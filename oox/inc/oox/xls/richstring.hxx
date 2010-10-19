@@ -143,7 +143,7 @@ struct PhoneticDataModel
     explicit            PhoneticDataModel();
 
     /** Sets the passed data from binary import. */
-    void                setBinData( sal_Int32 nType, sal_Int32 nAlignment );
+    void                setBiffData( sal_Int32 nType, sal_Int32 nAlignment );
 };
 
 // ----------------------------------------------------------------------------
@@ -292,4 +292,3 @@ typedef ::boost::shared_ptr< RichString > RichStringRef;
 } // namespace oox
 
 #endif
-

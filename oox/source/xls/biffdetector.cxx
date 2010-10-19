@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/xls/biffdetector.hxx"
+
 #include <algorithm>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -228,4 +229,3 @@ OUString SAL_CALL BiffDetector::detect( Sequence< PropertyValue >& rDescriptor )
 
 } // namespace xls
 } // namespace oox
-

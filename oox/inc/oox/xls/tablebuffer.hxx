@@ -66,7 +66,7 @@ public:
     /** Creates a database range from this tables. */
     void                finalizeImport();
 
-    /** Returns the table identifier. */
+    /** Returns the unique table identifier. */
     inline sal_Int32    getTableId() const { return maModel.mnId; }
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
@@ -116,7 +116,7 @@ public:
     TableRef            getTable( const ::rtl::OUString& rDispName ) const;
 
 private:
-    void                insertTable( TableRef xTable );
+    void                insertTable( const TableRef& rxTable );
 
 private:
     typedef RefMap< sal_Int32, Table >          TableIdMap;
@@ -132,4 +132,3 @@ private:
 } // namespace oox
 
 #endif
-

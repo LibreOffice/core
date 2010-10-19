@@ -27,22 +27,22 @@
 
 #include "oox/xls/condformatcontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxCondFormatContext::OoxCondFormatContext( OoxWorksheetFragmentBase& rFragment ) :
-    OoxWorksheetContextBase( rFragment )
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
+
+// ============================================================================
+
+CondFormatContext::CondFormatContext( WorksheetFragmentBase& rFragment ) :
+    WorksheetContextBase( rFragment )
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxCondFormatContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -54,7 +54,7 @@ ContextHandlerRef OoxCondFormatContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-void OoxCondFormatContext::onStartElement( const AttributeList& rAttribs )
+void CondFormatContext::onStartElement( const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -67,30 +67,30 @@ void OoxCondFormatContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-void OoxCondFormatContext::onCharacters( const OUString& rChars )
+void CondFormatContext::onCharacters( const OUString& rChars )
 {
     if( isCurrentElement( XLS_TOKEN( formula ) ) && mxCondFmt.get() && mxRule.get() )
         mxRule->appendFormula( rChars );
 }
 
-ContextHandlerRef OoxCondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
     switch( getCurrentElement() )
     {
-        case OOBIN_ID_CONDFORMATTING:
-            return (nRecId == OOBIN_ID_CFRULE) ? this : 0;
+        case BIFF12_ID_CONDFORMATTING:
+            return (nRecId == BIFF12_ID_CFRULE) ? this : 0;
     }
     return 0;
 }
 
-void OoxCondFormatContext::onStartRecord( RecordInputStream& rStrm )
+void CondFormatContext::onStartRecord( RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
-        case OOBIN_ID_CONDFORMATTING:
+        case BIFF12_ID_CONDFORMATTING:
             mxCondFmt = getCondFormats().importCondFormatting( rStrm );
         break;
-        case OOBIN_ID_CFRULE:
+        case BIFF12_ID_CFRULE:
             if( mxCondFmt.get() ) mxCondFmt->importCfRule( rStrm );
         break;
     }
@@ -100,4 +100,3 @@ void OoxCondFormatContext::onStartRecord( RecordInputStream& rStrm )
 
 } // namespace xls
 } // namespace oox
-

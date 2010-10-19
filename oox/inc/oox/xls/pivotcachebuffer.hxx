@@ -28,9 +28,9 @@
 #ifndef OOX_XLS_PIVOTCACHEBUFFER_HXX
 #define OOX_XLS_PIVOTCACHEBUFFER_HXX
 
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
@@ -100,7 +100,7 @@ public:
 
 private:
     ::com::sun::star::uno::Any maValue;     /// Value of the item.
-    sal_Int32           mnType;             /// Value type (OOX token identifier).
+    sal_Int32           mnType;             /// Value type (OOXML token identifier).
 };
 
 // ----------------------------------------------------------------------------
@@ -196,8 +196,8 @@ struct PCFieldGroupModel
 
     explicit            PCFieldGroupModel();
 
-    /** Sets the group-by value for BIFF/OOBIN import. */
-    void                setBinGroupBy( sal_uInt8 nGroupBy );
+    /** Sets the group-by value for BIFF import. */
+    void                setBiffGroupBy( sal_uInt8 nGroupBy );
 };
 
 // ----------------------------------------------------------------------------
@@ -479,9 +479,9 @@ class PivotCacheBuffer : public WorkbookHelper
 public:
     explicit            PivotCacheBuffer( const WorkbookHelper& rHelper );
 
-    /** Registers a pivot cache definition fragment. The fragment will be loaded on demand (OOX/OOBIN only). */
+    /** Registers a pivot cache definition fragment. The fragment will be loaded on demand (OOXML/BIFF12 only). */
     void                registerPivotCacheFragment( sal_Int32 nCacheId, const ::rtl::OUString& rFragmentPath );
-    /** Reads the reference to a pivot cache stream. The stream will be loaded on demand (BIFF only). */
+    /** Reads the reference to a pivot cache stream. The stream will be loaded on demand (BIFF2-BIFF8 only). */
     void                importPivotCacheRef( BiffInputStream& rStrm );
 
     /** Imports and stores a pivot cache definition fragment on first call,
@@ -508,4 +508,3 @@ private:
 } // namespace oox
 
 #endif
-

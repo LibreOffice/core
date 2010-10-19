@@ -26,27 +26,27 @@
  ************************************************************************/
 
 #include "oox/xls/sharedformulabuffer.hxx"
-#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include "properties.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulaparser.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::XFormulaTokens;
-using ::com::sun::star::sheet::XNamedRange;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -212,4 +212,3 @@ void SharedFormulaBuffer::updateCachedCell( const CellAddress& rBaseAddr, const 
 
 } // namespace xls
 } // namespace oox
-

@@ -178,10 +178,10 @@ private:
 // ============================================================================
 
 /** Context handler for creation of shapes embedded in group shapes. */
-class OoxGroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
+class GroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
 {
 public:
-    explicit            OoxGroupShapeContext(
+    explicit            GroupShapeContext(
                             ::oox::core::ContextHandler& rParent,
                             const WorksheetHelper& rHelper,
                             const ::oox::drawingml::ShapePtr& rxShape );
@@ -205,16 +205,14 @@ protected:
 // ============================================================================
 
 /** Fragment handler for a complete sheet drawing. */
-class OoxDrawingFragment : public OoxWorksheetFragmentBase
+class DrawingFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxDrawingFragment(
+    explicit            DrawingFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
@@ -307,10 +305,10 @@ private:
 
 // ============================================================================
 
-class OoxVmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
+class VmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
 {
 public:
-    explicit            OoxVmlDrawingFragment(
+    explicit            VmlDrawingFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 

@@ -61,8 +61,8 @@ struct WorkbookSettingsModel
 
     explicit            WorkbookSettingsModel();
 
-    /** Sets OOBIN or BIFF object visibility mode. */
-    void                setBinObjectMode( sal_uInt16 nObjMode );
+    /** Sets BIFF object visibility mode. */
+    void                setBiffObjectMode( sal_uInt16 nObjMode );
 };
 
 // ============================================================================
@@ -162,4 +162,3 @@ private:
 } // namespace oox
 
 #endif
-

@@ -36,10 +36,10 @@ namespace xls {
 
 // ============================================================================
 
-class OoxIndexedColorsContext : public OoxWorkbookContextBase
+class IndexedColorsContext : public WorkbookContextBase
 {
 public:
-    explicit            OoxIndexedColorsContext( OoxWorkbookFragmentBase& rFragment );
+    explicit            IndexedColorsContext( WorkbookFragmentBase& rFragment );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -48,12 +48,12 @@ protected:
 
 // ============================================================================
 
-class OoxFontContext : public OoxWorkbookContextBase
+class FontContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    inline explicit     OoxFontContext( ParentType& rParent, const FontRef& rxFont ) :
-                            OoxWorkbookContextBase( rParent ), mxFont( rxFont ) {}
+    inline explicit     FontContext( ParentType& rParent, const FontRef& rxFont ) :
+                            WorkbookContextBase( rParent ), mxFont( rxFont ) {}
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -64,12 +64,12 @@ private:
 
 // ============================================================================
 
-class OoxBorderContext : public OoxWorkbookContextBase
+class BorderContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    inline explicit     OoxBorderContext( ParentType& rParent, const BorderRef& rxBorder ) :
-                            OoxWorkbookContextBase( rParent ), mxBorder( rxBorder ) {}
+    inline explicit     BorderContext( ParentType& rParent, const BorderRef& rxBorder ) :
+                            WorkbookContextBase( rParent ), mxBorder( rxBorder ) {}
 
 protected:
     virtual void        onStartElement( const AttributeList& rAttribs );
@@ -81,12 +81,12 @@ private:
 
 // ============================================================================
 
-class OoxFillContext : public OoxWorkbookContextBase
+class FillContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    inline explicit     OoxFillContext( ParentType& rParent, const FillRef& rxFill ) :
-                            OoxWorkbookContextBase( rParent ), mxFill( rxFill ), mfGradPos( -1.0 ) {}
+    inline explicit     FillContext( ParentType& rParent, const FillRef& rxFill ) :
+                            WorkbookContextBase( rParent ), mxFill( rxFill ), mfGradPos( -1.0 ) {}
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -98,12 +98,12 @@ private:
 
 // ============================================================================
 
-class OoxXfContext : public OoxWorkbookContextBase
+class XfContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    inline explicit     OoxXfContext( ParentType& rParent, const XfRef& rxXf, bool bCellXf ) :
-                            OoxWorkbookContextBase( rParent ), mxXf( rxXf ), mbCellXf( bCellXf ) {}
+    inline explicit     XfContext( ParentType& rParent, const XfRef& rxXf, bool bCellXf ) :
+                            WorkbookContextBase( rParent ), mxXf( rxXf ), mbCellXf( bCellXf ) {}
 
 protected:
     virtual void        onStartElement( const AttributeList& rAttribs );
@@ -116,12 +116,12 @@ private:
 
 // ============================================================================
 
-class OoxDxfContext : public OoxWorkbookContextBase
+class DxfContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    inline explicit     OoxDxfContext( ParentType& rParent, const DxfRef& rxDxf ) :
-                            OoxWorkbookContextBase( rParent ), mxDxf( rxDxf ) {}
+    inline explicit     DxfContext( ParentType& rParent, const DxfRef& rxDxf ) :
+                            WorkbookContextBase( rParent ), mxDxf( rxDxf ) {}
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -132,20 +132,16 @@ private:
 
 // ============================================================================
 
-class OoxStylesFragment : public OoxWorkbookFragmentBase
+class StylesFragment : public WorkbookFragmentBase
 {
 public:
-    explicit            OoxStylesFragment(
+    explicit            StylesFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
@@ -157,4 +153,3 @@ protected:
 } // namespace oox
 
 #endif
-

@@ -38,10 +38,10 @@ class SheetScenarios;
 
 // ============================================================================
 
-class OoxScenarioContext : public OoxWorksheetContextBase
+class ScenarioContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxScenarioContext( OoxWorksheetContextBase& rParent, SheetScenarios& rSheetScenarios );
+    explicit            ScenarioContext( WorksheetContextBase& rParent, SheetScenarios& rSheetScenarios );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -56,10 +56,10 @@ private:
 
 // ============================================================================
 
-class OoxScenariosContext : public OoxWorksheetContextBase
+class ScenariosContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxScenariosContext( OoxWorksheetFragmentBase& rFragment );
+    explicit            ScenariosContext( WorksheetFragmentBase& rFragment );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -78,4 +78,3 @@ private:
 } // namespace oox
 
 #endif
-

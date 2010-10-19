@@ -36,20 +36,16 @@ namespace xls {
 
 // ============================================================================
 
-class OoxTableFragment : public OoxWorksheetFragmentBase
+class TableFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxTableFragment(
+    explicit            TableFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
@@ -63,4 +59,3 @@ private:
 } // namespace oox
 
 #endif
-

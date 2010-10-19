@@ -26,34 +26,33 @@
  ************************************************************************/
 
 #include "oox/xls/worksheetbuffer.hxx"
-#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
-#include "properties.hxx"
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <rtl/ustrbuf.hxx>
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
-using ::com::sun::star::sheet::XSpreadsheets;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -258,4 +257,3 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
 
 } // namespace xls
 } // namespace oox
-

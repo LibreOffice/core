@@ -10,6 +10,7 @@ AdjustmentValues
 Align
 AnchorPosition
 ApplyFormDesignMode
+AreaLinks
 ArrangeOrder
 Aspect
 AttachedAxisIndex
@@ -145,6 +146,8 @@ FillGradient
 FillGradientName
 FillStyle
 FillTransparence
+Filter
+FilterOptions
 FirstLineOffset
 FirstPageNumber
 FocusOnClick
@@ -333,6 +336,7 @@ RefY
 Reference
 ReferenceDevice
 ReferenceSheet
+RefreshPeriod
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
@@ -442,6 +446,7 @@ Transparency
 TriState
 Type
 URL
+Url
 UseRegularExpressions
 UseRings
 UseSelectedPage

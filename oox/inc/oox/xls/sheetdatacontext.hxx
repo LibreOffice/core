@@ -45,14 +45,12 @@ namespace xls {
     The sheetData element contains all row settings and all cells in a single
     sheet of a spreadsheet document.
  */
-class OoxSheetDataContext : public OoxWorksheetContextBase
+class SheetDataContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxSheetDataContext( OoxWorksheetFragmentBase& rFragment );
+    explicit            SheetDataContext( WorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
@@ -118,46 +116,46 @@ public:
     explicit            BiffSheetDataContext( const BiffWorksheetFragmentBase& rParent );
 
     /** Tries to import a sheet data record. */
-    virtual void        importRecord();
+    virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
     /** Sets current cell according to the passed address. */
     void                setCurrCell( const BinAddress& rAddr );
 
     /** Imports an XF identifier and sets the mnXfId member. */
-    void                importXfId( bool bBiff2 );
+    void                importXfId( BiffInputStream& rStrm, bool bBiff2 );
     /** Imports a BIFF cell address and the following XF identifier. */
-    void                importCellHeader( bool bBiff2 );
+    void                importCellHeader( BiffInputStream& rStrm, bool bBiff2 );
 
     /** Imports a BLANK record describing a blank but formatted cell. */
-    void                importBlank();
+    void                importBlank( BiffInputStream& rStrm );
     /** Imports a BOOLERR record describing a boolean or error code cell. */
-    void                importBoolErr();
+    void                importBoolErr( BiffInputStream& rStrm );
     /** Imports a FORMULA record describing a formula cell. */
-    void                importFormula();
+    void                importFormula( BiffInputStream& rStrm );
     /** Imports an INTEGER record describing a BIFF2 integer cell. */
-    void                importInteger();
+    void                importInteger( BiffInputStream& rStrm );
     /** Imports a LABEL record describing an unformatted string cell. */
-    void                importLabel();
+    void                importLabel( BiffInputStream& rStrm );
     /** Imports a LABELSST record describing a string cell using the shared string list. */
-    void                importLabelSst();
+    void                importLabelSst( BiffInputStream& rStrm );
     /** Imports a MULTBLANK record describing a range of blank but formatted cells. */
-    void                importMultBlank();
+    void                importMultBlank( BiffInputStream& rStrm );
     /** Imports a MULTRK record describing a range of numeric cells. */
-    void                importMultRk();
+    void                importMultRk( BiffInputStream& rStrm );
     /** Imports a NUMBER record describing a floating-point cell. */
-    void                importNumber();
+    void                importNumber( BiffInputStream& rStrm );
     /** Imports an RK record describing a numeric cell. */
-    void                importRk();
+    void                importRk( BiffInputStream& rStrm );
 
     /** Imports row settings from a ROW record. */
-    void                importRow();
+    void                importRow( BiffInputStream& rStrm );
     /** Imports an ARRAY record describing an array formula of a cell range. */
-    void                importArray();
+    void                importArray( BiffInputStream& rStrm );
     /** Imports a SHAREDFMLA record describing a shared formula in a cell range. */
-    void                importSharedFmla();
+    void                importSharedFmla( BiffInputStream& rStrm );
     /** Imports table operation from a DATATABLE or DATATABLE2 record. */
-    void                importDataTable();
+    void                importDataTable( BiffInputStream& rStrm );
 
 private:
     CellModel           maCurrCell;             /// Position and formatting of current imported cell.
@@ -172,4 +170,3 @@ private:
 } // namespace oox
 
 #endif
-

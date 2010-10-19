@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/xls/defnamesbuffer.hxx"
-#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
@@ -34,7 +34,7 @@
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
-#include "properties.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -42,35 +42,32 @@
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::ComplexReference;
-using ::com::sun::star::sheet::ExternalReference;
-using ::com::sun::star::sheet::SingleReference;
-using ::com::sun::star::sheet::XFormulaTokens;
-using ::com::sun::star::sheet::XPrintAreas;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
+// ============================================================================
+
 namespace {
 
-const sal_uInt32 OOBIN_DEFNAME_HIDDEN       = 0x00000001;
-const sal_uInt32 OOBIN_DEFNAME_FUNC         = 0x00000002;
-const sal_uInt32 OOBIN_DEFNAME_VBNAME       = 0x00000004;
-const sal_uInt32 OOBIN_DEFNAME_MACRO        = 0x00000008;
-const sal_uInt32 OOBIN_DEFNAME_CALCEXP      = 0x00000010;
-const sal_uInt32 OOBIN_DEFNAME_BUILTIN      = 0x00000020;
-const sal_uInt32 OOBIN_DEFNAME_PUBLISHED    = 0x00008000;
-const sal_uInt32 OOBIN_DEFNAME_WBPARAM      = 0x00010000;
+const sal_uInt32 BIFF12_DEFNAME_HIDDEN      = 0x00000001;
+const sal_uInt32 BIFF12_DEFNAME_FUNC        = 0x00000002;
+const sal_uInt32 BIFF12_DEFNAME_VBNAME      = 0x00000004;
+const sal_uInt32 BIFF12_DEFNAME_MACRO       = 0x00000008;
+const sal_uInt32 BIFF12_DEFNAME_CALCEXP     = 0x00000010;
+const sal_uInt32 BIFF12_DEFNAME_BUILTIN     = 0x00000020;
+const sal_uInt32 BIFF12_DEFNAME_PUBLISHED   = 0x00008000;
+const sal_uInt32 BIFF12_DEFNAME_WBPARAM     = 0x00010000;
 
 const sal_uInt16 BIFF_DEFNAME_HIDDEN        = 0x0001;
 const sal_uInt16 BIFF_DEFNAME_FUNC          = 0x0002;
@@ -91,20 +88,20 @@ const sal_Char* const spcOoxPrefix = "_xlnm.";
 
 const sal_Char* const sppcBaseNames[] =
 {
-    "Consolidate_Area", /* OOX */
+    "Consolidate_Area", /* OOXML */
     "Auto_Open",
     "Auto_Close",
-    "Extract",          /* OOX */
-    "Database",         /* OOX */
-    "Criteria",         /* OOX */
-    "Print_Area",       /* OOX */
-    "Print_Titles",     /* OOX */
+    "Extract",          /* OOXML */
+    "Database",         /* OOXML */
+    "Criteria",         /* OOXML */
+    "Print_Area",       /* OOXML */
+    "Print_Titles",     /* OOXML */
     "Recorder",
     "Data_Form",
     "Auto_Activate",
     "Auto_Deactivate",
-    "Sheet_Title",      /* OOX */
-    "_FilterDatabase"   /* OOX */
+    "Sheet_Title",      /* OOXML */
+    "_FilterDatabase"   /* OOXML */
 };
 
 /** Localized names for _xlnm._FilterDatabase as used in BIFF5. */
@@ -144,15 +141,15 @@ sal_Unicode lclGetBuiltinIdFromOox( const OUString& rOoxName )
                 return cBuiltinId;
         }
     }
-    return OOX_DEFNAME_UNKNOWN;
+    return BIFF_DEFNAME_UNKNOWN;
 }
 
-sal_Unicode lclGetBuiltinIdFromOob( const OUString& rOobName )
+sal_Unicode lclGetBuiltinIdFromBiff( const OUString& rName )
 {
     for( sal_Unicode cBuiltinId = 0; cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ); ++cBuiltinId )
-        if( rOobName.equalsIgnoreAsciiCaseAscii( sppcBaseNames[ cBuiltinId ] ) )
+        if( rName.equalsIgnoreAsciiCaseAscii( sppcBaseNames[ cBuiltinId ] ) )
             return cBuiltinId;
-    return OOX_DEFNAME_UNKNOWN;
+    return BIFF_DEFNAME_UNKNOWN;
 }
 
 bool lclIsFilterDatabaseName( const OUString& rName )
@@ -288,7 +285,7 @@ void DefinedNameBase::importOoxFormula( FormulaContext& rContext, sal_Int16 nBas
         getFormulaParser().convertErrorToFormula( rContext, BIFF_ERR_NAME );
 }
 
-void DefinedNameBase::importOobFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm )
+void DefinedNameBase::importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm )
 {
     rContext.setBaseAddress( CellAddress( nBaseSheet, 0, 0 ) );
     getFormulaParser().importFormula( rContext, rStrm );
@@ -314,7 +311,7 @@ void DefinedNameBase::extractReference( const ApiTokenSequence& rTokens )
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
     mnTokenIndex( -1 ),
-    mcBuiltinId( OOX_DEFNAME_UNKNOWN ),
+    mcBuiltinId( BIFF_DEFNAME_UNKNOWN ),
     mnFmlaSize( 0 )
 {
 }
@@ -347,14 +344,14 @@ void DefinedName::importDefinedName( RecordInputStream& rStrm )
 
     // macro function/command, hidden flag
     maModel.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 9 );
-    maModel.mbMacro       = getFlag( nFlags, OOBIN_DEFNAME_MACRO );
-    maModel.mbFunction    = getFlag( nFlags, OOBIN_DEFNAME_FUNC );
-    maModel.mbVBName      = getFlag( nFlags, OOBIN_DEFNAME_VBNAME );
-    maModel.mbHidden      = getFlag( nFlags, OOBIN_DEFNAME_HIDDEN );
+    maModel.mbMacro       = getFlag( nFlags, BIFF12_DEFNAME_MACRO );
+    maModel.mbFunction    = getFlag( nFlags, BIFF12_DEFNAME_FUNC );
+    maModel.mbVBName      = getFlag( nFlags, BIFF12_DEFNAME_VBNAME );
+    maModel.mbHidden      = getFlag( nFlags, BIFF12_DEFNAME_HIDDEN );
 
     // get builtin name index from name
-    if( getFlag( nFlags, OOBIN_DEFNAME_BUILTIN ) )
-        mcBuiltinId = lclGetBuiltinIdFromOob( maModel.maName );
+    if( getFlag( nFlags, BIFF12_DEFNAME_BUILTIN ) )
+        mcBuiltinId = lclGetBuiltinIdFromBiff( maModel.maName );
     // unhide built-in names (_xlnm._FilterDatabase is always hidden)
     if( isBuiltinName() )
         maModel.mbHidden = false;
@@ -430,7 +427,7 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcShee
         built-in flag, and even worse, localized. */
     else if( (eBiff == BIFF5) && lclIsFilterDatabaseName( maModel.maName ) )
     {
-        mcBuiltinId = OOX_DEFNAME_FILTERDATABASE;
+        mcBuiltinId = BIFF_DEFNAME_FILTERDATABASE;
     }
 
     // unhide built-in names (_xlnm._FilterDatabase is always hidden)
@@ -512,9 +509,9 @@ void DefinedName::createNameObject()
     using namespace ::com::sun::star::sheet::NamedRangeFlag;
     if( !isGlobalName() ) switch( mcBuiltinId )
     {
-        case OOX_DEFNAME_CRITERIA:      nNameFlags = FILTER_CRITERIA;               break;
-        case OOX_DEFNAME_PRINTAREA:     nNameFlags = PRINT_AREA;                    break;
-        case OOX_DEFNAME_PRINTTITLES:   nNameFlags = COLUMN_HEADER | ROW_HEADER;    break;
+        case BIFF_DEFNAME_CRITERIA:     nNameFlags = FILTER_CRITERIA;               break;
+        case BIFF_DEFNAME_PRINTAREA:    nNameFlags = PRINT_AREA;                    break;
+        case BIFF_DEFNAME_PRINTTITLES:  nNameFlags = COLUMN_HEADER | ROW_HEADER;    break;
     }
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
@@ -532,7 +529,7 @@ void DefinedName::convertFormula()
         // convert and set formula of the defined name
         switch( getFilterType() )
         {
-            case FILTER_OOX:
+            case FILTER_OOXML:
             {
                 SimpleFormulaContext aContext( xTokens, true, false );
                 implImportOoxFormula( aContext );
@@ -550,7 +547,7 @@ void DefinedName::convertFormula()
         // set builtin names (print ranges, repeated titles, filter ranges)
         if( !isGlobalName() ) switch( mcBuiltinId )
         {
-            case OOX_DEFNAME_PRINTAREA:
+            case BIFF_DEFNAME_PRINTAREA:
             {
                 Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
                 ApiCellRangeList aPrintRanges;
@@ -559,7 +556,7 @@ void DefinedName::convertFormula()
                     xPrintAreas->setPrintAreas( ContainerHelper::vectorToSequence( aPrintRanges ) );
             }
             break;
-            case OOX_DEFNAME_PRINTTITLES:
+            case BIFF_DEFNAME_PRINTTITLES:
             {
                 Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
                 ApiCellRangeList aTitleRanges;
@@ -606,7 +603,7 @@ void DefinedName::implImportOoxFormula( FormulaContext& rContext )
     if( mxFormula.get() )
     {
         RecordInputStream aStrm( *mxFormula );
-        importOobFormula( rContext, mnCalcSheet, aStrm );
+        importBiff12Formula( rContext, mnCalcSheet, aStrm );
     }
     else
         importOoxFormula( rContext, mnCalcSheet );
@@ -709,4 +706,3 @@ DefinedNameRef DefinedNamesBuffer::createDefinedName()
 
 } // namespace xls
 } // namespace oox
-

@@ -26,25 +26,26 @@
  ************************************************************************/
 
 #include "oox/xls/commentsfragment.hxx"
-#include "oox/xls/richstringcontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
+#include "oox/xls/richstringcontext.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxCommentsFragment::OoxCommentsFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorksheetFragmentBase( rHelper, rFragmentPath )
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::RecordInfo;
+using ::rtl::OUString;
+
+// ============================================================================
+
+CommentsFragment::CommentsFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath )
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxCommentsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef CommentsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -63,79 +64,77 @@ ContextHandlerRef OoxCommentsFragment::onCreateContext( sal_Int32 nElement, cons
         break;
         case XLS_TOKEN( comment ):
             if( (nElement == XLS_TOKEN( text )) && mxComment.get() )
-                return new OoxRichStringContext( *this, mxComment->createText() );
+                return new RichStringContext( *this, mxComment->createText() );
         break;
     }
     return 0;
 }
 
-void OoxCommentsFragment::onCharacters( const OUString& rChars )
+void CommentsFragment::onCharacters( const OUString& rChars )
 {
     if( isCurrentElement( XLS_TOKEN( author ) ) )
         getComments().appendAuthor( rChars );
 }
 
-void OoxCommentsFragment::onEndElement()
+void CommentsFragment::onEndElement()
 {
     if( isCurrentElement( XLS_TOKEN( comment ) ) )
         mxComment.reset();
 }
 
-ContextHandlerRef OoxCommentsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == OOBIN_ID_COMMENTS ) return this;
+            if( nRecId == BIFF12_ID_COMMENTS ) return this;
         break;
-        case OOBIN_ID_COMMENTS:
-            if( nRecId == OOBIN_ID_COMMENTAUTHORS ) return this;
-            if( nRecId == OOBIN_ID_COMMENTLIST ) return this;
+        case BIFF12_ID_COMMENTS:
+            if( nRecId == BIFF12_ID_COMMENTAUTHORS ) return this;
+            if( nRecId == BIFF12_ID_COMMENTLIST ) return this;
         break;
-        case OOBIN_ID_COMMENTAUTHORS:
-            if( nRecId == OOBIN_ID_COMMENTAUTHOR ) getComments().appendAuthor( rStrm.readString() );
+        case BIFF12_ID_COMMENTAUTHORS:
+            if( nRecId == BIFF12_ID_COMMENTAUTHOR ) getComments().appendAuthor( rStrm.readString() );
         break;
-        case OOBIN_ID_COMMENTLIST:
-            if( nRecId == OOBIN_ID_COMMENT ) { importComment( rStrm ); return this; }
+        case BIFF12_ID_COMMENTLIST:
+            if( nRecId == BIFF12_ID_COMMENT ) { importComment( rStrm ); return this; }
         break;
-        case OOBIN_ID_COMMENT:
-            if( (nRecId == OOBIN_ID_COMMENTTEXT) && mxComment.get() )
+        case BIFF12_ID_COMMENT:
+            if( (nRecId == BIFF12_ID_COMMENTTEXT) && mxComment.get() )
                 mxComment->createText()->importString( rStrm, true );
         break;
     }
     return 0;
 }
 
-void OoxCommentsFragment::onEndRecord()
+void CommentsFragment::onEndRecord()
 {
-    if( isCurrentElement( OOBIN_ID_COMMENT ) )
+    if( isCurrentElement( BIFF12_ID_COMMENT ) )
         mxComment.reset();
 }
 
-// oox.core.FragmentHandler2 interface ----------------------------------------
-
-const RecordInfo* OoxCommentsFragment::getRecordInfos() const
+const RecordInfo* CommentsFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { OOBIN_ID_COMMENT,         OOBIN_ID_COMMENT + 1        },
-        { OOBIN_ID_COMMENTAUTHORS,  OOBIN_ID_COMMENTAUTHORS + 1 },
-        { OOBIN_ID_COMMENTLIST,     OOBIN_ID_COMMENTLIST + 1    },
-        { OOBIN_ID_COMMENTS,        OOBIN_ID_COMMENTS + 1       },
-        { -1,                       -1                          }
+        { BIFF12_ID_COMMENT,        BIFF12_ID_COMMENT + 1           },
+        { BIFF12_ID_COMMENTAUTHORS, BIFF12_ID_COMMENTAUTHORS + 1    },
+        { BIFF12_ID_COMMENTLIST,    BIFF12_ID_COMMENTLIST + 1       },
+        { BIFF12_ID_COMMENTS,       BIFF12_ID_COMMENTS + 1          },
+        { -1,                       -1                              }
     };
     return spRecInfos;
 }
 
 // private --------------------------------------------------------------------
 
-void OoxCommentsFragment::importComment( const AttributeList& rAttribs )
+void CommentsFragment::importComment( const AttributeList& rAttribs )
 {
     mxComment = getComments().createComment();
     mxComment->importComment( rAttribs );
 }
 
-void OoxCommentsFragment::importComment( RecordInputStream& rStrm )
+void CommentsFragment::importComment( RecordInputStream& rStrm )
 {
     mxComment = getComments().createComment();
     mxComment->importComment( rStrm );
@@ -145,4 +144,3 @@ void OoxCommentsFragment::importComment( RecordInputStream& rStrm )
 
 } // namespace xls
 } // namespace oox
-

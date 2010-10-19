@@ -83,8 +83,8 @@ struct PageSettingsModel
 
     explicit            PageSettingsModel();
 
-    /** Sets the OOBIN or BIFF print errors mode. */
-    void                setBinPrintErrors( sal_uInt8 nPrintErrors );
+    /** Sets the BIFF print errors mode. */
+    void                setBiffPrintErrors( sal_uInt8 nPrintErrors );
 };
 
 // ============================================================================
@@ -217,4 +217,3 @@ private:
 } // namespace oox
 
 #endif
-

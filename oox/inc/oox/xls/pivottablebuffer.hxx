@@ -31,7 +31,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
-#include "oox/xls/workbookhelper.hxx"
+#include "oox/xls/stylesbuffer.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace sheet { class XDataPilotDescriptor; }
@@ -54,8 +54,8 @@ struct PTFieldItemModel
 
     explicit            PTFieldItemModel();
 
-    /** Sets item type for BIFF/OOBIN import. */
-    void                setBinType( sal_uInt16 nType );
+    /** Sets item type for BIFF import. */
+    void                setBiffType( sal_uInt16 nType );
 };
 
 // ----------------------------------------------------------------------------
@@ -93,8 +93,8 @@ struct PTFieldModel
 
     explicit            PTFieldModel();
 
-    /** Sets axis type for BIFF/OOBIN import. */
-    void                setBinAxis( sal_uInt8 nAxisFlags );
+    /** Sets axis type for BIFF import. */
+    void                setBiffAxis( sal_uInt8 nAxisFlags );
 };
 
 // ----------------------------------------------------------------------------
@@ -122,10 +122,10 @@ struct PTDataFieldModel
 
     explicit            PTDataFieldModel();
 
-    /** Sets the subtotal aggregation function for BIFF/OOBIN import. */
-    void                setBinSubtotal( sal_Int32 nSubtotal );
-    /** Sets the 'show data as' type for BIFF/OOBIN import. */
-    void                setBinShowDataAs( sal_Int32 nShowDataAs );
+    /** Sets the subtotal aggregation function for BIFF import. */
+    void                setBiffSubtotal( sal_Int32 nSubtotal );
+    /** Sets the 'show data as' type for BIFF import. */
+    void                setBiffShowDataAs( sal_Int32 nShowDataAs );
 };
 
 // ----------------------------------------------------------------------------
@@ -249,7 +249,7 @@ private:
 
 // ============================================================================
 
-struct PTDefinitionModel
+struct PTDefinitionModel : public AutoFormatModel
 {
     ::rtl::OUString     maName;
     ::rtl::OUString     maDataCaption;
@@ -281,6 +281,7 @@ struct PTDefinitionModel
     bool                mbPrintDrill;
     bool                mbEnableDrill;
     bool                mbPreserveFormatting;
+    bool                mbUseAutoFormat;
     bool                mbPageOverThenDown;
     bool                mbSubtotalHiddenItems;
     bool                mbRowGrandTotals;
@@ -446,4 +447,3 @@ private:
 } // namespace oox
 
 #endif
-

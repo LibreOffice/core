@@ -28,8 +28,8 @@
 #ifndef OOX_XLS_BIFFDETECTOR_HXX
 #define OOX_XLS_BIFFDETECTOR_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "oox/helper/storagebase.hxx"
 #include "oox/xls/biffhelper.hxx"
@@ -95,4 +95,3 @@ private:
 } // namespace oox
 
 #endif
-

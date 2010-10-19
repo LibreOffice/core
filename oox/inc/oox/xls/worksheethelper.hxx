@@ -37,14 +37,14 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
-    namespace util { struct DateTime; }
     namespace drawing { class XDrawPage; }
-    namespace table { class XTableColumns; }
-    namespace table { class XTableRows; }
+    namespace sheet { class XSheetCellRanges; }
+    namespace sheet { class XSpreadsheet; }
     namespace table { class XCell; }
     namespace table { class XCellRange; }
-    namespace sheet { class XSpreadsheet; }
-    namespace sheet { class XSheetCellRanges; }
+    namespace table { class XTableColumns; }
+    namespace table { class XTableRows; }
+    namespace util { struct DateTime; }
 } } }
 
 namespace oox {
@@ -53,13 +53,14 @@ namespace xls {
 struct BinAddress;
 struct BinRange;
 class BinRangeList;
-class WorksheetSettings;
-class SharedFormulaBuffer;
-class CondFormatBuffer;
 class CommentsBuffer;
+class CondFormatBuffer;
 class PageSettings;
+class QueryTableBuffer;
+class SharedFormulaBuffer;
 class SheetViewSettings;
 class VmlDrawing;
+class WorksheetSettings;
 
 // ============================================================================
 // ============================================================================
@@ -202,12 +203,12 @@ struct ValidationModel
 
     explicit            ValidationModel();
 
-    /** Sets the passed OOBIN or BIFF validation type. */
-    void                setBinType( sal_uInt8 nType );
-    /** Sets the passed OOBIN or BIFF operator. */
-    void                setBinOperator( sal_uInt8 nOperator );
-    /** Sets the passed OOBIN or BIFF error style. */
-    void                setBinErrorStyle( sal_uInt8 nErrorStyle );
+    /** Sets the passed BIFF validation type. */
+    void                setBiffType( sal_uInt8 nType );
+    /** Sets the passed BIFF operator. */
+    void                setBiffOperator( sal_uInt8 nOperator );
+    /** Sets the passed BIFF error style. */
+    void                setBiffErrorStyle( sal_uInt8 nErrorStyle );
 };
 
 // ============================================================================
@@ -314,6 +315,8 @@ public:
     CondFormatBuffer&   getCondFormats() const;
     /** Returns the buffer for all cell comments in this sheet. */
     CommentsBuffer&     getComments() const;
+    /** Returns the buffer for all web query tables in this sheet. */
+    QueryTableBuffer&   getQueryTables() const;
     /** Returns the page/print settings for this sheet. */
     PageSettings&       getPageSettings() const;
     /** Returns the view settings for this sheet. */
@@ -445,7 +448,7 @@ protected:
     /** Constructs from the passed data, creates and owns a new data object. */
     explicit            WorksheetHelperRoot(
                             const WorkbookHelper& rHelper,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 
@@ -468,4 +471,3 @@ private:
 } // namespace oox
 
 #endif
-

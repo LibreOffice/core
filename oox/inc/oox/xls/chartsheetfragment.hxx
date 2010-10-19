@@ -35,24 +35,20 @@ namespace xls {
 
 // ============================================================================
 
-class OoxChartsheetFragment : public OoxWorksheetFragmentBase
+class ChartsheetFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxChartsheetFragment(
+    explicit            ChartsheetFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             sal_Int16 nSheet );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        initializeImport();
@@ -72,7 +68,7 @@ class BiffChartsheetFragment : public BiffWorksheetFragmentBase
 public:
     explicit            BiffChartsheetFragment(
                             const BiffWorkbookFragmentBase& rParent,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             sal_Int16 nSheet );
 
     /** Imports the entire sheet fragment, returns true, if EOF record has been reached. */
@@ -85,4 +81,3 @@ public:
 } // namespace oox
 
 #endif
-

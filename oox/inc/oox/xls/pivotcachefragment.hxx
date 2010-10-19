@@ -38,11 +38,11 @@ class PivotCacheField;
 
 // ============================================================================
 
-class OoxPivotCacheFieldContext : public OoxWorkbookContextBase
+class PivotCacheFieldContext : public WorkbookContextBase
 {
 public:
-    explicit            OoxPivotCacheFieldContext(
-                            OoxWorkbookFragmentBase& rFragment,
+    explicit            PivotCacheFieldContext(
+                            WorkbookFragmentBase& rFragment,
                             PivotCacheField& rCacheField );
 
 protected:
@@ -57,10 +57,10 @@ private:
 
 // ============================================================================
 
-class OoxPivotCacheDefinitionFragment : public OoxWorkbookFragmentBase
+class PivotCacheDefinitionFragment : public WorkbookFragmentBase
 {
 public:
-    explicit            OoxPivotCacheDefinitionFragment(
+    explicit            PivotCacheDefinitionFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             PivotCache& rPivotCache );
@@ -77,10 +77,10 @@ private:
 
 // ============================================================================
 
-class OoxPivotCacheRecordsFragment : public OoxWorksheetFragmentBase
+class PivotCacheRecordsFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxPivotCacheRecordsFragment(
+    explicit            PivotCacheRecordsFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             const PivotCache& rPivotCache );
@@ -131,7 +131,7 @@ public:
 
     /** Reads the current record from stream and tries to insert a cell into
         the source data sheet. */
-    virtual void        importRecord();
+    virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
     void                startNextRow();
@@ -153,4 +153,3 @@ private:
 } // namespace oox
 
 #endif
-

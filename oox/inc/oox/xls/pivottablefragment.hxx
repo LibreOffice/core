@@ -40,11 +40,11 @@ class PivotTableFilter;
 
 // ============================================================================
 
-class OoxPivotTableFieldContext : public OoxWorksheetContextBase
+class PivotTableFieldContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxPivotTableFieldContext(
-                            OoxWorksheetFragmentBase& rFragment,
+    explicit            PivotTableFieldContext(
+                            WorksheetFragmentBase& rFragment,
                             PivotTableField& rTableField );
 
 protected:
@@ -59,11 +59,11 @@ private:
 
 // ============================================================================
 
-class OoxPivotTableFilterContext : public OoxWorksheetContextBase
+class PivotTableFilterContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxPivotTableFilterContext(
-                            OoxWorksheetFragmentBase& rFragment,
+    explicit            PivotTableFilterContext(
+                            WorksheetFragmentBase& rFragment,
                             PivotTableFilter& rTableFilter );
 
 protected:
@@ -78,10 +78,10 @@ private:
 
 // ============================================================================
 
-class OoxPivotTableFragment : public OoxWorksheetFragmentBase
+class PivotTableFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxPivotTableFragment(
+    explicit            PivotTableFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
@@ -100,10 +100,10 @@ private:
 class BiffPivotTableContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment, PivotTable& rPivotTable );
+    explicit            BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment );
 
     /** Imports all records related to the current pivot table. */
-    virtual void        importRecord();
+    virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
     PivotTable&         mrPivotTable;
@@ -115,4 +115,3 @@ private:
 } // namespace oox
 
 #endif
-

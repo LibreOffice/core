@@ -120,7 +120,7 @@ public:
     /** Will be called to create a context handler for the passed record.
 
         Usually 'this' can be returned to improve performance by reusing the
-        same instance to process several records. Used by OOBIN import only.
+        same instance to process several records. Used by BIFF import only.
      */
     virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm ) = 0;
 
@@ -128,14 +128,14 @@ public:
         started.
 
         The current record identifier can be accessed with getCurrentElement()
-        or isCurrentElement(). Used by OOBIN import only.
+        or isCurrentElement(). Used by BIFF import only.
      */
     virtual void        onStartRecord( RecordInputStream& rStrm ) = 0;
 
     /** Will be called when the current record block is about to be left.
 
         The current record identifier can be accessed with getCurrentElement()
-        or isCurrentElement(). Used by OOBIN import only.
+        or isCurrentElement(). Used by BIFF import only.
      */
     virtual void        onEndRecord() = 0;
 

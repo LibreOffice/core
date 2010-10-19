@@ -36,14 +36,12 @@ namespace xls {
 
 // ============================================================================
 
-class OoxCondFormatContext : public OoxWorksheetContextBase
+class CondFormatContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxCondFormatContext( OoxWorksheetFragmentBase& rFragment );
+    explicit            CondFormatContext( WorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
@@ -62,4 +60,3 @@ private:
 } // namespace oox
 
 #endif
-

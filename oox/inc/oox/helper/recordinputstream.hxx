@@ -34,7 +34,7 @@ namespace oox {
 
 // ============================================================================
 
-/** Reads the contents of a record from a binary OOBIN stream. */
+/** Reads the contents of a record from a BIFF stream. */
 class RecordInputStream : public SequenceInputStream
 {
 public:

@@ -26,10 +26,10 @@
  ************************************************************************/
 
 #include "oox/xls/worksheethelper.hxx"
+
 #include <algorithm>
-#include <utility>
 #include <list>
-#include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -37,33 +37,33 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
-#include <com/sun/star/sheet/XSheetOutline.hpp>
-#include <com/sun/star/sheet/XMultipleOperation.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
+#include <com/sun/star/sheet/XMultipleOperation.hpp>
+#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/sheet/XSheetOutline.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "properties.hxx"
-#include "tokens.hxx"
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <rtl/ustrbuf.hxx>
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/commentsbuffer.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/drawingfragment.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
+#include "oox/xls/querytablebuffer.hxx"
 #include "oox/xls/sharedformulabuffer.hxx"
 #include "oox/xls/sharedstringsbuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
@@ -72,73 +72,45 @@
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 #include "oox/xls/worksheetsettings.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::drawing::XDrawPage;
-using ::com::sun::star::drawing::XDrawPageSupplier;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::sheet::ConditionOperator;
-using ::com::sun::star::sheet::ValidationType;
-using ::com::sun::star::sheet::ValidationAlertStyle;
-using ::com::sun::star::sheet::XCellAddressable;
-using ::com::sun::star::sheet::XCellRangeAddressable;
-using ::com::sun::star::sheet::XFormulaTokens;
-using ::com::sun::star::sheet::XLabelRanges;
-using ::com::sun::star::sheet::XMultiFormulaTokens;
-using ::com::sun::star::sheet::XMultipleOperation;
-using ::com::sun::star::sheet::XSheetCellRangeContainer;
-using ::com::sun::star::sheet::XSheetCellRanges;
-using ::com::sun::star::sheet::XSheetCondition;
-using ::com::sun::star::sheet::XSheetOutline;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::table::BorderLine;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::table::XCellRange;
-using ::com::sun::star::table::XColumnRowRange;
-using ::com::sun::star::table::XTableColumns;
-using ::com::sun::star::table::XTableRows;
-using ::com::sun::star::text::XText;
-using ::com::sun::star::text::XTextContent;
-using ::com::sun::star::text::XTextRange;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::util::XMergeable;
-using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::util::XNumberFormatTypes;
+#include "properties.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
+// ============================================================================
+
 namespace {
 
-void lclUpdateProgressBar( ISegmentProgressBarRef xProgressBar, const CellRangeAddress& rUsedArea, sal_Int32 nRow )
+void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, const CellRangeAddress& rUsedArea, sal_Int32 nRow )
 {
-    if( xProgressBar.get() && (rUsedArea.StartRow <= nRow) && (nRow <= rUsedArea.EndRow) )
+    if( rxProgressBar.get() && (rUsedArea.StartRow <= nRow) && (nRow <= rUsedArea.EndRow) )
     {
         double fPosition = static_cast< double >( nRow - rUsedArea.StartRow + 1 ) / (rUsedArea.EndRow - rUsedArea.StartRow + 1);
-        if( xProgressBar->getPosition() < fPosition )
-            xProgressBar->setPosition( fPosition );
+        if( rxProgressBar->getPosition() < fPosition )
+            rxProgressBar->setPosition( fPosition );
     }
 }
 
-void lclUpdateProgressBar( ISegmentProgressBarRef xProgressBar, double fPosition )
+void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double fPosition )
 {
-    if( xProgressBar.get() )
-        xProgressBar->setPosition( fPosition );
+    if( rxProgressBar.get() )
+        rxProgressBar->setPosition( fPosition );
 }
 
 // ----------------------------------------------------------------------------
@@ -329,14 +301,14 @@ ValidationModel::ValidationModel() :
 {
 }
 
-void ValidationModel::setBinType( sal_uInt8 nType )
+void ValidationModel::setBiffType( sal_uInt8 nType )
 {
     static const sal_Int32 spnTypeIds[] = {
         XML_none, XML_whole, XML_decimal, XML_list, XML_date, XML_time, XML_textLength, XML_custom };
     mnType = STATIC_ARRAY_SELECT( spnTypeIds, nType, XML_none );
 }
 
-void ValidationModel::setBinOperator( sal_uInt8 nOperator )
+void ValidationModel::setBiffOperator( sal_uInt8 nOperator )
 {
     static const sal_Int32 spnOperators[] = {
         XML_between, XML_notBetween, XML_equal, XML_notEqual,
@@ -344,7 +316,7 @@ void ValidationModel::setBinOperator( sal_uInt8 nOperator )
     mnOperator = STATIC_ARRAY_SELECT( spnOperators, nOperator, XML_TOKEN_INVALID );
 }
 
-void ValidationModel::setBinErrorStyle( sal_uInt8 nErrorStyle )
+void ValidationModel::setBiffErrorStyle( sal_uInt8 nErrorStyle )
 {
     static const sal_Int32 spnErrorStyles[] = { XML_stop, XML_warning, XML_information };
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
@@ -358,7 +330,7 @@ class WorksheetData : public WorkbookHelper
 public:
     explicit            WorksheetData(
                             const WorkbookHelper& rHelper,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 
@@ -416,11 +388,13 @@ public:
     inline CondFormatBuffer& getCondFormats() { return maCondFormats; }
     /** Returns the buffer for all cell comments in this sheet. */
     inline CommentsBuffer& getComments() { return maComments; }
+    /** Returns the buffer for all web query tables in this sheet. */
+    inline QueryTableBuffer& getQueryTables() { return maQueryTables; }
     /** Returns the page/print settings for this sheet. */
     inline PageSettings& getPageSettings() { return maPageSett; }
     /** Returns the view settings for this sheet. */
     inline SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
-    /** Returns the VML drawing page for this sheet (OOX only!). */
+    /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only!). */
     inline VmlDrawing&  getVmlDrawing() { return *mxVmlDrawing; }
 
     /** Changes the current sheet type. */
@@ -589,6 +563,7 @@ private:
     SharedFormulaBuffer maSharedFmlas;      /// Buffer for shared formulas in this sheet.
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formattings.
     CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
+    QueryTableBuffer    maQueryTables;      /// Buffer for all web query tables in this sheet.
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
     VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
@@ -605,7 +580,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+WorksheetData::WorksheetData( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
     maTrueFormula( CREATE_OUSTRING( "=TRUE()" ) ),
     maFalseFormula( CREATE_OUSTRING( "=FALSE()" ) ),
@@ -617,9 +592,10 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maSharedFmlas( *this ),
     maCondFormats( *this ),
     maComments( *this ),
+    maQueryTables( *this ),
     maPageSett( *this ),
     maSheetViewSett( *this ),
-    mxProgressBar( xProgressBar ),
+    mxProgressBar( rxProgressBar ),
     meSheetType( eSheetType ),
     mbHasDefWidth( false )
 {
@@ -645,7 +621,7 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maDefRowModel.mbCollapsed = false;
 
     // buffers
-    if( getFilterType() == FILTER_OOX )
+    if( getFilterType() == FILTER_OOXML )
         mxVmlDrawing.reset( new VmlDrawing( *this ) );
 
     // prepare progress bars
@@ -985,7 +961,7 @@ void WorksheetData::setDefaultColumnWidth( double fWidth )
 
 void WorksheetData::setColumnModel( const ColumnModel& rModel )
 {
-    // convert 1-based OOX column indexes to 0-based API column indexes
+    // convert 1-based OOXML column indexes to 0-based API column indexes
     sal_Int32 nFirstCol = rModel.mnFirstCol - 1;
     sal_Int32 nLastCol = rModel.mnLastCol - 1;
     if( (0 <= nFirstCol) && (nFirstCol <= mrMaxApiPos.Column) )
@@ -1009,7 +985,7 @@ void WorksheetData::setDefaultRowSettings( double fHeight, bool bCustomHeight, b
 
 void WorksheetData::setRowModel( const RowModel& rModel )
 {
-    // convert 1-based OOX row indexes to 0-based API row indexes
+    // convert 1-based OOXML row indexes to 0-based API row indexes
     sal_Int32 nFirstRow = rModel.mnFirstRow - 1;
     sal_Int32 nLastRow = rModel.mnLastRow - 1;
     if( (0 <= nFirstRow) && (nFirstRow <= mrMaxApiPos.Row) )
@@ -1079,6 +1055,7 @@ void WorksheetData::finalizeWorksheetImport()
     finalizeMergedRanges();
     maSheetSett.finalizeImport();
     maCondFormats.finalizeImport();
+    maQueryTables.finalizeImport();
     maPageSett.finalizeImport();
     maSheetViewSett.finalizeImport();
     maSheetSett.finalizeImport();
@@ -1348,8 +1325,8 @@ void WorksheetData::finalizeValidationRanges() const
     {
         PropertySet aPropSet( getCellRangeList( aIt->maRanges ) );
 
-        Reference< XPropertySet > xValidation;
-        if( aPropSet.getProperty( xValidation, PROP_Validation ) && xValidation.is() )
+        Reference< XPropertySet > xValidation( aPropSet.getAnyProperty( PROP_Validation ), UNO_QUERY );
+        if( xValidation.is() )
         {
             PropertySet aValProps( xValidation );
             namespace csss = ::com::sun::star::sheet;
@@ -1479,18 +1456,18 @@ void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange )
 
 void WorksheetData::finalizeDrawing()
 {
-    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maDrawingPath.getLength() == 0),
+    OSL_ENSURE( (getFilterType() == FILTER_OOXML) || (maDrawingPath.getLength() == 0),
         "WorksheetData::finalizeDrawing - unexpected DrawingML path" );
-    if( (getFilterType() == FILTER_OOX) && (maDrawingPath.getLength() > 0) )
-        importOoxFragment( new OoxDrawingFragment( *this, maDrawingPath ) );
+    if( (getFilterType() == FILTER_OOXML) && (maDrawingPath.getLength() > 0) )
+        importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
 }
 
 void WorksheetData::finalizeVmlDrawing()
 {
-    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maVmlDrawingPath.getLength() == 0),
+    OSL_ENSURE( (getFilterType() == FILTER_OOXML) || (maVmlDrawingPath.getLength() == 0),
         "WorksheetData::finalizeVmlDrawing - unexpected VML path" );
-    if( (getFilterType() == FILTER_OOX) && (maVmlDrawingPath.getLength() > 0) )
-        importOoxFragment( new OoxVmlDrawingFragment( *this, maVmlDrawingPath ) );
+    if( (getFilterType() == FILTER_OOXML) && (maVmlDrawingPath.getLength() > 0) )
+        importOoxFragment( new VmlDrawingFragment( *this, maVmlDrawingPath ) );
 }
 
 void WorksheetData::finalizeUsedArea()
@@ -1522,7 +1499,7 @@ void WorksheetData::convertColumns()
 
     for( ColumnModelMap::const_iterator aIt = maColModels.begin(), aEnd = maColModels.end(); aIt != aEnd; ++aIt )
     {
-        // convert 1-based OOX column indexes to 0-based API column indexes
+        // convert 1-based OOXML column indexes to 0-based API column indexes
         sal_Int32 nFirstCol = ::std::max( aIt->second.mnFirstCol - 1, nNextCol );
         sal_Int32 nLastCol = ::std::min( aIt->second.mnLastCol - 1, nMaxCol );
 
@@ -1572,7 +1549,7 @@ void WorksheetData::convertRows()
 
     for( RowModelMap::const_iterator aIt = maRowModels.begin(), aEnd = maRowModels.end(); aIt != aEnd; ++aIt )
     {
-        // convert 1-based OOX row indexes to 0-based API row indexes
+        // convert 1-based OOXML row indexes to 0-based API row indexes
         sal_Int32 nFirstRow = ::std::max( aIt->second.mnFirstRow - 1, nNextRow );
         sal_Int32 nLastRow = ::std::min( aIt->second.mnLastRow - 1, nMaxRow );
 
@@ -1858,6 +1835,11 @@ CommentsBuffer& WorksheetHelper::getComments() const
     return mrSheetData.getComments();
 }
 
+QueryTableBuffer& WorksheetHelper::getQueryTables() const
+{
+    return mrSheetData.getQueryTables();
+}
+
 PageSettings& WorksheetHelper::getPageSettings() const
 {
     return mrSheetData.getPageSettings();
@@ -2056,44 +2038,51 @@ void WorksheetHelper::setTableOperation( const CellRangeAddress& rRange, const D
 void WorksheetHelper::setLabelRanges( const ApiCellRangeList& rColRanges, const ApiCellRangeList& rRowRanges )
 {
     const CellAddress& rMaxPos = getAddressConverter().getMaxApiAddress();
-    Reference< XLabelRanges > xLabelRanges;
     PropertySet aPropSet( getSheet() );
 
-    if( !rColRanges.empty() && aPropSet.getProperty( xLabelRanges, PROP_ColumnLabelRanges ) && xLabelRanges.is() )
+    if( !rColRanges.empty() )
     {
-        for( ApiCellRangeList::const_iterator aIt = rColRanges.begin(), aEnd = rColRanges.end(); aIt != aEnd; ++aIt )
+        Reference< XLabelRanges > xLabelRanges( aPropSet.getAnyProperty( PROP_ColumnLabelRanges ), UNO_QUERY );
+        if( xLabelRanges.is() )
         {
-            CellRangeAddress aDataRange = *aIt;
-            if( aDataRange.EndRow < rMaxPos.Row )
+            for( ApiCellRangeList::const_iterator aIt = rColRanges.begin(), aEnd = rColRanges.end(); aIt != aEnd; ++aIt )
             {
-                aDataRange.StartRow = aDataRange.EndRow + 1;
-                aDataRange.EndRow = rMaxPos.Row;
+                CellRangeAddress aDataRange = *aIt;
+                if( aDataRange.EndRow < rMaxPos.Row )
+                {
+                    aDataRange.StartRow = aDataRange.EndRow + 1;
+                    aDataRange.EndRow = rMaxPos.Row;
+                }
+                else if( aDataRange.StartRow > 0 )
+                {
+                    aDataRange.EndRow = aDataRange.StartRow - 1;
+                    aDataRange.StartRow = 0;
+                }
+                xLabelRanges->addNew( *aIt, aDataRange );
             }
-            else if( aDataRange.StartRow > 0 )
-            {
-                aDataRange.EndRow = aDataRange.StartRow - 1;
-                aDataRange.StartRow = 0;
-            }
-            xLabelRanges->addNew( *aIt, aDataRange );
         }
     }
 
-    if( !rRowRanges.empty() && aPropSet.getProperty( xLabelRanges, PROP_RowLabelRanges ) && xLabelRanges.is() )
+    if( !rRowRanges.empty() )
     {
-        for( ApiCellRangeList::const_iterator aIt = rRowRanges.begin(), aEnd = rRowRanges.end(); aIt != aEnd; ++aIt )
+        Reference< XLabelRanges > xLabelRanges( aPropSet.getAnyProperty( PROP_RowLabelRanges ), UNO_QUERY );
+        if( xLabelRanges.is() )
         {
-            CellRangeAddress aDataRange = *aIt;
-            if( aDataRange.EndColumn < rMaxPos.Column )
+            for( ApiCellRangeList::const_iterator aIt = rRowRanges.begin(), aEnd = rRowRanges.end(); aIt != aEnd; ++aIt )
             {
-                aDataRange.StartColumn = aDataRange.EndColumn + 1;
-                aDataRange.EndColumn = rMaxPos.Column;
+                CellRangeAddress aDataRange = *aIt;
+                if( aDataRange.EndColumn < rMaxPos.Column )
+                {
+                    aDataRange.StartColumn = aDataRange.EndColumn + 1;
+                    aDataRange.EndColumn = rMaxPos.Column;
+                }
+                else if( aDataRange.StartColumn > 0 )
+                {
+                    aDataRange.EndColumn = aDataRange.StartColumn - 1;
+                    aDataRange.StartColumn = 0;
+                }
+                xLabelRanges->addNew( *aIt, aDataRange );
             }
-            else if( aDataRange.StartColumn > 0 )
-            {
-                aDataRange.EndColumn = aDataRange.StartColumn - 1;
-                aDataRange.StartColumn = 0;
-            }
-            xLabelRanges->addNew( *aIt, aDataRange );
         }
     }
 }
@@ -2180,8 +2169,8 @@ WorksheetDataOwner::~WorksheetDataOwner()
 
 // ----------------------------------------------------------------------------
 
-WorksheetHelperRoot::WorksheetHelperRoot( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    prv::WorksheetDataOwner( prv::WorksheetDataRef( new WorksheetData( rHelper, xProgressBar, eSheetType, nSheet ) ) ),
+WorksheetHelperRoot::WorksheetHelperRoot( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+    prv::WorksheetDataOwner( prv::WorksheetDataRef( new WorksheetData( rHelper, rxProgressBar, eSheetType, nSheet ) ) ),
     WorksheetHelper( *mxSheetData )
 {
 }
@@ -2208,4 +2197,3 @@ bool WorksheetHelperRoot::isValidSheet() const
 
 } // namespace xls
 } // namespace oox
-

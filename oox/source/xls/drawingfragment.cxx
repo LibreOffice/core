@@ -458,14 +458,14 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 
 // ============================================================================
 
-OoxGroupShapeContext::OoxGroupShapeContext( ContextHandler& rParent,
+GroupShapeContext::GroupShapeContext( ContextHandler& rParent,
         const WorksheetHelper& rHelper, const ShapePtr& rxShape ) :
     ShapeGroupContext( rParent, ShapePtr(), rxShape ),
     WorksheetHelper( rHelper )
 {
 }
 
-/*static*/ ContextHandlerRef OoxGroupShapeContext::createShapeContext( ContextHandler& rParent,
+/*static*/ ContextHandlerRef GroupShapeContext::createShapeContext( ContextHandler& rParent,
         const WorksheetHelper& rHelper, sal_Int32 nElement, const AttributeList& rAttribs, ShapePtr* pxShape )
 {
     switch( nElement )
@@ -498,13 +498,13 @@ OoxGroupShapeContext::OoxGroupShapeContext( ContextHandler& rParent,
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GroupShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new OoxGroupShapeContext( rParent, rHelper, xShape );
+            return new GroupShapeContext( rParent, rHelper, xShape );
         }
     }
     return 0;
 }
 
-Reference< XFastContextHandler > SAL_CALL OoxGroupShapeContext::createFastChildContext(
+Reference< XFastContextHandler > SAL_CALL GroupShapeContext::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
 {
     ContextHandlerRef xContext = createShapeContext( *this, *this, nElement, AttributeList( rxAttribs ) );
@@ -513,19 +513,17 @@ Reference< XFastContextHandler > SAL_CALL OoxGroupShapeContext::createFastChildC
 
 // ============================================================================
 
-OoxDrawingFragment::OoxDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorksheetFragmentBase( rHelper, rFragmentPath ),
+DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath ),
     mxDrawPage( rHelper.getDrawPage(), UNO_QUERY )
 {
-    OSL_ENSURE( mxDrawPage.is(), "OoxDrawingFragment::OoxDrawingFragment - missing drawing page" );
+    OSL_ENSURE( mxDrawPage.is(), "DrawingFragment::DrawingFragment - missing drawing page" );
     maApiSheetSize = getDrawPageSize();
     maEmuSheetSize.Width = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Width, UNIT_EMU ) );
     maEmuSheetSize.Height = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Height, UNIT_EMU ) );
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -558,7 +556,7 @@ ContextHandlerRef OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const
                 case XDR_TOKEN( ext ):          if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );           break;
                 case XDR_TOKEN( clientData ):   if( mxAnchor.get() ) mxAnchor->importClientData( rAttribs );    break;
 
-                default:                        return OoxGroupShapeContext::createShapeContext( *this, *this, nElement, rAttribs, &mxShape );
+                default:                        return GroupShapeContext::createShapeContext( *this, *this, nElement, rAttribs, &mxShape );
             }
         }
         break;
@@ -577,7 +575,7 @@ ContextHandlerRef OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const
     return 0;
 }
 
-void OoxDrawingFragment::onCharacters( const OUString& rChars )
+void DrawingFragment::onCharacters( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
@@ -590,7 +588,7 @@ void OoxDrawingFragment::onCharacters( const OUString& rChars )
     }
 }
 
-void OoxDrawingFragment::onEndElement()
+void DrawingFragment::onEndElement()
 {
     switch( getCurrentElement() )
     {
@@ -1077,13 +1075,13 @@ void VmlDrawing::convertControlBackground( AxMorphDataModelBase& rAxModel, const
 
 // ============================================================================
 
-OoxVmlDrawingFragment::OoxVmlDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+VmlDrawingFragment::VmlDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     ::oox::vml::DrawingFragment( rHelper.getOoxFilter(), rFragmentPath, rHelper.getVmlDrawing() ),
     WorksheetHelper( rHelper )
 {
 }
 
-void OoxVmlDrawingFragment::finalizeImport()
+void VmlDrawingFragment::finalizeImport()
 {
     ::oox::vml::DrawingFragment::finalizeImport();
     getVmlDrawing().convertAndInsert();

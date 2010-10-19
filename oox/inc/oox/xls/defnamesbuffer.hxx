@@ -45,21 +45,21 @@ class BiffInputStreamPos;
 // ============================================================================
 
 // codes for built-in names
-const sal_Unicode OOX_DEFNAME_CONSOLIDATEAREA   = '\x00';
-const sal_Unicode OOX_DEFNAME_AUTOOPEN          = '\x01';
-const sal_Unicode OOX_DEFNAME_AUTOCLOSE         = '\x02';
-const sal_Unicode OOX_DEFNAME_EXTRACT           = '\x03';
-const sal_Unicode OOX_DEFNAME_DATABASE          = '\x04';
-const sal_Unicode OOX_DEFNAME_CRITERIA          = '\x05';
-const sal_Unicode OOX_DEFNAME_PRINTAREA         = '\x06';
-const sal_Unicode OOX_DEFNAME_PRINTTITLES       = '\x07';
-const sal_Unicode OOX_DEFNAME_RECORDER          = '\x08';
-const sal_Unicode OOX_DEFNAME_DATAFORM          = '\x09';
-const sal_Unicode OOX_DEFNAME_AUTOACTIVATE      = '\x0A';
-const sal_Unicode OOX_DEFNAME_AUTODEACTIVATE    = '\x0B';
-const sal_Unicode OOX_DEFNAME_SHEETTITLE        = '\x0C';
-const sal_Unicode OOX_DEFNAME_FILTERDATABASE    = '\x0D';
-const sal_Unicode OOX_DEFNAME_UNKNOWN           = '\x0E';
+const sal_Unicode BIFF_DEFNAME_CONSOLIDATEAREA  = '\x00';
+const sal_Unicode BIFF_DEFNAME_AUTOOPEN         = '\x01';
+const sal_Unicode BIFF_DEFNAME_AUTOCLOSE        = '\x02';
+const sal_Unicode BIFF_DEFNAME_EXTRACT          = '\x03';
+const sal_Unicode BIFF_DEFNAME_DATABASE         = '\x04';
+const sal_Unicode BIFF_DEFNAME_CRITERIA         = '\x05';
+const sal_Unicode BIFF_DEFNAME_PRINTAREA        = '\x06';
+const sal_Unicode BIFF_DEFNAME_PRINTTITLES      = '\x07';
+const sal_Unicode BIFF_DEFNAME_RECORDER         = '\x08';
+const sal_Unicode BIFF_DEFNAME_DATAFORM         = '\x09';
+const sal_Unicode BIFF_DEFNAME_AUTOACTIVATE     = '\x0A';
+const sal_Unicode BIFF_DEFNAME_AUTODEACTIVATE   = '\x0B';
+const sal_Unicode BIFF_DEFNAME_SHEETTITLE       = '\x0C';
+const sal_Unicode BIFF_DEFNAME_FILTERDATABASE   = '\x0D';
+const sal_Unicode BIFF_DEFNAME_UNKNOWN          = '\x0E';
 
 // ============================================================================
 
@@ -96,10 +96,10 @@ public:
     ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddress ) const;
 
 protected:
-    /** Imports the OOX formula string, using the passed formula context. */
+    /** Imports the OOXML formula string, using the passed formula context. */
     void                importOoxFormula( FormulaContext& rContext, sal_Int16 nBaseSheet );
-    /** Imports the OOBIN formula, using the passed formula context. */
-    void                importOobFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm );
+    /** Imports the BIFF12 formula, using the passed formula context. */
+    void                importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm );
     /** Imports the BIFF formula, using the passed formula context. */
     void                importBiffFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
 
@@ -135,7 +135,7 @@ public:
     void                convertFormula();
 
     /** Returns true, if this defined name is a special builtin name. */
-    inline bool         isBuiltinName() const { return mcBuiltinId != OOX_DEFNAME_UNKNOWN; }
+    inline bool         isBuiltinName() const { return mcBuiltinId != BIFF_DEFNAME_UNKNOWN; }
     /** Returns true, if this defined name is a macro function call. */
     inline bool         isMacroFunction() const { return maModel.mbMacro && maModel.mbFunction; }
     /** Returns true, if this defined name is a reference to a VBA macro. */
@@ -151,7 +151,7 @@ public:
     bool                getAbsoluteRange( ::com::sun::star::table::CellRangeAddress& orRange ) const;
 
 private:
-    /** Imports the OOX or OOBIN formula, using the passed formula context. */
+    /** Imports the OOXML or BIFF12 formula, using the passed formula context. */
     void                implImportOoxFormula( FormulaContext& rContext );
     /** Imports the BIFF formula, using the passed formula context. */
     void                implImportBiffFormula( FormulaContext& rContext );
@@ -165,7 +165,7 @@ private:
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Int16           mnCalcSheet;        /// Calc sheet index for sheet-local names.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
-    StreamDataSeqPtr    mxFormula;          /// Formula data for OOBIN import.
+    StreamDataSeqPtr    mxFormula;          /// Formula data for BIFF12 import.
     BiffStreamPosPtr    mxBiffStrm;         /// Cached BIFF stream for formula import.
     sal_uInt16          mnFmlaSize;         /// Cached BIFF formula size for formula import.
 };

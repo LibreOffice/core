@@ -61,7 +61,7 @@ class SharedFormulaBuffer : public WorksheetHelper
 public:
     explicit            SharedFormulaBuffer( const WorksheetHelper& rHelper );
 
-    /** Imports a shared formula from a OOX formula string. */
+    /** Imports a shared formula from a OOXML formula string. */
     void                importSharedFmla( const ::rtl::OUString& rFormula,
                             const ::rtl::OUString& rSharedRange, sal_Int32 nId,
                             const ::com::sun::star::table::CellAddress& rBaseAddr );
@@ -109,4 +109,3 @@ private:
 } // namespace oox
 
 #endif
-

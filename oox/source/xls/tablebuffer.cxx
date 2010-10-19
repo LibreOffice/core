@@ -26,25 +26,26 @@
  ************************************************************************/
 
 #include "oox/xls/tablebuffer.hxx"
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
+
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include "properties.hxx"
+#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::sheet::XDatabaseRanges;
-using ::com::sun::star::sheet::XDatabaseRange;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -98,11 +99,13 @@ void Table::finalizeImport()
     if( bValidRange && (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
     {
         // find an unused name
-        Reference< XDatabaseRanges > xDatabaseRanges = getDatabaseRanges();
+        PropertySet aDocProps( getDocument() );
+        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
         Reference< XNameAccess > xNameAccess( xDatabaseRanges, UNO_QUERY_THROW );
         OUString aName = ContainerHelper::getUnusedName( xNameAccess, maModel.maDisplayName, '_' );
         xDatabaseRanges->addNewByName( aName, maModel.maRange );
         Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( aName ), UNO_QUERY_THROW );
+        // get formula token index of the database range
         PropertySet aPropSet( xDatabaseRange );
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
@@ -153,16 +156,16 @@ TableRef TableBuffer::getTable( const OUString& rDispName ) const
 
 // private --------------------------------------------------------------------
 
-void TableBuffer::insertTable( TableRef xTable )
+void TableBuffer::insertTable( const TableRef& rxTable )
 {
-    sal_Int32 nTableId = xTable->getTableId();
-    const OUString& rDispName = xTable->getDisplayName();
+    sal_Int32 nTableId = rxTable->getTableId();
+    const OUString& rDispName = rxTable->getDisplayName();
     if( (nTableId > 0) && (rDispName.getLength() > 0) )
     {
-        OSL_ENSURE( maIdTables.find( nTableId ) == maIdTables.end(), "TableBuffer::insertTable - multiple table identifier" );
-        maIdTables[ nTableId ] = xTable;
-        OSL_ENSURE( maNameTables.find( rDispName ) == maNameTables.end(), "TableBuffer::insertTable - multiple table name" );
-        maNameTables[ rDispName ] = xTable;
+        OSL_ENSURE( !maIdTables.has( nTableId ), "TableBuffer::insertTable - multiple table identifier" );
+        maIdTables[ nTableId ] = rxTable;
+        OSL_ENSURE( !maNameTables.has( rDispName ), "TableBuffer::insertTable - multiple table name" );
+        maNameTables[ rDispName ] = rxTable;
     }
 }
 
@@ -170,4 +173,3 @@ void TableBuffer::insertTable( TableRef xTable )
 
 } // namespace xls
 } // namespace oox
-

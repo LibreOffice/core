@@ -75,14 +75,12 @@ struct FilterFieldItem
 
 // ============================================================================
 
-class OoxAutoFilterContext : public OoxWorksheetContextBase
+class AutoFilterContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxAutoFilterContext( OoxWorksheetFragmentBase& rFragment );
+    explicit            AutoFilterContext( WorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement();

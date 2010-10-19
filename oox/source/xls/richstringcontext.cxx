@@ -26,19 +26,20 @@
  ************************************************************************/
 
 #include "oox/xls/richstringcontext.hxx"
-#include "oox/xls/stylesfragment.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
+#include "oox/xls/stylesfragment.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
 
-ContextHandlerRef OoxRichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+// ============================================================================
+
+ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() )
     {
@@ -65,7 +66,7 @@ ContextHandlerRef OoxRichStringContext::onCreateContext( sal_Int32 nElement, con
             {
                 case XLS_TOKEN( rPr ):
                     if( mxPortion.get() )
-                        return new OoxFontContext( *this, mxPortion->createFont() );
+                        return new FontContext( *this, mxPortion->createFont() );
                 break;
 
                 case XLS_TOKEN( t ):
@@ -84,7 +85,7 @@ ContextHandlerRef OoxRichStringContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-void OoxRichStringContext::onCharacters( const OUString& rChars )
+void RichStringContext::onCharacters( const OUString& rChars )
 {
     if( isCurrentElement( XLS_TOKEN( t ) ) ) switch( getParentElement() )
     {
@@ -102,4 +103,3 @@ void OoxRichStringContext::onCharacters( const OUString& rChars )
 
 } // namespace xls
 } // namespace oox
-

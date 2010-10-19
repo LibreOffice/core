@@ -26,18 +26,21 @@
  ************************************************************************/
 
 #include "oox/xls/biffcodec.hxx"
+
 #include <osl/thread.h>
 #include <string.h>
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using ::oox::core::FilterBase;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OStringToOUString;
-using ::oox::core::FilterBase;
-
-namespace oox {
-namespace xls {
 
 // ============================================================================
 
@@ -331,4 +334,3 @@ void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
 
 } // namespace xls
 } // namespace oox
-

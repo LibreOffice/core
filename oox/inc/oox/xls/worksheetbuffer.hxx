@@ -58,8 +58,8 @@ struct SheetInfoModel
 /** Stores information about all sheets in a spreadsheet document.
 
     Information about sheets includes the sheet name, the visibility state, and
-    for the OOX filter, the relation identifier of the sheet used to obtain the
-    related worksheet fragment.
+    for the OOXML filter, the relation identifier of the sheet used to obtain
+    the related worksheet fragment.
  */
 class WorksheetBuffer : public WorkbookHelper
 {
@@ -74,7 +74,7 @@ public:
 
     /** Imports the attributes of a sheet element. */
     void                importSheet( const AttributeList& rAttribs );
-    /** Imports the SHEET record from the passed OOBIN stream. */
+    /** Imports the SHEET record from the passed BIFF12 stream. */
     void                importSheet( RecordInputStream& rStrm );
     /** Imports the SHEET record from the passed BIFF stream. */
     void                importSheet( BiffInputStream& rStrm );
@@ -84,7 +84,7 @@ public:
 
     /** Returns the number of original sheets contained in the workbook. */
     sal_Int32           getWorksheetCount() const;
-    /** Returns the OOX relation identifier of the specified worksheet. */
+    /** Returns the OOXML relation identifier of the specified worksheet. */
     ::rtl::OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
     /** Returns the BIFF record handle of the associated sheet substream. */
     sal_Int64           getBiffRecordHandle( sal_Int32 nWorksheet ) const;
@@ -130,4 +130,3 @@ private:
 } // namespace oox
 
 #endif
-

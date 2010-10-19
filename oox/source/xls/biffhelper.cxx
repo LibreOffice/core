@@ -26,17 +26,20 @@
  ************************************************************************/
 
 #include "oox/xls/biffhelper.hxx"
+
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffoutputstream.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -262,6 +265,24 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     return static_cast< sal_uInt16 >( (nCodePage == 0) ? 1252 : nCodePage );
 }
 
+/*static*/ bool BiffHelper::isBofRecord( BiffInputStream& rStrm )
+{
+    return
+        (rStrm.getRecId() == BIFF2_ID_BOF) ||
+        (rStrm.getRecId() == BIFF3_ID_BOF) ||
+        (rStrm.getRecId() == BIFF4_ID_BOF) ||
+        (rStrm.getRecId() == BIFF5_ID_BOF);
+}
+
+/*static*/ bool BiffHelper::skipRecordBlock( BiffInputStream& rStrm, sal_uInt16 nEndRecId )
+{
+    sal_uInt16 nStartRecId = rStrm.getRecId();
+    while( rStrm.startNextRecord() && (rStrm.getRecId() != nEndRecId) )
+        if( rStrm.getRecId() == nStartRecId )
+            skipRecordBlock( rStrm, nEndRecId );
+    return !rStrm.isEof() && (rStrm.getRecId() == nEndRecId);
+}
+
 /*static*/ void BiffHelper::importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff )
 {
     sal_uInt16 nFormat, nEnv;
@@ -284,4 +305,3 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 } // namespace xls
 } // namespace oox
-

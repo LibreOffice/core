@@ -26,21 +26,22 @@
  ************************************************************************/
 
 #include "oox/xls/autofiltercontext.hxx"
-#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/sheet/FilterConnection.hpp>
+#include <com/sun/star/sheet/FilterOperator.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
-#include <com/sun/star/sheet/FilterOperator.hpp>
-#include <com/sun/star/sheet/FilterConnection.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
-#include "properties.hxx"
+#include <com/sun/star/table/XCellRange.hpp>
+#include <rtl/ustrbuf.hxx>
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "properties.hxx"
 
 #define DEBUG_OOX_AUTOFILTER 0
 
@@ -117,8 +118,8 @@ FilterFieldItem::FilterFieldItem(Type eType) :
 
 // ============================================================================
 
-OoxAutoFilterContext::OoxAutoFilterContext( OoxWorksheetFragmentBase& rFragment ) :
-    OoxWorksheetContextBase( rFragment ),
+AutoFilterContext::AutoFilterContext( WorksheetFragmentBase& rFragment ) :
+    WorksheetContextBase( rFragment ),
     mbValidAddress( false ),
     mbUseRegex( false ),
     mbShowBlank( false ),
@@ -126,9 +127,7 @@ OoxAutoFilterContext::OoxAutoFilterContext( OoxWorksheetFragmentBase& rFragment 
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxAutoFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef AutoFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -166,7 +165,7 @@ ContextHandlerRef OoxAutoFilterContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-void OoxAutoFilterContext::onStartElement( const AttributeList& rAttribs )
+void AutoFilterContext::onStartElement( const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -204,7 +203,7 @@ void OoxAutoFilterContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-void OoxAutoFilterContext::onEndElement()
+void AutoFilterContext::onEndElement()
 {
     switch( getCurrentElement() )
     {
@@ -352,14 +351,14 @@ static void lclPrintFilterField( const FilterFieldItem& aItem )
 }
 #endif
 
-void OoxAutoFilterContext::initialize()
+void AutoFilterContext::initialize()
 {
     maFields.clear();
     maFilterNames.clear();
     mbValidAddress = mbShowBlank = mbUseRegex = mbConnectionAnd = false;
 }
 
-void OoxAutoFilterContext::setAutoFilter()
+void AutoFilterContext::setAutoFilter()
 {
     using namespace ::com::sun::star::sheet;
 
@@ -373,12 +372,11 @@ void OoxAutoFilterContext::setAutoFilter()
     // Create a new database range, add filters to it and refresh the database
     // for that to take effect.
 
-    Reference< XDatabaseRanges > xDBRanges = getDatabaseRanges();
+    PropertySet aDocProps( getDocument() );
+    Reference< XDatabaseRanges > xDBRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY );
+    OSL_ENSURE( xDBRanges.is(), "AutoFilterContext::setAutoFilter: DBRange empty" );
     if ( !xDBRanges.is() )
-    {
-        OSL_ENSURE( false, "OoxAutoFilterContext::setAutoFilter: DBRange empty" );
         return;
-    }
 
     Reference< XNameAccess > xNA( xDBRanges, UNO_QUERY_THROW );
     if ( !xNA->hasByName( sDataAreaName ) )
@@ -403,7 +401,7 @@ void OoxAutoFilterContext::setAutoFilter()
     }
     else
     {
-        OSL_ENSURE(false, "OoxAutoFilterContext::setAutoFilter: descriptor is empty");
+        OSL_ENSURE(false, "AutoFilterContext::setAutoFilter: descriptor is empty");
         return;
     }
 
@@ -412,7 +410,7 @@ void OoxAutoFilterContext::setAutoFilter()
     Reference< XExtendedSheetFilterDescriptor > xExtDescriptor( xDescriptor, UNO_QUERY );
     if ( !xExtDescriptor.is() )
     {
-        OSL_ENSURE(false, "OoxAutoFilterContext::setAutoFilter: extended descriptor is empty");
+        OSL_ENSURE(false, "AutoFilterContext::setAutoFilter: extended descriptor is empty");
         return;
     }
 
@@ -457,7 +455,7 @@ void OoxAutoFilterContext::setAutoFilter()
     xDB->refresh();
 }
 
-void OoxAutoFilterContext::maybeShowBlank()
+void AutoFilterContext::maybeShowBlank()
 {
     using namespace ::com::sun::star::sheet;
 
@@ -481,7 +479,7 @@ void OoxAutoFilterContext::maybeShowBlank()
     maFields.push_back(aItem);
 }
 
-void OoxAutoFilterContext::setFilterNames()
+void AutoFilterContext::setFilterNames()
 {
     using namespace ::com::sun::star::sheet;
 
@@ -536,7 +534,7 @@ void OoxAutoFilterContext::setFilterNames()
 #endif
 }
 
-void OoxAutoFilterContext::importAutoFilter( const AttributeList& rAttribs )
+void AutoFilterContext::importAutoFilter( const AttributeList& rAttribs )
 {
     initialize();
 
@@ -544,13 +542,13 @@ void OoxAutoFilterContext::importAutoFilter( const AttributeList& rAttribs )
         maAutoFilterRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true );
 }
 
-void OoxAutoFilterContext::importFilterColumn( const AttributeList& rAttribs )
+void AutoFilterContext::importFilterColumn( const AttributeList& rAttribs )
 {
     // hiddenButton and showButton attributes are not used for now.
     mnCurColID = rAttribs.getInteger( XML_colId, -1 );
 }
 
-void OoxAutoFilterContext::importTop10( const AttributeList& rAttribs )
+void AutoFilterContext::importTop10( const AttributeList& rAttribs )
 {
     using namespace ::com::sun::star::sheet;
 
@@ -584,7 +582,7 @@ void OoxAutoFilterContext::importTop10( const AttributeList& rAttribs )
     maFields.push_back(aItem);
 }
 
-void OoxAutoFilterContext::importCustomFilters( const AttributeList& rAttribs )
+void AutoFilterContext::importCustomFilters( const AttributeList& rAttribs )
 {
     // OR is default when the 'and' attribute is absent.
     mbConnectionAnd = rAttribs.getBool( XML_and, false );
@@ -683,7 +681,7 @@ static ::com::sun::star::sheet::FilterOperator lclTranslateFilterOp( sal_Int32 n
     return FilterOperator_EQUAL;
 }
 
-void OoxAutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
+void AutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
 {
     using namespace ::com::sun::star::sheet;
 
@@ -741,11 +739,11 @@ void OoxAutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
         }
         break;
         default:
-            OSL_ENSURE( false, "OoxAutoFilterContext::importCustomFilter: unhandled case" );
+            OSL_ENSURE( false, "AutoFilterContext::importCustomFilter: unhandled case" );
     }
 }
 
-void OoxAutoFilterContext::importFilters( const AttributeList& rAttribs )
+void AutoFilterContext::importFilters( const AttributeList& rAttribs )
 {
     // blank (boolean) and calendarType attributes can be present, but not used for now.
 
@@ -753,7 +751,7 @@ void OoxAutoFilterContext::importFilters( const AttributeList& rAttribs )
     maFilterNames.clear();
 }
 
-void OoxAutoFilterContext::importFilter( const AttributeList& rAttribs )
+void AutoFilterContext::importFilter( const AttributeList& rAttribs )
 {
     if (mnCurColID == -1)
         return;
@@ -763,7 +761,7 @@ void OoxAutoFilterContext::importFilter( const AttributeList& rAttribs )
         maFilterNames.push_back(value);
 }
 
-void OoxAutoFilterContext::importDynamicFilter( const AttributeList& /*rAttribs*/ )
+void AutoFilterContext::importDynamicFilter( const AttributeList& /*rAttribs*/ )
 {
     // not implemented yet - Calc doesn't support this.
 }
@@ -772,4 +770,3 @@ void OoxAutoFilterContext::importDynamicFilter( const AttributeList& /*rAttribs*
 
 } // namespace xls
 } // namespace oox
-

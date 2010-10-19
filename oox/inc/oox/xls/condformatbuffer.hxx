@@ -64,11 +64,11 @@ struct CondFormatRuleModel
 
     explicit            CondFormatRuleModel();
 
-    /** Sets the passed OOBIN or BIFF operator for condition type cellIs. */
-    void                setBinOperator( sal_Int32 nOperator );
+    /** Sets the passed BIFF operator for condition type cellIs. */
+    void                setBiffOperator( sal_Int32 nOperator );
 
-    /** Sets the passed OOBIN text comparison type and operator. */
-    void                setOobTextType( sal_Int32 nOperator );
+    /** Sets the passed BIFF12 text comparison type and operator. */
+    void                setBiff12TextType( sal_Int32 nOperator );
 };
 
 // ============================================================================
@@ -192,4 +192,3 @@ private:
 } // namespace oox
 
 #endif
-

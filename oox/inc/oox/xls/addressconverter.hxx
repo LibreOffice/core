@@ -221,7 +221,7 @@ enum BiffTargetType
 // ============================================================================
 // ============================================================================
 
-/** Converter for cell addresses and cell ranges for OOX and BIFF filters.
+/** Converter for cell addresses and cell ranges for OOXML and BIFF filters.
  */
 class AddressConverter : public WorkbookHelper
 {
@@ -689,4 +689,3 @@ private:
 } // namespace oox
 
 #endif
-

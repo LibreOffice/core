@@ -27,12 +27,9 @@
 
 #include "oox/xls/workbookhelper.hxx"
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XExternalDocLinks.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -48,6 +45,7 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffcodec.hxx"
+#include "oox/xls/connectionsbuffer.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/excelfilter.hxx"
@@ -63,7 +61,6 @@
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/viewsettings.hxx"
-#include "oox/xls/webquerybuffer.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 #include "properties.hxx"
@@ -133,16 +130,6 @@ public:
 
     /** Returns a reference to the source/target spreadsheet document model. */
     inline Reference< XSpreadsheetDocument > getDocument() const { return mxDoc; }
-    /** Returns the reference device of the document. */
-    Reference< XDevice > getReferenceDevice() const;
-    /** Returns the container for defined names from the Calc document. */
-    Reference< XNamedRanges > getNamedRanges() const;
-    /** Returns the container for database ranges from the Calc document. */
-    Reference< XDatabaseRanges > getDatabaseRanges() const;
-    /** Returns the container for external documents from the Calc document. */
-    Reference< XExternalDocLinks > getExternalDocLinks() const;
-    /** Returns the container for DDE links from the Calc document. */
-    Reference< XNameAccess > getDdeLinks() const;
     /** Returns the cell or page styles container from the Calc document. */
     Reference< XNameContainer > getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */
@@ -174,8 +161,8 @@ public:
     inline TableBuffer& getTables() const { return *mxTables; }
     /** Returns the scenarios collection. */
     inline ScenarioBuffer& getScenarios() const { return *mxScenarios; }
-    /** Returns the web queries. */
-    inline WebQueryBuffer& getWebQueries() const { return *mxWebQueries; }
+    /** Returns the collection of external data connections. */
+    inline ConnectionsBuffer&  getConnections() const { return *mxConnections; }
     /** Returns the collection of pivot caches. */
     inline PivotCacheBuffer& getPivotCaches() const { return *mxPivotCaches; }
     /** Returns the collection of pivot tables. */
@@ -194,12 +181,12 @@ public:
     /** Returns the page/print settings converter. */
     inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
 
-    // OOX specific -----------------------------------------------------------
+    // OOXML/BIFF12 specific --------------------------------------------------
 
-    /** Returns the base OOX filter object. */
+    /** Returns the base OOXML/BIFF12 filter object. */
     inline XmlFilterBase& getOoxFilter() const { return *mpOoxFilter; }
 
-    // BIFF specific ----------------------------------------------------------
+    // BIFF2-BIFF8 specific ---------------------------------------------------
 
     /** Returns the base BIFF filter object. */
     inline BinaryFilterBase& getBiffFilter() const { return *mpBiffFilter; }
@@ -238,7 +225,7 @@ private:
     typedef ::std::auto_ptr< DefinedNamesBuffer >       DefNamesBfrPtr;
     typedef ::std::auto_ptr< TableBuffer >              TableBfrPtr;
     typedef ::std::auto_ptr< ScenarioBuffer >           ScenarioBfrPtr;
-    typedef ::std::auto_ptr< WebQueryBuffer >           WebQueryBfrPtr;
+    typedef ::std::auto_ptr< ConnectionsBuffer >        ConnectionsBfrPtr;
     typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
     typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
     typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
@@ -272,7 +259,7 @@ private:
     DefNamesBfrPtr      mxDefNames;             /// All defined names.
     TableBfrPtr         mxTables;               /// All tables (database ranges).
     ScenarioBfrPtr      mxScenarios;            /// All scenarios.
-    WebQueryBfrPtr      mxWebQueries;           /// Web queries buffer.
+    ConnectionsBfrPtr   mxConnections;          /// All external data connections.
     PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
     PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
 
@@ -283,11 +270,11 @@ private:
     ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
     PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
 
-    // OOX specific
-    XmlFilterBase*      mpOoxFilter;            /// Base OOX filter object.
+    // OOXML/BIFF12 specific
+    XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
 
-    // BIFF specific
-    BinaryFilterBase*   mpBiffFilter;           /// Base BIFF filter object.
+    // BIFF2-BIFF8 specific
+    BinaryFilterBase*   mpBiffFilter;           /// Base BIFF2-BIFF8 filter object.
     BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
@@ -299,7 +286,7 @@ private:
 WorkbookData::WorkbookData( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
     mrExcelBase( rFilter ),
-    meFilterType( FILTER_OOX ),
+    meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
     mpBiffFilter( 0 ),
     meBiff( BIFF_UNKNOWN )
@@ -329,46 +316,6 @@ WorkbookData::~WorkbookData()
 }
 
 // document model -------------------------------------------------------------
-
-Reference< XDevice > WorkbookData::getReferenceDevice() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XDevice > xDevice;
-    aPropSet.getProperty( xDevice, PROP_ReferenceDevice );
-    return xDevice;
-}
-
-Reference< XNamedRanges > WorkbookData::getNamedRanges() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XNamedRanges > xNamedRanges;
-    aPropSet.getProperty( xNamedRanges, PROP_NamedRanges );
-    return xNamedRanges;
-}
-
-Reference< XDatabaseRanges > WorkbookData::getDatabaseRanges() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XDatabaseRanges > xDatabaseRanges;
-    aPropSet.getProperty( xDatabaseRanges, PROP_DatabaseRanges );
-    return xDatabaseRanges;
-}
-
-Reference< XExternalDocLinks > WorkbookData::getExternalDocLinks() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XExternalDocLinks > xDocLinks;
-    aPropSet.getProperty( xDocLinks, PROP_ExternalDocLinks );
-    return xDocLinks;
-}
-
-Reference< XNameAccess > WorkbookData::getDdeLinks() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XNameAccess > xDdeLinks;
-    aPropSet.getProperty( xDdeLinks, PROP_DDELinks );
-    return xDdeLinks;
-}
 
 Reference< XNameContainer > WorkbookData::getStyleFamily( bool bPageStyles ) const
 {
@@ -404,7 +351,8 @@ Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bo
 Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
     // find an unused name
-    Reference< XNamedRanges > xNamedRanges = getNamedRanges();
+    PropertySet aDocProps( mxDoc );
+    Reference< XNamedRanges > xNamedRanges( aDocProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
     Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY );
     if( xNameAccess.is() )
         orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
@@ -530,7 +478,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxDefNames.reset( new DefinedNamesBuffer( *this ) );
     mxTables.reset( new TableBuffer( *this ) );
     mxScenarios.reset( new ScenarioBuffer( *this ) );
-    mxWebQueries.reset( new WebQueryBuffer( *this ) );
+    mxConnections.reset( new ConnectionsBuffer( *this ) );
     mxPivotCaches.reset( new PivotCacheBuffer( *this ) );
     mxPivotTables.reset( new PivotTableBuffer( *this ) );
 
@@ -552,7 +500,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
         // disable automatic update of linked sheets and DDE links
         aPropSet.setProperty( PROP_IsExecuteLinkEnabled, false );
         // #i79890# disable automatic update of defined names
-        Reference< XActionLockable > xLockable( getNamedRanges(), UNO_QUERY );
+        Reference< XActionLockable > xLockable( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
         if( xLockable.is() )
             xLockable->addActionLock();
 
@@ -573,7 +521,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
             mxCodecHelper.reset( new BiffCodecHelper( *this ) );
         break;
 
-        case FILTER_OOX:
+        case FILTER_OOXML:
         break;
 
         case FILTER_UNKNOWN:
@@ -590,7 +538,7 @@ void WorkbookData::finalize()
         // #i74668# do not insert default sheets
         aPropSet.setProperty( PROP_IsLoaded, true );
         // #i79890# enable automatic update of defined names (before IsAdjustHeightEnabled!)
-        Reference< XActionLockable > xLockable( getNamedRanges(), UNO_QUERY );
+        Reference< XActionLockable > xLockable( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
         if( xLockable.is() )
             xLockable->removeActionLock();
         // enable automatic update of linked sheets and DDE links
@@ -693,31 +641,6 @@ Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 Reference< XMultiServiceFactory > WorkbookHelper::getDocumentFactory() const
 {
     return mrBookData.getBaseFilter().getModelFactory();
-}
-
-Reference< XDevice > WorkbookHelper::getReferenceDevice() const
-{
-    return mrBookData.getReferenceDevice();
-}
-
-Reference< XNamedRanges > WorkbookHelper::getNamedRanges() const
-{
-    return mrBookData.getNamedRanges();
-}
-
-Reference< XDatabaseRanges > WorkbookHelper::getDatabaseRanges() const
-{
-    return mrBookData.getDatabaseRanges();
-}
-
-Reference< XExternalDocLinks > WorkbookHelper::getExternalDocLinks() const
-{
-    return mrBookData.getExternalDocLinks();
-}
-
-Reference< XNameAccess > WorkbookHelper::getDdeLinks() const
-{
-    return mrBookData.getDdeLinks();
 }
 
 Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const
@@ -848,9 +771,9 @@ ScenarioBuffer& WorkbookHelper::getScenarios() const
     return mrBookData.getScenarios();
 }
 
-WebQueryBuffer& WorkbookHelper::getWebQueries() const
+ConnectionsBuffer& WorkbookHelper::getConnections() const
 {
-    return mrBookData.getWebQueries();
+    return mrBookData.getConnections();
 }
 
 PivotCacheBuffer& WorkbookHelper::getPivotCaches() const
@@ -890,11 +813,11 @@ PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
     return mrBookData.getPageSettingsConverter();
 }
 
-// OOX specific ---------------------------------------------------------------
+// OOXML/BIFF12 specific ------------------------------------------------------
 
 XmlFilterBase& WorkbookHelper::getOoxFilter() const
 {
-    OSL_ENSURE( mrBookData.getFilterType() == FILTER_OOX, "WorkbookHelper::getOoxFilter - invalid call" );
+    OSL_ENSURE( mrBookData.getFilterType() == FILTER_OOXML, "WorkbookHelper::getOoxFilter - invalid call" );
     return mrBookData.getOoxFilter();
 }
 

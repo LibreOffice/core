@@ -26,31 +26,34 @@
  ************************************************************************/
 
 #include "oox/xls/worksheetsettings.hxx"
+
 #include <com/sun/star/util/XProtectable.hpp>
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "properties.hxx"
-
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-
-using ::rtl::OUString;
-using ::oox::core::CodecHelper;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::oox::core::CodecHelper;
+using ::rtl::OUString;
+
+// ============================================================================
+
 namespace {
 
-const sal_uInt8 OOBIN_SHEETPR_FILTERMODE        = 0x01;
-const sal_uInt8 OOBIN_SHEETPR_EVAL_CF           = 0x02;
+const sal_uInt8 BIFF12_SHEETPR_FILTERMODE       = 0x01;
+const sal_uInt8 BIFF12_SHEETPR_EVAL_CF          = 0x02;
 
 const sal_uInt32 BIFF_SHEETEXT_NOTABCOLOR       = 0x7F;
 
@@ -184,8 +187,8 @@ void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
     rStrm.skip( 8 );    // sync anchor cell
     rStrm >> maSheetSettings.maCodeName;
     // sheet settings
-    maSheetSettings.mbFilterMode = getFlag( nFlags2, OOBIN_SHEETPR_FILTERMODE );
-    // outline settings, equal flags in BIFF and OOBIN
+    maSheetSettings.mbFilterMode = getFlag( nFlags2, BIFF12_SHEETPR_FILTERMODE );
+    // outline settings, equal flags in all BIFFs
     maSheetSettings.mbApplyStyles  = getFlag( nFlags1, BIFF_SHEETPR_APPLYSTYLES );
     maSheetSettings.mbSummaryRight = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSRIGHT );
     maSheetSettings.mbSummaryBelow = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSBELOW );

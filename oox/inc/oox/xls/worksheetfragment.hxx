@@ -35,14 +35,12 @@ namespace xls {
 
 // ============================================================================
 
-class OoxDataValidationsContext : public OoxWorksheetContextBase
+class DataValidationsContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxDataValidationsContext( OoxWorksheetFragmentBase& rFragment );
+    explicit            DataValidationsContext( WorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
@@ -61,25 +59,21 @@ private:
 
 // ============================================================================
 
-class OoxWorksheetFragment : public OoxWorksheetFragmentBase
+class WorksheetFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxWorksheetFragment(
+    explicit            WorksheetFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        initializeImport();
@@ -136,14 +130,12 @@ private:
 
 // ============================================================================
 
-class BiffPivotTableContext;
-
 class BiffWorksheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffWorksheetFragment(
                             const BiffWorkbookFragmentBase& rParent,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
     virtual             ~BiffWorksheetFragment();
@@ -153,40 +145,42 @@ public:
 
 private:
     /** Imports the COLINFO record and sets column properties and formatting. */
-    void                importColInfo();
+    void                importColInfo( BiffInputStream& rStrm );
     /** Imports the BIFF2 COLUMNDEFAULT record and sets column default formatting. */
-    void                importColumnDefault();
+    void                importColumnDefault( BiffInputStream& rStrm );
     /** Imports the BIFF2 COLWIDTH record and sets column width. */
-    void                importColWidth();
+    void                importColWidth( BiffInputStream& rStrm );
     /** Imports the DATAVALIDATION record containing cell ranges with data validation settings. */
-    void                importDataValidation();
+    void                importDataValidation( BiffInputStream& rStrm );
     /** Imports the DATAVALIDATIONS record containing global data validation settings. */
-    void                importDataValidations();
+    void                importDataValidations( BiffInputStream& rStrm );
     /** Imports the DEFCOLWIDTH record and sets default column width. */
-    void                importDefColWidth();
+    void                importDefColWidth( BiffInputStream& rStrm );
     /** Imports the DEFROWHEIGHT record and sets default row height and properties. */
-    void                importDefRowHeight();
+    void                importDefRowHeight( BiffInputStream& rStrm );
     /** Imports the DIMENSION record containing the used area of the sheet. */
-    void                importDimension();
+    void                importDimension( BiffInputStream& rStrm );
     /** Imports the HYPERLINK record and sets a cell hyperlink. */
-    void                importHyperlink();
+    void                importHyperlink( BiffInputStream& rStrm );
     /** Imports the LABELRANGES record and sets the imported label ranges. */
-    void                importLabelRanges();
+    void                importLabelRanges( BiffInputStream& rStrm );
     /** Imports the MEREDCELLS record and merges all cells in the document. */
-    void                importMergedCells();
+    void                importMergedCells( BiffInputStream& rStrm );
     /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
-    void                importPageBreaks( bool bRowBreak );
+    void                importPageBreaks( BiffInputStream& rStrm, bool bRowBreak );
     /** Imports a pivot table. */
-    void                importPTDefinition();
+    void                importPTDefinition( BiffInputStream& rStrm );
+    /** Imports the QUERYTABLE and following records and inserts a web query. */
+    void                importQueryTable( BiffInputStream& rStrm );
     /** Imports the SCENARIOS record and the following scenarios. */
-    void                importScenarios();
+    void                importScenarios( BiffInputStream& rStrm );
     /** Imports the SHAREDFEATHEAD record. */
-    void                importSharedFeatHead();
+    void                importSharedFeatHead( BiffInputStream& rStrm );
     /** Imports the STANDARDWIDTH record and sets standard column width. */
-    void                importStandardWidth();
+    void                importStandardWidth( BiffInputStream& rStrm );
 
 private:
-    ::boost::shared_ptr< BiffPivotTableContext > mxPTContext;
+    ::boost::shared_ptr< BiffWorksheetContextBase > mxContext;
 };
 
 // ============================================================================
@@ -195,4 +189,3 @@ private:
 } // namespace oox
 
 #endif
-

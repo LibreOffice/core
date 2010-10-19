@@ -317,10 +317,10 @@ typedef ::boost::shared_ptr< ExternalLink > ExternalLinkRef;
 
 // ============================================================================
 
-/** Represents a REF entry in the OOBIN EXTERNALSHEETS or in the BIFF8
+/** Represents a REF entry in the BIFF12 EXTERNALSHEETS or in the BIFF8
     EXTERNSHEET record.
 
-    This struct is used to map ref identifiers to external books (OOBIN:
+    This struct is used to map ref identifiers to external books (BIFF12:
     EXTERNALREF records, BIFF8: EXTERNALBOOK records), and provides sheet
     indexes into the sheet list of the external document.
  */
@@ -332,7 +332,7 @@ struct RefSheetsModel
 
     explicit            RefSheetsModel();
 
-    void                readOobData( RecordInputStream& rStrm );
+    void                readBiff12Data( RecordInputStream& rStrm );
     void                readBiff8Data( BiffInputStream& rStrm );
 };
 
@@ -393,7 +393,7 @@ private:
     ExternalLinkVec     maLinks;            /// List of link structures for all kinds of links.
     ExternalLinkVec     maExtLinks;         /// Real external links needed for formula parser.
     RefSheetsModelVec   maRefSheets;        /// Sheet indexes for reference ids.
-    bool                mbUseRefSheets;     /// True = use maRefSheets list (OOBIN only).
+    bool                mbUseRefSheets;     /// True = use maRefSheets list (BIFF12 only).
 };
 
 // ============================================================================

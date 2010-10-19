@@ -26,13 +26,16 @@
  ************************************************************************/
 
 #include "oox/xls/themebuffer.hxx"
+
 #include "oox/xls/stylesbuffer.hxx"
 #include "tokens.hxx"
 
-using ::oox::drawingml::ClrScheme;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using ::oox::drawingml::ClrScheme;
 
 // ============================================================================
 
@@ -91,7 +94,7 @@ ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
 {
     switch( getFilterType() )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
             //! TODO: locale dependent font name
             mxDefFontModel->maName = CREATE_OUSTRING( "Cambria" );
             mxDefFontModel->mfHeight = 11.0;
@@ -119,4 +122,3 @@ sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
 
 } // namespace xls
 } // namespace oox
-

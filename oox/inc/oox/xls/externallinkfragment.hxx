@@ -37,22 +37,21 @@ namespace xls {
 class ExternalLink;
 
 // ============================================================================
+// ============================================================================
 
 /** This class implements importing the sheetData element in external sheets.
 
     The sheetData element embedded in the externalBook element contains cached
     cells from externally linked sheets.
  */
-class OoxExternalSheetDataContext : public OoxWorkbookContextBase
+class ExternalSheetDataContext : public WorkbookContextBase
 {
 public:
-    explicit            OoxExternalSheetDataContext(
-                            OoxWorkbookFragmentBase& rFragment,
+    explicit            ExternalSheetDataContext(
+                            WorkbookFragmentBase& rFragment,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >& rxSheetCache );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
@@ -85,24 +84,20 @@ private:
 
 // ============================================================================
 
-class OoxExternalLinkFragment : public OoxWorkbookFragmentBase
+class ExternalLinkFragment : public WorkbookFragmentBase
 {
 public:
-    explicit            OoxExternalLinkFragment(
+    explicit            ExternalLinkFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             ExternalLink& rExtLink );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
@@ -117,29 +112,24 @@ private:
 };
 
 // ============================================================================
+// ============================================================================
 
-class BiffExternalLinkFragment : public BiffWorkbookFragmentBase
+class BiffExternalSheetDataContext : public BiffWorkbookContextBase
 {
 public:
-    explicit            BiffExternalLinkFragment( const BiffWorkbookFragmentBase& rParent, bool bImportDefNames );
-    virtual             ~BiffExternalLinkFragment();
-
-    /** Imports all records related to external links. */
-    virtual bool        importFragment();
+    explicit            BiffExternalSheetDataContext( const WorkbookHelper& rHelper, bool bImportDefNames );
+    virtual             ~BiffExternalSheetDataContext();
 
     /** Tries to import a record related to external links and defined names. */
-    void                importRecord();
-
-    /** Finalizes buffers related to external links and defined names. */
-    void                finalizeImport();
+    virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
-    void                importExternSheet();
-    void                importExternalBook();
-    void                importExternalName();
-    void                importXct();
-    void                importCrn();
-    void                importDefinedName();
+    void                importExternSheet( BiffInputStream& rStrm );
+    void                importExternalBook( BiffInputStream& rStrm );
+    void                importExternalName( BiffInputStream& rStrm );
+    void                importXct( BiffInputStream& rStrm );
+    void                importCrn( BiffInputStream& rStrm );
+    void                importDefinedName( BiffInputStream& rStrm );
 
     /** Sets the passed cell value to the passed position in the sheet cache. */
     void                setCellValue( const BinAddress& rBinAddr, const ::com::sun::star::uno::Any& rValue );
@@ -153,8 +143,19 @@ private:
 
 // ============================================================================
 
+class BiffExternalLinkFragment : public BiffWorkbookFragmentBase
+{
+public:
+    explicit            BiffExternalLinkFragment( const BiffWorkbookFragmentBase& rParent );
+
+    /** Imports all records related to external links. */
+    virtual bool        importFragment();
+};
+
+// ============================================================================
+// ============================================================================
+
 } // namespace xls
 } // namespace oox
 
 #endif
-

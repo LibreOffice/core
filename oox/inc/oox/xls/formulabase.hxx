@@ -28,19 +28,19 @@
 #ifndef OOX_XLS_FORMULABASE_HXX
 #define OOX_XLS_FORMULABASE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
+#include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/sheet/FormulaToken.hpp>
-#include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace sheet { class XFormulaOpCodeMapper; }
     namespace sheet { class XFormulaParser; }
     namespace sheet { class XFormulaTokens; }
-    namespace sheet { class XFormulaOpCodeMapper; }
 } } }
 
 namespace oox { template< typename Type > class Matrix; }
@@ -126,23 +126,13 @@ const sal_uInt8 BIFF_TOKID_AREAERR3D            = 0x1D;     /// Deleted 3D area 
 
 // specific token constants ---------------------------------------------------
 
-const sal_uInt8 OOBIN_TOK_ARRAY_DOUBLE          = 0;
-const sal_uInt8 OOBIN_TOK_ARRAY_STRING          = 1;
-const sal_uInt8 OOBIN_TOK_ARRAY_BOOL            = 2;
-const sal_uInt8 OOBIN_TOK_ARRAY_ERROR           = 4;
+const sal_uInt8 BIFF_TOK_ARRAY_DOUBLE           = 0;        /// Double value in an array.
+const sal_uInt8 BIFF_TOK_ARRAY_STRING           = 1;        /// String value in an array.
+const sal_uInt8 BIFF_TOK_ARRAY_BOOL             = 2;        /// Boolean value in an array.
+const sal_uInt8 BIFF_TOK_ARRAY_ERROR            = 4;        /// Error code in an array.
 
 const sal_uInt8 BIFF_TOK_BOOL_FALSE             = 0;        /// FALSE value of a tBool token.
 const sal_uInt8 BIFF_TOK_BOOL_TRUE              = 1;        /// TRUE value of a tBool token.
-
-const sal_uInt8 OOBIN_TOK_ATTR_VOLATILE         = 0x01;     /// Volatile function.
-const sal_uInt8 OOBIN_TOK_ATTR_IF               = 0x02;     /// Start of true condition in IF function.
-const sal_uInt8 OOBIN_TOK_ATTR_CHOOSE           = 0x04;     /// Jump array of CHOOSE function.
-const sal_uInt8 OOBIN_TOK_ATTR_SKIP             = 0x08;     /// Skip tokens.
-const sal_uInt8 OOBIN_TOK_ATTR_SUM              = 0x10;     /// SUM function with one parameter.
-const sal_uInt8 OOBIN_TOK_ATTR_ASSIGN           = 0x20;     /// BASIC style assignment.
-const sal_uInt8 OOBIN_TOK_ATTR_SPACE            = 0x40;     /// Spaces in formula representation.
-const sal_uInt8 OOBIN_TOK_ATTR_SPACE_VOLATILE   = 0x41;     /// Leading spaces and volatile formula.
-const sal_uInt8 OOBIN_TOK_ATTR_IFERROR          = 0x80;     /// Start of condition in IFERROR function.
 
 const sal_uInt8 BIFF_TOK_ATTR_VOLATILE          = 0x01;     /// Volatile function.
 const sal_uInt8 BIFF_TOK_ATTR_IF                = 0x02;     /// Start of true condition in IF function.
@@ -152,6 +142,7 @@ const sal_uInt8 BIFF_TOK_ATTR_SUM               = 0x10;     /// SUM function wit
 const sal_uInt8 BIFF_TOK_ATTR_ASSIGN            = 0x20;     /// BASIC style assignment.
 const sal_uInt8 BIFF_TOK_ATTR_SPACE             = 0x40;     /// Spaces in formula representation.
 const sal_uInt8 BIFF_TOK_ATTR_SPACE_VOLATILE    = 0x41;     /// Leading spaces and volatile formula.
+const sal_uInt8 BIFF_TOK_ATTR_IFERROR           = 0x80;     /// Start of condition in IFERROR function (BIFF12 only).
 
 const sal_uInt8 BIFF_TOK_ATTR_SPACE_SP          = 0x00;     /// Spaces before next token.
 const sal_uInt8 BIFF_TOK_ATTR_SPACE_BR          = 0x01;     /// Line breaks before next token.
@@ -166,27 +157,27 @@ const sal_uInt16 BIFF_TOK_FUNCVAR_FUNCIDMASK    = 0x7FFF;   /// Mask for functio
 const sal_uInt8 BIFF_TOK_FUNCVAR_CMDPROMPT      = 0x80;     /// User prompt for macro commands.
 const sal_uInt8 BIFF_TOK_FUNCVAR_COUNTMASK      = 0x7F;     /// Mask for parameter count.
 
-const sal_uInt16 OOBIN_TOK_REF_COLMASK          = 0x3FFF;   /// Mask to extract column from reference.
-const sal_Int32 OOBIN_TOK_REF_ROWMASK           = 0xFFFFF;  /// Mask to extract row from reference.
-const sal_uInt16 OOBIN_TOK_REF_COLREL           = 0x4000;   /// True = column is relative.
-const sal_uInt16 OOBIN_TOK_REF_ROWREL           = 0x8000;   /// True = row is relative.
+const sal_uInt16 BIFF12_TOK_REF_COLMASK         = 0x3FFF;   /// Mask to extract column from reference (BIFF12).
+const sal_Int32 BIFF12_TOK_REF_ROWMASK          = 0xFFFFF;  /// Mask to extract row from reference (BIFF12).
+const sal_uInt16 BIFF12_TOK_REF_COLREL          = 0x4000;   /// True = column is relative (BIFF12).
+const sal_uInt16 BIFF12_TOK_REF_ROWREL          = 0x8000;   /// True = row is relative (BIFF12).
 
 const sal_uInt16 BIFF_TOK_REF_COLMASK           = 0x00FF;   /// Mask to extract BIFF8 column from reference.
 const sal_uInt16 BIFF_TOK_REF_ROWMASK           = 0x3FFF;   /// Mask to extract BIFF2-BIFF5 row from reference.
 const sal_uInt16 BIFF_TOK_REF_COLREL            = 0x4000;   /// True = column is relative.
 const sal_uInt16 BIFF_TOK_REF_ROWREL            = 0x8000;   /// True = row is relative.
 
-const sal_uInt16 OOBIN_TOK_TABLE_COLUMN         = 0x0001;   /// Table reference: Single column.
-const sal_uInt16 OOBIN_TOK_TABLE_COLRANGE       = 0x0002;   /// Table reference: Range of columns.
-const sal_uInt16 OOBIN_TOK_TABLE_ALL            = 0x0004;   /// Table reference: Special [#All] range.
-const sal_uInt16 OOBIN_TOK_TABLE_HEADERS        = 0x0008;   /// Table reference: Special [#Headers] range.
-const sal_uInt16 OOBIN_TOK_TABLE_DATA           = 0x0010;   /// Table reference: Special [#Data] range.
-const sal_uInt16 OOBIN_TOK_TABLE_TOTALS         = 0x0020;   /// Table reference: Special [#Totals] range.
-const sal_uInt16 OOBIN_TOK_TABLE_THISROW        = 0x0040;   /// Table reference: Special [#This Row] range.
-const sal_uInt16 OOBIN_TOK_TABLE_SP_BRACKETS    = 0x0080;   /// Table reference: Spaces in outer brackets.
-const sal_uInt16 OOBIN_TOK_TABLE_SP_SEP         = 0x0100;   /// Table reference: Spaces after separators.
-const sal_uInt16 OOBIN_TOK_TABLE_ROW            = 0x0200;   /// Table reference: Single row.
-const sal_uInt16 OOBIN_TOK_TABLE_CELL           = 0x0400;   /// Table reference: Single cell.
+const sal_uInt16 BIFF12_TOK_TABLE_COLUMN         = 0x0001;   /// Table reference: Single column.
+const sal_uInt16 BIFF12_TOK_TABLE_COLRANGE       = 0x0002;   /// Table reference: Range of columns.
+const sal_uInt16 BIFF12_TOK_TABLE_ALL            = 0x0004;   /// Table reference: Special [#All] range.
+const sal_uInt16 BIFF12_TOK_TABLE_HEADERS        = 0x0008;   /// Table reference: Special [#Headers] range.
+const sal_uInt16 BIFF12_TOK_TABLE_DATA           = 0x0010;   /// Table reference: Special [#Data] range.
+const sal_uInt16 BIFF12_TOK_TABLE_TOTALS         = 0x0020;   /// Table reference: Special [#Totals] range.
+const sal_uInt16 BIFF12_TOK_TABLE_THISROW        = 0x0040;   /// Table reference: Special [#This Row] range.
+const sal_uInt16 BIFF12_TOK_TABLE_SP_BRACKETS    = 0x0080;   /// Table reference: Spaces in outer brackets.
+const sal_uInt16 BIFF12_TOK_TABLE_SP_SEP         = 0x0100;   /// Table reference: Spaces after separators.
+const sal_uInt16 BIFF12_TOK_TABLE_ROW            = 0x0200;   /// Table reference: Single row.
+const sal_uInt16 BIFF12_TOK_TABLE_CELL           = 0x0400;   /// Table reference: Single cell.
 
 const sal_uInt8 BIFF_TOK_NLR_ERR                = 0x01;     /// NLR: Invalid/deleted.
 const sal_uInt8 BIFF_TOK_NLR_ROWR               = 0x02;     /// NLR: Row index.
@@ -209,23 +200,21 @@ const sal_uInt32 BIFF_TOK_NLR_ADDMASK           = 0x3FFFFFFF;   /// Mask for num
 
 // function constants ---------------------------------------------------------
 
-const sal_uInt8 OOX_MAX_PARAMCOUNT              = 255;      /// Maximum parameter count for OOXML/OOBIN files.
-const sal_uInt8 BIFF_MAX_PARAMCOUNT             = 30;       /// Maximum parameter count for BIFF files.
+const sal_uInt8 OOX_MAX_PARAMCOUNT              = 255;      /// Maximum parameter count for OOXML/BIFF12 files.
+const sal_uInt8 BIFF_MAX_PARAMCOUNT             = 30;       /// Maximum parameter count for BIFF2-BIFF8 files.
 
-const sal_uInt16 OOBIN_FUNC_IF                  = 1;        /// OOBIN function id of the IF function.
-const sal_uInt16 OOBIN_FUNC_SUM                 = 4;        /// OOBIN function id of the SUM function.
-const sal_uInt16 OOBIN_FUNC_TRUE                = 34;       /// OOBIN function id of the TRUE function.
-const sal_uInt16 OOBIN_FUNC_FALSE               = 35;       /// OOBIN function id of the FALSE function.
-const sal_uInt16 OOBIN_FUNC_ROWS                = 76;       /// OOBIN function id of the ROWS function.
-const sal_uInt16 OOBIN_FUNC_COLUMNS             = 77;       /// OOBIN function id of the COLUMNS function.
-const sal_uInt16 OOBIN_FUNC_OFFSET              = 78;       /// OOBIN function id of the OFFSET function.
-const sal_uInt16 OOBIN_FUNC_FLOOR               = 285;      /// OOBIN function id of the FLOOR function.
-const sal_uInt16 OOBIN_FUNC_CEILING             = 288;      /// OOBIN function id of the CEILING function.
-const sal_uInt16 OOBIN_FUNC_HYPERLINK           = 359;      /// OOBIN function id of the HYPERLINK function.
-const sal_uInt16 OOBIN_FUNC_WEEKNUM             = 465;      /// OOBIN function id of the WEEKNUM function.
-
-const sal_uInt16 BIFF_FUNC_SUM                  = 4;        /// BIFF function id of the SUM function.
+const sal_uInt16 BIFF_FUNC_IF                   = 1;        /// Function identifier of the IF function.
+const sal_uInt16 BIFF_FUNC_SUM                  = 4;        /// Function identifier of the SUM function.
+const sal_uInt16 BIFF_FUNC_TRUE                 = 34;       /// Function identifier of the TRUE function.
+const sal_uInt16 BIFF_FUNC_FALSE                = 35;       /// Function identifier of the FALSE function.
+const sal_uInt16 BIFF_FUNC_ROWS                 = 76;       /// Function identifier of the ROWS function.
+const sal_uInt16 BIFF_FUNC_COLUMNS              = 77;       /// Function identifier of the COLUMNS function.
+const sal_uInt16 BIFF_FUNC_OFFSET               = 78;       /// Function identifier of the OFFSET function.
 const sal_uInt16 BIFF_FUNC_EXTERNCALL           = 255;      /// BIFF function id of the EXTERN.CALL function.
+const sal_uInt16 BIFF_FUNC_FLOOR                = 285;      /// Function identifier of the FLOOR function.
+const sal_uInt16 BIFF_FUNC_CEILING              = 288;      /// Function identifier of the CEILING function.
+const sal_uInt16 BIFF_FUNC_HYPERLINK            = 359;      /// Function identifier of the HYPERLINK function.
+const sal_uInt16 BIFF_FUNC_WEEKNUM              = 465;      /// Function identifier of the WEEKNUM function.
 
 // reference helpers ==========================================================
 
@@ -239,11 +228,11 @@ struct BinSingleRef2d
 
     explicit            BinSingleRef2d();
 
-    void                setOobData( sal_uInt16 nCol, sal_Int32 nRow, bool bRelativeAsOffset );
+    void                setBiff12Data( sal_uInt16 nCol, sal_Int32 nRow, bool bRelativeAsOffset );
     void                setBiff2Data( sal_uInt8 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
     void                setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
 
-    void                readOobData( RecordInputStream& rStrm, bool bRelativeAsOffset );
+    void                readBiff12Data( RecordInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
@@ -256,7 +245,7 @@ struct BinComplexRef2d
     BinSingleRef2d      maRef1;             /// Start (top-left) cell address.
     BinSingleRef2d      maRef2;             /// End (bottom-right) cell address.
 
-    void                readOobData( RecordInputStream& rStrm, bool bRelativeAsOffset );
+    void                readBiff12Data( RecordInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
@@ -495,8 +484,8 @@ struct FunctionInfo
     ::rtl::OUString     maExtProgName;      /// Programmatic function name for external functions.
     FunctionLibraryType meFuncLibType;      /// The external library this function is part of.
     sal_Int32           mnApiOpCode;        /// API function opcode.
-    sal_uInt16          mnOobFuncId;        /// OOBIN function identifier.
-    sal_uInt16          mnBiffFuncId;       /// BIFF function identifier.
+    sal_uInt16          mnBiff12FuncId;     /// BIFF12 function identifier.
+    sal_uInt16          mnBiffFuncId;       /// BIFF2-BIFF8 function identifier.
     sal_uInt8           mnMinParamCount;    /// Minimum number of parameters.
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
@@ -551,13 +540,13 @@ public:
     /** Returns the function info for an ODF function name, or 0 on error. */
     const FunctionInfo* getFuncInfoFromOdfFuncName( const ::rtl::OUString& rFuncName ) const;
 
-    /** Returns the function info for an OOX function name, or 0 on error. */
+    /** Returns the function info for an OOXML function name, or 0 on error. */
     const FunctionInfo* getFuncInfoFromOoxFuncName( const ::rtl::OUString& rFuncName ) const;
 
-    /** Returns the function info for an OOBIN function index, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromOobFuncId( sal_uInt16 nFuncId ) const;
+    /** Returns the function info for a BIFF12 function index, or 0 on error. */
+    const FunctionInfo* getFuncInfoFromBiff12FuncId( sal_uInt16 nFuncId ) const;
 
-    /** Returns the function info for a BIFF function index, or 0 on error. */
+    /** Returns the function info for a BIFF2-BIFF8 function index, or 0 on error. */
     const FunctionInfo* getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const;
 
     /** Returns the function info for a macro function referred by the
@@ -599,7 +588,7 @@ public:
     /** Returns the function info for an API token, or 0 on error. */
     const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
 
-    /** Returns the op-code map that is used by the OOX formula parser. */
+    /** Returns the op-code map that is used by the OOXML formula parser. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >
                         getOoxParserMap() const;
 
@@ -933,4 +922,3 @@ public:
 } // namespace oox
 
 #endif
-

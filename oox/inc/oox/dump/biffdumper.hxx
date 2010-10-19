@@ -190,6 +190,9 @@ protected:
                             ::oox::xls::BiffStringFlags nUniFlags = ::oox::xls::BIFF_STR_DEFAULT,
                             rtl_TextEncoding eDefaultTextEnc = RTL_TEXTENCODING_DONTKNOW );
 
+    ::rtl::OUString     dumpSegmentedUniString( const String& rName );
+    void                dumpSegmentedUniStringArray( const String& rName );
+
     sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
     sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
 

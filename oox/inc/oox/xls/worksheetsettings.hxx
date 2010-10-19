@@ -28,8 +28,8 @@
 #ifndef OOX_XLS_WORKSHEETSETTINGS_HXX
 #define OOX_XLS_WORKSHEETSETTINGS_HXX
 
-#include "oox/xls/worksheethelper.hxx"
 #include "oox/xls/richstring.hxx"
+#include "oox/xls/worksheethelper.hxx"
 
 namespace oox {
 namespace xls {
@@ -142,4 +142,3 @@ private:
 } // namespace oox
 
 #endif
-

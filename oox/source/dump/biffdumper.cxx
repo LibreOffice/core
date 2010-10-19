@@ -537,6 +537,26 @@ OUString BiffObjectBase::dumpString( const String& rName, BiffStringFlags nByteF
     return (getBiff() == BIFF8) ? dumpUniString( rName, nUniFlags ) : dumpByteString( rName, nByteFlags, eDefaultTextEnc );
 }
 
+OUString BiffObjectBase::dumpSegmentedUniString( const String& rName )
+{
+    sal_Int32 nLength = mxBiffStrm->readInt32();
+    OUStringBuffer aBuffer;
+    while( !mxBiffStrm->isEof() && (aBuffer.getLength() < nLength) )
+        aBuffer.append( mxBiffStrm->readUniString() );
+    OUString aString = aBuffer.makeStringAndClear();
+    writeStringItem( rName, aString );
+    return aString;
+}
+
+void BiffObjectBase::dumpSegmentedUniStringArray( const String& rName )
+{
+    writeEmptyItem( rName );
+    IndentGuard aIndGuard( mxOut );
+    mxOut->resetItemIndex();
+    for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "count" ); !mxBiffStrm->isEof() && (nIndex < nCount); ++nIndex )
+        dumpSegmentedUniString( "#entry" );
+}
+
 sal_uInt8 BiffObjectBase::dumpBoolean( const String& rName )
 {
     sal_uInt8 nBool;
@@ -2066,6 +2086,69 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpBool< sal_uInt32 >( "recommend-compress-pics" );
         break;
 
+        case BIFF_ID_CONNECTION:
+        {
+            dumpFrHeader( true, false );
+            sal_uInt16 nType = dumpDec< sal_uInt16 >( "data-source-type", "CONNECTION-SOURCETYPE" );
+            sal_uInt16 nFlags1 = dumpHex< sal_uInt16 >( "flags", "CONNECTION-FLAGS" );
+            dumpDec< sal_uInt16 >( "param-count" );
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "querytable-flags", "QUERYTABLESETTINGS-FLAGS" );
+            switch( nType )
+            {
+                case 4:     dumpHex< sal_uInt16 >( "html-flags", "QUERYTABLESETTINGS-HTML-FLAGS" );     break;
+                case 5:     dumpHex< sal_uInt16 >( "oledb-flags", "QUERYTABLESETTINGS-OLEDB-FLAGS" );   break;
+                case 7:     dumpHex< sal_uInt16 >( "ado-flags", "QUERYTABLESETTINGS-ADO-FLAGS" );       break;
+                default:    dumpUnused( 2 );
+            }
+            dumpDec< sal_uInt8 >( "edited-version" );
+            dumpDec< sal_uInt8 >( "refreshed-version" );
+            dumpDec< sal_uInt8 >( "min-refresh-version" );
+            dumpDec< sal_uInt16 >( "refresh-interval", "QUERYTABLESETTINGS-INTERVAL" );
+            dumpDec< sal_uInt16 >( "html-format", "QUERYTABLESETTINGS-HTMLFORMAT" );
+            dumpDec< sal_Int32 >( "reconnect-type", "CONNECTION-RECONNECTTYPE" );
+            dumpDec< sal_uInt8 >( "credentials", "CONNECTION-CREDENTIALS" );
+            dumpUnused( 1 );
+            dumpSegmentedUniString( "source-file" );
+            dumpSegmentedUniString( "source-conn-file" );
+            dumpSegmentedUniString( "name" );
+            dumpSegmentedUniString( "description" );
+            dumpSegmentedUniString( "sso-id" );
+            if( nFlags1 & 0x0004 ) dumpSegmentedUniString( "table-names" );
+            if( nFlags1 & 0x0010 )
+            {
+                break;   // TODO: parameter array structure
+            }
+            bool bEscape = false;
+            switch( nType )
+            {
+                case 1:
+                    dumpSegmentedUniString( "connection-string" );
+                break;
+                case 4:
+                    dumpSegmentedUniStringArray( "urls" );
+                    dumpSegmentedUniStringArray( "post-method" );
+                break;
+                case 5:
+                    bEscape = true;
+                break;
+                case 6:
+                    bEscape = true;
+                break;
+            }
+            if( bEscape )
+                break;
+            dumpSegmentedUniStringArray( "sql-command" );
+            dumpSegmentedUniStringArray( "orig-sql-command" );
+            dumpSegmentedUniStringArray( "webquery-dialog-url" );
+            switch( dumpDec< sal_uInt8 >( "linked-object-type", "CONNECTION-LINKEDOBJECTTYPE" ) )
+            {
+                case 1: dumpSegmentedUniString( "defined-name" );   break;
+                case 2: dumpHex< sal_uInt16 >( "cache-id" );        break;
+            }
+        }
+        break;
+
         case BIFF_ID_CONT:
             if( (eBiff == BIFF8) && (getLastRecId() == BIFF_ID_OBJ) )
                 dumpEmbeddedDff();
@@ -2175,6 +2258,21 @@ void WorkbookStreamObject::implDumpRecordBody()
             mxOut->resetItemIndex();
             while( rStrm.getRemaining() >= 2 )
                 dumpDec< sal_uInt16 >( "#cell-offset" );
+        break;
+
+        case BIFF_ID_DBQUERY:
+            if( eBiff == BIFF8 )
+            {
+                if( (getLastRecId() != BIFF_ID_PCITEM_STRING) && (getLastRecId() != BIFF_ID_DBQUERY) )
+                {
+                    dumpHex< sal_uInt16 >( "flags", "DBQUERY-FLAGS" );
+                    dumpDec< sal_uInt16 >( "sql-param-count" );
+                    dumpDec< sal_uInt16 >( "command-count" );
+                    dumpDec< sal_uInt16 >( "post-method-count" );
+                    dumpDec< sal_uInt16 >( "server-sql-count" );
+                    dumpDec< sal_uInt16 >( "odbc-connection-count" );
+                }
+            }
         break;
 
         case BIFF2_ID_DEFINEDNAME:
@@ -2715,6 +2813,58 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
         break;
 
+        case BIFF_ID_QUERYTABLE:
+            dumpHex< sal_uInt16 >( "flags", "QUERYTABLE-FLAGS" );
+            dumpDec< sal_uInt16 >( "autoformat-id" );
+            dumpHex< sal_uInt16 >( "autoformat-flags", "QUERYTABLE-AUTOFORMAT-FLAGS" );
+            dumpUnused( 4 );
+            dumpUniString( "defined-name" );
+            dumpUnused( 2 );
+        break;
+
+        case BIFF_ID_QUERYTABLEREFRESH:
+        {
+            dumpFrHeader( true, false );
+            bool bPivot = dumpBool< sal_uInt16 >( "pivot-table" );
+            dumpHex< sal_uInt16 >( "flags", "QUERYTABLEREFRESH-FLAGS" );
+            dumpHex< sal_uInt32 >( bPivot ? "pivottable-flags" : "querytable-flags", bPivot ? "QUERYTABLEREFRESH-PTFLAGS" : "QUERYTABLEREFRESH-QTFLAGS" );
+            dumpDec< sal_uInt8 >( "refreshed-version" );
+            dumpDec< sal_uInt8 >( "min-refresh-version" );
+            dumpUnused( 2 );
+            dumpUniString( "table-name" );
+            dumpUnused( 2 );
+        }
+        break;
+
+        case BIFF_ID_QUERYTABLESETTINGS:
+        {
+            dumpFrHeader( true, false );
+            sal_uInt16 nType = dumpDec< sal_uInt16 >( "data-source-type", "CONNECTION-SOURCETYPE" );
+            dumpHex< sal_uInt16 >( "flags-1", "QUERYTABLESETTINGS-FLAGS" );
+            switch( nType )
+            {
+                case 4:     dumpHex< sal_uInt16 >( "html-flags", "QUERYTABLESETTINGS-HTML-FLAGS" );     break;
+                case 5:     dumpHex< sal_uInt16 >( "oledb-flags", "QUERYTABLESETTINGS-OLEDB-FLAGS" );   break;
+                case 7:     dumpHex< sal_uInt16 >( "ado-flags", "QUERYTABLESETTINGS-ADO-FLAGS" );       break;
+                default:    dumpUnused( 2 );
+            }
+            dumpHex< sal_uInt16 >( "ext-flags", "QUERYTABLESETTINGS-EXT-FLAGS" );
+            dumpDec< sal_uInt8 >( "edited-version" );
+            dumpDec< sal_uInt8 >( "refreshed-version" );
+            dumpDec< sal_uInt8 >( "min-refresh-version" );
+            dumpUnused( 3 );
+            dumpDec< sal_uInt16 >( "oledb-count" );
+            dumpDec< sal_uInt16 >( "future-data-size" );
+            dumpDec< sal_uInt16 >( "refresh-interval", "QUERYTABLESETTINGS-INTERVAL" );
+            dumpDec< sal_uInt16 >( "html-format", "QUERYTABLESETTINGS-HTMLFORMAT" );
+        }
+        break;
+
+        case BIFF_ID_QUERYTABLESTRING:
+            dumpFrHeader( true, false );
+            dumpUniString( "connection-string" );
+        break;
+
         case BIFF_ID_RECALCID:
             dumpFrHeader( true, false );
             dumpDec< sal_uInt32 >( "recalc-engine-id" );
@@ -2894,18 +3044,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_Int8 >( "outline-level" );
             dumpUnicodeArray( "style-name", rStrm.readuInt16() );
             dumpDxfProp();
-        break;
-
-        case BIFF_ID_SXEXT:
-            if( eBiff == BIFF8 )
-            {
-                dumpHex< sal_uInt16 >( "flags", "SXEXT-FLAGS" );
-                dumpDec< sal_uInt16 >( "param-string-count" );
-                dumpDec< sal_uInt16 >( "sql-statement-string-count" );
-                dumpDec< sal_uInt16 >( "webquery-postmethod-string-count" );
-                dumpDec< sal_uInt16 >( "server-pagefields-string-count" );
-                dumpDec< sal_uInt16 >( "odbc-connection-string-count" );
-            }
         break;
 
         case BIFF_ID_TABLESTYLES:

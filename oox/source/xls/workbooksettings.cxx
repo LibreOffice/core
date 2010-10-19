@@ -26,48 +26,47 @@
  ************************************************************************/
 
 #include "oox/xls/workbooksettings.hxx"
+
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <comphelper/mediadescriptor.hxx>
-#include "properties.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::sheet::XCalculatable;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::util::Date;
-using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::comphelper::MediaDescriptor;
-using ::oox::core::CodecHelper;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::comphelper::MediaDescriptor;
+using ::oox::core::CodecHelper;
+using ::rtl::OUString;
+
+// ============================================================================
+
 namespace {
 
-const sal_uInt32 OOBIN_WORKBOOKPR_DATE1904  = 0x00000001;
-const sal_uInt32 OOBIN_WORKBOOKPR_STRIPEXT  = 0x00000080;
+const sal_uInt32 BIFF12_WORKBOOKPR_DATE1904     = 0x00000001;
+const sal_uInt32 BIFF12_WORKBOOKPR_STRIPEXT     = 0x00000080;
 
-const sal_uInt16 OOBIN_CALCPR_A1            = 0x0002;
-const sal_uInt16 OOBIN_CALCPR_ITERATE       = 0x0004;
-const sal_uInt16 OOBIN_CALCPR_FULLPRECISION = 0x0008;
-const sal_uInt16 OOBIN_CALCPR_CALCCOMPLETED = 0x0010;
-const sal_uInt16 OOBIN_CALCPR_CALCONSAVE    = 0x0020;
-const sal_uInt16 OOBIN_CALCPR_CONCURRENT    = 0x0040;
-const sal_uInt16 OOBIN_CALCPR_MANUALPROC    = 0x0080;
+const sal_uInt16 BIFF12_CALCPR_A1               = 0x0002;
+const sal_uInt16 BIFF12_CALCPR_ITERATE          = 0x0004;
+const sal_uInt16 BIFF12_CALCPR_FULLPRECISION    = 0x0008;
+const sal_uInt16 BIFF12_CALCPR_CALCCOMPLETED    = 0x0010;
+const sal_uInt16 BIFF12_CALCPR_CALCONSAVE       = 0x0020;
+const sal_uInt16 BIFF12_CALCPR_CONCURRENT       = 0x0040;
+const sal_uInt16 BIFF12_CALCPR_MANUALPROC       = 0x0080;
 
 // no predefined constants for show objects mode
 const sal_Int16 API_SHOWMODE_SHOW               = 0;        /// Show drawing objects.
@@ -95,7 +94,7 @@ WorkbookSettingsModel::WorkbookSettingsModel() :
 {
 }
 
-void WorkbookSettingsModel::setBinObjectMode( sal_uInt16 nObjMode )
+void WorkbookSettingsModel::setBiffObjectMode( sal_uInt16 nObjMode )
 {
     static const sal_Int32 spnObjModes[] = { XML_all, XML_placeholders, XML_none };
     mnShowObjectMode = STATIC_ARRAY_SELECT( spnObjModes, nObjMode, XML_all );
@@ -168,10 +167,10 @@ void WorkbookSettings::importWorkbookPr( RecordInputStream& rStrm )
 {
     sal_uInt32 nFlags;
     rStrm >> nFlags >> maBookSettings.mnDefaultThemeVer >> maBookSettings.maCodeName;
-    maBookSettings.setBinObjectMode( extractValue< sal_uInt16 >( nFlags, 13, 2 ) );
+    maBookSettings.setBiffObjectMode( extractValue< sal_uInt16 >( nFlags, 13, 2 ) );
     // set flag means: strip external link values
-    maBookSettings.mbSaveExtLinkValues = !getFlag( nFlags, OOBIN_WORKBOOKPR_STRIPEXT );
-    setDateMode( getFlag( nFlags, OOBIN_WORKBOOKPR_DATE1904 ) );
+    maBookSettings.mbSaveExtLinkValues = !getFlag( nFlags, BIFF12_WORKBOOKPR_STRIPEXT );
+    setDateMode( getFlag( nFlags, BIFF12_WORKBOOKPR_DATE1904 ) );
 }
 
 void WorkbookSettings::importCalcPr( RecordInputStream& rStrm )
@@ -181,14 +180,14 @@ void WorkbookSettings::importCalcPr( RecordInputStream& rStrm )
     rStrm >> maCalcSettings.mnCalcId >> nCalcMode >> maCalcSettings.mnIterateCount >> maCalcSettings.mfIterateDelta >> nProcCount >> nFlags;
 
     static const sal_Int32 spnCalcModes[] = { XML_manual, XML_auto, XML_autoNoTable };
-    maCalcSettings.mnRefMode       = getFlagValue( nFlags, OOBIN_CALCPR_A1, XML_A1, XML_R1C1 );
+    maCalcSettings.mnRefMode       = getFlagValue( nFlags, BIFF12_CALCPR_A1, XML_A1, XML_R1C1 );
     maCalcSettings.mnCalcMode      = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
-    maCalcSettings.mnProcCount     = getFlagValue< sal_Int32 >( nFlags, OOBIN_CALCPR_MANUALPROC, nProcCount, -1 );
-    maCalcSettings.mbCalcOnSave    = getFlag( nFlags, OOBIN_CALCPR_CALCONSAVE );
-    maCalcSettings.mbCalcCompleted = getFlag( nFlags, OOBIN_CALCPR_CALCCOMPLETED );
-    maCalcSettings.mbFullPrecision = getFlag( nFlags, OOBIN_CALCPR_FULLPRECISION );
-    maCalcSettings.mbIterate       = getFlag( nFlags, OOBIN_CALCPR_ITERATE );
-    maCalcSettings.mbConcurrent    = getFlag( nFlags, OOBIN_CALCPR_CONCURRENT );
+    maCalcSettings.mnProcCount     = getFlagValue< sal_Int32 >( nFlags, BIFF12_CALCPR_MANUALPROC, nProcCount, -1 );
+    maCalcSettings.mbCalcOnSave    = getFlag( nFlags, BIFF12_CALCPR_CALCONSAVE );
+    maCalcSettings.mbCalcCompleted = getFlag( nFlags, BIFF12_CALCPR_CALCCOMPLETED );
+    maCalcSettings.mbFullPrecision = getFlag( nFlags, BIFF12_CALCPR_FULLPRECISION );
+    maCalcSettings.mbIterate       = getFlag( nFlags, BIFF12_CALCPR_ITERATE );
+    maCalcSettings.mbConcurrent    = getFlag( nFlags, BIFF12_CALCPR_CONCURRENT );
 }
 
 void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
@@ -248,7 +247,7 @@ void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
 
 void WorkbookSettings::importHideObj( BiffInputStream& rStrm )
 {
-    maBookSettings.setBinObjectMode( rStrm.readuInt16() );
+    maBookSettings.setBiffObjectMode( rStrm.readuInt16() );
 }
 
 void WorkbookSettings::importIteration( BiffInputStream& rStrm )
@@ -288,7 +287,7 @@ void WorkbookSettings::finalizeImport()
     PropertySet aPropSet( getDocument() );
     switch( getFilterType() )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
         case FILTER_BIFF:
             aPropSet.setProperty( PROP_IgnoreCase,          true );     // always in Excel
             aPropSet.setProperty( PROP_RegularExpressions,  false );    // not supported in Excel
@@ -367,4 +366,3 @@ void WorkbookSettings::setDateMode( bool bDateMode1904 )
 
 } // namespace xls
 } // namespace oox
-

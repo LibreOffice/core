@@ -26,27 +26,29 @@
  ************************************************************************/
 
 #include "oox/xls/unitconverter.hxx"
-#include <rtl/math.hxx>
+
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <rtl/math.hxx>
 #include "oox/core/filterbase.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/xls/stylesbuffer.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::awt::FontDescriptor;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::awt::DeviceInfo;
-using ::com::sun::star::awt::XFont;
-using ::com::sun::star::util::Date;
-using ::com::sun::star::util::DateTime;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -132,7 +134,8 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
 
 void UnitConverter::finalizeImport()
 {
-    Reference< XDevice > xDevice = getReferenceDevice();
+    PropertySet aDocProps( getDocument() );
+    Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
     if( xDevice.is() )
     {
         // get reference device metric first, needed to get character widths below
@@ -255,4 +258,3 @@ double UnitConverter::getCoefficient( Unit eUnit ) const
 
 } // namespace xls
 } // namespace oox
-

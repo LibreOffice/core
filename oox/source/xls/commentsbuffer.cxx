@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/xls/commentsbuffer.hxx"
+
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
@@ -36,21 +37,17 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/drawingfragment.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::drawing::XShape;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::sheet::XSheetAnnotation;
-using ::com::sun::star::sheet::XSheetAnnotationAnchor;
-using ::com::sun::star::sheet::XSheetAnnotationShapeSupplier;
-using ::com::sun::star::sheet::XSheetAnnotations;
-using ::com::sun::star::sheet::XSheetAnnotationsSupplier;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -89,7 +86,7 @@ RichStringRef Comment::createText()
 
 void Comment::finalizeImport()
 {
-    // OOBIN format stores cell range instead of cell address, use first cell of this range
+    // BIFF12 stores cell range instead of cell address, use first cell of this range
     OSL_ENSURE( (maModel.maRange.StartColumn == maModel.maRange.EndColumn) &&
         (maModel.maRange.StartRow == maModel.maRange.EndRow),
         "Comment::finalizeImport - comment anchor should be a single cell" );
@@ -153,4 +150,3 @@ void CommentsBuffer::finalizeImport()
 
 } // namespace xls
 } // namespace oox
-

@@ -27,23 +27,23 @@
 
 #include "oox/xls/tablefragment.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
-
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxTableFragment::OoxTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorksheetFragmentBase( rHelper, rFragmentPath )
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::RecordInfo;
+using ::rtl::OUString;
+
+// ============================================================================
+
+TableFragment::TableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath )
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -55,25 +55,23 @@ ContextHandlerRef OoxTableFragment::onCreateContext( sal_Int32 nElement, const A
     return 0;
 }
 
-ContextHandlerRef OoxTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == OOBIN_ID_TABLE )
+            if( nRecId == BIFF12_ID_TABLE )
                 mxTable = getTables().importTable( rStrm, getSheetIndex() );
         break;
     }
     return 0;
 }
 
-// oox.core.FragmentHandler2 interface ----------------------------------------
-
-const RecordInfo* OoxTableFragment::getRecordInfos() const
+const RecordInfo* TableFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { OOBIN_ID_TABLE,   OOBIN_ID_TABLE + 1  },
+        { BIFF12_ID_TABLE,  BIFF12_ID_TABLE + 1 },
         { -1,               -1                  }
     };
     return spRecInfos;
@@ -83,4 +81,3 @@ const RecordInfo* OoxTableFragment::getRecordInfos() const
 
 } // namespace xls
 } // namespace oox
-

@@ -126,7 +126,7 @@ bool ExcelFilter::importDocument() throw()
         return false;
 
     WorkbookHelperRoot aHelper( *this );
-    return aHelper.isValid() && importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) );
+    return aHelper.isValid() && importFragment( new WorkbookFragment( aHelper, aWorkbookPath ) );
 }
 
 bool ExcelFilter::exportDocument() throw()
