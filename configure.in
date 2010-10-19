@@ -2413,9 +2413,9 @@ fi
 dnl *************************************************************
 dnl Testing for exception handling - dwarf2 or sjlj exceptions...
 dnl *************************************************************
-AC_MSG_CHECKING([exception type])
-AC_LANG_PUSH([C++])
 if test "$WITH_MINGWIN" = "yes"; then
+  AC_MSG_CHECKING([exception type])
+  AC_LANG_PUSH([C++])
   AC_TRY_LINK(
     [#include <iostream>
 
@@ -2426,10 +2426,10 @@ extern "C" void _Unwind_SjLj_RaiseException(void) __attribute__ ((__noreturn__))
     [exceptions_type="sjlj"],
     [exceptions_type="dwarf2"]
   )
+  AC_MSG_RESULT($exceptions_type)
+  AC_LANG_POP([C++])
 fi
 
-AC_MSG_RESULT($exceptions_type)
-AC_LANG_POP([C++])
 EXCEPTIONS="$exceptions_type"
 AC_SUBST(EXCEPTIONS)
 
