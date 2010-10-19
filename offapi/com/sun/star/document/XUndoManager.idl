@@ -162,6 +162,43 @@ interface XUndoManager
             raises( ::com::sun::star::util::InvalidStateException,
                     ::com::sun::star::lang::WrappedTargetException );
 
+    /** determines whether the Undo stack is currently non-empty.
+    */
+    boolean isUndoPossible();
+
+    /** determines whether the Redo stack is currently non-empty.
+    */
+    boolean isRedoPossible();
+
+    /** returns the title of the top-most action on the Undo stack
+        @throws ::com::sun::star::util::InvalidStateException
+            when the Undo stack is currently empty
+        @see XUndoAction::Title
+    */
+    string  getCurrentUndoActionTitle()
+            raises( ::com::sun::star::util::InvalidStateException );
+
+    /** returns the title of the top-most action on the Redo stack
+
+        @throws ::com::sun::star::util::InvalidStateException
+            when the Redo stack is currently empty
+        @see XUndoAction::Title
+    */
+    string  getCurrentRedoActionTitle()
+            raises( ::com::sun::star::util::InvalidStateException );
+
+    /** returns the titles of all actions currently on the Undo stack, from top to bottom
+        @see XUndoAction::Title
+    */
+    sequence< string >
+            getAllUndoActionTitles();
+
+    /** returns the titles of all actions currently on the Redo stack, from top to bottom
+        @see XUndoAction::Title
+    */
+    sequence< string >
+            getAllRedoActionTitles();
+
     /** clears the undo and the redo stack.
     */
     void    clear();
