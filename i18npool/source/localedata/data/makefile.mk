@@ -162,6 +162,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_it_IT.cxx  \
     $(MISC)$/localedata_ja_JP.cxx  \
     $(MISC)$/localedata_ka_GE.cxx  \
+    $(MISC)$/localedata_kab_DZ.cxx  \
     $(MISC)$/localedata_kk_KZ.cxx  \
     $(MISC)$/localedata_kl_GL.cxx  \
     $(MISC)$/localedata_km_KH.cxx  \
@@ -445,6 +446,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ia.obj    \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
+    $(SLO)$/localedata_kab_DZ.obj \
     $(SLO)$/localedata_kk_KZ.obj \
     $(SLO)$/localedata_km_KH.obj \
     $(SLO)$/localedata_kn_IN.obj \
