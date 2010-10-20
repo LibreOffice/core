@@ -197,7 +197,8 @@ public:
 
     SdrView*            GetCurDlgView() const;
 
-    SfxUndoManager*     GetUndoManager();
+    ::svl::IUndoManager*
+                        GetUndoManager();
 
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
 

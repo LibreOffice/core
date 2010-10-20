@@ -260,7 +260,7 @@ Window* __EXPORT IDEBaseWindow::GetLayoutWindow()
     return this;
 }
 
-SfxUndoManager* __EXPORT IDEBaseWindow::GetUndoManager()
+::svl::IUndoManager* __EXPORT IDEBaseWindow::GetUndoManager()
 {
     return NULL;
 }

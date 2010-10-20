@@ -556,9 +556,9 @@ void BasicIDEShell::ArrangeTabBar()
 
 
 
-SfxUndoManager* BasicIDEShell::GetUndoManager()
+::svl::IUndoManager* BasicIDEShell::GetUndoManager()
 {
-    SfxUndoManager* pMgr = NULL;
+    ::svl::IUndoManager* pMgr = NULL;
     if( pCurWin )
         pMgr = pCurWin->GetUndoManager();
 

@@ -228,7 +228,8 @@ public:
 
     virtual Window* GetLayoutWindow();
 
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                    GetUndoManager();
 
     virtual USHORT  GetSearchOptions();
 
