@@ -1,0 +1,20 @@
+catch throw
+commands
+    bt
+    cont
+end
+catch catch
+commands
+    bt
+    cont
+end
+echo log will be saved as gdbtrace.log, this will take some time, patience...\n
+set logging redirect on
+set logging file gdbtrace.log
+set logging on
+set logging overwrite on
+run
+bt
+quit
+set logging off
+echo log is saved as gdbtrace.log\n
