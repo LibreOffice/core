@@ -696,7 +696,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         std::cout << std::endl;
 
     } // try
-    catch( HelpProcessingException& )
+    catch( const HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
 #ifndef DBHELP_ONLY
@@ -1153,30 +1153,19 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 {
     bool bSuccess = true;
 
-    sal_Int32 argc = nXhpFileCount + 3;
-    const char** argv = new const char*[argc];
-    argv[0] = "";
-    argv[1] = "-mod";
+    std::vector<std::string> args;
+    args.reserve(nXhpFileCount + 2);
+    args.push_back(std::string("-mod"));
     rtl::OString aOExtensionName = rtl::OUStringToOString( aExtensionName, fs::getThreadTextEncoding() );
-    argv[2] = aOExtensionName.getStr();
+    args.push_back(std::string(aOExtensionName.getStr()));
 
     for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
     {
         rtl::OUString aXhpFile = pXhpFiles[iXhp];
 
         rtl::OString aOXhpFile = rtl::OUStringToOString( aXhpFile, fs::getThreadTextEncoding() );
-        char* pArgStr = new char[aOXhpFile.getLength() + 1];
-        strcpy( pArgStr, aOXhpFile.getStr() );
-        argv[iXhp + 3] = pArgStr;
+        args.push_back(std::string(aOXhpFile.getStr()));
     }
-
-    std::vector<std::string> args;
-    for( sal_Int32 i = 1; i < argc; ++i )
-        args.push_back(std::string( argv[i]) );
-
-    for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
-        delete[] argv[iXhp + 3];
-    delete[] argv;
 
     rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
     const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
