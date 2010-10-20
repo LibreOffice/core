@@ -477,15 +477,4 @@ ScVbaShapes::createName( rtl::OUString sName )
     return sName;
 }
 
-#if 0
-//TODO helperapi using a writer document
-awt::Point
-calculateTopLeftMargin( uno::Reference< XHelperInterface > xDocument )
-{
-    awt::Point aPoint( 0, 0 );
-    uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
-    return awt::Point();
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

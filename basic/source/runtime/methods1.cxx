@@ -534,15 +534,6 @@ RTLFUNC(DoEvents)
 // don't undstand what upstream are up to
 // we already process application events etc. in between
 // basic runtime pcode ( on a timed basis )
-#if 0
-    // Dummy implementation as the following code leads
-    // to performance problems for unknown reasons
-    //Timer aTimer;
-    //aTimer.SetTimeout( 1 );
-    //aTimer.Start();
-    //while ( aTimer.IsActive() )
-    //  Application::Reschedule();
-#endif
     // always return 0
     rPar.Get(0)->PutInteger( 0 );
 }

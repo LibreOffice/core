@@ -77,11 +77,7 @@ struct SbxParamInfo
     ~SbxParamInfo() {}
 };
 
-//#if 0 // _SOLAR__PRIVATE
 SV_DECL_PTRARR_DEL(SbxParams,SbxParamInfo*,4,4)
-//#else
-//typedef SvPtrarr SbxParams;
-//#endif
 
 #endif
 

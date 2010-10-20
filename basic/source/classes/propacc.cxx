@@ -392,15 +392,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
     // Get class names of struct
     String aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
 
-#if 0
-    // search service and instantiate
-    Reference< XMultiServiceFactory > xServiceManager = getProcessServiceFactory();
-    Reference< XInterface > xInterface;
-    if( xProv.is() )
-        xInterface = xProv->newInstance();
-#else
     Reference< XInterface > xInterface = (OWeakObject*) new SbPropertyValues();
-#endif
 
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
