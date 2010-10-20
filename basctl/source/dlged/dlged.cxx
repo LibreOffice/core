@@ -1014,7 +1014,7 @@ void DlgEditor::Paste()
                     Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
                     OSL_ASSERT( xProps.is() );
                     OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&DialogModelBytes)) ) , xClipDialogModel, xContext, m_xDocument );
+                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
                 }
 
                 // get control models from clipboard dialog model
