@@ -14,8 +14,8 @@
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>/</DateSeparator>
-<ThousandSeparator>,</ThousandSeparator>
-<DecimalSeparator>.</DecimalSeparator>
+<ThousandSeparator>.</ThousandSeparator>
+<DecimalSeparator>,</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>.</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
