@@ -61,11 +61,9 @@ testcase tViewWorkspaceHandoutView
     Call hNewDocument						'/// new document ///'
     sleep 2
     Kontext "DocumentImpress"
-    if NOT documentImpress.Exists then
-        hNewDocument
-        sleep 1
-    end if
-    sleep 2
+    DocumentImpress.UseMenu
+    hMenuSelectNr (5)
+    hMenuSelectNr (13)
     Printlog "  ViewWorkspaceHandoutView"
     ViewWorkspaceHandoutView						'/// view background handout ///'
     sleep 2

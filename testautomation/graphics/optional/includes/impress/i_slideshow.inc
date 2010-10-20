@@ -35,9 +35,12 @@ testcase tSlideShowSlideShow
 
     dim bLoaded as boolean
     dim i as integer
+    dim testfile as string
+    dim localtestfile as string
 
     '/// open file 'graphics\\input\\diashow.odp' ///'
-    hFileOpenLocally( gTesttoolPath + "graphics\required\input\diashow.odp" )
+    testfile = ( gTesttoolPath + "graphics\required\input\diashow.odp" )
+    hFileOpenLocally( testfile )
     sleep 30
 
    bLoaded = false
@@ -126,8 +129,15 @@ testcase tSlideShowSlideShow
    '/// Set "Start with current page" back to default = on, in ToolsOptions ///'
    setStartCurrentPage(TRUE)
    '/// close the application ///'
-   Call hCloseDocument
-   
+    Call hCloseDocument
+    localtestfile = hFileGetLocalPath( gTesttoolPath + "diashow.odp" )
+    printlog localtestfile
+    if (FileExists (localtestfile)) then
+        app.kill (localtestfile)
+        printlog "Deleting used file."
+    else
+        warnlog "File is missing."
+    endif
 endcase 'tSlideShowSlideShow
 
 '-------------------------------------------------------------------------------
@@ -216,6 +226,8 @@ testcase tSlideShowSlideShowSettings
    dim sTemp as string
    dim saSlideNames(4) as string
    dim bCurrentPage as boolean
+   dim sTestfile as string
+   dim sLocaltestfile as string
 
    S1 = glLocale (2) + " 1"
    S2 = glLocale (2) + " 2"
@@ -279,9 +291,10 @@ testcase tSlideShowSlideShowSettings
    Call hCloseDocument
    sleep 5
 
-   bLoaded = false
-   '/// open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides) ///'
-   hFileOpenLocally( gTesttoolPath + "graphics\required\input\diashow.odp" )
+    bLoaded = false
+    '/// open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides) ///'
+    sTestfile = ( gTesttoolPath + "graphics\required\input\diashow.odp" )
+    hFileOpenLocally( sTestfile )
    sleep 10
 
    try
@@ -681,7 +694,15 @@ testcase tSlideShowSlideShowSettings
    setStartCurrentPage(TRUE)
    '/// Close the document ///'
    call hCloseDocument
-   
+    sLocaltestfile = hFileGetLocalPath(  gTesttoolPath + "diashow.odp" )
+    printlog sLocaltestfile
+    if (FileExists (sLocaltestfile)) then
+        app.kill (sLocaltestfile)
+        printlog "Deleting used file."
+    else
+        warnlog "File is missing."
+    endif
+
 endcase 'tSlideShowSlideShowSettings
 
 '-------------------------------------------------------------------------------
