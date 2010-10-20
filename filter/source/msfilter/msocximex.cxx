@@ -5583,12 +5583,12 @@ sal_Bool HTML_TextBox::Import(com::sun::star::uno::Reference<
     return sal_True;
 }
 
-sal_Bool HTML_TextBox::Read(SotStorageStream *pS)
+sal_Bool HTML_TextBox::Read(SotStorageStream * /*pS*/)
 {
   return sal_True;
 }
 
-sal_Bool HTML_TextBox::ReadFontData(SotStorageStream *pS)
+sal_Bool HTML_TextBox::ReadFontData(SotStorageStream * /*pS*/)
 {
   return sal_True;
 }
