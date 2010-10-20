@@ -1075,9 +1075,10 @@ const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
     return oox::drawingml::table::TableStyleListPtr();
 }
 
-oox::drawingml::chart::ChartConverter* XclExpXmlStream::getChartConverter()
+oox::drawingml::chart::ChartConverter& XclExpXmlStream::getChartConverter()
 {
-    return NULL;
+    // DO NOT CALL
+    return * (oox::drawingml::chart::ChartConverter*) NULL;
 }
 
 ScDocShell* XclExpXmlStream::getDocShell()

@@ -1028,7 +1028,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
-    ShapeExport aDML( XML_xdr, pDrawing, NULL, &rStrm, DrawingML::DOCUMENT_XLSX );
+    ShapeExport aDML( XML_xdr, pDrawing, &rStrm, DrawingML::DOCUMENT_XLSX );
 
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
             XML_editAs, GetEditAs( *this ),
