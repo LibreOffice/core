@@ -899,7 +899,7 @@ ImplIMEInfos::~ImplIMEInfos()
 void ImplIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
 {
     nLen = nL;
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = new USHORT[ nL ];
     memcpy( pAttribs, pA, nL*sizeof(USHORT) );
 }
