@@ -37,7 +37,7 @@
 using namespace com::sun::star;
 
 
-ScVbaQueryTable::ScVbaQueryTable(const css::uno::Reference< ov::XHelperInterface >& xParent,
+ScVbaQueryTable::ScVbaQueryTable(const css::uno::Reference< ov::XHelperInterface >& /*xParent*/,
                                  const css::uno::Reference< css::uno::XComponentContext > & xContext,
                                  ScDocument *pDocument ,
                                  ScVbaRange *pParent
@@ -54,7 +54,7 @@ ScVbaQueryTable::~ScVbaQueryTable()
 }
 
 ::sal_Bool SAL_CALL
-ScVbaQueryTable::Refresh( const ::com::sun::star::uno::Any& aBackgroundQuery ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaQueryTable::Refresh( const ::com::sun::star::uno::Any& /*aBackgroundQuery*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 
     //Get parent Info
