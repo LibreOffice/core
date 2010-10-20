@@ -63,9 +63,9 @@ public:
     virtual sal_Bool SAL_CALL mapStrings( Sequence< OUString >& io_rStrings ) throw (RuntimeException)
     {
         sal_Int32 nItems = io_rStrings.getLength();
-        for( sal_Int32 i = 0; i < nItems; i++ )
+        for( sal_Int32 n = 0; n < nItems; n++ )
         {
-            rtl::OUString& rStr( io_rStrings.getArray()[i] );
+            rtl::OUString& rStr( io_rStrings.getArray()[n] );
 
             sal_Int32 nLen = rStr.getLength();
             rtl::OUStringBuffer aMirror( nLen );
