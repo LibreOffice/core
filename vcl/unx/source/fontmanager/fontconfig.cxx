@@ -743,7 +743,7 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
                      );
 #endif
 
-            OSL_ASSERT(eOutRes != FcResultMatch || outline);
+//            OSL_ASSERT(eOutRes != FcResultMatch || outline);
 
             // only outline fonts are usable to psprint anyway
             if( eOutRes == FcResultMatch && ! outline )
