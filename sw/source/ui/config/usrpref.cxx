@@ -245,27 +245,29 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Line/Guide",                       // 0
-        "Line/SimpleControlPoint",          // 1
-        "Line/LargeControlPoint",           // 2
-        "Window/HorizontalScroll",          // 3
-        "Window/VerticalScroll",            // 4
-        "Window/ShowRulers",                // 5
-        "Window/HorizontalRuler",           // 6
-        "Window/VerticalRuler",             // 7
-        "Window/HorizontalRulerUnit",       // 8
-        "Window/VerticalRulerUnit",         // 9
-        "Window/SmoothScroll",              //10
-        "Zoom/Value",                       //11
-        "Zoom/Type",                        //12
-        "Other/MeasureUnit",                //13
-        "Other/TabStop",                    //14
-        "Window/IsVerticalRulerRight",      //15
-        "ViewLayout/Columns",               //16
-        "ViewLayout/BookMode",              //17
-        "Other/IsSquaredPageMode"           //18
+        "Line/Guide",                           // 0
+        "Line/SimpleControlPoint",              // 1
+        "Line/LargeControlPoint",               // 2
+        "Window/HorizontalScroll",              // 3
+        "Window/VerticalScroll",                // 4
+        "Window/ShowRulers",                    // 5
+        "Window/HorizontalRuler",               // 6
+        "Window/VerticalRuler",                 // 7
+        "Window/HorizontalRulerUnit",           // 8
+        "Window/VerticalRulerUnit",             // 9
+        "Window/SmoothScroll",                  //10
+        "Zoom/Value",                           //11
+        "Zoom/Type",                            //12
+        "Other/IsAlignMathObjectsToBaseline"    //13
+        "Other/MeasureUnit",                    //14
+        // below properties are not available in WriterWeb
+        "Other/TabStop",                        //15
+        "Window/IsVerticalRulerRight",          //16
+        "ViewLayout/Columns",                   //17
+        "ViewLayout/BookMode",                  //18
+        "Other/IsSquaredPageMode"               //19
     };
-    const int nCount = bWeb ? 14 : 19;
+    const int nCount = bWeb ? 15 : 20;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -305,16 +307,16 @@ void SwLayoutViewConfig::Commit()
         sal_Bool bSet;
         switch(nProp)
         {
-            case  0: bSet = rParent.IsCrossHair(); break;// "Line/Guide",
-            case  1: bSet = rParent.IsSolidMarkHdl(); break;// "Line/SimpleControlPoint",
-            case  2: bSet = rParent.IsBigMarkHdl(); break;// "Line/LargeControlPoint",
-            case  3: bSet = rParent.IsViewHScrollBar(); break;// "Window/HorizontalScroll",
-            case  4: bSet = rParent.IsViewVScrollBar(); break;// "Window/VerticalScroll",
-            case  5: bSet = rParent.IsViewAnyRuler(); break; // "Window/ShowRulers"
+            case  0: bSet = rParent.IsCrossHair(); break;           // "Line/Guide",
+            case  1: bSet = rParent.IsSolidMarkHdl(); break;        // "Line/SimpleControlPoint",
+            case  2: bSet = rParent.IsBigMarkHdl(); break;          // "Line/LargeControlPoint",
+            case  3: bSet = rParent.IsViewHScrollBar(); break;      // "Window/HorizontalScroll",
+            case  4: bSet = rParent.IsViewVScrollBar(); break;      // "Window/VerticalScroll",
+            case  5: bSet = rParent.IsViewAnyRuler(); break;        // "Window/ShowRulers"
             // #i14593# use IsView*Ruler(TRUE) instead of IsView*Ruler()
             // this preserves the single ruler states even if "Window/ShowRulers" is off
-            case  6: bSet = rParent.IsViewHRuler(TRUE); break;// "Window/HorizontalRuler",
-            case  7: bSet = rParent.IsViewVRuler(TRUE); break;// "Window/VerticalRuler",
+            case  6: bSet = rParent.IsViewHRuler(TRUE); break;      // "Window/HorizontalRuler",
+            case  7: bSet = rParent.IsViewVRuler(TRUE); break;      // "Window/VerticalRuler",
             case  8:
                 if(rParent.bIsHScrollMetricSet)
                     pValues[nProp] <<= (sal_Int32)rParent.eHScrollMetric; // "Window/HorizontalRulerUnit"
@@ -323,15 +325,16 @@ void SwLayoutViewConfig::Commit()
                 if(rParent.bIsVScrollMetricSet)
                     pValues[nProp] <<= (sal_Int32)rParent.eVScrollMetric; // "Window/VerticalRulerUnit"
             break;
-            case 10: bSet = rParent.IsSmoothScroll(); break;// "Window/SmoothScroll",
-            case 11: pValues[nProp] <<= (sal_Int32)rParent.GetZoom(); break;// "Zoom/Value",
+            case 10: bSet = rParent.IsSmoothScroll(); break;                    // "Window/SmoothScroll",
+            case 11: pValues[nProp] <<= (sal_Int32)rParent.GetZoom(); break;    // "Zoom/Value",
             case 12: pValues[nProp] <<= (sal_Int32)rParent.GetZoomType(); break;// "Zoom/Type",
-            case 13: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
-            case 14: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(rParent.GetDefTab())); break;// "Other/TabStop",
-            case 15: bSet = rParent.IsVRulerRight(); break;// "Window/IsVerticalRulerRight",
-            case 16: pValues[nProp] <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;// "ViewLayout/Columns",
-            case 17: bSet = rParent.IsViewLayoutBookMode(); break;// "ViewLayout/BookMode",
-            case 18: bSet = rParent.IsSquaredPageMode(); break;// "Other/IsSquaredPageMode",
+            case 13: bSet = rParent.IsAlignMathObjectsToBaseline(); break;      // "Other/IsAlignMathObjectsToBaseline"
+            case 14: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;  // "Other/MeasureUnit",
+            case 15: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(rParent.GetDefTab())); break;// "Other/TabStop",
+            case 16: bSet = rParent.IsVRulerRight(); break;                     // "Window/IsVerticalRulerRight",
+            case 17: pValues[nProp] <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;// "ViewLayout/Columns",
+            case 18: bSet = rParent.IsViewLayoutBookMode(); break;              // "ViewLayout/BookMode",
+            case 19: bSet = rParent.IsSquaredPageMode(); break;                 // "Other/IsSquaredPageMode",
         }
         if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 || nProp == 18 )
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
@@ -395,30 +398,33 @@ void SwLayoutViewConfig::Load()
                         rParent.SetZoomType( static_cast< SvxZoomType >(nVal) );
                     }
                     break;// "Zoom/Type",
-                    case 13:
+
+                    case 13: rParent.SetAlignMathObjectsToBaseline(bSet); break;// "Other/IsAlignMathObjectsToBaseline"
+
+                    case 14:
                     {
                         sal_Int32 nUnit = 0;
                         pValues[nProp] >>= nUnit;
                         rParent.SetMetric((FieldUnit)nUnit, TRUE);
                     }
                     break;// "Other/MeasureUnit",
-                    case 14:
+                    case 15:
                     {
                         sal_Int32 nTab = 0;
                         pValues[nProp] >>= nTab;
                         rParent.SetDefTab(MM100_TO_TWIP(nTab), TRUE);
                     }
                     break;// "Other/TabStop",
-                    case 15: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
-                    case 16:
+                    case 16: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
+                    case 17:
                     {
                         sal_Int32 nColumns = 0;
                         pValues[nProp] >>= nColumns;
                         rParent.SetViewLayoutColumns( static_cast<USHORT>(nColumns) );
                     }
                     break;// "ViewLayout/Columns",
-                    case 17: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
-                    case 18: rParent.SetDefaultPageMode(bSet,TRUE); break;// "Other/IsSquaredPageMode",
+                    case 18: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
+                    case 19: rParent.SetDefaultPageMode(bSet,TRUE); break;// "Other/IsSquaredPageMode",
                 }
             }
         }

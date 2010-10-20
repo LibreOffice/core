@@ -42,9 +42,7 @@
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/bigint.hxx>
 #include <sot/storage.hxx>
 #include <svtools/insdlg.hxx>
@@ -61,27 +59,21 @@
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 
+#include <../../core/inc/flyfrm.hxx>
+
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
 #include <shellio.hxx>
@@ -89,9 +81,7 @@
 #include <swundo.hxx>  // fuer Undo-Ids
 #include <swcli.hxx>
 #include <poolfmt.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <edtwin.hxx>
 #include <fmtcol.hxx>
 #include <swtable.hxx>
@@ -100,15 +90,12 @@
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
-#ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/request.hxx>
 #include <paratr.hxx>
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
-//#include <svx/acorrcfg.hxx>
 #include <IMark.hxx>
 
 // -> #111827#
@@ -493,7 +480,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
         if ( xObj.is() )
         {
-            if( InsertOleObject( xObj ) && bActivate && bDoVerb )
+            BOOL bActivate2 = InsertOleObject( xObj );
+            if( bActivate && bDoVerb )
             {
                 SfxInPlaceClient* pClient = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
                 if ( !pClient )
@@ -517,7 +505,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 //#50270# Error brauchen wir nicht handeln, das erledigt das
                 //DoVerb in der SfxViewShell
-                pClient->DoVerb( SVVERB_SHOW );
+                if ( bActivate2 )
+                    pClient->DoVerb( SVVERB_SHOW );
 
                 // TODO/LATER: set document name - should be done in Client
                 //if ( !ERRCODE_TOERROR( nErr ) )
@@ -613,6 +602,11 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     }
     aFrmMgr.SetSize( aSz );
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
+
+    // --> #i972#
+    if ( bStarMath ) //sets baseline
+        AlignFormulaToBaseline( xRef.GetObject() );
+    // <--
 
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
@@ -774,6 +768,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc) || bLinkingChart
             // TODO/LATER: ResizeOnPrinterChange
              //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
+             || nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE // non-resizable objects need to be
+                                                            // set the size back by this method
              )
         {
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
@@ -884,6 +880,20 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     if ( bUseObjectSize )
     {
+        // --> this moves non-resizable object so that when adding borders the baseline remains the same
+        const SwFlyFrm *pFly = GetCurrFlyFrm();
+        if ( pFly )
+        {
+            const Point aPoint = pFly->GetLastFlyFrmPrtRectPos();
+            SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
+                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+            aArea += aPoint - aRect.Pos();
+        }
+        else
+        {
+            ASSERT( FALSE , "Could not find fly frame." );
+        }
+        // <--
         aArea.Width ( _aVisArea.Width() );
         aArea.Height( _aVisArea.Height() );
         RequestObjectResize( aArea, xObj.GetObject() );

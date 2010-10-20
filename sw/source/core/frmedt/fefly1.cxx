@@ -73,6 +73,9 @@
 #include <HandleAnchorNodeChg.hxx>
 // <--
 #include <frmatr.hxx>
+// --> 3.7.2010 #i972#
+#include <ndole.hxx>
+// <--
 // --> OD 2009-12-29 #i89920#
 #include <fmtsrnd.hxx>
 #include <editeng/opaqitem.hxx>
@@ -1522,6 +1525,9 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             pFly->ChgRelPos( aTmp );
         }
     }
+
+    pFly->SetLastFlyFrmPrtRectPos( pFly->Prt().Pos() ); //stores the value of last Prt rect
+
     EndAllAction();
 
     return aResult;
@@ -2153,4 +2159,93 @@ void SwFEShell::SetObjDescription( const String& rDescription )
         }
     }
 }
-// <--
+
+
+void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly )
+{
+#if OSL_DEBUG_LEVEL > 1
+    SvGlobalName aCLSID( xObj->getClassID() );
+    const bool bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
+    ASSERT( bStarMath, "AlignFormulaToBaseline should only be called for Math objects" );
+
+    if ( !bStarMath )
+        return;
+#endif
+
+    if (!pFly)
+        pFly = FindFlyFrm( xObj );
+    ASSERT( pFly , "No fly frame!" );
+    SwFrmFmt * pFrmFmt = pFly ? pFly->GetFmt() : 0;
+
+    // baseline to baseline alignment should only be applied to formulas anchored as char
+    if ( pFly && pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
+    {
+        // get baseline from Math object
+        uno::Any aBaseline;
+        if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+        {
+            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+            if ( xSet.is() )
+            {
+                try
+                {
+                    aBaseline = xSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BaseLine") ) );
+                }
+                catch ( uno::Exception& )
+                {
+                    ASSERT( FALSE , "Baseline could not be retrieved from Starmath!" );
+                }
+            }
+        }
+
+        sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
+        const MapMode aSourceMapMode( MAP_100TH_MM );
+        const MapMode aTargetMapMode( MAP_TWIP );
+        nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
+
+        //TLMATH01 ??? is nBaseline really always > 0 ?
+        ASSERT( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );
+        //nBaseline must be moved by aPrt position
+        nBaseline += pFly->GetLastFlyFrmPrtRectPos().Y();
+
+        const SwFmtVertOrient &rVert = pFrmFmt->GetVertOrient();
+        SwFmtVertOrient aVert( rVert );
+        aVert.SetPos( -nBaseline );
+        aVert.SetVertOrient( com::sun::star::text::VertOrientation::NONE );
+
+        pFrmFmt->LockModify();
+        pFrmFmt->SetFmtAttr( aVert );
+        pFrmFmt->UnlockModify();
+        pFly->InvalidatePos();
+    }
+}
+
+
+void SwFEShell::AlignAllFormulasToBaseline()
+{
+    StartAllAction();
+
+    SwStartNode *pStNd;
+    SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+    while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+    {
+        ++aIdx;
+        SwOLENode *pOleNode = dynamic_cast< SwOLENode * >( &aIdx.GetNode() );
+        if ( pOleNode )
+        {
+            const uno::Reference < embed::XEmbeddedObject > & xObj( pOleNode->GetOLEObj().GetOleRef() );
+            if (xObj.is())
+            {
+                SvGlobalName aCLSID( xObj->getClassID() );
+                if ( SotExchange::IsMath( aCLSID ) )
+                    AlignFormulaToBaseline( xObj );
+            }
+        }
+
+        aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
+    }
+
+    EndAllAction();
+}
+
+

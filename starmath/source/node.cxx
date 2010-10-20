@@ -763,7 +763,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         }
 
     Point  aPos;
-    SmRect::operator = (SmRect(nMaxWidth, 0));
+    SmRect::operator = (SmRect(nMaxWidth, 1));
     for (i = 0;  i < nSize;  i++)
     {   if (NULL != (pNode = GetSubNode(i)))
         {   const SmRect &rNodeRect = pNode->GetRect();
@@ -779,6 +779,22 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             ExtendBy(rNodeRect, nSize > 1 ? RCP_NONE : RCP_ARG);
         }
     }
+    // --> 4.7.2010 #i972#
+    if (HasBaseline())
+        nFormulaBaseline = GetBaseline();
+    else
+    {
+        SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+        aTmpDev.SetFont(GetFont());
+
+        SmRect aRect = (SmRect(aTmpDev, &rFormat, C2S("a"),
+                               GetFont().GetBorderWidth()));
+        nFormulaBaseline = GetAlignM();
+        // move from middle position by constant - distance
+        // between middle and baseline for single letter
+        nFormulaBaseline+= aRect.GetBaseline() - aRect.GetAlignM();
+    }
+    // <--
 }
 
 
@@ -818,20 +834,21 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
     aTmpDev.SetFont(GetFont());
 
-    // provide an empty rectangle with alignment parameters for the "current"
-    // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
-    // same sub-/supscript positions.)
-    //! be sure to use a character that has explicitly defined HiAttribut
-    //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
-    //! 'vec {a}'.
-    SmRect::operator = (SmRect(aTmpDev, &rFormat, C2S("a"),
-                               GetFont().GetBorderWidth()));
-    // make sure that the rectangle occupies (almost) no space
-    SetWidth(1);
-    SetItalicSpaces(0, 0);
-
     if (nSize < 1)
+    {
+        // provide an empty rectangle with alignment parameters for the "current"
+        // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
+        // same sub-/supscript positions.)
+        //! be sure to use a character that has explicitly defined HiAttribut
+        //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
+        //! 'vec {a}'.
+        SmRect::operator = (SmRect(aTmpDev, &rFormat, C2S("a"),
+                            GetFont().GetBorderWidth()));
+        // make sure that the rectangle occupies (almost) no space
+        SetWidth(1);
+        SetItalicSpaces(0, 0);
         return;
+    }
 
     // make distance depend on font size
     long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
@@ -839,7 +856,11 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nDist = 0;
 
     Point   aPos;
-    for (i = 0;  i < nSize;  i++)
+    // copy the first node into LineNode and extend by the others
+    if (NULL != (pNode = GetSubNode(0)))
+        SmRect::operator = (pNode->GetRect());
+
+    for (i = 1;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
         {
             aPos = pNode->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);

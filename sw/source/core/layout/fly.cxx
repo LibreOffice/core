@@ -122,6 +122,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 //    aRelPos(),
     pPrevLink( 0 ),
     pNextLink( 0 ),
+    aLastFlyFrmPrtRectPos(),
     bInCnt( FALSE ),
     bAtCnt( FALSE ),
     bLayout( FALSE ),

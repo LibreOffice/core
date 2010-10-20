@@ -328,7 +328,11 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         {
             // set new anchor position and relative position
             SwFlyInCntFrm* pFlyInCntFrm = &(const_cast<SwFlyInCntFrm&>(rFlyInCntFrm));
+            // --> let SwFlyInCnt::MakeObjPos set position only at this place using bPosCalculated
+            pFlyInCntFrm->SetPosCalculated( TRUE );
             pFlyInCntFrm->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
+            pFlyInCntFrm->SetPosCalculated( FALSE );
+            // <--
             if( nObjWidth != (pFlyInCntFrm->Frm().*fnRect->fnGetWidth)() )
             {
                 // recalculate object bound rectangle, if object width has changed.

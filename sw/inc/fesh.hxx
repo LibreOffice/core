@@ -550,6 +550,15 @@ public:
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );
 
+    // --> #i972#
+    // for starmath formulas anchored 'as char' it alignes it baseline to baseline
+    // changing the previous vertical orientation
+    void AlignFormulaToBaseline( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = 0 );
+
+    // aligns all formulas with anchor 'as char' to baseline
+    void AlignAllFormulasToBaseline();
+    // <--
+
 //------------------------------------------
 
     //Auskunft ueber naechstliegenden Inhalt zum uebergebenen Point

@@ -169,3 +169,20 @@ void SwOleClient::MakeVisible()
     const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     rSh.MakeObjVisible( GetObject() );
 }
+
+// --> #i972#
+void SwOleClient::FormatChanged()
+{
+    const uno::Reference < embed::XEmbeddedObject >& xObj = GetObject();
+
+    SvGlobalName aCLSID( xObj->getClassID() );
+    if ( SotExchange::IsMath( aCLSID ) )
+    {
+        SwView * pView = dynamic_cast< SwView * >( GetViewShell() );
+        if (pView)
+            pView->GetWrtShell().AlignFormulaToBaseline( xObj );
+    }
+}
+// <--
+
+
