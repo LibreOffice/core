@@ -251,7 +251,6 @@ void ImportExcel8::ReadBasic( void )
 
             if ( !bAsComment )
             {
-                ScDocument& rDoc = GetDoc();
 #if 1
                 // see if we have the XCB stream
                 SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
