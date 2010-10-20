@@ -177,8 +177,8 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange,
 }
 
 void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
-    const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
+    const rtl::OUString* /*pStyleName*/, const rtl::OUString* pCurrency,
+    ScXMLImport& /*rImport*/, const sal_uInt32 /*nMaxRanges*/)
 {
     if (!pCurrencyList)
         pCurrencyList = new ScMyCurrencyStylesSet();
@@ -199,7 +199,7 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
         aItr->mpRanges->addRange(rRange);
 }
 
-void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
+void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* /*pDoc*/)
 {
     if (mpTextList)
         mpTextList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
@@ -228,7 +228,7 @@ void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDo
     }
 }
 
-void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
+void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* /*pDoc*/)
 {
     if (mpTextList)
         mpTextList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
