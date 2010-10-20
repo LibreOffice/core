@@ -1758,10 +1758,10 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
             xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
             xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart > nAktPos )
+            if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
                 aSortedStart.push_back( pMark );
 
-            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) )
+            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
                 aSortedEnd.push_back( pMark );
         }
 
