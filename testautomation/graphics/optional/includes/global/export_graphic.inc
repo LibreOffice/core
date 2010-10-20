@@ -33,6 +33,9 @@
 
 testcase tEPS
 
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
     dim x as integer
     dim i as integer
 
@@ -95,6 +98,11 @@ testcase tEPS
 endcase 'tEPS
 '-------------------------------------------------------------------------
 testcase tPCT
+
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     dim x as integer
     dim i as integer
@@ -244,6 +252,10 @@ testcase tPCT
 endcase 'tPCT
 '-------------------------------------------------------------------------------
 testcase tPBM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PBM - Portable Bitmap (.pbm)"
     const sExt = ".pbm"
@@ -274,6 +286,10 @@ testcase tPBM
 endcase 'tPBM
 '-------------------------------------------------------------------------------
 testcase tPGM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PGM - Portable Graymap (.pgm)"
     const sExt = ".pgm"
@@ -303,6 +319,10 @@ testcase tPGM
 endcase 'tPGM
 '-------------------------------------------------------------------------------
 testcase tPPM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PPM - Portable Pixelmap (.ppm)"
     const sExt = ".ppm"
@@ -332,6 +352,10 @@ testcase tPPM
 endcase 'tPPM
 '------------------------------------------------------------------------------
 testcase tRAS
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "RAS - Sun Raster Image (.ras)"
     const sExt = ".ras"
@@ -352,6 +376,10 @@ testcase tRAS
 endcase 'tRAS
 '------------------------------------------------------------------------------
 testcase tTIFF
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     dim x as integer
     dim i as integer
@@ -375,6 +403,10 @@ testcase tTIFF
 endcase 'tTIFF
 '------------------------------------------------------------------------------
 testcase tXPM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "XPM - X PixMap (.xpm)"
     const sExt = ".xpm"
@@ -395,6 +427,10 @@ testcase tXPM
 endcase 'tXPM
 '-------------------------------------------------------------------------------
 testcase tGIF
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "GIF - Graphics Interchange Format (.gif)"
     const sExt = ".gif"
@@ -425,6 +461,10 @@ testcase tGIF
 endcase 'tGIF
 '-------------------------------------------------------------------------------
 testcase tJPEG
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "JPEG - Joint Photographic Experts Group (.jpg;.jpeg;.jfif;.jif;.jpe)"
     const sExt = ".jpg"
