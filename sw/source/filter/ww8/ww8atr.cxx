@@ -271,20 +271,21 @@ void MSWordExportBase::ExportPoolItemsToCHP( sw::PoolItems &rItems, USHORT nScri
  *      - gebe die Attribute aus; ohne Parents!
  */
 
-void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript )
+void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript,
+                                      bool bExportParentItemSet )
 {
-    if ( rSet.Count() )
+    if( bExportParentItemSet || rSet.Count() )
     {
         const SfxPoolItem* pItem;
         pISet = &rSet;                  // fuer Doppel-Attribute
 
         // If frame dir is set, but not adjust, then force adjust as well
-        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, false ) )
+        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
         {
             // No explicit adjust set ?
-            if ( SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_ADJUST, false ) )
+            if ( SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
             {
-                if ( 0 != ( pItem = rSet.GetItem( RES_PARATR_ADJUST ) ) )
+                if ( 0 != ( pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet ) ) )
                 {
                     // then set the adjust used by the parent format
                     AttrOutput().OutputItem( *pItem );
@@ -292,7 +293,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             }
         }
 
-        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pItem ) )
+        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
         {
             AttrOutput().OutputItem( *pItem );
 
@@ -307,7 +308,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
         }
 
         sw::PoolItems aItems;
-        GetPoolItems( rSet, aItems );
+        GetPoolItems( rSet, aItems, bExportParentItemSet );
         if ( bChpFmt )
             ExportPoolItemsToCHP(aItems, nScript);
 
@@ -783,7 +784,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                     aSet.Put( aLR );
                     CorrectTabStopInSet( aSet, rNFmt.GetAbsLSpace() );
                     OutputItemSet( aSet, bPapFmt, bChpFmt,
-                        i18n::ScriptType::LATIN);
+                        i18n::ScriptType::LATIN, mbExportModeRTF);
                     bCallOutSet = false;
                 }
             }
@@ -801,7 +802,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                         ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
                     aSet.Put( aLR );
                     OutputItemSet( aSet, bPapFmt, bChpFmt,
-                        com::sun::star::i18n::ScriptType::LATIN);
+                        com::sun::star::i18n::ScriptType::LATIN, mbExportModeRTF);
                     bCallOutSet = false;
                 }
                 // <--
@@ -841,7 +842,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 bOutFlyFrmAttrs = true;
                 //script doesn't matter if not exporting chp
                 OutputItemSet(aSet, true, false,
-                    i18n::ScriptType::LATIN);
+                    i18n::ScriptType::LATIN, mbExportModeRTF);
                 bOutFlyFrmAttrs = false;
 
                 bCallOutSet = false;
@@ -855,7 +856,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
 
     if( bCallOutSet )
         OutputItemSet( rFmt.GetAttrSet(), bPapFmt, bChpFmt,
-            i18n::ScriptType::LATIN);
+            i18n::ScriptType::LATIN, mbExportModeRTF);
     pOutFmtNode = pOldMod;
 }
 

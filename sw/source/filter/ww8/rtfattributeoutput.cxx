@@ -1364,7 +1364,7 @@ void RtfAttributeOutput::NumberingLevel( BYTE nLevel,
             m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_F;
             m_rExport.OutULong(m_rExport.maFontHelper.GetId(*pFont));
         }
-        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN );
+        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
         m_rExport.Strm() << m_aStyles.makeStringAndClear();
     }
 

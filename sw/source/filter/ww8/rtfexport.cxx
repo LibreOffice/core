@@ -776,6 +776,7 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
       eCurrentEncoding(eDefaultEncoding),
       bRTFFlySyntax(false)
 {
+    mbExportModeRTF = true;
     // the attribute output for the document
     m_pAttrOutput = new RtfAttributeOutput( *this );
     // that just causes problems for RTF

@@ -540,7 +540,7 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
         ClearOverridesFromSet( *pCharFmtItem, aExportSet );
 
     sw::PoolItems aExportItems;
-    GetPoolItems( aExportSet, aExportItems );
+    GetPoolItems( aExportSet, aExportItems, false );
 
     sw::cPoolItemIter aEnd = aRangeItems.end();
     for ( sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
@@ -2310,7 +2310,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             pOutFmtNode = &rNode;
 
             // Pap-Attrs, so script is not necessary
-            OutputItemSet( *pNewSet, true, false, i18n::ScriptType::LATIN);
+            OutputItemSet( *pNewSet, true, false, i18n::ScriptType::LATIN, false);
 
             pStyAttr = 0;
             pOutFmtNode = pOldMod;

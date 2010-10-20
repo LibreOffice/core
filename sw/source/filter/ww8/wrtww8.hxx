@@ -548,6 +548,8 @@ public:
     BYTE bHasFtr : 1;
     BYTE bSubstituteBullets : 1; // true: SubstituteBullet() gets called
 
+    bool mbExportModeRTF;
+
     SwDoc *pDoc;
     SwPaM *pCurPam, *pOrigPam;
 
@@ -597,7 +599,7 @@ public:
     void AppendWordBookmark( const String& rName );
 
     /// Use OutputItem() on an item set according to the parameters.
-    void OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript );
+    void OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript, bool bExportParentItemSet );
 
     short GetDefaultFrameDirection( ) const;
 
