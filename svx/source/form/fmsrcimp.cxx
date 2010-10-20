@@ -82,11 +82,6 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
-// ***************************************************************************************************
-
-// ***************************************************************************************************
-
-SV_IMPL_OBJARR(SvInt32Array, sal_Int32);
 
 //========================================================================
 // = FmSearchThread
@@ -848,7 +843,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     // analyze the fields
     // additionally, create the mapping: because the list of used columns can be shorter than the list
     // of columns of the cursor, we need a mapping: "used column numer n" -> "cursor column m"
-    m_arrFieldMapping.Remove(0, m_arrFieldMapping.Count());
+    m_arrFieldMapping.clear();
 
     // important: The case of the columns does not need to be exact - for instance:
     // - a user created a form which works on a table, for which the driver returns a column name "COLUMN"
@@ -911,8 +906,8 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             }
             // set the field selection back to the first
             pFieldNames = seqFieldNames.getArray();;
-            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Es wurden ungueltige Feldnamen angegeben !");
-            m_arrFieldMapping.Insert(nFoundIndex, m_arrFieldMapping.Count());
+            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Invalid field name were given !");
+            m_arrFieldMapping.push_back(nFoundIndex);
         }
     }
     catch(Exception&)
@@ -1273,18 +1268,18 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         return;
     // (da ich keinen Wechsel des Iterators von aussen zulasse, heisst selber ::com::sun::star::sdbcx::Index auch immer selbe Spalte, also habe ich nix zu tun)
 
-    DBG_ASSERT((nFieldIndex >= -1) && (nFieldIndex<m_arrFieldMapping.Count()), "FmSearchEngine::RebuildUsedFields : nFieldIndex ist ungueltig !");
+    DBG_ASSERT((nFieldIndex >= -1) && (nFieldIndex<m_arrFieldMapping.size()), "FmSearchEngine::RebuildUsedFields : nFieldIndex is invalid!");
     // alle Felder, die ich durchsuchen muss, einsammeln
     m_arrUsedFields.clear();
     if (nFieldIndex == -1)
     {
         Reference< ::com::sun::star::container::XIndexAccess >  xFields;
-        for (sal_uInt16 i=0; i<m_arrFieldMapping.Count(); ++i)
+        for (size_t i=0; i<m_arrFieldMapping.size(); ++i)
         {
             Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
             DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
             xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-            BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(i));
+            BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[i]);
         }
     }
     else
@@ -1293,7 +1288,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
         xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject((sal_uInt16)nFieldIndex));
+        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[static_cast< size_t >(nFieldIndex)]);
     }
 
     m_nCurrentFieldIndex = nFieldIndex;
