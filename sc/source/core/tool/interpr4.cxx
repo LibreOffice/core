@@ -2103,7 +2103,7 @@ double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
 double ScInterpreter::GetDouble()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDouble" );
-    double nVal;
+    double nVal(0.0);
     switch( GetRawStackType() )
     {
         case svDouble:
