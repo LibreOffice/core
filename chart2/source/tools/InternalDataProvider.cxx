@@ -491,7 +491,6 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
     OUString aRangeRepresentation = rRangeRepresentation;
     if( aRangeRepresentation.indexOf('{') >= 0 )
     {
-        sal_Int32   i, m, n;
         ::std::vector< double > aNewData;
         ::std::vector< OUString > aNewLabels;
         OUString    aToken;
@@ -502,7 +501,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
         OUString str = aRangeRepresentation.replace('{',' ').replace('}',' ');
 
         m_aInternalData.clearDefaultData();
-        n = m_aInternalData.getColumnCount();
+        sal_Int32 n = m_aInternalData.getColumnCount();
         if( n )
             n = n - 1;
 
