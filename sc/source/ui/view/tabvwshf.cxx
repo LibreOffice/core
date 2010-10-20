@@ -649,7 +649,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         if(rMark.GetTableSelect(i) &&!pDoc->IsTabProtected(i))
                         {
-                            TheTabs.Insert(i,TheTabs.Count());
+                            TheTabs.push_back(i);
                             bTabFlag=TRUE;
                             if(nNewTab==i) nNewTab++;
                         }
@@ -659,7 +659,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     pViewData->SetTabNo(nNewTab);
                     DeleteTables(TheTabs);
-                    TheTabs.Remove(0,TheTabs.Count());
+                    TheTabs.clear();
                     rReq.Done();
                 }
             }
