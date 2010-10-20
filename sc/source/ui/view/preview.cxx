@@ -175,13 +175,6 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
             pDrawView->SetPrintPreview( TRUE );
             pDrawView->ShowSdrPage(pPage);
         }
-#if 0
-        else if ( !pDrawView->GetSdrPageView())     // angezeigte Page umstellen
-        {
-            pDrawView->HideSdrPage();
-            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        }
-#endif
     }
     else if ( pDrawView )
     {

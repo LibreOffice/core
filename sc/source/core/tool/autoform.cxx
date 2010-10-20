@@ -870,31 +870,6 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
     // --- from 680/dr25 on: #21549# store strings as UTF-8
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
 
-#if 0
-    //  This was an internal flag to allow creating AutoFormats with localized names
-
-    if ( USHRT_MAX == nStrResId )
-    {
-        String aIniVal( SFX_APP()->GetIniManager()->Get(
-            SFX_GROUP_WORKINGSET_IMPL,
-            String( RTL_CONSTASCII_USTRINGPARAM( "SaveTableAutoFmtNameId" ))));
-        if( 0 != aIniVal.ToInt32() )
-        {
-            // check Name for ResId
-            for( USHORT nId = RID_SVXSTR_TBLAFMT_BEGIN;
-                        RID_SVXSTR_TBLAFMT_END > nId; ++nId )
-            {
-                String s( SVX_RES( nId ) );
-                if( s == aName )
-                {
-                    nStrResId = nId - RID_SVXSTR_TBLAFMT_BEGIN;
-                    break;
-                }
-            }
-        }
-    }
-#endif
-
     rStream << nStrResId;
     rStream << ( b = bIncludeFont );
     rStream << ( b = bIncludeJustify );

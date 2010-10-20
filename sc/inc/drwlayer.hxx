@@ -164,9 +164,6 @@ public:
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
-#if 0
-    void            DeleteObjects( SCTAB nTab );
-#endif
 
     void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,

@@ -140,20 +140,6 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 
     aResult = aEvent.Value;     // store result
 
-    if ( !HasListeners() )
-    {
-        //! remove from list and removeListener, as in RemoveDocument ???
-
-#if 0
-        //! this will crash if called before first StartListening !!!
-        aAllListeners.Remove( this );
-        if ( xVolRes.is() )
-            xVolRes->removeResultListener( this );
-        release();  // Ref for aAllListeners - this may be deleted here
-        return;
-#endif
-    }
-
     //  notify document of changes
 
     Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );

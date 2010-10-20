@@ -72,10 +72,6 @@ public:
     const ScTokenArray* GetBoolErr( XclBoolError );
     BOOL                GetShrFmla( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen );
 
-#if 0
-                            // return = TRUE -> String-Record folgt!
-    static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
-#endif
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 
     static inline BOOL  IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );

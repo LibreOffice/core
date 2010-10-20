@@ -335,10 +335,6 @@ struct XclExpCellProt : public XclCellProt
         @return  true = At least one protection item is set. */
     bool                FillFromItemSet( const SfxItemSet& rItemSet, bool bStyle = false );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnNumFmt ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF3-BIFF8 XF record. */
     void                FillToXF3( sal_uInt16& rnProt ) const;
 
@@ -358,14 +354,6 @@ struct XclExpCellAlign : public XclCellAlign
     bool                FillFromItemSet( const SfxItemSet& rItemSet,
                             bool bForceLineBreak, XclBiff eBiff, bool bStyle = false );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnFlags ) const;
-    /** Fills the data to the passed fields of a BIFF3 XF record. */
-    void                FillToXF3( sal_uInt16& rnAlign ) const;
-    /** Fills the data to the passed fields of a BIFF4 XF record. */
-    void                FillToXF4( sal_uInt16& rnAlign ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
     void                FillToXF5( sal_uInt16& rnAlign ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */
@@ -396,12 +384,6 @@ struct XclExpCellBorder : public XclCellBorder
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                SetFinalColors( const XclExpPalette& rPalette );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnFlags ) const;
-    /** Fills the data to the passed fields of a BIFF3/BIFF4 XF record. */
-    void                FillToXF3( sal_uInt32& rnBorder ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
     void                FillToXF5( sal_uInt32& rnBorder, sal_uInt32& rnArea ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */
@@ -432,12 +414,6 @@ struct XclExpCellArea : public XclCellArea
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                SetFinalColors( const XclExpPalette& rPalette );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnFlags ) const;
-    /** Fills the data to the passed fields of a BIFF3/BIFF4 XF record. */
-    void                FillToXF3( sal_uInt16& rnArea ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
     void                FillToXF5( sal_uInt32& rnArea ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */

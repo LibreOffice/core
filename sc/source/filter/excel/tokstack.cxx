@@ -332,9 +332,6 @@ void TokenPool::GetElement( const UINT16 nId )
                 pScToken->AddDouble( pP_Dbl[ pElement[ nId ] ] );
                 break;
             case T_Err:
-#if 0   // erAck
-                pScToken->AddError( pP_Err[ pElement[ nId ] ] );
-#endif
                 break;
             case T_RefC:
                 pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (UINT16) nId ] ] );
@@ -447,9 +444,6 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     pScToken->AddDouble( pP_Dbl[ pElement[ *pAkt ] ] );
                     break;
                 case T_Err:
-#if 0   // erAck
-                    pScToken->AddError( pP_Err[ pElement[ *pAkt ] ] );
-#endif
                     break;
                 case T_RefC:
                     pScToken->AddSingleReference( *ppP_RefTr[ pElement[ *pAkt ] ] );

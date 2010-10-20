@@ -366,20 +366,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         ( pDoc->IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
                     break; // kein Rename
 
-#if 0
-                //  ScSbxObject wird nicht mehr benutzt, stattdessen aus dem
-                //  ScSbxTable::Notify die richtige Tabelle an der Basic-View eingestellt
-                if( rReq.IsAPI() )
-                {
-                    SbxObject* pObj = GetScSbxObject();
-                    ScSbxTable* pSbxTab = PTR_CAST( ScSbxTable, pObj );
-                    DBG_ASSERT( pSbxTab, "pSbxTab???" );
-
-                    if( pSbxTab )
-                        nTabNr = pSbxTab->GetTableNr();
-                }
-#endif
-
                 if( pReqArgs != NULL )
                 {
                     BOOL        bDone   = FALSE;

@@ -334,12 +334,6 @@ double SAL_CALL AnalysisAddIn::getYielddisc( constREFXPS& xOpt,
 
     sal_Int32   nNullDate = GetNullDate( xOpt );
 
-#if 0
-    double      fRet = 1.0 - fPrice / fRedemp;
-    fRet /= GetYearFrac( nNullDate, nSettle, nMat, getDateMode( xOpt, rOB ) );
-    fRet /= 0.99795;  // don't know what this constant means in original
-#endif
-
     double fRet = ( fRedemp / fPrice ) - 1.0;
     fRet /= GetYearFrac( nNullDate, nSettle, nMat, getDateMode( xOpt, rOB ) );
 

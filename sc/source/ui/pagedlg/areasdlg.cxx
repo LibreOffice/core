@@ -80,6 +80,7 @@ bool    lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow
 void    lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
 
 #if 0
+// this method is useful when debugging address flags.
 static void printAddressFlags(USHORT nFlag)
 {
     if ((nFlag & SCA_COL_ABSOLUTE  ) == SCA_COL_ABSOLUTE  )  printf("SCA_COL_ABSOLUTE \n");

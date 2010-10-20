@@ -288,42 +288,6 @@ void ScXMLBodyContext::EndElement()
         if (pChangeTrackingImportHelper)
             pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
 
-#if 0
-        // #i57869# table styles are applied before the contents now
-
-        std::vector<rtl::OUString> aTableStyleNames(GetScImport().GetTableStyle());
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
-        if ( xSpreadDoc.is() && !aTableStyleNames.empty())
-        {
-            uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
-            if ( xIndex.is() )
-            {
-                sal_Int32 nTableCount = xIndex->getCount();
-                sal_Int32 nSize(aTableStyleNames.size());
-                DBG_ASSERT(nTableCount == nSize, "every table should have a style name");
-                for(sal_uInt32 i = 0; i < nTableCount; i++)
-                {
-                    if (i < nSize)
-                    {
-                        uno::Reference <beans::XPropertySet> xProperties(xIndex->getByIndex(i), uno::UNO_QUERY);
-                        if (xProperties.is())
-                        {
-                            rtl::OUString sTableStyleName(aTableStyleNames[i]);
-                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
-                            if ( pStyles && sTableStyleName.getLength() )
-                            {
-                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                    XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
-                                if (pStyle)
-                                    pStyle->FillPropertySet(xProperties);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-#endif
-
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
         {

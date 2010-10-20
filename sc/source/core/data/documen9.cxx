@@ -170,11 +170,6 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
                 pTab[nTab]->SetDrawPageSize(false,false);     // #54782# set the right size immediately
-#if 0
-                ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
-                ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
-                pDrawLayer->SetPageSize( nTab, Size( nx, ny ) );
-#endif
             }
         }
 

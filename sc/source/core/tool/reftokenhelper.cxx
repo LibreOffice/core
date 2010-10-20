@@ -113,26 +113,6 @@ void ScRefTokenHelper::compileRangeRepresentation(
             }
         }
 
-#if 0
-        switch (p->GetType())
-        {
-            case svSingleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   single ref\n");
-            break;
-            case svDoubleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   double ref\n");
-            break;
-            case svExternalSingleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   external single ref\n");
-            break;
-            case svExternalDoubleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   external double ref\n");
-            break;
-            default:
-                ;
-        }
-#endif
-
     }
     if (bFailure)
         rRefTokens.clear();

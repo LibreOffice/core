@@ -689,20 +689,6 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     delete pTemp;
 
         // alte Version mit SfxItemPoolCache:
-#if 0
-    SfxItemPoolCache aCache( pDocument->GetPool(), &rAttr );
-
-    const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
-
-    //  TRUE = alten Eintrag behalten
-
-    ScPatternAttr* pNewPattern = (ScPatternAttr*) &aCache.ApplyTo( *pPattern, TRUE );
-    ScDocumentPool::CheckRef( *pPattern );
-    ScDocumentPool::CheckRef( *pNewPattern );
-
-    if (pNewPattern != pPattern)
-      pAttrArray->SetPattern( nRow, pNewPattern );
-#endif
 }
 
 #ifdef _MSC_VER
@@ -1123,22 +1109,6 @@ BOOL ScColumn::TestInsertRow( SCSIZE nSize ) const
                  pItems[nCount-1].nRow <= MAXROW-(SCROW)nSize && pAttrArray->TestInsertRow( nSize ) );
     else
         return pAttrArray->TestInsertRow( nSize );
-
-#if 0
-    //!     rausgeschobene Attribute bei Undo beruecksichtigen
-
-    if ( nSize > static_cast<SCSIZE>(MAXROW) )
-        return FALSE;
-
-    SCSIZE nVis = nCount;
-    while ( nVis && pItems[nVis-1].pCell->IsBlank() )
-        --nVis;
-
-    if ( nVis )
-        return ( pItems[nVis-1].nRow <= MAXROW-nSize );
-    else
-        return TRUE;
-#endif
 }
 
 

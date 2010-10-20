@@ -473,13 +473,6 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
         SvxUnoTextRangeBase* pTextRange =
             ScHeaderFooterTextCursor::getImplementation( xRange );
 
-#if 0
-        if (!pTextRange)
-            pTextRange = (SvxUnoTextRange*)xRange->getImplementation(
-                                            SvxUnoTextRange_getReflection() );
-        //! bei SvxUnoTextRange testen, ob in passendem Objekt !!!
-#endif
-
         if ( pHeaderField && !pHeaderField->IsInserted() && pTextRange )
         {
             SvxEditSource* pEditSource = pTextRange->GetEditSource();

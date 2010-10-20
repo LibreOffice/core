@@ -402,20 +402,6 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
 
             BOOL bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
 
-            //! Mit dieser Abfrage wird zuviel weggelassen, wenn ein automatischer
-            //! Umbruch mitten in den Wiederholungsspalten liegt.
-            //! Dann lieber den aeusseren Rahmen zweimal ausgeben...
-#if 0
-            //  auf dem Drucker die Aussen-Linien weglassen (werden getrennt ausgegeben)
-            if ( eType == OUTTYPE_PRINTER && !bMetaFile )
-            {
-                if ( nX == MAXCOL )
-                    bDraw = FALSE;
-                else if (pDoc->HasColBreak(nXplus1, nTab))
-                    bDraw = FALSE;
-            }
-#endif
-
             USHORT nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
             bSingle = bSingleGrid;                                  //! in Fillinfo holen !!!!!
             if ( nX<MAXCOL && !bSingle )
@@ -530,20 +516,6 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
             }
 
             BOOL bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
-
-            //! Mit dieser Abfrage wird zuviel weggelassen, wenn ein automatischer
-            //! Umbruch mitten in den Wiederholungszeilen liegt.
-            //! Dann lieber den aeusseren Rahmen zweimal ausgeben...
-#if 0
-            //  auf dem Drucker die Aussen-Linien weglassen (werden getrennt ausgegeben)
-            if ( eType == OUTTYPE_PRINTER && !bMetaFile )
-            {
-                if ( nY == MAXROW )
-                    bDraw = FALSE;
-                else if (pDoc->HasRowBreak(nYplus1, nTab))
-                    bDraw = FALSE;
-            }
-#endif
 
             BOOL bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
             bSingle = !bNextYisNextRow;             // Hidden
@@ -2447,12 +2419,6 @@ void ScOutputData::DrawClipMarks()
                         //  visually left
                         Rectangle aMarkRect = aCellRect;
                         aMarkRect.Right() = aCellRect.Left()+nMarkPixel-1;
-#if 0
-                        //! Test
-                        pDev->SetLineColor(); pDev->SetFillColor(COL_YELLOW);
-                        pDev->DrawRect(aMarkRect);
-                        //! Test
-#endif
                         SvxFont::DrawArrow( *pDev, aMarkRect, aMarkSize, aArrowFillCol, TRUE );
                     }
                     if ( pInfo->nClipMark & ( bLayoutRTL ? SC_CLIPMARK_LEFT : SC_CLIPMARK_RIGHT ) )
@@ -2460,12 +2426,6 @@ void ScOutputData::DrawClipMarks()
                         //  visually right
                         Rectangle aMarkRect = aCellRect;
                         aMarkRect.Left() = aCellRect.Right()-nMarkPixel+1;
-#if 0
-                        //! Test
-                        pDev->SetLineColor(); pDev->SetFillColor(COL_LIGHTGREEN);
-                        pDev->DrawRect(aMarkRect);
-                        //! Test
-#endif
                         SvxFont::DrawArrow( *pDev, aMarkRect, aMarkSize, aArrowFillCol, FALSE );
                     }
                 }

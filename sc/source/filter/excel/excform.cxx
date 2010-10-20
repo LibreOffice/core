@@ -161,12 +161,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         {
             if( eErr != ConvOK )
                 ExcelToSc::SetError( *pZelle, eErr );
-#if 0
-            else
-                ExcelToSc::SetCurVal( *pZelle, rCurVal );
-#else
             (void)rCurVal;
-#endif
         }
 
         GetXFRangeBuffer().SetXF( aScPos, nXF );
@@ -427,9 +422,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x1C: // Error Value                           [314 266]
             {
                 aIn >> nByte;
-#if 0   // erAck
-                aPool.StoreError( XclTools::GetScErrorCode( nByte ) );
-#else
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -445,7 +437,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool << eOc;
                 if( eOc != ocStop )
                     aPool << ocOpen << ocClose;
-#endif
                 aPool >> aStack;
             }
                 break;
@@ -1775,54 +1766,6 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, XclImpStream& aIn, 
 
     return bRet;
 }
-
-
-#if 0
-BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
-{
-    UINT16  nInd;
-    BYTE    nType;
-    BYTE    nVal;
-    BOOL    bString = FALSE;
-
-#ifdef OSL_BIGENDIAN
-    // Code fuer alle anstaendigen Prozessoren
-    nType = *( ( ( BYTE * ) &rfCurVal ) + 7 );
-    nVal = *( ( ( BYTE * ) &rfCurVal ) + 5 );
-    nInd = *( ( UINT16 * ) &rfCurVal );
-#else
-    // fuer Schund-Prozessoren
-    nType = *( ( BYTE * ) &rfCurVal );
-    nVal = *( ( ( BYTE * ) &rfCurVal ) + 2 );
-    nInd = *( ( ( UINT16 * ) &rfCurVal ) + 3 );
-#endif
-
-    if( ( UINT16 ) ~nInd )
-        // Wert ist Float
-        rCell.SetHybridDouble( rfCurVal );
-    else
-    {
-        switch( nType )
-        {
-            case 0:     // String
-                bString = TRUE;
-                break;
-            case 1:     // Bool
-                if( nVal )
-                    rfCurVal = 1.0;
-                else
-                    rfCurVal = 0.0;
-                rCell.SetHybridDouble( rfCurVal );
-                break;
-            case 2:     // Error
-                rCell.SetErrCode( XclTools::GetScErrorCode( nVal ) );
-                break;
-        }
-    }
-
-    return bString;
-}
-#endif
 
 
 void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )

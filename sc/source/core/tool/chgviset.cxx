@@ -143,22 +143,13 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
                 if ( pLast )
                 {
                     aFirstDateTime = pLast->GetDateTime();
-#if 0
-// This would be the proper handling. But since the SvxTPFilter dialog uses
-// DateField/TimeField, and the filter dialog is used in ScAcceptChgDlg as the
-// controlling instance, and the TimeFields are used there without seconds or
-// 100ths, we'd display some extra entries between the floor of the minute and
-// the start of the next minute.
-                    // add one 100th second to point past last saved
-                    aFirstDateTime += Time( 0, 0, 0, 1 );
-#else
+
                     // Set the next minute as the start time and assume that
                     // the document isn't saved, reloaded, edited and filter set
                     // all together during the gap between those two times.
                     aFirstDateTime += Time( 0, 1 );
                     aFirstDateTime.SetSec(0);
                     aFirstDateTime.Set100Sec(0);
-#endif
                 }
             }
             if ( !pLast )

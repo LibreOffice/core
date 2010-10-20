@@ -1228,14 +1228,6 @@ String ScUnoAddInCollection::FindFunction( const String& rUpperName, BOOL bLocal
         ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( rUpperName ) );
         if ( iLook != pLocalHashMap->end() )
             return iLook->second->GetOriginalName();
-
-#if 0
-        //  after that, scan international names (really?)
-
-        iLook = pNameHashMap->find( rUpperName );
-        if ( iLook != pNameHashMap->end() )
-            return iLook->second->GetOriginalName();
-#endif
     }
     else
     {
@@ -1573,12 +1565,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         {
             nErrCode = errIllegalArgument;
         }
-#if 0
-        catch(FloatingPointException&)
-        {
-            nErrCode = errIllegalFPOperation;
-        }
-#endif
+
         catch(reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(

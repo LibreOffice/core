@@ -295,51 +295,6 @@ void ScImportExport::EndPaste()
 
 /////////////////////////////////////////////////////////////////////////////
 
-
-#if 0
-BOOL ScImportExport::ImportData( SvData& rData )
-{
-    ULONG nFmt = rData.GetFormat();
-    if ( nFmt == SOT_FORMATSTR_ID_HTML_SIMPLE )
-    {
-        MSE40HTMLClipFormatObj aMSE40ClpObj;
-        if ( aMSE40ClpObj.GetData( rData ) )
-        {
-            SvStream* pStream = aMSE40ClpObj.GetStream();
-            return ImportStream( *pStream, nFmt );
-        }
-        return FALSE;
-    }
-    else
-    {
-        void* pMem;
-        ULONG nSize = rData.GetMinMemorySize();
-        rData.GetData( &pMem, TRANSFER_REFERENCE );
-        if( nFmt == FORMAT_STRING
-                 || nFmt == FORMAT_RTF
-                 || nFmt == SOT_FORMATSTR_ID_SYLK
-                 || nFmt == SOT_FORMATSTR_ID_HTML
-                 || nFmt == SOT_FORMATSTR_ID_DIF )
-        {
-            //! String? Unicode??
-
-            // Stringende ermitteln!
-            sal_Char* pBegin = (sal_Char*) pMem;
-            sal_Char* pEnd   = (sal_Char*) pMem + nSize;
-
-            nSize = 0;
-            while( pBegin != pEnd && *pBegin != '\0' )
-                pBegin++, nSize++;
-            // #72909# MT says only STRING has to be zero-terminated
-            DBG_ASSERT( pBegin != pEnd || nFmt != FORMAT_STRING, "non zero-terminated String" )
-        }
-        SvMemoryStream aStrm( pMem, nSize, STREAM_READ );
-        return ImportStream( aStrm, nFmt );
-    }
-}
-
-#endif
-
 BOOL ScImportExport::ImportData( const String& /* rMimeType */,
                      const ::com::sun::star::uno::Any & /* rValue */ )
 {

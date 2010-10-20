@@ -6372,13 +6372,6 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
         ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
         SvxUnoTextRangeBase* pTextRange = ScCellTextCursor::getImplementation( xRange );
 
-#if 0
-        if (!pTextRange)
-            pTextRange = SvxUnoTextRangeBase::getImplementation( xRange );
-
-        //! bei SvxUnoTextRange testen, ob in passendem Objekt !!!
-#endif
-
         if ( pCellField && !pCellField->IsInserted() && pTextRange )
         {
             SvxEditSource* pEditSource = pTextRange->GetEditSource();

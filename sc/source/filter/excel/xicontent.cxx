@@ -213,23 +213,6 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
         }
         break;
 
-        // fix for #i31050# disabled, HYPERLINK is not able to return numeric value (#i91351#)
-#if 0
-        case CELLTYPE_VALUE:
-        {
-            // #i31050# replace number with HYPERLINK function
-            ScTokenArray aTokenArray;
-            aTokenArray.AddOpCode( ocHyperLink );
-            aTokenArray.AddOpCode( ocOpen );
-            aTokenArray.AddString( rUrl );
-            aTokenArray.AddOpCode( ocSep );
-            aTokenArray.AddDouble( rDoc.GetValue( aScPos ) );
-            aTokenArray.AddOpCode( ocClose );
-            rDoc.PutCell( aScPos, new ScFormulaCell( &rDoc, aScPos, &aTokenArray ) );
-        }
-        break;
-#endif
-
         default:;
     }
 }

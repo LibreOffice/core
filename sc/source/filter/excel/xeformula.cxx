@@ -1171,9 +1171,6 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
         case svUnknown:             mxData->mbOk = false;                   break;
         case svDouble:              ProcessDouble( aTokData );              break;
         case svString:              ProcessString( aTokData );              break;
-#if 0   // erAck
-        case svError:               ProcessError( aTokData );               break;
-#endif
         case svSingleRef:           ProcessCellRef( aTokData );             break;
         case svDoubleRef:           ProcessRangeRef( aTokData );            break;
         case svExternalSingleRef:   ProcessExternalCellRef( aTokData );     break;
@@ -1221,11 +1218,7 @@ void XclExpFmlaCompImpl::ProcessString( const XclExpScToken& rTokData )
 
 void XclExpFmlaCompImpl::ProcessError( const XclExpScToken& rTokData )
 {
-#if 0   // erAck
-    AppendErrorToken( XclTools::GetXclErrorCode( rTokData.mpScToken->GetError() ), rTokData.mnSpaces );
-#else
     (void)rTokData; // compiler warning
-#endif
 }
 
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpScToken& rTokData )

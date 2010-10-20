@@ -812,12 +812,6 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
         for( size_t nTab = 0, nTabCount = maTableList.GetSize(); nTab < nTabCount; ++nTab )
         {
-            // set current stream position in BOUNDSHEET record
-#if 0
-            ExcBoundsheetRef xBoundsheet = maBoundsheetList.GetRecord( nTab );
-            if( xBoundsheet.get() )
-                xBoundsheet->SetStreamPos( aXclStrm.GetSvStreamPos() );
-#endif
             // write the table
             maTableList.GetRecord( nTab )->WriteXml( rStrm );
         }

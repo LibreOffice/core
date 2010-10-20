@@ -1512,17 +1512,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
 
     //  Filter-Popup beendet sich mit eigenem Mausklick, nicht erst beim Klick
     //  in das GridWindow, darum ist die folgende Abfrage nicht mehr noetig:
-#if 0
-    // merken, dass FilterBox geloescht wird, damit sichergestellt
-    // ist, dass in diesem Handler nicht an gleicher Stelle wieder
-    // eine neue geoeffnet wird.
-    BOOL    bWasFilterBox = ( pFilterBox != NULL &&
-                                ((Window*)pFilterBox)->IsVisible() &&
-                                !pFilterBox->IsDataSelect() );
-    SCCOL   nOldColFBox   = bWasFilterBox ? pFilterBox->GetCol() : 0;
-    SCROW  nOldRowFBox    = bWasFilterBox ? pFilterBox->GetRow() : 0;
-#endif
-
     ClickExtern();  // loescht FilterBox, wenn vorhanden
 
     HideNoteMarker();   // Notiz-Anzeige
@@ -3544,21 +3533,6 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             // pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
 
             UpdateDragRectOverlay();
-
-            //  show target position as tip help
-#if 0
-            if (Help::IsQuickHelpEnabled())
-            {
-                ScRange aRange( nDragStartX, nDragStartY, nTab, nDragEndX, nDragEndY, nTab );
-                String aHelpStr;
-                aRange.Format( aHelpStr, SCA_VALID );   // non-3D
-
-                Point aPos = Pointer::GetPosPixel();
-                USHORT nAlign = QUICKHELP_BOTTOM|QUICKHELP_RIGHT;
-                Rectangle aRect( aPos, aPos );
-                Help::ShowQuickHelp(aRect, aHelpStr, nAlign);
-            }
-#endif
         }
     }
 

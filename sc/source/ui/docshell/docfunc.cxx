@@ -705,17 +705,6 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
 //! CellContentChanged();
 //! ShowAllCursors();
 
-#if 0
-    //! muss an der View bleiben !!!!
-    if ( nFlags & IDF_ATTRIB )
-    {
-        if ( nFlags & IDF_CONTENTS )
-            ForgetFormatArea();
-        else
-            StartFormatArea();              // Attribute loeschen ist auch Attributierung
-    }
-#endif
-
     return TRUE;
 }
 

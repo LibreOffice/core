@@ -1331,17 +1331,6 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
     rParam.maAlignRect.Justify();
     rParam.maClipRect.Justify();
-
-#if 0
-    //! Test !!!
-    pDev->Push();
-    pDev->SetLineColor();
-    pDev->SetFillColor( COL_LIGHTGREEN );
-    pDev->DrawRect( pDev->PixelToLogic(rParam.maClipRect) );
-    pDev->DrawRect( rParam.maClipRect );    // print preview
-    pDev->Pop();
-    //! Test !!!
-#endif
 }
 
 void ScOutputData::DrawStrings( BOOL bPixelToLogic )
@@ -2403,11 +2392,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-#if 0
-        Size aOnePixel = pDev->PixelToLogic(Size(1,1));
-        long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
-#endif
         nInitPosX += nMirrorW - 1;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -2935,20 +2919,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                                 }
 
-#if 0
-                                long nClipStartY = nStartY;
-                                if (nArrY==0 || bVisChanged)
-                                {
-                                    if ( nClipStartY < nRowPosY )
-                                    {
-                                        long nDif = nRowPosY - nClipStartY;
-                                        bClip = TRUE;
-                                        nClipStartY = nRowPosY;
-                                        aClipSize.Height() -= nDif;
-                                    }
-                                }
-#endif
-
                                 Rectangle aLogicClip;
                                 if (bClip || bSimClip)
                                 {
@@ -3225,11 +3195,6 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-#if 0
-        Size aOnePixel = pDev->PixelToLogic(Size(1,1));
-        long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
-#endif
         nInitPosX += nMirrorW - 1;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;

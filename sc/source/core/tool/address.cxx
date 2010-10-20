@@ -632,13 +632,6 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     // Keep in mind that nFlags2 gets left-shifted by 4 bits before being merged.
     USHORT nFlags2 = SCA_VALID_TAB;
 
-#if 0
-    {
-        ByteString  aStr(p, RTL_TEXTENCODING_UTF8);
-        aStr.Append(static_cast< char >(0));
-        std::cerr << "parse::XL::R1C1 \'" << aStr.GetBuffer() << '\'' << std::endl;
-    }
-#endif
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
             aEndTabName, nFlags, bOnlyAcceptSingle, NULL );
 
@@ -814,13 +807,6 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     String aExternDocName, aStartTabName, aEndTabName; // for external link table
     USHORT nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB;
 
-#if 0
-    {
-        ByteString  aStr(p, RTL_TEXTENCODING_UTF8);
-        aStr.Append(static_cast< char >(0));
-        std::cerr << "parse::XL::A1 \'" << aStr.GetBuffer() << '\'' << std::endl;
-    }
-#endif
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
             aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks );
 
@@ -1622,13 +1608,6 @@ getFileNameFromDoc( const ScDocument* pDoc )
                 sFileName = pShell->GetTitle();
         }
     }
-#if 0
-        {
-            ByteString  aStr( sFileName, RTL_TEXTENCODING_UTF8 );
-            aStr.Append(static_cast< char >(0));
-            std::cerr << "docname \'" << aStr.GetBuffer() << '\'' << std::endl;
-        }
-#endif
     return sFileName;
 }
 
@@ -1726,13 +1705,6 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
 {
     pDoc->GetName( nTab, rTabName );
     rDocName.Erase();
-#if 0
-    {
-        ByteString  aStr(rTabName, RTL_TEXTENCODING_UTF8);
-        aStr.Append(static_cast< char >(0));
-        std::cerr << "tabname \'" << aStr.GetBuffer() << '\'' << std::endl;
-    }
-#endif
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName.GetChar(0) == '\'' )
     {   // "'Doc'#Tab"

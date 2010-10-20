@@ -869,33 +869,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pNewDPObject )
                         pNewDPObject->SetOutRange( aDestPos );
-
-#if 0
-                    ScDBData*   pDBData = pTabViewShell->GetDBData();
-                    String      aErrMsg;
-
-                    pDBData->GetArea( nTab, nCol1, nRow1, nCol2, nRow2 );
-
-                    bAreaOk = TRUE;
-                    if ( nRow2-nRow1 < 1 )
-                    {
-                        // "mindestens eine Datenzeile"
-                        pTabViewShell->ErrorMessage(STR_PIVOT_INVALID_DBAREA);
-                        bAreaOk = FALSE;
-                    }
-                    else if (!pDBData->HasHeader())
-                    {
-                        if ( MessBox( pTabViewShell->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                                ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // Koepfe aus erster Zeile?
-                            ).Execute() == RET_YES )
-                        {
-                            pDBData->SetHeader( TRUE );     //! Undo ??
-                        }
-                        else
-                            bAreaOk = FALSE;
-                    }
-#endif
                 }
 
                 pTabViewShell->SetDialogDPObject( pNewDPObject );   // is copied

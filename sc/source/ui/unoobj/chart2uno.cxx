@@ -1310,53 +1310,6 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
         // Not all the adjacent cells are included.  Bail out.
         return false;
 
-#if 0 // Do we really need to do this ???
-    if (rRefTokens.size() == 2)
-    {
-        // Make a simple rectangular range if possible.
-        ScRange aRightPart(ScAddress(nMinCol+1, nMinRow,   nTab),  ScAddress(nMaxCol, nMaxRow, nTab));
-        ScRange aBottomPart(ScAddress(nMinCol,  nMinRow+1, nTab),  ScAddress(nMaxCol, nMaxRow, nTab));
-        vector<ScRange> aRanges;
-        aRanges.reserve(2);
-        aRanges.push_back(aRightPart);
-        aRanges.push_back(aBottomPart);
-        if (lcl_isRangeContained(rRefTokens, aRanges))
-        {
-            // Consolidate them into a single rectangle.
-            ScComplexRefData aData;
-            aData.InitFlags();
-            aData.Ref1.SetFlag3D(true);
-            aData.Ref1.SetColRel(false);
-            aData.Ref1.SetRowRel(false);
-            aData.Ref1.SetTabRel(false);
-            aData.Ref2.SetColRel(false);
-            aData.Ref2.SetRowRel(false);
-            aData.Ref2.SetTabRel(false);
-            aData.Ref1.nCol = nMinCol;
-            aData.Ref1.nRow = nMinRow;
-            aData.Ref1.nTab = nTab;
-            aData.Ref2.nCol = nMaxCol;
-            aData.Ref2.nRow = nMaxRow;
-            aData.Ref2.nTab = nTab;
-            vector<ScSharedTokenRef> aNewTokens;
-            aNewTokens.reserve(1);
-            if (bExternal)
-            {
-                ScSharedTokenRef p(
-                    new ScExternalDoubleRefToken(nFileId, aExtTabName, aData));
-                aNewTokens.push_back(p);
-            }
-            else
-            {
-                ScSharedTokenRef p(new ScDoubleRefToken(aData));
-                aNewTokens.push_back(p);
-            }
-            rRefTokens.swap(aNewTokens);
-            return true;
-        }
-    }
-#endif
-
     ScSingleRefData aData;
     aData.InitFlags();
     aData.SetFlag3D(true);

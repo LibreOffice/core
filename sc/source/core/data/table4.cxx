@@ -461,13 +461,7 @@ void ScTable::FillFormula(ULONG& /* nFormulaCounter */, BOOL /* bFirst */, ScFor
         ScAddress aAddr( nDestCol, nDestRow, nTab );
         ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
         aCol[nDestCol].Insert(nDestRow, pDestCell);
-#if 0
-// mit RelRefs unnoetig
-        pDestCell->UpdateReference(URM_COPY,
-                         ScRange( aAddr, aAddr ),
-                         nDestCol - pSrcCell->aPos.Col(),
-                         nDestRow - pSrcCell->aPos.Row(), 0);
-#endif
+
         if ( bLast && pDestCell->GetMatrixFlag() )
         {
             ScAddress aOrg;

@@ -1558,16 +1558,6 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
             pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
         }
-#if 0 // DR
-        ScPostIt aCellNote( ScPostIt::UNINITIALIZED );
-        // Hide visible notes during Filtering.
-        if(pCell->GetNote(aCellNote) && aCellNote.IsCaptionShown())
-        {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
-            aCellNote.SetShown( false );
-            pCell->SetNote(aCellNote);
-        }
-#endif
 
         if ( !rStrings.Insert( pData ) )
             delete pData;                               // doppelt

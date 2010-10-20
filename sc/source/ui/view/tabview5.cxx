@@ -299,32 +299,6 @@ void ScTabView::TabChanged()
     //  (fuer disablete Slots auf geschuetzten Tabellen), darum hier einfach alles...
     rBindings.InvalidateAll(FALSE);
 
-#if 0
-    rBindings.Invalidate( SID_SELECT_SCENARIO );
-    rBindings.Invalidate( FID_PROTECT_TABLE );
-    rBindings.Invalidate( FID_DELETE_TABLE );
-    rBindings.Invalidate( FID_TABLE_SHOW );
-    rBindings.Invalidate( FID_TABLE_HIDE );
-
-                // Auswirkungen von geschuetzten Tabellen.
-    rBindings.Invalidate( FID_TAB_RENAME );
-    rBindings.Invalidate( FID_TAB_MOVE );
-    rBindings.Invalidate( SID_DEL_ROWS );
-    rBindings.Invalidate( SID_DEL_COLS );
-    rBindings.Invalidate( FID_INS_ROW );
-    rBindings.Invalidate( FID_INS_COLUMN );
-    rBindings.Invalidate( FID_INS_CELL );
-    rBindings.Invalidate( FID_INS_CELLSDOWN );
-    rBindings.Invalidate( FID_INS_CELLSRIGHT );
-    rBindings.Invalidate( FID_DELETE_CELL );
-
-    rBindings.Invalidate( SID_OPENDLG_CHART );
-    rBindings.Invalidate( SID_INSERT_OBJECT );
-    rBindings.Invalidate( SID_INSERT_DIAGRAM );
-    rBindings.Invalidate( SID_INSERT_SMATH );
-    rBindings.Invalidate( SID_INSERT_GRAPHIC );
-#endif
-
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
     {
         SfxSimpleHint aAccHint(SC_HINT_ACC_TABLECHANGED);

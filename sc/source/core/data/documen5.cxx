@@ -559,15 +559,6 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         }
         if ( bChanged )
         {
-#if 0
-            if ( nDz != 0 )
-            {   // #81844# sheet to be deleted or inserted or moved
-                // => no valid sheet names for references right now
-                pChartListener->ChangeListening( aNewRLR, bDataChanged );
-                pChartListener->ScheduleSeriesRanges();
-            }
-            else
-#endif
             {
 //              SetChartRangeList( pChartListener->GetString(), aNewRLR );
 //              pChartListener->ChangeListening( aNewRLR, bDataChanged );

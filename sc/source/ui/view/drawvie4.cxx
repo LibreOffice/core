@@ -105,44 +105,6 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
     }
 }
 
-#if 0
-void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
-{
-    USHORT nPages = pModel->GetPageCount();
-    for (SCTAB nTab=0; nTab<nPages; nTab++)
-    {
-        SdrPage* pPage = pModel->GetPage(nTab);
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
-        {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
-            {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( aIPObj.Is() && SotExchange::IsChart( aIPObj->GetStorage()->GetClassName() ) )
-                {
-                    SchMemChart* pOldData = SchDLL::GetChartData(aIPObj);
-                    if ( pOldData )
-                    {
-                        //  create data from source document
-                        ScChartArray aArray( pSourceDoc, *pOldData );
-                        if ( aArray.IsValid() )
-                        {
-                            SchMemChart* pNewData = aArray.CreateMemChart();
-                            SchDLL::Update( aIPObj, pNewData );
-                            delete pNewData;
-                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                        }
-                    }
-                }
-            }
-            pObject = aIter.Next();
-        }
-    }
-}
-#endif
-
-
 BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
     BOOL bReturn = FALSE;

@@ -1200,44 +1200,6 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     return bFound;
 }
 
-#if 0
-void ScDrawLayer::DeleteObjects( SCTAB nTab )
-{
-    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-    if (!pPage)
-        return;
-
-    pPage->RecalcObjOrdNums();
-
-    long    nDelCount = 0;
-    ULONG   nObjCount = pPage->GetObjCount();
-    if (nObjCount)
-    {
-        SdrObject** ppObj = new SdrObject*[nObjCount];
-
-        SdrObjListIter aIter( *pPage, IM_FLAT );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
-        {
-            //  alle loeschen
-            ppObj[nDelCount++] = pObject;
-            pObject = aIter.Next();
-        }
-
-        long i;
-        if (bRecording)
-            for (i=1; i<=nDelCount; i++)
-                AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
-
-        for (i=1; i<=nDelCount; i++)
-            pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
-
-        delete[] ppObj;
-    }
-}
-#endif
-
 void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 )
 {

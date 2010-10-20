@@ -195,57 +195,6 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
 // Called following an EndDragObj() to update the new note rectangle position
 void FuText::StopDragMode(SdrObject* /*pObject*/)
 {
-#if 0 // DR
-    ScViewData& rViewData = *pViewShell->GetViewData();
-    if( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
-    {
-        ScDocument& rDoc = *rViewData.GetDocument();
-        const ScAddress& rPos = pData->maStart;
-        ScPostIt* pNote = rDoc.GetNote( rPos );
-        DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "FuText::StopDragMode - missing or invalid cell note" );
-        if( pNote )
-        {
-            Rectangle aOldRect = pNote->CalcRectangle( rDoc, rPos );
-            Rectangle aNewRect = pObject->GetLogicRect();
-            if( aOldRect != aNewRect )
-            {
-                pNote->UpdateFromRectangle( rDoc, rPos, aNewRect );
-                OutlinerParaObject* pPObj = pCaption->GetOutlinerParaObject();
-                bool bVertical = (pPObj && pPObj->IsVertical());
-                // The new height/width is honoured if property item is reset.
-                if(!bVertical && aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
-                {
-                    if(pCaption->IsAutoGrowHeight() && !bVertical)
-                    {
-                        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
-                        aNote.SetItemSet( *pDoc, pCaption->GetMergedItemSet() );
-                    }
-                }
-                else if(bVertical && aNewRect.Right() - aNewRect.Left() > aOldRect.Right() - aOldRect.Left())
-                {
-                    if(pCaption->IsAutoGrowWidth() && bVertical)
-                    {
-                        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
-                        aNote.SetItemSet( *pDoc, pCaption->GetMergedItemSet() );
-                    }
-                }
-                pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
-
-                // This repaint should not be necessary but it cleans
-                // up the 'marks' left behind  by the note handles
-                // now that notes can simultaineously have handles and edit active.
-                ScRange aDrawRange = rDoc.GetRange( rPos.Tab(), aOldRect );
-                // Set Start/End Row to previous/next row to allow for handles.
-                if( aDrawRange.aStart.Row() > 0 )
-                    aDrawRange.aStart.IncRow( -1 );
-                if( aDrawRange.aEnd.Row() < MAXROW )
-                    aDrawRange.aEnd.IncRow( 1 );
-                ScDocShell* pDocSh = rViewData.GetDocShell();
-                pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
-            }
-        }
-    }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

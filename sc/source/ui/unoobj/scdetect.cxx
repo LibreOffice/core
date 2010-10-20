@@ -210,22 +210,6 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
     return ( 0x0d == nEndFlag );
 }
 
-#if 0
-static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
-{
-    if ( !pFilter )
-        return FALSE;
-
-    //  TRUE for XML file or template
-    //  (template filter has no internal name -> allow configuration key names)
-
-    String aName(pFilter->GetFilterName());
-    return aName.EqualsAscii(pFilterXML) ||
-           aName.EqualsAscii("calc_StarOffice_XML_Calc") ||
-           aName.EqualsAscii("calc_StarOffice_XML_Calc_Template");
-}
-#endif
-
 ::rtl::OUString SAL_CALL ScFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
     REFERENCE< XInputStream > xStream;

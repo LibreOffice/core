@@ -6459,17 +6459,11 @@ void ScInterpreter::ScIndirect()
                 rData->ValidateTabRefs();
 
                 ScRange aRange;
-#if 0
-                // This is some really odd Excel behavior and renders named
-                // ranges containing relative references totally useless.
-                if (!rData->IsReference(aRange, ScAddress( aPos.Tab(), 0, 0)))
-                    break;
-#else
+
                 // This is the usual way to treat named ranges containing
                 // relative references.
                 if (!rData->IsReference( aRange, aPos))
                     break;
-#endif
 
                 if (aRange.aStart == aRange.aEnd)
                     PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),

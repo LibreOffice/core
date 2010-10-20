@@ -3568,11 +3568,6 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
     bool bAllowBooleans = bInArray;
     xub_StrLen nSpaces = NextSymbol(bInArray);
 
-#if 0
-    fprintf( stderr, "NextNewToken '%s' (spaces = %d)\n",
-             rtl::OUStringToOString( cSymbol, RTL_TEXTENCODING_UTF8 ).getStr(), nSpaces );
-#endif
-
     if (!cSymbol[0])
         return false;
 
@@ -3645,11 +3640,6 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
             p++;
         bMayBeFuncName = ( *p == '(' );
     }
-
-#if 0
-    fprintf( stderr, "Token '%s'\n",
-            rtl::OUStringToOString( aUpper, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
 
     // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
@@ -3751,11 +3741,6 @@ void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormu
 
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
-#if 0
-    fprintf( stderr, "CompileString '%s'\n",
-             rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
     if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
         SetGrammar( FormulaGrammar::GRAM_PODF );

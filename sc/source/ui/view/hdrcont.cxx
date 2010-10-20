@@ -422,15 +422,6 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
             }
         }
 
-#if 0
-        // 3D border is no longer used
-        SetLineColor( rStyleSettings.GetLightColor() );
-        if (bVertical)
-            DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) );
-        else
-            DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) );
-#endif
-
         SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
         {

@@ -31,36 +31,6 @@
 
 
 //------------------------------------------------------------------
-
-#if 0
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVCONTNR_HXX
-#define BASIC_NODIALOGS
-#define _SFXMNUITEM_HXX
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SFXMNUITEM_HXX
-#define _DLGCFG_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXBASIC_HXX
-#define _MODALDLG_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _BASE_DLGS_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXTBXCTRL_HXX
-#define _PASSWD_HXX
-//#define _SFXFILEDLG_HXX
-//#define _SFXREQUEST_HXX
-#define _SFXOBJFACE_HXX
-
-#define _SDR_NOTRANSFORM
-#define _SVDXOUT_HXX
-#endif
 #include <vcl/svapp.hxx>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -68,24 +38,6 @@
 // Erweiterte Konstanten, um CLOKs mit SVDRAW.HXX zu vermeiden
 // Die u.a. Aenderungen nehmen vorgeschlagene Konstante vorweg
 ///////////////////////////////////////////////////////////////////////////
-
-#if 0
-#define _SDR_NOTRANSFORM        // Transformationen, selten verwendet
-#define _SDR_NOTOUCH            // Hit-Tests, selten verwendet
-
-#define _SDR_NOUNDO             // Undo-Objekte
-#define _SDR_NOPAGEOBJ          // SdrPageObj
-#define _SDR_NOVIRTOBJ          // SdrVirtObj
-#define _SDR_NOGROUPOBJ         // SdrGroupObj
-#define _SDR_NOTEXTOBJ          // SdrTextObj
-#define _SDR_NOPATHOBJ          // SdrPathObj
-#define _SDR_NOEDGEOBJ          // SdrEdgeObj
-#define _SDR_NORECTOBJ          // SdrRectObj
-#define _SDR_NOCAPTIONOBJ       // SdrCaptionObj
-#define _SDR_NOCIRCLEOBJ        // SdrCircleObj
-#define _SDR_NOGRAFOBJ          // SdrGrafObj
-#define _SDR_NOOLE2OBJ          // SdrOle2Obj
-#endif
 
 // Dieses define entfernt die VCControls aus SI.HXX
 

@@ -1806,23 +1806,6 @@ void ScInputHandler::RemoveAdjust()
     if ( bUndo )
         pEngine->EnableUndo( FALSE );
 
-    //  RemoveParaAttribs removes all paragraph attributes, including EE_PARA_JUST
-#if 0
-    BOOL bChange = FALSE;
-    USHORT nCount = pEngine->GetParagraphCount();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        const SfxItemSet& rOld = pEngine->GetParaAttribs( i );
-        if ( rOld.GetItemState( EE_PARA_JUST ) == SFX_ITEM_SET )
-        {
-            SfxItemSet aNew( rOld );
-            aNew.ClearItem( EE_PARA_JUST );
-            pEngine->SetParaAttribs( i, aNew );
-            bChange = TRUE;
-        }
-    }
-#endif
-
     //  #89403# non-default paragraph attributes (e.g. from clipboard)
     //  must be turned into character attributes
     pEngine->RemoveParaAttribs();
@@ -1830,14 +1813,6 @@ void ScInputHandler::RemoveAdjust()
     if ( bUndo )
         pEngine->EnableUndo( TRUE );
 
-    // ER 31.08.00  Only called in EnterHandler, don't change view anymore.
-#if 0
-    if (bChange)
-    {
-        EditView* pActiveView = pTopView ? pTopView : pTableView;
-        pActiveView->ShowCursor( FALSE, TRUE );
-    }
-#endif
 }
 
 void ScInputHandler::RemoveRangeFinder()

@@ -100,14 +100,12 @@ class ScTokenArray;
 
 // constants and data types internal to compiler
 
-#if 0
 /*
     OpCode   eOp;           // OpCode
     formula::StackVar eType;         // type of data
     USHORT   nRefCnt;       // reference count
     BOOL     bRaw;          // not cloned yet and trimmed to real size
  */
-#endif
 
 #define SC_TOKEN_FIX_MEMBERS    \
     OpCode   eOp;               \

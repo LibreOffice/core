@@ -769,13 +769,6 @@ void lcl_Sheets( FixedText& aTimeText )
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
 
-#if 0
-    xSheets->insertSheet( "hinten", 100 );
-    xSheets->insertSheet( "vorne", 0 );
-    xSheets->removeSheetByName( "hinten" );
-    xSheets->removeSheetByName( "vorne" );
-#endif
-
     xSheets->moveSheet(0, 1, TRUE);
     xSheets->moveSheet(0, 2, FALSE);
 }
@@ -1010,21 +1003,6 @@ void lcl_Filter( FixedText& aTimeText )
     if (!xSelInt) return;
     XFilterableRef xFilter = (XFilterable*)xSelInt->queryInterface(XFilterable::getSmartUik());
     if (!xFilter) return;
-
-#if 0
-    XTableFilterDescriptorRef xDesc = xFilter->createFilterDescriptor(FALSE);
-    if (!xDesc) return;
-    Sequence<TableFilterField> aFields = xDesc->getFilterFields();
-    if (aFields.getLen())
-    {
-        //  1.Feld zwischen 1. und 2. Spalte toggeln
-        TableFilterField* pAry = aFields.getArray();
-        if (!pAry) return;
-        pAry[0].Field = pAry[0].Field ? 0 : 1;
-    }
-    xDesc->setFilterFields(aFields);
-    xFilter->filter(xDesc);
-#endif
 
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
     if (!xDoc) return;
@@ -1482,14 +1460,6 @@ void lcl_AutoForm( FixedText& aTimeText )   // 29
     XInterfaceRef xInt = lcl_GetView();
     if (!xInt) return;
 
-#if 0
-    //! Test - AutoFormat muss von der App kommen
-    XStarCalcViewRef xView = (XStarCalcView*)xInt->queryInterface(XStarCalcView::getSmartUik());
-    if (!xView) return;
-    XTableAutoFormatsRef xFormats = xView->getTableAutoFormats();
-    if (!xFormats) return;
-    //! Test
-#endif
     XTableAutoFormatsRef xFormats;
 
     XTableAutoFormatRef xFormat = xFormats->getAutoFormatByName(L"gaga");
@@ -1567,19 +1537,6 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
 
 IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
 {
-#if 0
-
-    long nCount = aCountField.GetValue();
-    if (nCount < 1)
-        nCount = 1;
-
-    ULONG nStart = Time::GetSystemTicks();
-    for (long i=0; i<nCount; i++)
-        lcl_DoCount();
-    ULONG nEnd = Time::GetSystemTicks();
-    aTimeText.SetText(String(nCount)+String(" x Count: ")+String(nEnd-nStart)+String(" ms"));
-
-#else
 
     long nCount = aCountField.GetValue();
     switch ( nCount )
@@ -1684,8 +1641,6 @@ IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
             break;
     }
 
-#endif
-
     return 0;
 }
 
@@ -1767,29 +1722,6 @@ IMPL_LINK(MyWindow, BlaHdl, PushButton*, EMPTYARG)
                     XTextCursorRef xCursor = xText->createTextCursor();
                     if ( xCursor && xType )
                     {
-#if 0
-                        //  Feld einfuegen
-                        XTextPositionRef xPos = (XTextPosition*)
-                                    xCursor->queryInterface(XTextPosition::getSmartUik());
-                        if ( xPos )
-                        {
-                            xCursor->gotoEnd(FALSE);
-                            XTextFieldRef xField = xTypes->insertTextField( xType, xPos );
-                            if (xField)
-                            {
-                                //  Eigenschaften setzen
-                                XPropertySetRef xProp = (XPropertySet*)xField->
-                                                queryInterface(XPropertySet::getSmartUik());
-                                if ( xProp )
-                                {
-                                    xProp->setPropertyValue(L"URL",
-                                                UsrAny(String("http://www.mopo.de/")));
-                                    xProp->setPropertyValue(L"Representation",
-                                                UsrAny(String("ein Hyperlink")));
-                                }
-                            }
-                        }
-#endif
 
                         //  letztes Feld loeschen
                         XIndexAccessRef xIndex = (XIndexAccess*)
@@ -1941,27 +1873,6 @@ IMPL_LINK(MyWindow, ViewHdl, PushButton*, EMPTYARG)
     XInterfaceRef xSelInt = xView->getSelection();
     if (!xSelInt) return 0;
 
-#if 0
-    XPropertySetRef xProp = (XPropertySet*)xSelInt->queryInterface(XPropertySet::getSmartUik());
-    if ( xProp )
-    {
-        UsrAny aAny;
-
-        aAny = xProp->getPropertyValue(L"TransparentBackground");
-        aAny.setBOOL(FALSE);
-        xProp->setPropertyValue(L"TransparentBackground", aAny);
-
-        aAny = xProp->getPropertyValue(L"BackgroundColor");
-        aAny.setUINT32(0xffff00);
-        xProp->setPropertyValue(L"BackgroundColor", aAny);
-    }
-    XIndentRef xInd = (XIndent*)xSelInt->queryInterface(XIndent::getSmartUik());
-    if ( xInd )
-    {
-        xInd->incrementIndent();
-    }
-#endif
-
     XAutoFormattableRef xAuto = (XAutoFormattable*)xSelInt->
                                     queryInterface(XAutoFormattable::getSmartUik());
     if ( xAuto )
@@ -1984,21 +1895,6 @@ IMPL_LINK(MyWindow, ViewHdl, PushButton*, EMPTYARG)
         aStr += 'X';
         xText->setText(StringToOUString(aStr, CHARSET_SYSTEM));
     }
-
-    //  Zelle selektieren
-
-#if 0
-    if (xDoc)
-    {
-        CellAddress aPos;
-        aPos.Sheet  = 0;
-        aPos.Column = 1;
-        aPos.Row    = 2;
-        XCellRef xCell = xDoc->getCell(aPos);
-        if ( xCell )
-            xView->select( xCell );
-    }
-#endif
 
     XPrintableRef xPrint = (XPrintable*)xInt->queryInterface(XPrintable::getSmartUik());
     String aName = OUStringToString( xPrint->getPrinterName(), CHARSET_SYSTEM );

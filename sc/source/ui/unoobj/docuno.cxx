@@ -301,19 +301,6 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                   rtl::OUString(),
                                                   aPageRangeOpt
                                                   );
-
-    // "Print only selected sheets" isn't needed because of the "Selected Sheets" choice in "Print content"
-#if 0
-    // create subgroup for sheets
-    m_aUIProperties[8].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
-
-    // create a bool option for selected pages only
-    m_aUIProperties[9].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 4 ) ),
-                                                  rtl::OUString( aStrings.GetString( 5 ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
-                                                  i_bSelectedOnly
-                                                  );
-#endif
 }
 
 void ScPrintUIOptions::SetDefaults()
@@ -1061,9 +1048,6 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[2].Value <<= aRangeAddress;
     }
 
-    #if 0
-    const ScPrintOptions& rPrintOpt =
-    #endif
     // FIXME: is this for side effects ?
         SC_MOD()->GetPrintOptions();
     if( ! pPrinterOptions )
@@ -1446,61 +1430,6 @@ uno::Reference<drawing::XDrawPages> SAL_CALL ScModelObj::getDrawPages() throw(un
     DBG_ERROR("keine DocShell");        //! Exception oder so?
     return NULL;
 }
-
-#if 0
-// XPrintable
-
-rtl::OUString ScModelObj::getPrinterName(void) const
-{
-    ScUnoGuard aGuard;
-    if (pDocShell)
-    {
-        SfxPrinter* pPrinter = pDocShell->GetPrinter();
-        if (pPrinter)
-            return pPrinter->GetName();
-    }
-
-    DBG_ERROR("getPrinterName: keine DocShell oder kein Printer");
-    return rtl::OUString();
-}
-
-void ScModelObj::setPrinterName(const rtl::OUString& PrinterName)
-{
-    ScUnoGuard aGuard;
-    //  Drucker setzen - wie in SfxViewShell::ExecPrint_Impl
-
-    if (pDocShell)
-    {
-        SfxPrinter* pPrinter = pDocShell->GetPrinter();
-        if (pPrinter)
-        {
-            String aString(PrinterName);
-            SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
-            if (pNewPrinter->IsKnown())
-                pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
-            else
-                delete pNewPrinter;
-        }
-    }
-}
-
-XPropertySetRef ScModelObj::createPrintOptions(void)
-{
-    ScUnoGuard aGuard;
-    return new ScPrintSettingsObj;      //! ScPrintSettingsObj implementieren!
-}
-
-void ScModelObj::print(const XPropertySetRef& xOptions)
-{
-    ScUnoGuard aGuard;
-    if (pDocShell)
-    {
-        //! xOptions auswerten (wie denn?)
-
-        //! muss noch
-    }
-}
-#endif
 
 // XGoalSeek
 

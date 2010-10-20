@@ -1087,66 +1087,6 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
     return uno::makeAny(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj)));
 }
 
-
-#if 0
-// XPrintable
-
-rtl::OUString ScTabViewObj::getPrinterName(void) const
-{
-    ScUnoGuard aGuard;
-    ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
-    {
-        SfxPrinter* pPrinter = pViewSh->GetPrinter(TRUE);
-        if (pPrinter)
-            return pPrinter->GetName();
-    }
-
-    DBG_ERROR("getPrinterName: keine View oder kein Printer");
-    return rtl::OUString();
-}
-
-void ScTabViewObj::setPrinterName(const rtl::OUString& PrinterName)
-{
-    ScUnoGuard aGuard;
-    //  Drucker setzen - wie in SfxViewShell::ExecPrint_Impl
-
-    ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
-    {
-        SfxPrinter* pPrinter = pViewSh->GetPrinter(TRUE);
-        if (pPrinter)
-        {
-            String aString(PrinterName);
-            SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
-            if (pNewPrinter->IsKnown())
-                pViewSh->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
-            else
-                delete pNewPrinter;
-        }
-    }
-}
-
-XPropertySetRef ScTabViewObj::createPrintOptions(void)
-{
-    ScUnoGuard aGuard;
-    return new ScPrintSettingsObj;      //! ScPrintSettingsObj implementieren!
-}
-
-void ScTabViewObj::print(const XPropertySetRef& xOptions)
-{
-    ScUnoGuard aGuard;
-    ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
-    {
-        //! xOptions auswerten (wie denn?)
-
-        SfxRequest aReq( SID_PRINTDOCDIRECT, SFX_CALLMODE_SYNCHRON, pViewSh->GetPool() );
-        pViewSh->ExecuteSlot( aReq );
-    }
-}
-#endif
-
 // XEnumerationAccess
 
 uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration()
@@ -1605,29 +1545,6 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
     if ((aActivationListeners.Count() == 0) && (nCount > 0)) // only if last listener removed
         EndActivationListening();
 }
-
-//  PageBreakMode / Zoom sind Properties
-
-#if 0
-
-BOOL ScTabViewObj::getPagebreakMode(void) const
-{
-    ScUnoGuard aGuard;
-    ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
-        return pViewSh->GetViewData()->IsPagebreakMode();
-    return FALSE;
-}
-
-void ScTabViewObj::setPagebreakMode(BOOL PagebreakMode)
-{
-    ScUnoGuard aGuard;
-    ScTabViewShell* pViewSh = GetViewShell();
-    if (pViewSh)
-        pViewSh->SetPagebreakMode(PagebreakMode);
-}
-
-#endif
 
 INT16 ScTabViewObj::GetZoom(void) const
 {

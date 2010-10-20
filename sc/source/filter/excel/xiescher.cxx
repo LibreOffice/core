@@ -1568,9 +1568,6 @@ void XclImpChartObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
     ReadFrameData( rStrm );
     rStrm.Ignore( 18 );
     ReadMacro3( rStrm, nMacroSize );
-#if 0
-    ReadChartSubStream( rStrm );
-#endif
     // set frame format from OBJ record, it is used if chart itself is transparent
     if( mxChart.is() )
         mxChart->UpdateObjFrame( maLineData, maFillData );
@@ -1582,9 +1579,6 @@ void XclImpChartObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
     ReadFrameData( rStrm );
     rStrm.Ignore( 18 );
     ReadMacro4( rStrm, nMacroSize );
-#if 0
-    ReadChartSubStream( rStrm );
-#endif
     // set frame format from OBJ record, it is used if chart itself is transparent
     if( mxChart.is() )
         mxChart->UpdateObjFrame( maLineData, maFillData );

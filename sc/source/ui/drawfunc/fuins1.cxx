@@ -311,30 +311,6 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             else
             {
                 //  error is handled in SvxOpenGraphicDialog::GetGraphic
-
-#if 0
-                USHORT nRes = 0;
-                switch ( nError )
-                {
-                    case GRFILTER_OPENERROR:    nRes = SCSTR_GRFILTER_OPENERROR;    break;
-                    case GRFILTER_IOERROR:      nRes = SCSTR_GRFILTER_IOERROR;      break;
-                    case GRFILTER_FORMATERROR:  nRes = SCSTR_GRFILTER_FORMATERROR;  break;
-                    case GRFILTER_VERSIONERROR: nRes = SCSTR_GRFILTER_VERSIONERROR; break;
-                    case GRFILTER_FILTERERROR:  nRes = SCSTR_GRFILTER_FILTERERROR;  break;
-                    case GRFILTER_TOOBIG:       nRes = SCSTR_GRFILTER_TOOBIG;       break;
-                }
-                if ( nRes )
-                {
-                    InfoBox aInfoBox( pWindow, String(ScResId(nRes)) );
-                    aInfoBox.Execute();
-                }
-                else
-                {
-                    ULONG nStreamError = GetGrfFilter()->GetLastError().nStreamError;
-                    if( ERRCODE_NONE != nStreamError )
-                        ErrorHandler::HandleError( nStreamError );
-                }
-#endif
             }
         }
     }

@@ -281,13 +281,6 @@ void ScTabViewShell::SetActive()
     // Die Sfx-View moechte sich gerne selbst aktivieren, weil dabei noch
     // magische Dinge geschehen (z.B. stuerzt sonst evtl. der Gestalter ab)
     ActiveGrabFocus();
-
-#if 0
-    SfxViewFrame* pFrame = GetViewFrame();
-    pFrame->GetFrame().Appear();
-
-    SFX_APP()->SetViewFrame( pFrame );          // immer erst Appear, dann SetViewFrame (#29290#)
-#endif
 }
 
 USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
@@ -492,31 +485,6 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     pDoc->SnapVisArea( aLogicRect );
 
     rRect.SetSize( pWin->LogicToPixel( aLogicRect.GetSize() ) );
-
-#if 0
-    //  auf ganze Zellen anpassen (in Pixeln)
-
-    ScViewData* pViewData = ((ScTabViewShell*)this)->GetViewData();
-    Size aSize = rRect.GetSize();
-
-    ScSplitPos ePos = pViewData->GetActivePart();
-    Window* pWin = ((ScTabViewShell*)this)->GetActiveWin();
-
-    Point aTest( aSize.Width(), aSize.Height() );
-    SCsCOL nPosX;
-    SCsROW nPosY;
-    pViewData->GetPosFromPixel( aTest.X(), aTest.Y(), ePos, nPosX, nPosY );
-    BOOL bLeft;
-    BOOL bTop;
-    pViewData->GetMouseQuadrant( aTest, ePos, nPosX, nPosY, bLeft, bTop );
-    if (!bLeft)
-        ++nPosX;
-    if (!bTop)
-        ++nPosY;
-    aTest = pViewData->GetScrPos( (SCCOL)nPosX, (SCROW)nPosY, ePos, TRUE );
-
-    rRect.SetSize(Size(aTest.X(),aTest.Y()));
-#endif
 }
 
 //------------------------------------------------------------------
