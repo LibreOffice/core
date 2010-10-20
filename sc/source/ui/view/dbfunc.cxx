@@ -100,7 +100,7 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
 
 //  aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
-ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool bShrinkToData, bool bExpandRows )
+ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool /*bShrinkToData*/, bool bExpandRows )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
