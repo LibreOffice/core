@@ -348,7 +348,7 @@ extern "C" {
     static gboolean
     show_at_idle( gpointer )
     {
-        SolarMutexGuard aGuard;
+        ::SolarMutexGuard aGuard;
         gtk_widget_show_all( GTK_WIDGET( pTrayIcon ) );
         return FALSE;
     }
@@ -356,7 +356,7 @@ extern "C" {
 
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( !g_type_from_name( "GdkDisplay" ) )
         return;
@@ -400,7 +400,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 
 void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     if( !pTrayIcon )
         return;
     gtk_widget_destroy( GTK_WIDGET( pTrayIcon ) );

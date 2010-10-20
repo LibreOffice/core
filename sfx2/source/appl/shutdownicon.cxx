@@ -348,7 +348,7 @@ void ShutdownIcon::FromTemplate()
 #include <tools/rcid.h>
 OUString ShutdownIcon::GetResString( int id )
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( ! m_pResMgr )
         m_pResMgr = SfxResId::GetResMgr();
@@ -365,7 +365,7 @@ OUString ShutdownIcon::GetResString( int id )
 
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
 }
@@ -374,7 +374,7 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 
 void ShutdownIcon::StartFileDialog()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     bool bDirty = ( m_bSystemDialogs != static_cast<bool>(SvtMiscOptions().UseSystemFileDialog()) );
 
@@ -618,7 +618,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
 void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
 {
     // access resource system and sfx only protected by solarmutex
-    SolarMutexGuard aSolarGuard;
+    ::SolarMutexGuard aSolarGuard;
     ResMgr *pResMgr = SfxResId::GetResMgr();
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -812,7 +812,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     ResMgr* pMgr = SfxResId::GetResMgr();
     if( pMgr )
     {
-        SolarMutexGuard aGuard;
+        ::SolarMutexGuard aGuard;
         UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
         aShortcutName = OUString( aRes );
     }
