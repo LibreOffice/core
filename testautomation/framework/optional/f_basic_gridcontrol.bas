@@ -51,6 +51,7 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
 
     use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_macro_tools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

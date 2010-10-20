@@ -624,11 +624,10 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     sTargetPath = hFileGetLocalPath( sSourcePath ) ' The path + file
 
     ' For debugging purposes set global variable gVerbose to TRUE
-    if ( gVerbose ) then
-        printlog( CFN & "Copying file" )
-        printlog( CFN & "From: " & sSourcePath )
-        printlog( CFN & "To..: " & sTargetPath )
-    endif
+
+    printlog( CFN & "Copying file" )
+    printlog( CFN & "From: " & sSourcePath )
+    printlog( CFN & "To..: " & sTargetPath )
 
     ' Copy the file from anywhere to the local user directory if it does not
     ' exist. This behavior was discussed on IRC
