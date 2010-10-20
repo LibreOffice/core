@@ -117,7 +117,7 @@ namespace toolkit
         }
 
     private:
-        ::osl::SolarMutexGuard   m_aGuard;
+        ::osl::SolarGuard   m_aGuard;
     };
 
     //==================================================================================================================

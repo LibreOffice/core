@@ -107,7 +107,7 @@ VCLXSplitter::getChild( int i )
 void SAL_CALL VCLXSplitter::dispose() throw(RuntimeException)
 {
     {
-        ::osl::SolarMutexGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);

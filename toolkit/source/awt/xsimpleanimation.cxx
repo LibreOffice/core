@@ -103,7 +103,7 @@ namespace toolkit
     void SAL_CALL XSimpleAnimation::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
         throw( uno::RuntimeException )
     {
-        ::osl::SolarMutexGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         if ( GetWindow() )
         {
@@ -139,7 +139,7 @@ namespace toolkit
     uno::Any SAL_CALL XSimpleAnimation::getProperty( const ::rtl::OUString& PropertyName )
         throw( uno::RuntimeException )
     {
-        ::osl::SolarMutexGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         uno::Any aReturn;
 

@@ -33,7 +33,6 @@
 #include "vcl/salinst.hxx"
 #include "vcl/salframe.hxx"
 #include "vcl/salsys.hxx"
-#include "vos/process.hxx"
 #include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/time.hxx"
@@ -67,6 +66,7 @@
 #include "osl/module.h"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
+#include "osl/process.h"
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
 #include "rtl/instance.hxx"
@@ -324,20 +324,18 @@ void Application::DeInit()
 
 // -----------------------------------------------------------------------
 
-USHORT Application::GetCommandLineParamCount()
+sal_uInt16 Application::GetCommandLineParamCount()
 {
-    vos::OStartupInfo aStartInfo;
-    return (USHORT)aStartInfo.getCommandArgCount();
+    return (sal_uInt16)osl_getCommandArgCount();
 }
 
 // -----------------------------------------------------------------------
 
 XubString Application::GetCommandLineParam( USHORT nParam )
 {
-    vos::OStartupInfo   aStartInfo;
-    rtl::OUString       aParam;
-    aStartInfo.getCommandArg( nParam, aParam );
-    return XubString( aParam );
+    rtl_uString* aParam;
+    osl_getCommandArg( nParam, &aParam );
+    return XubString( rtl_uString_getStr(aParam) );
 }
 
 // -----------------------------------------------------------------------
@@ -356,10 +354,9 @@ const XubString& Application::GetAppFileName()
     static String aAppFileName;
     if( !aAppFileName.Len() )
     {
-        vos::OStartupInfo   aStartInfo;
-        ::rtl::OUString     aExeFileName;
+        rtl_uString* aExeFileName;
 
-        aStartInfo.getExecutableFile( aExeFileName );
+        osl_getExecutableFile( &aExeFileName );
 
         // convert path to native file format
         rtl::OUString aNativeFileName;

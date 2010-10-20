@@ -75,7 +75,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > ToolPanelDeckPeer::CreateAccessibleContext()
     {
-        ::osl::SolarMutexGuard aSolarGuard( GetMutex() );
+        ::osl::SolarGuard aSolarGuard( GetMutex() );
         if ( m_pDeck == NULL )
             throw DisposedException( ::rtl::OUString(), *this );
 
@@ -89,7 +89,7 @@ namespace svt
     void SAL_CALL ToolPanelDeckPeer::dispose() throw(RuntimeException)
     {
         {
-            ::osl::SolarMutexGuard aSolarGuard( GetMutex() );
+            ::osl::SolarGuard aSolarGuard( GetMutex() );
             m_pDeck = NULL;
         }
         VCLXWindow::dispose();

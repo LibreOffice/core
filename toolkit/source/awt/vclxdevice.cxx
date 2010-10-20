@@ -112,7 +112,7 @@ IMPL_XTYPEPROVIDER_END
 // ::com::sun::star::awt::XDevice,
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > VCLXDevice::createGraphics(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > xRef;
 
@@ -124,7 +124,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  xRef;
     if ( GetOutputDevice() )
@@ -140,7 +140,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::awt::DeviceInfo VCLXDevice::getInfo() throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::awt::DeviceInfo aInfo;
 
@@ -191,7 +191,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor> aFonts;
     if( mpOutputDevice )
@@ -210,7 +210,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > VCLXDevice::getFont( const ::com::sun::star::awt::FontDescriptor& rDescriptor ) throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >  xRef;
     if( mpOutputDevice )
@@ -224,7 +224,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >  xBmp;
     if( mpOutputDevice )
@@ -240,7 +240,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& rxBitmap ) throw(::com::sun::star::uno::RuntimeException)
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     BitmapEx aBmp = VCLUnoHelper::GetBitmap( rxBitmap );
     VCLXBitmap* pBmp = new VCLXBitmap;
@@ -252,7 +252,7 @@ IMPL_XTYPEPROVIDER_END
 
 VCLXVirtualDevice::~VCLXVirtualDevice()
 {
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
 
     DestroyOutputDevice();
 }
@@ -265,7 +265,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 ::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     (void)aPoint;
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
     if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT )
     {
         // percentage not allowed here
@@ -290,7 +290,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 ::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     (void)aPoint;
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
     if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
         SourceUnit == com::sun::star::util::MeasureUnit::PIXEL )
     {
@@ -314,7 +314,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 ::com::sun::star::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     (void)aSize;
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
     if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT)
     {
         // percentage not allowed here
@@ -339,7 +339,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 ::com::sun::star::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     (void)aSize;
-    osl::SolarMutexGuard aGuard( GetMutex() );
+    osl::SolarGuard aGuard( GetMutex() );
     if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
         SourceUnit == com::sun::star::util::MeasureUnit::PIXEL)
     {

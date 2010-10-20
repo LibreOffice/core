@@ -69,7 +69,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXScroller, VCLXWindow );
 void SAL_CALL VCLXScroller::dispose() throw(RuntimeException)
 {
     {
-        ::osl::SolarMutexGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -154,7 +154,7 @@ void VCLXScroller::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 
 void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
-    ::osl::SolarMutexGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -173,7 +173,7 @@ void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, co
 
 Any SAL_CALL VCLXScroller::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::osl::SolarMutexGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     Any aReturn;
     if ( GetWindow() )

@@ -61,7 +61,7 @@ uno::Any LocalizedString::queryInterface( uno::Type const& rType )
 void LocalizedString::setText( OUString const& s )
     throw(uno::RuntimeException)
 {
-    ::osl::SolarMutexGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( Window *w = GetWindow() )
         return w->SetText( s );
@@ -70,7 +70,7 @@ void LocalizedString::setText( OUString const& s )
 OUString LocalizedString::getText()
     throw(uno::RuntimeException)
 {
-    ::osl::SolarMutexGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( Window *w = GetWindow() )
         return w->GetText();

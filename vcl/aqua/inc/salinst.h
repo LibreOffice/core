@@ -60,7 +60,7 @@ public:
     oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
 
-#define YIELD_GUARD osl::SolarMutexGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
+#define YIELD_GUARD osl::SolarGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
 
 
 // -------------------

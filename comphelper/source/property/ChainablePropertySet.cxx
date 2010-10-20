@@ -78,9 +78,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -96,9 +96,9 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -142,9 +142,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -176,9 +176,9 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 

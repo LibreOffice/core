@@ -55,7 +55,7 @@ VCLXPlugin::~VCLXPlugin()
 void SAL_CALL VCLXPlugin::dispose() throw(uno::RuntimeException)
 {
     {
-        ::osl::SolarMutexGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -72,7 +72,7 @@ void VCLXPlugin::SetPlugin( ::Control *p )
 awt::Size SAL_CALL VCLXPlugin::getMinimumSize()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::ClearableSolarMutexGuard aGuard( GetMutex() );
+    ::osl::ClearableSolarGuard aGuard( GetMutex() );
     if ( mpPlugin )
         return AWTSize( mpPlugin->GetSizePixel() );
     return awt::Size();

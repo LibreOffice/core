@@ -71,8 +71,8 @@
 #include "vcl/impimagetree.hxx"
 #include "vcl/xconnection.hxx"
 
-#include "vos/process.hxx"
 #include "osl/file.hxx"
+#include "osl/process.h"
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
@@ -289,8 +289,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // Main-Thread-Id merken
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
-    vos::OStartupInfo   aStartInfo;
-    rtl::OUString       aExeFileName;
+    rtl_uString*  aExeFileName;
 
 
     // Sal initialisieren
@@ -312,7 +311,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Den AppFileName gleich holen und absolut machen, bevor das
     // WorkingDirectory sich aendert...
-    aStartInfo.getExecutableFile( aExeFileName );
+    osl_getExecutableFile( &aExeFileName );
 
     // convert path to native file format
     rtl::OUString aNativeFileName;
