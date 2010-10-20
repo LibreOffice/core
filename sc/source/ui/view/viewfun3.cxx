@@ -1872,7 +1872,6 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         const BOOL bRecord( pDoc->IsUndoEnabled());
         ScDocument* pUndoDoc = NULL;
         ScDocument* pRedoDoc = NULL;
-        ScDocument* pRefUndoDoc = NULL;
         ScRefUndoData* pUndoData = NULL;
         SCTAB nTab = GetViewData()->GetTabNo();
         SCTAB nStartTab = nTab;
