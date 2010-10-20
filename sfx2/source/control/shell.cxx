@@ -517,6 +517,12 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 */
 
 {
+    OSL_ENSURE( ( pUndoMgr == NULL ) || ( pNewUndoMgr == NULL ) || ( pUndoMgr == pNewUndoMgr ),
+        "SfxShell::SetUndoManager: exchanging one non-NULL manager with another non-NULL manager? Suspicious!" );
+    // there's at least one client of our UndoManager - the DocumentUndoManager at the SfxBaseModel - which
+    // caches the UndoManager, and registers itself as listener. If exchanging non-NULL UndoManagers is really
+    // a supported scenario (/me thinks it is not), then we would need to notify all such clients instances.
+
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
         pUndoMgr->SetMaxUndoActionCount( (USHORT) SvtUndoOptions().GetUndoCount() );
