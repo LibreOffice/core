@@ -1660,6 +1660,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             m_aRun.append(OUStringToOString(OUString(FieldString(ww::eFORMDROPDOWN)), m_rExport.eCurrentEncoding));
                             m_aRun.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
                             m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
+                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
                             xPropSet->getPropertyValue(C2U("DefaultSelection")) >>= aIntSeq;
                             if( aIntSeq.getLength() )
@@ -1706,7 +1707,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun.append('}');
                             }
 
-                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
                             xPropSet->getPropertyValue(C2U("StringItemList")) >>= aStrSeq;
                             sal_uInt32 nListItems = aStrSeq.getLength();
