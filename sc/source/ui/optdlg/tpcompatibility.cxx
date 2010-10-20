@@ -83,7 +83,7 @@ BOOL ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
         return false;
 }
 
-void ScTpCompatOptions::Reset(const SfxItemSet &rCoreAttrs)
+void ScTpCompatOptions::Reset(const SfxItemSet &/*rCoreAttrs*/)
 {
     ScOptionsUtil::KeyBindingType eKeyB = mpOldOptions->GetKeyBindingType();
     switch (eKeyB)
