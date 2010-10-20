@@ -36,8 +36,9 @@ RSCCUSTOMIMG*=$(PRJ)
 
 IMAGES := $(COMMONBIN)$/images.zip
 SORTED_LIST=$(RES)$/img$/sorted.lst
-# Custom sets, at 24x24 & 16x16 fall-back to industrial preferentially
-CUSTOM_IMAGE_SETS=hicontrast industrial crystal oxygen tango classic
+# Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
+# (Tango fallbacks to Industrial for the missing icons)
+CUSTOM_IMAGE_SETS=hicontrast crystal oxygen tango classic
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
 CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
 CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
