@@ -217,7 +217,10 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                         }
                     }
 
-                    sal_Bool aSuccess = osl_setCondition( maSizeCondition );
+#if DEBUG
+                    sal_Bool aSuccess =
+#endif
+                                          osl_setCondition( maSizeCondition );
                     DBG( "%p set condition result: %d", this, aSuccess );
                 }
             }
@@ -225,7 +228,10 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
             // an error occured, set condition so that OOo thread doesn't wait for us
-            sal_Bool aSuccess = osl_setCondition( maSizeCondition );
+#if DEBUG
+            sal_Bool aSuccess =
+#endif
+                                osl_setCondition( maSizeCondition );
             DBG( "%p set condition result: %d", this, aSuccess );
         }
     }
@@ -384,7 +390,7 @@ double SAL_CALL Player::getMediaTime(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setStopTime( double fTime )
+void SAL_CALL Player::setStopTime( double /*fTime*/ )
     throw (uno::RuntimeException)
 {
     // TODO implement
@@ -402,7 +408,7 @@ double SAL_CALL Player::getStopTime(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setRate( double fRate )
+void SAL_CALL Player::setRate( double /*fRate*/ )
     throw (uno::RuntimeException)
 {
     // TODO set the window rate
@@ -516,7 +522,10 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     DBG( "%p Player::getPreferredPlayerWindowSize, member %d x %d", this, mnWidth, mnHeight );
 
     TimeValue aTimeout = { 10, 0 };
-    oslConditionResult aResult = osl_waitCondition( maSizeCondition, &aTimeout );
+#if DEBUG
+    oslConditionResult aResult =
+#endif
+                                 osl_waitCondition( maSizeCondition, &aTimeout );
 
     if( mbFakeVideo ) {
         mbFakeVideo = sal_False;
