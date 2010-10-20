@@ -188,6 +188,7 @@ testcase tToolsSpellcheck
     '/// Close starting document
     printlog " Close starting document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -314,6 +315,7 @@ testcase tToolsHangulHanjaConversion
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -402,6 +404,7 @@ testcase tToolsLanguageThesaurus
     Thesaurus.Cancel
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
