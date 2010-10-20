@@ -329,7 +329,7 @@ public:
     ~SfxHelp_Impl();
 
     SfxHelpOptions_Impl*    GetOptions();
-    String                  GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
+    static String           GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
     sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
     sal_Bool                IsHelpInstalled();                                      // module list not empty
 };
@@ -405,6 +405,199 @@ sal_Bool SfxHelp_Impl::IsHelpInstalled()
 }
 
 // class SfxHelp ---------------------------------------------------------
+/* some test code for HID conversion - please don't remove
+
+#include <tools/stream.hxx>
+void TestHids()
+{
+    static const char* aModules[] =
+    {
+        "swriter",
+        "scalc",
+        "simpress",
+        "sdraw",
+        "sdatabase",
+        "smath",
+        "schart",
+        "sbasic"
+    };
+
+    SvFileStream* pOut[] =
+    {
+        0,0,0,0,0,0,0,0,0
+    };
+
+    String aIn = String::CreateFromAscii("/data/OOo/replacer/hidsin.lst");
+    String aOut = String::CreateFromAscii("/data/OOo/replacer/");
+    SvFileStream aInStrm( aIn, STREAM_READ );
+    ByteString aBuffer;
+    while ( aInStrm.ReadLine( aBuffer ) )
+    {
+        ByteString aHid = aBuffer.GetToken(0, ' ');
+        ByteString aNr  = aBuffer.GetToken(1, ' ');
+        bool bFound=false;
+        for (sal_Int32 n= 0; n<8; n++)
+        {
+            bFound = false;
+            String aHelpURL = SfxHelp::CreateHelpURL( String( aNr, RTL_TEXTENCODING_UTF8 ), String( aModules[n], RTL_TEXTENCODING_UTF8 ) );
+            if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+            {
+                if (!pOut[n])
+                {
+                    String aTmp( aOut );
+                    aTmp += String( aModules[n], RTL_TEXTENCODING_UTF8 );
+                    aTmp += String::CreateFromAscii(".lst");
+                    pOut[n] = new SvFileStream( aTmp, STREAM_WRITE | STREAM_TRUNC );
+                }
+                pOut[n]->WriteLine( aHid );
+                bFound = true;
+                break;
+            }
+        }
+
+        if (!bFound)
+        {
+            if (!pOut[8])
+            {
+                String aTmp( aOut );
+                aTmp += String( "notfound", RTL_TEXTENCODING_UTF8 );
+                aTmp += String::CreateFromAscii(".lst");
+                pOut[8] = new SvFileStream( aTmp, STREAM_WRITE | STREAM_TRUNC );
+            }
+            pOut[8]->WriteLine( aHid );
+        }
+    }
+
+    for (sal_Int32 n= 0; n<9; n++)
+        DELETEZ( pOut[n] );
+}
+
+void TestHids2()
+{
+    static const char* aModules[] =
+    {
+        "swriter",
+        "scalc",
+        "simpress",
+        "smath",
+        "sbasic"
+    };
+
+    String aOut = String::CreateFromAscii("/data/OOo/replacer/");
+    aOut += String::CreateFromAscii("lost.lst");
+    SvFileStream aOutStrm( aOut, STREAM_WRITE | STREAM_TRUNC );
+    for (sal_Int32 n= 0; n<5; n++)
+    {
+        String aIn = String::CreateFromAscii("/data/OOo/replacer/help/");
+        aIn += String::CreateFromAscii( aModules[n] );
+        aIn += String::CreateFromAscii(".lst");
+        SvFileStream aInStrm( aIn, STREAM_READ );
+        ByteString aBuffer;
+        while ( aInStrm.ReadLine( aBuffer ) )
+        {
+            String aHelpURL = SfxHelp::CreateHelpURL( String( aBuffer, RTL_TEXTENCODING_UTF8 ), String( aModules[n], RTL_TEXTENCODING_UTF8 ) );
+            if ( SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+                aOutStrm.WriteLine( aBuffer );
+        }
+    }
+}
+
+#include <tools/stream.hxx>
+void TestHids3()
+{
+    static const char* aModules[] =
+    {
+        "swriter",
+        "scalc",
+        "simpress",
+        "sdraw",
+        "sdatabase",
+        "smath",
+        "schart",
+        "sbasic"
+    };
+
+    SvFileStream* pOut[] =
+    {
+        0,0,0,0,0,0,0,0,0
+    };
+
+    String aIn = String::CreateFromAscii("/data/OOo/replacer/hidsin.lst");
+    String aOut = String::CreateFromAscii("/data/OOo/replacer/quickhelp/");
+    SvFileStream aInStrm( aIn, STREAM_READ );
+    ByteString aBuffer;
+    while ( aInStrm.ReadLine( aBuffer ) )
+    {
+        ByteString aHid = aBuffer.GetToken(0, ' ');
+        ByteString aNr  = aBuffer.GetToken(1, ' ');
+        bool bFound=false;
+        for (sal_Int32 n= 0; n<8; n++)
+        {
+            bFound = false;
+            String aHelpURL = SfxHelp::CreateHelpURL( String( aNr, RTL_TEXTENCODING_UTF8 ), String( aModules[n], RTL_TEXTENCODING_UTF8 ) );
+            if ( SfxContentHelper::GetActiveHelpString( aHelpURL ).Len() )
+//            if ( SfxHelp_Impl::GetHelpText( String( aNr, RTL_TEXTENCODING_UTF8 ), String( aModules[n], RTL_TEXTENCODING_UTF8 ) ).Len() )
+            {
+                if (!pOut[n])
+                {
+                    String aTmp( aOut );
+                    aTmp += String( aModules[n], RTL_TEXTENCODING_UTF8 );
+                    aTmp += String::CreateFromAscii(".lst");
+                    pOut[n] = new SvFileStream( aTmp, STREAM_WRITE | STREAM_TRUNC );
+                }
+                pOut[n]->WriteLine( aHid );
+                bFound = true;
+                break;
+            }
+        }
+
+        if (!bFound)
+        {
+            if (!pOut[8])
+            {
+                String aTmp( aOut );
+                aTmp += String( "notfound", RTL_TEXTENCODING_UTF8 );
+                aTmp += String::CreateFromAscii(".lst");
+                pOut[8] = new SvFileStream( aTmp, STREAM_WRITE | STREAM_TRUNC );
+            }
+            pOut[8]->WriteLine( aHid );
+        }
+    }
+
+    for (sal_Int32 n= 0; n<9; n++)
+        DELETEZ( pOut[n] );
+}
+
+void TestHids4()
+{
+    static const char* aModules[] =
+    {
+        "swriter",
+        "scalc",
+        "simpress",
+        "smath",
+        "sbasic"
+    };
+
+    String aOut = String::CreateFromAscii("/data/OOo/replacer/quickhelp/");
+    aOut += String::CreateFromAscii("lost.lst");
+    SvFileStream aOutStrm( aOut, STREAM_WRITE | STREAM_TRUNC );
+    for (sal_Int32 n= 0; n<5; n++)
+    {
+        String aIn = String::CreateFromAscii("/data/OOo/replacer/quickhelp/");
+        aIn += String::CreateFromAscii( aModules[n] );
+        aIn += String::CreateFromAscii(".lst");
+        SvFileStream aInStrm( aIn, STREAM_READ );
+        ByteString aBuffer;
+        while ( aInStrm.ReadLine( aBuffer ) )
+        {
+            String aHelpURL = SfxHelp::CreateHelpURL( String( aBuffer, RTL_TEXTENCODING_UTF8 ), String( aModules[n], RTL_TEXTENCODING_UTF8 ) );
+            if ( !SfxContentHelper::GetActiveHelpString( aHelpURL ).Len() )
+                aOutStrm.WriteLine( aBuffer );
+        }
+    }
+}
+*/
 
 SfxHelp::SfxHelp() :
 
@@ -746,7 +939,11 @@ BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const Strin
     String aHelpModuleName( GetHelpModuleName_Impl() );
     switch ( nProtocol )
     {
-        case INET_PROT_NOT_VALID :
+        case INET_PROT_VND_SUN_STAR_HELP:
+            // already a vnd.sun.star.help URL -> nothing to do
+            aHelpURL = rURL;
+            break;
+        default:
         {
             // no URL, just a HelpID (maybe empty in case of keyword search)
             aHelpURL  = CreateHelpURL_Impl( rURL, aHelpModuleName );
@@ -771,13 +968,6 @@ BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const Strin
             }
             break;
         }
-        case INET_PROT_VND_SUN_STAR_HELP:
-            // already a vnd.sun.star.help URL -> nothing to do
-            aHelpURL = rURL;
-            break;
-        default:
-            aHelpURL  = CreateHelpURL_Impl( rURL, aHelpModuleName );
-            break;
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
