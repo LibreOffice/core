@@ -486,7 +486,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
 }
 
 sal_Bool SAL_CALL
-SfxDialogLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+SfxDialogLibraryContainer:: HasExecutableCode( const ::rtl::OUString& /*Library*/ ) throw (uno::RuntimeException)
 {
     return sal_False; // dialog library has no executable code
 }
