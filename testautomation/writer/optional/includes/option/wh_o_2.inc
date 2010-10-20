@@ -83,7 +83,13 @@ testcase tToolsOptionsHTMLPrint
 
     if bCheckboxStatus(6) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
 
-    if (Keine.IsChecked = True) Then NurNotizen.Check Else Keine.Check
+    if ( Keine.IsEnabled) then
+        if (Keine.IsChecked = True) Then
+            NurNotizen.Check
+        Else
+            Keine.Check
+        end if
+    end if
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -185,7 +191,13 @@ testcase tToolsOptionsHTMLPrint
 
     AusDruckereinstellung.Check
 
-    if (Dokumentende.IsChecked = True) Then Seitenende.Check Else Dokumentende.Check
+    if ( Dokumentende.IsEnabled ) then
+        if (Dokumentende.IsChecked = True) Then
+            Seitenende.Check
+        Else
+            Dokumentende.Check
+        end if
+    end if
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
