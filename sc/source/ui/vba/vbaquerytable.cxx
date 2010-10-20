@@ -38,7 +38,7 @@ using namespace com::sun::star;
 
 
 ScVbaQueryTable::ScVbaQueryTable(const css::uno::Reference< ov::XHelperInterface >& /*xParent*/,
-                                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                                 const css::uno::Reference< css::uno::XComponentContext > & /*xContext*/,
                                  ScDocument *pDocument ,
                                  ScVbaRange *pParent
                                  )
