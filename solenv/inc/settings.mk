@@ -1098,9 +1098,12 @@ CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
+# if debug is enabled, this may enable less debug info than debug, so rely just on debug
+.IF "$(debug)" == ""
 CFLAGSENABLESYMBOLS_CC_ONLY*=$(CFLAGSENABLESYMBOLS)
 CFLAGSCXX+=$(CFLAGSENABLESYMBOLS)
 CFLAGSCC+=$(CFLAGSENABLESYMBOLS_CC_ONLY)
+.ENDIF          # "$(DEBUG)" == ""
 .ENDIF          # ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
 
 .IF "$(profile)"!=""
