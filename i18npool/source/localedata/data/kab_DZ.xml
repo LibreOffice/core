@@ -17,7 +17,7 @@
 <ThousandSeparator>.</ThousandSeparator>
 <DecimalSeparator>,</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
-<Time100SecSeparator>.</Time100SecSeparator>
+<Time100SecSeparator>,</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator>, </LongDateDaySeparator>
