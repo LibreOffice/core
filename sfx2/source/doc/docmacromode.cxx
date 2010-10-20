@@ -356,11 +356,12 @@ namespace sfx2
                 {
                     ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
                     Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
-                    if ( aElements.getLength() )
+                    sal_Int32 nElementCount = aElements.getLength();
+                    if ( nElementCount )
                     {
                         // old check, if more than 1 library or the first library isn't the expected 'Standard'
                         // trigger the security 'nag' dialog
-                        if ( !bIsVBAMode && ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) ) )
+                        if ( !bIsVBAMode && ( nElementCount > 1 || !aElements[0].equals( aStdLibName ) ) )
                             bHasMacroLib = sal_True;
                         else
                         {
@@ -368,10 +369,8 @@ namespace sfx2
                             Reference< XLibraryQueryExecutable > xLib( xContainer, UNO_QUERY );
                             if ( xLib.is() )
                             {
-                                Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
-                                sal_Int32 nElementCount = aElements.getLength();
                                 const ::rtl::OUString* pElementName = aElements.getConstArray();
-                                for ( sal_Int32 index = 0; index < nElementCount; index++ )
+                                for ( sal_Int32 index = 0; index < nElementCount; ++index )
                                 {
                                     bHasMacroLib = xLib->HasExecutableCode( pElementName[index] );
                                     if ( bHasMacroLib )
@@ -390,7 +389,7 @@ namespace sfx2
                     Sequence< ::rtl::OUString > aElements = xDlgContainer->getElementNames();
                     sal_Int32 nElementCount = aElements.getLength();
                     const ::rtl::OUString* pElementName = aElements.getConstArray();
-                    for ( sal_Int32 index = 0; index < nElementCount; index++ )
+                    for ( sal_Int32 index = 0; index < nElementCount; ++index )
                     {
                         Reference< XNameAccess > xNameAccess;
                         xDlgContainer->getByName( pElementName[index] ) >>= xNameAccess;
