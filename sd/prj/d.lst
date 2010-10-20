@@ -22,7 +22,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar
 ..\%__SRC%\bin\sd??????.dll %_DEST%\bin%_EXT%\sd??????.dll
 ..\%__SRC%\bin\sd*.res %_DEST%\bin%_EXT%\sd*.res
 ..\%__SRC%\bin\sd???????.dll %_DEST%\bin%_EXT%\sd???????.dll
-..\%__SRC%\bin\pptx*.dll %_DEST%\bin%_EXT%\pptx*.dll
 ..\%__SRC%\bin\emp?????.* %_DEST%\bin%_EXT%\emp?????.*
 
 mkdir: %_DEST%\pck%_EXT%
