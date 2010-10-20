@@ -54,15 +54,12 @@ DataSequenceConverter::~DataSequenceConverter()
 Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUString& rRole )
 {
     // create data sequence from data source model (virtual call at chart converter)
-    Reference< XDataSequence > xDataSeq;
-    if( getChartConverter() )
-    {
-        xDataSeq = getChartConverter()->createDataSequence( getChartDocument()->getDataProvider(), mrModel );
+    Reference< XDataSequence > xDataSeq = getChartConverter().createDataSequence( getChartDocument()->getDataProvider(), mrModel );
 
-        // set sequen   ce role
-        PropertySet aSeqProp( xDataSeq );
-        aSeqProp.setProperty( PROP_Role, rRole );
-    }
+    // set sequence role
+    PropertySet aSeqProp( xDataSeq );
+    aSeqProp.setProperty( PROP_Role, rRole );
+
     return xDataSeq;
 }
 

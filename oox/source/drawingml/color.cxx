@@ -382,7 +382,6 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
     {
         for( TransformVec::const_iterator aIt = maTransforms.begin(), aEnd = maTransforms.end(); aIt != aEnd; ++aIt )
         {
-        OSL_ASSERT((aIt->mnToken & sal_Int32(0xFFFF0000))==0);
             switch( aIt->mnToken )
             {
                 case XML_red:       toCrgb(); lclSetValue( mnC1, aIt->mnValue );    break;

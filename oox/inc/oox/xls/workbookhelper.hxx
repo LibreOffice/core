@@ -253,7 +253,7 @@ public:
     /** Returns the converter for string to cell address/range conversion. */
     AddressConverter&   getAddressConverter() const;
     /** Returns the chart object converter. */
-    ExcelChartConverter* getChartConverter() const;
+    ExcelChartConverter& getChartConverter() const;
     /** Returns the page and print settings converter. */
     PageSettingsConverter& getPageSettingsConverter() const;
 

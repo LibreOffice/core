@@ -1,5 +1,5 @@
 <node oor:name="Impress MS PowerPoint 2007 XML Template" oor:op="replace">
-    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER TEMPLATE TEMPLATEPATH PREFERRED</value></prop>
+    <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER TEMPLATE TEMPLATEPATH PREFERRED</value></prop>
     <prop oor:name="UIComponent"/>
     <prop oor:name="FilterService"><value>com.sun.star.comp.Impress.oox.PowerPointImport</value></prop>
     <prop oor:name="UserData"/>

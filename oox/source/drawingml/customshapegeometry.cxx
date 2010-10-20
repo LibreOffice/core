@@ -1172,9 +1172,8 @@ Path2DListContext::Path2DListContext( ContextHandler& rParent, CustomShapeProper
 
 // ---------------------------------------------------------------------
 
-OUString GetShapePresetType( sal_Int32 nType )
+OUString GetShapeType( sal_Int32 nType )
 {
-    OSL_ASSERT((nType & sal_Int32(0xFFFF0000))==0);
     OUString sType;
      switch( nType )
     {
@@ -1802,7 +1801,6 @@ OUString GetShapePresetType( sal_Int32 nType )
 
 static OUString GetTextShapeType( sal_Int32 nType )
 {
-    OSL_ASSERT((nType & sal_Int32(0xFFFF0000))==0);
     OUString sType;
     switch( nType )
     {
@@ -2033,7 +2031,7 @@ PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler& rParent,
     OUString sShapeType;
     sal_Int32 nShapeType = xAttribs->getOptionalValueToken( XML_prst, FastToken::DONTKNOW );
     if ( nShapeType != FastToken::DONTKNOW )
-        sShapeType = GetShapePresetType( nShapeType );
+        sShapeType = GetShapeType( nShapeType );
     OSL_ENSURE( sShapeType.getLength(), "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
     mrCustomShapeProperties.setShapePresetType( sShapeType );
 }

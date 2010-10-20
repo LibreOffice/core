@@ -32,7 +32,6 @@
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textfont.hxx"
-#include <com/sun/star/xml/dom/XDocument.hpp>
 
 namespace oox {
 namespace drawingml {
@@ -95,11 +94,6 @@ public:
     inline Shape&                   getTxDef() { return maTxDef; }
     inline const Shape&             getTxDef() const { return maTxDef; }
 
-    void                            setFragment( const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XDocument>& getFragment() const { return mxFragment; }
-
 private:
     ::rtl::OUString     maStyleName;
     ClrScheme           maClrScheme;
@@ -111,8 +105,6 @@ private:
     Shape               maSpDef;
     Shape               maLnDef;
     Shape               maTxDef;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XDocument> mxFragment;
 };
 
 // ============================================================================

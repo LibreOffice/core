@@ -42,10 +42,8 @@
 #include <tools/solar.h>        // for the F_PI180 define
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -108,34 +106,6 @@ Shape::Shape( const sal_Char* pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
     setDefaults();
 }
-
-Shape::Shape( const ShapePtr& pSourceShape )
-: maChildren()
-, mbIsChild( pSourceShape->mbIsChild )
-, mpTextBody(pSourceShape->mpTextBody)
-, mpLinePropertiesPtr( pSourceShape->mpLinePropertiesPtr )
-, mpFillPropertiesPtr( pSourceShape->mpFillPropertiesPtr )
-, mpGraphicPropertiesPtr( pSourceShape->mpGraphicPropertiesPtr )
-, mpCustomShapePropertiesPtr( pSourceShape->mpCustomShapePropertiesPtr )
-, mpTablePropertiesPtr( pSourceShape->mpTablePropertiesPtr )
-, mp3DPropertiesPtr( pSourceShape->mp3DPropertiesPtr )
-, maShapeProperties( pSourceShape->maShapeProperties )
-, mpMasterTextListStyle( pSourceShape->mpMasterTextListStyle )
-, mxShape()
-, msServiceName( pSourceShape->msServiceName )
-, msName( pSourceShape->msName )
-, msId( pSourceShape->msId )
-, mnSubType( pSourceShape->mnSubType )
-, mnSubTypeIndex( pSourceShape->mnSubTypeIndex )
-, maShapeStyleRefs( pSourceShape->maShapeStyleRefs )
-, maSize( pSourceShape->maSize )
-, maPosition( pSourceShape->maPosition )
-, mxCreateCallback( pSourceShape->mxCreateCallback )
-, mnRotation( pSourceShape->mnRotation )
-, mbFlipH( pSourceShape->mbFlipH )
-, mbFlipV( pSourceShape->mbFlipV )
-{}
-
 Shape::~Shape()
 {
 }
@@ -208,7 +178,6 @@ void Shape::addShape(
 
 void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
-    if( rReferencedShape.mpTextBody.get() )
     mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpLinePropertiesPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
@@ -223,19 +192,6 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
     mbHidden = rReferencedShape.mbHidden;
-}
-
-void Shape::addChildren( const ::oox::core::XmlFilterBase& rFilterBase,
-                         const Theme* pTheme,
-                         const Reference< XShapes >& rxShapes,
-                         const awt::Rectangle* pShapeRect,
-                         ShapeIdMap* pShapeMap )
-{
-    addChildren(rFilterBase, *this, pTheme, rxShapes,
-                pShapeRect ?
-                 *pShapeRect :
-                 awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ),
-                pShapeMap);
 }
 
 // for group shapes, the following method is also adding each child

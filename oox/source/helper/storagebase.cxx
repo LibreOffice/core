@@ -50,25 +50,17 @@ namespace oox {
 
 namespace {
 
-void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, OUString aFullName )
+void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, const OUString& rFullName )
 {
-    sal_Int32  nSlashPos = aFullName.indexOf( '/' );
-
-    // strip leading slashes
-    while( nSlashPos == 0 )
+    sal_Int32 nSlashPos = rFullName.indexOf( '/' );
+    if( (0 <= nSlashPos) && (nSlashPos < rFullName.getLength()) )
     {
-        aFullName = aFullName.copy(1);
-        nSlashPos = aFullName.indexOf( '/' );
-    }
-
-    if( (0 <= nSlashPos) && (nSlashPos < aFullName.getLength()) )
-    {
-        orElement = aFullName.copy( 0, nSlashPos );
-        orRemainder = aFullName.copy( nSlashPos + 1 );
+        orElement = rFullName.copy( 0, nSlashPos );
+        orRemainder = rFullName.copy( nSlashPos + 1 );
     }
     else
     {
-        orElement = aFullName;
+        orElement = rFullName;
     }
 }
 

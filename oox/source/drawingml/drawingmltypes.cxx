@@ -160,7 +160,6 @@ float GetFontHeight( sal_Int32 nHeight )
 
 sal_Int16 GetFontUnderline( sal_Int32 nToken )
 {
-    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_none:              return FontUnderline::NONE;
@@ -187,7 +186,6 @@ sal_Int16 GetFontUnderline( sal_Int32 nToken )
 
 sal_Int16 GetFontStrikeout( sal_Int32 nToken )
 {
-    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_dblStrike: return FontStrikeout::DOUBLE;
@@ -210,7 +208,6 @@ sal_Int16 GetCaseMap( sal_Int32 nToken )
 /** converts a paragraph align to a ParaAdjust */
 sal_Int16 GetParaAdjust( sal_Int32 nAlign )
 {
-    OSL_ASSERT((nAlign & sal_Int32(0xFFFF0000))==0);
     sal_Int16 nEnum;
     switch( nAlign )
     {
@@ -239,7 +236,6 @@ sal_Int16 GetParaAdjust( sal_Int32 nAlign )
 
 TabAlign GetTabAlign( sal_Int32 aToken )
 {
-    OSL_ASSERT((aToken & sal_Int32(0xFFFF0000))==0);
     TabAlign nEnum;
     switch( aToken )
     {

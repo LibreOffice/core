@@ -59,7 +59,6 @@ SLOFILES =	\
         $(SLO)$/linepropertiescontext.obj\
         $(SLO)$/objectdefaultcontext.obj\
         $(SLO)$/shape.obj\
-        $(SLO)$/shape3dproperties.obj\
         $(SLO)$/shapecontext.obj\
         $(SLO)$/shapegroupcontext.obj\
         $(SLO)$/shapepropertiescontext.obj\

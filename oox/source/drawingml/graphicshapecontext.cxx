@@ -32,7 +32,7 @@
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/customshapeproperties.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
 #include "oox/drawingml/table/tablecontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -94,7 +94,7 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
             (mpShapePtr->getCustomShapeProperties());
 
         sal_uInt32 nType = aElementToken & (~ NMSP_MASK);
-        OUString sType(GetShapePresetType(nType));
+        OUString sType(GetShapeType(nType));
 
         if (sType.getLength() > 0)
             pCstmShpProps->setShapePresetType(sType);
@@ -119,7 +119,6 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
 {
     Reference< XFastContextHandler > xRet;
 
-    OSL_ASSERT(((aElementToken &(~NMSP_MASK)) & sal_Int32(0xFFFF0000))==0);
     switch( aElementToken &(~NMSP_MASK) )
     {
     // CT_ShapeProperties
@@ -278,6 +277,48 @@ DiagramGraphicDataContext::~DiagramGraphicDataContext()
 {
 }
 
+DiagramPtr DiagramGraphicDataContext::loadDiagram()
+{
+    DiagramPtr pDiagram( new Diagram() );
+    XmlFilterBase& rFilter = getFilter();
+
+    // data
+    OUString sDmPath = getFragmentPathFromRelId( msDm );
+    if( sDmPath.getLength() > 0 )
+    {
+        DiagramDataPtr pData( new DiagramData() );
+        pDiagram->setData( pData );
+        rFilter.importFragment( new DiagramDataFragmentHandler( rFilter, sDmPath, pData ) );
+    }
+    // layout
+    OUString sLoPath = getFragmentPathFromRelId( msLo );
+    if( sLoPath.getLength() > 0 )
+    {
+        DiagramLayoutPtr pLayout( new DiagramLayout() );
+        pDiagram->setLayout( pLayout );
+        rFilter.importFragment( new DiagramLayoutFragmentHandler( rFilter, sLoPath, pLayout ) );
+    }
+    // style
+    OUString sQsPath = getFragmentPathFromRelId( msQs );
+    if( sQsPath.getLength() > 0 )
+    {
+        DiagramQStylesPtr pStyles( new DiagramQStyles() );
+        pDiagram->setQStyles( pStyles );
+        rFilter.importFragment( new DiagramQStylesFragmentHandler( rFilter, sQsPath, pStyles ) );
+    }
+    // colors
+    OUString sCsPath = getFragmentPathFromRelId( msCs );
+    if( sCsPath.getLength() > 0 )
+    {
+        DiagramColorsPtr pColors( new DiagramColors() );
+        pDiagram->setColors( pColors );
+        rFilter.importFragment( new DiagramColorsFragmentHandler( rFilter, sCsPath, pColors ) ) ;
+    }
+
+    return pDiagram;
+}
+
+
 Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
@@ -291,12 +332,8 @@ Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildConte
         msLo = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_lo );
         msQs = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_qs );
         msCs = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_cs );
-        loadDiagram(mpShapePtr,
-                    getFilter(),
-                    getFragmentPathFromRelId( msDm ),
-                    getFragmentPathFromRelId( msLo ),
-                    getFragmentPathFromRelId( msQs ),
-                    getFragmentPathFromRelId( msCs ));
+        DiagramPtr pDiagram = loadDiagram();
+        pDiagram->addTo( mpShapePtr );
         OSL_TRACE("diagram added shape %s of type %s", OUSTRING_TO_CSTR( mpShapePtr->getName() ),
                   OUSTRING_TO_CSTR( mpShapePtr->getServiceName() ) );
         break;
@@ -355,8 +392,7 @@ void CreateChartCallback::onXShapeCreated( const Reference< drawing::XShape >& r
         Reference< drawing::XShapes > xExternalPage;
         if( !mbEmbedShapes )
             xExternalPage = rxShapes;
-        if( mrFilter.getChartConverter() )
-            mrFilter.getChartConverter()->convertFromModel( mrFilter, aModel, xChartDoc, xExternalPage, rxShape->getPosition(), rxShape->getSize() );
+        mrFilter.getChartConverter().convertFromModel( mrFilter, aModel, xChartDoc, xExternalPage, rxShape->getPosition(), rxShape->getSize() );
     }
     catch( Exception& )
     {

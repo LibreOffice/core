@@ -166,17 +166,6 @@ void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
             pNode->setNode( rFilterBase, xNode, pSlidePtr );
         }
     }
-
-    // not yet
-#if 0
-    if( getTheme() )
-    {
-        uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
-        xPagePropSet->setPropertyValue(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PPTTheme" )),
-            uno::makeAny(getTheme()->getFragment()));
-    }
-#endif
 }
 
 void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )

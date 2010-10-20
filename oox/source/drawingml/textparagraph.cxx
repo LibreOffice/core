@@ -63,9 +63,6 @@ void TextParagraph::insertAt(
         Reference< XTextRange > xStart( xAt, UNO_QUERY );
 
         sal_Int16 nLevel = maProperties.getLevel();
-
-        OSL_TRACE("TextParagraph::insertAt() - level %d", nLevel);
-
         const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
         if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
             nLevel = 0;
@@ -116,12 +113,6 @@ void TextParagraph::insertAt(
         {
             const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
             xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( -1 ) ) );
-        }
-        else if ( nLevel > 1 )
-        {
-            // Even more UGLY HACK
-            const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
-            xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( nLevel-1 ) ) );
         }
 
 // FIXME this is causing a lot of dispruption (ie does not work). I wonder what to do -- Hub

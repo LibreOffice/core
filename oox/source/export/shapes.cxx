@@ -359,15 +359,14 @@ namespace oox { namespace drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType )
+ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( pFS, pFB, eDocumentType )
+    , mnXmlNamespace( nXmlNamespace )
     , mnShapeIdMax( 1 )
     , mnPictureIdMax( 1 )
-    , mnXmlNamespace( nXmlNamespace )
     , maFraction( 1, 576 )
     , maMapModeSrc( MAP_100TH_MM )
     , maMapModeDest( MAP_INCH, Point(), maFraction, maFraction )
-    , mpShapeMap( pShapeMap ? pShapeMap : &maShapeMap )
 {
 }
 
@@ -650,7 +649,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
 
-    WriteBlip( xShapeProps, sGraphicURL );
+    WriteBlip( sGraphicURL );
 
     bool bStretch = false;
     if( ( xShapeProps->getPropertyValue( S( "FillBitmapStretch" ) ) >>= bStretch ) && bStretch )
@@ -978,34 +977,18 @@ size_t ShapeExport::ShapeHash::operator()( const ::com::sun::star::uno::Referenc
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )
 {
-    return GetNewShapeID( rXShape, GetFB() );
-}
+    sal_Int32 nID = GetFB()->GetUniqueId();
 
-sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilterBase* pFB )
-{
-    if( !rXShape.is() )
-        return -1;
-
-    sal_Int32 nID = pFB->GetUniqueId();
-
-    (*mpShapeMap)[ rXShape ] = nID;
+    maShapeMap[ rXShape ] = nID;
 
     return nID;
 }
 
 sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape )
 {
-    return GetShapeID( rXShape, mpShapeMap );
-}
+    ShapeHashMap::const_iterator aIter = maShapeMap.find( rXShape );
 
-sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape, ShapeHashMap* pShapeMap )
-{
-    if( !rXShape.is() )
-        return -1;
-
-    ShapeHashMap::const_iterator aIter = pShapeMap->find( rXShape );
-
-    if( aIter == pShapeMap->end() )
+    if( aIter == maShapeMap.end() )
         return -1;
 
     return aIter->second;

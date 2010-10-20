@@ -1,7 +1,7 @@
 <node oor:name="MS PowerPoint 2007 XML" oor:op="replace" >
     <prop oor:name="DetectService"><value>com.sun.star.comp.oox.FormatDetector</value></prop>
     <prop oor:name="URLPattern"/>
-    <prop oor:name="Extensions"><value>pptx pptm</value></prop>
+    <prop oor:name="Extensions"><value>pptm pptx</value></prop>
     <prop oor:name="MediaType"/>
     <prop oor:name="Preferred"><value>true</value></prop>
     <prop oor:name="PreferredFilter"><value>Impress MS PowerPoint 2007 XML</value></prop>

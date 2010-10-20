@@ -28,11 +28,11 @@
 
 #include <osl/diagnose.h>
 
+#include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
+#include "oox/drawingml/diagram/datamodelcontext.hxx"
 #include "oox/core/namespaces.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
 #include "diagramdefinitioncontext.hxx"
-#include "diagramfragmenthandler.hxx"
-#include "datamodelcontext.hxx"
+#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -132,144 +132,95 @@ DiagramLayoutFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 ///////////////////////
 
 DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFilter,
-                                                              const OUString& rFragmentPath,
-                                                              DiagramQStyleMap& rStylesMap ) :
-    FragmentHandler2( rFilter, rFragmentPath ),
-    maStyleName(),
-    maStyleEntry(),
-    mrStylesMap( rStylesMap )
-{}
-
-::oox::core::ContextHandlerRef DiagramQStylesFragmentHandler::createStyleMatrixContext(
-    sal_Int32 nElement,
-    const AttributeList& rAttribs,
-    ShapeStyleRef& o_rStyle )
+                                                        const OUString& rFragmentPath,
+                                                        const DiagramQStylesPtr pDataPtr )
+    throw( )
+    : FragmentHandler( rFilter, rFragmentPath )
+    , mpDataPtr( pDataPtr )
 {
-    o_rStyle.mnThemedIdx = (nElement == (NMSP_DRAWINGML|XML_fontRef)) ?
-        rAttribs.getToken( XML_idx, XML_none ) : rAttribs.getInteger( XML_idx, 0 );
-    return new ColorContext( *this, o_rStyle.maPhClr );
 }
 
-::oox::core::ContextHandlerRef DiagramQStylesFragmentHandler::onCreateContext( sal_Int32 nElement,
-                                                                               const AttributeList& rAttribs )
+DiagramQStylesFragmentHandler::~DiagramQStylesFragmentHandler( ) throw ()
 {
-    // state-table like way of navigating the color fragment. we
-    // currently ignore everything except styleLbl in the colorsDef
-    // element
-    switch( getCurrentElement() )
+
+}
+
+void SAL_CALL DiagramQStylesFragmentHandler::endDocument()
+    throw (SAXException, RuntimeException)
+{
+
+}
+
+
+Reference< XFastContextHandler > SAL_CALL
+DiagramQStylesFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
+                                                    const Reference< XFastAttributeList >& )
+    throw ( SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xRet;
+
+    switch( aElement )
     {
-        case XML_ROOT_CONTEXT:
-            return nElement == (NMSP_DIAGRAM|XML_styleDef) ? this : NULL;
-        case NMSP_DIAGRAM|XML_styleDef:
-            return nElement == (NMSP_DIAGRAM|XML_styleLbl) ? this : NULL;
-        case NMSP_DIAGRAM|XML_styleLbl:
-            return nElement == (NMSP_DIAGRAM|XML_style) ? this : NULL;
-        case NMSP_DIAGRAM|XML_style:
-        {
-            switch( nElement )
-            {
-                case NMSP_DRAWINGML|XML_lnRef :     // CT_StyleMatrixReference
-                    return createStyleMatrixContext(nElement,rAttribs,
-                                                    maStyleEntry.maLineStyle);
-                case NMSP_DRAWINGML|XML_fillRef :   // CT_StyleMatrixReference
-                    return createStyleMatrixContext(nElement,rAttribs,
-                                                    maStyleEntry.maFillStyle);
-                case NMSP_DRAWINGML|XML_effectRef : // CT_StyleMatrixReference
-                    return createStyleMatrixContext(nElement,rAttribs,
-                                                    maStyleEntry.maEffectStyle);
-                case NMSP_DRAWINGML|XML_fontRef :   // CT_FontRe    ference
-                    return createStyleMatrixContext(nElement,rAttribs,
-                                                    maStyleEntry.maTextStyle);
-            }
-            return 0;
-        }
+    case NMSP_DIAGRAM|XML_styleDef:
+        // TODO
+        break;
+    default:
+        break;
     }
 
-    return 0;
+    if( !xRet.is() )
+        xRet = getFastContextHandler();
+
+    return xRet;
 }
 
-void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttribs )
+/////////////////////
+
+DiagramColorsFragmentHandler::DiagramColorsFragmentHandler( XmlFilterBase& rFilter,
+                                                        const OUString& rFragmentPath,
+                                                        const DiagramColorsPtr pDataPtr )
+    throw( )
+    : FragmentHandler( rFilter, rFragmentPath )
+    , mpDataPtr( pDataPtr )
 {
-    if( getCurrentElement() == (NMSP_DIAGRAM|XML_styleLbl) )
+}
+
+DiagramColorsFragmentHandler::~DiagramColorsFragmentHandler( ) throw ()
+{
+
+}
+
+void SAL_CALL DiagramColorsFragmentHandler::endDocument()
+    throw (SAXException, RuntimeException)
+{
+
+}
+
+
+Reference< XFastContextHandler > SAL_CALL
+DiagramColorsFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
+                                                    const Reference< XFastAttributeList >& )
+    throw ( SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xRet;
+
+    switch( aElement )
     {
-        maStyleName = rAttribs.getString( XML_name, OUString() );
-        maStyleEntry = mrStylesMap[maStyleName];
-    }
-}
-
-void DiagramQStylesFragmentHandler::onEndElement( const ::rtl::OUString& )
-{
-    if( getCurrentElement() == (NMSP_DIAGRAM|XML_styleLbl) )
-        mrStylesMap[maStyleName] = maStyleEntry;
-}
-
-///////////////////////
-
-ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
-                                            const ::rtl::OUString& rFragmentPath,
-                                            DiagramColorMap& rColorsMap ) :
-    FragmentHandler2(rFilter,rFragmentPath),
-    maColorName(),
-    maColorEntry(),
-    mrColorsMap(rColorsMap)
-{}
-
-::oox::core::ContextHandlerRef ColorFragmentHandler::onCreateContext( sal_Int32 nElement,
-                                                                      const AttributeList& /*rAttribs*/ )
-{
-    // state-table like way of navigating the color fragment. we
-    // currently ignore everything except styleLbl in the colorsDef
-    // element
-    switch( getCurrentElement() )
-    {
-        case XML_ROOT_CONTEXT:
-            return nElement == (NMSP_DIAGRAM|XML_colorsDef) ? this : NULL;;
-        case NMSP_DIAGRAM|XML_colorsDef:
-            return nElement == (NMSP_DIAGRAM|XML_styleLbl) ? this : NULL;;
-        case NMSP_DIAGRAM|XML_styleLbl:
-            return ((nElement == (NMSP_DIAGRAM|XML_fillClrLst)) ||
-                    (nElement == (NMSP_DIAGRAM|XML_linClrLst)) ||
-                    (nElement == (NMSP_DIAGRAM|XML_effectClrLst)) ||
-                    (nElement == (NMSP_DIAGRAM|XML_txLinClrLst)) ||
-                    (nElement == (NMSP_DIAGRAM|XML_txFillClrLst)) ||
-                    (nElement == (NMSP_DIAGRAM|XML_txEffectClrLst))) ? this : NULL;;
-
-        // the actual colors - defer to color fragment handlers.
-
-        // TODO(F1): well, actually, there might be *several* color
-        // definitions in it, after all it's called list. but
-        // apparently colorChoiceContext doesn't handle that anyway...
-        case NMSP_DIAGRAM|XML_fillClrLst:
-            return new ColorContext( *this, maColorEntry.maFillColor );
-        case NMSP_DIAGRAM|XML_linClrLst:
-            return new ColorContext( *this, maColorEntry.maLineColor );
-        case NMSP_DIAGRAM|XML_effectClrLst:
-            return new ColorContext( *this, maColorEntry.maEffectColor );
-        case NMSP_DIAGRAM|XML_txFillClrLst:
-            return new ColorContext( *this, maColorEntry.maTextFillColor );
-        case NMSP_DIAGRAM|XML_txLinClrLst:
-            return new ColorContext( *this, maColorEntry.maTextLineColor );
-        case NMSP_DIAGRAM|XML_txEffectClrLst:
-            return new ColorContext( *this, maColorEntry.maTextEffectColor );
+    case NMSP_DIAGRAM|XML_colorsDef:
+        // TODO
+        break;
+    default:
+        break;
     }
 
-    return 0;
+    if( !xRet.is() )
+        xRet = getFastContextHandler();
+
+    return xRet;
 }
 
-void ColorFragmentHandler::onStartElement( const AttributeList& rAttribs )
-{
-    if( getCurrentElement() == (NMSP_DIAGRAM|XML_styleLbl) )
-    {
-        maColorName = rAttribs.getString( XML_name, OUString() );
-        maColorEntry = mrColorsMap[maColorName];
-    }
-}
 
-void ColorFragmentHandler::onEndElement( const ::rtl::OUString& )
-{
-    if( getCurrentElement() == (NMSP_DIAGRAM|XML_styleLbl) )
-        mrColorsMap[maColorName] = maColorEntry;
-}
+
 
 } }
 

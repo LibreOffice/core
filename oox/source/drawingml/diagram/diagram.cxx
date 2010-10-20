@@ -32,22 +32,10 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
-#include <rtl/ustrbuf.hxx>
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/textparagraph.hxx"
-#include "oox/drawingml/textrun.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
-#include "diagram.hxx"
-#include "diagramlayoutatoms.hxx"
-#include "diagramfragmenthandler.hxx"
-
-#include <iostream>
-#include <fstream>
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -59,25 +47,57 @@ namespace dgm {
 
 void Connection::dump()
 {
-    OSL_TRACE("dgm: cnx modelId %s, srcId %s, dstId %s, parTransId %s, presId %s, sibTransId %s, srcOrd %d, dstOrd %d",
+    OSL_TRACE("dgm: cnx modelId %s, srcId %s, dstId %s",
               OUSTRING_TO_CSTR( msModelId ),
               OUSTRING_TO_CSTR( msSourceId ),
-              OUSTRING_TO_CSTR( msDestId ),
-              OUSTRING_TO_CSTR( msParTransId ),
-              OUSTRING_TO_CSTR( msPresId ),
-              OUSTRING_TO_CSTR( msSibTransId ),
-              mnSourceOrder,
-              mnDestOrder );
+              OUSTRING_TO_CSTR( msDestId ) );
+}
+
+Point::Point()
+    : mpShape( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) )
+    , mnType( 0 )
+{
 }
 
 void Point::dump()
 {
-    OSL_TRACE( "dgm: pt text %x, cnxId %s, modelId %s, type %d",
-               mpShape.get(),
+    OSL_TRACE( "dgm: pt cnxId %s, modelId %s",
                OUSTRING_TO_CSTR( msCnxId ),
-               OUSTRING_TO_CSTR( msModelId ),
-               mnType );
+               OUSTRING_TO_CSTR( msModelId ) );
 }
+
+void Point::setModelId( const ::rtl::OUString & sModelId )
+{
+    msModelId = sModelId;
+    mpShape->setName( msModelId );
+}
+
+
+bool PointsTree::addChild( const PointsTreePtr & pChild )
+{
+    bool added = false;
+
+    OSL_ENSURE( pChild->mpParent.expired(), "can't add, has already a parent" );
+    OSL_ENSURE( mpNode, "has no node" );
+    if( mpNode && pChild->mpParent.expired() )
+    {
+        pChild->mpParent = shared_from_this();
+        maChildrens.push_back( pChild );
+        added = true;
+    }
+
+    return added;
+}
+
+PointsTreePtr PointsTree::getParent() const
+{
+    if( !mpParent.expired() )
+    {
+        return mpParent.lock() ;
+    }
+    return PointsTreePtr();
+}
+
 
 } // dgm namespace
 
@@ -96,10 +116,18 @@ void DiagramData::dump()
                   boost::bind( &dgm::Point::dump, _1 ) );
 }
 
-void DiagramLayout::layout( const dgm::Points & /*pTree*/, const awt::Point & /*pt*/ )
+static void setPosition( const dgm::PointPtr & pPoint, const awt::Point & pt )
 {
-    // TODO
-#if 0
+    ShapePtr pShape = pPoint->getShape();
+    awt::Size sz;
+    sz.Width = 50;
+    sz.Height = 50;
+    pShape->setPosition( pt );
+    pShape->setSize( sz );
+}
+
+void DiagramLayout::layout( const dgm::PointsTreePtr & pTree, const awt::Point & pt )
+{
     setPosition( pTree->getPoint(), pt );
     awt::Point nextPt = pt;
     nextPt.Y += 50;
@@ -109,7 +137,6 @@ void DiagramLayout::layout( const dgm::Points & /*pTree*/, const awt::Point & /*
         layout( *iter, nextPt );
         nextPt.X += 50;
     }
-#endif
 }
 
 void Diagram::setData( const DiagramDataPtr & pData)
@@ -123,244 +150,19 @@ void Diagram::setLayout( const DiagramLayoutPtr & pLayout)
     mpLayout = pLayout;
 }
 
-#if OSL_DEBUG_LEVEL > 1
-rtl::OString normalizeDotName( const rtl::OUString& rStr )
+void Diagram::setQStyles( const DiagramQStylesPtr & pStyles)
 {
-    rtl::OUStringBuffer aBuf;
-    aBuf.append((sal_Unicode)'N');
-
-    const sal_Int32 nLen(rStr.getLength());
-    sal_Int32 nCurrIndex(0);
-    while( nCurrIndex < nLen )
-    {
-        const sal_Int32 aChar=rStr.iterateCodePoints(&nCurrIndex);
-        if( aChar != '-' && aChar != '{' && aChar != '}' )
-            aBuf.append((sal_Unicode)aChar);
-    }
-
-    return rtl::OUStringToOString(aBuf.makeStringAndClear(),
-                                  RTL_TEXTENCODING_UTF8);
-}
-#endif
-
-static sal_Int32 calcDepth( const rtl::OUString& rNodeName,
-                            const dgm::Connections& rCnx )
-{
-    // find length of longest path in 'isChild' graph, ending with rNodeName
-    dgm::Connections::const_iterator aCurrCxn( rCnx.begin() );
-    const dgm::Connections::const_iterator aEndCxn( rCnx.end() );
-    while( aCurrCxn != aEndCxn )
-    {
-        if( aCurrCxn->msParTransId.getLength() &&
-            aCurrCxn->msSibTransId.getLength() &&
-            aCurrCxn->msSourceId.getLength() &&
-            aCurrCxn->msDestId.getLength() &&
-            aCurrCxn->mnType != XML_presOf &&
-            aCurrCxn->mnType != XML_presParOf &&
-            rNodeName == aCurrCxn->msDestId )
-        {
-            return calcDepth(aCurrCxn->msSourceId,
-                             rCnx) + 1;
-        }
-        ++aCurrCxn;
-    }
-
-    return 0;
+    mpQStyles = pStyles;
 }
 
+
+void Diagram::setColors( const DiagramColorsPtr & pColors)
+{
+    mpColors = pColors;
+}
 
 void Diagram::build(  )
 {
-    // build name-object maps
-    // ======================
-
-#if OSL_DEBUG_LEVEL > 1
-    std::ofstream output("/tmp/tree.dot");
-
-    output << "digraph datatree {" << std::endl;
-#endif
-
-    dgm::Points::iterator aCurrPoint( getData()->getPoints( ).begin() );
-    const dgm::Points::iterator aEndPoint( getData()->getPoints( ).end() );
-    while( aCurrPoint != aEndPoint )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        output << "\t"
-               << normalizeDotName(aCurrPoint->msModelId).getStr()
-               << "[";
-
-        if( aCurrPoint->msPresentationLayoutName.getLength() )
-            output << "label=\""
-                   << rtl::OUStringToOString(
-                       aCurrPoint->msPresentationLayoutName,
-                       RTL_TEXTENCODING_UTF8).getStr() << "\", ";
-        else
-            output << "label=\""
-                   << rtl::OUStringToOString(
-                       aCurrPoint->msModelId,
-                       RTL_TEXTENCODING_UTF8).getStr() << "\", ";
-
-        switch( aCurrPoint->mnType )
-        {
-            case XML_doc: output << "style=filled, color=red"; break;
-            case XML_asst: output << "style=filled, color=green"; break;
-            default:
-            case XML_node: output << "style=filled, color=blue"; break;
-            case XML_pres: output << "style=filled, color=yellow"; break;
-            case XML_parTrans: output << "color=grey"; break;
-            case XML_sibTrans: output << " "; break;
-        }
-
-        output << "];" << std::endl;
-
-        // does currpoint have any text set?
-        if( aCurrPoint->mpShape &&
-            aCurrPoint->mpShape->getTextBody() &&
-            !aCurrPoint->mpShape->getTextBody()->getParagraphs().empty() &&
-            !aCurrPoint->mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
-        {
-            static sal_Int32 nCount=0;
-
-            output << "\t"
-                   << "textNode" << nCount
-                   << " ["
-                   << "label=\""
-                   << rtl::OUStringToOString(
-                       aCurrPoint->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText(),
-                       RTL_TEXTENCODING_UTF8).getStr()
-                   << "\"" << "];" << std::endl;
-            output << "\t"
-                   << normalizeDotName(aCurrPoint->msModelId).getStr()
-                   << " -> "
-                   << "textNode" << nCount++
-                   << ";" << std::endl;
-        }
-
-
-#if 0
-        // msPresentationAssociationId does not appear to be
-        // valid/used, the relation this imposed for several examples
-        // was ~broken
-        if( aCurrPoint->msPresentationAssociationId.getLength() )
-            output << "\t"
-                   << normalizeDotName(aCurrPoint->msModelId).getStr()
-                   << " -> "
-                   << normalizeDotName(aCurrPoint->msPresentationAssociationId).getStr()
-                   << " [style=dotted, color=red, "
-                   << "label=\"presAssocID\"];" << std::endl;
-#endif
-
-#endif
-
-        const bool bInserted1=getData()->getPointNameMap().insert(
-            std::make_pair(aCurrPoint->msModelId,&(*aCurrPoint))).second;
-        (void)bInserted1;
-
-        OSL_ENSURE(bInserted1,"Diagram::build(): non-unique point model id");
-
-        if( aCurrPoint->msPresentationLayoutName.getLength() )
-        {
-            DiagramData::PointsNameMap::value_type::second_type& rVec=
-                getData()->getPointsPresNameMap()[aCurrPoint->msPresentationLayoutName];
-            rVec.push_back(&(*aCurrPoint));
-        }
-        ++aCurrPoint;
-    }
-
-    dgm::Connections::const_iterator aCurrCxn( getData()->getConnections( ).begin() );
-    const dgm::Connections::const_iterator aEndCxn( getData()->getConnections( ).end() );
-    while( aCurrCxn != aEndCxn )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        if( aCurrCxn->msParTransId.getLength() ||
-            aCurrCxn->msSibTransId.getLength() )
-        {
-            if( aCurrCxn->msSourceId.getLength() ||
-                aCurrCxn->msDestId.getLength() )
-            {
-                output << "\t"
-                       << normalizeDotName(aCurrCxn->msSourceId).getStr()
-                       << " -> "
-                       << normalizeDotName(aCurrCxn->msParTransId).getStr()
-                       << " -> "
-                       << normalizeDotName(aCurrCxn->msSibTransId).getStr()
-                       << " -> "
-                       << normalizeDotName(aCurrCxn->msDestId).getStr()
-                       << " [style=dotted,"
-                       << ((aCurrCxn->mnType == XML_presOf) ? " color=red, " : ((aCurrCxn->mnType == XML_presParOf) ? " color=green, " : " "))
-                       << "label=\""
-                       << rtl::OUStringToOString(aCurrCxn->msModelId,
-                                                 RTL_TEXTENCODING_UTF8 ).getStr()
-                       << "\"];" << std::endl;
-            }
-            else
-            {
-                output << "\t"
-                       << normalizeDotName(aCurrCxn->msParTransId).getStr()
-                       << " -> "
-                       << normalizeDotName(aCurrCxn->msSibTransId).getStr()
-                       << " ["
-                       << ((aCurrCxn->mnType == XML_presOf) ? " color=red, " : ((aCurrCxn->mnType == XML_presParOf) ? " color=green, " : " "))
-                       << "label=\""
-                       << rtl::OUStringToOString(aCurrCxn->msModelId,
-                                                 RTL_TEXTENCODING_UTF8 ).getStr()
-                       << "\"];" << std::endl;
-            }
-        }
-        else if( aCurrCxn->msSourceId.getLength() ||
-                 aCurrCxn->msDestId.getLength() )
-            output << "\t"
-                   << normalizeDotName(aCurrCxn->msSourceId).getStr()
-                   << " -> "
-                   << normalizeDotName(aCurrCxn->msDestId).getStr()
-                   << " [label=\""
-                   << rtl::OUStringToOString(aCurrCxn->msModelId,
-                                             RTL_TEXTENCODING_UTF8 ).getStr()
-                   << ((aCurrCxn->mnType == XML_presOf) ? "\", color=red]" : ((aCurrCxn->mnType == XML_presParOf) ? "\", color=green]" : "\"]"))
-                   << ";" << std::endl;
-#endif
-
-        const bool bInserted1=getData()->getConnectionNameMap().insert(
-            std::make_pair(aCurrCxn->msModelId,&(*aCurrCxn))).second;
-        (void)bInserted1;
-
-        OSL_ENSURE(bInserted1,"Diagram::build(): non-unique connection model id");
-
-        if( aCurrCxn->mnType == XML_presOf )
-        {
-            DiagramData::StringMap::value_type::second_type& rVec=getData()->getPresOfNameMap()[aCurrCxn->msDestId];
-            rVec.push_back(
-                std::make_pair(
-                    aCurrCxn->msSourceId,sal_Int32(0)));
-        }
-
-        ++aCurrCxn;
-    }
-
-    // assign outline levels
-    DiagramData::StringMap::iterator aPresOfIter=getData()->getPresOfNameMap().begin();
-    const DiagramData::StringMap::iterator aPresOfEnd=getData()->getPresOfNameMap().end();
-    while( aPresOfIter != aPresOfEnd )
-    {
-        DiagramData::StringMap::value_type::second_type::iterator aPresOfNodeIterCalcLevel=aPresOfIter->second.begin();
-        const DiagramData::StringMap::value_type::second_type::iterator aPresOfNodeEnd=aPresOfIter->second.end();
-        while(aPresOfNodeIterCalcLevel != aPresOfNodeEnd)
-        {
-            const sal_Int32 nDepth=calcDepth(aPresOfNodeIterCalcLevel->first,
-                                             getData()->getConnections());
-            aPresOfNodeIterCalcLevel->second = nDepth != 0 ? nDepth : -1;
-            ++aPresOfNodeIterCalcLevel;
-        }
-
-        ++aPresOfIter;
-    }
-
-#if OSL_DEBUG_LEVEL > 1
-    output << "}" << std::endl;
-#endif
-
-    // TODO
-#if 0
     OSL_TRACE( "building diagram" );
     typedef std::map< OUString, dgm::PointPtr > PointsMap;
     PointsMap aPointsMap;
@@ -436,33 +238,30 @@ void Diagram::build(  )
     }
     // check bounds
     OSL_ENSURE( aRoots.size() == 1, "more than one root" );
-    mpRoot = aRoots.begin()->second;
-    OSL_TRACE( "root is %s", OUSTRING_TO_CSTR( mpRoot->getPoint()->getModelId() ) );
-    for( PointsTreeMap::iterator iter = aTreeMap.begin();
-         iter != aTreeMap.end(); iter++ )
+    // #i92239# roots may be empty
+    if( !aRoots.empty() )
     {
-        if(! iter->second->getParent() )
+        mpRoot = aRoots.begin()->second;
+        OSL_TRACE( "root is %s", OUSTRING_TO_CSTR( mpRoot->getPoint()->getModelId() ) );
+        for( PointsTreeMap::iterator iter = aTreeMap.begin();
+             iter != aTreeMap.end(); iter++ )
         {
-            OSL_TRACE("node without parent %s", OUSTRING_TO_CSTR( iter->first ) );
+            if(! iter->second->getParent() )
+            {
+                OSL_TRACE("node without parent %s", OUSTRING_TO_CSTR( iter->first ) );
+            }
         }
     }
-#endif
 }
 
 
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
-    // collect data, init maps
-    build( );
-
-    // create Shape hierarchy
-    ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
-    mpLayout->getNode()->accept(aCreationVisitor);
-
-#if 0
     dgm::Points & aPoints( mpData->getPoints( ) );
     dgm::Points::iterator aPointsIter;
-    mpLayout->layout( mpRoot, awt::Point( 0, 0 ) );
+    build( );
+    if( mpRoot.get() )
+        mpLayout->layout( mpRoot, awt::Point( 0, 0 ) );
 
     for( aPointsIter = aPoints.begin(); aPointsIter != aPoints.end(); ++aPointsIter )
     {
@@ -485,7 +284,6 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     {
         OSL_TRACE( "Dgm: shape name %s", OUSTRING_TO_CSTR( (*iter)->getName() ) );
     }
-#endif
 }
 
 OUString Diagram::getLayoutId() const
@@ -498,156 +296,6 @@ OUString Diagram::getLayoutId() const
     return sLayoutId;
 }
 
-uno::Reference<xml::dom::XDocument> loadFragment(
-    core::XmlFilterBase& rFilter,
-    const rtl::Reference< core::FragmentHandler >& rxHandler )
-{
-    // load diagramming fragments into DOM representation, that later
-    // gets serialized back to SAX events and parsed
-    return rFilter.importFragment( rxHandler->getFragmentPath() );
-}
-
-void importFragment( core::XmlFilterBase& rFilter,
-                     const uno::Reference<xml::dom::XDocument>& rXDom,
-                     const char* /*pPropName*/,
-                     const ShapePtr& /*pShape*/,
-                     const rtl::Reference< core::FragmentHandler >& rxHandler )
-{
-    uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
-        rXDom, uno::UNO_QUERY_THROW);
-
-    // now serialize DOM tree into internal data structures
-    rFilter.importFragment( rxHandler, xSerializer );
-
-    // not yet
-#if 0
-    // tack XDocument onto shape
-    pShape->getShapeProperties().setProperty(
-        OUString::createFromAscii(pPropName),
-        rXDom);
-#endif
-}
-
-void loadDiagram( const ShapePtr& pShape,
-                  core::XmlFilterBase& rFilter,
-                  const ::rtl::OUString& rDataModelPath,
-                  const ::rtl::OUString& rLayoutPath,
-                  const ::rtl::OUString& rQStylePath,
-                  const ::rtl::OUString& rColorStylePath )
-{
-    DiagramPtr pDiagram( new Diagram() );
-
-    DiagramDataPtr pData( new DiagramData() );
-    pDiagram->setData( pData );
-
-    DiagramLayoutPtr pLayout( new DiagramLayout() );
-    pDiagram->setLayout( pLayout );
-
-    // data
-    if( rDataModelPath.getLength() > 0 )
-    {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
-
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramData",
-                       pShape,
-                       xRef);
-    }
-
-    // layout
-    if( rLayoutPath.getLength() > 0 )
-    {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramLayout",
-                       pShape,
-                       xRef);
-    }
-
-    // style
-    if( rQStylePath.getLength() > 0 )
-    {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramQStyle",
-                       pShape,
-                       xRef);
-    }
-
-    // colors
-    if( rColorStylePath.getLength() > 0 )
-    {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramColorStyle",
-                       pShape,
-                       xRef);
-    }
-
-    // diagram loaded. now lump together & attach to shape
-    pDiagram->addTo(pShape);
-}
-
-void loadDiagram( const ShapePtr& pShape,
-                  core::XmlFilterBase& rFilter,
-                  const uno::Reference<xml::dom::XDocument>& rXDataModelDom,
-                  const uno::Reference<xml::dom::XDocument>& rXLayoutDom,
-                  const uno::Reference<xml::dom::XDocument>& rXQStyleDom,
-                  const uno::Reference<xml::dom::XDocument>& rXColorStyleDom )
-{
-    DiagramPtr pDiagram( new Diagram() );
-
-    DiagramDataPtr pData( new DiagramData() );
-    pDiagram->setData( pData );
-
-    DiagramLayoutPtr pLayout( new DiagramLayout() );
-    pDiagram->setLayout( pLayout );
-
-    OUString aEmpty;
-
-    // data
-    if( rXDataModelDom.is() )
-        importFragment(rFilter,
-                       rXDataModelDom,
-                       "DiagramData",
-                       pShape,
-                       new DiagramDataFragmentHandler( rFilter, aEmpty, pData ));
-
-    // layout
-    if( rXLayoutDom.is() )
-        importFragment(rFilter,
-                       rXLayoutDom,
-                       "DiagramLayout",
-                       pShape,
-                       new DiagramLayoutFragmentHandler( rFilter, aEmpty, pLayout ));
-
-    // style
-    if( rXQStyleDom.is() )
-        importFragment(rFilter,
-                       rXQStyleDom,
-                       "DiagramQStyle",
-                       pShape,
-                       new DiagramQStylesFragmentHandler( rFilter, aEmpty, pDiagram->getStyles() ));
-
-    // colors
-    if( rXColorStyleDom.is() )
-        importFragment(rFilter,
-                       rXColorStyleDom,
-                       "DiagramColorStyle",
-                       pShape,
-                       new ColorFragmentHandler( rFilter, aEmpty, pDiagram->getColors() ));
-
-    // diagram loaded. now lump together & attach to shape
-    pDiagram->addTo(pShape);
-}
 
 } }
 

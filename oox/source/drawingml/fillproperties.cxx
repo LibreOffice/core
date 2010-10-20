@@ -79,7 +79,6 @@ static const sal_Int32 spnDefaultFillIds[ FillId_END ] =
 
 BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 {
-    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_tile:      return BitmapMode_REPEAT;
@@ -90,7 +89,6 @@ BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 
 RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
 {
-    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_tl:    return RectanglePoint_LEFT_TOP;
@@ -225,7 +223,6 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rM
     if( moFillType.has() )
     {
         FillStyle eFillStyle = FillStyle_NONE;
-        OSL_ASSERT((moFillType.get() & sal_Int32(0xFFFF0000))==0);
         switch( moFillType.get() )
         {
             case XML_noFill:

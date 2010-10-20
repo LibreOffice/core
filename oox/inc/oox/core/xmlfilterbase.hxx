@@ -42,10 +42,8 @@
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace document { class XDocumentProperties; }
-    namespace xml { namespace dom { class XDocument; } }
     namespace xml { namespace sax { class XLocator; } }
     namespace xml { namespace sax { class XFastDocumentHandler; } }
-    namespace xml { namespace sax { class XFastSAXSerializable; } }
 } } }
 
 namespace oox { namespace drawingml { class Theme; } }
@@ -91,7 +89,7 @@ public:
 
     /** Has to be implemented by each filter, returns a filter-specific chart
         converter object, that should be global per imported document. */
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() = 0;
+    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter() = 0;
 
     /** Has to be implemented by each filter to return the table style list. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
@@ -108,31 +106,6 @@ public:
         @return  True, if the fragment could be imported.
      */
     bool                importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler );
-
-    /** Imports a fragment into an xml::dom::XDocument.
-
-        @param rFragmentPath path to fragment
-
-        @return a non-empty reference to the XDocument, if the
-        fragment could be imported.
-     */
-    ::com::sun::star::uno::Reference<
-       ::com::sun::star::xml::dom::XDocument> importFragment( const ::rtl::OUString& rFragmentPath );
-
-    /** Imports a fragment from an xml::dom::XDocument using the
-        passed fragment handler
-
-        @param rxHandler fragment handler; path to fragment is
-        ignored, input source is the rxSerializer
-
-        @param rxSerializer usually retrieved from a
-        xml::dom::XDocument, will get serialized into rxHandler
-
-        @return true, if the fragment could be imported.
-     */
-    bool importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler,
-                         const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::xml::sax::XFastSAXSerializable >& rxSerializer );
 
     /** Imports the relations fragment associated with the specified fragment.
 

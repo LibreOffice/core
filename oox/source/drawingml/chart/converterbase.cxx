@@ -262,9 +262,9 @@ XmlFilterBase& ConverterRoot::getFilter() const
     return mxData->mrFilter;
 }
 
-ChartConverter* ConverterRoot::getChartConverter() const
+ChartConverter& ConverterRoot::getChartConverter() const
 {
-    return &mxData->mrConverter;
+    return mxData->mrConverter;
 }
 
 Reference< XChartDocument > ConverterRoot::getChartDocument() const

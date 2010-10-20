@@ -20,9 +20,6 @@ namespace beans {
 namespace drawing {
     class XShape;
 }
-namespace style {
-    struct LineSpacing;
-}
 namespace text {
     class XTextContent;
     class XTextRange;
@@ -41,6 +38,9 @@ public:
     enum DocumentType { DOCUMENT_DOCX, DOCUMENT_PPTX, DOCUMENT_XLSX };
 
 private:
+    ::sax_fastparser::FSHelperPtr mpFS;
+    ::oox::core::XmlFilterBase* mpFB;
+
     static int mnImageCounter;
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
@@ -48,8 +48,6 @@ private:
 
 protected:
     ::com::sun::star::uno::Any mAny;
-    ::sax_fastparser::FSHelperPtr mpFS;
-    ::oox::core::XmlFilterBase* mpFB;
 
     bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, String aName );
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
@@ -60,7 +58,7 @@ protected:
     rtl::OUString WriteImage( const rtl::OUString& rURL );
 
 public:
-    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX ) : meDocumentType( eDocumentType ), mpFS( pFS ), mpFB( pFB ) {}
+    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX ) : mpFS( pFS ), mpFB( pFB ), meDocumentType( eDocumentType ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
@@ -79,9 +77,8 @@ public:
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, String sURLPropName );
     void WriteOutline( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteStretch();
-    void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
 
-    ::rtl::OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, ::rtl::OUString& rURL );
+    ::rtl::OUString WriteBlip( ::rtl::OUString& rURL );
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,

@@ -40,8 +40,6 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -54,10 +52,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -76,12 +71,9 @@
 #include <editeng/svxenum.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
@@ -90,7 +82,6 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextField;
@@ -115,44 +106,6 @@ namespace drawingml {
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
         mAny >>= variable;
-DBG(
-void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
-{
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
-    Sequence< beans::Property > props = info->getProperties ();
-
-    for (int i=0; i < props.getLength (); i++) {
-        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
-        fprintf (stderr,"%30s = ", name.getStr() );
-
-        try {
-            Any value = rXPropSet->getPropertyValue( props [i].Name );
-
-            OUString strValue;
-            sal_Int32 intValue;
-            bool boolValue;
-            LineSpacing spacing;
-//             RectanglePoint pointValue;
-
-            if( value >>= strValue )
-                fprintf (stderr,"\"%s\"\n", USS( strValue ) );
-            else if( value >>= intValue )
-                fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
-            else if( value >>= boolValue )
-                fprintf (stderr,"%d            (bool)\n", boolValue);
-            else if( value >>= spacing ) {
-                fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
-            }
-//             else if( value >>= pointValue )
-//                 fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
-            else
-                fprintf (stderr,"???           <unhandled type>\n");
-        } catch(Exception e) {
-            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
-        }
-    }
-}
-);
 
 // not thread safe
 int DrawingML::mnImageCounter = 1;
@@ -568,25 +521,13 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     return sRelId;
 }
 
-OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL )
+OUString DrawingML::WriteBlip( OUString& rURL )
 {
         OUString sRelId = WriteImage( rURL );
-    sal_Int16 nBright = 0;
-    sal_Int32 nContrast = 0;
 
-    GET( nBright, AdjustLuminance );
-    GET( nContrast, AdjustContrast );
-
-        mpFS->startElementNS( XML_a, XML_blip,
-                  FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
-                  FSEND );
-    if( nBright || nContrast )
-        mpFS->singleElementNS( XML_a, XML_lum,
-                   XML_bright, nBright ? I32S( nBright*1000 ) : NULL,
-                   XML_contrast, nContrast ? I32S( nContrast*1000 ) : NULL,
-                   FSEND );
-
-        mpFS->endElementNS( XML_a, XML_blip );
+        mpFS->singleElementNS( XML_a, XML_blip,
+                               FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
+                               FSEND );
 
         return sRelId;
 }
@@ -626,7 +567,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, String sURLP
 
         mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
 
-        WriteBlip( rXPropSet, aURL );
+        WriteBlip( aURL );
 
         if( sURLPropName == S( "FillBitmapURL" ) )
             WriteBlipMode( rXPropSet );
@@ -1142,29 +1083,13 @@ const char* DrawingML::GetAlignment( sal_Int32 nAlignment )
     return sAlignment;
 }
 
-void DrawingML::WriteLinespacing( LineSpacing& rSpacing )
-{
-    if( rSpacing.Mode == LineSpacingMode::PROP )
-        mpFS->singleElementNS( XML_a, XML_spcPct,
-                   XML_val, I32S( ((sal_Int32)rSpacing.Height)*1000 ),
-                   FSEND );
-    else
-        mpFS->singleElementNS( XML_a, XML_spcPts,
-                   XML_val, I32S( rSpacing.Height ),
-                   FSEND );
-}
-
 void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
 {
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rParagraph, UNO_QUERY );
-    PropertyState eState;
 
     if( !rXPropSet.is() || !rXPropState.is() )
         return;
-
-    //OSL_TRACE("write paragraph properties pset");
-    //DBG(lcl_dump_pset(rXPropSet));
 
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
@@ -1176,26 +1101,14 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     sal_Int16 nAlignment( style::ParagraphAdjust_LEFT );
     GET( nAlignment, ParaAdjust );
 
-    sal_Bool bHasLinespacing = sal_False;
-    LineSpacing aLineSpacing;
-    if( GETAD( ParaLineSpacing ) )
-    bHasLinespacing = ( mAny >>= aLineSpacing );
-
     if( nLevel != -1
             || nLeftMargin > 0
-            || nAlignment != style::ParagraphAdjust_LEFT
-            || bHasLinespacing ) {
+            || nAlignment != style::ParagraphAdjust_LEFT ) {
         mpFS->startElementNS( XML_a, XML_pPr,
                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
                               XML_marL, nLeftMargin > 0 ? IS( nLeftMargin ) : NULL,
                               XML_algn, GetAlignment( nAlignment ),
                               FSEND );
-
-        if( bHasLinespacing ) {
-            mpFS->startElementNS( XML_a, XML_lnSpc, FSEND );
-            WriteLinespacing( aLineSpacing );
-            mpFS->endElementNS( XML_a, XML_lnSpc );
-        }
 
         WriteParagraphNumbering( rXPropSet, nLevel );
 
@@ -1269,24 +1182,11 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
             ;
     }
 
-    const char* sWritingMode = NULL;
-    sal_Bool bVertical = sal_False;
-    if( GETA( TextWritingMode ) ) {
-    WritingMode eMode;
-
-    if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL ) {
-        sWritingMode = "vert";
-        bVertical = sal_True;
-    }
-    }
-
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
     GET( eHorizontalAlignment, TextHorizontalAdjust );
     if( eHorizontalAlignment == TextHorizontalAdjust_CENTER )
         bHorizontalCenter = true;
-    else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
-    sVerticalAlignment = "b";
 
     sal_Bool bHasWrap = FALSE;
     sal_Bool bWrap = FALSE;
@@ -1304,7 +1204,6 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
                            XML_bIns, (nBottom != DEFTBINS) ? IS( MM100toEMU( nBottom ) ) : NULL,
                            XML_anchor, sVerticalAlignment,
                            XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
-               XML_vert, sWritingMode,
                            FSEND );
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
@@ -1342,10 +1241,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
     mpFS->startElementNS( XML_a, XML_avLst, FSEND );
 
     Sequence< drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-    if ( ( rProp.Value >>= aAdjustmentSeq )
-     && eShapeType != mso_sptActionButtonForwardNext  // we have adjustments values for these type of shape, but MSO doesn't like them
-     && eShapeType != mso_sptActionButtonBackPrevious // so they are now disabled
-    ) {
+    if ( rProp.Value >>= aAdjustmentSeq ) {
         DBG(printf("adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
         if ( bPredefinedHandlesUsed )
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
@@ -1461,16 +1357,14 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
 
 void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID )
 {
-    if( nStartID != -1 )
-        mpFS->singleElementNS( XML_a, XML_stCxn,
-                               XML_id, I32S( nStartID ),
-                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( TRUE ) ),
-                               FSEND );
-    if( nEndID != -1 )
-        mpFS->singleElementNS( XML_a, XML_endCxn,
-                               XML_id, I32S( nEndID ),
-                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( FALSE ) ),
-                               FSEND );
+    mpFS->singleElementNS( XML_a, XML_stCxn,
+                           XML_id, I32S( nStartID ),
+                           XML_idx, I64S( rConnectorEntry.GetConnectorRule( TRUE ) ),
+                           FSEND );
+    mpFS->singleElementNS( XML_a, XML_endCxn,
+                           XML_id, I32S( nEndID ),
+                           XML_idx, I64S( rConnectorEntry.GetConnectorRule( FALSE ) ),
+                           FSEND );
 }
 
 // from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact

@@ -41,7 +41,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/constraintlistcontext.obj \
     $(SLO)$/diagram.obj \
     $(SLO)$/diagramfragmenthandler.obj \
     $(SLO)$/diagramdefinitioncontext.obj \

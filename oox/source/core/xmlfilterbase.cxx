@@ -32,14 +32,10 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <sax/fshelper.hxx>
@@ -59,7 +55,6 @@ using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::StringPair;
-using ::com::sun::star::beans::Pair;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -80,14 +75,11 @@ using ::com::sun::star::xml::sax::XFastTokenHandler;
 using ::com::sun::star::xml::sax::XFastDocumentHandler;
 using ::com::sun::star::xml::sax::InputSource;
 using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::dom::XDocument;
-using ::com::sun::star::xml::dom::XDocumentBuilder;
 using ::com::sun::star::document::XDocumentProperties;
 using ::com::sun::star::util::DateTime;
 using ::comphelper::MediaDescriptor;
 using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
-using namespace ::com::sun::star;
 
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -127,8 +119,6 @@ struct XmlFilterBaseImpl
     typedef RefMap< OUString, Relations > RelationsMap;
 
     Reference< XFastParser > mxFastParser;
-    Reference< XFastTokenHandler >
-                        mxTokenHandler;
     OUString            maBinSuffix;
     OUString            maVmlSuffix;
     RelationsMap        maRelationsMap;
@@ -162,66 +152,6 @@ static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiS
 
 // ============================================================================
 
-namespace
-{
-    struct NamespaceIds: public rtl::StaticWithInit<
-        Sequence< Pair< OUString, sal_Int32 > >,
-        NamespaceIds>
-    {
-        Sequence< Pair< OUString, sal_Int32 > > operator()()
-        {
-            static const char* const namespaceURIs[] = {
-                "http://www.w3.org/XML/1998/namespace",
-                "http://schemas.openxmlformats.org/package/2006/relationships",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-                "http://schemas.openxmlformats.org/drawingml/2006/main",
-                "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-                "http://schemas.openxmlformats.org/drawingml/2006/chart",
-                "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
-                "urn:schemas-microsoft-com:vml",
-                "urn:schemas-microsoft-com:office:office",
-                "urn:schemas-microsoft-com:office:word",
-                "urn:schemas-microsoft-com:office:excel",
-                "urn:schemas-microsoft-com:office:powerpoint",
-                "http://schemas.microsoft.com/office/2006/activeX",
-                "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-                "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-                "http://schemas.microsoft.com/office/excel/2006/main",
-                "http://schemas.openxmlformats.org/presentationml/2006/main"
-            };
-
-            static const sal_Int32 namespaceIds[] = {
-                NMSP_XML,
-                NMSP_PACKAGE_RELATIONSHIPS,
-                NMSP_RELATIONSHIPS,
-                NMSP_DRAWINGML,
-                NMSP_DIAGRAM,
-                NMSP_CHART,
-                NMSP_CDR,
-                NMSP_VML,
-                NMSP_OFFICE,
-                NMSP_VML_DOC,
-                NMSP_VML_XLS,
-                NMSP_VML_PPT,
-                NMSP_AX,
-                NMSP_XLS,
-                NMSP_XDR,
-                NMSP_XM,
-                NMSP_PPT
-            };
-
-            Sequence< Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
-            for( sal_Int32 i=0; i<aRet.getLength(); ++i )
-                aRet[i] = beans::make_Pair(
-                    ::rtl::OUString::createFromAscii(namespaceURIs[i]),
-                    namespaceIds[i]);
-            return aRet;
-        }
-    };
-}
-
-// ============================================================================
-
 XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
     FilterBase( rxGlobalFactory ),
     mxImpl( new XmlFilterBaseImpl ),
@@ -230,18 +160,32 @@ XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalF
 {
     try
     {
-        // create the fast tokenhandler
-        mxImpl->mxTokenHandler.set( new FastTokenHandler );
-
         // create the fast parser
         mxImpl->mxFastParser.set( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
-        mxImpl->mxFastParser->setTokenHandler( mxImpl->mxTokenHandler );
+        mxImpl->mxFastParser->setTokenHandler( new FastTokenHandler );
 
         // register XML namespaces
-        const Sequence< Pair< OUString, sal_Int32 > > ids=
-            NamespaceIds::get();
-        for( sal_Int32 i=0; i<ids.getLength(); ++i )
-            mxImpl->mxFastParser->registerNamespace( ids[i].First, ids[i].Second );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_VML_DOC );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_VML_XLS );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_VML_PPT );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/activeX" ), NMSP_AX );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
+
+        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
     }
     catch( Exception& )
     {
@@ -351,66 +295,6 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     catch( Exception& )
     {
     }
-    return false;
-}
-
-Reference<XDocument> XmlFilterBase::importFragment( const ::rtl::OUString& aFragmentPath )
-{
-    Reference<XDocument> xRet;
-
-    // path to fragment stream valid?
-    OSL_ENSURE( aFragmentPath.getLength() > 0, "XmlFilterBase::importFragment - empty fragment path" );
-    if( aFragmentPath.getLength() == 0 )
-        return xRet;
-
-    // try to open the fragment stream (this may fail - do not assert)
-    Reference< XInputStream > xInStrm = openInputStream( aFragmentPath );
-    if( !xInStrm.is() )
-        return xRet;
-
-    // binary streams (fragment extension is '.bin') currently not supported
-    sal_Int32 nBinSuffixPos = aFragmentPath.getLength() - mxImpl->maBinSuffix.getLength();
-    if( (nBinSuffixPos >= 0) && aFragmentPath.match( mxImpl->maBinSuffix, nBinSuffixPos ) )
-        return xRet;
-
-    // try to import XML stream
-    try
-    {
-        // create the dom parser
-        Reference<XDocumentBuilder> xDomBuilder(
-            getGlobalFactory()->createInstance(
-                CREATE_OUSTRING( "com.sun.star.xml.dom.DocumentBuilder" ) ),
-            UNO_QUERY_THROW );
-
-        // create DOM from fragment
-        xRet = xDomBuilder->parse(xInStrm);
-    }
-    catch( Exception& )
-    {
-    }
-
-    return xRet;
-}
-
-bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler,
-                                    const Reference< xml::sax::XFastSAXSerializable >& rxSerializer )
-{
-    Reference< XFastDocumentHandler > xDocHandler( rxHandler.get() );
-    if( !xDocHandler.is() )
-        return false;
-
-    // try to import XML stream
-    try
-    {
-        rxSerializer->fastSerialize( xDocHandler,
-                                     mxImpl->mxTokenHandler,
-                                     uno::Sequence< beans::StringPair >(),
-                                     NamespaceIds::get() );
-        return true;
-    }
-    catch( Exception& )
-    {}
-
     return false;
 }
 
@@ -679,11 +563,6 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
         }
     }
     return *this;
-}
-
-::oox::drawingml::chart::ChartConverter* XmlFilterBase::getChartConverter()
-{
-    return 0;
 }
 
 // protected ------------------------------------------------------------------

@@ -32,7 +32,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
-#include "oox/drawingml/shape3dproperties.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -96,8 +95,7 @@ class Shape
 {
 public:
 
-    explicit Shape( const sal_Char* pServiceType = NULL );
-    explicit Shape( const ShapePtr& pSourceShape );
+    Shape( const sal_Char* pServiceType = NULL );
     virtual ~Shape();
 
     rtl::OUString&                  getServiceName(){ return msServiceName; }
@@ -116,20 +114,13 @@ public:
 
     CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
-    Shape3DProperties&              get3DProperties() { return *mp3DPropertiesPtr; }
-    const Shape3DProperties&        get3DProperties() const { return *mp3DPropertiesPtr; }
-
     table::TablePropertiesPtr       getTableProperties();
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
 
-    void                              setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
-    const com::sun::star::awt::Point& getPosition() const { return maPosition; }
-
-    void                              setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
-    const com::sun::star::awt::Size&  getSize() const { return maSize; }
-
+    void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
+    void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
     void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
     void                            addChild( const ShapePtr pChildPtr ) { maChildren.push_back( pChildPtr ); }
@@ -162,13 +153,6 @@ public:
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
                             const oox::core::XmlFilterBase& rFilterBase,
-                            const Theme* pTheme,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
-                            ShapeIdMap* pShapeMap = 0 );
-
-    void                addChildren(
-                            const ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
@@ -213,7 +197,6 @@ protected:
     GraphicPropertiesPtr        mpGraphicPropertiesPtr;
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
     table::TablePropertiesPtr   mpTablePropertiesPtr;
-    Shape3DPropertiesPtr        mp3DPropertiesPtr;
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
@@ -238,11 +221,7 @@ private:
     sal_Bool                        mbHidden;
 };
 
-// ---------------------------------------------------------------------
-
-/** Get custom shape preset string from xml token id
- */
-::rtl::OUString GetShapePresetType( sal_Int32 nType );
+::rtl::OUString GetShapeType( sal_Int32 nType );
 
 } }
 
