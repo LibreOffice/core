@@ -5817,8 +5817,7 @@ regerror (errcode, preg, errbuf, errbuf_size)
   size_t msg_size;
 
   if (errcode < 0
-      || errcode >= (int) (sizeof (re_error_msgid_idx)
-               / sizeof (re_error_msgid_idx[0])))
+      || errcode >= (int)SAL_N_ELEMENTS(re_error_msgid_idx))
     /* Only error codes returned by the rest of the code should be passed
        to this routine.  If we are given anything else, or if other regex
        code generates an invalid error code, then the program has a bug.
