@@ -65,7 +65,7 @@ public:
     virtual bool DoesUndo() const = 0;
 
     /** Zusammenfassen von Kontinuierlichen Insert/Delete/Overwrite von
-        Charaktern. Default ist ::com::sun::star::sdbcx::Group-Undo.
+        Charaktern. Default ist Group-Undo.
     */
     virtual void DoGroupUndo(bool bUn) = 0;
 

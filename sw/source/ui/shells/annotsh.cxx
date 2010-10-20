@@ -161,7 +161,7 @@ SwAnnotationShell::~SwAnnotationShell()
 {
 }
 
-SfxUndoManager* SwAnnotationShell::GetUndoManager()
+::svl::IUndoManager* SwAnnotationShell::GetUndoManager()
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr ||
@@ -1368,7 +1368,7 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
 void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    SfxUndoManager* pUndoManager = GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = GetUndoManager();
     SwWrtShell &rSh = rView.GetWrtShell();
 
     long aOldHeight = rView.GetPostItMgr()->HasActiveSidebarWin()
@@ -1445,7 +1445,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
-    SfxUndoManager* pUndoManager = GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = GetUndoManager();
     SfxViewFrame *pSfxViewFrame = rView.GetViewFrame();
     SwWrtShell &rSh = rView.GetWrtShell();
 
@@ -1480,18 +1480,18 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
             {
                 if( pUndoManager )
                 {
-                    UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
+                    UniString (::svl::IUndoManager:: *fnGetComment)( USHORT ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
                         nCount = pUndoManager->GetUndoActionCount();
-                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
+                        fnGetComment = &::svl::IUndoManager::GetUndoActionComment;
                     }
                     else
                     {
                         nCount = pUndoManager->GetRedoActionCount();
-                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
+                        fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
                     }
 
                     String sList;

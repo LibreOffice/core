@@ -623,7 +623,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                     1 < (nCnt = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
                     // then we make by ourself.
-                    SfxUndoManager* pUndoManager = GetUndoManager();
+                    ::svl::IUndoManager* pUndoManager = GetUndoManager();
                     if( pUndoManager )
                     {
                         if( SID_UNDO == nId )
@@ -668,21 +668,21 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
         case SID_GETUNDOSTRINGS:
         case SID_GETREDOSTRINGS:
             {
-                SfxUndoManager* pUndoManager = GetUndoManager();
+                ::svl::IUndoManager* pUndoManager = GetUndoManager();
                 if( pUndoManager )
                 {
-                    UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
+                    UniString (::svl::IUndoManager:: *fnGetComment)( USHORT ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
                         nCount = pUndoManager->GetUndoActionCount();
-                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
+                        fnGetComment = &::svl::IUndoManager::GetUndoActionComment;
                     }
                     else
                     {
                         nCount = pUndoManager->GetRedoActionCount();
-                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
+                        fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
                     }
                     if( nCount )
                     {
@@ -899,7 +899,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 /*-- 22.10.2003 14:26:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SfxUndoManager* SwDrawTextShell::GetUndoManager()
+::svl::IUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
