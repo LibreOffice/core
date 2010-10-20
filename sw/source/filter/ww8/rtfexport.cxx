@@ -1163,6 +1163,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, 
     if( pAktPageDesc != &rPgDsc )
     {
         pAktPageDesc = &rPgDsc;
+        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_HEADER,
                     FALSE, &pItem ) == SFX_ITEM_SET )
             WriteHeaderFooter(*pItem, true);
