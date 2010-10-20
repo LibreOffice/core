@@ -270,8 +270,8 @@ namespace osl
             SolarMutex() {}
             virtual ~SolarMutex() {}
     };
-    typedef osl::Guard< SolarMutex > SolarMutexGuard;
-    typedef osl::ClearableGuard< SolarMutex > ClearableSolarMutexGuard;
+    typedef osl::Guard< SolarMutex > SolarGuard;
+    typedef osl::ClearableGuard< SolarMutex > ClearableSolarGuard;
 }
 
 #endif  /* __cplusplus */
