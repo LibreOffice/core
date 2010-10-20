@@ -771,12 +771,20 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 // ---------------------------------------------------------------------------
 
 #if defined (ENABLE_QUICKSTART_APPLET) && defined (UNX)
-static OUString getDotAutostart( bool bCreate = false )
+/**
+* Return the XDG autostart directory.
+* http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
+* Available in Unix and with Quickstart enabled.
+* @param bCreate Create the directory if it does not exist yet.
+* @return OUString containing the autostart directory path.
+*/
+static OUString getAutostartDir( bool bCreate = false )
 {
     OUString aShortcut;
     const char *pConfigHome;
     if( (pConfigHome = getenv("XDG_CONFIG_HOME") ) )
-        aShortcut = OStringToOUString( OString( pConfigHome ), RTL_TEXTENCODING_UTF8 );
+        aShortcut = OStringToOUString( OString( pConfigHome ),
+                                       RTL_TEXTENCODING_UTF8 );
     else
     {
         OUString aHomeURL;
@@ -816,7 +824,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
 #else // UNX
-    OUString aShortcut = getDotAutostart();
+    OUString aShortcut = getAutostartDir();
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/qstart.desktop" ) );
 #endif // UNX
     return aShortcut;
@@ -857,7 +865,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #ifdef WNT
         EnableAutostartW32( aShortcut );
 #else // UNX
-        getDotAutostart( true );
+        getAutostartDir( true );
 
         OUString aPath( RTL_CONSTASCII_USTRINGPARAM("${BRAND_BASE_DIR}/share/xdg/qstart.desktop" ) );
         Bootstrap::expandMacros( aPath );
