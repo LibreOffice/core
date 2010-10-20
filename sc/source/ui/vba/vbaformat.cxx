@@ -121,7 +121,7 @@ ScVbaFormat<Ifc1>::getVerticalAlignment(  ) throw (script::BasicErrorException, 
     {
         if (!isAmbiguous( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) )
         {
-            sal_Int32 aAPIAlignment;
+            sal_Int32 aAPIAlignment = table::CellVertJustify2::STANDARD;
             mxPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) >>= aAPIAlignment;
             switch( aAPIAlignment )
             {
