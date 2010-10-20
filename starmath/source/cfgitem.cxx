@@ -48,8 +48,6 @@ static const char* aRootName = "Office.Math";
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
 
-SV_IMPL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry );
-
 /////////////////////////////////////////////////////////////////
 
 
@@ -294,10 +292,9 @@ SmFontFormatList::SmFontFormatList()
 
 void SmFontFormatList::Clear()
 {
-    USHORT nCnt = aEntries.Count();
-    if (nCnt)
+    if (!aEntries.empty())
     {
-        aEntries.Remove( 0, nCnt );
+        aEntries.clear();
         SetModified( TRUE );
     }
 }
@@ -311,7 +308,7 @@ void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
     if (!pFntFmt)
     {
         SmFntFmtListEntry aEntry( rFntFmtId, rFntFmt );
-        aEntries.Insert( aEntry, aEntries.Count() );
+        aEntries.push_back( aEntry );
         SetModified( TRUE );
     }
 }
@@ -319,35 +316,32 @@ void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
 
 void SmFontFormatList::RemoveFontFormat( const String &rFntFmtId )
 {
-    USHORT nPos = 0xFFFF;
 
     // search for entry
-    USHORT nCnt = aEntries.Count();
-    for (USHORT i = 0;  i < nCnt  &&  nPos == 0xFFFF;  ++i)
+    for (size_t i = 0;  i < aEntries.size();  ++i)
     {
         if (aEntries[i].aId == rFntFmtId)
-            nPos = i;
-    }
-
-    // remove entry if found
-    if (nPos != 0xFFFF)
-    {
-        aEntries.Remove( nPos );
-        SetModified( TRUE );
+        {
+            // remove entry if found
+            aEntries.erase( aEntries.begin() + i );
+            SetModified( TRUE );
+            break;
+        }
     }
 }
 
 
 const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) const
 {
-    SmFontFormat *pRes = 0;
+    const SmFontFormat *pRes = 0;
 
-    USHORT nCnt = aEntries.Count();
-    USHORT i;
-    for (i = 0;  i < nCnt  &&  !pRes;  ++i)
+    for (size_t i = 0;  i < aEntries.size();  ++i)
     {
         if (aEntries[i].aId == rFntFmtId)
+        {
             pRes = &aEntries[i].aFntFmt;
+            break;
+        }
     }
 
     return pRes;
@@ -355,11 +349,11 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) 
 
 
 
-const SmFontFormat * SmFontFormatList::GetFontFormat( USHORT nPos ) const
+const SmFontFormat * SmFontFormatList::GetFontFormat( size_t nPos ) const
 {
-    SmFontFormat *pRes = 0;
-    if (nPos < aEntries.Count())
-        pRes = &aEntries[ nPos ].aFntFmt;
+    const SmFontFormat *pRes = 0;
+    if (nPos < aEntries.size())
+        pRes = &aEntries[nPos].aFntFmt;
     return pRes;
 }
 
@@ -368,12 +362,13 @@ const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) co
 {
     String aRes;
 
-    USHORT nCnt = aEntries.Count();
-    USHORT i;
-    for (i = 0;  i < nCnt  &&  0 == aRes.Len();  ++i)
+    for (size_t i = 0;  i < aEntries.size();  ++i)
     {
         if (aEntries[i].aFntFmt == rFntFmt)
+        {
             aRes = aEntries[i].aId;
+            break;
+        }
     }
 
     return aRes;
@@ -392,10 +387,10 @@ const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, BOO
 }
 
 
-const String SmFontFormatList::GetFontFormatId( USHORT nPos ) const
+const String SmFontFormatList::GetFontFormatId( size_t nPos ) const
 {
     String aRes;
-    if (nPos < aEntries.Count())
+    if (nPos < aEntries.size())
         aRes = aEntries[nPos].aId;
     return aRes;
 }
@@ -409,12 +404,15 @@ const String SmFontFormatList::GetNewFontFormatId() const
 
     String aPrefix( RTL_CONSTASCII_STRINGPARAM( "Id" ) );
     INT32 nCnt = GetCount();
-    for (INT32 i = 1;  i <= nCnt + 1  &&  0 == aRes.Len();  ++i)
+    for (INT32 i = 1;  i <= nCnt + 1;  ++i)
     {
         String aTmpId( aPrefix );
         aTmpId += String::CreateFromInt32( i );
         if (!GetFontFormat( aTmpId ))
+        {
             aRes = aTmpId;
+            break;
+        }
     }
     DBG_ASSERT( 0 != aRes.Len(), "failed to create new FontFormatId" );
 
@@ -767,14 +765,14 @@ void SmMathConfig::SaveFontFormatList()
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     INT32 nSymbolProps = aNames.getLength();
 
-    USHORT nCount = rFntFmtList.GetCount();
+    size_t nCount = rFntFmtList.GetCount();
 
     Sequence< PropertyValue > aValues( nCount * nSymbolProps );
     PropertyValue *pValues = aValues.getArray();
 
     PropertyValue *pVal = pValues;
     OUString aDelim( OUString::valueOf( (sal_Unicode) '/' ) );
-    for (USHORT i = 0;  i < nCount;  ++i)
+    for (size_t i = 0;  i < nCount;  ++i)
     {
         String aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
         const SmFontFormat aFntFmt( *rFntFmtList.GetFontFormat( aFntFmtId ) );
@@ -826,13 +824,12 @@ void SmMathConfig::SaveFontFormatList()
 
 void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
 {
-    size_t nCount = rSymbols.size();
-    USHORT i;
+    size_t i;
 
     // build list of used font-formats only
     //!! font-format IDs may be different !!
     SmFontFormatList aUsedList;
-    for (i = 0;  i < nCount;  ++i)
+    for (i = 0;  i < rSymbols.size();  ++i)
     {
         DBG_ASSERT( rSymbols[i].GetName().Len() > 0, "non named symbol" );
         aUsedList.GetFontFormatId( SmFontFormat( rSymbols[i].GetFace() ) , TRUE );
@@ -845,14 +842,14 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
 
     // remove unused font-formats from list
     SmFontFormatList &rFntFmtList = GetFontFormatList();
-    USHORT nCnt = rFntFmtList.GetCount();
+    size_t nCnt = rFntFmtList.GetCount();
     SmFontFormat *pTmpFormat = new SmFontFormat[ nCnt ];
     String       *pId     = new String      [ nCnt ];
-    INT32 k;
+    size_t k;
     for (k = 0;  k < nCnt;  ++k)
     {
-        pTmpFormat[k] = *rFntFmtList.GetFontFormat( (USHORT) k );
-        pId[k]     = rFntFmtList.GetFontFormatId( (USHORT) k );
+        pTmpFormat[k] = *rFntFmtList.GetFontFormat( k );
+        pId[k]     = rFntFmtList.GetFontFormatId( k );
     }
     for (k = 0;  k < nCnt;  ++k)
     {

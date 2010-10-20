@@ -788,9 +788,9 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
 BOOL ViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_TXTATR_FIELD, n )))
+    sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
