@@ -50,7 +50,7 @@ namespace pdfi
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor&) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlEmitter(rEmitContext));
         }
@@ -72,10 +72,12 @@ namespace pdfi
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlEmitter(rEmitContext,
-                                                                            DrawXmlEmitter::IMPRESS_DOC));
+                                                                            DrawXmlEmitter::IMPRESS_DOC,
+                                                                            rProc
+                                                                            ));
         }
     };
 
@@ -95,10 +97,12 @@ namespace pdfi
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlEmitter(rEmitContext,
-                                                                            DrawXmlEmitter::DRAW_DOC));
+                                                                            DrawXmlEmitter::DRAW_DOC,
+                                                                            rProc
+                                                                            ));
         }
     };
 
