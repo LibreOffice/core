@@ -28,6 +28,7 @@
 package complex.sfx2;
 
 import com.sun.star.document.UndoManagerEvent;
+import com.sun.star.document.XUndoAction;
 import com.sun.star.lang.EventObject;
 import java.lang.reflect.Constructor;
 import org.openoffice.test.tools.OfficeDocument;
@@ -101,19 +102,22 @@ public class UndoManager
 
     private static class UndoListener implements XUndoManagerListener
     {
-        public void undoActionAdded( UndoManagerEvent ume )
+        public void undoActionAdded( UndoManagerEvent i_event )
         {
             ++m_undoActionsAdded;
+            m_mostRecentlyAddedAction = i_event.UndoActionTitle;
         }
 
-        public void actionUndone( UndoManagerEvent ume )
+        public void actionUndone( UndoManagerEvent i_event )
         {
             ++m_undoCount;
+            m_mostRecentlyUndone = i_event.UndoActionTitle;
         }
 
-        public void actionRedone( UndoManagerEvent ume )
+        public void actionRedone( UndoManagerEvent i_event )
         {
             ++m_redoCount;
+            m_mostRecentlyRedone = i_event.UndoActionTitle;
         }
 
         public void allActionsCleared( EventObject eo )
@@ -147,6 +151,9 @@ public class UndoManager
         int     getUndoActionCount() { return m_undoCount; }
         int     getRedoActionCount() { return m_redoCount; }
         String  getCurrentUndoContextTitle() { return m_activeUndoContexts.peek(); }
+        String  getMostRecentlyAddedActionTitle() { return m_mostRecentlyAddedAction; };
+        String  getMostRecentlyUndoneTitle() { return m_mostRecentlyUndone; }
+        String  getMostRecentlyRedoneTitle() { return m_mostRecentlyRedone; }
         int     getUndoContextDepth() { return m_activeUndoContexts.size(); }
         boolean isDisposed() { return m_isDisposed; }
 
@@ -154,6 +161,8 @@ public class UndoManager
         {
             m_undoActionsAdded = m_undoCount = m_redoCount = 0;
             m_activeUndoContexts.clear();
+            m_mostRecentlyAddedAction = m_mostRecentlyUndone = m_mostRecentlyRedone = null;
+            // m_isDisposed is not cleared, intentionally
         }
 
         private int     m_undoActionsAdded = 0;
@@ -162,6 +171,9 @@ public class UndoManager
         private boolean m_isDisposed = false;
         private Stack< String >
                         m_activeUndoContexts = new Stack<String>();
+        private String  m_mostRecentlyAddedAction = null;
+        private String  m_mostRecentlyUndone = null;
+        private String  m_mostRecentlyRedone = null;
     };
 
     private void impl_checkUndo( final Class i_testClass ) throws Exception
@@ -234,9 +246,96 @@ public class UndoManager
         assertEquals( "Just did an undo - the listener should have been notified", 1, listener.getUndoActionCount() );
 
         test.verifyInitialDocumentState();
-        listener.reset();
 
-        // test various comment-related functions
+        // custom Undo actions
+        {
+            undoManager.clear();
+            listener.reset();
+            assertFalse( "undo stack not empty after clearing the undo manager", undoManager.isUndoPossible() );
+            assertFalse( "redo stack not empty after clearing the undo manager", undoManager.isRedoPossible() );
+            assertArrayEquals( ">0 descriptions for an empty undo stack?", new String[0], undoManager.getAllUndoActionTitles() );
+            assertArrayEquals( ">0 descriptions for an empty redo stack?", new String[0], undoManager.getAllRedoActionTitles() );
+
+            // add two actions, one directly, one within a context
+            final CustomUndoAction action1 = new CustomUndoAction( "UndoAction1" );
+            undoManager.addUndoAction( action1 );
+            assertEquals( "Adding an undo action not observed by the listener", 1, listener.getUndoActionsAdded() );
+            assertEquals( "Adding an undo action did not notify the proper title", action1.getTitle(), listener.getMostRecentlyAddedActionTitle() );
+
+            final String contextTitle = "Undo Context";
+            undoManager.enterUndoContext( contextTitle );
+            final CustomUndoAction action2 = new CustomUndoAction( "UndoAction2" );
+            undoManager.addUndoAction( action2 );
+            assertEquals( "Adding an undo action not observed by the listener", 2, listener.getUndoActionsAdded() );
+            assertEquals( "Adding an undo action did not notify the proper title", action2.getTitle(), listener.getMostRecentlyAddedActionTitle() );
+            undoManager.leaveUndoContext();
+
+            // see if the manager has proper descriptions
+            assertArrayEquals( "unexpected Redo descriptions after adding two actions",
+                new String[0], undoManager.getAllRedoActionTitles() );
+            assertArrayEquals( "unexpected Undo descriptions after adding two actions",
+                new String[] { contextTitle, action1.getTitle() }, undoManager.getAllUndoActionTitles() );
+
+            // undo one action
+            undoManager.undo();
+            assertEquals( "improper action title notified during programmatic Undo", contextTitle, listener.getMostRecentlyUndoneTitle() );
+            assertTrue( "nested custom undo action has not been undone as expected", action2.undoCalled() );
+            assertFalse( "nested custom undo action has not been undone as expected", action1.undoCalled() );
+            assertArrayEquals( "unexpected Redo descriptions after undoing a nested custom action",
+                new String[] { contextTitle }, undoManager.getAllRedoActionTitles() );
+            assertArrayEquals( "unexpected Undo descriptions after undoing a nested custom action",
+                new String[] { action1.getTitle() }, undoManager.getAllUndoActionTitles() );
+            // undo the second action, via UI dispatches
+            test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            assertEquals( "improper action title notified during UI Undo", action1.getTitle(), listener.getMostRecentlyUndoneTitle() );
+            assertTrue( "nested custom undo action has not been undone as expected", action1.undoCalled() );
+            assertArrayEquals( "unexpected Redo descriptions after undoing the second custom action",
+                new String[] { action1.getTitle(), contextTitle }, undoManager.getAllRedoActionTitles() );
+            assertArrayEquals( "unexpected Undo descriptions after undoing the second custom action",
+                new String[0], undoManager.getAllUndoActionTitles() );
+        }
+
+        // nesting of contexts
+        {
+            undoManager.clear();
+            listener.reset();
+            undoManager.enterUndoContext( "context 1" );
+            undoManager.enterUndoContext( "context 1.1" );
+            final CustomUndoAction action1 = new CustomUndoAction( "action 1.1.1" );
+            undoManager.addUndoAction( action1 );
+            undoManager.enterUndoContext( "context 1.1.2" );
+            final CustomUndoAction action2 = new CustomUndoAction( "action 1.1.2.1" );
+            undoManager.addUndoAction( action2 );
+            undoManager.leaveUndoContext();
+            final CustomUndoAction action3 = new CustomUndoAction( "action 1.1.3" );
+            undoManager.addUndoAction( action3 );
+            undoManager.leaveUndoContext();
+            undoManager.leaveUndoContext();
+            final CustomUndoAction action4 = new CustomUndoAction( "action 1.2" );
+            undoManager.addUndoAction( action4 );
+
+            undoManager.undo();
+            assertEquals( "undoing a single action notifies a wrong title", action4.getTitle(), listener.getMostRecentlyUndoneTitle() );
+            assertTrue( "custom Undo not called", action4.undoCalled() );
+            assertFalse( "too many custom Undos called", action1.undoCalled() || action2.undoCalled() || action3.undoCalled() );
+            undoManager.undo();
+            assertTrue( "nested actions not properly undone", action1.undoCalled() && action2.undoCalled() && action3.undoCalled() );
+        }
+
+        // some error handlings
+        {
+            undoManager.clear();
+            listener.reset();
+            caughtExpected = false;
+            try { undoManager.undo(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+            assertTrue( "undo should throw if no Undo action is on the stack", caughtExpected );
+            caughtExpected = false;
+            try { undoManager.redo(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+            assertTrue( "redo should throw if no Redo action is on the stack", caughtExpected );
+            caughtExpected = false;
+            try { undoManager.leaveUndoContext(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+            assertTrue( "leaveUndoContext should throw if no context is currently open", caughtExpected );
+        }
 
         // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
@@ -273,6 +372,36 @@ public class UndoManager
         m_connection.tearDown();
         System.out.println( "finished class: " + UndoManager.class.getName() );
         System.out.println( "--------------------------------------------------------------------------------" );
+    }
+
+    private static class CustomUndoAction implements XUndoAction
+    {
+        CustomUndoAction( final String i_title )
+        {
+            m_title = i_title;
+        }
+
+        public String getTitle()
+        {
+            return m_title;
+        }
+
+        public void undo()
+        {
+            m_undoCalled = true;
+        }
+
+        public void redo()
+        {
+            m_redoCalled = true;
+        }
+
+        boolean undoCalled() { return m_undoCalled; }
+        boolean redoCalled() { return m_redoCalled; }
+
+        private final String    m_title;
+        private boolean         m_undoCalled = false;
+        private boolean         m_redoCalled = false;
     }
 
     private static final OfficeConnection m_connection = new OfficeConnection();
