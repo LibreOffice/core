@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <svl/undo.hxx>
 
@@ -852,7 +853,7 @@ BOOL SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 
 //------------------------------------------------------------------------
 
-SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
+SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
 /*  [Beschreibung]
 
     Richtet eine LinkAction ein, die auf einen weiteren UndoManager zeigt.
@@ -862,10 +863,15 @@ SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
 
 {
     pUndoManager = pManager;
+    SfxUndoManager* pUndoManagerImplementation = dynamic_cast< SfxUndoManager* >( pManager );
+    ENSURE_OR_THROW( pUndoManagerImplementation != NULL, "unsupported undo manager implementation!" );
+        // yes, this cast is dirty. But reaching into the the SfxUndoManager's implementation,
+        // directly accessing its internal stack, and tampering with an action on that stack
+        // is dirty, too.
     if ( pManager->GetMaxUndoActionCount() )
     {
         USHORT nPos = pManager->GetUndoActionCount()-1;
-        pAction = pManager->m_pData->pActUndoArray->aUndoActions[nPos];
+        pAction = pUndoManagerImplementation->m_pData->pActUndoArray->aUndoActions[nPos];
         pAction->SetLinked();
     }
     else

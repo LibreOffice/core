@@ -1430,7 +1430,7 @@ void TextEngine::EnableUndo( BOOL bEnable )
     mbUndoEnabled = bEnable;
 }
 
-SfxUndoManager& TextEngine::GetUndoManager()
+::svl::IUndoManager& TextEngine::GetUndoManager()
 {
     if ( !mpUndoManager )
         mpUndoManager = new TextUndoManager( this );
