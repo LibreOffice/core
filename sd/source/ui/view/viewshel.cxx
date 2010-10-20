@@ -1040,7 +1040,7 @@ void ViewShell::UpdatePreview (SdPage*, BOOL )
     // usefull is still done.
 }
 
-SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
+::svl::IUndoManager* ViewShell::ImpGetUndoManager (void) const
 {
     const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
@@ -1081,7 +1081,7 @@ SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
 
 void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
@@ -1116,7 +1116,7 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
@@ -1151,7 +1151,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1192,7 +1192,7 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
 
 void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 

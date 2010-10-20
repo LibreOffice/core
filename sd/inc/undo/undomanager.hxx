@@ -52,7 +52,7 @@ public:
 
     /** Set or reset the undo manager linked with the called undo manager.
     */
-    void SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager);
+    void SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager);
 
 private:
     using SfxUndoManager::Undo;
@@ -64,7 +64,7 @@ private:
     /** Used when the outline view is visible as a last resort to
         synchronize the undo managers.
     */
-    SfxUndoManager* mpLinkedUndoManager;
+    ::svl::IUndoManager* mpLinkedUndoManager;
 
     /** Call ClearRedo() at the linked undo manager, when present.
 

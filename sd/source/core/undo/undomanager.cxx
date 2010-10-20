@@ -94,7 +94,7 @@ BOOL UndoManager::Redo()
 
 
 
-void UndoManager::SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager)
+void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
 {
     mpLinkedUndoManager = pLinkedUndoManager;
 }

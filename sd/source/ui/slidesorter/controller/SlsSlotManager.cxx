@@ -948,7 +948,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
     SdPage* pPageToRename = NULL;
     PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
 
-    SfxUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
+    ::svl::IUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
 
     if( mrSlideSorter.GetModel().GetEditMode() == EM_PAGE )
     {
@@ -968,7 +968,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
 
             // (#67720#)
             ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                pManager, pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
+                pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
                 aVisibleLayers.IsSet( nBackground ),
                 aVisibleLayers.IsSet( nBgObj ));
             pManager->AddUndoAction( pAction );

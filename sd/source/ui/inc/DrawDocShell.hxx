@@ -100,7 +100,8 @@ public:
 
     virtual Rectangle       GetVisArea(USHORT nAspect) const;
     virtual void            Draw(OutputDevice*, const JobSetup& rSetup, USHORT nAspect = ASPECT_CONTENT);
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                            GetUndoManager();
     virtual Printer*        GetDocumentPrinter();
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter);
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
