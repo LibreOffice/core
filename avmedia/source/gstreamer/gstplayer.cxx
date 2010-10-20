@@ -499,7 +499,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 sal_Int16 SAL_CALL Player::getVolumeDB(  )
     throw (uno::RuntimeException)
 {
-    sal_Int16 nVolumeDB;
+    sal_Int16 nVolumeDB(0);
 
     if( mpPlaybin ) {
         double nGstVolume = 0.0;
