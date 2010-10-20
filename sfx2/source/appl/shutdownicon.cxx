@@ -879,8 +879,9 @@ void ShutdownIcon::SetAutostart( bool bActivate )
                                                   osl_getThreadTextEncoding() );
         if ((0 != symlink(aDesktopFileUnx, aShortcutUnx)) && (errno == EEXIST))
         {
-        unlink(aShortcutUnx);
-        symlink(aDesktopFileUnx, aShortcutUnx);
+            unlink(aShortcutUnx);
+            int ret = symlink(aDesktopFileUnx, aShortcutUnx);
+            (void)ret; //deliberately ignore return value, it's non-critical if it fails
         }
 
         ShutdownIcon *pIcon = ShutdownIcon::createInstance();
