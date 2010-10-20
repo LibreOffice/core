@@ -1240,7 +1240,6 @@ FltError ImportExcel8::Read( void )
         std::vector < SCTAB >::iterator it_end = nTabsWithNoCodeName.end();
         for ( std::vector < SCTAB >::iterator it = nTabsWithNoCodeName.begin(); it != it_end; ++it )
         {
-            bool bGotCodeName = false;
             SCTAB nTab = 1;
             OSL_TRACE("Trying to find suitable codename for %d", *it );
             while ( true )
