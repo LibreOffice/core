@@ -1,6 +1,6 @@
 PRJ=..$/..
 
-PRJNAME=filter
+PRJNAME=lotuswordpro
 TARGET=filter
 ENABLE_EXCEPTIONS=true
 

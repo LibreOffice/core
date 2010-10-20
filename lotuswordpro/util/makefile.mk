@@ -1,5 +1,5 @@
 PRJ=..
-PRJNAME=lwpft
+PRJNAME=lotuswordpro
 TARGET=lwpft
 VERSION=$(UPD)
 

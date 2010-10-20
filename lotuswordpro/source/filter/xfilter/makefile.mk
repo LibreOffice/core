@@ -56,7 +56,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=lwpfilter
+PRJNAME=lotuswordpro
 TARGET=xfilter
 
 
