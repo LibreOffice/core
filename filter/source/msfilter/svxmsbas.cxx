@@ -150,7 +150,7 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
     return bRet;
 }
 
-bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorageName, const String& rSubStorageName, BOOL bVBAMode )
+bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorageName, const String& rSubStorageName, BOOL /*bVBAMode*/ )
 {
     SvStorageRef xVBAStg(rVBA.GetStorage()->OpenSotStorage(rStorageName,
         STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL));
