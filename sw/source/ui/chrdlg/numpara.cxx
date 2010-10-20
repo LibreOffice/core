@@ -199,7 +199,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         if(!aStyle.Len())
             aStyle = aNumberStyleLB.GetEntry(0);
 
-        if( aStyle.EqualsAscii("Outline"))// == String::CreateFromAscii("Outline")) //maybe need modify,zhaojianwei
+        if( aStyle.EqualsAscii("Outline"))
         {
             aNumberStyleLB.InsertEntry( msOutlineNumbering );
             aNumberStyleLB.SelectEntry( msOutlineNumbering );

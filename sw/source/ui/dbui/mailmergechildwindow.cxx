@@ -58,7 +58,6 @@
 using namespace ::com::sun::star;
 
 SFX_IMPL_FLOATINGWINDOW( SwMailMergeChildWindow, FN_MAILMERGE_CHILDWINDOW )
-//SFX_IMPL_FLOATINGWINDOW( SwSendMailChildWindow, FN_MAILMERGE_SENDMAIL_CHILDWINDOW )
 
 SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
                                 USHORT nId,
@@ -528,7 +527,7 @@ void  SwSendMailDialog::SendMails()
 {
     if(!m_pConfigItem)
     {
-        DBG_ERROR("config item not set");
+        OSL_ENSURE(false, "config item not set");
         return;
     }
     String sErrorMessage;
@@ -543,7 +542,7 @@ void  SwSendMailDialog::SendMails()
     LeaveWait();
     if(!bIsLoggedIn)
     {
-        DBG_ERROR("create error message");
+        OSL_ENSURE(false, "create error message");
         return;
     }
     m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));

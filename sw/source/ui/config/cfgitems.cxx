@@ -85,7 +85,6 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT _nWhich ) :
     bFldHiddenText      = rVOpt.IsShowHiddenField();
     bManualBreak        = rVOpt.IsLineBreak(TRUE);
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
-
 }
 
 SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
@@ -95,7 +94,7 @@ SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
 
 int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwDocDisplayItem& rItem = (SwDocDisplayItem&)rAttr;
 
@@ -190,7 +189,7 @@ SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
 
 int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwElemItem& rItem = (SwElemItem&)rAttr;
 
@@ -283,7 +282,7 @@ SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
 
 int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwAddPrinterItem& rItem = (SwAddPrinterItem&)rAttr;
 
@@ -340,7 +339,7 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
     rVOpt.SetShdwCrsrFillMode( eMode );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
             SfxPoolItem(rTestItem)
 {
@@ -363,7 +362,7 @@ SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
 
 int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwTestItem& rItem = (const SwTestItem&) rAttr;
 

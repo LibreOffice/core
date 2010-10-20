@@ -36,9 +36,7 @@
 #include "actctrl.hxx"
 
 class SwMailMergeWizard;
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergePrepareMergePage : public svt::OWizardPage
 {
     SwBoldFixedInfo m_aHeaderFI;

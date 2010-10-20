@@ -400,7 +400,7 @@ void SwMailMergeOutputPage::ActivatePage()
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
 
     SwView* pTargetView = rConfigItem.GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists");
+    OSL_ENSURE(pTargetView, "no target view exists");
     if(pTargetView)
     {
         SfxPrinter* pPrinter = pTargetView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( true );
@@ -412,7 +412,7 @@ void SwMailMergeOutputPage::ActivatePage()
     m_aPrinterLB.SelectEntry( rConfigItem.GetSelectedPrinter() );
 
     SwView* pSourceView = rConfigItem.GetSourceView();
-    DBG_ASSERT(pSourceView, "no source view exists");
+    OSL_ENSURE(pSourceView, "no source view exists");
     if(pSourceView)
     {
         SwDocShell* pDocShell = pSourceView->GetDocShell();
@@ -620,7 +620,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pSourceView = rConfigItem.GetSourceView();
-    DBG_ASSERT( pSourceView, "source view missing");
+    OSL_ENSURE( pSourceView, "source view missing");
     if(pSourceView)
     {
         SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
@@ -666,7 +666,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pTargetView = rConfigItem.GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists");
+    OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
         return 0;
 
@@ -892,7 +892,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
 IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
 {
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists");
+    OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
         return 0;
 
@@ -1005,7 +1005,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     //get the composed document
     SwView* pTargetView = rConfigItem.GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists");
+    OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
         return 0;
 
@@ -1126,7 +1126,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     }
     SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName() );
     String sEMailColumn = m_aMailToLB.GetSelectEntry();
-    DBG_ASSERT( sEMailColumn.Len(), "No email column selected");
+    OSL_ENSURE( sEMailColumn.Len(), "No email column selected");
     Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
     Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
     if(!sEMailColumn.Len() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
@@ -1219,12 +1219,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         xTempDocShell->DoClose();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         sal_Int32 nTarget =
 #endif
                 rConfigItem.MoveResultSet(rInfo.nDBRow);
-        DBG_ASSERT( nTarget == rInfo.nDBRow, "row of current document could not be selected");
-        DBG_ASSERT( sEMailColumn.Len(), "No email column selected");
+        OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
+        OSL_ENSURE( sEMailColumn.Len(), "No email column selected");
         ::rtl::OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
         aDesc.sEMail = sEMail;
@@ -1239,7 +1239,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     pInStream->SetStreamCharSet( eEncoding );
                 else
                 {
-                    DBG_ERROR("no output file created?");
+                    OSL_ENSURE(false, "no output file created?");
                     continue;
                 }
                 ByteString sLine;

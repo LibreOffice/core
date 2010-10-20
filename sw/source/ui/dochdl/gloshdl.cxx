@@ -79,7 +79,7 @@ using namespace ::com::sun::star;
 
 const short RET_EDIT = 100;
 
-// PUBLIC METHODES -------------------------------------------------------
+// PUBLIC METHODS -------------------------------------------------------
 struct TextBlockInfo_Impl
 {
     String sTitle;
@@ -97,10 +97,10 @@ SV_IMPL_REF( SwDocShell )
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg( DLG_RENAME_GLOS,
                                                         pViewFrame, this, pWrtShell);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     String sName, sShortName;
 
     if( RET_EDIT == pDlg->Execute() )
@@ -212,9 +212,6 @@ BOOL SwGlossaryHdl::NewGroup(String &rGrpName, const String& rTitle)
     return rStatGlossaries.NewGroupDoc(rGrpName, rTitle);
 }
 
-/* -----------------23.11.98 13:10-------------------
- * Umbenennen eines Textbausteins
- * --------------------------------------------------*/
 BOOL SwGlossaryHdl::RenameGroup(const String & rOld, String& rNew, const String& rNewTitle)
 {
     BOOL bRet = FALSE;
@@ -260,7 +257,7 @@ BOOL SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSource
 
     //Der Index muss hier ermittelt werden, weil rSourceShortName in CopyBlock evtl veraendert wird
     USHORT nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
-    DBG_ASSERT(USHRT_MAX != nDeleteIdx, "Eintrag nicht gefunden");
+    OSL_ENSURE(USHRT_MAX != nDeleteIdx, "entry not found");
     ULONG nRet = pSourceGroup->CopyBlock( *pDestGroup, rSourceShortName, rLongName );
     if(!nRet && bMove)
     {
@@ -303,13 +300,13 @@ USHORT SwGlossaryHdl::GetGlossaryCnt()
 
 String SwGlossaryHdl::GetGlossaryName( USHORT nId )
 {
-    ASSERT(nId < GetGlossaryCnt(), Textbausteinarray ueberindiziert.);
+    OSL_ENSURE(nId < GetGlossaryCnt(), "Textbausteinarray ueberindiziert.");
     return pCurGrp->GetLongName( nId );
 }
 
 String  SwGlossaryHdl::GetGlossaryShortName(USHORT nId)
 {
-    ASSERT(nId < GetGlossaryCnt(), Textbausteinarray ueberindiziert.);
+    OSL_ENSURE(nId < GetGlossaryCnt(), "Textbausteinarray ueberindiziert.");
     return pCurGrp->GetShortName( nId );
 }
 
@@ -423,12 +420,12 @@ BOOL SwGlossaryHdl::DelGlossary(const String &rShortName)
 ------------------------------------------------------------------------*/
 BOOL SwGlossaryHdl::ExpandGlossary()
 {
-    ASSERT(pWrtShell->CanInsert(), illegal);
+    OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
     SwTextBlocks *pGlossary;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc( DLG_RENAME_GLOS );
-    DBG_ASSERT(fnGetCurrGroup, "Dialogdiet fail!");
+    OSL_ENSURE(fnGetCurrGroup, "Dialogdiet fail!");
     String sGroupName( (*fnGetCurrGroup)() );
     if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
         FindGroupName(sGroupName);
@@ -449,7 +446,7 @@ BOOL SwGlossaryHdl::ExpandGlossary()
             pWrtShell->LeaveBlockMode();
         else if(pWrtShell->IsExtMode())
             pWrtShell->LeaveExtMode();
-            // Wort selektieren
+        // select word
         pWrtShell->SelNearestWrd();
             // Wort erfragen
         if(pWrtShell->IsSelection())
@@ -512,10 +509,10 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstarctSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 for(USHORT i = 0; i < aFoundArr.Count(); ++i)
                 {
                     TextBlockInfo_Impl* pData = aFoundArr.GetObject(i);
@@ -541,7 +538,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
         }
     }
 
-        // nicht gefunden
+    // not found
     if( nFound == (USHORT) -1 )
     {
         if( !bCancel )
@@ -603,7 +600,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
 ------------------------------------------------------------------------*/
 BOOL SwGlossaryHdl::InsertGlossary(const String &rName)
 {
-    ASSERT(pWrtShell->CanInsert(), illegal);
+    OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
 
     SwTextBlocks *pGlos =
         pCurGrp? pCurGrp: rStatGlossaries.GetGroupDoc(aCurGrp);

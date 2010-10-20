@@ -33,9 +33,7 @@
 #include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>
 class SwMailMergeWizard;
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeOutputTypePage : public svt::OWizardPage
 {
     SwBoldFixedInfo m_aHeaderFI;

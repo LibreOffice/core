@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
 #include <swtypes.hxx>
 #include <swlbox.hxx>
@@ -40,18 +40,13 @@ using namespace nsSwComboBoxStyle;
 
 SV_IMPL_PTRARR(SwEntryLst, SwBoxEntry*)
 
-/*--------------------------------------------------------------------
-     Beschreibung: Ein ListboxElement
- --------------------------------------------------------------------*/
-
-
+//     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
     bModified(FALSE),
     bNew(FALSE),
     nId(LISTBOX_APPEND)
 {
 }
-
 
 SwBoxEntry::SwBoxEntry(const String& aNam, USHORT nIdx) :
     bModified(FALSE),
@@ -61,17 +56,13 @@ SwBoxEntry::SwBoxEntry(const String& aNam, USHORT nIdx) :
 {
 }
 
-
 SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
     bModified(rOld.bModified),
     bNew(rOld.bNew),
     aName(rOld.aName),
     nId(rOld.nId)
 {
-
 }
-
-
 
 SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
     ComboBox(pParent, rId),
@@ -86,66 +77,38 @@ SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
     }
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Basisklasse Dtor
- --------------------------------------------------------------------*/
-
-
+// Basic class Dtor
 SwComboBox::~SwComboBox()
 {
-// das erledigen die Listen doch schon selbst im DTOR!
-//  aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
-//  aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung: Eintrag in die ComboBox aufnehmen
- --------------------------------------------------------------------*/
-
 
 void SwComboBox::InsertEntry(const SwBoxEntry& rEntry)
 {
     InsertSorted(new SwBoxEntry(rEntry));
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Eintrag aus der Liste loeschen
- --------------------------------------------------------------------*/
-
-
 void SwComboBox::RemoveEntry(USHORT nPos)
 {
     if(nPos >= aEntryLst.Count())
         return;
 
-    // Altes Element austragen
+    // Remove old element
     SwBoxEntry* pEntry = aEntryLst[nPos];
     aEntryLst.Remove(nPos, 1);
     ComboBox::RemoveEntry(nPos);
 
-    // keine neuen Eintraege in die Liste mit aufnehmen
+    // Don't add new entries to the list
     if(pEntry->bNew)
         return;
 
-    // in DeleteListe eintragen
+    // add to DelEntryLst
     aDelEntryLst.C40_INSERT(SwBoxEntry, pEntry, aDelEntryLst.Count());
 }
-
-
-
-/*--------------------------------------------------------------------
-     Beschreibung: Position by Name
- --------------------------------------------------------------------*/
 
 USHORT SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
 {
     return ComboBox::GetEntryPos(rEntry.aName);
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung: Rund um die Entries
- --------------------------------------------------------------------*/
-
 
 const SwBoxEntry& SwComboBox::GetEntry(USHORT nPos) const
 {
@@ -155,16 +118,10 @@ const SwBoxEntry& SwComboBox::GetEntry(USHORT nPos) const
     return aDefault;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: geloeschte Eintraege
- --------------------------------------------------------------------*/
-
-
 USHORT SwComboBox::GetRemovedCount() const
 {
     return aDelEntryLst.Count();
 }
-
 
 const SwBoxEntry& SwComboBox::GetRemovedEntry(USHORT nPos) const
 {
@@ -174,23 +131,12 @@ const SwBoxEntry& SwComboBox::GetRemovedEntry(USHORT nPos) const
     return aDefault;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Sortiert einfuegen
- --------------------------------------------------------------------*/
-
-
 void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
 {
     ComboBox::InsertEntry(pEntry->aName);
     USHORT nPos = ComboBox::GetEntryPos(pEntry->aName);
     aEntryLst.C40_INSERT(SwBoxEntry, pEntry, nPos);
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung: Je nach Option bestimmte Zeichen ausblenden
- --------------------------------------------------------------------*/
-
 
 void SwComboBox::KeyInput( const KeyEvent& rKEvt )
 {
@@ -209,13 +155,7 @@ void SwComboBox::KeyInput( const KeyEvent& rKEvt )
     ComboBox::KeyInput(rKEvt);
 }
 
-
-
-/*--------------------------------------------------------------------
-    Beschreibung: Text nach Option konvertieren
- --------------------------------------------------------------------*/
-
-
+// Convert text according to option
 String SwComboBox::GetText() const
 {
     String aTxt( ComboBox::GetText() );

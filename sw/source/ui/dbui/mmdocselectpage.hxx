@@ -34,9 +34,7 @@
 #include <vcl/button.hxx>
 #include <svtools/stdctrl.hxx>
 class SwMailMergeWizard;
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeDocSelectPage : public svt::OWizardPage
 {
     SwBoldFixedInfo     m_aHeaderFI;

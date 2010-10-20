@@ -43,13 +43,11 @@
 #include "cfgid.h"
 
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Alle Filter registrieren
- --------------------------------------------------------------------*/
+
+// Description: Register all filters
 
 TYPEINIT1(SwGlobalDocShell, SwDocShell);
 
-//-------------------------------------------------------------------------
 SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/GlobalDocument" )
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
@@ -70,7 +68,7 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_Bool bTemplate /* = sal_False */) const
 {
     (void)bTemplate;
-    DBG_ASSERT( bTemplate == sal_False, "No template for Writer Global" );
+    OSL_ENSURE( bTemplate == sal_False, "No template for Writer Global" );
 
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {

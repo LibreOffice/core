@@ -191,7 +191,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -303,8 +303,10 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
     const int nCount = 13;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
+
     for(int i = 0; i < nCount; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
     return aNames;
 }
 
@@ -327,7 +329,7 @@ bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
         case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
         default:
-            DBG_ERROR("Wrong memberId");
+            OSL_ENSURE(false, "Wrong memberId");
             bRet = false;
     }
     return bRet;
@@ -359,7 +361,7 @@ bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
         case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
         default:
-            DBG_ERROR("Wrong memberId");
+            OSL_ENSURE(false,"Wrong memberId");
     }
     return bRet;
 }

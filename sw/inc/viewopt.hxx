@@ -173,7 +173,7 @@ protected:
 
     BYTE            nTblDest;           // Ziel fuer Tabellenhintergrund
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     BOOL  bTest1        :1;     // Test-Flag  "Layout not loading"
     BOOL  bTest2        :1;     // Test-Flag  "WYSIWYG++"
@@ -426,7 +426,7 @@ public:
     USHORT GetViewLayoutColumns() const { return mnViewLayoutColumns; }
     void   SetViewLayoutColumns( USHORT nNew ) { mnViewLayoutColumns = nNew; }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     inline BOOL IsTest1() const     { return bTest1; }
     inline void SetTest1( BOOL b )  { bTest1 = b; }

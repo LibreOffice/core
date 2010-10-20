@@ -213,7 +213,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 delete pPrt;
         }
 
-        // initialisiere Sprache
+        // initialise language
         {
             if( !aOpt.GetLanguage() )
             {

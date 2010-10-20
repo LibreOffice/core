@@ -40,7 +40,7 @@
 #include <sfx2/app.hxx>
 
 //copy from core\bastyp\swtypes.cxx
-String aEmptyStr;               // Konstante Strings
+String aEmptyStr; // constant strings
 
 ResMgr* pSwResMgr=0;
 

@@ -136,7 +136,7 @@ OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
         case MM_MERGEPAGE         : pRet = new SwMailMergeMergePage(this);          break;
         case MM_OUTPUTPAGE       :  pRet = new SwMailMergeOutputPage(this);         break;
     }
-    DBG_ASSERT(pRet, "no page created in ::createPage");
+    OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;
 }
 
@@ -144,6 +144,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 {
     ::svt::RoadmapWizard::enterState( _nState );
 /*
+
     entering a page after the layoutpage requires the insertion
     of greeting and address block - if not yet done
     entering the merge or output page requires to create the output document
@@ -211,7 +212,7 @@ String  SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
     }
     return sRet;
 }
-/*-- 24.06.2004 09:24:45---------------------------------------------------
+/*----------------------------------------------------------------------
     enables/disables pages in the roadmap depending on the current
     page and state
   -----------------------------------------------------------------------*/
@@ -284,7 +285,7 @@ void SwMailMergeWizard::UpdateRoadmap()
         enableState( nPage, bEnable );
     }
 }
-/*-- 24.06.2004 09:24:45---------------------------------------------------
+/*-- --------------------------------------------------------------------
     enables/disables pages in the roadmap depending on the current
     page and state
   -----------------------------------------------------------------------*/
@@ -304,7 +305,7 @@ void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
 
 short SwMailMergeWizard::Execute()
 {
-    DBG_ERROR( "SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
+    OSL_ENSURE(false, "SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
                "It creates a thread (MailDispatcher instance) that will call"
                "back to VCL apartment => deadlock!\n"
                "Use Dialog::StartExecuteModal to execute the dialog!" );

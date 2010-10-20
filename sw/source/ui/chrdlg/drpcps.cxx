@@ -517,11 +517,6 @@ void SwDropCapsPict::_InitPrinter()
     }
 }
 
-/****************************************************************************
-Dlg: Ctor
-****************************************************************************/
-
-
 SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
@@ -532,19 +527,9 @@ SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
     SetTabPage(pNewPage);
 }
 
-/****************************************************************************
-Dlg: Dtor
-****************************************************************************/
-
-
  SwDropCapsDlg::~SwDropCapsDlg()
 {
 }
-
-/****************************************************************************
-Page: Ctor
-****************************************************************************/
-
 
 SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
 
@@ -582,7 +567,7 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     aTextText.Enable( !bFormat );
     aTextEdit.Enable( !bFormat );
 
-    // Metriken
+    // Metrics
     SetMetric( aDistanceField, GetDfltMetric(bHtmlMode) );
 
     pPict->SetBorderStyle( WINDOW_BORDER_MONO );
@@ -597,10 +582,6 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     aTemplateBox  .SetSelectHdl(LINK(this, SwDropCapsPage, SelectHdl));
     aWholeWordCB  .SetClickHdl (LINK(this, SwDropCapsPage, WholeWordHdl ));
 }
-
-/****************************************************************************
-Page: Dtor
-****************************************************************************/
 
  SwDropCapsPage::~SwDropCapsPage()
 {
@@ -661,12 +642,13 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
     ::FillCharStyleListBox(aTemplateBox, rSh.GetView().GetDocShell(), TRUE);
 
     aTemplateBox.InsertEntry(SW_RESSTR(SW_STR_NONE), 0);
-    // Vorlage defaulten
+
+    // Reset format
     aTemplateBox.SelectEntryPos(0);
     if (aFmtDrop.GetCharFmt())
         aTemplateBox.SelectEntry(aFmtDrop.GetCharFmt()->GetName());
 
-    // Controls enablen
+    // Enable controls
     aDropCapsBox.Check(aFmtDrop.GetLines() > 1);
     const USHORT nVal = USHORT(aDropCapsField.GetValue());
     if (bFormat)

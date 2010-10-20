@@ -32,8 +32,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #include "dbmgr.hxx"
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
@@ -116,7 +114,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 
-    // Absender
+    // Sender
     if (rItem.bSend)
     {
         long   nSendX = nX + (USHORT) (f * rItem.lSendFromLeft),
@@ -128,7 +126,7 @@ void SwEnvPreview::Paint(const Rectangle &)
         DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
-    // Empfaenger
+    // Addressee
     long   nAddrX = nX + (USHORT) (f * rItem.lAddrFromLeft),
            nAddrY = nY + (USHORT) (f * rItem.lAddrFromTop ),
            nAddrW = (USHORT) (f * (nPageW - rItem.lAddrFromLeft - 566)),
@@ -136,7 +134,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aMedium );
     DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
-    // Briefmarke
+    // Stamp
     long   nStmpW = (USHORT) (f * 1417 /* 2,5 cm */),
            nStmpH = (USHORT) (f * 1701 /* 3,0 cm */),
            nStmpX = nX + nW - (USHORT) (f * 566) - nStmpW,
@@ -231,7 +229,7 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     SetExchangeSupport();
     pSh = GetParent()->pSh;
 
-    // Handler installieren
+    // Install handlers
     aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
@@ -261,8 +259,8 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     }
     else
         sActDBName.SetToken(1, DB_DELIM, aTableLB.GetSelectEntry());
-    pSh->GetNewDBMgr()->GetColumnNames(
-        &aDBFieldLB, aDatabaseLB.GetSelectEntry(), aTableLB.GetSelectEntry());
+        pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, aDatabaseLB.GetSelectEntry(),
+                                           aTableLB.GetSelectEntry());
     return 0;
 }
 
@@ -271,12 +269,10 @@ IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
     String aStr ( '<' );
     aStr += aDatabaseLB.GetSelectEntry();
     aStr += '.';
-//  aStr += DB_DELIM;
     aStr += aTableLB.GetSelectEntry();
     aStr += '.';
     aStr += aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1';
     aStr += '.';
-//  aStr += DB_DELIM;
     aStr += aDBFieldLB.GetSelectEntry();
     aStr += '>';
     aAddrEdit.ReplaceSelected(aStr);
@@ -308,6 +304,7 @@ void SwEnvPage::InitDatabaseBox()
         aDatabaseLB.Clear();
         Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
+
         for (long i = 0; i < aDataNames.getLength(); i++)
             aDatabaseLB.InsertEntry(pDataNames[i]);
 

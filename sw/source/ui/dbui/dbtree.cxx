@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// INCLUDE ---------------------------------------------------------------
-
-
 #include <sot/formats.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -135,10 +132,6 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
         SwConnectionDataPtr pPtr = aConnections[i];
         if(pPtr->sSourceName == sSource)
         {
-//            SwConnectionDataPtr pPtr = aConnections[i];
-//            Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
-//            if(xComp.is())
-//                xComp->dispose();
             aConnections.DeleteAndDestroy(i);
             break;
         }
@@ -169,7 +162,7 @@ BOOL SwDBTreeList_Impl::HasContext()
             if(xContainer.is())
                 xContainer->addContainerListener( this );
         }
-        DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+        OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
     }
     return xDBContext.is();
 }
@@ -323,7 +316,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        DBG_ASSERT(xTbls->hasByName(sTableName), "table not available anymore?");
+                        OSL_ENSURE(xTbls->hasByName(sTableName), "table not available anymore?");
                         try
                         {
                             Any aTable = xTbls->getByName(sTableName);
@@ -341,7 +334,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                        DBG_ASSERT(xQueries->hasByName(sTableName), "table not available anymore?");
+                        OSL_ENSURE(xQueries->hasByName(sTableName), "table not available anymore?");
                         try
                         {
                             Any aQuery = xQueries->getByName(sTableName);
@@ -374,7 +367,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
             {
             }
         }
-        else    // Tabellennamen
+        else    // table names
         {
             try
             {
@@ -438,7 +431,7 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
-        return COMPARE_GREATER; // Spaltennamen nicht sortieren
+        return COMPARE_GREATER; // don't sort column names
 
     return DefaultCompare(pData);   // Sonst Basisklasse rufen
 }
@@ -453,7 +446,7 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* p
         if (GetParent(GetParent(pEntry)))
         {
             rColumnName = GetEntryText(pEntry);
-            pEntry = GetParent(pEntry); // Spaltenname war selektiert
+            pEntry = GetParent(pEntry); // column name was selected
         }
         sDBName = GetEntryText(GetParent(pEntry));
         if(pbIsTable)

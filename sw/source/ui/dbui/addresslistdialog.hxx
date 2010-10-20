@@ -50,9 +50,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 class SwMailMergeAddressBlockPage;
-/*-- 08.04.2004 14:04:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwAddressListDialog : public SfxModalDialog
 {
     FixedInfo       m_aDescriptionFI;
@@ -85,9 +83,7 @@ class SwAddressListDialog : public SfxModalDialog
     SwMailMergeAddressBlockPage* m_pAddressPage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xDBContext;
-//    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>          m_xSource;
-//    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-//    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    m_xColumnsSupplier;
+
     SwDBData                                                                        m_aDBData;
 
     void DetectTablesAndQueries(SvLBoxEntry* pSelect, bool bWidthDialog);

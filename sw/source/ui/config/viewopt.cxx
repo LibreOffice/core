@@ -52,7 +52,7 @@
 
 #include <editeng/acorrcfg.hxx>
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
@@ -102,7 +102,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
@@ -146,7 +146,7 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 
 USHORT SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
 {
-    ASSERT( pOut, "no Outdev" );
+    OSL_ENSURE( pOut, "no Outdev" );
     return USHORT(pOut->GetTextWidth( String::CreateFromAscii(aPostItStr )));
 }
 
@@ -178,9 +178,8 @@ SwViewOption::SwViewOption() :
     bStarOneSetting(FALSE),
     bIsPagePreview(FALSE),
     bSelectionInReadonly(FALSE),
-    // --> FME 2004-06-29 #114856# Formular view
+    // #114856# Formular view
     bFormView(FALSE),
-    // <--
     bBookview(FALSE),
     mbViewLayoutBookMode(FALSE),
     bShowPlaceHolderFields( sal_True ),
@@ -210,7 +209,7 @@ SwViewOption::SwViewOption() :
 
     bIdle = true;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
@@ -221,9 +220,8 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
     bReadonly = FALSE;
     bSelectionInReadonly = FALSE;
-    // --> FME 2004-06-29 #114856# Formular view
+    // #114856# Formular view
     bFormView       = rVOpt.bFormView;
-    // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
@@ -246,7 +244,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -262,9 +260,8 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
-    // --> DVO FME 2004-06-29 #114856# Formular view
+    // #114856# Formular view
     bFormView       = rVOpt.bFormView   ;
-    // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
@@ -287,7 +284,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -317,7 +314,7 @@ void SwViewOption::Init( Window *pWin )
 BOOL SwViewOption::IsAutoCompleteWords() const
 {
     const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
-    return /*rFlags.bAutoCompleteWords &&*/ rFlags.bAutoCmpltCollectWords;
+    return rFlags.bAutoCmpltCollectWords;
 }
 
 AuthorCharAttr::AuthorCharAttr() :

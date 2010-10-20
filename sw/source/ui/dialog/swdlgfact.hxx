@@ -28,7 +28,6 @@
 #ifndef _SW_DLGFACT_HXX
 #define _SW_DLGFACT_HXX
 
-// include ---------------------------------------------------------------
 #include "swabstdlg.hxx"
 
 class SwSaveLabelDlg;

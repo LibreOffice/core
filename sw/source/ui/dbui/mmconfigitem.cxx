@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <mmconfigitem.hxx>
 #include <swtypes.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -225,7 +225,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == rNames.getLength())
     {
         for(int nProp = 0; nProp < rNames.getLength(); nProp++)
@@ -445,7 +445,7 @@ void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
             }
             else
             {
-                DBG_ERROR("parse error in address block or greeting line");
+                OSL_ENSURE(false, "parse error in address block or greeting line");
             }
         }
         else
@@ -930,7 +930,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception caught in xResultSet->SetFilter()");
+                    OSL_ENSURE(false, "exception caught in xResultSet->SetFilter()");
                 }
                 xRowSet->execute();
                 m_pImpl->xResultSet = xRowSet.get();
@@ -940,7 +940,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         }
         catch(Exception& )
         {
-            DBG_ERROR("exception caught in: SwMailMergeConfigItem::GetResultSet() ");
+            OSL_ENSURE(false, "exception caught in: SwMailMergeConfigItem::GetResultSet() ");
         }
     }
     return m_pImpl->xResultSet;
@@ -978,7 +978,7 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
             }
             catch(Exception&)
             {
-                DBG_ERROR("exception caught in SwMailMergeConfigItem::SetFilter()");
+                OSL_ENSURE(false, "exception caught in SwMailMergeConfigItem::SetFilter()");
             }
         }
     }
@@ -1259,9 +1259,8 @@ Sequence< ::rtl::OUString> SwMailMergeConfigItem::GetColumnAssignment(
     return aRet;
 }
 
-/*-- 21.05.2004 12:31:31---------------------------------------------------
-    returns the name that is assigned as e-mail column of the current data base
-  -----------------------------------------------------------------------*/
+
+// returns the name that is assigned as e-mail column of the current data base
 ::rtl::OUString     SwMailMergeConfigItem::GetAssignedColumn(sal_uInt32 nColumn) const
 {
     ::rtl::OUString sRet;
@@ -1655,7 +1654,7 @@ void SwMailMergeConfigItem::AddMergedDocument(SwDocMergeInfo& rInfo)
 
 SwDocMergeInfo& SwMailMergeConfigItem::GetDocumentMergeInfo(sal_uInt32 nDocument)
 {
-    DBG_ASSERT(m_pImpl->aMergeInfos.size() > nDocument,"invalid document index");
+    OSL_ENSURE(m_pImpl->aMergeInfos.size() > nDocument,"invalid document index");
     return m_pImpl->aMergeInfos[nDocument];
 }
 

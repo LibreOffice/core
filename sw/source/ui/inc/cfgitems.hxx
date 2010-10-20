@@ -203,7 +203,7 @@ public:
     void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Testeinstellungen

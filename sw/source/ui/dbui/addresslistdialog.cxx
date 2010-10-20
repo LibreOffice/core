@@ -85,8 +85,6 @@ using namespace ::rtl;
 #define ITEMID_NAME         1
 #define ITEMID_TABLE        2
 
-//typedef SharedUNOComponent< XConnection >   SharedConnection;
-
 static const char* cUTF8 = "UTF-8";
 
 struct AddressUserData_Impl
@@ -227,7 +225,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
     const SwDBData& rCurrentData = rConfigItem.GetCurrentDBData();
 
-    DBG_ASSERT(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
+    OSL_ENSURE(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
     m_aListLB.SelectAll( FALSE );
@@ -349,7 +347,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
             }
             catch(Exception& )
             {
-                DBG_ERROR("exception caught in SwAddressListDialog::FilterHdl_Impl");
+                OSL_ENSURE(false, "exception caught in SwAddressListDialog::FilterHdl_Impl");
             }
         }
     }
@@ -543,10 +541,8 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
     return 0;
 }
 
-/*-- 13.05.2004 14:59:25---------------------------------------------------
-    detect the number of tables for a data source
-    if only one is available then set it at the entry
-  -----------------------------------------------------------------------*/
+// detect the number of tables for a data source
+// if only one is available then set it at the entry
 void SwAddressListDialog::DetectTablesAndQueries(
         SvLBoxEntry* pSelect,
         bool bWidthDialog)
@@ -639,7 +635,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
     catch(Exception& )
     {
-        DBG_ERROR("exception caught in SwAddressListDialog::DetectTablesAndQueries");
+        OSL_ENSURE(false, "exception caught in SwAddressListDialog::DetectTablesAndQueries");
         m_aOK.Enable( sal_False );
     }
 }

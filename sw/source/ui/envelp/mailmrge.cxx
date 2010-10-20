@@ -142,12 +142,9 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
 
 void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException)
 {
-    DBG_ERROR("disposing");
+    OSL_ENSURE(false, "disposing");
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
          const String& rSourceName,
         const String& rTblName,
@@ -336,8 +333,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
-    //aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());// not supported in since cws printerpullpages anymore
-
     sal_Int16 nMailingMode(pModOpt->GetMailingFormats());
     aFormatSwCB.Check((nMailingMode & TXTFORMAT_OFFICE) != 0);
     aFormatHtmlCB.Check((nMailingMode & TXTFORMAT_HTML) != 0);
@@ -345,7 +340,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     aAllRB.Check(TRUE);
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
     aOkBTN.SetClickHdl(aLk);
 
@@ -473,10 +468,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 SwMailMergeDlg::~SwMailMergeDlg()
 {
     if(xFrame.is())
@@ -495,10 +486,6 @@ SwMailMergeDlg::~SwMailMergeDlg()
     delete pImpl;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwMailMergeDlg::Apply()
 {
 }
@@ -509,18 +496,21 @@ void lcl_MoveControlY( Window* ppW, long nDiffSize )
     aPos.Y() += nDiffSize;
     ppW->SetPosPixel( aPos );
 }
+
 void lcl_MoveControlX( Window* ppW, long nDiffSize )
 {
     Point aPos( ppW->GetPosPixel());
     aPos.X() += nDiffSize;
     ppW->SetPosPixel( aPos );
 }
+
 void lcl_ChangeWidth( Window* ppW, long nDiffSize )
 {
     Size aSize( ppW->GetSizePixel());
     aSize.Width() += nDiffSize;
     ppW->SetSizePixel( aSize );
 }
+
 void    SwMailMergeDlg::Resize()
 {
     //the only controls that profit from the resize is pBeamerWin
@@ -598,10 +588,6 @@ void    SwMailMergeDlg::Resize()
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn )
 {
     if (pBtn == &aOkBTN)
@@ -611,10 +597,6 @@ IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn )
     }
     return 0;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, RadioButton *, pBtn )
 {
@@ -665,9 +647,6 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
     }
     return 0;
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
 {
@@ -682,19 +661,11 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
  return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwMailMergeDlg, ModifyHdl, NumericField *, EMPTYARG )
 {
     aFromRB.Check();
     return (0);
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 bool SwMailMergeDlg::ExecQryShell()
 {
@@ -755,7 +726,7 @@ bool SwMailMergeDlg::ExecQryShell()
         pMgr->SetSubject(sPath);
     }
 
-    if (aFromRB.IsChecked())    // Liste Einfuegen
+    if (aFromRB.IsChecked())    // Insert list
     {
         // Safe: the maximal value of the fields is limited
         sal_Int32 nStart = sal::static_int_cast<sal_Int32>(aFromNF.GetValue());
@@ -770,7 +741,7 @@ bool SwMailMergeDlg::ExecQryShell()
             *pSelection <<= i;
     }
     else if (aAllRB.IsChecked() )
-        m_aSelection.realloc(0);    // Leere Selektion = Alles einfuegen
+        m_aSelection.realloc(0);    // Empty selection = insert all
     else
     {
         if(pImpl->xSelSupp.is())
@@ -813,10 +784,6 @@ bool SwMailMergeDlg::ExecQryShell()
     return true;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, EMPTYARG )
 {
     String sPath( aPathED.GetText() );
@@ -835,7 +802,6 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, EMPTYARG )
                     C2U( "com.sun.star.ui.dialogs.FolderPicker" ) ),
                 UNO_QUERY );
     }
-//    pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE1);
     xFP->setDisplayDirectory(sPath);
     if( xFP->execute() == RET_OK )
     {
@@ -848,17 +814,13 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, EMPTYARG )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
         AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this );
-        DBG_ASSERT(pFileDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pFileDlg, "Dialogdiet fail!");
         pFileDlg->SetFiles(aAttachED.GetText());
         pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
 

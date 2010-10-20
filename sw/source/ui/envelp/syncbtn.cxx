@@ -47,10 +47,6 @@
 
 SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwSyncChildWin::SwSyncChildWin( Window* _pParent,
                                 USHORT nId,
                                 SfxBindings* pBindings,
@@ -78,10 +74,6 @@ SwSyncChildWin::SwSyncChildWin( Window* _pParent,
     pWindow->Show();
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
                             Window *pParent) :
@@ -92,17 +84,9 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
     aSyncBtn.SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 __EXPORT SwSyncBtnDlg::~SwSyncBtnDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwSyncBtnDlg, BtnHdl, PushButton *, EMPTYARG )
 {

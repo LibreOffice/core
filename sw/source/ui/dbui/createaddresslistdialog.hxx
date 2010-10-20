@@ -38,17 +38,14 @@
 
 class SwAddressControl_Impl;
 class SwMailMergeConfigItem;
-/*-- 19.04.2004 12:09:46---------------------------------------------------
-    container of the created database
-  -----------------------------------------------------------------------*/
+
+// container of the created database
 struct SwCSVData
 {
     ::std::vector< ::rtl::OUString >                    aDBColumnHeaders;
     ::std::vector< ::std::vector< ::rtl::OUString> >     aDBData;
 };
-/*-- 08.04.2004 14:04:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwFindEntryDialog;
 class SwCreateAddressListDialog : public SfxModalDialog
 {
@@ -97,9 +94,7 @@ public:
     const String&           GetURL() const {    return m_sURL;    }
     void                    Find( const String& rSearch, sal_Int32 nColumn);
 };
-/*-- 13.04.2004 13:30:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwFindEntryDialog : public ModelessDialog
 {
     FixedText               m_aFindFT;

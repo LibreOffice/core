@@ -439,7 +439,7 @@ public:
  TabPage Testeinstellungen fuer SW
 --------------------------------------------------------- */
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 class SwTestTabPage : public SfxTabPage
 {

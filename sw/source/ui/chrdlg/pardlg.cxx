@@ -65,8 +65,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
-// STATIC DATA -----------------------------------------------------------
-
 
 SwParaDlg::SwParaDlg(Window *pParent,
                     SwView& rVw,
@@ -90,7 +88,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     BOOL bHtmlMode = static_cast< BOOL >(nHtmlMode & HTMLMODE_ON);
     if(pTitle)
     {
-            // Update des Titels
+        // Update title
         String aTmp( GetText() );
         aTmp += SW_RESSTR(STR_TEXTCOLL_HEADER);
         aTmp += *pTitle;
@@ -188,7 +186,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     SwWrtShell& rSh = rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-    // Bei Tabellenumrandung kann im Writer kein Schatten eingestellt werden
+    // Table borders cannot get any shade in Writer
     if (nId == TP_BORDER)
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));

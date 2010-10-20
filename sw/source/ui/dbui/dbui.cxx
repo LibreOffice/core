@@ -29,19 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// INCLUDE ---------------------------------------------------------------
-
-
 #include <tools/list.hxx>
 #include "wrtsh.hxx"
 
 
 #include "dbui.hrc"
 #include "dbui.hxx"
-
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 
 PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
 :   ModelessDialog( pParent, SW_RES(DLG_PRINTMONITOR) ),
@@ -61,9 +54,7 @@ PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
     }
     FreeResource();
 }
-/*---------------------------------------------------------------------
 
----------------------------------------------------------------------*/
 void lcl_ResizeControl( Window* pWin, long nDiff )
 {
     Size aSize( pWin->GetSizePixel() );
@@ -103,10 +94,8 @@ void PrintMonitor::ResizeControls()
         lcl_RePosControl( &aCancel, nDiff );
     }
 }
-/*---------------------------------------------------------------------
-    Progress Indicator for Creation of personalized Mail Merge documents:
----------------------------------------------------------------------*/
 
+// Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor( Window *pParent )
 :   ModelessDialog( pParent, SW_RES(DLG_MM_CREATIONMONITOR) ),
     m_aStatus           (this, SW_RES( FT_STATUS )),

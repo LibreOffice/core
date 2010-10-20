@@ -97,7 +97,7 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lXHeight = GetTextHeight();
     lXWidth  = GetTextWidth('X');
 
-    // Skalierungsfaktor
+    // Scale factor
     float fx = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
 
     lOutWPix23 = (long)((float)lOutWPix * fx);
@@ -139,7 +139,7 @@ void SwLabPreview::Paint(const Rectangle &)
     else
         lDispH += ROUND(aItem.lVDist / 10);
 
-    // Skalierungsfaktor
+    // Scale factor Skalierungsfaktor
     float fx = (float) lOutWPix23 / Max(1L, lDispW),
           fy = (float) lOutHPix23 / Max(1L, lDispH),
           f  = fx < fy ? fx : fy;
@@ -169,7 +169,7 @@ void SwLabPreview::Paint(const Rectangle &)
     if (aItem.nRows == 1)
         DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Unten
 
-    // Etiketten
+    // Labels
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
     SetFillColor(rWinColor);
     for (USHORT nRow = 0; nRow < Min((USHORT) 2, (USHORT) aItem.nRows); nRow++)
@@ -240,7 +240,7 @@ void SwLabPreview::Paint(const Rectangle &)
     }
 }
 
-// Pfeil bzw. Intervall zeichnen --------------------------------------------
+// Arror or interval character --------------------------------------------
 
 void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
 {
@@ -250,10 +250,10 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
     {
         Point aArr[3];
 
-        // Pfeil zeichnen
+        // Arrow character
         if (rP1.Y() == rP2.Y())
         {
-            // Waagerecht
+            // Horizontal
             aArr[0].X() = rP2.X() - 5;
             aArr[0].Y() = rP2.Y() - 2;
             aArr[1].X() = rP2.X();
@@ -263,7 +263,7 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
         }
         else
         {
-            // Senkrecht
+            // Vertical
             aArr[0].X() = rP2.X() - 2;
             aArr[0].Y() = rP2.Y() - 5;
             aArr[1].X() = rP2.X() + 2;
@@ -278,16 +278,16 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
     }
     else
     {
-        // Intervall zeichnen
+        // Interval symbol
         if (rP1.Y() == rP2.Y())
         {
-            // Waagerecht
+            // Horizontal
             DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
             DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
         }
         else
         {
-            // Senkrecht
+            // Vertical
             DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
             DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
         }
@@ -329,7 +329,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Metriken
+    // Metrics
     FieldUnit aMetric = ::GetDfltMetric(FALSE);
     SetMetric(aHDistField , aMetric);
     SetMetric(aVDistField , aMetric);
@@ -338,7 +338,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     SetMetric(aLeftField  , aMetric);
     SetMetric(aUpperField , aMetric);
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwLabFmtPage, ModifyHdl);
     aHDistField .SetModifyHdl( aLk );
     aVDistField .SetModifyHdl( aLk );
@@ -360,7 +360,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowsField  .SetLoseFocusHdl( aLk );
 
     aSavePB.SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
-    // Timer einstellen
+    // Set timer
     aPreviewTimer.SetTimeout(1000);
     aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
 }
@@ -369,7 +369,7 @@ SwLabFmtPage::~SwLabFmtPage()
 {
 }
 
-// Modify-Handler der MetricFields. Preview-Timer starten -------------------
+// Modify-handler of MetricFields. start preview timer
 IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 {
     bModified = TRUE;
@@ -378,7 +378,7 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 
-// Preview invalidaten ------------------------------------------------------
+// Invalidate preview
 IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 {
     aPreviewTimer.Stop();
@@ -390,7 +390,7 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 
-// LoseFocus-Handler: Bei Aenderung sofort updaten --------------------------
+// LoseFocus-Handler: Update on change --------------------------
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
     if (((Edit*) pControl)->IsModified())
@@ -399,7 +399,6 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 }
 IMPL_LINK_INLINE_END( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 
-// Minima und Maxima fuer Fields festlegen ----------------------------------
 void SwLabFmtPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
@@ -508,7 +507,7 @@ BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 
 void SwLabFmtPage::Reset(const SfxItemSet& )
 {
-    // Fields initialisieren
+    // Initialise fields
     GetParent()->GetLabItem(aItem);
 
     aHDistField .SetMax(100 * aItem.lHDist , FUNIT_TWIP);

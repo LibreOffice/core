@@ -43,9 +43,7 @@ class SwWrtShell;
 class SwView;
 
 namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySet;}}}}
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeLayoutPage : public svt::OWizardPage
 {
     SwBoldFixedInfo     m_aHeaderFI;

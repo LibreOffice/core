@@ -33,9 +33,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-
 #include <hintids.hxx>
 
 #include <tools/pstm.hxx>
@@ -112,7 +109,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Metriken
+    // Metrics
     FieldUnit aMetric = ::GetDfltMetric(FALSE);
     SetMetric(aAddrLeftField,   aMetric);
     SetMetric(aAddrTopField,    aMetric);
@@ -126,7 +123,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aAddrEditButton.SetPopupMenu(::pMenu);
     aSendEditButton.SetPopupMenu(::pMenu);
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
     aAddrLeftField  .SetUpHdl( aLk );
     aAddrTopField   .SetUpHdl( aLk );
@@ -229,14 +226,14 @@ IMPL_LINK_INLINE_END( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 {
     SwWrtShell* pSh = GetParent()->pSh;
-    ASSERT(pSh, "Shell fehlt");
+    OSL_ENSURE(pSh, "Shell missing");
 
     // Collection-Ptr ermitteln
     BOOL bSender = pButton != &aAddrEditButton;
 
     SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool( static_cast< USHORT >(
         bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
-    ASSERT(pColl, "Text-Collection fehlt");
+    OSL_ENSURE(pColl, "Text collection missing");
 
     switch (pButton->GetCurItemId())
     {
@@ -262,10 +259,10 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 aTmpSet.ClearItem( RES_BACKGROUND );
 
             SwAbstractDialogFactory* pFact = swui::GetFactory();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet, DLG_CHAR ,&pColl->GetName() );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
@@ -291,7 +288,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             // Damit die Tabulatoren nicht uebergebuegelt werden:
             SfxAllItemSet aTmpSet(*pCollSet);
 
-            // Tabulatoren, DefaultTabs ins ItemSet Stecken
+            // Insert tabs, default tabs ito ItemSet
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                 pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
@@ -299,7 +296,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
             aTmpSet.Put( aDefDistItem );
 
-            // Aktueller Tab
+            // Current tab
             SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
             aTmpSet.Put( aTabPos );
 
@@ -320,6 +317,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 const SfxPoolItem* pItem = 0;
                 SfxItemSet* pOutputSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 USHORT nNewDist;
+
                 if( SFX_ITEM_SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
                     FALSE, &pItem ) &&
                     nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
@@ -331,7 +329,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 }
                 if( pOutputSet->Count() )
                 {
-                    //pColl->SetAttr( *pOutputSet );
                     pCollSet->Put(*pOutputSet);
                 }
             }
@@ -487,7 +484,7 @@ void SwEnvFmtPage::SetMinMax()
     aSendTopField .SetMin((long) 100 * (566), FUNIT_TWIP);
     aSendTopField .SetMax((long) 100 * (GetFldVal(aAddrTopField ) - 2 * 566), FUNIT_TWIP);
 
-    // First und Last
+    // First and last
     aAddrLeftField.SetFirst(aAddrLeftField.GetMin());
     aAddrLeftField.SetLast (aAddrLeftField.GetMax());
     aAddrTopField .SetFirst(aAddrTopField .GetMin());
@@ -497,7 +494,7 @@ void SwEnvFmtPage::SetMinMax()
     aSendTopField .SetFirst(aSendTopField .GetMin());
     aSendTopField .SetLast (aSendTopField .GetMax());
 
-    // Fields neu formatieren
+    // Reformat fields
     aAddrLeftField  .Reformat();
     aAddrTopField   .Reformat();
     aSendLeftField  .Reformat();
@@ -567,7 +564,7 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
         if (aIDs[i] == (USHORT)ePaper)
             aSizeFormatBox.SelectEntryPos(i);
 
-    // Die MetricFields
+    // Metric fields
     SetFldVal(aAddrLeftField, rItem.lAddrFromLeft);
     SetFldVal(aAddrTopField , rItem.lAddrFromTop );
     SetFldVal(aSendLeftField, rItem.lSendFromLeft);

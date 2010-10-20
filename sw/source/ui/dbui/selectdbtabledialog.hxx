@@ -40,9 +40,6 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-/*-- 08.04.2004 14:04:39---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwSelectDBTableDialog : public SfxModalDialog
 {
     FixedText       m_aSelectFI;

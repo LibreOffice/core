@@ -63,16 +63,11 @@ static USHORT __FAR_DATA aPageRg[] = {
     0
 };
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
+// Warning! This table is indicated directly in code (0, 1, ...)
 static long nTabs[] =
     {   2, // Number of Tabs
         0, 100
     };
-
-/****************************************************************************
-Page: Ctor
-****************************************************************************/
-
 
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
@@ -98,7 +93,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     FreeResource();
     SetExchangeSupport();
 
-    // Handler installieren
+    // Install handlers
     aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
     aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     aStyleLB.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));

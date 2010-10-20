@@ -118,7 +118,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             case FUNIT_PICA:
             case FUNIT_INCH:
             {
-                // nur diese Metriken benutzen
+                // use only these metrics
                 USHORT nPos = aMetricLB.InsertEntry( sMetric );
                 aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
             }
@@ -346,7 +346,7 @@ IMPL_LINK(SwLoadOptPage, CaptionHdl, PushButton*, EMPTYARG)
 SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {
-    // TabPage erzeugen
+    // create TabPage
     SetTabPage((SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet));
 }
 
@@ -576,7 +576,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
         aAny = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
         if ( !( aAny >>= sTemp ) )
         {
-            DBG_ERRORFILE( "Couldn't get PRODUCTVERSION variable" );
+            OSL_ENSURE(false, "Couldn't get PRODUCTVERSION variable" );
         }
         else
         {
@@ -766,7 +766,7 @@ IMPL_LINK( SwCaptionOptPage, SaveEntryHdl, SvxCheckListBox *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = aCheckLB.GetHdlEntry();
 
-    if (pEntry)     // Alles speichern
+    if (pEntry) // save all
         SaveEntry(pEntry);
 
     return 0;
@@ -807,12 +807,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
 IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
 {
     String sFldTypeName = aCategoryBox.GetText();
-/*
-    SwFieldType* pType = sFldTypeName.Len() ? pMgr->GetFldType(RES_SETEXPFLD, sFldTypeName) : 0;
 
-    ((SfxSingleTabDialog*)GetParent())->GetOKButton()->Enable( (!pType || ((SwSetExpFieldType*)pType)->GetType() == GSE_SEQ)
-                                    && sFldTypeName.Len() != 0 );
-*/
     SfxSingleTabDialog *pDlg = (SfxSingleTabDialog *)GetParent();
     PushButton *pBtn = pDlg->GetOKButton();
     if (pBtn)
@@ -860,7 +855,7 @@ void SwCaptionOptPage::DrawSample()
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
-                // Kategorie
+                // category
                 aStr += aCategoryBox.GetText();
                 aStr += ' ';
             }
@@ -908,9 +903,7 @@ void SwCaptionOptPage::DrawSample()
     aPreview.SetPreviewText( aStr );
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  ComboBox ohne Spaces
-------------------------------------------------------------------------*/
+// Description: ComboBox without Spaces
 void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
 {
     if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )

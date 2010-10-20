@@ -436,7 +436,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                         case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
                         default:
                         {
-                            DBG_ERRORFILE( "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
+                            OSL_ENSURE(false, "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
                         }
                     }
                 }
@@ -453,7 +453,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
 void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
 {
     ULONG nCount = m_aOptionsLB.GetEntryCount();
-    DBG_ASSERT( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
+    OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
     for ( USHORT i = 0; i < nCount; ++i )
     {
         BOOL bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
@@ -510,7 +510,7 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
     {
         ULONG nSavedOptions = m_nSavedOptions;
         ULONG nCount = m_aOptionsLB.GetEntryCount();
-        DBG_ASSERT( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
+        OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
         bool bSetParaSpaceMax = false;
 

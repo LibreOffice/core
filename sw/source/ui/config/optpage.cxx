@@ -84,10 +84,6 @@
 
 using namespace ::com::sun::star;
 
-/*-----------------31.08.96 10.16-------------------
-    TabPage Anzeige/Inhalt
---------------------------------------------------*/
-
 SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SW_RES( TP_CONTENT_OPT ), rCoreSet ),
@@ -156,20 +152,20 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
             case FUNIT_LINE:
             {
                 // nur diese Metriken benutzen
-                                // a horizontal ruler has not the 'line' unit
-                                // there isn't 'line' unit in HTML format
-                                if ( eFUnit != FUNIT_LINE )
-                                {
-                        USHORT nPos = aMetricLB.InsertEntry( sMetric );
-                        aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
-                            aHMetric.InsertEntry( sMetric );
-                                    aHMetric.SetEntryData( nPos, (void*)(long)eFUnit );
-                                }
-                                // a vetical ruler has not the 'character' unit
+                // a horizontal ruler has not the 'line' unit
+                // there isn't 'line' unit in HTML format
+                if ( eFUnit != FUNIT_LINE )
+                {
+                   USHORT nPos = aMetricLB.InsertEntry( sMetric );
+                   aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
+                   aHMetric.InsertEntry( sMetric );
+                   aHMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                }
+                // a vertical ruler has not the 'character' unit
                 if ( eFUnit != FUNIT_CHAR )
                 {
-                            USHORT nPos = aVMetric.InsertEntry( sMetric );
-                            aVMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                   USHORT nPos = aVMetric.InsertEntry( sMetric );
+                   aVMetric.SetEntryData( nPos, (void*)(long)eFUnit );
                 }
             }
             default:;//prevent warning
@@ -571,17 +567,6 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
             aFaxList.Insert(rpString, 0);
         }
         SetFax( aFaxList );
-/*      SvStringsDtor aFaxList;
-        const List *pList = (pListItem)->GetList();
-        sal_uInt32 nCount = pList->Count();
-        for(sal_uInt32 i = 0; i < nCount ; i++)
-        {
-            String* pString = (String*)(pList->GetObject(i));
-            String* &rpString = pString;
-            aFaxList.Insert(rpString, 0 );
-        }
-        SetFax(aFaxList);
-*/
     }
 }
 
@@ -792,7 +777,6 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& )
                 delete (SfxFont*) pFnt;
                 bDelete = FALSE;
             }
-//          lcl_SetColl(pWrtShell, RES_POOLCOLL_STANDARD, pPrinter, sStandard);
             bMod = TRUE;
         }
         if(bStandardHeightChanged)
@@ -1164,9 +1148,6 @@ void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet)
     if (pFlagItem)
         SetFontMode(sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue()));
 }
-/*-----------------18.01.97 12.14-------------------
-    Optionen Tabelle
---------------------------------------------------*/
 
 SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_OPTTABLE_PAGE), rSet),
@@ -1341,46 +1322,10 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
 
-    //bestimmte Controls fuer HTML verstecken
+    // hide certain controls for html
     if(bHTMLMode)
     {
-/*        Point aPos(aCaptionFL.GetPosPixel());
-        long nYDiff = aTableFL.GetPosPixel().Y() - aPos.Y();
-        aTableFL.SetPosPixel(aPos);
 
-        aPos = aHeaderCB.GetPosPixel();
-        aPos.Y() -= nYDiff;
-        aHeaderCB.SetPosPixel(aPos);
-
-        aPos = aRepeatHeaderCB.GetPosPixel();
-        aPos.Y() -= nYDiff;
-        aRepeatHeaderCB.SetPosPixel(aPos);
-
-        aPos = aDontSplitCB.GetPosPixel(); // hier muss eine Luecke geschlossen werden
-        aPos.Y() -= nYDiff;
-        aBorderCB.SetPosPixel(aPos);
-
-        aPos = aTableInsertFL.GetPosPixel();
-        aPos.Y() -= nYDiff;
-        aTableInsertFL.SetPosPixel(aPos);
-
-        aPos = aNumFormattingCB.GetPosPixel();
-        aPos.Y() -= nYDiff;
-        aNumFormattingCB.SetPosPixel(aPos);
-
-        aPos = aNumFmtFormattingCB.GetPosPixel();
-        aPos.Y() -= nYDiff;
-        aNumFmtFormattingCB.SetPosPixel(aPos);
-
-        aPos = aNumAlignmentCB.GetPosPixel();
-        aPos.Y() -= nYDiff;
-        aNumAlignmentCB.SetPosPixel(aPos);
-
-        aCaptionFL.Hide();
-        aCaptionCB.Hide();
-        aCaptionFT.Hide();
-        aCaptionPB.Hide();
-*/
         aDontSplitCB.Hide();
     }
 
@@ -1422,9 +1367,6 @@ void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
         SetWrtShell(pWrtSh->GetValue());
 }
 
-/*-----------------31.10.97 17:55-------------------
- TabPage fuer ShadowCrsr
---------------------------------------------------*/
 SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTSHDWCRSR), rSet),
@@ -1497,7 +1439,6 @@ SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
 {
 }
 
-
 SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwShdwCrsrOptionsTabPage( pParent, rSet );
@@ -1540,7 +1481,7 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     SwDocDisplayItem aDisp;
     if(pOldAttr)
         aDisp = *pOldAttr;
-    //
+
     aDisp.bParagraphEnd         = aParaCB       .IsChecked();
     aDisp.bTab                  = aTabCB        .IsChecked();
     aDisp.bSpace                = aSpacesCB     .IsChecked();
@@ -1648,7 +1589,7 @@ SwMarkPreview::SwMarkPreview( Window *pParent, const ResId& rResID ) :
 
     const Size aSz(GetOutputSizePixel());
 
-    // Seite
+    // Page
     aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
 
     ULONG nOutWPix = aPage.GetWidth();
@@ -1719,23 +1660,23 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 
     switch (nMarkPos)
     {
-        case 1:     // Links
+        case 1:     // left
             aRightMark.SetPos(Point(aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
             break;
 
-        case 2:     // Rechts
+        case 2:     // right
             aLeftMark.SetPos(Point(aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
             break;
 
-        case 3:     // Aussen
+        case 3:     // outside
             break;
 
-        case 4:     // Innen
+        case 4:     // inside
             aLeftMark.SetPos(Point(aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
             aRightMark.SetPos(Point(aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
             break;
 
-        case 0:     // Keine
+        case 0:     // none
         default:
             return;
     }
@@ -2018,12 +1959,12 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     const AuthorCharAttr &rDeletedAttr = pOpt->GetDeletedAuthorAttr();
     const AuthorCharAttr &rChangedAttr = pOpt->GetFormatAuthorAttr();
 
-    // Preview initialisieren
+    // initialise preview
     InitFontStyle(aInsertedPreviewWN);
     InitFontStyle(aDeletedPreviewWN);
     InitFontStyle(aChangedPreviewWN);
 
-    // Farblistboxen initialisieren
+    // initialisieren colour list box
     String sColor;
     aInsertColorLB.SetUpdateMode(FALSE);
     aDeletedColorLB.SetUpdateMode(FALSE);
@@ -2122,7 +2063,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     }
     aMarkPosLB.SelectEntryPos(nPos);
 
-    // Einstellungen in Preview anzeigen
+    // show settings in preview
     AttribHdl(&aInsertLB);
     ColorHdl(&aInsertColorLB);
     AttribHdl(&aDeletedLB);
@@ -2362,10 +2303,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
-#ifdef DBG_UTIL
-/*----------------- OS 11.01.95  -----------------------
- TabPage Testeinstellungen
--------------------------------------------------------*/
+#if OSL_DEBUG_LEVEL > 1
 
 void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
 {

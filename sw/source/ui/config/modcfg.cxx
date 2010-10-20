@@ -82,7 +82,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
 {
     if(bHTML)
     {
-        DBG_ERROR("no caption option in sw/web!");
+        OSL_ENSURE(false, "no caption option in sw/web!");
         return 0;
     }
     else
@@ -105,7 +105,7 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
 
     if(bHTML)
     {
-        DBG_ERROR("no caption option in sw/web!");
+        OSL_ENSURE(false, "no caption option in sw/web!");
     }
     else if (pOpt)
     {
@@ -188,7 +188,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
                                 nVal -= 'a' - 10;
                             else
                             {
-                                DBG_ERROR( "ungueltiger Hex-Wert" );
+                                OSL_ENSURE(false,  "wrong hex value" );
                                 bValidData = FALSE;
                                 break;
                             }
@@ -201,7 +201,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
                         break;
                     }
 
-                    default:    // Unbekannt, daher nur Backslash einfuegen
+                    default:    // Unknown, so insert backslash
                         sReturn += '\\';
                         i--;
                         break;
@@ -366,7 +366,7 @@ void SwRevisionConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -905,7 +905,7 @@ void SwInsertConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         InsCaptionOpt* pWriterTableOpt = 0;
@@ -1194,7 +1194,7 @@ void SwTableConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -1304,7 +1304,7 @@ void SwMiscConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         OUString sTmp;

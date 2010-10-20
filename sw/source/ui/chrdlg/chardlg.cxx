@@ -76,11 +76,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
- --------------------------------------------------------------------*/
-
-
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
                      const String* pStr, BOOL bIsDrwTxtDlg) :
     SfxTabDialog(pParent, SW_RES(DLG_CHAR), &rCoreSet, pStr != 0),
@@ -88,8 +83,6 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     bIsDrwTxtMode(bIsDrwTxtDlg)
 {
     FreeResource();
-
-    // bspFonr fuer beide Bsp-TabPages
 
     if(pStr)
     {
@@ -231,8 +224,6 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
         }
     }
     delete pList;
-
-
 }
 
 SwCharURLPage::~SwCharURLPage()

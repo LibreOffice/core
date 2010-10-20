@@ -46,7 +46,7 @@
 #include <docstdlg.hxx>
 #include <modcfg.hxx>
 
-// fuer Statistikfelder
+// for statistics fields
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
@@ -144,7 +144,7 @@ void SwDocStatPage::Update()
     else if ( pVSh->ISA(SwPagePreView) )
         pSh = ((SwPagePreView*)pVSh)->GetViewShell();
 
-    ASSERT( pSh, "Shell not found" );
+    OSL_ENSURE( pSh, "Shell not found" );
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), TRUE );
     pSh->StartAction();

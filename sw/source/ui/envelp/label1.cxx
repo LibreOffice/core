@@ -83,7 +83,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
 
 void SwLabDlg::_ReplaceGroup( const String &rMake )
 {
-    //Die alten Eintraege vernichten.
+    // Remove old entries
     pRecs->Remove( 1, pRecs->Count() - 1 );
     aLabelsCfg.FillLabels(rtl::OUString(rMake), *pRecs);
     aLstGroup = rMake;
@@ -146,7 +146,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     {
         SetText(sBusinessCardDlg);
     }
-    // Benutzer-Etikette aus writer.cfg lesen
+    // Read user label from writer.cfg
     SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
     SwLabRec* pRec = new SwLabRec;
     const String aTmp( SW_RES( STR_CUSTOM ) );
@@ -180,6 +180,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     if ( aMakes.Count() )
         _ReplaceGroup( *aMakes[nLstGroup] );
+
     if (pExampleSet)
         pExampleSet->Put(aItem);
 }
@@ -195,16 +196,16 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
     const SwLabItem& rOldItem = (const SwLabItem&)GetInputSetImpl()->Get(FN_LABEL);
 
     if (rActItem != rOldItem)
-    {   // Wurde schon mal mit (hoffentlich) korrektem Inhalt "geputtet"
+    {
+        // Wurde schon mal mit (hoffentlich) korrektem Inhalt "geputtet"
         rItem = rActItem;
     }
     else
     {
         rItem = rOldItem;
 
-        // Im rItem stehen (vom Namen mal abgesehen) immer nur die
-        // benutzerdefinierbaren Einstellungen. Daher richtige Werte
-        // direkt aus dem Record besorgen:
+        // In rItem there are only settings defined by users.
+        // Therefore get the real settings directly from Record
         SwLabRec* pRec = GetRecord(rItem.aType, rItem.bCont);
         pRec->FillItem( rItem );
     }
@@ -227,7 +228,7 @@ SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
             break;
         }
     }
-    if (!bFound)    // Benutzerdefiniert
+    if (!bFound)    // User defined
         pRec = Recs()[0];
 
     return(pRec);
@@ -273,7 +274,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     SetExchangeSupport();
 
 
-    // Handler installieren
+    // Install handlers
     aAddrBox       .SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
     aDatabaseLB    .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     aTableLB       .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
@@ -292,10 +293,11 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     {
         String &rStr = *GetParent()->Makes()[i];
         aMakeBox.InsertEntry( rStr );
+
         if ( rStr == String(aItem.aLstMake) )
             nLstGroup = i;
     }
-//  Reset(rSet);
+
     aMakeBox.SelectEntryPos( nLstGroup );
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
 }
@@ -335,7 +337,6 @@ void SwLabPage::SetToBusinessCard()
     Point aFLPos(aWritingFL.GetPosPixel());
     long nDiffPos = aFormatFL.GetPosPixel().Y() - aFLPos.Y();
     Size aFLSz(aFormatFL.GetSizePixel());
-//  aFLSz.Height() += nDiffPos;
     aFormatFL.SetPosSizePixel(aFLPos, aFLSz);
 
     // move all controls up
@@ -358,8 +359,10 @@ void SwLabPage::SetToBusinessCard()
 IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
 {
     String aWriting;
+
     if ( aAddrBox.IsChecked() )
         aWriting = MakeSender();
+
     aWritingEdit.SetText( aWriting.ConvertLineEnd() );
     aWritingEdit.GrabFocus();
     return 0;
@@ -373,6 +376,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 
     if (pListBox == &aDatabaseLB)
         GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
+
     GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, aTableLB.GetSelectEntry());
     return 0;
 }
@@ -690,7 +694,8 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 {
     String* pGroup = (String*)aAutoTextGroupLB.GetEntryData(
                                     aAutoTextGroupLB.GetSelectEntryPos());
-    DBG_ASSERT(pGroup, "no group selected?");
+    OSL_ENSURE(pGroup, "no group selected?");
+
     if(pGroup)
         aLabItem.sGlossaryGroup = *pGroup;
 

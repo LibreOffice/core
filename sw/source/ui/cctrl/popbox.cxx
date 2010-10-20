@@ -36,22 +36,15 @@
 #include <popbox.hxx>
 #include <navipi.hxx>
 
-
-// --- class SwHelpToolBox ---------------------------------------------
-
-
 SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
     : ToolBox( pParent, rResId ),
     DropTargetHelper( this )
 {
 }
 
-
 void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 {
-        // Zuerst DoubleClick-Link auswerten
-        // Dessen Returnwert entscheidet ueber andere Verarbeitung
-        // Doppelclickhandler nur, wenn nicht auf einen Button geclickt wurde
+    // If doubleclick is detected use doublelick handler
     if(rEvt.GetButtons() == MOUSE_RIGHT &&
         0 == GetItemId(rEvt.GetPosPixel()))
     {
@@ -61,19 +54,13 @@ void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
         ToolBox::MouseButtonDown(rEvt);
 }
 
-
 long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
 {
-        // kein Doppelklick auf einen Button
+    // No doubleclick on button
     if( 0 == pCaller->GetCurItemId() && aDoubleClickLink.Call(0) )
         return TRUE;
     return FALSE;
 }
-
-/*-----------------26.02.94 00:36-------------------
- dtor ueberladen
---------------------------------------------------*/
-
 
 SwHelpToolBox::~SwHelpToolBox() {}
 

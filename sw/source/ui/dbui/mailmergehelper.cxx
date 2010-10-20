@@ -59,8 +59,6 @@ using namespace ::com::sun::star::sdbcx;
 
 using rtl::OUString;
 
-//using ::rtl::OUString;
-
 namespace SwMailMergeHelper
 {
 
@@ -83,11 +81,11 @@ String  CallSaveAsDialog(String& rFilter)
     return sRet;
 }
 
-/*-- 20.08.2004 09:39:18---------------------------------------------------
+/*
     simple address check: check for '@'
                             for at least one '.' after the '@'
                             and for at least to characters before and after the dot
-  -----------------------------------------------------------------------*/
+*/
 bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
 {
     String sAddress(rMailAddress);
@@ -177,7 +175,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         }
         catch(uno::Exception& )
         {
-            DBG_ERROR("exception caught");
+            OSL_ENSURE(false, "exception caught");
         }
     return xSmtpServer;
 }
@@ -255,13 +253,13 @@ void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
 
 sal_uInt16   SwAddressPreview::GetSelectedAddress()const
 {
-    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
     return pImpl->nSelectedAddress;
 }
 
 void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
-    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
     // now make it visible..
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
@@ -543,7 +541,7 @@ String SwAddressPreview::FillData(
                     }
                     catch( sdbc::SQLException& )
                     {
-                        DBG_ERROR("SQLException caught");
+                        OSL_ENSURE(false, "SQLException caught");
                     }
                 }
             }
@@ -569,7 +567,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
         {
             aRet.bIsColumn = true;
             xub_StrLen nClose = sAddress.Search('>');
-            DBG_ASSERT(nClose != STRING_NOTFOUND, "closing '>' not found");
+            OSL_ENSURE(nClose != STRING_NOTFOUND, "closing '>' not found");
             if( nClose != STRING_NOTFOUND )
             {
                 aRet.sText = sAddress.Copy(1, nClose - 1);

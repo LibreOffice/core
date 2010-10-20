@@ -396,9 +396,7 @@ void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< ::rtl::OU
     m_aPreview.SelectAddress(nSelectedAddress);
 }
 
-/*-- 25.06.2004 10:51:36---------------------------------------------------
-    return the address blocks and put the selected one to the first position
-  -----------------------------------------------------------------------*/
+// return the address blocks and put the selected one to the first position
 const uno::Sequence< ::rtl::OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks()
 {
     //put the selected block to the first position
@@ -888,7 +886,7 @@ void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
     }
     if( aMemberIter == aControls.end() )
     {
-        DBG_ERROR( "Window not found?" );
+        OSL_ENSURE(false, "Window not found?" );
         return;
     }
 
@@ -1460,9 +1458,8 @@ void AddressMultiLineEdit::SetText( const String& rStr )
     }
 }
 
-/*-- 25.06.2004 12:32:41---------------------------------------------------
-    Insert the new entry in front of the entry at the beginning of the selection
-  -----------------------------------------------------------------------*/
+
+// Insert the new entry in front of the entry at the beginning of the selection
 void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
 {
     // insert new entry after current selected one.
@@ -1660,11 +1657,7 @@ void AddressMultiLineEdit::SelectCurrentItem()
         Invalidate();
     }
 }
-/*-- 25.06.2004 09:10:43---------------------------------------------------
-    returns the address
-    remove trailing spaces
-    and trailing empty paragraphs
-  -----------------------------------------------------------------------*/
+
 String AddressMultiLineEdit::GetAddress()
 {
     String sRet;

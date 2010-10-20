@@ -320,7 +320,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
 
     rShell.NewFlyFrm(aSet, sal_True );
     SwFrmFmt* pRet = rShell.GetFlyFrmFmt();
-    ASSERT( pRet, "Fly not inserted" );
+    OSL_ENSURE( pRet, "Fly not inserted" );
 
     rShell.UnSelectFrm();
     const Sequence< ::rtl::OUString> aBlocks = rConfigItem.GetAddressBlocks();
@@ -563,7 +563,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
 //          Neutral: [database.sNameColumn]
-            DBG_ASSERT(sGenderColumn.Len() && rFemaleGenderValue.getLength(),
+            OSL_ENSURE(sGenderColumn.Len() && rFemaleGenderValue.getLength(),
                     "gender settings not available - how to form the condition?");
             //column used as lastname
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
@@ -672,7 +672,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     //put the cursor to the start of the paragraph
     rShell.SttPara();
 
-    DBG_ASSERT(0 == rShell.GetTableFmt(), "What to do with a table here?");
+    OSL_ENSURE(0 == rShell.GetTableFmt(), "What to do with a table here?");
 }
 
 IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
@@ -688,7 +688,7 @@ IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
     SwXTextDocument* pXDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
     SwDocShell* pDocShell = pXDoc->GetDocShell();
     m_pExampleWrtShell = pDocShell->GetWrtShell();
-    DBG_ASSERT(m_pExampleWrtShell, "No SwWrtShell found!");
+    OSL_ENSURE(m_pExampleWrtShell, "No SwWrtShell found!");
     if(!m_pExampleWrtShell)
         return 0;
 

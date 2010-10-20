@@ -234,14 +234,14 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
     {
         m_bNoDataSet = false;
         m_nCurrentDataSet = nSet;
-        DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
+        OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
         if(m_pData->aDBData.size() > m_nCurrentDataSet)
         {
             ::std::vector<Edit*>::iterator aEditIter;
             sal_uInt32 nIndex = 0;
             for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
             {
-                DBG_ASSERT(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
+                OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
                             "number of colums doesn't match number of Edits");
                 (*aEditIter)->SetText(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
             }
@@ -288,15 +288,13 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
     }
 }
 
-/*-- 19.04.2004 16:16:25---------------------------------------------------
-    copy data changes into database
-  -----------------------------------------------------------------------*/
+// copy data changes into database
 IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit*, pEdit)
 {
     //get the data element number of the current set
     sal_Int32 nIndex = (sal_Int32)(sal_IntPtr)pEdit->GetData();
     //get the index of the set
-    DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
+    OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
     if(m_pData->aDBData.size() > m_nCurrentDataSet)
     {
         m_pData->aDBData[m_nCurrentDataSet][nIndex] = pEdit->GetText();
@@ -425,7 +423,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 for( xub_StrLen nToken = 0; nToken < nHeaders; ++nToken)
                 {
                     String sHeader = sLine.GetToken( 0, '\t', nIndex );
-                    DBG_ASSERT(sHeader.Len() > 2 &&
+                    OSL_ENSURE(sHeader.Len() > 2 &&
                             sHeader.GetChar(0) == '\"' && sHeader.GetChar(sHeader.Len() - 1) == '\"',
                             "Wrong format of header");
                     if(sHeader.Len() > 2)
@@ -443,7 +441,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 for( xub_StrLen nToken = 0; nToken < nDataCount; ++nToken)
                 {
                     String sData = sLine.GetToken( 0, '\t', nIndex );
-                    DBG_ASSERT(sData.Len() >= 2 &&
+                    OSL_ENSURE(sData.Len() >= 2 &&
                                 sData.GetChar(0) == '\"' && sData.GetChar(sData.Len() - 1) == '\"',
                             "Wrong format of line");
                     if(sData.Len() >= 2)
@@ -481,10 +479,6 @@ SwCreateAddressListDialog::~SwCreateAddressListDialog()
     delete m_pFindDlg;
 }
 
-/*-- 13.04.2004 10:08:59---------------------------------------------------
-    add a new data set of empty strings and set the address input control
-    to that new set
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, NewHdl_Impl, PushButton*, EMPTYARG)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
@@ -567,10 +561,6 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-/*-- 23.04.2004 09:02:51---------------------------------------------------
-    writes the data into a .csv file
-    encoding is UTF8, separator is tab, strings are enclosed into "
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
 {
     if(!m_sURL.Len())

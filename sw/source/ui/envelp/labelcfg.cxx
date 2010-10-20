@@ -86,8 +86,8 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                 case 0: pValues[nProp] >>= sTmp; pNewRec->aType = sTmp; break;
                 case 1:
                 {
-//all values are contained as colon-separated 1/100 mm values except for the
-//continuous flag ('C'/'S')
+                    //all values are contained as colon-separated 1/100 mm values
+                    //except for the continuous flag ('C'/'S')
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
                     USHORT nTokenCount = sMeasure.GetTokenCount(';');
@@ -228,7 +228,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     {
         if(!AddNode(OUString(), rManufacturer))
         {
-            DBG_ERROR("New configuration node could not be created");
+            OSL_ENSURE(false, "New configuration node could not be created");
             return ;
         }
         else

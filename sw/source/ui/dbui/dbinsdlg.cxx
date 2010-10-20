@@ -354,7 +354,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                             }
                             catch(const Exception& )
                             {
-                                DBG_ERROR("illegal number format key");
+                                OSL_ENSURE(false, "illegal number format key");
                             }
                         }
                     }
@@ -369,7 +369,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
             if( !aDBColumns.Insert( pNew ))
             {
-                ASSERT( !this, "Spaltenname mehrfach vergeben?" );
+                OSL_ENSURE( !this, "Spaltenname mehrfach vergeben?" );
                 delete pNew;
             }
         }
@@ -778,10 +778,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
     }
 
     SwAbstractDialogFactory* pFact = swui::GetFactory();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateSwTableTabDlg(  pButton, rSh.GetAttrPool(),pTblSet, &rSh, DLG_FORMAT_TABLE );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute() )
         pTblSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
@@ -797,10 +797,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(),DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
     delete pDlg;
@@ -1039,19 +1039,19 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
                 aColFlds.Insert( aDBColumns[ nFndPos ], n );
             else {
-                ASSERT( !this, "Datenbankspalte nicht mehr gefunden" );
+                OSL_ENSURE( !this, "database column not found" );
             }
         }
 
         if( nCols != aColFlds.Count() )
         {
-            ASSERT( !this, "nicht alle Datenbankspalten gefunden" );
+            OSL_ENSURE( !this, "not all database columns found" );
             nCols = aColFlds.Count();
         }
 
         if(!nRows || !nCols)
         {
-            ASSERT( !this, "wrong parameters" );
+            OSL_ENSURE( !this, "wrong parameters" );
             break;
         }
 
@@ -1181,12 +1181,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                 }
                 catch(Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                             aExcept
 #endif
                 )
                 {
-                    DBG_ERROR(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+                    OSL_ENSURE(false, ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
                 }
             }
 

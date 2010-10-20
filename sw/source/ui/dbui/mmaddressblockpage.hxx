@@ -42,9 +42,7 @@
 #include <svl/lstner.hxx>
 class SwMailMergeWizard;
 class SwMailMergeConfigItem;
-/*-- 13.04.2004 15:50:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeAddressBlockPage : public svt::OWizardPage
 {
     SwBoldFixedInfo     m_aHeaderFI;
@@ -106,9 +104,7 @@ public:
 
     SwMailMergeWizard*  GetWizard() { return m_pWizard;}
 };
-/*-- 13.04.2004 15:45:31---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwSelectAddressBlockDialog : public SfxModalDialog
 {
     FixedText           m_aSelectFT;
@@ -151,10 +147,6 @@ public:
     ::rtl::OUString     GetCountry() const;
 };
 
-
-/*-- 26.05.2004 11:16:25---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwCustomizeAddressBlockDialog;
 class DDListBox : public SvTreeListBox
 {
@@ -165,9 +157,7 @@ public:
 
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 };
-/*-- 26.05.2004 11:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 #define MOVE_ITEM_LEFT           1
 #define MOVE_ITEM_RIGHT          2
 #define MOVE_ITEM_UP             4
@@ -205,10 +195,8 @@ public:
     String          GetCurrentItem();
     void            SelectCurrentItem();
 };
-/*-- 13.04.2004 15:45:31---------------------------------------------------
-    Dialog is used to create custom address blocks as well as
-    custom greeting lines
-  -----------------------------------------------------------------------*/
+
+// Dialog is used to create custom address blocks as well as custom greeting lines
 class SwRestrictedComboBox : public ComboBox
 {
     String sForbiddenChars;
@@ -222,7 +210,7 @@ public:
 
     ~SwRestrictedComboBox();
 
-    void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
+    void SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
 
 };
 class SwCustomizeAddressBlockDialog : public SfxModalDialog
@@ -292,9 +280,7 @@ public:
     void            SetAddress(const ::rtl::OUString& rAddress);
     ::rtl::OUString GetAddress();
 };
-/*-- 13.04.2004 17:41:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwAssignFieldsControl;
 class SwAssignFieldsDialog : public SfxModalDialog
 {

@@ -109,21 +109,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
             xD->dispatch(aURL, rValues);
             m_pBeamerWIN->Show();
         }
-/*        uno::Reference<???::XController> xController = m_xFrame->getController();
-        pImpl->xFController = uno::Reference<???::XFormController>(xController, uno::UNO_QUERY);
-        if(pImpl->xFController.is())
-        {
-            uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
-            pImpl->xSelSupp = uno::Reference<???::XSelectionSupplier>(xCtrl, uno::UNO_QUERY);
-            if(pImpl->xSelSupp.is())
-            {
-                pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
-                pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );
-            }
-        }
-*/    }
-
-
+    }
 }
 
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()

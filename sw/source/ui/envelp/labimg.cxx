@@ -155,7 +155,7 @@ int SwLabItem::operator ==(const SfxPoolItem& rItem) const
            aLstMake == rLab.aLstMake&&
            aLstType == rLab.aLstType&&
            sDBName  == rLab.sDBName &&
-               aPrivFirstName ==        rLab.aPrivFirstName&&
+            aPrivFirstName ==       rLab.aPrivFirstName&&
             aPrivName ==             rLab.aPrivName&&
             aPrivShortCut ==         rLab.aPrivShortCut&&
                aPrivFirstName2 ==        rLab.aPrivFirstName2&&
@@ -276,7 +276,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     sal_Bool bNoConfigValues = sal_True;
     if(aValues.getLength() == aNames.getLength())
     {

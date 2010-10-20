@@ -67,7 +67,7 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwLabPrtPage, CountHdl);
     aPageButton  .SetClickHdl( aLk );
     aSingleButton.SetClickHdl( aLk );
@@ -95,7 +95,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 {
     if (pButton == &aPrtSetup)
     {
-        // Druck-Setup aufrufen
+        // Call printer setup
         if (!pPrinter)
             pPrinter = new Printer;
 
@@ -116,9 +116,9 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 
     if ( bEnable )
         aColField.GrabFocus();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
-        ASSERT( pButton == &aPageButton, "NewButton?" );
+        OSL_ENSURE( pButton == &aPageButton, "NewButton?" );
 #endif
     return 0;
 }

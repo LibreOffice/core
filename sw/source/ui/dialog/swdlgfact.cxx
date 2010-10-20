@@ -583,13 +583,13 @@ long AbstractMailMergeWizard_Impl::GetResult()
     return pDlg->GetResult();
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDialog )
 #else
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, EMPTYARG )
 #endif
 {
-    DBG_ASSERT( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
+    OSL_ENSURE( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
 
     aEndDlgHdl.Call( this );
     aEndDlgHdl = Link();
@@ -1624,7 +1624,7 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
             break;
         case RID_SW_TP_OPTTEST_PAGE :
         case TP_OPTTEST_PAGE :
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             pRet = SwTestTabPage::Create;
 #endif
             break;

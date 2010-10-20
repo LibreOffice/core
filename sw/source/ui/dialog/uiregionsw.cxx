@@ -376,10 +376,9 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aConditionFT        ( this, SW_RES( FT_CONDITION ) ),
     aConditionED        ( this, SW_RES( ED_CONDITION ) ),
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
-    // <--
 
     aOK                 ( this, SW_RES( PB_OK ) ),
     aCancel             ( this, SW_RES( PB_CANCEL ) ),
@@ -408,9 +407,8 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aPasswdCB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
     aPasswdPB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
     aHideCB.SetClickHdl     ( LINK( this, SwEditRegionDlg, ChangeHideHdl));
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    //  #114856# edit in readonly sections
     aEditInReadonlyCB.SetClickHdl ( LINK( this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
-    // <--
 
     aOptionsPB.Show();
     aOptionsPB.SetClickHdl  ( LINK( this, SwEditRegionDlg, OptionsHdl));
@@ -441,11 +439,10 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
 
     aDDECB.SetClickHdl      ( LINK( this, SwEditRegionDlg, DDEHdl ));
 
-    //Ermitteln der vorhandenen Bereiche
     pCurrSect = rSh.GetCurrSection();
     RecurseList( 0, 0 );
-    //falls der Cursor nicht in einem Bereich steht,
-    //wird immer der erste selektiert
+    // if the cursor is not in a region
+    //the first one will always be selected
     if( !aTree.FirstSelected() && aTree.First() )
         aTree.Select( aTree.First() );
     aTree.Show();
@@ -581,13 +578,10 @@ USHORT SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
         if (pFmt==&rSh.GetSectionFmt(i))
             return i;
 
-    DBG_ERROR(  "SectionFormat nicht in der Liste" );
+    OSL_ENSURE(false,  "SectionFormat not on the list" );
     return USHRT_MAX;
 }
 
-/*---------------------------------------------------------------------
- Beschreibung:
----------------------------------------------------------------------*/
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
     SvLBoxEntry* pEntry = aTree.First();
@@ -629,9 +623,9 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     bDontCheckPasswd = sal_True;
     SvLBoxEntry* pEntry=pBox->FirstSelected();
     aHideCB     .Enable(TRUE);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     aEditInReadonlyCB.Enable(TRUE);
-    // <--
+
     aProtectCB  .Enable(TRUE);
     aFileCB     .Enable(TRUE);
     UNO_NMSPC::Sequence <sal_Int8> aCurPasswd;
@@ -639,18 +633,18 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     {
         aHideCB.EnableTriState( TRUE );
         aProtectCB.EnableTriState( TRUE );
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aEditInReadonlyCB.EnableTriState ( TRUE );
-        // <--
+
         aFileCB.EnableTriState( TRUE );
 
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
         bool bConditionValid    = true;
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         bool bEditInReadonlyValid = true;
         bool bEditInReadonly    = true;
-        // <--
+
         bool bHidden            = true;
         bool bProtect           = true;
         String sCondition;
@@ -668,9 +662,9 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 sCondition      = rData.GetCondition();
                 bHidden         = rData.IsHidden();
                 bProtect        = rData.IsProtectFlag();
-                // --> FME 2004-06-22 #114856# edit in readonly sections
+                // #114856# edit in readonly sections
                 bEditInReadonly = rData.IsEditInReadonlyFlag();
-                // <--
+
                 bFile           = (rData.GetType() != CONTENT_SECTION);
                 aCurPasswd      = rData.GetPassword();
             }
@@ -681,10 +675,10 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bConditionValid = FALSE;
                 bHiddenValid      = (bHidden == rData.IsHidden());
                 bProtectValid     = (bProtect == rData.IsProtectFlag());
-                // --> FME 2004-06-22 #114856# edit in readonly sections
+                // #114856# edit in readonly sections
                 bEditInReadonlyValid =
                     (bEditInReadonly == rData.IsEditInReadonlyFlag());
-                // <--
+
                 bFileValid        = (bFile ==
                     (rData.GetType() != CONTENT_SECTION));
                 bPasswdValid      = (aCurPasswd == rData.GetPassword());
@@ -697,10 +691,10 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bHidden ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.SetState( !bProtectValid ? STATE_DONTKNOW :
                     bProtect ? STATE_CHECK : STATE_NOCHECK);
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aEditInReadonlyCB.SetState( !bEditInReadonlyValid ? STATE_DONTKNOW :
                     bEditInReadonly ? STATE_CHECK : STATE_NOCHECK);
-        // <--
+
         aFileCB.SetState(!bFileValid ? STATE_DONTKNOW :
                     bFile ? STATE_CHECK : STATE_NOCHECK);
 
@@ -781,11 +775,10 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.Enable();
 
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aEditInReadonlyCB.SetState((rData.IsEditInReadonlyFlag())
                 ? STATE_CHECK : STATE_NOCHECK);
         aEditInReadonlyCB.Enable();
-        // <--
 
         BOOL bPasswdEnabled = aProtectCB.IsChecked();
         aPasswdCB.Enable(bPasswdEnabled);
@@ -801,9 +794,9 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     {
         aHideCB     .Enable(FALSE);
         aProtectCB  .Enable(FALSE);
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aEditInReadonlyCB.Enable(FALSE);
-        // <--
+
         aPasswdCB   .Enable(FALSE);
         aPasswdCB   .Enable(FALSE);
         aConditionFT     .Enable(FALSE);
@@ -1044,15 +1037,14 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
         aProtectCB.     Enable(FALSE);
         aPasswdCB.      Enable(FALSE);
         aHideCB.        Enable(FALSE);
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aEditInReadonlyCB.Enable(FALSE);
         aEditInReadonlyCB.SetState(STATE_NOCHECK);
-        // <--
         aProtectCB.     SetState(STATE_NOCHECK);
         aPasswdCB.      Check(FALSE);
         aHideCB.        SetState(STATE_NOCHECK);
         aFileCB.        Check(FALSE);
-        //sonst liegt der Focus auf dem HelpButton
+        // otherwise the focus would be on HelpButton
         aOK.GrabFocus();
         UseFileHdl(&aFileCB);
     }
@@ -1109,7 +1101,6 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
         {
             aDDECB.Check(FALSE);
             DDEHdl(&aDDECB);
-//          aFileNameED.SetText(aEmptyStr);
             aSubRegionED.SetText(aEmptyStr);
         }
     }
@@ -1146,9 +1137,6 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
 {
     if(!CheckPasswd())
@@ -1303,9 +1291,6 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     return 0;
 }
 
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -1625,10 +1610,9 @@ short   SwInsertSectionTabDialog::Ok()
                     m_pSectionData->IsHidden()));
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_PROTECT,
                     m_pSectionData->IsProtectFlag()));
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
                     m_pSectionData->IsEditInReadonlyFlag()));
-        // <--
 
         String sLinkFileName( m_pSectionData->GetLinkFileName() );
         aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.GetToken( 0, sfx2::cTokenSeperator )));
@@ -1663,10 +1647,9 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aHideCB             ( this, SW_RES( CB_HIDE ) ),
     aConditionFT             ( this, SW_RES( FT_CONDITION ) ),
     aConditionED        ( this, SW_RES( ED_CONDITION ) ),
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
-    // <--
 
     m_pWrtSh(0),
     m_pDocInserter(NULL),
@@ -1678,9 +1661,8 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aPasswdCB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     aPasswdPB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     aHideCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     aEditInReadonlyCB.SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
-    // <--
     aFileCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
     aFilePB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
     aCurName.SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
@@ -1729,9 +1711,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
         aCurName.SetText( rSh.GetUniqueSectionName() );
     }
 }
-/* -----------------21.05.99 10:32-------------------
- *
- * --------------------------------------------------*/
+
 BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
 {
     SwSectionData aSection(CONTENT_SECTION, aCurName.GetText());
@@ -1739,9 +1719,9 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     BOOL bProtected = aProtectCB.IsChecked();
     aSection.SetProtectFlag(bProtected);
     aSection.SetHidden(aHideCB.IsChecked());
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     aSection.SetEditInReadonlyFlag(aEditInReadonlyCB.IsChecked());
-    // <--
+
     if(bProtected)
     {
         aSection.SetPassword(m_aNewPasswd);
@@ -2172,7 +2152,6 @@ SfxTabPage* SwSectionFtnEndTabPage::Create( Window* pParent,
 
 IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
 {
-//  pBox->EnableTriState( FALSE );
     BOOL bFoot = &aFtnNtAtTextEndCB == pBox || &aFtnNtNumCB == pBox ||
                     &aFtnNtNumFmtCB == pBox ;
 
