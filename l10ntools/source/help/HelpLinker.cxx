@@ -46,17 +46,16 @@
 
 #define DBHELP_ONLY
 
-
 class IndexerPreProcessor
 {
 private:
-    std::string             m_aModuleName;
-    fs::path                m_fsIndexBaseDir;
-    fs::path                m_fsCaptionFilesDirName;
-    fs::path                m_fsContentFilesDirName;
+    std::string       m_aModuleName;
+    fs::path          m_fsIndexBaseDir;
+    fs::path          m_fsCaptionFilesDirName;
+    fs::path          m_fsContentFilesDirName;
 
-    xsltStylesheetPtr       m_xsltStylesheetPtrCaption;
-    xsltStylesheetPtr       m_xsltStylesheetPtrContent;
+    xsltStylesheetPtr m_xsltStylesheetPtrCaption;
+    xsltStylesheetPtr m_xsltStylesheetPtrContent;
 
 public:
     IndexerPreProcessor( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
@@ -245,7 +244,6 @@ class HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-//      std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
               std::string* pExtensionPath = NULL,
               std::string* pDestination = NULL,
               const rtl::OUString* pOfficeHelpPath = NULL )
@@ -697,7 +695,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( !bExtensionMode )
         std::cout << std::endl;
 
-    }   // try
+    } // try
     catch( HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
@@ -1145,7 +1143,7 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
-     const rtl::OUString& aOfficeHelpPath,
+    const rtl::OUString& aOfficeHelpPath,
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
@@ -1248,7 +1246,4 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 
     return bSuccess;
 }
-
-// vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
