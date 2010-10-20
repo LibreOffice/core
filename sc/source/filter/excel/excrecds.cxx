@@ -155,7 +155,7 @@ void ExcRecord::WriteBody( XclExpStream& rStrm )
     SaveCont( rStrm );
 }
 
-void ExcRecord::SaveXml( XclExpXmlStream& rStrm )
+void ExcRecord::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
