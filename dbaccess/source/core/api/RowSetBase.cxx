@@ -274,7 +274,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         ORowSetMatrix::iterator k = aHelper.aIterator;
         for (; k != m_pCache->getEnd(); ++k)
         {
-            ORowSetValueVector* pTemp = k->get;
+            ORowSetValueVector* pTemp = k->get();
             OSL_ENSURE( pTemp != (void*)0xfeeefeee,"HALT!" );
         }
 #endif
