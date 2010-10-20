@@ -157,6 +157,7 @@ public:
     ~TestDocumentHandler(  )
     {
         of.closeOutput();
+        delete rootNode;
     }
 
 
@@ -227,24 +228,24 @@ public: // ExtendedDocumentHandler
 
         LocaleNode * l =  LocaleNode::createNode (aName, xAttribs);
         if (!currentNode.empty() ) {
-            LocaleNode * ln = (LocaleNode *) currentNode . top();
+            LocaleNode * ln = (LocaleNode *) currentNode.top();
             ln->addChild(l);
         } else {
             rootNode = l;
         }
-        currentNode . push (l);
+        currentNode.push (l);
     }
 
 
     virtual void SAL_CALL endElement(const OUString& /*aName*/) throw (SAXException,RuntimeException)
     {
-        currentNode . pop();
+        currentNode.pop();
     }
 
     virtual void SAL_CALL characters(const OUString& aChars) throw (SAXException,RuntimeException)
     {
 
-        LocaleNode * l = currentNode . top();
+        LocaleNode * l = currentNode.top();
         l->setValue (aChars);
         ::rtl::OUString str(aChars);
         sal_Unicode nonBreakSPace[2]= {0xa, 0x0};
