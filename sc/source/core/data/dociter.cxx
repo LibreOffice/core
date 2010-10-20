@@ -543,6 +543,10 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         }
 
         SCSIZE nCellCount = mpDoc->GetCellCount(nTab, nCol);
+        if (!nCellCount)
+            // No cells found in this column.  Bail out.
+            return false;
+
         SCROW nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
         while ( (nColRow < nCellCount) && (nThisRow < nRow) )
             nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, ++nColRow);
