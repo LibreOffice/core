@@ -137,7 +137,6 @@ Module gid_Module_Root_Files_4
 	Files = (gid_File_Dat_Root4,
 	gid_File_Filter_Eme,
 	gid_File_Filter_Sdfilt,
-    gid_File_Filter_Pptx,
 	gid_File_Filter_Icg,
 	gid_File_Filter_Egi,
 	gid_File_Filter_Epb,
