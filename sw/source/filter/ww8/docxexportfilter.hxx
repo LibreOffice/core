@@ -47,7 +47,7 @@ public:
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const { return NULL; }
     virtual sal_Int32   getSchemeClr( sal_Int32 ) const { return 0; }
     virtual ::oox::vml::Drawing* getVmlDrawing() { return NULL; }
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() { static ::oox::drawingml::chart::ChartConverter aConverter; return &aConverter; }
+    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter() { static ::oox::drawingml::chart::ChartConverter aConverter; return aConverter; }
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() { return ::oox::drawingml::table::TableStyleListPtr(); }
 
     // Actual export of the DOCX document
