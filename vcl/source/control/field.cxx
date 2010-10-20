@@ -667,9 +667,15 @@ sal_Int64 NumericFormatter::Denormalize( sal_Int64 nValue ) const
 {
     sal_Int64 nFactor = ImplPower10( GetDecimalDigits() );
     if( nValue < 0 )
-        return ((nValue-(nFactor/2)) / nFactor );
+    {
+        sal_Int64 nHalf = nValue < ( SAL_MIN_INT64 + nFactor )? 0 : nFactor/2;
+        return ((nValue-nHalf) / nFactor );
+    }
     else
-        return ((nValue+(nFactor/2)) / nFactor );
+    {
+        sal_Int64 nHalf = nValue > ( SAL_MAX_INT64 - nFactor )? 0 : nFactor/2;
+        return ((nValue+nHalf) / nFactor );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1224,13 +1230,18 @@ static double nonValueDoubleToValueDouble( double nValue )
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, USHORT nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit )
 {
+    double nDouble = nonValueDoubleToValueDouble( ConvertDoubleValue(
+                (double)nValue, mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
+
     // caution: precision loss in double cast
-    return static_cast<sal_Int64>(
-        // #150733# cast double to sal_Int64 can throw a
-        // EXCEPTION_FLT_INVALID_OPERATION on Windows
-        nonValueDoubleToValueDouble(
-            ConvertDoubleValue( (double)nValue, mnBaseValue, nDecDigits,
-                                eInUnit, eOutUnit ) ) );
+    sal_Int64 nLong = static_cast<sal_Int64>( nDouble );
+
+    if ( nDouble >= (double)SAL_MAX_INT64 )
+        nLong = SAL_MAX_INT64;
+    else if ( nDouble <= (double)SAL_MIN_INT64 )
+        nLong = SAL_MIN_INT64;
+
+    return nLong;
 }
 
 // -----------------------------------------------------------------------
@@ -1239,8 +1250,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
 {
     return static_cast<sal_Int64>(
-        // #150733# cast double to sal_Int64 can throw a
-        // EXCEPTION_FLT_INVALID_OPERATION on Windows
         nonValueDoubleToValueDouble(
             ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
 }
@@ -1251,8 +1260,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
                                      FieldUnit eInUnit, MapUnit eOutUnit )
 {
     return static_cast<sal_Int64>(
-        // #150733# cast double to sal_Int64 can throw a
-        // EXCEPTION_FLT_INVALID_OPERATION on Windows
         nonValueDoubleToValueDouble(
             ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
 }
@@ -1750,7 +1757,8 @@ MetricField::~MetricField()
 
 void MetricField::SetUnit( FieldUnit nNewUnit )
 {
-    sal_Int64 nMax = Denormalize( GetMax( nNewUnit ) );
+    sal_Int64 nRawMax = GetMax( nNewUnit );
+    sal_Int64 nMax = Denormalize( nRawMax );
     sal_Int64 nMin = Denormalize( GetMin( nNewUnit ) );
     sal_Int64 nFirst = Denormalize( GetFirst( nNewUnit ) );
     sal_Int64 nLast = Denormalize( GetLast( nNewUnit ) );
