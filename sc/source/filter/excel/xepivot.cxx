@@ -737,7 +737,11 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
     WriteCacheStream();
 }
 
-void XclExpPivotCache::SaveXml( XclExpXmlStream& rStrm )
+void XclExpPivotCache::SaveXml( XclExpXmlStream&
+#ifdef XLSX_PIVOT_CACHE
+                                                 rStrm
+#endif
+)
 {
     DBG_ASSERT( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
 #ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
@@ -1869,7 +1873,11 @@ void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
     maPCacheList.Save( rStrm );
 }
 
-void XclExpPivotTableManager::WritePivotCachesXml( XclExpXmlStream& rStrm )
+void XclExpPivotTableManager::WritePivotCachesXml( XclExpXmlStream&
+#ifdef XLSX_PIVOT_CACHE
+                                                                    rStrm
+#endif
+)
 {
 #ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
                            results in a broken .xlsx */
