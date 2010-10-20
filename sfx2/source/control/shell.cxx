@@ -483,7 +483,7 @@ SfxBroadcaster* SfxShell::GetBroadcaster()
 
 //--------------------------------------------------------------------
 
-SfxUndoManager* SfxShell::GetUndoManager()
+::svl::IUndoManager* SfxShell::GetUndoManager()
 
 /*  [Beschreibung]
 
@@ -501,7 +501,7 @@ SfxUndoManager* SfxShell::GetUndoManager()
 
 //--------------------------------------------------------------------
 
-void SfxShell::SetUndoManager( SfxUndoManager *pNewUndoMgr )
+void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 
 /*  [Beschreibung]
 

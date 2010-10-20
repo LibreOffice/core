@@ -33,7 +33,7 @@
 
 class ImpEditEngine;
 
-class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
+class EDITENG_DLLPRIVATE EditUndoManager : public SfxUndoManager
 {
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;

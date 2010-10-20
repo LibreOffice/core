@@ -153,7 +153,7 @@ namespace sfx2
     struct DocumentUndoManager_Impl : public SfxUndoListener
     {
         ::cppu::OInterfaceContainerHelper   aUndoListeners;
-        SfxUndoManager*                     pUndoManager;
+        ::svl::IUndoManager*                pUndoManager;
         DocumentUndoManager&                rAntiImpl;
         bool                                bAPIActionRunning;
 
@@ -199,8 +199,16 @@ namespace sfx2
     namespace
     {
         //..............................................................................................................
-        SfxUndoManager& lcl_getUndoManager_throw( DocumentUndoManager_Impl& i_impl )
+        ::svl::IUndoManager& lcl_getUndoManager_throw( DocumentUndoManager_Impl& i_impl )
         {
+#if OSL_DEBUG_LEVEL > 0
+            SfxObjectShell* pObjectShell = i_antiImpl.getBaseModel().GetObjectShell();
+            if ( pObjectShell != NULL )
+                pUndoManager = pObjectShell->GetUndoManager();
+            if ( !pUndoManager )
+                throw NotInitializedException( ::rtl::OUString(), *&i_antiImpl.getBaseModel() );
+#endif
+
             ENSURE_OR_THROW( i_impl.pUndoManager != NULL, "internal error: no access to the doc's UndoManager implementation!" );
             return *i_impl.pUndoManager;
         }
@@ -358,7 +366,7 @@ namespace sfx2
         aEvent.UndoContextDepth = lcl_getUndoManager_throw( *m_pImpl ).GetListActionDepth();
 
         // TODO: this notification method here is used by DocumentUndoManager_Impl, to multiplex the notifications we
-        // receive from the SfxUndoManager. Those notitications are sent with a locked SolarMutex, which means
+        // receive from the ::svl::IUndoManager. Those notitications are sent with a locked SolarMutex, which means
         // we're doing the multiplexing here with a locked SM, too. Which is Bad (TM).
         // Fixing this properly would require outsourcing all the notifications into an own thread - which might lead
         // to problems of its own, since clients might expect synchronous notifications.
@@ -382,7 +390,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
@@ -404,7 +412,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         if ( !rUndoManager.IsInListAction() )
             throw InvalidStateException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no active undo context" ) ),
@@ -433,7 +441,7 @@ namespace sfx2
                 1
             );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
             rUndoManager.AddUndoAction( new UndoActionWrapper( i_action ) );
@@ -444,13 +452,13 @@ namespace sfx2
 
     //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager::impl_do_nolck(
-        USHORT ( SfxUndoManager::*i_checkMethod )() const, BOOL ( SfxUndoManager::*i_doMethod )(),
-        String ( SfxUndoManager::*i_titleRetriever )( USHORT ) const,
+        USHORT ( ::svl::IUndoManager::*i_checkMethod )() const, BOOL ( ::svl::IUndoManager::*i_doMethod )(),
+        String ( ::svl::IUndoManager::*i_titleRetriever )( USHORT ) const,
         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         if ( (rUndoManager.*i_checkMethod)() == 0 )
             throw InvalidStateException( ::rtl::OUString::createFromAscii( "stack is empty" ), static_cast< XUndoManager* >( this ) );
 
@@ -474,13 +482,13 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::undo(  ) throw (RuntimeException, InvalidStateException, WrappedTargetException)
     {
-        impl_do_nolck( &SfxUndoManager::GetUndoActionCount, &SfxUndoManager::Undo, &SfxUndoManager::GetUndoActionComment, &XUndoManagerListener::actionUndone );
+        impl_do_nolck( &::svl::IUndoManager::GetUndoActionCount, &::svl::IUndoManager::Undo, &::svl::IUndoManager::GetUndoActionComment, &XUndoManagerListener::actionUndone );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::redo(  ) throw (RuntimeException, InvalidStateException, WrappedTargetException)
     {
-        impl_do_nolck( &SfxUndoManager::GetRedoActionCount, &SfxUndoManager::Redo, &SfxUndoManager::GetRedoActionComment, &XUndoManagerListener::actionRedone );
+        impl_do_nolck( &::svl::IUndoManager::GetRedoActionCount, &::svl::IUndoManager::Redo, &::svl::IUndoManager::GetRedoActionComment, &XUndoManagerListener::actionRedone );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -488,7 +496,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         return rUndoManager.GetUndoActionCount() > 0;
     }
 
@@ -497,7 +505,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         return rUndoManager.GetRedoActionCount() > 0;
     }
 
@@ -509,7 +517,7 @@ namespace sfx2
         {
             SfxModelGuard aGuard( i_impl.rAntiImpl );
 
-            const SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( i_impl );
+            const ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( i_impl );
             if ( ( i_undo ? rUndoManager.GetUndoActionCount() : rUndoManager.GetRedoActionCount() )== 0 )
                 throw InvalidStateException(
                     i_undo ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no action on the Undo stack" ) )
@@ -524,7 +532,7 @@ namespace sfx2
         {
             SfxModelGuard aGuard( i_impl.rAntiImpl );
 
-            const SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( i_impl );
+            const ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( i_impl );
             const sal_Int32 nCount = i_undo ? rUndoManager.GetUndoActionCount() : rUndoManager.GetRedoActionCount();
 
             Sequence< ::rtl::OUString > aTitles( nCount );
@@ -565,7 +573,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
             rUndoManager.Clear();
@@ -578,7 +586,7 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        ::svl::IUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
             rUndoManager.ClearRedo();

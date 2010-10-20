@@ -38,7 +38,10 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-class SfxUndoManager;
+namespace svl
+{
+    class IUndoManager;
+}
 
 //......................................................................................................................
 namespace sfx2
@@ -108,9 +111,9 @@ namespace sfx2
             );
 
         void impl_do_nolck(
-                USHORT ( SfxUndoManager::*i_checkMethod )() const,
-                BOOL ( SfxUndoManager::*i_doMethod )(),
-                UniString ( SfxUndoManager::*i_titleRetriever )( USHORT ) const,
+                USHORT ( ::svl::IUndoManager::*i_checkMethod )() const,
+                BOOL ( ::svl::IUndoManager::*i_doMethod )(),
+                UniString ( ::svl::IUndoManager::*i_titleRetriever )( USHORT ) const,
                 void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& )
             );
 

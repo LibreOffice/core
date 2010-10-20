@@ -960,7 +960,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 {
     // gibt es an der obersten Shell einen Undo-Manager?
     SfxShell *pSh = GetDispatcher()->GetShell(0);
-    SfxUndoManager* pShUndoMgr = pSh->GetUndoManager();
+    ::svl::IUndoManager* pShUndoMgr = pSh->GetUndoManager();
     sal_Bool bOK = sal_False;
     if ( pShUndoMgr )
     {
@@ -1011,7 +1011,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         // Ich bin gerade am Reloaden und Yielde so vor mich hin ...
         return;
 
-    SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
+    ::svl::IUndoManager *pShUndoMgr = pSh->GetUndoManager();
     if ( !pShUndoMgr )
     {
         // der SW hat eigenes Undo an der View

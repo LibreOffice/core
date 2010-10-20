@@ -1624,7 +1624,7 @@ void SfxDispatcher::EnterAction( const String& rName )
     DBG_ASSERT( pImp->aStack.Count() > 0, "EnterAction on empty dispatcher stack" );
     if ( ++pImp->nActionLevel == 1 )
     {
-        SfxUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
+        ::svl::IUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
         if ( pUndoMgr )
             pUndoMgr->EnterListAction( rName, rName HACK(RepeatComment), 0 HACK(ID) );
     }
@@ -1639,7 +1639,7 @@ void SfxDispatcher::LeaveAction()
     DBG_ASSERT( pImp->nActionLevel > 0, "EnterAction without LeaveAction" );
     if ( --pImp->nActionLevel == 0 )
     {
-        SfxUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
+        ::svl::IUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
         if ( pUndoMgr )
             pUndoMgr->LeaveListAction();
     }
