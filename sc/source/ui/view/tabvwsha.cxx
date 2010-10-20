@@ -741,7 +741,7 @@ void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -787,7 +787,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
     SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();

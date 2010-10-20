@@ -1132,7 +1132,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
     if (aTester.IsEditable())
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
+        ::svl::IUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
         ScNoteData aOldData;
         ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
@@ -1736,8 +1736,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
 
         rDocShell.GetUndoManager()->LeaveListAction();
-        SfxUndoManager* pMgr = rDocShell.GetUndoManager();
-        pMgr->RemoveLastUndoAction();
+        rDocShell.GetUndoManager()->RemoveLastUndoAction();
 
         delete pRefUndoDoc;
         delete pUndoData;

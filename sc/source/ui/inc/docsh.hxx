@@ -188,7 +188,8 @@ public:
     virtual void    Activate();
     virtual void    Deactivate();
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                    GetUndoManager();
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
