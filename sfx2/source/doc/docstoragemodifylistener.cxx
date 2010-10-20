@@ -71,14 +71,14 @@ namespace sfx2
     //--------------------------------------------------------------------
     void DocumentStorageModifyListener::dispose()
     {
-        ::osl::SolarMutexGuard aGuard( m_rMutex );
+        ::osl::SolarGuard aGuard( m_rMutex );
         m_pDocument = NULL;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
     {
-        ::osl::SolarMutexGuard aGuard( m_rMutex );
+        ::osl::SolarGuard aGuard( m_rMutex );
         // storageIsModified must not contain any locking!
         if ( m_pDocument )
             m_pDocument->storageIsModified();

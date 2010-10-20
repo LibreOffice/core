@@ -295,7 +295,7 @@ void ShutdownIcon::FileOpen()
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
-        SolarMutexGuard aGuard;
+        ::SolarMutexGuard aGuard;
         EnterModalMode();
         getInstance()->StartFileDialog();
     }
