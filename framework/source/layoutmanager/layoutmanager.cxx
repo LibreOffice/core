@@ -1836,7 +1836,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            xUIElement = pToolbarManager->getElement( aName );
+            xUIElement = pToolbarManager->getToolbar( aName );
     }
 
     return xUIElement;
@@ -1854,7 +1854,7 @@ throw (uno::RuntimeException)
 
     Sequence< Reference< ui::XUIElement > > aSeq;
     if ( pToolbarManager )
-        aSeq = pToolbarManager->getElements();
+        aSeq = pToolbarManager->getToolbars();
 
     sal_Int32 nSize = aSeq.getLength();
     sal_Int32 nMenuBarIndex(-1);
@@ -2058,9 +2058,8 @@ throw (RuntimeException)
 
 ::sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) throw (uno::RuntimeException)
 {
-    bool bResult( false );
-
     ReadGuard aReadLock( m_aLock );
+    bool bResult( false );
     uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
     ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
     aReadLock.unlock();
@@ -2073,145 +2072,66 @@ throw (RuntimeException)
 sal_Bool SAL_CALL LayoutManager::floatWindow( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    UIElement aUIElement = impl_findElement( aName );
-    aReadLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-    if ( aUIElement.m_xUIElement.is() )
+    bool bResult( false );
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
-        try
-        {
-            Reference< awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-            if ( xWindow.is() &&  xDockWindow.is() )
-            {
-                if ( !xDockWindow->isFloating() )
-                {
-                    xDockWindow->setFloatingMode( sal_True );
-                    return sal_True;
-                }
-            }
-        }
-        catch ( DisposedException& )
-        {
-        }
-    }
+        ReadGuard aReadLock( m_aLock );
+        uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
+        ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
+        aReadLock.unlock();
 
-    return sal_False;
+        if ( pToolbarManager )
+            bResult = pToolbarManager->floatToolbar( aName );
+    }
+    return bResult;
 }
 
-::sal_Bool SAL_CALL LayoutManager::lockWindow( const ::rtl::OUString& rResourceURL )
+::sal_Bool SAL_CALL LayoutManager::lockWindow( const ::rtl::OUString& aName )
 throw (uno::RuntimeException)
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    UIElement aUIElement = impl_findElement( rResourceURL );
-    aReadLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-    if ( aUIElement.m_xUIElement.is() )
+    bool bResult( false );
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
-        try
-        {
-            Reference< awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow && pWindow->IsVisible() && xDockWindow.is() && !xDockWindow->isFloating() )
-            {
-                aUIElement.m_aDockedData.m_bLocked = sal_True;
-                implts_writeWindowStateData( rResourceURL, aUIElement );
-                xDockWindow->lock();
+        ReadGuard aReadLock( m_aLock );
+        uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
+        ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
+        aReadLock.unlock();
 
-                // Write back lock state
-                /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-                WriteGuard aWriteLock( m_aLock );
-                UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
-                if ( rUIElement.m_aName == aUIElement.m_aName )
-                    rUIElement.m_aDockedData.m_bLocked = aUIElement.m_aDockedData.m_bLocked;
-                aWriteLock.unlock();
-                /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-                doLayout();
-                return sal_True;
-            }
-        }
-        catch ( DisposedException& )
-        {
-        }
+        if ( pToolbarManager )
+            bResult = pToolbarManager->lockToolbar( aName );
     }
-
-    return sal_False;
+    return bResult;
 }
 
-::sal_Bool SAL_CALL LayoutManager::unlockWindow( const ::rtl::OUString& rResourceURL )
+::sal_Bool SAL_CALL LayoutManager::unlockWindow( const ::rtl::OUString& aName )
 throw (uno::RuntimeException)
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    UIElement aUIElement = impl_findElement( rResourceURL );
-    aReadLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-    if ( aUIElement.m_xUIElement.is() )
+    bool bResult( false );
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
-        try
-        {
-            Reference< awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow && pWindow->IsVisible() && xDockWindow.is() && !xDockWindow->isFloating() )
-            {
-                aUIElement.m_aDockedData.m_bLocked = sal_False;
-                implts_writeWindowStateData( rResourceURL, aUIElement );
-                xDockWindow->unlock();
+        ReadGuard aReadLock( m_aLock );
+        uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
+        ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
+        aReadLock.unlock();
 
-                // Write back lock state
-                WriteGuard aWriteLock( m_aLock );
-                UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
-                if ( rUIElement.m_aName == aUIElement.m_aName )
-                    rUIElement.m_aDockedData.m_bLocked = aUIElement.m_aDockedData.m_bLocked;
-                aWriteLock.unlock();
-
-                doLayout();
-                return sal_True;
-            }
-        }
-        catch ( DisposedException& )
-        {
-        }
+        if ( pToolbarManager )
+            bResult = pToolbarManager->unlockToolbar( aName );
     }
-
-    return sal_False;
+    return bResult;
 }
 
 void SAL_CALL LayoutManager::setElementSize( const ::rtl::OUString& aName, const awt::Size& aSize )
 throw (RuntimeException)
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    UIElement aUIElement = impl_findElement( aName );
-    aReadLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-    if ( aUIElement.m_xUIElement.is() )
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
-        try
-        {
-            Reference< awt::XWindow >  xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< awt::XWindow2 > xWindow2( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+        ReadGuard aReadLock( m_aLock );
+        uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
+        ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
+        aReadLock.unlock();
 
-            if ( xWindow.is() && xWindow2.is() && xDockWindow.is() && aUIElement.m_bFloating )
-            {
-                xWindow2->setOutputSize( aSize );
-                implts_writeNewStateData( aName, xWindow );
-            }
-        }
-        catch ( DisposedException& )
-        {
-        }
+        if ( pToolbarManager )
+            pToolbarManager->setToolbarSize( aName, aSize );
     }
 }
 
@@ -2226,7 +2146,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            pToolbarManager->setElementPos( aName, aPos );
+            pToolbarManager->setToolbarPos( aName, aPos );
     }
 }
 
@@ -2241,7 +2161,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            pToolbarManager->setElementPosSize( aName, aPos, aSize );
+            pToolbarManager->setToolbarPosSize( aName, aPos, aSize );
     }
 }
 
@@ -2302,7 +2222,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            return pToolbarManager->isElementVisible( aName );
+            return pToolbarManager->isToolbarVisible( aName );
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
     {
@@ -2327,7 +2247,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            return pToolbarManager->isElementFloating( aName );
+            return pToolbarManager->isToolbarFloating( aName );
     }
 
     return sal_False;
@@ -2344,7 +2264,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            return pToolbarManager->isElementDocked( aName );
+            return pToolbarManager->isToolbarDocked( aName );
     }
 
     return sal_False;
@@ -2361,7 +2281,7 @@ throw (uno::RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            pToolbarManager->isElementLocked( aName );
+            pToolbarManager->isToolbarLocked( aName );
     }
 
     return sal_False;
@@ -2378,7 +2298,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            return pToolbarManager->getElementSize( aName );
+            return pToolbarManager->getToolbarSize( aName );
     }
 
     return awt::Size();
@@ -2395,7 +2315,7 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            return pToolbarManager->getElementPos( aName );
+            return pToolbarManager->getToolbarPos( aName );
     }
 
     return awt::Point();

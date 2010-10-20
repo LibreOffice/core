@@ -133,32 +133,26 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void setVisible(bool bVisible);
         bool isVisible() { return m_bVisible; }
 
-        // docking
+        // docking and further functions
         bool dockToolbar( const ::rtl::OUString& rResourceURL, ::com::sun::star::ui::DockingArea eDockingArea, const ::com::sun::star::awt::Point& aPos );
         bool dockAllToolbars();
+        bool floatToolbar( const ::rtl::OUString& rResoureURL );
+        bool lockToolbar( const ::rtl::OUString& rResourceURL );
+        bool unlockToolbar( const ::rtl::OUString& rResourceURL );
+        void setToolbarPos( const ::rtl::OUString& rResourceURL, const ::com::sun::star::awt::Point& aPos );
+        void setToolbarSize( const ::rtl::OUString& rResourceURL, const ::com::sun::star::awt::Size& aSize );
+        void setToolbarPosSize( const ::rtl::OUString& rResourceURL, const ::com::sun::star::awt::Point& aPos, const ::com::sun::star::awt::Size& aSize );
+        bool isToolbarVisible( const ::rtl::OUString& rResourceURL );
+        bool isToolbarFloating( const ::rtl::OUString& rResourceURL );
+        bool isToolbarDocked( const ::rtl::OUString& rResourceURL );
+        bool isToolbarLocked( const ::rtl::OUString& rResourceURL );
+        ::com::sun::star::awt::Point getToolbarPos( const ::rtl::OUString& rResourceURL );
+        ::com::sun::star::awt::Size getToolbarSize( const ::rtl::OUString& rResourceURL );
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > getToolbar( const ::rtl::OUString& aName );
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > > getToolbars();
 
         // child window notifications
         long childWindowEvent( VclSimpleEvent* pEvent );
-
-        //---------------------------------------------------------------------------------------------------------
-        // XLayoutManager forwards
-        //---------------------------------------------------------------------------------------------------------
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > getElement( const ::rtl::OUString& aName );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > > getElements();
-        sal_Bool dockWindow( const ::rtl::OUString& aName, ::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos );
-        ::sal_Bool dockAllWindows( ::sal_Int16 nElementType );
-        sal_Bool floatWindow( const ::rtl::OUString& aName );
-        ::sal_Bool lockWindow( const ::rtl::OUString& ResourceURL );
-        ::sal_Bool unlockWindow( const ::rtl::OUString& ResourceURL );
-        void setElementSize( const ::rtl::OUString& aName, const ::com::sun::star::awt::Size& aSize );
-        void setElementPos( const ::rtl::OUString& aName, const ::com::sun::star::awt::Point& aPos );
-        void setElementPosSize( const ::rtl::OUString& aName, const ::com::sun::star::awt::Point& aPos, const ::com::sun::star::awt::Size& aSize );
-        sal_Bool isElementVisible( const ::rtl::OUString& aName );
-        sal_Bool isElementFloating( const ::rtl::OUString& aName );
-        sal_Bool isElementDocked( const ::rtl::OUString& aName );
-        ::sal_Bool isElementLocked( const ::rtl::OUString& ResourceURL );
-        ::com::sun::star::awt::Size getElementSize( const ::rtl::OUString& aName );
-        ::com::sun::star::awt::Point getElementPos( const ::rtl::OUString& aName );
 
         //---------------------------------------------------------------------------------------------------------
         // XInterface
@@ -243,6 +237,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
                                                                     sal_Int32 nOffset,
                                                                     SingleRowColumnWindowData& rRowColumnWindowData,
                                                                     const ::Size& rContainerSize );
+        void             implts_setLayoutDirty();
 
         //---------------------------------------------------------------------------------------------------------
         // lookup/container methods
@@ -250,6 +245,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         UIElement        implts_findToolbar( const rtl::OUString& aName );
         UIElement        implts_findToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xToolbar );
         UIElement&       impl_findToolbar( const rtl::OUString& aName );
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > implts_getXWindow( const ::rtl::OUString& aName );
+        Window*          implts_getWindow( const ::rtl::OUString& aName );
         bool             implts_insertToolbar( const UIElement& rUIElement );
         void             implts_setToolbar( const UIElement& rUIElement );
         ::Size           implts_getTopBottomDockingAreaSizes();
