@@ -1662,14 +1662,20 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
 
                             xPropSet->getPropertyValue(C2U("DefaultSelection")) >>= aIntSeq;
-                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
-                            // a dropdown list can have only one 'selected item by default'
-                            m_aRun.append((sal_Int32)aIntSeq[0]);
+                            if( aIntSeq.getLength() )
+                            {
+                                m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
+                                // a dropdown list can have only one 'selected item by default'
+                                m_aRun.append((sal_Int32)aIntSeq[0]);
+                            }
 
                             xPropSet->getPropertyValue(C2U("SelectedItems")) >>= aIntSeq;
-                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFRES);
-                            // a dropdown list can have only one 'currently selected item'
-                            m_aRun.append((sal_Int32)aIntSeq[0]);
+                            if( aIntSeq.getLength() )
+                            {
+                                m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFRES);
+                                // a dropdown list can have only one 'currently selected item'
+                                m_aRun.append((sal_Int32)aIntSeq[0]);
+                            }
 
                             sName = C2U("Name");
                             if (xPropSetInfo->hasPropertyByName(sName))
