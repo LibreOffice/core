@@ -247,3 +247,15 @@ toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleConte
 
 ### i111195 ###
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleValue
+
+### i113489 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleText
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleComponent
+toolkit.AccessibleMenuSeparator::com::sun::star::accessibility::XAccessibleComponent
+
+### i114213 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleSelection
+
+### i114636 ###
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleAction
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleContext

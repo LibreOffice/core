@@ -1353,11 +1353,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             //
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
-            bool bHack =
-                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
-                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
-                ;
-            if( nUserTime == 0 && bHack )
+            if( nUserTime == 0 )
             {
                 /* #i99360# ugly workaround an X11 library bug */
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
@@ -1365,7 +1361,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             }
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
 
-            if( bHack && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
+            if( ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
@@ -1451,6 +1447,12 @@ void GtkSalFrame::setMinMaxSize()
                 aGeo.max_height = maGeometry.nHeight;
                 aHints |= GDK_HINT_MAX_SIZE;
             }
+        }
+        if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
+        {
+            aGeo.max_width = m_aMaxSize.Width();
+            aGeo.max_height = m_aMaxSize.Height();
+            aHints |= GDK_HINT_MAX_SIZE;
         }
         if( aHints )
             gtk_window_set_geometry_hints( GTK_WINDOW(m_pWindow),

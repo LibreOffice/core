@@ -74,4 +74,10 @@ sw      sw\source\ui                        nmake   -       all     sw_ui sw_app
 sw      sw\source\core                      nmake   -       all     sw_core sw_attr sw_bast sw_crsr sw_dcnd sw_doc sw_draw sw_edit sw_excpt sw_fld sw_frmed sw_grph sw_layo sw_ole sw_para sw_sw3io sw_swg sw_text sw_tox sw_txtnd sw_uco sw_undo sw_view sw_acc sw_objpos sw_NumberTree sw_tablecore NULL
 sw      sw\source\filter                    nmake   -       all     sw_flt sw_ascii sw_bsflt sw_html sw_rtf sw_wrtr sw_ww1 sw_ww8 sw_xml NULL
 sw      sw\util                             nmake   -       all     sw_util sw_core sw_flt sw_sdi sw_ui NULL
-sw sw\qa\unoapi nmake - all sw_qa_unoapi NULL
+
+sw sw\qa\complex\accessibility      nmake - all sw_qa_complex_accessibility sw_util NULL
+sw sw\qa\complex\checkColor         nmake - all sw_qa_complex_checkColor sw_util NULL
+# fails
+# sw sw\qa\complex\indeterminateState nmake - all sw_qa_complex_indeterminateState sw_util NULL
+# sw sw\qa\complex\writer             nmake - all sw_qa_complex_writer sw_util NULL
+sw sw\qa\unoapi                     nmake - all sw_qa_unoapi sw_util NULL

@@ -841,7 +841,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
             }
             else if( mnObjType == EXC_OBJTYPE_DROPDOWN )
             {
-                rStrm << sal_uInt16( 0 ) << mnLineCount;
+                rStrm << sal_uInt16( 0 ) << mnLineCount << sal_uInt16( 0 ) << sal_uInt16( 0 );
             }
 
             rStrm.EndRecord();

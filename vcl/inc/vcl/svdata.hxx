@@ -208,7 +208,6 @@ struct ImplSVGDIData
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
     utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
     utl::FontSubstConfiguration* mpFontSubstConfiguration;
-    bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };

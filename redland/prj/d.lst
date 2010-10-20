@@ -1,3 +1,4 @@
+mkdir: %_DEST%\inc%_EXT%\external
 ..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\*.h
 ..\%__SRC%\lib\libraptor.so.1 %_DEST%\lib%_EXT%\libraptor.so.1
 symlink: %_DEST%\lib%_EXT%\libraptor.so.1 %_DEST%\lib%_EXT%\libraptor.so

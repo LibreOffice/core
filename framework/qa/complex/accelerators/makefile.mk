@@ -24,63 +24,44 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-
-PRJ = ..$/..$/..
-TARGET  = AcceleratorsConfigurationTest
-PRJNAME = $(TARGET)
-PACKAGE = complex$/accelerators
-
-# --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
-
-#----- compile .java files -----------------------------------------
-
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
-                  OOoRunner.jar
-                  
-JAVAFILES       = AcceleratorsConfigurationTest.java
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-SUBDIRS=helper
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH   = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
 .ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
 
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
+PRJ = ../../..
+PRJNAME = framework
+TARGET = qa_complex_accelerators
 
-# test looks something like the.full.package.TestName
-CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/accelerators
 
-# start the runner application
-CT_APP      = org.openoffice.Runner
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    AcceleratorsConfigurationTest.java
 
-# --- Targets ------------------------------------------------------
+# put here all other files
+JAVAFILES = $(JAVATESTFILES) \
+    KeyMapping.java
 
-#.IF "$(depend)" == ""
-#$(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props : ALLTAR
-#.ELSE
-#$(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props : ALLDEP
-#.ENDIF
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+#JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
+#                  OOoRunner.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-.INCLUDE :  target.mk
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
-RUN: run
+.END
 
-run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_TEST)
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+.END
+
+
+
+
+                  

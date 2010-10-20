@@ -26,42 +26,85 @@
  ************************************************************************/
 package complex.olesimplestorage;
 
-import complexlib.ComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /* Document.
  */
 
-public class OLESimpleStorageUnitTest extends ComplexTestCase {
+public class OLESimpleStorageUnitTest /* extends ComplexTestCase */
+{
     private XMultiServiceFactory m_xMSF = null;
 
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "ExecuteTest01"};
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[] {
+//            "ExecuteTest01"};
+//    }
+//
+//    public String getTestObjectName() {
+//        return "OLESimpleStorageUnitTest";
+//    }
 
-    public String getTestObjectName() {
-        return "OLESimpleStorageUnitTest";
-    }
-
-    public void before () {
+    @Before public void before () {
+        System.out.println("before()");
         try {
-            m_xMSF = (XMultiServiceFactory)param.getMSF();
+            m_xMSF = getMSF();
         } catch ( Exception e ){
-            failed ( "Cannot create service factory!" );
+            fail( "Cannot create service factory!" );
         }
         if ( m_xMSF == null ) {
-            failed ( "Cannot create service factory!" );
+            fail( "Cannot create service factory!" );
         }
     }
 
-    public void after () {
+    @After public void after () {
+        System.out.println("after()");
         m_xMSF = null;
     }
 
-    public void ExecuteTest01() {
-        OLESimpleStorageTest aTest = new Test01( m_xMSF, log );
-        assure( "Test01 failed!", aTest.test() );
+    @Test public void ExecuteTest01() {
+        System.out.println("ExecuteTest01()");
+        OLESimpleStorageTest aTest = new Test01( m_xMSF );
+        assertTrue( "Test01 failed!", aTest.test() );
     }
+
+
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+//        try
+//        {
+//            Thread.sleep(5000);
+//        }
+//        catch (java.lang.InterruptedException e)
+//        {
+//        }
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

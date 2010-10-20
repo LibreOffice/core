@@ -27,36 +27,49 @@
 
 package complex.toolkit;
 
-import complexlib.ComplexTestCase;
+// import complexlib.ComplexTestCase;
 import util.SOfficeFactory;
-import complex.toolkit.interface_tests._XRequestCallback;
-import complex.toolkit.CallbackClass;
+// import complex.toolkit.CallbackClass;
 import com.sun.star.awt.XRequestCallback;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XServiceInfo;
+// import com.sun.star.lang.XComponent;
+// import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.XExtendedToolkit;
-import java.io.PrintWriter;
+// import com.sun.star.awt.XExtendedToolkit;
+// import java.io.PrintWriter;
+
+// import org.junit.After;
+import org.junit.AfterClass;
+// import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /**
  *
  */
-public class CheckAsyncCallback extends ComplexTestCase {
+public class CheckAsyncCallback /* extends ComplexTestCase*/  {
 
 
     XInterface testObject = null;
     XMultiServiceFactory xMSF = null;
 
-    public String[] getTestMethodNames() {
-        return new String[]{"checkService"};
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[]{"checkService"};
+//    }
 
 /*    public String getTestObjectName() {
         return "com.sun.star.awt.AccessibleStatusBar";
     }
 */
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
     * reset</code> call.
@@ -65,14 +78,14 @@ public class CheckAsyncCallback extends ComplexTestCase {
         try {
             Thread.sleep(500) ;
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e) ;
         }
     }
 
     /**
      * Check services
      */
-    public void checkService() {
+    @Test public void checkService() {
             checkAsyncCallbackService();
 
     }
@@ -86,15 +99,14 @@ public class CheckAsyncCallback extends ComplexTestCase {
 
     public void getTestObject() {
         try {
-            xMSF = (XMultiServiceFactory)param.getMSF();
+            xMSF = getMSF();
             SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
 
             XRequestCallback xAsyncCallback = null;
 
             XInterface xIfc = (XInterface)xMSF.createInstance(
                                 "com.sun.star.awt.AsyncCallback" );
-            xAsyncCallback = (XRequestCallback)
-                UnoRuntime.queryInterface(XRequestCallback.class,xIfc);
+            xAsyncCallback = UnoRuntime.queryInterface(XRequestCallback.class, xIfc);
 
             testObject=xAsyncCallback;
         }
@@ -109,19 +121,36 @@ public class CheckAsyncCallback extends ComplexTestCase {
 
     public void runAllInterfaceTests() {
         getTestObject();
-        log.println("*** Now testing XRequestCallback ***");
+        System.out.println("*** Now testing XRequestCallback ***");
         _XRequestCallback _xRequestCallback =
-                                new _XRequestCallback(testObject, log, xMSF );
-        assure("failed: XRequestCallback::addCallback", _xRequestCallback._addCallback());
+                                new _XRequestCallback(testObject, xMSF );
+        assertTrue("failed: XRequestCallback::addCallback", _xRequestCallback._addCallback());
     }
 
     public void checkCallback() {
         getTestObject();
-        log.println("*** Now testing asynchronous callback service ***");
+        System.out.println("*** Now testing asynchronous callback service ***");
         XRequestCallback xAsyncCallback = null;
-        xAsyncCallback = (XRequestCallback)
-            UnoRuntime.queryInterface( XRequestCallback.class, testObject );
-        CallbackClass aCallbackClass = new CallbackClass( log, xMSF );
+        xAsyncCallback = UnoRuntime.queryInterface(XRequestCallback.class, testObject);
+        CallbackClass aCallbackClass = new CallbackClass( xMSF );
         xAsyncCallback.addCallback( aCallbackClass, null );
     }
+
+
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
+
 }

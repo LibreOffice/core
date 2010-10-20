@@ -13,3 +13,6 @@ rd  reportdesign\source\ui\inspection                                   nmake   
 rd  reportdesign\source\filter\xml                                      nmake   -   all rd_filter_xml rd_inc NULL
 rd  reportdesign\util                                                   nmake   -   all rd_util rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml NULL
 
+# has problems in m78, in m83 also
+# rd  reportdesign\qa\complex\reportdesign                                nmake   -   all rd_qa_complex NULL
+

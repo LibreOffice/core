@@ -54,3 +54,10 @@ sd.DrawController_PresentationView::com::sun::star::beans::XPropertySet
 ### i109518 ###
 sd.SdXPresentation::com::sun::star::presentation::XPresentation
 sd.SdXPresentation::com::sun::star::beans::XPropertySet
+
+### i113161 ###
+sd.SdLayer::com::sun::star::beans::XPropertySet
+sd.SdLayer::com::sun::star::drawing::Layer
+
+### i113386 ###
+sd.AccessibleDrawDocumentView::com::sun::star::accessibility::XAccessibleComponent

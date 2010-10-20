@@ -44,6 +44,7 @@ CFLAGSCXX+=-DADAPT_EXT_STL
 
 SLOFILES = \
     $(SLO)/getargument.obj \
+    $(SLO)/gettestargument.obj \
     $(SLO)/officeconnection.obj \
     $(SLO)/toabsolutefileurl.obj \
     $(SLO)/uniquepipename.obj

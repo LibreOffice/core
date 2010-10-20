@@ -26,12 +26,20 @@
  ************************************************************************/
 package complex.dbaccess;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
-import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.CRMDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 public abstract class CRMBasedTestCase extends TestCase
 {
@@ -42,30 +50,30 @@ public abstract class CRMBasedTestCase extends TestCase
     {
         try
         {
-            m_database = new CRMDatabase( getORB(), false );
+            m_database = new CRMDatabase( getMSF(), false );
         }
         catch ( Exception e )
         {
             e.printStackTrace( System.err );
-            assure( "caught an exception (" + e.getMessage() + ") while creating the test case", false );
+            fail( "caught an exception (" + e.getMessage() + ") while creating the test case");
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Override
-    public void before()
+    @Before public void before()
     {
         createTestCase();
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Override
-    public void after()
+    @After public void after()
     {
         try
         {
             if ( m_database != null )
+            {
                 m_database.saveAndClose();
+            }
         }
         catch ( Exception ex )
         {

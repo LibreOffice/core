@@ -31,7 +31,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
+// import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import helper.FileTools;
@@ -40,13 +40,24 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public abstract class TestCase extends complexlib.ComplexTestCase
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
+
+
+public abstract class TestCase
 {
     // --------------------------------------------------------------------------------------------------------
-    protected final XMultiServiceFactory getORB()
-    {
-        return (XMultiServiceFactory)param.getMSF();
-    }
+//    protected final XMultiServiceFactory getORB()
+//    {
+//        return (XMultiServiceFactory)param.getMSF();
+//    }
 
     // --------------------------------------------------------------------------------------------------------
     protected final XComponentContext getComponentContext()
@@ -54,13 +65,13 @@ public abstract class TestCase extends complexlib.ComplexTestCase
         XComponentContext context = null;
         try
         {
-            final XPropertySet orbProps = UnoRuntime.queryInterface( XPropertySet.class, getORB() );
+            final XPropertySet orbProps = UnoRuntime.queryInterface( XPropertySet.class, getMSF() );
             context = UnoRuntime.queryInterface( XComponentContext.class,
                 orbProps.getPropertyValue( "DefaultContext" ) );
         }
         catch ( Exception ex )
         {
-            failed( "could not retrieve the ComponentContext" );
+            fail( "could not retrieve the ComponentContext" );
         }
         return context;
     }
@@ -83,9 +94,11 @@ public abstract class TestCase extends complexlib.ComplexTestCase
      */
     protected final String createTempFileURL() throws IOException
     {
-        final File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" ).getAbsoluteFile();
+        final File documentFile = java.io.File.createTempFile( "dbaccess_test", ".odb" ).getAbsoluteFile();
         if ( documentFile.exists() )
+        {
             documentFile.delete();
+        }
         return FileHelper.getOOoCompatibleFileURL( documentFile.toURI().toURL().toString() );
     }
 
@@ -111,16 +124,40 @@ public abstract class TestCase extends complexlib.ComplexTestCase
     protected final XModel loadDocument( final String _docURL ) throws Exception
     {
         final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
-            getORB().createInstance( "com.sun.star.frame.Desktop" ) );
+            getMSF().createInstance( "com.sun.star.frame.Desktop" ) );
         return UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( _docURL, "_blank", 0, new PropertyValue[] {} ) );
     }
 
     // --------------------------------------------------------------------------------------------------------
-    protected void assureException( Object _object, Class _unoInterfaceClass, String _methodName, Object[] _methodArgs,
-        Class _expectedExceptionClass )
+//    protected void assureException( Object _object, Class _unoInterfaceClass, String _methodName, Object[] _methodArgs,
+//        Class _expectedExceptionClass )
+//    {
+//        assureException( UnoRuntime.queryInterface( _unoInterfaceClass, _object ), _methodName,
+//            _methodArgs, _expectedExceptionClass );
+//    }
+
+
+
+    protected XMultiServiceFactory getMSF()
     {
-        assureException( UnoRuntime.queryInterface( _unoInterfaceClass, _object ), _methodName,
-            _methodArgs, _expectedExceptionClass );
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
     }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

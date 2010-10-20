@@ -558,7 +558,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     mnCurPage               = 1;
     mnCurPrintPage          = 1;
     mbPrinting              = TRUE;
-    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
     {
         mbJobActive             = TRUE;
         // sallayer does all necessary page printing

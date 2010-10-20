@@ -14,3 +14,12 @@ xmloff.Impress.XMLStylesImporter::com::sun::star::xml::sax::XDocumentHandler
 xmloff.Draw.XMLStylesExporter
 xmloff.Impress.XMLStylesExporter
 #-> disabled in xmloff.sce
+
+### i112778 ###
+xmloff.Draw.XMLContentExporter::com::sun::star::document::XFilter
+xmloff.Draw.XMLMetaExporter::com::sun::star::document::XFilter
+xmloff.Impress.XMLMetaExporter::com::sun::star::document::XFilter
+
+### i114211 ###
+xmloff.Draw.XMLStylesImporter::com::sun::star::lang::XInitialization
+xmloff.Impress.XMLStylesImporter::com::sun::star::lang::XInitialization

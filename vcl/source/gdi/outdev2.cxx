@@ -1988,7 +1988,15 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             const long      nSrcWidth = aBmpRect.GetWidth(), nSrcHeight = aBmpRect.GetHeight();
             const long      nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
             const long      nOutWidth = aOutSz.Width(), nOutHeight = aOutSz.Height();
-            const long      nOffX = aDstRect.Left() - aOutPt.X(), nOffY = aDstRect.Top() - aOutPt.Y();
+            // calculate offset in original bitmap
+            // in RTL case this is a little more complicated since the contents of the
+            // bitmap is not mirrored (it never is), however the paint region and bmp region
+            // are in mirrored coordinates, so the intersection of (aOutPt,aOutSz) with these
+            // is content wise somewhere else and needs to take mirroring into account
+            const long      nOffX = IsRTLEnabled()
+                                    ? aOutSz.Width() - aDstRect.GetWidth() - (aDstRect.Left() - aOutPt.X())
+                                    : aDstRect.Left() - aOutPt.X(),
+                            nOffY = aDstRect.Top() - aOutPt.Y();
             long            nX, nOutX, nY, nOutY;
             long            nMirrOffX = 0;
             long            nMirrOffY = 0;
@@ -2002,7 +2010,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             for( nX = 0L, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
             {
                 pMapX[ nX ] = aBmpRect.Left() + nOutX * nSrcWidth / nOutWidth;
-
                 if( bHMirr )
                     pMapX[ nX ] = nMirrOffX - pMapX[ nX ];
             }

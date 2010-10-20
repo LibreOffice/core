@@ -1804,6 +1804,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
+        sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
@@ -1822,6 +1823,8 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
                 aDestStrm.GetEndOfData());
             rValue <<= aSeq;
         }
+        if ( bSwapped )
+            static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         break;
     }
 
@@ -1833,10 +1836,13 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
         }
         else
         {
+            sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
             const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
             aURL += OUString::createFromAscii( rGrafObj.GetUniqueID().GetBuffer() );
             rValue <<= aURL;
+            if ( bSwapped )
+                static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         }
         break;
     }
@@ -1851,8 +1857,11 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
 
     case OWN_ATTR_VALUE_GRAPHIC:
     {
+        sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
         rValue <<= xGraphic;
+        if ( bSwapped )
+            static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         break;
     }
 

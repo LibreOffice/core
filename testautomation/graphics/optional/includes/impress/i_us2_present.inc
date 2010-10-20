@@ -37,14 +37,13 @@ testcase i_us2_pres1
     dim iPictures as integer
     dim PresentationFile1 as string
     PresentationFile1 = (ConvertPath (gOfficePath + "user\work\PwrPres1.odp"))
+
     kontext "DocumentImpress"
-    printlog "New - Wizard - Presentation."
+    printlog "Starting with New - Wizard - Presentation."
     FileAutopilotPresentation
-    printlog "Called File-Autopilot-Presentation."
-    printlog "Create from Template"
+    printlog "Called File-Autopilot-Presentation, create from template."
     kontext "AutoPilotPraesentation1"
     FromTemplate.Check
-    'This part is for language-indepencancy
     if gOOO = TRUE then
         TemplateRegion.Select (1)
         printlog "Choose a Presentation"
@@ -56,7 +55,7 @@ testcase i_us2_pres1
             if TemplateList.GetItemCount < 40 then
                 TemplateRegion.Select (3)
                 if TemplateList.GetItemCount < 40 then
-                    Warnlog "   No Templates selectable in the wizard. Please check."
+                    Warnlog "No Templates selectable in the wizard. Please check."
                     goto endsub
                 endif
             endif
@@ -71,29 +70,29 @@ testcase i_us2_pres1
     sleep (1)
     Nextbutton.Click
 
-    printlog "   Switched to the second Wizard-page."
+    printlog "Switched to the second Wizard-page."
     sleep (1)
     printlog "Presentations"
     kontext "AutoPilotPraesentation2"
     printlog "Output: Screen"
-    if gOOO = TRUE then  'OpenOffice.org
+    if gOOO = TRUE then 
         Background.Select (2)
         if Backgroundchoice.GetItemCount < 2 then
             Background.Select (1)
             if Backgroundchoice.GetItemCount = 0 then
-                Warnlog "   No Backgrounds selectable in the wizard. Please check."
+                Warnlog "No Backgrounds selectable in the wizard. Please check."
                 goto endsub
             endif
         endif
         Backgroundchoice.Select (2)
-    else  'StarOffice
+    else 
         Background.Select (3)
         if Backgroundchoice.GetItemCount < 10 then
             Background.Select (2)
             if Backgroundchoice.GetItemCount < 10 then
                 Background.Select (3)
                 if Backgroundchoice.GetItemCount < 10 then
-                    Warnlog "   No Backgrounds selectable in the wizard. Please check."
+                    Warnlog "No Backgrounds selectable in the wizard. Please check."
                     goto endsub
                 endif
             endif
@@ -104,7 +103,7 @@ testcase i_us2_pres1
     printlog "Next"
     Nextbutton.Click
 
-    printlog "   Switched to the third Wizard-page."
+    printlog "Switched to the third Wizard-page."
     sleep (1)
     kontext "AutoPilotPraesentation3"
     printlog "Random Effect. Random Speed. Click through every choice."
@@ -118,7 +117,7 @@ testcase i_us2_pres1
     printlog "Next"
     Nextbutton.Click
 
-    printlog "   Switched to the fourth Wizard-page."
+    printlog "Switched to the fourth Wizard-page."
     sleep (1)
     kontext "AutoPilotPraesentation4"
     printlog "Fill in some company-name-subject-text"
@@ -136,36 +135,50 @@ testcase i_us2_pres1
     AutoPilotPraesentation5.OK
 
     sleep (1)
-    printlog "   Pressed 'Create'."
+    printlog "Pressed 'Create'."
     printlog "Add a Slide via Insert - Slide."
-    Kontext "DocumentImpress"
-    hTypeKeys "What we will talk about"
-    gMouseClick 1,1
     Kontext "DocumentImpress"
     DocumentImpress.UseMenu
     hMenuSelectNr (4)
     hMenuSelectNr (1)
-    call sSelectEmptyLayout
+
+    Kontext "DocumentImpress"
+    DocumentImpress.UseMenu
+    hMenuSelectNr (5)
+    hMenuSelectNr (13)
+    printlog "Changing focus to TaskPane."
+    kontext "Tasks"
     sleep (1)
+    printlog "Selecting 5th layout."
+    LayoutsPreview.TypeKeys "<HOME>"
+    sleep (1)
+    LayoutsPreview.TypeKeys "<RIGHT>", 4
+    LayoutsPreview.TypeKeys "<RETURN>"
+    sleep (1)
+    kontext "DocumentImpress"
+
+    sleep (1)
+    hTypeKeys "What we will talk about"
+    gMouseClick 1,1
 
     kontext "Slides"
-    SlidesControl.TypeKeys "<HOME><RETURN>"
+    SlidesControl.TypeKeys "<HOME>"
     kontext "DocumentImpress"
-    DocumentImpress.TypeKeys "<TAB>Text we just wrote..."
+    DocumentImpress.TypeKeys "<TAB>"
+    DocumentImpress.TypeKeys "Text we just wrote..."
+    DocumentImpress.TypeKeys "<ESCAPE>"
     printlog "Switch to the second slide."
     kontext "Slides"
-    SlidesControl.TypeKeys "<DOWN><RETURN>"
-    SlidesControl.TypeKeys "<RETURN>"
+    SlidesControl.TypeKeys "<DOWN>"
     kontext "DocumentImpress"
     printlog "Insert three lines with text, all with different formatting."
     call hTextrahmenErstellen ("First line with text",20,50,70,50)
     call hTextrahmenErstellen ("Second line with text",20,60,70,60)
     call hTextrahmenErstellen ("Third line with text",20,70,70,70)
-    printlog "Go down to the eleventh slide."
+    printlog "Go down to the third slide."
     kontext "Slides"
     SlidesControl.TypeKeys "<HOME>"
-    SlidesControl.TypeKeys "<PAGEDOWN>", 10
-    SlidesControl.TypeKeys "<RETURN>"
+    SlidesControl.TypeKeys "<PAGEDOWN>", 3
     printlog "Insert Smiley, + two circles around the eyes, + two new pupils,"
     printlog "placed at some interesteing place inside the circles."
     Kontext "Toolbar"
@@ -202,12 +215,12 @@ testcase i_us2_pres1
     hTypeKeys "<Escape>"
     sleep (1)
 
-    printlog "Insert new slide."
     kontext "Slides"
     printlog "get to the last slide."
-    SlidesControl.TypeKeys "<PAGEDOWN>", 15
+    SlidesControl.TypeKeys "<PAGEDOWN>", 3
+    printlog "Insert 4th slide."
     SlidesControl.TypeKeys "<RETURN>"
-    printlog "Delete the two fields the stylist has."
+    printlog "Delete everything on the page."
     kontext "DocumentImpress"
     gMouseClick 1,1
     EditSelectAll
@@ -220,22 +233,25 @@ testcase i_us2_pres1
     Oeffnen.Click
     gMouseClick 1,1
     printlog "Add a text above the picture. 'There is movement..."
-    call hTextrahmenErstellen ("There is movement...",20,20,70,30)
+    call hTextrahmenErstellen ("There is movement...",20,40,70,30)
 
     printlog "Add a new slide."
     InsertSlide
-    printlog "   Inserted new slide."
+    printlog "Inserted new slide."
     kontext "DocumentImpress"
     printlog "Bla bla about everything..."
-    call hTextrahmenErstellen ("Bla bla about everything...",20,20,70,30)
+    DocumentImpress.TypeKeys "<TAB>"
+    DocumentImpress.TypeKeys "Bla bla about everything..."
+    DocumentImpress.TypeKeys "<ESCAPE>",2
 
     printlog "Add a new slide."
     InsertSlide
     printlog "   Inserted new slide."
     kontext "DocumentImpress"
     printlog "Write text:  Q & A"
-    call hTextrahmenErstellen ("Q & A",20,20,70,30)
-    DocumentImpress.TypeKeys "<SHIFT HOME>"
+    DocumentImpress.TypeKeys "<TAB>"
+    DocumentImpress.TypeKeys "Q & A"
+    DocumentImpress.TypeKeys "<ESCAPE>",2
     sleep (1)
 
     printlog "Add a new slide."
@@ -243,11 +259,13 @@ testcase i_us2_pres1
     kontext "DocumentImpress"
 
     printlog "Thanks for listening, time for coffee... (ending)"
-    call hTextrahmenErstellen ("Class dismissed...",20,20,70,30)
+    DocumentImpress.TypeKeys "<TAB>"
+    DocumentImpress.TypeKeys "Class dismissed..."
+    DocumentImpress.TypeKeys "<ESCAPE>",2
 
     printlog "Save Document"
     call hFileSaveAsKill (PresentationFile1)
-    printlog "OK   saved at ", PresentationFile1
+    printlog "OK, saved at ", PresentationFile1
     sleep (1)
 
     printlog "Close Document"

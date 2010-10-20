@@ -27,53 +27,31 @@
 
 package complex.writer;
 
-
-import complexlib.ComplexTestCase;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /**
  *
  */
-public class CheckNamedPropertyValues extends ComplexTestCase {
+public class CheckNamedPropertyValues {
+    @Test public void checkNamedPropertyValues()
+        throws com.sun.star.uno.Exception
+    {
+        XNameContainer xCont = UnoRuntime.queryInterface(
+            XNameContainer.class,
+            (connection.getComponentContext().getServiceManager().
+             createInstanceWithContext(
+                 "com.sun.star.document.NamedPropertyValues",
+                 connection.getComponentContext())));
 
-    private final String testedServiceName =
-                    "com.sun.star.document.NamedPropertyValues";
-
-    public String[] getTestMethodNames() {
-        return new String[]{"checkNamedPropertyValues"};
-    }
-
-/*    public String getTestObjectName() {
-        return "complex.writer.CheckNamedPropertyValues";
-    } */
-
-    public void checkNamedPropertyValues() {
-        Object oObj = null;
-        try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
-            oObj = xMSF.createInstance(testedServiceName);
-            System.out.println("****************");
-            System.out.println("Service Name:");
-            util.dbg.getSuppServices(oObj);
-            System.out.println("****************");
-            System.out.println("Interfaces:");
-            util.dbg.printInterfaces((XInterface)oObj, true);
-        }
-        catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
-            failed(e.getMessage());
-            return;
-        }
-        XNameContainer xCont = (XNameContainer)UnoRuntime.queryInterface(
-                                                XNameContainer.class, oObj);
-
-        assure("XNameContainer was queried but returned null.",
-                                                        (xCont != null));
+        assertNotNull("XNameContainer was queried but returned null.", xCont);
         PropertyValue[] prop1 = new PropertyValue[1];
         prop1[0] = new PropertyValue();
         prop1[0].Name  = "Jupp";
@@ -84,113 +62,61 @@ public class CheckNamedPropertyValues extends ComplexTestCase {
         prop2[0].Name  = "Horst";
         prop2[0].Value = "BadGuy";
 
-        try {
-            Type t = xCont.getElementType();
-            log.println("Insertable Type: " + t.getTypeName());
-            assure("Initial container is not empty.", !xCont.hasElements());
+        Type t = xCont.getElementType();
+        assertFalse("Initial container is not empty.", xCont.hasElements());
 
-            log.println("Insert a PropertyValue.");
-            xCont.insertByName("prop1", prop1);
-            PropertyValue[]ret = (PropertyValue[])xCont.getByName("prop1");
-            assure("Got the wrong PropertyValue: " +
-                                    ret[0].Name +  "  " +(String)ret[0].Value,
-                                    ret[0].Name.equals(prop1[0].Name) &&
-                                    ret[0].Value.equals(prop1[0].Value));
-            log.println("Replace the PropertyValue.");
-            xCont.replaceByName("prop1", prop2);
-            ret = (PropertyValue[])xCont.getByName("prop1");
-            assure("Got the wrong PropertyValue: " +
-                                    ret[0].Name +  "  " +(String)ret[0].Value,
-                                    ret[0].Name.equals(prop2[0].Name) &&
-                                    ret[0].Value.equals(prop2[0].Value));
-            log.println("Remove the PropertyValue.");
-            xCont.removeByName("prop1");
-            assure("Could not remove PropertyValue.", !xCont.hasElements());
-            log.println("Insert again.");
-            xCont.insertByName("prop1", prop1);
-            xCont.insertByName("prop2", prop2);
-            assure("Did not insert PropertyValue.", xCont.hasElements());
-            String[] names = xCont.getElementNames();
-            int count = 0;
-            for (int i=0; i<names.length; i++) {
-                if (names[i].equals("prop1") || names[i].equals("prop2"))
-                    count++;
-                else
-                    failed("Got a wrong element name: "+names[i]);
-            }
-            if (count != 2)
-                failed("Not all element names were returned.");
-
-            try {
-                log.println("Insert PropertyValue with an existing name.");
-                xCont.insertByName("prop2", prop1);
-                failed("ElementExistException was not thrown.");
-            }
-            catch(com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Wrong exception thrown.");
-                failed(e.getMessage());
-                e.printStackTrace();
-            }
-            catch(com.sun.star.container.ElementExistException e) {
-                log.println("Expected exception thrown: "+e);
-            }
-            catch(com.sun.star.lang.WrappedTargetException e) {
-                log.println("Wrong exception thrown.");
-                failed(e.getMessage());
-                e.printStackTrace();
-            }
-
-            try {
-                log.println("Inserting a wrong argument.");
-                xCont.insertByName("prop3", "Example String");
-                failed("IllegalArgumentException was not thrown.");
-            }
-            catch(com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Expected exception thrown: "+e);
-            }
-            catch(com.sun.star.container.ElementExistException e) {
-                log.println("Wrong exception thrown.");
-                failed(e.getMessage());
-                e.printStackTrace();
-            }
-            catch(com.sun.star.lang.WrappedTargetException e) {
-                log.println("Wrong exception thrown.");
-                failed(e.getMessage());
-                e.printStackTrace();
-            }
-
-            try {
-                log.println("Remove a non-existing element.");
-                xCont.removeByName("prop3");
-                failed("NoSuchElementException was not thrown.");
-            }
-            catch(com.sun.star.container.NoSuchElementException e) {
-                log.println("Expected exception thrown: "+e);
-            }
-            catch(com.sun.star.lang.WrappedTargetException e) {
-                log.println("Wrong exception thrown.");
-                failed(e.getMessage());
-                e.printStackTrace();
-            }
-
+        xCont.insertByName("prop1", prop1);
+        PropertyValue[]ret = (PropertyValue[])xCont.getByName("prop1");
+        assertEquals(prop1[0].Name, ret[0].Name);
+        assertEquals(prop1[0].Value, ret[0].Value);
+        xCont.replaceByName("prop1", prop2);
+        ret = (PropertyValue[])xCont.getByName("prop1");
+        assertEquals(prop2[0].Name, ret[0].Name);
+        assertEquals(prop2[0].Value, ret[0].Value);
+        xCont.removeByName("prop1");
+        assertFalse("Could not remove PropertyValue.", xCont.hasElements());
+        xCont.insertByName("prop1", prop1);
+        xCont.insertByName("prop2", prop2);
+        assertTrue("Did not insert PropertyValue.", xCont.hasElements());
+        String[] names = xCont.getElementNames();
+        assertEquals("Not all element names were returned.", 2, names.length);
+        for (int i=0; i<names.length; i++) {
+            assertTrue(
+                "Got a wrong element name",
+                names[i].equals("prop1") || names[i].equals("prop2"));
         }
-        catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
-            e.printStackTrace();
+
+        try {
+            xCont.insertByName("prop2", prop1);
+            fail("ElementExistException was not thrown.");
         }
         catch(com.sun.star.container.ElementExistException e) {
-            failed(e.getMessage());
-            e.printStackTrace();
+        }
+
+        try {
+            xCont.insertByName("prop3", "Example String");
+            fail("IllegalArgumentException was not thrown.");
+        }
+        catch(com.sun.star.lang.IllegalArgumentException e) {
+        }
+
+        try {
+            xCont.removeByName("prop3");
+            fail("NoSuchElementException was not thrown.");
         }
         catch(com.sun.star.container.NoSuchElementException e) {
-            failed(e.getMessage());
-            e.printStackTrace();
-        }
-        catch(com.sun.star.lang.WrappedTargetException e) {
-            failed(e.getMessage());
-            e.printStackTrace();
         }
     }
 
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
 
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 }

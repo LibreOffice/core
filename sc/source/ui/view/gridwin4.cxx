@@ -1291,7 +1291,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
-                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
                     aCellBtn.setDrawBaseButton(false);
                     aCellBtn.setDrawPopupButton(true);
                     aCellBtn.setHasHiddenMember(bArrowState);
@@ -1315,17 +1316,13 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     long nPosX = aScrPos.X();
                     long nPosY = aScrPos.Y();
-                    if ( bLayoutRTL )
-                    {
-                        // overwrite the right, not left (visually) grid as long as the
-                        // left/right colors of the button borders aren't mirrored.
-                        nPosX -= nSizeX - 2;
-                    }
+                    // bLayoutRTL is handled in setBoundingBox
 
                     String aStr;
                     pDoc->GetString(nCol, nRow, nTab, aStr);
                     aCellBtn.setText(aStr);
-                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                     aCellBtn.setDrawBaseButton(true);
                     aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
                     aCellBtn.setHasHiddenMember(pInfo->bFilterActive);

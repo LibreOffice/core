@@ -46,28 +46,28 @@ TabPage TP_OPTIONS_CONTENTS
     CheckBox CBX_RULER
     {
         Pos = MAP_APPFONT ( 12 , 83 - 69 ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Rulers visible" ;
     };
     CheckBox CBX_HELPLINES
     {
         Pos = MAP_APPFONT ( 12 , 97 - 69 ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Guides when moving" ;
     };
     CheckBox CBX_HANDLES_BEZIER
     {
         Pos = MAP_APPFONT ( 12 , 111 - 69 ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~All control points in Bézier editor" ;
     };
     CheckBox CBX_MOVE_OUTLINE
     {
         Pos = MAP_APPFONT ( 12 , 125 - 69 ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Contour of each individual object" ;
     };

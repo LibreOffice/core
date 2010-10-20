@@ -117,6 +117,8 @@ struct BlipFillProperties
     OptValue< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
     OptValue< ::com::sun::star::geometry::IntegerRectangle2D >
                         moFillRect;             /// Stretch fill offsets.
+    OptValue< ::com::sun::star::geometry::IntegerRectangle2D >
+                        moClipRect;
     OptValue< sal_Int32 > moTileOffsetX;        /// Width of bitmap tiles (EMUs).
     OptValue< sal_Int32 > moTileOffsetY;        /// Height of bitmap tiles (EMUs).
     OptValue< sal_Int32 > moTileScaleX;         /// Horizontal scaling of bitmap tiles (1/1000 percent).

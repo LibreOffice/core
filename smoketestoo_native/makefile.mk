@@ -56,7 +56,8 @@ ALLTAR : cpptest
 
 cpptest : $(SHL1TARGETN)
 
-OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
+TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
+CPPTEST_LIBRARY = $(SHL1TARGETN)
 
 .IF "$(OS)" != "WNT"
 $(installationtest_instpath).flag : $(shell ls \

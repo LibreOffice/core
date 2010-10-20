@@ -96,7 +96,7 @@ cpptest .PHONY :
         -env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
-        $(my_cppenv) $(OOO_CPPTEST_ARGS)
+        $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") $(CPPTEST_LIBRARY)
     $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
@@ -111,7 +111,8 @@ javatest .PHONY : $(JAVATARGET)
         '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
         -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
-        $(my_javaenv) org.junit.runner.JUnitCore \
+        $(my_javaenv) $(TEST_ARGUMENTS:^"-Dorg.openoffice.test.arg.testarg.") \
+        org.junit.runner.JUnitCore \
         $(foreach,i,$(JAVATESTFILES) $(subst,/,. $(PACKAGE)).$(i:s/.java//))
     $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""

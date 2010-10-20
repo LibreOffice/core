@@ -134,16 +134,6 @@ class Graphic;
 #define GFF_EMF ( (USHORT)0x00f8 )
 #define GFF_XXX ( (USHORT)0xffff )
 
-// ---------------
-// - RequestInfo -
-// ---------------
-
-struct RequestInfo
-{
-    BYTE*   pBuffer;
-    ULONG   nRealBufferSize;
-};
-
 // ---------------------
 // - GraphicDescriptor -
 // ---------------------
@@ -151,28 +141,17 @@ struct RequestInfo
 class SVT_DLLPUBLIC GraphicDescriptor
 {
     SvStream*           pFileStm;
-    Link                aReqLink;
+
     String              aPathExt;
     Size                aPixSize;
     Size                aLogSize;
-    SvStream*           pMemStm;
-    SvStream*           pBaseStm;
-    ULONG               nStmPos;
     USHORT              nBitsPerPixel;
     USHORT              nPlanes;
     USHORT              nFormat;
     BOOL                bCompressed;
-    BOOL                bDataReady;
-    BOOL                bLinked;
-    BOOL                bLinkChanged;
-    BOOL                bWideSearch;
-    BOOL                bBaseStm;
-    long                nExtra1;
-    long                nExtra2;
+    BOOL                bOwnStream;
 
     void                ImpConstruct();
-
-//#if 0 // _SOLAR__PRIVATE
 
     BOOL                ImpDetectBMP( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectGIF( SvStream& rStm, BOOL bExtendedInfo );
@@ -199,26 +178,10 @@ class SVT_DLLPUBLIC GraphicDescriptor
     BOOL                ImpDetectSGV( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo );
 
-//#endif
-
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );
 
-protected:
-
-    BOOL                IsDataReady() const;
-    BOOL                IsWideSearch() const;
-    SvStream&           GetSearchStream() const;
-    const String&       GetPathExtension() const;
-
 public:
-
-    // Default-Ctor, um anschliessend einen Link zu setzen, mit dem
-    // die Daten vom Aufrufer im ::Detect() angefordert werden.
-    // da einige Formate ( Mtf's ) keinen eindeutigen Header besitzen,
-    // ist es sinnvoll den vollen Filenamen (inkl. Ext. ) mitanzugeben,
-    // da so das Format ueber die Extension ermittelt werden kann
-    GraphicDescriptor( const String* pPath = NULL );
 
     // Ctor, um einen Filenamen zu setzen. Es muss ::Detect() gerufen werden,
     // um das File zu identifizieren;
@@ -260,21 +223,6 @@ public:
 
     // zeigt an, ob das Bild evtl. komprimiert (wie auch immer) ist
     BOOL            IsCompressed() const { return bCompressed; }
-
-    // setzt den LinkHdl zum Setzen der Bytes;
-    // der Handler muss einen Pointer auf die RequestInfo-Struktur
-    // zurueckgeben; die Anzahl der minimal zur Verfuegung zu stellenden
-    // Daten muss im Handler ueber ::GetRequestedByteCount() erfragt werden;
-    // die tatsaechlich zur Verfuegung gestellte BYTE-Anzahl
-    // wird in der RequestInfo-Struktur gesetzt
-    void            SetRequestHdl( const Link& rRequestHdl );
-
-    // gibt den LinkHdl zum Setzen der Bytes zurueck
-    const Link&     GetRequestHdl() const { return aReqLink; }
-
-    // muss im ReqHdl gerufen werden, um zu erfahren, wieviele
-    // Bytes _mindestens_ bereitgestellt werden muessen
-    ULONG           GetRequestedByteCount() const;
 
     // gibt die Filternummer des Filters zurueck,
     // der im GraphicFilter zum Lesen dieses Formats

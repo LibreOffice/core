@@ -36,17 +36,16 @@ import com.sun.star.task.UserRecord;
 
 import com.sun.star.uno.UnoRuntime;
 
-import share.LogWriter;
 
 public class Test02 implements PasswordContainerTest {
     XMultiServiceFactory m_xMSF = null;
     XPasswordContainer m_xPasswordContainer = null;
     TestHelper m_aTestHelper = null;
 
-    public Test02 ( XMultiServiceFactory xMSF, LogWriter aLogWriter )
+    public Test02 ( XMultiServiceFactory xMSF )
     {
         m_xMSF = xMSF;
-        m_aTestHelper = new TestHelper (aLogWriter, "Test02: ");
+        m_aTestHelper = new TestHelper ( "Test02: ");
     }
 
     public boolean test() {
@@ -69,11 +68,11 @@ public class Test02 implements PasswordContainerTest {
 
         try {
             Object oPasswordContainer = m_xMSF.createInstance("com.sun.star.task.PasswordContainer");
-            XPasswordContainer xContainer = (XPasswordContainer)UnoRuntime.queryInterface(XPasswordContainer.class, oPasswordContainer);
+            XPasswordContainer xContainer = UnoRuntime.queryInterface(XPasswordContainer.class, oPasswordContainer);
             Object oHandler = m_xMSF.createInstance("com.sun.star.task.InteractionHandler");
-            XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(XInteractionHandler.class, oHandler);
+            XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, oHandler);
             MasterPasswdHandler aMHandler = new MasterPasswdHandler(xHandler);
-            XMasterPasswordHandling xMHandling = (XMasterPasswordHandling)UnoRuntime.queryInterface(XMasterPasswordHandling.class, oPasswordContainer);
+            XMasterPasswordHandling xMHandling = UnoRuntime.queryInterface(XMasterPasswordHandling.class, oPasswordContainer);
 
             // allow the storing of the passwords
             xMHandling.allowPersistentStoring(true);

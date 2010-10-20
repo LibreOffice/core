@@ -145,7 +145,14 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
         }
         break;
+
     case NMSP_PPT|XML_bgRef:            // a:CT_StyleMatrixReference
+        {
+            FillPropertiesPtr pFillPropertiesPtr( new FillProperties(
+                *mpSlidePersistPtr->getTheme()->getFillStyle( xAttribs->getOptionalValue( XML_idx ).toInt32() ) ) );
+            xRet.set( new ColorContext( *this, mpSlidePersistPtr->getBackgroundColorRef() ) );
+            mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
+        }
         break;
 
     case NMSP_PPT|XML_clrMap:           // CT_ColorMapping

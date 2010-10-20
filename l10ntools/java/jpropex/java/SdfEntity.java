@@ -97,7 +97,6 @@ public class SdfEntity implements Cloneable{
     }
 
     public void setProperties( String line ){
-
         if( line != null )
         {
             String[] splitted       = line.split("\t",15);

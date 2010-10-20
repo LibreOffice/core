@@ -25,53 +25,28 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = XUnitConversionTest
-PRJNAME = $(TARGET)
-PACKAGE = complex$/xunitconversion
-
-# --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
-
-
-#----- compile .java files -----------------------------------------
-
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar 
-JAVAFILES       = XUnitConversionTest.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-SUBDIRS		= 
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
 .ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
 
-# test base is java complex
-CT_TESTBASE = -tb java_complex
+PRJ = ../../..
+PRJNAME = sc
+TARGET = qa_complex_xunitconversiontest
 
-# build up package name with "." instead of $/
-CT_PACKAGE     = -o $(PACKAGE:s\$/\.\)
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/xunitconversion
 
-# start the runner application
-CT_APP      = org.openoffice.Runner
+JAVATESTFILES = \
+    XUnitConversionTest.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-# --- Targets ------------------------------------------------------
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-.INCLUDE :  target.mk
+ALLTAR : javatest
 
-run:	$(JAVAFILES) XUnitConversionTest
-
-XUnitConversionTest:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_PACKAGE).XUnitConversionTest
+.END
