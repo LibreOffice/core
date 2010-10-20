@@ -58,8 +58,8 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);  //liuchen 2009-7-31
-    virtual void SAL_CALL setMultiSelect( ::sal_Int32 _multiselect ) throw (css::uno::RuntimeException); //liuchen 2009-7-31
+    virtual ::sal_Int32 SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setMultiSelect( ::sal_Int32 _multiselect ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Selected( ::sal_Int32 index ) throw (css::uno::RuntimeException);
 
     // Methods

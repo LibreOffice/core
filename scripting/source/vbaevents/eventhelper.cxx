@@ -65,10 +65,10 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/XFixedText.hpp> //liuchen 2009-6-5
-#include <com/sun/star/awt/XTextComponent.hpp> //liuchen 2009-6-5
-#include <com/sun/star/awt/XComboBox.hpp> //liuchen 2009-6-18
-#include <com/sun/star/awt/XRadioButton.hpp> //liuchen 2009-7-30
+#include <com/sun/star/awt/XFixedText.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XComboBox.hpp>
+#include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 
 #include "vbamsformreturntypes.hxx"
@@ -112,7 +112,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
-#define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))//liuchen 2009-6-8
+#define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
 #define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
 // Some constants
@@ -241,7 +241,7 @@ Sequence< Any > ooFocusLostToVBAExit( const Sequence< Any >& params )
 
 typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
 
-//liuchen 2009-6-23
+
 //expand the "TranslateInfo" struct to support more kinds of events
 struct TranslateInfo
 {
@@ -257,7 +257,7 @@ std::list< TranslateInfo >,
 ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventInfoHash;
 
-//liuchen 2009-6-23
+
 struct TranslatePropMap
 {
     rtl::OUString sEventInfo;   //OO event name
@@ -292,12 +292,12 @@ TypeList listBoxList = {&typeXListBox, 1};
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },  //liuchen 2009-7-30, OptionalButton_Change event is not the same as OptionalButton_Click event
+    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },
     // actionPerformed ooo event
     { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Click"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } }, //liuchen 2009-7-30, OptionalButton_Change event should be triggered when the button state is changed
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } },
     // itemStateChanged ooo event
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },  //liuchen, add to support VBA ComboBox_Click event
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },
 
     { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&listBoxList) } },
     // changed ooo event
@@ -308,7 +308,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // focusLost ooo event
     { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_LostFocus"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), ooFocusLostToVBAExit, ApproveType, (void*)(&textCompList) } }, //liuchen, add to support VBA TextBox_Exit event
+    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), ooFocusLostToVBAExit, ApproveType, (void*)(&textCompList) } },
 
     // adjustmentValueChanged ooo event
     { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Scroll"), NULL, ApproveAll, NULL } },
@@ -321,7 +321,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { MAP_CHAR_LEN("keyReleased"), { MAP_CHAR_LEN("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
 
     // mouseReleased ooo event
-    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } }, //liuchen, add to support VBA Label_Click event
+    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } },
     { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
 
     // mousePressed ooo event
@@ -330,7 +330,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // mouseMoved ooo event
     { MAP_CHAR_LEN("mouseMoved"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } }, //liuchen, add to support VBA MouseMove event when the "Shift" key is pressed
+    { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } },
 
     // keyPressed ooo event
     { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
@@ -364,7 +364,7 @@ EventInfoHash& getEventTransInfo()
     }
     return eventTransInfo;
 }
-//liuchen 2009-6-23 end
+
 
 // Helper class
 
@@ -831,7 +831,7 @@ EventListener::getPropertySetInfo(  ) throw (RuntimeException)
     return xInfo;
 }
 
-//liuchen 2009-6-23
+
 //decide if the control should execute the event
 bool ApproveAll(const ScriptEvent&, void* )
 {
@@ -907,7 +907,7 @@ bool DenyKeys(const ScriptEvent& evt, void* /*pPara*/)
 
 
 
-//liuchen 2009-6-23
+
 // EventListener
 
 void
@@ -1027,12 +1027,12 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             ooo::vba::VBAMacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
             if ( aMacroResolvedInfo.IsResolved() )
             {
-                //liuchen 2009-6-8
+
                 if (! txInfo->ApproveRule(evt, txInfo->pPara) )
                 {
                     continue;
                 }
-                //liuchen 2009-6-8
+
                 // !! translate arguments & emulate events where necessary
                 Sequence< Any > aArguments;
                 if  ( (*txInfo).toVBA )

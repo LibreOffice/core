@@ -86,7 +86,7 @@ sal_Bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any
 sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if(!rValue.hasValue())
-        return sal_False;     //added by BerryJia for fixing Bug102407 2002-11-5
+        return sal_False;
     OUStringBuffer aOut;
     sal_Int16 nVal = 0;
 

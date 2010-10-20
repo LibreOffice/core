@@ -950,7 +950,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    //added by BerryJia for fixing bug102407 2002-11-5
+
     Reference< XPropertySet > OControlImport::createElement()
     {
         const Reference<XPropertySet> xPropSet = OElementImport::createElement();

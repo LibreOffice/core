@@ -516,19 +516,19 @@ ScVbaControl* ScVbaControlFactory::createControl(const uno::Reference< drawing::
     const static rtl::OUString sClassId( RTL_CONSTASCII_USTRINGPARAM("ClassId") );
     xProps->getPropertyValue( sClassId ) >>= nClassId;
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
-    sal_Bool bToggle = sal_False;  //liuchen 2009-8-11,
+    sal_Bool bToggle = sal_False;
     switch( nClassId )
     {
         case form::FormComponentType::COMBOBOX:
             return new ScVbaComboBox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
         case form::FormComponentType::COMMANDBUTTON:
-            //liuchen 2009-8-11
+
             xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Toggle") ) ) >>= bToggle;
             if ( bToggle )
                 return new ScVbaToggleButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
             else
                 return new ScVbaButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
-            //liuchen 2009-8-11
+
         case form::FormComponentType::FIXEDTEXT:
             return new ScVbaLabel( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
         case form::FormComponentType::TEXTFIELD:

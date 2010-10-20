@@ -2187,7 +2187,7 @@ public:
         }
     }
 
-    //liuchen 2009-7-21, support Excel VBA Form_QueryClose event
+
     virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
     {
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
@@ -2218,7 +2218,7 @@ public:
 
         mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ) );
     }
-    //liuchen 2009-7-21
+
 
     virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
@@ -2320,7 +2320,7 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxCLASS_METHOD );
     if( pMeth )
     {
-                 //liuchen 2009-7-21, support Excel VBA UserForm_QueryClose event with parameters
+
         if ( aArguments.getLength() > 0 )   // Setup parameters
         {
             SbxArrayRef xArray = new SbxArray;
@@ -2348,7 +2348,7 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
             pMeth->SetParameters( NULL );
         }
         else
-//liuchen 2009-7-21
+
         {
             SbxValues aVals;
             pMeth->Get( aVals );
@@ -2434,7 +2434,7 @@ void SbUserFormModule::Load()
         InitObject();
 }
 
-//liuchen 2009-7-21 change to accmordate VBA's beheavior
+
 void SbUserFormModule::Unload()
 {
     OSL_TRACE("** Unload() ");
@@ -2484,7 +2484,7 @@ void SbUserFormModule::Unload()
         OSL_TRACE("UnloadObject completed ( we hope )");
     }
 }
-//liuchen
+
 
 void SbUserFormModule::InitObject()
 {

@@ -65,7 +65,7 @@ interface XPageSetup : com::sun::star::uno::XInterface
     [attribute] boolean CenterVertically;
     [attribute] boolean CenterHorizontally;
     [attribute] boolean PrintHeadings;
-    [attribute] long PaperSize; //liuchen 2009-12-11
+    [attribute] long PaperSize;
 
 };
 

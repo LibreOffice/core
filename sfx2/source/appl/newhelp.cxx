@@ -901,7 +901,7 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
 }
 
 // -----------------------------------------------------------------------
-//added by BerryJia for fixing Bug98251, 2002-12-11
+
 sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 {
     sal_Bool bRet = sal_False;
@@ -1785,7 +1785,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl *, EMPTYARG )
 {
     // keyword found on index?
     sal_Bool bIndex = pIPage->HasKeyword();
-    //The following two lines are added by BerryJia for fixing Bug98251, 2002-12-11
+
     if( !bIndex)
         bIndex = pIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.

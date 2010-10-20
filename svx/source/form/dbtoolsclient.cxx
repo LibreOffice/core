@@ -161,7 +161,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+
     bool OStaticDataAccessTools::ensureLoaded() const
     {
         if ( !ODbtoolsClient::ensureLoaded() )

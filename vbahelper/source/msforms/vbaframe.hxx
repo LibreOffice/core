@@ -43,10 +43,10 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
-    //liuchen 2009-7-6
+
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
-    //liuchen 2009-7-6 end
+
     virtual rtl::OUString SAL_CALL getAccelerator() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAccelerator( const rtl::OUString& _accelerator ) throw (css::uno::RuntimeException);
     //XHelperInterface

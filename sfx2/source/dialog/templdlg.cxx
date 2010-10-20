@@ -374,7 +374,7 @@ SfxActionListBox::SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent,
 
 PopupMenu* SfxActionListBox::CreateContextMenu( void )
 {
-    //added by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
+
     if( !( GetSelectionCount() > 0 ) )
     {
         pDialog->EnableEdit( FALSE );
@@ -1111,7 +1111,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
             {
                 aFmtLb.MakeVisible( pEntry );
                 aFmtLb.Select( pEntry );
-                bWaterDisabled = !HasSelectedStyle(); //added by BerryJia for fixing Bug76391 2003-1-22
+                bWaterDisabled = !HasSelectedStyle();
                 FmtSelectHdl( NULL );
             }
         }
@@ -1373,7 +1373,7 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {
 //  EnableItem(SID_STYLE_WATERCAN, pItem != 0);
     bWaterDisabled =  pItem == 0;
-//added by BerryJia for fixing Bug76391 2003-1-7
+
     if(!bWaterDisabled)
         bWaterDisabled = !HasSelectedStyle();
 

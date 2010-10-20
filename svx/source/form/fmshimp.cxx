@@ -1248,7 +1248,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                 }
 
                 // replace the mdoel within the parent container
-                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);   //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);
                 if (xIndexParent.is())
                 {
                     // the form container works with FormComponents
@@ -1257,7 +1257,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     Any aNewModel(makeAny(xComponent));
                     try
                     {
-                        //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+
                         sal_Int32 nIndex = getElementPos(xParent, xOldModel);
                         if (nIndex>=0 && nIndex<xParent->getCount())
                             xIndexParent->replaceByIndex(nIndex, aNewModel);

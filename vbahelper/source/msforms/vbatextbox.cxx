@@ -98,8 +98,8 @@ ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException)
 {
-    sal_Int16 _maxlength16 = static_cast<sal_Int16> (_maxlength); //liuchen 2009-7-24, resolve the problem that MaxLength cannot be set correctly
-    uno::Any aValue( _maxlength16 );                              //liuchen 2009-7-24, resolve the problem that MaxLength cannot be set correctly
+    sal_Int16 _maxlength16 = static_cast<sal_Int16> (_maxlength);
+    uno::Any aValue( _maxlength16 );
     m_xProps->setPropertyValue
             (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextLen" ) ), aValue);
 }

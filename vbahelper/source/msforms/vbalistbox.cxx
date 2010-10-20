@@ -115,7 +115,7 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();
-    //m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );   //liuchen 2009-8-12 solve the problem that ListBox.Text and ListBox.Value cannot be set
+    //m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
 }
 
 ::rtl::OUString SAL_CALL

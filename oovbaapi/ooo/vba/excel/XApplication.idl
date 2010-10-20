@@ -66,7 +66,7 @@ interface XApplication
     [attribute, readonly] XWindow ActiveWindow;
     [attribute, readonly] XWorksheet ActiveSheet;
     [attribute, readonly] ooo::vba::XAssistant Assistant;
-    [attribute, readonly] ooo::vba::XFileSearch FileSearch; //liuchen 2009-8-18, add the support of VBA Application.FileSearch
+    [attribute, readonly] ooo::vba::XFileSearch FileSearch;
     [attribute] long Calculation;
     [attribute, readonly] XWorkbook ThisWorkbook;
     [attribute, readonly] ooo::vba::XFileDialog FileDialog;
@@ -78,8 +78,8 @@ interface XApplication
     [attribute] long Cursor;
         [attribute] boolean EnableEvents;
     [attribute] boolean Visible;
-    [attribute] boolean Iteration;  //liuchen 2009-11-25
-    [attribute] long EnableCancelKey;  //liuchen 2009-11-26
+    [attribute] boolean Iteration;
+    [attribute] long EnableCancelKey;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 
@@ -110,7 +110,7 @@ interface XApplication
     void Volatile([in] any Volatile);
     any Caller( [in] any aIndex );
     any MenuBars( [in] any aIndex );
-    any International([in] long Index);  //liuchen 2009-11-26
+    any International([in] long Index);
     any GetSaveAsFilename( [in] any InitialFilename, [in] any FileFilter, [in] any FilterIndex, [in] any Title,[in] any ButtonText);
     void Undo();  //2009-10-11  limingl
     double InchesToPoints([in] double Inches);

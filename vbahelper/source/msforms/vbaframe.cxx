@@ -65,7 +65,7 @@ ScVbaFrame::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::Run
     _value >>= sCaption;
     setCaption( sCaption );
 }
-//liuchen 2009-7-6
+
 ::sal_Int32 SAL_CALL ScVbaFrame::getForeColor() throw (::com::sun::star::uno::RuntimeException)
 {
     return 0;
@@ -75,7 +75,7 @@ void SAL_CALL ScVbaFrame::setForeColor( ::sal_Int32 /*_forecolor*/ ) throw (::co
 {
     return;
 }
-//liuchen 2009-7-6 end
+
 
 rtl::OUString SAL_CALL
 ScVbaFrame::getAccelerator() throw (css::uno::RuntimeException)

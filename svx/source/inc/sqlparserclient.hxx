@@ -44,7 +44,7 @@ namespace svxform
                             ,public ::svxform::OParseContextClient
     {
     private:
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
     protected:

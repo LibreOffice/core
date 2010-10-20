@@ -40,7 +40,7 @@ interface XListBox: com::sun::star::uno::XInterface
 {
     [attribute] any Value;
     [attribute] string Text;
-    [attribute] long MultiSelect; //liuchen 2009-7-31 MultiSelect property in Excel VBA is type long
+    [attribute] long MultiSelect;
     [attribute] any ListIndex;
         [attribute, readonly ] long ListCount;
     void AddItem( [in] any pvargItem, [in] any pvargIndex );

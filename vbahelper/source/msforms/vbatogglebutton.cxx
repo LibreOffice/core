@@ -69,7 +69,7 @@ ScVbaToggleButton::getValue() throw (uno::RuntimeException)
      return uno::makeAny( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
 }
 
-//liuchen 2009-7-23, resolve the defect that ToggleButton.Value cannot be set correctly
+
 void SAL_CALL
 ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
@@ -95,7 +95,7 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
     }
     m_xProps->setPropertyValue( STATE, uno::makeAny(  nState ) );
 }
-//liuchen 2009-7-23
+
 
 rtl::OUString&
 ScVbaToggleButton::getServiceImplName()

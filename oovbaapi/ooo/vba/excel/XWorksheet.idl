@@ -78,7 +78,7 @@ interface XWorksheet
 
     void Activate();
     void Calculate( );
-    void Select([in] any Replace); //liuchen 2009-9-2, add the input parameter to support expand selection
+    void Select([in] any Replace);
     void Move([in] any Before,[in] any After );
     void Copy([in] any Before,[in] any After );
     void Paste([in] any Destination,[in] any Link);

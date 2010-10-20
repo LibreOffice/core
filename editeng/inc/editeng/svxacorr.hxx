@@ -237,7 +237,7 @@ protected:
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
 public:
-    //The method below is changed from private to public by BerryJia for Bug95846 Time:2002-8-13 15:50
+
     sal_Unicode GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
                             LanguageType eLang ) const;
     virtual BOOL GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong );

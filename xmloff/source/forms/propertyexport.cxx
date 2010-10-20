@@ -144,7 +144,7 @@ namespace xmloff
                     aExportType = aValue.getValueType();
 
                 // the type attribute
-                // modified by BerryJia for Bug102407
+
                 bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
                 if ( bIsEmptyValue )
                 {
@@ -169,7 +169,7 @@ namespace xmloff
 
                 if( !bIsSequence && !bIsEmptyValue )
                 {   // the simple case
-                    //add by BerryJia for Bug102407
+
                     sValue = implConvertAny(aValue);
                     AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
                 }
