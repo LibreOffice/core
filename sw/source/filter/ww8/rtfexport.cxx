@@ -283,8 +283,14 @@ void RtfExport::WriteRevTab()
 
     // Now write the table
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_REVTBL << ' ';
-    for(std::map<String,USHORT>::iterator aIter = m_aRedlineTbl.begin(); aIter != m_aRedlineTbl.end(); ++aIter)
-        Strm() << '{' << OutString((*aIter).first, eDefaultEncoding) << ";}";
+    for(USHORT i = 0; i < m_aRedlineTbl.size(); ++i)
+    {
+        const String* pAuthor = GetRedline(i);
+        Strm() << '{';
+        if (pAuthor)
+            Strm() << OutString(*pAuthor, eDefaultEncoding);
+        Strm() << ";}";
+    }
     Strm() << '}' << sNewLine;
 }
 
@@ -1114,6 +1120,14 @@ USHORT RtfExport::GetRedline( const String& rAuthor )
         m_aRedlineTbl.insert(std::pair<String,USHORT>(rAuthor,nId));
         return nId;
     }
+}
+
+const String* RtfExport::GetRedline( USHORT nId )
+{
+    for(std::map<String,USHORT>::iterator aIter = m_aRedlineTbl.begin(); aIter != m_aRedlineTbl.end(); ++aIter)
+        if ((*aIter).second == nId)
+            return &(*aIter).first;
+    return NULL;
 }
 
 void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage )

@@ -182,6 +182,7 @@ public:
     void InsColorLine( const SvxBoxItem& rBox );
     void OutColorTable();
     USHORT GetRedline( const String& rAuthor );
+    const String* GetRedline( USHORT nId );
 
     void InsStyle( USHORT nId, const rtl::OString& rStyle );
     rtl::OString* GetStyle( USHORT nId );
