@@ -257,10 +257,8 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 {
     //ScViewData*   pViewData = pTabViewShell->GetViewData();
 
-    //pDoc = pViewData->GetDocument();
     String  aFieldName;
-    int nRecordNum = nEndRow - nStartRow;
-    for(sal_uInt16 i = 0; i < aColLength; i++)
+    for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
         if (pEdits[i])
         {
