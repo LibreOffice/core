@@ -84,29 +84,29 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     FixedText FT_NR_REPORTS
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text [ en-US ] = "Number of reports sent:" ;
     };
     FixedText FT_NR_REPORTS_VALUE
     {
-        Pos = MAP_APPFONT ( 95 , 132 ) ;
+        Pos = MAP_APPFONT ( 111 , 132 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
     FixedText FT_NR_ACTIONS
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text [ en-US ] = "Number of tracked actions:" ;
     };
     FixedText FT_NR_ACTIONS_VALUE
     {
-        Pos = MAP_APPFONT ( 95 , 145 ) ;
+        Pos = MAP_APPFONT ( 111 , 145 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
     PushButton PB_SHOWDATA
     {
         Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Show Data" ;
     };
     String STR_INFO
