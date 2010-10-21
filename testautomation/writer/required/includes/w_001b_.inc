@@ -399,7 +399,7 @@ testcase tMasterDocFileSaveWithPassword
     FileClose
     WaitSlot(2000)
     PrintLog "Open previous saved document"
-    hFileOpenLocally( Datei$)
+    Call hFileOpen( Datei$)
 
     Kontext "PasswordFileOpen"
     PrintLog "Enter a wrong password."
@@ -427,7 +427,7 @@ testcase tMasterDocFileSaveWithPassword
 
     Sleep 1
     PrintLog "File / Open again your previous saved document"
-    hFileOpenLocally( Datei$)
+    Call hFileOpen( Datei$)
     PrintLog "Enter your password in password dialog"
     Kontext "PasswordFileOpen"
     if PasswordFileOpen.Exists then
@@ -517,7 +517,7 @@ testcase tMasterDocFileReload
     endif
 
     PrintLog "Open previous saved document"
-    hFileOpenLocally(  sDocumentPath )
+    Call hFileOpen(  sDocumentPath )
     
     PrintLog "Insert a table in document"
     Call hTabelleEinfuegen
