@@ -27,9 +27,7 @@
 #ifndef SW_UNDOBJ_HXX
 #define SW_UNDOBJ_HXX
 
-// --> OD 2006-11-01 #130889#
 #include <vector>
-// <--
 #include <memory>
 
 #include <boost/shared_ptr.hpp>
@@ -1718,7 +1716,7 @@ public:
 struct _UndoTransliterate_Data;
 class SwUndoTransliterate : public SwUndo, public SwUndRng
 {
-    _UndoTransliterate_Data *pData, *pLastData;
+    std::vector< _UndoTransliterate_Data * >    aChanges;
     sal_uInt32 nType;
 
 public:
@@ -1732,7 +1730,7 @@ public:
 
     void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
-    BOOL HasData() const {return 0 != pData; }
+    BOOL HasData() const { return aChanges.size() > 0; }
 };
 
 //--------------------------------------------------------------------

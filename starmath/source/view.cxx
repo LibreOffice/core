@@ -749,7 +749,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 }
 
 
-SFX_IMPL_VIEWFACTORY(SmViewShell, SmResId(RID_VIEWNAME))
+SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
 {
     SFX_VIEW_REGISTRATION(SmDocShell);
 }
@@ -1551,7 +1551,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
         }
 
-        case SID_INSERT_FORMULA:
+        case SID_IMPORT_FORMULA:
         {
             delete pImpl->pRequest;
             pImpl->pRequest = new SfxRequest( rReq );
