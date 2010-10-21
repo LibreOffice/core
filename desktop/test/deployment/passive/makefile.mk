@@ -32,7 +32,7 @@ TARGET = test_deployment_passive
 ENABLE_EXCEPTIONS = TRUE
 
 PACKAGE = com/sun/star/comp/test/deployment/passive_java
-JAVAFILES = Service.java
+JAVAFILES = Dispatch.java Provider.java Services.java
 JARFILES = juh.jar ridl.jar unoil.jar
 
 my_components = passive_native passive_java passive_python

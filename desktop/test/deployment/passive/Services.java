@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--**********************************************************************
-*
+/*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,16 +21,29 @@
 * version 3 along with OpenOffice.org.  If not, see
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
-*
-**********************************************************************-->
+************************************************************************/
 
-<component loader="com.sun.star.loader.Java2"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.test.deployment.passive_java">
-    <service name="com.sun.star.test.deployment.passive_java"/>
-  </implementation>
-  <implementation
-      name="com.sun.star.comp.test.deployment.passive_java_singleton">
-    <singleton name="com.sun.star.test.deployment.passive_java_singleton"/>
-  </implementation>
-</component>
+package com.sun.star.comp.test.deployment.passive_java;
+
+import com.sun.star.lang.XSingleComponentFactory;
+import com.sun.star.lib.uno.helper.Factory;
+
+public final class Services {
+    private Services() {}
+
+    public static XSingleComponentFactory __getComponentFactory(
+        String implementation)
+    {
+        if (implementation.equals(Dispatch.implementationName)) {
+            return Factory.createComponentFactory(
+                Dispatch.class, Dispatch.implementationName,
+                Dispatch.serviceNames);
+        } else if (implementation.equals(Provider.implementationName)) {
+            return Factory.createComponentFactory(
+                Provider.class, Provider.implementationName,
+                Provider.serviceNames);
+        } else {
+            return null;
+        }
+    }
+}

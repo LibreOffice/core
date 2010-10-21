@@ -33,24 +33,49 @@ from com.sun.star.awt.MessageBoxButtons import BUTTONS_OK
 from com.sun.star.frame import XDispatch, XDispatchProvider
 from com.sun.star.lang import XServiceInfo
 
-implementationName = "com.sun.star.comp.test.deployment.passive_python"
-serviceNames = ("com.sun.star.test.deployment.passive_python",)
+class Provider(unohelper.Base, XServiceInfo, XDispatchProvider):
+    implementationName = "com.sun.star.comp.test.deployment.passive_python"
 
-class Service(unohelper.Base, XServiceInfo, XDispatchProvider, XDispatch):
+    serviceNames = ("com.sun.star.test.deployment.passive_python",)
+
     def __init__(self, context):
         self.context = context
 
     def getImplementationName(self):
-        return implementationName
+        return self.implementationName
 
     def supportsService(self, ServiceName):
-        return ServiceName in serviceNames
+        return ServiceName in self.serviceNames
 
     def getSupportedServiceNames(self):
-        return serviceNames
+        return self.serviceNames
 
     def queryDispatch(self, URL, TargetFrame, SearchFlags):
-        return self
+        return self.context.getValueByName( \
+            "/singletons/com.sun.star.test.deployment.passive_python_singleton")
+
+    def queryDispatches(self, Requests):
+        tuple( \
+            self.queryDispatch(i.FeatureURL, i.FrameName, i.SearchFlags) \
+                for i in Requests)
+
+class Dispatch(unohelper.Base, XServiceInfo, XDispatch):
+    implementationName = \
+        "com.sun.star.comp.test.deployment.passive_python_singleton"
+
+    serviceNames = ()
+
+    def __init__(self, context):
+        self.context = context
+
+    def getImplementationName(self):
+        return self.implementationName
+
+    def supportsService(self, ServiceName):
+        return ServiceName in self.serviceNames
+
+    def getSupportedServiceNames(self):
+        return self.serviceNames
 
     def dispatch(self, URL, Arguments):
         smgr = self.context.getServiceManager()
@@ -71,4 +96,6 @@ class Service(unohelper.Base, XServiceInfo, XDispatchProvider, XDispatch):
 
 g_ImplementationHelper = unohelper.ImplementationHelper()
 g_ImplementationHelper.addImplementation( \
-    Service, implementationName, serviceNames,)
+    Provider, Provider.implementationName, Provider.serviceNames)
+g_ImplementationHelper.addImplementation( \
+    Dispatch, Dispatch.implementationName, Dispatch.serviceNames)

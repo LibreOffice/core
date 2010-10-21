@@ -34,50 +34,30 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XStatusListener;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.URL;
 
-public final class Service extends WeakBase
-    implements XServiceInfo, XDispatchProvider, XDispatch
+public final class Dispatch extends WeakBase implements XServiceInfo, XDispatch
 {
-    public Service(XComponentContext context) {
+    public Dispatch(XComponentContext context) {
         this.context = context;
     }
 
     public String getImplementationName() { return implementationName; }
 
     public boolean supportsService(String ServiceName) {
-        return ServiceName.equals(getSupportedServiceNames()[0]); //TODO
+        return false; //TODO
     }
 
     public String[] getSupportedServiceNames() {
         return serviceNames;
-    }
-
-    public XDispatch queryDispatch(
-        URL URL, String TargetFrameName, int SearchFlags)
-    {
-        return this;
-    }
-
-    public XDispatch[] queryDispatches(DispatchDescriptor[] Requests) {
-        XDispatch[] s = new XDispatch[Requests.length];
-        for (int i = 0; i < s.length; ++i) {
-            s[i] = queryDispatch(
-                Requests[i].FeatureURL, Requests[i].FrameName,
-                Requests[i].SearchFlags);
-        }
-        return s;
     }
 
     public void dispatch(URL URL, PropertyValue[] Arguments) {
@@ -112,19 +92,10 @@ public final class Service extends WeakBase
 
     public void removeStatusListener(XStatusListener Control, URL URL) {}
 
-    public static XSingleComponentFactory __getComponentFactory(
-        String implementation)
-    {
-        return implementation.equals(implementationName)
-            ? Factory.createComponentFactory(Service.class, serviceNames)
-            : null;
-    }
-
     private final XComponentContext context;
 
-    private static final String implementationName =
-        "com.sun.star.comp.test.deployment.passive_java";
+    static final String implementationName =
+        "com.sun.star.comp.test.deployment.passive_java_singleton";
 
-    private static final String[] serviceNames = new String[] {
-        "com.sun.star.test.deployment.passive_java" };
+    static final String[] serviceNames = new String[0];
 }

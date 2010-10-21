@@ -31,4 +31,8 @@
   <implementation name="com.sun.star.comp.test.deployment.passive_python">
     <service name="com.sun.star.test.deployment.passive_python"/>
   </implementation>
+  <implementation
+      name="com.sun.star.comp.test.deployment.passive_python_singleton">
+    <singleton name="com.sun.star.test.deployment.passive_python_singleton"/>
+  </implementation>
 </component>

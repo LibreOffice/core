@@ -31,4 +31,8 @@
   <implementation name="com.sun.star.comp.test.deployment.passive_native">
     <service name="com.sun.star.test.deployment.passive_native"/>
   </implementation>
+  <implementation
+      name="com.sun.star.comp.test.deployment.passive_native_singleton">
+    <singleton name="com.sun.star.test.deployment.passive_native_singleton"/>
+  </implementation>
 </component>
