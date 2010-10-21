@@ -34,7 +34,7 @@
 
 
 #include <vector>
-typedef ::std::vector< String > IfaceVector;
+typedef ::std::vector< String > StringVector;
 
 struct SbiParseStack;
 
@@ -81,7 +81,8 @@ public:
     BOOL          bText;            // OPTION COMPARE TEXT
     BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
     BOOL          bClassModule;     // TRUE: OPTION ClassModule
-    IfaceVector   aIfaceVector;     // Holds all interfaces implemented by a class module
+    StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
+    StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
     SbiParser( StarBASIC*, SbModule* );

@@ -56,6 +56,7 @@
 #define RID_UUI_ERRHDL                                  (RID_UUI_START + 20)
 #define DLG_UUI_MASTERPASSWORD_CRT                      (RID_UUI_START + 21)
 #define DLG_UUI_PASSWORD                                (RID_UUI_START + 22)
+#define STR_ERROR_SIMPLE_PASSWORD_WRONG                 (RID_UUI_START + 23)
 #define STR_ERROR_PASSWORD_TO_OPEN_WRONG                (RID_UUI_START + 24)
 #define STR_ERROR_PASSWORD_TO_MODIFY_WRONG              (RID_UUI_START + 25)
 #define DLG_UUI_UNKNOWNAUTH                             (RID_UUI_START + 26)
@@ -93,6 +94,8 @@
 #define STR_RENAME_OR_REPLACE                           (RID_UUI_START + 58)
 #define STR_NAME_CLASH_RENAME_ONLY                      (RID_UUI_START + 59)
 #define STR_SAME_NAME_USED                              (RID_UUI_START + 60)
+#define STR_ENTER_SIMPLE_PASSWORD                       (RID_UUI_START + 61)
+#define STR_CONFIRM_SIMPLE_PASSWORD                     (RID_UUI_START + 62)
 
 #define ERRCODE_UUI_IO_ABORT                                    (ERRCODE_AREA_UUI + 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED                             (ERRCODE_AREA_UUI + 1)

@@ -754,6 +754,7 @@ void Desktop::DeInit()
         // instead of removing of the configManager just let it commit all the changes
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
         utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
 
         // close splashscreen if it's still open
@@ -784,6 +785,7 @@ BOOL Desktop::QueryExit()
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
         utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     }
     catch ( RuntimeException& )
@@ -1436,18 +1438,7 @@ USHORT Desktop::Exception(USHORT nError)
     if ( bAllowRecoveryAndSessionManagement )
         bRestart = SaveTasks();
 
-    // because there is no method to flush the condiguration data, we must dispose the ConfigManager
-    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
-    if (xCFGFlush.is())
-    {
-        xCFGFlush->flush();
-    }
-    else
-    {
-        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
-        if (xCFGDispose.is())
-            xCFGDispose->dispose();
-    }
+    FlushConfiguration();
 
     switch( nError & EXC_MAJORTYPE )
     {
@@ -1558,6 +1549,7 @@ void Desktop::Main()
     std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
     std::auto_ptr<SvtPathOptions> pPathOptions;
 
+    Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     sal_Bool bRestartRequested( sal_False );
     sal_Bool bUseSystemFileDialog(sal_True);
     int      nAcquireCount( 0 );
@@ -1761,7 +1753,6 @@ void Desktop::Main()
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
 
-        Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
         {
             ::comphelper::ComponentContext aContext( xSMgr );
             xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
@@ -1922,6 +1913,10 @@ void Desktop::Main()
         // The configuration error handler currently is only for startup
         aConfigErrHandler.deactivate();
 
+       // Acquire solar mutex just before we enter our message loop
+        if ( nAcquireCount )
+            Application::AcquireSolarMutex( nAcquireCount );
+
         // call Application::Execute to process messages in vcl message loop
         RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
@@ -1932,7 +1927,16 @@ void Desktop::Main()
             com::sun::star::uno::ContextLayer layer2(
                 new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
-            Execute();
+            // check whether the shutdown is caused by restart just before entering the Execute
+            bRestartRequested = bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
+            if ( !bRestartRequested )
+            {
+                // if this run of the office is triggered by restart, some additional actions should be done
+                DoRestartActionsIfNecessary( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoQuickstart() );
+
+                Execute();
+            }
         }
         catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
         {
@@ -1945,6 +1949,9 @@ void Desktop::Main()
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
     }
+
+    if ( bRestartRequested )
+        SetRestartState();
 
     if (xGlobalBroadcaster.is())
     {
@@ -1960,6 +1967,7 @@ void Desktop::Main()
 
     // remove temp directory
     RemoveTemporaryDirectory();
+    FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
     nAcquireCount = Application::ReleaseSolarMutex();
@@ -2055,6 +2063,22 @@ sal_Bool Desktop::InitializeConfiguration()
     }
 
     return bOk;
+}
+
+void Desktop::FlushConfiguration()
+{
+    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+    if (xCFGFlush.is())
+    {
+        xCFGFlush->flush();
+    }
+    else
+    {
+        // because there is no method to flush the condiguration data, we must dispose the ConfigManager
+        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+        if (xCFGDispose.is())
+            xCFGDispose->dispose();
+    }
 }
 
 sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& rSMgr )

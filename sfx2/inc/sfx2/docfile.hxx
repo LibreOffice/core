@@ -320,7 +320,6 @@ public:
 
     static com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag > GetVersionList(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    static sal_Bool EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OUString& aSecondURL );
     static ::rtl::OUString CreateTempCopyWithExt( const ::rtl::OUString& aURL );
     static sal_Bool CallApproveHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler, ::com::sun::star::uno::Any aRequest, sal_Bool bAllowAbort );
 

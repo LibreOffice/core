@@ -1,6 +1,0 @@
-[ComponentDescriptor]
-ImplementationName=com.sun.star.comp.configuration.backend.KDEBackend
-ComponentName=kdebe1.uno.so
-LoaderName=com.sun.star.loader.SharedLibrary
-[SupportedServices]
-com.sun.star.configuration.backend.KDEBackend

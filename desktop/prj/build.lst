@@ -41,3 +41,4 @@ dt  desktop\registry\data\org\openoffice\Office                     nmake   -  a
 dt  desktop\source\registration\com\sun\star\servicetag\resources   get     -  all sn_svctagres NULL
 dt  desktop\source\registration\com\sun\star\servicetag             nmake   -  all sn_svctag NULL
 dt  desktop\source\registration\com\sun\star\registration           nmake   -  all sn_regjob sn_svctag NULL
+dt desktop\qa\deployment_misc nmake - all sn_qa_deployment_misc dt_dp_misc dt_inc NULL

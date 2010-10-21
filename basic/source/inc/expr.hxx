@@ -234,7 +234,6 @@ class SbiExprList {                  // Basisklasse fuer Parameter und Dims
 protected:
     SbiParser* pParser;             // Parser
     SbiExpression* pFirst;          // Expressions
-    SbiProcDef* pProc;              // DECLARE-Funktion (Parameter-Anpassung)
     short nExpr;                    // Anzahl Expressions
     short nDim;                     // Anzahl Dimensionen
     BOOL  bError;                   // TRUE: Fehler
@@ -249,8 +248,6 @@ public:
     SbiExpression* Get( short );
     BOOL  Test( const SbiProcDef& );    // Parameter-Checks
     void  Gen();                    // Code-Erzeugung
-    // Setzen einer Funktionsdefinition zum Abgleich der Parameter
-    void SetProc( SbiProcDef* p )   { pProc = p; }
     void addExpression( SbiExpression* pExpr );
 };
 

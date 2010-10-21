@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Draw.GraphicExporter">
+    <service name="com.sun.star.drawing.GraphicExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper">
+    <service name="com.sun.star.document.BinaryStreamResolver"/>
+    <service name="com.sun.star.document.GraphicObjectResolver"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper">
+    <service name="com.sun.star.document.BinaryStreamResolver"/>
+    <service name="com.sun.star.document.GraphicObjectResolver"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider">
+    <service name="com.sun.star.gallery.GalleryThemeProvider"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D">
+    <service name="com.sun.star.graphic.PrimitiveFactory2D"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.Impl.FindbarDispatcher">
+    <service name="com.sun.star.comp.svx.FindbarDispatcher"/>
+    <service name="com.sun.star.frame.ProtocolHandler"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svx.RecoveryUI">
+    <service name="com.sun.star.dialog.RecoveryUI"/>
+  </implementation>
+  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine">
+    <service name="com.sun.star.drawing.CustomShapeEngine"/>
+  </implementation>
+  <implementation name="com.sun.star.drawing.SvxShapeCollection">
+    <service name="com.sun.star.drawing.ShapeCollection"/>
+  </implementation>
+  <implementation name="com.sun.star.drawing.SvxUnoColorTable">
+    <service name="com.sun.star.drawing.ColorTable"/>
+  </implementation>
+  <implementation name="com.sun.star.svx.DownSearchToolboxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.svx.FindTextToolboxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.svx.FontHeightToolBoxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.svx.UpSearchToolboxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+</component>

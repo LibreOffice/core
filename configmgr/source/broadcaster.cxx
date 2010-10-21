@@ -32,13 +32,17 @@
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"
 #include "com/sun/star/container/XContainerListener.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
+#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/XChangesListener.hpp"
+#include "cppuhelper/exc_hlp.hxx"
 #include "osl/diagnose.hxx"
+#include "rtl/string.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -49,6 +53,13 @@ namespace configmgr {
 namespace {
 
 namespace css = com::sun::star;
+
+void appendMessage(
+    rtl::OUStringBuffer & buffer, css::uno::Exception const & exception)
+{
+    buffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("; "));
+    buffer.append(exception.Message);
+}
 
 }
 
@@ -108,14 +119,16 @@ void Broadcaster::addChangesNotification(
 }
 
 void Broadcaster::send() {
-    bool exception = false;
+    css::uno::Any exception;
+    rtl::OUStringBuffer messages;
     for (DisposeNotifications::iterator i(disposeNotifications_.begin());
          i != disposeNotifications_.end(); ++i) {
         try {
             i->listener->disposing(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
     for (ContainerNotifications::iterator i(
@@ -125,8 +138,9 @@ void Broadcaster::send() {
         try {
             i->listener->elementInserted(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
     for (ContainerNotifications::iterator i(
@@ -136,8 +150,9 @@ void Broadcaster::send() {
         try {
             i->listener->elementRemoved(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
     for (ContainerNotifications::iterator i(
@@ -147,8 +162,9 @@ void Broadcaster::send() {
         try {
             i->listener->elementReplaced(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
     for (PropertyChangeNotifications::iterator i(
@@ -158,8 +174,9 @@ void Broadcaster::send() {
         try {
             i->listener->propertyChange(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
     for (PropertiesChangeNotifications::iterator i(
@@ -169,8 +186,9 @@ void Broadcaster::send() {
         try {
             i->listener->propertiesChange(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
     for (ChangesNotifications::iterator i(changesNotifications_.begin());
@@ -178,16 +196,19 @@ void Broadcaster::send() {
         try {
             i->listener->changesOccurred(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
+        } catch (css::uno::Exception & e) {
+            exception = cppu::getCaughtException();
+            appendMessage(messages, e);
         }
     }
-    if (exception) { //TODO
-        throw css::uno::RuntimeException(
-            rtl::OUString(
+    if (exception.hasValue()) {
+        throw css::lang::WrappedTargetRuntimeException(
+            (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr exceptions during listener notification")),
-            css::uno::Reference< css::uno::XInterface >());
+                    "configmgr exceptions during listener notification")) +
+             messages.makeStringAndClear()),
+            css::uno::Reference< css::uno::XInterface >(),
+            exception);
     }
 }
 

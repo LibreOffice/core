@@ -520,11 +520,13 @@ RTLFUNC(DoEvents)
     (void)pBasic;
     (void)bWrite;
     (void)rPar;
-    Timer aTimer;
-    aTimer.SetTimeout( 1 );
-    aTimer.Start();
-    while ( aTimer.IsActive() )
-        Application::Yield();
+    // Dummy implementation as the following code leads
+    // to performance problems for unknown reasons
+    //Timer aTimer;
+    //aTimer.SetTimeout( 1 );
+    //aTimer.Start();
+    //while ( aTimer.IsActive() )
+    //  Application::Reschedule();
 }
 
 RTLFUNC(GetGUIVersion)
@@ -1552,8 +1554,6 @@ RTLFUNC(Join)
         StarBASIC::Error( SbERR_MUST_HAVE_DIMS );
 }
 
-
-typedef ::std::vector< String > StringVector;
 
 RTLFUNC(Split)
 {

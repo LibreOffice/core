@@ -134,6 +134,9 @@ class Desktop : public Application
         static sal_Bool         IsFirstStartWizardNeeded();
         static sal_Bool         CheckExtensionDependencies();
 
+        static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
+        static void             SetRestartState();
+
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
@@ -152,6 +155,7 @@ class Desktop : public Application
 
         sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
         sal_Bool                InitializeConfiguration();
+        void                    FlushConfiguration();
         sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
