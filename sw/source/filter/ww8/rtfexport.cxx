@@ -460,6 +460,10 @@ void RtfExport::WritePageDescTable()
     }
     Strm() << '}' << sNewLine;
     bOutPageDescs = FALSE;
+
+    // reset table infos, otherwise the depth of the cells will be incorrect,
+    // in case the page style (header or footer) had tables
+    mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 }
 
 void RtfExport::ExportDocument_Impl()
