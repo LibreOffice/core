@@ -116,13 +116,6 @@ private:
 //<---
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
-    sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData* pPDFExtOutDevData,
-                                                const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev );
-    void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly,
-                                                const Gradient& rGradient, VirtualDevice& rDummyVDev );
-    void                    ImplWriteBitmapEx( ::vcl::PDFWriter& rWriter, VirtualDevice& rDummyVDev,
-                                                const Point& rPoint, const Size& rSize, const BitmapEx& rBitmap );
-
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 

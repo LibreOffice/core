@@ -54,48 +54,6 @@ extern "C"
 
     // -------------------------------------------------------------------------
 
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-    {
-        if (pRegistryKey)
-        {
-            try
-            {
-                Reference< XRegistryKey >   xNewKey;
-                sal_Int32                   nPos;
-
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFFilter_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-                const Sequence< OUString > & rSNL1 = PDFFilter_getSupportedServiceNames();
-                const OUString * pArray1 = rSNL1.getConstArray();
-                for ( nPos = rSNL1.getLength(); nPos--; )
-                    xNewKey->createKey( pArray1[nPos] );
-
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFDialog_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-                const Sequence< OUString > & rSNL2 = PDFDialog_getSupportedServiceNames();
-                const OUString * pArray2 = rSNL2.getConstArray();
-                for ( nPos = rSNL2.getLength(); nPos--; )
-                    xNewKey->createKey( pArray2[nPos] );
-
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFInteractionHandler_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-                const Sequence< OUString > & rSNL3 = PDFInteractionHandler_getSupportedServiceNames();
-                const OUString * pArray3 = rSNL3.getConstArray();
-                for ( nPos = rSNL3.getLength(); nPos--; )
-                    xNewKey->createKey( pArray3[nPos] );
-
-                return sal_True;
-            }
-            catch (InvalidRegistryException &)
-            {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-            }
-        }
-        return sal_False;
-    }
-
-    // -------------------------------------------------------------------------
-
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
