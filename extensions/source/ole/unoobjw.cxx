@@ -66,7 +66,6 @@
 #include "unoobjw.hxx"
 #include "servprov.hxx"
 
-using namespace vos;
 using namespace std;
 using namespace rtl;
 using namespace osl;

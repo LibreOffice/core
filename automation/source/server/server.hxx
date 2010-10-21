@@ -27,17 +27,6 @@
 #ifndef _SERVER_HXX
 #define _SERVER_HXX
 
-/*#include <osl/thread.hxx>
-#ifndef _STD_NO_NAMESPACE
-namespace vos
-{
-#endif
-    class OAcceptorSocket;
-#ifndef _STD_NO_NAMESPACE
-}
-#endif
-*/
-
 #include "editwin.hxx"
 #include <automation/communi.hxx>
 

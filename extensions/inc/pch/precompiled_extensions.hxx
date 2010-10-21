@@ -539,7 +539,6 @@
 
 #include "vcl/fldunit.hxx"
 
-#include "vos/macros.hxx"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
 

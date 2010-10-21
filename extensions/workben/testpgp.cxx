@@ -33,7 +33,6 @@
 #ifndef _RTL_WSTRING_
 #include <rtl/wstring>
 #endif
-#include <vos/macros.hxx>
 
 #include <usr/smartservices.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -282,7 +281,7 @@ sal_Int32 SAL_CALL DataSource_Impl::readBytes (
         throw IOException();
 
     sal_Int32 k = m_buffer.getLength() - m_position;
-    k = VOS_BOUND(k, 0, nBytesToRead);
+    k = SAL_BOUND(k, 0, nBytesToRead);
     if (k > 0)
     {
         rData.realloc(k);
@@ -554,7 +553,7 @@ BOOL install (
     String aModule ("module://");
     char   pBuffer[1024];
 
-    NAMESPACE_VOS(ORealDynamicLoader)::computeModuleName (
+    vos:ORealDynamicLoader::computeModuleName (
         prefix, pBuffer, sizeof(pBuffer));
     aModule += pBuffer;
 
@@ -572,7 +571,7 @@ BOOL uninstall (
     String aModule ("module://");
     char   pBuffer[1024];
 
-    NAMESPACE_VOS(ORealDynamicLoader)::computeModuleName (
+    vos::ORealDynamicLoader::computeModuleName (
         prefix, pBuffer, sizeof(pBuffer));
     aModule += pBuffer;
 

@@ -52,7 +52,6 @@
 
 using namespace std;
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 #define BUILD_ERROR(expr, Message)\

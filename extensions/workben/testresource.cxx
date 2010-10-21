@@ -33,13 +33,11 @@
 #include <smart/com/sun/star/script/XInvocation.hxx>
 
 #include <rtl/ustring.hxx>
-#include <vos/dynload.hxx>
 #include <osl/diagnose.h>
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 class MyApp : public Application

@@ -52,7 +52,6 @@
 #include "factory.hxx"
 
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 

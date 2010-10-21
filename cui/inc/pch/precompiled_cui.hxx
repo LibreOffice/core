@@ -943,8 +943,6 @@
 #include "vcl/wall.hxx"
 #include "vcl/wintypes.hxx"
 #include "osl/mutex.hxx"
-#include "vos/thread.hxx"
-#include "vos/xception.hxx"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"

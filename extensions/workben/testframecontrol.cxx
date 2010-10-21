@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#include <vos/dynload.hxx>
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
@@ -45,7 +43,6 @@
 
 #include <svtools/unoiface.hxx>
 
-using namespace vos;
 using namespace usr;
 
 //==================================================================================================

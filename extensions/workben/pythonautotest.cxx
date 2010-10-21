@@ -34,7 +34,6 @@
 #include <stardiv/uno/beans/exactname.hxx>
 
 #include <rtl/ustring.hxx>
-#include <vos/dynload.hxx>
 #include <osl/diagnose.h>
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
@@ -44,7 +43,6 @@
 #include <osl/conditn.hxx>
 
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 #define PCHAR_TO_USTRING(x) StringToOUString(String(x),CHARSET_SYSTEM)

@@ -41,7 +41,6 @@
 #include <smart/com/sun/star/registry/XImplementationRegistration.hxx>
 #include <smart/com/sun/star/lang/XComponent.hxx>
 
-#include <vos/dynload.hxx>
 #include <osl/diagnose.h>
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
@@ -52,7 +51,6 @@
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 
