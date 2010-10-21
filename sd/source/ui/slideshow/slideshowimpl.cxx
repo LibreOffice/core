@@ -44,7 +44,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <vos/process.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/urihelper.hxx>
 

@@ -91,11 +91,6 @@
 
 #include "i18npool/mslangid.hxx"
 
-#include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
-using namespace vos;
-#endif
-
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

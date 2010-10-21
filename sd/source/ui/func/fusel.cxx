@@ -31,7 +31,6 @@
 
 
 #include "fusel.hxx"
-#include <vos/process.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>

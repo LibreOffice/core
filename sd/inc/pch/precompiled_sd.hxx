@@ -908,8 +908,7 @@
 #include "osl/diagnose.h"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/xception.hxx"
+#include "osl/process.h"
 //---MARKER---
 
 #endif
