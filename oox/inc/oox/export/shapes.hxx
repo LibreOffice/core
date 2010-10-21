@@ -94,8 +94,6 @@ public:
     virtual ShapeExport&
                         WriteEllipseShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
-                        WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
-    virtual ShapeExport&
                         WriteGraphicObjectShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteLineShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
@@ -150,6 +148,8 @@ public:
                         WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteTextShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual ShapeExport&
+                        WriteOLE2Shape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 

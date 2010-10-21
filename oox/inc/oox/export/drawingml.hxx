@@ -24,6 +24,9 @@ namespace text {
     class XTextContent;
     class XTextRange;
 }
+namespace io {
+    struct XOutputStream;
+}
 }}}
 
 namespace oox {
@@ -62,6 +65,7 @@ public:
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
+    DocumentType GetDocumentType() { return meDocumentType; }
 
     rtl::OUString WriteImage( const Graphic &rGraphic );
 
@@ -82,9 +86,9 @@ public:
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,
-                   sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
+                  sal_Int32 nXmlNamespace, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
     void WriteTransformation( const Rectangle& rRectangle,
-                  sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
+                  sal_Int32 nXmlNamespace, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
     void WriteText( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape );
     void WriteParagraph( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > rParagraph );
@@ -92,11 +96,12 @@ public:
     void WriteParagraphNumbering( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                                   sal_Int16 nLevel );
     void WriteRun( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
-    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool bIsField );
+    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rRun, sal_Bool bIsField );
 
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
     void WritePolyPolygon( const PolyPolygon& rPolyPolygon );
+    void WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
 
     static void ResetCounters();
 
@@ -107,6 +112,15 @@ public:
     sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
     static const char* GetAlignment( sal_Int32 nAlignment );
+
+    sax_fastparser::FSHelperPtr     CreateOutputStream (
+                                        const ::rtl::OUString& sFullStream,
+                                        const ::rtl::OUString& sRelativeStream,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xParentRelation,
+                                        const char* sContentType,
+                                        const char* sRelationshipType,
+                                        ::rtl::OUString* pRelationshipId = NULL );
+
 };
 
 }

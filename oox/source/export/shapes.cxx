@@ -57,6 +57,8 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -71,6 +73,7 @@
 #include <svx/svdoashp.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
+#include <oox/export/chartexport.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -90,6 +93,8 @@ using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextField;
 using ::com::sun::star::text::XTextRange;
+using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::frame::XModel;
 using ::oox::core::XmlFilterBase;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
@@ -424,7 +429,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteTransformation( aRect );
+    WriteTransformation( aRect, XML_a );
     WritePolyPolygon( aPolyPolygon );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
@@ -505,7 +510,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape );
+    WriteShapeTransformation( xShape, XML_a );
     if( nAdjustmentValuesIndex != -1 )
         WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed, nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
     else
@@ -548,7 +553,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape );
+    WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "ellipse" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -562,39 +567,6 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
     WriteTextBox( xShape );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
-
-    return *this;
-}
-
-ShapeExport& ShapeExport::WriteFill( Reference< XPropertySet > xPropSet )
-{
-    FillStyle aFillStyle( FillStyle_NONE );
-    xPropSet->getPropertyValue( S( "FillStyle" ) ) >>= aFillStyle;
-
-    if( aFillStyle == FillStyle_BITMAP )
-    {
-        //DBG(printf ("FillStyle_BITMAP properties\n"));
-        //DBG(dump_pset(rXPropSet));
-    }
-
-    if( aFillStyle == FillStyle_NONE ||
-        aFillStyle == FillStyle_HATCH )
-        return *this;
-
-    switch( aFillStyle )
-    {
-    case ::com::sun::star::drawing::FillStyle_SOLID :
-        WriteSolidFill( xPropSet );
-        break;
-    case ::com::sun::star::drawing::FillStyle_GRADIENT :
-        WriteGradientFill( xPropSet );
-        break;
-    case ::com::sun::star::drawing::FillStyle_BITMAP :
-        WriteBlipFill( xPropSet, S( "FillBitmapURL" ) );
-        break;
-    default:
-        ;
-    }
 
     return *this;
 }
@@ -661,7 +633,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape );
+    WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
@@ -793,7 +765,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, bFlipH, bFlipV );
+    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
     WritePresetShape( "line" );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( xShapeProps.is() )
@@ -857,7 +829,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape );
+    WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -895,6 +867,7 @@ static const NameToConvertMapType& lcl_GetConverters()
     shape_converters[ "com.sun.star.drawing.LineShape" ]                = &ShapeExport::WriteLineShape;
     shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenBezierShape;
     shape_converters[ "com.sun.star.drawing.RectangleShape" ]           = &ShapeExport::WriteRectangleShape;
+    shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
     shape_converters[ "com.sun.star.drawing.TextShape" ]                = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.DateTimeShape" ]       = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.FooterShape" ]         = &ShapeExport::WriteTextShape;
@@ -952,7 +925,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape );
+    WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
     WriteBlipFill( Reference< XPropertySet >(xShape, UNO_QUERY ), S( "GraphicURL" ) );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
@@ -961,6 +934,25 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
+    return *this;
+}
+
+ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
+{
+    Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
+    if( xPropSet.is() && GetProperty( xPropSet, S("Model") ) )
+    {
+        Reference< XChartDocument > xChartDoc;
+        mAny >>= xChartDoc;
+        if( xChartDoc.is() )
+        {
+            //export the chart
+            Reference< XModel > xModel( xChartDoc, UNO_QUERY );
+            ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
+            static sal_Int32 nChartCount = 0;
+            aChartExport.WriteChartObj( xShape, ++nChartCount );
+        }
+    }
     return *this;
 }
 

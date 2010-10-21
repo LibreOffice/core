@@ -16,6 +16,9 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES =	\
         $(SLO)$/drawingml.obj \
         $(SLO)$/shapes.obj \
+        $(SLO)$/chartexport.obj \
+        $(SLO)$/SchXMLSeriesHelper.obj \
+        $(SLO)$/ColorPropertySet.obj \
         $(SLO)$/vmlexport.obj \
         $(SLO)$/vmlexport-shape-types.obj
 
