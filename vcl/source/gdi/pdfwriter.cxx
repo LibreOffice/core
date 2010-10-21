@@ -40,7 +40,7 @@ PDFWriter::AnyWidget::~AnyWidget()
 
 PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc )
         :
-        pImplementation( new PDFWriterImpl( rContext, xEnc ) )
+        pImplementation( new PDFWriterImpl( rContext, xEnc, *this ) )
 {
 }
 
@@ -560,12 +560,23 @@ std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
     return ((PDFWriterImpl*)pImplementation)->getErrors();
 }
 
+<<<<<<< local
 com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
 PDFWriter::InitEncryption( const rtl::OUString& i_rOwnerPassword,
                            const rtl::OUString& i_rUserPassword,
                            bool b128Bit
                           )
+=======
+void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
+>>>>>>> other
 {
+<<<<<<< local
     return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword, b128Bit );
+=======
+    ((PDFWriterImpl*)pImplementation)->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
+>>>>>>> other
 }
+<<<<<<< local
 
+=======
+>>>>>>> other

@@ -48,6 +48,7 @@
 class Font;
 class Point;
 class OutputDevice;
+class GDIMetaFile;
 class MapMode;
 class Polygon;
 class LineInfo;
@@ -61,6 +62,8 @@ class Wallpaper;
 
 namespace vcl
 {
+
+class PDFExtOutDevData;
 
 struct PDFNote
 {
@@ -594,6 +597,8 @@ The following structure describes the permissions used in PDF security
         PDFWriter::PDFDocInfo           DocumentInfo;
 
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
+        sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
+                                                        // 0 here specifies a default handling
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -620,7 +625,9 @@ The following structure describes the permissions used in PDF security
                 FirstPageLeft( false ),
                 InitialPage( 1 ),
                 OpenBookmarkLevels( -1 ),
-                Encryption()
+                Encryption(),
+                DPIx( 0 ),
+                DPIy( 0 )
         {}
     };
 
@@ -649,6 +656,24 @@ The following structure describes the permissions used in PDF security
         returns the page id of the new page
     */
     sal_Int32 NewPage( sal_Int32 nPageWidth = 0, sal_Int32 nPageHeight = 0, Orientation eOrientation = Inherit );
+    /** Play a metafile like an outputdevice would do
+    */
+    struct PlayMetafileContext
+    {
+        int     m_nMaxImageResolution;
+        bool    m_bOnlyLosslessCompression;
+        int     m_nJPEGQuality;
+        bool    m_bTransparenciesWereRemoved;
+
+        PlayMetafileContext()
+        : m_nMaxImageResolution( 0 )
+        , m_bOnlyLosslessCompression( false )
+        , m_nJPEGQuality( 90 )
+        , m_bTransparenciesWereRemoved( false )
+        {}
+
+    };
+    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = NULL );
 
     /* sets the document locale originally passed with the context to a new value
      * only affects the output if used before calling <code>Emit/code>.

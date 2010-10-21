@@ -2076,6 +2076,13 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
         // move the visual item by having an offset
         pVI->mnXOffset += nDelta;
     }
+    // move subsequent items - this often isn't necessary because subsequent
+    // moves will correct subsequent items. However, if there is a contiguous
+    // range not involving fallback which spans items, this will be needed
+    while (++pVI - mpVisualItems < mnItemCount)
+    {
+        pVI->mnXOffset += nDelta;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2203,7 +2210,9 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
             const int k = mpGlyphs2Chars[ i ];
             mpGlyphs2Chars[ j ]   = k;
             const int nRelGlyphPos = (j++) - rVI.mnMinGlyphPos;
-            mpLogClusters[ k ]    = static_cast<WORD>(nRelGlyphPos);
+            if( k < 0) // extra glyphs are already mapped
+                continue;
+            mpLogClusters[ k ] = static_cast<WORD>(nRelGlyphPos);
         }
 
         rVI.mnEndGlyphPos = j;
@@ -2362,6 +2371,10 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         if( rVisualItem.IsEmpty() )
             continue;
 
+        if (mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK)
+        {
+            nXPos = rVisualItem.mnXOffset;
+        }
         // get glyph positions
         // TODO: handle when rVisualItem's glyph range is only partially used
         for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
@@ -2395,13 +2408,17 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         }
     }
 
-    // fixup unknown character positions to neighbor
-    for( i = 0; i < nMaxIdx; ++i )
+    if (!(mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK))
     {
-        if( pCaretXArray[ i ] >= 0 )
-            nXPos = pCaretXArray[ i ];
-        else
-            pCaretXArray[ i ] = nXPos;
+        nXPos = 0;
+        // fixup unknown character positions to neighbor
+        for( i = 0; i < nMaxIdx; ++i )
+        {
+            if( pCaretXArray[ i ] >= 0 )
+                nXPos = pCaretXArray[ i ];
+            else
+                pCaretXArray[ i ] = nXPos;
+        }
     }
 }
 

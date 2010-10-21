@@ -1016,6 +1016,7 @@ i12626
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     sal_Bool        m_bIsPDF_A1;
+    PDFWriter&      m_rOuterFace;
 
     /*
     i12626
@@ -1049,8 +1050,15 @@ i12626
                                                sal_Int32& o_rKeyLength, sal_Int32& o_rRC4KeyLength );
     void setupDocInfo();
     bool prepareEncryption( const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
+
+    // helper for playMetafile
+    void implWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
+                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+    void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx,
+                           VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
+    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl();
 
     static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
@@ -1079,6 +1087,7 @@ public:
     bool emit();
     std::set< PDFWriter::ErrorCode > getErrors();
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
+    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = NULL );
 
     Size getCurPageSize() const
     {

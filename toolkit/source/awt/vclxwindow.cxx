@@ -92,6 +92,7 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
+using ::toolkit::ReleaseSolarMutex;
 
 //====================================================================
 //= misc helpers
@@ -339,7 +340,7 @@ IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
     }
 
     {
-        ::toolkit::ReleaseSolarMutex aReleaseSolar;
+        ReleaseSolarMutex aReleaseSolar( ReleaseSolarMutex::RescheduleDuringAcquire );
         for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
                 loop != aCallbacksCopy.end();
                 ++loop

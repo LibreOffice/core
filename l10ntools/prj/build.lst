@@ -1,6 +1,7 @@
-tr	l10ntools	:	tools LIBXSLT:libxslt BERKELEYDB:berkeleydb LUCENE:lucene NULL
+tr	l10ntools	:	tools LIBXSLT:libxslt BERKELEYDB:berkeleydb LUCENE:lucene PYTHON:python NULL
 tr	l10ntools						usr1	-	all	tr_mkout NULL
 tr	l10ntools\inc					nmake	-	all	tr_inc NULL
+tr	l10ntools\scripts					nmake	-	all	tr_scripts NULL
 tr	l10ntools\source					nmake	-	all	tr_src tr_inc NULL
 tr	l10ntools\layout					nmake	-	all	rt_layout tr_src tr_inc NULL
 tr	l10ntools\java\jpropex			nmake	-	all	tr_blah NULL
