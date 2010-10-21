@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
-#include <vos/xception.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>

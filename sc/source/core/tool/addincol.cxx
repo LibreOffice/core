@@ -35,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/xception.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
 

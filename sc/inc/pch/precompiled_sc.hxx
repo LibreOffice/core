@@ -236,9 +236,6 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wintypes.hxx>
-#include <vos/macros.hxx>
-#include <vos/object.hxx>
-#include <vos/types.hxx>
 #include <wchar.h>
 
 #endif
