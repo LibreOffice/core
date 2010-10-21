@@ -295,10 +295,10 @@ IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
         return 1;
     try
     {
-        uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
+        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),  system::SystemShellExecuteFlags::DEFAULTS );
+        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
     }
     catch ( uno::Exception& )
     {
