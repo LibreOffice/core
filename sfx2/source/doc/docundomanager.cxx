@@ -208,6 +208,7 @@ namespace sfx2
         virtual void clearedRedo();
         virtual void listActionEntered( const String& i_comment );
         virtual void listActionLeft();
+        virtual void listActionCancelled();
         virtual void undoManagerDying();
     };
 
@@ -290,6 +291,15 @@ namespace sfx2
             return;
 
         rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::leftUndoContext );
+    }
+
+     //------------------------------------------------------------------------------------------------------------------
+    void DocumentUndoManager_Impl::listActionCancelled()
+    {
+        if ( bAPIActionRunning )
+            return;
+
+        rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::cancelledUndoContext );
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -420,14 +430,17 @@ namespace sfx2
                 static_cast< XUndoManager* >( this )
             );
 
+        USHORT nContextElements = 0;
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
-            rUndoManager.LeaveListAction();
+            nContextElements = rUndoManager.LeaveListAction();
         }
 
-        impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftUndoContext, aGuard );
-            // TODO: is this retrieval of the title correct? Does it deliver proper results in case another
-            // undo context is still open?
+        if ( nContextElements == 0 )
+            impl_notify( ::rtl::OUString(), &XUndoManagerListener::cancelledUndoContext, aGuard );
+            // TODO: obtain the title of the context which has just been left
+        else
+            impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftUndoContext, aGuard );
     }
 
     //------------------------------------------------------------------------------------------------------------------

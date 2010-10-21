@@ -131,15 +131,31 @@ public class UndoManager
         public void enteredUndoContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.push( i_event.UndoActionTitle );
+            assertEquals( "different opinions on the context nesting level (after entering)",
+                m_activeUndoContexts.size(), i_event.UndoContextDepth );
         }
 
-        public void enteredHiddenUndoContext( UndoManagerEvent ume )
+        public void enteredHiddenUndoContext( UndoManagerEvent i_event )
         {
+            m_activeUndoContexts.push( i_event.UndoActionTitle );
+            assertEquals( "different opinions on the context nesting level (after entering hidden)",
+                m_activeUndoContexts.size(), i_event.UndoContextDepth );
         }
 
         public void leftUndoContext( UndoManagerEvent i_event )
         {
             assertEquals( "nested undo context descriptions do not match", m_activeUndoContexts.pop(), i_event.UndoActionTitle );
+            assertEquals( "different opinions on the context nesting level (after leaving)",
+                m_activeUndoContexts.size(), i_event.UndoContextDepth );
+            m_leftContext = true;
+        }
+
+        public void cancelledUndoContext( UndoManagerEvent i_event )
+        {
+            m_activeUndoContexts.pop();
+            assertEquals( "different opinions on the context nesting level (after cancelling)",
+                m_activeUndoContexts.size(), i_event.UndoContextDepth );
+            m_cancelledContext = true;
         }
 
         public void disposing( EventObject i_event )
@@ -156,6 +172,8 @@ public class UndoManager
         String  getMostRecentlyRedoneTitle() { return m_mostRecentlyRedone; }
         int     getUndoContextDepth() { return m_activeUndoContexts.size(); }
         boolean isDisposed() { return m_isDisposed; }
+        boolean contextLeft() { return m_leftContext; }
+        boolean contextCancelled() { return m_cancelledContext; }
 
         void reset()
         {
@@ -163,12 +181,15 @@ public class UndoManager
             m_activeUndoContexts.clear();
             m_mostRecentlyAddedAction = m_mostRecentlyUndone = m_mostRecentlyRedone = null;
             // m_isDisposed is not cleared, intentionally
+            m_leftContext = m_cancelledContext = false;
         }
 
         private int     m_undoActionsAdded = 0;
         private int     m_undoCount = 0;
         private int     m_redoCount = 0;
         private boolean m_isDisposed = false;
+        private boolean m_leftContext = false;
+        private boolean m_cancelledContext = false;
         private Stack< String >
                         m_activeUndoContexts = new Stack<String>();
         private String  m_mostRecentlyAddedAction = null;
@@ -200,52 +221,56 @@ public class UndoManager
         undoManager.addUndoManagerListener( listener );
 
         // do a single modification to the document
-        test.doSingleModification();
-        test.verifySingleModificationDocumentState();
+        {
+            test.doSingleModification();
+            test.verifySingleModificationDocumentState();
 
-        // undo the modification, ensure the listener got the proper notifications
-        assertEquals( "We did not yet do a undo!", 0, listener.getUndoActionCount() );
-        undoManager.undo();
-        assertEquals( "A simple undo does not result in the proper Undo count.", 1, listener.getUndoActionCount() );
+            // undo the modification, ensure the listener got the proper notifications
+            assertEquals( "We did not yet do a undo!", 0, listener.getUndoActionCount() );
+            undoManager.undo();
+            assertEquals( "A simple undo does not result in the proper Undo count.", 1, listener.getUndoActionCount() );
 
-        // verify the document is in its initial state, again
-        test.verifyInitialDocumentState();
+            // verify the document is in its initial state, again
+            test.verifyInitialDocumentState();
 
-        // redo the modification, ensure the listener got the proper notifications
-        assertEquals( "did not yet do a redo!", 0, listener.getRedoActionCount() );
-        undoManager.redo();
-        assertEquals( "did a redo, but got no notification of it!", 1, listener.getRedoActionCount() );
+            // redo the modification, ensure the listener got the proper notifications
+            assertEquals( "did not yet do a redo!", 0, listener.getRedoActionCount() );
+            undoManager.redo();
+            assertEquals( "did a redo, but got no notification of it!", 1, listener.getRedoActionCount() );
 
-        // ensure the document is in the proper state, again
-        test.verifySingleModificationDocumentState();
+            // ensure the document is in the proper state, again
+            test.verifySingleModificationDocumentState();
 
-        // now do an Undo via the UI (aka the dispatch API), and see if this works, and notifies the listener as
-        // expected
-        test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-        test.verifyInitialDocumentState();
-        assertEquals( "UI-Undo does not notify the listener", 2, listener.getUndoActionCount() );
-
-        listener.reset();
+            // now do an Undo via the UI (aka the dispatch API), and see if this works, and notifies the listener as
+            // expected
+            test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            test.verifyInitialDocumentState();
+            assertEquals( "UI-Undo does not notify the listener", 2, listener.getUndoActionCount() );
+        }
 
         // do multiple changes in a row, after entering an Undo context
-        assertEquals( "unexpected initial undo context depth", 0, listener.getUndoContextDepth() );
-        undoManager.enterUndoContext( "Batch Changes" );
-        assertEquals( "unexpected undo context depth after entering a context", 1, listener.getUndoContextDepth() );
+        {
+            listener.reset();
 
-        assertEquals( "entering an Undo context has not been notified properly", "Batch Changes", listener.getCurrentUndoContextTitle() );
-        final int modifications = test.doMultipleModifications();
-        assertEquals( "unexpected number of undo actions while doing batch changes to the document",
-            modifications, listener.getUndoActionsAdded() );
+            assertEquals( "unexpected initial undo context depth", 0, listener.getUndoContextDepth() );
+            undoManager.enterUndoContext( "Batch Changes" );
+            assertEquals( "unexpected undo context depth after entering a context", 1, listener.getUndoContextDepth() );
 
-        assertEquals( "seems the document operations touched the undo context depth", 1, listener.getUndoContextDepth() );
-        undoManager.leaveUndoContext();
-        assertEquals( "unexpected undo context depth after leaving the last context", 0, listener.getUndoContextDepth() );
+            assertEquals( "entering an Undo context has not been notified properly", "Batch Changes", listener.getCurrentUndoContextTitle() );
+            final int modifications = test.doMultipleModifications();
+            assertEquals( "unexpected number of undo actions while doing batch changes to the document",
+                modifications, listener.getUndoActionsAdded() );
 
-        assertEquals( "no Undo done, yet - still the listener has been notified of an Undo action", 0, listener.getUndoActionCount() );
-        undoManager.undo();
-        assertEquals( "Just did an undo - the listener should have been notified", 1, listener.getUndoActionCount() );
+            assertEquals( "seems the document operations touched the undo context depth", 1, listener.getUndoContextDepth() );
+            undoManager.leaveUndoContext();
+            assertEquals( "unexpected undo context depth after leaving the last context", 0, listener.getUndoContextDepth() );
 
-        test.verifyInitialDocumentState();
+            assertEquals( "no Undo done, yet - still the listener has been notified of an Undo action", 0, listener.getUndoActionCount() );
+            undoManager.undo();
+            assertEquals( "Just did an undo - the listener should have been notified", 1, listener.getUndoActionCount() );
+
+            test.verifyInitialDocumentState();
+        }
 
         // custom Undo actions
         {
@@ -285,6 +310,7 @@ public class UndoManager
                 new String[] { contextTitle }, undoManager.getAllRedoActionTitles() );
             assertArrayEquals( "unexpected Undo descriptions after undoing a nested custom action",
                 new String[] { action1.getTitle() }, undoManager.getAllUndoActionTitles() );
+
             // undo the second action, via UI dispatches
             test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
             assertEquals( "improper action title notified during UI Undo", action1.getTitle(), listener.getMostRecentlyUndoneTitle() );
@@ -335,6 +361,54 @@ public class UndoManager
             caughtExpected = false;
             try { undoManager.leaveUndoContext(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
             assertTrue( "leaveUndoContext should throw if no context is currently open", caughtExpected );
+        }
+
+        // more on undo contexts
+        {
+            undoManager.clear();
+            listener.reset();
+
+            undoManager.enterUndoContext( "Undo Context" );
+            assertEquals( "unexpected undo context depth after entering a context", 1, listener.getUndoContextDepth() );
+            undoManager.addUndoAction( new CustomUndoAction( "Undo Action" ) );
+            undoManager.leaveUndoContext();
+            assertTrue( "leaving a non-empty context does not call leftUndoContext", listener.contextLeft() );
+            assertFalse( "leaving a non-empty context should not call cancelledUndoContext", listener.contextCancelled() );
+            assertEquals( "unexpected undo context depth leaving a non-empty context", 0, listener.getUndoContextDepth() );
+
+            undoManager.clear();
+            listener.reset();
+
+            undoManager.enterUndoContext( "Undo Context" );
+            undoManager.leaveUndoContext();
+            assertFalse( "leaving an empty context should not call leftUndoContext", listener.contextLeft() );
+            assertTrue( "leaving an empty context does not call cancelledUndoContext", listener.contextCancelled() );
+            assertFalse( "leaving an empty context should silently remove it, and not contribute to the stack",
+                undoManager.isUndoPossible() );
+        }
+
+        // stack handling
+        {
+            undoManager.clear();
+            listener.reset();
+
+            assertFalse( undoManager.isUndoPossible() );    // just for completeness, those two
+            assertFalse( undoManager.isRedoPossible() );    // have been checked above already ...
+            undoManager.addUndoAction( new CustomUndoAction( "Undo Action 1" ) );
+            assertTrue( undoManager.isUndoPossible() );
+            assertFalse( undoManager.isRedoPossible() );
+            undoManager.addUndoAction( new CustomUndoAction( "Undo Action 2" ) );
+            assertTrue( undoManager.isUndoPossible() );
+            assertFalse( undoManager.isRedoPossible() );
+            undoManager.undo();
+            assertTrue( undoManager.isUndoPossible() );
+            assertTrue( undoManager.isRedoPossible() );
+            undoManager.undo();
+            assertFalse( undoManager.isUndoPossible() );
+            assertTrue( undoManager.isRedoPossible() );
+            undoManager.addUndoAction( new CustomUndoAction( "Undo Action 3" ) );
+            assertTrue( undoManager.isUndoPossible() );
+            assertFalse( "adding a new action should have cleared the Redo stack", undoManager.isRedoPossible() );
         }
 
         // close the document, ensure the Undo manager listener gets notified
