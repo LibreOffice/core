@@ -145,7 +145,8 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
     // Check if the mouse cursor is clicking on the popup arrow box.
     mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc));
-    mpFilterButton->setBoundingBox(aScrPos, aScrSize);
+    mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
+    mpFilterButton->setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
     Point aPopupPos;
     Size aPopupSize;
     mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
@@ -371,6 +372,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 
 bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
 {
+    BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+
     // Get the geometry of the cell.
     Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
     long nSizeX, nSizeY;
@@ -379,7 +382,8 @@ bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddres
 
     // Check if the mouse cursor is clicking on the popup arrow box.
     ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings());
-    aBtn.setBoundingBox(aScrPos, aScrSize);
+    aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
+    aBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
     Point aPopupPos;
     Size aPopupSize;
     aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
@@ -520,9 +524,16 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         }
     }
 
+    BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+
     Rectangle aCellRect(rScrPos, rScrSize);
     const Size& rPopupSize = mpDPFieldPopup->getWindowSize();
-    if (rScrSize.getWidth() > rPopupSize.getWidth())
+    if (bLayoutRTL)
+    {
+        // RTL: rScrPos is logical-left (visual right) position, always right-align with that
+        aCellRect.SetPos(Point(rScrPos.X() - rPopupSize.Width() + 1, rScrPos.Y()));
+    }
+    else if (rScrSize.getWidth() > rPopupSize.getWidth())
     {
         // If the cell width is larger than the popup window width, launch it
         // right-aligned with the cell.
