@@ -27,7 +27,6 @@
 package com.sun.star.wizards.ui;
 
 // import java.util.Vector;
-import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControl;
@@ -40,21 +39,22 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lib.uno.helper.PropertySet;
+import com.sun.star.sdb.SQLFilterOperator;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
+import com.sun.star.wizards.db.SQLQueryComposer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,19 +62,9 @@ public class FilterComponent
 {
 
     private Integer IStep;
-    // private int iStartPosX;
-    // private int iStartPosY;
-    // int Count;
     private int RowCount;
-    // private int FilterCount;
     private static String[] sLogicOperators;
-    private static String[] sBooleanValues;
-    // private /* public */ String[] FieldNames;
-    private XRadioButton optMatchAll;
     private XRadioButton optMatchAny;
-    // private String soptMatchAll;
-    // private String soptMatchAny;
-    // private String[] sHeadLines;
     private String slblFieldNames;
     private String slblOperators;
     private String slblValue;
@@ -82,7 +72,6 @@ public class FilterComponent
     private int BaseID = 2300;
     private String sIncSuffix;
     private ControlRow[] oControlRows;
-    // private Vector FilterNames;
     private String sDuplicateCondition;
     final int SOOPTORMODE = 100;
     final int SOOPTANDMODE = 101;
@@ -128,20 +117,16 @@ public class FilterComponent
     final int SO_OPTQUERYMODE = 5;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;
-    // int ifilterstate = SOI_MATCHALL;
     int curHelpID;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
-
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
             String sControlName = "";
             switch (iKey)
             {
-                //              case SOOPTQUERYMODE:
-                //                  getfilterstate();
                 case SO_FIRSTFIELDNAME:
                 case SO_SECONDFIELDNAME:
                 case SO_THIRDFIELDNAME:
@@ -153,24 +138,11 @@ public class FilterComponent
                     FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
 
                     String sControlNameTextValue = "txtValue" + sControlNameSuffix;
-//                        String sControlNameBooleanList = "lstBoolean" + sControlNameSuffix;
-//                        if (aFieldColumn.FieldType == DataType.BOOLEAN)
-//                        {
-//                            // scheint aufgrund eines Fehlers in Toolkit nicht zu funktionieren
-//                            CurUnoDialog.setControlVisible(sControlNameTextValue, false);
-//                            CurUnoDialog.setControlVisible(sControlNameBooleanList, true);
-//                        }
-//                        else
-//                        {
-//                            CurUnoDialog.setControlVisible(sControlNameTextValue, true);
-//                            CurUnoDialog.setControlVisible(sControlNameBooleanList, false);
-
                     XControl xValueControl = CurUnoDialog.xDlgContainer.getControl(sControlNameTextValue);
                     XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
                     Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", Boolean.valueOf(CurFieldColumn.isNumberFormat()));
                     final NumberFormatter aNumberFormatter = oQueryMetaData.getNumberFormatter();
                     aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.getDBFormatKey(), aNumberFormatter);
-//                         }
 
                     break;
                 case SO_FIRSTCONDITION:
@@ -181,7 +153,6 @@ public class FilterComponent
                     break;
                 case SOOPTORMODE:
                 case SOOPTANDMODE:
-                    // getfilterstate();
                     return;
 
                 case SO_FIRSTBOOLFIELDNAME:
@@ -210,24 +181,6 @@ public class FilterComponent
             String sName = getControlName(EventObject.Source);
             togglefollowingControlRow(sName);
         }
-
-        public void disposing(EventObject EventObject)
-        {
-        }
-    }
-
-    public void fieldconditionchanged(ItemEvent EventObject)
-    {
-        String sName = getControlName(EventObject.Source);
-        togglefollowingControlRow(sName);
-    }
-
-    public void disposing(com.sun.star.lang.EventObject eventObject)
-    {
-    }
-
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener
-    {
 
         public void disposing(EventObject eventObject)
         {
@@ -285,6 +238,7 @@ public class FilterComponent
         int nFilterCount = getFilterCount();
         if (nFilterCount > 0)
         {
+            final SQLQueryComposer composer = oQueryMetaData.getSQLQueryComposer();
             try
             {
                 final String serviceName = "com.sun.star.beans.PropertyBag";
@@ -292,31 +246,32 @@ public class FilterComponent
 
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
                 column.addProperty("Name", PropertyAttribute.BOUND, "");
+                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), null );
                 final XPropertySet columnSet = UnoRuntime.queryInterface(XPropertySet.class, column);
 
-                if ( oQueryMetaData.getSQLQueryComposer().getQuery().length() == 0)
+                if ( composer.getQuery().length() == 0)
                 {
-                    final String fromClause = oQueryMetaData.getSQLQueryComposer().getFromClause();
-                    StringBuffer sql = new StringBuffer();
-                    sql.append(oQueryMetaData.getSQLQueryComposer().getSelectClause(true));
+                    final String fromClause = composer.getFromClause();
+                    StringBuilder sql = new StringBuilder();
+                    sql.append(composer.getSelectClause(true));
                     sql.append(' ');
                     sql.append(fromClause);
-                    oQueryMetaData.getSQLQueryComposer().getQueryComposer().setElementaryQuery(sql.toString());
+                    composer.getQueryComposer().setElementaryQuery(sql.toString());
                 }
-                int a = 0;
+                composer.getQueryComposer().setStructuredFilter( new PropertyValue[][] {} );
                 for (int i = 0; i < RowCount; i++)
                 {
-                    ControlRow CurControlRow = oControlRows[i];
-                    if (CurControlRow.isEnabled())
+                    ControlRow currentControlRow = oControlRows[i];
+                    if (currentControlRow.isEnabled())
                     {
-                        if (CurControlRow.isConditionComplete())
+                        if (currentControlRow.isConditionComplete())
                         {
-                            String sFieldName = CurControlRow.getSelectedFieldName();
-                            int nOperator = (int) CurControlRow.getSelectedOperator();
+                            String sFieldName = currentControlRow.getSelectedFieldName();
+                            int nOperator = (int) currentControlRow.getSelectedOperator();
                             FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
                             columnSet.setPropertyValue("Name", aFieldColumn.getFieldName());
                             columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
-                            Object value = CurControlRow.getValue();
+                            Object value = currentControlRow.getValue();
                             switch(aFieldColumn.getFieldType())
                             {
                                 case DataType.TIMESTAMP:
@@ -324,13 +279,24 @@ public class FilterComponent
                                     value = ((Double)value) - oQueryMetaData.getNullDateCorrection();
                                     break;
                             }
-                            column.addProperty("Value", PropertyAttribute.MAYBEVOID, value);
+                            column.removeProperty( "Value" );
+                            final short operator = currentControlRow.getSelectedOperator();
+                            if  (   ( operator == SQLFilterOperator.SQLNULL )
+                                ||  ( operator == SQLFilterOperator.NOT_SQLNULL )
+                                ||  AnyConverter.isVoid( value )
+                                )
+                            {
+                                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), new String() );
+                                value = new Any( new Type( TypeClass.VOID ), null );
+                            }
+                            else
+                                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), value );
                             columnSet.setPropertyValue("Value", value);
-                            oQueryMetaData.getSQLQueryComposer().getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL,nOperator);
+                            composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL,nOperator);
                         }
                     }
                 }
-                filterconditions = oQueryMetaData.getSQLQueryComposer().getQueryComposer().getStructuredFilter();
+                filterconditions = composer.getNormalizedStructuredFilter();
                 int[] iduplicate = JavaTools.getDuplicateFieldIndex(filterconditions);
                 if (iduplicate[0] != -1)
                 {
@@ -338,9 +304,7 @@ public class FilterComponent
                     String smsgDuplicateCondition = getDisplayCondition(sDuplicateCondition, aduplicatecondition, null);
                     CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
                     CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", Integer.valueOf(1), Integer.valueOf(2)));
-                    return new PropertyValue[][]
-                            {
-                            };
+                    return new PropertyValue[][]{};
                 }
             }
             catch (Exception ex)
@@ -403,22 +367,6 @@ public class FilterComponent
         return ifilterstate;
     }
 
-    private void addfiltercondition(int _index, String _curFieldName, Object _curValue, int _curOperator)
-    {
-        String ValString = String.valueOf(_curValue);
-        PropertyValue oPropertyValue = Properties.createProperty(_curFieldName, ValString, _curOperator);
-        getfilterstate();
-        if (getfilterstate() == this.SOI_MATCHALL)
-        {
-            if (_index == 0)
-            {
-                filterconditions[0] = new PropertyValue[getFilterCount()];
-            }
-            filterconditions[0][_index] = new PropertyValue();
-            filterconditions[0][_index] = oPropertyValue;
-        }
-    }
-
     private int getFilterCount()
     {
         int a = 0;
@@ -430,8 +378,6 @@ public class FilterComponent
             }
         }
         return a;
-        // FilterCount = a;
-        // return FilterCount;
     }
 
     /** Creates a new instance of FilterComponent
@@ -457,8 +403,6 @@ public class FilterComponent
         this.oQueryMetaData = _oQueryMetaData;
         boolean bEnabled;
         sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "optMatchAll");
-        // iStartPosX = iPosX;
-        // iStartPosY = iPosY;
 
         String soptMatchAll = CurUnoDialog.m_oResource.getResText(BaseID + 9);
         String soptMatchAny = CurUnoDialog.m_oResource.getResText(BaseID + 10);
@@ -466,14 +410,13 @@ public class FilterComponent
         slblOperators = CurUnoDialog.m_oResource.getResText(BaseID + 24);
         slblValue = CurUnoDialog.m_oResource.getResText(BaseID + 25);
         sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 10 /* 7 */); // =, <>, <, >, <=, >=, like, !like, is null, !is null
-        sBooleanValues = CurUnoDialog.m_oResource.getResArray(BaseID + 36, 2); // true, false
 
         sDuplicateCondition = CurUnoDialog.m_oResource.getResText(BaseID + 89);
 
         // create Radiobuttons
         // * match all
         // * match one
-        optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
+        CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
                 new String[]
                 {
                     "Height",
@@ -534,13 +477,6 @@ public class FilterComponent
 
     public void initialize(PropertyValue[][] _filterconditions, String[] _fieldnames)
     {
-        // String aFieldNamesWithAdditionalEmpty[] = new String[_fieldnames.length + 1];
-        // for (int i = 0; i < _fieldnames.length; i++)
-        // {
-        //     aFieldNamesWithAdditionalEmpty[i] = _fieldnames[i];
-        // }
-        // aFieldNamesWithAdditionalEmpty[_fieldnames.length] = "";
-
         int i;
         for (i = 0; i < RowCount; i++)
         {
@@ -593,9 +529,8 @@ public class FilterComponent
     //
     //
     // -------------------------------------------------------------------------
-    class ControlRow
+    final class ControlRow
     {
-
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
@@ -776,7 +711,6 @@ public class FilterComponent
                             Short.valueOf(curtabindex++),
                             Integer.valueOf(nValueWidth)
                         });
-
             }
             catch (Exception exception)
             {
@@ -821,13 +755,6 @@ public class FilterComponent
                             String sValue = (String.valueOf(oValue));
                             return (!sValue.equals(""));
                         }
-//                        String sBoolValue="";
-//                        short aSelectedBoolValue[] = (short[])Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[6]), "SelectedItems");
-//                        if (aSelectedBoolValue.length > 0)
-//                        {
-//                            sBoolValue = String.valueOf(aSelectedBoolValue[0] == 1);
-//                            return !sBoolValue.equals("");
-//                        }
                     }
                 }
                 return false;
@@ -839,16 +766,10 @@ public class FilterComponent
             }
         }
 
-        private void fieldnamechanged(ItemEvent EventObject)
-        {
-            int i = 0;
-        }
-
         protected void setCondition(PropertyValue _filtercondition)
         {
             try
             {
-                int ikey;
                 XListBox xFieldsListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, ControlElements[SOLSTFIELDNAME]);
                 xFieldsListBox.selectItem(_filtercondition.Name, true);
                 XListBox xOperatorListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, ControlElements[SOLSTOPERATOR]);
@@ -918,8 +839,8 @@ public class FilterComponent
 
         private void settovoid()
         {
-            CurUnoDialog.deselectListBox(ControlElements[SOLSTFIELDNAME]);
-            CurUnoDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
+            WizardDialog.deselectListBox(ControlElements[SOLSTFIELDNAME]);
+            WizardDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
             Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", com.sun.star.uno.Any.VOID);
         }
 
@@ -954,7 +875,7 @@ public class FilterComponent
             }
             else if (!isConditionComplete())
             {
-                CurUnoDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
+                WizardDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
             }
         }
 
@@ -1025,43 +946,9 @@ public class FilterComponent
 
         protected String getDateTimeString(boolean bgetDate)
         {
-                double dblValue = ((Double) getValue()).doubleValue();
-                NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
-                return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
+            double dblValue = ((Double) getValue()).doubleValue();
+            NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
+            return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
         }
     }
 }
-//  com.sun.star.sdb.SQLFilterOperator.EQUAL
-//  com.sun.star.sdb.SQLFilterOperator.NOT_EQUAL
-//  com.sun.star.sdb.SQLFilterOperator.LESS
-//  com.sun.star.sdb.SQLFilterOperator.GREATER
-//  com.sun.star.sdb.SQLFilterOperator.LESS_EQUAL
-//  com.sun.star.sdb.SQLFilterOperator.GREATER_EQUAL
-//  com.sun.star.sdb.SQLFilterOperator.LIKE
-//  com.sun.star.sdb.SQLFilterOperator.NOT_LIKE
-//  com.sun.star.sdb.SQLFilterOperator.SQLNULL
-//  com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL
-
-/*  constants SQLFilterOperator
-{
-/// equal to
-const long EQUAL            = 1;
-/// not equal to
-const long NOT_EQUAL        = 2;
-/// less than
-const long LESS             = 3;
-/// greater than
-const long GREATER          = 4;
-/// less or eqal than
-const long LESS_EQUAL       = 5;
-/// greater or eqal than
-const long GREATER_EQUAL    = 6;
-/// like
-const long LIKE             = 7;
-/// not like
-const long NOT_LIKE         = 8;
-/// is null
-const long SQLNULL          = 9;
-/// is not null
-const long NOT_SQLNULL      = 10;
-}; */

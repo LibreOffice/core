@@ -36,8 +36,10 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.QueryMetaData;
@@ -59,15 +61,15 @@ public class QueryWizard extends DatabaseObjectWizard
     private static final int SOGROUPFILTER_PAGE = 6;
     private static final int SOTITLES_PAGE = 7;
     protected static final int SOSUMMARY_PAGE = 8;
-    private CommandFieldSelection CurDBCommandFieldSelection;
-    private SortingComponent CurSortingComponent;
-    private FieldSelection CurGroupFieldSelection;
-    private TitlesComponent CurTitlesComponent;
-    private FilterComponent CurFilterComponent;
-    private FilterComponent CurGroupFilterComponent;
-    private AggregateComponent CurAggregateComponent;
-    private Finalizer CurFinalizer;
-    private QuerySummary CurDBMetaData;
+    private CommandFieldSelection m_DBCommandFieldSelectio;
+    private SortingComponent m_sortingComponent;
+    private FieldSelection m_groupFieldSelection;
+    private TitlesComponent m_titlesComponent;
+    private FilterComponent m_filterComponent;
+    private FilterComponent m_groupFilterComponent;
+    private AggregateComponent m_aggregateComponent;
+    private Finalizer m_finalizer;
+    private QuerySummary m_DBMetaData;
     private String reslblFieldHeader;
     private String reslblAliasHeader;
     private String reslblFields;
@@ -82,30 +84,85 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         super( xMSF, 40970, i_wizardContext );
         addResourceHandler("QueryWizard", "dbw");
-        CurDBMetaData = new QuerySummary(xMSF, m_oResource);
+        m_DBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
-/*    public static void main(String args[])
+    public static void main(String i_args[])
     {
-        String ConnectStr = "uno:pipe,name=foo;urp;StarOffice.ServiceManager";
+        final String settings[] = new String[] { null, null, null };
+        final int IDX_PIPE_NAME = 0;
+        final int IDX_LOCATION = 1;
+        final int IDX_DSN = 2;
+
+        // some simple parsing
+        boolean failure = false;
+        int settingsIndex = -1;
+        for ( int i=0; i<i_args.length; ++i )
+        {
+            if ( settingsIndex >= 0 )
+            {
+                settings[ settingsIndex ] = i_args[i];
+                settingsIndex = -1;
+                continue;
+            }
+
+            if ( i_args[i].equals( "--pipe-name" ) )
+            {
+                settingsIndex = IDX_PIPE_NAME;
+                continue;
+            }
+
+            if ( i_args[i].equals( "--database-location" ) )
+            {
+                settingsIndex = IDX_LOCATION;
+                continue;
+            }
+
+            if ( i_args[i].equals( "--data-source-name" ) )
+            {
+                settingsIndex = IDX_DSN;
+                continue;
+            }
+
+            failure = true;
+        }
+
+        if ( settings[ IDX_PIPE_NAME ] == null )
+            failure = true;
+
+        if ( ( settings[ IDX_DSN ] == null ) && ( settings[ IDX_LOCATION ] == null ) )
+            failure = true;
+
+        if ( failure )
+        {
+            System.err.println( "supported arguments: " );
+            System.err.println( "  --pipe-name <name>           : specifies the name of the pipe to connect to the running OOo instance" );
+            System.err.println( "  --database-location <url>    : specifies the URL of the database document to work with" );
+            System.err.println( "  --data-source-name <name>    : specifies the name of the data source to work with" );
+            return;
+        }
+
+        final String ConnectStr = "uno:pipe,name=" + settings[IDX_PIPE_NAME] + ";urp;StarOffice.ServiceManager";
         try
         {
-            XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
-            if (xLocMSF != null)
+            final XMultiServiceFactory serviceFactory = Desktop.connect(ConnectStr);
+            if (serviceFactory != null)
             {
                 PropertyValue[] curproperties = new PropertyValue[1];
-                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///G:/temp/abc.odb");
-//              curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
+                if ( settings[ IDX_LOCATION ] != null )
+                    curproperties[0] = Properties.createProperty( "DatabaseLocation", settings[ IDX_LOCATION ] );
+                else
+                    curproperties[0] = Properties.createProperty( "DataSourceName", settings[ IDX_DSN ] );
 
-                QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
-                CurQueryWizard.startQueryWizard(xLocMSF, curproperties);
+                QueryWizard CurQueryWizard = new QueryWizard( serviceFactory, curproperties );
+                CurQueryWizard.startQueryWizard();
             }
         }
         catch (java.lang.Exception jexception)
         {
             jexception.printStackTrace(System.out);
         }
-    }*/
+    }
 
     public final XFrame getFrame()
     {
@@ -116,7 +173,7 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         try
         {
-            if ( CurDBMetaData.getConnection( m_wizardContext ) )
+            if ( m_DBMetaData.getConnection( m_wizardContext ) )
             {
                 reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
                 reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
@@ -138,11 +195,11 @@ public class QueryWizard extends DatabaseObjectWizard
                 setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
                 this.setMaxStep(8);
                 buildSteps();
-                this.CurDBCommandFieldSelection.preselectCommand( m_wizardContext, false );
+                this.m_DBCommandFieldSelectio.preselectCommand( m_wizardContext, false );
 
                 XWindowPeer windowPeer = UnoRuntime.queryInterface( XWindowPeer.class, m_frame.getContainerWindow() );
                 createWindowPeer(windowPeer);
-                CurDBMetaData.setWindowPeer(this.xControl.getPeer());
+                m_DBMetaData.setWindowPeer(this.xControl.getPeer());
                 insertQueryRelatedSteps();
                 executeDialog( m_frame.getContainerWindow().getPosSize() );
             }
@@ -151,14 +208,14 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             jexception.printStackTrace(System.out);
         }
-        CurGroupFilterComponent = null;
-        CurTitlesComponent = null;
-        CurAggregateComponent = null;
-        CurDBCommandFieldSelection = null;
+        m_groupFilterComponent = null;
+        m_titlesComponent = null;
+        m_aggregateComponent = null;
+        m_DBCommandFieldSelectio = null;
         xWindowPeer = null;
-        CurFinalizer = null;
-        CurDBMetaData.finish();
-        CurDBMetaData = null;
+        m_finalizer = null;
+        m_DBMetaData.finish();
+        m_DBMetaData = null;
         System.gc();
 
         return m_createdQuery;
@@ -181,17 +238,17 @@ public class QueryWizard extends DatabaseObjectWizard
                     case SOAGGREGATE_PAGE:
                         if (_bEnabled == true)
                         {
-                            bEnabled = ((CurDBMetaData.hasNumericalFields()) && (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
+                            bEnabled = ((m_DBMetaData.hasNumericalFields()) && (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
                         }
                         break;
                     case SOGROUPSELECTION_PAGE:
-                        bEnabled = CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY;
+                        bEnabled = m_DBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY;
                         break;
                     case SOGROUPFILTER_PAGE:
                         bEnabled = false;
                         if (_bEnabled == true)
                         {
-                            bEnabled = (CurDBMetaData.GroupByFilterConditions.length > 0);
+                            bEnabled = (m_DBMetaData.GroupByFilterConditions.length > 0);
                         }
 
                         break;
@@ -225,11 +282,11 @@ public class QueryWizard extends DatabaseObjectWizard
             i = insertRoadmapItem(0, true, SOFIELDSELECTION_PAGE - 1, SOFIELDSELECTION_PAGE);
             i = insertRoadmapItem(i, false, SOSORTING_PAGE - 1, SOSORTING_PAGE); // Orderby is always supported
             i = insertRoadmapItem(i, false, SOFILTER_PAGE - 1, SOFILTER_PAGE);
-            if (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar())
+            if (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar())
             {
-                i = insertRoadmapItem(i, CurDBMetaData.hasNumericalFields(), SOAGGREGATE_PAGE - 1, SOAGGREGATE_PAGE);
+                i = insertRoadmapItem(i, m_DBMetaData.hasNumericalFields(), SOAGGREGATE_PAGE - 1, SOAGGREGATE_PAGE);
             }
-            if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+            if (m_DBMetaData.xDBMetaData.supportsGroupBy())
             {
                 i = insertRoadmapItem(i, false, SOGROUPSELECTION_PAGE - 1, SOGROUPSELECTION_PAGE);
                 i = insertRoadmapItem(i, false, SOGROUPFILTER_PAGE - 1, SOGROUPFILTER_PAGE);
@@ -251,28 +308,25 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         try
         {
-//            curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields,  slblTables, true, 34411);
-//            curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
+            m_DBCommandFieldSelectio = new CommandFieldSelection(this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables, true, 40850);
+            m_DBCommandFieldSelectio.setAppendMode(true);
+            m_DBCommandFieldSelectio.addFieldSelectionListener(new FieldSelectionListener());
+            m_sortingComponent = new SortingComponent(this, SOSORTING_PAGE, 95, 27, 210, 40865);
+            m_filterComponent = new FilterComponent(this, xMSF, SOFILTER_PAGE, 97, 27, 209, 3, m_DBMetaData, 40878);
+            m_filterComponent.addNumberFormats();
 
-            CurDBCommandFieldSelection = new CommandFieldSelection(this, CurDBMetaData, 120, reslblFields, reslblSelFields, reslblTables, true, 40850);
-            CurDBCommandFieldSelection.setAppendMode(true);
-            CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-            CurSortingComponent = new SortingComponent(this, SOSORTING_PAGE, 95, 27, 210, 40865);
-            CurFilterComponent = new FilterComponent(this, xMSF, SOFILTER_PAGE, 97, 27, 209, 3, CurDBMetaData, 40878);
-            CurFilterComponent.addNumberFormats();
-
-            if (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar())
+            if (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar())
             {
-                CurAggregateComponent = new AggregateComponent(this, CurDBMetaData, SOAGGREGATE_PAGE, 97, 69, 209, 5, 40895);
+                m_aggregateComponent = new AggregateComponent(this, m_DBMetaData, SOAGGREGATE_PAGE, 97, 69, 209, 5, 40895);
             }
-            if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+            if (m_DBMetaData.xDBMetaData.supportsGroupBy())
             {
-                CurGroupFieldSelection = new FieldSelection(this, SOGROUPSELECTION_PAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
-                CurGroupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-                CurGroupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTER_PAGE, 97, 27, 209, 3, CurDBMetaData, 40923);
+                m_groupFieldSelection = new FieldSelection(this, SOGROUPSELECTION_PAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
+                m_groupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
+                m_groupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTER_PAGE, 97, 27, 209, 3, m_DBMetaData, 40923);
             }
-            CurTitlesComponent = new TitlesComponent(this, SOTITLES_PAGE, 97, 37, 207, 7, reslblFieldHeader, reslblAliasHeader, 40940);
-            CurFinalizer = new Finalizer(this, CurDBMetaData);
+            m_titlesComponent = new TitlesComponent(this, SOTITLES_PAGE, 97, 37, 207, 7, reslblFieldHeader, reslblAliasHeader, 40940);
+            m_finalizer = new Finalizer(this, m_DBMetaData);
             enableNavigationButtons(false, false, false);
         }
         catch (com.sun.star.uno.Exception exception)
@@ -288,10 +342,10 @@ public class QueryWizard extends DatabaseObjectWizard
             ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
             )
         {
-            m_createdQuery = CurFinalizer.finish();
+            m_createdQuery = m_finalizer.finish();
             if ( m_createdQuery.length() > 0 )
             {
-                loadSubComponent( CommandType.QUERY, m_createdQuery, CurFinalizer.displayQueryDesign() );
+                loadSubComponent( CommandType.QUERY, m_createdQuery, m_finalizer.displayQueryDesign() );
                 xDialog.endExecute();
                 return true;
             }
@@ -305,11 +359,11 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             if (nOldStep <= SOGROUPSELECTION_PAGE && nNewStep > SOGROUPSELECTION_PAGE)
             {
-                if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+                if (m_DBMetaData.xDBMetaData.supportsGroupBy())
                 {
-                    CurDBMetaData.setGroupFieldNames(CurGroupFieldSelection.getSelectedFieldNames());
-                    CurDBMetaData.GroupFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.GroupFieldNames, CurDBMetaData.NonAggregateFieldNames);
-                    CurDBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.GroupFieldNames);
+                    m_DBMetaData.setGroupFieldNames(m_groupFieldSelection.getSelectedFieldNames());
+                    m_DBMetaData.GroupFieldNames = JavaTools.removeOutdatedFields(m_DBMetaData.GroupFieldNames, m_DBMetaData.NonAggregateFieldNames);
+                    m_DBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.GroupFieldNames);
                 }
             }
             switch (nNewStep)
@@ -317,24 +371,24 @@ public class QueryWizard extends DatabaseObjectWizard
                 case SOFIELDSELECTION_PAGE:
                     break;
                 case SOSORTING_PAGE:
-                    CurSortingComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.getSortFieldNames());
+                    m_sortingComponent.initialize(m_DBMetaData.getDisplayFieldNames(), m_DBMetaData.getSortFieldNames());
                     break;
                 case SOFILTER_PAGE:
-                    CurFilterComponent.initialize(CurDBMetaData.getFilterConditions(), CurDBMetaData.getDisplayFieldNames());
+                    m_filterComponent.initialize(m_DBMetaData.getFilterConditions(), m_DBMetaData.getDisplayFieldNames());
                     break;
                 case SOAGGREGATE_PAGE:
-                    CurAggregateComponent.initialize();
+                    m_aggregateComponent.initialize();
                     break;
                 case SOGROUPSELECTION_PAGE:
                     break;
                 case SOGROUPFILTER_PAGE:
-                    CurGroupFilterComponent.initialize(CurDBMetaData.GroupByFilterConditions, CurDBMetaData.getGroupFieldNames());
+                    m_groupFilterComponent.initialize(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.getGroupFieldNames());
                     break;
                 case SOTITLES_PAGE:
-                    CurTitlesComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.FieldTitleSet);
+                    m_titlesComponent.initialize(m_DBMetaData.getDisplayFieldNames(), m_DBMetaData.FieldTitleSet);
                     break;
                 case SOSUMMARY_PAGE:
-                    CurFinalizer.initialize();
+                    m_finalizer.initialize();
                     break;
                 default:
                     break;
@@ -351,27 +405,27 @@ public class QueryWizard extends DatabaseObjectWizard
         switch (nOldStep)
         {
             case SOFIELDSELECTION_PAGE:
-                CurDBMetaData.reorderFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames());
-                CurDBMetaData.initializeFieldTitleSet(true);
-                CurDBMetaData.setNumericFields();
+                m_DBMetaData.reorderFieldColumns(m_DBCommandFieldSelectio.getSelectedFieldNames());
+                m_DBMetaData.initializeFieldTitleSet(true);
+                m_DBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
             case SOSORTING_PAGE:
-                CurDBMetaData.setSortFieldNames(CurSortingComponent.getSortFieldNames());
+                m_DBMetaData.setSortFieldNames(m_sortingComponent.getSortFieldNames());
                 break;
             case SOFILTER_PAGE:
-                CurDBMetaData.setFilterConditions(CurFilterComponent.getFilterConditions());
+                m_DBMetaData.setFilterConditions(m_filterComponent.getFilterConditions());
                 break;
             case SOAGGREGATE_PAGE:
-                CurDBMetaData.AggregateFieldNames = CurAggregateComponent.getAggregateFieldNames();
+                m_DBMetaData.AggregateFieldNames = m_aggregateComponent.getAggregateFieldNames();
                 break;
             case SOGROUPSELECTION_PAGE:
                 break;
             case SOGROUPFILTER_PAGE:
-                CurDBMetaData.setGroupByFilterConditions(this.CurGroupFilterComponent.getFilterConditions());
+                m_DBMetaData.setGroupByFilterConditions(this.m_groupFilterComponent.getFilterConditions());
                 break;
             case SOTITLES_PAGE:
-                CurDBMetaData.setFieldTitles(CurTitlesComponent.getFieldTitles());
+                m_DBMetaData.setFieldTitles(m_titlesComponent.getFieldTitles());
                 break;
             case SOSUMMARY_PAGE:
                 break;
@@ -382,15 +436,15 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             try
             {
-                if (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)
+                if (m_DBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)
                 {
-                    if (CurDBMetaData.xDBMetaData.supportsGroupBy())
+                    if (m_DBMetaData.xDBMetaData.supportsGroupBy())
                     {
-                        CurDBMetaData.setNonAggregateFieldNames();
-                        CurGroupFieldSelection.initialize(CurDBMetaData.getUniqueAggregateFieldNames(), false, CurDBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
-                        CurGroupFieldSelection.intializeSelectedFields(CurDBMetaData.NonAggregateFieldNames);
-                        CurGroupFieldSelection.setMultipleMode(false);
-                        setStepEnabled(SOGROUPFILTER_PAGE, CurAggregateComponent.isGroupingpossible() && CurDBMetaData.NonAggregateFieldNames.length > 0);
+                        m_DBMetaData.setNonAggregateFieldNames();
+                        m_groupFieldSelection.initialize(m_DBMetaData.getUniqueAggregateFieldNames(), false, m_DBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
+                        m_groupFieldSelection.intializeSelectedFields(m_DBMetaData.NonAggregateFieldNames);
+                        m_groupFieldSelection.setMultipleMode(false);
+                        setStepEnabled(SOGROUPFILTER_PAGE, m_aggregateComponent.isGroupingpossible() && m_DBMetaData.NonAggregateFieldNames.length > 0);
                     }
                 }
             }
@@ -403,18 +457,18 @@ public class QueryWizard extends DatabaseObjectWizard
 
     private void searchForOutdatedFields()
     {
-        String[] sFieldNames = CurDBMetaData.getFieldNames();
-        String[][] sRemovedFields = JavaTools.removeOutdatedFields(CurDBMetaData.getSortFieldNames(), sFieldNames);
-        CurDBMetaData.setSortFieldNames(sRemovedFields);
-        CurDBMetaData.setFilterConditions(JavaTools.removeOutdatedFields(CurDBMetaData.getFilterConditions(), sFieldNames));
-        CurDBMetaData.AggregateFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.AggregateFieldNames, sFieldNames);
+        String[] sFieldNames = m_DBMetaData.getFieldNames();
+        String[][] sRemovedFields = JavaTools.removeOutdatedFields(m_DBMetaData.getSortFieldNames(), sFieldNames);
+        m_DBMetaData.setSortFieldNames(sRemovedFields);
+        m_DBMetaData.setFilterConditions(JavaTools.removeOutdatedFields(m_DBMetaData.getFilterConditions(), sFieldNames));
+        m_DBMetaData.AggregateFieldNames = JavaTools.removeOutdatedFields(m_DBMetaData.AggregateFieldNames, sFieldNames);
     }
 
     private void enableWizardSteps(String[] NewItems)
     {
         boolean bEnabled = NewItems.length > 0;
-        setControlProperty("btnWizardNext", "Enabled", new Boolean(bEnabled));
-        setControlProperty("btnWizardFinish", "Enabled", new Boolean(bEnabled));
+        setControlProperty("btnWizardNext", "Enabled", bEnabled);
+        setControlProperty("btnWizardFinish", "Enabled", bEnabled);
         enableRoadmapItems(NewItems, bEnabled); // Note: Performancewise this could be improved
     }
 
@@ -446,15 +500,15 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             if (ID == 1)
             {
-                CurDBMetaData.addSeveralFieldColumns(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
+                m_DBMetaData.addSeveralFieldColumns(SelItems, m_DBCommandFieldSelectio.getSelectedCommandName());
                 enableWizardSteps(NewItems);
-                CurDBCommandFieldSelection.changeSelectedFieldNames(CurDBMetaData.getDisplayFieldNames());
-                CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
+                m_DBCommandFieldSelectio.changeSelectedFieldNames(m_DBMetaData.getDisplayFieldNames());
+                m_DBCommandFieldSelectio.toggleCommandListBox(NewItems);
             }
             else
             {
-                boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), "Enabled", new Boolean(bEnabled));
+                boolean bEnabled = (m_groupFieldSelection.getSelectedFieldNames().length > 0);
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), "Enabled", bEnabled);
             }
         }
 
@@ -464,30 +518,30 @@ public class QueryWizard extends DatabaseObjectWizard
             if (ID == 1)
             {
                 enableWizardSteps(NewItems);
-                String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
-                CurDBCommandFieldSelection.addItemsToFieldsListbox(sSelfieldNames);
-                CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
-                CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
+                String[] sSelfieldNames = m_DBMetaData.getFieldNames(SelItems, m_DBCommandFieldSelectio.getSelectedCommandName());
+                m_DBCommandFieldSelectio.addItemsToFieldsListbox(sSelfieldNames);
+                m_DBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
+                m_DBCommandFieldSelectio.toggleCommandListBox(NewItems);
 
             }
             else
             {
-                boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
+                boolean bEnabled = (m_groupFieldSelection.getSelectedFieldNames().length > 0);
                 String CurDisplayFieldName = SelItems[0];
-                if (JavaTools.FieldInList(CurDBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1)
+                if (JavaTools.FieldInList(m_DBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1)
                 {
                     showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
-                    CurGroupFieldSelection.xSelectedFieldsListBox.addItems(SelItems, CurGroupFieldSelection.xSelectedFieldsListBox.getItemCount());
-                    String FieldList[] = CurGroupFieldSelection.xFieldsListBox.getItems();
+                    m_groupFieldSelection.xSelectedFieldsListBox.addItems(SelItems, m_groupFieldSelection.xSelectedFieldsListBox.getItemCount());
+                    String FieldList[] = m_groupFieldSelection.xFieldsListBox.getItems();
                     int index = JavaTools.FieldInList(FieldList, CurDisplayFieldName);
                     if (index > -1)
                     {
-                        CurGroupFieldSelection.xFieldsListBox.removeItems((short) index, (short) 1);
+                        m_groupFieldSelection.xFieldsListBox.removeItems((short) index, (short) 1);
                     }
                 }
                 else
                 {
-                    Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), "Enabled", new Boolean(bEnabled));
+                    Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), "Enabled", bEnabled);
                 }
             }
         }
