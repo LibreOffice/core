@@ -48,6 +48,7 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
@@ -517,13 +518,6 @@ private:
     /** Merges the passed merged range and updates right/bottom cell borders. */
     void                finalizeMergedRange( const CellRangeAddress& rRange );
 
-    /** Imports the drawing layer of the sheet (DrawingML part). */
-    void                finalizeDrawing();
-    /** Imports the drawing layer of the sheet (VML part). */
-    void                finalizeVmlDrawing();
-    /** Extends the used cell area with the area used by drawing objects. */
-    void                finalizeUsedArea();
-
     /** Converts column properties for all columns in the sheet. */
     void                convertColumns();
     /** Converts column properties. */
@@ -538,6 +532,9 @@ private:
     void                convertOutlines( OutlineLevelVec& orLevels, sal_Int32 nColRow, sal_Int32 nLevel, bool bCollapsed, bool bRows );
     /** Groups columns or rows for the given range. */
     void                groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLastColRow, bool bCollapsed, bool bRows );
+
+    /** Imports the drawings of the sheet (DML, VML), and updates the used area. */
+    void                finalizeDrawings();
 
 private:
     typedef ::std::auto_ptr< VmlDrawing > VmlDrawingPtr;
@@ -1064,10 +1061,7 @@ void WorksheetData::finalizeWorksheetImport()
     convertColumns();
     convertRows();
     lclUpdateProgressBar( mxFinalProgress, 0.75 );
-    finalizeDrawing();
-    finalizeVmlDrawing();
-    maComments.finalizeImport();    // after VML drawing
-    finalizeUsedArea();             // after DML and VML drawing
+    finalizeDrawings();
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
 
     // reset current sheet index in global data
@@ -1454,42 +1448,6 @@ void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange )
     }
 }
 
-void WorksheetData::finalizeDrawing()
-{
-    OSL_ENSURE( (getFilterType() == FILTER_OOXML) || (maDrawingPath.getLength() == 0),
-        "WorksheetData::finalizeDrawing - unexpected DrawingML path" );
-    if( (getFilterType() == FILTER_OOXML) && (maDrawingPath.getLength() > 0) )
-        importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
-}
-
-void WorksheetData::finalizeVmlDrawing()
-{
-    OSL_ENSURE( (getFilterType() == FILTER_OOXML) || (maVmlDrawingPath.getLength() == 0),
-        "WorksheetData::finalizeVmlDrawing - unexpected VML path" );
-    if( (getFilterType() == FILTER_OOXML) && (maVmlDrawingPath.getLength() > 0) )
-        importOoxFragment( new VmlDrawingFragment( *this, maVmlDrawingPath ) );
-}
-
-void WorksheetData::finalizeUsedArea()
-{
-    /*  Extend used area of the sheet by cells covered with drawing objects.
-        Needed if the imported document is inserted as "OLE object from file"
-        and thus does not provide an OLE size property by itself. */
-    if( (maShapeBoundingBox.Width > 0) || (maShapeBoundingBox.Height > 0) )
-        extendUsedArea( getCellRangeFromRectangle( maShapeBoundingBox ) );
-
-    // if no used area is set, default to A1
-    if( maUsedArea.StartColumn > maUsedArea.EndColumn )
-        maUsedArea.StartColumn = maUsedArea.EndColumn = 0;
-    if( maUsedArea.StartRow > maUsedArea.EndRow )
-        maUsedArea.StartRow = maUsedArea.EndRow = 0;
-
-    /*  Register the used area of this sheet in global view settings. The
-        global view settings will set the visible area if this document is an
-        embedded OLE object. */
-    getViewSettings().setSheetUsedArea( maUsedArea );
-}
-
 void WorksheetData::convertColumns()
 {
     sal_Int32 nNextCol = 0;
@@ -1651,6 +1609,55 @@ void WorksheetData::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLastC
     }
     catch( Exception& )
     {
+    }
+}
+
+void WorksheetData::finalizeDrawings()
+{
+    switch( getFilterType() )
+    {
+        case FILTER_OOXML:
+            // import DML and VML
+            if( maDrawingPath.getLength() > 0 )
+                importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
+            if( maVmlDrawingPath.getLength() > 0 )
+                importOoxFragment( new VmlDrawingFragment( *this, maVmlDrawingPath ) );
+        break;
+
+        case FILTER_BIFF:
+            // TODO: import DFF shapes
+        break;
+
+        case FILTER_UNKNOWN:
+        break;
+    }
+
+    // comments (after callout shapes have been imported from VML/DFF)
+    maComments.finalizeImport();
+
+    /*  Extend used area of the sheet by cells covered with drawing objects.
+        Needed if the imported document is inserted as "OLE object from file"
+        and thus does not provide an OLE size property by itself. */
+    if( (maShapeBoundingBox.Width > 0) || (maShapeBoundingBox.Height > 0) )
+        extendUsedArea( getCellRangeFromRectangle( maShapeBoundingBox ) );
+
+    // if no used area is set, default to A1
+    if( maUsedArea.StartColumn > maUsedArea.EndColumn )
+        maUsedArea.StartColumn = maUsedArea.EndColumn = 0;
+    if( maUsedArea.StartRow > maUsedArea.EndRow )
+        maUsedArea.StartRow = maUsedArea.EndRow = 0;
+
+    /*  Register the used area of this sheet in global view settings. The
+        global view settings will set the visible area if this document is an
+        embedded OLE object. */
+    getViewSettings().setSheetUsedArea( maUsedArea );
+
+    /*  #i103686# Set right-to-left sheet layout. Must be done after all
+        drawing shapes to simplify calculation of shape coordinates. */
+    if( maSheetViewSett.isSheetRightToLeft() )
+    {
+        PropertySet aPropSet( mxSheet );
+        aPropSet.setProperty( PROP_TableLayout, ::com::sun::star::text::WritingMode2::RL_TB );
     }
 }
 

@@ -139,6 +139,9 @@ public:
     /** Converts all imported sheet view settings. */
     void                finalizeImport();
 
+    /** Returns true, if the sheet layout is set to right-to-left. */
+    bool                isSheetRightToLeft() const;
+
 private:
     SheetViewModelRef   createSheetView();
 

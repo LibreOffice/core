@@ -33,7 +33,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -498,13 +497,6 @@ void SheetViewSettings::finalizeImport()
         xModel->mbShowOutline = true;
     }
 
-    // mirrored sheet (this is not a view setting in Calc)
-    if( xModel->mbRightToLeft )
-    {
-        PropertySet aPropSet( getSheet() );
-        aPropSet.setProperty( PROP_TableLayout, ::com::sun::star::text::WritingMode2::RL_TB );
-    }
-
     // sheet selected (active sheet must be selected)
     bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveCalcSheet());
 
@@ -593,6 +585,11 @@ void SheetViewSettings::finalizeImport()
 
     // store sheet view settings in global view settings object
     getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
+}
+
+bool SheetViewSettings::isSheetRightToLeft() const
+{
+    return !maSheetViews.empty() && maSheetViews.front()->mbRightToLeft;
 }
 
 // private --------------------------------------------------------------------
