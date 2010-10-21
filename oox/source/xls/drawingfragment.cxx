@@ -459,14 +459,15 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 // ============================================================================
 
 GroupShapeContext::GroupShapeContext( ContextHandler& rParent,
-        const WorksheetHelper& rHelper, const ShapePtr& rxShape ) :
-    ShapeGroupContext( rParent, ShapePtr(), rxShape ),
+        const WorksheetHelper& rHelper, const ShapePtr& rxParentShape, const ShapePtr& rxShape ) :
+    ShapeGroupContext( rParent, rxParentShape, rxShape ),
     WorksheetHelper( rHelper )
 {
 }
 
 /*static*/ ContextHandlerRef GroupShapeContext::createShapeContext( ContextHandler& rParent,
-        const WorksheetHelper& rHelper, sal_Int32 nElement, const AttributeList& rAttribs, ShapePtr* pxShape )
+        const WorksheetHelper& rHelper, sal_Int32 nElement, const AttributeList& rAttribs,
+        const ShapePtr& rxParentShape, ShapePtr* pxShape )
 {
     switch( nElement )
     {
@@ -474,31 +475,31 @@ GroupShapeContext::GroupShapeContext( ContextHandler& rParent,
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.CustomShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new ShapeContext( rParent, ShapePtr(), xShape );
+            return new ShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( cxnSp ):
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.ConnectorShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new ConnectorShapeContext( rParent, ShapePtr(), xShape );
+            return new ConnectorShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( pic ):
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new GraphicShapeContext( rParent, ShapePtr(), xShape );
+            return new GraphicShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( graphicFrame ):
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new GraphicalObjectFrameContext( rParent, ShapePtr(), xShape, rHelper.getSheetType() != SHEETTYPE_CHARTSHEET );
+            return new GraphicalObjectFrameContext( rParent, rxParentShape, xShape, rHelper.getSheetType() != SHEETTYPE_CHARTSHEET );
         }
         case XDR_TOKEN( grpSp ):
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GroupShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new GroupShapeContext( rParent, rHelper, xShape );
+            return new GroupShapeContext( rParent, rHelper, rxParentShape, xShape );
         }
     }
     return 0;
@@ -507,7 +508,7 @@ GroupShapeContext::GroupShapeContext( ContextHandler& rParent,
 Reference< XFastContextHandler > SAL_CALL GroupShapeContext::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
 {
-    ContextHandlerRef xContext = createShapeContext( *this, *this, nElement, AttributeList( rxAttribs ) );
+    ContextHandlerRef xContext = createShapeContext( *this, *this, nElement, AttributeList( rxAttribs ), mpGroupShapePtr );
     return xContext.get() ? xContext.get() : ShapeGroupContext::createFastChildContext( nElement, rxAttribs );
 }
 
@@ -556,7 +557,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
                 case XDR_TOKEN( ext ):          if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );           break;
                 case XDR_TOKEN( clientData ):   if( mxAnchor.get() ) mxAnchor->importClientData( rAttribs );    break;
 
-                default:                        return GroupShapeContext::createShapeContext( *this, *this, nElement, rAttribs, &mxShape );
+                default:                        return GroupShapeContext::createShapeContext( *this, *this, nElement, rAttribs, ShapePtr(), &mxShape );
             }
         }
         break;

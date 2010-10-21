@@ -184,6 +184,7 @@ public:
     explicit            GroupShapeContext(
                             ::oox::core::ContextHandler& rParent,
                             const WorksheetHelper& rHelper,
+                            const ::oox::drawingml::ShapePtr& rxParentShape,
                             const ::oox::drawingml::ShapePtr& rxShape );
 
     static ::oox::core::ContextHandlerRef
@@ -192,6 +193,7 @@ public:
                             const WorksheetHelper& rHelper,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs,
+                            const ::oox::drawingml::ShapePtr& rxParentShape,
                             ::oox::drawingml::ShapePtr* pxShape = 0 );
 
 protected:
