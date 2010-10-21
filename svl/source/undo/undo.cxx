@@ -706,7 +706,7 @@ USHORT SfxUndoManager::GetListActionDepth() const
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::LeaveListAction()
+USHORT SfxUndoManager::LeaveListAction()
 
 /*  [Beschreibung]
 
@@ -714,15 +714,15 @@ void SfxUndoManager::LeaveListAction()
 */
 {
     if ( !m_pData->mbUndoEnabled )
-        return;
+        return 0;
 
     if ( !m_pData->pUndoArray->nMaxUndoActions )
-        return;
+        return 0;
 
     if( !IsInListAction() )
     {
         DBG_ERROR( "svl::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
-        return;
+        return 0;
     }
 
     DBG_ASSERT(m_pData->pActUndoArray->pFatherUndoArray,"svl::SfxUndoManager::LeaveListAction(), no father undo array!?");
@@ -732,7 +732,8 @@ void SfxUndoManager::LeaveListAction()
 
     // If no undo action where added, delete the undo list action
     SfxUndoAction *pTmpAction= m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1];
-    if(!pTmp->nCurUndoAction)
+    const USHORT nListActionElements = pTmp->nCurUndoAction;
+    if( nListActionElements == 0 )
     {
         m_pData->pActUndoArray->aUndoActions.Remove( --m_pData->pActUndoArray->nCurUndoAction);
         delete pTmpAction;
@@ -760,8 +761,12 @@ void SfxUndoManager::LeaveListAction()
             ++listener
         )
     {
-        (*listener)->listActionLeft();
+        if ( nListActionElements > 0 )
+            (*listener)->listActionLeft();
+        else
+            (*listener)->listActionCancelled();
     }
+    return nListActionElements;
 }
 
 //------------------------------------------------------------------------

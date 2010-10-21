@@ -146,6 +146,7 @@ public:
     virtual void clearedRedo() = 0;
     virtual void listActionEntered( const String& i_comment ) = 0;
     virtual void listActionLeft() = 0;
+    virtual void listActionCancelled() = 0;
     virtual void undoManagerDying() = 0;
 };
 
@@ -187,7 +188,11 @@ namespace svl
         virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction ) const = 0;
 
         virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0) = 0;
-        virtual void            LeaveListAction() = 0;
+        /** leaves the list action entered with EnterListAction
+            @return the number of the sub actions in the list which has just been left. Note that in case no such
+                actions exist, the list action does not contribute to the Undo stack, but is silently removed.
+        */
+        virtual USHORT          LeaveListAction() = 0;
 
         /// determines whether we're within a ListAction context, i.e. a LeaveListAction call is pending
         virtual bool            IsInListAction() const = 0;
@@ -248,7 +253,7 @@ public:
     virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const;
     virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction ) const;
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
-    virtual void            LeaveListAction();
+    virtual USHORT          LeaveListAction();
     virtual bool            IsInListAction() const;
     virtual USHORT          GetListActionDepth() const;
     virtual void            RemoveLastUndoAction();
