@@ -619,6 +619,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Page" ;
     };
+    String STR_PGNUM
+    {
+        Text [ en-US ] = "Page %1" ;
+    };
     String STR_LOAD_DOC
     {
         Text [ en-US ] = "Load document" ;

@@ -962,15 +962,14 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
         Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
-        String aPageText = ScGlobal::GetRscString( STR_PAGE );
+        String aPageStr = ScGlobal::GetRscString( STR_PGNUM );
         if ( nPageScript == 0 )
         {
             //  get script type of translated "Page" string only once
-            nPageScript = pDoc->GetStringScriptType( aPageText );
+            nPageScript = pDoc->GetStringScriptType( aPageStr );
             if (nPageScript == 0)
                 nPageScript = ScGlobal::GetDefaultScriptType();
         }
-        aPageText += ' ';
 
         Font aFont;
         ScEditEngineDefaulter* pEditEng = NULL;
@@ -1095,8 +1094,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     nPageNo += ((long)nColPos)*nRowBreaks+nRowPos;
                                 else
                                     nPageNo += ((long)nRowPos)*nColBreaks+nColPos;
-                                String aPageStr = aPageText;
-                                aPageStr += String::CreateFromInt32(nPageNo);
+                                aPageStr.SearchAndReplaceAscii("%1", String::CreateFromInt32(nPageNo));
 
                                 if ( pEditEng )
                                 {
