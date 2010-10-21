@@ -111,7 +111,6 @@
 #include <usr/sequ.hxx>
 #include <uno/types.h>
 #include <uno/macros.h>
-#include <vos/xception.hxx>
 #include <osl/mutex.h>
 #include <tools/shl.hxx>
 #include <sfx2/module.hxx>
@@ -120,11 +119,8 @@
 #include <usr/xiface.hxx>
 #include <usr/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <vos/types.hxx>
 #include <osl/types.h>
 #include <osl/interlck.h>
-#include <vos/object.hxx>
-#include <vos/macros.hxx>
 #include <smdll.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <chaos/cntids.hrc>
@@ -146,7 +142,6 @@
 #include <smmod.hxx>
 #include <osl/thread.hxx>
 #include <osl/thread.h>
-#include <vos/runnable.hxx>
 #include <vcl/apptypes.hxx>
 #include <tools/dynary.hxx>
 #include <vcl/metric.hxx>

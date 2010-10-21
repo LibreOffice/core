@@ -60,7 +60,6 @@
 #include <config.hxx>
 #include <smdll.hxx>
 
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::std;
 using namespace ::comphelper;
