@@ -37,40 +37,40 @@ TARGET=dialog
 # --- Files --------------------------------------------------------------
 
 EXCEPTIONSFILES=\
-        $(SLO)$/about.obj           \
+        $(SLO)$/about.obj		\
+        $(SLO)$/alienwarn.obj		\
+        $(SLO)$/basedlgs.obj		\
+        $(SLO)$/dinfdlg.obj		\
+        $(SLO)$/dinfedt.obj		\
+        $(SLO)$/dockwin.obj		\
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filtergrouping.obj	\
-        $(SLO)$/itemconnect.obj     \
+        $(SLO)$/intro.obj		\
+        $(SLO)$/itemconnect.obj		\
         $(SLO)$/mailmodel.obj		\
-        $(SLO)$/partwnd.obj         \
-        $(SLO)$/recfloat.obj        \
-        $(SLO)$/templdlg.obj        \
-        $(SLO)$/dinfdlg.obj         \
-        $(SLO)$/dockwin.obj         \
-        $(SLO)$/taskpane.obj
+        $(SLO)$/mgetempl.obj		\
+        $(SLO)$/navigat.obj		\
+        $(SLO)$/newstyle.obj		\
+        $(SLO)$/partwnd.obj		\
+        $(SLO)$/passwd.obj		\
+        $(SLO)$/printopt.obj		\
+        $(SLO)$/recfloat.obj		\
+        $(SLO)$/securitypage.obj	\
+        $(SLO)$/sfxdlg.obj		\
+        $(SLO)$/splitwin.obj		\
+        $(SLO)$/srchdlg.obj		\
+        $(SLO)$/styledlg.obj		\
+        $(SLO)$/tabdlg.obj		\
+        $(SLO)$/taskpane.obj		\
+        $(SLO)$/templdlg.obj		\
+        $(SLO)$/titledockwin.obj	\
+        $(SLO)$/tplcitem.obj		\
+        $(SLO)$/versdlg.obj
 
 SLOFILES =\
-        $(EXCEPTIONSFILES)			\
-        $(SLO)$/alienwarn.obj       \
-        $(SLO)$/basedlgs.obj		\
-        $(SLO)$/dinfedt.obj			\
-        $(SLO)$/intro.obj			\
-        $(SLO)$/mgetempl.obj		\
-        $(SLO)$/navigat.obj			\
-        $(SLO)$/newstyle.obj		\
-        $(SLO)$/passwd.obj			\
-        $(SLO)$/printopt.obj		\
-        $(SLO)$/sfxdlg.obj          \
-        $(SLO)$/splitwin.obj		\
-        $(SLO)$/srchdlg.obj         \
+        $(EXCEPTIONSFILES)		\
         $(SLO)$/styfitem.obj		\
-        $(SLO)$/styledlg.obj		\
-        $(SLO)$/tabdlg.obj			\
-        $(SLO)$/tplcitem.obj		\
-        $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj         \
-        $(SLO)$/securitypage.obj    \
-        $(SLO)$/titledockwin.obj
+        $(SLO)$/tplpitem.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
