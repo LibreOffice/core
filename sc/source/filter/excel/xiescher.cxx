@@ -3837,6 +3837,10 @@ sal_Size XclImpDrawing::GetProgressSize() const
 
 void XclImpDrawing::ImplConvertObjects( XclImpDffConverter& rDffConv, SdrModel& rSdrModel, SdrPage& rSdrPage )
 {
+    //rhbz#636521, disable undo during conversion. faster, smaller and stops
+    //temp objects being inserted into the undo list
+    bool bOrigUndoStatus = rSdrModel.IsUndoEnabled();
+    rSdrModel.EnableUndo(false);
     // register this drawing manager at the passed (global) DFF manager
     rDffConv.InitializeDrawing( *this, rSdrModel, rSdrPage );
     // process list of objects to be skipped
@@ -3849,6 +3853,7 @@ void XclImpDrawing::ImplConvertObjects( XclImpDffConverter& rDffConv, SdrModel& 
     rDffConv.ProcessDrawing( maDffStrm );
     // unregister this drawing manager at the passed (global) DFF manager
     rDffConv.FinalizeDrawing();
+    rSdrModel.EnableUndo(bOrigUndoStatus);
 }
 
 // protected ------------------------------------------------------------------
