@@ -84,7 +84,6 @@ SHL1STDLIBS+= \
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB) \
     $(SALHELPERLIB) \
