@@ -325,6 +325,7 @@ inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPus
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
+void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULONG& rRetIndexExpr);
 //void PushByte(BYTE nVal);
 void PushDouble(double nVal);
 void PushInt( int nVal );

@@ -1776,6 +1776,52 @@ ScMatrixRef ScInterpreter::PopMatrix()
     return NULL;
 }
 
+void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULONG& rRetIndexExpr)
+{
+    if (xMat)
+    {
+        ScMatValType nMatValType;
+        const ScMatrixValue* pMatVal = xMat->Get(0, 0, nMatValType);
+        if ( pMatVal )
+        {
+            if (ScMatrix::IsNonValueType( nMatValType))
+            {
+                if ( xMat->IsEmptyPath( 0, 0))
+                {   // result of empty FALSE jump path
+                    FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
+                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                    rRetTypeExpr = NUMBERFORMAT_LOGICAL;
+                }
+                else
+                {
+                    String aStr( pMatVal->GetString());
+                    FormulaTokenRef xRes = new FormulaStringToken( aStr);
+                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                    rRetTypeExpr = NUMBERFORMAT_TEXT;
+                }
+            }
+            else
+            {
+                USHORT nErr = GetDoubleErrorValue( pMatVal->fVal);
+                FormulaTokenRef xRes;
+                if (nErr)
+                    xRes = new FormulaErrorToken( nErr);
+                else
+                    xRes = new FormulaDoubleToken( pMatVal->fVal);
+                PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
+                    rRetTypeExpr = NUMBERFORMAT_NUMBER;
+            }
+            rRetIndexExpr = 0;
+        }
+        else
+            SetError( errUnknownStackVariable);
+        xMat->SetErrorInterpreter( NULL);
+    }
+    else
+        SetError( errUnknownStackVariable);
+}
+
 
 void ScInterpreter::PushDouble(double nVal)
 {
@@ -4133,7 +4179,8 @@ StackVar ScInterpreter::Interpret()
                     if ( bMatrixFormula )
                     {   // create matrix for {=A1:A5}
                         PopDoubleRefPushMatrix();
-                        // no break, continue with svMatrix
+                        ScMatrixRef xMat = PopMatrix();
+                        QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
                     }
                     else
                     {
@@ -4143,10 +4190,9 @@ StackVar ScInterpreter::Interpret()
                         if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr))
                             PushCellResultToken( false, aAdr,
                                     &nRetTypeExpr, &nRetIndexExpr);
-                        break;
                     }
                 }
-                // no break
+                break;
                 case svExternalDoubleRef:
                 case svMatrix :
                 {
@@ -4156,48 +4202,7 @@ StackVar ScInterpreter::Interpret()
                     else
                         PopExternalDoubleRef(xMat);
 
-                    if (xMat)
-                    {
-                        ScMatValType nMatValType;
-                        const ScMatrixValue* pMatVal = xMat->Get(0, 0, nMatValType);
-                        if ( pMatVal )
-                        {
-                            if (ScMatrix::IsNonValueType( nMatValType))
-                            {
-                                if ( xMat->IsEmptyPath( 0, 0))
-                                {   // result of empty FALSE jump path
-                                    FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
-                                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                                    nRetTypeExpr = NUMBERFORMAT_LOGICAL;
-                                }
-                                else
-                                {
-                                    String aStr( pMatVal->GetString());
-                                    FormulaTokenRef xRes = new FormulaStringToken( aStr);
-                                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                                    nRetTypeExpr = NUMBERFORMAT_TEXT;
-                                }
-                            }
-                            else
-                            {
-                                USHORT nErr = GetDoubleErrorValue( pMatVal->fVal);
-                                FormulaTokenRef xRes;
-                                if (nErr)
-                                    xRes = new FormulaErrorToken( nErr);
-                                else
-                                    xRes = new FormulaDoubleToken( pMatVal->fVal);
-                                PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                                if ( nRetTypeExpr != NUMBERFORMAT_LOGICAL )
-                                    nRetTypeExpr = NUMBERFORMAT_NUMBER;
-                            }
-                            nRetIndexExpr = 0;
-                        }
-                        else
-                            SetError( errUnknownStackVariable);
-                        xMat->SetErrorInterpreter( NULL);
-                    }
-                    else
-                        SetError( errUnknownStackVariable);
+                    QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
                 }
                 break;
                 case svExternalSingleRef:
