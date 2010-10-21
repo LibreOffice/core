@@ -63,8 +63,7 @@ SHL1DEPN	=$(SHL1LIBS)
 SHL1STDLIBS=\
             $(TOOLSLIB) \
             $(BTSTRPLIB)		\
-            $(VOSLIB)			\
-            $(SALLIB)   
+            $(SALLIB)
 
 DEF1NAME    =$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt
