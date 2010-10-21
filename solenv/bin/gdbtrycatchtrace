@@ -1,3 +1,4 @@
+set pagination off
 catch throw
 commands
     bt
