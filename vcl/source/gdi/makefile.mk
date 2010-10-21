@@ -63,6 +63,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/metric.obj		\
                     $(SLO)$/pdfwriter_impl.obj	\
+                    $(SLO)$/pdfwriter_impl2.obj	\
                     $(SLO)$/pdffontcache.obj\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\

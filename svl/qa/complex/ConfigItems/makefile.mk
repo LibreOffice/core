@@ -24,60 +24,38 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ = ..$/..$/..
-TARGET  = CheckConfigItems
-PRJNAME = svl
-PACKAGE = complex$/ConfigItems
-
-# --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
-
-
-#----- compile .java files -----------------------------------------
-
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
-                  OOoRunner.jar
-                  
-JAVAFILES       = CheckConfigItems.java
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-SUBDIRS = helper
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
 .ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
 
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
+PRJ = ../../..
+PRJNAME = svl
+TARGET = qa_complex_ConfigItems
 
-# test looks something like the.full.package.TestName
-CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/ConfigItems
 
-# start the runner application
-CT_APP      = org.openoffice.Runner
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    CheckConfigItems.java
 
-# --- Targets ------------------------------------------------------
+# put here all other files
+JAVAFILES = $(JAVATESTFILES)
 
-.INCLUDE :  target.mk
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-RUN: run
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
-run:
-    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_TEST)
+.END
 
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+.END
 
 
