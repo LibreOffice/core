@@ -34,10 +34,6 @@
 #include "svx/svxdllapi.h"
 
 
-/*--------------------------------------------------------------------
-    Beschreibung:   SvxNumType
- --------------------------------------------------------------------*/
-
 enum SvxNumType
 {
     SVX_CHARS_UPPER_LETTER,
@@ -51,7 +47,7 @@ enum SvxNumType
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Benutzung der Seite
+  usage of the page
  --------------------------------------------------------------------*/
 
 enum SvxPageUsage
@@ -65,24 +61,21 @@ enum SvxPageUsage
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Teile der Seitenbeschreibung
+  parts of the page description
  --------------------------------------------------------------------*/
 
-
-
 /*
-[Beschreibung]
-Dieses Item beschreibt ein Seiten-Attribut (Name der Vorlage, Numerierung,
-Portrait oder Landscape, Layout).
+This item describes a page attribute (name of the template, enumeration,
+portait or landscape, layout)
 */
 
 class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
 {
 private:
-    String          aDescName;          // Name der Vorlage
-    SvxNumType      eNumType;           // Numerierung
-    BOOL            bLandscape;         // Portrait / Landscape
-    USHORT          eUse;               // Layout
+    String          aDescName;          // name of the template
+    SvxNumType      eNumType;           // enumeration
+    BOOL            bLandscape;         // portrait / landscape
+    USHORT          eUse;               // layout
 
 public:
 
@@ -103,18 +96,18 @@ public:
     virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
     virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
 
-    // Ausrichtung
+    // orientation
     USHORT          GetPageUsage() const                { return eUse;       }
     void            SetPageUsage(USHORT eU)             { eUse= eU;          }
 
     BOOL            IsLandscape() const                 { return bLandscape; }
     void            SetLandscape(BOOL bL)               { bLandscape = bL;   }
 
-    // Numerierung
+    // enumeration
     SvxNumType      GetNumType() const                  { return eNumType;   }
     void            SetNumType(SvxNumType eNum)         { eNumType = eNum;   }
 
-    // Name des Descriptors
+    // name of the descriptor
     const String&   GetDescName() const                 { return aDescName;  }
     void            SetDescName(const String& rStr)     { aDescName = rStr;  }
 };
@@ -122,15 +115,8 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Container fuer Header/Footer-Attribute
+  container for header/footer attributes
  --------------------------------------------------------------------*/
-
-
-
-/*
-[Beschreibung]
-Dieses Item dient als Container fuer Header- und Footer-Attribute.
-*/
 
 class SVX_DLLPUBLIC SvxSetItem: public SfxSetItem
 {

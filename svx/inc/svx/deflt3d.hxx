@@ -35,29 +35,29 @@
 
 /*************************************************************************
 |*
-|* Klasse zum verwalten der 3D-Default Attribute
+|* Class for managing the 3D default attributes
 |*
 \************************************************************************/
 
 class SVX_DLLPUBLIC E3dDefaultAttributes
 {
 private:
-    // Compound-Objekt
+    // Compound object
     Color               aDefaultAmbientColor;
     BOOL                bDefaultCreateNormals;
     BOOL                bDefaultCreateTexture;
 
-    // Cube-Objekt
+    // Cube object
     basegfx::B3DPoint   aDefaultCubePos;
     basegfx::B3DVector  aDefaultCubeSize;
     UINT16              nDefaultCubeSideFlags;
     BOOL                bDefaultCubePosIsCenter;
 
-    // Sphere-Objekt
+    // Sphere object
     basegfx::B3DPoint   aDefaultSphereCenter;
     basegfx::B3DVector  aDefaultSphereSize;
 
-    // Lathe-Objekt
+    // Lathe object
     long                nDefaultLatheEndAngle;
     BOOL                bDefaultLatheSmoothed;
     BOOL                bDefaultLatheSmoothFrontBack;
@@ -65,7 +65,7 @@ private:
     BOOL                bDefaultLatheCloseFront;
     BOOL                bDefaultLatheCloseBack;
 
-    // Extrude-Objekt
+    // Extrude object
     BOOL                bDefaultExtrudeSmoothed;
     BOOL                bDefaultExtrudeSmoothFrontBack;
     BOOL                bDefaultExtrudeCharacterMode;
@@ -73,14 +73,14 @@ private:
     BOOL                bDefaultExtrudeCloseBack;
 
 public:
-    // Konstruktor
+    // Construktor
     E3dDefaultAttributes();
 
-    // Defaults zuruecksetzen
+    // Reset to defaults
     void Reset();
 
-    // Getter/Setter fuer Default-Werte aller 3D-Objekte
-    // Compound-Objekt
+    // Getter/Setter for default values of all 3D objects
+    // Compound object
     const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
     void SetDefaultAmbientColor(const Color& rNew) { aDefaultAmbientColor = rNew; }
 
@@ -89,7 +89,7 @@ public:
     BOOL GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
     void SetDefaultCreateTexture(const BOOL bNew) { bDefaultCreateTexture = bNew; }
 
-    // Cube-Objekt
+    // Cube object
     const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
     void SetDefaultCubePos(const basegfx::B3DPoint& rNew) { aDefaultCubePos = rNew; }
     const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
@@ -99,13 +99,13 @@ public:
     BOOL GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
     void SetDefaultCubePosIsCenter(const BOOL bNew) { bDefaultCubePosIsCenter = bNew; }
 
-    // Sphere-Objekt
+    // Sphere object
     const basegfx::B3DPoint& GetDefaultSphereCenter() { return aDefaultSphereCenter; }
     void SetDefaultSphereCenter(const basegfx::B3DPoint& rNew) { aDefaultSphereCenter = rNew; }
     const basegfx::B3DVector& GetDefaultSphereSize() { return aDefaultSphereSize; }
     void SetDefaultSphereSize(const basegfx::B3DPoint& rNew) { aDefaultSphereSize = rNew; }
 
-    // Lathe-Objekt
+    // Lathe object
     long GetDefaultLatheEndAngle() const { return nDefaultLatheEndAngle; }
     void SetDefaultLatheEndAngle(const long nNew) { nDefaultLatheEndAngle = nNew; }
     BOOL GetDefaultLatheSmoothed() const { return bDefaultLatheSmoothed; }
@@ -119,7 +119,7 @@ public:
     BOOL GetDefaultLatheCloseBack() const { return bDefaultLatheCloseBack; }
     void SetDefaultLatheCloseBack(const BOOL bNew) { bDefaultLatheCloseBack = bNew; }
 
-    // Extrude-Objekt
+    // Extrude object
     BOOL GetDefaultExtrudeSmoothed() const { return bDefaultExtrudeSmoothed; }
     void SetDefaultExtrudeSmoothed(const BOOL bNew) { bDefaultExtrudeSmoothed = bNew; }
     BOOL GetDefaultExtrudeSmoothFrontBack() const { return bDefaultExtrudeSmoothFrontBack; }

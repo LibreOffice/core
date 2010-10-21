@@ -34,12 +34,6 @@
 
 
 // class SvxRelativeField ------------------------------------------------
-/*
-    [Beschreibung]
-
-    "Ahnlich der Klasse FontSizeBox. Abgeleitet von der Klasse MetricField.
-    Zus"atzliche Funktionalit"at: relative Angaben.
-*/
 
 class SVX_DLLPUBLIC SvxRelativeField : public MetricField
 {

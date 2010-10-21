@@ -78,7 +78,7 @@ private:
     ImageButton         aBtnUpdate;
     ImageButton         aBtnAssign;
 
-// Geometrie
+// geometry
     FixedText           aFtPercentDiagonal;
     MetricField         aMtrPercentDiagonal;
     FixedText           aFtBackscale;
@@ -104,7 +104,7 @@ private:
 
     ImageButton         aBtnDoubleSided;
 
-// Darstellung
+// presentation
     FixedText           aFtShademode;
     ListBox             aLbShademode;
     ImageButton         aBtnShadow3d;
@@ -118,7 +118,7 @@ private:
     FixedLine           aFLCamera;
     FixedLine           aFLRepresentation;
 
-// Beleuchtung
+// lighting
     ImageButton         aBtnLight1;
     ImageButton         aBtnLight2;
     ImageButton         aBtnLight3;
@@ -147,7 +147,7 @@ private:
 
     FixedLine           aFLLight;
 
-// Texturen
+// Textures
     FixedText           aFtTexKind;
     ImageButton         aBtnTexLuminance;
     ImageButton         aBtnTexColor;
@@ -167,8 +167,8 @@ private:
     ImageButton         aBtnTexFilter;
     FixedLine           aFLTexture;
 
-// Material
-// Materialeditor
+// material
+// material editor
     FixedText           aFtMatFavorites;
     ListBox             aLbMatFavorites;
     FixedText           aFtMatColor;
@@ -185,21 +185,21 @@ private:
     FixedLine           aFLMatSpecular;
     FixedLine           aFLMaterial;
 
-// Unterer Teil
+// bottom part
     ImageButton         aBtnConvertTo3D;
     ImageButton         aBtnLatheObject;
     ImageButton         aBtnPerspective;
     Svx3DPreviewControl aCtlPreview;
     SvxLightCtl3D       aCtlLightPreview;
 
-// der Rest ...
+// the rest ...
     Image               aImgLightOn;
     Image               aImgLightOff;
     BOOL                bUpdate;
     ViewType3D          eViewType;
     Size                aSize;
 
-    // Model, Page, View etc. fuer Favoriten
+    // Model, Page, View etc. for favourites
     FmFormModel*        pModel;
     FmFormPage*         pFmPage;
     VirtualDevice*      pVDev;
@@ -268,7 +268,7 @@ public:
 
 /*************************************************************************
 |*
-|* ControllerItem fuer 3D-Window (Floating/Docking)
+|* Controller item for 3D Window (Floating/Docking)
 |*
 \************************************************************************/
 
@@ -286,7 +286,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 
 /*************************************************************************
 |*
-|* ControllerItem fuer Status eines Slots
+|* ControllerItem for State of a Slot
 |* (SID_CONVERT_TO_3D, SID_CONVERT_TO_3D_LATHE_FAST)
 |*
 \************************************************************************/

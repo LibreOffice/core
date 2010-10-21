@@ -70,7 +70,7 @@ protected:
     virtual void DoubleClick(const BrowserMouseEvent&);
     virtual void KeyInput(const KeyEvent& rEvt);
     virtual void Select();
-    virtual void SetDirty(); // wird z.B. bei Modusumschaltungen gerufen
+    virtual void SetDirty(); // is called for example in mode switches
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
 public:

@@ -36,9 +36,6 @@
 #define ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS   (1UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_NOTEXISTS)
 
-// moved to editeng lib
-//#define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    (2UL | ERRCODE_AREA_SVX)
-
 #define ERRCODE_SVX_LINGU_LINGUNOTEXISTS       (3UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_NOTEXISTS )
 #define ERRCODE_SVX_LINGU_HYPHENNOTEXISTS      (4UL | ERRCODE_AREA_SVX | \
@@ -50,8 +47,6 @@
 
 #define ERRCODE_SVX_GRAPHIC_NOTREADABLE        (7UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_READ )
-// moved to editeng lib
-//#define ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT   (8UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_READ )
 
 #define ERRCODE_SVX_LINGU_NOLANGUAGE           (9UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_NOTEXISTS )

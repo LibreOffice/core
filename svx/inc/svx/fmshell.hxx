@@ -89,14 +89,13 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
 
     sal_uInt16  m_nLastSlot;
     sal_Bool    m_bDesignMode : 1;
-    sal_Bool    m_bHasForms : 1;    // Flag welches festhaelt, ob Formulare auf einer Seite
-                                // vorhanden sind, nur für den DesignMode, siehe UIFeatureChanged!
+    sal_Bool    m_bHasForms : 1;    // flag storing if the forms on a page exist,
+                                        // only for the DesignMode, see UIFeatureChanged!
 
-    // die Markierungen einer FormView haben sich geaendert ...
+    // the marks of a FormView have changed...
     void NotifyMarkListChanged(FmFormView*);
-        // (die FormView selber ist kein Broadcaster, deshalb kann sie den Formular-Explorer, den dieses
-        // Ereignis interesiert, nicht sauber verstaendigen (sie koennte sich lediglich von der Application
-        // das Navigator-Fenster geben lassen, aber das wollen wir ja nicht, ge ? ...))
+        // (the FormView itself is not a broadcaster, therefore it can't always correctly notify the
+        // form explorer who is interested in the event)
 
     class FormShellWaitObject
     {
@@ -177,7 +176,7 @@ public:
 protected:
     void GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich);
 
-    // gibt es ein Formular auf der aktuellen Seite?
+    // is there a form on the current page?
     void DetermineForms(sal_Bool bInvalidate);
     void impl_setDesignMode( sal_Bool bDesign);
 };

@@ -33,8 +33,8 @@
 
 //------------------------------------------------------------
 // class SdrOnOffItem
-// hier liefert GetValueTextByVal() "an" oder "aus"
-// anstelle von "TRUE" und "FALSE"
+// here GetValueTextByVal() returns "an" or "aus" instead
+// of "TRUE" or "FALSE"
 //------------------------------------------------------------
 class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:

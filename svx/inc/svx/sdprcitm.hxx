@@ -33,7 +33,7 @@
 
 //------------------------------------------------------------
 // class SdrPercentItem
-// Ganze Prozente von 0
+// Integer percents of 0
 //------------------------------------------------------------
 
 class SVX_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
@@ -55,7 +55,7 @@ public:
 
 //------------------------------------------------------------
 // class SdrSignedPercentItem
-// Ganze Prozente von +/-
+// Integer percents of +/-
 //------------------------------------------------------------
 
 class SVX_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item

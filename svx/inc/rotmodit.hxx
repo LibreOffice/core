@@ -32,7 +32,7 @@
 #include "svx/svxdllapi.h"
 
 //----------------------------------------------------------------------------
-//  Ausrichtung bei gedrehtem Text
+//  Alignment with rotated text
 
 enum SvxRotateMode
 {

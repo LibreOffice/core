@@ -32,6 +32,39 @@
 #include <sal/types.h>
 #include "svx/svxdllapi.h"
 
+/*
+
+Using this class, you can find out:
+- SdrView* First/NextView()
+  - All Views in which a model is displayed
+  - All Views in which a certain page is visible (also as MasterPage)
+  - All Views in which a certain object is visible (also as MasterPage)
+- SdrPageView* First/NextPageView()
+  - All PageViews in which a model is displayed
+  - All PageViews in which a certain page is visible (also as MasterPage)
+  - All PageViews in which a certain object is visible (also as MasterPage)
+- OutputDevice* First/NextOutDev()
+  - All OutputDevices in which a model is displayed
+  - All OutputDevices in which a certain page is visible (also as MasterPage)
+  - All OutputDevices in which a certain object is visible (also as MasterPage)
+- Window* First/NextWindow()
+  - All Windows in which a model is displayed
+  - All Windows in which a certain page is visible (also as MasterPage)
+  - All Windows in which a certain object is visible (also as MasterPage)
+You can specify if the selection is restricted to a certain page/object by
+choosing the corresponding constructor.
+
+Among others, the following are considered:
+- Visibility state of the layer
+- Visible Layer of MasterPages
+- Multiple layer for group objects
+
+Not considered are:
+- Whether the pages/objects were already painted or if an Invalidate is still pending
+- Whether the pages/objects in a Window are in a visible region
+
+*/
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class OutputDevice;
@@ -84,43 +117,6 @@ public:
     Window* FirstWindow();
     Window* NextWindow();
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef _JUST_DESCRIPTION
-
-Mit dieser Klasse kann man rausbekommen:
-- SdrView* First/NextView()
-  - Alle Views in denen ein Models dargestellt wird
-  - Alle Views in denen eine bestimme Page sichtbar ist (ww. auch als MasterPage)
-  - Alle Views in denen ein bestimmes Objekt sichtbar ist (ww. auch auf MasterPage)
-- SdrPageView* First/NextPageView()
-  - Alle PageViews in denen ein Models dargestellt wird
-  - Alle PageViews in denen eine bestimme Page sichtbar ist (ww. auch als MasterPage)
-  - Alle PageViews in denen ein bestimmes Objekt sichtbar ist (ww. auch auf MasterPage)
-- OutputDevice* First/NextOutDev()
-  - Alle OutputDevices in denen ein Models dargestellt wird
-  - Alle OutputDevices in denen eine bestimme Page sichtbar ist (ww. auch als MasterPage)
-  - Alle OutputDevices in denen ein bestimmes Objekt sichtbar ist (ww. auch auf MasterPage)
-- Window* First/NextWindow()
-  - Alle Windows in denen ein Models dargestellt wird
-  - Alle Windows in denen eine bestimme Page sichtbar ist (auch als MasterPage)
-  - Alle Windows in denen ein bestimmes Objekt sichtbar ist (auch auf MasterPage)
-Ob die Auswahl auf ein(e) bestimmte(s) Page/Objekt beschraenkt wird, bestimmt man
-durch die Wahl des Konstruktors.
-
-Es werden u.a. auch berueksichtigt:
-- Layer Sichtbarkeitsstatus
-- Visible Layer von MasterPages
-- Mehrfachlayer bei Gruppenobjekten
-
-Es wird nicht berueksichtigt:
-- Ob die Pages/Objekte wirklich schon gepaintet wurden oder noch ein Invalidate ansteht, ...
-- Ob die Pages/Objekte in einem Window im sichtbaren Bereich liegen
-
-#endif // _JUST_DESCRIPTION
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDVITER_HXX
 

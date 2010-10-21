@@ -44,7 +44,7 @@ class ListBox;
 
 /*************************************************************************
 |*
-|* Klassen fuer Flaechenattribute (Controls und Controller)
+|* Class for surface attributes (controls and controller)
 |*
 \************************************************************************/
 

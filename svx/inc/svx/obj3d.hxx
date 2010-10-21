@@ -45,7 +45,7 @@
 #include "svx/svxdllapi.h"
 
 //************************************************************
-//   Vorausdeklarationen
+// Forward declaration
 //************************************************************
 
 class SfxPoolItem;
@@ -65,22 +65,22 @@ namespace sdr { namespace properties {
 
 /*************************************************************************
 |*
-|* GeoData relevant fuer Undo-Actions
+|* GeoData relevant for undo actions
 |*
 \************************************************************************/
 
 class E3DObjGeoData : public SdrObjGeoData
 {
 public:
-    basegfx::B3DRange           maLocalBoundVol;    // umschliessendes Volumen des Objekts
-    basegfx::B3DHomMatrix       maTransformation;   // lokale Transformation
+    basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object
+    basegfx::B3DHomMatrix       maTransformation;   // lokal transformations
 
     E3DObjGeoData() {}
 };
 
 /*************************************************************************
 |*
-|* Liste fuer 3D-Objekte
+|* List for 3D objects
 |*
 \************************************************************************/
 
@@ -100,7 +100,7 @@ public:
 
 /*************************************************************************
 |*
-|* Basisklasse fuer 3D-Objekte
+|* Base class for 3D objects
 |*
 \************************************************************************/
 
@@ -110,18 +110,18 @@ private:
     // to allow sdr::properties::E3dProperties access to StructureChanged()
     friend class sdr::properties::E3dProperties;
 
-    // Aus der E3dObjList und E3dDragMethod alles erlauben
+    // Allow everything for E3dObjList and E3dDragMethod
     friend class E3dObjList;
     friend class E3dDragMethod;
 
  protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    E3dObjList                  maSubList;          // Subliste (Childobjekte)
+    E3dObjList                  maSubList;          // child objekts
 
-    basegfx::B3DRange           maLocalBoundVol;    // umschliessendes Volumen des Objekts (aus geometrieerzeugung)
-    basegfx::B3DHomMatrix       maTransformation;   // lokale Transformation
-    basegfx::B3DHomMatrix       maFullTransform;    // globale Transformation (inkl. Parents)
+    basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
+    basegfx::B3DHomMatrix       maTransformation;   // local transformation
+    basegfx::B3DHomMatrix       maFullTransform;    // global transformation (including. parents)
 
     // Flags
     unsigned        mbTfHasChanged          : 1;
@@ -164,7 +164,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual SdrObjList* GetSubList() const;
 
-    // 3D-Objekt in die Gruppe einfuegen; Eigentumsuebergang!
+    // Insert 3D object into the group; transfer to other owner!
     virtual void Insert3DObj(E3dObject* p3DObj);
     void Remove3DObj(E3dObject* p3DObj);
 
@@ -174,23 +174,24 @@ public:
     const basegfx::B3DRange& GetBoundVolume() const;
     void InvalidateBoundVolume();
 
-    // komplette Transformation inklusive aller Parents berechnen
+    // calculate complete transformation including all parents
     const basegfx::B3DHomMatrix& GetFullTransform() const;
 
-    // Transformationsmatrix abfragen bzw. (zurueck)setzen
+    // get and (re)set transformation matrix
     const basegfx::B3DHomMatrix& GetTransform() const;
     virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix);
     virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
 
-    // [FG] 2D-Rotationen, werden hier als Rotationen um die Z-Achse, die in den Bildschirm zeigt,
-    //      implementiert plus eine Verschiebung der Scene. Dies bedeutet auch die Scene (E3dScene)
-    //      muss diese Routine in der Klasse als virtual definieren.
+    // 2D rotations, are implemented as a rotation around the Z axis
+    // which is vertical to the screen, plus a shift of the scene.
+    // This means that also the scene (E3dScene) must define this
+    // routine as virtual in its class.
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
 
     // get wireframe polygon for local object. No transform is applied.
     basegfx::B3DPolyPolygon CreateWireframe() const;
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     USHORT GetLogicalGroup() { return 0; }
@@ -200,22 +201,22 @@ public:
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo);
 
-    // Selektion Setzen/Lesen
+    // get/set the selection
     bool GetSelected() const { return mbIsSelected; }
     void SetSelected(bool bNew);
 
-    // Aufbrechen
+    // break up
     virtual BOOL IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 
 /*************************************************************************
 |*
-|* Klasse fuer alle zusammengesetzen Objekte (Cube, Lathe, Scene, Extrude)
-|* Diese Klasse erspart ein paar ISA-Abfragen und sie beschleunigt das
-|* Verhalten ungemein, da alle Attribute usw. fuer die untergeordneten
-|* Polygone hierueber gehalten werden. Die Polygone duerfen nur Attribute
-|* halten, wenn sie direkt einer Szene untergeordnet sind.
+|* Class for all compound objects (Cube, Lathe, Scene, Extrude)
+|* This class saves some ISA queries and accelerates the behaviour
+|* significantly, because all the attributes etc. are kept through this.
+|* The polygons may only keep attributes if they are directly
+|* subordinated to the scene.
 |*
 \************************************************************************/
 
@@ -231,10 +232,10 @@ private:
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    // Material des Objektes
+    // material of the object
     Color                   aMaterialAmbientColor;
 
-    // Attribute zur Geometrieerzeugung
+    // attributes for geometry creation
     unsigned                bCreateNormals              : 1;
     unsigned                bCreateTexture              : 1;
 
@@ -307,21 +308,20 @@ public :
     virtual UINT16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
 
-    // Parameter Geometrieerzeugung setzen/lesen
+    // set/get parameters for geometry creation
     BOOL GetCreateNormals() const { return bCreateNormals; }
     void SetCreateNormals(BOOL bNew);
 
     BOOL GetCreateTexture() const { return bCreateTexture; }
     void SetCreateTexture(BOOL bNew);
 
-    // Copy-Operator
+    // copy operator
     virtual void operator=(const SdrObject&);
 
-    // Material des Objektes
+    // material of the object
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }
     void SetMaterialAmbientColor(const Color& rColor);
 
-    // #110988#
     sal_Bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };
 

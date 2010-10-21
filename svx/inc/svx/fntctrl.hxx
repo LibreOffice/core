@@ -56,7 +56,7 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    // Aus Effizienz-gr"unden nicht const
+    // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
     void                SetFont( const SvxFont& rFont );

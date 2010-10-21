@@ -35,7 +35,7 @@
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer 3D Window
+|* Derived from SfxChildWindow as "container" for 3D Window
 |*
 \************************************************************************/
 

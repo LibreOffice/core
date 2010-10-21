@@ -38,8 +38,8 @@
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
-    long    lLeft;         // nLeft oder der neg. Erstzeileneinzug
-    long    lRight;        // der unproblematische rechte Rand
+    long    lLeft;         // nLeft or the negativ first-line indentation
+    long    lRight;        // the unproblematic right edge
 
   protected:
 
@@ -74,8 +74,8 @@ public:
 
 class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 {
-    long    lLeft;         // nLeft oder der neg. Erstzeileneinzug
-    long    lRight;        // der unproblematische rechte Rand
+    long    lLeft;         // nLeft or the negative first-line indentation
+    long    lRight;        // the unproblematic right edge
 
   protected:
 
@@ -143,9 +143,9 @@ public:
 
 struct SvxColumnDescription
 {
-    long nStart;                    /* Spaltenbeginn */
-    long nEnd;                      /* Spaltenende */
-    BOOL   bVisible;                   /* Sichtbarkeit */
+    long nStart;                    /* Start of the column */
+    long nEnd;                      /* End of the column */
+    BOOL   bVisible;                   /* Visibility */
 
     long nEndMin;         //min. possible position of end
     long nEndMax;         //max. possible position of end
@@ -190,13 +190,13 @@ typedef SvPtrarr SvxColumns;
 
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
-    SvxColumns aColumns;// Spaltenarray
-    long    nLeft,      // Linker Rand bei Tabelle
-           nRight;      // Rechter Rand bei Tabelle; bei Spalten immer gleich
-                        // zum umgebenden Rahmen
-    USHORT nActColumn;  // die aktuelle Spalte
-    BOOL    bTable;     // Tabelle?
-    BOOL    bOrtho;     // Gleichverteilte Spalten
+    SvxColumns aColumns;// Column array
+    long    nLeft,      // Left edge for the table
+           nRight;      // Right edge for the table; for columns always
+                                // equal to the surrounding frame
+    USHORT nActColumn;  // the current column
+    BOOL    bTable;     // table?
+    BOOL    bOrtho;     // evenly spread columns
 
     void DeleteAndDestroyColumns();
 
@@ -214,11 +214,11 @@ protected:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 public:
     TYPEINFO();
-    // rechter Rand des umgebenden Rahmens
-    // nLeft, nRight jeweils der Abstand zum umgebenden Rahmen
-    SvxColumnItem(USHORT nAct = 0); // Spalten
+    // right edge of the surrounding frame
+    // nLeft, nRight each the distance to the surrounding frame
+    SvxColumnItem(USHORT nAct = 0); // columns
     SvxColumnItem(USHORT nActCol,
-                  USHORT nLeft, USHORT nRight = 0); // Tabelle mit Raendern
+                  USHORT nLeft, USHORT nRight = 0); // table with borders
     SvxColumnItem(const SvxColumnItem &);
     ~SvxColumnItem();
 
@@ -251,7 +251,7 @@ public:
     BOOL   IsOrtho () const { return FALSE ; }
 
     BOOL IsConsistent() const  { return nActColumn < aColumns.Count(); }
-    long   GetVisibleRight() const;// rechter sichtbare Rand der aktuellen Spalte
+    long   GetVisibleRight() const;// right visible edge of the current column
 };
 
 // class SvxObjectItem ---------------------------------------------------
@@ -259,11 +259,11 @@ public:
 class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
 {
 private:
-    long   nStartX;                    /* Beginn in X-Richtung */
-    long   nEndX;                      /* Ende in X-Richtung */
-    long   nStartY;                    /* Beginn in Y-Richtung */
-    long   nEndY;                      /* Ende in Y-Richtung */
-    BOOL   bLimits;                    /* Grenzwertkontrolle durch die Applikation */
+    long   nStartX;                    /* Start in x direction */
+    long   nEndX;                      /* End in x direction */
+    long   nStartY;                    /* Start in y direction */
+    long   nEndY;                      /* Ende in y direction */
+    BOOL   bLimits;                    /* boundary limit control by the application */
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
 

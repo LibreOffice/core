@@ -75,7 +75,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Controller
+|* Derivation from SfxChildWindow as "container" for Controller
 |*
 \************************************************************************/
 

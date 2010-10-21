@@ -54,18 +54,18 @@ private:
     Size                aWinSize;
     Size                aSize;
 
-    // Einzuege
+    // indentation
     long                nLeftMargin;
     long                nRightMargin;
     short               nFirstLineOfst;
-    // Abstaende
+    // distances
     USHORT              nUpper;
     USHORT              nLower;
-    // Ausrichtung
+    // adjustment
     SvxAdjust           eAdjust;
-    // Letzte Zeile im Blocksatz
+    // last line in justification
     SvxAdjust           eLastLine;
-    // Zeilenabstand
+    // line distance
     SvxPrevLineSpace    eLine;
     USHORT              nLineVal;
 

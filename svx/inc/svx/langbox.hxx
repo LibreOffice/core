@@ -105,10 +105,6 @@ namespace layout
 class SvxLanguageBoxImpl;
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
-    /*DECL_GET_IMPL( SvxLanguageBox );
-    DECL_CONSTRUCTORS( SvxLanguageBox, ListBox, WB_BORDER );
-    DECL_GET_WINDOW (SvxLanguageBox);*/
-
 public:
     SvxLanguageBox( Context*, const char*, BOOL bCheck = FALSE );
     ~SvxLanguageBox ();

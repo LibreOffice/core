@@ -44,7 +44,7 @@ public:
                 USHORT  );
     virtual ~SvxGrfCrop();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Create(SvStream &, USHORT nVer) const;
     virtual SvStream&           Store(SvStream &, USHORT nIVer) const;

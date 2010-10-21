@@ -40,21 +40,19 @@ class SVX_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
 {
 protected:
 
-    // Erzeugen eines SdrObjects anhand einer Description. Kann von
-    // abgeleiteten Klassen dazu benutzt werden, eigene ::com::sun::star::drawing::Shapes zu
-    // unterstuetzen (z.B. Controls)
+    // Creating a SdrObject based on a Description. Cann be used by derived classes to
+    // support own ::com::sun::star::drawing::Shapes (for example Controls)
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )throw ();
 
-    // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
-    // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
-    // ein ein SvxShape aggregierendes Objekt anlegen.
+    // The following method is called when a SvxShape object should be created.
+    // Derived classes can create a derivation or an object aggregating SvxShape.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw ();
 
 public:
     SvxFmDrawPage( SdrPage* pPage );
     virtual ~SvxFmDrawPage() throw ();
 
-    // UNO Anbindung
+    // UNO connection
     DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);

@@ -60,7 +60,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als 'Beh"alter' f"ur Float
+|* Derivative from SfxChildWindow as 'container' for Float
 |*
 \************************************************************************/
 

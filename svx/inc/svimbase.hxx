@@ -166,43 +166,36 @@ public:
     ULONG               GetOrgAlignedSize() const { return GetOrgAlignedWidth() * GetOrgHeight(); }
     ULONG               GetDestAlignedSize() const { return GetDestAlignedWidth() * GetDestHeight(); }
 
-    // Farbtiefe des Ausgangsbildes ermitteln und setzen
+    // Get and set the color depth of the origin picture
     SimDepthType        GetDepth() const { return eOrgDepth; }
     void                SetDepth( const SimDepthType eDepth ) { eOrgDepth = eDepth; }
 
-    // Farbtiefen nach Undo und Redo ermitteln und setzen
+    // Get and set the color depth after Undo and Redo
     SimDepthType        GetUndoDepth() const { return eUndoDepth; }
     void                SetUndoDepth(const SimDepthType eDepth) { eUndoDepth = eDepth; }
 
     SimDepthType        GetRedoDepth() const { return eRedoDepth; }
     void                SetRedoDepth(const SimDepthType eDepth) { eRedoDepth = eDepth; }
 
-    // Vor- und Ruecklauf der Bildverarbeitung
     BOOL                BeginProcessing( BOOL bUndo = TRUE );
     void                EndProcessing();
 
     BOOL                BeginProcessingExt(ULONG nWidth, ULONG nHeight, BOOL bUndo = TRUE);
     void                EndProcessingExt() { EndProcessing(); }
 
-    // Zeiger auf Arrays zur Verfuegung stellen
     HPBYTE              GetOrgPointer() { return pOrgArray; }
     HPBYTE              GetDestPointer() { return pDestArray; }
 
-    // DIB-Erzeugung fuer Anzeige
     BOOL                CreateOutBitmap( const ULONG nColorCount = 256, ULONG nLast = 0,
                                          SfxProgress* pProgress = NULL );
 
-    // Undo-Verwaltung
     BOOL                DoUndo( SfxProgress* pProgress = NULL );
     BOOL                DoRedo( SfxProgress* pProgress = NULL );
 
-    // DIB-Rueckgabe fuer Anzeige
     const Bitmap&       GetOutBitmap() const;
 
-    // DIB-Rueckgabe fuer Speicherung
     Bitmap              GetSaveBitmap();
 
-    // Palette besorgen
     SimPalette*         GetOrgPalette() const { return nWhichOrg == 1 ? pPal1 : pPal2; }
     SimPalette*         GetDestPalette() const { return nWhichOrg == 1 ? pPal2 : pPal1; }
 };

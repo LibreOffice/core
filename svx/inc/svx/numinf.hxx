@@ -38,8 +38,7 @@
 
 
 /*
-[Beschreibung]
-Dieses Item dient als Transport-Medium fuer einen Number-Formatter.
+This item is used as a transport medium for a number formatter
 */
 
 class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem

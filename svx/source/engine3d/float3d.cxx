@@ -190,7 +190,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
         aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
 
-        // Texturen
+        // Textures
         aFtTexKind          ( this, SVX_RES( FT_TEX_KIND ) ),
         aBtnTexLuminance    ( this, SVX_RES( BTN_TEX_LUMINANCE ) ),
         aBtnTexColor        ( this, SVX_RES( BTN_TEX_COLOR ) ),
@@ -351,7 +351,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aBtnLight7.SetClickHdl( aLink );
     aBtnLight8.SetClickHdl( aLink );
 
-    // Texturen
+    // Textures
     aBtnTexLuminance.SetClickHdl( aLink );
     aBtnTexColor.SetClickHdl( aLink );
     aBtnTexReplace.SetClickHdl( aLink );
@@ -1403,7 +1403,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     }
 
 
-// Texturen
+// Textures
     // Art
     if( bBitmap )
     {
@@ -2113,7 +2113,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_AMBIENTCOLOR);
 
-// Texturen
+// Textures
     // Art
     nValue = 3;
     if( aBtnTexLuminance.IsChecked() )
@@ -2525,7 +2525,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
             }
         }
 
-        // Texturen
+        // Textures
         if( eViewType == VIEWTYPE_TEXTURE )
         {
             aFtTexKind.Show();
@@ -2717,7 +2717,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             ClickLightHdl( pBtn );
             bUpdatePreview = TRUE;
         }
-        // Texturen
+        // Textures
         else if( pBtn == &aBtnTexLuminance ||
                  pBtn == &aBtnTexColor )
         {

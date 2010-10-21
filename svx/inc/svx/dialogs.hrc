@@ -34,7 +34,7 @@
 
 // Resource-Id's ------------------------------------------------------------
 
-// Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
+// Please maintain FIRSTFREE (does not apply to strings)
 #define RID_SVX_FIRSTFREE                   314
 
 // some strings also used in CUI
@@ -202,26 +202,25 @@
 #define RID_SVXFLOAT3D_FIX_G                (RID_SVX_START + 78)
 #define RID_SVXFLOAT3D_FIX_B                (RID_SVX_START + 84)
 
-// Ids fuer FrameBitmaps durch ImageList ersetzt
-// 67 bis 72 frei
+// 67 to 72 free
 
-// ResId fuer den Gitter- und Raster-Dialog
+// ResId for the grid dialog
 #define RID_SVXDLG_GRID                     (RID_SVX_START +  79)
 
-// ResId's fuer FontMenu-Controls
+// ResId's for the FontMenu controls
 #define RID_MN_FONTSIZE                     (RID_SVX_START +  80)
 
-// ResId's fuer Undo-TbxControls
+// ResId's for Undo-TbxControls
 #define RID_SVXTBX_UNDO                     (RID_SVX_START +  81)
 
-// ResId fuer Zoom-Popup-Menue
+// ResId for zoom popup menu
 #define RID_SVXMNU_ZOOM                     (RID_SVX_START +  82)
 
-// ResId fuer Funktions-Popup-Menue
+// ResId for funktion popup menue
 #define RID_SVXMNU_PSZ_FUNC                 (RID_SVX_START +  83)
 #define RID_SVXMNU_XMLSECSTATBAR            (RID_SVX_START +  84)
 
-// ResId fuer Position- und Size-Bitmap
+// ResId for position and size bitmap
 #define RID_SVXBMP_POSITION                 (RID_SVX_START +  85)
 #define RID_SVXBMP_SIZE                     (RID_SVX_START +  86)
 
@@ -239,16 +238,16 @@
 #define RID_SVXBMP_SLIDERDECREASE_HC            (RID_SVX_START +  71)
 #define RID_SVXBMP_SLIDERINCREASE_HC            (RID_SVX_START +  72)
 
-// Resource mit Bitmaps fuer die CheckListBox
+// Resource with bitmaps for the CheckListBox
 #define RID_CHECKLISTBOX_BITMAPS            (RID_SVX_START +  91)
 
-// Menu fuers Lineal
+// Menu for the ruler
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)
 
-// FontWork-Dialog
+// FontWork dialog
 #define RID_SVXDLG_FONTWORK                 (RID_SVX_START +  93)
 
-// FontWork-ValueSet-Bitmaps
+// FontWork ValueSet bitmaps
 #define RID_SVXBMP_FONTWORK_FORM1           (RID_SVX_START +  94)
 #define RID_SVXBMP_FONTWORK_FORM2           (RID_SVX_START +  95)
 #define RID_SVXBMP_FONTWORK_FORM3           (RID_SVX_START +  96)
@@ -269,13 +268,13 @@
 
 #define RID_SVXCTRL_COLOR                   (RID_SVX_START + 117)
 
-// fuer ToolboxControl-Style
+// for Toolbox-Control style
 #define RID_SVXTBX_STYLE                    (RID_SVX_START + 120)
 
 #define RID_SVXDLG_HYPERLINK                (RID_SVX_START + 140)
 #define RID_SVXDLG_PASSWORD                 (RID_SVX_START + 141)
 
-// ResId fuer InternetPage
+// ResId for InternetPage
 #define RID_SVXPAGE_INTERNET                (RID_SVX_START + 154)
 
 //InetDlg
@@ -294,7 +293,7 @@
 #define RID_SVXPAGE_REGISTER_5              (RID_SVX_START + 198)
 #define RID_SVXPAGE_REGISTER_6              (RID_SVX_START + 199)
 
-// 3D-Entfernung/Perspektive Bitmaps
+// 3D distance/perspective bitmaps
 #define RID_SVXBMP_3D_DISTANCE_01           (RID_SVX_START + 162)
 #define RID_SVXBMP_3D_DISTANCE_02           (RID_SVX_START + 163)
 #define RID_SVXBMP_3D_DISTANCE_03           (RID_SVX_START + 164)
@@ -317,33 +316,33 @@
 #define RID_SVXBMP_3D_FOCAL_LENGTH_09       (RID_SVX_START + 180)
 #define RID_SVXBMP_3D_FOCAL_LENGTH_10       (RID_SVX_START + 181)
 
-// fuer ToolboxControls Alignment und Drawobjekte
+// for ToolboxControls alignment and draw objects
 #define RID_SVXTBX_DRAW                     (RID_SVX_START + 189)
 #define RID_SVXTBX_ALIGNMENT                (RID_SVX_START + 190)
 
-// Ids fuer Autokorrektur
+// Ids fuer auto correction
 #define RID_SVX_AUTOCORR                    (RID_SVX_START + 192)
 
-// Auswahl ext. Linguitik
+// Choice for external linguistics
 #define RID_SVX_OPT_EXT_LINGU               (RID_SVX_START + 193)
 
-// TabPage und Dialog f"ur LDAP-Server
+// TabPage and dialog for LDAP server
 #define RID_SVXPAGE_LDAP                    (RID_SVX_START + 204)
 #define RID_SVXDLG_LDAP                     (RID_SVX_START + 205)
 
-// Dialog fuer Funktionen
+// Dialog for functions
 #define RID_SVXDLG_CALCFUNC                 (RID_SVX_START + 206)
 
 // QueryBox for Exit Recovery Wizard
 #define RID_SVXQB_EXIT_RECOVERY             (RID_SVX_START + 215)
 
-// ResId fuer den ImportGraphic-Dialog
+// ResId for the ImportGraphic dialog
 #define RID_SVXRES_IMPORTGRAPHIC            (RID_SVX_START + 499)
 
 
 #define RID_SVXCTRL_RECTBTNS                (RID_SVX_START + 226)
 
-// ResId's f???r Hyperlink-Dialog-Tabpages
+// ResId's for hyperlink dialog tabpages
 
 // ResId's for Starone impl. bitmaps
 #define RID_UNODRAW_OBJECTS                 (RID_SVX_START + 233)
@@ -385,11 +384,11 @@
 // Strings ------------------------------------------------------------------
 
 
-// Strings fuer die Sprachen (HM-Abhaengig)
+// Strings for the language
 #define RID_SVXSTR_LANGUAGE_BEGIN           (RID_SVX_START +   0)
 #define RID_SVXSTR_LANGUAGE_ALL             (RID_SVX_START +  15)
 
-// Messages im DBMgr-Bereich
+// Messages for the DBMgr
 #define RID_SVXSTR_DBINI                    (RID_SVX_START +  60)
 #define RID_SVXSTR_DBDRV                    (RID_SVX_START +  61)
 #define RID_SVXSTR_NODBDRV                  (RID_SVX_START +  62)
@@ -404,18 +403,18 @@
 #define RID_SVXSTR_INVALID_RECORD           (RID_SVX_START +  71)
 #define RID_SVXSTR_NOSET_MATCHING           (RID_SVX_START +  72)
 
-// Strings aus dem Suchen-Dialog
+// Strings from the search dialog
 #define RID_SVXSTR_SEARCH_STYLES            (RID_SVX_START +  80)
 #define RID_SVXSTR_SEARCH                   (RID_SVX_START +  81)
 #define RID_SVXSTR_REPLACE                  (RID_SVX_START +  82)
 
 #define RID_SVXSTR_FULLSIZE                 (RID_SVX_START + 144)
 
-// ResIds fuer die verschiedenen Strings des PageDlgs
+// ResIds for the PageDialog
 #define RID_SVXSTR_CALC_PAGE                (RID_SVX_START + 146)
 #define RID_SVXSTR_DRAW_PAGE                (RID_SVX_START + 147)
 
-// Strings der ToolBox-Controls aus tbcontrl.cxx
+// Strings of the ToolBox-Controls from tbcontrl.cxx
 #define RID_SVXSTR_FILLPATTERN              (RID_SVX_START + 191)
 #define RID_SVXSTR_FRAME                    (RID_SVX_START + 192)
 #define RID_SVXSTR_FRAME_COLOR              (RID_SVX_START + 194)
@@ -425,17 +424,17 @@
 #define RID_SVXSTR_MORE                     (RID_SVX_START + 198)
 
 
-// Strings der UndoTbxControls
+// Strings for the UndoTbxControls
 #define RID_SVXSTR_UNDO                     (RID_SVX_START + 200)
 #define RID_SVXSTR_REDO                     (RID_SVX_START + 201)
 #define RID_SVXSTR_ACTION                   (RID_SVX_START + 202)
 #define RID_SVXSTR_ACTIONS                  (RID_SVX_START + 203)
 
-// Strings fuer Insert/Overwrite
+// Strings for insert/overwrite
 #define RID_SVXSTR_INSERT_TEXT              (RID_SVX_START + 210)
 #define RID_SVXSTR_OVERWRITE_TEXT           (RID_SVX_START + 211)
 
-// Strings fuer Selection Mode
+// Strings for the selection mode
 #define RID_SVXSTR_SELMODE_STD              (RID_SVX_START + 212)
 #define RID_SVXSTR_SELMODE_ER               (RID_SVX_START + 213)
 #define RID_SVXSTR_SELMODE_ERG              (RID_SVX_START + 214)
@@ -446,19 +445,19 @@
 #define RID_SVXSTR_XMLSEC_NO_SIG            (RID_SVX_START + 225)
 #define RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG (RID_SVX_START + 226)
 
-// weitere ID bei 219
+// further ID at 219
 
-// String-ResId fuer den ImportGraphic-Dialog
+// String-ResId for the ImportGraphic dialog
 #define RID_SVXSTR_ALL_FILES                (RID_SVX_START + 241)
 
-// Strings des Lineals
+// Strings for the ruler
 #define RID_SVXSTR_RULER_START              (RID_SVX_START + 245)
 #define RID_SVXSTR_RULER_TAB_LEFT           (RID_SVX_START + 245)
 #define RID_SVXSTR_RULER_TAB_RIGHT          (RID_SVX_START + 246)
 #define RID_SVXSTR_RULER_TAB_DECIMAL        (RID_SVX_START + 247)
 #define RID_SVXSTR_RULER_TAB_CENTER         (RID_SVX_START + 248)
 
-// Schlie"ssen (im TabDialog Line/Area)
+// Close (in TabDialog line/aria)
 #define RID_SVXSTR_CLOSE                    (RID_SVX_START + 260)
 
 // FontWork-ValueSet-Strings
@@ -476,7 +475,7 @@
 #define RID_SVXSTR_FONTWORK_FORM12          (RID_SVX_START + 272)
 #define RID_SVXSTR_FONTWORK_UNDOCREATE      (RID_SVX_START + 273)
 
-// Farben-Strings
+// Color strings
 #define RID_SVXSTR_BLACK                    (RID_SVX_START + 275)
 #define RID_SVXSTR_BLUE                     (RID_SVX_START + 276)
 #define RID_SVXSTR_GREEN                    (RID_SVX_START + 277)
@@ -496,7 +495,7 @@
 #define RID_SVXSTR_BLUEGREY                 (RID_SVX_START + 291)
 #define RID_SVXSTR_ORANGE                   (RID_SVX_START + 292)
 
-// Linienenden-Strings
+// Line endings strings
 #define RID_SVXSTR_ARROW                    (RID_SVX_START + 300)
 #define RID_SVXSTR_SQUARE                   (RID_SVX_START + 301)
 #define RID_SVXSTR_CIRCLE                   (RID_SVX_START + 302)
@@ -508,9 +507,9 @@
 // String-Arrays
 #define RID_SVXSTR_TEXTENCODING_TABLE       (RID_SVX_START + 312)
 
-// Hyperlink-Dlg
+// Hyperlink dialog
 #define RID_SVXMN_HYPERLINK                 (RID_SVX_START + 321)
-// Hyperlink-QueryBoxen
+// Hyperlink query boxes
 #define RID_SVXQB_NOCONNECT                 (RID_SVX_START + 322)
 #define RID_SVXQB_DONTEXIST                 (RID_SVX_START + 323)
 //color configuration
@@ -528,18 +527,18 @@
 #define RID_SVXSTR_MEM_ERROR                (RID_SVX_START + 415)
 #define RID_SVXSTR_DLG_TITLE_INFO           (RID_SVX_START + 416)
 
-// Define - Bereich fuer BmpMaskierung
-// !!! aus diesem Bereich keine Defines benutzen !!!
+// Define - Region for bitmap masking
+// !!! don't use defines from this region !!!
 #define RID_SVX_BMPMASK_START               (RID_SVX_START + 420)
 #define RID_SVX_BMPMASK_END                 (RID_SVX_START + 440)
 
-// Define - Bereich fuer IMAP-Editor
-// !!! aus diesem Bereich keine Defines benutzen !!!
+// Define - Region for IMAP editor
+// !!! don't use defines from this region !!!
 #define RID_SVX_IMAP_START                  (RID_SVX_START + 450)
 #define RID_SVX_IMAP_END                    (RID_SVX_START + 460)
 
-// Define - Bereich fuer Contour-Editor
-// !!! aus diesem Bereich keine Defines benutzen !!!
+// Define - Region for contour editor
+// !!! don't use defines from this region !!!
 #define RID_SVX_CONTOUR_START               (RID_SVX_START + 461)
 #define RID_SVX_CONTOUR_END                 (RID_SVX_START + 471)
 
@@ -554,7 +553,7 @@
 #define RID_SVX_RELOAD_NORMAL               (RID_SVX_START + 480)
 #define RID_SVX_RELOAD_SPECIAL              (RID_SVX_START + 481)
 
-// Defines fuer die 3D-Engine
+// Defines for the 3D engine
 #define RID_SVX_3D_UNDO_EXCHANGE_PASTE      (RID_SVX_START + 489)
 #define RID_SVX_3D_CREATE_LATHE             (RID_SVX_START + 490)
 #define RID_SVX_3D_UNDO_SEGMENTS            (RID_SVX_START + 491)
@@ -578,10 +577,6 @@
 #define RID_STR_FULLNUMS_8                  (RID_STR_FULLNUMS_START + 7)//?
 #define RID_STR_FULLNUMS_7_HTML             (RID_SVX_START + 510)//?
 
-// RID_SVX_END == (RID_SVX_START + 499) !!!
-// am besten ab 520 frei (RB)
-// seit der Erfindung eigener Resourcen fuer jedes Projekt kann es hier keine
-// Obergrenze geben (abgesehen von USHRT_MAX) (os)
 #define RID_STR_BULLET_THEME                (RID_SVX_START + 508)
 
 
@@ -986,22 +981,6 @@
 #define RID_SVX_MDLG_SCRIPTORG_NEWLIB       ( RID_SVX_START +  7 )
 #define RID_SVX_MDLG_FONTWORK_CHARSPACING   ( RID_SVX_START + 19 )
 
-// ResId fuer den ImportClipboard-Dialog
-// depricated
-//#define RID_SVXDLG_CLIPBOARD              ( RID_SVX_START +   9 )
-
-// ResId fuer den Sonderzeichen-Dialog
-
-// allgemeine DBMgr-Dialoge
-// depricated
-//#define RID_SVX_DBSELDLG                  ( RID_SVX_START +  11 )
-//#define RID_SVX_DBEDDLG                   ( RID_SVX_START +  12 )
-//#define RID_SVX_DBLOGON                   ( RID_SVX_START +  13 )
-//#define RID_SVX_RECDLG                    ( RID_SVX_START +  14 )
-//#define RID_SVX_BRSEEKDLG                 ( RID_SVX_START +  15 )
-//#define RID_SVX_BRCFGDLG                  ( RID_SVX_START +  16 )
-//#define RID_SVX_BRSORTDLG                 ( RID_SVX_START +  17 )
-
 // document recovery and error report
 // recycling ids from DBMgr
 #define RID_SVX_MDLG_DOCRECOVERY_PROGR      ( RID_SVX_START +  11 )
@@ -1037,7 +1016,7 @@
 #define OFA_TP_APPEARANCE               (RID_OFA_START + 203)
 #define OFA_TP_TABPROPERTIES_GENERAL    (RID_OFA_START + 204)
 
-//die RID_??_TP_*  stehen nochmal im offids.hrc
+//the RID_??_TP_*  are duplicate in offids.hrc
 
 #define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
 #define RID_SW_TP_OPTINSERT_PAGE        (RID_OFA_START + 213)

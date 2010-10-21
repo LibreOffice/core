@@ -130,7 +130,7 @@ public:
 
     virtual void SetObjectType(sal_uInt16 nType);
 
-    // User Callback eintragen
+    // register user callback
     void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
     void SetUserSelectionChangeCallback(Link aNew) { maUserSelectionChangeCallback = aNew; }
     void SetChangeCallback(Link aNew) { maChangeCallback = aNew; }
@@ -169,7 +169,7 @@ private:
     ScrollBar               maVerScroller;
     PushButton              maSwitcher;
 
-    // Callback bei interaktiven Aenderungen
+    // callback for interactive changes
     Link                    maUserInteractiveChangeCallback;
     Link                    maUserSelectionChangeCallback;
 
@@ -178,17 +178,17 @@ public:
     SvxLightCtl3D( Window* pParent, WinBits nStyle = 0);
     ~SvxLightCtl3D();
 
-    // Reagiere auf Groessenaenderungen
+    // react to size changes
     virtual void Resize();
     void NewLayout();
 
-    // Selektion auf Gueltigkeit pruefen
+    // check the selection for validity
     void CheckSelection();
 
-    // Um weitere Einstellungen nach Aussen zu bringen...
+    // bring further settings to the outside world
     Svx3DLightControl& GetSvx3DLightControl() { return maLightControl; }
 
-    // User Callback eintragen
+    // register user callback
     void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
     void SetUserSelectionChangeCallback(Link aNew) { maUserSelectionChangeCallback = aNew; }
 
@@ -203,7 +203,7 @@ protected:
     DECL_LINK( ScrollBarMove, void*);
     DECL_LINK( ButtonPress, void*);
 
-    // Lokale Parameter Initialisieren
+    // initialize local parameters
     void Init();
 
     void move( double fDeltaHor, double fDeltaVer );

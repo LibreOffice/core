@@ -27,9 +27,8 @@
 
 #define SDR_ResourceBegin            2560
 
-// Achtung: Alle Strings zwischen SDR_StringCacheBegin und
-// SDR_StringCacheEnd muessen buendig aneinander liegen.
-//BFS06#define SDR_StringCacheBegin         (SDR_ResourceBegin)
+// Attention: All strings between SDR_StringCacheBegin and
+// SDR_StringCacheEnd must be aligned next to each other.
 
 #define STR_ObjNameBegin             (SDR_ResourceBegin)
 #define STR_ObjNameSingulNONE        (STR_ObjNameBegin +  0)
@@ -154,7 +153,6 @@
 #define STR_ObjNameSingulUno         (STR_ObjNameBegin +119)
 #define STR_ObjNamePluralUno         (STR_ObjNameBegin +120)
 
-// Neu ab 537: Namen fuer 3D-Objekte
 #define STR_ObjNameSingulCube3d     (STR_ObjNameBegin + 121)
 #define STR_ObjNamePluralCube3d     (STR_ObjNameBegin + 122)
 #define STR_ObjNameSingulExtrude3d  (STR_ObjNameBegin + 123)
@@ -165,7 +163,6 @@
 #define STR_ObjNamePluralLathe3d    (STR_ObjNameBegin + 128)
 #define STR_ObjNameSingulObj3d      (STR_ObjNameBegin + 129)
 #define STR_ObjNamePluralObj3d      (STR_ObjNameBegin + 130)
-//BFS01#define  STR_ObjNameSingulPoly3d     (STR_ObjNameBegin + 131)
 #define STR_ObjNamePluralPoly3d     (STR_ObjNameBegin + 132)
 #define STR_ObjNameSingulScene3d    (STR_ObjNameBegin + 133)
 #define STR_ObjNamePluralScene3d    (STR_ObjNameBegin + 134)
@@ -398,12 +395,6 @@
 #define STR_ItemNam_SHADOWTRANSPARENCE   (STR_ItemNamBegin +  4)
 #define STR_ItemNam_SHADOW3D             (STR_ItemNamBegin +  5)
 #define STR_ItemNam_SHADOWPERSP          (STR_ItemNamBegin +  6)
-//BFS01#define STR_ItemNam_SHADOWRESERVE1       (STR_ItemNamBegin +  7)
-//BFS01#define STR_ItemNam_SHADOWRESERVE2       (STR_ItemNamBegin +  8)
-//BFS01#define STR_ItemNam_SHADOWRESERVE3       (STR_ItemNamBegin +  9)
-//BFS01#define STR_ItemNam_SHADOWRESERVE4       (STR_ItemNamBegin + 10)
-//BFS01#define STR_ItemNam_SHADOWRESERVE5       (STR_ItemNamBegin + 11)
-//BFS01#define STR_ItemNamSET_SHADOW            (STR_ItemNamBegin + 12)
 #define STR_ItemNam_CAPTIONTYPE          (STR_ItemNamBegin + 13)
 #define STR_ItemNam_CAPTIONFIXEDANGLE    (STR_ItemNamBegin + 14)
 #define STR_ItemNam_CAPTIONANGLE         (STR_ItemNamBegin + 15)
@@ -462,14 +453,12 @@
 #define STR_ItemNamEnd                   (STR_ItemNam_SHEARANGLE)
 #define STR_ItemEnd                      STR_ItemNamEnd
 
-// 22-05-98: 2 Eintraege fuer die Bitmaps von der StrErrorReserve abgeknapst
-//BFS06#define BMAP_Begin                       (STR_ErrorEnd+1)
 #define BMAP_Begin                       (STR_ItemEnd+1)
 #define BMAP_GrafikEi                    (BMAP_Begin +0)
 #define BMAP_GrafikDe                    (BMAP_Begin +1)
 #define BMAP_End                         (BMAP_GrafikDe)
 
-// Strings fuer den Vorlagen-Dialog
+// Strings for the template dialog
 #define SIP_Begin                           (BMAP_End)
 
 #define SIP_UNKNOWN_ATTR                    (SIP_Begin +   0)

@@ -33,7 +33,7 @@
 
 /*************************************************************************
 |*
-|* Kamera-Ableitung
+|* Camera derivative
 |*
 \************************************************************************/
 
@@ -57,7 +57,7 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
              double fFocalLen = 35.0, double fBankAng = 0);
     Camera3D();
 
-    // Anfangswerte wieder herstellen
+    // Reset to default values
     void Reset();
 
     void SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
@@ -71,19 +71,19 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
     const basegfx::B3DPoint& GetLookAt() const { return aLookAt; }
     void SetPosAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DPoint& rNewLookAt);
 
-    // Brennweite in mm
+    // Focal length in mm
     void    SetFocalLength(double fLen);
     void    SetFocalLengthWithCorrect(double fLen);
     double  GetFocalLength() const { return fFocalLength; }
 
-    // Neigung links/rechts
+    // Bank angle links/rechts
     void    SetBankAngle(double fAngle);
     double  GetBankAngle() const { return fBankAngle; }
 
-    // Um die Kameraposition drehen, LookAt wird dabei veraendert
+    // For rotating the camera position. Changes LookAt.
     void Rotate(double fHAngle, double fVAngle);
 
-    // Um den Blickpunkt drehen, Position wird dabei veraendert
+    // For changing the point of view. Changes the position.
     void RotateAroundLookAt(double fHAngle, double fVAngle);
 
     void SetAutoAdjustProjection(bool bAdjust = true)

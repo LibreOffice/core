@@ -30,7 +30,7 @@
 #include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
 
-// Anzahl der Durchlaeufe. 0=Endlos.
+// Number of loops. 0=infinite.
 class SdrTextAniCountItem: public SfxUInt16Item {
 public:
     SdrTextAniCountItem(UINT16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}

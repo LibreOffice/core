@@ -58,7 +58,7 @@ class XFormTextShadowYValItem;
 
 /*************************************************************************
 |*
-|* ControllerItem fuer Fontwork
+|* ControllerItem for Fontwork
 |*
 \************************************************************************/
 
@@ -78,7 +78,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Fontwork-Dialog
+|* Derived from SfxChildWindow as "container" for fontwork dialog
 |*
 \************************************************************************/
 
@@ -91,7 +91,7 @@ class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 
 /*************************************************************************
 |*
-|* Floating Window zur Attributierung von Texteffekten
+|* Floating window for setting attributes of text effects
 |*
 \************************************************************************/
 

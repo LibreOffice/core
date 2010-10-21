@@ -35,20 +35,20 @@
 //   Defines
 //************************************************************
 
-enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // nur fuer Statusabfrage
-                         SDRPATHSMOOTH_ANGULAR,    // Eckig
-                         SDRPATHSMOOTH_ASYMMETRIC, // unsymmetrisch, normales Smooth
-                         SDRPATHSMOOTH_SYMMETRIC}; // symmetrisch
+enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // only for status query
+                         SDRPATHSMOOTH_ANGULAR,    // angular
+                         SDRPATHSMOOTH_ASYMMETRIC, // asymmetric, normal Smooth
+                         SDRPATHSMOOTH_SYMMETRIC}; // symmetric
 
-enum SdrPathSegmentKind {SDRPATHSEGMENT_DONTCARE,  // nur fuer Statusabfrage
-                         SDRPATHSEGMENT_LINE,      // gerader Streckenabschnitt
-                         SDRPATHSEGMENT_CURVE,     // Kurvenabschnitt (Bezier)
-                         SDRPATHSEGMENT_TOGGLE};   // nur fuer Set: Toggle
+enum SdrPathSegmentKind {SDRPATHSEGMENT_DONTCARE,  // only for status query
+                         SDRPATHSEGMENT_LINE,      // straight path segment
+                         SDRPATHSEGMENT_CURVE,     // curve path segment (Bezier)
+                         SDRPATHSEGMENT_TOGGLE};   // only for Set: Toggle
 
-enum SdrObjClosedKind   {SDROBJCLOSED_DONTCARE,    // nur fuer Statusabfrage
-                         SDROBJCLOSED_OPEN,        // Objekte geoeffnet (Linie, Polyline, ...)
-                         SDROBJCLOSED_CLOSED,      // Objekte geschlossen (Polygon, ...)
-                         SDROBJCLOSED_TOGGLE};     // nur fuer Set: Toggle (not implemented yet)
+enum SdrObjClosedKind   {SDROBJCLOSED_DONTCARE,    // only for status query
+                         SDROBJCLOSED_OPEN,        // non-closed object (line, polyline, ...)
+                         SDROBJCLOSED_CLOSED,      // closed object (polygon, ...)
+                         SDROBJCLOSED_TOGGLE};     // only for Set: Toggle (not implemented yet)
 
 class IPolyPolygonEditorController
 {

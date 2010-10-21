@@ -83,7 +83,7 @@
 class Window;
 
 //==================================================================
-// allgemeine Typen
+// common types
 //==================================================================
 // displaying a database exception for the user
 // display info about a simple ::com::sun::star::sdbc::SQLException
@@ -98,8 +98,8 @@ sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star
 SVX_DLLPUBLIC ::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
 
 // ===================================================================================================
-// = class CursorWrapper - eine Hilfsklasse, die parallel mit je einem ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
-//                          XDatabaseBookmarkCursor und XDatabaseDirectCursor arbeitet
+// = class CursorWrapper - a helper class which works in common with a ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
+//                          XDatabaseBookmarkCursor and XDatabaseDirectCursor each
 // ===================================================================================================
 
 class CursorWrapper
@@ -116,8 +116,8 @@ public:
     CursorWrapper() { }
     CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
     SVX_DLLPUBLIC CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
-        // bei bUseCloned == sal_True wird der Cursor ueber das XCloneable-Interface (dass er besitzen muss) gedoubled und
-        // erst dann benutzt
+        // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
+        // and then used
 
     friend bool operator==(const CursorWrapper& lhs, const CursorWrapper& rhs)
     {
@@ -130,7 +130,7 @@ public:
     CursorWrapper* operator ->() { return this; }
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& () const{ return m_xGeneric; }
 
-    // 'Konvertierungen'
+    // 'Conversions'
     const CursorWrapper& operator=(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xCursor);
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>& () const         { return m_xBookmarkOperations; }
@@ -141,7 +141,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >&          getRowLocate() const        { return m_xBookmarkOperations; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >&    getColumnsSupplier() const  { return m_xColumnsSupplier; }
 
-    // das normale queryInterface
+    // the usual queryInterface
     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
     { return m_xMoveOperations->queryInterface(type); }
 

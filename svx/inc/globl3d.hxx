@@ -30,7 +30,6 @@
 
 #include <tools/solar.h>
 
-//#define ESODEBUG
 #define E3D_STREAMING
 
 const double PrecisionLimit = 1.0e-14;

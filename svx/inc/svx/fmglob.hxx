@@ -38,7 +38,7 @@ const sal_uInt32 FmFormInventor = sal_uInt32('F')*0x00000001+
                               sal_uInt32('1')*0x01000000;
 
 const sal_uInt16 OBJ_FM_CONTROL         =   ::com::sun::star::form::FormComponentType::CONTROL;
-                                                                    // fuer FormularKomponenten
+                                                                    // for form components
 const sal_uInt16 OBJ_FM_EDIT            =   ::com::sun::star::form::FormComponentType::TEXTFIELD;
 const sal_uInt16 OBJ_FM_BUTTON          =   ::com::sun::star::form::FormComponentType::COMMANDBUTTON;
 const sal_uInt16 OBJ_FM_FIXEDTEXT       =   ::com::sun::star::form::FormComponentType::FIXEDTEXT;

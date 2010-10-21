@@ -28,9 +28,6 @@
 
 #include "svx/svxdllapi.h"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 class SdrObject;
 
 //........................................................................

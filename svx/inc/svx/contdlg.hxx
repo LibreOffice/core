@@ -35,7 +35,7 @@
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Float
+|* Derivation from SfxChildWindow as "container" for Float
 |*
 \************************************************************************/
 
@@ -59,12 +59,6 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 
 class SvxSuperContourDlg;
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SvxContourDlgItem : public SfxControllerItem
 {
     SvxSuperContourDlg& rDlg;
@@ -77,12 +71,6 @@ public:
 
                         SvxContourDlgItem( USHORT nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
 };
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
 {

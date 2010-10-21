@@ -67,17 +67,17 @@ enum GridRowStatus
 };
 
 //==================================================================
-// DbGridRow, Zeilenbeschreibung
+// DbGridRow, description of rows
 //==================================================================
 
 class DbGridRow : public SvRefBase
 {
-    ::com::sun::star::uno::Any                      m_aBookmark;        // ::com::sun::star::text::Bookmark der Zeile, kann gesetzt sein
+    ::com::sun::star::uno::Any                      m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
     DbDataColumns               m_aVariants;
     GridRowStatus               m_eStatus;
     sal_Bool                        m_bIsNew;
-                                                    // Zeile ist nicht mehr gueltig,
-                                                    // wird bei der naechsten positionierung entfernt
+                                                    // row is no longer valid
+                                                    // is removed on the next positioning
 public:
     DbGridRow():m_eStatus(GRS_CLEAN), m_bIsNew(sal_True) { }
     DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor);
@@ -85,7 +85,7 @@ public:
 
     ~DbGridRow();
 
-    // da GetField auf Geschwindigkeit getuned ist vorher immer noch hasField verwenden
+    // Because GetField is tuned on speed, always use hasField first
     sal_Bool HasField(sal_uInt32 nPos) const {return nPos < m_aVariants.Count();}
     const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants.GetObject(nPos); }
 
@@ -159,23 +159,23 @@ public:
 
         //  zusaetzliche Controls
         FixedText       m_aRecordText;
-        AbsolutePos     m_aAbsolute;            // AbsolutePositionierung
+        AbsolutePos     m_aAbsolute;            // absolute positioning
         FixedText       m_aRecordOf;
         FixedText       m_aRecordCount;
 
-        ImageButton     m_aFirstBtn;            // ImageButton fuer 'gehe zum ersten Datensatz'
-        ImageButton     m_aPrevBtn;         // ImageButton fuer 'gehe zum vorhergehenden Datensatz'
-        ImageButton     m_aNextBtn;         // ImageButton fuer 'gehe zum naechsten Datensatz'
-        ImageButton     m_aLastBtn;         // ImageButton fuer 'gehe zum letzten Datensatz'
-        ImageButton     m_aNewBtn;          // ImageButton fuer 'gehe zum neuen Datensatz'
+        ImageButton     m_aFirstBtn;            // ImageButton for 'go to the first record'
+        ImageButton     m_aPrevBtn;         // ImageButton for 'go to the previous record'
+        ImageButton     m_aNextBtn;         // ImageButton for 'go to the next record'
+        ImageButton     m_aLastBtn;         // ImageButton for 'go to the last record'
+        ImageButton     m_aNewBtn;          // ImageButton for 'go to a new record'
         sal_uInt16      m_nDefaultWidth;
         sal_Int32       m_nCurrentPos;
 
         sal_Bool            m_bPositioning;     // protect PositionDataSource against recursion
 
     public:
-        //  StatusIds fuer Controls der Bar
-        //  wichtig fuers Invalidieren
+        //  StatusIds for Controls of the Bar
+        //  important for invalidation
         enum State
         {
             RECORD_TEXT = 1,
@@ -191,7 +191,7 @@ public:
 
         NavigationBar(Window* pParent, WinBits nStyle = 0);
 
-        // Status Methoden fuer Controls
+        // Status methods for Controls
         void InvalidateAll(sal_Int32 nCurrentPos = -1, sal_Bool bAll = sal_False);
         void InvalidateState(sal_uInt16 nWhich) {SetState(nWhich);}
         void SetState(sal_uInt16 nWhich);
@@ -213,8 +213,8 @@ public:
     friend class DbGridControl::NavigationBar;
 
 public:
-    // diese Optionen werden verodert und geben an, welche der einzelnen feature
-    // freigegeben werden koennen, default ist readonly also 0
+    // these options are or'ed and indicate, which of the single
+    // features can be released, default is readonly which means 0
     enum Option
     {
         OPT_READONLY    = 0x00,
@@ -231,14 +231,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
 
-    DbGridColumns   m_aColumns;         // Spaltenbeschreibung
+    DbGridColumns   m_aColumns;         // Column description
     NavigationBar   m_aBar;
-    DbGridRowRef    m_xDataRow;         // Zeile die modifiziert werden kann
-                                        // kommt vom DatenCursor
-    DbGridRowRef    m_xSeekRow,         // Zeile die von Iterator gesetzt wird
-                                        // kommt vom DatenCursor
+    DbGridRowRef    m_xDataRow;         // Row which can be modified
+                                        // comes from the data cursor
+    DbGridRowRef    m_xSeekRow,         // Row to which the iterator can set
+                                        // comes from the data cursor
 
-                    m_xEmptyRow;        // Datensatz zum einfuegen
+                    m_xEmptyRow;        // record set to insert
 
     sal_uInt32          m_nAsynAdjustEvent;
 
@@ -261,17 +261,16 @@ private:
     FmGridListener*                                 m_pGridListener;
 
 protected:
-    CursorWrapper*  m_pDataCursor;      // Cursor fuer Updates
-    CursorWrapper*  m_pSeekCursor;      // Cursor zum Seeken
+    CursorWrapper*  m_pDataCursor;      // Cursor for Updates
+    CursorWrapper*  m_pSeekCursor;      // Cursor for Seeking
 
 private:
-    // dieses sind Laufvariablen
-    DbGridRowRef        m_xCurrentRow;      // Row an der aktuellen Zeile
-    DbGridRowRef        m_xPaintRow;        // Row die gerade drgestellt werden soll
-    sal_Int32           m_nSeekPos;         // Position des SeekCursors
-    sal_Int32           m_nTotalCount;      // wird gesetzt, wenn der DatenCursor mit dem Zählen der
-                                            // Datensätze fertig ist
-                                            // initial Wert ist -1
+    // iteration variables
+    DbGridRowRef        m_xCurrentRow;
+    DbGridRowRef        m_xPaintRow;        // Row to be displayed
+    sal_Int32           m_nSeekPos;         // Position of the SeekCursor
+    sal_Int32           m_nTotalCount;      // is set when the data cursor finished counting the
+                                            // records. Initial value is -1
     osl::Mutex          m_aDestructionSafety;
     osl::Mutex          m_aAdjustSafety;
 
@@ -279,9 +278,9 @@ private:
                         m_aNullDate;        // NullDate of the Numberformatter;
 
     BrowserMode         m_nMode;
-    sal_Int32           m_nCurrentPos;      // Aktuelle Position;
-    sal_uInt32          m_nDeleteEvent;     // EventId fuer asychrone Loeschen von Zeilen
-    sal_uInt16          m_nOptions;         // Was kann das Control (Insert, Update, Delete)
+    sal_Int32           m_nCurrentPos;      // Current position;
+    sal_uInt32          m_nDeleteEvent;     // EventId for asychronous deletion of rows
+    sal_uInt16          m_nOptions;         // What is the able to do (Insert, Update, Delete)
                                         // default readonly
     sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
                                         // (with respect to the data source capabilities)
@@ -304,7 +303,7 @@ private:
     sal_Bool            m_bHideScrollbars : 1;
 
 protected:
-    sal_Bool            m_bUpdating : 1;            // werden gerade updates durchgefuehrt
+    sal_Bool            m_bUpdating : 1;            // are any updates being executed right now?
 
 protected:
     virtual sal_Bool SeekRow(long nRow);
@@ -399,8 +398,8 @@ public:
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& getNumberFormatter() const {return m_xFormatter;}
 
-    // die Datenquelle
-    // die Optionen koennen die Updatefaehigkeiten noch einschraenken, nicht erweitern
+    // the data source
+    // the options can restrict but not extend the update abilities
     virtual void setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& rCursor,
         sal_uInt16 nOpts = OPT_INSERT | OPT_UPDATE | OPT_DELETE);
     virtual void Dispatch(sal_uInt16 nId);
@@ -412,18 +411,18 @@ public:
     sal_Bool HasHandle() const {return m_bHandle;}
     void InsertHandleColumn();
 
-    /// welche Position hat die Spalte mit der Id in der ::com::sun::star::sdbcx::View, die Handle-Column zahelt nicht mit
+    // which position does the column with the id in the ::com::sun::star::sdbcx::View have, the handle column doesn't count
     sal_uInt16 GetViewColumnPos( sal_uInt16 nId ) const { sal_uInt16 nPos = GetColumnPos(nId); return (nPos==(sal_uInt16)-1) ? GRID_COLUMN_NOT_FOUND : nPos-1; }
 
-    /** welche Position hat die Spalte mit der Id in m_aColumns, also dem von GetColumns gelieferten ::com::sun::star::sdbcx::Container ?
-        (unterscheidet sich u.U. von der von GetViewColumnPos gelieferten, wenn es versteckt Spalten gibt)
-    */
+    // which position does the column with the id in m_aColumns have, that means the ::com::sun::star::sdbcx::Container
+    // returned from the GetColumns (may be different from the position returned by GetViewColumnPos
+    // if there are hidden columns)
     sal_uInt16 GetModelColumnPos( sal_uInt16 nId ) const;
 
-    /// Anzahl der Spalten im Model
+    // the number of columns in the model
     sal_uInt16 GetViewColCount() const { return ColCount() - 1; }
     sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.Count(); }
-    /// umgekehrt zu GetViewColumnPos : Id zu Position, die erste Nicht-Handle-Column hat die Position 0
+    // reverse to GetViewColumnPos: Id of position, the first non-handle column has position 0
     sal_uInt16 GetColumnIdFromViewPos( sal_uInt16 nPos ) const { return GetColumnId(nPos + 1); }
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;
 
@@ -450,7 +449,7 @@ public:
 
     const com::sun::star::util::Date&   getNullDate() const {return m_aNullDate;}
 
-    // Positionierung
+    // positioning
     void MoveToPosition(sal_uInt32 nPos);
     void MoveToFirst();
     void MoveToNext();
@@ -458,15 +457,17 @@ public:
     void MoveToLast();
     void AppendNew();
 
-    // Abgleich der Cursor falls von außen der DatenCursor verschoben wurde
-    // Flag bedeutet ob ein Abgleich es Rowcounts vorgenommen werden soll
+    // adjustment of the cursors in case the data cursor has been
+    // moved from the outside.
+    // the flag indicates if an adjustment of the row count should be
+    // done as well
     void AdjustDataSource(sal_Bool bFull = sal_False);
     void Undo();
 
     virtual void BeginCursorAction();
     virtual void EndCursorAction();
 
-    // wird die aktuelle Zeile neu gesetzt
+    // is the current line being updated
     sal_Bool IsUpdating() const {return m_bUpdating;}
 
     virtual void RowRemoved( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True );
@@ -478,15 +479,16 @@ public:
     sal_Bool getDisplaySynchron() const { return m_bSynchDisplay; }
     void setDisplaySynchron(sal_Bool bSync);
     void forceSyncDisplay();
-        // wenn das auf sal_False gesetzt wird, laeuft die Anzeige nicht mehr mit der aktuellen Cursor-Position synchron
-        // (soll heissen, in AdjustDataSource wird nicht in die zur CursorPosition gehoerenden Zeile gesprungen)
-        // wer das benutzt, sollte bitte wissen, was er tut, da zum Beispiel die Eingabe von Daten in einer Zeile auf der Anzeige,
-        // die gar nicht mit der Position des Cursors synchron ist, ziemlich kritisch sein koennte
+        // when set to sal_False, the display is no longer in sync with the current cursor position
+        // (means that in AdjustDataSource we are jumping to a row not belonging to CursorPosition)
+        // when using this, you should know what you are doing, because for example entering data
+        // in a row in the display that is not in sync with the position of the cursor can be very critical
 
     sal_Bool isForcedROController() const { return m_bForceROController; }
     void forceROController(sal_Bool bForce);
-        // Setzt man das auf sal_True, hat das GridControl immer einen ::com::sun::star::frame::Controller, der allerdings read-only ist. Ausserdem
-        // wird die Edit-Zeile des Controllers so eingestellt, dass sie ihre Selektion bei Fokus-Verlust weiterhin anzeigt.
+        // when set to sal_True, the GridControl always has a ::com::sun::star::frame::Controler which is
+        // read-only though. Additionally, the edit row of the controller is configured in a way
+        // that its selection stays displayed on focus loss.
 
     const DbGridRowRef& GetCurrentRow() const {return m_xCurrentRow;}
 
@@ -568,7 +570,7 @@ public:
 protected:
     void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor);
     sal_Bool SeekCursor(long nRow, sal_Bool bAbsolute = sal_False);
-    void RemoveColumns();       // aufraeumen eigener strukturen
+    void RemoveColumns();       // cleaning of own structures
     void AdjustRows();
     sal_Int32 AlignSeekCursor();
     sal_Bool SetCurrent(long nNewRow);
@@ -577,10 +579,10 @@ protected:
     virtual void DeleteSelectedRows();
     sal_Bool IsValid(const DbGridRowRef& _xRow) const {return _xRow && _xRow->IsValid();}
 
-    // Zeile an der gerade eingefuegt wird
+    // row which is currently being appended
     sal_Bool IsCurrentAppending() const;
 
-    // Leerzeile zum Einfuegen
+    // empty row for insertion
     sal_Bool IsInsertionRow(long nRow) const;
 
     void  SetSeekPos(sal_Int32 nPos) {m_nSeekPos = nPos;}

@@ -288,7 +288,7 @@
 
 #define ACT_SVX_HID_END     (HID_SVX_START+248)
 #if ACT_SVX_HID_END > HID_SVX_END
-#error Resource-Ueberlauf in #line, #file
+#error Resource overflow in #line, #file
 #endif
 
 #endif

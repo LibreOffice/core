@@ -30,11 +30,11 @@
 
 enum SvxAnchorIds
 {
-    SVX_OBJ_AT_CNTNT    = 0x01,     //Absatzgebundener Rahmen
-    SVX_OBJ_IN_CNTNT    = 0x02,     //Zeichengebundener Rahmen
-    SVX_OBJ_PAGE        = 0x04,     //Seitengebundener Rahmen
-    SVX_OBJ_AT_FLY      = 0x08      //Rahmengebundener Rahmen
-//  SVX_OBJ_AUTO_CNTNT  = 0x10      //Automatisch positionierter, absatzgebundener Rahmen
+    SVX_OBJ_AT_CNTNT    = 0x01,     // Frame bound to paragraph
+    SVX_OBJ_IN_CNTNT    = 0x02,     // Frame bound to character
+    SVX_OBJ_PAGE        = 0x04,     // Frame bound to page
+    SVX_OBJ_AT_FLY      = 0x08      // Frame bound to other frame
+//  SVX_OBJ_AUTO_CNTNT  = 0x10      // Automatically positioned frame bound to paragraph
 };
 
 

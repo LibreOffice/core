@@ -33,18 +33,18 @@
 
 /*************************************************************************
 |*
-|* 3D-Rotationsobjekt aus uebergebenem 2D-Polygon erzeugen
+|* Create a 3D rotation object from a passed 2D polygon
 |*
-|* Das aPolyPoly3D wird in nHSegments-Schritten um die Achse rotiert.
-|* nVSegments gibt die Anzahl der Linien von aPolyPoly3D an und stellt damit
-|* quasi eine vertikale Segmentierung dar.
+|* The aPolyPoly3D is rotated around its axis in nHSegments steps.
+|* nVSegments contains the number of lines of aPolyPoly3D and therefore
+|* is effectively a vertical segmentation.
 |*
 \************************************************************************/
 
 class SVX_DLLPUBLIC E3dLatheObj : public E3dCompoundObject
 {
 private:
-    // Partcodes fuer Wireframe-Generierung: Standard oder Deckelflaeche
+    // Part codes for Wireframe generation: standard oder cover surface
     enum { LATHE_PART_STD = 1, LATHE_PART_COVER = 2 };
     basegfx::B2DPolyPolygon maPolyPoly2D;
 
@@ -105,15 +105,15 @@ private:
 
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    // Lokale Parameter setzen/lesen mit Geometrieneuerzeugung
+    // set/get local parameters with geometry recreation
     void SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew);
     const basegfx::B2DPolyPolygon& GetPolyPoly2D() { return maPolyPoly2D; }
 
-    // Aufbrechen
+    // break up
     virtual BOOL IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };

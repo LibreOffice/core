@@ -81,7 +81,7 @@ enum SvxModeType
 // define ----------------------------------------------------------------
 
 // 1/2 cm in TWIPS
-// wird auch fuer Minimalgrosse der LayFrms aller Arten benutzt
+// Is also used for minimum size of LayFrms of any kind
 #define MM50   283  //from original svx/inc/paragrph.hxx
 
 //--------------from original svx/inc/tabstpge.hxx

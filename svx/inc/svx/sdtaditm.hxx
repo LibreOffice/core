@@ -47,7 +47,7 @@ public:
     SdrTextAniDirectionItem(SvStream& rIn)                           : SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,rIn)  {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem*   Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT         GetValueCount() const; // { return 4; }
+    virtual USHORT         GetValueCount() const;
     SdrTextAniDirection GetValue() const      { return (SdrTextAniDirection)SfxEnumItem::GetValue(); }
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;

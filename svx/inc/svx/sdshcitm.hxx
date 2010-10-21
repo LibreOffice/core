@@ -40,7 +40,6 @@ public:
 
     SdrShadowColorItem(const String& rName, const Color& rTheColor):  XColorItem(SDRATTR_SHADOWCOLOR,rName,rTheColor) {}
 
-//  SdrShadowColorItem(SvStream& rIn):                                XColorItem(SDRATTR_SHADOWCOLOR,rIn) {}
 };
 
 #endif

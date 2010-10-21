@@ -92,7 +92,6 @@ class SVX_DLLPUBLIC SdrPageWindow
     void*                                               mpDummy;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
 
-    // #110094# ObjectContact section
     sdr::contact::ObjectContact* CreateViewSpecificObjectContact();
 
 public:

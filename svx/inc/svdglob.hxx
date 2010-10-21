@@ -36,7 +36,7 @@
 #include <svx/svxdllapi.h>
 
 //************************************************************
-//   Vorausdeklarationen
+//   forward declaration
 //************************************************************
 
 class Link;
@@ -48,7 +48,7 @@ class ImpSdrStrCache;
 //   Defines
 //************************************************************
 
-// Den zur App passenden Resourcemanager holen
+// Get the resource manager for the app
 ResMgr* ImpGetResMgr();
 
 class SdrResId: ResId {
@@ -56,11 +56,11 @@ public:
     SdrResId(USHORT nId): ResId(nId,*ImpGetResMgr()) {}
 };
 
-// ResourceCache fuer haeuffig benoetigte Strings
-// gecachet werden globale String-Resourcen mit den
-// IDs von SDR_StringCacheBegin (256) bis
-// SDR_StringCacheEnd (weiss ich grad' nicht).
-// Hierzu siehe auch SvdStr.Hrc
+// ResourceCache for frequently used strings.
+// Global string resources with the IDs from
+// SDR_StringCacheBegin (256) to SDR_StringCacheEnd
+// are cached.
+// See also SvdStr.Hrc
 SVX_DLLPUBLIC String ImpGetResStr(sal_uInt16 nResID);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

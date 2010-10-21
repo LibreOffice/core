@@ -37,8 +37,7 @@
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt das Autoren-Kuerzel eines Notizzettels.
+The author shorthand symbol of a note
 */
 
 class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
@@ -69,8 +68,7 @@ public:
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt das Datum eines Notizzettels.
+The date of a note
 */
 
 class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
@@ -100,8 +98,7 @@ public:
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt den Text eines Notizzettels.
+The text of a note
 */
 
 class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
@@ -112,7 +109,7 @@ public:
     SvxPostItTextItem( USHORT nWhich  );
 
     SvxPostItTextItem( const String& rText, USHORT nWhich  );
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

@@ -232,7 +232,7 @@ public:
     FmXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
     virtual ~FmXGridControl();
 
-    // UNO Anbindung
+    // UNO connection
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl);
     virtual ::com::sun::star::uno::Any  SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
@@ -317,12 +317,12 @@ public:
 
 protected:
     virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
-        // ImplCreatePeer waere besser ;) geht aber nicht, da dann nicht exportiert
+        // ImplCreatePeer would be better, but doesn't work because it's not exported
 
 };
 
 //==================================================================
-// FmXGridPeer -> Peer fuers Gridcontrol
+// FmXGridPeer -> Peer for the Gridcontrol
 //==================================================================
 typedef ::comphelper::ImplHelper19  <   ::com::sun::star::form::XGridPeer,
                                         ::com::sun::star::form::XBoundComponent,
@@ -385,7 +385,7 @@ public:
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !
     void Create(Window* pParent, WinBits nStyle);
 
-// UNO Anbindung
+// UNO connection
     DECLARE_UNO3_DEFAULTS(FmXGridPeer, VCLXWindow);
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 

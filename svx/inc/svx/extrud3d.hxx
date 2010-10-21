@@ -93,15 +93,14 @@ public:
 
     virtual void operator=(const SdrObject&);
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    // Lokale Parameter setzen/lesen mit Geometrieneuerzeugung
+    // set/get local parameters with geometry regeneration
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
 
-    // Aufbrechen
     virtual BOOL IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };

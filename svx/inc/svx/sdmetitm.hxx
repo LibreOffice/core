@@ -33,8 +33,8 @@
 
 //------------------------------------------------------------
 // class SdrAngleItem
-// Fuer alle Metriken. GetPresentation liefert dann bei
-// Value=2500 z.B. ein "25mm".
+// For all metrics. GetPresentation returns for example for
+// Value=2500 a "25mm".
 //------------------------------------------------------------
 class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:

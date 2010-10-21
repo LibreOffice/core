@@ -60,13 +60,13 @@ struct ExchangeData
 
 enum SgaObjKind
 {
-    SGA_OBJ_NONE = 0,   // Abstraktes Objekt
-    SGA_OBJ_BMP = 1,    // Bitmap-Objekt
-    SGA_OBJ_SOUND = 2,  // Sound-Objekt
-    SGA_OBJ_VIDEO = 3,  // Video-Objekt
-    SGA_OBJ_ANIM = 4,   // Animations-Objekt
-    SGA_OBJ_SVDRAW = 5, // Svdraw-Objekt
-    SGA_OBJ_INET = 6    // Grafik aus dem Internet
+    SGA_OBJ_NONE = 0,   // abstract object
+    SGA_OBJ_BMP = 1,    // bitmap object
+    SGA_OBJ_SOUND = 2,  // sound object
+    SGA_OBJ_VIDEO = 3,  // video object
+    SGA_OBJ_ANIM = 4,   // animation object
+    SGA_OBJ_SVDRAW = 5, // Svdraw object
+    SGA_OBJ_INET = 6    // graphics from the internet
 };
 
 // -----------

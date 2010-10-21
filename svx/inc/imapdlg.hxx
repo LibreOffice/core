@@ -53,7 +53,7 @@ class ImageMap;
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Float
+|* Derivation from SfxChildWindow as "container" for float
 |*
 \************************************************************************/
 

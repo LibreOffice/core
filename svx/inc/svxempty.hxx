@@ -35,7 +35,6 @@ extern XubString& rImplEmptyStr;
 inline const XubString& GetEmptyStr() { return rImplEmptyStr; }
 #define GetEmptySStr GetEmptyStr
 #else
-// CSET stellt rImplEmptyStr nicht in items.lib (?)
 const XubString& GetEmptyStr();
 #define GetEmptySStr GetEmptyStr
 #endif

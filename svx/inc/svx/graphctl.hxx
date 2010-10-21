@@ -36,12 +36,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class GraphCtrlUserCall;
 class SvxGraphCtrlAccessibleContext;
 
@@ -141,12 +135,6 @@ public:
 };
 
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class GraphCtrlUserCall : public SdrObjUserCall
 {
     GraphCtrl&      rWin;
@@ -158,12 +146,6 @@ public:
 
     virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect );
 };
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class GraphCtrlView : public SdrView
 {

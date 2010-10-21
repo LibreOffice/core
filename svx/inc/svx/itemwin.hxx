@@ -127,7 +127,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
 protected:
     virtual void    Modify();
     virtual void    Down();
-    virtual void    Up();       // Nur zur Sicherheit
+    virtual void    Up();       // just to be sure
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );

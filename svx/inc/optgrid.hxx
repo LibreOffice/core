@@ -140,7 +140,7 @@ private:
     FixedText           aDivisionPointY;
 
     CheckBox            aCbxSynchronize;
-    FixedLine           aGrpDrawGrid; // Neu
+    FixedLine           aGrpDrawGrid;
 
 protected:
     //these controls are used in draw and impress
@@ -164,7 +164,6 @@ protected:
 
 private:
     BOOL                bAttrModified;
-//  BOOL                bEqualGrid; // Neu
 
 #ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );

@@ -88,10 +88,10 @@ public:
     SearchAttrItem& GetObject( USHORT nPos ) const
                         { return SrchAttrItemList::GetObject( nPos ); }
 
-    // der Pointer auf das Item wird nicht kopiert!!! (also nicht l"oschen)
+    // the pointer to the item is not being copierd, so don't delete
     void Insert( const SearchAttrItem& rItem )
         { SrchAttrItemList::Insert( rItem, SrchAttrItemList::Count() ); }
-    // l"oscht die Pointer auf die Items
+    // deletes the pointer to the items
     void Remove( USHORT nPos, USHORT nLen = 1 );
 };
 
@@ -120,10 +120,10 @@ public:
 /*
     {k:\svx\prototyp\dialog\srchdlg.hxx}
 
-    [Beschreibung]
-    In diesem Modeless-Dialog werden die Attribute einer Suche eingestellt
-    und damit eine Suche gestartet. Es sind mehrere Sucharten
-    ( Suchen, Alle suchen, Ersetzen, Alle ersetzen ) m"oglich.
+    [Description]
+    In this modeless dialog the attributes for a search are configured
+    and a search is started from it. Several search types
+    (search, search all, replace, replace all) are possible.
 
     [Items]
     <SvxSearchItem><SID_ATTR_SEARCH>

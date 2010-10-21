@@ -33,7 +33,7 @@
 #include "svx/svxdllapi.h"
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                Clipboard-Format fuer XOutDev-Fuellattribute
+//                Clipboard format for XOutDev filling attributes
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class XFillAttrSetItem;
@@ -54,7 +54,6 @@ public:
                         XFillExchangeData(const XFillAttrSetItem rXFillAttrSetItem);
                         virtual ~XFillExchangeData();
 
-                        // Zuweisungsoperator
                         XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
 
     SVX_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );

@@ -27,10 +27,6 @@
 #ifndef _SVX_DSTRIBUT_ENUM_HXX
 #define _SVX_DSTRIBUT_ENUM_HXX
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 enum SvxDistributeHorizontal
 {
     SvxDistributeHorizontalNone = 0,

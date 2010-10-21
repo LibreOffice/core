@@ -34,7 +34,7 @@
 
 class StarBASIC;
 class FmFormModel;
-class FmFormPageImpl;   // haelt die Liste aller Forms
+class FmFormPageImpl;   // contains a list of all forms
 
 FORWARD_DECLARE_INTERFACE(container,XNameContainer)
 
@@ -66,7 +66,7 @@ public:
 
     virtual SdrObject* RemoveObject(ULONG nObjNum);
 
-    // Zugriff auf alle Formulare
+    // access to all forms
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
 
 #ifndef SVX_LIGHT

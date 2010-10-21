@@ -30,10 +30,10 @@
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
-/* -----------------04.03.2004 12:58-----------------
+/*
     contains strings needed for positioning dialogs
     of frames and drawing in Writer
- --------------------------------------------------*/
+ */
 class SvxSwFramePosString_Impl;
 class SVX_DLLPUBLIC SvxSwFramePosString
 {
