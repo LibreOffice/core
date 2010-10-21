@@ -87,8 +87,6 @@
 #include "sys/stat.h"
 #include "sys/types.h"
 
-#include "osl/mutex.hxx"
-#include "vos/process.hxx"
 //---MARKER---
 #endif
 

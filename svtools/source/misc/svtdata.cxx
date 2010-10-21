@@ -32,7 +32,6 @@
 #include <map>
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
-#include <vos/process.hxx>
 #include <svtools/svtdata.hxx>
 #include <vcl/svapp.hxx>
 

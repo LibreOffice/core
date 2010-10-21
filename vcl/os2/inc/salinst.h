@@ -32,8 +32,6 @@
 #include <vcl/salinst.hxx>
 #include <vcl/solarmutex.hxx>
 
-namespace vos { class OMutex; }
-
 // -------------------
 // - SalInstanceData -
 // -------------------

@@ -408,7 +408,7 @@ static AquaSalFrame* getMouseContainerFrame()
     return mpFrame ? (mpFrame->getClipPath() != 0 ? NO : YES) : YES;
 }
 
-// helper class similar to a vos::OGuard for the SalYieldMutex
+// helper class similar to a osl::SolarGuard for the SalYieldMutex
 // the difference is that it only does tryToAcquire instead of aquire
 // so dreaded deadlocks like #i93512# are prevented
 class TryGuard

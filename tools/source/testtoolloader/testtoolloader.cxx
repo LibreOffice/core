@@ -32,7 +32,7 @@
 #include "tools/testtoolloader.hxx"
 #include <osl/module.h>
 #include <rtl/logfile.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include "tools/solar.h"
 #include "tools/string.hxx"
 #include "tools/debug.hxx"
@@ -57,16 +57,14 @@ static bool bLoggerStarted = false;
 
 sal_uInt32 GetCommandLineParamCount()
 {
-    vos::OStartupInfo aStartInfo;
-    return aStartInfo.getCommandArgCount();
+    return osl_getCommandArgCount();
 }
 
 String GetCommandLineParam( sal_uInt32 nParam )
 {
-    vos::OStartupInfo aStartInfo;
     ::rtl::OUString aParam;
-    vos::OStartupInfo::TStartupError eError = aStartInfo.getCommandArg( nParam, aParam );
-    if ( eError == vos::OStartupInfo::E_None )
+    oslProcessError eError = osl_getCommandArg( nParam, &aParam.pData );
+    if ( eError == osl_Process_E_None )
         return String( aParam );
     else
     {

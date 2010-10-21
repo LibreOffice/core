@@ -47,7 +47,7 @@
 #include <i18n_xkb.hxx>
 
 #include <saldata.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 #include "KDESalDisplay.hxx"
 
@@ -133,17 +133,17 @@ void KDEXLib::Init()
 
     m_nFakeCmdLineArgs = 2;
     USHORT nIdx;
-    vos::OExtCommandLine aCommandLine;
-    int nParams = aCommandLine.getCommandArgCount();
+
+    int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;
 
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
-        aCommandLine.getCommandArg( nIdx, aParam );
+        osl_getCommandArg( nIdx, &aParam.pData );
         if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
         {
-            aCommandLine.getCommandArg( nIdx + 1, aParam );
+            osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
             m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs + 2 ];

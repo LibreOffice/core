@@ -96,7 +96,6 @@ namespace toolkit
             bInit = true;
         }
         // TODO: XSimpleAnimation::ProcessWindowEvent
-        //::vos::OClearableGuard aGuard( GetMutex() );
         //Reference< XSimpleAnimation > xKeepAlive( this );
         //SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
         //if ( !pSpinButton )

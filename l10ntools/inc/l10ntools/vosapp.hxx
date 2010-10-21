@@ -5,7 +5,6 @@
 #include <sal/main.h>
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <vos/process.hxx>
 
 // Mininmal vcl/svapp compatibility without vcl dependence
 class Application
@@ -19,15 +18,13 @@ public:
 // Urg: Cut & Paste from svapp.cxx: we don't want to depend on vcl
 USHORT Application::GetCommandLineParamCount()
 {
-    vos::OStartupInfo aStartInfo;
-    return (USHORT)aStartInfo.getCommandArgCount();
+    return osl_getCommandArgCount();
 }
 
 XubString Application::GetCommandLineParam( USHORT nParam )
 {
-    vos::OStartupInfo aStartInfo;
     rtl::OUString aParam;
-    aStartInfo.getCommandArg( nParam, aParam );
+    osl_getCommandArg( nParam, &aParam.pData );
     return XubString( aParam );
 }
 

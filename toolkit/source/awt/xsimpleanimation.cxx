@@ -90,7 +90,6 @@ namespace toolkit
     void XSimpleAnimation::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
         // TODO: XSimpleAnimation::ProcessWindowEvent
-        //::vos::OClearableGuard aGuard( GetMutex() );
         //Reference< XSimpleAnimation > xKeepAlive( this );
         //SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
         //if ( !pSpinButton )

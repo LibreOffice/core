@@ -51,7 +51,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#include <vos/dynload.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::rtl;

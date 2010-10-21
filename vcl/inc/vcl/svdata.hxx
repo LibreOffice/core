@@ -110,7 +110,6 @@ class SalI18NImeStatus;
 class DockingManager;
 class VclEventListeners2;
 
-namespace vos { class OMutex; }
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 

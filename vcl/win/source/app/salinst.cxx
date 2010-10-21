@@ -104,7 +104,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 // =======================================================================
 
-class SalYieldMutex : public vos::OMutex
+class SalYieldMutex : public vcl::SolarMutexObject
 {
 public: // for ImplSalYield()
     WinSalInstance*             mpInstData;

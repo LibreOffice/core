@@ -30,12 +30,8 @@
 #define _SV_SALSYS_H
 
 #include <vcl/sv.h>
-#ifndef _VOS_MUTEX_HXX
 #include <osl/mutex.hxx>
-#endif
-#ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <vcl/salsys.hxx>
 #include <vcl/dllapi.h>
 

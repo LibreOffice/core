@@ -43,7 +43,6 @@
 #include <unotools/bootstrap.hxx>
 
 #include <unotools/ucbhelper.hxx>
-#include <vos/process.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

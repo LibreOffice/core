@@ -112,7 +112,7 @@ class AquaDelayedSettingsChanged : public Timer
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
-    vos::OGuard aGuard( *mpSalYieldMutex );
+    osl:SolarGuard aGuard( *mpSalYieldMutex );
     AquaDelayedSettingsChanged* pTimer = new AquaDelayedSettingsChanged( bInvalidate );
     pTimer->SetTimeout( 50 );
     pTimer->Start();

@@ -426,7 +426,7 @@
 #include <vcl/unohelp.hxx>
 
 #include <osl/mutex.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 //---MARKER---
 

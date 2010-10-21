@@ -33,12 +33,11 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.h>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 
-using namespace vos;
 using namespace osl;
 using namespace rtl;
 
@@ -66,18 +65,17 @@ namespace comphelper
  */
 static sal_Bool retrievePortalUserDir( OUString *pDirectory )
 {
-    OStartupInfo startInfo;
-    sal_uInt32 nArgs = startInfo.getCommandArgCount();
+    sal_uInt32 nArgs = osl_getCommandArgCount();
     sal_Bool bIsPortalUser = sal_False;
     OUString sArg;
     while( nArgs > 0 )
-      {
-        if ( !startInfo.getCommandArg(--nArgs, sArg) )
-          {
+    {
+        if ( !osl_getCommandArg(--nArgs, &sArg.pData) )
+        {
             if ( sArg.indexOf(OUString::createFromAscii("-userid")) == 0 )
             {
 
-                  bIsPortalUser = sal_True;
+                bIsPortalUser = sal_True;
                 sal_Int32 nStart = sArg.lastIndexOf( '[' );
                 sal_Int32 nEnd   = sArg.lastIndexOf( ']' );
                 if( -1 == nStart || -1 == nEnd || nEnd < nStart)
@@ -189,8 +187,7 @@ OUString getPathToSystemRegistry()
     FILE     *f=NULL;
 
     // search in the directory of the executable
-    OStartupInfo info;
-    if( OStartupInfo::E_None == info.getExecutableFile(uBuffer) )
+    if(osl_Process_E_None == osl_getExecutableFile(&uBuffer.pData))
     {
         sal_uInt32  lastIndex = uBuffer.lastIndexOf(PATH_DELEMITTER);
         if (lastIndex > 0)

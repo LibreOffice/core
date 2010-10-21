@@ -57,7 +57,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #endif
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <osl/mutex.hxx>
 
 #include "Xproto.h"
@@ -67,7 +67,6 @@
 #include <salframe.h>
 #include <osl/signal.h>
 #include <osl/thread.h>
-#include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
@@ -401,16 +400,16 @@ void SalXLib::Init()
     Display *pDisp = NULL;
 
     // is there a -display command line parameter?
-    vos::OExtCommandLine aCommandLine;
-    sal_uInt32 nParams = aCommandLine.getCommandArgCount();
+
+    sal_uInt32 nParams = osl_getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
     for (USHORT i=0; i<nParams; i++)
     {
-        aCommandLine.getCommandArg(i, aParam);
+        osl_getCommandArg(i, &aParam.pData);
         if (aParam.equalsAscii("-display"))
         {
-            aCommandLine.getCommandArg(i+1, aParam);
+            osl_getCommandArg(i+1, &aParam.pData);
             aDisplay = rtl::OUStringToOString(
                    aParam, osl_getThreadTextEncoding());
 
