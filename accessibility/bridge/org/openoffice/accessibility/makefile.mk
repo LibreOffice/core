@@ -53,3 +53,10 @@ CUSTOMMANIFESTFILE      = manifest
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/java_uno_accessbridge.component
+
+$(MISC)/java_uno_accessbridge.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt java_uno_accessbridge.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt java_uno_accessbridge.component

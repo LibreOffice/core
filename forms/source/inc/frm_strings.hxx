@@ -141,6 +141,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_METHOD,            "SubmitMethod" );
     FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_ENCODING,          "SubmitEncoding" );
     FORMS_CONSTASCII_STRING( PROPERTY_IMAGE_URL,                "ImageURL" );
+    FORMS_CONSTASCII_STRING( PROPERTY_GRAPHIC,                  "Graphic" );
     FORMS_CONSTASCII_STRING( PROPERTY_IMAGE_POSITION,           "ImagePosition" );
     FORMS_CONSTASCII_STRING( PROPERTY_EMPTY_IS_NULL,            "ConvertEmptyToNull" );
     FORMS_CONSTASCII_STRING( PROPERTY_LISTSOURCETYPE,           "ListSourceType" );

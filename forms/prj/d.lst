@@ -5,3 +5,4 @@
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\util\*.xml %_DEST%\xml%_EXT%\*.xml
+..\%__SRC%\misc\frm.component %_DEST%\xml%_EXT%\frm.component

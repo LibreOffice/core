@@ -38,12 +38,10 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XChild;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XHierarchicalNameContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
@@ -91,7 +89,6 @@ import java.util.logging.Logger;
 
 public class DBMetaData
 {
-
     private XNameAccess xQueryNames;
     public XDatabaseMetaData xDBMetaData;
     private XDataSource m_dataSource;
@@ -109,12 +106,8 @@ public class DBMetaData
     public com.sun.star.lang.XMultiServiceFactory xMSF;
     public XComponent xConnectionComponent;
 
-    private XNameAccess m_xTableNames;
-    private XInteractionHandler oInteractionHandler;
     private XNameAccess xNameAccess;
     private XInterface xDatabaseContext;
-    private XCompletedConnection xCompleted;
-    // private int[] nDataTypes = null;
     private XWindowPeer xWindowPeer;
     private String[] TableNames = new String[] {};
     private String[] QueryNames = new String[] {};
@@ -212,15 +205,13 @@ public class DBMetaData
         return lDateCorrection;
     }
 
-    void getInterfaces(XMultiServiceFactory xMSF)
+    private void getInterfaces(XMultiServiceFactory xMSF)
     {
         try
         {
             this.xMSF = xMSF;
             xDatabaseContext = (XInterface) xMSF.createInstance("com.sun.star.sdb.DatabaseContext");
             xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xDatabaseContext );
-            XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
-            oInteractionHandler = UnoRuntime.queryInterface( XInteractionHandler.class, xInteractionHandler );
             DataSourceNames = xNameAccess.getElementNames();
         }
         catch (Exception exception)
@@ -257,7 +248,6 @@ public class DBMetaData
 
     public boolean hasTableByName(String _stablename)
     {
-        // getTableNames();
         return getTableNamesAsNameAccess().hasByName(_stablename);
     }
 
@@ -371,11 +361,6 @@ public class DBMetaData
         return bHasEscapeProcessing;
     }
 
-    // public void initCommandNames()
-    // {
-        // getTableNames();
-    // }
-
     public XNameAccess getQueryNamesAsNameAccess()
     {
         XQueriesSupplier xDBQueries = UnoRuntime.queryInterface( XQueriesSupplier.class, DBConnection );
@@ -416,7 +401,7 @@ public class DBMetaData
         return TableNames;
     }
 
-    void InitializeWidthList()
+    private void InitializeWidthList()
     {
         WidthList = new int[17][2];
         WidthList[0][0] = DataType.BIT; // ==  -7;
@@ -581,7 +566,7 @@ public class DBMetaData
         return m_dataSource;
     }
 
-    private void setDataSourceByName(String _DataSourceName, boolean bgetInterfaces)
+    private void setDataSourceByName(String _DataSourceName)
     {
         try
         {
@@ -601,7 +586,6 @@ public class DBMetaData
 
     public void getDataSourceInterfaces() throws Exception
     {
-        xCompleted = UnoRuntime.queryInterface( XCompletedConnection.class, getDataSource() );
         xDataSourcePropertySet = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
     }
@@ -684,8 +668,8 @@ public class DBMetaData
 
     private boolean getConnection(String _DataSourceName)
     {
-        setDataSourceByName(_DataSourceName, true);
-        return getConnection( getDataSource() );
+        setDataSourceByName(_DataSourceName);
+         return getConnection( getDataSource() );
     }
 
     private boolean getConnection(com.sun.star.sdbc.XConnection _DBConnection)
@@ -955,7 +939,7 @@ public class DBMetaData
             NamedValueCollection creationArgs = new NamedValueCollection();
             creationArgs.put( "Name", basename );
             creationArgs.put( "URL", documentURL );
-            creationArgs.put( "AsTemplate", new Boolean( i_createTemplate ) );
+            creationArgs.put( "AsTemplate", i_createTemplate );
             XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, _xDocNameAccess );
             Object oDBDocument = xDocMSF.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", creationArgs.getPropertyValues() );
             XHierarchicalNameContainer xHier = UnoRuntime.queryInterface( XHierarchicalNameContainer.class, _xDocNameAccess );
@@ -967,7 +951,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace();
         }
     }
 
@@ -1103,13 +1087,11 @@ public class DBMetaData
     public void finish()
     {
         xQueryNames = null;
-        oInteractionHandler = null;
         xNameAccess = null;
         xDatabaseContext = null;
         xDBMetaData = null;
         m_dataSource = null;
         xModel = null;
-        xCompleted = null;
         xDataSourcePropertySet = null;
         xWindowPeer = null;
         DBConnection = null;

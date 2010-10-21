@@ -1176,7 +1176,11 @@ bool MenuSaveInData::LoadSubMenus(
     const OUString& rBaseTitle,
     SvxConfigEntry* pParentData )
 {
-    SvxEntries*     pEntries            = pParentData->GetEntries();
+    SvxEntries* pEntries = pParentData->GetEntries();
+
+    // Don't access non existing menu configuration!
+    if ( !xMenuSettings.is() )
+        return true;
 
     for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); nIndex++ )
     {
@@ -2593,17 +2597,20 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
     PopupMenu* pPopup = aModifyTopLevelButton.GetPopupMenu();
-    pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
-    pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
-    pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
-
-    SvxEntries* pEntries = pMenuData->GetEntries();
-    SvxEntries::const_iterator iter = pEntries->begin();
-
-    for ( ; iter != pEntries->end(); iter++ )
+    if ( pMenuData )
     {
-        SvxConfigEntry* pEntry = *iter;
-        InsertEntryIntoUI( pEntry );
+        pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
+        pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
+        pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
+
+        SvxEntries* pEntries = pMenuData->GetEntries();
+        SvxEntries::const_iterator iter = pEntries->begin();
+
+        for ( ; iter != pEntries->end(); iter++ )
+        {
+            SvxConfigEntry* pEntry = *iter;
+            InsertEntryIntoUI( pEntry );
+        }
     }
 
     UpdateButtonStates();
