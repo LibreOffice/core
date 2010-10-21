@@ -34,6 +34,8 @@
 #include <osl/conditn.h>
 #include <osl/mutex.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 namespace cppu_threadpool
 {
     extern "C" typedef void (SAL_CALL RequestFun)(void *);
@@ -47,6 +49,9 @@ namespace cppu_threadpool
     typedef ::std::list < struct Job > JobList;
 
     typedef ::std::list < sal_Int64 > CallStackList;
+
+    class DisposedCallerAdmin;
+    typedef boost::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
 
     class JobQueue
     {
@@ -73,6 +78,7 @@ namespace cppu_threadpool
         sal_Int32 m_nToDo;
         sal_Bool m_bSuspended;
         oslCondition m_cndWait;
+        DisposedCallerAdminHolder m_DisposedCallerAdmin;
     };
 }
 

@@ -39,6 +39,7 @@
 #include <com/sun/star/util/Color.idl>
 #endif
 
+#include <com/sun/star/awt/XItemList.idl>
 
 //=============================================================================
 
@@ -225,6 +226,11 @@ published service UnoControlComboBoxModel
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;
+
+    /** allows mmanipulating the list of items in the combo box more fine-grained than the
+        <member>StringItemList</member> property.
+    */
+    [optional] interface XItemList;
 };
 
 //=============================================================================
