@@ -24,10 +24,10 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ = ..$/..$/..$/..
+PRJ = ../../../..
 TARGET  = CheckXComponentLoader
 PRJNAME = framework
-PACKAGE = complex$/loadAllDocuments$/helper
+PACKAGE = complex/loadAllDocuments/helper
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -35,10 +35,9 @@ PACKAGE = complex$/loadAllDocuments$/helper
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar \
-                  Generator.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 JAVAFILES       = InteractionHandler.java StatusIndicator.java StreamSimulator.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
 
 MAXLINELENGTH = 100000
 
