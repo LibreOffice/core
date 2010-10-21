@@ -68,7 +68,7 @@ public class SdfData
         BufferedReader in;
         try
         {
-            in = new BufferedReader( new FileReader( filename ) );
+            in = new BufferedReader( new InputStreamReader( new FileInputStream( filename ), "UTF-8" ) );
             SdfEntity entity;
             while( in.ready() )
             {

@@ -59,7 +59,8 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\%__SRC%\bin\sdf.pyc %_DEST%\bin%_EXT%\sdf.pyc
 ..\%__SRC%\bin\xhtex.py %_DEST%\bin%_EXT%\xhtex.py
 ..\%__SRC%\bin\xtxex.py %_DEST%\bin%_EXT%\xtxex.py
-
+..\%__SRC%\bin\xhtex.pyc %_DEST%\bin%_EXT%\xhtex.pyc
+..\%__SRC%\bin\xtxex.pyc %_DEST%\bin%_EXT%\xtxex.pyc
 ..\inc\export.hxx %_DEST%\inc%_EXT%\l10ntools\export.hxx
 ..\inc\l10ntools\directory.hxx %_DEST%\inc%_EXT%\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc%_EXT%\l10ntools\file.hxx

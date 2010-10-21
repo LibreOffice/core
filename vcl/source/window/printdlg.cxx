@@ -2575,6 +2575,7 @@ void PrintProgressDialog::tick()
 
 void PrintProgressDialog::reset()
 {
+    mbCanceled = false;
     setProgress( 0 );
 }
 
