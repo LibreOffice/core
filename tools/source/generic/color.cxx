@@ -30,7 +30,6 @@
 #include "precompiled_tools.hxx"
 
 #include <stdlib.h>
-#include <vos/macros.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -89,18 +88,18 @@ UINT8 Color::GetColorError( const Color& rCompareColor ) const
 
 void Color::IncreaseLuminance( UINT8 cLumInc )
 {
-    SetRed( (UINT8) VOS_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
-    SetGreen( (UINT8) VOS_BOUND( (long) COLORDATA_GREEN( mnColor ) + cLumInc, 0L, 255L ) );
-    SetBlue( (UINT8) VOS_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
+    SetRed( (UINT8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
+    SetGreen( (UINT8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) + cLumInc, 0L, 255L ) );
+    SetBlue( (UINT8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
 }
 
 // -----------------------------------------------------------------------
 
 void Color::DecreaseLuminance( UINT8 cLumDec )
 {
-    SetRed( (UINT8) VOS_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
-    SetGreen( (UINT8) VOS_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
-    SetBlue( (UINT8) VOS_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
+    SetRed( (UINT8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
+    SetGreen( (UINT8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
+    SetBlue( (UINT8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
 }
 
 // -----------------------------------------------------------------------
@@ -112,9 +111,9 @@ void Color::IncreaseContrast( UINT8 cContInc )
         const double fM = 128.0 / ( 128.0 - 0.4985 * cContInc );
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( (UINT8) VOS_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (UINT8) VOS_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (UINT8) VOS_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetRed( (UINT8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetGreen( (UINT8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetBlue( (UINT8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
     }
 }
 
@@ -127,9 +126,9 @@ void Color::DecreaseContrast( UINT8 cContDec )
         const double fM = ( 128.0 - 0.4985 * cContDec ) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( (UINT8) VOS_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (UINT8) VOS_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (UINT8) VOS_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetRed( (UINT8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetGreen( (UINT8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetBlue( (UINT8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
     }
 }
 

@@ -30,7 +30,6 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdlib.h>
-#include <vos/macros.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmap.hxx>
 
@@ -475,7 +474,7 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
                         nSum2 += nMask332 * nGrey33;
 
                         nSum1 = (long) sqrt( (double)( nSum1 * nSum1 + nSum2 * nSum2 ) );
-                        aGrey.SetIndex( ~(BYTE) VOS_BOUND( nSum1, 0, 255 ) );
+                        aGrey.SetIndex( ~(BYTE) SAL_BOUND( nSum1, 0, 255 ) );
                         pWriteAcc->SetPixel( nY, nX, aGrey );
 
                         if( nX < ( nWidth - 1 ) )
@@ -550,7 +549,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
                 const long  nLz = FRound( sin( fElev ) * 255.0 );
                 const long  nZ2 = ( ( 6 * 255 ) / 4 ) * ( ( 6 * 255 ) / 4 );
                 const long  nNzLz = ( ( 6 * 255 ) / 4 ) * nLz;
-                const BYTE  cLz = (BYTE) VOS_BOUND( nLz, 0, 255 );
+                const BYTE  cLz = (BYTE) SAL_BOUND( nLz, 0, 255 );
 
                 // fill mapping tables
                 pHMap[ 0 ] = 0;
@@ -587,7 +586,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
                         else
                         {
                             const double fGrey = nDotL / sqrt( (double)(nNx * nNx + nNy * nNy + nZ2) );
-                            aGrey.SetIndex( (BYTE) VOS_BOUND( fGrey, 0, 255 ) );
+                            aGrey.SetIndex( (BYTE) SAL_BOUND( fGrey, 0, 255 ) );
                         }
 
                         pWriteAcc->SetPixel( nY, nX, aGrey );
@@ -688,7 +687,7 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
     {
         long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SEPIA ) ?
                                         pFilterParam->mcSolarGreyThreshold : 10;
-        const long      nSepia = 10000 - 100 * VOS_BOUND( nSepiaPercent, 0, 100 );
+        const long      nSepia = 10000 - 100 * SAL_BOUND( nSepiaPercent, 0, 100 );
         BitmapPalette   aSepiaPal( 256 );
 
         DBG_ASSERT( nSepiaPercent <= 100, "Bitmap::ImplSepia(): sepia value out of range; defaulting to 100%" );

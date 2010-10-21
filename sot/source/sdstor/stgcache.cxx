@@ -36,7 +36,6 @@
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/postsys.h>
 #endif
-#include <vos/macros.hxx>
 
 #include <string.h>
 #include <osl/endian.h>
@@ -56,7 +55,7 @@ typedef std::hash_map
     INT32,
     StgPage *,
     std::hash< INT32 >,
-    NAMESPACE_STD(equal_to)< INT32 >
+    std::equal_to< INT32 >
 > UsrStgPagePtr_Impl;
 #ifdef _MSC_VER
 #pragma warning( disable: 4786 )

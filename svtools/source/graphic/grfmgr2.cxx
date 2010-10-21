@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <vos/macros.hxx>
 #include <vcl/bmpacc.hxx>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>

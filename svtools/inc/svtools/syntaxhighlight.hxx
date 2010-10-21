@@ -30,7 +30,6 @@
 
 #include <list>
 
-#include <vos/macros.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>

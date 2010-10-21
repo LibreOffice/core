@@ -36,7 +36,6 @@
 #endif
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-#include <vos/macros.hxx>
 #include <comphelper/eventattachermgr.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
