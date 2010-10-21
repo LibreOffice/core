@@ -73,7 +73,8 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll"
 #elif UNX
 #ifdef MACOSX
-        "/../../../JavaVM"
+        "/../../../JavaVM",
+        "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
 #else
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
