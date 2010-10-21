@@ -56,7 +56,6 @@
 
 using namespace rtl;
 using namespace cppu;
-//using namespace vos;
 using namespace ModuleA;
 //using namespace ModuleB;
 //using namespace ModuleC;

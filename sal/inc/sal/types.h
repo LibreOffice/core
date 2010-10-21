@@ -29,6 +29,7 @@
 #define _SAL_TYPES_H_
 
 #include <sal/config.h>
+#include <sal/macros.h>
 
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX

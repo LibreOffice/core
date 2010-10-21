@@ -44,4 +44,12 @@
 #    define SAL_N_ELEMENTS(arr)     (sizeof (arr) / sizeof ((arr)[0]))
 #endif
 
+#ifndef SAL_BOUND
+#    define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
+#endif
+
+#ifndef SAL_ABS
+#    define SAL_ABS(a)              (((a) < 0) ? (-(a)) : (a))
+#endif
+
 #endif
