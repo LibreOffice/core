@@ -127,7 +127,6 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)		\
         $(CPPULIB)				\
         $(SO2LIB)				\
-        $(VOSLIB)				\
         $(SALLIB) \
         $(SALHELPERLIB) \
         $(EDITENGLIB)
