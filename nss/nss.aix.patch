@@ -1,5 +1,5 @@
---- misc/nss-3.12.6/mozilla/nsprpub/configure	2010-08-18 07:23:01.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/configure	2010-08-18 07:33:11.000000000 -0500
+--- misc/nss-3.12.8/mozilla/nsprpub/configure	2010-08-18 07:23:01.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/nsprpub/configure	2010-08-18 07:33:11.000000000 -0500
 @@ -2973,7 +2973,8 @@
  #define SYSV 1
  EOF
@@ -18,8 +18,8 @@
      AIX_WRAP='$(DIST)/lib/aixwrap.o'
      AIX_TMP='./_aix_tmp.o'
      if test -n "$USE_64"; then
---- misc/nss-3.12.6/mozilla/nsprpub/configure.in	2010-08-18 07:23:01.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/configure.in	2010-08-18 07:32:36.000000000 -0500
+--- misc/nss-3.12.8/mozilla/nsprpub/configure.in	2010-08-18 07:23:01.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/nsprpub/configure.in	2010-08-18 07:32:36.000000000 -0500
 @@ -831,7 +831,8 @@
      AC_DEFINE(XP_UNIX)
      AC_DEFINE(AIX)
@@ -42,8 +42,8 @@
      AIX_WRAP='$(DIST)/lib/aixwrap.o'
      AIX_TMP='./_aix_tmp.o'
      if test -n "$USE_64"; then
---- misc/nss-3.12.6/mozilla/nsprpub/pr/src/Makefile.in	2010-08-18 07:23:04.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/pr/src/Makefile.in	2010-08-18 07:24:49.000000000 -0500
+--- misc/nss-3.12.8/mozilla/nsprpub/pr/src/Makefile.in	2010-08-18 07:23:04.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/nsprpub/pr/src/Makefile.in	2010-08-18 07:24:49.000000000 -0500
 @@ -110,7 +110,6 @@
  endif
  
@@ -52,8 +52,8 @@
  OS_LIBS		= -lodm -lcfg
  ifeq ($(CLASSIC_NSPR),1)
  ifeq ($(OS_RELEASE),4.1)
---- misc/nss-3.12.6/mozilla/security/coreconf/AIX.mk	2010-08-18 07:23:06.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/AIX.mk	2010-08-18 07:26:26.000000000 -0500
+--- misc/nss-3.12.8/mozilla/security/coreconf/AIX.mk	2010-08-18 07:23:06.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/security/coreconf/AIX.mk	2010-08-18 07:26:26.000000000 -0500
 @@ -62,35 +62,30 @@
  
  DEFAULT_COMPILER = xlc_r
@@ -96,8 +96,8 @@
  ifeq ($(USE_64), 1)
  	OS_CFLAGS	+= -DAIX_64BIT
  	OBJECT_MODE=64
---- misc/nss-3.12.6/mozilla/security/nss/cmd/platlibs.mk	2010-08-18 07:23:18.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/platlibs.mk	2010-08-18 07:26:48.000000000 -0500
+--- misc/nss-3.12.8/mozilla/security/nss/cmd/platlibs.mk	2010-08-18 07:23:18.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/security/nss/cmd/platlibs.mk	2010-08-18 07:26:48.000000000 -0500
 @@ -173,7 +173,7 @@
  	$(NULL)
  
@@ -116,8 +116,8 @@
  endif
  
  # $(PROGRAM) has NO explicit dependencies on $(EXTRA_SHARED_LIBS)
---- misc/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/mangle/Makefile	2010-08-18 07:23:20.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/mangle/Makefile	2010-08-18 07:42:44.000000000 -0500
+--- misc/nss-3.12.8/mozilla/security/nss/cmd/shlibsign/mangle/Makefile	2010-08-18 07:23:20.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/security/nss/cmd/shlibsign/mangle/Makefile	2010-08-18 07:42:44.000000000 -0500
 @@ -75,7 +75,9 @@
  
  endif
@@ -129,8 +129,8 @@
  
  #######################################################################
  # (5) Execute "global" rules. (OPTIONAL)                              #
---- misc/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2010-08-18 08:00:17.000000000 -0500
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2010-08-18 07:55:55.000000000 -0500
+--- misc/nss-3.12.8/mozilla/security/nss/cmd/shlibsign/Makefile	2010-08-18 08:00:17.000000000 -0500
++++ misc/build/nss-3.12.8/mozilla/security/nss/cmd/shlibsign/Makefile	2010-08-18 07:55:55.000000000 -0500
 @@ -75,6 +75,9 @@
  
  endif
