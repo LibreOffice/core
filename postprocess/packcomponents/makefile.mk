@@ -203,7 +203,7 @@ my_components += gconfbe1
 .END
 
 .IF "$(ENABLE_GIO)" != ""
-my_components += ucpgio1
+my_components += ucpgio
 .END
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
