@@ -50,10 +50,10 @@ installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation$(UPDMINOREXT)
 
 .IF "$(OS)" == "MACOSX"
 my_sofficepath = \
-    $(installationtest_instpath)/opt/OpenOffice.org.app/Contents/MacOS/soffice
+    $(installationtest_instpath)/opt/LibreOffice.app/Contents/MacOS/soffice
 .ELIF "$(OS)" == "WNT"
 my_sofficepath = \
-    $(installationtest_instpath)'/opt/OpenOffice.org 3/program/soffice.exe'
+    $(installationtest_instpath)'/opt/LibreOffice 3/program/soffice.exe'
 .ELSE
 my_sofficepath = \
     $(installationtest_instpath)/opt/program/soffice
@@ -80,12 +80,12 @@ my_javaenv = \
 # smoketestoo_native:
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
 $(MISC)/$(TARGET)/installation.flag : $(shell \
-        ls $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip)
+        ls $(installationtest_instset)/Lib0_*_install-arc_$(defaultlangiso).zip)
     $(MKDIRHIER) $(@:d)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
-    unzip $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip \
+    unzip $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip \
         -d "$$my_tmp" && \
-    mv "$$my_tmp"/OOo_*_install-arc_$(defaultlangiso) "$$my_tmp"/opt && \
+    mv "$$my_tmp"/LibO_*_install-arc_$(defaultlangiso) "$$my_tmp"/opt && \
     echo "$$my_tmp" > $@
 .END
 
