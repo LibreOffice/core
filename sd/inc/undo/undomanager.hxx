@@ -40,7 +40,7 @@ public:
     UndoManager( USHORT nMaxUndoActionCount = 20 );
 
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
-    virtual void            LeaveListAction();
+    virtual USHORT          LeaveListAction();
 
     virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
 

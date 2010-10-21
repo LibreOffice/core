@@ -49,11 +49,12 @@ void UndoManager::EnterListAction(const UniString &rComment, const UniString& rR
     }
 }
 
-void UndoManager::LeaveListAction()
+USHORT UndoManager::LeaveListAction()
 {
+    USHORT nListElements = 0;
     if( !isInUndo() )
     {
-        SfxUndoManager::LeaveListAction();
+        nListElements = SfxUndoManager::LeaveListAction();
         if( mnListLevel )
         {
             mnListLevel--;
@@ -63,6 +64,7 @@ void UndoManager::LeaveListAction()
             DBG_ERROR("sd::UndoManager::LeaveListAction(), no open list action!" );
         }
     }
+    return nListElements;
 }
 
 void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALSE */ )
