@@ -37,6 +37,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
@@ -56,8 +57,9 @@ using namespace ::xmloff::token;
 
 ::rtl::OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
-ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
-     m_xContext(context)
+ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context)
+    :m_bImportedChart( false )
+    ,m_xContext(context)
 {
 }
 // -----------------------------------------------------------------------------
@@ -121,35 +123,24 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
 {
     m_xDelegatee->endDocument();
     uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
-    if ( xReceiver.is() )
+    if ( xReceiver.is() && m_bImportedChart )
     {
         // this fills the chart again
-        uno::Sequence< beans::PropertyValue > aArgs( 4 );
-        aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-            uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("HasCategories"), -1,
-            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        ::comphelper::NamedValueCollection aArgs;
+        aArgs.put( "CellRangeRepresentation", ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) );
+        aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
+        aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+        aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
 
         uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
         if ( xDataProvider.is() )
         {
-            aArgs.realloc(5);
-            uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames = xDataProvider->getComplexColumnDescriptions();
-            aArgs[4] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("ComplexColumnDescriptions"), -1,
-                uno::makeAny( aColumnNames ), beans::PropertyState_DIRECT_VALUE );
+            const uno::Sequence< ::rtl::OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+            aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
         }
-        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
 
-        xReceiver->setArguments( aArgs );
+        xReceiver->attachDataProvider( m_xDatabaseDataProvider.get() );
+        xReceiver->setArguments( aArgs.getPropertyValues() );
     }
 }
 
@@ -204,6 +195,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         }
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_CHART),NULL);
         bExport = false;
+        m_bImportedChart = true;
     }
     else if ( _sName.equalsAscii("rpt:master-detail-field") )
     {
