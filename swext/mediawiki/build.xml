@@ -53,7 +53,7 @@
         <!-- build options -->
         <property name="sourcelevel" value="1.4"/>
         <property name="verbose" value="false"/>
-        <property name="debug" value="true"/>
+        <property name="debug" value="${antdebug}"/>
 
         <!-- build classpath -->
         <path id="classpath">
@@ -75,7 +75,7 @@
     </target>
 
     <target name="compile" depends="init">
-        <javac debug="${debug}" destdir="${classes}" classpathref="classpath"
+        <javac debug="${debug}" debuglevel="lines,vars,source" destdir="${classes}" classpathref="classpath"
                source="${sourcelevel}" verbose="${verbose}">
             <src path="src"/>
         </javac>
