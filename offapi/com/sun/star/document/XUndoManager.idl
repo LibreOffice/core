@@ -98,6 +98,11 @@ interface XUndoManager
     /** leaves the undo context previously opened via <member>enterUndoContext</member> respectively
         <member>enterHiddenUndoContext</member>.
 
+        <p>If no Undo action has been added since the context has been opened, the context is not only left,
+        but silently removed, and does not contribute to the Undo stack at all. In this case, possible
+        listeners will be notified via <member>XUndoManagerListener::cancelledUndoContext</member>,
+        instead of <member>XUndoManagerListener::leftUndoContext</member>.</p>
+
         @throws ::com::sun::star::util::InvalidStateException
             if no undo context is currently open.
 
