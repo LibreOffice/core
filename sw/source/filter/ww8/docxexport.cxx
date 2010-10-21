@@ -32,10 +32,12 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <oox/export/chartexport.hxx>
 
 #include <map>
 #include <algorithm>
@@ -290,6 +292,33 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 {
     OSL_TRACE( "TODO DocxExport::ForFormText()\n" );
+}
+
+rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
+{
+    rtl::OUString aFileName = rtl::OUStringBuffer()
+                                .appendAscii("charts/chart")
+                                .append(nCount)
+                                .appendAscii( ".xml" )
+                                .makeStringAndClear();
+
+    OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                    S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" ),
+                    aFileName );
+
+    aFileName = rtl::OUStringBuffer()
+                  .appendAscii("word/charts/chart")
+                  .append(nCount)
+                  .appendAscii( ".xml" )
+                  .makeStringAndClear();
+
+    ::sax_fastparser::FSHelperPtr pChartFS =
+        m_pFilter->openFragmentStreamWithSerializer( aFileName,
+            S( "application/vnd.openxmlformats-officedocument.drawingml.chart" ) );
+
+    oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
+    aChartExport.ExportContent();
+    return ::rtl::OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
 void DocxExport::ExportDocument_Impl()

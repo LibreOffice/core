@@ -125,6 +125,11 @@
 #include <tools/color.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
@@ -141,6 +146,7 @@ using namespace sax_fastparser;
 using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;
+using namespace ::com::sun::star;
 
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
@@ -1742,6 +1748,81 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     m_pSerializer->endElementNS( XML_w, XML_drawing );
 }
 
+void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize )
+{
+    uno::Reference< chart2::XChartDocument > xChartDoc;
+    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    if( xShape.is() )
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
+            xChartDoc.set( xPropSet->getPropertyValue( rtl::OUString::createFromAscii("Model") ), uno::UNO_QUERY );
+    }
+
+    if( xChartDoc.is() )
+    {
+        OSL_TRACE("DocxAttributeOutput::WriteOLE2Obj: export chart ");
+        m_pSerializer->startElementNS( XML_w, XML_drawing,
+            FSEND );
+        m_pSerializer->startElementNS( XML_wp, XML_inline,
+            XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
+            FSEND );
+
+        OString aWidth( OString::valueOf( TwipsToEMU( rSize.Width() ) ) );
+        OString aHeight( OString::valueOf( TwipsToEMU( rSize.Height() ) ) );
+        m_pSerializer->singleElementNS( XML_wp, XML_extent,
+            XML_cx, aWidth.getStr(),
+            XML_cy, aHeight.getStr(),
+            FSEND );
+        // TODO - the right effectExtent, extent including the effect
+        m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
+            XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
+            FSEND );
+
+        // should get the unique id
+        sal_Int32 nID = 1;
+        OUString sName = rtl::OUString::createFromAscii("Object 1");
+        uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
+        if( xNamed.is() )
+            sName = xNamed->getName();
+
+        m_pSerializer->singleElementNS( XML_wp, XML_docPr,
+            XML_id, I32S( nID ),
+            XML_name, USS( sName ),
+            FSEND );
+
+        m_pSerializer->singleElementNS( XML_wp, XML_cNvGraphicFramePr,
+            FSEND );
+
+        m_pSerializer->startElementNS( XML_a, XML_graphic,
+            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSEND );
+
+        m_pSerializer->startElementNS( XML_a, XML_graphicData,
+            XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
+            FSEND );
+
+
+
+        OString aRelId;
+        static sal_Int32 nChartCount = 0;
+        nChartCount++;
+        uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
+        aRelId = m_rExport.OutputChart( xModel, nChartCount );
+
+        m_pSerializer->singleElementNS( XML_c, XML_chart,
+            FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_r, XML_id ), aRelId.getStr(),
+            FSEND );
+
+        m_pSerializer->endElementNS( XML_a, XML_graphicData );
+        m_pSerializer->endElementNS( XML_a, XML_graphic );
+        m_pSerializer->endElementNS( XML_wp, XML_inline );
+        m_pSerializer->endElementNS( XML_w, XML_drawing );
+    }
+}
+
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& /*rNdTopLeft*/ )
 {
     m_pSerializer->mark();
@@ -1790,6 +1871,13 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             {
                 // The frame output is postponed at the end of the anchor paragraph
                 m_pParentFrame = &rFrame;
+            }
+            break;
+        case sw::Frame::eOle:
+            {
+                const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
+                if ( pSdrObj )
+                    WriteOLE2Obj( pSdrObj, rFrame.GetLayoutSize() );
             }
             break;
         default:

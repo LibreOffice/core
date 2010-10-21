@@ -53,6 +53,10 @@ namespace oox {
     namespace vml { class VMLExport; }
 }
 
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+} } }
+
 /// The class that does all the actual DOCX export-related work.
 class DocxExport : public MSWordExportBase
 {
@@ -128,6 +132,9 @@ public:
     virtual void DoFormText(const SwInputField * pFld);
 
     virtual ULONG ReplaceCr( BYTE nChar );
+
+    /// Returns the relationd id
+    rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
 
 protected:
     /// Format-dependant part of the actual export.

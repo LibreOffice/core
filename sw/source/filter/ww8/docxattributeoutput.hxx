@@ -43,6 +43,7 @@
 class DocxExport;
 
 class SwGrfNode;
+class SdrObject;
 
 namespace docx { class FootnotesList; }
 namespace oox { namespace drawingml { class DrawingML; } }
@@ -302,6 +303,7 @@ private:
 
     /// Output graphic fly frames.
     void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
+    void WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize );
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
