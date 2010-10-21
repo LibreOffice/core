@@ -176,7 +176,6 @@ SHL1STDLIBS+=\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
-            $(VOSLIB)           \
             $(SALLIB)			\
             $(BASEGFXLIB)		\
             $(ICUUCLIB)			\
@@ -301,7 +300,6 @@ SHL2STDLIBS=\
             $(I18NPAPERLIB)     \
             $(I18NISOLANGLIB)     \
             $(TOOLSLIB)         \
-            $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(UNOTOOLSLIB) \
             $(COMPHELPERLIB)	\
@@ -381,7 +379,6 @@ SHL4STDLIBS+=\
             $(TOOLSLIB)         \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
-            $(VOSLIB)           \
             $(SALLIB)           \
             $(X11LINK_DYNAMIC)
 
@@ -410,7 +407,6 @@ SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=\
         $(VCLLIB)       \
         $(TOOLSLIB)     \
-        $(VOSLIB)       \
         $(SALLIB)       \
         $(X11LINK_DYNAMIC)
 
@@ -440,7 +436,6 @@ SHL6STDLIBS+=\
         $(VCLLIB)       \
         $(PSPLIB)	\
         $(TOOLSLIB)     \
-        $(VOSLIB)       \
         $(SALLIB)   \
         $(X11LINK_DYNAMIC)
 

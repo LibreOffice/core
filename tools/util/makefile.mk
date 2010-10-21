@@ -94,8 +94,8 @@ LIB1FILES+=  $(SLB)$/dll.lib
 #SOLARLIBDIR=..\$(INPATH)\lib
 # bei lokalen osl rtl oder vos das SOLARLIBDIR bitte patchen !
 LIB1FILES+= $(SOLARLIBDIR)\xosl.lib \
-            $(SOLARLIBDIR)\xrtl.lib \
-            $(SOLARLIBDIR)\xvos.lib
+            $(SOLARLIBDIR)\xrtl.lib
+
 SHL1STDLIBS+=   $(WSOCK32LIB)
 .ENDIF
 .ENDIF          # "$(BIG_TOOLS)"!=""
@@ -107,7 +107,7 @@ SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
 SHL1USE_EXPORTS=name
-SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(BASEGFXLIB) $(I18NISOLANGLIB) $(COMPHELPERLIB)
+SHL1STDLIBS+=   $(SALLIB)  $(BASEGFXLIB) $(I18NISOLANGLIB) $(COMPHELPERLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=   $(SHELL32LIB)     \

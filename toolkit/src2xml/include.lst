@@ -56,8 +56,6 @@
 ../../vcl/unxlngi6.pro/inc
 ../../ure/unxlngi6.pro/inc
 ../../uui/unxlngi6.pro/inc
-../../vos/inc
-../../vos/unxlngi6.pro/inc
 ../../dbaccess/inc
 ../../dbaccess/source/ui/inc
 ../../dbaccess/source/inc

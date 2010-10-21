@@ -62,9 +62,8 @@ APP1OBJS = $(OBJFILES)
 APP1STDLIBS =\
     $(TOOLSLIB)\
     $(EXPATASCII3RDLIB)\
-    $(VOSLIB)\
     $(CPPULIB) \
-    $(SALLIB)	
+    $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 

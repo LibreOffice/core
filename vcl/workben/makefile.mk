@@ -60,7 +60,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(COMPHELPERLIB)	\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(VCLLIB)
 
@@ -92,7 +91,6 @@ APP3STDLIBS=	$(CPPULIB)			\
                 $(COMPHELPERLIB)	\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(VCLLIB)
 
@@ -110,7 +108,6 @@ APP4STDLIBS=    $(CPPULIB)                      \
                                 $(VCLLIB)                       \
                                 $(TOOLSLIB)             \
                                 $(SALLIB)                       \
-                                $(VOSLIB)                       \
                                 $(SOTLIB)                       \
                                 $(VCLLIB)
 
@@ -125,7 +122,6 @@ APP5STDLIBS=    $(CPPULIB)                      \
                                 $(VCLLIB)                       \
                                 $(TOOLSLIB)             \
                                 $(SALLIB)                       \
-                                $(VOSLIB)                       \
                                 $(SOTLIB)                       \
                                 $(VCLLIB)
 

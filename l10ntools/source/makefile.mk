@@ -81,7 +81,6 @@ APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 
 APP1STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 
 .IF "$(OS)"=="MACOSX"
@@ -98,7 +97,7 @@ APP2RPATH= NONE
 .IF "$(OS)"!="MACOSX"
 .ENDIF
 
-APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
+APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
@@ -114,7 +113,6 @@ APP3RPATH=  NONE
 .ENDIF
 APP3STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
@@ -125,7 +123,6 @@ APP4TARGET= gsiconv
 APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
 APP4STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 
 # tag checker for *.gsi
@@ -133,7 +130,6 @@ APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 
 # extractor and merger for *.cfg
@@ -146,7 +142,6 @@ APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $
 
 APP6STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 
 .IF "$(OS)"=="MACOSX"
@@ -163,7 +158,6 @@ APP7RPATH=  NONE
 
 APP7STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 
 .IF "$(OS)"=="MACOSX"
@@ -173,7 +167,7 @@ APP7STDLIBS+= \
 # 
 #APP8TARGET= treeconfig
 #APP8OBJS=   $(OBJ)$/treeconfig.obj $(OBJ)$/inireader.obj $(OBJ)$/export2.obj
-#APP8STDLIBS=$(TOOLSLIB) $(SALLIB) $(VOSLIB) $(ICUINLIB) $(STLPORT) 
+#APP8STDLIBS=$(TOOLSLIB) $(SALLIB)  $(ICUINLIB) $(STLPORT)
 
 # localizer for l10n framework
 APP9TARGET= localize_sl
@@ -183,7 +177,6 @@ APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)
 
 APP9STDLIBS+= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(ICUINLIB) \
             $(ICUUCLIB) \
             $(STLPORTLIB) \

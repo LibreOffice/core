@@ -27,9 +27,11 @@
  ************************************************************************/
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <l10ntools/vosapp.hxx>
 
 #include <osl/file.hxx>
+#include <osl/process.h>
+
+#include <l10ntools/vosapp.hxx>
 
 #include "export.hxx"
 #include "layoutparse.hxx"

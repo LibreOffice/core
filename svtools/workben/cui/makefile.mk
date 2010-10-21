@@ -47,7 +47,6 @@ APP4STDLIBS= \
             $(SVLLIB) \
             $(VCLLIB) \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 .IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
 APP4STDLIBS+= $(CPPULIB)
