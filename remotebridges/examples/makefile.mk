@@ -43,7 +43,6 @@ SHL1TARGET= officeclientsample
 
 SHL1STDLIBS= \
         $(SALLIB)	\
-        $(VOSLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) 
 

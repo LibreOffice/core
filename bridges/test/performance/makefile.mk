@@ -53,7 +53,6 @@ APP1STDLIBS+= -lstdc++
 APP1STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(VOSLIB)	\
             $(SALLIB)
 
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
