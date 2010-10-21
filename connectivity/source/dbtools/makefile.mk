@@ -57,7 +57,6 @@ SHL1TARGET=	$(DBTOOLS_TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SALLIB)					\
     $(SALHELPERLIB)					\
     $(JVMACCESSLIB)				\

@@ -58,7 +58,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(VCLLIB)			\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)  -l$(LB)/fps_office.uno.lib
 

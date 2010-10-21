@@ -87,7 +87,6 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SALLIB)					\
     $(SALHELPERLIB)					\
     $(JVMACCESSLIB)				\

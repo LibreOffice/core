@@ -111,7 +111,6 @@ SHL2LINKFLAGS+=$(KAB_LIB)
 SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
-    $(VOSLIB)                   \
     $(SALLIB)                   \
     $(SALHELPERLIB)                   \
     $(DBTOOLSLIB)               \

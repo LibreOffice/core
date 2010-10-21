@@ -91,7 +91,6 @@ SHL1STDLIBS+=\
         $(UCBHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(VOSLIB) \
         $(SALLIB) \
         $(LIBXML2LIB) \
 

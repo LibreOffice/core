@@ -101,7 +101,6 @@ SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
-    $(VOSLIB)                   \
     $(SALLIB)                   \
     $(DBTOOLSLIB)               \
     $(COMPHELPERLIB)            \

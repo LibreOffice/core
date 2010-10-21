@@ -89,12 +89,11 @@ SHL1OBJS= $(SLOFILES)
 SHL1STDLIBS=\
     $(UNOTOOLSLIB)\
     $(SALLIB)\
-    $(VOSLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(COMPHELPERLIB)\
     $(TOOLSLIB)
-    
+
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"

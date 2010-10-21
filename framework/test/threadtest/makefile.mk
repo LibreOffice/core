@@ -40,20 +40,19 @@ USE_DEFFILE=		TRUE
 
 APP1TARGET= 	threadtest
 
-APP1OBJS=		$(SLO)$/threadtest.obj							\
+APP1OBJS=       $(SLO)$/threadtest.obj \
                 $(SLO)$/lockhelper.obj
 
 DEPOBJFILES=$(APP1OBJS)
 
 # [ed] 6/16/02 Add the transaction manager library on OS X
 
-APP1STDLIBS=	$(CPPULIB)										\
-                $(CPPUHELPERLIB)								\
-                $(SALLIB)										\
-                $(VOSLIB)										\
+APP1STDLIBS=	$(CPPULIB) \
+                $(CPPUHELPERLIB) \
+                $(SALLIB) \
                 $(VCLLIB)
 
-APP1DEPN=		$(INC)$/threadhelp$/threadhelpbase.hxx			\
+APP1DEPN=       $(INC)$/threadhelp$/threadhelpbase.hxx			\
                 $(INC)$/threadhelp$/transactionbase.hxx			\
                 $(INC)$/threadhelp$/transactionmanager.hxx		\
                 $(INC)$/threadhelp$/transactionguard.hxx		\

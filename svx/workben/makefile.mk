@@ -47,7 +47,6 @@ APP1TARGET= $(TARGET)
 APP1OBJS=	$(OBJFILES)
 APP1LIBS=	$(LB)$/svx.lib
 APP1STDLIBS=$(TOOLSLIB) 		\
-            $(VOSLIB)			\
             $(SO2LIB)			\
             $(SVTOOLLIB)		\
             $(SVLLIB)			\

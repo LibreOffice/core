@@ -82,7 +82,7 @@ COMPONENT_CONFIG_SCHEMA=$(TARGET)2.xcs
 SLOFILES=\
         $(SLO)$/MDriver.obj						\
         $(SLO)$/MServices.obj
-            
+
 # --- MOZAB BASE Library -----------------------------------
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
@@ -152,7 +152,6 @@ SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SALLIB)					\
     $(SALHELPERLIB) \
     $(DBTOOLSLIB)				\

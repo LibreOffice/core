@@ -56,7 +56,7 @@ SHL1LIBS= \
     $(SLB)$/accessibility.lib	\
     $(SLB)$/editeng.lib \
     $(SLB)$/outliner.lib \
-    $(SLB)$/xml.lib 
+    $(SLB)$/xml.lib
 
 SHL1STDLIBS= \
              $(XMLOFFLIB) \
@@ -75,7 +75,6 @@ SHL1STDLIBS= \
              $(UCBHELPERLIB) \
              $(CPPUHELPERLIB) \
              $(CPPULIB) \
-             $(VOSLIB) \
              $(SALLIB) \
              $(SALHELPERLIB) \
              $(ICUUCLIB)

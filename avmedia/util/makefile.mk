@@ -38,7 +38,7 @@ GEN_HID_OTHER=TRUE
 # --- Resources ---------------------------------
 
 RESLIB1NAME=$(TARGET)
-RESLIB1IMAGES=$(PRJ)$/res	
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=			\
     $(SRS)$/viewer.srs		\
     $(SRS)$/framework.srs
@@ -48,13 +48,13 @@ RESLIB1SRSFILES=			\
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/viewer.lib		\
-    $(SLB)$/framework.lib	
-                
+    $(SLB)$/framework.lib
+
 # ==========================================================================
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(TARGET)
-SHL1STDLIBS=$(UNOTOOLSLIB) $(TOOLSLIB) $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(SVTOOLLIB) $(SVLLIB) $(SFXLIB) $(VOSLIB)
+SHL1STDLIBS=$(UNOTOOLSLIB) $(TOOLSLIB) $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(SVTOOLLIB) $(SVLLIB) $(SFXLIB)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 

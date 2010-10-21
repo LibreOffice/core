@@ -116,7 +116,6 @@ SHL1STDLIBS=    \
                 $(SVTOOLLIB)        \
                 $(SVLLIB)        	\
                 $(I18NISOLANGLIB)   \
-                $(VOSLIB)           \
                 $(VCLLIB)           \
                 $(TKLIB)            \
                 $(CPPULIB)          \
@@ -156,7 +155,6 @@ SHL2STDLIBS=    \
                 $(COMPHELPERLIB)                    \
                 $(CPPUHELPERLIB)                    \
                 $(CPPULIB)                          \
-                $(VOSLIB)                           \
                 $(SALLIB)
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def

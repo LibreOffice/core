@@ -53,8 +53,8 @@ APP1OBJS=\
     $(OBJ)$/searchdemo.obj
 
 APP1STDLIBS=\
-    $(SALLIB) \
-    $(VOSLIB)
+    $(SALLIB)
+
 
 APP1LIBS=\
     $(SLB)/jaqe.lib \

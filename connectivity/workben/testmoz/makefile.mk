@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ OBJFILES=       $(OBJ)$/main.obj
 
 
 APPSTDLIBS=$(SALLIB) \
-        $(VOSLIB) \
+         \
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
     $(UCBHELPERLIB)	\
     $(DBTOOLSLIB)	\
     $(COMPHELPERLIB)
-            
+
 
 # ... cfgapi ..............................
 
@@ -57,14 +57,14 @@ APP1OBJS=       $(OBJFILES)
 APP1STDLIBS = $(APPSTDLIBS)
 
 
-    
+
 APP2TARGET = mozThread
 APP2OBJS   = $(OBJ)$/initUNO.obj	\
      $(OBJ)$/mozthread.obj
-                 
+
 APP2STDLIBS = $(APPSTDLIBS)
 
 # --- Targets ------------------------------------------------------
-    
+
 .INCLUDE :      target.mk
 

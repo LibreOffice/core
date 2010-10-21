@@ -78,7 +78,6 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(TOOLSLIB)					\
     $(SVLLIB)				\
     $(UNOTOOLSLIB)				\

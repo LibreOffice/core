@@ -57,18 +57,6 @@ RCFILES=ooverinfo2.rc
 LINKFLAGSAPPGUI!:=	$(LINKFLAGSAPPGUI:s/-bind_at_load//)
 .ENDIF # MACOSX
 
-#.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "NETBSD"
-## #74158# linux needs sal/vos/tools at end of link list, solaris needs it first,
-## winXX is handled like solaris for now
-#APP1_STDPRE=
-#APP1_STDPOST=$(CPPULIB) $(CPPUHELPERLIB) $(UNOLIB) $(TOOLSLIB) \
-#	$(VOSLIB) $(SALLIB)
-#.ELSE
-#APP1_STDPRE=$(SALLIB) $(VOSLIB) $(TOOLSLIB) $(UNOLIB) $(CPPULIB) \
-#	$(CPPUHELPERLIB)
-#APP1_STDPOST=
-#.ENDIF
-
 RESLIB1NAME=		dkt
 RESLIB1IMAGES=		$(PRJ)$/res
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs
@@ -218,7 +206,7 @@ ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
 .IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
-    
+
 ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST)
 .ENDIF # "$(LINK_SO)"=="TRUE"
 
