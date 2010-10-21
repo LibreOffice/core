@@ -380,7 +380,7 @@ private:
     ByteString      aStarName; // no idee what this should be
 
 protected:
-    NAMESPACE_VOS( OMutex ) aMutex;
+    osl::Mutex      aMutex;
 
     USHORT          nStarMode;
     SolarFileList   aFileList;
