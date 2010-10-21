@@ -128,6 +128,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     ,m_nMaxResultRecords( -1 )
     ,m_aNameMapper(NULL)
     ,m_eSDBCAddressType(SDBCAddress::Unknown)
+    ,m_bForceLoadTable(false)
 {
     m_pDriver->acquire();
 
