@@ -1576,6 +1576,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
     static SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_FLAGS),    0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ISDATALA), 0,  &getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_NUMBERFO), 0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
@@ -1753,6 +1754,11 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
     else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
         aRet <<= mbHasHiddenMember;
+    else if (aNameStr.EqualsAscii(SC_UNO_FLAGS))
+    {
+        sal_Int32 nFlags = 0;       // tabular data: all orientations are possible
+        aRet <<= nFlags;
+    }
     else
     {
         DBG_ERROR("unknown property");

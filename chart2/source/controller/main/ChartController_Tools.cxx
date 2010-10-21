@@ -827,16 +827,14 @@ bool ChartController::executeDispatch_Delete()
     else
     {
         //remove additional shape
-        uno::Reference< drawing::XShape > xShape( m_aSelection.getSelectedAdditionalShape() );
-        if( xShape.is() )
+        impl_ClearSelection();
         {
-            impl_ClearSelection();
+            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            if ( m_pDrawViewWrapper )
             {
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-                if( m_pDrawViewWrapper )
-                    m_pDrawViewWrapper->UnmarkAll();
+                m_pDrawViewWrapper->DeleteMarked();
+                bReturn = true;
             }
-            bReturn = DrawModelWrapper::removeShape( xShape );
         }
     }
     return bReturn;

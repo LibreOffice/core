@@ -2255,7 +2255,9 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
         {
             if (pDrawLayer)
             {
-                unsigned long nOldHeights = GetRowHeight(nStartRow, nEndRow);
+                // #i115025# When comparing to nNewHeight for the whole range, the height
+                // including hidden rows has to be used (same behavior as 3.2).
+                unsigned long nOldHeights = mpRowHeights->getSumValue(nStartRow, nEndRow);
                 // FIXME: should we test for overflows?
                 long nHeightDif = (long) (unsigned long) nNewHeight *
                     (nEndRow - nStartRow + 1) - nOldHeights;
@@ -3100,10 +3102,13 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
     {
-        long x = GetColOffset( MAXCOL + 1 );
-        long y = GetRowOffset( MAXROW + 1 );
-        x = (long) ((double) x * HMM_PER_TWIPS);
-        y = (long) ((double) y * HMM_PER_TWIPS);
+        double fValX = GetColOffset( MAXCOL + 1 ) * HMM_PER_TWIPS;
+        double fValY = GetRowOffset( MAXROW + 1 ) * HMM_PER_TWIPS;
+        const long nMax = ::std::numeric_limits<long>::max();
+        // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
+        // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
+        long x = ( fValX > (double)nMax ) ? nMax : (long) fValX;
+        long y = ( fValY > (double)nMax ) ? nMax : (long) fValY;
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;
