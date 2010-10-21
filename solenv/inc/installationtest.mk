@@ -80,7 +80,7 @@ my_javaenv = \
 # smoketestoo_native:
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
 $(MISC)/$(TARGET)/installation.flag : $(shell \
-        ls $(installationtest_instset)/Lib0_*_install-arc_$(defaultlangiso).zip)
+        ls $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip)
     $(MKDIRHIER) $(@:d)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
     unzip $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip \
