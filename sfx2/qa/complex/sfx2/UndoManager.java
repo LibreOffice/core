@@ -43,6 +43,7 @@ import com.sun.star.util.InvalidStateException;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
+import complex.sfx2.undo.WriterDocumentTest;
 import java.util.Stack;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -66,21 +67,27 @@ public class UndoManager
     }
 
     @Test
+    public void checkWriterUndo() throws Exception
+    {
+        impl_checkUndo( WriterDocumentTest.class, true );
+    }
+
+    @Test
     public void checkCalcUndo() throws Exception
     {
-        impl_checkUndo( CalcDocumentTest.class );
+        impl_checkUndo( CalcDocumentTest.class, false );
     }
 
     @Test
     public void checkDrawUndo() throws Exception
     {
-        impl_checkUndo( DrawDocumentTest.class );
+        impl_checkUndo( DrawDocumentTest.class, false );
     }
 
     @Test
     public void checkImpressUndo() throws Exception
     {
-        impl_checkUndo( ImpressDocumentTest.class );
+        impl_checkUndo( ImpressDocumentTest.class, false );
     }
 
     @After
@@ -197,7 +204,7 @@ public class UndoManager
         private String  m_mostRecentlyRedone = null;
     };
 
-    private void impl_checkUndo( final Class i_testClass ) throws Exception
+    private void impl_checkUndo( final Class i_testClass, final boolean i_fakeTestForNow ) throws Exception
     {
         final Constructor ctor = i_testClass.getConstructor( XMultiServiceFactory.class );
         final DocumentTest test = (DocumentTest)ctor.newInstance( getORB() );
@@ -205,6 +212,23 @@ public class UndoManager
         m_currentDocument = test.getDocument();
         test.initializeDocument();
         test.verifyInitialDocumentState();
+
+        if ( i_fakeTestForNow )
+        {
+            // Writer does not yet have an UndoManager in the current phase of the implementation. Once it has, we
+            // this complete branch, which barely tests anything (except perhaps the DocumentTest implementation),
+            // can vanish.
+            test.doSingleModification();
+            test.verifySingleModificationDocumentState();
+            test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            test.verifyInitialDocumentState();
+            final int expectedUndoSteps = test.doMultipleModifications();
+            for ( int i=0; i<expectedUndoSteps; ++i )
+                test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            test.verifyInitialDocumentState();
+            test.getDocument().close();
+            return;
+        }
 
         final XUndoManager undoManager = getUndoManager( test.getDocument() );
         undoManager.clear();
