@@ -47,7 +47,6 @@
 #include <svl/itemprop.hxx>
 #include "misc.hxx"
 #include "defs.hxx"
-#include <vos/refernce.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans {

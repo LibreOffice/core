@@ -36,6 +36,7 @@
 #include <helper/oinstanceprovider.hxx>
 #include <classes/servicemanager.hxx>
 #include <macros/debug.hxx>
+#include <osl/process.h>
 
 #include <defines.hxx>
 
@@ -68,14 +69,12 @@
 #include <svtools/unoiface.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vos/process.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::rtl                           ;
-using namespace ::vos                           ;
 using namespace ::comphelper                    ;
 using namespace ::framework                     ;
 using namespace ::com::sun::star::uno           ;
@@ -167,13 +166,12 @@ void FrameWork::impl_analyzeCommandArguments()
     m_bUsePlugIn = sal_False;   // depends from "/plugin"
 
     // Then step over all given arguments and search for supported one.
-    OStartupInfo    aInfo       ;
     OUString        sArgument   ;
-    sal_uInt32      nCount      = aInfo.getCommandArgCount();
+    sal_uInt32      nCount = osl_getCommandArgCount();
     for ( sal_uInt32 nArgument=0; nArgument<nCount; ++nArgument )
     {
         // If extraction of current argument successfull ...
-        if ( aInfo.getCommandArg( nArgument, sArgument ) == osl_Process_E_None )
+        if ( osl_getCommandArg( nArgument, &sArgument.pData ) == osl_Process_E_None )
         {
             // ... search for matching with supported values.
             if ( sArgument == COMMANDARGUMENT_PLUGIN )

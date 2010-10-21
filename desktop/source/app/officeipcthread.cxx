@@ -35,7 +35,7 @@
 #include "dispatchwatcher.hxx"
 #include <memory>
 #include <stdio.h>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -436,7 +436,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     ::rtl::OUString aUserInstallPath;
     ::rtl::OUString aDummy;
 
-    ::vos::OStartupInfo aInfo;
     OfficeIPCThread* pThread = new OfficeIPCThread;
 
     pThread->maPipeIdent = OUString( RTL_CONSTASCII_USTRINGPARAM( "SingleOfficeIPC_" ) );
@@ -460,7 +459,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     OUString            aIniName;
 
-    aInfo.getExecutableFile( aIniName );
+    osl_getExecutableFile( &aIniName.pData );
+
     sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
     if ( lastIndex > 0 )
     {

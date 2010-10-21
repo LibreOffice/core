@@ -54,7 +54,7 @@
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <unotools/processfactory.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -335,15 +335,14 @@ void XCDGenerator::impl_printSyntax()
 *//*-*************************************************************************************************************/
 void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
 {
-    ::vos::OStartupInfo aInfo                                   ;
     ::rtl::OUString     sArgument                               ;
     sal_Int32           nArgument   = 0                         ;
-    sal_Int32           nCount      = aInfo.getCommandArgCount();
+    sal_Int32           nCount      = osl_getCommandArgCount();
     sal_Int32           nMinCount   = 0                         ;
 
     while( nArgument<nCount )
     {
-        aInfo.getCommandArg( nArgument, sArgument );
+        osl_getCommandArg( nArgument, &sArgument.pData );
 /*OBSOLETE
         //_____________________________________________________________________________________________________
         // look for "-fis=..."

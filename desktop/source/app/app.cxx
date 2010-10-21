@@ -115,6 +115,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <osl/module.h>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <osl/signal.h>
 #include <rtl/uuid.h>
 #include <rtl/uri.hxx>
@@ -143,8 +144,6 @@
 #include <unotools/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
-#include "vos/process.hxx"
-
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
@@ -162,7 +161,6 @@
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
-using namespace vos;
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
@@ -313,8 +311,7 @@ void FatalError(const ::rtl::OUString& sMessage)
     ::rtl::OUString sProductKey = ::utl::Bootstrap::getProductKey();
     if ( ! sProductKey.getLength())
     {
-        ::vos::OStartupInfo aInfo;
-        aInfo.getExecutableFile( sProductKey );
+        osl_getExecutableFile( &sProductKey.pData );
 
         ::sal_uInt32 nLastIndex = sProductKey.lastIndexOf('/');
         if ( nLastIndex > 0 )
@@ -845,9 +842,8 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         ::rtl::OUString        aUserInstallURL;
         ::rtl::OUString        aProductKey;
         ::rtl::OUString        aTemp;
-        ::vos::OStartupInfo aInfo;
 
-        aInfo.getExecutableFile( aProductKey );
+        osl_getExecutableFile( &aProductKey.pData );
         sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
         if ( lastIndex > 0 )
             aProductKey = aProductKey.copy( lastIndex+1 );
@@ -2646,9 +2642,8 @@ void Desktop::OpenClients()
     else
     {
         OUString            aIniName;
-        ::vos::OStartupInfo aInfo;
 
-        aInfo.getExecutableFile( aIniName );
+        osl_getExecutableFile( &aIniName.pData );
         sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
         if ( lastIndex > 0 )
         {

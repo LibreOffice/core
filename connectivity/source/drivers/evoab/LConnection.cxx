@@ -39,7 +39,7 @@
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <tools/debug.hxx>
 #include "LDebug.hxx"
 #include "diagnose_ex.h"
@@ -116,18 +116,30 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
     ::rtl::OUString aArg2 = ::rtl::OUString::createFromAscii(OEvoabDriver::getEVOAB_CLI_ARG_OUTPUT_FILE_PREFIX());
     aArg2 += aWorkingDirPath;
     aArg2 += getDriver()->getEvoFolderListFileName();
-    OArgumentList aArgs(2,&aArg1,&aArg2);
+
+    const sal_uInt32 nArgsCount = 2;
+    rtl_uString* pPargs[nArgsCount] = { aArg1.pData, aArgs2.pData };
 
     EVO_TRACE_STRING("OEvoabConnection::construct()::aCLICommand = %s\n", aCLICommand );
     EVO_TRACE_STRING("OEvoabConnection::construct()::aWorkingDirPath = %s\n", aWorkingDirPath );
     EVO_TRACE_STRING("OEvoabConnection::construct()::aArg1 = %s\n", aArg1 );
     EVO_TRACE_STRING("OEvoabConnection::construct()::aArg2 = %s\n", aArg2 );
-    OProcess aApp( aCLICommand,aWorkingDirPath);
-    OSL_VERIFY_EQUALS(
-        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath),aArgs),
-        OProcess::E_None,
-        "Error at execute evolution-addressbook-export to get VCards");
 
+    oslProcess aProcess;
+    if ( osl_Process_E_None != osl_executeProcess(
+                aCLICommand.pData,
+                pArgs,
+                nArgsCount,
+                osl_Process_HIDDEN | osl_Process_WAIT | osl_Process_SEARCHPATH,
+                NULL,
+                aWorkingDirPath.pData,
+                NULL, 0,
+                &aProcess ) )
+    {
+        OSL_TRACE("Error at execute evolution-addressbook-export to get VCards");
+        ::dbtools::throwGenericSQLException(
+                ::rtl::OUString::createFromAscii("Error at execute evolution-addressbook-export to get VCards"),NULL);
+    }
 
     Sequence<PropertyValue> aDriverParam;
     ::std::vector<PropertyValue> aParam;

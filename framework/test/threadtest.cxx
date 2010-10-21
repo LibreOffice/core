@@ -51,8 +51,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/random.h>
-#include <vos/process.hxx>
-#include <vos/thread.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>
@@ -78,7 +77,6 @@
 
 using namespace ::rtl       ;
 using namespace ::osl       ;
-using namespace ::vos       ;
 using namespace ::framework ;
 
 //_________________________________________________________________________________________________________________
@@ -693,16 +691,15 @@ void TestApplication::Main()
     // Parse command line.
     // Attention: All parameter are required and must exist!
     // syntax: "threadtest.exe <testcount> <threadcount> <loops> <owner>"
-    OStartupInfo    aInfo       ;
     OUString        sArgument   ;
     sal_Int32       nArgument   ;
-    sal_Int32       nCount      = aInfo.getCommandArgCount();
+    sal_Int32       nCount      = osl_getCommandArgCount();
 
     LOG_ASSERT2( nCount!=4 ,"TestApplication::Main()" , "Wrong argument line detected!")
 
     for( nArgument=0; nArgument<nCount; ++nArgument )
     {
-        aInfo.getCommandArg( nArgument, sArgument );
+        osl_getCommandArg( nArgument, &sArgument.pData );
         if( nArgument== 0 ) nTestCount  =sArgument.toInt32();
         if( nArgument== 1 ) nThreadCount=sArgument.toInt32();
         if( nArgument== 2 ) nLoops      =sArgument.toInt32();

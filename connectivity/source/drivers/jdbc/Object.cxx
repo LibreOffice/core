@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include "java/tools.hxx"
 #include "java/sql/SQLException.hxx"
-#include <vos/process.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/uno/Sequence.hxx>

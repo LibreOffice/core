@@ -29,7 +29,7 @@
 #define _PROCESS_HXX
 
 #include <tools/string.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 #include <map>
 
@@ -39,9 +39,12 @@ typedef Environment::value_type EnvironmentVariable;
 class Process
 {
     // Internal members and methods
-    vos::OArgumentList *pArgumentList;
-    vos::OEnvironment *pEnvList;
-    vos::OProcess *pProcess;
+    sal_uInt32                  m_nArgumentCount;
+    rtl_uString               **m_pArgumentList;
+    sal_uInt32                  m_nEnvCount;
+    rtl_uString               **m_pEnvList;
+    rtl::OUString               m_aProcessName;
+    oslProcess                  m_pProcess;
     BOOL ImplIsRunning();
     long ImplGetExitCode();
     BOOL bWasGPF;

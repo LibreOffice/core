@@ -148,6 +148,7 @@
 
 #include "i18npool/lang.h"
 
+#include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/module.h"
 #include "osl/mutex.hxx"
@@ -274,10 +275,6 @@
 #include "vcl/window.hxx"
 #include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
-
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
-#include "vos/process.hxx"
 
 #include "xmlscript/xmldlg_imexp.hxx"
 #include "xmlscript/xmllib_imexp.hxx"

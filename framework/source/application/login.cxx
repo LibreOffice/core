@@ -51,7 +51,7 @@
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/event.hxx>
@@ -81,7 +81,6 @@
 //_________________________________________________________________________________________________________________
 
 using namespace ::rtl                       ;
-using namespace ::vos                       ;
 using namespace ::comphelper                ;
 using namespace ::framework                 ;
 using namespace ::com::sun::star::uno       ;
@@ -250,12 +249,10 @@ void LoginApplication::Main()
 //*****************************************************************************************************************
 void LoginApplication::impl_parseCommandline()
 {
-    // Use vos::OStartupInfo for access to command line.
     // Step over all arguments, search for supported ones and try to get his values.
     // Set it on our member. Caller of this method must control setted values.
-    OStartupInfo aInfo;
 
-    sal_uInt32  nCount      =   aInfo.getCommandArgCount()  ;
+    sal_uInt32  nCount = osl_getCommandArgCount();
     sal_uInt32  nArgument   =   0                           ;
     OUString    sArgument                                   ;
     OUString    sValue                                      ;
@@ -272,7 +269,7 @@ void LoginApplication::impl_parseCommandline()
     {
         // .. but work with valid ones only!
         // Don't check values here. Caller of this method must decide between wrong and allowed values!
-        aInfo.getCommandArg( nArgument, sArgument );
+        osl_getCommandArg( nArgument, &sArgument.pData );
 
         //_____________________________________________________________________________________________________
         // Look for "-f=<temp. file name>"

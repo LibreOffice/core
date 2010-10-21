@@ -46,7 +46,6 @@
 #include <comphelper/types.hxx>
 #include "LFolderList.hxx"
 #include "connectivity/CommonTools.hxx"
-#include <vos/process.hxx>
 #include <osl/process.h>
 #include <tools/debug.hxx>
 #include <map>
@@ -359,7 +358,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             aArg2 += ::rtl::OUString(pOEvoabConnection->getExtension());
             ::rtl::OUString aArg3 = ::rtl::OUString::createFromAscii(pOEvoabConnection->getDriver()->getEVOAB_CLI_ARG_OUTPUT_FORMAT());
 
-            OArgumentList aArgs(3,&aArg1,&aArg2,&aArg3);
+            const sal_uInt32 nArgsCount = 3;
+            rtl_uString *pArgs[nArgsCount] = { aArg1.pData, aArg2.pData, aArg3.pData };
 
             EVO_TRACE_STRING( "OEvoabDatabaseMetaData::getTables()::aCLICommand = %s\n", aCLICommand );
             EVO_TRACE_STRING( "OEvoabDatabaseMetaData::getTables()::aWorkingDir = %s\n", aWorkingDir );
@@ -367,11 +367,20 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             EVO_TRACE_STRING( "OEvoabDatabaseMetaData::getTables()::aArg2 = %s\n", aArg2 );
             EVO_TRACE_STRING( "OEvoabDatabaseMetaData::getTables()::aArg3 = %s\n", aArg3 );
 
-            OProcess aApp( aCLICommand,aWorkingDir);
-            OSL_VERIFY_EQUALS(
-                aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath),aArgs),
-                OProcess::E_None,
-                "Error at execute evolution-addressbook-exporter to get VCards" );
+            oslProcess aProcess;
+            if ( osl_Process_E_None != osl_executeProcess(
+                        aCLICommand.pData,
+                        pArgs,
+                        nArgsCount,
+                        osl_Process_HIDDEN | osl_Process_WAIT | osl_Process_SEARCHPATH,
+                        NULL,
+                        aWorkingDir.pData,
+                        NULL, 0,
+                        &aProcess ) )
+            {
+                OSL_TRACE("Error at execute evolution-addressbook-export to get VCards");
+                throw SQLException();
+            }
 
             bMoreData = pFolderList->next();
         }

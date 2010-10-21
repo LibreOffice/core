@@ -30,8 +30,6 @@
 #include "precompiled_sfx2.hxx"
 #include <vcl/status.hxx>
 #include <vcl/msgbox.hxx>
-#include <vos/process.hxx>
-#include <vos/xception.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

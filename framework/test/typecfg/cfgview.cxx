@@ -51,7 +51,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -115,7 +115,6 @@
 //_________________________________________________________________________________________________________________
 
 using namespace ::std                       ;
-using namespace ::vos                       ;
 using namespace ::rtl                       ;
 using namespace ::framework                 ;
 using namespace ::comphelper                ;
@@ -249,16 +248,14 @@ void CFGView::impl_printSyntax()
 *//*-*************************************************************************************************************/
 void CFGView::impl_parseCommandLine( AppMember& rMember )
 {
-    ::vos::OStartupInfo aInfo                                   ;
     ::rtl::OUString     sArgument                               ;
     sal_Int32           nArgument   = 0                         ;
-    sal_Int32           nCount      = aInfo.getCommandArgCount();
+    sal_Int32           nCount      =  osl_getCommandArgCount();
     sal_Int32           nMinCount   = 0                         ;
 
     while( nArgument<nCount )
     {
-        aInfo.getCommandArg( nArgument, sArgument );
-
+        osl_getCommandArg( nArgument, &sArgument.pData );
         //_____________________________________________________________________________________________________
         // look for "-dir="
         if( sArgument.compareTo( ARGUMENT_DIRNAME, ARGUMENTLENGTH ) == ARGUMENTFOUND )

@@ -54,7 +54,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <i18npool/mslangid.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/resmgr.hxx>

@@ -38,7 +38,6 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
-#include <vos/process.hxx>
 #include <tools/simplerm.hxx>
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>

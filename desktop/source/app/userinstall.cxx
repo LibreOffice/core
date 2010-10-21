@@ -42,7 +42,6 @@
 #include <osl/diagnose.h>
 #include <osl/security.hxx>
 #include <rtl/ref.hxx>
-#include <vos/process.hxx>
 
 #include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>

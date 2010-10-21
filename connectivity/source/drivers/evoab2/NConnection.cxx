@@ -39,7 +39,6 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/process.hxx>
 #include <tools/debug.hxx>
 #include "NDebug.hxx"
 #include <comphelper/sequence.hxx>

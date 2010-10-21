@@ -41,7 +41,6 @@
 #include <svl/itempool.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/helpopt.hxx>
-#include <vos/process.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Exception.hpp>

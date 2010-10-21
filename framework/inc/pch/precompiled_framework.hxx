@@ -487,9 +487,7 @@
 #include "vcl/window.hxx"
 #include "vcl/wintypes.hxx"
 
-#include "osl/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/thread.hxx"
+
 
 //---MARKER---
 #endif

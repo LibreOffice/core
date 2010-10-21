@@ -46,7 +46,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -533,9 +533,9 @@ ELockType& LockHelper::implts_getLockType()
         {
             static ELockType eType = FALLBACK_LOCKTYPE;
 
-            ::vos::OStartupInfo aEnvironment;
+            ::rtl::OUString     aEnvVar( ENVVAR_LOCKTYPE );
             ::rtl::OUString     sValue      ;
-            if( aEnvironment.getEnvironment( ENVVAR_LOCKTYPE, sValue ) == ::vos::OStartupInfo::E_None )
+            if( osl_getEnvironment( aEnvVar.pData, &sValue.pData ) == osl_Process_E_None )
             {
                 eType = (ELockType)(sValue.toInt32());
             }

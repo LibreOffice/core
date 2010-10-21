@@ -32,7 +32,6 @@
 #include <stack>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
-#include <vos/process.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/ucb/ContentAction.hpp>
@@ -80,6 +79,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <srcharg.hxx>
+#include <osl/security.hxx>
 
 using ucbhelper::getLocalFileURL;
 using ucbhelper::getSystemPathFromFileURL;
@@ -433,7 +433,7 @@ sal_Bool Ucb::init()
         try
         {
             rtl::OUString aPipe;
-            vos::OSecurity().getUserIdent(aPipe);
+            osl::Security().getUserIdent(aPipe);
             uno::Sequence< uno::Any > aArgs(4);
             aArgs[0] <<= m_aConfigurationKey1;
             aArgs[1] <<= m_aConfigurationKey2;

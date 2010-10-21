@@ -86,7 +86,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <rtl/ustring.hxx>
-#include <vos/process.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/mediadescriptor.hxx>

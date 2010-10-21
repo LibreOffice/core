@@ -38,7 +38,7 @@
 #include "connectivity/dbexception.hxx"
 #include "TConnection.hxx"
 #include "diagnose_ex.h"
-#include <vos/process.hxx>
+
 #include <osl/process.h>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -64,8 +64,8 @@ const char sNewLine[] = "\015\012"; // \015\012 and not \n
 #define CURRENT_DB_VERSION      "13.01.00"
 #define CURRENT_KERNEL_VERSION  "13.01"
 
-#define OPROCESS_ADABAS     (OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath)
-#define OPROCESS_ADABAS_DBG (OProcess::TOption_Wait | OProcess::TOption_SearchPath)
+#define OPROCESS_ADABAS     (osl_Process_HIDDEN | osl_Process_WAIT | osl_Process_SEARCHPATH)
+#define OPROCESS_ADABAS_DBG (osl_Process_WAIT | osl_Process_SEARCHPATH)
 
 
 using namespace connectivity;
@@ -144,7 +144,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace utl;
 using namespace osl;
-using namespace vos;
 using namespace ::dbtools;
 
     sal_Bool LoadFunctions(oslModule pODBCso);
@@ -882,19 +881,23 @@ void ODriver::clearDatabase(const ::rtl::OUString& sDBName)
     ::rtl::OUString sCommand;
 #if defined(WIN) || defined(WNT)
     ::rtl::OUString sStop = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stop"));
-    OArgumentList aArgs(2,&sDBName,&sStop);
-    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_cons.exe"));
+    const sal_uInt32 nArgsCount = 2;
+    rtl_uString *pArgs[nArgsCount] = { sDBName.pData, sStop.pData };
 #else
-    OArgumentList aArgs(1,&sDBName);
     sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_clear"));
+    const sal_uInt32 nArgsCount = 1;
+    rtl_uString* pArgs[nArgsCount] = { sDBName.pData };
 #endif
 
-    OProcess aApp( sCommand,m_sDbWorkURL);
+    oslProcess aApp;
+
 #if OSL_DEBUG_LEVEL > 0
-    OProcess::TProcessError eError =
+    oslProcessError eError =
 #endif
-        aApp.execute( (OProcess::TProcessOption) OPROCESS_ADABAS, aArgs );
-    OSL_ENSURE( eError == OProcess::E_None, "ODriver::clearDatabase: calling the executable failed!" );
+        osl_executeProcess(sCommand.pData, pArgs, nArgsCount,
+                           OPROCESS_ADABAS, NULL, m_sDbWorkURL.pData,
+                           NULL, 0, &aApp);
+    OSL_ENSURE( eError == osl_Process_E_None, "ODriver::clearDatabase: calling the executable failed!" );
 }
 // -----------------------------------------------------------------------------
 void ODriver::createDb( const TDatabaseStruct& _aInfo)
@@ -988,7 +991,7 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
             const ::rtl::OUString& _CMD)
 {
     //  %XPARAM% -u %CONUSR%,%CONPWD% BINIT
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1022,12 +1025,16 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
         pFileStream->Flush();
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    oslProcess aApp;
+
 #if OSL_DEBUG_LEVEL > 0
-    OProcess::TProcessError eError =
+    oslProcesError eError =
 #endif
-        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
-    OSL_ENSURE( eError == OProcess::E_None, "ODriver::X_PARAM: calling the executable failed!" );
+        osl_executeProcess(sCommandFile.pData, NULL, 0,
+                           osl_Process_HIDDEN | osl_Process_WAIT,
+                           NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+    OSL_ENSURE( eError == osl_Process_E_None, "ODriver::X_PARAM: calling the executable failed!" );
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1052,18 +1059,25 @@ void ODriver::PutParam(const ::rtl::OUString& sDBName,
                       const ::rtl::OUString& rWhat,
                       const ::rtl::OUString& rHow)
 {
-    OArgumentList aArgs(3,&sDBName,&rWhat,&rHow);
+    const sal_uInt32 nArgsCount = 3;
+    rtl_uString* pArgs[nArgsCount] = { sDBName.pData, rWhat.pData, rHow.pData  };
+
     ::rtl::OUString sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("putparam"));
 #if defined(WIN) || defined(WNT)
     sCommand += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
 #endif
 
-    OProcess aApp(sCommand,m_sDbWorkURL);
+    oslProcess aApp;
+
+
 #if OSL_DEBUG_LEVEL > 0
-    OProcess::TProcessError eError =
+    oslProcesError eError =
 #endif
-        aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS,aArgs );
-    OSL_ENSURE( eError == OProcess::E_None, "ODriver::PutParam: calling the executable failed!" );
+        osl_executeProcess(sCommand.pData, pArgs, nArgsCount,
+                           OPROCESS_ADABAS,
+                           NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+
+    OSL_ENSURE( eError == osl_Process_E_None, "ODriver::PutParam: calling the executable failed!" );
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODriver::CreateFile(const ::rtl::OUString &_FileName,
@@ -1122,17 +1136,22 @@ int ODriver::X_START(const ::rtl::OUString& sDBName)
     ::rtl::OUString sArg3 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
     ::rtl::OUString sArg4 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBWindow"));
 
-    OArgumentList aArgs(4,&sArg1,&sDBName,&sArg3,&sArg4);
+    const sal_uInt32 nArgsCount = 4;
+    rtl_uString* pArgs[nArgsCount] = { sArg1.pData, sDBName.pData, sArg3.pData, sArg4.pData };
     sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("strt.exe"));
 #else
-    OArgumentList aArgs(1,&sDBName);
+    const sal_uInt32 nArgsCount = 1;
+    rtl_uString* pArgs[nArgsCount] = { sDBName.pData };
     sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_start"));
 #endif
 
-    OProcess aApp( sCommand ,m_sDbWorkURL);
-    OProcess::TProcessError eError = aApp.execute((OProcess::TProcessOption)OPROCESS_ADABAS,aArgs);
+    oslProcess aApp;
 
-    if(eError == OProcess::E_NotFound)
+    oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgsCount,
+                                                OPROCESS_ADABAS, NULL, m_sDbWorkURL.pData,
+                                                NULL, 0, &aApp);
+
+    if(eError == osl_Process_E_NotFound)
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
@@ -1142,10 +1161,11 @@ int ODriver::X_START(const ::rtl::OUString& sDBName)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-    OSL_ASSERT(eError == OProcess::E_None);
+    OSL_ASSERT(eError == osl_Process_E_None);
 
-    OProcess::TProcessInfo aInfo;
-    if(aApp.getInfo(OProcess::TData_ExitCode,&aInfo) == OProcess::E_None && aInfo.Code)
+    oslProcessInfo aInfo;
+
+    if(osl_getProcessInfo(aApp, osl_Process_EXITCODE, &aInfo) == osl_Process_E_None && aInfo.Code)
         return aInfo.Code;
 
     return 0;
@@ -1159,22 +1179,28 @@ int ODriver::X_STOP(const ::rtl::OUString& sDBName)
     ::rtl::OUString sArg1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-d"));
     ::rtl::OUString sArg2 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
 
-    OArgumentList aArgs(3,&sArg1,&sDBName,&sArg2);
+    const sal_uInt32 nArgsCount = 3;
+    rtl_uString* pArgs[nArgsCount] = { sArg1.pData, sDBName.pData, sArg3.pData };
     sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stp.exe"));
 #else
-    OArgumentList aArgs(1,&sDBName);
+    const sal_uInt32 nArgsCount = 1;
+    rtl_uString* pArgs[nArgsCount] = { sDBName.pData };
     sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_stop"));
 #endif
-    OProcess aApp( sCommand ,m_sDbWorkURL);
 
-    OProcess::TProcessError eError = aApp.execute((OProcess::TProcessOption)OPROCESS_ADABAS,aArgs);
+    oslProcess aApp;
 
+    oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgsCount,
+                                                OPROCESS_ADABAS, NULL, m_sDbWorkURL.pData,
+                                                NULL, 0, &aApp);
 
-    OSL_ASSERT(eError == OProcess::E_None);
-    if(eError != OProcess::E_None)
+    OSL_ASSERT(eError == osl_Process_E_None);
+    if(eError != osl_Process_E_None)
         return 1;
-        OProcess::TProcessInfo aInfo;
-    if(aApp.getInfo(OProcess::TData_ExitCode,&aInfo) == OProcess::E_None && aInfo.Code)
+
+    oslProcessInfo aInfo;
+
+    if(osl_getProcessInfo(aApp, osl_Process_EXITCODE, &aInfo) == osl_Process_E_None && aInfo.Code)
         return aInfo.Code;
 
     return 0;
@@ -1193,7 +1219,7 @@ void ODriver::XUTIL(const ::rtl::OUString& _rParam,
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
 
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
 
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
@@ -1219,12 +1245,17 @@ void ODriver::XUTIL(const ::rtl::OUString& _rParam,
         pFileStream->Flush();
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    oslProcess aApp;
+
+
 #if OSL_DEBUG_LEVEL > 0
-    OProcess::TProcessError eError =
+    oslProcesError eError =
 #endif
-        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
-    OSL_ENSURE( eError == OProcess::E_None, "ODriver::XUTIL: calling the executable failed!" );
+        osl_executeProcess(sCommandFile.pData, NULL, 0,
+                           osl_Process_HIDDEN | osl_Process_WAIT,
+                           NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+    OSL_ENSURE( eError == osl_Process_E_None, "ODriver::XUTIL: calling the executable failed!" );
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1247,7 +1278,7 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
 
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1276,12 +1307,17 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
         pFileStream->Flush();
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    oslProcess aApp;
+
+
 #if OSL_DEBUG_LEVEL > 0
-    OProcess::TProcessError eError =
+    oslProcesError eError =
 #endif
-        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
-    OSL_ENSURE( eError == OProcess::E_None, "ODriver::LoadBatch: calling the executable failed!" );
+        osl_executeProcess(sCommandFile.pData, NULL, 0,
+                           osl_Process_HIDDEN | osl_Process_WAIT,
+                           NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+    OSL_ENSURE( eError == osl_Process_E_None, "ODriver::LoadBatch: calling the executable failed!" );
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1439,7 +1475,7 @@ void ODriver::X_CONS(const ::rtl::OUString& sDBName,const ::rtl::OString& _ACTIO
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(_FILENAME,sPhysicalPath);
 
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1458,8 +1494,12 @@ void ODriver::X_CONS(const ::rtl::OUString& sDBName,const ::rtl::OString& _ACTIO
         pFileStream->Flush();
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
-    aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+    oslProcess aApp;
+
+    osl_executeProcess(sCommandFile.pData, NULL, 0,
+                       osl_Process_HIDDEN | osl_Process_WAIT,
+                       NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1522,7 +1562,7 @@ sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersio
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
 
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1538,8 +1578,12 @@ sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersio
                         << sNewLine;
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
-    aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS);
+    oslProcess aApp;
+
+    osl_executeProcess(sCommandFile.pData, NULL, 0,
+                       OPROCESS_ADABAS,
+                       NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1572,7 +1616,7 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
 
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1588,8 +1632,11 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
                         << sNewLine;
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
-    aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS);
+    oslProcess aApp;
+    osl_executeProcess(sCommandFile.pData, NULL, 0,
+                       OPROCESS_ADABAS,
+                       NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1622,7 +1669,7 @@ sal_Bool ODriver::isKernelVersion(const char* _pVersion)
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
 
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1633,8 +1680,11 @@ sal_Bool ODriver::isKernelVersion(const char* _pVersion)
                         << sNewLine;
     }
 
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
-    aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS);
+    oslProcess aApp;
+    osl_executeProcess(sCommandFile.pData, NULL, 0,
+                       OPROCESS_ADABAS,
+                       NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
+
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);
@@ -1733,7 +1783,7 @@ void ODriver::installSystemTables(  const TDatabaseStruct& _aInfo)
     XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESTART")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
 
 #else // UNX
-    String sCommandFile = generateInitFile();
+    ::rtl::OUString sCommandFile = generateInitFile();
     {
         ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
         pFileStream->Seek(STREAM_SEEK_TO_END);
@@ -1761,8 +1811,11 @@ void ODriver::installSystemTables(  const TDatabaseStruct& _aInfo)
         pFileStream->Flush();
     }
     // now execute the command
-    OProcess aApp(sCommandFile ,m_sDbWorkURL);
-    aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+
+    oslProcess aApp;
+    osl_executeProcess(sCommandFile.pData, NULL, 0,
+                       osl_Process_WAIT | osl_Process_HIDDEN,
+                       NULL, m_sDbWorkURL.pData, NULL, 0, &aApp);
 #if OSL_DEBUG_LEVEL < 2
     if(UCBContentHelper::Exists(sCommandFile))
         UCBContentHelper::Kill(sCommandFile);

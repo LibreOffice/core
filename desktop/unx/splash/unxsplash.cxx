@@ -28,7 +28,7 @@
 #include "unxsplash.hxx"
 #include <stdio.h>
 #include <unotools/bootstrap.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/sfx.hrc>
@@ -107,11 +107,10 @@ void SAL_CALL
 UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw ( RuntimeException )
 {
-    ::vos::OStartupInfo aInfo;
-    for ( sal_uInt32 i = 0; i < aInfo.getCommandArgCount(); i++ )
+    for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
         rtl::OUString aArg;
-        if ( aInfo.getCommandArg( i, aArg ) )
+        if ( osl_getCommandArg( i, &aArg.pData ) )
             break;
         if ( aArg.matchIgnoreAsciiCaseAsciiL( PIPE_ARG, sizeof( PIPE_ARG ) - 1, 0 ) )
         {

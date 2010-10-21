@@ -32,7 +32,7 @@
 
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
@@ -3486,8 +3486,8 @@ RTLFUNC(Shell)
     }
     else
     {
-        USHORT nOptions = vos::OProcess::TOption_SearchPath|
-            vos::OProcess::TOption_Detached;
+        oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
+
         String aCmdLine = rPar.Get(1)->GetString();
         // Zusaetzliche Parameter anhaengen, es muss eh alles geparsed werden
         if( nArgCount >= 4 )
@@ -3564,76 +3564,75 @@ RTLFUNC(Shell)
             nWinStyle = rPar.Get(2)->GetInteger();
             switch( nWinStyle )
             {
-                case 2:
-                    nOptions |= vos::OProcess::TOption_Minimized;
-                    break;
-                case 3:
-                    nOptions |= vos::OProcess::TOption_Maximized;
-                    break;
-                case 10:
-                    nOptions |= vos::OProcess::TOption_FullScreen;
-                    break;
+            case 2:
+                nOptions |= osl_Process_MINIMIZED;
+                break;
+            case 3:
+                nOptions |= osl_Process_MAXIMIZED;
+                break;
+            case 10:
+                nOptions |= osl_Process_FULLSCREEN;
+                break;
             }
 
             BOOL bSync = FALSE;
             if( nArgCount >= 5 )
                 bSync = rPar.Get(4)->GetBool();
             if( bSync )
-                nOptions |= vos::OProcess::TOption_Wait;
+                nOptions |= osl_Process_WAIT;
         }
-        vos::OProcess::TProcessOption eOptions =
-            (vos::OProcess::TProcessOption)nOptions;
-
 
         // #72471 Parameter aufbereiten
         std::list<String>::const_iterator iter = aTokenList.begin();
         const String& rStr = *iter;
         ::rtl::OUString aOUStrProg( rStr.GetBuffer(), rStr.Len() );
-        String aOUStrProgUNC = getFullPathUNC( aOUStrProg );
+        ::rtl::OUString aOUStrProgUNC = getFullPathUNC( aOUStrProg );
 
         iter++;
 
         USHORT nParamCount = sal::static_int_cast< USHORT >(
             aTokenList.size() - 1 );
-        ::rtl::OUString* pArgumentList = NULL;
-        //const char** pParamList = NULL;
+        rtl_uString** pParamList = NULL;
         if( nParamCount )
         {
-            pArgumentList = new ::rtl::OUString[ nParamCount ];
-            //pParamList = new const char*[ nParamCount ];
-            USHORT iList = 0;
-            while( iter != aTokenList.end() )
+            pParamList = new rtl_uString*[nParamCount];
+            for(int iList = 0; iter != aTokenList.end(); ++iList, ++iter)
             {
                 const String& rParamStr = (*iter);
-                pArgumentList[iList++] = ::rtl::OUString( rParamStr.GetBuffer(), rParamStr.Len() );
-                //pParamList[iList++] = (*iter).GetStr();
-                iter++;
+                const ::rtl::OUString aTempStr( rParamStr.GetBuffer(), rParamStr.Len());
+                pParamList[iList] = NULL;
+                rtl_uString_assign(&(pParamList[iList]), aTempStr.pData);
             }
         }
 
-        //const char* pParams = aParams.Len() ? aParams.GetStr() : 0;
-        vos::OProcess* pApp;
-        pApp = new vos::OProcess( aOUStrProgUNC );
-        BOOL bSucc;
-        if( nParamCount == 0 )
+        oslProcess pApp;
+        BOOL bSucc = osl_executeProcess(
+                    aOUStrProgUNC.pData,
+                    pParamList,
+                    nParamCount,
+                    nOptions,
+                    NULL,
+                    NULL,
+                    NULL, 0,
+                    &pApp ) == osl_Process_E_None;
+
+        osl_freeProcessHandle( pApp );
+
+        for(int j = 0; i < nParamCount; i++)
         {
-            bSucc = pApp->execute( eOptions ) == vos::OProcess::E_None;
+            rtl_uString_release(pParamList[j]);
+            pParamList[j] = NULL;
         }
-        else
-        {
-            vos::OArgumentList aArgList( pArgumentList, nParamCount );
-            bSucc = pApp->execute( eOptions, aArgList ) == vos::OProcess::E_None;
-        }
+
         long nResult = 0;
-        vos::OProcess::TProcessInfo aInfo;
         // We should return the identifier of the executing process when is running VBA, because method Shell(...) returns it in Excel.
-        if ( bSucc && SbiRuntime::isVBAEnabled() && pApp->getInfo( vos::OProcess::TData_Identifier, &aInfo ) == vos::OProcess::E_None )
+        if ( bSucc && SbiRuntime::isVBAEnabled())
         {
+            oslProcessInfo aInfo;
+            osl_getProcessInfo( pApp, osl_Process_IDENTIFIER, &aInfo );
             nResult = aInfo.Ident;
         }
 
-        delete pApp;
-        delete[] pArgumentList;
         if( !bSucc )
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         else

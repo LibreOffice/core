@@ -53,7 +53,6 @@
 #include <osl/file.hxx>
 #include <osl/module.h>
 #include <osl/security.hxx>
-#include <vos/process.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
@@ -84,7 +83,6 @@
 #define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
 using namespace rtl;
-using namespace vos;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
