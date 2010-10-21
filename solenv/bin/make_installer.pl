@@ -1421,8 +1421,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 $packagerootpath = $onepackage->{'destpath'};
                 installer::packagelist::resolve_packagevariables(\$packagerootpath, $allvariableshashref, 1);
-                # we put branding and common stuff into the same prefix on unixes => $packagerootpath must be the whole prefix, including product name and version
-                if ($installer::globals::isunix) { $packagerootpath .= "/$allvariableshashref->{'UNIXBASISROOTNAME'}$allvariableshashref->{'BRANDPACKAGEVERSION'}"; }
+                # we put branding and common stuff into the same prefix on unixes => $packagerootpath must be the whole prefix, including the product name
+                if ($installer::globals::isunix) { $packagerootpath .= "/$allvariableshashref->{'UNIXBASISROOTNAME'}"; }
                 if ( $^O =~ /darwin/i ) { $packagerootpath =~ s/\/opt\//\/Applications\//; }
             }
             else
