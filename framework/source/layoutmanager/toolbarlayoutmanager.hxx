@@ -238,6 +238,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
                                                                     SingleRowColumnWindowData& rRowColumnWindowData,
                                                                     const ::Size& rContainerSize );
         void             implts_setLayoutDirty();
+        void             implts_setLayoutInProgress( bool bInProgress = true );
+        bool             implts_isLayoutInProgress() const { return m_bLayoutInProgress; }
 
         //---------------------------------------------------------------------------------------------------------
         // lookup/container methods

@@ -2051,8 +2051,19 @@ throw (RuntimeException)
 
     parseResourceURL( aName, aElementType, aElementName );
     if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
-        m_pToolbarManager->dockToolbar( aName, DockingArea, Pos );
+    {
+        ReadGuard aReadLock( m_aLock );
+        uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
+        ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
+        aReadLock.unlock();
 
+        if ( pToolbarManager )
+        {
+            pToolbarManager->dockToolbar( aName, DockingArea, Pos );
+            if ( pToolbarManager->isLayoutDirty() )
+                doLayout();
+        }
+    }
     return sal_False;
 }
 
@@ -2065,7 +2076,11 @@ throw (RuntimeException)
     aReadLock.unlock();
 
     if ( pToolbarManager )
+    {
         bResult = pToolbarManager->dockAllToolbars();
+        if ( pToolbarManager->isLayoutDirty() )
+        doLayout();
+    }
     return bResult;
 }
 
@@ -2081,7 +2096,11 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
+    {
             bResult = pToolbarManager->floatToolbar( aName );
+            if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
+        }
     }
     return bResult;
 }
@@ -2098,7 +2117,11 @@ throw (uno::RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
+    {
             bResult = pToolbarManager->lockToolbar( aName );
+            if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
+        }
     }
     return bResult;
 }
@@ -2115,7 +2138,11 @@ throw (uno::RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
+    {
             bResult = pToolbarManager->unlockToolbar( aName );
+            if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
+        }
     }
     return bResult;
 }
@@ -2131,7 +2158,11 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
+    {
             pToolbarManager->setToolbarSize( aName, aSize );
+            if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
+        }
     }
 }
 
@@ -2146,7 +2177,11 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
+    {
             pToolbarManager->setToolbarPos( aName, aPos );
+            if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
+        }
     }
 }
 
@@ -2161,7 +2196,11 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
+    {
             pToolbarManager->setToolbarPosSize( aName, aPos, aSize );
+            if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
+    }
     }
 }
 
@@ -2281,7 +2320,7 @@ throw (uno::RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-            pToolbarManager->isToolbarLocked( aName );
+            return pToolbarManager->isToolbarLocked( aName );
     }
 
     return sal_False;
