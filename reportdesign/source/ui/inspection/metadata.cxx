@@ -173,9 +173,8 @@ namespace rptui
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
 
-        ::std::sort( aPropertyInfos, aPropertyInfos + s_nCount, PropertyInfoLessByName() );
+        ::std::sort( aPropertyInfos, aPropertyInfos + SAL_N_ELEMENTS(aPropertyInfos), PropertyInfoLessByName() );
 
         return s_pPropertyInfos;
     }
