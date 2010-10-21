@@ -40,7 +40,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <shellio.hxx>
-#include <pam.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <IMark.hxx>

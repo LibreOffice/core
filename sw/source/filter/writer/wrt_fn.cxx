@@ -34,7 +34,6 @@
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
-#include "pam.hxx"
 #include "node.hxx"
 #include "format.hxx"
 
