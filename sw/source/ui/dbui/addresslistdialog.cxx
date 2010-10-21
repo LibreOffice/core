@@ -519,6 +519,18 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
         pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         if(pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
+            /*
+             * We're a callback from a selection from a list box, which takes
+             * place on mouse down before mouse up. The next dialog also has a
+             * list box. Spawning it means this list box doesn't get the mouse
+             * down event. So it sticks on "making selection" mode. So if you
+             * cancel the next dialog and just move the mouse out of this entry
+             * and back then the dialog pops up again, without requiring a click
+             *
+             * Most expedient thing to do is to manually end the parent selection
+             * here.
+             */
+            pThis->m_aListLB.EndSelection();
             pThis->DetectTablesAndQueries(pSelect, !sTable.Len());
         }
         else
