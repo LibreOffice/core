@@ -34,7 +34,7 @@ TARGET=copying
 .INCLUDE: $(PRJ)/util/makefile.pmk
 #----------------------------------------------------------------
 
-IDLLIST:={$(subst,/,/ $(shell @$(FIND) $(IDLOUT) -type f | sed -e '/star.portal/d' -e'/star.webservices/d'))}
+IDLLIST:={$(subst,/,/ $(shell @$(FIND) $(IDLOUT)/com -type f))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
 DESTINCLUDELIST={$(subst,$(SOLARINCDIR),$(DESTDIRINC) $(INCLUDELIST))}
