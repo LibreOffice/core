@@ -658,10 +658,10 @@ void ScDocumentPool::CellStyleCreated( const String& rName )
     // Calling StyleSheetChanged isn't enough because the pool may still contain items
     // for undo or clipboard content.
 
-    sal_uInt16 nCount = GetItemCount(ATTR_PATTERN);
-    for (sal_uInt16 i=0; i<nCount; i++)
+    sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem(ATTR_PATTERN, i);
+        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem2(ATTR_PATTERN, i);
         if ( pPattern && pPattern->GetStyleSheet() == NULL )
         {
             const String* pStyleName = pPattern->GetStyleName();
