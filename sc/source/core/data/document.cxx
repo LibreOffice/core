@@ -127,10 +127,10 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
     if ( ValidTab(nTab) && !pTab[nTab] )
     {
-        String aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Tabelle"
+        String aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
         aString += String::CreateFromInt32(nTab+1);
         if ( _bNeedsNameCheck )
-            CreateValidTabName( aString );  // keine doppelten
+            CreateValidTabName( aString );  // no doubles
 
         pTab[nTab] = new ScTable(this, nTab, aString);
         pTab[nTab]->SetLoadingMedium(bLoadingMedium);
@@ -272,18 +272,17 @@ void ScDocument::CreateValidTabName(String& rName) const
 {
     if ( !ValidTabName(rName) )
     {
-        // neu erzeugen
+        // Find new one
 
         const String aStrTable( ScResId(SCSTR_TABLE) );
         BOOL         bOk   = FALSE;
 
-        //  vorneweg testen, ob der Prefix als gueltig erkannt wird
-        //  wenn nicht, nur doppelte vermeiden
+        // First test if the prefix is valid, if so only avoid doubles
         BOOL bPrefix = ValidTabName( aStrTable );
-        DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
+        OSL_ENSURE(bPrefix, "Invalid Table Name");
         SCTAB nDummy;
 
-        SCTAB nLoops = 0;       // "zur Sicherheit"
+        SCTAB nLoops = 0;       // "for safety messures"
         for ( SCTAB i = nMaxTableNumber+1; !bOk && nLoops <= MAXTAB; i++ )
         {
             rName  = aStrTable;
@@ -295,13 +294,13 @@ void ScDocument::CreateValidTabName(String& rName) const
             ++nLoops;
         }
 
-        DBG_ASSERT(bOk, "kein gueltiger Tabellenname gefunden");
+        OSL_ENSURE(bOk, "No Valid Table name found.");
         if ( !bOk )
             rName = aStrTable;
     }
     else
     {
-        // uebergebenen Namen ueberpruefen
+        // testing the supplied Name
 
         if ( !ValidNewTabName(rName) )
         {
@@ -326,7 +325,7 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
 {
     SCTAB   nTabCount = GetTableCount();
     BOOL    bValid = ValidTab(nTabCount);
-    if ( !bExternalDocument )   // sonst rName == "'Doc'!Tab", vorher pruefen
+    if ( !bExternalDocument )   // else test rName == "'Doc'!Tab" first
         bValid = (bValid && ValidNewTabName(rName));
     if (bValid)
     {
@@ -413,7 +412,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
             if (nTabCount > 1)
             {
                 BOOL bOldAutoCalc = GetAutoCalc();
-                SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+                SetAutoCalc( FALSE );   // avoid multiple calculations
                 ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
                 DelBroadcastAreasInRange( aRange );
 
@@ -468,8 +467,8 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();
-                // Excel-Filter loescht einige Tables waehrend des Ladens,
-                // Listener werden erst nach dem Laden aufgesetzt
+                // Excel-Filter deletes some Tables while loading, Listeners will
+                // only be triggered after the loading is done.
                 if ( !bInsertingFromOtherDoc )
                 {
                     for (i = 0; i <= MAXTAB; i++)
@@ -498,7 +497,7 @@ BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef 
         if (pTab[nTab])
         {
             if ( bExternalDocument )
-                bValid = TRUE;      // zusammengesetzter Name
+                bValid = TRUE;      // composed name
             else
                 bValid = ValidTabName(rName);
             for (i=0; (i<=MAXTAB) && bValid; i++)
@@ -605,7 +604,7 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -646,12 +645,12 @@ BOOL ScDocument::IsNegativePage( SCTAB nTab ) const
 
 
 /* ----------------------------------------------------------------------------
-    benutzten Bereich suchen:
+    used search area:
 
-    GetCellArea  - nur Daten
-    GetTableArea - Daten / Attribute
-    GetPrintArea - beruecksichtigt auch Zeichenobjekte,
-                    streicht Attribute bis ganz rechts / unten
+    GetCellArea  - Only Data
+    GetTableArea - Data / Attributes
+    GetPrintArea - intended for character objects,
+                    sweeps attributes all the way to bottom / right
 ---------------------------------------------------------------------------- */
 
 
@@ -717,7 +716,7 @@ bool ScDocument::ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol,
     return pTab[nTab]->ShrinkToUsedDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bColumnsOnly);
 }
 
-//  zusammenhaengender Bereich
+// connected area
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                               SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown ) const
@@ -848,14 +847,14 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
     BOOL bTest = TRUE;
     BOOL bRet = FALSE;
     BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+    SetAutoCalc( FALSE );   // avoid mulitple calculations
     for ( i = nStartTab; i <= nEndTab && bTest; i++)
         if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= pTab[i]->TestInsertRow( nStartCol, nEndCol, nSize );
     if (bTest)
     {
-        // UpdateBroadcastAreas muss vor UpdateReference gerufen werden, damit nicht
-        // Eintraege verschoben werden, die erst bei UpdateReference neu erzeugt werden
+        // UpdateBroadcastAreas have to be called before UpdateReference, so that entries
+        // aren't shifted that would be rebuild at UpdateReference
 
         // handle chunks of consecutive selected sheets together
         SCTAB nTabRangeStart = nStartTab;
@@ -942,7 +941,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     }
 
     BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+    SetAutoCalc( FALSE );   // avoid multiple calculations
 
     // handle chunks of consecutive selected sheets together
     SCTAB nTabRangeStart = nStartTab;
@@ -1051,7 +1050,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
     BOOL bTest = TRUE;
     BOOL bRet = FALSE;
     BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+    SetAutoCalc( FALSE );   // avoid multiple calculations
     for ( i = nStartTab; i <= nEndTab && bTest; i++)
         if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= pTab[i]->TestInsertCol( nStartRow, nEndRow, nSize );
@@ -1132,7 +1131,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     }
 
     BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+    SetAutoCalc( FALSE );   // avoid multiple calculations
 
     // handle chunks of consecutive selected sheets together
     SCTAB nTabRangeStart = nStartTab;
@@ -1209,7 +1208,7 @@ void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
                             ScRange& rColRange, BOOL& rInsCol, BOOL& rDelCol,
                             ScRange& rRowRange, BOOL& rInsRow, BOOL& rDelRow )
 {
-    DBG_ASSERT( rOld.aStart == rNew.aStart, "FitBlock: Anfang unterschiedlich" );
+    OSL_ENSURE( rOld.aStart == rNew.aStart, "FitBlock: Beginning is different" );
 
     rInsCol = rDelCol = rInsRow = rDelRow = FALSE;
 
@@ -1349,7 +1348,7 @@ void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+    SetAutoCalc( FALSE );   // avoid multiple calculations
     for (SCTAB i = 0; i <= MAXTAB; i++)
         if (pTab[i])
             if ( rMark.GetTableSelect(i) || bIsUndo )
@@ -1367,7 +1366,7 @@ void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
     if ( VALIDTAB(nTab) && pTab[nTab] )
     {
         BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+        SetAutoCalc( FALSE );   // avoid multiple calculations
         pTab[nTab]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag);
         SetAutoCalc( bOldAutoCalc );
     }
@@ -1484,7 +1483,7 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     if (VALIDTAB(nTab1) && VALIDTAB(nTab2))
     {
         BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-        pDestDoc->SetAutoCalc( FALSE );     // Mehrfachberechnungen vermeiden
+        pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
             if (pTab[i] && pDestDoc->pTab[i])
@@ -1508,7 +1507,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     if (VALIDTAB(nTab1) && VALIDTAB(nTab2))
     {
         BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-        pDestDoc->SetAutoCalc( FALSE );     // Mehrfachberechnungen vermeiden
+        pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
         if (nTab1 > 0)
             CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, FALSE, pDestDoc, pMarks );
 
@@ -1536,7 +1535,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
     if( !pDestDoc->aDocName.Len() )
         pDestDoc->aDocName = aDocName;
     BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-    pDestDoc->SetAutoCalc( FALSE );     // Mehrfachberechnungen vermeiden
+    pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
     for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab(); i++)
         if (pTab[i] && pDestDoc->pTab[i])
             pTab[i]->CopyToTable(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
@@ -1557,7 +1556,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     SCTAB nTab2 = aNewRange.aEnd.Tab();
 
     BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-    pDestDoc->SetAutoCalc( FALSE );     // Mehrfachberechnungen vermeiden
+    pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
     if (nTab1 > 0)
         CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, FALSE, pDestDoc, pMarks );
 
@@ -1578,14 +1577,14 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
                             ScDocument* pClipDoc, const ScMarkData* pMarks,
                             bool bAllTabs, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions)
 {
-    DBG_ASSERT( bAllTabs || pMarks, "CopyToClip: ScMarkData fehlt" );
+    OSL_ENSURE( bAllTabs || pMarks, "CopyToClip: ScMarkData fails" );
 
     if (bIsClip)
         return;
 
     if (!pClipDoc)
     {
-        DBG_ERROR("CopyToClip: no ClipDoc");
+        OSL_TRACE("CopyToClip: no ClipDoc");
         pClipDoc = SC_MOD()->GetClipDoc();
     }
 
@@ -1663,7 +1662,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         PutInOrder( nRow1, nRow2 );
         if (!pClipDoc)
         {
-            DBG_ERROR("CopyTabToClip: no ClipDoc");
+            OSL_TRACE("CopyTabToClip: no ClipDoc");
             pClipDoc = SC_MOD()->GetClipDoc();
         }
 
@@ -1683,8 +1682,8 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 
 void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsLink )
 {
-    DBG_ASSERT( bIsClip && pTransClip && pTransClip->bIsClip,
-                    "TransposeClip mit falschem Dokument" );
+    OSL_ENSURE( bIsClip && pTransClip && pTransClip->bIsClip,
+                    "TransposeClip with wrong Document" );
 
         //  initialisieren
         //  -> pTransClip muss vor dem Original-Dokument geloescht werden!
@@ -1704,7 +1703,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
             pData->SetIndex(nIndex);
     }
 
-        //  Daten
+    // The data
 
     ScRange aClipRange = GetClipParam().getWholeRange();
     if ( ValidRow(aClipRange.aEnd.Row()-aClipRange.aStart.Row()) )
@@ -1712,7 +1711,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
         for (SCTAB i=0; i<=MAXTAB; i++)
             if (pTab[i])
             {
-                DBG_ASSERT( pTransClip->pTab[i], "TransposeClip: Tabelle nicht da" );
+                OSL_ENSURE( pTransClip->pTab[i], "TransposeClip: Table not there" );
                 pTab[i]->TransposeClip( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
                                             aClipRange.aEnd.Col(), aClipRange.aEnd.Row(),
                                             pTransClip->pTab[i], nFlags, bAsLink );
@@ -1740,7 +1739,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
     }
     else
     {
-        DBG_ERROR("TransposeClip: zu gross");
+        OSL_TRACE("TransposeClip: Too big");
     }
 
         //  Dies passiert erst beim Einfuegen...
@@ -2010,7 +2009,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
 
                 // drawing layer must be created before calling CopyFromClip
                 // (ScDocShell::MakeDrawLayer also does InitItems etc.)
-                DBG_ASSERT( pDrawLayer, "CopyBlockFromClip: No drawing layer" );
+                OSL_ENSURE( pDrawLayer, "CopyBlockFromClip: No drawing layer" );
                 if ( pDrawLayer )
                 {
                     //  For GetMMRect, the row heights in the target document must already be valid
@@ -2592,7 +2591,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         BOOL bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
 
         BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );                   // Mehrfachberechnungen vermeiden
+        SetAutoCalc( FALSE );                   // avoid multiple calculations
 
         SCTAB nCount = GetTableCount();
         for (SCTAB i=0; i<nCount; i++)
@@ -2644,7 +2643,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
         BOOL bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
 
         BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );                   // Mehrfachberechnungen vermeiden
+        SetAutoCalc( FALSE );                   // avoid multiple calculations
 
         ScRange aArea;
         rMark.GetMultiMarkArea( aArea );

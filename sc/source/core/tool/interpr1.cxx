@@ -87,7 +87,7 @@ using namespace formula;
 using ::std::auto_ptr;
 
 //-----------------------------------------------------------------------------
-// Funktionen
+// Functions
 //-----------------------------------------------------------------------------
 
 
@@ -1156,7 +1156,7 @@ void ScInterpreter::ScAnd()
                                 bHaveValue = TRUE;
                                 nRes &= ( GetCellValue( aAdr, pCell ) != 0.0 );
                             }
-                            // else: Xcl setzt hier keinen Fehler
+                            // else: Xcl raises no error here
                         }
                     }
                     break;
@@ -1254,7 +1254,7 @@ void ScInterpreter::ScOr()
                                 bHaveValue = TRUE;
                                 nRes |= ( GetCellValue( aAdr, pCell ) != 0.0 );
                             }
-                            // else: Xcl setzt hier keinen Fehler
+                            // else: Xcl raises no error here
                         }
                     }
                     break;
@@ -2497,7 +2497,7 @@ void ScInterpreter::ScN()
 
 
 void ScInterpreter::ScTrim()
-{   // trimmt nicht nur sondern schnibbelt auch doppelte raus!
+{   // Doesn't only trim but writes out twice!
     String aVal( GetString() );
     aVal.EraseLeadingChars();
     aVal.EraseTrailingChars();
@@ -2506,7 +2506,7 @@ void ScInterpreter::ScTrim()
     register const sal_Unicode* const pEnd = p + aVal.Len();
     while ( p < pEnd )
     {
-        if ( *p != ' ' || p[-1] != ' ' )    // erster kann kein ' ' sein, -1 ist also ok
+        if ( *p != ' ' || p[-1] != ' ' )    // ' ' can't be first, -1 is fine too
             aStr += *p;
         p++;
     }
@@ -2607,7 +2607,7 @@ void ScInterpreter::ScT()
                 PushString( EMPTY_STRING );
             else
             {
-                //  wie GetString()
+                // like GetString()
                 GetCellString( aTempStr, pCell );
                 PushString( aTempStr );
             }
@@ -3388,7 +3388,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                     ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
                     if (aValIter.GetFirst(fVal, nErr))
                     {
-                        //  Schleife aus Performance-Gruenden nach innen verlegt:
+                        // placed the loop on the inside for performance reasons:
                         aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
                         switch( eFunc )
                         {
@@ -4678,7 +4678,7 @@ void ScInterpreter::ScCountIf()
                 else
                 {
                     ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                    // Entry.nField im Iterator bei Spaltenwechsel weiterschalten
+                    // Keep Entry.nField in iterator on column change
                     aCellIter.SetAdvanceQueryParamEntryField( TRUE );
                     if ( aCellIter.GetFirst() )
                     {

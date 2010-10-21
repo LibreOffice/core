@@ -92,12 +92,12 @@ public:
 };
 
 enum ScIterFunc {
-    ifSUM,                              // Aufsummieren
-    ifSUMSQ,                            // Quadratsummen
-    ifPRODUCT,                          // Multiplizieren
-    ifAVERAGE,                          // Durchschnitt
-    ifCOUNT,                            // Anzahl Werte
-    ifCOUNT2,                           // Anzahl Werte (nichtleer)
+    ifSUM,                              // Add up
+    ifSUMSQ,                            // Sums of squares
+    ifPRODUCT,                          // Product
+    ifAVERAGE,                          // Average
+    ifCOUNT,                            // Count Values
+    ifCOUNT2,                           // Count Values (not empty)
     ifMIN,                              // Minimum
     ifMAX                               // Maximum
 };

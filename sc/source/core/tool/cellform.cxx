@@ -107,12 +107,12 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                     pFCell->GetFormula( rString );
                 else
                 {
-                    // #62160# Ein via Interpreter gestartetes Makro, das hart
-                    // auf Formelzellen zugreift, bekommt einen CellText, auch
-                    // wenn dadurch ein weiterer Interpreter gestartet wird,
-                    // aber nicht wenn diese Zelle gerade interpretiert wird.
-                    // IdleCalc startet generell keine weiteren Interpreter,
-                    // um keine Err522 (zirkulaer) zu bekommen.
+                    // #62160# A macro started from the interpreter, which has
+                    // access to Formular Cells, becomes a CellText, even if
+                    // that triggers further interpretation, except if those
+                    // cells are already being interpreted.
+                    // IdleCalc generally doesn't trigger futher interpretation,
+                    // as not to get Err522 (circular).
                     if ( pFCell->GetDocument()->IsInInterpreter() &&
                             (!pFCell->GetDocument()->GetMacroInterpretLevel()
                             || pFCell->IsRunning()) )
@@ -123,7 +123,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                     {
                         USHORT nErrCode = pFCell->GetErrCode();
 
-                        // erst nach dem Interpretieren (GetErrCode) das Zahlformat holen:
+                        // get the number format only after interpretation (GetErrCode):
                         if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
                             nFormat = pFCell->GetStandardFormat( rFormatter,
                                 nFormat );
