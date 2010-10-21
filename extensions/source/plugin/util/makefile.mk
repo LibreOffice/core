@@ -87,7 +87,6 @@ SHL1STDLIBS+= \
     $(SVLLIB)			\
         $(UNOTOOLSLIB)                     \
     $(TOOLSLIB)			\
-    $(VOSLIB)			\
     $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\

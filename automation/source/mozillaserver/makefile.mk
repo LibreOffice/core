@@ -109,7 +109,7 @@ UNOTYPES= \
 
 #SHL1TARGET=iserverproxy
 #SHL1STDLIBS= \
-#		$(VOSLIB) $(OSLLIB) $(RTLLIB) $(TOOLSLIB) \
+#		 $(OSLLIB) $(RTLLIB) $(TOOLSLIB) \
 #		$(CPPULIB)		\
 #		$(CPPUHELPERLIB)	\
 #		$(UNOLIB)	\

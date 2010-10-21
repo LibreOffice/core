@@ -69,9 +69,8 @@ OBJFILES=\
 
 APP1TARGET=pluginapp.bin
 APP1OBJS=$(OBJFILES)
-APP1STDLIBS=\
-    $(VOSLIB)					\
-    $(SALLIB)
+APP1STDLIBS= $(SALLIB)
+
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"
 APP1STDLIBS+=-lXm -lXt $(X11LINK_DYNAMIC) -ldl
 .ELSE
@@ -98,7 +97,7 @@ DIRECT :=-z nodefs $(DIRECT)
 .ENDIF
 .ENDIF          # "$(PKGCONFIG_ROOT)"!=""
 .ENDIF
-    
+
 
 APP1DEF=	$(MISC)$/$(TARGET).def
 

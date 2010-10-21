@@ -59,7 +59,6 @@ SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS= \
         $(SALLIB)	\
-        $(VOSLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)
 

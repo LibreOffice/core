@@ -52,7 +52,6 @@ SLOFILES=		$(SLO)$/multiplexer.obj				\
 #		$(ONELIB)	 \
 #		$(USRLIB)	 \
 #		$(UNOLIB)	 \
-#		$(VOSLIB) 	 \
 #		$(OSLLIB) 	 \
 #		$(TOOLSLIB) 	 \
 #		$(RTLLIB)
