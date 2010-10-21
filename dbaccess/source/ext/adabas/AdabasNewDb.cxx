@@ -29,7 +29,6 @@
 #include "AdabasNewDb.hxx"
 #include "AdabasNewDb.hrc"
 
-#include <vos/process.hxx>
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
 #include <sfx2/passwd.hxx>
@@ -60,7 +59,6 @@
 using namespace adabasui;
 using namespace ucbhelper;
 using namespace utl;
-using namespace vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;

@@ -1628,7 +1628,7 @@ sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix:
             TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
             for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
             {
-                if ( (*(*aOldRowIter)).getRow() == *_aIter )
+                if ( (*aOldRowIter)->getRow() == *_aIter )
                     *_aIter = new ORowSetValueVector(nColumnCount);
             }
         }
