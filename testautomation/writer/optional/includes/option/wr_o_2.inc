@@ -508,7 +508,13 @@ testcase tToolsOptionsWriterPrint1
     if bCheckboxes(10) then LeereSeitenDrucken.UnCheck else LeereSeitenDrucken.Check
     if bCheckboxes(11) then AusDruckereinstellung.UnCheck  else AusDruckereinstellung.Check
 
-    if (Keine.IsChecked = True) then NurNotizen.Check else Keine.Check
+    if Keine.IsEnabled then
+        if (Keine.IsChecked = True) then
+            NurNotizen.Check
+        else
+            Keine.Check
+        endif
+    endif
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -612,7 +618,13 @@ testcase tToolsOptionsWriterPrint1
     LeereSeitenDrucken.UnCheck
     AusDruckereinstellung.UnCheck
 
-    if (NurNotizen.IsChecked = True) then Dokumentende.Check else NurNotizen.Check
+    if NurNotizen.IsEnabled then
+        if (NurNotizen.IsChecked = True) then
+            Dokumentende.Check
+        else
+            NurNotizen.Check
+        endif
+    endif
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -666,7 +678,13 @@ testcase tToolsOptionsWriterPrint1
     LeereSeitenDrucken.Check
     AusDruckereinstellung.Check
 
-    if (Dokumentende.IsChecked = True) then Seitenende.Check else Dokumentende.Check
+    if Dokumentende.IsEnabled then
+        if (Dokumentende.IsChecked = True) then
+            Seitenende.Check
+        else
+            Dokumentende.Check
+        endif
+    endif
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
