@@ -23,42 +23,32 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ../..
+PRJ = ../../../../..
 PRJNAME = test
-TARGET = cpp
+TARGET = java
 
-ENABLE_EXCEPTIONS = TRUE
-VISIBILITY_HIDDEN = TRUE
+.IF "$(OOO_JUNIT_JAR)" != ""
+
+PACKAGE = org/openoffice/test
+JAVAFILES = \
+    Argument.java \
+    FileHelper.java \
+    OfficeConnection.java \
+    OfficeFileUrl.java \
+    TestArgument.java
+JARFILES = juh.jar ridl.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+JARTARGET = test.jar
+JARCLASSDIRS = $(PACKAGE)
+JARCLASSPATH = $(JARFILES)
+ # expect $(OOO_JUNIT_JAR) to be on CLASSPATH wherever test.jar is used (also,
+ # on Windows, $(OOO_JUNIT_JAR) could be an absolute pathname with drive letter
+ # like X:/path and some JVMs would refuse to load test.jar if its MANIFEST.MF
+ # Class-Path contained such a pathname that looks like an unknown URL with
+ # scheme X)
+
+.END
 
 .INCLUDE: settings.mk
-
-CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
-
-SLOFILES = \
-    $(SLO)/getargument.obj \
-    $(SLO)/gettestargument.obj \
-    $(SLO)/officeconnection.obj \
-    $(SLO)/toabsolutefileurl.obj \
-    $(SLO)/uniquepipename.obj
-
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = NONE
-SHL1STDLIBS = \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(CPPUNITLIB) \
-    $(SALLIB)
-SHL1TARGET = test
-SHL1USE_EXPORTS = name
-DEF1NAME = $(SHL1TARGET)
-
 .INCLUDE: target.mk
