@@ -32,6 +32,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include "svx/sdtaitm.hxx"
 
 
@@ -313,6 +314,8 @@ class XclExpChart;
 class XclExpChartObj : public XclObj, protected XclExpRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > XShapeRef;
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
@@ -321,10 +324,15 @@ public:
 
     /** Writes the OBJ record and the entire chart substream. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm );
+    void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
 private:
     typedef ScfRef< XclExpChart > XclExpChartRef;
     XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
+    XShapeRef mxShape;
+    XChartDocRef mxChartDoc;
 };
 
 // ============================================================================

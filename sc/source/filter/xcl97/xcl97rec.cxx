@@ -933,19 +933,17 @@ ExcBof8_Base::ExcBof8_Base()
     nFileHistory    = 0x00000000;
     nLowestBiffVer  = 0x00000006;   // Biff8
 }
-
-static void
-WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
+void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& rShape, SCTAB nTab )
 {
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
-    awt::Point  aTopLeft    = rObj.GetShape()->getPosition();
-    awt::Size   aSize       = rObj.GetShape()->getSize();
+    awt::Point  aTopLeft    = rShape->getPosition();
+    awt::Size   aSize       = rShape->getSize();
     Rectangle   aLocation( aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height );
-    ScRange     aRange      = rStrm.GetRoot().GetDoc().GetRange( rObj.GetTab(), aLocation );
+    ScRange     aRange      = rStrm.GetRoot().GetDoc().GetRange( nTab, aLocation );
     Rectangle   aRangeRect  = rStrm.GetRoot().GetDoc().GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
             aRange.aEnd.Col()-1, aRange.aEnd.Row()-1,
-            rObj.GetTab() );
+            nTab );
 
 
     pDrawing->startElement( FSNS( XML_xdr, XML_from ),
@@ -967,6 +965,11 @@ WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_rowOff ),
             MM100toEMU( aLocation.Bottom() - aRangeRect.Bottom() ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_to ) );
+}
+
+void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
+{
+    WriteFromTo( rStrm, rObj.GetShape(), rObj.GetTab() );
 }
 
 static void

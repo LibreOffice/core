@@ -42,6 +42,10 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <set>
 #include <rtl/ustrbuf.h>
@@ -83,6 +87,8 @@
 
 #include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/export/chartexport.hxx>
+#include <oox/export/utils.hxx>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -104,7 +110,10 @@ using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::container::XNamed;
 using ::oox::drawingml::DrawingML;
+using ::oox::drawingml::ChartExport;
 
 #define  HMM2XL(x)        ((x)/26.5)+0.5
 
@@ -1046,7 +1055,7 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
-    XclExpRoot( rObjMgr.GetRoot() )
+    XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape )
 {
     // create the MSODRAWING record contents for the chart object
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -1080,6 +1089,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     ScfPropertySet aShapeProp( xShape );
     Reference< XModel > xModel;
     aShapeProp.GetProperty( xModel, CREATE_OUSTRING( "Model" ) );
+    mxChartDoc.set( xModel,UNO_QUERY );
     ::com::sun::star::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, CREATE_OUSTRING( "BoundRect" ) );
     Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
@@ -1096,6 +1106,118 @@ void XclExpChartObj::Save( XclExpStream& rStrm )
     XclObj::Save( rStrm );
     // chart substream
     mxChart->Save( rStrm );
+}
+
+void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
+{
+    OSL_TRACE("XclExpChartObj::SaveXml -- Entry point to export chart");
+    sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
+
+    // FIXME: two cell? it seems the two cell anchor is incorrect.
+    pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
+            XML_editAs, "oneCell",
+            FSEND );
+    Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
+    if (xPropSet.is())
+    {
+        XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
+        Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
+        ChartExport aChartExport( XML_xdr, pDrawing, xModel, &rStrm, DrawingML::DOCUMENT_XLSX );
+        static sal_Int32 nChartCount = 0;
+        nChartCount++;
+        aChartExport.WriteChartObj( mxShape, nChartCount );
+        // TODO: get the correcto chart number
+        //WriteChartObj( pDrawing, rStrm );
+    }
+
+    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData),
+            // OOXTODO: XML_fLocksWithSheet
+            // OOXTODO: XML_fPrintsWithSheet
+            FSEND );
+    pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
+}
+
+void XclExpChartObj::WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm )
+{
+    pDrawing->startElement(  FSNS( XML_xdr, XML_graphicFrame ), FSEND );
+
+    pDrawing->startElement(  FSNS( XML_xdr, XML_nvGraphicFramePr ), FSEND );
+
+    // TODO: get the correct chart name chart id
+    OUString sName = CREATE_OUSTRING("Object 1");
+    Reference< XNamed > xNamed( mxShape, UNO_QUERY );
+    if (xNamed.is())
+    {
+        sName = xNamed->getName();
+    }
+    sal_Int32 nID = rStrm.GetUniqueId();
+
+    pDrawing->singleElement( FSNS( XML_xdr, XML_cNvPr ),
+                          XML_id,     I32S( nID ),
+                          XML_name,   USS( sName ),
+                          FSEND );
+
+    pDrawing->singleElement( FSNS( XML_xdr, XML_cNvGraphicFramePr ),
+                          FSEND );
+
+    pDrawing->endElement( FSNS( XML_xdr, XML_nvGraphicFramePr ) );
+
+    // visual chart properties
+    //pDrawing->startElement( FSNS( XML_xdr, XML_xfrm ), FSEND );
+    WriteShapeTransformation( pDrawing, mxShape );
+    //pDrawing->endElement( FSNS( XML_xdr, XML_xfrm ) );
+
+    // writer chart object
+    pDrawing->startElement( FSNS( XML_a, XML_graphic ), FSEND );
+    pDrawing->startElement( FSNS( XML_a, XML_graphicData ),
+                       XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                       FSEND );
+    OUString sId;
+    // TODO:
+    static sal_Int32 nChartCount = 0;
+    nChartCount++;
+    sax_fastparser::FSHelperPtr pChart = rStrm.CreateOutputStream(
+            XclXmlUtils::GetStreamName( "xl/", "charts/chart", nChartCount ),
+            XclXmlUtils::GetStreamName( "../", "charts/chart", nChartCount ),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+            &sId );
+
+    pDrawing->singleElement(  FSNS( XML_c, XML_chart ),
+            FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_r, XML_id ), XclXmlUtils::ToOString( sId ).getStr(),
+            FSEND );
+
+    rStrm.PushStream( pChart );
+    Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
+    ChartExport aChartExport( XML_xdr, pChart, xModel, &rStrm, DrawingML::DOCUMENT_XLSX );
+    aChartExport.ExportContent();
+
+    rStrm.PopStream();
+
+    pDrawing->endElement( FSNS( XML_a, XML_graphicData ) );
+    pDrawing->endElement( FSNS( XML_a, XML_graphic ) );
+    pDrawing->endElement( FSNS( XML_xdr, XML_graphicFrame ) );
+
+}
+
+void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+{
+    ::com::sun::star::awt::Point aPos = rXShape->getPosition();
+    ::com::sun::star::awt::Size aSize = rXShape->getSize();
+
+    pFS->startElementNS( XML_xdr, XML_xfrm,
+                          XML_flipH, bFlipH ? "1" : NULL,
+                          XML_flipV, bFlipV ? "1" : NULL,
+                          XML_rot, nRotation ? I32S( nRotation ) : NULL,
+                          FSEND );
+
+    pFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( aPos.X ) ), XML_y, IS( MM100toEMU( aPos.Y ) ), FSEND );
+    pFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( MM100toEMU( aSize.Width ) ), XML_cy, IS( MM100toEMU( aSize.Height ) ), FSEND );
+
+    pFS->endElementNS( XML_xdr, XML_xfrm );
 }
 
 // ============================================================================

@@ -254,6 +254,8 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
     virtual void                SaveXml( XclExpXmlStream& rStrm );
+    static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
+    static void                 WriteFromTo( XclExpXmlStream& rStrm, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, SCTAB nTab );
 
 private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
