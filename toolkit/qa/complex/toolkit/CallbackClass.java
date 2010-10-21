@@ -28,11 +28,11 @@
 package complex.toolkit;
 
 import com.sun.star.awt.XCallback;
-import lib.MultiMethodTest;
+// import lib.MultiMethodTest;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+// import com.sun.star.uno.XInterface;
+// import com.sun.star.uno.UnoRuntime;
+// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.awt.XRequestCallback</code>
@@ -44,15 +44,15 @@ import share.LogWriter;
  */
 public class CallbackClass implements XCallback{
 
-    private LogWriter log;
+    // private LogWriter log;
 
     private XMultiServiceFactory xMSF;
 
 
-    public CallbackClass(LogWriter log, XMultiServiceFactory xMSF ) {
+    public CallbackClass(XMultiServiceFactory xMSF ) {
 
         this.xMSF = xMSF;
-        this.log = log;
+        // this.log = log;
     }
 
 
@@ -62,6 +62,6 @@ public class CallbackClass implements XCallback{
      */
     public void notify( Object aData ) {
 
-        log.println("callback called successfully" );
+        System.out.println("callback called successfully" );
     }
 }
