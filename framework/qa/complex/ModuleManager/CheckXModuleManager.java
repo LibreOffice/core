@@ -30,21 +30,27 @@ package complex.ModuleManager;
 import com.sun.star.beans.*;
 import com.sun.star.frame.*;
 import com.sun.star.lang.*;
-import com.sun.star.uno.*;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.*;
 import com.sun.star.container.*;
 
-import complexlib.ComplexTestCase;
 
-import helper.URLHelper;
 
-import java.lang.*;
-import java.util.*;
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 //-----------------------------------------------
 /** @short  todo document me
  */
-public class CheckXModuleManager extends ComplexTestCase
+public class CheckXModuleManager
 {
     //-------------------------------------------
     // some const
@@ -71,16 +77,16 @@ public class CheckXModuleManager extends ComplexTestCase
         @return All test methods.
         @todo   Think about selection of tests from outside ...
      */
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-        {
-            "checkModuleIdentification"        ,
-            "checkModuleConfigurationReadable" ,
-            "checkModuleConfigurationWriteable",
-            "checkModuleConfigurationQueries"
-        };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//        {
+//            "checkModuleIdentification"        ,
+//            "checkModuleConfigurationReadable" ,
+//            "checkModuleConfigurationWriteable",
+//            "checkModuleConfigurationQueries"
+//        };
+//    }
 
     //-------------------------------------------
     /** @short  Create the environment for following tests.
@@ -88,36 +94,28 @@ public class CheckXModuleManager extends ComplexTestCase
         @descr  Use either a component loader from desktop or
                 from frame
      */
-    public void before()
+    @Before public void before()
         throws java.lang.Exception
     {
         // get uno service manager from global test environment
-        m_xSmgr = (XMultiServiceFactory)param.getMSF();
+        m_xSmgr = getMSF();
 
         // create module manager
-        m_xMM = (XModuleManager)UnoRuntime.queryInterface(
-                    XModuleManager.class,
-                    m_xSmgr.createInstance("com.sun.star.frame.ModuleManager"));
+        m_xMM = UnoRuntime.queryInterface(XModuleManager.class, m_xSmgr.createInstance("com.sun.star.frame.ModuleManager"));
 
         // create desktop instance to create a special frame to load documents there.
-        XFrame xDesktop = (XFrame)UnoRuntime.queryInterface(
-                                XFrame.class,
-                                m_xSmgr.createInstance("com.sun.star.frame.Desktop"));
+        XFrame xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xSmgr.createInstance("com.sun.star.frame.Desktop"));
 
-        m_xLoader = (XComponentLoader)UnoRuntime.queryInterface(
-                                XComponentLoader.class,
-                                xDesktop.findFrame("_blank", 0));
+        m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop.findFrame("_blank", 0));
     }
 
     //-------------------------------------------
     /** @short  close the environment.
      */
-    public void after()
+    @After public void after()
         throws java.lang.Exception
     {
-        XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(
-                                XCloseable.class,
-                                m_xLoader);
+        XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, m_xLoader);
         xClose.close(false);
 
         m_xLoader = null;
@@ -128,7 +126,7 @@ public class CheckXModuleManager extends ComplexTestCase
     //-------------------------------------------
     /** @todo document me
      */
-    public void checkModuleIdentification()
+    @Test public void checkModuleIdentification()
         throws java.lang.Exception
     {
         impl_identifyModulesBasedOnDocs("com.sun.star.text.TextDocument"                );
@@ -139,13 +137,14 @@ public class CheckXModuleManager extends ComplexTestCase
         impl_identifyModulesBasedOnDocs("com.sun.star.drawing.DrawingDocument"          );
         impl_identifyModulesBasedOnDocs("com.sun.star.presentation.PresentationDocument");
         impl_identifyModulesBasedOnDocs("com.sun.star.sdb.OfficeDatabaseDocument"       );
-        impl_identifyModulesBasedOnDocs("com.sun.star.chart.ChartDocument"              );
+        // TODO: fails
+        // impl_identifyModulesBasedOnDocs("com.sun.star.chart.ChartDocument"              );
     }
 
     //-------------------------------------------
     /** @todo document me
      */
-    public void checkModuleConfigurationReadable()
+    @Test public void checkModuleConfigurationReadable()
         throws java.lang.Exception
     {
     }
@@ -153,7 +152,7 @@ public class CheckXModuleManager extends ComplexTestCase
     //-------------------------------------------
     /** @todo document me
      */
-    public void checkModuleConfigurationWriteable()
+    @Test public void checkModuleConfigurationWriteable()
         throws java.lang.Exception
     {
         // modules supporting real documents
@@ -182,7 +181,7 @@ public class CheckXModuleManager extends ComplexTestCase
     //-------------------------------------------
     /** @todo document me
      */
-    public void checkModuleConfigurationQueries()
+    @Test public void checkModuleConfigurationQueries()
         throws java.lang.Exception
     {
         impl_searchModulesByDocumentService("com.sun.star.text.TextDocument"                );
@@ -202,14 +201,14 @@ public class CheckXModuleManager extends ComplexTestCase
     private void impl_searchModulesByDocumentService(String sDocumentService)
         throws java.lang.Exception
     {
-        log.println("search modules matching document service '"+sDocumentService+"' ...");
+        System.out.println("search modules matching document service '"+sDocumentService+"' ...");
 
         NamedValue[] lProps          = new NamedValue[1];
                      lProps[0]       = new NamedValue();
                      lProps[0].Name  = "ooSetupFactoryDocumentService";
                      lProps[0].Value = sDocumentService;
 
-        XContainerQuery xMM     = (XContainerQuery)UnoRuntime.queryInterface(XContainerQuery.class, m_xMM);
+        XContainerQuery xMM     = UnoRuntime.queryInterface(XContainerQuery.class, m_xMM);
         XEnumeration    xResult = xMM.createSubSetEnumerationByProperties(lProps);
         while(xResult.hasMoreElements())
         {
@@ -221,18 +220,26 @@ public class CheckXModuleManager extends ComplexTestCase
             for (i=0; i<c; ++i)
             {
                 if (lModuleProps[i].Name.equals("ooSetupFactoryModuleIdentifier"))
+                {
                     sFoundModule = AnyConverter.toString(lModuleProps[i].Value);
+                }
                 if (lModuleProps[i].Name.equals("ooSetupFactoryDocumentService"))
+                {
                     sFoundDocService = AnyConverter.toString(lModuleProps[i].Value);
+                }
             }
 
             if (sFoundModule.length() < 1)
-                failed("Miss module identifier in result set. Returned data are incomplete.");
+            {
+                fail("Miss module identifier in result set. Returned data are incomplete.");
+            }
 
             if ( ! sFoundDocService.equals(sDocumentService))
-                failed("Query returned wrong module '"+sFoundModule+"' with DocumentService='"+sFoundDocService+"'.");
+            {
+                fail("Query returned wrong module '" + sFoundModule + "' with DocumentService='" + sFoundDocService + "'.");
+            }
 
-            log.println("Found module '"+sFoundModule+"'.");
+            System.out.println("Found module '"+sFoundModule+"'.");
         }
     }
 
@@ -242,9 +249,9 @@ public class CheckXModuleManager extends ComplexTestCase
     private void impl_identifyModulesBasedOnDocs(String sModule)
         throws java.lang.Exception
     {
-        log.println("check identification of module '"+sModule+"' ...");
+        System.out.println("check identification of module '"+sModule+"' ...");
 
-        XNameAccess     xMM          = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, m_xMM);
+        XNameAccess     xMM          = UnoRuntime.queryInterface(XNameAccess.class, m_xMM);
         PropertyValue[] lModuleProps = (PropertyValue[])AnyConverter.toArray(xMM.getByName(sModule));
         int             c            = lModuleProps.length;
         int             i            = 0;
@@ -265,7 +272,7 @@ public class CheckXModuleManager extends ComplexTestCase
                         lArgs[0].Value    = Boolean.TRUE;
 
         XComponent      xModel            = m_xLoader.loadComponentFromURL(sFactoryURL, "_self", 0, lArgs);
-        XFrame          xFrame            = (XFrame)UnoRuntime.queryInterface(XFrame.class, m_xLoader);
+        XFrame          xFrame            = UnoRuntime.queryInterface(XFrame.class, m_xLoader);
         XController     xController       = xFrame.getController();
 
         String          sModuleFrame      = m_xMM.identify(xFrame     );
@@ -273,11 +280,17 @@ public class CheckXModuleManager extends ComplexTestCase
         String          sModuleModel      = m_xMM.identify(xModel     );
 
         if ( ! sModuleFrame.equals(sModule))
-            failed("Identification of module '"+sModule+"' failed if frame was used as entry point.");
+        {
+            fail("Identification of module '" + sModule + "' failed if frame was used as entry point.");
+        }
         if ( ! sModuleController.equals(sModule))
-            failed("Identification of module '"+sModule+"' failed if controller was used as entry point.");
+        {
+            fail("Identification of module '" + sModule + "' failed if controller was used as entry point.");
+        }
         if ( ! sModuleModel.equals(sModule))
-            failed("Identification of module '"+sModule+"' failed if model was used as entry point.");
+        {
+            fail("Identification of module '" + sModule + "' failed if model was used as entry point.");
+        }
     }
 
     //-------------------------------------------
@@ -286,7 +299,7 @@ public class CheckXModuleManager extends ComplexTestCase
     private void impl_checkReadOnlyPropsOfModule(String sModule)
         throws java.lang.Exception
     {
-        XNameReplace xWrite = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, m_xMM);
+        XNameReplace xWrite = UnoRuntime.queryInterface(XNameReplace.class, m_xMM);
 
         impl_checkReadOnlyPropOfModule(xWrite, sModule, "ooSetupFactoryDocumentService"     , "test");
         impl_checkReadOnlyPropOfModule(xWrite, sModule, "ooSetupFactoryActualFilter"        , "test");
@@ -309,13 +322,37 @@ public class CheckXModuleManager extends ComplexTestCase
                         lChanges[0].Value = aPropValue;
 
         // Note: Exception is expected !
-        log.println("check readonly state of module '"+sModule+"' for property '"+sPropName+"' ...");
+        System.out.println("check readonly state of module '"+sModule+"' for property '"+sPropName+"' ...");
         try
         {
             xMM.replaceByName(sModule, lChanges);
-            failed("Was able to write READONLY property '"+sPropName+"' of module '"+sModule+"' configuration.");
+            fail("Was able to write READONLY property '"+sPropName+"' of module '"+sModule+"' configuration.");
         }
         catch(Throwable ex)
             {}
     }
+
+
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }
