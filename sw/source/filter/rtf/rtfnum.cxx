@@ -806,8 +806,8 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         // suche die Rule - steht unter Nummer 3
         nListNo = 3;
         bContinus = FALSE;
-        nLevel = MAXLEVEL <= nTokenValue ? MAXLEVEL - 1
-                                         : BYTE( nTokenValue - 1 );
+        nLevel = MAXLEVEL <= (unsigned long) nTokenValue ? MAXLEVEL - 1
+            : (!nTokenValue ? 0 : BYTE( nTokenValue - 1 ));
     }
     else
     {
@@ -815,9 +815,9 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         {
         case RTF_PNLVL:         nListNo = 3;
                                 bContinus = FALSE;
-                                nLevel = MAXLEVEL <= nTokenValue
+                                nLevel = MAXLEVEL <= (unsigned long) nTokenValue
                                                     ? MAXLEVEL - 1
-                                                    : BYTE( nTokenValue-1 );
+                                    : (!nTokenValue ? 0 : BYTE( nTokenValue-1 ));
                                 break;
 
         case RTF_PNLVLBODY:

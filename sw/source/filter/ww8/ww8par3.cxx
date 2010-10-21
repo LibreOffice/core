@@ -1400,7 +1400,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         pLFOInfo->pNumRule->Set(aLFOLVL.nLevel, aNumFmt);
                     }
                     bLVLOk = true;
-                    pLFOInfo->maOverrides[aLFOLVL.nLevel] = aLFOLVL;
+
+                    if (nMaxLevel > aLFOLVL.nLevel)
+                        pLFOInfo->maOverrides[aLFOLVL.nLevel] = aLFOLVL;
                 }
                 if( !bLVLOk )
                     break;
