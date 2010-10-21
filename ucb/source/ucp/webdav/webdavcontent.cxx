@@ -1395,7 +1395,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // For DAV resources we only know the Title, for non-DAV
         // resources we additionally know that it is a document.
-        else if ( rType == DAV )
+
+        if ( rType == DAV )
         {
             //xProps.reset(
             //    new ContentProperties( aUnescapedTitle ) );
