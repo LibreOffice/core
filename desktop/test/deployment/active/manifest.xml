@@ -32,6 +32,12 @@
   <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
       m:full-path="ProtocolHandler.xcu"/>
   <m:file-entry
-      m:media-type="application/vnd.sun.star.uno-components"
-      m:full-path="uno.components"/>
+      m:media-type="application/vnd.sun.star.uno-component;type=native"
+      m:full-path="@PATH@"/>
+  <m:file-entry
+      m:media-type="application/vnd.sun.star.uno-component;type=Java"
+      m:full-path="active_java.jar"/>
+  <m:file-entry
+      m:media-type="application/vnd.sun.star.uno-component;type=Python"
+      m:full-path="active_python.py"/>
 </m:manifest>

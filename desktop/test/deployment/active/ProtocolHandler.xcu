@@ -26,12 +26,23 @@
 *
 **********************************************************************-->
 
-<m:manifest xmlns:m="http://openoffice.org/2001/manifest">
-  <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
-      m:full-path="Addons.xcu"/>
-  <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
-      m:full-path="ProtocolHandler.xcu"/>
-  <m:file-entry
-      m:media-type="application/vnd.sun.star.uno-components"
-      m:full-path="uno.components"/>
-</m:manifest>
+<o:component-data xmlns:o="http://openoffice.org/2001/registry"
+    o:package="org.openoffice.Office" o:name="ProtocolHandler">
+  <node o:name="HandlerSet">
+    <node o:name="com.sun.star.test.deployment.active_native" o:op="replace">
+      <prop o:name="Protocols">
+        <value>vnd.org.openoffice.test.desktop.deployment.active_native:*</value>
+      </prop>
+    </node>
+    <node o:name="com.sun.star.test.deployment.active_java" o:op="replace">
+      <prop o:name="Protocols">
+        <value>vnd.org.openoffice.test.desktop.deployment.active_java:*</value>
+      </prop>
+    </node>
+    <node o:name="com.sun.star.test.deployment.active_python" o:op="replace">
+      <prop o:name="Protocols">
+        <value>vnd.org.openoffice.test.desktop.deployment.active_python:*</value>
+      </prop>
+    </node>
+  </node>
+</o:component-data>

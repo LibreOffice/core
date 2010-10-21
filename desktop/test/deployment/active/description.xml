@@ -26,12 +26,12 @@
 *
 **********************************************************************-->
 
-<m:manifest xmlns:m="http://openoffice.org/2001/manifest">
-  <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
-      m:full-path="Addons.xcu"/>
-  <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
-      m:full-path="ProtocolHandler.xcu"/>
-  <m:file-entry
-      m:media-type="application/vnd.sun.star.uno-components"
-      m:full-path="uno.components"/>
-</m:manifest>
+<d:description xmlns:d="http://openoffice.org/extensions/description/2006">
+  <d:identifier
+      value="org.openoffice/framework/desktop/test/deployment/active"/>
+  <d:version value="1"/>
+  <d:platform value="@PLATFORM@"/>
+  <d:dependencies>
+    <d:OpenOffice.org-minimal-version d:name="OpenOffice.org 3.4" value="3.4"/>
+  </d:dependencies>
+</d:description>

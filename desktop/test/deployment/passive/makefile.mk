@@ -105,15 +105,15 @@ $(MISC)/$(TARGET)/passive_python.component : \
         '$(COMPONENTPREFIX_EXTENSION)passive_python.py' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt passive_python.component
 
-$(MISC)/$(TARGET)/passive_java.jar : manifest.mf $(JAVATARGET)
+$(MISC)/$(TARGET)/passive_java.jar : MANIFEST.MF $(JAVATARGET)
     $(MKDIRHIER) $(@:d)
     $(RM) $@
     $(RM) -r $(MISC)/$(TARGET)/passive_java.jar-zip
     $(MKDIR) $(MISC)/$(TARGET)/passive_java.jar-zip
     $(MKDIRHIER) $(MISC)/$(TARGET)/passive_java.jar-zip/META-INF \
         $(MISC)/$(TARGET)/passive_java.jar-zip/$(PACKAGE)
-    $(COPY) manifest.mf $(MISC)/$(TARGET)/passive_java.jar-zip/META-INF/
+    $(COPY) MANIFEST.MF $(MISC)/$(TARGET)/passive_java.jar-zip/META-INF/
     $(COPY) $(foreach,i,$(JAVAFILES:b) $(CLASSDIR)/$(PACKAGE)/$i.class) \
         $(MISC)/$(TARGET)/passive_java.jar-zip/$(PACKAGE)/
     cd $(MISC)/$(TARGET)/passive_java.jar-zip && zip ../passive_java.jar \
-        META-INF/manifest.mf $(foreach,i,$(JAVAFILES:b) $(PACKAGE)/$i.class)
+        META-INF/MANIFEST.MF $(foreach,i,$(JAVAFILES:b) $(PACKAGE)/$i.class)
