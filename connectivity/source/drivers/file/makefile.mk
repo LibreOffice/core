@@ -45,27 +45,27 @@ CDEFS += -DOOO_DLLIMPLEMENTATION_FILE
 
 # --- Files -------------------------------------
 EXCEPTIONSFILES=\
-    $(SLO)$/FNoException.obj		\
-    $(SLO)$/FConnection.obj			\
-    $(SLO)$/FResultSetMetaData.obj	\
-    $(SLO)$/FColumns.obj			\
-    $(SLO)$/FTables.obj				\
-    $(SLO)$/FTable.obj				\
     $(SLO)$/FCatalog.obj			\
-    $(SLO)$/FResultSet.obj			\
-    $(SLO)$/FStatement.obj			\
-    $(SLO)$/FPreparedStatement.obj	\
-    $(SLO)$/FDatabaseMetaData.obj	\
+    $(SLO)$/FColumns.obj			\
+    $(SLO)$/FConnection.obj			\
+    $(SLO)$/FDatabaseMetaData.obj		\
+    $(SLO)$/FDateFunctions.obj			\
     $(SLO)$/FDriver.obj				\
+    $(SLO)$/FNoException.obj			\
+    $(SLO)$/FNumericFunctions.obj		\
+    $(SLO)$/FPreparedStatement.obj		\
+    $(SLO)$/FResultSet.obj			\
+    $(SLO)$/FResultSetMetaData.obj		\
+    $(SLO)$/FStatement.obj			\
+    $(SLO)$/FStringFunctions.obj		\
+    $(SLO)$/FTable.obj				\
+    $(SLO)$/FTables.obj				\
     $(SLO)$/fanalyzer.obj			\
-    $(SLO)$/fcomp.obj               \
-    $(SLO)$/fcode.obj
+    $(SLO)$/fcode.obj				\
+    $(SLO)$/fcomp.obj
 
 SLOFILES=\
     $(EXCEPTIONSFILES)				\
-    $(SLO)$/FStringFunctions.obj	\
-    $(SLO)$/FDateFunctions.obj	\
-    $(SLO)$/FNumericFunctions.obj \
     $(SLO)$/quotedstring.obj
 
 

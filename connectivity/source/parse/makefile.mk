@@ -43,15 +43,15 @@ YACCFILES= sqlbison.y
 YACCFLAGS=-v -d -l -pSQLyy -bsql
 
 EXCEPTIONSFILES =  \
-        $(SLO)$/PColumn.obj			\
+        $(SLO)$/PColumn.obj		\
+        $(SLO)$/internalnode.obj	\
         $(SLO)$/sqliterator.obj		\
-        $(SLO)$/sqlnode.obj         \
-        $(SLO)$/wrap_sqlbison.obj		\
-        $(SLO)$/internalnode.obj
+        $(SLO)$/sqlnode.obj		\
+        $(SLO)$/wrap_sqlbison.obj	\
+        $(SLO)$/wrap_sqlflex.obj
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)			\
-        $(SLO)$/wrap_sqlflex.obj
+        $(EXCEPTIONSFILES)
 
 
 # --- Targets -------------------------------------------------------

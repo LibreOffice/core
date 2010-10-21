@@ -52,29 +52,24 @@ SRC1FILES =  \
         svxitems.src
 
 SLOFILES= \
-                $(SLO)$/optitems.obj    \
-                $(SLO)$/svdfield.obj \
-        $(SLO)$/writingmodeitem.obj \
-        $(SLO)$/frmitems.obj \
+	$(EXCEPTIONSFILES) \
+        $(SLO)$/charhiddenitem.obj \
         $(SLO)$/justifyitem.obj \
-        $(SLO)$/paraitem.obj \
-        $(SLO)$/textitem.obj \
-        $(SLO)$/flditem.obj \
-        $(SLO)$/svxfont.obj \
-        $(SLO)$/paperinf.obj    \
-        $(SLO)$/itemtype.obj	\
-        $(SLO)$/bulitem.obj \
-        $(SLO)$/numitem.obj \
-        $(SLO)$/xmlcnitm.obj \
-        $(SLO)$/charhiddenitem.obj
+        $(SLO)$/optitems.obj \
+        $(SLO)$/writingmodeitem.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/svdfield.obj \
-        $(SLO)$/paraitem.obj \
+        $(SLO)$/bulitem.obj \
+        $(SLO)$/flditem.obj \
         $(SLO)$/frmitems.obj \
-        $(SLO)$/numitem.obj\
-        $(SLO)$/xmlcnitm.obj\
-        $(SLO)$/flditem.obj
+        $(SLO)$/itemtype.obj \
+        $(SLO)$/numitem.obj \
+        $(SLO)$/paperinf.obj \
+        $(SLO)$/paraitem.obj \
+        $(SLO)$/svdfield.obj \
+        $(SLO)$/svxfont.obj \
+        $(SLO)$/textitem.obj \
+        $(SLO)$/xmlcnitm.obj
 
 .INCLUDE :	target.mk
 

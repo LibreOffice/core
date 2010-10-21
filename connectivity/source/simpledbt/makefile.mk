@@ -36,15 +36,15 @@ TARGET=simpledbt
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
-        $(SLO)$/charset_s.obj   \
-        $(SLO)$/staticdbtools_s.obj \
-        $(SLO)$/parsenode_s.obj     \
-        $(SLO)$/parser_s.obj
+        $(SLO)$/charset_s.obj		\
+        $(SLO)$/dbtfactory.obj		\
+        $(SLO)$/parsenode_s.obj		\
+        $(SLO)$/parser_s.obj		\
+        $(SLO)$/staticdbtools_s.obj
 
 SLOFILES=\
         $(EXCEPTIONSFILES)       \
-        $(SLO)$/refbase.obj		\
-        $(SLO)$/dbtfactory.obj	\
+        $(SLO)$/refbase.obj
 
 # --- Targets ------------------------------------------------------
 
