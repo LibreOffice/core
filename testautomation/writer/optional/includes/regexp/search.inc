@@ -64,10 +64,8 @@ end sub
 
 '---------------------------------------------------------
 testcase tCheckDialog
-    warnlog( "#i111908# - Control <Replace> cannot be accessed" )
-    goto endsub
     
- Dim Checkboxtitel
+    Dim Checkboxtitel
    Call hNewDocument
    EditSearchAndReplace
    Sleep 2
