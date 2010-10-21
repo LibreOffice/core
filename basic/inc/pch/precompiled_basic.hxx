@@ -276,7 +276,6 @@
 #include "vcl/wrkwin.hxx"
 
 #include "osl/diagnose.h"
-#include "vos/macros.hxx"
 #include "osl/mutex.hxx"
 #include "vos/process.hxx"
 

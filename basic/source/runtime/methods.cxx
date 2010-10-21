@@ -3486,8 +3486,8 @@ RTLFUNC(Shell)
     }
     else
     {
-        USHORT nOptions = NAMESPACE_VOS(OProcess)::TOption_SearchPath|
-                          NAMESPACE_VOS(OProcess)::TOption_Detached;
+        USHORT nOptions = vos::OProcess::TOption_SearchPath|
+            vos::OProcess::TOption_Detached;
         String aCmdLine = rPar.Get(1)->GetString();
         // Zusaetzliche Parameter anhaengen, es muss eh alles geparsed werden
         if( nArgCount >= 4 )
@@ -3565,13 +3565,13 @@ RTLFUNC(Shell)
             switch( nWinStyle )
             {
                 case 2:
-                    nOptions |= NAMESPACE_VOS(OProcess)::TOption_Minimized;
+                    nOptions |= vos::OProcess::TOption_Minimized;
                     break;
                 case 3:
-                    nOptions |= NAMESPACE_VOS(OProcess)::TOption_Maximized;
+                    nOptions |= vos::OProcess::TOption_Maximized;
                     break;
                 case 10:
-                    nOptions |= NAMESPACE_VOS(OProcess)::TOption_FullScreen;
+                    nOptions |= vos::OProcess::TOption_FullScreen;
                     break;
             }
 
@@ -3579,10 +3579,10 @@ RTLFUNC(Shell)
             if( nArgCount >= 5 )
                 bSync = rPar.Get(4)->GetBool();
             if( bSync )
-                nOptions |= NAMESPACE_VOS(OProcess)::TOption_Wait;
+                nOptions |= vos::OProcess::TOption_Wait;
         }
-        NAMESPACE_VOS(OProcess)::TProcessOption eOptions =
-            (NAMESPACE_VOS(OProcess)::TProcessOption)nOptions;
+        vos::OProcess::TProcessOption eOptions =
+            (vos::OProcess::TProcessOption)nOptions;
 
 
         // #72471 Parameter aufbereiten
@@ -3612,33 +3612,25 @@ RTLFUNC(Shell)
         }
 
         //const char* pParams = aParams.Len() ? aParams.GetStr() : 0;
-        NAMESPACE_VOS(OProcess)* pApp;
-        pApp = new NAMESPACE_VOS(OProcess)( aOUStrProgUNC );
+        vos::OProcess* pApp;
+        pApp = new vos::OProcess( aOUStrProgUNC );
         BOOL bSucc;
         if( nParamCount == 0 )
         {
-            bSucc = pApp->execute( eOptions ) == NAMESPACE_VOS(OProcess)::E_None;
+            bSucc = pApp->execute( eOptions ) == vos::OProcess::E_None;
         }
         else
         {
-            NAMESPACE_VOS(OArgumentList) aArgList( pArgumentList, nParamCount );
-            bSucc = pApp->execute( eOptions, aArgList ) == NAMESPACE_VOS(OProcess)::E_None;
+            vos::OArgumentList aArgList( pArgumentList, nParamCount );
+            bSucc = pApp->execute( eOptions, aArgList ) == vos::OProcess::E_None;
         }
         long nResult = 0;
-        NAMESPACE_VOS(OProcess)::TProcessInfo aInfo;
+        vos::OProcess::TProcessInfo aInfo;
         // We should return the identifier of the executing process when is running VBA, because method Shell(...) returns it in Excel.
-        if ( bSucc && SbiRuntime::isVBAEnabled() && pApp->getInfo( NAMESPACE_VOS(OProcess)::TData_Identifier, &aInfo ) == NAMESPACE_VOS(OProcess)::E_None )
+        if ( bSucc && SbiRuntime::isVBAEnabled() && pApp->getInfo( vos::OProcess::TData_Identifier, &aInfo ) == vos::OProcess::E_None )
         {
             nResult = aInfo.Ident;
         }
-
-        /*
-        if( nParamCount == 0 )
-            pApp = new NAMESPACE_VOS(OProcess)( pProg );
-        else
-            pApp = new NAMESPACE_VOS(OProcess)( pProg, pParamList, nParamCount );
-        BOOL bSucc = pApp->execute( eOptions ) == NAMESPACE_VOS(OProcess)::E_None;
-        */
 
         delete pApp;
         delete[] pArgumentList;

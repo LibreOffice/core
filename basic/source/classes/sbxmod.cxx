@@ -31,7 +31,6 @@
 
 #include <list>
 
-#include <vos/macros.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <svl/brdcst.hxx>

@@ -71,9 +71,9 @@ BOOL Process::ImplIsRunning()
 {
     if ( pProcess && bHasBeenStarted )
     {
-        NAMESPACE_VOS(OProcess::TProcessInfo) aProcessInfo;
-        pProcess->getInfo( NAMESPACE_VOS(OProcess::TData_ExitCode), &aProcessInfo );
-        if ( !(aProcessInfo.Fields & NAMESPACE_VOS(OProcess::TData_ExitCode)) )
+        vos::OProcess::TProcessInfo aProcessInfo;
+        pProcess->getInfo( vos::OProcess::TData_ExitCode, &aProcessInfo );
+        if ( !(aProcessInfo.Fields & vos::OProcess::TData_ExitCode) )
             return TRUE;
         else
             return FALSE;
@@ -86,9 +86,9 @@ long Process::ImplGetExitCode()
 {
     if ( pProcess )
     {
-        NAMESPACE_VOS(OProcess::TProcessInfo) aProcessInfo;
-        pProcess->getInfo( NAMESPACE_VOS(OProcess::TData_ExitCode), &aProcessInfo );
-        if ( !(aProcessInfo.Fields & NAMESPACE_VOS(OProcess::TData_ExitCode)) )
+        vos::OProcess::TProcessInfo aProcessInfo;
+        pProcess->getInfo( vos::OProcess::TData_ExitCode, &aProcessInfo );
+        if ( !(aProcessInfo.Fields & vos::OProcess::TData_ExitCode) )
             SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
         return aProcessInfo.Code;
     }
@@ -123,7 +123,7 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
                 nParamCount++;
             }
         }
-        pArgumentList = new NAMESPACE_VOS(OArgumentList)( pParamList, nCount );
+        pArgumentList = new vos::OArgumentList( pParamList, nCount );
 
 
         ::rtl::OUString *pEnvArray = NULL;
@@ -142,12 +142,12 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
                 nEnvCount++;
                 aIter++;
             }
-            pEnvList = new NAMESPACE_VOS(OEnvironment)( pEnvArray, nEnvCount );
+            pEnvList = new vos::OEnvironment( pEnvArray, nEnvCount );
         }
 
         ::rtl::OUString aNormalizedAppPath;
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
-        pProcess = new NAMESPACE_VOS(OProcess)( aNormalizedAppPath );
+        pProcess = new vos::OProcess( aNormalizedAppPath );
         bHasBeenStarted = FALSE;
 
         delete [] pParamList;
@@ -169,20 +169,14 @@ BOOL Process::Start()
 #endif
             if ( pEnvList )
             {
-                bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
-                            ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
-                            *pArgumentList,
-                            *pEnvList ) == NAMESPACE_VOS(OProcess)::E_None;
+                bSuccess = pProcess->execute( (vos::OProcess::TProcessOption)(vos::OProcess::TOption_SearchPath),
+                                              *pArgumentList,
+                                              *pEnvList ) == vos::OProcess::E_None;
             }
             else
             {
-                bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
-                            ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
-                            *pArgumentList ) == NAMESPACE_VOS(OProcess)::E_None;
+                bSuccess = pProcess->execute( (vos::OProcess::TProcessOption)(vos::OProcess::TOption_SearchPath),
+                                              *pArgumentList ) == vos::OProcess::E_None;
             }
 #ifdef WNT
         }
