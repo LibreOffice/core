@@ -82,7 +82,6 @@ using namespace com::sun::star::beans;
 
 static rtl::OUString aSlash( rtl::OUString::createFromAscii( "/" ) );
 static rtl::OUString aHelpFilesBaseName( rtl::OUString::createFromAscii( "help" ) );
-static rtl::OUString aHelpMediaType( rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
 
 rtl::OUString Databases::expandURL( const rtl::OUString& aURL )
 {
@@ -1545,6 +1544,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     }
     if( bRegistered )
     {
+        rtl::OUString aHelpMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.help" ) );
         if( xPackage->isBundle() )
         {
             Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
