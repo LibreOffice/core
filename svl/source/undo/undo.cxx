@@ -188,6 +188,7 @@ struct SfxUndoManager_Data
 
 namespace
 {
+    //--------------------------------------------------------------------
     struct LockGuard
     {
         LockGuard( ::svl::IUndoManager& i_manager )
@@ -204,6 +205,22 @@ namespace
     private:
         ::svl::IUndoManager& m_manager;
     };
+
+    //--------------------------------------------------------------------
+    struct NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
+    {
+        NotifyUndoListener( void ( SfxUndoListener::*i_notificationMethod )() )
+            :m_notificationMethod( i_notificationMethod )
+        {
+        }
+
+        void operator()( SfxUndoListener* i_listener ) const
+        {
+            ( i_listener->*m_notificationMethod )();
+        }
+
+        void ( SfxUndoListener::*m_notificationMethod )();
+    };
 }
 
 //========================================================================
@@ -217,13 +234,8 @@ SfxUndoManager::SfxUndoManager( USHORT nMaxUndoActionCount )
 
 SfxUndoManager::~SfxUndoManager()
 {
-    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
-            listener != m_pData->aListeners.end();
-            ++listener
-        )
-    {
-        (*listener)->undoManagerDying();
-    }
+    ::std::for_each( m_pData->aListeners.begin(), m_pData->aListeners.end(),
+        NotifyUndoListener( &SfxUndoListener::undoManagerDying ) );
 }
 
 //------------------------------------------------------------------------
@@ -314,13 +326,9 @@ void SfxUndoManager::Clear()
 
     m_pData->pActUndoArray->nCurUndoAction = 0;
 
-    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
-            listener != m_pData->aListeners.end();
-            ++listener
-        )
-    {
-        (*listener)->cleared();
-    }
+    // notify listeners
+    ::std::for_each( m_pData->aListeners.begin(), m_pData->aListeners.end(),
+        NotifyUndoListener( &SfxUndoListener::cleared ) );
 }
 
 //------------------------------------------------------------------------
@@ -335,13 +343,8 @@ void SfxUndoManager::ClearRedo()
         delete pAction;
     }
 
-    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
-            listener != m_pData->aListeners.end();
-            ++listener
-        )
-    {
-        (*listener)->clearedRedo();
-    }
+    ::std::for_each( m_pData->aListeners.begin(), m_pData->aListeners.end(),
+        NotifyUndoListener( &SfxUndoListener::clearedRedo ) );
 }
 
 //------------------------------------------------------------------------
@@ -351,13 +354,8 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
     if ( IsUndoEnabled() )
     {
         // Redo-Actions loeschen
-        for ( USHORT nPos = m_pData->pActUndoArray->aUndoActions.Count();
-              nPos > m_pData->pActUndoArray->nCurUndoAction; --nPos )
-            delete m_pData->pActUndoArray->aUndoActions[nPos-1];
-
-        m_pData->pActUndoArray->aUndoActions.Remove(
-            m_pData->pActUndoArray->nCurUndoAction,
-            m_pData->pActUndoArray->aUndoActions.Count() - m_pData->pActUndoArray->nCurUndoAction );
+        if ( GetRedoActionCount() > 0 )
+            ClearRedo();
 
         if ( m_pData->pActUndoArray->nMaxUndoActions )
         {
@@ -732,16 +730,11 @@ USHORT SfxUndoManager::LeaveListAction()
         }
     }
 
-    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
-            listener != m_pData->aListeners.end();
-            ++listener
-        )
-    {
-        if ( nListActionElements > 0 )
-            (*listener)->listActionLeft();
-        else
-            (*listener)->listActionCancelled();
-    }
+    // notify listeners
+    const bool leftContext = ( nListActionElements > 0 );
+    ::std::for_each( m_pData->aListeners.begin(), m_pData->aListeners.end(),
+        NotifyUndoListener( leftContext ? &SfxUndoListener::listActionLeft : &SfxUndoListener::listActionCancelled ) );
+
     return nListActionElements;
 }
 
