@@ -473,12 +473,18 @@ namespace sfx2
             // ignore the request if the manager is locked
             return;
 
+        const bool bHadRedoActions = ( rUndoManager.GetRedoActionCount() > 0 );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
             rUndoManager.AddUndoAction( new UndoActionWrapper( i_action ) );
         }
+        const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount() > 0 );
+
         lcl_invalidateXDo( *m_pImpl );
         impl_notify( i_action->getTitle(), &XUndoManagerListener::undoActionAdded, aGuard );
+
+        if ( bHadRedoActions && !bHasRedoActions )
+            impl_notify( &XUndoManagerListener::redoActionsCleared );
     }
 
     //------------------------------------------------------------------------------------------------------------------
