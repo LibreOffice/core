@@ -50,7 +50,7 @@ interface XBroadcaster: com::sun::star::uno::XInterface
         <member>XBroadcaster::unlockBroadcasts()</member> may be
         nested and even overlapping, but they must be in pairs. While
         there is at least one lock remaining, no broadcasts are
-        send to registered listeners.
+        sent to registered listeners.
         </p>
      */
     [oneway] void lockBroadcasts();
@@ -64,10 +64,10 @@ interface XBroadcaster: com::sun::star::uno::XInterface
         <member>XBroadcaster::unlockBroadcasts()</member> may be
         nested and even overlapping, but they must be in pairs. While
         there is at least one lock remaining, no broadcasts are
-        send to registered listeners.
+        sent to registered listeners.
         </p>
 
-        <p> Pending broadcasts will be send immediately after the last
+        <p> Pending broadcasts will be sent immediately after the last
         call to <member>XBroadcaster::lockBroadcast()</member> is matched
         by a call to <member>XBroadcaster::unlockBroadcasts()</member>.
         An implementation can decide to broadcast all pending notification in
