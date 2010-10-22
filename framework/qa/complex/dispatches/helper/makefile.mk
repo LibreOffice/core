@@ -24,10 +24,10 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ = ..$/..$/..$/..
+PRJ = ../../../..
 TARGET  = checkdispatchapi
 PRJNAME = framework
-PACKAGE = complex$/dispatches$/helper
+PACKAGE = complex/dispatches/helper
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -35,10 +35,9 @@ PACKAGE = complex$/dispatches$/helper
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar \
-                  Generator.jar OOoRunner.jar
+JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar Generator.jar
 JAVAFILES       = Interceptor.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
 
 MAXLINELENGTH = 100000
 

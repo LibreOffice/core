@@ -114,6 +114,8 @@ public:
 private:
     virtual ~Service() {}
 
+    virtual void SAL_CALL disposing() { flushModifications(); }
+
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return configuration_provider::getImplementationName(); }
@@ -165,6 +167,8 @@ private:
 
     virtual css::lang::Locale SAL_CALL getLocale()
         throw (css::uno::RuntimeException);
+
+    void flushModifications() const;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString locale_;
@@ -241,7 +245,7 @@ Service::createInstanceWithArguments(
     if (nodepath.getLength() == 0) {
         badNodePath();
     }
-    // For backwards compatibility, allow a notepath that misses the leading
+    // For backwards compatibility, allow a nodepath that misses the leading
     // slash:
     if (nodepath[0] != '/') {
         nodepath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + nodepath;
@@ -326,7 +330,7 @@ void Service::removeRefreshListener(
 }
 
 void Service::flush() throw (css::uno::RuntimeException) {
-    //TODO
+    flushModifications();
     cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
         cppu::UnoType< css::util::XFlushListener >::get());
     if (cont != 0) {
@@ -378,6 +382,16 @@ css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
         }
     }
     return loc;
+}
+
+void Service::flushModifications() const {
+    Components * components;
+    {
+        osl::MutexGuard guard(lock);
+        Components::initSingleton(context_);
+        components = &Components::getSingleton();
+    }
+    components->flushModifications();
 }
 
 class Factory:
@@ -456,7 +470,8 @@ Factory::createInstanceWithArgumentsAndContext(
                             " arguments")),
                     0);
             }
-            // For backwards compatibility, allow "Locale" in any case:
+            // For backwards compatibility, allow "Locale" and (ignored)
+            // "EnableAsync" in any case:
             if (name.equalsIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("locale")))
             {
@@ -471,8 +486,9 @@ Factory::createInstanceWithArgumentsAndContext(
                                 " one, non-empty, string Locale argument")),
                         0);
                 }
-            } else {
-                //TODO
+            } else if (!name.equalsIgnoreAsciiCaseAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("enableasync")))
+            {
                 throw css::uno::Exception(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(

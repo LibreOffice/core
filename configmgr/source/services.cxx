@@ -28,7 +28,6 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -36,9 +35,6 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "osl/diagnose.h"
 #include "uno/lbnames.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 #include "configurationprovider.hxx"
@@ -88,48 +84,4 @@ component_getImplementationEnvironment(
     char const ** ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey)
-{
-    if (!component_writeInfoHelper(pServiceManager, pRegistryKey, services)) {
-        return false;
-    }
-    try {
-        css::uno::Reference< css::registry::XRegistryKey >(
-            (css::uno::Reference< css::registry::XRegistryKey >(
-                static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
-             createKey(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "/com.sun.star.comp.configuration.DefaultProvider/UNO/"
-                         "SINGLETONS/"
-                         "com.sun.star.configuration.theDefaultProvider")))),
-            css::uno::UNO_SET_THROW)->
-            setStringValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.DefaultProvider")));
-        css::uno::Reference< css::registry::XRegistryKey >(
-            (css::uno::Reference< css::registry::XRegistryKey >(
-                static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
-             createKey(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "/com.sun.star.comp.configuration.Update/UNO/"
-                         "SINGLETONS/com.sun.star.configuration.Update")))),
-            css::uno::UNO_SET_THROW)->
-            setStringValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.Update_Service")));
-    } catch (css::uno::Exception & e) {
-        (void) e;
-        OSL_TRACE(
-            "configmgr component_writeInfo exception: %s",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-        return false;
-    }
-    return true;
 }
