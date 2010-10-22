@@ -1,4 +1,4 @@
-ph	comphelper	:	cppuhelper ucbhelper offuh vos salhelper NULL
+ph	comphelper	:	cppuhelper ucbhelper offuh vos salhelper LIBXSLT:libxslt NULL
 ph	comphelper								usr1	-	all	ph_mkout NULL
 ph	comphelper\inc							nmake	-	all	ph_inc NULL
 ph	comphelper\source\container				nmake	-	all	ph_container ph_inc NULL

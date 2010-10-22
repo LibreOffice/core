@@ -1,4 +1,4 @@
-ti	toolkit	:	vcl NULL
+ti	toolkit	: LIBXSLT:libxslt vcl NULL
 ti	toolkit									usr1	-	all	ti_mkout NULL
 ti	toolkit\prj								get		-	all	ti_prj NULL
 ti	toolkit\inc								nmake	-	all	ti_inc NULL

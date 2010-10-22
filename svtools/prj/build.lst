@@ -1,4 +1,4 @@
-st	svtools	:	l10n svl offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal sot jvmfwk NULL
+st	svtools	:	l10n svl offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal sot jvmfwk LIBXSLT:libxslt NULL
 st	svtools								usr1	-	all	st_mkout NULL
 st	svtools\inc							nmake	-	all	st_inc NULL
 st	svtools\bmpmaker					nmake	-	all	st_bmp st_inc NULL
