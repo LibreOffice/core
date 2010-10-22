@@ -162,7 +162,7 @@ struct SfxUndoManager_Data
     SfxUndoArray*   pActUndoArray;
     SfxUndoArray*   pFatherUndoArray;
 
-    bool            mbUndoEnabled;
+    sal_Int32       mnLockCount;
     bool            mbDoing;
 
     UndoListeners   aListeners;
@@ -171,7 +171,7 @@ struct SfxUndoManager_Data
         :pUndoArray( new SfxUndoArray( i_nMaxUndoActionCount ) )
         ,pActUndoArray( NULL )
         ,pFatherUndoArray( NULL )
-        ,mbUndoEnabled( true )
+        ,mnLockCount( 0 )
         ,mbDoing( false )
 
     {
@@ -183,6 +183,28 @@ struct SfxUndoManager_Data
         delete pUndoArray;
     }
 };
+
+//========================================================================
+
+namespace
+{
+    struct LockGuard
+    {
+        LockGuard( ::svl::IUndoManager& i_manager )
+            :m_manager( i_manager )
+        {
+            m_manager.EnableUndo( false );
+        }
+
+        ~LockGuard()
+        {
+            m_manager.EnableUndo( true );
+        }
+
+    private:
+        ::svl::IUndoManager& m_manager;
+    };
+}
 
 //========================================================================
 
@@ -208,14 +230,23 @@ SfxUndoManager::~SfxUndoManager()
 
 void SfxUndoManager::EnableUndo( bool bEnable )
 {
-    m_pData->mbUndoEnabled = bEnable;
+    DBG_TESTSOLARMUTEX();
+    if ( !bEnable )
+        ++m_pData->mnLockCount;
+    else
+    {
+        OSL_PRECOND( m_pData->mnLockCount > 0, "SfxUndoManager::EnableUndo: not disabled, so why enabling?" );
+        if ( m_pData->mnLockCount > 0 )
+            --m_pData->mnLockCount;
+    }
 }
 
 //------------------------------------------------------------------------
 
 bool SfxUndoManager::IsUndoEnabled() const
 {
-    return m_pData->mbUndoEnabled;
+    DBG_TESTSOLARMUTEX();
+    return m_pData->mnLockCount == 0;
 }
 
 //------------------------------------------------------------------------
@@ -317,7 +348,7 @@ void SfxUndoManager::ClearRedo()
 
 void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 {
-    if( m_pData->mbUndoEnabled )
+    if ( IsUndoEnabled() )
     {
         // Redo-Actions loeschen
         for ( USHORT nPos = m_pData->pActUndoArray->aUndoActions.Count();
@@ -458,7 +489,7 @@ BOOL SfxUndoManager::Undo()
     OSL_ENSURE( !IsDoing(), "SfxUndoManager::Undo: *nested* Undo/Redo actions? How this?" );
 
     ::comphelper::FlagGuard aGuard( m_pData->mbDoing );
-    ::comphelper::FlagRestorationGuard aEnableGuard( m_pData->mbUndoEnabled, false );
+    LockGuard aLockGuard( *this );
 
     BOOL bRet = FALSE;
 
@@ -503,7 +534,7 @@ BOOL SfxUndoManager::Redo()
     OSL_ENSURE( !IsDoing(), "SfxUndoManager::Redo: *nested* Undo/Redo actions? How this?" );
 
     ::comphelper::FlagGuard aGuard( m_pData->mbDoing );
-    ::comphelper::FlagRestorationGuard aEnableGuard( m_pData->mbUndoEnabled, false );
+    LockGuard aLockGuard( *this );
 
     BOOL bRet = FALSE;
 
@@ -605,7 +636,7 @@ void SfxUndoManager::EnterListAction(
 */
 
 {
-    if( !m_pData->mbUndoEnabled )
+    if( !IsUndoEnabled() )
         return;
 
     if ( !m_pData->pUndoArray->nMaxUndoActions )
@@ -658,7 +689,7 @@ USHORT SfxUndoManager::LeaveListAction()
     Verlaesst die aktuelle ListAction und geht eine Ebene nach oben.
 */
 {
-    if ( !m_pData->mbUndoEnabled )
+    if ( !IsUndoEnabled() )
         return 0;
 
     if ( !m_pData->pUndoArray->nMaxUndoActions )
