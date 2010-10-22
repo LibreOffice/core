@@ -55,14 +55,6 @@ namespace css = ::com::sun::star;
 namespace framework {
 
 //-----------------------------------------------------------------------------
-/** status event mapped from load event of frame loader
-
-    @todo think about me
-          should be moved to another more specific place.
- */
-static const ::rtl::OUString FEATUREDESCRIPTOR_LOADSTATE = DECLARE_ASCII("loadFinishedOrCancelled");
-
-//-----------------------------------------------------------------------------
 /** Those macro is used to make it more clear where a synchronized block will start.
     Because normal documentation code wont be recognized by some developers to be real
     I need something where they are thinking about.
