@@ -1,4 +1,4 @@
-sf      sfx2    :    l10n idl basic xmlscript framework readlicense_oo shell setup_native sax SYSTRAY_GTK:libegg LIBXML2:libxml2 NULL
+sf      sfx2    :    l10n idl basic xmlscript framework readlicense_oo shell setup_native sax SYSTRAY_GTK:libegg LIBXML2:libxml2 LIBXSLT:libxslt NULL
 sf	sfx2									usr1	-	all	sf_mkout NULL
 sf	sfx2\inc								nmake	-	all	sf_inc NULL
 sf	sfx2\prj								get		-	all	sf_prj NULL
