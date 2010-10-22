@@ -292,17 +292,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        SFX_REQUEST_ARG( rReq, pClassItem,          SfxStringItem, FN_PARAM_1, sal_False );
         SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
         SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
         //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
-        if( pClassItem || pClassLocationItem || pCommandsItem )
+        if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
         {
-            String sClass;
             String sClassLocation;
-            if(pClassItem)
-                sClass = pClassItem->GetValue();
             if(pClassLocationItem)
                 sClassLocation = pClassLocationItem->GetValue();
 
