@@ -1,3 +1,3 @@
-animations	animations	:	cppuhelper comphelper offuh NULL
+animations	animations	:	cppuhelper comphelper offuh LIBXSLT:libxslt NULL
 animations	animations						usr1	-	all	animations_mkout NULL
 animations	animations\source\animcore		nmake	-	all	animations_animcore NULL
