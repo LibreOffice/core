@@ -57,12 +57,6 @@ namespace framework{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
-
-static const ::rtl::OUString ERRMSG_INVALID_COMPONENT_PARAM = ::rtl::OUString::createFromAscii("NULL as component reference not allowed.");
-static const ::rtl::OUString ERRMSG_INVALID_NUMBER_PARAM    = ::rtl::OUString::createFromAscii("Special valkud INVALID_NUMBER not allowed as input parameter.");
-
 //-----------------------------------------------
 TitleHelper::TitleHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ::cppu::BaseMutex ()
