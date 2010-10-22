@@ -104,9 +104,6 @@ namespace
     };
 }
 
-static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
-static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
-
 static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& xWindowStateMgr, const ::rtl::OUString& rResourceURL, WindowState& rWindowState )
 {
     bool bResult = false;
@@ -191,6 +188,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                           uno::UNO_QUERY );
             }
 
+            static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
+
             uno::Reference< frame::XModuleManager > xModuleManager( m_xModuleManager );
             if ( !xModuleManager.is() )
             {
@@ -200,6 +199,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                                     uno::UNO_QUERY );
                 m_xModuleManager = xModuleManager;
             }
+
+            static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
 
             uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
             if ( !xWindowStateConfiguration.is() )
@@ -248,7 +249,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 SfxChildWindow*  SfxDockingWrapper::CreateImpl(
 Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
 {
-    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo); return pWin;
+    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo);
+    return pWin;
 }
 
 sal_uInt16 SfxDockingWrapper::GetChildWindowId ()
