@@ -1,4 +1,4 @@
-xmrg xmerge : solenv unoil javaunohelper NULL
+xmrg xmerge : solenv unoil javaunohelper LIBXSLT:libxslt NULL
 xmrg xmerge                        usr1  - all xmrg_mkout NULL
 xmrg xmerge\inc                    nmake - all xmrg_inc NULL
 xmrg xmerge\source\xmerge          nmake - all xmrg_xmerge xmrg_inc NULL
