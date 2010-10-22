@@ -285,7 +285,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         try
         {
-            xSet->getPropertyValue( CONTROLLER_PROPNAME_ICONID ) >>= nIcon;
+            xSet->getPropertyValue( DECLARE_ASCII("IconId") ) >>= nIcon;
         }
         catch(const css::uno::Exception&)
         {}

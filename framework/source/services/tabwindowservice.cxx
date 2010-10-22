@@ -323,7 +323,7 @@ void TabWindowService::impl_initializePropInfo()
 
     impl_addPropertyInfo(
         css::beans::Property(
-            TABWINDOWSERVICE_PROPNAME_WINDOW,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Window")),
             TABWINDOWSERVICE_PROPHANDLE_WINDOW,
             ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
             css::beans::PropertyAttribute::TRANSIENT));

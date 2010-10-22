@@ -181,7 +181,6 @@ class TitleHelper : private ::cppu::BaseMutex
         void impl_appendProductExtension (::rtl::OUStringBuffer& sTitle);
         void impl_appendModuleName (::rtl::OUStringBuffer& sTitle);
         void impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle);
-        void impl_appendEvalVersion (::rtl::OUStringBuffer& sTitle);
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
         ::rtl::OUString impl_getSubTitle ();
