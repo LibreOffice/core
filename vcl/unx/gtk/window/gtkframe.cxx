@@ -3553,6 +3553,10 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
     {
         GTK_YIELD_GRAB();
 
+        const bool bWasPreedit =
+            (pThis->m_aInputEvent.mpTextAttr != 0) ||
+            pThis->m_bPreeditJustChanged;
+
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
         pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
@@ -3576,9 +3580,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
          *  or because there never was a preedit.
          */
         bool bSingleCommit = false;
-        bool bWasPreedit =
-            (pThis->m_aInputEvent.mpTextAttr != 0) ||
-            pThis->m_bPreeditJustChanged;
         if( ! bWasPreedit
             && pThis->m_aInputEvent.maText.Len() == 1
             && ! pThis->m_aPrevKeyPresses.empty()
