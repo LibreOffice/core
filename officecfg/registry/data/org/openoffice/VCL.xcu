@@ -1423,9 +1423,8 @@
       </node>
       <node oor:name="arial" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>liberationsans;albany;albanyamt;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>liberationsans;albany;albanyamt;arimo;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
-        <prop oor:name="SubstFontsMS"><value></value></prop>
         <prop oor:name="SubstFontsPS"><value>Helvetica</value></prop>
         <prop oor:name="SubstFontsHTML"><value>sans-serif</value></prop>
         <prop oor:name="FontWeight"><value>Normal</value></prop>
@@ -1436,24 +1435,9 @@
         <prop oor:name="SubstFonts">
           <value>arialnarrowmt;liberationsansnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value></value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Condensed</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Normal,SansSerif</value>
-        </prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Condensed</value></prop>
+        <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
       </node>
       <node oor:name="arialunicode" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -1477,6 +1461,17 @@
         <prop oor:name="FontType">
           <value>Normal,SansSerif,Full</value>
         </prop>
+      </node>
+      <node oor:name="arimo" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>arial;liberationsans;albany;albanyamt;helvetica;</value>
+        </prop>
+        <prop oor:name="SubstFontsMS"><value>arial</value></prop>
+        <prop oor:name="SubstFontsPS"><value>helvetica</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>sans-serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Standard,Normal,SansSerif</value></prop>
       </node>
       <node oor:name="arioso" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -2394,7 +2389,7 @@
       </node>
       <node oor:name="courier" oor:op="replace">
     <prop oor:name="SubstFonts">
-          <value>cumberland;cumberlandamt;liberationmono;couriernew;nimbusmonol;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+          <value>cumberland;cumberlandamt;cousine;liberationmono;couriernew;nimbusmonol;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
     <prop oor:name="SubstFontsMS"><value>Courier New</value></prop>
     <prop oor:name="SubstFontsPS"><value></value></prop>
@@ -2405,9 +2400,19 @@
       </node>
       <node oor:name="couriernew" oor:op="replace">
     <prop oor:name="SubstFonts">
-      <value>cumberland;cumberlandamt;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+      <value>cumberland;cumberlandamt;cousine;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
-    <prop oor:name="SubstFontsMS"><value></value></prop>
+    <prop oor:name="SubstFontsPS"><value>Courier</value></prop>
+    <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+    <prop oor:name="FontWeight"><value>Normal</value></prop>
+    <prop oor:name="FontWidth"><value>Normal</value></prop>
+    <prop oor:name="FontType"><value>Standard,Normal,Fixed,Typewriter</value></prop>
+      </node>
+      <node oor:name="cousine" oor:op="replace">
+    <prop oor:name="SubstFonts">
+      <value>couriernew;cumberland;cumberlandamt;liberationmono;courier</value>
+        </prop>
+    <prop oor:name="SubstFontsMS"><value>Courier New</value></prop>
     <prop oor:name="SubstFontsPS"><value>Courier</value></prop>
     <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
     <prop oor:name="FontWeight"><value>Normal</value></prop>
@@ -7287,7 +7292,6 @@
         <prop oor:name="SubstFonts">
           <value>thorndale;thorndaleamt;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
-        <prop oor:name="SubstFontsMS"><value></value></prop>
         <prop oor:name="SubstFontsPS"><value>Times</value></prop>
         <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
         <prop oor:name="FontWeight"><value>Normal</value></prop>
@@ -7315,6 +7319,17 @@
         <prop oor:name="FontWeight"><value>Normal</value></prop>
         <prop oor:name="FontWidth"><value>Normal</value></prop>
         <prop oor:name="FontType"><value>Normal,Serif</value></prop>
+      </node>
+      <node oor:name="timos" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>timesnewroman;thorndale;thorndaleamt;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons</value>
+        </prop>
+        <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
+        <prop oor:name="SubstFontsPS"><value>Times</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Standard,Normal,Serif</value></prop>
       </node>
       <node oor:name="tmsrmn" oor:op="replace">
         <prop oor:name="SubstFonts">
