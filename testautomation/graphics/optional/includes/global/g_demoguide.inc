@@ -247,7 +247,8 @@ testcase t_Interoperability
     MenuSelect(MenuGetItemID(3))
     View.OpenMenu
     MenuSelect(MenuGetItemID(2))
-    sleep 2    
+    printlog "needing a longer wait here for first start of the master page previews"
+    wait(20000)
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
     sleep (5)

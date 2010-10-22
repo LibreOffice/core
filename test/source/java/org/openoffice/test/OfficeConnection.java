@@ -31,8 +31,9 @@ import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.connection.NoConnectException;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.DisposedException;
-import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -49,17 +50,16 @@ public final class OfficeConnection {
     /** Start up an OOo instance.
     */
     public void setUp() throws Exception {
-        String sofficeArg = getArgument("soffice");
+        String sofficeArg = Argument.get("soffice");
         if (sofficeArg.startsWith("path:")) {
             description = "pipe,name=oootest" + UUID.randomUUID();
             ProcessBuilder pb = new ProcessBuilder(
                 sofficeArg.substring("path:".length()), "-quickstart=no",
                 "-nofirststartwizard", "-norestore",
                 "-accept=" + description + ";urp",
-                "-env:UserInstallation=" + getArgument("user"),
-                "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
-                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
-            String envArg = getArgument("env");
+                "-env:UserInstallation=" + Argument.get("user"),
+                "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
+            String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();
                 int i = envArg.indexOf("=");
@@ -85,11 +85,11 @@ public final class OfficeConnection {
             Bootstrap.createInitialComponentContext(null));
         for (;;) {
             try {
-                factory = UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class,
+                context = UnoRuntime.queryInterface(
+                    XComponentContext.class,
                     resolver.resolve(
                         "uno:" + description +
-                        ";urp;StarOffice.ServiceManager"));
+                        ";urp;StarOffice.ComponentContext"));
                 break;
             } catch (NoConnectException e) {}
             if (process != null) {
@@ -104,19 +104,24 @@ public final class OfficeConnection {
         throws InterruptedException, com.sun.star.uno.Exception
     {
         boolean desktopTerminated = true;
-        if (factory != null) {
-            XDesktop desktop = UnoRuntime.queryInterface(
-                XDesktop.class,
-                factory.createInstance("com.sun.star.frame.Desktop"));
-            factory = null;
-            try {
-                desktopTerminated = desktop.terminate();
-            } catch (DisposedException e) {}
-                // it appears that DisposedExceptions can already happen while
-                // receiving the response of the terminate call
-            desktop = null;
-        } else if (process != null) {
-            process.destroy();
+        if (process != null) {
+            if (context != null) {
+                XMultiComponentFactory factory = context.getServiceManager();
+                assertNotNull(factory);
+                XDesktop desktop = UnoRuntime.queryInterface(
+                    XDesktop.class,
+                    factory.createInstanceWithContext(
+                        "com.sun.star.frame.Desktop", context));
+                context = null;
+                try {
+                    desktopTerminated = desktop.terminate();
+                } catch (DisposedException e) {}
+                    // it appears that DisposedExceptions can already happen
+                    // while receiving the response of the terminate call
+                desktop = null;
+            } else {
+                process.destroy();
+            }
         }
         int code = 0;
         if (process != null) {
@@ -130,19 +135,15 @@ public final class OfficeConnection {
         assertTrue(errTerminated);
     }
 
-    /** Obtain the service factory of the running OOo instance.
+    /** Obtain the component context of the running OOo instance.
     */
-    public XMultiServiceFactory getFactory() {
-        return factory;
+    public XComponentContext getComponentContext() {
+        return context;
     }
 
     //TODO: get rid of this hack for legacy qa/unoapi tests
     public String getDescription() {
         return description;
-    }
-
-    private static String getArgument(String name) {
-        return System.getProperty("org.openoffice.test.arg." + name);
     }
 
     private static Integer waitForProcess(Process process, final long millis)
@@ -217,5 +218,5 @@ public final class OfficeConnection {
     private Process process = null;
     private Forward outForward = null;
     private Forward errForward = null;
-    private XMultiServiceFactory factory = null;
+    private XComponentContext context = null;
 }

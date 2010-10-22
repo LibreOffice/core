@@ -218,8 +218,12 @@ testcase tiTableObjectBar
 
     Kontext "InsertTableImpress"
     printlog "Inserting table."
-    InsertTableImpress.OK
-
+    if InsertTableImpress.Exists(1) then
+        InsertTableImpress.OK
+    else
+        sleep (1)
+        InsertTableImpress.OK
+    endif
     printlog "Selecting table for geeting the TableObjectBar."
     printlog "Switching between Draw/Impress"
     if ( gApplication = "IMPRESS" )then

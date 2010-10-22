@@ -51,6 +51,8 @@ public class JPEGEvaluator extends EnhancedComplexTestCase
         GlobalLogWriter.set(log);
         ParameterHelper aParam = new ParameterHelper(param);
 
+        // aParam.getTestParameters().put("current_ok_status", -1);
+
         // run through all documents found in Inputpath
         foreachResultCreateHTML(aParam);
     }

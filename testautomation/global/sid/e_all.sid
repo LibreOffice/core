@@ -776,7 +776,7 @@ ToolsLanguageHyphenationDraw SID_HYPHENATION
 
 ' **** Math
 ToolsSymbolsCatalog SID_SYMBOLS_CATALOGUE
-ToolsImportFormula SID_INSERT_FORMULA
+ToolsImportFormula SID_IMPORT_FORMULA
 
 ' ******************************************
 ' ***********  Slide Show Menu  ************
