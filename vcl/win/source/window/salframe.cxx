@@ -161,7 +161,7 @@ BOOL WinSalFrame::mbInReparent = FALSE;
 // =======================================================================
 
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
-static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
+static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = NULL );
 
 static void ImplSaveFrameState( WinSalFrame* pFrame )
 {
@@ -182,6 +182,25 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWMAXIMIZED;
             pFrame->mbRestoreMaximize = TRUE;
+
+            WINDOWPLACEMENT aPlacement;
+            aPlacement.length = sizeof(aPlacement);
+            if( GetWindowPlacement( pFrame->mhWnd, &aPlacement ) )
+            {
+                RECT aRect = aPlacement.rcNormalPosition;
+                RECT aRect2 = aRect;
+                AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
+                                    FALSE,  GetWindowExStyle( pFrame->mhWnd ) );
+                long nTopDeco = abs( aRect.top - aRect2.top );
+                long nLeftDeco = abs( aRect.left - aRect2.left );
+                long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+                long nRightDeco = abs( aRect.right - aRect2.right );
+
+                pFrame->maState.mnX      = aRect.left + nLeftDeco;
+                pFrame->maState.mnY      = aRect.top + nTopDeco;
+                pFrame->maState.mnWidth  = aRect.right - aRect.left - nLeftDeco - nRightDeco;
+                pFrame->maState.mnHeight = aRect.bottom - aRect.top - nTopDeco - nBottomDeco;
+            }
         }
         else
         {
@@ -1934,17 +1953,25 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
         }
     }
 
-    // Wenn Fenster nicht minimiert/maximiert ist oder nicht optisch
-    // umgesetzt werden muss, dann SetWindowPos() benutzen, da
-    // SetWindowPlacement() die TaskBar mit einrechnet
+    // if a window is neither minimized nor maximized or need not be
+    // positioned visibly (that is in visible state), do not use
+    // SetWindowPlacement since it calculates including the TaskBar
     if ( !IsIconic( mhWnd ) && !IsZoomed( mhWnd ) &&
          (!bVisible || (aPlacement.showCmd == SW_RESTORE)) )
     {
         if( bUpdateHiddenFramePos )
         {
+            RECT aStateRect;
+            aStateRect.left   = nX;
+            aStateRect.top    = nY;
+            aStateRect.right  = nX+nWidth;
+            aStateRect.bottom = nY+nHeight;
             // #96084 set a useful internal window size because
             // the window will not be maximized (and the size updated) before show()
-            SetMaximizedFrameGeometry( mhWnd, this );
+            SetMaximizedFrameGeometry( mhWnd, this, &aStateRect );
+            SetWindowPos( mhWnd, 0,
+                          maGeometry.nX, maGeometry.nY, maGeometry.nWidth, maGeometry.nHeight,
+                          SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
         }
         else
             SetWindowPos( mhWnd, 0,
@@ -4197,23 +4224,27 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
 
 // -----------------------------------------------------------------------
 
-static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
+static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect )
 {
     // calculate and set frame geometry of a maximized window - useful if the window is still hidden
 
     // dualmonitor support:
     // Get screensize of the monitor whith the mouse pointer
 
-    POINT pt;
-    GetCursorPos( &pt );
     RECT aRectMouse;
-    aRectMouse.left = pt.x;
-    aRectMouse.top = pt.y;
-    aRectMouse.right = pt.x+2;
-    aRectMouse.bottom = pt.y+2;
+    if( ! pParentRect )
+    {
+        POINT pt;
+        GetCursorPos( &pt );
+        aRectMouse.left = pt.x;
+        aRectMouse.top = pt.y;
+        aRectMouse.right = pt.x+2;
+        aRectMouse.bottom = pt.y+2;
+        pParentRect = &aRectMouse;
+    }
 
     RECT aRect;
-    ImplSalGetWorkArea( hWnd, &aRect, &aRectMouse );
+    ImplSalGetWorkArea( hWnd, &aRect, pParentRect );
 
     // a maximized window has no other borders than the caption
     pFrame->maGeometry.nLeftDecoration = pFrame->maGeometry.nRightDecoration = pFrame->maGeometry.nBottomDecoration = 0;

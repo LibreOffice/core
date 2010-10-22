@@ -1524,7 +1524,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
 
         // add font alias if available
         // a font alias should never win against an original font with similar quality
-        if( aMapNames.Len() >= nMapNameIndex )
+        if( aMapNames.Len() <= nMapNameIndex )
             break;
         if( bKeepNewData ) // try to recycle obsoleted object
             pNewData = pNewData->CreateAlias();

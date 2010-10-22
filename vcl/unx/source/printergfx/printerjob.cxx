@@ -341,7 +341,8 @@ PrinterJob::~PrinterJob ()
     delete mpJobTrailer;
 
     // XXX should really call osl::remove routines
-    removeSpoolDir (maSpoolDirName);
+    if( maSpoolDirName.getLength() )
+        removeSpoolDir (maSpoolDirName);
 
     // osl::Directory::remove (maSpoolDirName);
 }
@@ -614,7 +615,7 @@ PrinterJob::EndJob ()
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
         if (0 == rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName,
-            maJobTitle, pDestFILE, m_aDocumentJobData ))
+            maJobTitle, pDestFILE, m_aDocumentJobData, true ))
         {
             bSuccess = sal_False;
         }
