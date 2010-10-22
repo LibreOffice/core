@@ -494,8 +494,10 @@ BOOL SfxUndoManager::Undo()
     DBG_ASSERT( m_pData->pActUndoArray == m_pData->pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
     if ( m_pData->pActUndoArray->nCurUndoAction )
     {
-        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ];
+        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction - 1 ];
         pAction->Undo();
+        // decrement nCurUndoAction *after* having called Undo - in case it raises an exception
+        --m_pData->pActUndoArray->nCurUndoAction;
         bRet = TRUE;
 
         for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
@@ -538,8 +540,10 @@ BOOL SfxUndoManager::Redo()
 
     if ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
     {
-        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction++];
+        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction];
         pAction->Redo();
+        // increment nCurUndoAction *after* having called Redo - in case it raises an exception
+        ++m_pData->pActUndoArray->nCurUndoAction;
         bRet = TRUE;
 
         for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
