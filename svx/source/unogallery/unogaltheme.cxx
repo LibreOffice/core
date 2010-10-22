@@ -37,6 +37,9 @@
 #include "svx/gallery1.hxx"
 #include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unopage.hxx>
+#include <svl/itempool.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -321,10 +324,42 @@ void SAL_CALL GalleryTheme::update(  )
 
         if( pModel && pModel->GetDoc() && pModel->GetDoc()->ISA( FmFormModel ) )
         {
+            //Here we're inserting something that's already a gallery theme drawing
+
             nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
             if( mpTheme->InsertModel( *static_cast< FmFormModel* >( pModel->GetDoc() ), nIndex ) )
                 nRet = nIndex;
+        }
+        else if (!pModel)
+        {
+            //#i80184# Try to do the right thing and make a Gallery drawing out of an ordinary
+            //Drawing if possible.
+            try
+            {
+                uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
+                uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+                uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
+                SvxDrawPage* pUnoPage = xPage.is() ? SvxDrawPage::getImplementation( xPage ) : NULL;
+                SdrModel* pOrigModel = pUnoPage ? pUnoPage->GetSdrPage()->GetModel() : NULL;
+                SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : NULL;
+
+                if (pOrigPage && pOrigModel)
+                {
+                    FmFormModel* pTmpModel = new FmFormModel(&pOrigModel->GetItemPool());
+                    SdrPage* pNewPage = pOrigPage->Clone();
+                    pTmpModel->InsertPage(pNewPage, 0);
+
+                    uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pTmpModel ) );
+                    pTmpModel->setUnoModel( uno::Reference< uno::XInterface >::query( xDrawing ) );
+
+                    nRet = insertDrawingByIndex( xDrawing, nIndex );
+                    return nRet;
+                }
+            }
+            catch (...)
+            {
+            }
         }
     }
 
