@@ -46,9 +46,14 @@ SRS1NAME=$(TARGET)
 SRC1FILES =	dlgegif.src		\
         egifstr.src
 .IF "$(L10N_framework)"==""
-SLOFILES= 	$(SLO)$/egif.obj		\
-        $(SLO)$/dlgegif.obj	\
+SLOFILES= \
+        $(EXCEPTIONSFILES)	\
         $(SLO)$/giflzwc.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/dlgegif.obj	\
+        $(SLO)$/egif.obj
+
 .ENDIF
 
 # ==========================================================================

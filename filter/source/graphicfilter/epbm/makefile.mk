@@ -46,8 +46,11 @@ SRS1NAME=$(TARGET)
 SRC1FILES=	dlgepbm.src \
             epbmstr.src
 .IF "$(L10N_framework)"==""
-SLOFILES =	$(SLO)$/epbm.obj \
-            $(SLO)$/dlgepbm.obj
+SLOFILES = \
+	$(EXCEPTIONSFILES)
+EXCEPTIONSFILES =	\
+	$(SLO)$/epbm.obj \
+	$(SLO)$/dlgepbm.obj
 .ENDIF
 # ==========================================================================
 

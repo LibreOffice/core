@@ -42,6 +42,7 @@ CDEFS+= -DEDITDEBUG
 .ENDIF
 
 SLOFILES =	$(SLO)$/eras.obj
+EXCEPTIONSFILES =	$(SLO)$/eras.obj
 
 # ==========================================================================
 

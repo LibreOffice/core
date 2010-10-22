@@ -42,6 +42,7 @@ CDEFS+= -DEDITDEBUG
 .ENDIF
 .IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/etiff.obj
+EXCEPTIONSFILES =	$(SLO)$/etiff.obj
 
 # ==========================================================================
 
