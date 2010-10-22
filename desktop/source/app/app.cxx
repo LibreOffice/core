@@ -121,6 +121,7 @@
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/signal.h>
+#include <osl/thread.hxx>
 #include <rtl/uuid.h>
 #include <rtl/uri.hxx>
 #include <unotools/pathoptions.hxx>
@@ -347,9 +348,7 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pArgs )
-    {
             pArgs = new CommandLineArgs;
-    }
     }
 
     return pArgs;
@@ -1561,7 +1560,7 @@ void Desktop::Main()
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     sal_Bool bRestartRequested( sal_False );
     sal_Bool bUseSystemFileDialog(sal_True);
-    int      nAcquireCount( 0 );
+    int         nAcquireCount( 0 );
     Reference < css::document::XEventListener > xGlobalBroadcaster;
     try
     {
@@ -1628,25 +1627,6 @@ void Desktop::Main()
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
-/*
-        // locale and UI locale in AppSettings are now retrieved from configuration or system directly via SvtSysLocale
-        // no reason to set while starting
-        // set UI language and locale
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
-        //LanguageSelection langselect;
-        OUString aUILocaleString = LanguageSelection::getLanguageString();
-        Locale aUILocale = LanguageSelection::IsoStringToLocale(aUILocaleString);
-        LanguageType eLanguage = SvtSysLocale().GetLanguage();
-
-        // #i39040#, do not call anything between GetSettings and SetSettings that might have
-        // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
-        // which changes the MiscSettings !!! )
-        AllSettings aSettings( Application::GetSettings() );
-        aSettings.SetUILocale( aUILocale );
-        aSettings.SetLanguage( eLanguage );
-        Application::SetSettings( aSettings );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
-*/
 
         // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
         OUString aTitleString( aTitle );
@@ -1666,12 +1646,9 @@ void Desktop::Main()
 #endif
 
         SetDisplayName( aTitle );
-//        SetSplashScreenProgress(30);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions.reset( new SvtPathOptions);
-//        SetSplashScreenProgress(40);
-//        pLanguageOptions = new SvtLanguageOptions(sal_True);
-//        SetSplashScreenProgress(45);
+        SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
         // Check special env variable #111015#
@@ -1753,6 +1730,7 @@ void Desktop::Main()
         }
 
         SetSplashScreenProgress(50);
+
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
@@ -1782,43 +1760,37 @@ void Desktop::Main()
 
         if ( !bRestartRequested )
         {
-            if (
-                (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
+            if ((!pCmdLineArgs->WantsToLoadDocument()                                  ) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
-                (!Application::AnyInput( INPUT_APPEVENT )                              )
-               )
+                (!Application::AnyInput( INPUT_APPEVENT )                              ))
             {
-                RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
-                Reference< XFrame > xDesktopFrame( xSMgr->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-                if (xDesktopFrame.is())
-                {
-    //                SetSplashScreenProgress(60);
-                    Reference< XFrame > xBackingFrame;
-                    Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+                 RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
+                 Reference< XFrame > xDesktopFrame( xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+                 if (xDesktopFrame.is())
+                 {
+                   Reference< XFrame > xBackingFrame;
+                   Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
-                    xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
-                    if (xBackingFrame.is())
-                        xContainerWindow = xBackingFrame->getContainerWindow();
-                    if (xContainerWindow.is())
-                    {
-                        // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
-                        // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
-                        // otherwise documents loaded into this frame will later on miss functionality depending on the style.
-                        Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-                        OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
-                        pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+                   xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                   if (xBackingFrame.is())
+                       xContainerWindow = xBackingFrame->getContainerWindow();
+                   if (xContainerWindow.is())
+                   {
+                       // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
+                       // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
+                       // otherwise documents loaded into this frame will later on miss functionality depending on the style.
+                       Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                       OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
+                       pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
 
-                        SetSplashScreenProgress(75);
-                        Sequence< Any > lArgs(1);
-                        lArgs[0] <<= xContainerWindow;
+                       SetSplashScreenProgress(75);
+                       Sequence< Any > lArgs(1);
+                       lArgs[0] <<= xContainerWindow;
 
-                        Reference< XController > xBackingComp(
-                            xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
-                            UNO_QUERY);
-    //                    SetSplashScreenProgress(80);
+                       Reference< XController > xBackingComp(
+                           xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs), UNO_QUERY);
                         if (xBackingComp.is())
                         {
                             Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
@@ -1849,16 +1821,6 @@ void Desktop::Main()
         FatalError( MakeStartupErrorMessage(e.Message) );
         return;
     }
-    /*
-    catch ( ... )
-    {
-        FatalError( MakeStartupErrorMessage(
-            OUString::createFromAscii(
-            "Unknown error during startup (Office wrapper service).\nInstallation could be damaged.")));
-        return;
-    }
-    */
-//    SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
 
@@ -1867,7 +1829,6 @@ void Desktop::Main()
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
-//    SetSplashScreenProgress(60);
 
     if ( !bRestartRequested )
     {
@@ -1901,15 +1862,6 @@ void Desktop::Main()
             FatalError( MakeStartupErrorMessage(e.Message) );
             return;
         }
-        /*
-        catch ( ... )
-        {
-            FatalError( MakeStartupErrorMessage(
-                OUString::createFromAscii(
-                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
-            return;
-        }
-        */
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
@@ -2211,12 +2163,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 
     // CloseStartupScreen();
     CloseSplashScreen();
-
     CheckFirstRun( );
-
-    // allow ipc interaction
-//    OfficeIPCThread::SetReady();
-
     EnableOleAutomation();
 
     if (getenv ("OOO_EXIT_POST_STARTUP"))
@@ -2713,16 +2660,6 @@ void Desktop::OpenClients()
 
     if ( ! bAllowRecoveryAndSessionManagement )
     {
-     /*
-        ::comphelper::ConfigurationHelper::writeDirectKey(
-                ::comphelper::getProcessServiceFactory(),
-                ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
-                ::rtl::OUString::createFromAscii("AutoSave"),
-                ::rtl::OUString::createFromAscii("Enabled"),
-                ::com::sun::star::uno::makeAny(sal_False),
-                ::comphelper::ConfigurationHelper::E_STANDARD);
-
-        */
         try
         {
             Reference< XDispatch > xRecovery(
