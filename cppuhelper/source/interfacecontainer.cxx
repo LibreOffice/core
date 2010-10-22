@@ -99,15 +99,15 @@ OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & 
         // worst case, two iterators at the same time
         rCont.copyAndResetInUse();
     bIsList = rCont_.bIsList;
-    pData = rCont_.pData;
+    aData = rCont_.aData;
     if( bIsList )
     {
         rCont.bInUse = sal_True;
-        nRemain = ((Sequence< Reference< XInterface > >*)pData)->getLength();
+        nRemain = aData.pAsSequence->getLength();
     }
-    else if( pData )
+    else if( aData.pAsInterface )
     {
-        ((XInterface *)pData)->acquire();
+        aData.pAsInterface->acquire();
         nRemain = 1;
     }
     else
@@ -120,7 +120,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW( () )
     {
     MutexGuard aGuard( rCont.rMutex );
     // bResetInUse protect the iterator against recursion
-    bShared = pData == rCont.pData && rCont.bIsList;
+    bShared = aData.pAsSequence == rCont.aData.pAsSequence && rCont.bIsList;
     if( bShared )
     {
         OSL_ENSURE( rCont.bInUse, "OInterfaceContainerHelper must be in use" );
@@ -132,10 +132,10 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW( () )
     {
         if( bIsList )
             // Sequence owned by the iterator
-            delete (Sequence< Reference< XInterface > >*)pData;
-        else if( pData )
+            delete aData.pAsSequence;
+        else if( aData.pAsInterface )
             // Interface is acquired by the iterator
-            ((XInterface*)pData)->release();
+            aData.pAsInterface->release();
     }
 }
 
@@ -146,9 +146,9 @@ XInterface * OInterfaceIteratorHelper::next() SAL_THROW( () )
         nRemain--;
         if( bIsList )
             // typecase to const,so the getArray method is faster
-            return ((const Sequence< Reference< XInterface > >*)pData)->getConstArray()[nRemain].get();
-        else if( pData )
-            return (XInterface*)pData;
+            return aData.pAsSequence->getConstArray()[nRemain].get();
+        else if( aData.pAsInterface )
+            return aData.pAsInterface;
     }
     // exception
     return 0;
@@ -159,15 +159,14 @@ void OInterfaceIteratorHelper::remove() SAL_THROW( () )
     if( bIsList )
     {
         OSL_ASSERT( nRemain >= 0 &&
-                    nRemain < ((const Sequence< Reference< XInterface > >*)pData)->getLength() );
-        XInterface * p =
-            ((const Sequence< Reference< XInterface > >*)pData)->getConstArray()[nRemain].get();
+                    nRemain < aData.pAsSequence->getLength() );
+        XInterface * p = aData.pAsSequence->getConstArray()[nRemain].get();
         rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >( &p ) );
     }
     else
     {
         OSL_ASSERT( 0 == nRemain );
-        rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >(&pData));
+        rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >(&aData.pAsInterface));
     }
 }
 
@@ -177,8 +176,7 @@ void OInterfaceIteratorHelper::remove() SAL_THROW( () )
 
 
 OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW( () )
-    : pData( 0 )
-    , rMutex( rMutex_ )
+    : rMutex( rMutex_ )
     , bInUse( sal_False )
     , bIsList( sal_False )
 {
@@ -188,17 +186,17 @@ OInterfaceContainerHelper::~OInterfaceContainerHelper() SAL_THROW( () )
 {
     OSL_ENSURE( !bInUse, "~OInterfaceContainerHelper but is in use" );
     if( bIsList )
-        delete (Sequence< Reference< XInterface > >*)pData;
-    else if( pData )
-        ((XInterface*)pData)->release();
+        delete aData.pAsSequence;
+    else if( aData.pAsInterface )
+        aData.pAsInterface->release();
 }
 
 sal_Int32 OInterfaceContainerHelper::getLength() const SAL_THROW( () )
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
-        return ((Sequence< Reference< XInterface > >*)pData)->getLength();
-    else if( pData )
+        return aData.pAsSequence->getLength();
+    else if( aData.pAsInterface )
         return 1;
     return 0;
 }
@@ -207,10 +205,10 @@ Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
-        return *(Sequence< Reference< XInterface > >*)pData;
-    else if( pData )
+        return *aData.pAsSequence;
+    else if( aData.pAsInterface )
     {
-        Reference<XInterface> x( (XInterface *)pData );
+        Reference<XInterface> x( aData.pAsInterface );
         return Sequence< Reference< XInterface > >( &x, 1 );
     }
     return Sequence< Reference< XInterface > >();
@@ -224,9 +222,9 @@ void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW( () )
         // this should be the worst case. If a iterator is active
         // and a new Listener is added.
         if( bIsList )
-            pData = new Sequence< Reference< XInterface > >( *(Sequence< Reference< XInterface > >*)pData );
-        else if( pData )
-            ((XInterface*)pData)->acquire();
+            aData.pAsSequence = new Sequence< Reference< XInterface > >( *aData.pAsSequence );
+        else if( aData.pAsInterface )
+            aData.pAsInterface->acquire();
 
         bInUse = sal_False;
     }
@@ -241,25 +239,25 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
 
     if( bIsList )
     {
-        sal_Int32 nLen = ((Sequence< Reference< XInterface > >*)pData)->getLength();
-        realloc( *(Sequence< Reference< XInterface > >*)pData, nLen +1 );
-        ((Sequence< Reference< XInterface > >*)pData)->getArray()[ nLen ] = rListener;
+        sal_Int32 nLen = aData.pAsSequence->getLength();
+        realloc( *aData.pAsSequence, nLen +1 );
+        aData.pAsSequence->getArray()[ nLen ] = rListener;
         return nLen +1;
     }
-    else if( pData )
+    else if( aData.pAsInterface )
     {
         Sequence< Reference< XInterface > > * pSeq = new Sequence< Reference< XInterface > >( 2 );
         Reference<XInterface> * pArray = pSeq->getArray();
-        pArray[0] = (XInterface *)pData;
+        pArray[0] = aData.pAsInterface;
         pArray[1] = rListener;
-        ((XInterface *)pData)->release();
-        pData = pSeq;
+        aData.pAsInterface->release();
+        aData.pAsSequence = pSeq;
         bIsList = sal_True;
         return 2;
     }
     else
     {
-        pData = rListener.get();
+        aData.pAsInterface = rListener.get();
         if( rListener.is() )
             rListener->acquire();
         return 1;
@@ -275,8 +273,8 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
 
     if( bIsList )
     {
-        const Reference<XInterface> * pL = ((const Sequence< Reference< XInterface > >*)pData)->getConstArray();
-        sal_Int32 nLen = ((Sequence< Reference< XInterface > >*)pData)->getLength();
+        const Reference<XInterface> * pL = aData.pAsSequence->getConstArray();
+        sal_Int32 nLen = aData.pAsSequence->getLength();
         sal_Int32 i;
         for( i = 0; i < nLen; i++ )
         {
@@ -284,7 +282,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
             // more faster.
             if( pL[i].get() == rListener.get() )
             {
-                sequenceRemoveElementAt( *(Sequence< Reference< XInterface > >*)pData, i );
+                sequenceRemoveElementAt( *aData.pAsSequence, i );
                 break;
             }
         }
@@ -296,30 +294,30 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
             {
                 if( pL[i] == rListener )
                 {
-                    sequenceRemoveElementAt(*(Sequence< Reference< XInterface > >*)pData, i );
+                    sequenceRemoveElementAt(*aData.pAsSequence, i );
                     break;
                 }
             }
         }
 
-        if( ((Sequence< Reference< XInterface > >*)pData)->getLength() == 1 )
+        if( aData.pAsSequence->getLength() == 1 )
         {
-            XInterface * p = ((const Sequence< Reference< XInterface > >*)pData)->getConstArray()[0].get();
+            XInterface * p = aData.pAsSequence->getConstArray()[0].get();
             p->acquire();
-            delete (Sequence< Reference< XInterface > >*)pData;
-            pData = p;
+            delete aData.pAsSequence;
+            aData.pAsInterface = p;
             bIsList = sal_False;
             return 1;
         }
         else
-            return ((Sequence< Reference< XInterface > >*)pData)->getLength();
+            return aData.pAsSequence->getLength();
     }
-    else if( pData && Reference<XInterface>( (XInterface*)pData ) == rListener )
+    else if( aData.pAsInterface && Reference<XInterface>( aData.pAsInterface ) == rListener )
     {
-        ((XInterface *)pData)->release();
-        pData = 0;
+        aData.pAsInterface->release();
+        aData.pAsInterface = 0;
     }
-    return pData ? 1 : 0;
+    return aData.pAsInterface ? 1 : 0;
 }
 
 void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_THROW( () )
@@ -328,10 +326,10 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
     OInterfaceIteratorHelper aIt( *this );
     // Container freigeben, falls im disposing neue Einträge kommen
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
-    if( !bIsList && pData )
-        ((XInterface *)pData)->release();
+    if( !bIsList && aData.pAsInterface )
+        aData.pAsInterface->release();
     // set the member to null, the iterator delete the values
-    pData = NULL;
+    aData.pAsInterface = NULL;
     bIsList = sal_False;
     bInUse = sal_False;
     aGuard.clear();
@@ -358,10 +356,10 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
     OInterfaceIteratorHelper aIt( *this );
     // Container freigeben, falls im disposing neue Einträge kommen
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
-    if( !bIsList && pData )
-        ((XInterface *)pData)->release();
+    if( !bIsList && aData.pAsInterface )
+        aData.pAsInterface->release();
     // set the member to null, the iterator delete the values
-    pData = 0;
+    aData.pAsInterface = 0;
     bIsList = sal_False;
     bInUse = sal_False;
     // release mutex before aIt destructor call
