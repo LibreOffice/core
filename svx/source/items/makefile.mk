@@ -50,34 +50,36 @@ SRC1FILES =  \
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB1OBJFILES= \
-        $(SLO)$/algitem.obj \
-        $(SLO)$/drawitem.obj	\
-        $(SLO)$/chrtitem.obj	\
-        $(SLO)$/e3ditem.obj \
-        $(SLO)$/grfitem.obj \
-        $(SLO)$/clipfmtitem.obj \
-        $(SLO)$/customshapeitem.obj 
+        $(SLO)$/algitem.obj		\
+        $(SLO)$/chrtitem.obj		\
+        $(SLO)$/clipfmtitem.obj		\
+        $(SLO)$/customshapeitem.obj	\
+        $(SLO)$/drawitem.obj		\
+        $(SLO)$/e3ditem.obj		\
+        $(SLO)$/grfitem.obj
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
-        $(SLO)$/ofaitem.obj \
-        $(SLO)$/postattr.obj	\
-        $(SLO)$/hlnkitem.obj \
-        $(SLO)$/pageitem.obj	\
-        $(SLO)$/viewlayoutitem.obj    \
-        $(SLO)$/rotmodit.obj \
-        $(SLO)$/numinf.obj	\
-        $(SLO)$/svxerr.obj	\
-        $(SLO)$/numfmtsh.obj	\
-        $(SLO)$/zoomitem.obj \
-        $(SLO)$/svxempty.obj \
-        $(SLO)$/SmartTagItem.obj \
-        $(SLO)$/zoomslideritem.obj \
+        $(SLO)$/SmartTagItem.obj	\
+        $(SLO)$/hlnkitem.obj		\
+        $(SLO)$/numfmtsh.obj		\
+        $(SLO)$/numinf.obj		\
+        $(SLO)$/ofaitem.obj		\
+        $(SLO)$/pageitem.obj		\
+        $(SLO)$/postattr.obj		\
+        $(SLO)$/rotmodit.obj		\
+        $(SLO)$/svxempty.obj		\
+        $(SLO)$/svxerr.obj		\
+        $(SLO)$/viewlayoutitem.obj	\
+        $(SLO)$/zoomitem.obj		\
+        $(SLO)$/zoomslideritem.obj
 
 SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 EXCEPTIONSFILES= \
-        $(SLO)$/customshapeitem.obj
+        $(SLO)$/chrtitem.obj		\
+        $(SLO)$/customshapeitem.obj	\
+        $(SLO)$/numfmtsh.obj
 
 .INCLUDE :	target.mk
 
