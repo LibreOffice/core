@@ -3121,6 +3121,8 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                                         ScSizeMode eMode, USHORT nSizeTwips,
                                         BOOL bRecord, BOOL bApi )
 {
+    ScDocShellModificator aModificator( rDocShell );
+
     if (!nRangeCnt)
         return TRUE;
 
@@ -3282,6 +3284,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     pDoc->UpdatePageBreaks( nTab );
 
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_ALL);
+    aModificator.SetDocumentModified();
 
     return bSuccess;
 }
