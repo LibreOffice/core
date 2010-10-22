@@ -30,6 +30,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -162,6 +163,7 @@ struct SfxUndoManager_Data
     SfxUndoArray*   pFatherUndoArray;
 
     bool            mbUndoEnabled;
+    bool            mbDoing;
 
     UndoListeners   aListeners;
 
@@ -170,6 +172,7 @@ struct SfxUndoManager_Data
         ,pActUndoArray( NULL )
         ,pFatherUndoArray( NULL )
         ,mbUndoEnabled( true )
+        ,mbDoing( false )
 
     {
         pActUndoArray = pUndoArray;
@@ -390,12 +393,12 @@ XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
-USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
+USHORT SfxUndoManager::GetUndoActionId() const
 {
-    DBG_ASSERT( nNo < m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
-    if( nNo < m_pData->pActUndoArray->nCurUndoAction )
+    DBG_ASSERT( m_pData->pActUndoArray->nCurUndoAction > 0, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
+    if( m_pData->pActUndoArray->nCurUndoAction > 0 )
     {
-        return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
+        return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1]->GetId();
     }
     else
     {
@@ -441,55 +444,41 @@ void SfxUndoManager::RemoveLastUndoAction()
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Undo()
+bool SfxUndoManager::IsDoing() const
 {
-    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
-    m_pData->mbUndoEnabled = false;
-
-    BOOL bRet = FALSE;
-
-    try
-    {
-        DBG_ASSERT( m_pData->pActUndoArray == m_pData->pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
-        if ( m_pData->pActUndoArray->nCurUndoAction )
-        {
-            ImplUndo( *m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ] );
-            bRet = TRUE;
-        }
-    }
-    catch( const Exception& )
-    {
-        m_pData->mbUndoEnabled = bUndoWasEnabled;
-        throw;
-    }
-    m_pData->mbUndoEnabled = bUndoWasEnabled;
-    return bRet;
+    DBG_TESTSOLARMUTEX();
+    return m_pData->mbDoing;
 }
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::ImplUndo( SfxUndoAction &rAction )
+BOOL SfxUndoManager::Undo()
 {
-    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
-    m_pData->mbUndoEnabled = false;
-    try
+    DBG_TESTSOLARMUTEX();
+    OSL_ENSURE( !IsDoing(), "SfxUndoManager::Undo: *nested* Undo/Redo actions? How this?" );
+
+    ::comphelper::FlagGuard aGuard( m_pData->mbDoing );
+    ::comphelper::FlagRestorationGuard aEnableGuard( m_pData->mbUndoEnabled, false );
+
+    BOOL bRet = FALSE;
+
+    DBG_ASSERT( m_pData->pActUndoArray == m_pData->pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
+    if ( m_pData->pActUndoArray->nCurUndoAction )
     {
-        rAction.Undo();
+        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ];
+        pAction->Undo();
+        bRet = TRUE;
+
         for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
                 listener != m_pData->aListeners.end();
                 ++listener
             )
         {
-            (*listener)->actionUndone( rAction );
+            (*listener)->actionUndone( *pAction );
         }
     }
-    catch( const Exception& )
-    {
-        m_pData->mbUndoEnabled = bUndoWasEnabled;
-        throw;
-    }
 
-    m_pData->mbUndoEnabled = bUndoWasEnabled;
+    return bRet;
 }
 
 //------------------------------------------------------------------------
@@ -508,63 +497,32 @@ XubString SfxUndoManager::GetRedoActionComment( USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
-USHORT SfxUndoManager::GetRedoActionId( USHORT nNo ) const
-{
-    return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction+nNo]->GetId(); //!
-}
-
-//------------------------------------------------------------------------
-
 BOOL SfxUndoManager::Redo()
 {
-    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
-    m_pData->mbUndoEnabled = false;
+    DBG_TESTSOLARMUTEX();
+    OSL_ENSURE( !IsDoing(), "SfxUndoManager::Redo: *nested* Undo/Redo actions? How this?" );
+
+    ::comphelper::FlagGuard aGuard( m_pData->mbDoing );
+    ::comphelper::FlagRestorationGuard aEnableGuard( m_pData->mbUndoEnabled, false );
 
     BOOL bRet = FALSE;
 
-    try
+    if ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
     {
-        if ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
-        {
-            ImplRedo( *m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction++] );
-            bRet = TRUE;
-        }
-    }
-    catch( const Exception& )
-    {
-        m_pData->mbUndoEnabled = bUndoWasEnabled;
-        throw;
-    }
+        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction++];
+        pAction->Redo();
+        bRet = TRUE;
 
-    m_pData->mbUndoEnabled = bUndoWasEnabled;
-    return bRet;
-}
-
-//------------------------------------------------------------------------
-
-void SfxUndoManager::ImplRedo( SfxUndoAction &rAction )
-{
-    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
-    m_pData->mbUndoEnabled = false;
-
-    try
-    {
-        rAction.Redo();
         for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
                 listener != m_pData->aListeners.end();
                 ++listener
             )
         {
-            (*listener)->actionRedone( rAction );
+            (*listener)->actionRedone( *pAction );
         }
     }
-    catch( const Exception& )
-    {
-        m_pData->mbUndoEnabled = bUndoWasEnabled;
-        throw;
-    }
 
-    m_pData->mbUndoEnabled = bUndoWasEnabled;
+    return bRet;
 }
 
 //------------------------------------------------------------------------
@@ -576,19 +534,21 @@ USHORT SfxUndoManager::GetRepeatActionCount() const
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget, USHORT nNo ) const
+XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget) const
 {
-    return m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 - nNo ]
+    return m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 ]
         ->GetRepeatComment(rTarget);
 }
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT /*nFrom*/, USHORT /*nCount*/ )
+BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
 {
     if ( m_pData->pActUndoArray->aUndoActions.Count() )
     {
-        Repeat( rTarget, *m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 ] );
+        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 ];
+        if ( pAction->CanRepeat( rTarget ) )
+            pAction->Repeat( rTarget );
         return TRUE;
     }
 
@@ -597,26 +557,11 @@ BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT /*nFrom*/, USHORT 
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction )
+BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget ) const
 {
-    if ( rAction.CanRepeat(rTarget) )
-        rAction.Repeat(rTarget);
-}
-
-//------------------------------------------------------------------------
-
-BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction ) const
-{
-    return rAction.CanRepeat(rTarget);
-}
-
-//------------------------------------------------------------------------
-
-BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const
-{
-    if ( m_pData->pActUndoArray->aUndoActions.Count() > nNo )
+    if ( m_pData->pActUndoArray->aUndoActions.Count() > 0 )
     {
-        USHORT nActionNo = m_pData->pActUndoArray->aUndoActions.Count() - 1 - nNo;
+        USHORT nActionNo = m_pData->pActUndoArray->aUndoActions.Count() - 1;
         return m_pData->pActUndoArray->aUndoActions[nActionNo]->CanRepeat(rTarget);
     }
 
@@ -904,7 +849,7 @@ void SfxLinkUndoAction::Redo()
 
 BOOL SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
 {
-    return pAction && pUndoManager->CanRepeat(r,*pAction);
+    return pAction && pAction->CanRepeat(r);
 }
 
 
@@ -913,8 +858,8 @@ BOOL SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
 
 void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 {
-    if ( pAction )
-        pUndoManager->Repeat(r,*pAction);
+    if ( pAction && pAction->CanRepeat( r ) )
+        pAction->Repeat( r );
 }
 
 
