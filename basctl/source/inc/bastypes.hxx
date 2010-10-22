@@ -164,8 +164,12 @@ public:
 #define BASWIN_INRESCHEDULE     0x08
 
 class Printer;
-class SfxUndoManager;
 class BasicEntryDescriptor;
+
+namespace svl
+{
+    class IUndoManager;
+}
 
 class IDEBaseWindow : public Window
 {
