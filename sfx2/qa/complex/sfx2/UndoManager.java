@@ -435,6 +435,46 @@ public class UndoManager
             assertFalse( "adding a new action should have cleared the Redo stack", undoManager.isRedoPossible() );
         }
 
+        // locking the manager
+        {
+            undoManager.clear();
+            listener.reset();
+
+            // implicit Undo actions, triggered by changes to the document
+            assertFalse( "unexpected initial locking state", undoManager.isLocked() );
+            undoManager.lock();
+            assertTrue( "just locked the manager, why does it lie?", undoManager.isLocked() );
+            test.doSingleModification();
+            assertEquals( "when the Undo manager is locked, no implicit additions should happen",
+                0, listener.getUndoActionsAdded() );
+            undoManager.unlock();
+            assertEquals( "unlock is not expected to add collected actions - they should be discarded",
+                0, listener.getUndoActionsAdded() );
+            assertFalse( "just unlocked the manager, why does it lie?", undoManager.isLocked() );
+
+            // explicit Undo actions
+            undoManager.lock();
+            undoManager.addUndoAction( new CustomUndoAction( "Dummy Undo Action" ) );
+            undoManager.unlock();
+            assertEquals( "explicit Undo actions are expected to be ignored when the manager is locked",
+                0, listener.getUndoActionsAdded() );
+
+            // Undo contexts while being locked
+            undoManager.lock();
+            undoManager.enterUndoContext( "Dummy Context" );
+            undoManager.enterHiddenUndoContext();
+            assertEquals( "entering Undo contexts should be ignored when the manager is locked", 0, listener.getUndoContextDepth() );
+            undoManager.leaveUndoContext();
+            undoManager.leaveUndoContext();
+            undoManager.unlock();
+
+            // |unlock| error handling
+            assertFalse( "internal error: manager should not be locked at this point in time", undoManager.isLocked() );
+            caughtExpected = false;
+            try { undoManager.unlock(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+            assertTrue( "unlocking the manager when it is not locked should throw", caughtExpected );
+        }
+
         // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
         assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", listener.isDisposed() );

@@ -86,6 +86,9 @@ namespace sfx2
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoActionTitles(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clear(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearRedo(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL unlock(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::util::InvalidStateException);
+        virtual ::sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
 

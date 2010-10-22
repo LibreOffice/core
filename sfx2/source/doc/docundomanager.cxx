@@ -402,6 +402,9 @@ namespace sfx2
         SfxModelGuard aGuard( *this );
 
         ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        if ( !rUndoManager.IsUndoEnabled() )
+            // ignore this request if the manager is locked
+            return;
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
@@ -415,6 +418,12 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::enterHiddenUndoContext(  ) throw (InvalidStateException, RuntimeException)
     {
         SfxModelGuard aGuard( *this );
+
+        ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        if ( !rUndoManager.IsUndoEnabled() )
+            // ignore this request if the manager is locked
+            return;
+
         // TODO: place your code here
     }
 
@@ -424,6 +433,10 @@ namespace sfx2
         SfxModelGuard aGuard( *this );
 
         ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        if ( !rUndoManager.IsUndoEnabled() )
+            // ignore this request if the manager is locked
+            return;
+
         if ( !rUndoManager.IsInListAction() )
             throw InvalidStateException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no active undo context" ) ),
@@ -456,6 +469,10 @@ namespace sfx2
             );
 
         ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        if ( !rUndoManager.IsUndoEnabled() )
+            // ignore the request if the manager is locked
+            return;
+
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
             rUndoManager.AddUndoAction( new UndoActionWrapper( i_action ) );
@@ -606,6 +623,35 @@ namespace sfx2
             rUndoManager.ClearRedo();
         }
         impl_notify( &XUndoManagerListener::redoActionsCleared, aGuard );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DocumentUndoManager::lock(  ) throw (RuntimeException)
+    {
+        SfxModelGuard aGuard( *this );
+
+        ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        rUndoManager.EnableUndo( false );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DocumentUndoManager::unlock(  ) throw (RuntimeException, InvalidStateException)
+    {
+        SfxModelGuard aGuard( *this );
+
+        ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        if ( rUndoManager.IsUndoEnabled() )
+            throw InvalidStateException( ::rtl::OUString::createFromAscii( "Undo manager is not locked" ), static_cast< XUndoManager* >( this ) );
+        rUndoManager.EnableUndo( true );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Bool SAL_CALL DocumentUndoManager::isLocked(  ) throw (RuntimeException)
+    {
+        SfxModelGuard aGuard( *this );
+
+        ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        return !rUndoManager.IsUndoEnabled();
     }
 
     //------------------------------------------------------------------------------------------------------------------
