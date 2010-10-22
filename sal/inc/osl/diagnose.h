@@ -78,6 +78,11 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_THIS_FILE       __FILE__
 
 /* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
+/* as documented in http://www.openoffice.org/issues/show_bug.cgi?id=114290 ,
+   this cannot work, so disable it for now */
+#if 1
+#define OSL_THIS_FUNC " "
+#else
 #ifdef __func__
 #define OSL_THIS_FUNC __func__
 #elif defined (__PRETTY_FUNCTION__)
@@ -87,6 +92,7 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #else
 #define OSL_THIS_FUNC " "
 #endif
+#endif /* 1 */
 
 /* the macro OSL_TO_STRING is intended to be an office internal macro for now */
 #define OSL_TO_STRING( x ) #x
