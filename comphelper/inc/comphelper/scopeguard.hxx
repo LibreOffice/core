@@ -83,6 +83,22 @@ private:
     }
 };
 
+class COMPHELPER_DLLPUBLIC FlagRestorationGuard : ScopeGuard
+{
+public:
+    FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
+        :ScopeGuard( ::boost::bind( RestoreFlag, ::boost::ref( i_flagRef ), !!i_flagRef ), i_excHandling )
+    {
+        i_flagRef = i_temporaryValue;
+    }
+
+private:
+    static void RestoreFlag( bool& i_flagRef, bool i_originalValue )
+    {
+        i_flagRef = i_originalValue;
+    }
+};
+
 } // namespace comphelper
 
 #endif // ! defined(INCLUDED_COMPHELPER_SCOPEGUARD_HXX)
