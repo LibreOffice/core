@@ -468,6 +468,11 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
         FcPatternDestroy( pTestPattern );
         if( eFcResult != FcResultMatch )
             continue;
+        // #i115131# double check results and eventually ignore them
+        FcBool bOutline = FcFalse;
+        FcResult eOutRes = FcPatternGetBool( pBetterPattern, FC_OUTLINE, 0, &bOutline );
+        if( (eOutRes != FcResultMatch) || (bOutline == FcFalse) )
+            continue;
         // insert best found pattern for the dupe-search pattern
         // TODO: skip inserting patterns that are already known in the target fontset
         FcPatternReference( pBetterPattern );
@@ -773,7 +778,10 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
 #endif
             }
             if( aFonts.empty() )
+            {
+                // TODO: remove fonts unusable to psprint from fontset
                 continue;
+            }
 
             int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), sal_True );
             PrintFont* pUpdate = aFonts.front();
