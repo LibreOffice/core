@@ -118,11 +118,12 @@ class GtkSalFrame : public SalFrame
                 return (event != NULL)
                     && (event->window == window)
                     && (event->send_event == send_event)
-                    && (event->state == state)
+                    // ignore non-Gdk state bits, e.g., these used by IBus
+                    && ((event->state & GDK_MODIFIER_MASK) == (state & GDK_MODIFIER_MASK))
                     && (event->keyval == keyval)
                     && (event->hardware_keycode == hardware_keycode)
                     && (event->group == group)
-                    && (event->time - time < 3)
+                    && (event->time - time < 300)
                     ;
             }
         };
