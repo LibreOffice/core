@@ -107,7 +107,7 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="NETBSD"
 COPYRECURSE=-R
 .ELSE #"$(OS)"=="MACOSX"
 COPYRECURSE=-r
