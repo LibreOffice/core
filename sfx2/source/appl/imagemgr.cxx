@@ -67,10 +67,6 @@ typedef std::hash_map< ::rtl::OUString,
                        ::rtl::OUStringHash,
                        ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;
 
-static WeakReference< XModuleManager >                        m_xModuleManager;
-static WeakReference< XModuleUIConfigurationManagerSupplier > m_xModuleCfgMgrSupplier;
-static WeakReference< XURLTransformer >                       m_xURLTransformer;
-static ModuleIdToImagegMgr                                    m_aModuleIdToImageMgrMap;
 
 Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
@@ -91,22 +87,6 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
     rtl::OUString aCommandURL( aURL );
     if ( nProtocol == INET_PROT_SLOT )
     {
-        /*
-        // Support old way to retrieve image via slot URL
-        Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
-        if ( !xURLTransformer.is() )
-        {
-            xURLTransformer = Reference< XURLTransformer >(
-                                ::comphelper::getProcessServiceFactory()->createInstance(
-                                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
-                                UNO_QUERY );
-            m_xURLTransformer = xURLTransformer;
-        }
-
-        URL aTargetURL;
-        aTargetURL.Complete = aURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        USHORT nId = ( USHORT ) aTargetURL.Path.toInt32();*/
         USHORT nId = ( USHORT ) String(aURL).Copy(5).ToInt32();
         const SfxSlot* pSlot = 0;
         if ( xModel.is() )
@@ -171,6 +151,8 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
         }
     }
 
+    static WeakReference< XModuleManager > m_xModuleManager;
+
     Reference< XModuleManager > xModuleManager = m_xModuleManager;
 
     if ( !xModuleManager.is() )
@@ -189,11 +171,16 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
         {
             Reference< XImageManager > xModuleImageManager;
             rtl::OUString aModuleId = xModuleManager->identify( rFrame );
+
+            static ModuleIdToImagegMgr m_aModuleIdToImageMgrMap;
+
             ModuleIdToImagegMgr::iterator pIter = m_aModuleIdToImageMgrMap.find( aModuleId );
             if ( pIter != m_aModuleIdToImageMgrMap.end() )
                 xModuleImageManager = pIter->second;
             else
             {
+                static WeakReference< XModuleUIConfigurationManagerSupplier > m_xModuleCfgMgrSupplier;
+
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier = m_xModuleCfgMgrSupplier;
 
                 if ( !xModuleCfgMgrSupplier.is() )
