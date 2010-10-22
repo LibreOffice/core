@@ -1531,7 +1531,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
 
         // add font alias if available
         // a font alias should never win against an original font with similar quality
-        if( aMapNames.Len() >= nMapNameIndex )
+        if( aMapNames.Len() <= nMapNameIndex )
             break;
         if( bKeepNewData ) // try to recycle obsoleted object
             pNewData = pNewData->CreateAlias();
@@ -8017,7 +8017,7 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpFontEntry )
         return FALSE;
 
-    // a little font charmap cache helps considerably
+#ifdef ENABLE_IFC_CACHE    // a little font charmap cache helps considerably
     static const int NMAXITEMS = 16;
     static int nUsedItems = 0, nCurItem = 0;
 
@@ -8035,10 +8035,12 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
         rFontCharMap.Reset( aCache[i].maCharMap.mpImpl );
     }
     else            // need to cache
+#endif // ENABLE_IFC_CACHE
     {
-        ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
+        const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
         rFontCharMap.Reset( pNewMap );
 
+#ifdef ENABLE_IFC_CACHE
         // manage cache round-robin and insert data
         CharMapCacheItem& rItem = aCache[ nCurItem ];
         rItem.mpFontData = pFontData;
@@ -8049,6 +8051,7 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
 
         if( ++nUsedItems >= NMAXITEMS )
             nUsedItems = NMAXITEMS;
+#endif // ENABLE_IFC_CACHE
     }
 
     if( rFontCharMap.IsDefaultMap() )

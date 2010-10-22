@@ -79,3 +79,11 @@ SHL1STDLIBS= \
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/i18npool.component
+
+$(MISC)/i18npool.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        i18npool.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt i18npool.component
