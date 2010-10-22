@@ -35,9 +35,7 @@
 #include <tools/rcid.h>
 #include <tools/config.hxx>
 #include <tools/stream.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>
@@ -64,8 +62,6 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 using namespace ::com::sun::star::script;
 
-// #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
-
 SV_IMPL_VARARR(SbTextPortions,SbTextPortion)
 
 TYPEINIT1(StarBASIC,SbxObject)
@@ -77,9 +73,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
-const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
-
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
@@ -88,7 +81,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
         {
             Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
-                        if ( xDocFac.is() )
+            if ( xDocFac.is() )
             {
                 try
                 {
@@ -100,6 +93,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
             }
         }
+        const String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
     }
     return pVBAGlobals;
@@ -108,6 +102,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
 //  i#i68894#
 SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
 {
+    const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
     if( rName == aThisComponent )
         return NULL;
     // rename to init globals
