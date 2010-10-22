@@ -41,7 +41,8 @@ SRS1NAME=core_strings
 SRC1FILES= \
     core_resource.src
 
-SLOFILES=	$(SLO)$/core_resource.obj
+SLOFILES=		$(EXCEPTIONSFILES)
+EXCEPTIONSFILES=	$(SLO)$/core_resource.obj
 
 # --- Targets ----------------------------------
 
