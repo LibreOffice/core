@@ -868,9 +868,7 @@ USHORT SwTOXAuthority::GetLevel() const
   -----------------------------------------------------------------------*/
 static String lcl_GetText(SwFmtFld const& rField)
 {
-    bool const isClipBoard(
-        rField.GetTxtFld()->GetTxtNode().GetDoc()->IsClipBoard());
-    return rField.GetFld()->ExpandField(isClipBoard);
+    return rField.GetFld()->ExpandField(true);
 }
 
 void SwTOXAuthority::GetText_Impl( String& rTxt, String& ) const

@@ -779,9 +779,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                     case RES_TXTATR_FIELD :
                     {
                         SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                        SwDoc const*const pDoc(GetDoc());
-                        const String aTxt =
-                            pFld->ExpandField(pDoc->IsClipBoard());
+                        const String aTxt = pFld->ExpandField(true);
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
                             aTxt.Len() ) )
                             nAdd = 20;
@@ -984,8 +982,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 case RES_TXTATR_FIELD :
                 {
                     SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                    SwDoc const*const pDoc( GetDoc() );
-                    String const aTxt = pFld->ExpandField(pDoc->IsClipBoard());
+                    String const aTxt = pFld->ExpandField(true);
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();

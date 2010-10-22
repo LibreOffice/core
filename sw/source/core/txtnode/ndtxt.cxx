@@ -3067,8 +3067,7 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                         {
                             const XubString aExpand(
                                 static_cast<SwTxtFld const*>(pAttr)->GetFld()
-                                    .GetFld()->ExpandField(
-                                        GetDoc()->IsClipBoard()));
+                                    .GetFld()->ExpandField(true));
                             rTxt.Insert( aExpand, nPos );
                             nPos = nPos + aExpand.Len();
                             nEndPos = nEndPos + aExpand.Len();
@@ -3217,7 +3216,7 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                     {
                         XubString const aExpand(
                             static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                                ->ExpandField(GetDoc()->IsClipBoard()));
+                                ->ExpandField(true));
                         if( aExpand.Len() )
                         {
                             aDestIdx++;     // dahinter einfuegen;
@@ -3315,7 +3314,7 @@ const ModelToViewHelper::ConversionMap*
         {
             const XubString aExpand(
                 static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
-                    ->ExpandField(GetDoc()->IsClipBoard()));
+                    ->ExpandField(true));
             if ( aExpand.Len() > 0 )
             {
                 const xub_StrLen nFieldPos = *pAttr->GetStart();

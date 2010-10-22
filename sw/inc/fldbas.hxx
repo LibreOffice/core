@@ -326,10 +326,14 @@ public:
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
     /** expand the field.
-        @param  bInClipboard    field is in clipboard document?
+        @param  bCached     return cached field value.
+        @remark     most callers should use the cached field value.
+                    this is because various fields need special handing
+                    (ChangeExpansion()) to return correct values, and only
+                    SwTxtFormatter::NewFldPortion() sets things up properly.
         @return     the generated text (suitable for display)
       */
-    String              ExpandField(bool const bInClipboard) const;
+    String              ExpandField(bool const bCached) const;
 
     virtual String      GetFieldName() const;
 

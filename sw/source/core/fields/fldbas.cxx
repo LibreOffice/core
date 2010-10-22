@@ -427,9 +427,9 @@ BOOL SwField::IsFixed() const
     return bRet;
 }
 
-String SwField::ExpandField(bool const bInClipboard) const
+String SwField::ExpandField(bool const bCached) const
 {
-    if (!bInClipboard) // #i85766# do not expand fields in clipboard documents
+    if (!bCached) // #i85766# do not expand fields in clipboard documents
     {
         m_Cache = Expand();
     }
@@ -440,7 +440,8 @@ SwField * SwField::CopyField() const
 {
     SwField *const pNew = Copy();
     // #i85766# cache expansion of source (for clipboard)
-    pNew->m_Cache = Expand();
+    // use this->cache, not this->Expand(): only text formatting calls Expand()
+    pNew->m_Cache = m_Cache;
     return pNew;
 }
 

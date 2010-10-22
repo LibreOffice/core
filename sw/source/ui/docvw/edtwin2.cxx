@@ -304,8 +304,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             USHORT nOldSubType = pFld->GetSubType();
                             ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sTxt =
-                                pFld->ExpandField(rSh.GetDoc()->IsClipBoard());
+                            sTxt = pFld->ExpandField(true);
                             ((SwField*)pFld)->SetSubType(nOldSubType);
                         }
                         break;

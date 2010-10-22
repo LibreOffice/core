@@ -2451,7 +2451,7 @@ BOOL SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGEGETFLD&&
                         nWhich != RES_REFPAGESETFLD))
                 {
-                    String sText = pField->ExpandField( this->IsClipBoard() );
+                    String sText = pField->ExpandField(true);
                     //database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText.Erase();

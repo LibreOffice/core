@@ -343,7 +343,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
-    String const fieldStr( pFld->ExpandField(pDoc->IsClipBoard()) );
+    String const fieldStr( pFld->ExpandField(true) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static BYTE aArr2[] = {

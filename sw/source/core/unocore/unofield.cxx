@@ -1275,7 +1275,7 @@ OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::Runtim
     }
     ::rtl::OUString const ret( (bShowCommand)
             ? pField->GetFieldName()
-            : pField->ExpandField( GetDoc()->IsClipBoard() ) );
+            : pField->ExpandField(true) );
     return ret;
 }
 /* -----------------18.02.99 13:39-------------------

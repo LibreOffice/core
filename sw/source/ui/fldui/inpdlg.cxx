@@ -119,7 +119,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         CharClass aCC( SvxCreateLocale( pSetFld->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
         {
-            aStr = pSetFld->ExpandField(false/*no dialogs for clipboard*/);
+            aStr = pSetFld->ExpandField(true);
         }
         else
             aStr = sFormula;

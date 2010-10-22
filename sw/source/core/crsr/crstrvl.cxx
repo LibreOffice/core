@@ -717,8 +717,7 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
                 (SwDateTimeFieldType*)pDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
-            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
-                        pDoc->IsClipBoard() );
+            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex() );
             pTxtFld->ChgTxtNode( pTNd );
         }
 
