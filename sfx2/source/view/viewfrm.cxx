@@ -985,7 +985,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 
             case SID_REPEAT:
                 if ( pSh->GetRepeatTarget() )
-                    pShUndoMgr->Repeat( *pSh->GetRepeatTarget(), 0);
+                    pShUndoMgr->Repeat( *pSh->GetRepeatTarget() );
                 bOK = sal_True;
                 break;
         }
@@ -1047,10 +1047,10 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_REDO );
     SfxRepeatTarget *pTarget = pSh->GetRepeatTarget();
     if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
-         pShUndoMgr->CanRepeat(*pTarget, 0) )
+         pShUndoMgr->CanRepeat(*pTarget) )
     {
         String aTmp( SfxResId(STR_REPEAT) );
-        aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget, 0);
+        aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget);
         rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
     }
     else
