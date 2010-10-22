@@ -1451,7 +1451,7 @@ SdPage* OutlineView::GetActualPage()
 
     SdPage* pCurrent = GetPageForParagraph(static_cast<Paragraph*>(pSelList->First()) );
     DBG_ASSERT( pCurrent ||
-                (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->isInUndo()) ||
+                (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->IsDoing()) ||
                 maDragAndDropModelGuard.get(),
                 "sd::OutlineView::GetActualPage(), no current page?" );
     if( pCurrent )

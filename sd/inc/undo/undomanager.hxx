@@ -40,15 +40,8 @@ public:
     UndoManager( USHORT nMaxUndoActionCount = 20 );
 
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
-    virtual USHORT          LeaveListAction();
 
     virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
-
-    bool                    isInListAction() const { return mnListLevel != 0; }
-    bool                    isInUndo() const { return maIsInUndoLock.isLocked(); }
-
-    virtual BOOL            Undo();
-    virtual BOOL            Redo();
 
     /** Set or reset the undo manager linked with the called undo manager.
     */
@@ -57,9 +50,6 @@ public:
 private:
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
-
-    int mnListLevel;
-    ScopeLock maIsInUndoLock;
 
     /** Used when the outline view is visible as a last resort to
         synchronize the undo managers.

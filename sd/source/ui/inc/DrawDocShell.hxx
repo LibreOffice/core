@@ -49,6 +49,7 @@ class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
 class AbstractSvxNameDialog;
+class SfxUndoManager;
 
 namespace sd {
 
