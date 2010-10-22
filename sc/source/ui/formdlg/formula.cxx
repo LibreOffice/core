@@ -453,10 +453,19 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
         else
         {
+            // We can't use ScRange::Format here because in R1C1 mode we need
+            // to display the reference position relative to the cursor
+            // position.
             ScTokenArray aArray;
             ScComplexRefData aRefData;
             aRefData.InitRangeRel(rRef, aCursorPos);
-            aArray.AddDoubleReference(aRefData);
+            bool bSingle = aRefData.Ref1 == aRefData.Ref2;
+            if (aCursorPos.Tab() != rRef.aStart.Tab())
+                aRefData.Ref1.SetFlag3D(true);
+            if (bSingle)
+                aArray.AddSingleReference(aRefData.Ref1);
+            else
+                aArray.AddDoubleReference(aRefData);
             ScCompiler aComp(pDoc, aCursorPos, aArray);
             aComp.SetGrammar(pDoc->GetGrammar());
             ::rtl::OUStringBuffer aBuf;
