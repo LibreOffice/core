@@ -40,7 +40,36 @@ interface XUndoManagerListener;
 
 //==================================================================================================================
 
-/** provides access to the undo/redo stacks of the document
+/** provides access to the undo/redo stacks of a document
+
+    <h3>Undo</h3>
+    <p>Changes to a document usually result in recording of information how to undo those changes, if desired. A so-called
+    Undo action records the information how to undo a single change. Undo actions are maintained in a stack, so that
+    the changes they represent can be undo in the reverse order they have originally been applied.</p>
+
+    <h3>Redo</h3>
+    <p>Additionally, the Undo manager manages a Redo stack: Actions which are undone are moved from the Undo to the Redo
+    stack, so it is possible to re-apply the changes to the document.</p>
+
+    <h3>Undo contexts</h3>
+    <p>For collecting multiple changes in a single Undo action, so-called Undo contexts are provided. When an Undo
+    context is entered, all subsequently added Undo actions are not pushed onto the Undo stack directly, but considered
+    a sub action of the Undo context. Once the Undo context is left, a single Undo action is pushed onto the Undo stack,
+    which comprises all those single Undo actions.<br/>
+    Undo contexts can be arbitrarily nested.</p>
+
+    <h3>Hidden Undo actions</h3>
+    <p>Hidden Undo actions are those which in no observable way contribute to the Undo stack. That is,
+    any method retrieving information about the stack will behave as if the Undo action does not exist. Nonetheless,
+    calling <member>undo</member> respectively <member>redo</member> will include those actions.<br/>
+    Hidden Undo actions can be created by calling <member>enterHiddenUndoContext</member>, following by
+    <member>leaveUndoContext</member>.</p>
+
+    <a name="locking"></a>
+    <h3>Locking</h3>
+    <p>An Undo manager can be locked and unlocked, using the <member>lock</member> and <member>unlock</member> methods.
+    When it is locked, then every attempt to add an Undo action, or to enter or leave an Undo context, will be silently
+    ignored.</p>
  */
 interface XUndoManager
 {
@@ -48,7 +77,7 @@ interface XUndoManager
 
         <p>A new undo action will be added to the undo stack, with the title given as <code>i_title</code>. As long
         as the context is not left, every undo action added to the stack will be treated as sub action. This means
-        it will not be directly accessible at the undo manager, not appear in any user interface, and cannot be
+        it will not be directly accessible at the Undo manager, not appear in any user interface, and cannot be
         separately undone or re-done.</p>
 
         <p>Each call to <code>enterUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
@@ -56,6 +85,8 @@ interface XUndoManager
 
         <p>Undo contexts can be nested, i.e. it is legitimate to call <code>enterUndoContext</code> and
         <member>enterHiddenUndoContext</member> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+
+        <p>The redo stack is cleared when a new Undo context is entered.</p>
 
         @see leaveUndoContext
     */
@@ -84,6 +115,8 @@ interface XUndoManager
 
         <p>Undo contexts can be nested, i.e. it is legitimate to call <member>enterUndoContext</member> and
         <code>enterHiddenUndoContext</code> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+
+        <p>The redo stack is cleared when a new hidden Undo context is entered.</p>
 
         @throws ::com::sun::star::util::InvalidStateException
             if the Undo stack is currently empty, in which case it is impossible to push a hidden Undo action onto
@@ -116,10 +149,13 @@ interface XUndoManager
 
         <p>The redo stack is cleared when a new action is pushed onto the undo stack.</p>
 
-        <p>The undo manager takes ownership of any actions pushed onto the undo stack. This means that if the
-        action is finally removed from the undo manager's control (e.g. by calling <member>clear</member> resp.
+        <p>The Undo manager takes ownership of any actions pushed onto the undo stack. This means that if the
+        action is finally removed from the Undo manager's control (e.g. by calling <member>clear</member> resp.
         <member>clearRedo</member>), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
         interface.</p>
+
+        <p>If the Undo manager is <a href="#locking">locked</a> at the moment the method is called, the call will be ignored, and the Undo action
+        will immediately be disposed, if applicable.</p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if the given undo action is <NULL/>.
@@ -139,11 +175,13 @@ interface XUndoManager
 
         <p>If one or more undo contexts are currently open, those will be implicit
 
-        @see redo
         @throws ::com::sun::star::util::InvalidStateException
             when the Undo stack is currently empty
+
         @throws ::com::sun::star::lang::WrappedTargetException
             if the invocation of <member>XUndoAction::undo</member> raises an exception other than a <member scope="com::sun::star::uno">RuntimeException</member>
+
+        @see redo
     */
     void    undo()
             raises( ::com::sun::star::util::InvalidStateException,
@@ -157,11 +195,13 @@ interface XUndoManager
             <li>move this action from the redo stack to the undo stack</li>
         </ul></p>
 
-        @see undo
         @throws ::com::sun::star::util::InvalidStateException
             when the Redo stack is currently empty
+
         @throws ::com::sun::star::lang::WrappedTargetException
             if the invocation of <member>XUndoAction::redo</member> raises an exception other than a <member scope="com::sun::star::uno">RuntimeException</member>
+
+        @see undo
     */
     void    redo()
             raises( ::com::sun::star::util::InvalidStateException,
@@ -176,8 +216,10 @@ interface XUndoManager
     boolean isRedoPossible();
 
     /** returns the title of the top-most action on the Undo stack
+
         @throws ::com::sun::star::util::InvalidStateException
             when the Undo stack is currently empty
+
         @see XUndoAction::Title
     */
     string  getCurrentUndoActionTitle()
@@ -199,18 +241,55 @@ interface XUndoManager
             getAllUndoActionTitles();
 
     /** returns the titles of all actions currently on the Redo stack, from top to bottom
+
         @see XUndoAction::Title
     */
     sequence< string >
             getAllRedoActionTitles();
 
     /** clears the undo and the redo stack.
+
+        <p>All actions will be removed from both the Undo and the Redo stack. Actions which implement the
+        <type scope="com::sun::star::lang">XComponent</type> interface will be disposed.</p>
     */
     void    clear();
 
     /** clears the redo stack.
+
+        <p>All actions will be removed from the Redo stack. Actions which implement the <type scope="com::sun::star::lang">XComponent</type>
+        interface will be disposed.</p>
     */
     void    clearRedo();
+
+    /** locks</a> the Undo manager
+
+        <p><code>lock</code> and <code>unlock</code> calls can be nested. However, they must be in
+        pairs. As long as there has been one more call to <code>lock</code> than to <code>unlock</code>, the
+        Undo manager is considered <a href="#locking">locked</a>.</p>
+
+        @see unlock
+        @see isLocked
+    */
+    void    lock();
+
+    /** unlocks the Undo manager
+
+        @throws ::com::sun::star::util::InvalidStateException
+            if the Undo manager is not currently locked.
+
+        @see lock
+        @see isLocked
+    */
+    void    unlock()
+        raises  (   ::com::sun::star::util::InvalidStateException
+                );
+
+    /** determines whether the Undo manager is currently locked.
+
+        @see lock
+        @see unlock
+    */
+    boolean isLocked();
 
     /** adds a listener to be notified of changes in the Undo/Redo stacks.
     */
