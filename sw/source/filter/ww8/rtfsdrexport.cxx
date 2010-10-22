@@ -222,8 +222,9 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                     m_aShapeProps.insert(std::pair<OString,OString>(OString("fNoFillHitTest"), OString::valueOf(sal_Int32(1))));
                 break;
             case ESCHER_Prop_fNoLineDrawDash:
-                if (it->nPropValue)
-                    m_aShapeProps.insert(std::pair<OString,OString>(OString("fNoLineDrawDash"), OString::valueOf(sal_Int32(1))));
+                // for some reason the value is set to 0x90000 if lines are switched off
+                if( it->nPropValue == 0x90000 )
+                    m_aShapeProps.insert(std::pair<OString,OString>(OString("fLine"), OString::valueOf(sal_Int32(0))));
                 break;
             case ESCHER_Prop_lineColor:
                 m_aShapeProps.insert(std::pair<OString,OString>(OString("lineColor"), OString::valueOf(sal_Int32(it->nPropValue))));
