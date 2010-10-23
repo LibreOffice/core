@@ -169,16 +169,50 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
         Point  aPos (PixelToLogic(rMEvt.GetPosPixel())
                      - GetFormulaDrawPos());
 
-        const SmNode* pTree = pViewShell->GetDoc()->GetFormulaTree();
+        const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
+        if (!pTree)
+            return;
 
+        if (IsInlineEditEnabled()) {
+            // if it was clicked inside the formula then get the appropriate node
+            if (pTree->OrientedDist(aPos) <= 0)
+                pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
+            return;
+        }
+        const SmNode *pNode = 0;
         // if it was clicked inside the formula then get the appropriate node
         if (pTree->OrientedDist(aPos) <= 0)
-            pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
+            pNode = pTree->FindRectClosestTo(aPos);
+
+        if (pNode)
+        {   SmEditWindow  *pEdit = pViewShell->GetEditWindow();
+            const SmToken  aToken (pNode->GetToken());
+
+            // set selection to the beginning of the token
+            ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1);
+
+            if (rMEvt.GetClicks() != 1 || aToken.eType == TPLACE)
+                aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< USHORT >(aToken.aText.Len());
+
+            pEdit->SetSelection(aSel);
+            SetCursor(pNode);
+
+            // allow for immediate editing and
+            //! implicitly synchronize the cursor position mark in this window
+            pEdit->GrabFocus();
+        }
     }
+}
+
+bool SmGraphicWindow::IsInlineEditEnabled() const
+{
+    return pViewShell->GetEditWindow()->IsInlineEditEnabled();
 }
 
 void SmGraphicWindow::GetFocus()
 {
+    if (!IsInlineEditEnabled())
+        return;
     pViewShell->GetEditWindow()->Flush();
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(FALSE);
@@ -197,6 +231,80 @@ void SmGraphicWindow::LoseFocus()
     }
 }
 
+void SmGraphicWindow::ShowCursor(BOOL bShow)
+    // shows or hides the formula-cursor depending on 'bShow' is TRUE or not
+{
+    if (IsInlineEditEnabled())
+        return;
+
+    BOOL  bInvert = bShow != IsCursorVisible();
+
+    if (bInvert)
+        InvertTracking(aCursorRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
+
+    SetIsCursorVisible(bShow);
+}
+
+
+void SmGraphicWindow::SetCursor(const SmNode *pNode)
+{
+    if (IsInlineEditEnabled())
+        return;
+
+    const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
+
+    // get appropriate rectangle
+    Point aOffset (pNode->GetTopLeft() - pTree->GetTopLeft()),
+          aTLPos  (GetFormulaDrawPos() + aOffset);
+    aTLPos.X() -= pNode->GetItalicLeftSpace();
+    Size  aSize   (pNode->GetItalicSize());
+    Point aBRPos  (aTLPos.X() + aSize.Width(), aTLPos.Y() + aSize.Height());
+
+    SetCursor(Rectangle(aTLPos, aSize));
+}
+
+void SmGraphicWindow::SetCursor(const Rectangle &rRect)
+    // sets cursor to new position (rectangle) 'rRect'.
+    // The old cursor will be removed, and the new one will be shown if
+    // that is activated in the ConfigItem
+{
+    if (IsInlineEditEnabled())
+        return;
+
+    SmModule *pp = SM_MOD();
+
+    if (IsCursorVisible())
+        ShowCursor(FALSE);      // clean up remainings of old cursor
+    aCursorRect = rRect;
+    if (pp->GetConfig()->IsShowFormulaCursor())
+        ShowCursor(TRUE);       // draw new cursor
+}
+
+const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
+    // looks for a VISIBLE node in the formula tree with it's token at
+    // (or around) the position 'nRow', 'nCol' in the edit window
+    // (row and column numbering starts with 1 there!).
+    // If there is such a node the formula-cursor is set to cover that nodes
+    // rectangle. If not the formula-cursor will be hidden.
+    // In any case the search result is being returned.
+{
+    if (IsInlineEditEnabled())
+        return NULL;
+
+    // find visible node with token at nRow, nCol
+    const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree(),
+                 *pNode = 0;
+    if (pTree)
+        pNode = pTree->FindTokenAt(nRow, nCol);
+
+    if (pNode)
+        SetCursor(pNode);
+    else
+        ShowCursor(FALSE);
+
+    return pNode;
+}
+
 void SmGraphicWindow::Paint(const Rectangle&)
 {
     OSL_ENSURE(pViewShell, "Sm : NULL pointer");
@@ -207,9 +315,27 @@ void SmGraphicWindow::Paint(const Rectangle&)
     rDoc.DrawFormula(*this, aPoint, TRUE);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
     SetFormulaDrawPos(aPoint);
-    //Draw cursor if any...
-    if(pViewShell->GetDoc()->HasCursor())
-        pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
+    if(IsInlineEditEnabled()) {
+        //Draw cursor if any...
+        if(pViewShell->GetDoc()->HasCursor())
+            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
+    } else {
+    SetIsCursorVisible(FALSE);  // (old) cursor must be drawn again
+
+    const SmEditWindow *pEdit = pViewShell->GetEditWindow();
+    if (pEdit)
+    {   // get new position for formula-cursor (for possible altered formula)
+        USHORT  nRow, nCol;
+        SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
+        nRow++;
+        nCol++;
+        const SmNode *pFound = SetCursorPos(nRow, nCol);
+
+        SmModule  *pp = SM_MOD();
+        if (pFound && pp->GetConfig()->IsShowFormulaCursor())
+            ShowCursor(TRUE);
+    }
+    }
 }
 
 
@@ -223,6 +349,11 @@ void SmGraphicWindow::SetTotalSize ()
 
 void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 {
+    if (!IsInlineEditEnabled()) {
+        if (! (GetView() && GetView()->KeyInput(rKEvt)) )
+            ScrollableWindow::KeyInput(rKEvt);
+        return;
+    }
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
     SmCursor& rCursor = pViewShell->GetDoc()->GetCursor();
     switch(nCode)
@@ -1360,8 +1491,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 bVal = !pp->GetConfig()->IsShowFormulaCursor();
 
             pp->GetConfig()->SetShowFormulaCursor(bVal);
-            //GetGraphicWindow().ShowCursor(bVal);
-            //TODO Consider disabling this option!!!
+            if (!IsInlineEditEnabled())
+                GetGraphicWindow().ShowCursor(bVal);
             break;
         }
         case SID_DRAW:
@@ -1506,9 +1637,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
             const SfxInt16Item& rItem =
                 (const SfxInt16Item&)rReq.GetArgs()->Get(SID_INSERTCOMMAND);
 
-            if (pWin && bInsertIntoEditWindow)
+            if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertCommand(rItem.GetValue());
-            if (GetDoc() && !bInsertIntoEditWindow) {
+            if (IsInlineEditEnabled() && (GetDoc() && !bInsertIntoEditWindow)) {
                 GetDoc()->GetCursor().InsertCommand(rItem.GetValue());
                 GetGraphicWindow().GrabFocus();
             }
@@ -1520,9 +1651,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
             const SfxStringItem& rItem =
                 (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTSYMBOL);
 
-            if (pWin && bInsertIntoEditWindow)
+            if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertText(rItem.GetValue());
-            if(GetDoc() && !bInsertIntoEditWindow)
+            if (IsInlineEditEnabled() && (GetDoc() && !bInsertIntoEditWindow))
                 GetDoc()->GetCursor().InsertSpecial(rItem.GetValue());
             break;
         }

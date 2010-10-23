@@ -96,6 +96,11 @@ void SmGetLeftSelectionPart(const ESelection aSel,
     }
 }
 
+bool SmEditWindow::IsInlineEditEnabled()
+{
+    return GetView()->IsInlineEditEnabled();
+}
+
 ////////////////////////////////////////
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
@@ -122,6 +127,12 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
     aModifyTimer.SetTimeout(500);
 
+    if (!IsInlineEditEnabled())
+    {
+        aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
+        aCursorMoveTimer.SetTimeout(500);
+    }
+
     // if not called explicitly the this edit window within the
     // command window will just show an empty gray panel.
     Show();
@@ -132,6 +143,7 @@ SmEditWindow::~SmEditWindow()
 {
     aModifyTimer.Stop();
 
+    StartCursorMove();
 
     // #112565# clean up of classes used for accessibility
     // must be done before EditView (and thus EditEngine) is no longer
@@ -154,6 +166,12 @@ SmEditWindow::~SmEditWindow()
     delete pHScrollBar;
     delete pVScrollBar;
     delete pScrollBox;
+}
+
+void SmEditWindow::StartCursorMove()
+{
+    if (!IsInlineEditEnabled())
+        aCursorMoveTimer.Stop();
 }
 
 void SmEditWindow::InvalidateSlots()
@@ -253,6 +271,35 @@ IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
     return 0;
 }
 
+IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
+    // every once in a while check cursor position (selection) of edit
+    // window and if it has changed (try to) set the formula-cursor
+    // according to that.
+{
+    if (IsInlineEditEnabled())
+        return 0;
+
+    ESelection aNewSelection(GetSelection());
+
+    if (!aNewSelection.IsEqual(aOldSelection))
+    {
+        SmViewShell *pView = rCmdBox.GetView();
+        if (pView)
+        {
+            // get row and column to look for
+            USHORT  nRow, nCol;
+            SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
+            nRow++;
+            nCol++;
+            pView->GetGraphicWindow().SetCursorPos(nRow, nCol);
+            aOldSelection = aNewSelection;
+        }
+    }
+    aCursorMoveTimer.Stop();
+
+    return 0;
+}
+
 void SmEditWindow::Resize()
 {
     if (!pEditView)
@@ -286,6 +333,8 @@ void SmEditWindow::MouseButtonUp(const MouseEvent &rEvt)
     else
         Window::MouseButtonUp (rEvt);
 
+    if (!IsInlineEditEnabled())
+        CursorMoveTimerHdl(&aCursorMoveTimer);
     InvalidateSlots();
 }
 
@@ -390,6 +439,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
     else
     {
+        StartCursorMove();
+
         if (!pEditView)
             CreateEditView();
         if ( !pEditView->PostKeyEvent(rKEvt) )
@@ -616,7 +667,7 @@ void SmEditWindow::GetFocus()
         pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
 
     //Let SmViewShell know we got focus
-    if(GetView())
+    if(GetView() && IsInlineEditEnabled())
         GetView()->SetInsertIntoEditWindow(TRUE);
 }
 
@@ -700,7 +751,7 @@ void SmEditWindow::InsertCommand(USHORT nCommand)
         }
 
         aModifyTimer.Start();
-
+        StartCursorMove();
         GrabFocus();
     }
 }
@@ -887,6 +938,7 @@ void SmEditWindow::InsertText(const String& Text)
     {
         pEditView->InsertText(Text);
         aModifyTimer.Start();
+        StartCursorMove();
     }
 }
 
@@ -903,6 +955,11 @@ void SmEditWindow::Flush()
                     SID_TEXT, SFX_CALLMODE_STANDARD,
                     new SfxStringItem(SID_TEXT, GetText()), 0L);
         }
+    }
+    if (aCursorMoveTimer.IsActive())
+    {
+        aCursorMoveTimer.Stop();
+        CursorMoveTimerHdl(&aCursorMoveTimer);
     }
 }
 

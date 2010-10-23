@@ -51,8 +51,23 @@ class SmPrintUIOptions;
 
 class SmGraphicWindow : public ScrollableWindow
 {
-    Point           aFormulaDrawPos;
+    Point     aFormulaDrawPos;
 
+    // old style editing pieces
+    Rectangle aCursorRect;
+    bool      bIsCursorVisible;
+public:
+    BOOL IsCursorVisible() const { return bIsCursorVisible; }
+    void ShowCursor(BOOL bShow);
+    const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
+protected:
+    void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
+    using   Window::SetCursor;
+    void        SetCursor(const SmNode *pNode);
+    void        SetCursor(const Rectangle &rRect);
+    bool        IsInlineEditEnabled() const;
+
+private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >  xAccessible;
     SmGraphicAccessible *                                       pAccessible;
@@ -297,6 +312,9 @@ public:
      */
     void SetInsertIntoEditWindow(BOOL bEditWindowHadFocusLast = TRUE){
         bInsertIntoEditWindow = bEditWindowHadFocusLast;
+    }
+    bool IsInlineEditEnabled() const {
+        return false;
     }
 };
 

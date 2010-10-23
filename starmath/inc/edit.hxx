@@ -65,13 +65,15 @@ class SmEditWindow : public Window, public DropTargetHelper
     ScrollBar      *pHScrollBar,
                    *pVScrollBar;
     ScrollBarBox   *pScrollBox;
-    Timer           aModifyTimer;
+    Timer           aModifyTimer,
+                    aCursorMoveTimer;
     ESelection      aOldSelection;
 
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void Command(const CommandEvent& rCEvt);
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(ModifyTimerHdl, Timer *);
+    DECL_LINK(CursorMoveTimerHdl, Timer *);
 
     virtual void DataChanged( const DataChangedEvent& );
     virtual void Resize();
@@ -133,6 +135,8 @@ public:
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
     BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                IsInlineEditEnabled();
+    void                StartCursorMove();
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

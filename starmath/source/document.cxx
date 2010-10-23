@@ -98,6 +98,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include "cursor.hxx"
+#include "visitors.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -435,8 +436,6 @@ SfxItemPool& SmDocShell::GetEditEngineItemPool()
     OSL_ENSURE( pEditEngineItemPool, "EditEngineItemPool missing" );
     return *pEditEngineItemPool;
 }
-//TODO: Move to the top of the file...
-#include "visitors.hxx"
 
 void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSelection)
 {
@@ -530,8 +529,7 @@ Size SmDocShell::GetSize()
 }
 
 void SmDocShell::InvalidateCursor(){
-    if(pCursor)
-        delete pCursor;
+    delete pCursor;
     pCursor = NULL;
 }
 

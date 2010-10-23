@@ -34,9 +34,10 @@
 #include <iostream>
 #include <stdio.h>
 
-//My special assert macro
-//TODO: replace this with DBG_ASSERT when this patch moves to production, can be done using search/replace
-#define j_assert(cond, msg)     do{                                                             \
+#define j_assert(cond, msg) DBG_ASSERT(cond, msg)
+#if 0
+// easier to read assert macro
+    do{                                                             \
                                     if(!(cond))                                                 \
                                     {                                                           \
                                         std::cerr<<"Failed assertion: "<<msg<<", at line ";     \
@@ -48,7 +49,9 @@
                                         fprintf(stderr, "%d in %s\n", __LINE__, f + 1);         \
                                     }                                                           \
                                 } while(false)
-//TODO: Comment out below to disable dumpasdot
+#endif
+
+// Comment out below to disable dumpasdot
 #define DEBUG_ENABLE_DUMPASDOT
 
 #include "parse.hxx"
