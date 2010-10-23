@@ -3,22 +3,22 @@
 SHELL=/bin/sh
 
 all:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 	./fetch_tarballs.sh ooo.lst && \
 	./bootstrap && \
 		cd instsetoo_native && ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -P@BUILD_MAX_JOBS@
 
 distclean:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 	dmake distclean
 
 clean:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 	dmake clean
 
 dev-install:
-	. ./*[Ee]nv.[Ss]et.sh && \
-		ooinstall -l $$SRC_ROOT/install
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		ooinstall -l $$SRC_ROOT/install && \
 		echo && \
 		echo "Developer installation finished, you can find it here:" && \
 		echo "$$SRC_ROOT/install"
