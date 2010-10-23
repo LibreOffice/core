@@ -1268,7 +1268,10 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         return;
     // (da ich keinen Wechsel des Iterators von aussen zulasse, heisst selber ::com::sun::star::sdbcx::Index auch immer selbe Spalte, also habe ich nix zu tun)
 
-    DBG_ASSERT((nFieldIndex >= -1) && (nFieldIndex<m_arrFieldMapping.size()), "FmSearchEngine::RebuildUsedFields : nFieldIndex is invalid!");
+    DBG_ASSERT((nFieldIndex == -1) ||
+               ((nFieldIndex >= 0) &&
+                (static_cast<size_t>(nFieldIndex) < m_arrFieldMapping.size())),
+            "FmSearchEngine::RebuildUsedFields : nFieldIndex is invalid!");
     // alle Felder, die ich durchsuchen muss, einsammeln
     m_arrUsedFields.clear();
     if (nFieldIndex == -1)
