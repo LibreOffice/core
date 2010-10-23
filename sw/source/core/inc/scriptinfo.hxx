@@ -364,7 +364,7 @@ inline xub_StrLen SwScriptInfo::GetScriptChg( const size_t nCnt ) const
 }
 inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
-    ASSERT( nCnt < aScriptType.Count(),"No ScriptType today!");
+    ASSERT( nCnt < aScriptType.size(),"No ScriptType today!");
     return aScriptType[ nCnt ];
 }
 

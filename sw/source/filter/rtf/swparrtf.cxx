@@ -204,7 +204,7 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     sBaseURL( rBaseURL ),
     nAktPageDesc(0),
     nAktFirstPageDesc(0),
-    nAktBox(0),
+    m_nCurrentBox(0),
     nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX),
     nRowsToRepeat(0),
@@ -1758,7 +1758,7 @@ void SwRTFParser::NextToken( int nToken )
         if (!CantUseTables())
         {
             // aus der Line raus
-            nAktBox = 0;
+            m_nCurrentBox = 0;
             pTableNode = 0;
             // noch in der Tabelle drin?
             SwNodeIndex& rIdx = pPam->GetPoint()->nNode;

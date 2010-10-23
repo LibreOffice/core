@@ -436,9 +436,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
             "Was ist das fuer ein MessageItem?" );
 
     SwFieldType* pFldType(0);
-    sal_uInt32 i;
 
-    for( i = 0; i < pFldTypes->Count(); ++i )
+    for (USHORT i = 0; i < pFldTypes->Count(); ++i)
     {
         if( RES_TABLEFLD == ( pFldType = (*pFldTypes)[i] )->Which() )
         {
@@ -508,12 +507,14 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
     // und dann noch alle Tabellen Box Formeln abklappern
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
-    for( i = 0; i < nMaxItems; ++i )
+    for (sal_uInt32 i = 0; i < nMaxItems; ++i)
+    {
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
             ((SwTblBoxFormula*)pItem)->GetDefinedIn() )
         {
             ((SwTblBoxFormula*)pItem)->ChangeState( pHt );
         }
+    }
 
 
     // alle Felder/Boxen sind jetzt invalide, also kann das Rechnen anfangen
@@ -608,7 +609,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
     }
 
     // dann berechene noch die Formeln an den Boxen
-    for( i = 0; i < nMaxItems; ++i )
+    for (sal_uInt32 i = 0; i < nMaxItems; ++i )
+    {
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
             ((SwTblBoxFormula*)pItem)->GetDefinedIn() &&
             !((SwTblBoxFormula*)pItem)->IsValid() )
@@ -685,6 +687,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                 }
             }
         }
+    }
 
     if( pCalc )
         delete pCalc;
@@ -1732,7 +1735,6 @@ String lcl_DBDataToString(const SwDBData& rData)
 void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
                             const SvStringsDtor* pAllDBNames )
 {
-    sal_uInt32 n;
     SvStringsDtor aUsedDBNames;
     SvStringsDtor aAllDBNames;
 
@@ -1743,7 +1745,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
     }
 
     SwSectionFmts& rArr = GetSections();
-    for( n = rArr.Count(); n; )
+    for (USHORT n = rArr.Count(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -1758,7 +1760,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
 
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-    for( n = 0; n < nMaxItems; ++n )
+    for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
@@ -1916,10 +1918,9 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     aNewDBData.nCommandType = (short)rNewName.GetToken(2, DB_DELIM).ToInt32();
 
     String sFormel;
-    sal_uInt32 n;
 
     SwSectionFmts& rArr = GetSections();
-    for( n = rArr.Count(); n; )
+    for (USHORT n = rArr.Count(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -1934,7 +1935,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
 
-    for( n = 0; n < nMaxItems; ++n )
+    for (sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
@@ -2329,9 +2330,8 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         SwSectionNode* pSectNd;
         USHORT nArrStt = 0;
         ULONG nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
-        sal_uInt32 n;
 
-        for( n = rArr.Count(); n; )
+        for (USHORT n = rArr.Count(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
             if( pSect && pSect->IsHidden() && pSect->GetCondition().Len() &&
@@ -2351,13 +2351,13 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         // erst alle anzeigen, damit die Frames vorhanden sind. Mit deren
         // Position wird das BodyAnchor ermittelt.
         // Dafuer erst den ContentBereich, dann die Sonderbereiche!!!
-        for( n = nArrStt; n < aTmpArr.Count(); ++n )
+        for (USHORT n = nArrStt; n < aTmpArr.Count(); ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             ASSERT( pSectNd, "Wo ist mein SectionNode" );
             pSectNd->GetSection().SetCondHidden( FALSE );
         }
-        for( n = 0; n < nArrStt; ++n )
+        for (USHORT n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             ASSERT( pSectNd, "Wo ist mein SectionNode" );
@@ -2365,8 +2365,10 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
 
         // so, erst jetzt alle sortiert in die Liste eintragen
-        for( n = 0; n < aTmpArr.Count(); ++n )
+        for (USHORT n = 0; n < aTmpArr.Count(); ++n)
+        {
             GetBodyNode( *rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode() );
+        }
     }
 
     String sTrue( String::CreateFromAscii(

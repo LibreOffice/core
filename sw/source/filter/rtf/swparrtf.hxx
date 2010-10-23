@@ -318,7 +318,7 @@ class SwRTFParser : public SvxRTFParser
     String sBaseURL;
 
     USHORT nAktPageDesc, nAktFirstPageDesc;
-    USHORT nAktBox;         // akt. Box
+    USHORT m_nCurrentBox;
     USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
     USHORT nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
     USHORT nRowsToRepeat;

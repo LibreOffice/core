@@ -815,7 +815,8 @@ void SmMathConfig::SaveFontFormatList()
         pVal->Value <<= (INT16) aFntFmt.nItalic;
         pVal++;
     }
-    DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
+    DBG_ASSERT( static_cast<size_t>(pVal - pValues) == (nCount * nSymbolProps),
+            "properties missing" );
     ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
 
     rFntFmtList.SetModified( FALSE );

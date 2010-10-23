@@ -71,7 +71,9 @@ SLOFILES =  \
         $(SLO)$/SwAppletImpl.obj \
 
 EXCEPTIONSFILES = \
+        $(SLO)$/htmlatr.obj \
         $(SLO)$/htmlfld.obj \
+        $(SLO)$/htmlgrin.obj \
         $(SLO)$/htmlplug.obj \
         $(SLO)$/htmlsect.obj \
         $(SLO)$/swhtml.obj \

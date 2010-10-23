@@ -1250,8 +1250,9 @@ class HTMLEndPosLst
     SvXub_StrLens aScriptChgLst;    // positions where script changes
                                     // 0 is not contained in this list,
                                     // but the text length
-    SvUShorts aScriptLst;   // the script that is valif up to the position
-                            // contained in aScriptChgList at the same index
+    // the script that is valif up to the position
+    // contained in aScriptChgList at the same index
+    ::std::vector<USHORT> aScriptLst;
 
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
@@ -1798,7 +1799,7 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
         sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
         nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
         aScriptChgLst.push_back( nPos );
-        aScriptLst.Insert( nScript, aScriptLst.Count() );
+        aScriptLst.push_back( nScript );
     }
 }
 
