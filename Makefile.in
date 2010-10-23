@@ -18,9 +18,7 @@ clean:
 
 dev-install:
 	. ./*[Ee]nv.[Ss]et.sh && \
-		cd $$SRC_ROOT/instsetoo_native/util && \
-		LOCALINSTALLDIR=$$SRC_ROOT/install dmake openoffice_en-US PKGFORMAT=installed && \
-		$$SOLARENV/bin/linkoo $$SRC_ROOT/install/LibreOffice/installed/install/en-US $$SRC_ROOT && \
+		ooinstall -l $$SRC_ROOT/install
 		echo && \
 		echo "Developer installation finished, you can find it here:" && \
-		echo "$$SRC_ROOT/install/LibreOffice/installed/install/en-US"
+		echo "$$SRC_ROOT/install"

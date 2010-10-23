@@ -1,0 +1,114 @@
+#!/usr/bin/env perl
+
+# This script has three uses:
+# 1. From the command line to install straight into a given directory:
+#    bin/ooinstall /opt/Foo
+# 2. From the command line to link into a given directory:
+#    bin/ooinstall -l /opt/FooLinked
+# 3. When packaging (called from package-ooo), to install to DESTDIR
+
+use File::Find;
+use Cwd;
+
+$path = '';
+$do_link = 0;
+
+sub wanted {
+    my $path_to_unopkg="$path/program";
+    if ( $^O =~ /darwin/i )
+    {
+        $path_to_unopkg="$path/OpenOffice.org.app/Contents/MacOS";
+    }
+    -f $_
+	&& /.*\.oxt$/
+	&& system ( "LD_LIBRARY_PATH='' $path_to_unopkg/unopkg add -v --shared $File::Find::name" )
+	&& die "Cannot install $_ extension!";
+}
+
+( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
+
+# Workaround for system Mozilla
+if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
+    $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
+}
+
+# Workaround for the Python
+$ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python/lib-dynload";
+
+for $arg (@ARGV) {
+    if ($arg eq '-l') {
+	$do_link = 1;
+
+    } elsif ($arg eq '-h' || $arg eq '--help') {
+	$help = 1;
+    } else {
+	$path = Cwd::realpath( $arg );
+    }
+}
+
+$help = 1 if $path eq '';
+
+if ($help) {
+    print "ooinstall [-l] <prefix to install to>\n";
+    print "  -l - performs a linkoo on the installed source\n";
+    exit 1;
+}
+
+my $BUILD=undef;
+my $LAST_MINOR=undef;
+open MINORMK, "$ENV{'SOLARENV'}/inc/minor.mk";
+while (<MINORMK>) {
+	my $t = "\$" . $_;
+	if(/^BUILD/ || /^LAST_MINOR/) {
+		eval $t;
+	}
+}
+close MINORMK;
+$ENV{LAST_MINOR} = $LAST_MINOR;
+$ENV{OUT} = "../$ENV{'INPATH'}";
+$ENV{LOCAL_OUT} = $ENV{OUT};
+$ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
+# FIXME: the following variable helps to install localizations even if some
+# files are not localized (like Japanese, Chinese wordbook), it makes
+# the installer to use the English localization of the file instead.
+$ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
+
+$langs=$setup_vars{OOO_LANGS_LIST};
+$langs='en-US' if $langs eq '';
+$langs =~ s/\s+/,/g;
+# FIXME: hack... we get a useless , at the end which makes it being e.g. zu#
+# which breaks the build...
+$langs =~ s/,'/'/;
+
+$destdir='';
+if ( defined $setup_vars{OODESTDIR} &&
+     $setup_vars{OODESTDIR} ne "" ) {
+    $destdir = "-destdir \"$setup_vars{OODESTDIR}\"";
+}
+
+$strip='';
+if ( defined $setup_vars{OOO_STRIP} &&
+     $setup_vars{OOO_STRIP} eq "no" ) {
+    $strip = "-dontstrip";
+}
+
+print "Running OOo installer\n";
+system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
+	"perl -d:DProf -w $ENV{SOLARENV}/bin/make_installer.pl " .
+	"-f openoffice.lst -l $langs -p LibreOffice " .
+	"-buildid $BUILD $destdir $strip " .
+	"-simple $path") && die "Failed to install: $!";
+
+if ($ENV{BUILD_TYPE} =~ m/ODK/) {
+    print "Running SDK installer\n";
+    system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
+	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+	"-f openoffice.lst -l en-US -p LibreOffice_SDK " .
+	"-buildid $BUILD $destdir $strip " .
+	"-simple $path") && die "Failed to install: $!";
+}
+print "Installer finished\n";
+
+if ($do_link) {
+    `$ENV{SOLARENV}/bin/linkoo $path $ENV{SRC_ROOT}`;
+}
