@@ -569,10 +569,10 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
 
     if (bUndo)                                      // UnDo
     {
-        for(size_t i=theNewTabs.size()-1;i>=0;i--)
+        for (size_t i = theNewTabs.size(); i > 0; i--)
         {
-            SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
-            SCTAB nOldTab = theOldTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nDestTab = theNewTabs[i - 1];
+            SCTAB nOldTab = theOldTabs[i - 1];
             if (nDestTab > MAXTAB)                          // append ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
@@ -585,9 +585,9 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
     {
         for(size_t i=0;i<theNewTabs.size();i++)
         {
-            SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
-            SCTAB nNewTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
-            SCTAB nOldTab = theOldTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nDestTab = theNewTabs[i];
+            SCTAB nNewTab = theNewTabs[i];
+            SCTAB nOldTab = theOldTabs[i];
             if (nDestTab > MAXTAB)                          // append ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
@@ -672,10 +672,9 @@ void ScUndoCopyTab::Undo()
 
     DoSdrUndoAction( pDrawUndo, pDoc );                 // before the sheets are deleted
 
-    size_t i;
-    for(i=theNewTabs.size()-1;i>=0;i--)
+    for (size_t i = theNewTabs.size(); i > 0; i--)
     {
-        SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+        SCTAB nDestTab = theNewTabs[i - 1];
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -687,9 +686,9 @@ void ScUndoCopyTab::Undo()
     //  ScTablesHint broadcasts after all sheets have been deleted,
     //  so sheets and draw pages are in sync!
 
-    for(i=theNewTabs.size()-1;i>=0;i--)
+    for (size_t i = theNewTabs.size(); i > 0; i--)
     {
-        SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+        SCTAB nDestTab = theNewTabs[i - 1];
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -707,9 +706,9 @@ void ScUndoCopyTab::Redo()
     SCTAB nDestTab = 0;
     for(size_t i=0;i<theNewTabs.size();i++)
     {
-        nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
-        SCTAB nNewTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
-        SCTAB nOldTab = theOldTabs[sal::static_int_cast<USHORT>(i)];
+        nDestTab = theNewTabs[i];
+        SCTAB nNewTab = theNewTabs[i];
+        SCTAB nOldTab = theOldTabs[i];
         if (nDestTab > MAXTAB)                          // append ?
             nDestTab = pDoc->GetTableCount() - 1;
 

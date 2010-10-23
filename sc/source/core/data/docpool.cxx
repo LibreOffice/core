@@ -661,7 +661,9 @@ void ScDocumentPool::CellStyleCreated( const String& rName )
     sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem2(ATTR_PATTERN, i);
+        ScPatternAttr *const pPattern =
+            const_cast<ScPatternAttr*>(
+                static_cast<ScPatternAttr const*>(GetItem2(ATTR_PATTERN, i)));
         if ( pPattern && pPattern->GetStyleSheet() == NULL )
         {
             const String* pStyleName = pPattern->GetStyleName();

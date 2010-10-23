@@ -2149,7 +2149,6 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
     ScDocument* pDoc    = pDocSh->GetDocument();
     BOOL bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : FALSE;
     SCTAB       nNewTab = TheTabs.front();
-    int         i;
     WaitObject aWait( GetFrameWin() );
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
@@ -2169,9 +2168,9 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 //      pUndoDoc->InitUndo( pDoc, 0, nCount-1 );        // incl. Ref.
 
         String aOldName;
-        for(i=0;i<TheTabs.size();i++)
+        for (size_t i = 0; i < TheTabs.size(); i++)
         {
-            SCTAB nTab = TheTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nTab = TheTabs[i];
             if (i==0)
                 pUndoDoc->InitUndo( pDoc, nTab,nTab, TRUE,TRUE );   // incl. Spalten/Zeilenflags
             else
@@ -2219,11 +2218,11 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
     BOOL bDelDone = FALSE;
 
-    for(i=TheTabs.size()-1;i>=0;i--)
+    for (size_t i = TheTabs.size(); i > 0; i--)
     {
         String sCodeName;
-        BOOL bHasCodeName = pDoc->GetCodeName( TheTabs[sal::static_int_cast<USHORT>(i)], sCodeName );
-        if (pDoc->DeleteTab( TheTabs[sal::static_int_cast<USHORT>(i)], pUndoDoc ))
+        BOOL bHasCodeName = pDoc->GetCodeName( TheTabs[i-1], sCodeName );
+        if (pDoc->DeleteTab( TheTabs[i-1], pUndoDoc ))
         {
             bDelDone = TRUE;
             if( bVbaEnabled )
@@ -2233,7 +2232,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                     VBA_DeleteModule( *pDocSh, sCodeName );
                 }
             }
-            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[sal::static_int_cast<USHORT>(i)] ) );
+            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[i-1] ) );
         }
     }
     if (bRecord)
