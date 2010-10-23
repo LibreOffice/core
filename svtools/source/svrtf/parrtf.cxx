@@ -252,8 +252,9 @@ int SvRTFParser::_GetNextToken()
                     aParserStates.push( aState );
                 }
                 ++nOpenBrakets;
-                DBG_ASSERT( nOpenBrakets == aParserStates.size(),
-                            "ParserStateStack unequal to bracket count" );
+                DBG_ASSERT(
+                    static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                    "ParserStateStack unequal to bracket count" );
                 nRet = nNextCh;
             }
             break;
@@ -276,8 +277,9 @@ int SvRTFParser::_GetNextToken()
                     SetSrcEncoding( GetCodeSet() );
                 }
             }
-            DBG_ASSERT( nOpenBrakets == aParserStates.size(),
-                        "ParserStateStack unequal to bracket count" );
+            DBG_ASSERT(
+                static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                "ParserStateStack unequal to bracket count" );
             nRet = nNextCh;
             break;
 
