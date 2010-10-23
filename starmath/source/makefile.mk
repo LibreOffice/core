@@ -45,43 +45,43 @@ ENABLE_EXCEPTIONS=TRUE
 SMDLL=TRUE
 
 SRS2NAME =smres
-SRC2FILES = smres.src   \
-            symbol.src	\
+SRC2FILES = smres.src    \
+            symbol.src   \
             commands.src
 
-SLO1FILES =  \
+SLO1FILES = \
         $(SLO)$/accessibility.obj \
-        $(SLO)$/edit.obj \
+        $(SLO)$/edit.obj          \
         $(SLO)$/eqnolefilehdr.obj \
-        $(SLO)$/mathmlexport.obj \
-        $(SLO)$/mathmlimport.obj \
-        $(SLO)$/symbol.obj \
-        $(SLO)$/types.obj \
-        $(SLO)$/unodoc.obj \
-        $(SLO)$/action.obj \
-        $(SLO)$/cfgitem.obj \
-        $(SLO)$/config.obj \
-        $(SLO)$/dialog.obj \
-        $(SLO)$/document.obj \
-        $(SLO)$/format.obj \
-        $(SLO)$/mathtype.obj \
-        $(SLO)$/node.obj \
-        $(SLO)$/visitors.obj \
-		$(SLO)$/caret.obj \
-		$(SLO)$/cursor.obj \
-        $(SLO)$/parse.obj \
-        $(SLO)$/register.obj \
-        $(SLO)$/smdll.obj \
-        $(SLO)$/toolbox.obj \
-        $(SLO)$/typemap.obj \
-        $(SLO)$/smmod.obj \
-        $(SLO)$/utility.obj \
-        $(SLO)$/rect.obj \
-        $(SLO)$/unomodel.obj \
+        $(SLO)$/mathmlexport.obj  \
+        $(SLO)$/mathmlimport.obj  \
+        $(SLO)$/symbol.obj        \
+        $(SLO)$/types.obj         \
+        $(SLO)$/unodoc.obj        \
+        $(SLO)$/action.obj        \
+        $(SLO)$/cfgitem.obj       \
+        $(SLO)$/config.obj        \
+        $(SLO)$/dialog.obj        \
+        $(SLO)$/document.obj      \
+        $(SLO)$/format.obj        \
+        $(SLO)$/mathtype.obj      \
+        $(SLO)$/node.obj          \
+        $(SLO)$/visitors.obj      \
+        $(SLO)$/caret.obj         \
+        $(SLO)$/cursor.obj        \
+        $(SLO)$/parse.obj         \
+        $(SLO)$/register.obj      \
+        $(SLO)$/smdll.obj         \
+        $(SLO)$/toolbox.obj       \
+        $(SLO)$/typemap.obj       \
+        $(SLO)$/smmod.obj         \
+        $(SLO)$/utility.obj       \
+        $(SLO)$/rect.obj          \
+        $(SLO)$/unomodel.obj      \
         $(SLO)$/view.obj
 
-SLO2FILES =  \
-        $(SLO)$/register.obj  \
+SLO2FILES = \
+        $(SLO)$/register.obj \
         $(SLO)$/detreg.obj
 
 SLOFILES = \
