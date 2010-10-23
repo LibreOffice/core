@@ -186,7 +186,7 @@ struct TokenTable
     }
     void clear()
     {
-        for_each(maTokens.begin(), maTokens.end(), DeleteInstance());
+        ::std::for_each(maTokens.begin(), maTokens.end(), DeleteInstance());
     }
 
     void push_back( FormulaToken* pToken )
@@ -994,7 +994,7 @@ void lcl_convertTokensToString(OUString& rStr, const vector<ScSharedTokenRef>& r
     const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     FormulaGrammar::Grammar eGrammar = pDoc->GetGrammar();
     Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
-    func = for_each(rTokens.begin(), rTokens.end(), func);
+    func = ::std::for_each(rTokens.begin(), rTokens.end(), func);
     func.getString(rStr);
 }
 
@@ -1807,7 +1807,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     {
         list<SCTAB> aTableNumList;
         InsertTabNumber func;
-        func = for_each(aAllTokens.begin(), aAllTokens.end(), func);
+        func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
         aResult.push_back(
             beans::PropertyValue( ::rtl::OUString::createFromAscii("TableNumberList"), -1,
@@ -2021,7 +2021,7 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
         throw lang::IllegalArgumentException();
 
     Tokens2RangeStringXML converter(m_pDocument);
-    converter = for_each(aRefTokens.begin(), aRefTokens.end(), converter);
+    converter = ::std::for_each(aRefTokens.begin(), aRefTokens.end(), converter);
     converter.getString(aRet);
 
     return aRet;
@@ -3169,7 +3169,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
 
     // Determine the total size of all ranges.
     AccumulateRangeSize func;
-    func = for_each(m_pTokens->begin(), m_pTokens->end(), func);
+    func = ::std::for_each(m_pTokens->begin(), m_pTokens->end(), func);
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
 
@@ -3199,7 +3199,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
     // Generate label strings based on the info so far.
     sal_Int32 nCount = bColumn ? nCols : nRows;
     GenerateLabelStrings genLabels(nCount, eOrigin, bColumn);
-    genLabels = for_each(m_pTokens->begin(), m_pTokens->end(), genLabels);
+    genLabels = ::std::for_each(m_pTokens->begin(), m_pTokens->end(), genLabels);
     Sequence<OUString> aSeq = genLabels.getLabels();
 
     return aSeq;
