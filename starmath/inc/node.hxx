@@ -114,8 +114,12 @@ class SmNode : public SmRect
     SmNodeType      eType;
     SmScaleMode     eScaleMode;
     RectHorAlign    eRectHorAlign;
-    USHORT      nFlags, nAttributes;
-    BOOL        bIsPhantom, bIsDebug;
+    USHORT          nFlags,
+                    nAttributes;
+    BOOL            bIsPhantom,
+                    bIsDebug;
+
+    BOOL            bIsSelected;
 
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
