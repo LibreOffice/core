@@ -1233,6 +1233,7 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
+/// Glue class to call RtfExport as an internal filter, needed by copy&paste support.
 class SwRTFWriter : public Writer
 {
        public:

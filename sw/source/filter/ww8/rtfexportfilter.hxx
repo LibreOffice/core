@@ -36,7 +36,7 @@
 #include <tools/stream.hxx>
 #include <shellio.hxx>
 
-// This is just here so that we don't have to copy&paste its string format methods
+/// Dummy Writer implementation to be able to use the string format methods of the base class
 class RtfWriter : public Writer
 {
 protected:

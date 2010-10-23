@@ -38,6 +38,7 @@
 class RtfExport;
 class RtfAttributeOutput;
 
+/// Handles export of drawings using RTF markup
 class RtfSdrExport : public EscherEx
 {
     RtfExport &m_rExport;

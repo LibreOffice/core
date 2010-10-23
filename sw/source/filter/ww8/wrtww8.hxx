@@ -1371,6 +1371,7 @@ public:
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const = 0;
 };
 
+/// Used to export formatted text associated to drawings.
 class MSWord_SdrAttrIter : public MSWordAttrIter
 {
 private:

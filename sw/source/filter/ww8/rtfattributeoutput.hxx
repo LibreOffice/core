@@ -46,6 +46,7 @@ class SwGrfNode;
 class SwOLENode;
 class SdrObject;
 
+/// The class that has handlers for various resource types when exporting as RTF
 class RtfAttributeOutput : public AttributeOutputBase
 {
 public:
