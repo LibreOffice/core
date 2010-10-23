@@ -388,7 +388,7 @@ namespace utl
 
     void OConfigurationValueContainer::read( )
     {
-        for_each(
+        std::for_each(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             UpdateFromConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
@@ -401,7 +401,7 @@ namespace utl
     void OConfigurationValueContainer::write( sal_Bool _bCommit )
     {
         // collect the current values in the exchange locations
-        for_each(
+        std::for_each(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             UpdateToConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
