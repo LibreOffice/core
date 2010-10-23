@@ -1486,8 +1486,8 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
         aText += (sal_Unicode)' ';
 
         rViewSh.GetViewFrame()->GetDispatcher()->Execute(
-                SID_INSERTTEXT, SFX_CALLMODE_STANDARD,
-                new SfxStringItem(SID_INSERTTEXT, aText), 0L);
+                SID_INSERTSYMBOL, SFX_CALLMODE_STANDARD,
+                new SfxStringItem(SID_INSERTSYMBOL, aText), 0L);
     }
 
     return 0;

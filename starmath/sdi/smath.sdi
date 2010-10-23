@@ -378,7 +378,7 @@ SfxVoidItem InsertCommand SID_INSERTCOMMAND
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertConfigName SID_INSERTTEXT
+SfxVoidItem InsertConfigName SID_INSERTSYMBOL
 ()
 [
     /* flags: */

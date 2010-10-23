@@ -66,6 +66,9 @@ SLO1FILES =  \
         $(SLO)$/format.obj \
         $(SLO)$/mathtype.obj \
         $(SLO)$/node.obj \
+        $(SLO)$/visitors.obj \
+		$(SLO)$/caret.obj \
+		$(SLO)$/cursor.obj \
         $(SLO)$/parse.obj \
         $(SLO)$/register.obj \
         $(SLO)$/smdll.obj \

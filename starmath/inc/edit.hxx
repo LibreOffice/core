@@ -65,15 +65,13 @@ class SmEditWindow : public Window, public DropTargetHelper
     ScrollBar      *pHScrollBar,
                    *pVScrollBar;
     ScrollBarBox   *pScrollBox;
-    Timer           aModifyTimer,
-                    aCursorMoveTimer;
+    Timer           aModifyTimer;
     ESelection      aOldSelection;
 
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void Command(const CommandEvent& rCEvt);
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(ModifyTimerHdl, Timer *);
-    DECL_LINK(CursorMoveTimerHdl, Timer *);
 
     virtual void DataChanged( const DataChangedEvent& );
     virtual void Resize();
