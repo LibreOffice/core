@@ -14,3 +14,6 @@
 /aclocal.m4
 
 /*/*.exe
+
+instsetoo_native/util/LibreOffice*
+instsetoo_native/util/tmon.out
