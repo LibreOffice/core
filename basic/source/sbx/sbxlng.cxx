@@ -162,7 +162,7 @@ start:
         case SbxBYREF | SbxLONG:
             nRes = *p->pLong; break;
 
-        // ab hier muss getestet werden
+        // from here had to be tested
         case SbxBYREF | SbxULONG:
             aTmp.nULong = *p->pULong; goto ref;
         case SbxBYREF | SbxERROR:
@@ -199,7 +199,7 @@ void ImpPutLong( SbxValues* p, INT32 n )
 start:
     switch( +p->eType )
     {
-        // Ab hier muss getestet werden
+        // From here had to be tested
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -223,7 +223,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // ab hier nicht mehr
+        // from here no longer
         case SbxLONG:
             p->nLong = n; break;
         case SbxSINGLE:
