@@ -273,7 +273,7 @@ static OUString & getIniFileName_Impl()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-            progExt = OUString::createFromAscii(".exe");
+            progExt = OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
