@@ -159,7 +159,7 @@ namespace comphelper
         {
             ::rtl::OUString sMainKeyName( sRootKey );
             sMainKeyName += component->sImplementationName;
-            sMainKeyName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+            sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
             try
             {
@@ -176,7 +176,7 @@ namespace comphelper
 
                     ::rtl::OUString sSingletonKeyName( sRootKey );
                     sSingletonKeyName += component->sImplementationName;
-                    sSingletonKeyName += ::rtl::OUString::createFromAscii( "/UNO/SINGLETONS/" );
+                    sSingletonKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS/"));
                     sSingletonKeyName += component->sSingletonName;
 
                     xNewKey = _rxRootKey->createKey( sSingletonKeyName );

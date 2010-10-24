@@ -223,7 +223,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< ::com
         throw frame::DoubleInitializationException();
 
     if ( aArguments.getLength() != 1 )
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Wrong number of arguments!\n" ),
+        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong number of arguments!\n")),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
@@ -239,7 +239,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< ::com
         m_bInitialized = sal_True;
     }
     else
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Unexpected type of argument!\n" ),
+        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected type of argument!\n")),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 }

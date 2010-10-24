@@ -109,12 +109,12 @@ const uno::Reference < embed::XStorage >& EmbedImpl::GetReplacements()
         try
         {
             mxImageStorage = mxStorage->openStorageElement(
-                ::rtl::OUString::createFromAscii( "ObjectReplacements" ), embed::ElementModes::READWRITE );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectReplacements")), embed::ElementModes::READWRITE );
         }
         catch ( uno::Exception& )
         {
             mxImageStorage = mxStorage->openStorageElement(
-                ::rtl::OUString::createFromAscii( "ObjectReplacements" ), embed::ElementModes::READ );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectReplacements")), embed::ElementModes::READ );
         }
     }
 
@@ -172,7 +172,7 @@ sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()
             {
                 // get the open mode from the parent storage
                 sal_Int32 nMode = 0;
-                uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("OpenMode") );
+                uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode")) );
                 if ( aAny >>= nMode )
                     bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
             } // if ( xSet.is() )
@@ -364,7 +364,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         {
             // get the open mode from the parent storage
             sal_Int32 nMode = 0;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("OpenMode") );
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode")) );
             if ( aAny >>= nMode )
                 bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
         }
@@ -1217,7 +1217,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
                 uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
                 if ( xSet.is() )
                 {
-                    uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("MediaType") );
+                    uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
                     aAny >>= *pMediaType;
                 }
             }
@@ -1272,13 +1272,13 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
         if ( !xPropSet.is() )
             throw uno::RuntimeException();
 
-        xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "UseCommonStoragePasswordEncryption" ),
+        xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption")),
                                     uno::makeAny( (sal_Bool)sal_True ) );
         uno::Any aAny;
         aAny <<= rMediaType;
-        xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
+        xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny );
 
-        xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "Compressed" ),
+        xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
                                     uno::makeAny( (sal_Bool)sal_True ) );
     }
     catch( uno::Exception& )

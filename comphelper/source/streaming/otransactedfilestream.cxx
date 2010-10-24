@@ -304,9 +304,9 @@ void OTruncatedTransactedFileStream::Commit_Impl()
             ::rtl::OUString aTempURL;
             try {
                 uno::Reference< beans::XPropertySet > xTempFile( m_pStreamData->m_xTempStream, uno::UNO_QUERY_THROW );
-                uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+                uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")) );
                 aUrl >>= aTempURL;
-                xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ),
+                xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile")),
                                              uno::makeAny( sal_False ) );
 
                 m_pStreamData->m_xTempSeekable->seek( nPos );
