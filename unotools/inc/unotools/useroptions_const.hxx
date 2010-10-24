@@ -33,25 +33,25 @@
 
 namespace
 {
-    static const ::rtl::OUString s_sData                     = ::rtl::OUString::createFromAscii("org.openoffice.UserProfile/Data");
-    static const ::rtl::OUString s_so                        = ::rtl::OUString::createFromAscii("o"); // USER_OPT_COMPANY
-    static const ::rtl::OUString s_sgivenname                = ::rtl::OUString::createFromAscii("givenname"); // USER_OPT_FIRSTNAME
-    static const ::rtl::OUString s_ssn                       = ::rtl::OUString::createFromAscii("sn"); // USER_OPT_LASTNAME
-    static const ::rtl::OUString s_sinitials                 = ::rtl::OUString::createFromAscii("initials"); // USER_OPT_ID
-    static const ::rtl::OUString s_sstreet                   = ::rtl::OUString::createFromAscii("street"); // USER_OPT_STREET
-    static const ::rtl::OUString s_sl                        = ::rtl::OUString::createFromAscii("l"); // USER_OPT_CITY
-    static const ::rtl::OUString s_sst                       = ::rtl::OUString::createFromAscii("st"); // USER_OPT_STATE
-    static const ::rtl::OUString s_spostalcode               = ::rtl::OUString::createFromAscii("postalcode"); // USER_OPT_ZIP
-    static const ::rtl::OUString s_sc                        = ::rtl::OUString::createFromAscii("c"); // USER_OPT_COUNTRY
-    static const ::rtl::OUString s_stitle                    = ::rtl::OUString::createFromAscii("title"); // USER_OPT_TITLE
-    static const ::rtl::OUString s_sposition                 = ::rtl::OUString::createFromAscii("position"); // USER_OPT_POSITION
-    static const ::rtl::OUString s_shomephone                = ::rtl::OUString::createFromAscii("homephone"); // USER_OPT_TELEPHONEHOME
-    static const ::rtl::OUString s_stelephonenumber          = ::rtl::OUString::createFromAscii("telephonenumber"); // USER_OPT_TELEPHONEWORK
-    static const ::rtl::OUString s_sfacsimiletelephonenumber = ::rtl::OUString::createFromAscii("facsimiletelephonenumber"); // USER_OPT_FAX
-    static const ::rtl::OUString s_smail                     = ::rtl::OUString::createFromAscii("mail"); // USER_OPT_EMAIL
-    static const ::rtl::OUString s_scustomernumber           = ::rtl::OUString::createFromAscii("customernumber"); // USER_OPT_CUSTOMERNUMBER
-    static const ::rtl::OUString s_sfathersname              = ::rtl::OUString::createFromAscii("fathersname"); // USER_OPT_FATHERSNAME
-    static const ::rtl::OUString s_sapartment                = ::rtl::OUString::createFromAscii("apartment"); // USER_OPT_APARTMENT
+    static const ::rtl::OUString s_sData(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile/Data"));
+    static const ::rtl::OUString s_so(RTL_CONSTASCII_USTRINGPARAM("o")); // USER_OPT_COMPANY
+    static const ::rtl::OUString s_sgivenname(RTL_CONSTASCII_USTRINGPARAM("givenname")); // USER_OPT_FIRSTNAME
+    static const ::rtl::OUString s_ssn(RTL_CONSTASCII_USTRINGPARAM("sn")); // USER_OPT_LASTNAME
+    static const ::rtl::OUString s_sinitials(RTL_CONSTASCII_USTRINGPARAM("initials")); // USER_OPT_ID
+    static const ::rtl::OUString s_sstreet(RTL_CONSTASCII_USTRINGPARAM("street")); // USER_OPT_STREET
+    static const ::rtl::OUString s_sl(RTL_CONSTASCII_USTRINGPARAM("l")); // USER_OPT_CITY
+    static const ::rtl::OUString s_sst(RTL_CONSTASCII_USTRINGPARAM("st")); // USER_OPT_STATE
+    static const ::rtl::OUString s_spostalcode(RTL_CONSTASCII_USTRINGPARAM("postalcode")); // USER_OPT_ZIP
+    static const ::rtl::OUString s_sc(RTL_CONSTASCII_USTRINGPARAM("c")); // USER_OPT_COUNTRY
+    static const ::rtl::OUString s_stitle(RTL_CONSTASCII_USTRINGPARAM("title")); // USER_OPT_TITLE
+    static const ::rtl::OUString s_sposition(RTL_CONSTASCII_USTRINGPARAM("position")); // USER_OPT_POSITION
+    static const ::rtl::OUString s_shomephone(RTL_CONSTASCII_USTRINGPARAM("homephone")); // USER_OPT_TELEPHONEHOME
+    static const ::rtl::OUString s_stelephonenumber(RTL_CONSTASCII_USTRINGPARAM("telephonenumber")); // USER_OPT_TELEPHONEWORK
+    static const ::rtl::OUString s_sfacsimiletelephonenumber(RTL_CONSTASCII_USTRINGPARAM("facsimiletelephonenumber")); // USER_OPT_FAX
+    static const ::rtl::OUString s_smail(RTL_CONSTASCII_USTRINGPARAM("mail")); // USER_OPT_EMAIL
+    static const ::rtl::OUString s_scustomernumber(RTL_CONSTASCII_USTRINGPARAM("customernumber")); // USER_OPT_CUSTOMERNUMBER
+    static const ::rtl::OUString s_sfathersname(RTL_CONSTASCII_USTRINGPARAM("fathersname")); // USER_OPT_FATHERSNAME
+    static const ::rtl::OUString s_sapartment(RTL_CONSTASCII_USTRINGPARAM("apartment")); // USER_OPT_APARTMENT
 }
 
 #endif //  INCLUDE_CONFIGITEMS_USEROPTIONS_CONST_HXX

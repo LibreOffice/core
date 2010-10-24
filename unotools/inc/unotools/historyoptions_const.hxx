@@ -36,21 +36,21 @@
 
 namespace
 {
-    static const ::rtl::OUString s_sCommonHistory     = ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/History");
-    static const ::rtl::OUString s_sHistories         = ::rtl::OUString::createFromAscii("org.openoffice.Office.Histories/Histories");
-    static const ::rtl::OUString s_sPickListSize      = ::rtl::OUString::createFromAscii("PickListSize");
-    static const ::rtl::OUString s_sURLHistorySize    = ::rtl::OUString::createFromAscii("Size");
-    static const ::rtl::OUString s_sHelpBookmarksSize = ::rtl::OUString::createFromAscii("HelpBookmarkSize");
-    static const ::rtl::OUString s_sPickList          = ::rtl::OUString::createFromAscii("PickList");
-    static const ::rtl::OUString s_sURLHistory        = ::rtl::OUString::createFromAscii("URLHistory");
-    static const ::rtl::OUString s_sHelpBookmarks     = ::rtl::OUString::createFromAscii("HelpBookmarks");
-    static const ::rtl::OUString s_sItemList          = ::rtl::OUString::createFromAscii("ItemList");
-    static const ::rtl::OUString s_sOrderList         = ::rtl::OUString::createFromAscii("OrderList");
-    static const ::rtl::OUString s_sHistoryItemRef    = ::rtl::OUString::createFromAscii("HistoryItemRef");
-    static const ::rtl::OUString s_sURL               = ::rtl::OUString::createFromAscii("URL");
-    static const ::rtl::OUString s_sFilter            = ::rtl::OUString::createFromAscii("Filter");
-    static const ::rtl::OUString s_sTitle             = ::rtl::OUString::createFromAscii("Title");
-    static const ::rtl::OUString s_sPassword          = ::rtl::OUString::createFromAscii("Password");
+    static const ::rtl::OUString s_sCommonHistory(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/History"));
+    static const ::rtl::OUString s_sHistories(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Histories/Histories"));
+    static const ::rtl::OUString s_sPickListSize(RTL_CONSTASCII_USTRINGPARAM("PickListSize"));
+    static const ::rtl::OUString s_sURLHistorySize(RTL_CONSTASCII_USTRINGPARAM("Size"));
+    static const ::rtl::OUString s_sHelpBookmarksSize(RTL_CONSTASCII_USTRINGPARAM("HelpBookmarkSize"));
+    static const ::rtl::OUString s_sPickList(RTL_CONSTASCII_USTRINGPARAM("PickList"));
+    static const ::rtl::OUString s_sURLHistory(RTL_CONSTASCII_USTRINGPARAM("URLHistory"));
+    static const ::rtl::OUString s_sHelpBookmarks(RTL_CONSTASCII_USTRINGPARAM("HelpBookmarks"));
+    static const ::rtl::OUString s_sItemList(RTL_CONSTASCII_USTRINGPARAM("ItemList"));
+    static const ::rtl::OUString s_sOrderList(RTL_CONSTASCII_USTRINGPARAM("OrderList"));
+    static const ::rtl::OUString s_sHistoryItemRef(RTL_CONSTASCII_USTRINGPARAM("HistoryItemRef"));
+    static const ::rtl::OUString s_sURL(RTL_CONSTASCII_USTRINGPARAM("URL"));
+    static const ::rtl::OUString s_sFilter(RTL_CONSTASCII_USTRINGPARAM("Filter"));
+    static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    static const ::rtl::OUString s_sPassword(RTL_CONSTASCII_USTRINGPARAM("Password"));
 }
 
 #endif //  INCLUDE_CONFIGITEMS_HISTORYOPTIONS_CONST_HXX
