@@ -2249,7 +2249,9 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
         {
             if (pDrawLayer)
             {
-                unsigned long nOldHeights = GetRowHeight(nStartRow, nEndRow);
+                // #i115025# When comparing to nNewHeight for the whole range, the height
+                // including hidden rows has to be used (same behavior as 3.2).
+                unsigned long nOldHeights = mpRowHeights->getSumValue(nStartRow, nEndRow);
                 // FIXME: should we test for overflows?
                 long nHeightDif = (long) (unsigned long) nNewHeight *
                     (nEndRow - nStartRow + 1) - nOldHeights;
