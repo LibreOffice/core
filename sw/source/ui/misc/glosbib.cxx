@@ -268,7 +268,7 @@ IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
 //  sGroup.ToLower();
     sGroup += GLOS_DELIM;
     sGroup += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
-    DBG_ASSERT(!pGlosHdl->FindGroupName(sGroup), "Gruppe bereits vorhanden!");
+    OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     if(!pInsertedArr)
         pInsertedArr = new SvStrings;
     pInsertedArr->Insert(new String(sGroup), pInsertedArr->Count());
@@ -366,7 +366,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 
     sNewName += GLOS_DELIM;
     sNewName += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
-    DBG_ASSERT(!pGlosHdl->FindGroupName(sNewName), "Gruppe bereits vorhanden!");
+    OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // befindet sich der umzubenennende Name unter den
     // den neuen - dann austauschen

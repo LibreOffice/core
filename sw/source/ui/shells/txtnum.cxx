@@ -130,7 +130,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
             aSet.Put(SvxNumBulletItem(aRule));
             // --> OD 2008-02-29 #refactorlists# - removed <bHasChild>
-            ASSERT( GetShell().GetNumLevel() < MAXLEVEL,
+            OSL_ENSURE( GetShell().GetNumLevel() < MAXLEVEL,
                     "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
             USHORT nLevel = GetShell().GetNumLevel();
             // <--
@@ -182,10 +182,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell());
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         USHORT nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
         if( RET_OK == nRet )
@@ -242,7 +242,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     }
     break;
     default:
-        ASSERT(FALSE,  falscher Dispatcher);
+        OSL_ENSURE(false, "wrong dispatcher");
         return;
     }
 }

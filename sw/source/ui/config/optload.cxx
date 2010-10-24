@@ -586,7 +586,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     }
     else
     {
-        DBG_ERRORFILE( "Couldn't get PRODUCTNAME variable" );
+        OSL_ENSURE(false, "Couldn't get PRODUCTNAME variable" );
     }
 
     SvObjectServerList aObjS;

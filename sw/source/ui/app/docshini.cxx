@@ -692,7 +692,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         }
         else
         {
-            DBG_ERROR("Code removed!");
+            OSL_ENSURE(false, "Code removed!");
         }
 
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );

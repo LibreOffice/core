@@ -106,7 +106,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
     if (pTextObj)
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-        ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+        OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -132,7 +132,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
     if ( pTextObj )
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-        ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+        OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -204,7 +204,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-                    ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+                    OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
                     bNextDoc = sal_True;

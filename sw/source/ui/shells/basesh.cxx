@@ -250,7 +250,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLeft();
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
             return;
     }
     rReq.Done();
@@ -414,7 +414,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
             return;
     }
     if(!bIgnore)
@@ -511,7 +511,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             rSh.Do( SwWrtShell::REPEAT );
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
     }
 
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
@@ -859,11 +859,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
                             GetView(),DLG_CONV_TEXT_TABLE , bToTable);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
@@ -1158,7 +1158,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     static_cast<const SfxBoolItem*>( pItem )->GetValue();
 
                 // set form design mode
-                DBG_ASSERT( GetView().GetFormShell() != NULL, "form shell?" );
+                OSL_ENSURE( GetView().GetFormShell() != NULL, "form shell?" );
                 SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
                 aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
                 GetView().GetFormShell()->Execute( aReq );
@@ -1217,7 +1217,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_PAGE_STYLE_SET_PAPER_SIZE:
         case FN_PAGE_STYLE_SET_PAPER_BIN:
         {
-            DBG_ERROR("not implemented");
+            OSL_ENSURE(false, "not implemented");
         }
         break;
 
@@ -1244,7 +1244,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-                DBG_ERROR("falscher Dispatcher");
+                OSL_ENSURE(false, "wrong Dispatcher");
         }
 
     }
@@ -2310,7 +2310,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         default:
 //          bMsgOk = FALSE;
             rReq.Ignore();
-            DBG_ERROR( "Unbekannte Message bei ExecuteAttr!" );
+            OSL_ENSURE(false, "unknown message in ExecuteAttr!" );
             return;
     }
 
@@ -2433,10 +2433,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2450,10 +2450,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2468,10 +2468,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2493,7 +2493,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
             SfxAbstractDialog * pDlg = 0;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
 
             // Tabellenzelle(n) selektiert?
@@ -2505,7 +2505,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2524,7 +2524,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrmAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
@@ -2539,7 +2539,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2555,7 +2555,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
         }
         break;
-        default:DBG_ERROR("falscher Dispatcher (basesh.cxx)");
+        default:OSL_ENSURE(false, "wrong Dispatcher (basesh.cxx)");
     }
     if(!bDone)
         rReq.Done();
@@ -2649,9 +2649,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             if( !nCols || !nRows )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( DLG_INSERT_TABLE, rTempView );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
@@ -2855,16 +2855,16 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView(), DLG_CHANGE_DB );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
         break;
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong dispatcher");
     }
 }
 

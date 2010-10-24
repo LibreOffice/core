@@ -142,8 +142,8 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::UpdateFlyFrm()
 {
-    ASSERT( pOwnSh->IsFrmSelected(),
-        "Kein Rahmen selektiert oder keine Shell, Update nicht moeglich");
+    OSL_ENSURE( pOwnSh->IsFrmSelected(),
+        "no frame selected or no shell, update not possible");
 
     if( pOwnSh->IsFrmSelected() )
     {
@@ -201,7 +201,7 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Size   &rSize,
                                    BOOL bAbs )
 {
-    ASSERT( eAnchorType == FLY_AT_PAGE ||
+    OSL_ENSURE( eAnchorType == FLY_AT_PAGE ||
             eAnchorType == FLY_AT_PARA ||
             eAnchorType == FLY_AT_CHAR ||
             eAnchorType == FLY_AT_FLY  ||
@@ -542,7 +542,7 @@ void SwFlyFrmAttrMgr::DelAttr( USHORT nId )
 
 void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
-    ASSERT( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
+    OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
 
     SvxLRSpaceItem aTmp( (SvxLRSpaceItem&)aSet.Get( RES_LR_SPACE ) );
     if( LONG_MAX != nLeft )
@@ -554,7 +554,7 @@ void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 
 void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
 {
-    ASSERT(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
+    OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
 
     SvxULSpaceItem aTmp( (SvxULSpaceItem&)aSet.Get( RES_UL_SPACE ) );
     if( LONG_MAX != nTop )

@@ -198,14 +198,14 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 
             if (nSlot == FN_REPEAT_SEARCH)
             {
-                ASSERT(pSrchItem, "Search-Item fehlt");
+                OSL_ENSURE(pSrchItem, "SearchItem missing");
                 if( !pSrchItem )
                     pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
             }
             else
             {
                 // SearchItem aus Request besorgen
-                ASSERT(pArgs, "Args fehlen");
+                OSL_ENSURE(pArgs, "Args missing");
                 if ( pArgs )
                 {
                     delete pSrchItem;
@@ -415,13 +415,13 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         }
         break;
         default:
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if(nSlot)
             {
                 ByteString sStr( "nSlot: " );
                 sStr += ByteString::CreateFromInt32( nSlot );
-                sStr += " falscher Dispatcher (viewsrch.cxx)";
-                DBG_ERROR( sStr.GetBuffer() );
+                sStr += " wrong Dispatcher (viewsrch.cxx)";
+                OSL_ENSURE(false, sStr.GetBuffer() );
             }
 #endif
             return;

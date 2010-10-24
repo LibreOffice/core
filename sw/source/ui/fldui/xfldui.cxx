@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -89,7 +89,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         if(xTSupplier.is())
         {
             Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            DBG_ASSERT(xTbls->hasByName(rTblQryName), "table not available anymore?");
+            OSL_ENSURE(xTbls->hasByName(rTblQryName), "table not available anymore?");
             try
             {
                 Any aTable = xTbls->getByName(rTblQryName);
@@ -106,7 +106,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            DBG_ASSERT(xQueries->hasByName(rTblQryName), "table not available anymore?");
+            OSL_ENSURE(xQueries->hasByName(rTblQryName), "table not available anymore?");
             try
             {
                 Any aQuery = xQueries->getByName(rTblQryName);
@@ -127,7 +127,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception in getColumns()");
+            OSL_ENSURE(false, "Exception in getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFldName))
         {

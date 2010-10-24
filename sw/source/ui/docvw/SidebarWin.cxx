@@ -493,7 +493,7 @@ void SwSidebarWin::SetPosAndSize()
             }
             break;
             default:
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
             break;
         }
@@ -1258,7 +1258,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
     {
         SidebarWinAccessible* pAcc =
                         static_cast<SidebarWinAccessible*>( GetWindowPeer() );
-        ASSERT( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
+        OSL_ENSURE( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
                 "<SwSidebarWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
         pAcc->ChangeSidebarItem( mrSidebarItem );
     }

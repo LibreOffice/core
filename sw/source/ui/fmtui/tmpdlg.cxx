@@ -329,7 +329,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         break;
 
         default:
-            ASSERT(!this, "Falsche Familie");
+            OSL_ENSURE(!this, "wrong family");
 
     }
 }
@@ -400,7 +400,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     {
         case TP_CHAR_STD:
             {
-                ASSERT(::GetActiveView(), "keine View aktiv");
+                OSL_ENSURE(::GetActiveView(), "no active view");
 
                 SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
                     GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );

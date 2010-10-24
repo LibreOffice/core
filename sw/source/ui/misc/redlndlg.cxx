@@ -817,7 +817,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
     ListBoxEntries_t aRedlines;
 
     // don't activate
-    DBG_ASSERT( bInhibitActivate == false,
+    OSL_ENSURE( bInhibitActivate == false,
                 "recursive call of CallAcceptReject?");
     bInhibitActivate = true;
 
@@ -1127,9 +1127,9 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
                         sComment = rRedline.GetComment();
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "Dialogdiet fail!");
+                        OSL_ENSURE(pFact, "Dialogdiet fail!");
                         ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                        DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
+                        OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                         SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
 
                         aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
@@ -1140,7 +1140,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                                     SID_ATTR_POSTIT_DATE ));
 
                         AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, FALSE );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         pDlg->HideAuthor();
 

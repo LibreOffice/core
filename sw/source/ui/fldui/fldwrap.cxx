@@ -99,10 +99,10 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
     pDlg->Start();
@@ -146,10 +146,10 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
 
     pWindow = pDlg->GetWindow();

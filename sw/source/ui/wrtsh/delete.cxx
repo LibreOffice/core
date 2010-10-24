@@ -388,7 +388,7 @@ long SwWrtShell::DelRight()
             LeaveSelFrmMode();
             UnSelectFrm();
             // --> OD 2006-07-06 #134369#
-            ASSERT( !IsFrmSelected(),
+            OSL_ENSURE( !IsFrmSelected(),
                     "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" )
             // <--
             // --> OD 2006-07-10 #134369#

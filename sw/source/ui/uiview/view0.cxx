@@ -494,7 +494,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(sal_False, Falsche Request-Methode);
+            OSL_ENSURE(sal_False, "wrong request method");
             return;
     }
 

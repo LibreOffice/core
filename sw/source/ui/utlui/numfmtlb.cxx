@@ -149,7 +149,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         else
         {
             SwView *pView = GetView();
-            DBG_ASSERT(pView, "no view found");
+            OSL_ENSURE(pView, "no view found");
             if(!pView)
                 return;
             SwWrtShell &rSh = pView->GetWrtShell();
@@ -219,7 +219,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             break;
 
         default:
-            DBG_ERROR("what a format?");
+            OSL_ENSURE(false, "what a format?");
             break;
         }
 
@@ -294,7 +294,7 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     else
     {
         SwView *pView = GetView();
-        DBG_ASSERT(pView, "no view found");
+        OSL_ENSURE(pView, "no view found");
         if(!pView)
             return;
         SwWrtShell &rSh = pView->GetWrtShell();
@@ -411,12 +411,12 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
         if (RET_OK == pDlg->Execute())
         {

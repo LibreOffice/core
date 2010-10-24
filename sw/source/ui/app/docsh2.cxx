@@ -1304,7 +1304,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         catch(Exception& )
                         {
-                            DBG_ERROR("control acces failed");
+                            OSL_ENSURE(false, "control acces failed");
                         }
 
                         xFP->setTitle( SW_RESSTR( nStrId ));
@@ -1425,7 +1425,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
         break;
 
-        default: DBG_ERROR("falscher Dispatcher");
+        default: OSL_ENSURE(false, "wrong Dispatcher");
     }
 }
 

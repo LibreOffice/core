@@ -812,7 +812,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 if(pFact)
                 {
                     pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 }
 
                 pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -982,7 +982,7 @@ MOVEPAGE:
         }
         break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 
@@ -995,7 +995,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     SfxWhichIter aIter(rSet);
     BYTE nRow = 1;
     USHORT nWhich = aIter.FirstWhich();
-    ASSERT(nWhich, leeres Set);
+    OSL_ENSURE(nWhich, "empty set");
     SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
     //#106746# zoom has to be disabled if Accessibility support is switched on
     // MT 2010/01, see #110498#
@@ -1333,7 +1333,7 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    ASSERT( !*ppScrollbar, "vorher abpruefen!" )
+    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" )
 
     if( !bHori )
     {
@@ -1778,11 +1778,11 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
             SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0
         };
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     {
         const USHORT* pPtr = aInval + 1;
         do {
-            ASSERT( *(pPtr - 1) < *pPtr, "falsche Sortierung!" );
+            OSL_ENSURE( *(pPtr - 1) < *pPtr, "wrong sorting!" );
         } while( *++pPtr );
     }
 #endif
@@ -1809,7 +1809,7 @@ PrintDialog*  SwPagePreView::CreatePrintDialog( Window *pParent )
 // OD 18.12.2002 #103492# - no longer needed ??
 Size  SwPagePreView::GetOptimalSizePixel() const
 {
-    ASSERT( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" )
+    OSL_ENSURE( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" )
     return Size( -1, -1 );
 /*
     //JP 09.06.99: was wird hier errechnet ?????
@@ -1951,7 +1951,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
                                                         // happend already!!!
 
-    DBG_ASSERT( GetViewShell() != NULL, "We need a view shell" );
+    OSL_ENSURE( GetViewShell() != NULL, "We need a view shell" );
     return GetViewShell()->CreateAccessiblePreview();
 }
 

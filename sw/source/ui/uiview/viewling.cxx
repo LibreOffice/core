@@ -209,7 +209,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             {
                                 SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
                                 // check for unexpected error case
-                                DBG_ASSERT( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
+                                OSL_ENSURE( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
                                     "text missing: corrupted node?" );
                                 if (!pTxtNode || pTxtNode->GetTxt().Len() < nPointIndex)
                                     nPointIndex = 0;
@@ -232,7 +232,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
             HyphenateDocument();
             break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong Dispatcher");
             return;
     }
 }
@@ -339,7 +339,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             }
             break;
         default:
-            ASSERT( !this, "SpellStart with unknown Area" );
+            OSL_ENSURE( !this, "SpellStart with unknown Area" );
     }
     pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
 }
@@ -434,7 +434,7 @@ void SwView::HyphStart( SvxSpellArea eWhich )
             pWrtShell->HyphStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND );
             break;
         default:
-            ASSERT( !this, "HyphStart with unknown Area" );
+            OSL_ENSURE( !this, "HyphStart with unknown Area" );
     }
 }
 
@@ -715,7 +715,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
                 else
                 {
-                    DBG_ERROR( "text node expected but not found" );
+                    OSL_ENSURE(false, "text node expected but not found" );
                 }
 
                 bRet = sal_True;

@@ -131,7 +131,7 @@ void SwChangeDBDlg::FillDBPopup()
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
         xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
     }
-    DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+    OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
 
     const SwDBData& rDBData = pSh->GetDBData();
     String sDBName(rDBData.sDataSource);

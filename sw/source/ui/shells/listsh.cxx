@@ -155,7 +155,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
     // --> FME 2005-01-04 #i35572#
     const SwNumRule* pCurRule = rSh.GetCurNumRule();
-    ASSERT( pCurRule, "SwListShell::Execute without NumRule" )
+    OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" )
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
     // <--
 
@@ -243,7 +243,7 @@ void SwListShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }

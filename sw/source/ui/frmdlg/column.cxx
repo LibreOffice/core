@@ -202,8 +202,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     else
         aApplyToLB.RemoveEntry( nPagePos );
 
-
-    ASSERT( pColPgSet, "" );
+    OSL_ENSURE( pColPgSet, "" );
     // TabPage erzeugen
     SwColumnPage* pPage = (SwColumnPage*) SwColumnPage::Create( this,
                                                                 *pColPgSet );
@@ -919,7 +918,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
     if(aAutoWidthBox.IsChecked())
     {
         USHORT nMaxGap = pColMgr->GetActualSize() - nCols * MINLAY;
-        DBG_ASSERT(nCols, "Abstand kann nicht ohne Spalten eingestellt werden");
+        OSL_ENSURE(nCols, "Abstand kann nicht ohne Spalten eingestellt werden");
         nMaxGap /= nCols - 1;
         if(nActValue > nMaxGap)
         {

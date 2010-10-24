@@ -851,13 +851,13 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         break;
         case CTX_EDIT:
         {
-            DBG_ASSERT(pCont, "Edit ohne Entry ? " );
+            OSL_ENSURE(pCont, "edit without entry ? " );
             EditContent(pCont);
         }
         break;
         case CTX_EDIT_LINK:
         {
-            DBG_ASSERT(pCont, "Edit ohne Entry ? " );
+            OSL_ENSURE(pCont, "edit without entry ? " );
             SfxStringItem aName(FN_EDIT_REGION,
                     pCont->GetSection()->GetSectionName());
             rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
@@ -904,14 +904,14 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
                             0);
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( DLG_MULTI_TOX,
                                                         this, aSet,
                                                         *pActiveShell,
                                                         0,
                                                         USHRT_MAX,
                                                         TRUE);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                 {
                     SwTOXDescription&  rDesc = pDlg->GetTOXDescription(
@@ -1071,7 +1071,7 @@ void    SwGlobalTree::HideTree()
 void    SwGlobalTree::ExecCommand(USHORT nCmd)
 {
     SvLBoxEntry* pEntry = FirstSelected();
-    DBG_ASSERT(pEntry, "gleich knallt's");
+    OSL_ENSURE(pEntry, "gleich knallt's");
     if(FN_GLOBAL_EDIT == nCmd)
     {
         const SwGlblDocContent* pCont = (const SwGlblDocContent*)
@@ -1327,7 +1327,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             //update the global document content after each inserted document
             rSh.GetGlobalDocContent(aTempContents);
             SwGlblDocContent* pAnchorContent = 0;
-            DBG_ASSERT(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
+            OSL_ENSURE(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
             if ( aTempContents.Count() > (nAnchorContent + nFile) )
                 pAnchorContent = aTempContents.GetObject(nAnchorContent + (USHORT)nFile);
             else

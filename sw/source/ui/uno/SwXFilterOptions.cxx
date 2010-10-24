@@ -128,10 +128,10 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
     {
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream,  DLG_ASCII_FILTER );
-        DBG_ASSERT(pAsciiDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pAsciiDlg, "Dialogdiet fail!");
         if(RET_OK == pAsciiDlg->Execute())
         {
             SwAsciiOptions aOptions;

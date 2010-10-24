@@ -599,7 +599,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
     else
         mbRTL = pWrtShell->IsTableRightToLeft();
 
-    DBG_ASSERT( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
+    OSL_ENSURE( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
         m_xBreak = uno::Reference< i18n::XBreakIterator >(

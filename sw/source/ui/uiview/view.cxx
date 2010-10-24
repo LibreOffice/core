@@ -799,7 +799,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     BOOL bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_False );
-    ASSERT( pDocSh, "View ohne DocShell." );
+    OSL_ENSURE( pDocSh, "view without DocShell." );
     SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != pWebDShell);

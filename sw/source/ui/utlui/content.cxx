@@ -563,9 +563,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
 
         case CONTENT_TYPE_TABLE     :
         {
-            DBG_ASSERT(nMemberCount ==
-                    pWrtShell->GetTblFrmFmtCount(sal_True),
-                    "MemberCount differiert");
+            OSL_ENSURE(nMemberCount == pWrtShell->GetTblFrmFmtCount(sal_True),
+                       "MemberCount differs");
             Point aNullPt;
             nMemberCount =  pWrtShell->GetTblFrmFmtCount(sal_True);
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
@@ -596,8 +595,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 eType = FLYCNTTYPE_OLE;
             else if(nContentType == CONTENT_TYPE_GRAPHIC)
                 eType = FLYCNTTYPE_GRF;
-            DBG_ASSERT(nMemberCount ==  pWrtShell->GetFlyCount(eType),
-                    "MemberCount differiert");
+            OSL_ENSURE(nMemberCount ==  pWrtShell->GetFlyCount(eType),
+                    "MemberCount differs");
             Point aNullPt;
             nMemberCount = pWrtShell->GetFlyCount(eType);
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
@@ -1226,7 +1225,7 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
     {
         if(!pParent->HasChilds())
         {
-            DBG_ASSERT(pParent->GetUserData(), "keine UserData?");
+            OSL_ENSURE(pParent->GetUserData(), "no UserData?");
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
 
             sal_uInt16 nCount = pCntType->GetMemberCount();
@@ -1396,7 +1395,7 @@ IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     // ist es ein Inhaltstyp?
-    DBG_ASSERT(pEntry, "kein aktueller Eintrag!");
+    OSL_ENSURE(pEntry, "no current entry!");
     if(pEntry)
     {
         if(lcl_IsContentType(pEntry) && !pEntry->HasChilds())
@@ -1409,7 +1408,7 @@ IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
             }
             //Inhaltstyp anspringen:
             SwContent* pCnt = (SwContent*)pEntry->GetUserData();
-            DBG_ASSERT( pCnt, "keine UserData");
+            OSL_ENSURE( pCnt, "no UserData");
             GotoContent(pCnt);
             if(pCnt->GetParent()->GetType() == CONTENT_TYPE_FRAME)
                 pActiveShell->EnterStdMode();
@@ -1633,7 +1632,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode )
 {
     SwWrtShell* pWrtShell = GetWrtShell();
-    DBG_ASSERT(pWrtShell, "keine Shell!");
+    OSL_ENSURE(pWrtShell, "no Shell!");
     SvLBoxEntry* pEntry = GetCurEntry();
     if(!pEntry || lcl_IsContentType(pEntry) || !pWrtShell)
         return sal_False;
@@ -1649,8 +1648,8 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         case CONTENT_TYPE_OUTLINE:
         {
             sal_uInt16 nPos = ((SwOutlineContent*)pCnt)->GetPos();
-            DBG_ASSERT(nPos < pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount(),
-                       "outlinecnt veraendert");
+            OSL_ENSURE(nPos < pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount(),
+                       "outlinecnt changed");
 
             // #100738# make sure outline may actually be copied
             if( pWrtShell->IsOutlineCopyable( nPos ) )
@@ -2377,8 +2376,8 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
 
         }
 
-        DBG_ASSERT( pEntry &&
-            lcl_IsContent(pEntry),"Source == 0 oder Source hat keinen Content" );
+        OSL_ENSURE( pEntry &&
+            lcl_IsContent(pEntry),"Source == 0 or Source has no Content" );
         GetParentWindow()->MoveOutline( nSourcePos,
                                     nTargetPos,
                                     sal_True);
@@ -2418,8 +2417,8 @@ sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
         }
 
 
-        DBG_ASSERT( pEntry &&
-            lcl_IsContent(pEntry),"Source == 0 oder Source hat keinen Content" );
+        OSL_ENSURE( pEntry &&
+            lcl_IsContent(pEntry),"Source == 0 or Source has no Content" );
         GetParentWindow()->MoveOutline( nSourcePos, nTargetPos, sal_False);
 
         //TreeListBox wird aus dem Dokument neu geladen
@@ -3026,10 +3025,10 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         aObj >>= xTmp;
         uno::Reference< container::XNamed >  xNamed(xTmp, uno::UNO_QUERY);
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg( this, xNamed, xNameAccess, DLG_RENAME_XNAMED );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);
 

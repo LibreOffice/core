@@ -77,7 +77,7 @@ void DbgTColumn(TColumn* pTColumn, USHORT nCount)
         String sMsg(i);
         sMsg += pTColumn[i].bVisible ? " v " : " h ";
         sMsg += pTColumn[i].nWidth;
-        DBG_ERROR(sMsg)
+        OSL_ENSURE(false, sMsg)
     }
 }
 #endif

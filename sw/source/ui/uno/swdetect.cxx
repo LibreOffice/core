@@ -237,7 +237,7 @@ SwFilterDetect::~SwFilterDetect()
                 }
                 else
                 {
-                    DBG_ASSERT( xStorage.is(), "At this point storage must exist!" );
+                    OSL_ENSURE( xStorage.is(), "At this point storage must exist!" );
 
                     try
                     {

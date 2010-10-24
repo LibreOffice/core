@@ -31,7 +31,7 @@
 #include <unotools/configitem.hxx>
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "swdllapi.h"
 
 #define FONT_STANDARD       0

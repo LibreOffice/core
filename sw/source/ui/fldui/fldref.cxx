@@ -940,7 +940,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
-            ASSERT( pEntry,
+            OSL_ENSURE( pEntry,
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
@@ -960,7 +960,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         else if ( nTypeId == REFFLDFLAG_NUMITEM )
         {
             SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
-            ASSERT( pEntry,
+            OSL_ENSURE( pEntry,
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {

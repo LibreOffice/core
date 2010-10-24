@@ -240,7 +240,7 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
     if (pItem->ISA(SwRedline))
         mvPostItFlds.push_back(new SwRedCommentItem( static_cast<SwRedline*>(pItem), true, bFocus)) ;
     */
-    DBG_ASSERT(pItem->ISA(SwFmtFld) /*|| pItem->ISA(SwRedline)*/,"Mgr::InsertItem: seems like new stuff was added");
+    OSL_ENSURE(pItem->ISA(SwFmtFld) /*|| pItem->ISA(SwRedline)*/,"Mgr::InsertItem: seems like new stuff was added");
     StartListening(*pItem);
 }
 
@@ -316,7 +316,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ( mpView->GetDocShell() != &rBC )
                 {
                     // field to be removed is the broadcaster
-                    DBG_ERROR("Notification for removed SwFmtFld was not sent!");
+                    OSL_ENSURE(false, "Notification for removed SwFmtFld was not sent!");
                     RemoveItem(&rBC);
                 }
                 break;
@@ -375,7 +375,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 else
                 {
-                    DBG_ERROR( "Inserted field not in document!" );
+                    OSL_ENSURE(false, "Inserted field not in document!" );
                         }
                 break;
             }
@@ -491,7 +491,7 @@ bool SwPostItMgr::CalcRects()
             SwSidebarItem* pItem = (*i);
             if ( !pItem->UseElement() )
             {
-                DBG_ERROR("PostIt is not in doc or other wrong use");
+                OSL_ENSURE(false, "PostIt is not in doc or other wrong use");
                 bRepair = true;
                 continue;
             }
@@ -774,7 +774,7 @@ void SwPostItMgr::LayoutPostIts()
                                         (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Right(),
                                                                    mPages[n]->mPageRect.Bottom()));
                                 }
-                                DBG_ASSERT(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
+                                OSL_ENSURE(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
                             }
                         }
 
@@ -814,7 +814,7 @@ void SwPostItMgr::LayoutPostIts()
                     SwSidebarItem* pItem = (*i);
                     if ( !pItem->UseElement() )
                     {
-                        DBG_ERROR("PostIt is not in doc!");
+                        OSL_ENSURE(false, "PostIt is not in doc!");
                         bRepair = true;
                         continue;
                     }
@@ -847,13 +847,13 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 {
     if ( mPages[aPage-1]->mList->empty() )
     {
-        DBG_ERROR("Notes SidePane painted but no rects and page lists calculated!");
+        OSL_ENSURE(false, "Notes SidePane painted but no rects and page lists calculated!");
         return false;
     }
 
     SwSidebarItem_iterator aItem = mPages[aPage-1]->mList->end();
     --aItem;
-    DBG_ASSERT ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
+    OSL_ENSURE ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
     if ((*aItem)->pPostIt)
     {
         const long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
@@ -866,7 +866,7 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 {
-    DBG_ASSERT((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");
+    OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");
     // do not scroll more than neccessary up or down
     if ( ((mPages[aPage-1]->lOffset == 0) && (lScroll>0)) || ( BorderOverPageBorder(aPage) && (lScroll<0)) )
         return;
@@ -1145,7 +1145,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
             // security check so we don't loop forever
             if (loop>MAX_LOOP_COUNT)
             {
-                DBG_ERROR("PostItMgr::Layout(): We are looping forever");
+                OSL_ENSURE(false, "PostItMgr::Layout(): We are looping forever");
                 break;
             }
         }
@@ -1444,7 +1444,7 @@ long SwPostItMgr::GetNextBorder()
         }
     }
 
-    DBG_ERROR("SwPostItMgr::GetNextBorder(): We have to find a next border here");
+    OSL_ENSURE(false, "SwPostItMgr::GetNextBorder(): We have to find a next border here");
     return -1;
 }
 
@@ -1534,7 +1534,7 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
         if( nPageNum )
         {
             Rectangle aRect;
-            DBG_ASSERT(mPages.size()>nPageNum-1,"SwPostitMgr:: page container size wrong");
+            OSL_ENSURE(mPages.size()>nPageNum-1,"SwPostitMgr:: page container size wrong");
             aRect = mPages[nPageNum-1]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
                     ? Rectangle(Point(aPageFrm.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrm.Top()),Size(GetSidebarWidth(),aPageFrm.Height()))
                     : Rectangle( Point(aPageFrm.Right()+GetSidebarBorderWidth(),aPageFrm.Top()) , Size(GetSidebarWidth(),aPageFrm.Height()));
@@ -1765,7 +1765,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
     mnEventId = 0;
     if ( mbLayouting )
     {
-        DBG_ERROR("Reentrance problem in Layout Manager!");
+        OSL_ENSURE(false, "Reentrance problem in Layout Manager!");
         mbWaitingForCalcRects = false;
         return 0;
     }

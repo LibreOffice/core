@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <wrtsh.hxx>
@@ -58,7 +58,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)

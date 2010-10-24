@@ -40,7 +40,7 @@
 #include <utlui.hrc>
 #include <unotools.hrc>
 #include <unoprnms.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>
@@ -104,7 +104,7 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     }
     catch(uno::RuntimeException&)
     {
-        DBG_ERROR("Name wurde nicht geaendert");
+        OSL_ENSURE(false, "name wasn't changed");
     }
     EndDialog(RET_OK);
     return 0;

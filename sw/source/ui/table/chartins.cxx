@@ -83,7 +83,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
 
     Point aRet;
 
-    DBG_ASSERT( pParentWin, "Window not found" );
+    OSL_ENSURE( pParentWin, "Window not found" );
     if (pParentWin)
     {
         Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
@@ -250,7 +250,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                     }
                     catch( uno::Exception& )
                     {
-                        DBG_ERROR( "Chart wizard couldn't be positioned automatically\n" );
+                        OSL_ENSURE(false, "Chart wizard couldn't be positioned automatically\n" );
                     }
                 }
 
@@ -262,7 +262,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 }
                 else
                 {
-                    DBG_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
+                    OSL_ENSURE( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
                         "dialog execution failed" );
                 }
             }

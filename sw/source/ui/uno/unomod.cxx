@@ -31,7 +31,7 @@
 
 
 #include <swtypes.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <unomod.hxx>
 #include <unomid.h>
 #include <unoprnms.hxx>
@@ -246,7 +246,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     if(!pxViewSettings)
     {
         ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
-        DBG_ERROR("Web oder Text?");
+        OSL_ENSURE(false, "Web or Text?");
         *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, 0 ) );
     }
     return *pxViewSettings;
@@ -258,7 +258,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     if(!pxPrintSettings)
     {
         ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
-        DBG_ERROR("Web oder Text?");
+        OSL_ENSURE(false, "Web or Text?");
         *pxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
     }
     return *pxPrintSettings;
@@ -993,7 +993,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             bBool = sal_False;
         }
         break;
-        default: DBG_ERROR("Diese Id gibt's nicht!");
+        default: OSL_ENSURE(false, "there is no such ID!");
     }
     if( bBool )
         rValue.setValue(&bBoolVal, ::getBooleanCppuType());

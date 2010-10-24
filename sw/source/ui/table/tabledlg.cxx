@@ -78,12 +78,11 @@
 
 using namespace ::com::sun::star;
 
-
 #ifdef DEBUG_TBLDLG
 void DbgTblRep(SwTableRep* pRep)
 {
-    DBG_ERROR(String(pRep->GetColCount()))
-    DBG_ERROR(String(pRep->GetAllColCount()))
+    OSL_ENSURE(false, String(pRep->GetColCount()))
+    OSL_ENSURE(false, String(pRep->GetAllColCount()))
     SwTwips nSum = 0;
     for(USHORT i = 0; i < pRep->GetAllColCount(); i++)
     {
@@ -91,23 +90,23 @@ void DbgTblRep(SwTableRep* pRep)
         sMsg += pRep->GetColumns()[i].bVisible ? " v " : " h ";
         sMsg += pRep->GetColumns()[i].nWidth;
         nSum +=pRep->GetColumns()[i].nWidth;
-        DBG_ERROR(sMsg)
+        OSL_ENSURE(false, sMsg)
     }
-    String sMsg("Spaltensumme: ");
+    String sMsg("Column sum: ");
     sMsg += nSum;
-    sMsg += " Tblbreite: ";
+    sMsg += " table width: ";
     sMsg += pRep->GetWidth();
-    DBG_ERROR(sMsg)
+    OSL_ENSURE(false, sMsg)
     sMsg = "Gesamt/Links/Rechts: ";
     sMsg += pRep->GetSpace();
     sMsg += '/';
     sMsg += pRep->GetLeftSpace();
     sMsg += '/';
     sMsg += pRep->GetRightSpace();
-    DBG_ERROR(sMsg)
+    OSL_ENSURE(false, sMsg)
     sMsg = "Align: ";
     sMsg += pRep->GetAlign();
-    DBG_ERROR(sMsg)
+    OSL_ENSURE(false, sMsg)
 
 };
 
@@ -212,7 +211,7 @@ void  SwFormatTablePage::Init()
 
 IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 {
-    DBG_ASSERT(pTblData, "Tabellendaten nicht da?");
+    OSL_ENSURE(pTblData, "table data not available?");
     BOOL bIsChecked = pBtn->IsChecked();
     sal_Int64 nLeft  = aLeftMF.DenormalizePercent(aLeftMF.GetValue(FUNIT_TWIP ));
     sal_Int64 nRight = aRightMF.DenormalizePercent(aRightMF.GetValue(FUNIT_TWIP ));
@@ -658,7 +657,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 ------------------------------------------------------------------------*/
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
-    DBG_ASSERT(pTblData, "Tabellendaten nicht da?");
+    OSL_ENSURE(pTblData, "table data not available?");
     if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP ))
     {
         SwTwips nCurWidth = text::HoriOrientation::FULL != pTblData->GetAlign() ?
@@ -1115,7 +1114,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
                     nDiff = 0;
                     SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
                 }
-                DBG_ASSERT(nDiff >= 0, "nDiff < 0 kann hier nicht sein!");
+                OSL_ENSURE(nDiff >= 0, "nDiff < 0 cannot be here!");
             }
         }
     }
@@ -1123,7 +1122,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
     {
 //      Differenz wird ueber die Tabellenbreite ausgeglichen,
 //      andere Spalten bleiben unveraendert
-        DBG_ASSERT(nDiff <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" );
+        OSL_ENSURE(nDiff <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
         {
@@ -1139,7 +1138,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
     {
 //      Alle Spalten werden proportional mitveraendert, die Tabellenbreite wird
 //      entsprechend angepasst
-        DBG_ASSERT(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" );
+        OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
         if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
         {
@@ -1336,7 +1335,7 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
         i++;
     }
     SwTwips nReturn = pTblData->GetColumns()[i].nWidth;
-    DBG_ASSERT(i < nNoOfCols, "Array index out of range");
+    OSL_ENSURE(i < nNoOfCols, "Array index out of range");
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         nReturn += pTblData->GetColumns()[++i].nWidth;
 
@@ -1355,7 +1354,7 @@ void SwTableColumnPage::SetVisibleWidth(USHORT nPos, SwTwips nNewWidth)
             nPos--;
         i++;
     }
-    DBG_ASSERT(i < nNoOfCols, "Array index out of range");
+    OSL_ENSURE(i < nNoOfCols, "Array index out of range");
     pTblData->GetColumns()[i].nWidth = nNewWidth;
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         pTblData->GetColumns()[++i].nWidth = 0;
@@ -1372,7 +1371,7 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
 {
     FreeResource();
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_FORMAT_TABLE, &SwFormatTablePage::Create, 0 );
     AddTabPage(TP_TABLE_TEXTFLOW, &SwTextFlowPage::Create, 0 );
     AddTabPage(TP_TABLE_COLUMN, &SwTableColumnPage::Create, 0 );

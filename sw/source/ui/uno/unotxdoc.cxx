@@ -198,7 +198,7 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
 
     // get default values to use in dialog from documents SwPrintData
     const SwPrintData *pPrintData = pDocShell->GetDoc()->getPrintData();
-    DBG_ASSERT( pPrintData, "failed to get SwPrintData from document" );
+    OSL_ENSURE( pPrintData, "failed to get SwPrintData from document" );
 
     return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, *pPrintData );
 }
@@ -446,7 +446,7 @@ void SwXTextDocument::GetNumberFormatter()
                         xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
 
             }
-            DBG_ASSERT(pNumFmt, "No number formatter available");
+            OSL_ENSURE(pNumFmt, "No number formatter available");
             if(!pNumFmt->GetNumberFormatter())
                 pNumFmt->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter( sal_True ));
         }
@@ -1403,7 +1403,7 @@ void SwXTextDocument::Invalidate()
                     xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
             pNumFmt->SetNumberFormatter(0);
         }
-        DBG_ASSERT(pNumFmt, "No number formatter available");
+        OSL_ENSURE(pNumFmt, "No number formatter available");
     }
     InitNewDoc();
     pDocShell = 0;
@@ -1471,7 +1471,7 @@ void    SwXTextDocument::InitNewDoc()
                     xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
 
         }
-        DBG_ASSERT(pNumFmt, "No number formatter available");
+        OSL_ENSURE(pNumFmt, "No number formatter available");
         pNumFmt->SetNumberFormatter(0);
     }
 
@@ -2179,28 +2179,28 @@ void SwXTextDocument::addPropertyChangeListener(const OUString& /*PropertyName*/
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 void SwXTextDocument::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 void SwXTextDocument::addVetoableChangeListener(const OUString& /*PropertyName*/,
     const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyName*/,
                         const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException )
@@ -2388,7 +2388,7 @@ SfxViewShell * SwXTextDocument::GetRenderView(
         uno::Reference< frame::XController > xController;
         if (aTmp >>= xController)
         {
-            DBG_ASSERT( xController.is(), "controller is empty!" );
+            OSL_ENSURE( xController.is(), "controller is empty!" );
             pView = GuessViewShell( rbIsSwSrcView, xController );
         }
     }
@@ -2416,7 +2416,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
         pDoc = pDocShell->GetDoc();
     else
     {
-        DBG_ASSERT( !xModel.is(), "unexpected model found" );
+        OSL_ENSURE( !xModel.is(), "unexpected model found" );
 
         if (rSelection.hasValue())     // is anything selected ?
         {
@@ -2428,11 +2428,11 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             {
                 (void) bIsPDFExport;
                 // aside from maybe PDF export the view should always have been provided!
-                DBG_ASSERT( bIsPDFExport, "view is missing, guessing one..." );
+                OSL_ENSURE( bIsPDFExport, "view is missing, guessing one..." );
 
                 rpView = GuessViewShell( bIsSwSrcView );
             }
-            DBG_ASSERT( rpView, "ViewShell missing" );
+            OSL_ENSURE( rpView, "ViewShell missing" );
             // the view shell should be SwView for documents PDF export.
             // for the page preview no selection should be possible
             // (the export dialog does not allow for this option)
@@ -2448,7 +2448,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             }
             else
             {
-                DBG_ERROR( "unexpected ViewShell" );
+                OSL_ENSURE(false, "unexpected ViewShell" );
             }
         }
     }
@@ -2510,7 +2510,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     // const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
-    DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
+    OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
     if (!pDoc || !pView)
         return 0;
 
@@ -2634,7 +2634,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             nRet = m_pRenderData->GetPagesToPrint().size();
         }
     }
-    DBG_ASSERT( nRet >= 0, "negative number of pages???" );
+    OSL_ENSURE( nRet >= 0, "negative number of pages???" );
 
     return nRet;
 }
@@ -2668,7 +2668,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     const bool bPrintPaperFromSetup = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup", false );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
-    DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
+    OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
     if (!pDoc || !pView)
         return uno::Sequence< beans::PropertyValue >();
 
@@ -2680,7 +2680,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
     {
-        DBG_ASSERT( m_pRenderData, "m_pRenderData missing!!" );
+        OSL_ENSURE( m_pRenderData, "m_pRenderData missing!!" );
         nMaxRenderer = bPrintProspect?
             m_pRenderData->GetPagePairsForProspectPrinting().size() - 1 :
             m_pRenderData->GetPagesToPrint().size() - 1;
@@ -2815,7 +2815,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  sal_False );
     }
 
-    DBG_ASSERT( pSwView || pSwPagePreView || pSwSrcView, "failed to get view shell" );
+    OSL_ENSURE( pSwView || pSwPagePreView || pSwSrcView, "failed to get view shell" );
     if (pView)
         rbIsSwSrcView = pSwSrcView != 0;
     return pView;
@@ -2844,8 +2844,8 @@ void SAL_CALL SwXTextDocument::render(
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
 
-    DBG_ASSERT( m_pRenderData, "data should have been created already in getRendererCount..." );
-    DBG_ASSERT( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
+    OSL_ENSURE( m_pRenderData, "data should have been created already in getRendererCount..." );
+    OSL_ENSURE( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
     if (!bIsSwSrcView && !m_pRenderData)
         m_pRenderData = new SwRenderData;
     if (!m_pPrintUIOptions)
@@ -2855,13 +2855,13 @@ void SAL_CALL SwXTextDocument::render(
     const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
-    DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
+    OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
     if (pDoc && pView)
     {
         sal_Int32 nMaxRenderer = 0;
         if (!bIsSwSrcView)
         {
-            DBG_ASSERT( m_pRenderData, "m_pRenderData missing!!" );
+            OSL_ENSURE( m_pRenderData, "m_pRenderData missing!!" );
             nMaxRenderer = bPrintProspect?
                 m_pRenderData->GetPagePairsForProspectPrinting().size() - 1 :
                 m_pRenderData->GetPagesToPrint().size() - 1;
@@ -2881,7 +2881,7 @@ void SAL_CALL SwXTextDocument::render(
                 // the view shell should be SwView for documents PDF export
                 // or SwPagePreView for PDF export of the page preview
                 //!! (check for SwView first as in GuessViewShell) !!
-                DBG_ASSERT( pView, "!! view missing !!" );
+                OSL_ENSURE( pView, "!! view missing !!" );
                 const TypeId aSwViewTypeId = TYPE(SwView);
                 ViewShell* pVwSh = 0;
                 if (pView)
@@ -2900,7 +2900,7 @@ void SAL_CALL SwXTextDocument::render(
                     const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
                     bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
-                    DBG_ASSERT(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())
+                    OSL_ENSURE(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())
                             || (!pView->IsA(aSwViewTypeId) && !m_pRenderData->IsViewOptionAdjust()),
                             "SwView / SwViewOptionAdjust_Impl availability mismatch" );
 
@@ -3537,7 +3537,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
     sal_Bool bRet = sal_False;
     if(pxDoc)
     {
-        DBG_ERROR("not implemented");
+        OSL_ENSURE(false, "not implemented");
     }
     else
     {
@@ -3796,8 +3796,8 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                     xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
                 xRet = xDrawDefaults;
             break;
-#ifdef DBG_UTIL
-            default: DBG_ERROR("which table?");
+#if OSL_DEBUG_LEVEL > 1
+            default: OSL_ENSURE(false, "which table?");
 #endif
         }
     }

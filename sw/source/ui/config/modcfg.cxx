@@ -37,7 +37,7 @@
 #include <svl/mailenum.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <tools/globname.hxx>
 #include <swtypes.hxx>

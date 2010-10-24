@@ -633,7 +633,7 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
          !GetView().GetViewFrame()->GetFrame().IsInPlace() )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
-        ASSERT( xRef.is(), "OLE not found" );
+        OSL_ENSURE( xRef.is(), "OLE not found" );
         SfxInPlaceClient* pCli=0;
 
         pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
@@ -679,7 +679,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 {
     //Einstellen der Skalierung am Client. Diese ergibt sich aus der Differenz
     //zwischen der VisArea des Objektes und der ObjArea.
-    ASSERT( xObj.is(), "ObjectRef not  valid" );
+    OSL_ENSURE( xObj.is(), "ObjectRef not  valid" );
 
     sal_Int64 nAspect = xObj.GetViewAspect();
     if ( nAspect == embed::Aspects::MSOLE_ICON )
@@ -778,13 +778,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     catch( embed::NoVisualAreaSizeException& )
     {
-        DBG_ERROR( "Can't get visual area size!\n" );
+        OSL_ENSURE(false, "Can't get visual area size!\n" );
         // the scaling will not be done
     }
     catch( uno::Exception& )
     {
         // TODO/LATER: handle the error
-        DBG_ERROR( "Can't get visual area size!\n" );
+        OSL_ENSURE(false, "Can't get visual area size!\n" );
         return;
     }
 
@@ -1130,9 +1130,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     // check, if numbering of the outline level of the pararaph
                     // style is active. If not, activate this outline level.
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
-                    ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),   //<-end,zhaojianwei
+                    OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                             "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                    if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&        //<-end,zhaojianwei
+                    if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
                          pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
                             == SVX_NUM_NUMBER_NONE )
                     {
@@ -1178,10 +1178,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             {
                 // check, if numbering of the outline level of the pararaph
                 // style is active. If not, activate this outline level.
-                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//#outline level,zhaojianwei
-                ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),//#outline level,zhaojianwei
+                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
+                OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                         "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&//#outline level,zhaojianwei
+                if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
                      pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
                         == SVX_NUM_NUMBER_NONE )
                 {

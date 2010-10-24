@@ -55,7 +55,7 @@ SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet) :
 {
     SetText(SW_RESSTR(STR_FRMUI_PATTERN));
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
     {

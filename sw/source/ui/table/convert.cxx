@@ -232,10 +232,10 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
     delete pDlg;

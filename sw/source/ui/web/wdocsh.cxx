@@ -92,7 +92,7 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_Bool bTemplate /* = sal_False */) const
 {
     (void)bTemplate;
-    DBG_ASSERT( bTemplate == sal_False, "No template for Writer Web" );
+    OSL_ENSURE( bTemplate == sal_False, "No template for Writer Web" );
 
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {

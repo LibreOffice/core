@@ -120,7 +120,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                     {
                         uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-                        ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                        OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                         if( !xControlModel.is() )
                             return;
 
@@ -170,7 +170,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            DBG_ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -197,7 +197,7 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                     {
                         uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-                        ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                        OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                         if( !xControlModel.is() )
                             return;
 

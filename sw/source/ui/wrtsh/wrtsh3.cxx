@@ -204,7 +204,7 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
             {
                 uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-                ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                 if( !xControlModel.is() )
                     return bRet;
 

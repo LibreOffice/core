@@ -69,9 +69,7 @@
 #include <unomid.h>
 
 #include <IDocumentOutlineNodes.hxx>
-// --> OD 2008-04-14 #outlinelevel#
 #include <app.hrc>
-// <--
 
 using namespace ::com::sun::star;
 

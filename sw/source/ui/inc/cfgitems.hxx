@@ -37,7 +37,7 @@
 
 class SwWriterApp;
 class SwModule;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;

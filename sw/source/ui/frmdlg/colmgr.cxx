@@ -72,7 +72,7 @@ USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
         nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         const SwColumns& rCols = aFmtCol.GetColumns();
         nRet = rCols.GetObject(nPos)->GetRight() + rCols.GetObject(nPos + 1)->GetLeft();
     }
@@ -85,7 +85,7 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
         aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
         USHORT nGutterWidth2 = nGutterWidth / 2;
         rCols.GetObject(nPos)->SetRight(nGutterWidth2);
@@ -103,7 +103,7 @@ short SwColMgr::GetLineHeightPercent() const
 
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
-    ASSERT(nPercent <= 100, LineHeight darf nur bis 100 % gross  sein);
+    OSL_ENSURE(nPercent <= 100, "line height may only be 100 \%");
     aFmtCol.SetLineHeight((BYTE)nPercent);
 }
 
@@ -112,13 +112,13 @@ void SwColMgr::SetLineHeightPercent(short nPercent)
 ------------------------------------------------------------------------*/
 USHORT SwColMgr::GetColWidth(USHORT nIdx) const
 {
-    ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
+    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
 void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 {
-    ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
+    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     aFmtCol.GetColumns()[nIdx]->SetWishWidth(nWd);
 
 }

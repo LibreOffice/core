@@ -257,7 +257,7 @@ static SwWrtShell* lcl_GetShell()
     SwView* pView;
     if ( 0 != (pView = ::GetActiveView()) )
         return pView->GetWrtShellPtr();
-    DBG_ERROR("no current shell found!");
+    OSL_ENSURE(false, "no current shell found!");
     return 0;
 }
 
@@ -454,14 +454,14 @@ USHORT SwFldMgr::GetGroup(BOOL bHtmlMode, USHORT nTypeId, USHORT nSubType) const
 
 USHORT SwFldMgr::GetTypeId(USHORT nPos)
 {
-    ASSERT(nPos < ::GetPackCount(), "unzulaessige Pos");
+    OSL_ENSURE(nPos < ::GetPackCount(), "forbidden Pos");
     return aSwFlds[ nPos ].nTypeId;
 }
 
 
 const String& SwFldMgr::GetTypeStr(USHORT nPos)
 {
-    ASSERT(nPos < ::GetPackCount(), "unzulaessige TypeId");
+    OSL_ENSURE(nPos < ::GetPackCount(), "forbidden TypeId");
 
     USHORT nFldWh = aSwFlds[ nPos ].nTypeId;
 
@@ -619,7 +619,7 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
 
 USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) const
 {
-    ASSERT(nTypeId < TYP_END, "unzulaessige TypeId");
+    OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
     {
         const USHORT nPos = GetPos(nTypeId);
@@ -677,7 +677,7 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
 String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
 {
     String aRet;
-    ASSERT(nTypeId < TYP_END, "unzulaessige TypeId");
+    OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
     const USHORT nPos = GetPos(nTypeId);
 
@@ -1377,11 +1377,11 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         }
         break;
         default:
-        {   ASSERT(!this, "Falscher Feldtyp");
+        {   OSL_ENSURE(!this, "wrong field type");
             return FALSE;
         }
     }
-    ASSERT(pFld, "Feld nicht vorhanden");
+    OSL_ENSURE(pFld, "field not available");
 
 
      //the auto language flag has to be set prior to the language!
@@ -1426,7 +1426,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
                             SwField * _pTmpFld) // #111840#
 {
     // Format aendern
-    ASSERT(pCurFld, "kein Feld an der CursorPos");
+    OSL_ENSURE(pCurFld, "no field at CursorPos");
 
     bool bDelete = false;
     SwField *pTmpFld;       // mb: fixed memory leak

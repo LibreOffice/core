@@ -314,10 +314,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR,0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -335,10 +335,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -347,10 +347,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -385,7 +385,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -422,10 +422,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
@@ -552,7 +552,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         return;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     if(nEEWhich && pNewAttrs)
@@ -885,7 +885,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
             break;
 
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
 }

@@ -32,7 +32,7 @@
 #include <hintids.hxx>
 
 #include <doc.hxx>
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -144,7 +144,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
                                     SwContentAtPos::SW_SMARTTAG |
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
@@ -158,7 +158,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = UniString(
@@ -360,7 +360,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             // --> OD 2008-01-09 #i85090#
                             const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
-                            ASSERT( pRefFld,
+                            OSL_ENSURE( pRefFld,
                                     "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
                             if ( pRefFld )
                             {

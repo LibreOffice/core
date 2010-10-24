@@ -32,6 +32,7 @@
 
 #include <hintids.hxx>
 
+#include <osl/diagnose.h>
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -216,7 +217,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             //
             SwFmtHeader aHeaderFmt(rMaster.GetHeader());
             SwFrmFmt *pHeaderFmt = aHeaderFmt.GetHeaderFmt();
-            ASSERT(pHeaderFmt != 0, "kein HeaderFormat");
+            OSL_ENSURE(pHeaderFmt != 0, "no header format");
 
             ::FillHdFt(pHeaderFmt, rHeaderSet);
 
@@ -252,7 +253,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             //
             SwFmtFooter aFooterFmt(rMaster.GetFooter());
             SwFrmFmt *pFooterFmt = aFooterFmt.GetFooterFmt();
-            ASSERT(pFooterFmt != 0, "kein FooterFormat");
+            OSL_ENSURE(pFooterFmt != 0, "no footer format");
 
             ::FillHdFt(pFooterFmt, rFooterSet);
 
@@ -365,7 +366,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFmtHeader &rHeaderFmt = rMaster.GetHeader();
         const SwFrmFmt *pHeaderFmt = rHeaderFmt.GetHeaderFmt();
-        ASSERT(pHeaderFmt != 0, kein HeaderFormat.);
+        OSL_ENSURE(pHeaderFmt != 0, "no header format");
 
         // HeaderInfo, Raender, Hintergrund, Umrandung
         //
@@ -411,7 +412,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFmtFooter &rFooterFmt = rMaster.GetFooter();
         const SwFrmFmt *pFooterFmt = rFooterFmt.GetFooterFmt();
-        ASSERT(pFooterFmt != 0, kein FooterFormat.);
+        OSL_ENSURE(pFooterFmt != 0, "no footer format");
 
         // FooterInfo, Raender, Hintergrund, Umrandung
         //
@@ -689,7 +690,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
             }
             else
             {
-                DBG_ERROR("wo soll die Breite denn herkommen?");
+                OSL_ENSURE(false, "where to get the actual width from?");
             }
             const SvxLRSpaceItem& rLRSpace = pFmt->GetLRSpace();
             nWidth -= (rLRSpace.GetRight() + rLRSpace.GetLeft());

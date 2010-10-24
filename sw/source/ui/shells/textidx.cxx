@@ -69,9 +69,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         case FN_EDIT_AUTH_ENTRY_DLG :
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
@@ -97,19 +97,19 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {   // Mehrere Marken, welche solls denn sein ?
                 //
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg( DLG_MULTMRK,
                                                         pMDI, aMgr);
-                DBG_ASSERT(pMultDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pMultDlg, "Dialogdiet fail!");
                 nRet = pMultDlg->Execute();
                 delete pMultDlg;
             }
             if( nRet == RET_OK)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 VclAbstractDialog* pDlg = pFact->CreateIndexMarkModalDlg( DLG_EDIT_IDXMARK, pMDI, GetShell(), aMgr.GetCurTOXMark() );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 delete pDlg;
             }
@@ -154,11 +154,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                     aSet.Put(*pSet);
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( DLG_MULTI_TOX,
                                                         pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
                                                         USHRT_MAX, bGlobal);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
@@ -167,13 +167,13 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         {
             SwWrtShell& rSh = GetShell();
             const SwTOXBase* pBase = rSh.GetCurTOX();
-            DBG_ASSERT(pBase, "no TOXBase to remove");
+            OSL_ENSURE(pBase, "no TOXBase to remove");
             if( pBase )
                 rSh.DeleteTOX(*pBase, TRUE);
         }
         break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }

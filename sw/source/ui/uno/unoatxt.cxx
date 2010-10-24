@@ -34,7 +34,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vos/mutex.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <svl/svstdarr.hxx>
 #include <svtools/unoevent.hxx>
@@ -218,7 +218,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     pGlossaries->NewGroupDoc(sGroup, sGroup.GetToken(0, GLOS_DELIM));
 
     uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
-    DBG_ASSERT( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
+    OSL_ENSURE( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
         // we just inserted the group into the glossaries, so why doesn't it exist?
 
     return xGroup;
@@ -281,7 +281,7 @@ SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
     sName(rName),
     m_sGroupName(rName)
 {
-    DBG_ASSERT( -1 != rName.indexOf( GLOS_DELIM ),
+    OSL_ENSURE( -1 != rName.indexOf( GLOS_DELIM ),
         "SwXAutoTextGroup::SwXAutoTextGroup: to be constructed with a complete name only!" );
 }
 
@@ -344,7 +344,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
 
 sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
 {
-    ASSERT( pInsDoc, "kein Ins.Dokument"  );
+    OSL_ENSURE( pInsDoc, "no InsDoc");
 
     SwNodes& rNds = pInsDoc->GetNodes();
 
@@ -457,7 +457,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     }
 
     uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true );
-    DBG_ASSERT( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
+    OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
         // we just inserted the entry into the group, so why doesn't it exist?
 
     return xEntry;
@@ -587,7 +587,7 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName, true );
-    DBG_ASSERT( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
+    OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
         // we told it to create the object, so why didn't it?
     return makeAny( xEntry );
 }
@@ -844,7 +844,7 @@ void SwXAutoTextEntry::GetBodyText ()
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
     xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, FALSE );
-    DBG_ASSERT( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
+    OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
     // start listening at the document
     StartListening( *&xDocSh );
@@ -1069,16 +1069,16 @@ void SwAutoTextEventDescriptor::replaceByName(
                 lang::WrappedTargetException,
                 uno::RuntimeException)
 {
-    DBG_ASSERT( NULL != rAutoTextEntry.GetGlossaries(),
+    OSL_ENSURE( NULL != rAutoTextEntry.GetGlossaries(),
                 "Strangely enough, the AutoText vanished!" );
-    DBG_ASSERT( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
+    OSL_ENSURE( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
                 (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
                 "Unknown event ID" );
 
     const SwGlossaries* pGlossaries = rAutoTextEntry.GetGlossaries();
     SwTextBlocks* pBlocks =
         pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() );
-    DBG_ASSERT( NULL != pBlocks,
+    OSL_ENSURE( NULL != pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
     if( pBlocks && !pBlocks->GetError())
@@ -1108,15 +1108,15 @@ void SwAutoTextEventDescriptor::getByName(
                 lang::WrappedTargetException,
                 uno::RuntimeException)
 {
-    DBG_ASSERT( NULL != rAutoTextEntry.GetGlossaries(), "no AutoText" );
-    DBG_ASSERT( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
+    OSL_ENSURE( NULL != rAutoTextEntry.GetGlossaries(), "no AutoText" );
+    OSL_ENSURE( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
                 (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
                 "Unknown event ID" );
 
     const SwGlossaries* pGlossaries = rAutoTextEntry.GetGlossaries();
     SwTextBlocks* pBlocks =
         pGlossaries->GetGroupDoc( rAutoTextEntry.GetGroupName() );
-    DBG_ASSERT( NULL != pBlocks,
+    OSL_ENSURE( NULL != pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
     // return empty macro, unless macro is found

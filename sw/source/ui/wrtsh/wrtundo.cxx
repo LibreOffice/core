@@ -155,7 +155,7 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
             sList += *rIdNm.GetUndoStr();
         else
         {
-            ASSERT( !this, "no Undo/Redo Test set" );
+            OSL_ENSURE( !this, "no Undo/Redo Test set" );
         }
         sList += '\n';
     }

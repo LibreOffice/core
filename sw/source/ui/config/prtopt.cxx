@@ -33,7 +33,7 @@
 #include <unotools/configmgr.hxx>
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 

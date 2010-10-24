@@ -303,7 +303,7 @@ void SwFldDlg::EnableInsert(BOOL bEnable)
     if( bEnable )
     {
         SwView* pView = ::GetActiveView();
-        DBG_ASSERT(pView, "no view found");
+        OSL_ENSURE(pView, "no view found");
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
                     pView->GetWrtShell().HasReadonlySel()) )

@@ -242,7 +242,7 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
 SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< USHORT >( rSel.GetStart().GetPara() ) );
 
@@ -382,7 +382,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             const SfxItemSet* pTmpArgs = rReq.GetArgs();
 
             USHORT nWhich = pTmpArgs->GetWhichByPos( 0 );
-            DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
+            OSL_ENSURE( nWhich, "Wich fuer SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( (const SvxSearchItem&)rItem);
             StartSearchAndReplace( (const SvxSearchItem&)rItem, FALSE, rReq.IsAPI() );
@@ -757,7 +757,7 @@ sal_Int32 SwSrcView::PrintSource(
 
     pOutDev->Pop();
 
-    DBG_ASSERT( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );
+    OSL_ENSURE( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );
     return nCurPage;
 }
 
@@ -866,7 +866,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         pDocShell->SetModified();// das Flag wird zwischendurch zurueckgesetzt
     // AutoLoad abschalten
     pDocShell->SetAutoLoad(INetURLObject(), 0, FALSE);
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
     USHORT nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);
     aEditWin.GetTextEngine()->ResetUndo();

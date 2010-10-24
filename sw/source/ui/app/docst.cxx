@@ -257,7 +257,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 break;
 
             default:
-                DBG_ERROR( "Invalid SlotId");
+                OSL_ENSURE(false, "Invalid SlotId");
         }
         nWhich = aIter.NextWhich();
     }
@@ -485,7 +485,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     break;
 
                     default:
-                        DBG_ERROR( "Invalid SlotId");
+                        OSL_ENSURE(false, "Invalid SlotId");
                 }
 
                 rReq.Done();
@@ -893,7 +893,7 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
             break;
         }
         default:
-            DBG_ERROR("Unknown family");
+            OSL_ENSURE(false, "Unknown family");
     }
     pSh->EndAllAction();
 
@@ -948,7 +948,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
                 break;
 
             default:
-                DBG_ERROR( "Unknown family");
+                OSL_ENSURE(false, "Unknown family");
         }
     }
     else

@@ -168,7 +168,7 @@ SfxUndoManager* SwAnnotationShell::GetUndoManager()
     if ( !pPostItMgr ||
          !pPostItMgr->HasActiveSidebarWin() )
     {
-        DBG_ASSERT(pPostItMgr,"PostItMgr::Layout(): We are looping forever");
+        OSL_ENSURE(pPostItMgr,"PostItMgr::Layout(): We are looping forever");
         return 0;
     }
     return &pPostItMgr->GetActiveSidebarWin()->GetOutlinerView()->GetOutliner()->GetUndoManager();
@@ -373,10 +373,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( rView.GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -385,10 +385,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         rView.GetWindow(), &aTmp, rView.GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -424,7 +424,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( rView.GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -450,10 +450,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, DLG_CHAR,0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -498,10 +498,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
@@ -1354,7 +1354,7 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
                 break;
 
             default:
-                ASSERT(!this, "falscher Dispatcher");
+                OSL_ENSURE(!this, "wrong dispatcher");
         }
 
         if( nMode )

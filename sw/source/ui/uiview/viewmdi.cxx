@@ -292,11 +292,11 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
  */
 IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
-        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
         Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
 
         switch ( pVclEvent->GetId() )
@@ -324,7 +324,7 @@ int SwView::_CreateScrollbar( BOOL bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    ASSERT( !*ppScrollbar, "vorher abpruefen!" )
+    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" )
 
     if( !bHori )
         CreatePageButtons( !bShowAtResize );
@@ -664,19 +664,19 @@ void SwView::SetImageButtonColor(Color& rColor)
 
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
     pHScrollbar->ExtendedShow(bShow);
 }
 
 sal_Bool SwView::IsHScrollbarVisible()const
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
     return pHScrollbar->IsVisible( FALSE ) || pHScrollbar->IsAuto();
 }
 
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
     pVScrollbar->ExtendedShow(bShow);
     pPageUpBtn->Show(bShow);
     pPageDownBtn->Show(bShow);
@@ -685,7 +685,7 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
 
 sal_Bool SwView::IsVScrollbarVisible()const
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
     return pVScrollbar->IsVisible( FALSE );
 }
 

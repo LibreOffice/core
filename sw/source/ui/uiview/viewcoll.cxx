@@ -56,7 +56,7 @@ void SwView::ExecColl(SfxRequest &rReq)
     {
         case FN_SET_PAGE:
         {
-            DBG_ASSERT(!this, "Not implemented");
+            OSL_ENSURE(!this, "Not implemented");
         }
         break;
         case FN_SET_PAGE_STYLE:
@@ -90,7 +90,7 @@ void SwView::ExecColl(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(FALSE, falscher CommandProcessor fuer Dispatch);
+            OSL_ENSURE(false, "wrong CommandProcessor for Dispatch");
             return;
     }
 }

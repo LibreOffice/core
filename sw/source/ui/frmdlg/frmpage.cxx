@@ -795,7 +795,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     if ( nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE )
     {
-        ASSERT(pSh , "shell not found");
+        OSL_ENSURE(pSh , "shell not found");
         const SfxPoolItem* pItem;
         //OS: nur fuer die Variante Einfuegen/Grafik/Eigenschaften
         if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, FALSE, &pItem))
@@ -939,7 +939,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
     BOOL bRet = FALSE;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                         : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
-    ASSERT( pSh , "shell not found");
+    OSL_ENSURE( pSh , "shell not found");
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOldItem = 0;
 
@@ -1658,7 +1658,7 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
 
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                         :((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
-    ASSERT(pSh , "shell not found");
+    OSL_ENSURE(pSh , "shell not found");
     SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
     SvxSwFrameValidation        aVal;
 
@@ -2788,7 +2788,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
 
-        DBG_ASSERT(pWrtSh, "keine Shell?");
+        OSL_ENSURE(pWrtSh, "keine Shell?");
         if( bNew || !aTmpName1.Len() )
 
             switch( nDlgType )

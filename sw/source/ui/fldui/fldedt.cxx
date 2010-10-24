@@ -351,12 +351,12 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     SwAbstractDialogFactory* pFact = swui::GetFactory();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet,
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(RET_OK == pDlg->Execute())
     {
         pSh->UpdateFlds( *pCurFld );

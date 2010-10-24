@@ -88,7 +88,7 @@ void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, co
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
-        DBG_ASSERT( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
+        OSL_ENSURE( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
         const USHORT nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 

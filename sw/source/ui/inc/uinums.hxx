@@ -124,7 +124,7 @@ public:
 // INLINE METHODE --------------------------------------------------------
 inline const SwNumRulesWithName *SwBaseNumRules::GetRules(USHORT nIdx) const
 {
-    ASSERT(nIdx < nMaxRules, Array der NumRules ueberindiziert.);
+    OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     return pNumRules[nIdx];
 }
 

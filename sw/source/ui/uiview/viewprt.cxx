@@ -295,7 +295,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
             return;
         }
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }

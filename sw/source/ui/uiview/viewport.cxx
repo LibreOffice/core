@@ -130,7 +130,7 @@ void SwView::InvalidateRulerPos()
 
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?");
+    OSL_ENSURE(pHRuler, "warum ist das Lineal nicht da?");
     pHRuler->ForceUpdate();
     pVRuler->ForceUpdate();
 }
@@ -832,7 +832,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
             rToFill.Left() = nWidth;
     }
 
-    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?");
+    OSL_ENSURE(pHRuler, "warum ist das Lineal nicht da?");
     if ( pHRuler->IsVisible() )
         rToFill.Top() = pHRuler->GetSizePixel().Height();
 
@@ -1157,7 +1157,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         //nicht mehr zum aktuell sichtbaren Bereich passen
         pWrtShell->ResetCursorStack();
 
-        ASSERT( !GetEditWin().IsVisible() ||
+        OSL_ENSURE( !GetEditWin().IsVisible() ||
                     (( aEditSz.Width() > 0 && aEditSz.Height() > 0 )
                         || !aVisArea.IsEmpty()), "Small world, isn't it?" );
 

@@ -251,7 +251,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -284,7 +284,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         {
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot( pThis->GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,

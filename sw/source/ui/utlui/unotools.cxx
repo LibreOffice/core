@@ -37,7 +37,7 @@
 #include <unotools.hrc>
 #include <unotools.hxx>
 #include <unoprnms.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>

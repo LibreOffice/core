@@ -146,8 +146,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
 
-    ASSERT( !rSh.IsObjSelected() && !rSh.IsFrmSelected(),
-            "Falsche Shell auf dem Dispatcher" );
+    OSL_ENSURE( !rSh.IsObjSelected() && !rSh.IsFrmSelected(),
+            "wrong shell on dispatcher" );
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
@@ -364,7 +364,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
+            OSL_ENSURE( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
             rSh.InsertObject( xObj, pName, TRUE, nSlot);
             rReq.Done();
         }
@@ -640,10 +640,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                     GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
                 GetShell().LockPaint();
@@ -704,10 +704,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         else
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( DLG_INSERT_RULER,
                                                         pParent );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             // MessageBox fuer fehlende Grafiken
             if(!pDlg->HasImages())
                 InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
@@ -759,16 +759,16 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_FORMAT_COLUMN :
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN);
-        DBG_ASSERT(pColDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pColDlg, "Dialogdiet fail!");
         pColDlg->Execute();
         delete pColDlg;
     }
     break;
 
     default:
-        ASSERT( !this, "falscher Dispatcher" );
+        OSL_ENSURE(!this, "wrong  dispatcher");
         return;
     }
 }
@@ -992,7 +992,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLine();
             break;
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     rReq.Done();
@@ -1037,7 +1037,7 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
             break;
 
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
         }
 
         if( nMode )

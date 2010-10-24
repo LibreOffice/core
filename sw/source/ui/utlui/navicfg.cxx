@@ -33,7 +33,7 @@
 #include <swtypes.hxx>  // fuer Pathfinder
 #include <navicfg.hxx>
 #include <swcont.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -79,7 +79,7 @@ SwNavigationConfig::SwNavigationConfig() :
     Sequence<Any> aValues = GetProperties(aNames);
 //  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)

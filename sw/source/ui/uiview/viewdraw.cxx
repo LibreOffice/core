@@ -146,7 +146,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pFormView )
         {
             SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
-            DBG_ASSERT( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
+            OSL_ENSURE( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
             if( pDescriptorItem )
             {
                 ::svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
@@ -483,7 +483,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
     SdrPageView* pPV;
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    ASSERT( pSdrView, "EnterDrawTextMode without DrawView?" );
+    OSL_ENSURE( pSdrView, "EnterDrawTextMode without DrawView?" );
 
     sal_Bool bReturn = sal_False;
 
@@ -620,7 +620,7 @@ sal_Bool SwView::IsTextTool() const
     sal_uInt16 nId;
     sal_uInt32 nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
-    ASSERT( pSdrView, "IsTextTool without DrawView?" );
+    OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );
 
     if (pSdrView->IsCreateMode())
         pSdrView->SetCreateMode(sal_False);

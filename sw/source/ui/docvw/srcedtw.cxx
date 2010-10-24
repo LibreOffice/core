@@ -169,8 +169,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     {
                         //was war das denn?
 #if OSL_DEBUG_LEVEL > 1
-                        DBG_ERROR("Token nicht erkannt!");
-                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
+                        OSL_ENSURE(false, "Token not recognised!");
+                        OSL_ENSURE(false, ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
 #endif
                     }
 
@@ -614,7 +614,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
 IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
     Time aSyntaxCheckStart;
-    DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
+    OSL_ENSURE( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
     // pTextEngine->SetUpdateMode( FALSE );
 
     bHighlighting = TRUE;
@@ -763,13 +763,13 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         // optimiert das die TextEngine.
         USHORT nLastEnd = 0;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         USHORT nLine = aPortionList[0].nLine;
 #endif
         for ( USHORT i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
-            DBG_ASSERT( r.nLine == nLine, "doch mehrere Zeilen ?" );
+            OSL_ENSURE( r.nLine == nLine, "doch mehrere Zeilen ?" );
             if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
                 continue;
 

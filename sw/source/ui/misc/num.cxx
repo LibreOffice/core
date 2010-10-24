@@ -513,7 +513,7 @@ void SwNumPositionTabPage::InitPosAndSpaceMode()
 {
     if ( pActNum == 0 )
     {
-        DBG_ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );
         return;
     }

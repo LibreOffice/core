@@ -206,7 +206,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                                             IsInsTblFormatNum( bWebView )));
             break;
             default:
-                DBG_ERROR("::StateOther: default");
+                OSL_ENSURE(false, "::StateOther: default");
         }
         nWhich = aIter.NextWhich();
     }
@@ -306,7 +306,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
 {
     if ( m_pView )
     {
-        DBG_ERROR( "SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
+        OSL_ENSURE(false, "SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
         return;
     }
 

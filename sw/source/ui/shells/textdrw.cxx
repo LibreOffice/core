@@ -87,7 +87,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
             uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-            ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+            OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
             if( !xControlModel.is() )
                 return;
 

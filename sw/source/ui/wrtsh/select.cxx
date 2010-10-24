@@ -774,7 +774,7 @@ void SwWrtShell::LeaveSelFrmMode()
 IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
 {
     const SwFrmFmt *pFmt = pFlyFmt ? (SwFrmFmt*)pFlyFmt : GetFlyFrmFmt();
-    ASSERT(pFmt, kein FrameFormat.);
+    OSL_ENSURE(pFmt, "no frame format");
     const SvxMacroItem &rFmtMac = pFmt->GetMacro();
 
     if(rFmtMac.HasMacro(SW_EVENT_OBJECT_SELECT))

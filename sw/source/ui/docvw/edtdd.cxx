@@ -326,7 +326,7 @@ USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
         case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
         case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
-        default: ASSERT( !this, "new ObjectType?" );
+        default: OSL_ENSURE( !this, "new ObjectType?" );
         }
     }
     if ( !nDropDestination )

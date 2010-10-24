@@ -525,7 +525,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
             {
                 if(rSh.GetTableCrsr())
                 {
-                    DBG_ASSERT(rSh.GetTableFmt(), "kein Tabellenformat?");
+                    OSL_ENSURE(rSh.GetTableFmt(), "kein Tabellenformat?");
                     uno::Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFmt(),
                                                     rSh.GetTableCrsr());
                     aRef = uno::Reference< uno::XInterface >  (xCrsr, uno::UNO_QUERY);;
@@ -650,7 +650,7 @@ SdrObject* SwXTextView::GetControl(
     SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
     Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
 
-    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
+    OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
 
     SdrObject* pControl = NULL;
     if ( pFormShell && pDrawView && pWindow )
@@ -675,7 +675,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
     SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
     Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
-    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::getFormController: how could I?" );
+    OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::getFormController: how could I?" );
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )
@@ -885,7 +885,7 @@ SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/
 
 void SwXTextView::NotifySelChanged()
 {
-    DBG_ASSERT( m_pView, "view is missing" );
+    OSL_ENSURE( m_pView, "view is missing" );
 
     // destroy temporary document with selected text that is used
     // in PDF export of (multi-)selections.
@@ -960,7 +960,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
             }
             break;
             default :
-                DBG_ERROR("unknown WID");
+                OSL_ENSURE(false, "unknown WID");
         }
     }
 }
@@ -1010,7 +1010,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
             }
             break;
             default :
-                DBG_ERROR("unknown WID");
+                OSL_ENSURE(false, "unknown WID");
         }
     }
 
@@ -1022,7 +1022,7 @@ void SAL_CALL SwXTextView::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 void SAL_CALL SwXTextView::removePropertyChangeListener(
@@ -1030,7 +1030,7 @@ void SAL_CALL SwXTextView::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 void SAL_CALL SwXTextView::addVetoableChangeListener(
@@ -1038,7 +1038,7 @@ void SAL_CALL SwXTextView::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 void SAL_CALL SwXTextView::removeVetoableChangeListener(
@@ -1046,7 +1046,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
@@ -1094,7 +1094,7 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 {
 
     sal_Bool bRes = sal_False;
-    DBG_ASSERT(m_pView, "m_pView is NULL ???");
+    OSL_ENSURE(m_pView, "m_pView is NULL ???");
     if(m_pView)
     {
         //! m_pView->GetShellMode() will only work after the shell
@@ -1110,14 +1110,14 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
     return sal_True;
 }
 
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented");
+    OSL_ENSURE(false, "not implemented");
 }
 
 awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException )

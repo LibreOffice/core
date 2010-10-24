@@ -242,7 +242,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         aParaTemplBox.SelectEntry( sStr );      // Default
     else
     {
-        ASSERT(!pColl->IsDefault(), "Defaultvorlage fuer Fussnoten ist falsch.");
+        OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
         const USHORT nPos = aParaTemplBox.GetEntryPos(pColl->GetName());
         if( LISTBOX_ENTRY_NOTFOUND != nPos )
             aParaTemplBox.SelectEntryPos( nPos );
@@ -298,9 +298,9 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         case FTNNUM_CHAPTER:
             sSelect = aNumChapter;
         break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         default:
-            DBG_ERROR("Which numbering type?");
+            OSL_ENSURE(false, "Which numbering type?");
 #endif
     }
     aNumCountBox.SelectEntry(sSelect);
@@ -440,7 +440,7 @@ BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     {
         const String aFmtName( aParaTemplBox.GetSelectEntry() );
         SwTxtFmtColl *pColl = pSh->GetParaStyle(aFmtName, SwWrtShell::GETSTYLE_CREATEANY);
-        ASSERT(pColl, "Absatzvorlage nicht gefunden.");
+        OSL_ENSURE(pColl, "paragraph style not found");
         pInf->SetFtnTxtColl(*pColl);
     }
 

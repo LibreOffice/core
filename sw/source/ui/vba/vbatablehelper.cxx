@@ -209,7 +209,7 @@ sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols ) const
 
 sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum) const
 {
-    DBG_ASSERT( nNum < (sal_Int32)GetColCount( rCols ) ,"Index out of range");
+    OSL_ENSURE( nNum < (sal_Int32)GetColCount( rCols ) ,"Index out of range");
     sal_Int32 i = 0;
     while( nNum >= 0 )
     {

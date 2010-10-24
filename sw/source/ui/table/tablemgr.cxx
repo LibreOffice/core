@@ -67,10 +67,10 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
     InitTabCols();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this ,DLG_COL_WIDTH );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlg->Execute();
     delete pDlg;
 }
@@ -114,7 +114,7 @@ SwTwips SwTableFUNC::GetColWidth(USHORT nNum) const
 
 SwTwips SwTableFUNC::GetMaxColWidth( USHORT nNum ) const
 {
-    ASSERT(nNum <= aCols.Count(), "Index out of Area");
+    OSL_ENSURE(nNum <= aCols.Count(), "Index out of Area");
 
     if ( GetColCount() > 0 )
     {
@@ -176,7 +176,7 @@ void SwTableFUNC::SetColWidth(USHORT nNum, SwTwips nNewWidth )
 
 void SwTableFUNC::InitTabCols()
 {
-    ASSERT(pSh, keine Shell);
+    OSL_ENSURE(pSh, "no Shell");
 
     if( pFmt && pSh)
         pSh->GetTabCols( aCols );
@@ -315,7 +315,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
             else if (nColLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_COLUMNS;
             else {
-                DBG_ERROR( "unexpected state" );
+                OSL_ENSURE(false, "unexpected state" );
             }
         }
 
@@ -368,7 +368,7 @@ USHORT  SwTableFUNC::GetColCount() const
 
 int SwTableFUNC::GetRightSeparator(int nNum) const
 {
-    DBG_ASSERT( nNum < (int)GetColCount() ,"Index out of range");
+    OSL_ENSURE( nNum < (int)GetColCount() ,"Index out of range");
     int i = 0;
     while( nNum >= 0 )
     {

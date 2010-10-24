@@ -310,7 +310,7 @@ void SwSpellPopup::fillLangPopupMenu(
             aEntryTxt != sAsterix &&
             aEntryTxt != sEmpty)
         {
-            DBG_ASSERT( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
+            OSL_ENSURE( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
                     "nItemId outside of expected range!" );
             pPopupMenu->InsertItem( nItemId, aEntryTxt, MIB_RADIOCHECK );
             if (aEntryTxt == aCurLang)
@@ -398,7 +398,7 @@ pSh( pWrtSh ),
 xSpellAlt(xAlt),
 bGrammarResults(false)
 {
-    DBG_ASSERT(xSpellAlt.is(), "no spelling alternatives available");
+    OSL_ENSURE(xSpellAlt.is(), "no spelling alternatives available");
 
 //    CreateAutoMnemonics();
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -738,7 +738,7 @@ void SwSpellPopup::Execute( USHORT nId )
     {
         sal_Int32 nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
                 nId - MN_SUGGESTION_START : nId - MN_AUTOCORR_START;
-        DBG_ASSERT( 0 <= nAltIdx && nAltIdx < aSuggestions.getLength(), "index out of range" );
+        OSL_ENSURE( 0 <= nAltIdx && nAltIdx < aSuggestions.getLength(), "index out of range" );
         if (0 <= nAltIdx && nAltIdx < aSuggestions.getLength() && (bGrammarResults || xSpellAlt.is()))
         {
             sal_Bool bOldIns = pSh->IsInsMode();
@@ -825,7 +825,7 @@ void SwSpellPopup::Execute( USHORT nId )
     else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
     {
             OUString aWord( xSpellAlt->getWord() );
-//            DBG_ASSERT( nDicIdx < aDics.getLength(), "dictionary index out of range" );
+//            OSL_ENSURE( nDicIdx < aDics.getLength(), "dictionary index out of range" );
 
             PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
             String aDicName ( pMenu->GetItemText(nId) );

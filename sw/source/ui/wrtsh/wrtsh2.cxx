@@ -159,10 +159,10 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
 //  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     BOOL bRet = RET_CANCEL == pDlg->Execute();
@@ -179,10 +179,10 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
 BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     USHORT nRet = pDlg->Execute();
@@ -383,7 +383,7 @@ BOOL SwWrtShell::ClickToINetGrf( const Point& rDocPt, USHORT nFilter )
 void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
               const String *pTargetFrameName )
 {
-    ASSERT( rURL.Len() && pVSh, "was soll hier geladen werden?" );
+    OSL_ENSURE( rURL.Len() && pVSh, "what should be loaded here?" );
     if( !rURL.Len() || !pVSh )
         return ;
 
@@ -398,7 +398,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
         return;
 
     SwDocShell* pDShell = pSh->GetView().GetDocShell();
-    DBG_ASSERT( pDShell, "No DocShell?!");
+    OSL_ENSURE( pDShell, "No DocShell?!");
     String sTargetFrame;
     if( pTargetFrameName && pTargetFrameName->Len() )
         sTargetFrame = *pTargetFrameName;

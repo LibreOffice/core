@@ -184,7 +184,7 @@ void SwWebView::SelectShell()
                     break;
             }
             pSfxShell = rDispatcher.GetShell( --i );
-            ASSERT( pSfxShell, "My Shell ist lost in space" );
+            OSL_ENSURE( pSfxShell, "My Shell ist lost in space" );
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 

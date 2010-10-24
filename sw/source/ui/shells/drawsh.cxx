@@ -193,10 +193,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -205,10 +205,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -243,7 +243,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -285,7 +285,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         default:
-            DBG_ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     if (pSdrView->GetModel()->IsChanged())

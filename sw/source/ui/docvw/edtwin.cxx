@@ -141,6 +141,7 @@
 #include <PostItMgr.hxx>
 
 //JP 11.10.2001: enable test code for bug fix 91313
+//TODO: This one could most probably be removed
 #if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
 #endif
@@ -849,7 +850,7 @@ void SwEditWin::FlushInBuffer()
             // as well, we now expand the selection accordingly.
             SwPaM &rCrsr = *rSh.GetCrsr();
             xub_StrLen nCrsrStartPos = rCrsr.Start()->nContent.GetIndex();
-            DBG_ASSERT( nCrsrStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
+            OSL_ENSURE( nCrsrStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
             if (nExpandSelection && nCrsrStartPos >= nExpandSelection)
             {
                 if (!rCrsr.HasMark())
@@ -1038,7 +1039,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             case MOVE_DOWN_SMALL: if( aTmp.Height() < aSnap.Height() + MINFLY ) break;
                     nDown = aSnap.Height(); // kein break
             case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown ); break;
-            default: ASSERT( TRUE, "ChangeFly: Unknown direction." );
+            default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
         }
         BOOL bSet = FALSE;
         if ((FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
@@ -1529,7 +1530,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         case KS_CheckKey:
             eKeyState = KS_KeyToView;       // default weiter zur View
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // JP 19.01.99: zum Umschalten des Cursor Verhaltens in ReadOnly
             //              Bereichen
@@ -4250,7 +4251,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             }
                             else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
                             {
-                                ASSERT( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
+                                OSL_ENSURE( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
                                 if ( aCntntAtPos.aFnd.pFldmark != NULL)
                                 {
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
@@ -4940,9 +4941,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                                     }
                                     break;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     default:
-                        ASSERT( !this, "unknown speech command." );
+                        OSL_ENSURE( !this, "unknown speech command." );
 #endif
                 }
                 if ( nSlotId )
@@ -5208,9 +5209,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         default:
-            ASSERT( !this, "unknown command." );
+            OSL_ENSURE( !this, "unknown command." );
 #endif
     }
     if (bCallBase)
@@ -5535,7 +5536,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::Create
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
                                                         // happend already!!!
     SwWrtShell *pSh = rView.GetWrtShellPtr();
-    ASSERT( pSh, "no writer shell, no accessible object" );
+    OSL_ENSURE( pSh, "no writer shell, no accessible object" );
     uno::Reference<
         ::com::sun::star::accessibility::XAccessible > xAcc;
     if( pSh )

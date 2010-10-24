@@ -317,7 +317,7 @@ SwTransferable::~SwTransferable()
 static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
 {
     SwDoc *const pDoc = rDocFac.GetDoc();
-    ASSERT( pDoc, "Document not found" );
+    OSL_ENSURE( pDoc, "Document not found" );
     if (pDoc)
     {
         pDoc->SetClipBoard( true );
@@ -622,7 +622,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
 
             // SW should have no MasterPages
-            DBG_ASSERT(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+            OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
             for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
             {
@@ -1253,11 +1253,11 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         switch( nClearedAction )
         {
         case EXCHG_OUT_ACTION_INSERT_PRIVATE:
-ASSERT( pPt, "EXCHG_OUT_ACTION_INSERT_PRIVATE: was soll hier passieren?" );
+            OSL_ENSURE( pPt, "EXCHG_OUT_ACTION_INSERT_PRIVATE: what should happen here?" );
             break;
 
         case EXCHG_OUT_ACTION_MOVE_PRIVATE:
-ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
+            OSL_ENSURE( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: what should happen here?" )
             break;
 
 
@@ -1371,7 +1371,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
                 break;
 
             default:
-                ASSERT( pPt, "unbekanntes Format" );
+                OSL_ENSURE( pPt, "unknown format" );
             }
             break;
 
@@ -1447,7 +1447,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
                                                 nActionFlags, bMsg );
                 break;
             default:
-                ASSERT( FALSE, "unbekanntes Format" );
+                OSL_ENSURE( false, "unknown format" );
             }
 
             break;
@@ -1486,7 +1486,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
             break;
 
         default:
-            ASSERT( FALSE, "unbekannte Action" );
+            OSL_ENSURE(false, "unknown action" );
         }
     }
 
@@ -1762,7 +1762,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             if ( !rData.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
             {
-                DBG_ASSERT( !xStrm.is(), "An object without descriptor in clipboard!");
+                OSL_ENSURE( !xStrm.is(), "An object without descriptor in clipboard!");
             }
         }
         else
@@ -2029,7 +2029,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         SotStorageStreamRef xStrm;
         if( !rData.GetSotStorageStream( SOT_FORMATSTR_ID_LINK, xStrm ))
         {
-            ASSERT( !&rWrtShell, "DDE Data not found." );
+            OSL_ENSURE( !&rWrtShell, "DDE Data not found." );
             return 0;
         }   //sinnvollen Fehler melden!!
 
@@ -2696,7 +2696,7 @@ BOOL SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
             String sExt( rFileName.Copy( nLen - 3 ));
             if( sExt.EqualsIgnoreCaseAscii( "url" ))
             {
-ASSERT( !&rFileName, "how do we read today .URL - Files?" );
+                OSL_ENSURE( !&rFileName, "how do we read today .URL - Files?" );
             }
         }
     }
@@ -3139,7 +3139,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 {
     // erst den SelectionType erfragen, dann Action-Klammerung !!!!
     // (sonst wird nicht in eine TabellenSelektion gepastet!!!)
-    ASSERT( !rShell.ActionPend(), "Paste darf nie eine Actionklammerung haben" );
+    OSL_ENSURE( !rShell.ActionPend(), "Paste darf nie eine Actionklammerung haben" );
     if ( !pClpDocFac )
         return sal_False; // the return value of the SwFEShell::Paste also is BOOL!
 

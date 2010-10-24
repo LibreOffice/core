@@ -92,8 +92,8 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     {
         case  TOX_CONTENT:
         {
-            ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
-                                            ungueltiger Level InsertTOCMark);
+            OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
+                       "invalid InsertTOCMark level");
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_CONTENT, 0));
             pMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
@@ -127,8 +127,8 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         break;
         case  TOX_USER:
         {
-            ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
-                                            ungueltiger Level InsertTOCMark);
+            OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
+                       "invalid InsertTOCMark level");
             USHORT nId = rDesc.GetTOUName() ?
                 GetUserTypeID(*rDesc.GetTOUName()) : 0;
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_USER, nId));
@@ -151,7 +151,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
 
     pSh->StartAllAction();
     if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
@@ -249,7 +249,7 @@ USHORT SwTOXMgr::GetUserTypeID(const String& rStr)
 
 void SwTOXMgr::NextTOXMark(BOOL bSame)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_NXT : TOX_NXT;
@@ -260,7 +260,7 @@ void SwTOXMgr::NextTOXMark(BOOL bSame)
 
 void SwTOXMgr::PrevTOXMark(BOOL bSame)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_PRV : TOX_PRV;
@@ -408,7 +408,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     }
 
 
-    DBG_ASSERT(pNewTOX, "no TOXBase created!" );
+    OSL_ENSURE(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
         return FALSE;
 

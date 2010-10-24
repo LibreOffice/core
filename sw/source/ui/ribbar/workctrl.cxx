@@ -382,7 +382,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
 
         SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
         if ( fnSetActGroup )
             (*fnSetActGroup)( sGroup );

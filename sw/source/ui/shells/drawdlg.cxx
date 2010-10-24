@@ -93,12 +93,12 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             BOOL bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+            OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             pView);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
             if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
@@ -135,13 +135,13 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+            OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
             SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
                 pObj,
                 bHasMarked);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();

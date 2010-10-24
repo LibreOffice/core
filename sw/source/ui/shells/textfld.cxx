@@ -149,10 +149,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     default:
                     {
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                         SfxAbstractDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
                         pDlg->Execute();
                         delete pDlg;
                     }
@@ -240,7 +240,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, FALSE, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
-                    DBG_WARNING("Command is not yet used");
+                    OSL_ENSURE(false, "Command is not yet used");
                     sal_Unicode cSeparator = ' ';
                     SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                     bRes = aFldMgr.InsertFld(aData);
@@ -418,9 +418,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     BOOL bTravel = FALSE;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact, "Dialogdiet fail!");
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                    DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
+                    OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
                     aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
@@ -463,9 +463,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bTravel |= bNext|bPrev;
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact2, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact2, "Dialogdiet fail!");
                     AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel, TRUE );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
                     String sTitle(SW_RES(STR_REDLINE_COMMENT));
@@ -524,10 +524,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 else
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact, "Dialogdiet fail!");
                     AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog( DLG_JAVAEDIT,
                                                             pMDI, &rSh);
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {
                         aType = pDlg->GetType();
@@ -603,7 +603,7 @@ FIELD_INSERT:
             }
             break;
             default:
-                ASSERT(FALSE, falscher Dispatcher);
+                OSL_ENSURE(false, "wrong dispatcher");
                 return;
         }
     }

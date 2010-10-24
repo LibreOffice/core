@@ -87,7 +87,7 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
         }
         catch (uno::Exception &)
         {
-            DBG_ASSERT(0, "exception caught in SwLinguServiceEventListener c-tor" );
+            OSL_ENSURE(0, "exception caught in SwLinguServiceEventListener c-tor" );
         }
     }
 }

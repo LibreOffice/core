@@ -238,10 +238,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -250,10 +250,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -288,7 +288,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -452,7 +452,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
@@ -462,7 +462,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                                                         DLG_FRM_STD,
                                                         FALSE,
                                                         nDefPage);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() )
                 {
@@ -534,7 +534,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sPrevName);
-                                DBG_ASSERT(pPrevFmt, "No frame found!");
+                                OSL_ENSURE(pPrevFmt, "No frame found!");
                                 if(pPrevFmt)
                                 {
                                     rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
@@ -568,7 +568,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sNextName);
-                                DBG_ASSERT(pNextFmt, "No frame found!");
+                                OSL_ENSURE(pNextFmt, "No frame found!");
                                 if(pNextFmt)
                                 {
                                     rSh.Chain(*(SwFrmFmt*)
@@ -631,7 +631,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
         // <--
         default:
-            ASSERT( !this, "falscher Dispatcher" );
+            OSL_ENSURE( !this, "wrong dispatcher" );
             return;
     }
     // Vorlagen-AutoUpdate

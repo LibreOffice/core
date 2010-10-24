@@ -97,7 +97,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, FALSE, TRUE ); break;
         case FN_LINE_UP:    rSh.Up   ( bSelect, 1 ); break;
         case FN_LINE_DOWN:  rSh.Down ( bSelect, 1 ); break;
-        default:            ASSERT(FALSE, falscher Dispatcher); return;
+        default: OSL_ENSURE(false, "wrong Dispatcher"); return;
         }
     }
 
@@ -134,7 +134,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         case FN_SELECT_WORD:            bRet = rSh.SelNearestWrd(); break;
 
         case SID_SELECTALL:             bRet = 0 != rSh.SelAll();   break;
-        default:                    ASSERT(FALSE, falscher Dispatcher); return;
+        default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
 
     if ( bRet )
@@ -171,7 +171,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
 
         case FN_END_OF_PAGE_SEL:
         case FN_END_OF_PAGE:        rSh.EndPg   ( FN_END_OF_PAGE_SEL == nSlot ); break;
-        default:                    ASSERT(FALSE, falscher Dispatcher); return;
+        default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
     rReq.Done();
 }
@@ -188,7 +188,7 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
         case FN_END_OF_NEXT_COLUMN:   rSh.EndOfNextColumn  ( FALSE ); break;
         case FN_START_OF_PREV_COLUMN: rSh.StartOfPrevColumn( FALSE ); break;
         case FN_END_OF_PREV_COLUMN:   rSh.EndOfPrevColumn  ( FALSE ); break;
-        default:                      ASSERT(FALSE, falscher Dispatcher); return;
+        default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
     rReq.Done();
 }
@@ -231,7 +231,7 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
 
         case FN_PREV_PARA:      bRet = rSh.BwdPara    ( FALSE );
         break;
-        default:                ASSERT(FALSE, falscher Dispatcher); return;
+        default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
     rReq.Done();
 }
@@ -349,7 +349,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
 

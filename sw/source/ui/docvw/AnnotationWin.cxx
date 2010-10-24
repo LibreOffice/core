@@ -264,7 +264,7 @@ SvxLanguageItem SwAnnotationWin::GetLanguage(void)
         case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
         case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
         case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-        default: DBG_ERROR("GetLanguage: wrong script tye");
+        default: OSL_ENSURE(false, "GetLanguage: wrong script type");
     }
     return SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId);
 }

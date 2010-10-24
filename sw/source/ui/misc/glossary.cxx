@@ -564,7 +564,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
                 {
                     SvLBoxEntry* pChild = DoesBlockExist(aTitle, aShortName);
-                    DBG_ASSERT(pChild, "Eintrag nicht gefunden!");
+                    OSL_ENSURE(pChild, "entry not found!");
                     SvLBoxEntry* pParent = aCategoryBox.GetParent(pChild);
                     aCategoryBox.Select(pParent);
 
@@ -1116,7 +1116,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     if(pFact)
     {
         AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
         pDlg->SetPath(sGlosPath);

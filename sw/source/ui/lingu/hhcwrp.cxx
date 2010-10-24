@@ -237,7 +237,7 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
 void SwHHCWrapper::HandleNewUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd )
 {
-    DBG_ASSERT( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
+    OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
     if (!(0 <= nUnitStart && nUnitStart <= nUnitEnd))
         return;
 
@@ -260,7 +260,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
     //!! please see also TextConvWrapper::ChangeText with is a modified
     //!! copy of this code
 
-    DBG_ASSERT( rNewText.Len() != 0, "unexpected empty string" );
+    OSL_ENSURE( rNewText.Len() != 0, "unexpected empty string" );
     if (rNewText.Len() == 0)
         return;
 
@@ -286,7 +286,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
         // different length. Negative values allowed!
         long nCorrectionOffset = 0;
 
-        DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen,
+        OSL_ENSURE(nIndices == 0 || nIndices == nConvTextLen,
                 "mismatch between string length and sequence length!" );
 
         // find all substrings that need to be replaced (and only those)
@@ -317,7 +317,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
 
                     // set selection to sub string to be replaced in original text
                     xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
-                    DBG_ASSERT( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
+                    OSL_ENSURE( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
                     rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
                     rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
 #ifdef DEBUG
@@ -418,7 +418,7 @@ void SwHHCWrapper::ReplaceUnit(
     static OUString aBracketedStart( C2U( "(" ) );
     static OUString aBracketedEnd( C2U( ")" ) );
 
-    DBG_ASSERT( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
+    OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
     if (!(nUnitStart >= 0 && nUnitEnd >= nUnitStart))
         return;
 
@@ -432,7 +432,7 @@ void SwHHCWrapper::ReplaceUnit(
 
     OUString aOrigTxt( rWrtShell.GetSelTxt() );
     OUString aNewTxt( rReplaceWith );
-    DBG_ASSERT( aOrigTxt == rOrigText, "!! text mismatch !!" );
+    OSL_ENSURE( aOrigTxt == rOrigText, "!! text mismatch !!" );
     SwFmtRuby *pRuby = 0;
     sal_Bool bRubyBelow = sal_False;
     String  aNewOrigText;
@@ -475,7 +475,7 @@ void SwHHCWrapper::ReplaceUnit(
         }
         break;
         default:
-            DBG_ERROR( "unexpected case" );
+            OSL_ENSURE(false, "unexpected case" );
     }
     nUnitOffset += nUnitStart + aNewTxt.getLength();
 
@@ -532,7 +532,7 @@ void SwHHCWrapper::ReplaceUnit(
             rWrtShell.SetMark();
             rWrtShell.GetCrsr()->GetMark()->nContent -= (xub_StrLen) aNewTxt.getLength();
 
-            DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
+            OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
 
             sal_uInt16 aRanges[] = {
@@ -543,13 +543,13 @@ void SwHHCWrapper::ReplaceUnit(
             SfxItemSet aSet( rWrtShell.GetAttrPool(), aRanges );
             if (pNewUnitLanguage)
             {
-                //DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
+                //OSL_ENSURE(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
                 //      "similar language should not be changed!");
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
             }
 
             const Font *pTargetFont = GetTargetFont();
-            DBG_ASSERT( pTargetFont, "target font missing?" );
+            OSL_ENSURE( pTargetFont, "target font missing?" );
             if (pTargetFont && pNewUnitLanguage)
             {
                 SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( RES_CHRATR_CJK_FONT );
@@ -581,7 +581,7 @@ sal_Bool SwHHCWrapper::HasRubySupport() const
 
 void SwHHCWrapper::Convert()
 {
-    DBG_ASSERT( pConvArgs == 0, "NULL pointer expected" );
+    OSL_ENSURE( pConvArgs == 0, "NULL pointer expected" );
     {
         SwPaM *pCrsr = pView->GetWrtShell().GetCrsr();
         SwPosition* pSttPos = pCrsr->Start();
@@ -611,13 +611,13 @@ void SwHHCWrapper::Convert()
                             pTxtNode, pSttPos->nContent,
                             pTxtNode, pSttPos->nContent );
         }
-        DBG_ASSERT( pConvArgs->pStartNode && pConvArgs->pStartNode->IsTxtNode(),
+        OSL_ENSURE( pConvArgs->pStartNode && pConvArgs->pStartNode->IsTxtNode(),
                 "failed to get proper start text node" );
-        DBG_ASSERT( pConvArgs->pEndNode && pConvArgs->pEndNode->IsTxtNode(),
+        OSL_ENSURE( pConvArgs->pEndNode && pConvArgs->pEndNode->IsTxtNode(),
                 "failed to get proper end text node" );
 
         // chinese conversion specific settings
-        DBG_ASSERT( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
+        OSL_ENSURE( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
                 "source and target language mismatch?" );
         if (IsChinese( GetTargetLanguage() ))
         {

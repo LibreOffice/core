@@ -123,7 +123,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     //Sonderfall Align per Menue
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
-        DBG_ASSERT(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem erwartet");
+        OSL_ENSURE(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem expected");
         nSlotId = nSlotId + ((const SfxEnumItem*)pItem)->GetValue();
         nSlotId++;
     }
@@ -160,10 +160,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         pSh->GetObjAttr(aSet);
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                         SfxAbstractDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE, RC_DLG_SWWRAPDLG );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         if (pDlg->Execute() == RET_OK)
                         {
@@ -222,7 +222,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                         pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
                                 pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pCaptionDlg;
-                                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                             }
                         }
                         else
@@ -235,7 +235,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                             pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
                                 pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pTransform;
-                                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                             }
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
@@ -601,7 +601,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         }
 
         default:
-            DBG_ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong Dispatcher");
             return;
     }
     if(!bDone)
@@ -626,7 +626,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection");
+    OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const String sCurrentName = pObj->GetName();
     String sNewName;

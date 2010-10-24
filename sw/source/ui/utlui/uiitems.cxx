@@ -85,7 +85,7 @@ SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 int  SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( Which() == rAttr.Which(), "keine gleichen Attribute" );
+    OSL_ENSURE( Which() == rAttr.Which(), "keine gleichen Attribute" );
     return ( aFtnInfo == ((SwPageFtnInfoItem&)rAttr).GetPageFtnInfo());
 }
 
@@ -237,7 +237,7 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SwPtrItem& rItem = (SwPtrItem&)rAttr;
     return ( pMisc == rItem.pMisc );
 }
@@ -270,7 +270,7 @@ SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 

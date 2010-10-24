@@ -321,7 +321,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
     catch(Exception& )
     {
-        DBG_ERROR("control acces failed");
+        OSL_ENSURE(false, "control acces failed");
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
@@ -352,7 +352,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 try
                 {
                     Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
+                    OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                     bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
                     Any aTemplateValue = xCtrlAcc->getValue(
                         ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
@@ -363,7 +363,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 }
                 catch(Exception& )
                 {
-                    DBG_ERROR("control acces failed");
+                    OSL_ENSURE(false, "control acces failed");
                 }
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -387,7 +387,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             else
             {
                 Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
+                OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                 bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
                 Any aTemplateValue = xCtrlAcc->getValue(
                     ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
@@ -501,9 +501,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case FN_LINE_NUMBERING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_LINE_NUMBERING,    *this);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -541,7 +541,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
                 if( aPasswd.getLength() )
                 {
-                    DBG_ASSERT( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
+                    OSL_ENSURE( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
@@ -1037,10 +1037,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SfxHelp::OpenHelpAgent( &pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
                                                         &pTmpFrame->GetWindow());
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1155,7 +1155,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     if(!bIgnore)
@@ -1183,7 +1183,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
-    ASSERT( nWhich, "leeres Set");
+    OSL_ENSURE( nWhich, "empty set");
 
     while( nWhich )
     {
@@ -1372,7 +1372,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     sStr = pTOX->GetTOXName();
                                 else
                                 {
-                                    ASSERT( !this,
+                                    OEL_ENSURE( !this,
                                         "was ist das fuer ein Verzeichnis?" );
                                     sStr = pCurrSect->GetSectionName();
                                 }
@@ -1603,7 +1603,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     }
 
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -2048,7 +2048,7 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
         case SID_INSERTDOC:             bInsert = TRUE;     break;
 
         default:
-            ASSERT( !this, "Unbekannte SlotId!" );
+            OSL_ENSURE( !this, "unknown SlotId!" );
             bInsert = TRUE;
             nSlotId = SID_INSERTDOC;
             break;
@@ -2278,11 +2278,11 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             {
                 //take an existing data source or create a new one?
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact, "Dialogdiet fail!");
                     AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(
                                                         DLG_MERGE_FIELD_CONNECTIONS,
                                                         &GetViewFrame()->GetWindow());
-                    DBG_ASSERT(pConnectionsDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pConnectionsDlg, "Dialogdiet fail!");
                     if(RET_OK == pConnectionsDlg->Execute())
                         bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
                     else

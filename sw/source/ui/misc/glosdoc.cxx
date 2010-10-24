@@ -41,7 +41,7 @@
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
@@ -160,7 +160,7 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
 
 String SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
 {
-    ASSERT(nGroupId < m_pGlosArr->Count(), Textbausteinarray ueberindiziert);
+    OSL_ENSURE(nGroupId < m_pGlosArr->Count(), "Textbausteinarray ueberindiziert");
     return *(*m_pGlosArr)[nGroupId];
 }
 
@@ -253,7 +253,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
         sOldFileURL += SwGlossaries::GetExtension();
         BOOL bExist = FStatHelper::IsDocument( sOldFileURL );
-        DBG_ASSERT(bExist, "Gruppe existiert nicht!");
+        OSL_ENSURE(bExist, "group doesn't exist!");
         if(bExist)
         {
             sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
@@ -269,7 +269,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 sTempNewFilePath += INET_PATH_TOKEN;
                 sTempNewFilePath += sNewFileName ;
                 bExist = FStatHelper::IsDocument( sTempNewFilePath );
-                DBG_ASSERT(!bExist, "Gruppe existiert bereits!");
+                OSL_ENSURE(!bExist, "group already exists!");
                 if(!bExist)
                 {
                     BOOL bCopyCompleted = SWUnoHelper::UCB_CopyFile(
@@ -322,7 +322,7 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
         // der Textbausteinbereiche entfernt werden
     // Kein && wegen CFfront
     BOOL bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
-    DBG_ASSERT(bRemoved, "file has not been removed");
+    OSL_ENSURE(bRemoved, "file has not been removed");
     RemoveFileFromList( aName );
     return bRemoved;
 }
