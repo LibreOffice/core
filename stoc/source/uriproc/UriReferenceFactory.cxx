@@ -422,7 +422,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                 throw;
             } catch (css::uno::Exception & e) {
                 throw css::lang::WrappedTargetRuntimeException(
-                    rtl::OUString::createFromAscii("creating service ")
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("creating service "))
                         + serviceName,
                     static_cast< cppu::OWeakObject * >(this),
                     css::uno::makeAny(e)); //TODO: preserve type of e
@@ -441,7 +441,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             uriRef = parseGeneric(scheme, schemeSpecificPart);
         } catch (std::bad_alloc &) {
             throw css::uno::RuntimeException(
-                rtl::OUString::createFromAscii("std::bad_alloc"),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")),
                 static_cast< cppu::OWeakObject * >(this));
         }
     }
@@ -706,19 +706,19 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Factory(context));
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii("std::bad_alloc"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")), 0);
     }
 }
 
 rtl::OUString getImplementationName() {
-    return rtl::OUString::createFromAscii(
-        "com.sun.star.comp.uri.UriReferenceFactory");
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uri.UriReferenceFactory"));
 }
 
 css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString::createFromAscii(
-        "com.sun.star.uri.UriReferenceFactory");
+    s[0] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.UriReferenceFactory"));
     return s;
 }
 

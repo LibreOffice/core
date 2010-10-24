@@ -543,7 +543,7 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 #endif
 
     if (!strcmp(TIMEZONE, p))
-        pjvm->pushProp(rtl::OUString::createFromAscii("user.timezone=ECT"));
+        pjvm->pushProp(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user.timezone=ECT")));
 }
 
 void initVMConfiguration(

@@ -290,8 +290,8 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
         return xTD;
 
     throw container::NoSuchElementException(
-        rtl::OUString::createFromAscii(
-            "No further elements in enumeration!" ),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("No further elements in enumeration!") ),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 

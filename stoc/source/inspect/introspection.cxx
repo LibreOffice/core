@@ -1928,14 +1928,14 @@ Sequence< OUString > ImplIntrospection::getSupportedServiceNames(void) throw()
 // Helper XServiceInfo
 OUString ImplIntrospection::getImplementationName_Static(  )
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLEMENTATION_NAME));
 }
 
 // ORegistryServiceManager_Static
 Sequence< OUString > ImplIntrospection::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
     return aSNS;
 }
 
@@ -3074,7 +3074,7 @@ sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
 
             const Sequence< OUString > & rSNL =
                 stoc_inspect::ImplIntrospection::getSupportedServiceNames_Static();
