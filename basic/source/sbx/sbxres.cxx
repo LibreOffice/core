@@ -76,7 +76,7 @@ static const char* pSbxRes[] = {
     "Item",
     "Remove",
 
-    "Error ",   // mit Blank!
+    "Error ",   // with blank!
     "False",
     "True"
 };
