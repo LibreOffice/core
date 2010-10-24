@@ -389,7 +389,7 @@ long SwWrtShell::DelRight()
             UnSelectFrm();
             // --> OD 2006-07-06 #134369#
             OSL_ENSURE( !IsFrmSelected(),
-                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" )
+                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
             // <--
             // --> OD 2006-07-10 #134369#
             // leave draw mode, if necessary.

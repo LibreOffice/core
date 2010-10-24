@@ -324,7 +324,7 @@ int SwView::_CreateScrollbar( BOOL bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" )
+    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" );
 
     if( !bHori )
         CreatePageButtons( !bShowAtResize );

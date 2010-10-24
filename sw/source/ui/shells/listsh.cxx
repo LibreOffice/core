@@ -46,9 +46,7 @@
 #include <tools/shl.hxx>
 #include <svl/srchitem.hxx>
 
-// --> FME 2005-01-04 #i35572#
 #include <numrule.hxx>
-// <--
 #include <fmtornt.hxx>
 #include "wrtsh.hxx"
 #include "swmodule.hxx"
@@ -153,11 +151,10 @@ void SwListShell::Execute(SfxRequest &rReq)
     USHORT nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
-    // --> FME 2005-01-04 #i35572#
+    // #i35572#
     const SwNumRule* pCurRule = rSh.GetCurNumRule();
-    OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" )
+    OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" );
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
-    // <--
 
     switch (nSlot)
     {

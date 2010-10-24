@@ -368,7 +368,7 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     //get the current language
     if(!bNewMark) //if dialog is opened to iterate existing marks
     {
-        OSL_ENSURE(pTOXMgr, "need TOXMgr")
+        OSL_ENSURE(pTOXMgr, "need TOXMgr");
         if(!pTOXMgr)
             return;
         SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();

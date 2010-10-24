@@ -1257,7 +1257,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             break;
 
         case EXCHG_OUT_ACTION_MOVE_PRIVATE:
-            OSL_ENSURE( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: what should happen here?" )
+            OSL_ENSURE( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: what should happen here?" );
             break;
 
 

@@ -1333,7 +1333,7 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" )
+    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" );
 
     if( !bHori )
     {
@@ -1809,7 +1809,7 @@ PrintDialog*  SwPagePreView::CreatePrintDialog( Window *pParent )
 // OD 18.12.2002 #103492# - no longer needed ??
 Size  SwPagePreView::GetOptimalSizePixel() const
 {
-    OSL_ENSURE( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" )
+    OSL_ENSURE( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" );
     return Size( -1, -1 );
 /*
     //JP 09.06.99: was wird hier errechnet ?????

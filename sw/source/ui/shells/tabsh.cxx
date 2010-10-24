@@ -534,7 +534,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     aBox.SetDistance( Max(rCoreBox.GetDistance(),(USHORT)MIN_BORDER_DIST)  );
             }
             else
-                {OSL_ENSURE( !this, "where is BoxItem?" )}
+                OSL_ENSURE( !this, "where is BoxItem?" );
 
             //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );

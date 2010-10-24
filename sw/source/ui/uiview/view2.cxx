@@ -1372,7 +1372,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     sStr = pTOX->GetTOXName();
                                 else
                                 {
-                                    OEL_ENSURE( !this,
+                                    OSL_ENSURE( !this,
                                         "was ist das fuer ein Verzeichnis?" );
                                     sStr = pCurrSect->GetSectionName();
                                 }
