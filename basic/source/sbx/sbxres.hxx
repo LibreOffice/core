@@ -30,9 +30,9 @@
 
 #include <tools/string.hxx>
 
-// Zur Zeit sind Ressources im SVTOOLS-Projekt nicht vorgesehen.
-// Da es sich um unkritische Ressourcen handelt (BASIC-Keywords),
-// koennen wir mit Dummies arbeiten.
+// Currently there are no resources provided in the SVTOOLS-Project.
+// Because it is non-critical resources (BASIC-Keywords),
+// we can work with dummies.
 
 #define STRING_TYPES        0
 #define STRING_EMPTY        0
