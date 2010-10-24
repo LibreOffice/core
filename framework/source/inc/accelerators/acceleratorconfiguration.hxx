@@ -75,13 +75,13 @@ namespace framework
 //-----------------------------------------------
 // Accelerators.xcu
 
-static const ::rtl::OUString CFG_ENTRY_PRIMARY      = ::rtl::OUString::createFromAscii("PrimaryKeys");
-static const ::rtl::OUString CFG_ENTRY_SECONDARY    = ::rtl::OUString::createFromAscii("SecondaryKeys");
+static const ::rtl::OUString CFG_ENTRY_PRIMARY(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeys"));
+static const ::rtl::OUString CFG_ENTRY_SECONDARY(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeys"));
 
-static const ::rtl::OUString CFG_ENTRY_GLOBAL       = ::rtl::OUString::createFromAscii("Global");
-static const ::rtl::OUString CFG_ENTRY_MODULES      = ::rtl::OUString::createFromAscii("Modules");
+static const ::rtl::OUString CFG_ENTRY_GLOBAL(RTL_CONSTASCII_USTRINGPARAM("Global"));
+static const ::rtl::OUString CFG_ENTRY_MODULES(RTL_CONSTASCII_USTRINGPARAM("Modules"));
 
-static const ::rtl::OUString CFG_PROP_COMMAND       = ::rtl::OUString::createFromAscii("Command");
+static const ::rtl::OUString CFG_PROP_COMMAND(RTL_CONSTASCII_USTRINGPARAM("Command"));
 
 /** "global" type to make accelerator presets unique, so they can be used
     in combination with the salhelper::SingletonRef mechanism! */
