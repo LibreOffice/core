@@ -30,6 +30,7 @@
 #include "precompiled_framework.hxx"
 
 #include "backingwindow.hxx"
+#include "classes/resource.hrc"
 #include "framework.hrc"
 #include "classes/fwkresid.hxx"
 #include <services.h>
@@ -385,8 +386,13 @@ void BackingWindow::prepareRecentFileMenu()
             aBuf.append( aMenuTitle );
             mpRecentMenu->InsertItem( static_cast<USHORT>(i+1), aBuf.makeStringAndClear() );
         }
-        maOpenButton.SetPopupMenu( mpRecentMenu );
     }
+    else
+    {
+        String aNoDoc( FwkResId( STR_NODOCUMENT ) );
+        mpRecentMenu->InsertItem( 0xffff, aNoDoc );
+    }
+    maOpenButton.SetPopupMenu( mpRecentMenu );
 }
 
 void BackingWindow::initBackground()

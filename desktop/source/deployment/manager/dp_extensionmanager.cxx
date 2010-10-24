@@ -78,7 +78,6 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 namespace css = com::sun::star;
 
-
 //#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 using ::com::sun::star::uno::Reference;
@@ -140,11 +139,40 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
             OUSTR("Failed to update") + url, 0, exc);
     }
 }
+
+class ExtensionRemoveGuard
+{
+    css::uno::Reference<css::deployment::XPackage> m_extension;
+    css::uno::Reference<css::deployment::XPackageManager> m_xPackageManager;
+
+public:
+    ExtensionRemoveGuard(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
+        css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager):
+        m_extension(extension), m_xPackageManager(xPackageManager) {}
+    ~ExtensionRemoveGuard();
+
+    void reset(css::uno::Reference<css::deployment::XPackage> const & extension) {
+        m_extension = extension;
+    }
+};
+
+ExtensionRemoveGuard::~ExtensionRemoveGuard()
+{
+    try {
+        if (m_xPackageManager.is() && m_extension.is())
+            m_xPackageManager->removePackage(
+                dp_misc::getIdentifier(m_extension), ::rtl::OUString(),
+                css::uno::Reference<css::task::XAbortChannel>(),
+                css::uno::Reference<css::ucb::XCommandEnvironment>());
+    } catch (...) {
+        OSL_ASSERT(0);
+    }
+}
+
 } //end namespace
 
 namespace dp_manager {
-
-
 
 //------------------------------------------------------------------------------
 
@@ -194,7 +222,6 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
             static_cast<cppu::OWeakObject*>(this), 0);
     return xPackageManager;
 }
-
 
 /*
   Enters the XPackage objects into a map. They must be all from the
@@ -336,8 +363,6 @@ ExtensionManager::getExtensionsWithSameIdentifier(
             static_cast<OWeakObject*>(this), exc);
     }
 }
-
-
 
 bool ExtensionManager::isUserDisabled(
     OUString const & identifier, OUString const & fileName)
@@ -501,6 +526,107 @@ ExtensionManager::getSupportedPackageTypes()
 {
     return m_userRepository->getSupportedPackageTypes();
 }
+//Do some necessary checks and user interaction. This function does not
+//aquire the extension manager mutex and that mutex must not be aquired
+//when this function is called. doChecksForAddExtension does  synchronous
+//user interactions which may require aquiring the solar mutex.
+//Returns true if the extension can be installed.
+bool ExtensionManager::doChecksForAddExtension(
+    Reference<deploy::XPackageManager> const & xPackageMgr,
+    uno::Sequence<beans::NamedValue> const & properties,
+    css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv,
+    Reference<deploy::XPackage> & out_existingExtension )
+    throw (deploy::DeploymentException,
+           ucb::CommandFailedException,
+           ucb::CommandAbortedException,
+           lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    try
+    {
+        Reference<deploy::XPackage> xOldExtension;
+        const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
+        const OUString sFileName = xTmpExtension->getName();
+        const OUString sDisplayName = xTmpExtension->getDisplayName();
+        const OUString sVersion = xTmpExtension->getVersion();
+
+        try
+        {
+            xOldExtension = xPackageMgr->getDeployedPackage(
+                sIdentifier, sFileName, xCmdEnv);
+            out_existingExtension = xOldExtension;
+        }
+        catch (lang::IllegalArgumentException &)
+        {
+        }
+        bool bCanInstall = false;
+
+        //This part is not guarded against other threads removing, adding, disabling ...
+        //etc. the same extension.
+        //checkInstall is safe because it notifies the user if the extension is not yet
+        //installed in the same repository. Because addExtension has its own guard
+        //(m_addMutex), another thread cannot add the extension in the meantime.
+        //checkUpdate is called if the same extension exists in the same
+        //repository. The user is asked if they want to replace it.  Another
+        //thread
+        //could already remove the extension. So asking the user was not
+        //necessary. No harm is done. The other thread may also ask the user
+        //if he wants to remove the extension. This depends on the
+        //XCommandEnvironment which it passes to removeExtension.
+        if (xOldExtension.is())
+        {
+            //throws a CommandFailedException if the user cancels
+            //the action.
+            checkUpdate(sVersion, sDisplayName,xOldExtension, xCmdEnv);
+        }
+        else
+        {
+            //throws a CommandFailedException if the user cancels
+            //the action.
+            checkInstall(sDisplayName, xCmdEnv);
+        }
+        //Prevent showing the license if requested.
+        Reference<ucb::XCommandEnvironment> _xCmdEnv(xCmdEnv);
+        ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>());
+
+        dp_misc::DescriptionInfoset info(dp_misc::getDescriptionInfoset(xTmpExtension->getURL()));
+        const ::boost::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =
+            info.getSimpleLicenseAttributes();
+
+        if (licenseAttributes && licenseAttributes->suppressIfRequired
+            && props.isSuppressedLicense())
+            _xCmdEnv = Reference<ucb::XCommandEnvironment>(
+                new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
+
+        bCanInstall = xTmpExtension->checkPrerequisites(
+            xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0 ? true : false;
+
+        return bCanInstall;
+    }
+    catch (deploy::DeploymentException& ) {
+        throw;
+    } catch (ucb::CommandFailedException & ) {
+        throw;
+    } catch (ucb::CommandAbortedException & ) {
+        throw;
+    } catch (lang::IllegalArgumentException &) {
+        throw;
+    } catch (uno::RuntimeException &) {
+        throw;
+    } catch (uno::Exception &) {
+        uno::Any excOccurred = ::cppu::getCaughtException();
+        deploy::DeploymentException exc(
+            OUSTR("Extension Manager: exception in doChecksForAddExtension"),
+            static_cast<OWeakObject*>(this), excOccurred);
+        throw exc;
+    } catch (...) {
+        throw uno::RuntimeException(
+            OUSTR("Extension Manager: unexpected exception in doChecksForAddExtension"),
+            static_cast<OWeakObject*>(this));
+    }
+}
 
 // Only add to shared and user repository
 Reference<deploy::XPackage> ExtensionManager::addExtension(
@@ -525,165 +651,183 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
             static_cast<cppu::OWeakObject*>(this), 0);
-    ::osl::MutexGuard guard(getMutex());
+    //We must make sure that the xTmpExtension is not create twice, because this
+    //would remove the first one.
+    ::osl::MutexGuard addGuard(m_addMutex);
+
     Reference<deploy::XPackage> xTmpExtension =
         getTempExtension(url, xAbortChannel, xCmdEnv);
+    //Make sure the extension is removed from the tmp repository in case
+    //of an exception
+    ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, m_tmpRepository);
     const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
     const OUString sFileName = xTmpExtension->getName();
-    const OUString sDisplayName = xTmpExtension->getDisplayName();
-    const OUString sVersion = xTmpExtension->getVersion();
-    dp_misc::DescriptionInfoset info(dp_misc::getDescriptionInfoset(xTmpExtension->getURL()));
-    const ::boost::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =
-        info.getSimpleLicenseAttributes();
     Reference<deploy::XPackage> xOldExtension;
     Reference<deploy::XPackage> xExtensionBackup;
 
-    uno::Any excOccurred1;
     uno::Any excOccurred2;
     bool bUserDisabled = false;
-    try
-    {
-        bUserDisabled = isUserDisabled(sIdentifier, sFileName);
-        try
-        {
-            xOldExtension = xPackageManager->getDeployedPackage(
-                sIdentifier, sFileName, xCmdEnv);
-        }
-        catch (lang::IllegalArgumentException &)
-        {
-        }
-        bool bCanInstall = false;
-        try
-        {
-            if (xOldExtension.is())
-            {
-                //throws a CommandFailedException if the user cancels
-                //the action.
-                checkUpdate(sVersion, sDisplayName,xOldExtension, xCmdEnv);
-            }
-            else
-            {
-                //throws a CommandFailedException if the user cancels
-                //the action.
-                checkInstall(sDisplayName, xCmdEnv);
-            }
-            //Prevent showing the license if requested.
-            Reference<ucb::XCommandEnvironment> _xCmdEnv(xCmdEnv);
-            ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>());
-            if (licenseAttributes && licenseAttributes->suppressIfRequired
-                && props.isSuppressedLicense())
-                _xCmdEnv = Reference<ucb::XCommandEnvironment>(
-                    new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
+    bool bCanInstall = doChecksForAddExtension(
+        xPackageManager,
+        properties,
+        xTmpExtension,
+        xAbortChannel,
+        xCmdEnv,
+        xOldExtension );
 
-            bCanInstall = xTmpExtension->checkPrerequisites(
-                xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0 ? true : false;
-        }
-        catch (deploy::DeploymentException& ) {
-            excOccurred1 = ::cppu::getCaughtException();
-        } catch (ucb::CommandFailedException & ) {
-            excOccurred1 = ::cppu::getCaughtException();
-        } catch (ucb::CommandAbortedException & ) {
-            excOccurred1 = ::cppu::getCaughtException();
-        } catch (lang::IllegalArgumentException &) {
-            excOccurred1 = ::cppu::getCaughtException();
-        } catch (uno::RuntimeException &) {
-            excOccurred1 = ::cppu::getCaughtException();
-        } catch (...) {
-            excOccurred1 = ::cppu::getCaughtException();
-            deploy::DeploymentException exc(
-                OUSTR("Extension Manager: exception during addExtension, url: ")
-                + url, static_cast<OWeakObject*>(this), excOccurred1);
-            excOccurred1 <<= exc;
-        }
+    {
+        // In this garded section (getMutex) we must not use the argument xCmdEnv
+        // because it may bring up dialogs (XInteractionHandler::handle) this
+        //may potententially deadlock. See issue
+        //http://qa.openoffice.org/issues/show_bug.cgi?id=114933
+        //By not providing xCmdEnv the underlying APIs will throw an exception if
+        //the XInteractionRequest cannot be handled
+        ::osl::MutexGuard guard(getMutex());
 
         if (bCanInstall)
         {
-            if (xOldExtension.is())
+            try
             {
-                xOldExtension->revokePackage(xAbortChannel, xCmdEnv);
-                //save the old user extension in case the user aborts
-                //store the extension in the tmp repository, this will overwrite
-                //xTmpPackage (same identifier). Do not let the user abort or
-                //interact
-                Reference<ucb::XCommandEnvironment> tmpCmdEnv(
-                    new TmpRepositoryCommandEnv(xCmdEnv->getInteractionHandler()));
-                //importing the old extension in the tmp repository will remove
-                //the xTmpExtension
-                xTmpExtension = 0;
-                xExtensionBackup = m_tmpRepository->importExtension(
-                    xOldExtension, Reference<task::XAbortChannel>(),
-                    tmpCmdEnv);
-            }
-            xNewExtension = xPackageManager->addPackage(
-                url, properties, OUString(), xAbortChannel, xCmdEnv);
-            //If we add a user extension and there is already one which was
-            //disabled by a user, then the newly installed one is enabled. If we
-            //add to another repository then the user extension remains
-            //disabled.
-            bool bUserDisabled2 = bUserDisabled;
-            if (repository.equals(OUSTR("user")))
-                bUserDisabled2 = false;
-            activateExtension(
-                dp_misc::getIdentifier(xNewExtension),
-                xNewExtension->getName(), bUserDisabled2, false, xAbortChannel, xCmdEnv);
-            fireModified();
-        }
-    }
-    catch (deploy::DeploymentException& ) {
-        excOccurred2 = ::cppu::getCaughtException();
-    } catch (ucb::CommandFailedException & ) {
-        excOccurred2 = ::cppu::getCaughtException();
-    } catch (ucb::CommandAbortedException & ) {
-        excOccurred2 = ::cppu::getCaughtException();
-    } catch (lang::IllegalArgumentException &) {
-        excOccurred2 = ::cppu::getCaughtException();
-    } catch (uno::RuntimeException &) {
-        excOccurred2 = ::cppu::getCaughtException();
-    } catch (...) {
-        excOccurred2 = ::cppu::getCaughtException();
-        deploy::DeploymentException exc(
-            OUSTR("Extension Manager: exception during addExtension, url: ")
-            + url, static_cast<OWeakObject*>(this), excOccurred2);
-        excOccurred2 <<= exc;
-    }
+                bUserDisabled = isUserDisabled(sIdentifier, sFileName);
+                if (xOldExtension.is())
+                {
+                    try
+                    {
+                        xOldExtension->revokePackage(
+                            xAbortChannel, Reference<ucb::XCommandEnvironment>());
+                        //save the old user extension in case the user aborts
+                        //store the extension in the tmp repository, this will overwrite
+                        //xTmpPackage (same identifier). Do not let the user abort or
+                        //interact
+                        //importing the old extension in the tmp repository will remove
+                        //the xTmpExtension
+                        //no command environment supplied, only this class shall interact
+                        //with the user!
+                        xExtensionBackup = m_tmpRepository->importExtension(
+                            xOldExtension, Reference<task::XAbortChannel>(),
+                            Reference<ucb::XCommandEnvironment>());
+                        tmpExtensionRemoveGuard.reset(xExtensionBackup);
+                        //xTmpExtension will later be used to check the dependencies
+                        //again. However, only xExtensionBackup will be later removed
+                        //from the tmp repository
+                        xTmpExtension = xExtensionBackup;
+                        OSL_ASSERT(xTmpExtension.is());
+                    }
+                    catch (lang::DisposedException &)
+                    {
+                        //Another thread might have removed the extension meanwhile
+                    }
+                }
+                //check again dependencies but prevent user interaction,
+                //We can disregard the license, because the user must have already
+                //accepted it, whe we called checkPrerequisites the first time
+                SilentCheckPrerequisitesCommandEnv * pSilentCommandEnv =
+                    new SilentCheckPrerequisitesCommandEnv();
+                Reference<ucb::XCommandEnvironment> silentCommandEnv(pSilentCommandEnv);
 
-    if (excOccurred2.hasValue())
+                sal_Int32 failedPrereq = xTmpExtension->checkPrerequisites(
+                    xAbortChannel, silentCommandEnv, true);
+                if (failedPrereq == 0)
+                {
+                    xNewExtension = xPackageManager->addPackage(
+                        url, properties, OUString(), xAbortChannel,
+                        Reference<ucb::XCommandEnvironment>());
+                    //If we add a user extension and there is already one which was
+                    //disabled by a user, then the newly installed one is enabled. If we
+                    //add to another repository then the user extension remains
+                    //disabled.
+                    bool bUserDisabled2 = bUserDisabled;
+                    if (repository.equals(OUSTR("user")))
+                        bUserDisabled2 = false;
+
+                    activateExtension(
+                        dp_misc::getIdentifier(xNewExtension),
+                        xNewExtension->getName(), bUserDisabled2, false, xAbortChannel,
+                        Reference<ucb::XCommandEnvironment>());
+                }
+                else
+                {
+                    if (pSilentCommandEnv->m_Exception.hasValue())
+                        ::cppu::throwException(pSilentCommandEnv->m_Exception);
+                    else if ( pSilentCommandEnv->m_UnknownException.hasValue())
+                        ::cppu::throwException(pSilentCommandEnv->m_UnknownException);
+                    else
+                        throw deploy::DeploymentException (
+                            OUSTR("Extension Manager: exception during addExtension, ckeckPrerequisites failed"),
+                            static_cast<OWeakObject*>(this), uno::Any());
+                }
+            }
+            catch (deploy::DeploymentException& ) {
+                excOccurred2 = ::cppu::getCaughtException();
+            } catch (ucb::CommandFailedException & ) {
+                excOccurred2 = ::cppu::getCaughtException();
+            } catch (ucb::CommandAbortedException & ) {
+                excOccurred2 = ::cppu::getCaughtException();
+            } catch (lang::IllegalArgumentException &) {
+                excOccurred2 = ::cppu::getCaughtException();
+            } catch (uno::RuntimeException &) {
+                excOccurred2 = ::cppu::getCaughtException();
+            } catch (...) {
+                excOccurred2 = ::cppu::getCaughtException();
+                deploy::DeploymentException exc(
+                    OUSTR("Extension Manager: exception during addExtension, url: ")
+                    + url, static_cast<OWeakObject*>(this), excOccurred2);
+                excOccurred2 <<= exc;
+            }
+        }
+
+        if (excOccurred2.hasValue())
+        {
+            //It does not matter what exception is thrown. We try to
+            //recover the original status.
+            //If the user aborted installation then a ucb::CommandAbortedException
+            //is thrown.
+            //Use a private AbortChannel so the user cannot interrupt.
+            try
+            {
+                if (xExtensionBackup.is())
+                {
+                    Reference<deploy::XPackage> xRestored =
+                        xPackageManager->importExtension(
+                            xExtensionBackup, Reference<task::XAbortChannel>(),
+                            Reference<ucb::XCommandEnvironment>());
+                }
+                activateExtension(
+                    sIdentifier, sFileName, bUserDisabled, false,
+                    Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
+            }
+            catch (...)
+            {
+            }
+            ::cppu::throwException(excOccurred2);
+        }
+    } // leaving the garded section (getMutex())
+
+    try
     {
-        //It does not matter what exception is thrown. We try to
-        //recover the original status.
-        //If the user aborted installation then a ucb::CommandAbortedException
-        //is thrown.
-        //Use a private AbortChannel so the user cannot interrupt.
-        try
-        {
-            Reference<ucb::XCommandEnvironment> tmpCmdEnv(
-                new TmpRepositoryCommandEnv(xCmdEnv->getInteractionHandler()));
-            if (xExtensionBackup.is())
-            {
-                Reference<deploy::XPackage> xRestored =
-                    xPackageManager->importExtension(
-                        xExtensionBackup, Reference<task::XAbortChannel>(),
-                        tmpCmdEnv);
-            }
-            activateExtension(
-                sIdentifier, sFileName, bUserDisabled, false,
-                Reference<task::XAbortChannel>(), tmpCmdEnv);
-            if (xTmpExtension.is() || xExtensionBackup.is())
-                m_tmpRepository->removePackage(
-                    sIdentifier, OUString(), xAbortChannel, xCmdEnv);
-            fireModified();
-        }
-        catch (...)
-        {
-        }
-        ::cppu::throwException(excOccurred2);
-    }
-    if (xTmpExtension.is() || xExtensionBackup.is())
-        m_tmpRepository->removePackage(
-            sIdentifier,OUString(), xAbortChannel, xCmdEnv);
+        fireModified();
 
-    if (excOccurred1.hasValue())
-        ::cppu::throwException(excOccurred1);
+    }catch (deploy::DeploymentException& ) {
+        throw;
+    } catch (ucb::CommandFailedException & ) {
+        throw;
+    } catch (ucb::CommandAbortedException & ) {
+        throw;
+    } catch (lang::IllegalArgumentException &) {
+        throw;
+    } catch (uno::RuntimeException &) {
+        throw;
+    } catch (uno::Exception &) {
+        uno::Any excOccurred = ::cppu::getCaughtException();
+        deploy::DeploymentException exc(
+            OUSTR("Extension Manager: exception in doChecksForAddExtension"),
+            static_cast<OWeakObject*>(this), excOccurred);
+        throw exc;
+    } catch (...) {
+        throw uno::RuntimeException(
+            OUSTR("Extension Manager: unexpected exception in doChecksForAddExtension"),
+            static_cast<OWeakObject*>(this));
+    }
 
     return xNewExtension;
 }
@@ -902,7 +1046,6 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
         throw exc;
     }
 }
-
 
 void ExtensionManager::disableExtension(
     Reference<deploy::XPackage> const & extension,
@@ -1366,6 +1509,5 @@ void ExtensionManager::fireModified()
 }
 
 } // namespace dp_manager
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

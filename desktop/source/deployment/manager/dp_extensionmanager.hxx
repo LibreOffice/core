@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-
 #if ! defined INCLUDED_DP_EXTENSIONMANAGER_H
 #define INCLUDED_DP_EXTENSIONMANAGER_H
 
@@ -41,7 +40,6 @@
 #include "osl/mutex.hxx"
 #include <list>
 
-
 namespace css = ::com::sun::star;
 
 namespace dp_manager {
@@ -50,7 +48,6 @@ typedef ::std::hash_map<
     ::rtl::OUString,
     ::std::vector<css::uno::Reference<css::deployment::XPackage> >,
     ::rtl::OUStringHash > id2extensions;
-
 
 class ExtensionManager : private ::dp_misc::MutexHolder,
         public ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >
@@ -128,7 +125,6 @@ public:
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
 
-
     virtual sal_Int32 SAL_CALL checkPrerequisitesAndEnable(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
@@ -138,7 +134,6 @@ public:
             css::ucb::CommandAbortedException,
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-
 
     virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
         SAL_CALL getDeployedExtensions(
@@ -183,7 +178,6 @@ public:
             css::ucb::CommandAbortedException,
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-
 
     virtual void SAL_CALL reinstallDeployedExtensions(
         ::rtl::OUString const & repository,
@@ -235,6 +229,8 @@ private:
     css::uno::Reference<css::deployment::XPackageManager> m_bundledRepository;
     css::uno::Reference<css::deployment::XPackageManager> m_tmpRepository;
 
+    //only to be used within addExtension
+    ::osl::Mutex m_addMutex;
     /* contains the names of all repositories (except tmp) in order of there
        priority. That is, the first element is "user" follod by "shared" and
        then "bundled"
@@ -259,7 +255,6 @@ private:
         bool bUserDisabled, bool bStartup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-
 
     ::std::list<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(::rtl::OUString  const & identifier,
@@ -287,7 +282,6 @@ private:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
-
     void addExtensionsToMap(
         id2extensions & mapExt,
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
@@ -296,12 +290,22 @@ private:
     css::uno::Reference<css::deployment::XPackageManager>
     getPackageManager(::rtl::OUString const & repository)
         throw (css::lang::IllegalArgumentException);
+
+    bool doChecksForAddExtension(
+        css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
+        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        css::uno::Reference<css::deployment::XPackage> & out_existingExtension )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException);
+
 };
 
 }
 
-
-
-
 #endif
-
