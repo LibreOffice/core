@@ -14,11 +14,11 @@ module com {  module sun {  module star {  module chart2 {
 */
 service LogicTargetModel
 {
-    /** identifies an instance of this service within one chartdocument.
+    /** identifies an instance of this service within one chart document.
     */
     [ readonly, property ] string ID;
 
-    /** identifies an instance of the service com::sun::star::chart2::LegendModel within one chartdocument.
+    /** identifies an instance of the service com::sun::star::chart2::LegendModel within one chart document.
     * that instance is used to automatically calculate missing properties
     */
     [ property ] string LegendID;

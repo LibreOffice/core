@@ -53,7 +53,7 @@ module chart2
     //
     // coordinatesystem-supplier
     //
-    // chart-typ ? property string rendererServiceName
+    // chart-type ? property string rendererServiceName
 
 
 /** reflects the model data of the object that has all the information
@@ -150,7 +150,7 @@ service DataSeries
         series.</p>
 
         <p>If the sequence is empty, that means that all data points
-        look alike.  They are formatted using the propery values set
+        look alike.  They are formatted using the property values set
         in the data series.</p>
 
         <p>The indexes in this sequence match the indexes used by the
@@ -162,7 +162,7 @@ service DataSeries
      */
     [readonly, optional, property] sequence< long > AttributedDataPoints;
 
-    /** indicates wether this series should be stacked with respect to the previous series.
+    /** indicates whether this series should be stacked with respect to the previous series.
     */
     [property] StackingDirection StackingDirection;
 
@@ -171,7 +171,7 @@ service DataSeries
      */
     [optional, property] boolean                    VaryColorsByPoint;
 
-    /** This property describes wether the series should be shown at
+    /** This property describes whether the series should be shown at
         the main value axis or at the secondary value axis.  Having
         this property not set or setting it to 0 means that this data
         series will be scaled at the primary y-axis ( of the

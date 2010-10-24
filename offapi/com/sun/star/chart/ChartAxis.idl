@@ -119,7 +119,7 @@ published service ChartAxis
 
     /**
     Contains the number of help intervals within a main interval. E.g. a StepHelpCount of 5 divides
-    the main interval into 5 pieces and thus producces 4 help tick marks.
+    the main interval into 5 pieces and thus produces 4 help tick marks.
     */
     [optional, property] long StepHelpCount;
 
@@ -133,7 +133,7 @@ published service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    /** The maximium value of the axis scale is calculated by the chart if
+    /** The maximum value of the axis scale is calculated by the chart if
         this property is <TRUE/>.
      */
     [optional, property] boolean AutoMax;
@@ -188,8 +188,8 @@ published service ChartAxis
     //-------------------------------------------------------------------------
 
     /** Indicates the reference value where bars or areas have their grounding.
-        This property has only an effect when the used odf fileformat does not allow for
-        further axis posiioning or the axis is a secondary y-axis.
+        This property has only an effect when the used ODF file format does not allow for
+        further axis positioning or the axis is a secondary y-axis.
      */
     [optional, property] double Origin;
 

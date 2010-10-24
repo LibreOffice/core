@@ -7,7 +7,7 @@ module com {  module sun {  module star {  module chart2 {
 /**
 <p>
 The service CoordinateSystemType represents a special type of coordinate system.
-For example a 2 dimensional cartesian coordinate system is a CoordinateSystemType
+For example a 2 dimensional Cartesian coordinate system is a CoordinateSystemType
 and different from for example a 3 dimensional spherical coordinate system.
 </p>
 <p>A CoordinateSystemType is a stateless service which has no owner and does not

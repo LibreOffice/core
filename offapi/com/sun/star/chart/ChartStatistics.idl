@@ -120,7 +120,7 @@ published service ChartStatistics
     /** specifies the percentage that is used to display error bars.
 
         <p>The length of the error indicators is calculated for each
-        data point by taking the given percentatge of its value.</p>
+        data point by taking the given percentage of its value.</p>
 
         <p>this setting is effective if the
         <member>ChartStatistics::ErrorCategory</member> is set to
@@ -163,7 +163,7 @@ published service ChartStatistics
      */
     [property] com::sun::star::chart::ChartRegressionCurveType RegressionCurves;
 
-    /** contains a cell range string for positve error bars. This
+    /** contains a cell range string for positive error bars. This
         property is used when the <type>ErrorBarCategory</type> is set
         to <member>ErrorBarCategory::FROM_DATA</member>.
      */

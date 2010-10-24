@@ -38,7 +38,7 @@
 
 //=============================================================================
 
-/** has to be supported by charts providing the cpabilities of a
+/** has to be supported by charts providing the capabilities of a
    horizontal axis, i.e., an <em>x</em>-axis.
  */
 published service ChartAxisXSupplier

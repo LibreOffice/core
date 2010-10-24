@@ -93,7 +93,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
         @param bMaySkipPointsInCalculation determines whether it is
                allowed to skip points in the calculation. When this
                parameter is <TRUE/> it is assumed that the underlying
-               coordinate system is cartesian.
+               coordinate system is Cartesian.
 
         @param xScalingX a scaling that is used for the values in
                x-direction
@@ -116,7 +116,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
 
         <p>The value of <it>r</it> is signed.  Often
         <it>r</it><sup>2</sup> is used instead of <it>r</it> to denote
-        a regression curve's accuray.</p>
+        a regression curve's accuracy.</p>
 
         @return
             The return value is the fraction of the variance in the
@@ -135,7 +135,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
      */
     string getRepresentation();
 
-    /** Returns a representation using the given numnber format for formatting all numbers
+    /** Returns a representation using the given number format for formatting all numbers
         contained in the formula.
 
         @see getRepresentation

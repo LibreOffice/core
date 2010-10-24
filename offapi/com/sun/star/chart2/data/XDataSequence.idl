@@ -43,7 +43,7 @@ module chart2
 module data
 {
 
-/** allows acces to a one-dimensional sequence of data.
+/** allows access to a one-dimensional sequence of data.
 
     <p>The data that is stored in this container may contain different
     types.</p>
@@ -86,7 +86,7 @@ interface XDataSequence : ::com::sun::star::uno::XInterface
             the longer side with parameter LONG_SIDE or you can obtain labels
             for the shorter side with parameter SHORT_SIDE.
 
-            If the range is not structured in a tabular way you may reveive
+            If the range is not structured in a tabular way you may receive
             no label.
 
         @return
@@ -97,7 +97,7 @@ interface XDataSequence : ::com::sun::star::uno::XInterface
             sequence "Row 1" "Row 2" "Row 3" for the long side to be used
             as categories for example.
 
-        Example: Assuming this sequence has a Rangerepresentation spanning
+        Example: Assuming this sequence has a Range representation spanning
         row 5 and 6 in column 8. Following sequences of strings or similar strings
         are expected as return values:
 

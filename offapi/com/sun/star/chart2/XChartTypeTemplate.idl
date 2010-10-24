@@ -150,7 +150,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
             that the template matches more accurately.  E.g. for a
             line-chart with symbols the property "Symbol" would be set
             to <TRUE/>.  If this parameter is <FALSE/> the template
-            itselfs stays unmodified.
+            itself stays unmodified.
 
         @return
             <TRUE/> if the diagram given is structurally identical to
@@ -167,7 +167,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         series.
 
         @param aFormerlyUsedChartTypes
-            The list can be used to copy some aspects from old charttypes during the creation of a new chart type.
+            The list can be used to copy some aspects from old chart types during the creation of a new chart type.
             The list might be empty.
      */
     XChartType getChartTypeForNewSeries( [in] sequence< XChartType > aFormerlyUsedChartTypes );

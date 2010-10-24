@@ -29,7 +29,7 @@ struct IncrementData
     any         Distance;
 
     /**
-    <member>PostEquidistant</member> rules wether the member <member>Distance</member>
+    <member>PostEquidistant</member> rules whether the member <member>Distance</member>
     describes a distance before or after the scaling is applied.
 
     <p>If <member>PostEquidistant</member> equals <TRUE/> <member>Distance</member>

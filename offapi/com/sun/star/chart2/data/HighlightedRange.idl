@@ -59,7 +59,7 @@ struct HighlightedRange
 
     /** If the highlighted range is visually highlighted and this
         member is <TRUE/>, the range given in
-        <member>RangeRepresentation</mamber> may be included in a
+        <member>RangeRepresentation</member> may be included in a
         merged range rectangle spanning a bigger range.
      */
     boolean   AllowMerginigWithOtherRanges;

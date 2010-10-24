@@ -49,11 +49,11 @@
  */
 interface XDiagramPositioning : com::sun::star::uno::XInterface
 {
-    /** the diagram will be placed automtically
+    /** the diagram will be placed automatically
     */
     void setAutomaticDiagramPositioning();
 
-    /** @returns whether the diagram is placed automtically
+    /** @returns whether the diagram is placed automatically
     */
     boolean isAutomaticDiagramPositioning();
 

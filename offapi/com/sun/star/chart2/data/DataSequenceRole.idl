@@ -88,11 +88,11 @@ module data
           would be the closing course.</dd>
      <dt>values-min</dt>
       <dd>the minimum value of a series of values.  In a stock-chart
-          this would be the lowest course that occured during
+          this would be the lowest course that occurred during
           trading.</dd>
      <dt>values-max</dt>
       <dd>the maximum value of a series of values.  In a stock-chart
-          this would be the highest course that occured during
+          this would be the highest course that occurred during
           trading.</dd>
     </dl>
  */

@@ -104,10 +104,10 @@ interface XDataReceiver : ::com::sun::star::uno::XInterface
         data ranges used by the currently selected objects in the data
         receiver component.
 
-        <p>This is typically used by a spreadsheet to hightlight the
+        <p>This is typically used by a spreadsheet to highlight the
         ranges used by the currently selected object in a chart.</p>
 
-        <p>The range hightlighter is optional, i.e., this method may
+        <p>The range highlighter is optional, i.e., this method may
         return an empty object.</p>
      */
     XRangeHighlighter getRangeHighlighter();

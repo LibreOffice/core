@@ -41,7 +41,7 @@ module chart2
 module data
 {
 
-/** allows acces to a one-dimensional sequence of data.
+/** allows access to a one-dimensional sequence of data.
 
     <p>The data that is stored in this container may contain different
     types.</p>

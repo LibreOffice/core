@@ -40,7 +40,7 @@ module chart2
 module data
 {
 
-/** allows acces to a one-dimensional sequence of strings.
+/** allows access to a one-dimensional sequence of strings.
  */
 interface XTextualDataSequence : ::com::sun::star::uno::XInterface
 {

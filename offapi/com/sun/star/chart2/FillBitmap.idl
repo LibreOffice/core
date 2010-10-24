@@ -51,7 +51,7 @@ module star
 module chart2
 {
 
-/** This strucutre contains all properties of a bitmap when used as
+/** This structure contains all properties of a bitmap when used as
     FillStyle.
 
     @see com::sun::star::drawing::FillProperties

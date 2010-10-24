@@ -59,7 +59,7 @@ published constants ChartSolidType
 
     //-------------------------------------------------------------------------
 
-    /** pyramidial with a square as base
+    /** pyramidal with a square as base
      */
     const long PYRAMID = 3;
 
