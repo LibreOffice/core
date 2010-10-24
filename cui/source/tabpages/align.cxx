@@ -221,7 +221,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
         maLbFrameDir.Hide();
     }
 
-    // diese Page braucht ExchangeSupport
+    // This page needs ExchangeSupport.
     SetExchangeSupport();
 
     FreeResource();
