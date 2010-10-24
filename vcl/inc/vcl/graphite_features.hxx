@@ -46,7 +46,6 @@ namespace grutils
         static const char FEAT_PREFIX;
         static const char FEAT_SEPARATOR;
         static const char FEAT_ID_VALUE_SEPARATOR;
-        static const std::string ISO_LANG;
         GrFeatureParser(gr::Font & font, const std::string features, const std::string lang);
         GrFeatureParser(gr::Font & font, const std::string lang);
         GrFeatureParser(const GrFeatureParser & copy);
