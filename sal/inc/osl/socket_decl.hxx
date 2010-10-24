@@ -165,7 +165,7 @@ namespace osl
         */
         static inline sal_Int32 SAL_CALL getServicePort(
             const ::rtl::OUString& strServiceName,
-            const ::rtl::OUString & strProtocolName= ::rtl::OUString::createFromAscii( "tcp" ) );
+            const ::rtl::OUString & strProtocolName= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tcp")) );
     };
 
 
