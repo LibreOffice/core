@@ -503,7 +503,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 pStackData = aStack.GetStackData();
             }
             else {
-                ByteString sError( "Missplaced close tag: " );
+                ByteString sError( "Misplaced close tag: " );
                 ByteString sInFile(" in file ");
                 sError += sToken;
                 sError += sInFile;
