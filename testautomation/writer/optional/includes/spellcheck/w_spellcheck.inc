@@ -58,7 +58,7 @@ testcase tToolsSpellcheckWithShortcut
        exit sub
     end if
 
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
 
     printlog " Insert some faulty text"
@@ -149,7 +149,7 @@ testcase tToolsSpellcheckCorrect
     PrintLog "- Tools / Spellcheck without text"
 
     printlog " Open document where the formatting is set to the language we wish to test."
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
 
     printlog " Insert some faulty text"
@@ -284,7 +284,7 @@ testcase tToolsSpellcheck1Mistake
     end select
 
     printlog " Open document where the formatting is set to the language we wish to test."
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
 
     '/// Insert a sentence with one definded mistake and execute spellcheck ///
@@ -741,7 +741,7 @@ testcase tToolsSpellcheckAutomatic
 
     PrintLog "- Tools / Spellcheck / AutoSpellcheck"
     printlog " Open document where the formatting is set to the language we wish to test."
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
 
     '/// Enable Auto-Spellcheck in options
@@ -1288,7 +1288,7 @@ testcase tToolsThesaurus
     end select
 
     printlog "Open new preformatted-writerdocument"
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
 
     printlog "-  Thesaurus without a word"
@@ -1322,7 +1322,7 @@ testcase tToolsThesaurus
     wait 500
 
     printlog " Open new preformatted-document where the formatting is set to the language we wish to test."
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
 
     Call wTypeKeys sWordInitial
@@ -1444,7 +1444,7 @@ testcase tToolsThesaurusSynonyms
     end select
 
     printlog "Open new preformatted-writerdocument"
-    call hFileOpen (TheFile,false)
+    call hFileOpenLocally (TheFile,false)
     
     Call wTypeKeys sWordInitial
     Call wTypeKeys "<Shift Home>"
