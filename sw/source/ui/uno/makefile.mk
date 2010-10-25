@@ -55,7 +55,6 @@ SLO1FILES =  \
         $(SLO)$/dlelstnr.obj \
         $(SLO)$/unofreg.obj \
         $(SLO)$/SwXDocumentSettings.obj \
-        $(SLO)$/SwXPrintPreviewSettings.obj \
         $(SLO)$/SwXFilterOptions.obj\
         $(SLO)$/RefreshListenerContainer.obj \
         $(SLO)$/unomodule.obj \

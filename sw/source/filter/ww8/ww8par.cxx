@@ -1420,14 +1420,19 @@ void SwWW8ImplReader::ImportDop()
             uno::Reference<beans::XPropertySetInfo> xInfo =
                 xDocProps->getPropertySetInfo();
             sal_Bool bValue = false;
-            if (xInfo.is() &&
-                xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
+            if (xInfo.is())
             {
-                xDocProps->setPropertyValue(C2U("ApplyFormDesignMode"),
-                    cppu::bool2any(bValue));
+                if (xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
+                {
+                    xDocProps->setPropertyValue(C2U("ApplyFormDesignMode"),
+                                                cppu::bool2any(bValue));
+                }
             }
         }
     }
+
+    mpDocShell->SetModifyPasswordHash(pWDop->lKeyProtDoc);
+
     const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
     sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
     if (bUseEnhFields) {
@@ -1852,7 +1857,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
 
 bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
 {
-    return (mrReader.pWDop->fProtEnabled && !rSection.IsNotProtected());
+    return (mrReader.pWwFib->fReadOnlyRecommended && !rSection.IsNotProtected());
 }
 
 void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,

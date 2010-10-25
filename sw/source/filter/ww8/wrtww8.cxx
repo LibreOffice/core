@@ -257,11 +257,28 @@ static void WriteDop( WW8Export& rWrt )
     SwDocShell *pDocShell(rWrt.pDoc->GetDocShell());
     DBG_ASSERT(pDocShell, "no SwDocShell");
     uno::Reference<document::XDocumentProperties> xDocProps;
+    uno::Reference<beans::XPropertySet> xProps;
     if (pDocShell) {
+        uno::Reference<lang::XComponent> xModelComp(pDocShell->GetModel(),
+           uno::UNO_QUERY);
+        xProps = uno::Reference<beans::XPropertySet>(xModelComp,
+           uno::UNO_QUERY);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+            xModelComp, uno::UNO_QUERY_THROW);
         xDocProps = xDPS->getDocumentProperties();
         DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+
+        rDop.lKeyProtDoc = pDocShell->GetModifyPasswordHash();
+    }
+
+    if ((rWrt.pSepx && rWrt.pSepx->DocumentIsProtected()) ||
+        rDop.lKeyProtDoc != 0)
+    {
+        rDop.fProtEnabled =  1;
+    }
+    else
+    {
+        rDop.fProtEnabled = 0;
     }
 
     if (!xDocProps.is()) {
@@ -279,9 +296,8 @@ static void WriteDop( WW8Export& rWrt )
         Date aD3(uDT.Day, uDT.Month, uDT.Year);
         Time aT3(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
         rDop.dttmLastPrint = sw::ms::DateTime2DTTM(DateTime(aD3,aT3));
-    }
 
-    rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
+    }
 
 //  auch damit werden die DocStat-Felder in Kopf-/Fusszeilen nicht korrekt
 //  berechnet.
@@ -2456,7 +2472,7 @@ typedef ::std::deque<SwNode *> SwNodeDeque;
 void MSWordExportBase::WriteText()
 {
 // whoever has need of the missing function should go and implement it!
-// This damned piece of code always breaks builds...
+// This piece of code always breaks builds...
 //#ifdef DEBUG
 //    ::std::clog << "<WriteText>" << ::std::endl;
 //    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
@@ -2472,7 +2488,7 @@ void MSWordExportBase::WriteText()
         SwNode * pNd = pCurPam->GetNode();
 
 // whoever has need of the missing function should go and implement it!
-// This damned piece of code always breaks builds...
+// This piece of code always breaks builds...
 #if 0
 #ifdef DEBUG
         if (aNodeSet.find(pNd) == aNodeSet.end())
@@ -3788,8 +3804,10 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
 void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 {
+#if 0
 #ifdef DEBUG
     ::std::clog << "<OutWW8_SwStartNode>" << dbg_out(&rNode) << ::std::endl;
+#endif
 #endif
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo =

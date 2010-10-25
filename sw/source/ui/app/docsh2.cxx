@@ -119,7 +119,10 @@
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-
+#ifdef FUTURE_VBA
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#endif
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
@@ -137,7 +140,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using namespace ::sfx2;
-
 extern BOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 /*--------------------------------------------------------------------
@@ -188,6 +190,26 @@ void SwDocShell::DoFlushDocInfo()
     }
 }
 
+#ifdef FUTURE_VBA
+void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
+{
+    using namespace com::sun::star::script::vba::VBAEventId;
+    if ( rHint.ISA( SfxEventHint ) )
+    {
+        uno::Sequence< uno::Any > aArgs;
+        ULONG nEventId = ((SfxEventHint&)rHint).GetEventId();
+        switch( nEventId )
+        {
+            case SFX_EVENT_CREATEDOC:
+                xVbaEvents->processVbaEvent( DOCUMENT_NEW, aArgs );
+            break;
+            case SFX_EVENT_OPENDOC:
+                xVbaEvents->processVbaEvent( DOCUMENT_OPEN, aArgs );
+            break;
+        }
+    }
+}
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:   Benachrichtigung bei geaenderter DocInfo
@@ -201,6 +223,12 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 //      ASSERT( !this, "DocShell ist nicht richtig initialisiert!" );
         return ;
     }
+
+#ifdef FUTURE_VBA
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+    if( xVbaEvents.is() )
+        lcl_processCompatibleSfxHint( xVbaEvents, rHint );
+#endif
 
     USHORT nAction = 0;
     if( rHint.ISA(SfxSimpleHint) )
@@ -283,6 +311,18 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     if( TRUE == nRet ) //Unbedingt auf TRUE abfragen! (RET_NEWTASK)
         EndListening( *this );
 
+#ifdef FUTURE_VBA
+    if( pDoc && IsInPrepareClose() )
+    {
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+        if( xVbaEvents.is() )
+        {
+            using namespace com::sun::star::script::vba::VBAEventId;
+            uno::Sequence< uno::Any > aArgs;
+            xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
+        }
+    }
+#endif
     return nRet;
 }
 

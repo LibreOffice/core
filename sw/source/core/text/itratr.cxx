@@ -916,12 +916,20 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         while( nStop < nEnd && nStop < nNextChg )
         {
             cChar = m_Text.GetChar( nStop );
-            if( CH_TAB == cChar || CH_BREAK == cChar ||
-                CHAR_HARDBLANK == cChar || CHAR_HARDHYPHEN == cChar ||
+            if (
+                CH_TAB == cChar ||
+                CH_BREAK == cChar ||
+                CHAR_HARDBLANK == cChar ||
+                CHAR_HARDHYPHEN == cChar ||
                 CHAR_SOFTHYPHEN == cChar ||
-               ( CH_TXTATR_BREAKWORD == cChar ||  CH_TXTATR_INWORD == cChar ) &&
-               ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
+                (
+                  (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar) &&
+                  (0 == (pHint = aIter.GetAttr(nStop)))
+                )
+               )
+            {
                 break;
+            }
             else
                 ++nStop;
         }

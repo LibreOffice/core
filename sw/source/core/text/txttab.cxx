@@ -199,6 +199,10 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             }
             SwTwips nCount = nSearchPos;
 
+            //Minimum tab stop width is 1
+            if (nDefTabDist <= 0)
+                nDefTabDist = 1;
+
             nCount /= nDefTabDist;
             nNextPos = nCount < 0 || (!nCount && nSearchPos <= 0)? nCount * nDefTabDist :( nCount + 1 ) * nDefTabDist ;
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
