@@ -56,8 +56,7 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     sleep(1)
 
@@ -98,6 +97,7 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
     ' remove the word again from the dictionary
     delete_word_from_dictionary(sWrongWord,"IgnoreAllList")
 
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 endcase 'tiToolsSpellcheckCorrect
 
 '-------------------------------------------------------------------------------
@@ -124,9 +124,7 @@ testcase tiToolsSpellcheckCheck_Change
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -170,6 +168,7 @@ testcase tiToolsSpellcheckCheck_Change
     
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
 endcase 'tiToolsSpellcheckCheck_Change
 '-------------------------------------------------------------------------------
@@ -198,9 +197,7 @@ testcase tiToolsSpellcheckCheck_ChangeAll
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -216,6 +213,7 @@ testcase tiToolsSpellcheckCheck_ChangeAll
 
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
 endcase 'tiToolsSpellcheckCheck_ChangeAll
 
