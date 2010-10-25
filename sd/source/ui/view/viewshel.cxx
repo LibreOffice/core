@@ -85,6 +85,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
+#include <tools/diagnose_ex.h>
 
 // #96090#
 #include <svl/slstitm.hxx>
@@ -1166,11 +1167,18 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageUndoAction
-            // the nCount may have changed, so test GetUndoActionCount()
-            while(nNumber-- && pUndoManager->GetUndoActionCount())
+            try
             {
-                pUndoManager->Undo();
+                // #94637# when UndoStack is cleared by ModifyPageUndoAction
+                // the nCount may have changed, so test GetUndoActionCount()
+                while(nNumber-- && pUndoManager->GetUndoActionCount())
+                {
+                    pUndoManager->Undo();
+                }
+            }
+            catch( const Exception& e )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -1207,11 +1215,18 @@ void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageRedoAction
-            // the nCount may have changed, so test GetRedoActionCount()
-            while(nNumber-- && pUndoManager->GetRedoActionCount())
+            try
             {
-                pUndoManager->Redo();
+                // #94637# when UndoStack is cleared by ModifyPageRedoAction
+                // the nCount may have changed, so test GetRedoActionCount()
+                while(nNumber-- && pUndoManager->GetRedoActionCount())
+                {
+                    pUndoManager->Redo();
+                }
+            }
+            catch( const Exception& e )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
