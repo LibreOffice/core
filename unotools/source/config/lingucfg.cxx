@@ -847,13 +847,13 @@ BOOL SvtLinguConfigItem::IsReadOnly( INT32 nPropertyHandle ) const
 static SvtLinguConfigItem *pCfgItem = 0;
 static sal_Int32           nCfgItemRefCount = 0;
 
-static const rtl::OUString aG_SupportedDictionaryFormats( A2OU("SupportedDictionaryFormats") );
-static const rtl::OUString aG_Dictionaries( A2OU("Dictionaries") );
-static const rtl::OUString aG_Locations( A2OU("Locations") );
-static const rtl::OUString aG_Format( A2OU("Format") );
-static const rtl::OUString aG_Locales( A2OU("Locales") );
-static const rtl::OUString aG_DisabledDictionaries( A2OU("DisabledDictionaries") );
-static const rtl::OUString aG_LastActiveDictionaries( A2OU("LastActiveDictionaries") );
+static const rtl::OUString aG_SupportedDictionaryFormats(RTL_CONSTASCII_USTRINGPARAM("SupportedDictionaryFormats"));
+static const rtl::OUString aG_Dictionaries(RTL_CONSTASCII_USTRINGPARAM("Dictionaries"));
+static const rtl::OUString aG_Locations(RTL_CONSTASCII_USTRINGPARAM("Locations"));
+static const rtl::OUString aG_Format(RTL_CONSTASCII_USTRINGPARAM("Format"));
+static const rtl::OUString aG_Locales(RTL_CONSTASCII_USTRINGPARAM("Locales"));
+static const rtl::OUString aG_DisabledDictionaries(RTL_CONSTASCII_USTRINGPARAM("DisabledDictionaries"));
+static const rtl::OUString aG_LastActiveDictionaries(RTL_CONSTASCII_USTRINGPARAM("LastActiveDictionaries"));
 
 SvtLinguConfig::SvtLinguConfig()
 {
@@ -965,7 +965,7 @@ BOOL SvtLinguConfig::GetElementNamesFor(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
         rElementNames = xNA->getElementNames();
         bSuccess = true;
@@ -1009,7 +1009,7 @@ BOOL SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
         if (xNA->getByName( aG_SupportedDictionaryFormats ) >>= rFormatList)
@@ -1035,7 +1035,7 @@ void SvtLinguConfig::SetOrCreateSupportedDictionaryFormatsFor(
 
         uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
         uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA = GetOrCreateSetEntry_Impl( xNA, rSetEntry );
 
@@ -1061,11 +1061,11 @@ static uno::Reference< util::XMacroExpander > lcl_GetMacroExpander()
         {
             uno::Reference< uno::XComponentContext > xContext;
             uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))) >>= xContext;
             if ( xContext.is() )
             {
                 aG_xMacroExpander =  uno::Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.util.theMacroExpander"))),
                                         uno::UNO_QUERY );
                 xMacroExpander = aG_xMacroExpander;
             }
@@ -1125,7 +1125,7 @@ BOOL SvtLinguConfig::GetDictionaryEntry(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
@@ -1177,7 +1177,7 @@ void SvtLinguConfig::SetOrCreateDictionaryEntry(
     {
         uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
         uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
         xNA = GetOrCreateSetEntry_Impl( xNA, rNodeName );
 
@@ -1203,7 +1203,7 @@ uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA->getByName( aG_DisabledDictionaries ) >>= aResult;
     }
     catch (uno::Exception &)
@@ -1219,7 +1219,7 @@ void SvtLinguConfig::SetDisabledDictionaries(
     {
         uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
         uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         if (xNA->hasByName( aG_DisabledDictionaries ))
         {
             uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
@@ -1301,20 +1301,20 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
             if (xMgr.is())
             {
                 xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+                        xMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationProvider"))),
                         uno::UNO_QUERY_THROW ) ;
             }
 
             // get configuration update access
             beans::PropertyValue aValue;
-            aValue.Name  = A2OU( "nodepath" );
-            aValue.Value = uno::makeAny( A2OU("org.openoffice.Office.Linguistic") );
+            aValue.Name  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+            aValue.Value = uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic")));
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
             m_xMainUpdateAccess = uno::Reference< util::XChangesBatch >(
                     xConfigurationProvider->createInstanceWithArguments(
-                        A2OU( "com.sun.star.configuration.ConfigurationUpdateAccess" ), aProps ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"), aProps)),
                         uno::UNO_QUERY_THROW );
         }
         catch (uno::Exception &)
@@ -1334,16 +1334,16 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     try
     {
         uno::Reference< container::XNameAccess > xImagesNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xImagesNA.set( xImagesNA->getByName( A2OU("Images") ), uno::UNO_QUERY_THROW );
+        xImagesNA.set( xImagesNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Images"))), uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName( A2OU("ServiceNameEntries") ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceNameEntries"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rServiceImplName ), uno::UNO_QUERY_THROW );
-        uno::Any aAny( xNA->getByName( A2OU("VendorImagesNode") ) );
+        uno::Any aAny(xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VendorImagesNode"))));
         rtl::OUString aVendorImagesNode;
         if (aAny >>= aVendorImagesNode)
         {
             xNA = xImagesNA;
-            xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VendorImages"))), uno::UNO_QUERY_THROW );
             xNA.set( xNA->getByName( aVendorImagesNode ), uno::UNO_QUERY_THROW );
             aAny = xNA->getByName( rImageName );
             rtl::OUString aTmp;
@@ -1446,8 +1446,8 @@ bool SvtLinguConfig::HasVendorImages( const char *pImageName ) const
         try
         {
             uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( A2OU("Images") ), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Images")) ), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VendorImages")) ), uno::UNO_QUERY_THROW );
 
             uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
             sal_Int32 nVendors = aElementNames.getLength();
@@ -1486,8 +1486,8 @@ bool SvtLinguConfig::HasGrammarChecker() const
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("ServiceManager") ), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager")) ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GrammarCheckerList")) ), uno::UNO_QUERY_THROW );
 
         uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.getLength() > 0;
