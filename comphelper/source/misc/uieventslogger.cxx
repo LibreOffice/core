@@ -69,33 +69,33 @@ namespace
 {
     static void lcl_SetupOriginAppAbbr(map<OUString, OUString>& abbrs)
     {
-        abbrs[OUString::createFromAscii("com.sun.star.text.TextDocument")] = OUString::createFromAscii("W"); // Writer
-        abbrs[OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument")] = OUString::createFromAscii("C"); // Calc
-        abbrs[OUString::createFromAscii("com.sun.star.presentation.PresentationDocument")] = OUString::createFromAscii("I"); // Impress
-        abbrs[OUString::createFromAscii("com.sun.star.drawing.DrawingDocument")] = OUString::createFromAscii("D"); // Draw
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"))] = OUString(sal_Unicode('W')); // Writer
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"))] = OUString(sal_Unicode('C')); // Calc
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"))] = OUString(sal_Unicode('I')); // Impress
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"))] = OUString(sal_Unicode('D')); // Draw
     };
 
     static void lcl_SetupOriginWidgetAbbr(map<OUString,OUString>& abbrs)
     {
-        abbrs[OUString::createFromAscii("ButtonToolbarController")] = OUString::createFromAscii("0");
-        abbrs[OUString::createFromAscii("ComplexToolbarController")] = OUString::createFromAscii("1");
-        abbrs[OUString::createFromAscii("ControlMenuController")] = OUString::createFromAscii("2");
-        abbrs[OUString::createFromAscii("FontMenuController")] = OUString::createFromAscii("3");
-        abbrs[OUString::createFromAscii("FontSizeMenuController")] = OUString::createFromAscii("4");
-        abbrs[OUString::createFromAscii("FooterMenuController")] = OUString::createFromAscii("5");
-        abbrs[OUString::createFromAscii("GenericToolbarController")] = OUString::createFromAscii("6");
-        abbrs[OUString::createFromAscii("HeaderMenuController")] = OUString::createFromAscii("7");
-        abbrs[OUString::createFromAscii("LanguageSelectionMenuController")] = OUString::createFromAscii("8");
-        abbrs[OUString::createFromAscii("LangSelectionStatusbarController")] = OUString::createFromAscii("9");
-        abbrs[OUString::createFromAscii("MacrosMenuController")] = OUString::createFromAscii("10");
-        abbrs[OUString::createFromAscii("MenuBarManager")] = OUString::createFromAscii("11");
-        abbrs[OUString::createFromAscii("NewMenuController")] = OUString::createFromAscii("12");
-        abbrs[OUString::createFromAscii("ObjectMenuController")] = OUString::createFromAscii("13");
-        abbrs[OUString::createFromAscii("RecentFilesMenuController")] = OUString::createFromAscii("14");
-        abbrs[OUString::createFromAscii("ToolbarsMenuController")] = OUString::createFromAscii("15");
-        abbrs[OUString::createFromAscii("SfxToolBoxControl")] = OUString::createFromAscii("16");
-        abbrs[OUString::createFromAscii("SfxAsyncExec")] = OUString::createFromAscii("17");
-        abbrs[OUString::createFromAscii("AcceleratorExecute")] = OUString::createFromAscii("18");
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))] = OUString(sal_Unicode('0'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("ComplexToolbarController"))] = OUString(sal_Unicode('1'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("ControlMenuController"))] = OUString(sal_Unicode('2'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("FontMenuController"))] = OUString(sal_Unicode('3'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("FontSizeMenuController"))] = OUString(sal_Unicode('4'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("FooterMenuController"))] = OUString(sal_Unicode('5'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("GenericToolbarController"))] = OUString(sal_Unicode('6'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderMenuController"))] = OUString(sal_Unicode('7'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("LanguageSelectionMenuController"))] = OUString(sal_Unicode('8'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("LangSelectionStatusbarController"))] = OUString(sal_Unicode('9'));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("MacrosMenuController"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("10"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("MenuBarManager"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("11"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("NewMenuController"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("12"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectMenuController"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("13"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("RecentFilesMenuController"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("14"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("ToolbarsMenuController"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("15"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("16"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("SfxAsyncExec"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("17"));
+        abbrs[OUString(RTL_CONSTASCII_USTRINGPARAM("AcceleratorExecute"))] = OUString(RTL_CONSTASCII_USTRINGPARAM("18"));
     };
 }
 
@@ -184,33 +184,33 @@ namespace comphelper
 {
     // consts
     const sal_Int32 UiEventsLogger_Impl::COLUMNS = 9;
-    const OUString UiEventsLogger_Impl::CFG_ENABLED = OUString::createFromAscii("EnablingAllowed");
-    const OUString UiEventsLogger_Impl::CFG_IDLETIMEOUT = OUString::createFromAscii("IdleTimeout");
-    const OUString UiEventsLogger_Impl::CFG_LOGGING = OUString::createFromAscii("/org.openoffice.Office.Logging");
-    const OUString UiEventsLogger_Impl::CFG_LOGPATH = OUString::createFromAscii("LogPath");
-    const OUString UiEventsLogger_Impl::CFG_OOOIMPROVEMENT = OUString::createFromAscii("OOoImprovement");
+    const OUString UiEventsLogger_Impl::CFG_ENABLED(RTL_CONSTASCII_USTRINGPARAM("EnablingAllowed"));
+    const OUString UiEventsLogger_Impl::CFG_IDLETIMEOUT(RTL_CONSTASCII_USTRINGPARAM("IdleTimeout"));
+    const OUString UiEventsLogger_Impl::CFG_LOGGING(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Logging"));
+    const OUString UiEventsLogger_Impl::CFG_LOGPATH(RTL_CONSTASCII_USTRINGPARAM("LogPath"));
+    const OUString UiEventsLogger_Impl::CFG_OOOIMPROVEMENT(RTL_CONSTASCII_USTRINGPARAM("OOoImprovement"));
 
-    const OUString UiEventsLogger_Impl::CSSL_CSVFORMATTER = OUString::createFromAscii("com.sun.star.logging.CsvFormatter");
-    const OUString UiEventsLogger_Impl::CSSL_FILEHANDLER = OUString::createFromAscii("com.sun.star.logging.FileHandler");
-    const OUString UiEventsLogger_Impl::CSSL_LOGGERPOOL = OUString::createFromAscii("com.sun.star.logging.LoggerPool");
-    const OUString UiEventsLogger_Impl::CSSO_CORECONTROLLER = OUString::createFromAscii("com.sun.star.oooimprovement.CoreController");
-    const OUString UiEventsLogger_Impl::CSSU_PATHSUB = OUString::createFromAscii("com.sun.star.util.PathSubstitution");
+    const OUString UiEventsLogger_Impl::CSSL_CSVFORMATTER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.logging.CsvFormatter"));
+    const OUString UiEventsLogger_Impl::CSSL_FILEHANDLER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.logging.FileHandler"));
+    const OUString UiEventsLogger_Impl::CSSL_LOGGERPOOL(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.logging.LoggerPool"));
+    const OUString UiEventsLogger_Impl::CSSO_CORECONTROLLER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController"));
+    const OUString UiEventsLogger_Impl::CSSU_PATHSUB(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution"));
 
-    const OUString UiEventsLogger_Impl::ETYPE_DISPATCH = OUString::createFromAscii("dispatch");
-    const OUString UiEventsLogger_Impl::ETYPE_ROTATED = OUString::createFromAscii("rotated");
-    const OUString UiEventsLogger_Impl::ETYPE_VCL = OUString::createFromAscii("vcl");
+    const OUString UiEventsLogger_Impl::ETYPE_DISPATCH(RTL_CONSTASCII_USTRINGPARAM("dispatch"));
+    const OUString UiEventsLogger_Impl::ETYPE_ROTATED(RTL_CONSTASCII_USTRINGPARAM("rotated"));
+    const OUString UiEventsLogger_Impl::ETYPE_VCL(RTL_CONSTASCII_USTRINGPARAM("vcl"));
 
-    const OUString UiEventsLogger_Impl::LOGGERNAME = OUString::createFromAscii("org.openoffice.oooimprovement.Core.UiEventsLogger");
-    const OUString UiEventsLogger_Impl::LOGORIGINWIDGET = OUString::createFromAscii("comphelper.UiEventsLogger.LogOriginWidget");
-    const OUString UiEventsLogger_Impl::LOGORIGINAPP = OUString::createFromAscii("comphelper.UiEventsLogger.LogOriginApp");
+    const OUString UiEventsLogger_Impl::LOGGERNAME(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.oooimprovement.Core.UiEventsLogger"));
+    const OUString UiEventsLogger_Impl::LOGORIGINWIDGET(RTL_CONSTASCII_USTRINGPARAM("comphelper.UiEventsLogger.LogOriginWidget"));
+    const OUString UiEventsLogger_Impl::LOGORIGINAPP(RTL_CONSTASCII_USTRINGPARAM("comphelper.UiEventsLogger.LogOriginApp"));
 
-    const OUString UiEventsLogger_Impl::UNKNOWN_ORIGIN = OUString::createFromAscii("unknown origin");
-    const OUString UiEventsLogger_Impl::FN_CURRENTLOG = OUString::createFromAscii("Current");
-    const OUString UiEventsLogger_Impl::FN_ROTATEDLOG = OUString::createFromAscii("OOoImprove");
-    const OUString UiEventsLogger_Impl::LOGROTATE_EVENTNAME = OUString::createFromAscii("onOOoImprovementLogRotated");
+    const OUString UiEventsLogger_Impl::UNKNOWN_ORIGIN(RTL_CONSTASCII_USTRINGPARAM("unknown origin"));
+    const OUString UiEventsLogger_Impl::FN_CURRENTLOG(RTL_CONSTASCII_USTRINGPARAM("Current"));
+    const OUString UiEventsLogger_Impl::FN_ROTATEDLOG(RTL_CONSTASCII_USTRINGPARAM("OOoImprove"));
+    const OUString UiEventsLogger_Impl::LOGROTATE_EVENTNAME(RTL_CONSTASCII_USTRINGPARAM("onOOoImprovementLogRotated"));
 
-    const OUString UiEventsLogger_Impl::URL_UNO = OUString::createFromAscii(".uno:");
-    const OUString UiEventsLogger_Impl::URL_FILE = OUString::createFromAscii("file:");
+    const OUString UiEventsLogger_Impl::URL_UNO(RTL_CONSTASCII_USTRINGPARAM(".uno:"));
+    const OUString UiEventsLogger_Impl::URL_FILE(RTL_CONSTASCII_USTRINGPARAM("file:"));
 
 
     // public UiEventsLogger interface
@@ -532,10 +532,10 @@ namespace comphelper
         // It will call disposing and make sure we clear all our references
         {
             Reference<XTerminateListener> xCore(
-                sm->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.Core")),
+                sm->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.Core"))),
                 UNO_QUERY);
             Reference<XDesktop> xDesktop(
-                sm->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+                sm->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
                 UNO_QUERY);
             if(!(xCore.is() && xDesktop.is()))
             {
@@ -568,15 +568,15 @@ namespace comphelper
         if(m_Formatter.is() && m_LogHandler.is() && m_Logger.is())
         {
             Sequence<OUString> columns = Sequence<OUString>(COLUMNS);
-            columns[0] = OUString::createFromAscii("eventtype");
-            columns[1] = OUString::createFromAscii("originapp");
-            columns[2] = OUString::createFromAscii("originwidget");
-            columns[3] = OUString::createFromAscii("uno url");
-            columns[4] = OUString::createFromAscii("parent id");
-            columns[5] = OUString::createFromAscii("window type");
-            columns[6] = OUString::createFromAscii("id");
-            columns[7] = OUString::createFromAscii("method");
-            columns[8] = OUString::createFromAscii("parameter");
+            columns[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("eventtype"));
+            columns[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("originapp"));
+            columns[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("originwidget"));
+            columns[3] = OUString(RTL_CONSTASCII_USTRINGPARAM("uno url"));
+            columns[4] = OUString(RTL_CONSTASCII_USTRINGPARAM("parent id"));
+            columns[5] = OUString(RTL_CONSTASCII_USTRINGPARAM("window type"));
+            columns[6] = OUString(RTL_CONSTASCII_USTRINGPARAM("id"));
+            columns[7] = OUString(RTL_CONSTASCII_USTRINGPARAM("method"));
+            columns[8] = OUString(RTL_CONSTASCII_USTRINGPARAM("parameter"));
             m_Formatter->setColumnnames(columns);
             m_LogHandler->setFormatter(Reference<XLogFormatter>(m_Formatter, UNO_QUERY));
             m_Logger->setLevel(LogLevel::ALL);
@@ -644,7 +644,7 @@ namespace comphelper
     {
         Reference<XMultiServiceFactory> sm = getProcessServiceFactory();
         Reference<XCoreController> core_c(
-            sm->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            sm->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController"))),
             UNO_QUERY);
         if(!core_c.is()) return false;
         return core_c->enablingUiEventsLoggerAllowed(1);
