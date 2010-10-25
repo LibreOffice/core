@@ -262,7 +262,7 @@ namespace sfx2
 
         aContextVisibilities.push( i_hidden );
 
-        rAntiImpl.impl_notify( i_title, i_hidden ? &XUndoManagerListener::enteredHiddenUndoContext : &XUndoManagerListener::enteredUndoContext, aGuard );
+        rAntiImpl.impl_notify( i_title, i_hidden ? &XUndoManagerListener::enteredHiddenContext : &XUndoManagerListener::enteredContext, aGuard );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ namespace sfx2
         if ( bAPIActionRunning )
             return;
 
-        rAntiImpl.impl_notify( i_comment, &XUndoManagerListener::enteredUndoContext );
+        rAntiImpl.impl_notify( i_comment, &XUndoManagerListener::enteredContext );
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ namespace sfx2
         if ( bAPIActionRunning )
             return;
 
-        rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::leftUndoContext );
+        rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::leftContext );
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ namespace sfx2
         if ( bAPIActionRunning )
             return;
 
-        rAntiImpl.impl_notify( ::rtl::OUString(), &XUndoManagerListener::leftHiddenUndoContext );
+        rAntiImpl.impl_notify( ::rtl::OUString(), &XUndoManagerListener::leftHiddenContext );
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ namespace sfx2
         if ( bAPIActionRunning )
             return;
 
-        rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::cancelledUndoContext );
+        rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::cancelledContext );
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -482,12 +482,12 @@ namespace sfx2
         }
 
         if ( nContextElements == 0 )
-            impl_notify( ::rtl::OUString(), &XUndoManagerListener::cancelledUndoContext, aGuard );
+            impl_notify( ::rtl::OUString(), &XUndoManagerListener::cancelledContext, aGuard );
             // TODO: obtain the title of the context which has just been left
         else if ( isHiddenContext )
-            impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftHiddenUndoContext, aGuard );
+            impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftHiddenContext, aGuard );
         else
-            impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftUndoContext, aGuard );
+            impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftContext, aGuard );
     }
 
     //------------------------------------------------------------------------------------------------------------------

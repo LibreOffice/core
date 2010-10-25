@@ -139,21 +139,21 @@ public class UndoManager
             m_redoWasCleared = true;
         }
 
-        public void enteredUndoContext( UndoManagerEvent i_event )
+        public void enteredContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.push( i_event.UndoActionTitle );
             assertEquals( "different opinions on the context nesting level (after entering)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
         }
 
-        public void enteredHiddenUndoContext( UndoManagerEvent i_event )
+        public void enteredHiddenContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.push( i_event.UndoActionTitle );
             assertEquals( "different opinions on the context nesting level (after entering hidden)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
         }
 
-        public void leftUndoContext( UndoManagerEvent i_event )
+        public void leftContext( UndoManagerEvent i_event )
         {
             assertEquals( "nested undo context descriptions do not match", m_activeUndoContexts.pop(), i_event.UndoActionTitle );
             assertEquals( "different opinions on the context nesting level (after leaving)",
@@ -161,15 +161,15 @@ public class UndoManager
             m_leftContext = true;
         }
 
-        public void leftHiddenUndoContext( UndoManagerEvent i_event )
+        public void leftHiddenContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.pop();
             assertEquals( "different opinions on the context nesting level (after leaving)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
-            m_leftHideenContext = true;
+            m_leftHiddenContext = true;
         }
 
-        public void cancelledUndoContext( UndoManagerEvent i_event )
+        public void cancelledContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.pop();
             assertEquals( "different opinions on the context nesting level (after cancelling)",
@@ -192,7 +192,7 @@ public class UndoManager
         int     getUndoContextDepth() { return m_activeUndoContexts.size(); }
         boolean isDisposed() { return m_isDisposed; }
         boolean contextLeft() { return m_leftContext; }
-        boolean hiddenContextLeft() { return m_leftHideenContext; }
+        boolean hiddenContextLeft() { return m_leftHiddenContext; }
         boolean contextCancelled() { return m_cancelledContext; }
         boolean stackWasCleared() { return m_wasCleared; }
         boolean redoStackWasCleared() { return m_redoWasCleared; }
@@ -203,7 +203,7 @@ public class UndoManager
             m_activeUndoContexts.clear();
             m_mostRecentlyAddedAction = m_mostRecentlyUndone = m_mostRecentlyRedone = null;
             // m_isDisposed is not cleared, intentionally
-            m_leftContext = m_leftHideenContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = false;
+            m_leftContext = m_leftHiddenContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = false;
         }
 
         private int     m_undoActionsAdded = 0;
@@ -211,7 +211,7 @@ public class UndoManager
         private int     m_redoCount = 0;
         private boolean m_isDisposed = false;
         private boolean m_leftContext = false;
-        private boolean m_leftHideenContext = false;
+        private boolean m_leftHiddenContext = false;
         private boolean m_cancelledContext = false;
         private boolean m_wasCleared = false;
         private boolean m_redoWasCleared = false;
