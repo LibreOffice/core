@@ -909,11 +909,8 @@ rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "configmgr Access has no service implementation name")),
-        static_cast< cppu::OWeakObject * >(this));
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice-configmgr::Access"));
 }
 
 sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
