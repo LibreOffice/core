@@ -290,7 +290,7 @@ testcase tUndoSpellcheck
     '/// <B>Spellcheck(Autocheck/Spellcheck)</B>
     printlog "- Spellcheck: Autocheck"
     '/// new document ///
-    hfileOpen (gTesttoolpath + "writer\optional\input\undo\spellcheck_undo.odt")
+    Call hfileOpenLocally (gTesttoolpath + "writer\optional\input\undo\spellcheck_undo.odt")
     
     '/// Type "This is a testp<End>"
     Call wTypeKeys ( "<End>" )  'This is a testp
