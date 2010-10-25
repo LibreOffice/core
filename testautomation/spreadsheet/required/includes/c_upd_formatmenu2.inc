@@ -29,23 +29,6 @@
 '*
 '* short description : Resource Test - Format Menu Part II
 '*
-'************************************************************************
-'*
-' #1 tFormatPrintRanges
-' #1 tFormatCharacter
-' #1 tFormatParagraph
-' #1 tFormatChangeCase
-' #1 tFormatStyles
-' #1 tFormatAutoFormat
-' #1 tFormatConditionalFormatting
-' #1 tFormatAnchor
-' #1 tFormatAlignment
-' #1 tFormatArrange
-' #1 tFormatFlip
-' #1 tFormatGroup
-' #0 tFormatControl
-
-'*
 '\***********************************************************************
 
 sub c_upd_formatmenu2
@@ -664,7 +647,7 @@ testcase tFormatAlignment
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
-    hFileDelete ( gLastWorkFile )
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -768,7 +751,7 @@ testcase tFormatGroup
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
-    hFileDelete ( gLastWorkFile )
+    hFileDelete( gLastWorkFile )
 
 endcase
 

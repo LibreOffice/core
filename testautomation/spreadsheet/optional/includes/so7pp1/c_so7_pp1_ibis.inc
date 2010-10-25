@@ -40,7 +40,8 @@
 testcase tIBIS111099
 
     Dim testdoc as string
-    testdoc = convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls")
+    testdoc = convertpath( gTesttoolpath & "spreadsheet\optional\input\111099.xls" )
+
     printlog " Open the test document"
     hFileOpenLocally(testdoc)
 
@@ -67,7 +68,7 @@ testcase tIBIS111158
 
     Dim testdoc as string
     Dim testString as string
-    testdoc = convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls")
+    testdoc = convertpath( gTesttoolpath & "spreadsheet\optional\input\111158.xls" )
 
     printlog " Open the test document"
     hFileOpenLocally(testdoc)
