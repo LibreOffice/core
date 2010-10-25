@@ -41,6 +41,8 @@
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <stack>
+
 //......................................................................................................................
 namespace sfx2
 {
@@ -156,6 +158,7 @@ namespace sfx2
         ::svl::IUndoManager*                pUndoManager;
         DocumentUndoManager&                rAntiImpl;
         bool                                bAPIActionRunning;
+        ::std::stack< bool >                aContextVisibilities;
 
         DocumentUndoManager_Impl( DocumentUndoManager& i_antiImpl )
             :aUndoListeners( i_antiImpl.getMutex() )
@@ -201,6 +204,7 @@ namespace sfx2
             pUndoManager = NULL;
         }
 
+        // SfxUndoListener
         virtual void actionUndone( SfxUndoAction& i_action );
         virtual void actionRedone( SfxUndoAction& i_action );
         virtual void undoActionAdded( SfxUndoAction& i_action );
@@ -208,8 +212,12 @@ namespace sfx2
         virtual void clearedRedo();
         virtual void listActionEntered( const String& i_comment );
         virtual void listActionLeft();
+        virtual void listActionLeftAndMerged();
         virtual void listActionCancelled();
         virtual void undoManagerDying();
+
+        // public operations
+        void enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden );
     };
 
      //==================================================================================================================
@@ -228,9 +236,36 @@ namespace sfx2
                 pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDocShell );
             }
         }
+
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    void DocumentUndoManager_Impl::enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden )
+    {
+        SfxModelGuard aGuard( rAntiImpl );
+
+        ::svl::IUndoManager& rUndoManager = getUndoManager();
+        if ( !rUndoManager.IsUndoEnabled() )
+            // ignore this request if the manager is locked
+            return;
+
+        if ( i_hidden && ( rUndoManager.GetUndoActionCount() == 0 ) )
+            throw InvalidStateException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "can't enter a hidden context without a previous Undo action" ) ),
+                static_cast< XUndoManager* >( &rAntiImpl )
+            );
+
+        {
+            ::comphelper::FlagGuard aNotificationGuard( bAPIActionRunning );
+            rUndoManager.EnterListAction( i_title, ::rtl::OUString() );
+        }
+
+        aContextVisibilities.push( i_hidden );
+
+        rAntiImpl.impl_notify( i_title, i_hidden ? &XUndoManagerListener::enteredHiddenUndoContext : &XUndoManagerListener::enteredUndoContext, aGuard );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager_Impl::actionUndone( SfxUndoAction& i_action )
     {
         if ( bAPIActionRunning )
@@ -291,6 +326,15 @@ namespace sfx2
             return;
 
         rAntiImpl.impl_notify( pUndoManager->GetUndoActionComment(), &XUndoManagerListener::leftUndoContext );
+    }
+
+     //------------------------------------------------------------------------------------------------------------------
+    void DocumentUndoManager_Impl::listActionLeftAndMerged()
+    {
+        if ( bAPIActionRunning )
+            return;
+
+        rAntiImpl.impl_notify( ::rtl::OUString(), &XUndoManagerListener::leftHiddenUndoContext );
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -391,7 +435,7 @@ namespace sfx2
         EventObject aEvent;
         aEvent.Source = static_cast< XUndoManager* >( this );
 
-        // TODO: the same comment as in the other impl_notify applies here ...
+        // TODO: the same comment as in the other impl_notify, regarding SM locking applies here ...
 
         m_pImpl->aUndoListeners.notifyEach( i_notificationMethod, aEvent );
     }
@@ -399,32 +443,13 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::enterUndoContext( const ::rtl::OUString& i_title ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
-
-        ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
-        if ( !rUndoManager.IsUndoEnabled() )
-            // ignore this request if the manager is locked
-            return;
-
-        {
-            ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
-            rUndoManager.EnterListAction( i_title, ::rtl::OUString() );
-        }
-
-        impl_notify( i_title, &XUndoManagerListener::enteredUndoContext, aGuard );
+        m_pImpl->enterUndoContext( i_title, false );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::enterHiddenUndoContext(  ) throw (InvalidStateException, RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
-
-        ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
-        if ( !rUndoManager.IsUndoEnabled() )
-            // ignore this request if the manager is locked
-            return;
-
-        // TODO: place your code here
+        m_pImpl->enterUndoContext( ::rtl::OUString(), true );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -444,14 +469,23 @@ namespace sfx2
             );
 
         USHORT nContextElements = 0;
+        bool isHiddenContext = false;
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
-            nContextElements = rUndoManager.LeaveListAction();
+
+            isHiddenContext = m_pImpl->aContextVisibilities.top();
+            m_pImpl->aContextVisibilities.pop();
+            if ( isHiddenContext )
+                nContextElements = rUndoManager.LeaveAndMergeListAction();
+            else
+                nContextElements = rUndoManager.LeaveListAction();
         }
 
         if ( nContextElements == 0 )
             impl_notify( ::rtl::OUString(), &XUndoManagerListener::cancelledUndoContext, aGuard );
             // TODO: obtain the title of the context which has just been left
+        else if ( isHiddenContext )
+            impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftHiddenUndoContext, aGuard );
         else
             impl_notify( rUndoManager.GetUndoActionComment(0), &XUndoManagerListener::leftUndoContext, aGuard );
     }

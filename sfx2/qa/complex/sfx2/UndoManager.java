@@ -161,6 +161,14 @@ public class UndoManager
             m_leftContext = true;
         }
 
+        public void leftHiddenUndoContext( UndoManagerEvent i_event )
+        {
+            m_activeUndoContexts.pop();
+            assertEquals( "different opinions on the context nesting level (after leaving)",
+                m_activeUndoContexts.size(), i_event.UndoContextDepth );
+            m_leftHideenContext = true;
+        }
+
         public void cancelledUndoContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.pop();
@@ -184,6 +192,7 @@ public class UndoManager
         int     getUndoContextDepth() { return m_activeUndoContexts.size(); }
         boolean isDisposed() { return m_isDisposed; }
         boolean contextLeft() { return m_leftContext; }
+        boolean hiddenContextLeft() { return m_leftHideenContext; }
         boolean contextCancelled() { return m_cancelledContext; }
         boolean stackWasCleared() { return m_wasCleared; }
         boolean redoStackWasCleared() { return m_redoWasCleared; }
@@ -194,7 +203,7 @@ public class UndoManager
             m_activeUndoContexts.clear();
             m_mostRecentlyAddedAction = m_mostRecentlyUndone = m_mostRecentlyRedone = null;
             // m_isDisposed is not cleared, intentionally
-            m_leftContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = false;
+            m_leftContext = m_leftHideenContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = false;
         }
 
         private int     m_undoActionsAdded = 0;
@@ -202,6 +211,7 @@ public class UndoManager
         private int     m_redoCount = 0;
         private boolean m_isDisposed = false;
         private boolean m_leftContext = false;
+        private boolean m_leftHideenContext = false;
         private boolean m_cancelledContext = false;
         private boolean m_wasCleared = false;
         private boolean m_redoWasCleared = false;
@@ -255,6 +265,7 @@ public class UndoManager
         impl_testContextHandling( undoManager, listener );
         impl_testStackHandling( undoManager, listener );
         impl_testClearance( undoManager, listener );
+        impl_testHiddenContexts( test, undoManager, listener );
 
         // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
@@ -373,7 +384,6 @@ public class UndoManager
         // check the actions are disposed when the stacks are cleared
         i_undoManager.clear();
         assertTrue( action1.disposed() && action2.disposed() );
-
     }
 
     private void impl_testLocking( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
@@ -570,6 +580,88 @@ public class UndoManager
         i_undoManager.addUndoAction( new CustomUndoAction() );
         assertFalse( i_undoManager.isRedoPossible() );
         assertTrue( "implicit clearance of the Redo stack does not notify listeners", i_listener.redoStackWasCleared() );
+    }
+
+    private void impl_testHiddenContexts( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    {
+        i_undoManager.clear();
+        i_listener.reset();
+
+        // entering a hidden context should be rejected if the stack is empty
+        assertFalse( "precondition for testing hidden undo contexts not met", i_undoManager.isUndoPossible() );
+        boolean caughtExpected = false;
+        try { i_undoManager.enterHiddenUndoContext(); }
+        catch ( final com.sun.star.util.InvalidStateException e ) { caughtExpected = true; }
+        assertTrue( "entering hidden contexts should be denied on an empty stack", caughtExpected );
+
+        // but it should be allowed if the context is not empty
+        final CustomUndoAction undoAction0 = new CustomUndoAction( "Step 0" );
+        i_undoManager.addUndoAction( undoAction0 );
+        final CustomUndoAction undoAction1 = new CustomUndoAction( "Step 1" );
+        i_undoManager.addUndoAction( undoAction1 );
+        i_undoManager.enterHiddenUndoContext();
+        final CustomUndoAction hiddenUndoAction = new CustomUndoAction( "hidden context action" );
+        i_undoManager.addUndoAction( hiddenUndoAction );
+        i_undoManager.leaveUndoContext();
+        assertFalse( "leaving a hidden should not call |leftUndocontext|", i_listener.contextLeft() );
+        assertTrue( "leaving a hidden does not call |leftHiddenUndocontext|", i_listener.hiddenContextLeft() );
+        assertFalse( "leaving a non-empty hidden context claims to have cancelled it", i_listener.contextCancelled() );
+        assertEquals( "leaving a hidden context is not properly notified", 0, i_listener.getUndoContextDepth() );
+        assertArrayEquals( "unexpected Undo stack after leaving a hidden context",
+            new String[] { undoAction1.getTitle(), undoAction0.getTitle() },
+            i_undoManager.getAllUndoActionTitles() );
+
+        // and then calling |undo| once should not only undo everything in the hidden context, but also
+        // the previous action - but not more
+        i_undoManager.undo();
+        assertTrue( "Undo after leaving a hidden context does not actually undo the context actions",
+            hiddenUndoAction.undoCalled() );
+        assertTrue( "Undo after leaving a hidden context does not undo the predecessor action",
+            undoAction1.undoCalled() );
+        assertFalse( "Undo after leaving a hidden context undoes too much",
+            undoAction0.undoCalled() );
+
+        // leaving an empty hidden context should call the proper notification method
+        i_listener.reset();
+        i_undoManager.enterHiddenUndoContext();
+        i_undoManager.leaveUndoContext();
+        assertFalse( i_listener.contextLeft() );
+        assertFalse( i_listener.hiddenContextLeft() );
+        assertTrue( i_listener.contextCancelled() );
+
+        // nesting hidden and normal contexts
+        i_listener.reset();
+        i_undoManager.clear();
+        final CustomUndoAction action0 = new CustomUndoAction( "action 0" );
+        i_undoManager.addUndoAction( action0 );
+        i_undoManager.enterUndoContext( "context 1" );
+        final CustomUndoAction action1 = new CustomUndoAction( "action 1" );
+        i_undoManager.addUndoAction( action1 );
+        i_undoManager.enterHiddenUndoContext();
+        final CustomUndoAction action2 = new CustomUndoAction( "action 2" );
+        i_undoManager.addUndoAction( action2 );
+        i_undoManager.enterUndoContext( "context 2" );
+        // is entering a hidden context rejected even at the nesting level > 0 (the above test was for nesting level == 0)?
+        caughtExpected = false;
+        try { i_undoManager.enterHiddenUndoContext(); }
+        catch( final InvalidStateException e ) { caughtExpected = true; }
+        assertTrue( "at a nesting level > 0, denied hidden contexts does not work as expected", caughtExpected );
+        final CustomUndoAction action3 = new CustomUndoAction( "action 3" );
+        i_undoManager.addUndoAction( action3 );
+        i_undoManager.enterHiddenUndoContext();
+        assertEquals( "mixed hidden/normal context do are not properly notified", 4, i_listener.getUndoContextDepth() );
+        i_undoManager.leaveUndoContext();
+        assertTrue( "the left context was empty - why wasn't 'cancelled' notified?", i_listener.contextCancelled() );
+        assertFalse( i_listener.contextLeft() );
+        assertFalse( i_listener.hiddenContextLeft() );
+        i_undoManager.leaveUndoContext();
+        i_undoManager.leaveUndoContext();
+        i_undoManager.leaveUndoContext();
+        i_undoManager.undo();
+        assertFalse( "one action too much has been undone", action0.undoCalled() );
+        assertTrue( action1.undoCalled() );
+        assertTrue( action2.undoCalled() );
+        assertTrue( action3.undoCalled() );
     }
 
     private XComponentContext getContext()

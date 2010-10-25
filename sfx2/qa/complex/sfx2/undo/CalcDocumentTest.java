@@ -51,7 +51,7 @@ public class CalcDocumentTest extends DocumentTestBase
     public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
     {
         final XCell cellA1 = getCellA1();
-        assertEquals( "cell A1 didn't restore its value", INIT_VALUE, cellA1.getValue(), 0 );
+        assertEquals( "cell A1 doesn't have its initial value", INIT_VALUE, cellA1.getValue(), 0 );
 
         XCellRange range = UnoRuntime.queryInterface( XCellRange.class,
             ((SpreadsheetDocument)m_document).getSheet(0) );
