@@ -84,7 +84,7 @@ namespace io_acceptor
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 
         // make it unique
-        m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
+        m_sDescription += OUString(RTL_CONSTASCII_USTRINGPARAM(",uniqueValue="));
         m_sDescription += OUString::valueOf(
             sal::static_int_cast<sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(&m_pipe)),
@@ -167,7 +167,7 @@ namespace io_acceptor
         m_pipe = Pipe( m_sPipeName.pData , osl_Pipe_CREATE , osl::Security() );
         if( ! m_pipe.is() )
         {
-            OUString error = OUString::createFromAscii( "io.acceptor: Couldn't setup pipe " );
+            OUString error = OUString(RTL_CONSTASCII_USTRINGPARAM("io.acceptor: Couldn't setup pipe "));
             error += m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > () );
         }
@@ -182,7 +182,7 @@ namespace io_acceptor
         }
         if( ! pipe.is() )
         {
-            OUString error = OUString::createFromAscii( "io.acceptor: pipe already closed" );
+            OUString error = OUString(RTL_CONSTASCII_USTRINGPARAM("io.acceptor: pipe already closed"));
             error += m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > () );
         }
@@ -202,7 +202,7 @@ namespace io_acceptor
         }
         else
         {
-            OUString error = OUString::createFromAscii( "io.acceptor: Couldn't setup pipe " );
+            OUString error = OUString(RTL_CONSTASCII_USTRINGPARAM("io.acceptor: Couldn't setup pipe "));
             error += m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > ());
         }

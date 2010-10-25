@@ -119,11 +119,11 @@ namespace stoc_connector
                 }
                 else
                 {
-                    OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to pipe " );
+                    OUString sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Connector : couldn't connect to pipe "));
                     sMessage += aName;
-                    sMessage += OUString::createFromAscii( "(" );
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM("("));
                     sMessage += OUString::valueOf( (sal_Int32 ) pConn->m_pipe.getError() );
-                    sMessage += OUString::createFromAscii( ")" );
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                     delete pConn;
                     throw NoConnectException( sMessage ,Reference< XInterface > () );
                 }
@@ -153,10 +153,10 @@ namespace stoc_connector
                 SocketAddr AddrTarget( aHost.pData, nPort );
                 if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
                 {
-                    OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to socket (" );
+                    OUString sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Connector : couldn't connect to socket ("));
                     OUString sError = pConn->m_socket.getErrorAsString();
                     sMessage += sError;
-                    sMessage += OUString::createFromAscii( ")" );
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                     delete pConn;
                     throw NoConnectException( sMessage, Reference < XInterface > () );
                 }
@@ -211,7 +211,7 @@ namespace stoc_connector
             if( !pNames )
             {
                 static Sequence< OUString > seqNames(1);
-                seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+                seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
                 pNames = &seqNames;
             }
         }

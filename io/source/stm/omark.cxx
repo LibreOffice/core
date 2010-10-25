@@ -730,7 +730,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( nBytesToSkip < 0 )
         throw BufferSizeExceededException(
-            ::rtl::OUString::createFromAscii( "precondition not met: XInputStream::skipBytes: non-negative integer required!" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("precondition not met: XInputStream::skipBytes: non-negative integer required!")),
             *this
         );
 

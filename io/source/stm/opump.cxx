@@ -280,7 +280,7 @@ void Pump::run()
             if( ! rInput.is() )
             {
                 NotConnectedException exception(
-                    OUString::createFromAscii( "no input stream set" ) , Reference<XInterface>((OWeakObject*)this) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("no input stream set")) , Reference<XInterface>((OWeakObject*)this) );
                 throw exception;
             }
             Sequence< sal_Int8 > aData;
@@ -289,7 +289,7 @@ void Pump::run()
                 if( ! rOutput.is() )
                 {
                     NotConnectedException exception(
-                        OUString::createFromAscii( "no output stream set" ) , Reference<XInterface>( (OWeakObject*)this) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("no output stream set")) , Reference<XInterface>( (OWeakObject*)this) );
                     throw exception;
                 }
                 rOutput->writeBytes( aData );
