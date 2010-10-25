@@ -178,7 +178,7 @@ namespace svl
         virtual void            Clear() = 0;
         virtual void            ClearRedo() = 0;
 
-        /** detrmines whether an Undo or Redo is currently running
+        /** determines whether an Undo or Redo is currently running
         */
         virtual bool            IsDoing() const = 0;
 
