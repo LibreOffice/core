@@ -42,7 +42,7 @@ module com { module sun { module star { module document {
  */
 interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 {
-    /** is called when an Undo action is added to the Undo stack.
+    /** is called when an undo action is added to the undo stack.
 
         <p>Note that the action must not necessarily be the new top element of the stack: In case there's an
         open Undo context, <member>UndoManagerEvent::UndoContextDepth</member> will be greater <code>0</code>,
@@ -52,13 +52,13 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     */
     void    undoActionAdded( [in] UndoManagerEvent i_event );
 
-    /** is called when the top-most action of the Undo stack has been undone.
+    /** is called when the top-most action of the undo stack has been undone.
 
         @see XUndoManager::undo
     */
     void    actionUndone( [in] UndoManagerEvent i_event );
 
-    /** is called when the top-most action of the Redo stack has been redone.
+    /** is called when the top-most action of the Redo stack has been re-applied.
 
         @see XUndoManager::redo
     */
@@ -84,7 +84,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::enterUndoContext
     */
-    void    enteredUndoContext( [in] UndoManagerEvent i_event );
+    void    enteredContext( [in] UndoManagerEvent i_event );
 
     /** is called when a new hidden Undo context has been entered.
 
@@ -94,7 +94,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::enterUndoContext
     */
-    void    enteredHiddenUndoContext( [in] UndoManagerEvent i_event );
+    void    enteredHiddenContext( [in] UndoManagerEvent i_event );
 
     /** is called when an Undo context has been left.
 
@@ -104,9 +104,9 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::leaveUndoContext
         @see leftHiddenUndocontext
-        @see cancelledUndoContext
+        @see cancelledContext
     */
-    void    leftUndoContext( [in] UndoManagerEvent i_event );
+    void    leftContext( [in] UndoManagerEvent i_event );
 
     /** is calledn when a hidden Undo context has been left.
 
@@ -114,21 +114,21 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         a title.</p>
 
         @see XUndoManager::leaveHiddenUndoContext
-        @see leftUndoContext
-        @see cancelledUndoContext
+        @see leftContext
+        @see cancelledContext
     */
-    void    leftHiddenUndoContext( [in] UndoManagerEvent i_event );
+    void    leftHiddenContext( [in] UndoManagerEvent i_event );
 
     /** is called when an Undo context has been left, but no actions have been added within this context.
 
-        <p>In such a case, the context which has just been left will not contribute to the Undo stack, but instead
+        <p>In such a case, the context which has just been left will not contribute to the undo stack, but instead
         be silently removed.</p>
 
         @see XUndoManager::leaveUndoContext
-        @see leftUndoContext
-        @see leftHiddenUndocontext
+        @see leftContext
+        @see leftHiddenContext
     */
-    void    cancelledUndoContext( [in] UndoManagerEvent i_event );
+    void    cancelledContext( [in] UndoManagerEvent i_event );
 };
 
 //==================================================================================================================
