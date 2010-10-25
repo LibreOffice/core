@@ -223,7 +223,7 @@ namespace formula
         const String    aTitle1;
         const String    aTitle2;
         const String    aTxtEnd;
-        const String    aTxtOk;     // hinter aBtnEnd
+        const String    aTxtOk;     // behind aBtnEnd
         FormulaHelper
                         m_aFormulaHelper;
 
@@ -295,9 +295,9 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     pMEdit          (NULL),
     bUserMatrixFlag (FALSE),
     //
-    aTitle1         ( ModuleRes( STR_TITLE1 ) ),        // lokale Resource
-    aTitle2         ( ModuleRes( STR_TITLE2 ) ),        // lokale Resource
-    aTxtEnd         ( ModuleRes( STR_END ) ),           // lokale Resource
+    aTitle1         ( ModuleRes( STR_TITLE1 ) ),        // local resource
+    aTitle2         ( ModuleRes( STR_TITLE2 ) ),        // local resource
+    aTxtEnd         ( ModuleRes( STR_END ) ),           // local resource
     aTxtOk          ( aBtnEnd.GetText() ),
     m_aFormulaHelper(_pFunctionMgr),
     //
@@ -332,7 +332,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aTabCtrl.SetTabPage( TP_FUNCTION, pFuncPage);
     aTabCtrl.SetTabPage( TP_STRUCT, pStructPage);
 
-    nOldHelp = pParent->GetHelpId();                // HelpId aus Resource immer fuer "Seite 1"
+    nOldHelp = pParent->GetHelpId();                // HelpId from resource always for "Page 1"
     nOldUnique = pParent->GetUniqueId();
 
     aFtResult.Show( _bSupportResult );
@@ -376,10 +376,10 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
     {
         aTimer.SetTimeoutHdl(Link());
         aTimer.Stop();
-    } // if(aTimer.IsActive())
-    bIsShutDown=TRUE;// Setzen, damit PreNotify keinen GetFocus speichert.
+    }// if(aTimer.IsActive())
+    bIsShutDown=TRUE;// Set it in order to PreNotify not to save GetFocus.
     FormEditData* pData = m_pHelper->getFormEditData();
-    if (pData) // wird nicht ueber Close zerstoert;
+    if (pData) // it won't be destroyed over Close;
     {
         pData->SetFStart((xub_StrLen)pMEdit->GetSelection().Min());
         pData->SetSelection(pMEdit->GetSelection());
@@ -427,7 +427,7 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 
                 FormEditData* pData = m_pHelper->getFormEditData();
 
-                if (pData && !aTimer.IsActive()) // wird nicht ueber Close zerstoert;
+                if (pData && !aTimer.IsActive()) // it won't be destroyed over Close;
                 {
                     pData->SetUniqueId(nActivWinId);
                 }
@@ -484,7 +484,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
 
     xub_StrLen nTokPos=1;
     xub_StrLen nOldTokPos=1;
-    xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testweise
+    xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testwise
     xub_StrLen nPrevFuncPos=1;
     short  nBracketCount=0;
     BOOL   bFlag=FALSE;
@@ -498,8 +498,6 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
 
         const sheet::FormulaToken* pIter = m_aTokenList.getConstArray();
         const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
-        //if ( pIter != pEnd && aFormString.GetChar(0) == '=' )
-        //    ++pIter;
         try
         {
             while ( pIter != pEnd )
@@ -596,7 +594,7 @@ BOOL FormulaDlg_Impl::CalcValue( const String& rStrExp, String& rStrResult )
 
     if ( rStrExp.Len() > 0 )
     {
-        // nur, wenn keine Tastatureingabe mehr anliegt, den Wert berechnen:
+        // Only calculate the value when there isn't any more keyboard input:
 
         if ( !Application::AnyInput( INPUT_KEYBOARD ) )
         {
@@ -634,7 +632,7 @@ BOOL FormulaDlg_Impl::CalcStruct( const String& rStrExp)
 
     if ( rStrExp.Len() > 0 && aOldFormula!=rStrExp && bStructUpdate)
     {
-        // nur, wenn keine Tastatureingabe mehr anliegt, den Wert berechnen:
+        // Only calculate the value when there isn't any more keyboard input:
 
         if ( !Application::AnyInput( INPUT_KEYBOARD ) )
         {
@@ -798,10 +796,10 @@ void FormulaDlg_Impl::FillDialog(BOOL nFlag)
 // -----------------------------------------------------------------------------
 void FormulaDlg_Impl::FillListboxes()
 {
-    //  Umschalten zwischen den "Seiten"
+    //  Switch between the "Pages"
     FormEditData* pData = m_pHelper->getFormEditData();
     String aNewTitle;
-    //  1. Seite: Funktion auswaehlen
+    //  1. Page: select function
     if ( pFuncDesc && pFuncDesc->getCategory() )
     {
         if( pFuncPage->GetCategory() != pFuncDesc->getCategory()->getNumber() + 1 )
@@ -818,27 +816,27 @@ void FormulaDlg_Impl::FillListboxes()
     }
     FuncSelHdl(NULL);
 
-    //  ResizeArgArr jetzt schon in UpdateFunctionDesc
+    //  ResizeArgArr is now already in UpdateFunctionDesc
 
 
-    m_pHelper->setDispatcherLock( TRUE);// Modal-Modus einschalten
+    m_pHelper->setDispatcherLock( TRUE);// Activate Modal-Mode
 
     aNewTitle = aTitle1;
 
-    //  HelpId fuer 1. Seite ist die aus der Resource
+    //  HelpId for 1. page is the one from the resource
     m_pParent->SetHelpId( nOldHelp );
     m_pParent->SetUniqueId( nOldUnique );
 }
 // -----------------------------------------------------------------------------
 void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
 {
-    //  Umschalten zwischen den "Seiten"
+    //  Switch between the "Pages"
     FormEditData* pData = m_pHelper->getFormEditData();
     if (!pData )
         return;
 
     String aNewTitle;
-    //  2. Seite oder Editieren: ausgewaehlte Funktion anzeigen
+    //  2. Page or Edit: show selected function
 
     xub_StrLen nFStart     = pData->GetFStart();
     String aFormula        = m_pHelper->getCurrentFormula();
@@ -888,7 +886,7 @@ void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
         USHORT nOffset = pData->GetOffset();
         nEdFocus = pData->GetEdFocus();
 
-        //  Verkettung der Edit's fuer Focus-Kontrolle
+        //  Concatenate the Edit's for Focus-Control
 
         if(bTestFlag)
             pParaWin->SetArgumentOffset(nOffset);
@@ -980,10 +978,10 @@ String FormulaDlg_Impl::RepairFormula(const String& aFormula)
 
 void FormulaDlg_Impl::DoEnter(BOOL bOk)
 {
-    //  Eingabe ins Dokument uebernehmen oder abbrechen
+    //  Accept input to the document or cancel
     if ( bOk)
     {
-        //  ggf. Dummy-Argumente entfernen
+        //  remove dummy arguments
         String  aInputFormula = m_pHelper->getCurrentFormula();
         String  aString = RepairFormula(pMEdit->GetText());
         m_pHelper->setSelection(0, aInputFormula.Len());
@@ -993,10 +991,10 @@ void FormulaDlg_Impl::DoEnter(BOOL bOk)
     m_pHelper->switchBack();
 
     m_pHelper->dispatch(bOk,aBtnMatrix.IsChecked());
-    //  Daten loeschen
+    //  Clear data
     m_pHelper->deleteFormData();
 
-    //  Dialog schliessen
+    //  Close dialog
     m_pHelper->doClose(bOk);
 }
 // -----------------------------------------------------------------------------
@@ -1005,15 +1003,15 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 {
     if ( pBtn == &aBtnCancel )
     {
-        DoEnter(FALSE);                 // schliesst den Dialog
+        DoEnter(FALSE);                 // closes the Dialog
     }
     else if ( pBtn == &aBtnEnd )
     {
-        DoEnter(TRUE);                  // schliesst den Dialog
+        DoEnter(TRUE);                  // closes the Dialog
     }
     else if ( pBtn == &aBtnForward )
     {
-        //@pMEdit->GrabFocus();         // Damit die Selektion auch angezeigt wird.
+        //@pMEdit->GrabFocus();         // In order to show the selection too
         const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
 
         if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
@@ -1041,7 +1039,7 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 
 
 //  --------------------------------------------------------------------------
-//                          Funktionen fuer 1. Seite
+//                          Functions for 1. Page
 //  --------------------------------------------------------------------------
 
 void FormulaDlg_Impl::ResizeArgArr( const IFunctionDescription* pNewFunc )
@@ -1086,8 +1084,8 @@ void FormulaDlg_Impl::UpdateFunctionDesc()
             aFtFuncDesc.SetText( pDesc->getDescription() );
             ResizeArgArr( pDesc );
 
-            if ( !m_aArguments.empty() )        // noch Argumente da?
-                aSig = pDesc->getFormula( m_aArguments );           // fuer Eingabezeile
+            if ( !m_aArguments.empty() )        // still arguments there?
+                aSig = pDesc->getFormula( m_aArguments );           // for input line
             //@ m_pHelper->setCurrentFormula( aSig );
         }
     }
@@ -1102,7 +1100,7 @@ void FormulaDlg_Impl::UpdateFunctionDesc()
 }
 // -----------------------------------------------------------------------------
 
-// Handler fuer Listboxen
+// Handler for Listboxes
 
 IMPL_LINK( FormulaDlg_Impl, DblClkHdl, FuncPage*, EMPTYARG )
 {
@@ -1139,13 +1137,13 @@ IMPL_LINK( FormulaDlg_Impl, DblClkHdl, FuncPage*, EMPTYARG )
 // -----------------------------------------------------------------------------
 
 //  --------------------------------------------------------------------------
-//                          Funktionen fuer rechte Seite
+//                          Functions for right Page
 //  --------------------------------------------------------------------------
 void FormulaDlg_Impl::SetData(xub_StrLen nFStart,xub_StrLen nNextFStart,xub_StrLen nNextFEnd,xub_StrLen& PrivStart,xub_StrLen& PrivEnd)
 {
     xub_StrLen nFEnd;
 
-    // Selektion merken und neue setzen
+    // Notice and set new selection
     m_pHelper->getSelection( nFStart, nFEnd );
     m_pHelper->setSelection( nNextFStart, nNextFEnd );
     if(!bEditFlag)
@@ -1323,10 +1321,10 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin*, pPtr )
 {
     if(pPtr==pParaWin)
     {
-        aBtnForward.Enable(TRUE); //@ Damit eine neue Fkt eingegeben werden kann.
+        aBtnForward.Enable(TRUE); //@ In order to be able to input another function.
         aTabCtrl.SetCurPageId(TP_FUNCTION);
 
-        String aUndoStr = m_pHelper->getCurrentFormula();       // bevor unten ein ";" eingefuegt wird
+        String aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
         FormEditData* pData = m_pHelper->getFormEditData();
         if (!pData) return 0;
 
@@ -1349,7 +1347,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin*, pPtr )
         ClearAllParas();
 
         FillDialog(FALSE);
-        pFuncPage->SetFocus(); //Da Parawin nicht mehr sichtbar
+        pFuncPage->SetFocus(); //There Parawin is not visible anymore
     }
     return 0;
 }
@@ -1380,7 +1378,7 @@ IMPL_LINK( FormulaDlg_Impl, FormulaHdl, MultiLineEdit*, EMPTYARG )
     Selection   aSel =pMEdit->GetSelection();
     xub_StrLen nTest=0;
 
-    if(aString.Len()==0) //falls alles geloescht wurde
+    if(aString.Len()==0) //in case everything was cleared
     {
         aString +='=';
         pMEdit->SetText(aString);
@@ -1388,7 +1386,7 @@ IMPL_LINK( FormulaDlg_Impl, FormulaHdl, MultiLineEdit*, EMPTYARG )
         aSel .Max()=1;
         pMEdit->SetSelection(aSel);
     }
-    else if(aString.GetChar(nTest)!='=') //falls ersetzt wurde;
+    else if(aString.GetChar(nTest)!='=') //in case it's replaced;
     {
         aString.Insert( (sal_Unicode)'=', 0 );
         pMEdit->SetText(aString);
@@ -1652,7 +1650,7 @@ BOOL FormulaDlg_Impl::CheckMatrix(String& aFormula)
 {
     pMEdit->GrabFocus();
     xub_StrLen nLen = aFormula.Len();
-    BOOL bMatrix =  nLen > 3                    // Matrix-Formel ?
+    BOOL bMatrix =  nLen > 3                    // Matrix-Formula ?
             && aFormula.GetChar(0) == '{'
             && aFormula.GetChar(1) == '='
             && aFormula.GetChar(nLen-1) == '}';
@@ -1672,41 +1670,6 @@ IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, pStruP )
     bStructUpdate=FALSE;
     if(pStructPage->IsVisible())    aBtnForward.Enable(FALSE); //@New
 
-    if(pStructPage==pStruP)
-    {
-        /// TODO
-        //ScToken* pSelToken = pStructPage->GetSelectedToken();
-  //      ScToken* pOrigToken = ((pSelToken && pSelToken->GetType() == svFAP) ?
-  //              pSelToken->GetFAPOrigToken() : pSelToken);
-        //xub_StrLen nTokPos=1;
-
-        //if(pScTokA!=NULL)
-        //{
-        //  ScToken* pToken = pScTokA->First();
-
-        //  while(pToken!=NULL)
-        //  {
-        //      String aString;
-  //              if ( pToken == pOrigToken )
-  //                  break;
-        //      pComp->CreateStringFromToken( aString,pToken);
-  //              nTokPos = sal::static_int_cast<xub_StrLen>( nTokPos + aString.Len() );
-        //      pToken=pScTokA->Next();
-        //  }
-        //  EditThisFunc(nTokPos);
-        //}
-
-        //if( pOrigToken )
-        //{
-        //  String aStr;
-        //  pComp->CreateStringFromToken( aStr, pOrigToken );
-        //  String aEntryTxt=pStructPage->GetSelectedEntryText();
-
-        //  if(aEntryTxt!=aStr)
-        //      ShowReference(aEntryTxt);
-        //}
-
-    }
     bStructUpdate=TRUE;
     return 0;
 }
@@ -1757,7 +1720,7 @@ void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection,const String& _
     aEdRef.SetSelection( theSel );
 
     //-------------------------------------
-    // Manuelles Update der Ergebnisfelder:
+    // Manual Update of the results' fields:
     //-------------------------------------
     USHORT nPrivActiv = pParaWin->GetActiveLine();
     pParaWin->SetArgument(nPrivActiv,aEdRef.GetText());
@@ -1993,7 +1956,7 @@ void FormulaModalDialog::SetEdSelection()
 }
 
 //  --------------------------------------------------------------------------
-//      Initialisierung / gemeinsaME Funktionen  fuer Dialog
+//      Initialisation / General functions  for Dialog
 //  --------------------------------------------------------------------------
 FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                              Window* pParent
@@ -2008,10 +1971,9 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                             ,_pHelper,_pFunctionMgr,_pDlg))
 {
     FreeResource();
-    if(GetHelpId()==0)              //Hack, da im SfxModelessDialog die HelpId
-        SetHelpId(GetUniqueId());   //fuer einen ModelessDialog entfernt und
-                                    //in eine UniqueId gewandelt wird, machen
-                                    //wir das an dieser Stelle rueckgaengig.
+    if(GetHelpId()==0)              //Hack which hides the HelpId for a model Dialog in SfxModelessDialog
+        SetHelpId(GetUniqueId());   //and will be changed in a UniqueId,
+                                    //at this point we reverse it.
     SetText(m_pImpl->aTitle1);
 }
 
@@ -2154,7 +2116,7 @@ IMPL_LINK( FormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
 
-    if (pData) // wird nicht ueber Close zerstoert;
+    if (pData) // won't be destroyed over Close;
     {
         m_pImpl->m_pHelper->setReferenceInput(pData);
         ULONG nUniqueId=pData->GetUniqueId();
@@ -2196,7 +2158,7 @@ void FormEditData::RestoreValues()
     if (pTemp)
     {
         *this = *pTemp;
-        pTemp->pParent = NULL;      // sonst wird der auch geloescht!
+        pTemp->pParent = NULL;      // otherwise it would be cleared too!
         delete pTemp;
     }
 }

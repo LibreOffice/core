@@ -84,7 +84,7 @@ long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
 inline USHORT Lb2Cat( USHORT nLbPos )
 {
-    // Kategorie 0 == LRU, sonst Categories == LbPos-1
+    // Category 0 == LRU, otherwise Categories == LbPos-1
     if ( nLbPos > 0 )
         nLbPos -= 1;
 
@@ -161,7 +161,7 @@ void FuncPage::UpdateFunctionList()
             impl_addFunctions(pCategory);
         }
     }
-    else // LRU-Liste
+    else // LRU-List
     {
         ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
         ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
@@ -251,7 +251,7 @@ String FuncPage::GetSelFunctionName() const
 }
 const IFunctionDescription* FuncPage::GetFuncDesc( USHORT nPos ) const
 {
-    // nicht schoen, aber hoffentlich selten
+    // not pretty, but hopefully rare
     return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);
 }
 
