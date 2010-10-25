@@ -57,7 +57,8 @@ typedef void* oslSecurity;
 */
 oslSecurity SAL_CALL osl_getCurrentSecurity(void);
 
-/** Create a security handle for the denoted user.
+/** Deprecated API
+    Create a security handle for the denoted user.
     Try to log in the user on the local system.
     @param strzUserName [in] denotes the name of the user to logg in.
     @param strPasswd [in] the password for this user.
