@@ -1141,9 +1141,12 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int32 nNewPos = 0;
             if (!(rVal >>= nNewPos) )
                 return sal_False;
+            if (bConvert)
+                nNewPos = MM100_TO_TWIP ( nNewPos );
+            if (nNewPos <= 0)
+                return sal_False;
             const SvxTabStop& rTab = *(GetStart());
-            SvxTabStop aNewTab ( bConvert ? MM100_TO_TWIP ( nNewPos ) : nNewPos,
-                                 rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
+            SvxTabStop aNewTab ( nNewPos, rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
             Remove ( 0 );
             Insert( aNewTab );
             break;
