@@ -46,8 +46,7 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-static const ::rtl::OUString ERRMSG_INVALID_COMPONENT_PARAM = ::rtl::OUString::createFromAscii("NULL as component reference not allowed.");
-static const ::rtl::OUString ERRMSG_INVALID_NUMBER_PARAM    = ::rtl::OUString::createFromAscii("Special valkud INVALID_NUMBER not allowed as input parameter.");
+static const ::rtl::OUString ERRMSG_INVALID_COMPONENT_PARAM(RTL_CONSTASCII_USTRINGPARAM("NULL as component reference not allowed."));
 
 //-----------------------------------------------
 NumberedCollection::NumberedCollection()
@@ -130,33 +129,33 @@ void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        if (nNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
-            throw css::lang::IllegalArgumentException (ERRMSG_INVALID_NUMBER_PARAM, m_xOwner.get(), 1);
+    if (nNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
+        throw css::lang::IllegalArgumentException (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Special valkud INVALID_NUMBER not allowed as input parameter.")), m_xOwner.get(), 1);
 
-        TDeadItemList               lDeadItems;
-        TNumberedItemHash::iterator pComponent;
+    TDeadItemList               lDeadItems;
+    TNumberedItemHash::iterator pComponent;
 
-        for (  pComponent  = m_lComponents.begin ();
-               pComponent != m_lComponents.end   ();
-             ++pComponent                          )
+    for (  pComponent  = m_lComponents.begin ();
+           pComponent != m_lComponents.end   ();
+         ++pComponent                          )
+    {
+        const TNumberedItem&                              rItem = pComponent->second;
+        const css::uno::Reference< css::uno::XInterface > xItem = rItem.xItem.get();
+
+        if ( ! xItem.is ())
         {
-            const TNumberedItem&                              rItem = pComponent->second;
-            const css::uno::Reference< css::uno::XInterface > xItem = rItem.xItem.get();
-
-            if ( ! xItem.is ())
-            {
-                lDeadItems.push_back(pComponent->first);
-                continue;
-            }
-
-            if (rItem.nNumber == nNumber)
-            {
-                m_lComponents.erase (pComponent);
-                break;
-            }
+            lDeadItems.push_back(pComponent->first);
+            continue;
         }
 
-        impl_cleanUpDeadItems(m_lComponents, lDeadItems);
+        if (rItem.nNumber == nNumber)
+        {
+            m_lComponents.erase (pComponent);
+            break;
+        }
+    }
+
+    impl_cleanUpDeadItems(m_lComponents, lDeadItems);
 
     // <- SYNCHRONIZED
 }
