@@ -111,7 +111,7 @@ testcase tToolsNumbering12
 				Call hCloseDocument
 
 				printlog "  - load previous saved document"
-				hFileOpenLocally(  ExportFileName )
+				hFileOpen(  ExportFileName )
 
 				printlog "  - close document"
 				hFileCloseAll()
