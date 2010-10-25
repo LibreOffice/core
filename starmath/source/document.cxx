@@ -96,6 +96,7 @@
 #include "mathmlexport.hxx"
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -1163,8 +1164,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     fnDo = &::svl::IUndoManager::Redo;
                 }
 
-                for( ; nCnt && nCount; --nCnt, --nCount )
-                    (pTmpUndoMgr->*fnDo)();
+                try
+                {
+                    for( ; nCnt && nCount; --nCnt, --nCount )
+                        (pTmpUndoMgr->*fnDo)();
+                }
+                catch( const Exception& e )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
             Repaint();
             SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
