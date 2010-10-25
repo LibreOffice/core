@@ -47,23 +47,31 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         <p>Note that the action must not necessarily be the new top element of the stack: In case there's an
         open Undo context, <member>UndoManagerEvent::UndoContextDepth</member> will be greater <code>0</code>,
         and the newly added action will be subordinate of the context action.</p>
+
+        @see XUndoManager::addUndoAction
     */
     void    undoActionAdded( [in] UndoManagerEvent i_event );
 
     /** is called when the top-most action of the Undo stack has been undone.
+
+        @see XUndoManager::undo
     */
     void    actionUndone( [in] UndoManagerEvent i_event );
 
     /** is called when the top-most action of the Redo stack has been redone.
+
+        @see XUndoManager::redo
     */
     void    actionRedone( [in] UndoManagerEvent i_event );
 
     /** is called when both the Undo and the Redo stack have been cleared from all Undo actions.
+
         @see XUndoManager::clear
     */
     void    allActionsCleared( [in] ::com::sun::star::lang::EventObject i_event );
 
     /** is called when the the Redo stack has been cleared.
+
         @see XUndoManager::clearRedo
     */
     void    redoActionsCleared( [in] ::com::sun::star::lang::EventObject i_event );
@@ -95,6 +103,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         one just left.</p>
 
         @see XUndoManager::leaveUndoContext
+        @see cancelledUndoContext
     */
     void    leftUndoContext( [in] UndoManagerEvent i_event );
 
