@@ -3083,13 +3083,6 @@ BOOL StatementCommand::Execute()
                                         nDirFlags = nFlags = Sb_ATTR_HIDDEN | Sb_ATTR_SYSTEM | Sb_ATTR_DIRECTORY;
 
                                     // Nur diese Bitmaske ist unter Windows erlaubt
-                        #ifdef WIN
-                                    if( nFlags & ~0x1E )
-                                    {
-                                        nDirFlags = 0;
-                                        StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                                    }
-                        #endif
                                     // Sb_ATTR_VOLUME wird getrennt gehandelt
                                     if( nDirFlags & Sb_ATTR_VOLUME )
                                         aPath = aEntry.GetVolume();
@@ -3121,31 +3114,7 @@ BOOL StatementCommand::Execute()
                                     }
                                     DirEntry aNextEntry=(*(pDir))[nDirPos++];
                                     aPath = aNextEntry.GetName(); //Full();
-                    #ifdef WIN
-                                    aNextEntry.ToAbs();
-                                    String sFull(aNextEntry.GetFull());
-                                    unsigned nFlags;
-
-                                    if (_dos_getfileattr( sFull.GetStr(), &nFlags ))
-                                        nErrorcode = FSYS_ERR_NOTEXISTS;
-                                    else
-                                    {
-                                        INT16 nCurFlags = nDirFlags;
-                                        if( (nCurFlags == Sb_ATTR_NORMAL)
-                                        && !(nFlags & ( _A_HIDDEN | _A_SYSTEM | _A_VOLID | _A_SUBDIR ) ) )
-                                            break;
-                                        else if( (nCurFlags & Sb_ATTR_HIDDEN) && (nFlags & _A_HIDDEN) )
-                                            break;
-                                        else if( (nCurFlags & Sb_ATTR_SYSTEM) && (nFlags & _A_SYSTEM) )
-                                            break;
-                                        else if( (nCurFlags & Sb_ATTR_VOLUME) && (nFlags & _A_VOLID) )
-                                            break;
-                                        else if( (nCurFlags & Sb_ATTR_DIRECTORY) && (nFlags & _A_SUBDIR) )
-                                            break;
-                                    }
-                    #else
                                     break;
-                    #endif
                                 }
                             }
                             if ( !nErrorcode )

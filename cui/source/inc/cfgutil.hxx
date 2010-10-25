@@ -139,12 +139,8 @@ public:
                   ~SfxConfigFunctionListBox_Impl();
 
     void          ClearAll();
-    SvLBoxEntry*  GetEntry_Impl( USHORT nId );
-    SvLBoxEntry*  GetEntry_Impl( const String& );
-    USHORT        GetId( SvLBoxEntry *pEntry );
     using Window::GetHelpText;
     String        GetHelpText( SvLBoxEntry *pEntry );
-    USHORT        GetCurId() { return GetId( FirstSelected() ); }
     String        GetCurCommand();
     String        GetCurLabel();
     SfxMacroInfo* GetMacroInfo();
@@ -173,7 +169,6 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
-    ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
 
     void InitModule();
     void InitBasic();

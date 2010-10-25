@@ -296,6 +296,11 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentOpened",  RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentClosed",  RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED ) );
 //    aDisplayNames.push_back( EventDisplayName( "OnLayoutFinished",        RID_SVXSTR_EVENT_LAYOUT_FINISHED ) );
+    aDisplayNames.push_back( EventDisplayName( "OnSelect",              RID_SVXSTR_EVENT_SELECTIONCHANGED ) );
+    aDisplayNames.push_back( EventDisplayName( "OnDoubleClick",         RID_SVXSTR_EVENT_DOUBLECLICK ) );
+    aDisplayNames.push_back( EventDisplayName( "OnRightClick",          RID_SVXSTR_EVENT_RIGHTCLICK ) );
+    aDisplayNames.push_back( EventDisplayName( "OnCalculate",           RID_SVXSTR_EVENT_CALCULATE ) );
+    aDisplayNames.push_back( EventDisplayName( "OnChange",              RID_SVXSTR_EVENT_CONTENTCHANGED ) );
 
     // the event name to UI string mappings for forms & dialogs
     //

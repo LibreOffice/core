@@ -52,9 +52,8 @@
 #include <comphelper/componentcontext.hxx>
 #include <map>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
@@ -65,7 +64,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
 {
     try
     {
-                uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
+                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
                 if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
                 {
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
@@ -86,8 +85,8 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
 
 sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const String& rModName )
 {
-    sal_Int32 nType = com::sun::star::script::ModuleType::NORMAL;
-    uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
+    sal_Int32 nType = script::ModuleType::NORMAL;
+    uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
     if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
     {
         script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );

@@ -364,13 +364,23 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
         SbModuleRef xModule = new SbModule( rModName );
         xModule->SetSource32( aOUSource );
         USHORT nCount = xModule->GetMethods()->Count();
-        aSeqMethods.realloc( nCount );
-
+        USHORT nRealCount = nCount;
         for ( USHORT i = 0; i < nCount; i++ )
         {
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            if( pMethod->IsHidden() )
+                --nRealCount;
+        }
+        aSeqMethods.realloc( nRealCount );
+
+        USHORT iTarget = 0;
+        for ( USHORT i = 0 ; i < nCount; ++i )
+        {
+            SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            if( pMethod->IsHidden() )
+                continue;
             DBG_ASSERT( pMethod, "Method not found! (NULL)" );
-            aSeqMethods.getArray()[ i ] = pMethod->GetName();
+            aSeqMethods.getArray()[ iTarget++ ] = pMethod->GetName();
         }
     }
 
@@ -392,7 +402,7 @@ BOOL HasMethod( const ScriptDocument& rDocument, const String& rLibName, const S
         if ( pMethods )
         {
             SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
-            if ( pMethod )
+            if ( pMethod && !pMethod->IsHidden() )
                 bHasMethod = TRUE;
         }
     }

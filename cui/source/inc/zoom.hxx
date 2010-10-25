@@ -99,16 +99,13 @@ public:
     SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxZoomDialog();
 
-    static USHORT*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
     USHORT              GetFactor() const;
     void                SetFactor( USHORT nNewFactor, USHORT nBtnId = 0 );
 
-    void                SetButtonText( USHORT nBtnId, const String& aNewTxt );
     void                HideButton( USHORT nBtnId );
     void                SetLimits( USHORT nMin, USHORT nMax );
-    void                SetSpinSize( USHORT nNewSpin );
 };
 
 #include <layout/layout-post.hxx>

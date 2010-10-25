@@ -375,13 +375,22 @@
 #define HID_OFAPAGE_QUOTE_CLB                       (HID_CUI_START + 340)
 #define HID_CT_THES_ALTERNATIVES                    (HID_CUI_START + 341)
 
-// please adjust ACT_CUI_HID_END below if you add entries here!
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY                             (HID_CUI_START + 342)
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN            (HID_CUI_START + 343)
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN    (HID_CUI_START + 344)
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE                        (HID_CUI_START + 345)
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY               (HID_CUI_START + 346)
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY          (HID_CUI_START + 347)
+#define HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY  (HID_CUI_START + 348)
+#define HID_HYPERLINK_DIALOG                                        (HID_CUI_START + 349)
+
+// please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
 // Overrun check ---------------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_CUI_HID_END     HID_CUI_START + 341
+#define ACT_CUI_HID_END     (HID_CUI_START + 349)
 
 #if ACT_CUI_HID_END > HID_CUI_END
 #error Resource-Ueberlauf in #line, #file

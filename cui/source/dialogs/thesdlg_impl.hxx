@@ -51,10 +51,15 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 
 #include <stack>
+#include <map>
 #include <algorithm>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
+class SvLBoxEntry;
+class ThesaurusAlternativesCtrl_Impl;
+
 
 // class LookUpComboBox_Impl --------------------------------------------------
 
@@ -105,17 +110,14 @@ public:
 
 // class ThesaurusAlternativesCtrl_Impl ----------------------------------
 
-class AlternativesUserData_Impl
+class AlternativesExtraData
 {
     String  sText;
     bool    bHeader;
 
-    // disable copy c-tor and assignment operator
-    AlternativesUserData_Impl( const AlternativesUserData_Impl & );
-    AlternativesUserData_Impl & operator = ( const AlternativesUserData_Impl & );
-
 public:
-    AlternativesUserData_Impl( const String &rText, bool bIsHeader ) :
+    AlternativesExtraData() : bHeader( false ) {}
+    AlternativesExtraData( const String &rText, bool bIsHeader ) :
         sText(rText),
         bHeader(bIsHeader)
         {
@@ -128,10 +130,11 @@ public:
 
 class AlternativesString_Impl : public SvLBoxString
 {
+    ThesaurusAlternativesCtrl_Impl &    m_rControlImpl;
 public:
 
-    AlternativesString_Impl( SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr )
-        : SvLBoxString( pEntry, nFlags, rStr ) {}
+    AlternativesString_Impl( ThesaurusAlternativesCtrl_Impl &rControl,
+        SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr );
 
     virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry);
 };
@@ -141,6 +144,9 @@ class ThesaurusAlternativesCtrl_Impl :
     public SvxCheckListBox
 {
     SvxThesaurusDialog_Impl &   m_rDialogImpl;
+
+    typedef std::map< const SvLBoxEntry *, AlternativesExtraData >  UserDataMap_t;
+    UserDataMap_t           m_aUserData;
 
     // disable copy c-tor and assignment operator
     ThesaurusAlternativesCtrl_Impl( const ThesaurusAlternativesCtrl_Impl & );
@@ -152,7 +158,10 @@ public:
 
 
     SvLBoxEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
-    void            ClearUserData();
+
+    void            ClearExtraData();
+    void            SetExtraData( const SvLBoxEntry *pEntry, const AlternativesExtraData &rData );
+    AlternativesExtraData * GetExtraData( const SvLBoxEntry *pEntry );
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    Paint( const Rectangle& rRect );

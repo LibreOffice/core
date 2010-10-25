@@ -58,13 +58,6 @@
 
 // static ----------------------------------------------------------------
 
-static USHORT pRanges[] =
-{
-    SID_ATTR_ZOOM,
-    SID_ATTR_ZOOM,
-    0
-};
-
 #define SPECIAL_FACTOR  ((USHORT)0xFFFF)
 
 // class SvxZoomDialog ---------------------------------------------------
@@ -124,29 +117,6 @@ void SvxZoomDialog::SetFactor( USHORT nNewFactor, USHORT nBtnId )
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
-{
-    switch ( nBtnId )
-    {
-        case ZOOMBTN_OPTIMAL: // Optimal-Button
-            aOptimalBtn.SetText( rNewTxt );
-            break;
-
-        case ZOOMBTN_PAGEWIDTH: // Seitenbreite-Button
-            aPageWidthBtn.SetText( rNewTxt );
-            break;
-
-        case ZOOMBTN_WHOLEPAGE: // Ganze Seite-Button
-            aWholePageBtn.SetText( rNewTxt );
-            break;
-
-        default:
-            DBG_ERROR( "wrong button number" );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void SvxZoomDialog::HideButton( USHORT nBtnId )
 {
     switch ( nBtnId )
@@ -177,13 +147,6 @@ void SvxZoomDialog::SetLimits( USHORT nMin, USHORT nMax )
     aUserEdit.SetFirst( nMin );
     aUserEdit.SetMax( nMax );
     aUserEdit.SetLast( nMax );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxZoomDialog::SetSpinSize( USHORT nNewSpin )
-{
-    aUserEdit.SetSpinSize( nNewSpin );
 }
 
 // -----------------------------------------------------------------------
@@ -366,13 +329,6 @@ SvxZoomDialog::~SvxZoomDialog()
 {
     delete pOutSet;
     pOutSet = 0;
-}
-
-// -----------------------------------------------------------------------
-
-USHORT* SvxZoomDialog::GetRanges()
-{
-    return pRanges;
 }
 
 // -----------------------------------------------------------------------

@@ -196,11 +196,6 @@ void SvInsertOleDlg::SelectDefault()
     aLbObjecttype.SelectEntryPos( 0 );
 }
 
-void SvInsertOleDlg::FillObjectServerList( SvObjectServerList* pList )
-{
-    pList->FillInsertObjects();
-}
-
 // -----------------------------------------------------------------------
 SvInsertOleDlg::SvInsertOleDlg
 (

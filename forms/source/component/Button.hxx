@@ -127,7 +127,7 @@ class OButtonControl    :public OButtonControl_BASE
                         ,public OFormNavigationHelper
 {
 private:
-    sal_uInt32  m_nClickEvent;
+    ULONG m_nClickEvent;
     sal_Int16   m_nTargetUrlFeatureId;
     /// caches the value of the "Enabled" property of our model
     sal_Bool    m_bEnabledByPropertyValue;

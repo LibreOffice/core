@@ -50,12 +50,8 @@
 #include "testfactreg.hxx"
 
 
-#ifndef _VOS_NO_NAMESPACE
 using namespace vos;
 using namespace usr;
-#endif
-
-
 
 class OMarkableOutputStreamTest :
         public XSimpleTest,

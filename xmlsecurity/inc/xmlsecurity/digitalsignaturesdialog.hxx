@@ -94,7 +94,6 @@ private:
 
     FixedLine           maBottomSepFL;
     OKButton            maOKBtn;
-    CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;
 
     ::rtl::OUString m_sODFVersion;

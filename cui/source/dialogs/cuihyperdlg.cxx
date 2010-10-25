@@ -107,6 +107,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbReadOnly      ( sal_False ),
     mbIsHTMLDoc     ( sal_False )
 {
+    SetUniqueId( HID_HYPERLINK_DIALOG );
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
@@ -134,9 +135,6 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP_H ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
-
-    // all tab pages set -> create mnemonics
-    //  CreateIconTextAutoMnemonics();  #99671# not useful, because this is not what user expects when using mnemonics on the pages
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
