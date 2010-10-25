@@ -685,11 +685,20 @@ USHORT SfxUndoManager::GetListActionDepth() const
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::LeaveListAction()
+{
+    return ImplLeaveListAction( false );
+}
 
-/*  [Beschreibung]
+//------------------------------------------------------------------------
 
-    Verlaesst die aktuelle ListAction und geht eine Ebene nach oben.
-*/
+USHORT SfxUndoManager::LeaveAndMergeListAction()
+{
+    return ImplLeaveListAction( true );
+}
+
+//------------------------------------------------------------------------
+
+USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
 {
     if ( !IsUndoEnabled() )
         return 0;
@@ -699,45 +708,68 @@ USHORT SfxUndoManager::LeaveListAction()
 
     if( !IsInListAction() )
     {
-        DBG_ERROR( "svl::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
+        DBG_ERROR( "svl::SfxUndoManager::ImplLeaveListAction, called without calling EnterListAction()!" );
         return 0;
     }
 
-    DBG_ASSERT(m_pData->pActUndoArray->pFatherUndoArray,"svl::SfxUndoManager::LeaveListAction(), no father undo array!?");
+    DBG_ASSERT(m_pData->pActUndoArray->pFatherUndoArray,"svl::SfxUndoManager::ImplLeaveListAction, no father undo array!?");
 
-    SfxUndoArray* pTmp = m_pData->pActUndoArray;
+    // the array/level which we're about to leave
+    SfxUndoArray* pArrayToLeave = m_pData->pActUndoArray;
+    // one step up
     m_pData->pActUndoArray = m_pData->pActUndoArray->pFatherUndoArray;
 
     // If no undo action where added, delete the undo list action
-    SfxUndoAction *pTmpAction= m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1];
-    const USHORT nListActionElements = pTmp->nCurUndoAction;
+    const USHORT nListActionElements = pArrayToLeave->nCurUndoAction;
     if( nListActionElements == 0 )
     {
-        m_pData->pActUndoArray->aUndoActions.Remove( --m_pData->pActUndoArray->nCurUndoAction);
-        delete pTmpAction;
+        SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ];
+        m_pData->pActUndoArray->aUndoActions.Remove( --m_pData->pActUndoArray->nCurUndoAction );
+        delete pCurrentAction;
+
+        ::std::for_each( m_pData->aListeners.begin(), m_pData->aListeners.end(),
+            NotifyUndoListener( &SfxUndoListener::listActionCancelled ) );
+        return 0;
     }
-    else
+
+
+    SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ];
+    SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction * >( pCurrentAction );
+    OSL_ENSURE( pListAction, "SfxUndoManager::ImplLeaveListAction: list action expected at this position!" );
+
+    if ( pListAction && i_merge )
     {
-        // if the undo array has no comment, try to get it from its children
-        SfxListUndoAction* pList = dynamic_cast< SfxListUndoAction * >( pTmpAction );
-        if( pList && pList->GetComment().Len() == 0 )
+        // merge the list action with its predecessor on the same level
+        OSL_ENSURE( m_pData->pActUndoArray->nCurUndoAction > 1,
+            "SfxUndoManager::ImplLeaveListAction: cannot merge the list action if there's no other action on the same level - check this beforehand!" );
+        if ( m_pData->pActUndoArray->nCurUndoAction > 1 )
         {
-            USHORT n;
-            for( n = 0; n < pList->aUndoActions.Count(); n++ )
+            const SfxUndoAction* pPreviousAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction - 2 ];
+            m_pData->pActUndoArray->aUndoActions.Remove( m_pData->pActUndoArray->nCurUndoAction - 2 );
+            --m_pData->pActUndoArray->nCurUndoAction;
+            pListAction->aUndoActions.Insert( pPreviousAction, 0 );
+            ++pListAction->nCurUndoAction;  // should not matter, as we're not expected to ever re-enter this list ...
+
+            pListAction->SetComment( pPreviousAction->GetComment() );
+        }
+    }
+
+    // if the undo array has no comment, try to get it from its children
+    if ( pListAction && pListAction->GetComment().Len() == 0 )
+    {
+        for( USHORT n = 0; n < pListAction->aUndoActions.Count(); n++ )
+        {
+            if( pListAction->aUndoActions[n]->GetComment().Len() )
             {
-                if( pList->aUndoActions[n]->GetComment().Len() )
-                {
-                    pList->SetComment( pList->aUndoActions[n]->GetComment() );
-                    break;
-                }
+                pListAction->SetComment( pListAction->aUndoActions[n]->GetComment() );
+                break;
             }
         }
     }
 
     // notify listeners
-    const bool leftContext = ( nListActionElements > 0 );
     ::std::for_each( m_pData->aListeners.begin(), m_pData->aListeners.end(),
-        NotifyUndoListener( leftContext ? &SfxUndoListener::listActionLeft : &SfxUndoListener::listActionCancelled ) );
+        NotifyUndoListener( &SfxUndoListener::listActionLeft ) );
 
     return nListActionElements;
 }

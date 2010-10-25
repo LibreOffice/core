@@ -146,6 +146,7 @@ public:
     virtual void clearedRedo() = 0;
     virtual void listActionEntered( const String& i_comment ) = 0;
     virtual void listActionLeft() = 0;
+    virtual void listActionLeftAndMerged() = 0;
     virtual void listActionCancelled() = 0;
     virtual void undoManagerDying() = 0;
 };
@@ -188,15 +189,34 @@ namespace svl
         virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget ) const = 0;
 
         virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0) = 0;
+
         /** leaves the list action entered with EnterListAction
             @return the number of the sub actions in the list which has just been left. Note that in case no such
                 actions exist, the list action does not contribute to the Undo stack, but is silently removed.
         */
         virtual USHORT          LeaveListAction() = 0;
 
-        /// determines whether we're within a ListAction context, i.e. a LeaveListAction call is pending
+        /** leaves the list action entered with EnterListAction, and forcefully merges the previous
+            action on the stack into the newly created list action.
+
+            Say you have an Undo action A on the stack, then call EnterListAction, followed by one or more calls to
+            AddUndoAction, followed by a call to LeaveAndMergeListAction. In opposite to LeaveListAction, your Undo
+            stack will now still contain one undo action: the newly created list action, whose first child is the
+            original A, whose other children are those you added via AddUndoAction, and whose comment is the same as
+            the comment of A.
+
+            Effectively, this means that all actions added between EnterListAction and LeaveAndMergeListAction are
+            hidden from the user.
+
+            @return the number of the sub actions in the list which has just been left. Note that in case no such
+                actions exist, the list action does not contribute to the Undo stack, but is silently removed.
+        */
+        virtual USHORT          LeaveAndMergeListAction() = 0;
+
+        /// determines whether we're within a ListAction context, i.e. a LeaveListAction/LeaveAndMergeListAction call is pending
         virtual bool            IsInListAction() const = 0;
 
+        /// determines how many nested list actions are currently open
         virtual USHORT          GetListActionDepth() const = 0;
 
         /** clears the redo stack and removes the top undo action */
@@ -252,6 +272,7 @@ public:
     virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget ) const;
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
     virtual USHORT          LeaveListAction();
+    virtual USHORT          LeaveAndMergeListAction();
     virtual bool            IsInListAction() const;
     virtual USHORT          GetListActionDepth() const;
     virtual void            RemoveLastUndoAction();
@@ -259,6 +280,9 @@ public:
     virtual bool            IsUndoEnabled() const;
     virtual void            AddUndoListener( SfxUndoListener& i_listener );
     virtual void            RemoveUndoListener( SfxUndoListener& i_listener );
+
+private:
+    USHORT ImplLeaveListAction( const bool i_merge );
 };
 
 //=========================================================================
