@@ -215,13 +215,13 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 
         ImplControlValue aControlValue;
         Point aPoint;
-        Region aContent, aBound;
-        Region aArea( Rectangle(aPoint, pThis->GetOutputSizePixel()) );
+        Rectangle aContent, aBound;
+        Rectangle aArea( aPoint, pThis->GetOutputSizePixel() );
 
         if ( pThis->GetNativeControlRegion(CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
                 aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
-                width = pThis->mbHorz ? aContent.GetBoundRect().GetWidth() : aContent.GetBoundRect().GetHeight();
+            width = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
         }
     }
     return width;
@@ -338,16 +338,14 @@ void ToolBox::ImplDrawGrip( ToolBox* pThis )
         BOOL bNativeOk = FALSE;
         if( pThis->IsNativeControlSupported( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_HORZ : PART_THUMB_VERT ) )
         {
-            ImplControlValue    aControlValue;
             ToolbarValue        aToolbarValue;
             aToolbarValue.maGripRect = pWrapper->GetDragArea();
-            aControlValue.setOptionalVal( (void *)(&aToolbarValue) );
             Point aPt;
-            Region              aCtrlRegion( Rectangle( aPt, pThis->GetOutputSizePixel() ) );
+            Rectangle           aCtrlRegion( aPt, pThis->GetOutputSizePixel() );
             ControlState        nState = CTRL_STATE_ENABLED;
 
             bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
-                                            aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                                            aCtrlRegion, nState, aToolbarValue, rtl::OUString() );
         }
 
         if( bNativeOk )
@@ -557,7 +555,7 @@ BOOL ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region & )
 {
     // use NWF
     Point aPt;
-    Region        aCtrlRegion( Rectangle( aPt, pThis->GetOutputSizePixel() ) );
+    Rectangle aCtrlRegion( aPt, pThis->GetOutputSizePixel() );
     ControlState  nState = CTRL_STATE_ENABLED;
 
     return pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
@@ -1918,9 +1916,9 @@ BOOL ToolBox::ImplCalcItem()
     // determine minimum size necessary in NWF
     {
         Rectangle aRect( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
-        Region aReg = aRect;
+        Rectangle aReg( aRect );
         ImplControlValue aVal;
-        Region aNativeBounds, aNativeContent;
+        Rectangle aNativeBounds, aNativeContent;
         if( IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
         {
             if( GetNativeControlRegion( CTRL_TOOLBAR, PART_BUTTON,
@@ -1929,7 +1927,7 @@ BOOL ToolBox::ImplCalcItem()
                                         aVal, OUString(),
                                         aNativeBounds, aNativeContent ) )
             {
-                aRect = aNativeBounds.GetBoundRect();
+                aRect = aNativeBounds;
                 if( aRect.GetWidth() > nMinWidth )
                     nMinWidth = aRect.GetWidth();
                 if( aRect.GetHeight() > nMinHeight )
@@ -1954,7 +1952,7 @@ BOOL ToolBox::ImplCalcItem()
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
-            aRect = aNativeBounds.GetBoundRect();
+            aRect = aNativeBounds;
             if( aRect.GetHeight() > mnWinHeight )
                 mnWinHeight = aRect.GetHeight();
         }
@@ -1966,7 +1964,7 @@ BOOL ToolBox::ImplCalcItem()
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
-            aRect = aNativeBounds.GetBoundRect();
+            aRect = aNativeBounds;
             if( aRect.GetHeight() > mnWinHeight )
                 mnWinHeight = aRect.GetHeight();
         }
@@ -1978,7 +1976,7 @@ BOOL ToolBox::ImplCalcItem()
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
-            aRect = aNativeBounds.GetBoundRect();
+            aRect = aNativeBounds;
             if( aRect.GetHeight() > mnWinHeight )
                 mnWinHeight = aRect.GetHeight();
         }
@@ -3418,7 +3416,6 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highl
     if( !bIsWindow && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
-        Region              aCtrlRegion( rRect );
         ControlState        nState = 0;
 
         if ( highlight == 1 )   nState |= CTRL_STATE_PRESSED;
@@ -3429,7 +3426,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highl
 
 
         bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
-                                        aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                                              rRect, nState, aControlValue, rtl::OUString() );
     }
 
     if( !bNativeOk )
@@ -3453,6 +3450,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
     String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
+
+    bHighlight = bHighlight && pItem->mbEnabled;
 
     // Falls Rechteck ausserhalb des sichbaren Bereichs liegt
     if ( pItem->maRect.IsEmpty() )

@@ -201,6 +201,18 @@ public:
                                    BOOL bPropGreat = FALSE );
     void                SetItemSize( USHORT nId, long nNewSize );
     long                GetItemSize( USHORT nId ) const;
+    /** Set a range that limits the (variable part of the) size with an
+        upper and a lower bound (both are valid values themselves.)
+        @param nId
+            Id of the item for which the size limits are set.
+        @param aRange
+            Values of -1 define missing bounds, thus setting a range (-1,-1)
+            (the default) removes the size limitiation.
+    */
+    void                SetItemSizeRange (USHORT nId, const Range aRange);
+    /** Return the current size limits for the specified item.
+    */
+    Range               GetItemSizeRange (USHORT nId) const;
     long                GetItemSize( USHORT nId, SplitWindowItemBits nBits ) const;
     void                SetItemBits( USHORT nId, SplitWindowItemBits nNewBits );
     SplitWindowItemBits GetItemBits( USHORT nId ) const;

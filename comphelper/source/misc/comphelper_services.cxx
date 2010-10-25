@@ -41,6 +41,7 @@ extern void createRegistryInfo_OfficeInstallationDirectories();
 extern void createRegistryInfo_OInstanceLocker();
 extern void createRegistryInfo_Map();
 extern void createRegistryInfo_OSimpleLogRing();
+extern void createRegistryInfo_OOfficeRestartManager();
 
 //........................................................................
 namespace comphelper { namespace module
@@ -66,6 +67,7 @@ namespace comphelper { namespace module
                 createRegistryInfo_OInstanceLocker();
                 createRegistryInfo_Map();
                 createRegistryInfo_OSimpleLogRing();
+                createRegistryInfo_OOfficeRestartManager();
             }
         }
     }

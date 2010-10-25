@@ -2356,7 +2356,11 @@ IMPL_LINK( ImplListBox, MRUChanged, void*, EMPTYARG )
 
 IMPL_LINK( ImplListBox, LBWindowScrolled, void*, EMPTYARG )
 {
+    long nSet = GetTopEntry();
+    if( nSet > mpVScrollBar->GetRangeMax() )
+        mpVScrollBar->SetRangeMax( GetEntryList()->GetEntryCount() );
     mpVScrollBar->SetThumbPos( GetTopEntry() );
+
     mpHScrollBar->SetThumbPos( GetLeftIndent() );
 
     maScrollHdl.Call( this );
@@ -2395,7 +2399,11 @@ void ImplListBox::ImplCheckScrollBars()
         mbVScroll = TRUE;
 
         // Ueberpruefung des rausgescrollten Bereichs
-        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+        if( GetEntryList()->GetSelectEntryCount() == 1 &&
+            GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+            ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+        else
+            SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
     }
     else
     {
@@ -2428,7 +2436,11 @@ void ImplListBox::ImplCheckScrollBars()
                     mbVScroll = TRUE;
 
                     // Ueberpruefung des rausgescrollten Bereichs
-                    SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+                    if( GetEntryList()->GetSelectEntryCount() == 1 &&
+                        GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+                        ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+                    else
+                        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
                 }
             }
 
@@ -2819,7 +2831,7 @@ void ImplWin::ImplDraw( bool bLayout )
             sal_Int32 nLeft, nTop, nRight, nBottom;
             pWin->GetBorder( nLeft, nTop, nRight, nBottom );
             Point aPoint( -nLeft, -nTop );
-            Region aCtrlRegion( Rectangle( aPoint - GetPosPixel(), pWin->GetSizePixel() ) );
+            Rectangle aCtrlRegion( aPoint - GetPosPixel(), pWin->GetSizePixel() );
 
             BOOL bMouseOver = FALSE;
             if( GetParent() )
@@ -2838,8 +2850,7 @@ void ImplWin::ImplDraw( bool bLayout )
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
                 Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
-                Region aParentReg( aParentRect );
-                pWin->DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aParentReg,
+                pWin->DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aParentRect,
                                          nState, aControlValue, rtl::OUString() );
             }
 

@@ -189,14 +189,15 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
      return true;
 }
 
-bool WinSalGraphics::drawPolyLine(const basegfx::B2DPolygon& rPolygon, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin eLineJoin)
+bool WinSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolygon, double fTransparency, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin eLineJoin )
 {
     const sal_uInt32 nCount(rPolygon.count());
 
     if(mbPen && nCount)
     {
         Gdiplus::Graphics aGraphics(mhDC);
-        Gdiplus::Color aTestColor(255, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
+        const sal_uInt8 aTrans = (sal_uInt8)basegfx::fround( 255 * (1.0 - fTransparency) );
+        Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
         Gdiplus::Pen aTestPen(aTestColor, Gdiplus::REAL(rLineWidths.getX()));
         Gdiplus::GraphicsPath aPath;
         bool bNoLineJoin(false);

@@ -45,7 +45,6 @@ namespace svt { namespace table
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl        ( _rTableControl )
-        ,m_nRowAlreadySelected( -1 )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -58,14 +57,33 @@ namespace svt { namespace table
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
-
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetBackground( const Wallpaper& rColor )
+    {
+        Window::SetBackground( rColor );
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetControlBackground( const Color& rColor )
+    {
+        Window::SetControlBackground( rColor );
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetBackground()
+    {
+        Window::SetBackground();
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetControlBackground()
+    {
+        Window::SetControlBackground();
+    }
     //--------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
         Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if(m_rTableControl.getCurrentRow(aPoint)>=0 )
+            if(m_rTableControl.getCurrentRow(aPoint)>=0 && m_rTableControl.isTooltipActive() )
             {
                 SetPointer(POINTER_ARROW);
                 rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
@@ -91,23 +109,22 @@ namespace svt { namespace table
     {
         Point aPoint = rMEvt.GetPosPixel();
         RowPos nCurRow = m_rTableControl.getCurrentRow(aPoint);
+        std::vector<RowPos> selectedRows(m_rTableControl.getSelectedRows());
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
         else
         {
             if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
             {
-                if( m_nRowAlreadySelected != nCurRow )
+                bool found = std::find(selectedRows.begin(),selectedRows.end(), nCurRow) != selectedRows.end();
+
+                if( !found )
                 {
-                    m_nRowAlreadySelected = nCurRow;
                     m_aSelectHdl.Call( NULL );
                 }
-                else
-                    m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
             }
-            else
-                m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
         }
+        m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().LoseFocus();
     }
     //--------------------------------------------------------------------
@@ -115,8 +132,7 @@ namespace svt { namespace table
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
-        else
-            m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
+        m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GetFocus();
     }
     //--------------------------------------------------------------------

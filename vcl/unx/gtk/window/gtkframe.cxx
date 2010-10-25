@@ -1353,11 +1353,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             //
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
-            bool bHack =
-                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
-                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
-                ;
-            if( nUserTime == 0 && bHack )
+            if( nUserTime == 0 )
             {
                 /* #i99360# ugly workaround an X11 library bug */
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
@@ -1365,7 +1361,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             }
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
 
-            if( bHack && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
+            if( ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
@@ -1452,7 +1448,7 @@ void GtkSalFrame::setMinMaxSize()
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
-        if( m_bFullscreen )
+        if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
         {
             aGeo.max_width = m_aMaxSize.Width();
             aGeo.max_height = m_aMaxSize.Height();
@@ -1832,7 +1828,11 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
                 // workaround different legacy version window managers have different opinions about
                 // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
                 if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+                {
+                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
                     gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
+                }
                 if( bVisible )
                     Show( TRUE );
             }
@@ -1863,11 +1863,8 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
         {
             if( bFullScreen )
             {
-                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
-                {
-                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
-                }
+                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
                 gtk_window_fullscreen( GTK_WINDOW(m_pWindow) );
                 moveToScreen( nScreen );
                 Size aScreenSize = pDisp->GetScreenSize( m_nScreen );
@@ -1879,11 +1876,8 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
             else
             {
                 gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
-                if( getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
-                {
-                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
-                }
+                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
                 moveToScreen( nScreen );
             }
         }
@@ -2849,11 +2843,51 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     return FALSE;
 }
 
+IMPL_LINK( GtkSalFrame, ImplDelayedFullScreenHdl, void*, EMPTYARG )
+{
+    Atom nStateAtom = getDisplay()->getWMAdaptor()->getAtom(vcl_sal::WMAdaptor::NET_WM_STATE);
+    Atom nFSAtom = getDisplay()->getWMAdaptor()->getAtom(vcl_sal::WMAdaptor::NET_WM_STATE_FULLSCREEN );
+    if( nStateAtom && nFSAtom )
+    {
+        /* #i110881# workaround a gtk issue (see https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
+           gtk_window_fullscreen can fail due to a race condition, request an additional status change
+           to fullscreen to be safe
+        */
+        XEvent aEvent;
+        aEvent.type                 = ClientMessage;
+        aEvent.xclient.display      = getDisplay()->GetDisplay();
+        aEvent.xclient.window       = GDK_WINDOW_XWINDOW(m_pWindow->window);
+        aEvent.xclient.message_type = nStateAtom;
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.data.l[0]    = 1;
+        aEvent.xclient.data.l[1]    = nFSAtom;
+        aEvent.xclient.data.l[2]    = 0;
+        aEvent.xclient.data.l[3]    = 0;
+        aEvent.xclient.data.l[4]    = 0;
+        XSendEvent( getDisplay()->GetDisplay(),
+                    getDisplay()->GetRootWindow( m_nScreen ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
+    }
+
+    return 0;
+}
+
 gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     GTK_YIELD_GRAB();
+
+    if( pThis->m_bFullscreen )
+    {
+        /* #i110881# workaorund a gtk issue (see https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
+           gtk_window_fullscreen can run into a race condition with the window's showstate
+        */
+        Application::PostUserEvent( LINK( pThis, GtkSalFrame, ImplDelayedFullScreenHdl ) );
+    }
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;
@@ -3757,8 +3791,21 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
-    xText->deleteText(nPosition + offset, nPosition + offset + nchars);
-    return TRUE;
+        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
+        // range checking
+//        xText->deleteText(nPosition + offset, nPosition + offset + nchars);
+        sal_Int32 nDeletePos = nPosition + offset;
+        sal_Int32 nDeleteEnd = nDeletePos + nchars;
+        if (nDeletePos < 0)
+            nDeletePos = 0;
+        if (nDeleteEnd < 0)
+            nDeleteEnd = 0;
+        if (nDeleteEnd > xText->getCharacterCount())
+            nDeleteEnd = xText->getCharacterCount();
+
+        xText->deleteText(nDeletePos, nDeleteEnd);
+        // <--
+        return TRUE;
     }
 
     return FALSE;

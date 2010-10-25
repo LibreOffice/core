@@ -245,7 +245,11 @@ class HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-        std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+//      std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+              std::string* pExtensionPath = NULL,
+              std::string* pDestination = NULL,
+              const rtl::OUString* pOfficeHelpPath = NULL )
+
             throw( HelpProcessingException );
 
     HelpLinker()
@@ -265,10 +269,13 @@ private:
     fs::path idxContentStylesheet;
     fs::path zipdir;
     fs::path outputFile;
+    std::string extsource;
+    std::string extdestination;
     std::string module;
     std::string lang;
     std::string hid;
     std::string extensionPath;
+    std::string extensionDestination;
     bool bExtensionMode;
     fs::path indexDirName;
     Stringtable hidlistTranslation;
@@ -396,7 +403,8 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( bExtensionMode )
     {
-        indexDirParentName = sourceRoot;
+        //indexDirParentName = sourceRoot;
+        indexDirParentName = extensionDestination;
     }
     else
     {
@@ -752,21 +760,13 @@ void HelpLinker::link() throw( HelpProcessingException )
 
 
 void HelpLinker::main( std::vector<std::string> &args,
-    std::string* pExtensionPath, const rtl::OUString* pOfficeHelpPath )
-        throw( HelpProcessingException )
+                       std::string* pExtensionPath, std::string* pDestination,
+                       const rtl::OUString* pOfficeHelpPath )
+    throw( HelpProcessingException )
 {
-    rtl::OUString aOfficeHelpPath;
-
     bExtensionMode = false;
-    if( pExtensionPath && pExtensionPath->length() > 0 && pOfficeHelpPath )
-    {
-        helpFiles.clear();
-        bExtensionMode = true;
-        extensionPath = *pExtensionPath;
-        sourceRoot = fs::path(extensionPath);
+    helpFiles.clear();
 
-        aOfficeHelpPath = *pOfficeHelpPath;
-    }
     if (args.size() > 0 && args[0][0] == '@')
     {
         std::vector<std::string> stringList;
@@ -786,10 +786,34 @@ void HelpLinker::main( std::vector<std::string> &args,
     }
 
     size_t i = 0;
-
+    bool bSrcOption = false;
     while (i < args.size())
     {
-        if (args[i].compare("-src") == 0)
+        if (args[i].compare("-extlangsrc") == 0)
+        {
+            ++i;
+            if (i >= args.size())
+            {
+                std::stringstream aStrStream;
+                aStrStream << "extension source missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+            }
+            extsource = args[i];
+        }
+        else if (args[i].compare("-extlangdest") == 0)
+        {
+            //If this argument is not provided then the location provided in -extsource will
+            //also be the destination
+            ++i;
+            if (i >= args.size())
+            {
+                std::stringstream aStrStream;
+                aStrStream << "extension destination missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+            }
+            extdestination = args[i];
+        }
+        else if (args[i].compare("-src") == 0)
         {
             ++i;
             if (i >= args.size())
@@ -798,9 +822,8 @@ void HelpLinker::main( std::vector<std::string> &args,
                 aStrStream << "sourceroot missing" << std::endl;
                 throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
-
-            if( !bExtensionMode )
-                sourceRoot = fs::path(args[i], fs::native);
+            bSrcOption = true;
+            sourceRoot = fs::path(args[i], fs::native);
         }
         else if (args[i].compare("-sty") == 0)
         {
@@ -926,21 +949,70 @@ void HelpLinker::main( std::vector<std::string> &args,
         ++i;
     }
 
+    //We can be called from the helplinker executable or the extension manager
+    //In the latter case extsource is not used.
+    if( (pExtensionPath && pExtensionPath->length() > 0 && pOfficeHelpPath)
+        || !extsource.empty())
+    {
+        bExtensionMode = true;
+        if (!extsource.empty())
+        {
+            //called from helplinker.exe, pExtensionPath and pOfficeHelpPath
+            //should be NULL
+            sourceRoot = fs::path(extsource, fs::native);
+            extensionPath = sourceRoot.toUTF8();
+
+            if (extdestination.empty())
+            {
+                std::stringstream aStrStream;
+                aStrStream << "-extlangdest is missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+            }
+            else
+            {
+                //Convert from system path to file URL!!!
+                fs::path p(extdestination, fs::native);
+                extensionDestination = p.toUTF8();
+            }
+        }
+        else
+        { //called from extension manager
+            extensionPath = *pExtensionPath;
+            sourceRoot = fs::path(extensionPath);
+            extensionDestination = *pDestination;
+        }
+        //check if -src option was used. This option must not be used
+        //when extension help is compiled.
+        if (bSrcOption)
+        {
+            std::stringstream aStrStream;
+            aStrStream << "-src must not be used together with -extsource missing" << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+        }
+    }
+
     if (!bExtensionMode && zipdir.empty())
     {
         std::stringstream aStrStream;
         aStrStream << "no index dir given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    if (!bExtensionMode && idxCaptionStylesheet.empty())
+
+    if (!bExtensionMode && idxCaptionStylesheet.empty()
+        || !extsource.empty() && idxCaptionStylesheet.empty())
     {
+        //No extension mode and extension mode using commandline
+        //!extsource.empty indicates extension mode using commandline
+        // -idxcaption paramter is required
         std::stringstream aStrStream;
         aStrStream << "no index caption stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    else if ( bExtensionMode )
+    else if ( bExtensionMode &&  extsource.empty())
     {
-        rtl::OUString aIdxCaptionPathFileURL( aOfficeHelpPath );
+        //This part is used when compileExtensionHelp is called from the extensions manager.
+        //If extension help is compiled using helplinker in the build process
+        rtl::OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
         aIdxCaptionPathFileURL += rtl::OUString::createFromAscii( "/idxcaption.xsl" );
 
         rtl::OString aOStr_IdxCaptionPathFileURL( rtl::OUStringToOString
@@ -949,15 +1021,23 @@ void HelpLinker::main( std::vector<std::string> &args,
 
         idxCaptionStylesheet = fs::path( aStdStr_IdxCaptionPathFileURL );
     }
-    if (!bExtensionMode && idxContentStylesheet.empty())
+
+    if (!bExtensionMode && idxContentStylesheet.empty()
+        || !extsource.empty() && idxContentStylesheet.empty())
     {
+        //No extension mode and extension mode using commandline
+        //!extsource.empty indicates extension mode using commandline
+        // -idxcontent paramter is required
         std::stringstream aStrStream;
         aStrStream << "no index content stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    else if ( bExtensionMode )
+    else if ( bExtensionMode && extsource.empty())
     {
-        rtl::OUString aIdxContentPathFileURL( aOfficeHelpPath );
+        //If extension help is compiled using helplinker in the build process
+        //then  -idxcontent must be supplied
+        //This part is used when compileExtensionHelp is called from the extensions manager.
+        rtl::OUString aIdxContentPathFileURL( *pOfficeHelpPath );
         aIdxContentPathFileURL += rtl::OUString::createFromAscii( "/idxcontent.xsl" );
 
         rtl::OString aOStr_IdxContentPathFileURL( rtl::OUStringToOString
@@ -1069,6 +1149,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
+    const rtl::OUString& aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 )
 {
@@ -1102,13 +1183,16 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
     const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
     std::string aStdStrExtensionPath = pExtensionPath;
+    rtl::OString aODestination = rtl::OUStringToOString(aDestination, fs::getThreadTextEncoding());
+    const char* pDestination = aODestination.getStr();
+    std::string aStdStrDestination = pDestination;
 
     // Set error handler
     xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
     try
     {
         HelpLinker* pHelpLinker = new HelpLinker();
-        pHelpLinker->main( args, &aStdStrExtensionPath, &aOfficeHelpPath );
+        pHelpLinker->main( args, &aStdStrExtensionPath, &aStdStrDestination, &aOfficeHelpPath );
         delete pHelpLinker;
     }
     catch( const HelpProcessingException& e )

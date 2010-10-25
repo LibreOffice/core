@@ -34,7 +34,6 @@
 
 #include "sal/main.h"
 
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -125,13 +124,14 @@ Reference< XInputStream > createStreamFromFile(
 
     if( f ) {
         fseek( f , 0 , SEEK_END );
-        int nLength = ftell( f );
+        size_t nLength = ftell( f );
         fseek( f , 0 , SEEK_SET );
 
         Sequence<sal_Int8> seqIn(nLength);
-        fread( seqIn.getArray() , nLength , 1 , f );
-
-        r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+        if (fread( seqIn.getArray() , nLength , 1 , f ) == 1)
+            r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+        else
+            fprintf(stderr, "failure reading %s\n", pcFile);
         fclose( f );
     }
     return r;
@@ -338,45 +338,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         xSMgr = createRegistryServiceFactory(
             ::rtl::OUString::createFromAscii(argv[4]),
-            ::rtl::OUString::createFromAscii(argv[5]) );
+            ::rtl::OUString::createFromAscii(argv[5]), true );
     }
     catch ( Exception& )
     {
         printf( "Exception on createRegistryServiceFactory\n" );
         exit(1);
     }
-
-    Reference < XImplementationRegistration > xReg;
-    try
-    {
-        // Create registration service
-        Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
-        xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
-    }
-    catch( Exception & ) {
-        printf( "Couldn't create ImplementationRegistration service\n" );
-        exit(1);
-    }
-
-    OString sTestName;
-    try
-    {
-        // Load dll for the tested component
-        OUString aDllName =
-            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
-        xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-            aDllName,
-            Reference< XSimpleRegistry > ()  );
-    }
-    catch( Exception &e ) {
-        printf( "Couldn't raise sax.uno library!\n" );
-        printf( "%s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
-
-        exit(1);
-    }
-
 
     //--------------------------------
     // parser demo

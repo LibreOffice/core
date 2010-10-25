@@ -116,17 +116,15 @@ inline FourCharCode GetTag(const char aTagName[5])
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 
-ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
+    // return the cached charmap
     if( mpCharMap )
-    {
-        // return the cached charmap
-        mpCharMap->AddReference();
         return mpCharMap;
-    }
 
     // set the default charmap
     mpCharMap = ImplFontCharMap::GetDefaultMap();
+    mpCharMap->AddReference();
 
     // get the CMAP byte size
     ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
@@ -149,10 +147,14 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     // parse the CMAP
     CmapResult aCmapResult;
-    if( !ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
-        return mpCharMap;
+    if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
+    {
+        // create the matching charmap
+        mpCharMap->DeReference();
+        mpCharMap = new ImplFontCharMap( aCmapResult );
+        mpCharMap->AddReference();
+    }
 
-    mpCharMap = new ImplFontCharMap( aCmapResult );
     return mpCharMap;
 }
 
@@ -988,6 +990,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
 // -----------------------------------------------------------------------
 
 bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
     const ::basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin )
 {
@@ -1032,6 +1035,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
         CGContextAddPath( mrContext, xPath );
         // draw path with antialiased line
         CGContextSetShouldAntialias( mrContext, true );
+        CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CGContextDrawPath( mrContext, kCGPathStroke );
@@ -1451,16 +1455,24 @@ BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
     // prepare the target context
     NSGraphicsContext* pOrigNSCtx = [NSGraphicsContext currentContext];
+    [pOrigNSCtx retain];
+
+    // create new context
     NSGraphicsContext* pDrawNSCtx = [NSGraphicsContext graphicsContextWithGraphicsPort: mrContext flipped: IsFlipped()];
+    // set it, setCurrentContext also releases the prviously set one
     [NSGraphicsContext setCurrentContext: pDrawNSCtx];
+
     // draw the EPS
     const NSRect aDstRect = {{nX,nY},{nWidth,nHeight}};
     const BOOL bOK = [xEpsImage drawInRect: aDstRect];
+
+    // restore the NSGraphicsContext
+    [NSGraphicsContext setCurrentContext: pOrigNSCtx];
+    [pOrigNSCtx release]; // restore the original retain count
+
     CGContextRestoreGState( mrContext );
     // mark the destination rectangle as updated
        RefreshRect( aDstRect );
-    // restore the NSGraphicsContext, TODO: do we need this?
-    [NSGraphicsContext setCurrentContext: pOrigNSCtx];
 
     return bOK;
 }
@@ -1545,8 +1557,10 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
+    (void)nFallbackLevel; // glyph-fallback on ATSU is done differently -> no fallback level
+
     // get the ATSU font metrics (in point units)
     // of the font that has eventually been size-limited
 
@@ -1980,7 +1994,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
     if( !mpMacFontData )
         return ImplFontCharMap::GetDefaultMap();
@@ -2355,6 +2369,8 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
                 if( nGlyph > 0 )
                     rUnicodeEnc[ nUcsChar ] = nGlyph;
             }
+
+            pMap->DeReference(); // TODO: add and use RAII object instead
         }
 
         ::CloseTTFont( pSftFont );

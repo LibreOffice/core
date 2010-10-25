@@ -43,7 +43,10 @@ public class JPropEx
     private boolean isQuiet             = false;
     private final String resourceType   = "javaproperties";
     private final String sourceLanguage = "en-US";
-    //private SdfData data;
+
+    static final int JAVA_TYPE      = 0;
+    static final int JAVA_ENUS_TYPE = 1;
+    static final int EXTENSION_TYPE = 2;
 
     public JPropEx()
     {
@@ -118,28 +121,38 @@ public class JPropEx
         String key;
         SdfEntity currentStr;
         String value;
+        String str;
         for( Enumeration e = prop.propertyNames() ; e.hasMoreElements() ; )
         {
             key         = (String)      e.nextElement();
             currentStr  = (SdfEntity)   dolly.clone();
-            // Set the new LID and the string text
-            currentStr.setLid( key );
+            // Set the new GID and the string text
+            currentStr.setGid( key );
             value            = prop.getProperty( key , "" );
             //if( value.equals("") )  System.err.println("Warning: in file "+inputFileArg+" the string with the key "+key+" has a empty string!");
-            currentStr.setText( (prop.getProperty( key )).replaceAll("\t" , " " ) );     // TODO: Quoting!!!!
-            data.add( currentStr );
+            str = (prop.getProperty( key )).replaceAll("\t" , " " );    // remove tab
+            str = str.replaceAll("\n"," ");                             // remove return
+            currentStr.setText( str );
+            if( str.length() > 0 )
+                data.add( currentStr );
         }
         data.write( outputFileArg );
     }
 
     private SdfEntity prepareSdfObj( String filename )
     {
-        String path = makeAbs( filename );
-        //String path = makeAbs( inputFileArg );
-        path = path.replace( rootArg + "/" , "" );
+        String path = makeAbs( filename ).trim();
+        String myRootArg = makeAbs( rootArg ).trim();
+        myRootArg = myRootArg.replace( "\\","/");
+        myRootArg += "/";
+        path = path.replace("\\","/");
+        path = path.replace( myRootArg, "" );
         path = path.replace("/","\\");
-        return new SdfEntity( projectArg , path , "" /* dummy1 */ , resourceType , "", "" , "" , "" , "" /* dummy2 */ ,
-                              sourceLanguage , "",  "" , ""  , "" , "2002-02-02 02:02:02" );
+        // TODO: Make this static
+        java.text.SimpleDateFormat dateformat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = dateformat.format( new Date() );
+        return new SdfEntity( projectArg , path , "0" /* dummy1 */ , resourceType , "", "" , "" , "" , "0" /* dummy2 */ ,
+                              sourceLanguage , "",  "" , ""  , "" , date );
     }
 
     private void merge()
@@ -166,7 +179,7 @@ public class JPropEx
         {
             BufferedReader in = new BufferedReader( new FileReader( filename.substring( 1 ) ) );
             while( in.ready() )
-                lines.add( in.readLine() );
+                lines.add( in.readLine().trim() );
         }
         catch( IOException e )
         {
@@ -178,6 +191,7 @@ public class JPropEx
 
     private void mergeFile( String filename , SdfData data , boolean isSingleFile )
     {
+        int type = detectFormat( filename );
         java.util.Properties sourceProp = loadProp( filename );
         Vector langs = getLanguages( data );
         HashMap props = new HashMap();
@@ -200,7 +214,7 @@ public class JPropEx
             key          = (String) e.nextElement();
             sourceString = sourceProp.getProperty( key );
             curStr       = (SdfEntity) dolly.clone();
-            curStr.setLid( key );
+            curStr.setGid( key );
             for( Enumeration lang = langs.elements(); lang.hasMoreElements(); ) // merge in every language
             {
                 curEntity   = (SdfEntity) curStr.clone();
@@ -209,13 +223,13 @@ public class JPropEx
                 mergedEntity = data.get( curEntity );
                 if( mergedEntity == null )
                 {
-                    // if case there is not translation the fallback to the en-US source string
-                    ( (java.util.Properties) props.get( curLang )).setProperty( curEntity.getLid() , sourceString  );
+                    // in case there is no translation then fallback to the en-US source string
+                    ( (java.util.Properties) props.get( curLang )).setProperty( curEntity.getGid() , sourceString  );
                 }
                 else
                 {
                     // Set the merged text from the sdf file
-                    ( (java.util.Properties) props.get( curLang )).setProperty( mergedEntity.getLid() , mergedEntity.getText() );  // TODO: Quoting ???
+                    ( (java.util.Properties) props.get( curLang )).setProperty( mergedEntity.getGid() , mergedEntity.getText() );  // TODO: Quoting ???
                 }
             }
 
@@ -225,10 +239,10 @@ public class JPropEx
         for( Iterator i = props.keySet().iterator() ; i.hasNext() ; )
         {
             lang = (String) i.next();
-            writeSinglePropertiesFile( filename , (java.util.Properties) props.get( lang ) , lang , isSingleFile );
+            writeSinglePropertiesFile( filename , (java.util.Properties) props.get( lang ) , lang , isSingleFile , type );
         }
     }
-    private void writeSinglePropertiesFile( String filename , java.util.Properties prop , String lang , boolean isSingleFile )
+    private void writeSinglePropertiesFile( String filename , java.util.Properties prop , String lang , boolean isSingleFile , int type )
     {
         // Prepare path to file
         int filenameIdx     = filename.lastIndexOf( "/" ) > 0 ? filename.lastIndexOf( "/" )+1 : 0 ;
@@ -240,24 +254,21 @@ public class JPropEx
         if( pathPrefixArg != null && pathPrefixArg.length()>0 && pathPostfixArg != null && pathPostfixArg.length()>0 )
         {
             path = new StringBuffer().append( pathPrefixArg ).append( "/" ).append( lcLang ).append( "/" ).append( pathPostfixArg ).append( "/" ).toString();
-            name = new StringBuffer().append( filename.substring( filenameIdx , filename.lastIndexOf( ".properties" ) ) )
-                                        .append( "_" ).append( lcLang.replaceAll("-","_") ).append( ".properties" ).toString();
+            name += formatFilename( filename , filenameIdx , lang , type );
         }
         //use of -i <one_filename>
         else if( !isSingleFile && outputFileArg != null && outputFileArg.length()>0 )
         {
-            name = outputFileArg;
-            name += new StringBuffer().append( filename.substring( filenameIdx , filename.lastIndexOf( ".properties" ) ) )
-                                     .append( "_" ).append( lcLang.replaceAll("-","_") ).append( ".properties" ).toString();
             //name = outputFileArg;
+            path = outputFileArg;
+            name += formatFilename( filename , filenameIdx , lang , type );
         }
         //use of -i @<file_containing_many_filenames>
         else if( isSingleFile && outputFileArg != null && outputFileArg.length()>0 )
         {
-            name = outputFileArg;
-            name += new StringBuffer().append( inputFileArg.substring( filenameIdx , filename.lastIndexOf( ".properties" ) ) )
-                                     .append( "_" ).append( lcLang.replaceAll("-","_") ).append( ".properties" ).toString();
             //name = outputFileArg;
+            path = outputFileArg;
+            name += formatFilename( filename , filenameIdx , lang , type );
         }
         else
         {
@@ -284,7 +295,7 @@ public class JPropEx
         }
         path += name;
         // Write the properties file
-        System.out.println("DBG: Writing to "+path);
+        //System.out.println("DBG: Writing to "+path);
         try{
             BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( path ) );
             if( prop == null )
@@ -298,6 +309,75 @@ public class JPropEx
         }
     }
 
+    // we have different types of properties in the source code
+    // each needs a different file nameing scheme
+    private int detectFormat( String filename )
+    {
+       if( filename.endsWith( "_en_US.properties" ) )
+           return EXTENSION_TYPE;
+       else if( filename.endsWith("_en_us.properties" ) )
+           return JAVA_ENUS_TYPE;
+       else if( filename.endsWith( ".properties" ) )
+           return JAVA_TYPE;
+
+       // Can not detect, exit
+       System.err.println("ERROR: Invalid file name. Only allowed (case sensitive!)  *_en_US.properties , *_en_us.properties or *.properties\n");
+       System.exit(-1);
+       return JAVA_TYPE;    // dummy
+    }
+
+    private String formatFilename( String filename , int filenameIdx , String lang , int type )
+    {
+
+        if( !lang.equals( "en-US" ) )
+        {
+            // Parse iso code
+            int pos = lang.indexOf("-");
+            String langpart1 = new String();
+            String langpart2 = new String();
+            if( pos == -1 )
+            {
+                langpart1 = lang;
+            }
+            else if( pos > 0 )
+            {
+                langpart1 = lang.substring( 0 , pos );
+                langpart2 = lang.substring( pos+1 , lang.length() );
+            }
+            // change filename according to the type
+            switch( type )
+            {
+                // -> de_DE
+                case EXTENSION_TYPE:
+                    lang  =  langpart1.toLowerCase();
+                    if( langpart2.length() > 0 )                    // -> en_US
+                        lang += "_" + langpart2.toUpperCase();
+                    else                                            // -> de_DE
+                        lang += "_" + langpart1.toUpperCase();
+                    return new StringBuffer().append( filename.substring( filenameIdx , filename.lastIndexOf( "_en_US.properties" ) ) )
+                                        .append( "_" ).append( lang.replaceAll("-","_") ).append( ".properties" ).toString();
+                    // -> de
+                case JAVA_ENUS_TYPE:
+                    lang = langpart1.toLowerCase();
+                    if( langpart2.length() > 0 )
+                        lang += "_" + langpart2.toLowerCase();
+                    return new StringBuffer().append( filename.substring( filenameIdx , filename.lastIndexOf( "_en_us.properties" ) ) )
+                                        .append( "_" ).append( lang.replaceAll("-","_") ).append( ".properties" ).toString();
+                    // -> de
+                case JAVA_TYPE:
+                    lang = langpart1.toLowerCase();
+                    if( langpart2.length() > 0 )
+                        lang += "_" + langpart2.toLowerCase();
+                    return new StringBuffer().append( filename.substring( filenameIdx , filename.lastIndexOf( ".properties" ) ) )
+                                        .append( "_" ).append( lang.replaceAll("-","_") ).append( ".properties" ).toString();
+                default:
+                        System.err.println("ERROR: Something is really broken here, l10ntools/java/jprop/java/JPropEx.java :: formatFilename()");
+                        System.exit( -1 );
+                break;
+            }
+       }
+        return filename;        // don't change en-US source file name
+    }
     private SdfData getSdfData()
     {
         SdfData data = new SdfData( inputSdfFileArg );

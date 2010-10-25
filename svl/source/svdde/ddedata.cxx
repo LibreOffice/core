@@ -41,10 +41,6 @@
 
 #include <osl/thread.h>
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVDDE_MISC_CODE" )
-#endif
-
 // --- DdeData::DdeData() ------------------------------------------
 
 DdeData::DdeData()
@@ -164,10 +160,10 @@ ULONG DdeData::GetExternalFormat( ULONG nFmt )
 
     default:
         {
-#if defined(WNT) || defined(WIN) || defined( PM2 )
+#if defined(WNT) || defined( PM2 )
             String aName( SotExchange::GetFormatName( nFmt ) );
 
-#if defined(WNT) || defined(WIN)
+#if defined(WNT)
 
             if( aName.Len() )
                 nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.GetBuffer()) );
@@ -203,7 +199,7 @@ ULONG DdeData::GetInternalFormat( ULONG nFmt )
         break;
 
     default:
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
         if( nFmt >= CF_MAX )
         {
             TCHAR szName[ 256 ];

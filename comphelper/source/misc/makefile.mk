@@ -72,6 +72,7 @@ SLOFILES=   \
             $(SLO)$/numberedcollection.obj \
             $(SLO)$/numbers.obj \
             $(SLO)$/officeresourcebundle.obj \
+            $(SLO)$/officerestartmanager.obj \
             $(SLO)$/proxyaggregation.obj \
             $(SLO)$/querydeep.obj \
             $(SLO)$/regpathhelper.obj \

@@ -1407,56 +1407,59 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
     pFrame->meWindowType        = eType;
     pFrame->mnDecorationFlags   = nDecorationFlags;
 
-    // set mwm hints
-    struct _mwmhints {
-        unsigned long flags, func, deco;
-        long input_mode;
-        unsigned long status;
-    } aHint;
-
-    aHint.flags = 15; /* flags for functions, decoration, input mode and status */
-    aHint.deco = 0;
-    aHint.func = 1L << 2;
-    aHint.status = 0;
-    aHint.input_mode = 0;
-
-    // evaluate decoration flags
-    if( nDecorationFlags & decoration_All )
-        aHint.deco = 1, aHint.func = 1;
-    else
+    if( ! pFrame->mbFullScreen )
     {
-        if( nDecorationFlags & decoration_Title )
-            aHint.deco |= 1L << 3;
-        if( nDecorationFlags & decoration_Border )
-            aHint.deco |= 1L << 1;
-        if( nDecorationFlags & decoration_Resize )
-            aHint.deco |= 1L << 2, aHint.func |= 1L << 1;
-        if( nDecorationFlags & decoration_MinimizeBtn )
-            aHint.deco |= 1L << 5, aHint.func |= 1L << 3;
-        if( nDecorationFlags & decoration_MaximizeBtn )
-            aHint.deco |= 1L << 6, aHint.func |= 1L << 4;
-        if( nDecorationFlags & decoration_CloseBtn )
-            aHint.deco |= 1L << 4, aHint.func |= 1L << 5;
-    }
-    // evaluate window type
-    switch( eType )
-    {
-        case windowType_ModalDialogue:
-            aHint.input_mode = 1;
-            break;
-        default:
-            break;
-    }
+        // set mwm hints
+        struct _mwmhints {
+            unsigned long flags, func, deco;
+            long input_mode;
+            unsigned long status;
+        } aHint;
 
-    // set the hint
-     XChangeProperty( m_pDisplay,
-                      pFrame->GetShellWindow(),
-                      m_aWMAtoms[ MOTIF_WM_HINTS ],
-                      m_aWMAtoms[ MOTIF_WM_HINTS ],
-                      32,
-                      PropModeReplace,
-                      (unsigned char*)&aHint,
-                      5 );
+        aHint.flags = 15; /* flags for functions, decoration, input mode and status */
+        aHint.deco = 0;
+        aHint.func = 1L << 2;
+        aHint.status = 0;
+        aHint.input_mode = 0;
+
+        // evaluate decoration flags
+        if( nDecorationFlags & decoration_All )
+            aHint.deco = 1, aHint.func = 1;
+        else
+        {
+            if( nDecorationFlags & decoration_Title )
+                aHint.deco |= 1L << 3;
+            if( nDecorationFlags & decoration_Border )
+                aHint.deco |= 1L << 1;
+            if( nDecorationFlags & decoration_Resize )
+                aHint.deco |= 1L << 2, aHint.func |= 1L << 1;
+            if( nDecorationFlags & decoration_MinimizeBtn )
+                aHint.deco |= 1L << 5, aHint.func |= 1L << 3;
+            if( nDecorationFlags & decoration_MaximizeBtn )
+                aHint.deco |= 1L << 6, aHint.func |= 1L << 4;
+            if( nDecorationFlags & decoration_CloseBtn )
+                aHint.deco |= 1L << 4, aHint.func |= 1L << 5;
+        }
+        // evaluate window type
+        switch( eType )
+        {
+            case windowType_ModalDialogue:
+                aHint.input_mode = 1;
+                break;
+            default:
+                break;
+        }
+
+        // set the hint
+        XChangeProperty( m_pDisplay,
+                         pFrame->GetShellWindow(),
+                         m_aWMAtoms[ MOTIF_WM_HINTS ],
+                         m_aWMAtoms[ MOTIF_WM_HINTS ],
+                         32,
+                         PropModeReplace,
+                         (unsigned char*)&aHint,
+                         5 );
+    }
 
     // set transientFor hint
     /*  #91030# dtwm will not map a dialogue if the transient
@@ -2177,6 +2180,15 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
     if( m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
     {
         pFrame->mbFullScreen = bFullScreen;
+        if( bFullScreen )
+        {
+            if( m_aWMAtoms[ MOTIF_WM_HINTS ] )
+            {
+                XDeleteProperty( m_pDisplay,
+                                 pFrame->GetShellWindow(),
+                                m_aWMAtoms[ MOTIF_WM_HINTS ] );
+            }
+        }
         if( pFrame->bMapped_ )
         {
             // window already mapped, send WM a message

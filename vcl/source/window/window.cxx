@@ -88,8 +88,8 @@
 
 #include "vcl/dialog.hxx"
 #include "vcl/unowrap.hxx"
-#include "dndlcon.hxx"
-#include "dndevdis.hxx"
+#include "vcl/dndlcon.hxx"
+#include "vcl/dndevdis.hxx"
 #include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
@@ -243,18 +243,17 @@ void Window::ImplInitAppFontData( Window* pWindow )
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;
-        Region aCtrlRegion( (const Rectangle&)Rectangle( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) ) );
-        Region aBoundingRgn( aCtrlRegion );
-        Region aContentRgn( aCtrlRegion );
+        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        Rectangle aBoundingRgn( aCtrlRegion );
+        Rectangle aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                              CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {
-            Rectangle aContentRect( aContentRgn.GetBoundRect() );
             // comment: the magical +6 is for the extra border in bordered
             // (which is the standard) edit fields
-            if( aContentRect.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
-                pSVData->maGDIData.mnAppFontY = (aContentRect.GetHeight()-4) * 10;
+            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
         }
     }
 
@@ -8650,7 +8649,10 @@ Reference< XClipboard > Window::GetClipboard()
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
+
+                    if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
+                        mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
@@ -8711,6 +8713,9 @@ Reference< XClipboard > Window::GetPrimarySelection()
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
 #   else
                     static Reference< XClipboard >  s_xSelection;
+
+                    if ( !s_xSelection.is() )
+                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );

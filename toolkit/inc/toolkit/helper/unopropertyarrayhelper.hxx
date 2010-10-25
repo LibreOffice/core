@@ -28,16 +28,18 @@
 #ifndef _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 #define _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 
+#include <toolkit/dllapi.h>
 #include <cppuhelper/propshlp.hxx>
 
 #include <tools/table.hxx>
 
 #include <list>
+#include "toolkit/dllapi.h"
 
 //  ----------------------------------------------------
 //  class UnoPropertyArrayHelper
 //  ----------------------------------------------------
-class UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
+class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
 {
 private:
     Table       maIDs;
