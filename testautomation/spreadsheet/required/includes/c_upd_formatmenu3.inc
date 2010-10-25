@@ -29,14 +29,6 @@
 '*
 '* short description : Resource Test - Format Menu Part III
 '*
-'************************************************************************
-'*
-' #1 tFormatGraphicPositionAndSize
-' #1 tFormatGraphicLine
-' #1 tFormatGraphicArea
-' #1 tFormatGraphicText
-' #1 tFormatGraphicPoints
-'*
 '\***********************************************************************
 
 sub c_upd_formatmenu3
@@ -129,6 +121,7 @@ testcase tFormatGraphicPositionAndSize
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -369,6 +362,7 @@ testcase tFormatGraphicLine
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -911,6 +905,7 @@ testcase tFormatGraphicArea
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -1027,6 +1022,7 @@ testcase tFormatGraphicText
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -1047,6 +1043,7 @@ testcase tFormatGraphicPoints
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 

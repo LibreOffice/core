@@ -33,6 +33,9 @@
 
 testcase tEPS
 
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
     dim x as integer
     dim i as integer
 
@@ -95,6 +98,11 @@ testcase tEPS
 endcase 'tEPS
 '-------------------------------------------------------------------------
 testcase tPCT
+
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     dim x as integer
     dim i as integer
@@ -167,83 +175,15 @@ testcase tPCT
         endif
     endif
 
-    printlog "----------3rd: exporting part of the picture and inserting into new file."
-    hTypeKeys ("<escape><tab>")
-    fGetSizeXY sx1, sY, TRUE
-
-    if ( hCallExport( OutputGrafikTBO + "1", sFilter, TRUE ) ) then
-
-        Kontext "PCTOptions"
-        printlog( "Export options dialog" )
-        if ( PCTOptions.Exists( 2 ) ) then
-            hCloseDialog( PCTOptions, "ok" )
-        else
-            warnlog( "No export options dialog was displayed" )
-        endif
-
-        sOutputFile = OutputGrafikTBO + "1" + sExt
-        if ( hWaitForOutputFile( sOutputFile ) ) then
-            printlog( "Close file and re-insert graphics into new document" )
-            hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
-        else
-            warnlog( "File was not saved: " & sOutputFile )
-        endif
-
-        bTemp = fGetSizeXY( sx1, sY, bTemp )
-        if (bTemp = FALSE) then
-            warnlog "Selected original size NOT OK :-("
-        endif
-    endif
-
-    hFileReOpen( "" )
-    printlog "----------4th: exporting rectangle and reload file."
-    hRechteckErstellen ( 10, 10, 30, 40 )
-
-    if ( hCallExport( OutputGrafikTBO + "2" , sFilter, TRUE ) ) then
-
-        Kontext "PCTOptions"
-        printlog( "Export options dialog" )
-        if ( PCTOptions.Exists( 2 ) ) then
-            Exportwidth.SetText "9"
-            if Exportmeasurement.GetSelText = "inches" then
-                sx1 = (Exportwidth.GetText)+ """"
-                printlog "sx1= " & sx1
-            else
-                sx1 = (Exportwidth.GetText)+ "cm"
-            endif
-
-            if Exportmeasurement.GetSelText = "inches" then
-                sY = (Exportheight.GetText)+ """"
-                printlog "sY= " & sY
-            else
-                sY = (Exportheight.GetText)+ "cm"
-            endif
-            hCloseDialog( PCTOptions, "ok" )
-        else
-            warnlog( "No export options dialog was displayed" )
-        endif
-
-        sOutputFile = OutputGrafikTBO + "2" + sExt
-
-        if ( not hWaitForOutputFile( sOutputFile ) ) then
-            warnlog( "File was not saved: " & sOutputFile )
-        endif
-
-        printlog( "Reload file if it exists. Warn if not" )
-        hFileReOpen( sOutputFile )
-
-        kontext "DocumentDraw"
-        DocumentDraw.TypeKeys ("<escape><tab>")
-        ContextOriginalSize
-        bTemp = fGetSizeXY( sx1, sY, bTemp )
-        if ( not bTemp ) then warnlog "Selected original size NOT OK :-("
-    endif
-
     call hCloseDocument
 
 endcase 'tPCT
 '-------------------------------------------------------------------------------
 testcase tPBM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PBM - Portable Bitmap (.pbm)"
     const sExt = ".pbm"
@@ -274,6 +214,10 @@ testcase tPBM
 endcase 'tPBM
 '-------------------------------------------------------------------------------
 testcase tPGM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PGM - Portable Graymap (.pgm)"
     const sExt = ".pgm"
@@ -303,6 +247,10 @@ testcase tPGM
 endcase 'tPGM
 '-------------------------------------------------------------------------------
 testcase tPPM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PPM - Portable Pixelmap (.ppm)"
     const sExt = ".ppm"
@@ -332,6 +280,10 @@ testcase tPPM
 endcase 'tPPM
 '------------------------------------------------------------------------------
 testcase tRAS
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "RAS - Sun Raster Image (.ras)"
     const sExt = ".ras"
@@ -352,6 +304,10 @@ testcase tRAS
 endcase 'tRAS
 '------------------------------------------------------------------------------
 testcase tTIFF
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     dim x as integer
     dim i as integer
@@ -375,6 +331,10 @@ testcase tTIFF
 endcase 'tTIFF
 '------------------------------------------------------------------------------
 testcase tXPM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "XPM - X PixMap (.xpm)"
     const sExt = ".xpm"
@@ -395,6 +355,10 @@ testcase tXPM
 endcase 'tXPM
 '-------------------------------------------------------------------------------
 testcase tGIF
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "GIF - Graphics Interchange Format (.gif)"
     const sExt = ".gif"
@@ -425,6 +389,10 @@ testcase tGIF
 endcase 'tGIF
 '-------------------------------------------------------------------------------
 testcase tJPEG
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "JPEG - Joint Photographic Experts Group (.jpg;.jpeg;.jfif;.jif;.jpe)"
     const sExt = ".jpg"

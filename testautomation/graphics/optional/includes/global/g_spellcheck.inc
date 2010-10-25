@@ -136,7 +136,7 @@ endcase 'tiToolsSpellcheckCorrect
 testcase tiToolsSpellcheckError
     if iSprache = 48 then
         qaerrorlog "This test is not adapted for polish, 48."
-        got endsub
+        goto endsub
     endif
     Dim Fehler$
     Dim Sprachenname$
@@ -155,7 +155,7 @@ testcase tiToolsSpellcheckError
     case 39 : FehlerText$ = "Ringrarziamo per l'interessa mostrato a collaborare con la firma." : Fehler$ = "Ringrarziamo" : Sprachenname$ = "Italienisch"
     case 46 : FehlerText$ = "Detd varierar vad som behandlas och ur vilket perspektiv."         : Fehler$ = "Detd"         : Sprachenname$ = "Schwedisch"
     case 49 : FehlerText$ = "Diees ist ein Fehler."                         : Fehler$ = "Diees" : Sprachenname$ = "Deutsch"
-    case 50 : FehlerText$ = "Toje napaka, ker manjka presledek."            : Fehler$ = "Toje" : Sprachenname$ = "SlovenÅ¡Ä?ina"
+    case 50 : FehlerText$ = "Toje napaka, ker manjka presledek."            : Fehler$ = "Toje" : Sprachenname$ = "SlovenÅ¡ï¿½?ina"
     case 55 : FehlerText$ = "Eesta poderia ser a resposta para suas preces?": Fehler$ = "Eesta" : Sprachenname$ = "Portugiesisch"
     case else :
         if bAsianLan then
@@ -328,7 +328,7 @@ testcase tiToolsSpellcheckCheck_Change
     printlog "Close document"
     Call hCloseDocument
 
-endcase
+endcase 'tiToolsSpellcheckCheck_Change
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_ChangeAll
 
@@ -374,8 +374,10 @@ testcase tiToolsSpellcheckCheck_ChangeAll
     printlog "Close document"
     Call hCloseDocument
 
-endcase
+endcase 'tiToolsSpellcheckCheck_ChangeAll
+
 '-------------------------------------------------------------------------------
+
 function delete_all_added_words(aWords)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -384,44 +386,7 @@ function delete_all_added_words(aWords)
     Dim iWordCounter as integer
     Dim iBooks as integer
 
-    Select Case Ucase(gApplication)
-    case "DRAW"         : sExt = ".odg"
-    case "IMPRESS"      : sExt = ".odp"
-    end select
-
-    printlog "Load prepared document containing 4 errors : graphics\\required\\input\\recht_" & iSprache & sExt
-    if (not bAsianLan) then
-        printlog "Check if the document is writable."
-        Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-    else
-        Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_1"+sExt)
-    end if
-    if fIsDocumentWritable = false then
-        printlog "Make the document writable and check if it's succesfull."
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        end if
-    end if
-    select case iSprache  ' sWord(1)=red     : sWord(2)=turquoise
-    case 01 : sWord(1) = "documente"     : sWord(2) = "expriss"
-    case 33 : sWord(1) = "intercu"       : sWord(2) = "Lees"
-    case 34 : sWord(1) = "afekto"        : sWord(2) = "fratternal"
-    case 36 : sWord(1) = "szeerint"       : sWord(2) = "tervvezi"
-    case 39 : sWord(1) = "Millano"       : sWord(2) = "tarrget"
-    case 46 : sWord(1) = "desa"          : sWord(2) = "occh"
-    case 49 : sWord(1) = "Texxt"         : sWord(2) = "reichtt"
-    case 50 : sWord(1) = "Bsedilo"       : sWord(2) = "zadosÄ?a"
-    case 55 : sWord(1) = "esktava"         : sWord(2) = "noitee"
-    case else :
-        if bAsianLan then
-            sWord(1) = "documente"     : sWord(2) = "expriss"
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here and create the file"
-        end if
-    end select
-    sleep 2
-
+    Printlog "Delete the given words from dictionaries."
     printlog "Call Tools->Options."
     ToolsOptions
     printlog "Select in category 'Languagesettings' entry 'Writing Aids.'"
@@ -436,7 +401,7 @@ function delete_all_added_words(aWords)
     Kontext "BenutzerwoerterbuchBearbeiten"
     sleep 1
     printlog "Check every book, if it contains the words."
-    iBooks = Buch.getItemCount    
+    iBooks = Buch.getItemCount
     for iBookCounter = 1 to iBooks
         Buch.select(iBookCounter)
         printlog "Items in Booklist: " & WordList.getItemCount
@@ -457,8 +422,10 @@ function delete_all_added_words(aWords)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
     
-end function
+end function 'delete_all_added_words
+
 '-------------------------------------------------------------------------------
+
 function delete_word_from_dictionary(sWord as String, sDictionary as String)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -498,7 +465,9 @@ function delete_word_from_dictionary(sWord as String, sDictionary as String)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
 
-end function
+end function 'delete_word_from_dictionary
+
+'-------------------------------------------------------------------------------
 
 function fSelectWithString(oControl as Object,sText as String)
 
@@ -513,8 +482,9 @@ function fSelectWithString(oControl as Object,sText as String)
         endif
     next
 
-end function
+end function 'fSelectWithString
 
+'-------------------------------------------------------------------------------
 
 function getWordsForLanguage()
 
@@ -563,4 +533,4 @@ function getWordsForLanguage()
 
     getWordsForLanguage = aWords
 
-end function
+end function 'getWordsForLanguage

@@ -529,7 +529,8 @@ endcase
 
 testcase tExtrasIndividuellePraesentation
     Printlog "- Slideshow/Individual slideshow"
- Call hNewDocument							'/// new impress document ///'
+    Call hNewDocument
+    Call sSelectEmptyLayout						'/// new impress document ///'
      '/// Deactivate "Start with current page" in ToolsOptions ///'
      setStartCurrentPage(FALSE)
    '///  check state of navigator ! expected: closed ///'
@@ -546,24 +547,27 @@ testcase tExtrasIndividuellePraesentation
        Kontext "Bildschirmpraesentation"
        Fenster.Check
        Bildschirmpraesentation.OK
-  InsertSlide                                                           '/// insert slide ///'
-  sleep 2
-  hTypekeys "<Pagedown>"
-  sleep 2
-  InsertSlide
-  sleep 2
-  hTypekeys "<Pagedown>"
-  sleep 2
-  InsertSlide								'/// insert another slide ///'
-  sleep 2
-  hTypekeys "<Pagedown>"
-  sleep 2
-  Printlog "  - Slides added"
-  sleep 1
-  Kontext "DocumentImpress"
-  DocumentImpress.TypeKeys "<MOD1 SHIFT F5>"		'/// open navigator ///'
-  sleep 1
-  Kontext "NavigatorDraw"
+    InsertSlide                                                           '/// insert slide ///'
+    sleep 2
+    Call sSelectEmptyLayout
+    hTypekeys "<Pagedown>"
+    sleep 2
+    InsertSlide
+    sleep 2
+    Call sSelectEmptyLayout
+    hTypekeys "<Pagedown>"
+    sleep 2
+    InsertSlide								'/// insert another slide ///'
+    sleep 2
+    Call sSelectEmptyLayout
+    hTypekeys "<Pagedown>"
+    sleep 2
+    Printlog "  - Slides added"
+    sleep 1
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<MOD1 SHIFT F5>"		'/// open navigator ///'
+    sleep 1
+    Kontext "NavigatorDraw"
    if NavigatorDraw.Exists Then
       Printlog "  - Navigator exists"
       Erste.Click							'/// switch to 1st slide ///'
