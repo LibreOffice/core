@@ -304,7 +304,7 @@ IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
     {
         uno::Any exc( ::cppu::getCaughtException() );
         rtl::OUString msg( ::comphelper::anyToString( exc ) );
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ErrorBox aErrorBox( NULL, WB_OK, msg );
         aErrorBox.SetText( sTitle );
         aErrorBox.Execute();
