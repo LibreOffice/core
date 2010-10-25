@@ -923,6 +923,7 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
     else
     {
         DBG_ERRORFILE( "invalid font name box" );
+        return;
     }
 
     pStyleBox->Fill( pNameBox->GetText(), pFontList );
@@ -969,6 +970,7 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
     else
     {
         DBG_ERRORFILE( "invalid font name box" );
+        return;
     }
 
     FontInfo _aFontInfo( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) );
