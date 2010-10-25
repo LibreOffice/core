@@ -42,6 +42,7 @@
     use Fcntl;
     use POSIX qw(:errno_h);
     use Sys::Hostname;
+    use IPC::Open3;
 
     use lib ("$ENV{SOLARENV}/bin/modules");
     use SourceConfig;
@@ -208,9 +209,16 @@
     %module_deps_hash_pids = ();
     my @argv = @ARGV;
     my $source_config_file;
+    my $zenity_pid = 0;
+    my $zenity_in = '';
+    my $zenity_out = '';
+    my $zenity_err = '';
 ### main ###
 
     get_options();
+
+    zenity_open();
+    zenity_tooltip("Starting build.");
 
 #    my $temp_html_file = CorrectPath($tmp_dir. '/' . $ENV{INPATH}. '.build.html');
     get_build_modes();
@@ -1704,6 +1712,8 @@ sub cancel_build {
     print "            http://wiki.documentfoundation.org/Development\n";
     print "\n";
 
+    zenity_set_message("LibreOffice Build Failed!");
+
     if (!$broken_modules_number || !$build_all_parents) {
         while (children_number()) {
             handle_dead_children(1);
@@ -2132,7 +2142,45 @@ sub print_announce {
     $announce_string .= $echo . $text;
     $announce_string .= $echo . "=============\n";
     print $announce_string;
+    my $total_modules = scalar(keys %build_lists_hash);
+    my $modules_started = scalar(keys %module_announced) + 1;
+    zenity_tooltip("($modules_started/$total_modules) $text");
     $module_announced{$Prj}++;
+};
+
+sub zenity_open {
+    if (defined $ENV{ENABLE_ZENITY}) {
+        my $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
+                               "/bin/env zenity --notification --listen");
+    };
+};
+
+sub zenity_close {
+    if (defined $ENV{ENABLE_ZENITY}) {
+        sleep(1); # Give Zenity a chance to show the message.
+        kill 1, $zenity_pid;
+    };
+};
+
+sub zenity_icon {
+    if (defined $ENV{ENABLE_ZENITY}) {
+        my $filename = shift;
+        print $zenity_in "icon: $filename\n";
+    };
+};
+
+sub zenity_tooltip {
+    if (defined $ENV{ENABLE_ZENITY}) {
+        my $text = shift;
+        print $zenity_in "tooltip: LibreOffice Build: $text\n";
+    };
+};
+
+sub zenity_message {
+    if (defined $ENV{ENABLE_ZENITY}) {
+        my $text = shift;
+        print $zenity_in "message: $text\n";
+    };
 };
 
 sub are_all_dependent {
@@ -2732,6 +2780,12 @@ sub do_exit {
 #    close_server_socket();
     my $exit_code = shift;
     $build_finished++;
+    if ($exit_code) {
+        zenity_message("LibreOffice Build Failed!")
+    } else {
+        zenity_message("LibreOffice Build Success!")
+    };
+    zenity_close();
     generate_html_file(1);
     if ( $^O eq 'os2' )
     {

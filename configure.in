@@ -945,6 +945,10 @@ AC_ARG_WITH(max-jobs,
                           can get up to CPUS*max_jobs. Defaults to 1, unless
                           you configure --enable-icecream - then to 10.
 ],,)
+AC_ARG_ENABLE(zenity,
+[  --enable-zenity         Display a icon in the notification area during
+                          build.
+],,)
 
 BUILD_TYPE="OOo"
 
@@ -7463,6 +7467,20 @@ else
    AC_MSG_RESULT([not set])
 fi
 AC_SUBST(VERBOSE)
+
+dnl ===================================================================
+dnl Use zenity during build
+dnl ===================================================================
+AC_MSG_CHECKING([whether to use zenity during build])
+if test "$enable_zenity" = "yes"; then
+    ENABLE_ZENITY=TRUE
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_ZENITY=FALSE
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_ZENITY)
+
 
 dnl ===================================================================
 dnl Hook up OOos nodep environmental variable to automake's equivalent
