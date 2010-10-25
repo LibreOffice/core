@@ -1075,7 +1075,7 @@ testcase tTextframes_31
     Sleep 2
     
     '/// Check if the frame is non-editable
-    hFileOpenLocally( sTestFile )
+    hFileOpen( sTestFile )
     
     Call wTypeKeys ( "<Shift F4>" )
     
@@ -1132,7 +1132,7 @@ testcase tTextframes_32
     Sleep 2
     
     '/// Check if the text can be inputed into frame
-    hFileOpenLocally( sTestFile )
+    hFileOpen( sTestFile )
     
     Call wTypeKeys "<SHIFT F4><RETURN>"
     Wait 500
