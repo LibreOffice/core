@@ -33,6 +33,7 @@
 #include "osl/thread.hxx"
 #include "vcl/salinst.hxx"
 #include "osl/conditn.h"
+#include <vcl/solarmutex.hxx>
 
 #include "aquavcltypes.h"
 
