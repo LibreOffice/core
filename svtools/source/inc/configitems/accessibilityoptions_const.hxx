@@ -36,16 +36,16 @@
 
 namespace
 {
-    static const ::rtl::OUString s_sAccessibility           = ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/Accessibility");
-    static const ::rtl::OUString s_sAutoDetectSystemHC      = ::rtl::OUString::createFromAscii("AutoDetectSystemHC");
-    static const ::rtl::OUString s_sIsForPagePreviews       = ::rtl::OUString::createFromAscii("IsForPagePreviews");
-    static const ::rtl::OUString s_sIsHelpTipsDisappear     = ::rtl::OUString::createFromAscii("IsHelpTipsDisappear");
-    static const ::rtl::OUString s_sHelpTipSeconds          = ::rtl::OUString::createFromAscii("HelpTipSeconds");
-    static const ::rtl::OUString s_sIsAllowAnimatedGraphics = ::rtl::OUString::createFromAscii("IsAllowAnimatedGraphics");
-    static const ::rtl::OUString s_sIsAllowAnimatedText     = ::rtl::OUString::createFromAscii("IsAllowAnimatedText");
-    static const ::rtl::OUString s_sIsAutomaticFontColor    = ::rtl::OUString::createFromAscii("IsAutomaticFontColor");
-    static const ::rtl::OUString s_sIsSystemFont            = ::rtl::OUString::createFromAscii("IsSystemFont");
-    static const ::rtl::OUString s_sIsSelectionInReadonly   = ::rtl::OUString::createFromAscii("IsSelectionInReadonly");
+    static const ::rtl::OUString s_sAccessibility(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Accessibility"));
+    static const ::rtl::OUString s_sAutoDetectSystemHC(RTL_CONSTASCII_USTRINGPARAM("AutoDetectSystemHC"));
+    static const ::rtl::OUString s_sIsForPagePreviews(RTL_CONSTASCII_USTRINGPARAM("IsForPagePreviews"));
+    static const ::rtl::OUString s_sIsHelpTipsDisappear(RTL_CONSTASCII_USTRINGPARAM("IsHelpTipsDisappear"));
+    static const ::rtl::OUString s_sHelpTipSeconds(RTL_CONSTASCII_USTRINGPARAM("HelpTipSeconds"));
+    static const ::rtl::OUString s_sIsAllowAnimatedGraphics(RTL_CONSTASCII_USTRINGPARAM("IsAllowAnimatedGraphics"));
+    static const ::rtl::OUString s_sIsAllowAnimatedText(RTL_CONSTASCII_USTRINGPARAM("IsAllowAnimatedText"));
+    static const ::rtl::OUString s_sIsAutomaticFontColor(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticFontColor"));
+    static const ::rtl::OUString s_sIsSystemFont(RTL_CONSTASCII_USTRINGPARAM("IsSystemFont"));
+    static const ::rtl::OUString s_sIsSelectionInReadonly(RTL_CONSTASCII_USTRINGPARAM("IsSelectionInReadonly"));
 }
 
 #endif //  INCLUDE_CONFIGITEMS_ACCESSIBILITYOPTIONS_CONST_HXX
