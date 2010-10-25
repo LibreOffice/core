@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 /** === end UNO includes === **/
 
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
 
