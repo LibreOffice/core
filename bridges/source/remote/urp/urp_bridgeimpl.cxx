@@ -205,9 +205,9 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
 
 void urp_BridgeImpl::addError( char const *pError )
 {
-    OUString message = OUString( RTL_CONSTASCII_USTRINGPARAM( "(tid=" ) );
+    OUString message = OUString(RTL_CONSTASCII_USTRINGPARAM("(tid=" ));
     message += OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
-    message += OUString::createFromAscii( ") " );
+    message += OUString(RTL_CONSTASCII_USTRINGPARAM(") "));
     message += OUString::createFromAscii( pError );
     MutexGuard guard( m_errorListMutex );
     m_lstErrors.push_back( message );
@@ -215,9 +215,9 @@ void urp_BridgeImpl::addError( char const *pError )
 
 void urp_BridgeImpl::addError( const OUString & error )
 {
-    OUString message = OUString( RTL_CONSTASCII_USTRINGPARAM( "(tid=" ) );
+    OUString message = OUString(RTL_CONSTASCII_USTRINGPARAM("(tid="));
     message += OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
-    message += OUString::createFromAscii( ") " );
+    message += OUString(RTL_CONSTASCII_USTRINGPARAM(") "));
     message += error;
     MutexGuard guard( m_errorListMutex );
     m_lstErrors.push_back( message );

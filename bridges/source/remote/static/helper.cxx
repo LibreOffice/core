@@ -128,7 +128,7 @@ void SAL_CALL remote_sendQueryInterface(
 
     // get type for queryInterface
     OUString sCompleteMethodName = type.getTypeName();
-    sCompleteMethodName += OUString::createFromAscii("::queryInterface");
+    sCompleteMethodName += OUString(RTL_CONSTASCII_USTRINGPARAM("::queryInterface"));
 
     typelib_InterfaceMemberTypeDescription *pMemberType = 0;
     typelib_typedescription_getByName(

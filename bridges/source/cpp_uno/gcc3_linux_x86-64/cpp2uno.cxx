@@ -292,7 +292,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!\n" );
     if ( nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex )
     {
-        throw RuntimeException( OUString::createFromAscii("illegal vtable index!"),
+        throw RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM("illegal vtable index!")),
                                 reinterpret_cast<XInterface *>( pCppI ) );
     }
 
@@ -389,7 +389,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
         }
         default:
         {
-            throw RuntimeException( OUString::createFromAscii("no member description found!"),
+            throw RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM("no member description found!")),
                                     reinterpret_cast<XInterface *>( pCppI ) );
             // is here for dummy
             eRet = typelib_TypeClass_VOID;

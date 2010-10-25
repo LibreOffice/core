@@ -761,7 +761,7 @@ void SAL_CALL PropertyObject::implCommitChange( uno_Sequence *pSequence, uno_Any
         {
             InvalidProtocolChangeException exception;
             Type type = getCppuType( &exception );
-            exception.Message = OUString::createFromAscii( "urp: unknown Property " );
+            exception.Message = OUString(RTL_CONSTASCII_USTRINGPARAM("urp: unknown Property "));
             exception.Message += pP[i].Name;
             exception.invalidProperty = pP[i];
             exception.reason = 1;

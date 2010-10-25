@@ -515,8 +515,8 @@ void SAL_CALL uno_ext_getMapping(
 
         ::rtl::OUString sFromName = pFrom->pTypeName;
         ::rtl::OUString sToName = pTo->pTypeName;
-        ::rtl::OUString sUno = OUString::createFromAscii( UNO_LB_UNO );
-        ::rtl::OUString sRemote = OUString::createFromAscii( "urp" );
+        ::rtl::OUString sUno(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO));
+        ::rtl::OUString sRemote(RTL_CONSTASCII_USTRINGPARAM("urp"));
         if ( sFromName.equalsIgnoreAsciiCase( sRemote ) &&
              sToName.equalsIgnoreAsciiCase( sUno ) )
         {
