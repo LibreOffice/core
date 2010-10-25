@@ -103,9 +103,21 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         one just left.</p>
 
         @see XUndoManager::leaveUndoContext
+        @see leftHiddenUndocontext
         @see cancelledUndoContext
     */
     void    leftUndoContext( [in] UndoManagerEvent i_event );
+
+    /** is calledn when a hidden Undo context has been left.
+
+        <p><member>UndoManagerEvent::UndoActionTitle</member> is empty, as hidden Undo contexts don't have
+        a title.</p>
+
+        @see XUndoManager::leaveHiddenUndoContext
+        @see leftUndoContext
+        @see cancelledUndoContext
+    */
+    void    leftHiddenUndoContext( [in] UndoManagerEvent i_event );
 
     /** is called when an Undo context has been left, but no actions have been added within this context.
 
@@ -114,6 +126,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::leaveUndoContext
         @see leftUndoContext
+        @see leftHiddenUndocontext
     */
     void    cancelledUndoContext( [in] UndoManagerEvent i_event );
 };
