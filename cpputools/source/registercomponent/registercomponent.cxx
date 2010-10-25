@@ -83,7 +83,7 @@ OUString replacePrefix(OUString const & url, OUString const & prefix) {
 
 sal_Bool isFileUrl(const OUString& fileName)
 {
-    if (fileName.indexOf(OUString::createFromAscii("file://")) == 0 )
+    if (fileName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("file://"))) == 0 )
         return sal_True;
     return sal_False;
 }
@@ -694,7 +694,7 @@ static void bootstrap(
         }
         reg = Reference< XSimpleRegistry >(
             xSMgr->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")), UNO_QUERY);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))), UNO_QUERY);
 
         if (reg.is())
         {
@@ -727,15 +727,15 @@ static void bootstrap(
         // we know our java loader, so we check, whether a java-loader is
         // registered
         Reference< XInterface > r = loadSharedLibComponentFactory(
-            OUString::createFromAscii( "javavm.uno" SAL_DLLEXTENSION ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.uno" SAL_DLLEXTENSION)),
             OUString(),
-            OUString::createFromAscii( "com.sun.star.comp.stoc.JavaVirtualMachine" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaVirtualMachine")),
             xSMgr,
             Reference< XRegistryKey > () );
         Reference< XInterface > r2 = loadSharedLibComponentFactory(
-            OUString::createFromAscii( "javaloader.uno" SAL_DLLEXTENSION ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader.uno" SAL_DLLEXTENSION)),
             OUString(),
-            OUString::createFromAscii(( "com.sun.star.comp.stoc.JavaComponentLoader" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader")),
             xSMgr,
             Reference< XRegistryKey > () );
         Reference <XSet> xSet( xSMgr, UNO_QUERY );

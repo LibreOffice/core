@@ -90,7 +90,7 @@ namespace unoexe
 
 static sal_Bool isFileUrl(const OUString& fileName)
 {
-    if (fileName.indexOf(OUString::createFromAscii("file://")) == 0 )
+    if (fileName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("file://"))) == 0 )
         return sal_True;
     return sal_False;
 }
@@ -159,7 +159,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
                             sal_Int32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
 {
-    const OUString dash = OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+    const OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
     if(aArg.indexOf(dash) != 0)
         return sal_False;
 
@@ -650,7 +650,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
 
             rtl_getAppCommandArg(nPos, &arg.pData);
 
-            const OUString dashdash = OUString(RTL_CONSTASCII_USTRINGPARAM("--"));
+            const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
             if (dashdash == arg)
             {
                 ++nPos;

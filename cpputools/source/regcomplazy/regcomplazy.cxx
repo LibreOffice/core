@@ -40,7 +40,6 @@
 #include <registry/registry.hxx>
 
 
-#define OUSTR(x) ::rtl::OUString::createFromAscii( x )
 #define OSToOUS(x) ::rtl::OStringToOUString(x, osl_getThreadTextEncoding())
 #define OUSToOS(x) ::rtl::OUStringToOString(x, osl_getThreadTextEncoding())
 using namespace ::rtl;
@@ -95,7 +94,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         ++nPos;
     }
 
-    OUString sys_path( OUSTR( argv[ nPos ] ) );
+    OUString sys_path( ::rtl::OUString::createFromAscii( argv[ nPos ] ) );
     OUString reg_url;
     oslFileError rc = osl_getFileURLFromSystemPath( sys_path.pData, &reg_url.pData );
     if (osl_File_E_None != rc)
@@ -207,21 +206,21 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
 
         OString sLoaderName = (*comp_iter).sLoaderName;
-        OUString usKeyName(OUSTR("UNO/ACTIVATOR"));
+        OUString usKeyName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/ACTIVATOR")));
         key.createKey(usKeyName, subKey);
         subKey.setValue(OUString(), RG_VALUETYPE_STRING,
                         (sal_Char*)sLoaderName.getStr(), sLoaderName.getLength()+1);
 
         OString sCompName = (*comp_iter).sComponentName;
-        usKeyName = OUSTR("UNO/LOCATION");
+        usKeyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/LOCATION"));
         key.createKey(usKeyName, subKey);
         subKey.setValue(OUString(), RG_VALUETYPE_STRING,
                         (sal_Char*)sCompName.getStr(), sCompName.getLength()+1);
 
-        usKeyName = OUSTR("UNO/SERVICES");
+        usKeyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/SERVICES"));
         key.createKey(usKeyName, subKey);
 
-        rootKey.createKey(OUSTR("/SERVICES"), serviceKey);
+        rootKey.createKey(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/SERVICES")), serviceKey);
 
         OSVector::const_iterator serv_iter = ((*comp_iter).vSupportedServices).begin();
         OUString usServiceKeyName;
