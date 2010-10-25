@@ -2147,38 +2147,6 @@ if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
                     [AC_MSG_ERROR([cups/cups.h could not be found. libcupsys2-dev or cups???-devel missing?])], [])
 fi
 
-dnl ===================================================================
-dnl Check if PAM/pam_appl.h is available on Linux or FreeBSD
-dnl ===================================================================
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "GNU"; then
-  AC_MSG_CHECKING([whether to enable pam support])
-  if test -z "$enable_pam" || test "$enable_pam" != "no"; then
-    AC_MSG_RESULT([yes])
-    PAM=YES
-    AC_CHECK_HEADER(security/pam_appl.h, [],
-                    [AC_MSG_ERROR([pam_appl.h could not be found. libpam-dev or pam-devel missing?])], [])
-    AC_MSG_CHECKING([whether to link to libpam])
-    if test -n "$enable_pam_link" -a "$enable_pam_link" != "no"; then
-      AC_MSG_RESULT([yes])
-      PAM_LINK=YES
-      AC_CHECK_LIB(pam, pam_start, [],
-          [AC_MSG_ERROR(libpam not found or functional)], [])
-    else
-      AC_MSG_RESULT([no, dynamically open it])
-      PAM_LINK=NO
-    fi
-  else
-    AC_MSG_RESULT([no])
-    PAM=NO
-    PAM_LINK=NO
-    dnl check getspnam_r for needed args (4 or 5)
-    AX_FUNC_WHICH_GETSPNAM_R
-  fi
-fi
-AC_SUBST(PAM)
-AC_SUBST(NEW_SHADOW_API)
-AC_SUBST(PAM_LINK)
-
 if test "$_os" = "Linux"; then
     AC_MSG_CHECKING([whether to link to libcrypt])
     if test -n "$enable_crypt_link" -a "$enable_crypt_link" != "no"; then
