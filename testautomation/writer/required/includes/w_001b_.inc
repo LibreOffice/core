@@ -468,7 +468,7 @@ testcase tMasterDocFileSaveWithPassword
             Sleep 1
             FileClose
             PrintLog "File / Close and open your document again"
-            hFileOpenLocally( Datei$)
+            hFileOpen( Datei$)
             Sleep 1
             Kontext "PasswordFileOpen"
             PrintLog "Now the passwort dialog should come up"
