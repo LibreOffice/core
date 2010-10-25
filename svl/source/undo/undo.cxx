@@ -30,7 +30,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
