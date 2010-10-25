@@ -48,7 +48,6 @@
 
 #include "rtl/math.hxx"
 
-
 #include <unotools/localedatawrapper.hxx>
 
 using namespace ::com::sun::star;
@@ -1151,33 +1150,32 @@ static FieldUnit ImplMetricGetUnit( const XubString& rStr )
 }
 
 #define K *1000L
-#define M *1000000L
+#define M *1000000LL
 #define X *5280L
 
-// Amelia : about measurement unit, 'char' and 'line'
-//static const sal_Int64 aImplFactor[FUNIT_MILE+1][FUNIT_MILE+1] =
+// twip in km = 254 / 14 400 000 000
+// expressions too big for default size 32 bit need LL to avoid overflow
+
 static const sal_Int64 aImplFactor[FUNIT_LINE+1][FUNIT_LINE+1] =
 { /*
-mm/100    mm    cm       m     km  twip point  pica  inch    foot     mile    char    line*/
+mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile     char     line  */
 {    1,  100,  1 K,  100 K, 100 M, 2540, 2540, 2540, 2540,2540*12,2540*12 X ,   53340, 396240},
 {    1,    1,   10,    1 K,   1 M, 2540, 2540, 2540, 2540,2540*12,2540*12 X ,    5334, 396240},
 {    1,    1,    1,    100, 100 K,  254,  254,  254,  254, 254*12, 254*12 X ,    5334,  39624},
 {    1,    1,    1,      1,   1 K,  254,  254,  254,  254, 254*12, 254*12 X ,  533400,  39624},
-{    1,    1,    1,      1,     1,    0,  254,  254,  254, 254*12, 254*12 X ,533400 K,  39624},
-{ 1440,144 K,144 K,14400 K,     0,    1,   20,  240, 1440,1440*12,1440*12 X ,     210,   3120},
+{    1,    1,    1,      1,     1,  254,  254,  254,  254, 254*12, 254*12 X ,533400 K,  39624},
+{ 1440,144 K,144 K,14400 K,14400LL M, 1,   20,  240, 1440,1440*12,1440*12 X ,     210,   3120},
 {   72, 7200, 7200,  720 K, 720 M,    1,    1,   12,   72,  72*12,  72*12 X ,     210,    156},
 {    6,  600,  600,   60 K,  60 M,    1,    1,    1,    6,   6*12,   6*12 X ,     210,     10},
 {    1,  100,  100,   10 K,  10 M,    1,    1,    1,    1,     12,     12 X ,     210,     45},
 {    1,  100,  100,   10 K,  10 M,    1,    1,    1,    1,      1,      1 X ,     210,     45},
 {    1,  100,  100,   10 K,  10 M,    1,    1,    1,    1,      1,        1 ,     210,     45},
 {  144, 1440,14400,  14400, 14400,    1,   20,  240, 1440,1440*12, 1440*12 X,       1,   156 },
-{  720,72000,72000, 7200 K,7200 M,   20,   10,   13,   11,  11*12,   11*12 X,     105,     1 }
+{  720,72000,72000, 7200 K,7200LL M, 20,   10,   13,   11,  11*12,   11*12 X,     105,     1 }
 };
-
 #undef X
 #undef M
 #undef K
-// twip in km 254/14400 M
 
 static FieldUnit eDefaultUnit = FUNIT_NONE;
 
