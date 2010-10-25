@@ -133,7 +133,7 @@ bool writeOasis2OOoLibraryElement(
     Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     OSL_VERIFY( xProps->getPropertyValue(
-        OUString::createFromAscii(("DefaultContext")) ) >>= xContext );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
 
     Reference< lang::XMultiComponentFactory > xSMgr(
         xContext->getServiceManager() );
@@ -179,7 +179,7 @@ bool writeOasis2OOoLibraryElement(
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId = OUString::createFromAscii( "virtual file" );
+    source.sSystemId = OUString(RTL_CONSTASCII_USTRINGPARAM("virtual file"));
 
     xParser->parseStream( source );
 
@@ -353,8 +353,8 @@ SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl( void )
 }
 
 
-static OUString aResourceFileNameBase = OUString::createFromAscii( "DialogStrings" );
-static OUString aResourceFileCommentBase = OUString::createFromAscii( "# Strings for Dialog Library " );
+static OUString aResourceFileNameBase(RTL_CONSTASCII_USTRINGPARAM("DialogStrings"));
+static OUString aResourceFileCommentBase(RTL_CONSTASCII_USTRINGPARAM("# Strings for Dialog Library "));
 
 // Resource handling
 Reference< ::com::sun::star::resource::XStringResourcePersistence >
@@ -381,7 +381,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
 
         // TODO: Ctor
         xRet = Reference< resource::XStringResourcePersistence >( mxMSF->createInstance
-            ( OUString::createFromAscii( "com.sun.star.resource.StringResourceWithStorage" ) ), UNO_QUERY );
+            ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.resource.StringResourceWithStorage")) ), UNO_QUERY );
 
         uno::Reference< embed::XStorage > xLibrariesStor;
         uno::Reference< embed::XStorage > xLibraryStor;
@@ -429,7 +429,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
 
         // TODO: Ctor
         xRet = Reference< resource::XStringResourcePersistence >( mxMSF->createInstance
-            ( OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ) ), UNO_QUERY );
+            ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.resource.StringResourceWithLocation")) ), UNO_QUERY );
 
         // TODO: Ctor
         if( xRet.is() )
@@ -511,9 +511,9 @@ Sequence< ::rtl::OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServ
 Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString::createFromAscii( "com.sun.star.script.DocumentDialogLibraryContainer" );
+    aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.DocumentDialogLibraryContainer"));
     // plus, for compatibility:
-    aServiceNames[1] = OUString::createFromAscii( "com.sun.star.script.DialogLibraryContainer" );
+    aServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.DialogLibraryContainer"));
     return aServiceNames;
 }
 
@@ -525,7 +525,7 @@ OUString SfxDialogLibraryContainer::getImplementationName_static()
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.DialogLibraryContainer" );
+        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.DialogLibraryContainer"));
         bNeedsInit = sal_False;
     }
     return aImplName;
