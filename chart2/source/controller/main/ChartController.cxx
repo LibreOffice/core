@@ -475,6 +475,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     if( rEvent.NewMode.equals(C2U("dirty")) )
     {
         //the view has become dirty, we should repaint it if we have a window
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if( m_pChartWindow )
             m_pChartWindow->ForceInvalidate();
     }
@@ -518,8 +519,11 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
                     impl_initializeAccessible();
 
-                    if( m_pChartWindow )
-                        m_pChartWindow->Invalidate();
+                    {
+                        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                        if( m_pChartWindow )
+                            m_pChartWindow->Invalidate();
+                    }
                 }
 
                 m_bConnectingToView = false;
@@ -537,10 +541,10 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     //is called to attach the controller to a new model.
     //return true if attach was successfully, false otherwise (e.g. if you do not work with a model)
 
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex());
+    ::vos::OClearableGuard aClearableGuard( Application::GetSolarMutex());
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
         return sal_False; //behave passive if already disposed or suspended
-    aGuard.clear();
+    aClearableGuard.clear();
 
 
     TheModelRef aNewModelRef( new TheModel( xModel), m_aModelMutex);
@@ -612,8 +616,11 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     }
 
     //the frameloader is responsible to call xModel->connectController
-    if( m_pChartWindow )
-        m_pChartWindow->Invalidate();
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        if( m_pChartWindow )
+            m_pChartWindow->Invalidate();
+    }
 
     uno::Reference< chart2::XUndoSupplier > xUndoSupplier( getModel(), uno::UNO_QUERY );
     if( xUndoSupplier.is())
@@ -1106,6 +1113,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if(aCommand.equals("Update")) //Update Chart
     {
         ChartViewHelper::setViewToDirtyState( getModel() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if( m_pChartWindow )
             m_pChartWindow->Invalidate();
     }
@@ -1491,6 +1499,7 @@ uno::Reference< XAccessible > ChartController::CreateAccessible()
 
 void ChartController::impl_invalidateAccessible()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( m_pChartWindow )
     {
         Reference< lang::XInitialization > xInit( m_pChartWindow->GetAccessible(false), uno::UNO_QUERY );
@@ -1503,6 +1512,7 @@ void ChartController::impl_invalidateAccessible()
 }
 void ChartController::impl_initializeAccessible()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( m_pChartWindow )
         this->impl_initializeAccessible( Reference< lang::XInitialization >( m_pChartWindow->GetAccessible(false), uno::UNO_QUERY ) );
 }
@@ -1517,11 +1527,14 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         aArguments[1]=uno::makeAny(xModel);
         aArguments[2]=uno::makeAny(m_xChartView);
         uno::Reference< XAccessible > xParent;
-        if( m_pChartWindow )
         {
-            Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
-            if( pParentWin )
-                xParent.set( pParentWin->GetAccessible());
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            if( m_pChartWindow )
+            {
+                Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
+                if( pParentWin )
+                    xParent.set( pParentWin->GetAccessible());
+            }
         }
         aArguments[3]=uno::makeAny(xParent);
         aArguments[4]=uno::makeAny(m_xViewWindow);
