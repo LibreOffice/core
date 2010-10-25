@@ -1314,7 +1314,7 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
             aProps[0] <<= aValue;
             m_xMainUpdateAccess = uno::Reference< util::XChangesBatch >(
                     xConfigurationProvider->createInstanceWithArguments(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"), aProps)),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")), aProps),
                         uno::UNO_QUERY_THROW );
         }
         catch (uno::Exception &)
