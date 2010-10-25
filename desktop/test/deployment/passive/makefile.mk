@@ -35,7 +35,8 @@ PACKAGE = com/sun/star/comp/test/deployment/passive_java
 JAVAFILES = Dispatch.java Provider.java Services.java
 JARFILES = juh.jar ridl.jar unoil.jar
 
-my_components = passive_native passive_java passive_python
+my_platform_components = passive_native
+my_generic_components = passive_java passive_python
 
 .INCLUDE: settings.mk
 
@@ -55,34 +56,50 @@ DEF1NAME = $(SHL1TARGET)
 ALLTAR : $(MISC)/passive.oxt
 
 $(MISC)/passive.oxt : manifest.xml description.xml Addons.xcu \
-        ProtocolHandler.xcu $(MISC)/$(TARGET)/uno.components $(SHL1TARGETN) \
+        ProtocolHandler.xcu $(MISC)/$(TARGET)/platform.components \
+        $(MISC)/$(TARGET)/generic.components $(SHL1TARGETN) \
         $(MISC)/$(TARGET)/passive_java.jar passive_python.py
     $(RM) $@
     $(RM) -r $(MISC)/$(TARGET)/passive.oxt-zip
     $(MKDIR) $(MISC)/$(TARGET)/passive.oxt-zip
     $(MKDIRHIER) $(MISC)/$(TARGET)/passive.oxt-zip/META-INF
-    $(COPY) manifest.xml $(MISC)/$(TARGET)/passive.oxt-zip/META-INF/
-    $(SED) -e 's|@PLATFORM@|$(RTL_OS:l)_$(RTL_ARCH:l)|g' < description.xml \
-        > $(MISC)/$(TARGET)/passive.oxt-zip/description.xml
-    $(COPY) Addons.xcu ProtocolHandler.xcu $(MISC)/$(TARGET)/uno.components \
-        $(SHL1TARGETN) $(MISC)/$(TARGET)/passive_java.jar passive_python.py \
+    $(SED) -e 's|@PLATFORM@|$(RTL_OS:l)_$(RTL_ARCH:l)|g' < manifest.xml \
+        > $(MISC)/$(TARGET)/passive.oxt-zip/META-INF/manifest.xml
+    $(COPY) description.xml Addons.xcu ProtocolHandler.xcu \
+        $(MISC)/$(TARGET)/platform.components \
+        $(MISC)/$(TARGET)/generic.components $(SHL1TARGETN) \
+        $(MISC)/$(TARGET)/passive_java.jar passive_python.py \
         $(MISC)/$(TARGET)/passive.oxt-zip/
     cd $(MISC)/$(TARGET)/passive.oxt-zip && zip ../../passive.oxt \
         META-INF/manifest.xml description.xml Addons.xcu ProtocolHandler.xcu \
-        uno.components $(SHL1TARGETN:f) passive_java.jar passive_python.py
+        platform.components generic.components $(SHL1TARGETN:f) \
+        passive_java.jar passive_python.py
 
-$(MISC)/$(TARGET)/uno.components : $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/$(TARGET)/uno.components.input \
-        $(my_components:^"$(MISC)/$(TARGET)/":+".component")
+$(MISC)/$(TARGET)/platform.components : $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/$(TARGET)/platform.components.input \
+        $(my_platform_components:^"$(MISC)/$(TARGET)/":+".component")
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/$(TARGET)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/$(TARGET)/uno.components.input
+        $(MISC)/$(TARGET)/platform.components.input
 
-$(MISC)/$(TARGET)/uno.components.input :
+$(MISC)/$(TARGET)/platform.components.input :
     $(MKDIRHIER) $(@:d)
-    echo \
-        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
-        > $@
+    echo '<list>' \
+        '$(my_platform_components:^"<filename>":+".component</filename>")' \
+        '</list>' > $@
+
+$(MISC)/$(TARGET)/generic.components : $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/$(TARGET)/generic.components.input \
+        $(my_generic_components:^"$(MISC)/$(TARGET)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/$(TARGET)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/$(TARGET)/generic.components.input
+
+$(MISC)/$(TARGET)/generic.components.input :
+    $(MKDIRHIER) $(@:d)
+    echo '<list>' \
+        '$(my_generic_components:^"<filename>":+".component</filename>")' \
+        '</list>' > $@
 
 $(MISC)/$(TARGET)/passive_native.component : \
         $(SOLARENV)/bin/createcomponent.xslt passive_native.component

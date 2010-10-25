@@ -30,7 +30,6 @@
   <d:identifier
       value="org.openoffice/framework/desktop/test/deployment/passive"/>
   <d:version value="1"/>
-  <d:platform value="@PLATFORM@"/>
   <d:dependencies>
     <d:OpenOffice.org-minimal-version d:name="OpenOffice.org 3.4" value="3.4"/>
   </d:dependencies>

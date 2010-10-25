@@ -59,11 +59,10 @@ $(MISC)/active.oxt : manifest.xml description.xml Addons.xcu \
     $(RM) -r $(MISC)/$(TARGET)/active.oxt-zip
     $(MKDIR) $(MISC)/$(TARGET)/active.oxt-zip
     $(MKDIRHIER) $(MISC)/$(TARGET)/active.oxt-zip/META-INF
-    $(SED) -e 's|@PATH@|$(SHL1TARGETN:f)|g' < manifest.xml \
+    $(SED) -e 's|@PATH@|$(SHL1TARGETN:f)|g' \
+        -e 's|@PLATFORM@|$(RTL_OS:l)_$(RTL_ARCH:l)|g' < manifest.xml \
         > $(MISC)/$(TARGET)/active.oxt-zip/META-INF/manifest.xml
-    $(SED) -e 's|@PLATFORM@|$(RTL_OS:l)_$(RTL_ARCH:l)|g' < description.xml \
-        > $(MISC)/$(TARGET)/active.oxt-zip/description.xml
-    $(COPY) Addons.xcu ProtocolHandler.xcu $(SHL1TARGETN) \
+    $(COPY) description.xml Addons.xcu ProtocolHandler.xcu $(SHL1TARGETN) \
         $(MISC)/$(TARGET)/active_java.jar active_python.py \
         $(MISC)/$(TARGET)/active.oxt-zip/
     cd $(MISC)/$(TARGET)/active.oxt-zip && zip ../../active.oxt \

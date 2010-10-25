@@ -32,6 +32,9 @@
   <m:file-entry m:media-type="application/vnd.sun.star.configuration-data"
       m:full-path="ProtocolHandler.xcu"/>
   <m:file-entry
+      m:media-type="application/vnd.sun.star.uno-components;platform=@PLATFORM@"
+      m:full-path="platform.components"/>
+  <m:file-entry
       m:media-type="application/vnd.sun.star.uno-components"
-      m:full-path="uno.components"/>
+      m:full-path="generic.components"/>
 </m:manifest>
