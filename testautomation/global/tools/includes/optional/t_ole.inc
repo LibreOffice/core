@@ -25,42 +25,47 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Tools for OLE objects
 '*
 '\******************************************************************************
 
-private const VERBOSE = FALSE
-
-'*******************************************************************************
-
 function hGetOfficeVersion() as string
 
-    dim cPath as string
-    dim aItemList( 20 ) as string
-    
-    const CFN = "global::tools::includes::optional::t_ole.inc::hGetOfficeVersion(): "
+    ' The "Insert OLE object" dialog lists the OLE Objects with application name
+    ' and version number. THe version numbers are tracked in the officeinfo.txt
+    ' file which must be adjusted each time we change to a new major version.
 
-    ' Path to info file
-    cPath = convertpath( gTesttoolPath & "global/input/officeinfo.txt" )
-    if ( VERBOSE ) then printlog( CFN & "Reading: " & cPath )
+    const CFN = "global::tools::includes::optional::t_ole.inc::hGetOfficeVersion(): "
+    const DATAFILE = "global/input/officeinfo.txt"
+    const MAX_LINES_IN_DATAFILE = 20
+
+    dim cPath as string
+    dim aItemList( MAX_LINES_IN_DATAFILE ) as string
     
-    ' Read the file
+    ' Path to info file
+    cPath = convertpath( gTesttoolPath & DATAFILE )
+    if ( GVERBOSE ) then printlog( CFN & "Reading: " & cPath )
+    
+    ' Read the file, store the list of known office versions
     hGetDatafileSection( cPath, aItemList(), "", "", "" )
     
-    ' Set global variable
+    ' Search for the version number matching the product name, store value in global variable
     gOfficeVersion = hGetValueForKeyAsString( aItemList(), gProductName )
     
-    ' Set returnvalue
+    ' Return content of the global variable as well
     hGetOfficeVersion() = gOfficeVersion
     
 end function
 
 '*******************************************************************************
 
-function hGetOleObjectName( ObjectType as string ) as string
+function hGetOleObjectName( cApplication as string ) as string
 
+    ' for cApplication you may pass gApplication.
+
+    dim Application_API_Name as string
     dim oUnoOfficeConnection as object
     dim oUnoConfigurationAccess as object
     dim aPropertyValue(1) as new com.sun.star.beans.PropertyValue
@@ -69,28 +74,26 @@ function hGetOleObjectName( ObjectType as string ) as string
     dim cString as string
 
     const CFN = "global::tools::includes::optional::t_ole.inc::hGetOleObjectName(): "
-    
-    ' Test function parameters. They are <> gApplication as the API is case sensitive
-    select case ObjectType
-    case "Writer"
-    case "Calc"
-    case "Impress"
-    case "Draw"
-    case "Math"
-    case "Chart"
+
+    ' The application names for the API are case sensitive so we cannot use gApplication
+    select case ( ucase( cApplication ) )
+    case "WRITER" : Application_API_Name = "Writer"
+    case "CALC"   : Application_API_Name = "Calc"
+    case "IMPRESS": Application_API_Name = "Impress"
+    case "DRAW"   : Application_API_Name = "Draw"
+    case "MATH"   : Application_API_Name = "Math"
+    case "CHART"  : Application_API_Name = "Chart"
     case else
-        warnlog( CFN & "Invalid object type passed to function: " & ObjectType )
-        warnlog( CFN & "This function is case sensitive." )
-        warnlog( CFN & "Supported are: Writer, Calc, Impress, Draw, Math, Chart" )
+        warnlog( CFN & "Invalid object type passed to function: " & cApplication )
         hGetOleObjectName() = ""
         exit function
     end select
     
-    if ( VERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & ObjectType )
+    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & cApplication )
 
     ' ...Embedding is physical path, ObjectNames the top node
     aPropertyValue( 0 ).Name  = "nodepath"
-    aPropertyValue( 0 ).Value = "/org.openoffice.Office.Embedding/ObjectNames/" & ObjectType
+    aPropertyValue( 0 ).Value = "/org.openoffice.Office.Embedding/ObjectNames/" & Application_API_Name
     
     ' Connect to remote UNO
     oUnoOfficeConnection = hGetUnoService( TRUE )
@@ -125,7 +128,7 @@ end function
 function GetOleDefaultNames()
 
     const CFN = "global::tools::includes::optional::t_ole.inc::GetOleDefaultNames(): "
-    if ( VERBOSE ) then printlog( CFN & "Retrieving OLE names" )
+    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE names" )
 
     hGetOfficeVersion()
     gOLEWriter  = hGetOleObjectName( "Writer"  )

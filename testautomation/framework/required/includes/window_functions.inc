@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Window/Titlebar functionality
 '*
@@ -40,17 +40,17 @@ testcase tWindowFunctions
         goto endsub
     endif
 
-    
+
     printlog( "Create initial document" )
     gApplication = "WRITER"
     hInitSingleDoc()
     hInitWriteDocIdentifier( "F_updt_windowfuncs.bas" )
-    
+
     printlog( "New document" )
     hNewDocument()
     if ( getDocumentCount <> 2 ) then
         warnlog( "Two open documents were expected, found " & getDocumentCount )
-    endif    
+    endif
 
     kontext "DocumentWriter"
     printlog( "Close document" )
@@ -64,7 +64,7 @@ testcase tWindowFunctions
     hNewDocument()
     if ( getDocumentCount <> 2) then
         warnlog( "Two open documents were expected, found " & getDocumentCount )
-    endif    
+    endif
 
     printlog( "Enter some text into the second writer document" )
     kontext "DocumentWriter"
@@ -78,8 +78,8 @@ testcase tWindowFunctions
     else
         warnlog( "No warning that data will be lost on close of this document" )
     endif
-    
-    kontext "DocumentWriter"    
+
+    kontext "DocumentWriter"
     if ( getDocumentCount = 2 ) then
         printlog( "Two documents open. Good." )
     else
@@ -89,21 +89,21 @@ testcase tWindowFunctions
     kontext "DocumentWriter"
     printlog( "Close the document" )
     FileClose()
-    
+
     kontext "Active"
-    if ( Active.exists() ) then  
+    if ( Active.exists() ) then
         printlog( "Do not save the document" )
         Active.No()
     else
         warnlog( "Warning: No data loss warning" )
     endif
-    
+
     kontext "DocumentWriter"
     if ( getDocumentCount = 1 ) then
         printlog( "One document open. Good." )
     else
         warnlog( "Incorrect document count. Expected one, found " & getDocumentCount )
-    endif    
+    endif
 
     Kontext "DocumentWriter"
     printlog( "Minimize window" )
@@ -132,7 +132,7 @@ testcase tWindowFunctions
     printlog( "Maximize window" )
     DocumentWriter.Maximize()
     Wait( 2000 )
-    
+
     kontext "DocumentWriter"
     if ( DocumentWriter.IsMax() ) then
         printlog( "Window is maximized" )
@@ -149,177 +149,151 @@ endcase
 sub sAllWindowTitle
 
     printlog( "Window titles for the applications: " & gProductName )
-    
+
     printlog( "Writer" )
     gApplication = "WRITER"
-    call tCheckWindowTitle("swriter","Writer")
+    call tCheckWindowTitle( "swriter", "Writer" )
 
     printlog( "Master Document" )
     gApplication = "MASTERDOCUMENT"
-    call tCheckWindowTitle("sglobal","Writer")
+    call tCheckWindowTitle( "sglobal", "Writer" )
 
     printlog( "HTML" )
     gApplication = "HTML"
-    call tCheckWindowTitle("sweb","Writer/Web")
+    call tCheckWindowTitle( "sweb", "Writer/Web" )
 
     printlog( "Spreadsheet" )
     gApplication = "CALC"
-    call tCheckWindowTitle("scalc","Calc")
+    call tCheckWindowTitle( "scalc", "Calc" )
 
     printlog( "Presentation" )
     gApplication = "IMPRESS"
-    call tCheckWindowTitle("simpress","Impress")
+    call tCheckWindowTitle( "simpress", "Impress" )
 
     printlog( "Drawing" )
     gApplication = "DRAW"
-    call tCheckWindowTitle("sdraw","Draw")
+    call tCheckWindowTitle( "sdraw", "Draw" )
 
     printlog( "Formula" )
     gApplication = "MATH"
-    call tCheckWindowTitle("smath","Math")
+    call tCheckWindowTitle( "smath", "Math" )
 
-    qaerrorlog( "Excluded BASE and BACKINGWINDOW" )
+    printlog( "BASIC IDE" )
+    gApplication = "WRITER"
+    call tCheckWindowTitle( "basic", "Basic" )
 
-    'gApplication = "DATABASE"
-    'call tCheckWindowTitle("DATABASE","Base")
+    printlog( "Database" )
+    gApplication = "DATABASE"
+    call tCheckWindowTitle( "database", "Base" )
 
-    'fileclose
-    'call tCheckWindowTitle("soffice","")
+    printlog( "Backing Window / StartCenter" )
+    gApplication = "BACKGROUND"
+    call tCheckWindowTitle( "soffice", "" )
 
 end sub
 
 '*******************************************************************************
 
-testcase tCheckWindowTitle(sApplication as string, sReference as string)
+testcase tCheckWindowTitle( sApplication as string, sReference as string )
 
     printlog( "Update test for the office window titles" )
-    '<u>Input</u>:
-    '<ol>
-    '+<li>Name of application (string), case sensitive. Valid options are:</li>
-    '<ol>
-    '+<li>&quot;swriter&quot;</li>
-    '+<li>&quot;sglobal&quot;</li>
-    '+<li>&quot;sweb&quot;</li>
-    '+<li>&quot;scalc&quot;</li>
-    '+<li>&quot;simpress&quot;</li>
-    '+<li>&quot;sdraw&quot;</li>
-    '+<li>&quot;smath&quot;</li>
-    '+<li>&quot;insight&quot; * Currently disabled</li>
-    '+<li>&quot;soffice&quot; * Currently disabled</li>
-    '</ol>
-    '+<li>Reference name (string), matches name of application</li>
-    '<ol>
-    '+<li>&quot;Writer&quot;</li>
-    '+<li>&quot;Writer/Web&quot;</li>
-    '+<li>&quot;Calc&quot;</li>
-    '+<li>&quot;Impress&quot;</li>
-    '+<li>&quot;Draw&quot;</li>
-    '+<li>&quot;Math&quot;</li>
-    '+<li>&quot;Base&quot; * Currently disabled</li>
-    '+<li>&quot;&quot; * Currently disabled</li>
-    '</ol>
-    '</ol>
-    '<u>Returns</u>:
-    '<ol>
-    '+<li>Nothing</li>
-    '</ol>
-    '<u>Description</u>:
-    '<ul>
-    
 
-    dim sTemp as string
-    dim saTemp() as string
-    dim brc as boolean
-    gApplication = gApplication
-    printlog " - Application: " + sApplication + "; Title should be: " + sReference
-    
-    printlog( "Ensure that exactly one document is open" )
+    ' This is a Testtool-only problem that the product name is not displayed
+    ' after calling hCloseDocument() on the last document.
+    if ( sApplication = "soffice" ) then
+        qaerrorlog( "#i113760# - Product name missing for backing window" )
+        goto endsub
+    endif
+
+    const BASIC_MODULE = "tCheckWindowTitle"
+    const STRING_NOT_FOUND = 0
+    const STRING_LEFTMOST  = 1
+
+    dim cWindowCaption as string
+
+    dim iProductnamePosition as integer
+    dim iApplicationPosition as integer
+
+    dim cProductNameString as string
+    dim cApplicationString as string
+
+    ' hGetWindowCaption modifies it's function parameter, so we pass a copy instead
+    ' This is a thing that justifies the use of a four letter word for sure.
+    dim sApplicationTemp as string : sApplicationTemp = sApplication
+
+    printlog( "Application: " & sApplication & "; Title should be: " & sReference )
+    printlog( "Open the work windows (documents)" )
     hInitSingleDoc()
-
-    printlog( "Open another document as specified by gApplication" )    
-    hCreateDocument()
 
     printlog( "Verify that the correct window is open" )
     select case sApplication
-        case"swriter":
-        case"sglobal":
-        case"sweb":
-        case"scalc":
-        case"simpress":
-        case"sdraw":
-        case"smath":
-        case"basic":
-            ToolsMacroMacro
-            kontext "makro"
-            if Makro.exists(5) then
-                MakroAus.typeKeys "<end>"
-                if (Neu.isEnabled) then
-                    Neu.click
-                    kontext "basicide"
-                    if BasicIDE.exists(5) then
-                        printlog( "Basic IDE open. Good." )
-                    else
-                        warnlog( "Basic IDE not open. This is unexpected" )
-                    endif
-                else
-                    warnlog( "New-button is unexpectedly disabled." )
-                endif
-                try
-                    kontext "neuesmodul"
-                    if NeuesModul.exists(5) then
-                        NeuesModul.OK
-                    else
-                        warnlog( "New module naming dialog is not open" )
-                    endif
-                catch
-                    warnlog( "Accessing <New module> dialog failed" )
-                endcatch
-            else
-                warnlog( "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..." )
-            endif
-        case"chart":
-        case"DATABASE":
-        case"soffice":
-            brc = hDestroyDocument()
+        case "basic"   : hInitBasicIDE( BASIC_MODULE )
+        case "soffice" : hFileCloseAll()
+        case else      : hCreateDocument()
     end select
 
-    printlog( "Retrieve the caption from the window" )
-    sTemp = hGetWindowCaption(sApplication)
-    printlog( "Caption is: " & sTemp )
-    
-    printlog( "Split up the string to isolate the desired part" )
-    saTemp() = fSplitWindowTitle(sTemp)
-    printlog "Filename/Untitled: '" & saTemp(0) & "'"
+    ' Note: The Testtool connection string does not belong to the window caption
+    '       so we do not check for it here.
+    cWindowCaption = hGetWindowCaption( sApplicationTemp )
+    printlog( "Caption is: " & cWindowCaption )
 
-    printlog( "Compare the string to a reference" )
-    if (ubound(saTemp()) > 0) then
-        if (saTemp(1) <> sReference) then
-            warnlog "Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) & "'"
+    ' This prevents accidential matches like "base" in a document name like "database8.odb"
+    ' And we have a - (minus) as delimiter between the document name and the product name
+    cProductnameString = " - " & gProductName & " "
+    cApplicationString =   " " & sReference
+
+    ' Find out where in the caption the substrings are
+    iProductNamePosition = instr( cWindowCaption, cProductnameString )
+    iApplicationPosition = instr( cWindowCaption, cApplicationString )
+
+    ' Verify that the productname is contained within the string
+    if ( iProductNamePosition = STRING_NOT_FOUND ) then
+        if ( lcase( gPlatform ) = "osx" ) then
+            printlog( "The product name is missing" )
+            ' life is different on that platform compared to testtool world
+        else
+            warnlog( "The product name is missing" )
         endif
-        printlog "Productname: '" + saTemp(2) + "'"
+    endif
+
+    ' Verify that the application name (e.g. "Writer") is contained in the string
+    ' The StartCenter should not have any application name
+    if ( sApplication = "soffice" ) then
+        if ( iApplicationPosition > STRING_NOT_FOUND ) then
+            printlog( "The StartCenter should not have an application name" )
+        endif
     else
-        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & saTemp(1) + "'"
+        if ( iApplicationPosition = STRING_NOT_FOUND ) then
+            warnlog( "The application name is missing" )
+        endif
+    endif
+
+    if ( sApplication = "soffice" ) then
+        printlog( "Backing window should exclusively show the product name" )
+    else
+        ' If one of Productname or application is leftmost in the string, we have a
+        ' missing document identifier. This can be different things - the filename,
+        ' the module name (BASIC) etc.
+        if ( ( iApplicationPosition = STRING_LEFTMOST ) OR _
+               iProductnamePosition = STRING_LEFTMOST ) then
+            warnlog( "Current document identifier missing (like e.g. <Unknown 1>)" )
+        endif
+
+        ' Verify that the order is correct: Product name first, the application
+        if ( iProductNamePosition >= iApplicationPosition ) then
+            warnlog( "The order of the strings is incorrect" )
+            printlog( "Expected: <Product Name> <Application>" )
+        endif
     endif
 
     printlog( "Cleanup after test" )
     select case sApplication
-        case"swriter":
-        case"sglobal":
-        case"sweb":
-        case"scalc":
-        case"simpress":
-        case"sdraw":
-        case"smath":
-        case"basic":
-            brc = hDestroyDocument()
-        case"chart":
-        case"DATABASE":
-        case"soffice":
-            hCreateDocument()
-            hCreateDocument()
+        case "basic"   : hDestroyDocument()
+        case "soffice" : hCreateDocument()
     end select
 
     printlog( "Close all open documents" )
     hFileCloseAll()
+
 endcase
 

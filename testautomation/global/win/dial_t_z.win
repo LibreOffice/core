@@ -261,12 +261,6 @@ Neu sw:PushButton:DLG_BIB_BASE:PB_NEW
 Loeschen sw:PushButton:DLG_BIB_BASE:PB_DELETE
 Umbenennen sw:PushButton:DLG_BIB_BASE:PB_RENAME
 
-*WMFOptionen svtools:ModalDialog:DLG_EXPORT_VEC
-Original svtools:RadioButton:DLG_EXPORT_VEC:RB_ORIGINAL_VEC
-Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
-Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
-Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
-
 *Zahlenformat HID_NUMBERFORMAT
 Kategorie cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_CATEGORY
 KategorieFormat HID_NUMBERFORMAT_LB_FORMAT

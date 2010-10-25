@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Toolbar tools 1
 '*
@@ -36,7 +36,7 @@
 '\*************************************************************************************
 
 '******************************************************************
-'* Created by hercule.li@sun.com
+'* Created by hercule.li@oracle.com
 '* This function will active or inactive image button in toolbar
 '* sToolbar : Toolbar name                  
 '* sObject  : image button name                   

@@ -25,29 +25,42 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Address book mozilla
 '*
 '\***********************************************************************
 sub db_Mozilla
 
-    ' Information for this test under
-    ' http://wiki.services.openoffice.org/wiki/Database_Automatic_Testing#Testing_the_mozilla_Address_book
-
-    if fCreateMozillaAddressbookDatasource(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb")) then
-        
-        tQueryAddressbook(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb"))
-        tSortAddressbook(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb"))
-	else
+    if(gPlatform = "osx") then
+        ' on Mac platform the Mozilla address book is not available
+        ' so I call only the testcases to satisfied the database
         tQueryAddressbook("")
         tSortAddressbook("")
+    else
+    
+        ' Information for this test under
+        ' http://wiki.services.openoffice.org/wiki/Database_Automatic_Testing#Testing_the_mozilla_Address_book
+
+        if fCreateMozillaAddressbookDatasource(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb")) then
+
+            tQueryAddressbook(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb"))
+            tSortAddressbook(gOfficePath + ConvertPath("user/work/TT_Mozilla.odb"))
+            else
+            tQueryAddressbook("")
+            tSortAddressbook("")
+        endif
     endif
     
 end sub
 '-------------------------------------------------------------------------
 testcase tQueryAddressbook( sFileName )
     
+    if(gPlatform = "osx") then
+        printlog "mozilla address book not available on Mac"
+        goto endsub
+    endif
+
     if ( not fOpenDatabase(sFileName) ) then        
         warnlog "Database can't be open"
         printlog "May be you find a solution under http://wiki.services.openoffice.org/wiki/Database_Automatic_Testing#Testing_the_mozilla_Address_book"
@@ -86,6 +99,11 @@ endcase
 '-------------------------------------------------------------------------
 testcase tSortAddressbook( sFileName )
     
+    if(gPlatform = "osx") then
+        printlog "mozilla address book not available on Mac"
+        goto endsub
+    endif
+
     Dim sRecordCount as String
     
     '/// open the database file created in the bas file

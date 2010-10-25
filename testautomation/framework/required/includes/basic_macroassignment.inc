@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update-Test for some dialogs in Basic-IDE
 '*
@@ -33,109 +33,94 @@
 
 testcase tUpdtMacroAssignment
 
-    printlog( "Update-Test for some dialogs in Basic-IDE" )
+    printlog( "Update test all dialogs from plain document via assign macro dialog to scriptselector" )
     
-    dim brc as boolean
-    
+    const TABPAGE_EVENTS = 2
+    const BASIC_MODULE = "tUpdtMacroAssignment"
+    const DEFAULT_DIALOG_TIMEOUT = 1
+    const RC_TIMEOUT = -1
+
+    printlog( "New document" )
     hCreateDocument()
     
     printlog( "Create a new BASIC-module for this document" )
-    
-    brc = hOpenBasicOrganizerFromDoc()
-    
-    brc = hCreateModuleForDoc( "tUpdtBasicIde" )
-    if ( not brc ) then
-        warnlog( "Failed to create a new BASIC module for this document" )
-        brc = hDestroyDocument()
-        goto endsub
-    endif
+    hInitBasicIDE( BASIC_MODULE )
     
     printlog( "Create a new BASIC-dialog" )
-    brc = hNewDialog()
-    if ( not brc ) then
-        warnlog( "Failed to create a new BASIC-dialog" )
-        hCloseBasicIde()
-        brc = hDestroyDocument()
-        goto endsub
-    endif
-    
-    printlog( "Select the Dialog-Pane from the DialogWindow" )
-    brc = hSelectDialogPane()
-    if ( not brc ) then
-        warnlog( "Selecting failed: ToolsCollectionBar is in the way." )
-        hCloseBasicIde()
-    else
-    
-        printlog( "Show ToolsCollectionBar" )
-        brc = hShowMacroControls()
-        if ( not brc ) then
-            warnlog( "ToolsCollectionBar is not open" )
-        endif
-        
-        printlog( "Open the Property-Browser: TabGeneralControl" )
-        brc = hOpenPropertyBrowser()
-        if ( brc ) then
-            call dialogtest( TabGeneralControl )
-        else
-            warnlog( "Property-Browser is not open, skipping further testing" )
-        endif
-        
-        if ( brc ) then
-            brc = hSetPBTabPage( 2 )
-        endif
-        
-        if ( brc ) then
-        
-            printlog( "Current Dialog: Property-Browser / Events-Page" )
-            call dialogtest( TabEventsControl )
-        
-            Kontext "TabEventsControl"
-            printlog( "Click the button for the FocusGained-Event" )
-            try
-                PBFocusGained.click()
-            catch
-                warnlog( "#i64196# - Events missing on properties tab-page" )
-                goto skipevents
-            endcatch
-        
-            Kontext "AssignMacro"
-            printlog( "Current Dialog: Assign Macro" )
-            if ( AssignMacro.exists( 1 ) ) then
-                call dialogtest( AssignMacro )
-                printlog( "Click the Assign-Button on the Macro-Assignment-Dialog" )
-                AssignButton.click()
-            
-                Kontext "ScriptSelector"
-                printlog( "Current Dialog: ScriptSelector" )
-                if ( ScriptSelector.exists( 1 ) ) then
-                    call dialogtest( ScriptSelector )
-                    printlog( "Cancel the scriptselector" )
-                    ScriptSelector.cancel()
+    if ( hNewDialog() ) then
+
+        printlog( "Select the Dialog-Pane from the DialogWindow" )
+        if ( hSelectDialogPane() ) then
+
+            printlog( "Show ToolsCollectionBar" )
+            if ( hShowMacroControls() ) then
+
+                printlog( "Open the Property-Browser" )
+                if ( hOpenPropertyBrowser() ) then
+
+                    kontext "TabGeneralControl"
+                    call dialogtest( TabGeneralControl )
+
+                    printlog( "Switch to events-tab" )
+                    if ( hSetPBTabPage( TABPAGE_EVENTS ) ) then
+
+                        printlog( "Current Dialog: Property-Browser / Events-Page" )
+                        call dialogtest( TabEventsControl )
+
+                        Kontext "TabEventsControl"
+                        printlog( "Click the button for the FocusGained-Event" )
+                        if ( hClickButton( PBFocusGained ) <> RC_TIMEOUT ) then
+
+                            Kontext "AssignMacro"
+                            printlog( "Current Dialog: Assign Macro" )
+                            if ( AssignMacro.exists( DEFAULT_DIALOG_TIMEOUT ) ) then
+
+                                call dialogtest( AssignMacro )
+
+                                printlog( "Click the Assign-Button on the Macro-Assignment-Dialog to open Script Selector" )
+                                if ( hClickButton( AssignButton ) <> RC_TIMEOUT ) then
+
+                                    Kontext "ScriptSelector"
+                                    if ( ScriptSelector.exists( DEFAULT_DIALOG_TIMEOUT ) ) then
+
+                                        call dialogtest( ScriptSelector )
+
+                                        printlog( "Close Script Selector" )
+                                        hCloseDialog( ScriptSelector, "cancel" )
+
+                                        printlog( "Close all remaining dialogs and documents" )
+                                        Kontext "AssignMacro"
+                                        hCloseDialog( AssignMacro, "cancel" )
+                                        hClosePropertyBrowser()
+                                        hCloseBasicIDE()
+                                        hDestroyDocument()
+                                    else
+                                        warnlog( "Failed to open/access <ScriptSelector>" )
+                                    endif
+                                else
+                                    warnlog( "Assign-button is not enabled" )
+                                endif
+                            else
+                                warnlog( "Failed to open/access <AssignMacro> dialog" )
+                            endif
+                        else
+                            warnlog( "#i64196# - Events missing on properties tab-page" )
+                        endif
+                    else
+                        warnlog( "Failed to switch tabpage to Tab-Events" )
+                    endif
                 else
-                    warnlog( "Failed to open/access <ScriptSelector>" )
+                    warnlog( "Property-Browser is not open, skipping further testing" )
                 endif
-            
-                Kontext "AssignMacro" 
-                printlog( "Current Dialog: Assign Macro" )
-                printlog( "Cancel the Script-Assignement-Dialog" )
-                AssignMacro.cancel()
             else
-                warnlog( "Failed to open/access <AssignMacro> dialog" )
+                warnlog( "ToolsCollectionBar is not open" )
             endif
-            
+        else
+            warnlog( "Selecting failed: ToolsCollectionBar is in the way." )
         endif
-        
-        skipevents:
-       
-        printlog( "Current Dialog: Property-Browser" )
-        printlog( "Close the Property-Browser, return to the document" )
-        brc = hClosePropertyBrowser()
-        
-        brc = hCloseBasicIde()
-        
+    else
+        warnlog( "Failed to create a new BASIC-dialog" )
     endif
-    
-    brc = hDestroyDocument()
 
 endcase
 

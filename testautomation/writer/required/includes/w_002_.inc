@@ -1,5 +1,5 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 ' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '
 ' Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,13 +23,13 @@
 ' <http://www.openoffice.org/license.html>
 ' for a copy of the LGPLv3 License.
 '
-'/************************************************************************
-'*                                                                **
-'* owner : helge.delfs@sun.com             **
-'*                                                                **
-'* short description :                                  **
-'*                                                                **
-'\******************************************************************
+'/******************************************************************************
+'*                                                                            **
+'* owner : helge.delfs@oracle.com                                                **
+'*                                                                            **
+'* short description :                                                        **
+'*                                                                            **
+'\******************************************************************************
 
 sub w_002_
 
@@ -60,14 +60,13 @@ sub w_002_
     Call tEditImageMap
     Call tEditObjectEdit
 
-    'Writer Web
-    gApplication = "HTML"
-    Call tHtmlDocEditFields
-    gApplication = "WRITER"
-
     'Writer Master Document
     gApplication = "MASTERDOCUMENT"
     Call tMasterDocEditNavigator
+
+    gApplication "HTML"
+    Call tEditFields
+
     gApplication = "WRITER"
 
 end sub
@@ -82,6 +81,7 @@ testcase tEditUndoRedo
 
     PrintLog "Insert table"
     Call hTabelleEinfuegen
+
     PrintLog "Edit / Undo"
     hUseAsyncSlot( "EditUndo" )
     
@@ -93,13 +93,14 @@ testcase tEditUndoRedo
     
     PrintLog "File / Close"
     hUseAsyncSlot( "FileClose" )
-    Kontext
-    if ( Active.Exists ) then
-        if Active.GetRT = 304 then
-            WarnLog ( "Messagebox: '" & Active.Gettext & "' should not appear" )
-            Active.No
-        end if
+
+    Kontext "Active"
+    if ( Active.Exists( 1 ) ) then
+        warnlog( "No messagebox was expected upon file close" )
+        printlog( Active.getText )
+        Active.no()
     end if
+
 endcase
 
 '----------------------------------------------------
@@ -172,64 +173,62 @@ testcase tEditPasteSpecial
     PrintLog "Open new document"
     Call hNewDocument
 
-    if gSamePC = TRUE then
-        PrintLog "  - External Clipboard"
-        PrintLog "Enter some text in external clipboard"
-        SetClipboard "Text from external clipboard!"
+    PrintLog "  - External Clipboard"
+    PrintLog "Enter some text in external clipboard"
+    SetClipboard "Text from external clipboard!"
 
-        PrintLog "Paste from external clipboard with Edit / Paste in Office"
-        hUseAsyncSlot( "EditPaste" )
+    PrintLog "Paste from external clipboard with Edit / Paste in Office"
+    hUseAsyncSlot( "EditPaste" )
 
-        Call wTypeKeys("<Mod1 A>")
-        Wait(200)
-        hUseAsyncSlot( "EditCopy" )
+    Call wTypeKeys("<Mod1 A>")
+    Wait(200)
+    hUseAsyncSlot( "EditCopy" )
 
-        if GetClipboardText <> "Text from external clipboard!" then
-            Warnlog "External Clipboard not available!"
-            Warnlog "Is: " & GetClipboardText
-        end if
-        Call wTypeKeys("<End><Return>")
-        SetClipboard ""
-        SetClipboard "2nd Text from external clipboard!"
-        try
-            PrintLog "Edit / Paste / Special"
-            hUseAsyncSlot( "EditPasteSpecialWriter" )
-            
-            Kontext "InhaltEinfuegen"
-            if ( InhaltEinfuegen.Exists( 2 ) ) then
-                try
-                    Auswahl.Select 1
-                catch
-                    Warnlog "Unable to select entry in format list !"
-                    InhaltEinfuegen.Close
-                    Call hCloseDocument
-                    goto endsub
-                endcatch
-                InhaltEinfuegen.OK
-                Wait(200)
-                Kontext "Active"
-                if Active.Exists then
-                    if Active.GetRT = 304 then
-                        Warnlog "Maybe Bug#109331"
-                        Warnlog Active.Gettext
-                        try
-                            Active.Ok
-                        catch
-                            Active.No
-                        endcatch
-                    end if
-                else
-                    Call wTypeKeys("<Home><Shift End>")
-                    hUseAsyncSlot( "EditCopy" )
-                    if GetClipboardText <> "2nd Text from external clipboard!" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
+    if GetClipboardText <> "Text from external clipboard!" then
+        Warnlog "External Clipboard not available!"
+        Warnlog "Is: " & GetClipboardText
+    end if
+    Call wTypeKeys("<End><Return>")
+    SetClipboard ""
+    SetClipboard "2nd Text from external clipboard!"
+    try
+        PrintLog "Edit / Paste / Special"
+        hUseAsyncSlot( "EditPasteSpecialWriter" )
+
+        Kontext "InhaltEinfuegen"
+        if ( InhaltEinfuegen.Exists( 2 ) ) then
+            try
+                Auswahl.Select 1
+            catch
+                Warnlog "Unable to select entry in format list !"
+                InhaltEinfuegen.Close
+                Call hCloseDocument
+                goto endsub
+            endcatch
+            InhaltEinfuegen.OK
+            Wait(200)
+            Kontext "Active"
+            if Active.Exists then
+                if Active.GetRT = 304 then
+                    Warnlog "Maybe Bug#109331"
+                    Warnlog Active.Gettext
+                    try
+                        Active.Ok
+                    catch
+                        Active.No
+                    endcatch
                 end if
             else
-                Warnlog "Dialog 'Paste Special' is not up!"
+                Call wTypeKeys("<Home><Shift End>")
+                hUseAsyncSlot( "EditCopy" )
+                if GetClipboardText <> "2nd Text from external clipboard!" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
             end if
-        catch
-            Exceptlog
-        endcatch
-    end if
+        else
+            Warnlog "Dialog 'Paste Special' is not up!"
+        end if
+    catch
+        Exceptlog
+    endcatch
 
     PrintLog "  - Internal Clipboard with StarOffice Writer-Text"
     PrintLog "Enter some text in writer and copy it"
@@ -316,11 +315,7 @@ testcase tEditChanges
 
     PrintLog "Passwort-dialog has to come up, cancel it"
     Kontext "Passwort"
-    if ( Passwort.Exists( 1 ) ) then
-        Passwort.Close
-    else
-        Warnlog "Password-dialog is not up!"
-    end if
+    hCloseDialog( Passwort, "close" )
 
     PrintLog "Edit / Changes / Accept or Reject"
     EditChangesAcceptOrReject
@@ -368,52 +363,67 @@ endcase
 '----------------------------------------------------
 
 testcase tEditCompareDocument
+
     PrintLog "- Edit/Compare Document"
-    Select Case gApplication
-    Case "WRITER"
-        Call hNewDocument
-        PrintLog "Open new document"
-        EditCompareDocumentCalc
-        PrintLog "Edit / Compare document"
-    Case "MASTERDOCUMENT"
-        printlog "Comparing documents not in Masterdocument!"
-        goto endsub
-    Case "HTML"
-        printlog "Comparing documents not in WriterWeb!"
-        goto endsub
-    end select
 
-    if gUseSysDlg = False then
-        Kontext "OeffnenDlg"
-        Dateiname.SetText ConvertPath ( gTesttoolPath & "writer\required\input\bt.sxw" )
-        PrintLog "in File-Open-dialog load ..\writer\required\input\bt.sxw"
-        Oeffnen.Click
-    end if
-    Kontext "FilterAuswahl"
-    if Filterauswahl.Exists then Filterauswahl.OK
-    Sleep 1
-    Kontext "Active"
-    if Active.Exists then
-        Warnlog Active.Gettext
-        Active.Ok
-    end if
+    dim sFile as string
+        sFile = gTesttoolPath & "writer\required\input\bt.sxw"
 
-    Kontext "Redlining"
-    PrintLog "Dialog 'Accept and Reject changes' has to come up"
-    if Redlining.Exists then
-        TabControl.SetPage TabListe
-        wait 200
+    if ( gApplication <> "WRITER" ) then
+        printlog( "Test only designed for WRITER, skipping" )
+        goto endsub
+    endif
+
+    call hNewDocument()
+
+    printlog( "Open test document")    
+    EditCompareDocumentCalc
+
+    Kontext "OeffnenDlg"
+    printlog( "File Open dialog" )
+    if ( OeffnenDlg.exists( 2 ) ) then
+
+        printlog( "Load file: " & sFile )
+        Dateiname.SetText ConvertPath ( sFile )
+        Oeffnen.Click()
+
+        Kontext "FilterAuswahl"
+        printlog( "Check for filterselection dialog (comes up e.g. if file is broken)" )
+        if Filterauswahl.Exists( 2 ) then
+            warnlog( "Dialog <Filterauswahl> was not expected at this point" )
+            Filterauswahl.OK()
+        else
+            printlog( "No dialog <Filterauswahl>, good" )
+        endif
+        
+        Kontext "Active"
+        if Active.Exists( 1 ) then
+            warnlog( "Unexpected messagebox displayed:" )
+            printlog( Active.getText() )
+            Active.Ok()
+        else
+            printlog( "No unexpected messageboxes, good." )
+        endif
+
         Kontext "Redlining"
-        TabControl.SetPage TabFilter
-        Kontext "Redlining"
-        Redlining.Close
-        PrintLog "Close dialog"
+        PrintLog "Dialog 'Accept and Reject changes' has to come up"
+        if Redlining.Exists( 1 ) then
+            TabControl.SetPage TabListe
+            wait 200
+            Kontext "Redlining"
+            TabControl.SetPage TabFilter
+            Kontext "Redlining"
+            hCloseDialog( Redlining, "close" )
+        else
+            Warnlog "- Dialog 'Redlining' does not exist!"
+        endif
     else
-        Warnlog "- Dialog 'Redlining' does not exist!"
-    end if
+        warnlog( "Dialog <FileOpen> did not open")
+    endif
 
-    Call hCloseDocument
     PrintLog "Close active document"
+    Call hCloseDocument
+    
 endcase
 
 '----------------------------------------------------
@@ -529,24 +539,15 @@ testcase tViewNavigator
 
         Kontext "NavigatorWriter"
         Umschalten.Click
-        Kontext "NavigatorGlobalDoc"
-        Sleep (1)
 
-        printlog "  - Bearbeiten"
-        try
-            Bearbeiten.Click
-        catch
-            Sleep (2)
-            try
-                Bearbeiten.Click
-            catch
-                Warnlog " Either taking more than three seconds to switch Navigator-modes, or something has gone wrong."
-            endcatch
-        endcatch
-        wait (300)
+        Kontext "NavigatorGlobalDoc"
+        printlog( "Click <Edit>" )
+        if ( hClickButton( Bearbeiten ) = -1 ) then
+            warnlog( "Unable to click <Edit> button, cannot switch Navigator-Mode" )
+        endif
 
         Kontext "Navigator"
-        Navigator.Close
+        hCloseDialog( Navigator, "close" )
         Call hCloseDocument
         PrintLog "Close active document"
         goto endsub
@@ -680,9 +681,9 @@ testcase tEditAutotext
     PrintLog "Click Categories"
     Kontext "Autotext"
     Bereiche.Click
-    Sleep 1    
+    
     Kontext "BereicheBearbeitenAutoText"
-    if BereicheBearbeitenAutoText.Exists then
+    if BereicheBearbeitenAutoText.Exists( 2 ) then
         DialogTest ( BereicheBearbeitenAutoText )
         PrintLog "Create a new categorie"
         Bereich.SetText "Hallo"
@@ -695,12 +696,11 @@ testcase tEditAutotext
         if Neu.IsEnabled then
             Neu.Click
             Wait (200)
-            if Loeschen.IsEnabled then
-                PrintLog "Delete created categorie"
-                Loeschen.Click
-            else
-                Warnlog "- Not able to delete new category. Button disabled!"
-            end if
+
+            printlog( "Click <Delete>" )
+            if ( hClickButton( Loeschen ) = -1 ) then
+                warnlog( "Unable to delete category, the button is disabled" )
+            endif
         else
             if gNetzInst = False then
                 Warnlog "- Category cannot be created!"
@@ -720,20 +720,19 @@ testcase tEditAutotext
     Kontext "PfadeAuswaehlen"
     PrintLog "On 'Select Paths' dialog click 'add'"
     Hinzufuegen.Click
-    wait 200
+    
     Kontext "OeffnenDlg"
-    if OeffnenDlg.Exists then
+    if OeffnenDlg.Exists( 2 ) then
         PrintLog "Cancel File-Open dialog"
-        OeffnenDlg.Cancel
+        hCloseDialog( OeffnenDlg, "cancel" )
     else
         Warnlog "Dialog ' Select Paths' not up!"
     end if
-    wait 200
+    
     Kontext "PfadeAuswaehlen"
     PrintLog "Cancel dialog 'Select Paths'"
-    PfadeAuswaehlen.Cancel
+    hCloseDialog( PfadeAuswaehlen, "cancel" )
 
-    Wait (300)
     Kontext "AutoText"
     PrintLog "We have to create an autotext first"
     PrintLog "to assure the 'Autotext'-Button enabled"
@@ -788,6 +787,7 @@ testcase tEditAutotext
         Call hCloseDocument
         goto endsub
     end if
+
     printlog "Select created autotext"
     EditAutotext
     WaitSlot (2000)
@@ -856,14 +856,16 @@ testcase tEditAutotext
                 exit do
             end if
         Loop
+
         ' Dialog needs some time to be opened
         Kontext "MakroZuweisen"
-        if NOT MakroZuweisen.Exists(5) then
-            warnlog "AutoText-Macro - Assign Macro took longer than 5 seconds to load. Check why."
+        printlog( "Close <MakroZuweisen> dialog" )
+        if ( MakroZuweisen.exists( 5 ) ) then
+            call Dialogtest( MakroZuweisen )
+            hCloseDialog( MakroZuweisen, "close" )
         else
-            PrintLog "Cancel 'Macro' dialog"
-            MakroZuweisen.Cancel
-        end if
+            warnlog "AutoText-Macro - Assign Macro took longer than 5 seconds to load. Check why."
+        endif
     catch
         Warnlog "Menu Autotext->'Macro' disabled !"
         Call hMenuClose
@@ -922,200 +924,143 @@ endcase
 
 testcase tEditHyperlink
     Printlog "- Edit / Hyperlink"
-    Call hNewDocument
+
     PrintLog "Open new document"
-    InsertHyperlink
+    Call hNewDocument
+
     PrintLog "Insert / Hyperlink"
-    WaitSlot(5000)
-    Kontext "Hyperlink"
+    InsertHyperlink
 
-    Call wEinfuegenHyperlink(1)
-    Kontext "TabHyperlinkInternet"
-    Internet.Check
-    ZielUrl.Settext "http://www.sonor.de"
-    PrintLog "Enter URL "
-    Kontext "Hyperlink"
-    PrintLog "Click 'Apply'"
-    Uebernehmen.Click
-    PrintLog "Close Hyperlink dialog"
-    Hyperlink.Close
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
 
-    Call wDocSetContext
-    try
-        PrintLog "Check if correct URL has been set to document"
-        hUseAsyncSlot( "EditCopy" )
+        PrintLog "Insert / Hyperlink"
+        Call wEinfuegenHyperlink(1)
+
+        Kontext "TabHyperlinkInternet"
+        printlog( "Check <Internet>" )
+        Internet.Check()
+
+        PrintLog "Enter URL "
+        ZielUrl.Settext "http://www.sonor.de"
+
+        Kontext "Hyperlink"
+        PrintLog "Click 'Apply'"
+        Uebernehmen.Click
+
+        kontext "HyperlinkDialog"
+        PrintLog "Close Hyperlink dialog"
+        hClickButton( CloseButton )
+    else
+        warnlog( "Dialog <Hyperlink> did not open" )
+        hCloseDocument()
+        goto endsub
+    endif
+
+    hSetDocumentContext()
+
+    PrintLog "Check if correct URL has been set to document"
+    if ( hUseAsyncSlot( "EditCopy" ) > -1 ) then
         if GetClipBoardtext = "" then
             Warnlog "No Hyperlink or wrong hyperlink in document!" & GetClipBoardtext
         end if
-    catch
-        Warnlog "No Hyperlink in document!"
-        goto endsub
-    endcatch
+    else
+        warnlog( "Slot <EditCopy> could not be executed. Most likely the hyperlink was not selected" )
+    endif
 
     PrintLog "Set cursor into link"
     Call wTypeKeys("<Left>")
-    try
-        PrintLog "Edit / Hyperlink has to be enabled"
-        EditHyperlink
-        Kontext "Hyperlink"
-        if Hyperlink.Exists then
-            Hyperlink.Close
-        else
-            Warnlog "- Hyperlinkdialog not up"
-        end if
-    catch
-        Warnlog "- Not able to edit Hyperlink!"
-    endcatch
+
+    PrintLog "Edit / Hyperlink has to be enabled"
+    if ( hUseAsyncSlot( "EditHyperlink" ) > -1 ) then
+        kontext "HyperlinkDialog"
+        hClickButton( CloseButton )
+    else
+        warnlog( "Slot <EditHyperlink> could not be called" )
+    endif
 
     PrintLog "Close active document"
     Call hCloseDocument
 endcase
 
-'----------------------------------------------------------------
+' ----------------------------------------------------------------
 
 testcase tEditFields
-    PrintLog "- Edit/Fields"
 
-    PrintLog "Open new document"
-    Call hNewDocument
+    PrintLog( "Edit/Fields: Edit Fields dialog: " & gApplication )
+    dim iCurrentType as integer
 
-    PrintLog "Select Insert / Fields Other"
-    InsertFieldsOther
-    Kontext
-    Active.Setpage TabDokumentFeldbefehle
-    Kontext "TabDokumentFeldbefehle"
-    Sleep 1
-    PrintLog "Insert Field 'Sender -> Company'"
-    Select Case gApplication
-    Case "HTML"
-        Select case iSprache
-        case 01 : Feldtyp.Select 5  'Sender
-            Auswahl.Select 1  'Company
-        case 03 : Feldtyp.Select 8
-            Auswahl.Select 1
-        case 07 : Feldtyp.Select 5
-            Auswahl.Select 1
-        case 31 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 33 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 34 : Feldtyp.Select 6
-            Auswahl.Select 1
-        case 36 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 39 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 45 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 46 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 48 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 49 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 51 : Feldtyp.Select 5 
-            Auswahl.Select 1
-        case 52 : Feldtyp.Select 5
-            Auswahl.Select 1			
-        case 55 : Feldtyp.Select 7
-            Auswahl.Select 1
-        case 81 : Feldtyp.Select 4
-            Auswahl.Select 1
-        case 82 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 84 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 86 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 88 : Feldtyp.Select 2
-            Auswahl.Select 1
+    PrintLog( "Open new document" )
+    Call hNewDocument()
 
-        case else :  Warnlog "Missing language support!"
-            TabDokumentFeldbefehle.Cancel
-            PrintLog "Close active document"
-            Call hCloseDocument
-            goto endsub
-        end select
-    Case else
-        Select case iSprache
-        case 01 : Feldtyp.Select 6  'Sender
-            Auswahl.Select 1  'Company
-        case 03 : Feldtyp.Select 9
-            Auswahl.Select 1
-        case 07 : Feldtyp.Select 6
-            Auswahl.Select 1
-        case 31 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 33 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 34 : Feldtyp.Select 8
-            Auswahl.Select 1
-        case 36 : Feldtyp.Select 4
-            Auswahl.Select 1
-        case 39 : Feldtyp.Select 4
-            Auswahl.Select 1
-        case 45 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 46 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 48 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 49 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 51 : Feldtyp.Select 6
-            Auswahl.Select 1
-		case 52 : Feldtyp.Select 6
-            Auswahl.Select 1			
-        case 55 : Feldtyp.Select 9
-            Auswahl.Select 1
-        case 81 : Feldtyp.Select 5
-            Auswahl.Select 1
-        case 82 : Feldtyp.Select 2
-            Auswahl.Select 2
-        case 84 : Feldtyp.Select 5
-            Auswahl.Select 1
-        case 86 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 88 : Feldtyp.Select 2
-            Auswahl.Select 1
+    printlog( "Insert->Field->Other" )
+    hUseAsyncSlot( "InsertFieldsOther" )
 
-        case else : Warnlog "Missing language support!"
-            TabDokumentFeldbefehle.Cancel
-            PrintLog "Close active document"
-            Call hCloseDocument
-            goto endsub
-        end select
-    end select
+    ' Note that the tabdialog does not have a unique ID yet, so we treat it as "Active"
+    kontext
+    if ( Active.exists( 2 ) ) then
 
-    Einfuegen.Click
-    Wait (400)
-    PrintLog "Close Fields dialog"
-    Schliessen.Click
+        printlog( "Switch to <Document> tab" )
+        Active.setPage( TabDokumentFeldbefehle )
 
-    PrintLog "Put cursor in front of field"
-    Call wTypeKeys("<Home>")
+        kontext "TabDokumentFeldbefehle"
+        printlog( "Select sender item from the user data, insert the field, close the dialog" )
+        if ( TabDokumentFeldbefehle.isVisible() ) then
 
-    PrintLog "Edit / Fields"
-    EditFields
-    WaitSlot (2000)
+            ' Search for the sender item in the "Type" listbox by counting the
+            ' number of items in the "Select" box. Only the sender item has
+            ' more than 12 (usually 15) selectable options.
+            ' This is done to make sure that we have an enabled "Edit..." button
+            ' in the "Edit Fields" dialog called later in this test
+            printlog( "Search for suitable field type" )
+            for iCurrentType = 1 to FeldTyp.getItemCount()
+                FeldTyp.select( iCurrentType )
+                if ( Auswahl.isEnabled() and Auswahl.getItemCount() > 12 ) then
+                    exit for
+                endif
+            next iCurrentType
 
-    Kontext "FeldbefehlBearbeitenDokument"
-    Call DialogTest ( FeldbefehlBearbeitenDokument )
+            hClickButton( Einfuegen )
+            hCloseDialog( TabDokumentFeldbefehle , "close" )
 
-    PrintLog "In 'Edit Fields' dialog select 'Edit'"
-    if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
-        Bearbeiten.Click
-        Kontext "TabBenutzerdaten"
-        TabBenutzerdaten.Cancel
-        Kontext "FeldbefehlBearbeitenDokument"
+            PrintLog( "Move cursor infront of field (start of document)" )
+            Call wTypeKeys("<Home>")
+
+            PrintLog( "Edit / Fields" )
+            hUseAsyncSlot( "EditFields" )
+
+            Kontext "FeldbefehlBearbeitenDokument"
+            if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
+                Call DialogTest ( FeldbefehlBearbeitenDokument )
+
+                PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
+                hClickButton( Bearbeiten )
+
+                Kontext "TabBenutzerdaten"
+                if ( TabBenutzerdaten.exists( 2 ) ) then
+                    printlog( "<TabBenutzerdaten> is open. Good." )
+                    call DialogTest( TabBenutzerdaten )
+                    hCloseDialog( TabBenutzerdaten, "cancel" )
+                else
+                    warnlog( "<TabBenutzerdaten> did not open" )
+                endif
+            else
+                warnlog( "<TabDokumentFeldbefehle> is not visible" )
+            endif
+
+            PrintLog( "Close dialog" )
+            Kontext "FeldbefehlBearbeitenDokument"
+            hCloseDialog( FeldbefehlBearbeitenDokument, "cancel" )
+        else
+            warnlog( "<FeldbefehlBearbeitenDokument> did not open" )
+        endif
     else
-        Warnlog "Button 'Edit' in Dialog disabled!"
-    end if
+        warnlog( "Unable to open <InsertFieldsOther>")
+    endif
 
-    PrintLog "Close dialog"
-    FeldbefehlBearbeitenDokument.Cancel
-    PrintLog "Close active document"
-    Call hCloseDocument
+    PrintLog( "Close active document" )
+    Call hCloseDocument()
+
 endcase
 
 '----------------------------------------------------------------
@@ -1203,9 +1148,7 @@ endcase
 '----------------------------------------------------------------
 
 testcase tEditIndexEntry
-    qaErrorLog "#158646# - Insert Indexes Entry causes crash."
-    goto endsub
-
+    
     PrintLog "- Edit/Index Entry"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
@@ -1249,53 +1192,66 @@ endcase
 
 testcase tEditLinks
     PrintLog "- Edit/Links"
-    if gApplication = "HTML" then
+
+    dim sFile as string
+        sFile = gTesttoolPath & "writer\required\input\graphics\jolink.jpg"
+
+    if ( gApplication = "HTML" ) then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
 
+    printlog( "Open a new document" )
     Call hNewDocument
-    Call hGrafikVerknuepftEinfuegen ( gTesttoolPath & "writer\required\input\graphics\jolink.jpg" )
-    Wait 200
-    try
-        EditLinksWriter
-    catch
+
+    printlog( "Insert graphic file (linked): " & sFile )
+    Call hGrafikVerknuepftEinfuegen ( sFile )
+
+    printlog( "Edit->Links" )
+    if ( hUseAsyncSlot( "EditLinksWriter" ) = -1 ) then
         Warnlog "Error on calling Edit / Links ! (disabled)"
         Call hCloseDocument
         goto endsub
-    endcatch
+    endif
 
     Kontext "VerknuepfungenBearbeiten"
-    if VerknuepfungenBearbeiten.Exists then
+    if ( VerknuepfungenBearbeiten.Exists( 1 ) ) then
         Call DialogTest ( VerknuepfungenBearbeiten )
-        Wait 200
-        try
-            Aendern.Click
+
+        Kontext "VerknuepfungenBearbeiten"
+        printlog( "Click <Change>" )
+        if ( hClickButton( Aendern ) > -1 ) then
             Kontext "GrafikEinfuegenDlg"
-            GrafikEinfuegenDlg.Cancel
-        catch
+            call DialogTest( GrafikEinfuegenDlg )
+            hCloseDialog( GrafikEinfuegenDlg, "cancel" )
+        else
             Warnlog "Error modifying the link!"
-        endcatch
+        endif
 
         Kontext "VerknuepfungenBearbeiten"
-        Wait 200
-        try
-            Aktualisieren.Click
-        catch
+        printlog( "Click <Update>" )
+        if ( hClickButton( Aktualisieren ) = -1 ) then
             Warnlog "Error on updating the link!"
-        endcatch
-        Wait 200
-
-        try
-            Loesen.Click
-            Kontext "Active"
-            if Active.Exists then Active.No
-        catch
-            Warnlog "- Error on breaking the link!"
-        endcatch
+        endif
 
         Kontext "VerknuepfungenBearbeiten"
-        VerknuepfungenBearbeiten.Close
+        printlog( "Click <Release>" )
+        if ( hClickButton( Loesen ) > -1 ) then
+            Kontext "Active"
+            printlog( "Check for confirmation message" )
+            if ( Active.Exists( 1 ) ) then
+                printlog( "Message displayed, good. Closing with <No>" )
+                printlog( Active.getText() )
+                Active.No
+            else
+                Warnlog( "The <Are you sure you want to remove the selected link?> message is missing" )
+            endif
+        else
+            Warnlog( "Unable to break the link to the file" )
+        endif
+
+        Kontext "VerknuepfungenBearbeiten"
+        hCloseDialog( VerknuepfungenBearbeiten, "close" )
     else
         Warnlog "Dialog Edit / Links not opened!"
     end if
@@ -1321,23 +1277,41 @@ endcase
 '------------------------------------------------------
 
 testcase tEditImageMap
-    PrintLog "- Edit / ImageMap"
 
+     PrintLog "- Edit / ImageMap"
+
+    dim sFile as string
+        sFile = gTesttoolPath & "writer\required\input\graphics\jolink.jpg"
+   
     PrintLog "Open new document"
     Call hNewDocument
 
-    if hGrafikEinfuegen ( gTesttoolPath & "writer\required\input\graphics\jolink.jpg" )=true then
+    printlog( "Insert graphics file: " & sFile )
+    if ( hGrafikEinfuegen( sFile ) ) then
+
+        printlog( "Edit->Imagemap" )
+        EditImageMap
+
         Kontext "ImageMapEditor"
-        if ImageMapEditor.Exists then ImageMapEditor.Close
-        try
-            EditImageMap
-            Kontext "ImageMapEditor"
+        if ( ImageMapEditor.exists( 1 ) ) then
             Call DialogTest (ImageMapEditor)
-            Sleep 1
-            ImageMapEditor.Close
-        catch
-            Warnlog "Edit/ImageMap disabled!"
-        endcatch
+            hCloseDialog( ImageMapEditor, "close" )
+
+            printlog( "Check for <Imagemap changed> messagebox (should not appear)" )
+            kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                qaerrorlog( "#i109605# - <imagemap changed> message displayed." )
+                printlog( Active.getText )
+                Active.no()
+            else
+                printlog( "No messagebox on close, good." )
+            endif
+
+        else
+            warnlog( "Dialog <ImageMapEditor> did not open" )
+        endif
+    else
+        warnlog( "Insert graphics failed" )
     end if
 
     PrintLog "Close active document"
@@ -1366,103 +1340,6 @@ testcase tEditObjectEdit
 
     PrintLog "Close active document"
     Call hCloseDocument
-endcase
-
-'----------------------------------------------------------------
-
-testcase tHtmlDocEditFields
-    PrintLog "- Edit/Fields"
-
-    gApplication = "HTML"
-    PrintLog "Open new document"
-    Call hNewDocument
-
-    PrintLog "Select Insert / Fields Other"
-    InsertFieldsOther
-    Kontext
-    Active.Setpage TabDokumentFeldbefehle
-    Kontext "TabDokumentFeldbefehle"
-    Sleep 1
-    PrintLog "Insert Field 'Sender -> Company'"
-    Select case iSprache
-    case 01 : Feldtyp.Select 5  'Sender
-        Auswahl.Select 1  'Company
-    case 03 : Feldtyp.Select 8
-        Auswahl.Select 1
-    case 07 : Feldtyp.Select 5
-        Auswahl.Select 1
-    case 31 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 33 : Feldtyp.Select 2
-        Auswahl.Select 1
-    case 34 : Feldtyp.Select 6
-        Auswahl.Select 1
-    case 36 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 39 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 45 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 46 : Feldtyp.Select 2
-        Auswahl.Select 1
-    case 48 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 49 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 51 : Feldtyp.Select 5
-        Auswahl.Select 1
-    case 52 : Feldtyp.Select 5
-        Auswahl.Select 1		
-    case 55 : Feldtyp.Select 7
-        Auswahl.Select 1
-    case 81 : Feldtyp.Select 4
-        Auswahl.Select 1
-    case 82 : Feldtyp.Select 2
-        Auswahl.Select 1
-    case 84 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 86 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 88 : Feldtyp.Select 2
-        Auswahl.Select 1
-
-    case else :  Warnlog "Missing language support!"
-        TabDokumentFeldbefehle.Cancel
-        PrintLog "Close active document"
-        Call hCloseDocument
-        goto endsub
-    end select
-
-    Einfuegen.Click
-    Wait (400)
-    PrintLog "Close Fields dialog"
-    Schliessen.Click
-
-    PrintLog "Put cursor in front of field"
-    Call wTypeKeys("<Home>")
-
-    PrintLog "Edit / Fields"
-    EditFields
-    WaitSlot (2000)
-
-    Kontext "FeldbefehlBearbeitenDokument"
-    Call DialogTest ( FeldbefehlBearbeitenDokument )
-
-    PrintLog "In 'Edit Fields' dialog select 'Edit'"
-    if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
-        Bearbeiten.Click
-        Kontext "TabBenutzerdaten"
-        TabBenutzerdaten.Cancel
-        Kontext "FeldbefehlBearbeitenDokument"
-    else
-        Warnlog "Button 'Edit' in Dialog disabled!"
-    end if
-
-    PrintLog "Close dialog"
-    FeldbefehlBearbeitenDokument.Cancel
-    PrintLog "Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
 endcase
 
 '----------------------------------------------------------------

@@ -25,13 +25,11 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'************************************************************************************
-' #1 tToolsOptionsMeasurementUnit
-'\***********************************************************************************
+'\******************************************************************************
 
 testcase tToolsOptionsMeasurementUnit (sApplication as string)
     dim i as integer
@@ -65,39 +63,6 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
 
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-
-        FileExport
-        Kontext "ExportierenDlg"
-        Dateiname.SetText "adagio"
-        Dateityp.Select "BMP - Windows Bitmap (.bmp)"
-        if AutomatischeDateinamenserweiterung.Exists then
-            AutomatischeDateinamenserweiterung.Check
-        else
-            warnlog( "Automatic Filename Extension checkbox is mising" )
-        endif
-        Speichern.Click
-        kontext "AlienWarning"
-        if AlienWarning.exists(5) then
-            warnlog "#i41983# Alien Warning on export not allowed"
-            AlienWarning.OK
-        endif
-        Kontext "Messagebox"
-        if Messagebox.Exists(2) then
-           Messagebox.Yes
-        endif
-        Sleep 3
-        Kontext "BMPOptionen"
-            Groesse.Check
-                sUnitDialog = getMeasUnit(Breite.getText)   ' (2)
-                if (getMeasUnit(Hoehe.getText) <> sUnitDialog) then
-                    warnlog " Measurement Unit is different for Width:'" + sUnitDialog + "' and Hight:'" + getMeasUnit(Hoehe.getText) + "'"
-                else
-                    printlog "Measurement Unit is same for Width:'" + sUnitDialog + "' and Hight:'" + getMeasUnit(Hoehe.getText) + "'"
-                endif
-                if (sUnitOptions <> sUnitDialog) then
-                    printlog "#109705# Measurement Unit is different for Options:'" + sUnitOptions + "' and BMP Dialog:'" + sUnitDialog + "' (1) <> (2)"
-                endif
-        BMPOptionen.Cancel
 
         Format3D_Effects
         Kontext "Drei_D_Effekte"

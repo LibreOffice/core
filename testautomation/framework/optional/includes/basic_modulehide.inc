@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Verify that hiding modules works
 '*
@@ -36,6 +36,14 @@ testcase tBasicIdeModuleHide
     
     const CFN = "tBasicIdeModuleHide::"
 
+    const TESTMACRO = "TTMacro1"
+    const ERR_NO_LINES_INSERTED = 0
+
+    const RC_SUCCESS = 0
+    const RC_TIMEOUT = -1
+
+    const TAB_MODULES = 1
+
     dim rc as integer
     dim brc as boolean
     dim cDefaultTabName as string
@@ -43,60 +51,48 @@ testcase tBasicIdeModuleHide
     gApplication = "WRITER"
     call hNewDocument()
     
-    brc = hOpenBasicOrganizerFromDoc()
-    brc = hCreateModuleForDoc()
+    ToolsMacro_uno
+    hCreateModuleForDoc()
     
-    brc = hInsertMacro( 1 )
-    if ( brc ) then
+    printlog( "Insert macro" )
+    if ( hInsertMacroFromFile( TESTMACRO ) > ERR_NO_LINES_INSERTED ) then
        printlog( CFN & "Macro has been written successfully" )
     else
        warnlog( CFN & "Failed to insert macro" )
     endif
 
-    rc = hHideModule()
-    if ( rc > 0 ) then
-        warnlog( "Some unexpected error occurred while trying to hide the module" )
-    endif
+    printlog( "Hide the module" )
+    if ( hHideModule() ) then 
 
-    try
         ' hTestMacro is expected to fail, so we jump to the catch statement
-        rc = hTestMacro( 1 )
-        if ( rc = 0 ) then
+        if ( hInsertMacroFromFile( TESTMACRO ) <> ERR_NO_LINES_INSERTED ) then
             warnlog( "For some reason the original module is still visible" )
         else
-            warnlog( "There should not be any editingwindow visible" )
+            printlog( "The edit window is not accessible, good" )
         endif
-    catch
-        printlog( " * unable to locate editwindow -> no module visible." )
-    endcatch
-    
-    if ( hOpenBasicObjectOrganizer( 1 ) ) then
-    
-        modulliste.typekeys( "<END><RIGHT><DOWN><RIGHT><DOWN>" )
-        try
-            bearbeiten.click()
-        catch
-            warnlog( "#i35097# Crash when editing last module" )
-        endcatch
-        
-         
-        rc = hTestMacro( 1 )
-        if ( rc = 1 ) then
-            printlog( " * the correct macro-module is open. Good." )
+
+        if ( hOpenBasicObjectOrganizer( TAB_MODULES ) ) then
+
+            modulliste.typekeys( "<END><RIGHT><DOWN><RIGHT><DOWN>" )
+            if ( hClickButton( Bearbeiten ) = RC_TIMEOUT ) then
+                warnlog( "#i35097# Crash when editing last module" )
+                goto endsub
+            endif
+
+            if ( not hBasicIDERunMacro( TESTMACRO ) ) then
+                warnlog( "Incorrect macro executed/macro missing" )
+            endif
+
+            hCloseBasicIDE()
+            hFileCloseAll()
+
         else
-            warnlog( "The open macro-module is not the one that was expected" )
+            warnlog( "restarting the office to recover from errors" )
+            call exitRestartTheOffice()
         endif
-         
-        hCloseBasicIDE()
-    
-        call hCloseDocument()      
-         
+
     else
-    
-        warnlog( "restarting the office to recover from errors" )
-        call exitRestartTheOffice()
-        
+        warnlog( "Some unexpected error occurred while trying to hide the module" )
     endif
-    
     
 endcase

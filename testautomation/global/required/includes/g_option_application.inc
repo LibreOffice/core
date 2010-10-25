@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : update and resouce test for all option pages (at tools/options)
 '*

@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Functiontest for matrix/array constants in calc
 '*

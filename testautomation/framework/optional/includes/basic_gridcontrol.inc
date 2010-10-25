@@ -25,33 +25,29 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : gridcontrol
 '*
 '\******************************************************************************
 
 testcase tGridcontrolLoad
-    dim sLocation as string
-    dim i,x,a as integer
-    dim sTemp as string
-    dim lFiles(200) as string
-    dim bTemp as boolean
-    dim iError, iOK as integer
+
+    const MACRO_NAME = "VclTestTool"
+    const MACRO_NOT_FOUND = 0
+    const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
+
+    dim iPos as integer
     
-    sLocation = "framework/optional/include/basic_gridcontrol.inc::"
+    printlog( "Open the test document: " & FILE_NAME )
+    call hFileOpen( gTestToolPath & FILE_NAME )
 
-    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
+    printlog( "Open the <Run Macro> dialog" )
+    ToolsMacrosRunMacro
 
-    printlog "Open the test document"
-    call hFileOpen(convertPath(gTestToolPath + "framework/optional/input/gridcontrol.odt"))
-    printlog "Security dialog might come up"
-    kontext "SecurityWarning"
-    if SecurityWarning.exists(5) then
-        printlog "Allow to run macros"
-        SecurityWarning.ok
-    endif
-    call sleep 1
+    printlog( "Find the document, its library and the test macro, run the macro" )
+    Kontext "ScriptSelector"
+    if ( ScriptSelector.exists( 10 ) ) then
 
     printlog "Start the macro, that performs the test"
     Kontext "GridControlDialogStarter"
@@ -100,11 +96,9 @@ testcase tGridcontrolLoad
         warnlog "Gridcontrol Dialog did not come up after pressing button"
     endif
     
-    printlog "clean up"
-    printlog "Close the document, else an error about the navigator will be thrown"
-    if getDocumentcount > 0 then
-        call hCloseDocument()
-    endif
+    printlog( "Test exit, cleanup" )
+    hFileCloseAll()
+    
 endcase
 
 

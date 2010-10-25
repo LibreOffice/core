@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Compress local written status files for submission
 '*
@@ -142,7 +142,7 @@ function fZip(sDirectory as string, sZipFileName as string) as integer
         oInfo.Attributes = 0
         
         ' get all files in a directory
-        getFileNameListLocal (sDirectory+"/","*.txt",lsFile())
+        getFileNameList (sDirectory+"/","*.txt",lsFile())
         printlog "Going to zip Directory: '" + sDirectory + "'"
         for i = 1 to listCount(lsFile())
             printlog "Going to add: " + i + ": '" + lsFile(i) + "'"

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Graphics Function: Convert to ...
 '*
@@ -45,22 +45,22 @@ sub main
 
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tiModifyConvertToPolygon
-   ' Call tdContextConvertIntoBitmap
+    Call tdContextConvertIntoBitmap
     Call tiAendernUmwandelnInKurve
     Call tiAendernUmwandelnInPolygonGrafik
-    'Call tiAendernUmwandelnIn3D
-    'Call tiAendernUmwandelnIn3DRotationsKoerper
-    'Call tiAendernUmwandelnInMetaFile
+    Call tiAendernUmwandelnIn3D
+    Call tiAendernUmwandelnIn3DRotationsKoerper
+    Call tiAendernUmwandelnInMetaFile
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-    'Call tiModifyConvertToPolygon
-    'Call tdContextConvertIntoBitmap
-    'Call tiAendernUmwandelnInKurve
-    'Call tiAendernUmwandelnInPolygonGrafik
-    'Call tiAendernUmwandelnIn3D
-    'Call tiAendernUmwandelnIn3DRotationsKoerper
-    'Call tiAendernUmwandelnInMetaFile
+    Call tiModifyConvertToPolygon
+    Call tdContextConvertIntoBitmap
+    Call tiAendernUmwandelnInKurve
+    Call tiAendernUmwandelnInPolygonGrafik
+    Call tiAendernUmwandelnIn3D
+    Call tiAendernUmwandelnIn3DRotationsKoerper
+    Call tiAendernUmwandelnInMetaFile
 
     Call hStatusOut
 end sub

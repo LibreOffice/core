@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Tools for Tools::Options dialog
 '*

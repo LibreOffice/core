@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : show all templates as preview in template dialog
 '*

@@ -87,7 +87,7 @@ testcase tUpdtFindBar()
             warnlog( "Messagebox missing <No matches found>" )
         endif
 
-        warnlog( "#i111984 - exclude <SearchDialog> button from testing" )
+        qaerrorlog( "#i111984 - exclude <SearchDialog> button from testing" )
         goto skip_SearchDialog
 
             printlog( "Search dialog button may not be visible by default" )

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : general routines to work with lists (arrays)
 '*
@@ -595,31 +595,5 @@ function hListClearBlank( lsList() as string ) as integer
 
 end function
 
-'*******************************************************************************
-
-function hListIntegrityTest( sList() as string ) as boolean
-
-    const CFN = "global::tools::inc::t_list.inc::hListIntegrityTest:"
-
-    '///<h3>Verify that listcount( array ) < ubound( array )</h3>
-    ' NOTE: some listfunctions fail if ubound = listcount
-
-    dim iListCount as integer
-    dim iUbound as integer
-
-    iListCount = listcount( sList() )
-    iUbound = ubound( sList() )
-
-    if ( iListCount >= iUbound ) then
-        warnlog( CFN & "ListCount points beyond array boundary" )
-        warnlog( CFN & "ListCount: " & iListCount )
-        warnlog( CFN & "UBOUND...: " & iUbound )
-        hListIntegrityTest() = false
-        exit function
-    end if
-
-    hListIntegrityTest() = true
-
-end function
 
 

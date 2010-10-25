@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Resource test for the printing dialog
 '*
@@ -232,7 +232,7 @@ testcase tPrintGeneral()
                     warnlog( "<Arrange slides> should be enabled for Handouts" )
                 endif
 
-                lb_test( SlidesPerPage, 6, 0, "" )
+                lb_test( SlidesPerPage, 7, 0, "" )
                 lb_test( ArrangeSlides, 2, 1, "" )
                 
             endif

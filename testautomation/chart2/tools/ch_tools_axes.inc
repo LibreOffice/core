@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Library for automation of the 'Insert::Axes...' dialog
 '*

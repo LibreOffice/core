@@ -24,7 +24,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Put description here
 '*
@@ -154,32 +154,48 @@ end sub
 sub hEinfuegenFloatingFrame
 
     InsertFloatingFrame
+
     Kontext "TabEigenschaften"
-    FrameName.SetText "Hallo"
-    Inhalt.SetText ConvertPath ( gTesttoolpath + "input\desktop\frameset.htm" )
-    TabEigenschaften.OK
-    Sleep 10
+    if ( Tabeigenschaften.exists( 2 ) ) then
+        FrameName.SetText "Hallo"
+        Inhalt.SetText ConvertPath ( gTesttoolpath + "input\desktop\frameset.htm" )
+        hCloseDialog( TabEigenschaften, "ok" )
+    else
+        warnlog( "Failed to open <TabEigenschaften>" )
+    endif
     
 end sub
 
 ' -----------------------------------------------------------------------
 
 sub hEinfuegenRahmen
+
     InsertFrame
+
     Kontext
-    Active.SetPage TabType
-    Kontext "TabType"
-    TabType.OK
-    Sleep 3
+    if ( Active.exists( 2 ) ) then
+        Active.SetPage TabType
+        Kontext "TabType"
+        hCloseDialog( TabType, "ok" )
+    else
+        warnlog( "Failed to open <TabType>" )
+    endif
+
 end sub
 
 ' -----------------------------------------------------------------------
 
 sub hEinfuegenChart
+
     InsertObjectChart
+
     Kontext "AutoformatDiagramm1"
-    Fertigstellen.Click
-    WaitSlot() ' NOOP
+    if ( AutoformatDiagramm1.exists( 2 ) ) then
+        hClickButton( Fertigstellen )
+    else
+        warnlog( "Failed to open <AutoformatDiagramm1>" )
+    endif
+    
 end sub
 
 ' -----------------------------------------------------------------------
@@ -315,6 +331,8 @@ end sub
 '----------------------------------------------------------------
 
 sub sMenufunktionen(Fuer_Was as string)
+
+    const RC_FAILURE = -1
     Dim i as integer
 
     Kontext "FormControls"
@@ -336,33 +354,20 @@ sub sMenufunktionen(Fuer_Was as string)
     next i
 
     Kontext
-    try
-        FormatControl 
-        WaitSlot()
+    if ( hUseAsyncSlot( "FormatControl" ) <> RC_FAILURE ) then
         
         Kontext "ControlPropertiesDialog"
         if ControlPropertiesDialog.Exists( 2 ) then
-            ControlPropertiesDialog.Close
-            ControlPropertiesDialog.notExists( 2 )
-        else
-            FormatControl
-            Wait 500
-            Kontext "ControlPropertiesDialog"
-            if ControlPropertiesDialog.Exists( 2 ) then
-                ControlPropertiesDialog.Close
-                ControlPropertiesDialog.notExists( 2 )
-            else
-                Warnlog "  - Controlfieldproperties "+ Fuer_Was +" from Menu not available!"
-            end if
-        end if
+            hCloseDialog( ControlPropertiesDialog, "close" )
+        endif
         printlog Fuer_Was
-    catch
+    else
         if gPlatform = "osx" then
             Warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
         else
             Warnlog "  - Controlfieldproperties "+ Fuer_Was +" from Menu not available!"
         end if
-    endcatch
+    endif
 
     Call wTypeKeys "<Escape>"
     Kontext "FormControls"

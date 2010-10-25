@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : global update test (Standardbar)
 '*
@@ -90,9 +90,10 @@ testcase tStandardBar_2
             
             sleep( 1 )
             hMenuselectNr ( iNewButtonItem )
-            sleep( 3 )
+            hFileWait() ' was sleep( 3 )
             
-            hCloseNavigator()
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
             
             select case iNewButtonItem
             case 1  :   Kontext "DocumentWriter"

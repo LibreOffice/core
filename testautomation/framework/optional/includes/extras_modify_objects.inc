@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Perform standard operations on all samples/templates etc.
 '*
@@ -41,8 +41,8 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
 
     const CFN = "tModifyObjects::"
     const RESTART = 15
-    const TEMPLATE_COUNT = 236 ' For en-US/StarOffice, numbers may differ for Languages/Brands
-    const SAMPLE_COUNT = 60    ' For en-US/StarOffice, numbers may differ for Languages/Brands
+    const TEMPLATE_COUNT = 236 ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
+    const SAMPLE_COUNT = 56    ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
 
 
     dim iObjectFolder as integer
@@ -81,12 +81,12 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     next iObject
     
     printlog( "Verify object count (en_US only)" )
-    if ( gProductName = "StarOffice" and gISOLang = "en-US" ) then
+    if ( gProductName = "Oracle Open Office" and gISOLang = "en-US" ) then
         if ( iObjectSum <> iObjectCountExpected ) then
             warnlog( "Number of objects has changed. OLD: " & iObjectCountExpected &_
             " NEW: " & iObjectSum )
         else
-            printlog( "Object count is ok for en-US / StarOffice" )
+            printlog( "Object count is ok for en-US / Oracle Open Office" )
         endif
     else
         printlog( "Template count testing skipped for non-en_US/StarOffice" )
@@ -95,7 +95,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     Kontext "TemplateAndDocuments"
     printlog( "Switch from preview to document info" )
     docinfo.click()
-    TemplateAndDocuments.cancel()
+    hCloseDialog( TemplateAndDocuments, "cancel" )
    
     printlog( "" )
     printlog( "Starting to load/save/close/reload/close all Objects" )
@@ -111,11 +111,14 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
             printlog( "Folder index = " & iObjectFolder & ", Object index = " & iObject )
             
             hFileCloseAll()
-            
-            if ( iReset = 10 ) then
-                call exitRestartTheOffice()
-                iReset = 0
-            endif
+
+            ' every now and then the office becomes a little unstable.
+            ' Enable the if()-block then, otherwise you might miss some broken
+            ' documents (because the test aborts too early)
+            'if ( iReset = 10 ) then
+            '    call exitRestartTheOffice()
+            '    iReset = 0
+            'endif
           
             printlog( "Select the item we want to load" )
             FileNewFromTemplate
@@ -138,17 +141,19 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
                 if ( hFileWait( false ) = -6 ) then 
                     warnlog( "Load failure: ASCII filter dialog displayed, recovering" )
                     kontext "FilterAuswahl"
-                    FilterAuswahl.cancel()
+                    hCloseDialog( FilterAuswahl, "cancel" )
                     hDestroyDocument()
                 else
                     printlog( "Build filename; save, reload and delete" )
                     sFile = sPath & cCategory & iObjectFolder & "_" & iObject
-                    hCloseNavigator()
+                    kontext "Navigator"
+                    hCloseDialog( Navigator, "close,optional" )
                     hFileSaveAsKill( sFile )
                     hDestroyDocument()
                     hFileOpen( sFile )
                     hHandleActivesOnLoad( 1 , 2 )
-                    hCloseNavigator()
+                    kontext "Navigator"
+                    hCloseDialog( Navigator, "close,optional" )
                     hDestroyDocument()
                     hDeleteFile( sFile )
                     printlog( "Test cycle done, going for next object." )

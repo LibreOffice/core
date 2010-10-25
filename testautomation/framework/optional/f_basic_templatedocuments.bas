@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : My Macros/standard execution with user defined template
 '*
@@ -38,8 +38,10 @@ sub main
 
     call hStatusIn( "framework" , "f_basic_templatedocuments.bas" )
 
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_MEDIUM )
     call tMacroUserTemplate()
     call tBasicSpecTemplate()
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
 
     call hStatusOut()
 
@@ -64,7 +66,6 @@ sub LoadIncludeFiles
     use "framework\tools\includes\private_environment.inc"
     use "framework\tools\includes\webtools.inc"
     use "framework\tools\includes\template_tools.inc"
-    use "framework\tools\includes\init_tools.inc"
     use "framework\tools\includes\scriptorganizer_tools.inc"
 
     gApplication = "WRITER"

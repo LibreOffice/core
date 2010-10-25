@@ -97,6 +97,24 @@ Modify starmath:PushButton:RID_SYMDEFINEDIALOG:2
 Delete starmath:PushButton:RID_SYMDEFINEDIALOG:3
 Symbols HID_SMA_CONTROL_FONTCHAR_VIEW
 
+*EMFOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+
+*EPSOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Preview svtools:CheckBox:DLG_EXPORT:CB_EPS_PREVIEW_TIFF
+Epsi svtools:CheckBox:DLG_EXPORT:CB_EPS_PREVIEW_EPSI
+Color svtools:RadioButton:DLG_EXPORT:RB_EPS_COLOR_FORMAT1
+Greyscale svtools:RadioButton:DLG_EXPORT:RB_EPS_COLOR_FORMAT2
+Level1 svtools:RadioButton:DLG_EXPORT:RB_EPS_LEVEL1
+Level2 svtools:RadioButton:DLG_EXPORT:RB_EPS_LEVEL2
+LZWEncoding svtools:RadioButton:DLG_EXPORT:RB_EPS_COMPRESSION_LZW
+NoneCompression svtools:RadioButton:DLG_EXPORT:RB_EPS_COMPRESSION_NONE
+
 *ExecuteSQLCommand dbaccess:ModalDialog:DLG_DIRECTSQL
 CommandToExecute dbaccess:MultiLineEdit:DLG_DIRECTSQL:ME_SQL
 ExecuteBtn dbaccess:PushButton:DLG_DIRECTSQL:PB_EXECUTE
@@ -420,9 +438,13 @@ ChooseARemoteDirectoryB HID_FTP_BTN_PATH
 CancelB HID_FTP_CANCEL
 
 *LoginDialog HID_DLG_LOGIN
-LoginName uui:Edit:DLG_UUI_LOGIN:ED_LOGIN_USERNAME
-LoginPassword uui:Edit:DLG_UUI_LOGIN:ED_LOGIN_PASSWORD
-LoginSavePassword uui:CheckBox:DLG_UUI_LOGIN:CB_LOGIN_SAVEPASSWORD
+LoginName HID_LOGIN_DLG_USER_NAME
+LoginPassword HID_LOGIN_DLG_PASSWORD
+LoginSavePassword HID_LOGIN_DLG_REMEMBER_PASSWORD
+Path HID_LOGIN_DLG_PATH
+Browse HID_LOGIN_DLG_BROWSE
+Account HID_LOGIN_DLG_ACCOUNT
+UseSystemCredentials HID_LOGIN_DLG_USE_SYSTEM_CREDENTIALS
 
 *Gallery SID_GALLERY
 NewTheme HID_GALLERY_NEWTHEME
@@ -434,6 +456,15 @@ View HID_GALLERY_WINDOW
 
 *GalleryNewTitle HID_GALLERY_TITLE
 Title HID_GALLERY_TITLE_EDIT
+
+*GIFOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Interlaced svtools:CheckBox:DLG_EXPORT:CB_INTERLACED
+Transparency svtools:CheckBox:DLG_EXPORT:CB_SAVE_TRANSPARENCY
 
 *HelpAgent HID_HELPAGENT_WINDOW
 
@@ -498,3 +529,7 @@ Custom   sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_CUSTOM
 CustomLanguage sc:ListBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:LB_CUSTOM_LANG
 DetectSpecialNumbers sc:CheckBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:BTN_CONVERT_DATE
 
+*HyperlinkDialog HID_HYPERLINK_DIALOG
+CloseButton HID_ICCDIALOG_CANCEL_BTN
+ApplyButton HID_ICCDIALOG_OK_BTN
+BackButton HID_ICCDIALOG_RESET_BTN

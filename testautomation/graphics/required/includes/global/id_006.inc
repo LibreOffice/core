@@ -25,24 +25,11 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiToolsSpellchecking
-' #1 tiToolsSpellcheckingAutomatic
-' #1 tiToolsThesaurus
-' #1 tiToolsHyphenation
-' #1 tiToolsAutoCorrect
-' #1 tChineseTranslation
-' #1 tiToolsMacro
-' #1 tiToolsGallery
-' #1 tiToolsEyedropper
-' #1 tiToolsOptions
 '\**********************************************************************************
-
-'------------------------------------------------------------------------------
 sub id_Tools
     printLog "---------    id_006    ----------"
     call tiToolsSpellchecking
@@ -116,9 +103,9 @@ testcase tiToolsSpellcheckingAutomatic
 endcase
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurus
-
     Dim sWord as string
     Dim sExt as string
+    Dim sFileName as string
 
     'for normal text, the thesaurus is enabled,
     'if the format->character->language of the word has a thesaurus
@@ -206,10 +193,9 @@ testcase tiToolsThesaurus
     if Thesaurus.Exists(3) then
         Thesaurus.Cancel
     else
-        warnlog "the thesaurus does not appear"
-    endif
+         warnlog "the thesaurus does not appear"
+    end if
     Call hCloseDocument
-
 endcase
 '-------------------------------------------------------------------------------
 testcase tiToolsHyphenation
@@ -485,4 +471,4 @@ testcase tiToolsEyedropper
     '/// close application ///'
     Call hCloseDocument
 endcase
-'-------------------------------------------------------------------------------
+

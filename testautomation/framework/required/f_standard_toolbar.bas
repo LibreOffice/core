@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Update/resource-test for toolbars
 '*
@@ -62,8 +62,6 @@ sub LoadIncludeFiles
     
     use "framework\tools\includes\toolbar_tools.inc"
     use "framework\tools\includes\customize_tools.inc"
-    use "framework\tools\includes\performance.inc"
-    use "framework\tools\includes\init_tools.inc"
 
    gApplication = "WRITER"
    call GetUseFiles

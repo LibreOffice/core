@@ -25,24 +25,9 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Tools for writer/Optional - 1
-'*
-'************************************************************************
-'*
-' #0 fFileProperties
-' #0 fFormatGraphic
-' #0 fFormatFrame
-' #0 fFormatPageWriter
-' #0 fFormatParagraph
-' #0 fFormatCharacter
-' #0 fFormatTable
-' #0 fFormatStylesCatalog
-' #0 fPositionAndSize
-' #0 fInsertFieldsOther
-' #0 fInsertSection
-' #0 fToolsAutocorrect
 '*
 '\***********************************************************************
 
@@ -51,18 +36,25 @@
 '*****************************************************************
 function fFileProperties(Options as string)
 
-  FileProperties
-  sleep(1)
-  Kontext
-  Select case Options
-    case "TabDokument"        : active.SetPage TabDokument
-    case "TabBeschreibung"    : active.SetPage TabBeschreibung
-    case "TabBenutzer"        : active.SetPage TabBenutzer
-    case "TabInternet"        : active.SetPage TabInternet
-    case "TabStatistik"       : active.SetPage TabStatistik
-  end Select
+    if ( hUseAsyncSlot( "FileProperties" ) <> -1 ) then
 
-  Kontext Options
+        Kontext
+        if ( Active.exists( 2 ) ) then
+            Select case Options
+            case "TabDokument"        : active.SetPage TabDokument
+            case "TabBeschreibung"    : active.SetPage TabBeschreibung
+            case "TabBenutzer"        : active.SetPage TabBenutzer
+            case "TabInternet"        : active.SetPage TabInternet
+            case "TabStatistik"       : active.SetPage TabStatistik
+            end Select
+        else
+            warnlog( "<FileProperties> dialog not open" )
+        endif
+    else
+        warnlog( "Failed to execute <FileProperties>" )
+    endif
+
+    Kontext Options
 
 end function
 
@@ -74,16 +66,11 @@ end function
 function fFormatGraphic(Options as string) as boolean
     Dim j as integer, sSlotOK as boolean
 
-	try
-		FormatGraphics
-		sSlotOK = true
-	catch
-		warnlog "Unable to execute Format / Graphics"
-	endcatch
-    sleep(1)
-    Kontext
-    if sSlotOK = true then
-        Select case Options
+    if ( hUseAsyncSlot( "FormatGraphics" ) <> -1 ) then
+
+        Kontext
+        if ( Active.exists( 2 ) ) then
+            Select case Options
             case "TabType"                     : active.SetPage TabType
             case "TabZusaetze"                 : active.SetPage TabZusaetze
             case "TabUmlauf"                   : active.SetPage TabUmlauf
@@ -104,16 +91,21 @@ function fFormatGraphic(Options as string) as boolean
                             Active.Ok
                         else
                             exit do
-                        end if                    
+                        end if
                     else
                         exit do
                     end if
-                Loop            
-        end select
-    
-        Kontext Options
-    end if
-    fFormatGraphic = sSlotOK
+                Loop
+            end select
+        else
+            warnlog( "Failed to access <Format Graphics> Tabpage" )
+        endif
+    else
+        warnlog( "Failed to execute <FormatGraphics>" )
+    endif
+
+    Kontext Options
+
 end function
 
 
@@ -123,22 +115,28 @@ end function
 '****************************************************************
 function fFormatFrame(Options as string)
 
-  Sleep 1
-  FormatFrame
-  Kontext
+    if ( hUseAsyncSlot( "FormatFrame" ) <> -1 ) then
 
-  Select case Options
-    case "TabType"                     : active.SetPage TabType
-    case "TabZusaetze"                 : active.SetPage TabZusaetze
-    case "TabUmlauf"                   : active.SetPage TabUmlauf
-    case "TabHyperlinkRahmen"          : active.SetPage TabHyperlinkRahmen
-    case "TabUmrandung"                : active.SetPage TabUmrandung
-    case "TabHintergrund"              : active.SetPage TabHintergrund
-    case "TabSpalten"                  : active.SetPage TabSpalten
-    case "TabMakro"                    : active.SetPage TabMakro
-  end Select
+        Kontext
+        if ( Active.exists( 2 ) ) then
+            Select case Options
+            case "TabType"                     : active.SetPage TabType
+            case "TabZusaetze"                 : active.SetPage TabZusaetze
+            case "TabUmlauf"                   : active.SetPage TabUmlauf
+            case "TabHyperlinkRahmen"          : active.SetPage TabHyperlinkRahmen
+            case "TabUmrandung"                : active.SetPage TabUmrandung
+            case "TabHintergrund"              : active.SetPage TabHintergrund
+            case "TabSpalten"                  : active.SetPage TabSpalten
+            case "TabMakro"                    : active.SetPage TabMakro
+            end Select
+        else
+            warnlog( "<Format Frame> dialog did not open" )
+        endif
+    else
+        warnlog( "Failed to execute <FormatFrame>" )
+    endif
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -148,10 +146,10 @@ end function
 '*************************************************************************
 function fFormatPageWriter(Options as string)
 
-  FormatPageWriter
-  Kontext
+    FormatPageWriter
+    Kontext
 
-  Select case Options
+    Select case Options
     case "TabVerwalten"                : active.SetPage TabVerwalten
     case "TabSeite"                    : active.SetPage TabSeite
     case "TabHintergrund"              : active.SetPage TabHintergrund
@@ -161,9 +159,9 @@ function fFormatPageWriter(Options as string)
     case "TabSpalten"                  : active.SetPage TabSpalten
     case "TabFussnote"                 : active.SetPage TabFussnote
     case "TabGrid"                     : active.SetPage TabGrid
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -173,10 +171,10 @@ end function
 '*************************************************************************
 function fFormatParagraph(Options as string)
 
-  FormatParagraph
-  Kontext
+    FormatParagraph
+    Kontext
 
-  Select case Options
+    Select case Options
     case "TabEinzuegeUndAbstaende" : active.SetPage TabEinzuegeUndAbstaende
     case "TabAusrichtungAbsatz"    : active.SetPage TabAusrichtungAbsatz
     case "TabTextfluss"            : active.SetPage TabTextfluss
@@ -186,9 +184,9 @@ function fFormatParagraph(Options as string)
     case "TabInitialen"            : active.SetPage TabInitialen
     case "TabUmrandung"            : active.SetPage TabUmrandung
     case "TabHintergrund"          : active.SetPage TabHintergrund
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -198,19 +196,19 @@ end function
 '*************************************************************************
 function fFormatCharacter(Options as string)
 
-  FormatCharacter
-  Kontext
+    FormatCharacter
+    Kontext
 
-  Select case Options
+    Select case Options
     case "TabFont"                  : active.SetPage TabFont
     case "TabFontEffects"           : active.SetPage TabFontEffects
     case "TabFontPosition"          : active.SetPage TabFontPosition
     case "TabAsianLayout"           : active.SetPage TabAsianLayout
     case "TabHyperlinkZeichen"      : active.SetPage TabHyperlinkZeichen
     case "TabHintergrund"           : active.SetPage TabHintergrund
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -221,18 +219,18 @@ end function
 '*************************************************************************
 function fFormatTable(Options as string)
 
-  FormatTable
-  Kontext
+    FormatTable
+    Kontext
 
-  Select case Options
+    Select case Options
     case "TabTabelle"               : active.SetPage TabTabelle
     case "TabTextflussTabelle"      : active.SetPage TabTextflussTabelle
     case "TabSpaltenTabelle"        : active.SetPage TabSpaltenTabelle
     case "TabUmrandung"             : active.SetPage TabUmrandung
     case "TabHintergrund"           : active.SetPage TabHintergrund
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -242,16 +240,18 @@ end function
 '*************************************************************************
 function fFormatStylesCatalog(Options as string)
 
-  FormatStylesCatalog
-  Kontext "VorlagenKatalog"
+    FormatStylesCatalog
+    Kontext "VorlagenKatalog"
 
-  Select case Options
+    Select case Options
     case "Paragraph"      : Vorlagen.Select 1
     case "Character"      : Vorlagen.Select 2
     case "Frame"          : Vorlagen.Select 3
     case "Page"           : Vorlagen.Select 4
     case "Numbering"      : Vorlagen.Select 5
-  end Select
+    end Select
+
+    Kontext Options
 
 end function
 
@@ -261,19 +261,19 @@ end function
 '*******************************************************************************
 function fInsertFieldsOther(Options as string)
 
-  InsertFieldsOther
-  Kontext
+    InsertFieldsOther
+    Kontext
 
-  Select case Options
+    Select case Options
     case "TabDokumentFeldbefehle"     : active.SetPage TabDokumentFeldbefehle
     case "TabReferenzen"              : active.SetPage TabReferenzen
     case "TabFunktionen"              : active.SetPage TabFunktionen
     case "TabDokumentinfoFeldbefehle" : active.SetPage TabDokumentinfoFeldbefehle
     case "TabVariablen"               : active.SetPage TabVariablen
     case "TabDatenbank"               : active.SetPage TabDatenbank
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -283,20 +283,23 @@ end function
 '******************************************************
 function fInsertSection(Options as string)
 
-   InsertSection
-   wait 500
-   Kontext
+    InsertSection
 
-   Select case Options
-       case "TabBereiche"       : active.SetPage TabBereiche
-       case "TabSpalten"        : active.SetPage TabSpalten
-       case "TabSectionIndent"  : active.SetPage TabSectionIndent
-       case "TabHintergrund"    : active.SetPage TabHintergrund
-       case "TabFussEndnoten"   : active.SetPage TabFussEndnoten
-   end Select
+    Kontext
+    if ( Active.exists( 2 ) ) then
+        Select case Options
+        case "TabBereiche"       : active.SetPage TabBereiche
+        case "TabSpalten"        : active.SetPage TabSpalten
+        case "TabSectionIndent"  : active.SetPage TabSectionIndent
+        case "TabHintergrund"    : active.SetPage TabHintergrund
+        case "TabFussEndnoten"   : active.SetPage TabFussEndnoten
+        end Select
+        waitslot()
+    else
+        warnlog( "Failed to open <Insert Section> dialog" )
+    endif
 
-   Kontext Options
-   Sleep 1
+    Kontext Options
 
 end function
 
@@ -306,18 +309,18 @@ end function
 '*************************************************************************
 function fToolsAutocorrect(Options as string)
 
-  Kontext
-  ToolsAutoCorrect
+    Kontext
+    ToolsAutoCorrect
 
-  Select case Options
+    Select case Options
     case "TabErsetzung"                : active.SetPage TabErsetzung
     case "TabAusnahmen"                : active.SetPage TabAusnahmen
     case "TabOptionenAutokorrektur"    : active.SetPage TabOptionenAutokorrektur
     case "TabLocalizedOptions"         : active.SetPage TabLocalizedOptions
     case "TabWortergaenzung"           : active.SetPage TabWortergaenzung
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 
@@ -327,16 +330,16 @@ end function
 '******************************************************
 function fPositionAndSize(Options as string)
 
-  Kontext
-  FormatPositionAndSize
+    Kontext
+    FormatPositionAndSize
 
-  Select case Options
+    Select case Options
     case "TabPositionAndSizeWriter"  : active.SetPage TabPositionAndSizeWriter
     case "TabDrehung"                : active.SetPage TabDrehung
     case "TabSchraegstellen"         : active.SetPage TabSchraegstellen
-  end Select
+    end Select
 
-  Kontext Options
+    Kontext Options
 
 end function
 

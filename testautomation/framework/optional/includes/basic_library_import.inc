@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Import BASIC library (flat)
 '*
@@ -35,21 +35,29 @@ testcase tBasicLibraryImport
 
     printlog( "Import a BASIC library" )
 
+    const MY_MACROS = 1
+    const LIBRARIES_TAB = 3
+    const STANDARD_LIBRARY = 1
+
+    const XLB_DIALOG_FILE = "dialog.xlb"
+
     dim cMsg as string
     dim iCurrentLib as integer
+
+    dim cPath as string : cPath = hGetWorkPath() & LIBRARY_NAME
 
     ToolsMacro_uno
     
     kontext "Makro"
-    MakroAus.Select( 1 )
+    MakroAus.Select( MY_MACROS )
     
     Verwalten.click()
     
-    hSelectBasicObjectOrganizerTab( 3 )    
+    hSelectBasicObjectOrganizerTab( LIBRARIES_TAB )
     
     printlog( "Select My macros" )
     kontext "TabBibliotheken"
-    Bibliothek.select( 1 )
+    Bibliothek.select( STANDARD_LIBRARY )
     
     printlog( "Click to add a library" )
     Hinzufuegen.click()
@@ -62,20 +70,18 @@ testcase tBasicLibraryImport
     OeffnenDlg.typeKeys( "<RETURN>" )
     
     printlog( "Enter &quot;dialog.xlb&quot;" )
-    DateiName.setText( "dialog.xlb" )
+    DateiName.setText( XLB_DIALOG_FILE )
     
-    printlog( "Open dialog.xlb" )
+    printlog( "Open " & XLB_DIALOG_FILE )
     Oeffnen.click()
     
     kontext "active"
     if ( active.exists( 1 ) ) then
         if ( active.getRT() <> 373 ) then
-            cMSG = Active.getText()
-            cMsg = hRemoveLineBreaks( cMsg )
-            warnlog( "Autocompletion failed: " & cMsg )
+            warnlog( "Autocompletion failed: " & Active.getText() )
             Active.ok()
             Kontext "OeffnenDlg"
-            DateiName.setText( "dialog.xlb" )
+            DateiName.setText( XLB_DIALOG_FILE )
             Oeffnen.click()
         endif
     endif
@@ -114,10 +120,10 @@ testcase tBasicLibraryImport
     
     hDestroyDocument()
 
-    hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "dialog.xlb"  )
-    hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "Module1.xba" )
-    hDeleteFile( hGetWorkPath() & LIBRARY_NAME & gPathSigne & "script.xlb"  )
-    rmdir( hGetWorkPath() & LIBRARY_NAME ) : printlog( "Remove directory" )
+    hDeleteFile( cPath & GetPathSeparator & XLB_DIALOG_FILE  )
+    hDeleteFile( cPath & GetPathSeparator & "Module1.xba" )
+    hDeleteFile( cPath & GetPathSeparator & "script.xlb"  )
+    rmdir( cPath ) : printlog( "Remove directory" )
        
 endcase
 

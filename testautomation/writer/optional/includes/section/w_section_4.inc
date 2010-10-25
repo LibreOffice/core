@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Functional-Test for Section.
 '*
@@ -1190,11 +1190,11 @@ testcase tScenarioSection_1
 
    j = UBound(SectionName)
 
-   if hFileExists ( MasterDoc ) then app.kill ( MasterDoc )
+   if FileExists ( MasterDoc ) then app.kill ( MasterDoc )
 
    For i = 0 to j
        tempFile =  Convertpath( gOfficePath + "user\work\" + SectionName(i) )
-       if hFileExists ( tempFile ) then app.kill ( tempFile )
+       if FileExists ( tempFile ) then app.kill ( tempFile )
    next i
 
   '/// open testdocument (tScenarioSection_1.sxw) ///
@@ -1310,11 +1310,11 @@ testcase tScenarioSection_2
 
    j = UBound(SectionName)
 
-   if hFileExists ( MasterDoc ) then app.kill ( MasterDoc )
+   if FileExists ( MasterDoc ) then app.kill ( MasterDoc )
 
    For i = 0 to j
        tempFile =  Convertpath( gOfficePath + "user\work\" + SectionName(i) )
-       if hFileExists ( tempFile ) then app.kill ( tempFile )
+       if FileExists ( tempFile ) then app.kill ( tempFile )
    next i
 
   '/// open testdocument (tScenarioSection_2.sxw) ///

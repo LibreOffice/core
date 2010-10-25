@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Form Test
 '*
@@ -173,7 +173,7 @@ testcase tCreateForm
    	'/// insert a textfield
     printlog "insert a textfield"        
     Edit.Click
-   	call hDrawingWithSelection ( 50, 20, 60, 30 )
+   	call hDrawingWithSelection ( 50, 30, 60, 40 )
    	sleep(1)
     
     Kontext "FormControls"
@@ -543,7 +543,7 @@ testcase tCreateSubForms
    	'/// insert a textfield
     printlog "insert a textfield"        
     Edit.Click
-   	call hDrawingWithSelection ( 50, 20, 60, 30 )
+   	call hDrawingWithSelection ( 50, 30, 60, 40 )
    	sleep(1)
     
     Kontext "FormControls"
@@ -638,7 +638,7 @@ testcase tCreateSubForms
        '/// insert a textfield
        printlog "insert a textfield"
        'Edit.Click
-   	 call hDrawingWithSelection ( 50, 40, 60, 50 )
+   	 call hDrawingWithSelection ( 50, 50, 60, 60 )
    	 sleep(1)
     
     Kontext "FormControls"
@@ -672,6 +672,8 @@ testcase tCheckSubForm
     '/// set cursor into the first control
     printlog "set cursor into the first control"   
     Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "<MOD1 F6>" , true
+        wait(1000)
         DocumentWriter.TypeKeys "<MOD1 F5>" , true
         sleep(1)
            
@@ -749,7 +751,7 @@ testcase tCreateSubFormsNewMethod
         '/// insert a textfield
         printlog "insert a textfield"        
         Edit.Click
-        call hDrawingWithSelection ( 50, 20, 60, 30 )
+        call hDrawingWithSelection ( 50, 30, 60, 40 )
         sleep(1)
     
     Kontext "FormControls"

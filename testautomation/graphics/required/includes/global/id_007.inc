@@ -25,31 +25,37 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tdModifyFlipVertikal
-' #1 tdModifyFlipHorizontal
-' #1 tdContextConvertIntoCurve
-' #1 tdContextConvertIntoPolygon
-' #1 tdContextConvertIntoContour
-' #1 tdContextConvertInto3D
-' #1 tdContextConvertIntoRotationObject
-' #1 tdContextConvertIntoBitmap
-' #1 tdContextConvertIntoMetaFile
-' #1 tdModifyArrange
-' #1 tdModifyArrangeObjects
-' #1 tdModifyAlignment
-' #1 tdContextDistribution
-' #1 tdContextDescriptionObject
-' #1 tdContextNameObject
-' #1 tdModifyConnectBreak
-' #1 tdModifyShapes
-' #1 tdModifyCombineSplit
-'\**********************************************************************************
+'\******************************************************************************
 
+sub id_007
+
+    printLog Chr(13) + "---------    id_007    ----------"
+    ' in imp available via context menu, in draw via modify menu
+
+    call tdModifyFlipVertikal
+    call tdModifyFlipHorizontal
+    call tdContextConvertIntoCurve
+    call tdContextConvertIntoPolygon
+    call tdContextConvertIntoContour
+    call tdContextConvertInto3D
+    call tdContextConvertIntoRotationObject
+    call tdContextConvertIntoBitmap
+    call tdContextConvertIntoMetaFile
+    call tdModifyArrange
+    call tdModifyArrangeObjects
+    call tdModifyAlignment
+    call tdContextDistribution
+    call tdContextDescriptionObject
+    call tdContextNameObject
+    call tdModifyConnectBreak
+    call tdModifyShapes
+    call tdModifyCombineSplit
+end sub
+'-------------------------------------------------------------------------------
 testcase tdModifyFlipVertikal
 
     '/// open application ///'

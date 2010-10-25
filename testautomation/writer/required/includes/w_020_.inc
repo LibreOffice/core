@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description: Testcases for Toolbars.
 '*
@@ -54,13 +54,17 @@ sub w_020_
     Call tHtmlDoc_TB_Rest
     gApplication = "WRITER"
 
+    Call tUpdtFindBar()
+
 end sub
 
 '-----------------------------------------------------------
 
 testcase t_TB_Insert
-    qaErrorLog "#158646# - Inserting Indexes causes crash."
-    goto endsub
+
+    ' JSK: This issue is solved since OOO300m9, enabling test again
+    'qaErrorLog "#158646# - Inserting Indexes causes crash."
+    'goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
 
@@ -122,7 +126,8 @@ testcase t_TB_Insert
     else
         Call hToolbarSelect("Insert", true)
     endif
-    
+
+    sleep( 2 ) ' Too fast for some machines. Using dirty fix.
     if Tabelle.IsEnabled then
         Tabelle.Click
         Kontext "TabelleEinfuegenWriter"
@@ -235,7 +240,7 @@ testcase t_TB_InsertFields
     printlog "- Toolbox ( normal ) : Fields"
 
     if gPlatgroup = "unx" then
-        QAErrorlog "Doesn't run on unix"
+        printlog( "Test not suitable for Unix(like) OS" )
         goto endsub
     end if
     printlog " Open new document"
@@ -658,8 +663,10 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDoc_TB_Insert
-    qaErrorLog "#158646# - Inserting Indexes causes crash."
-    goto endsub
+
+    ' JSK: This issue is solved since OOO300m9, enabling test again
+    'qaErrorLog "#158646# - Inserting Indexes causes crash."
+    'goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
     gApplication = "HTML"
@@ -780,7 +787,7 @@ testcase tHtmlDoc_TB_InsertFields
     gApplication = "HTML"
 
     if gPlatgroup = "unx" then
-        QAErrorlog "Doesn't run on unix"
+        printlog( "Test not suitable for Unix(like) OS" )
         goto endsub
     end if
 

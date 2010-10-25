@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Get the UI names for default filters
 '*
@@ -99,8 +99,7 @@ function hGetFilterGroup( api_filters() as string, ui_filters() as string )
     
     dim iCurrentFilter as integer
     
-    dim iFilterCount as integer
-        iFilterCount = ubound( api_filters() )
+    dim iFilterCount as integer : iFilterCount = ubound( api_filters() )
         
     dim iAPIfilterList as integer
 
@@ -115,9 +114,11 @@ function hGetFilterGroup( api_filters() as string, ui_filters() as string )
         
             if ( oFilter( iAPIFilterList ).Name = "UIName" ) then
                 ui_filters( iCurrentFilter ) = oFilter( iAPIFilterList ).Value()
-                'printlog( CFN & "DEBUG: Index (iCurrentFilter): " & iCurrentFilter )
-                'printlog( CFN & "DEBUG: API Filter: " & api_filters( iCurrentFilter ) )
-                'printlog( CFN & "DEBUG: UI Filter.: " &  ui_filters( iCurrentFilter ) )
+                if ( GVERBOSE ) then
+                    'printlog( CFN & "DEBUG: Index (iCurrentFilter): " & iCurrentFilter )
+                    'printlog( CFN & "DEBUG: API Filter: " & api_filters( iCurrentFilter ) )
+                    'printlog( CFN & "DEBUG: UI Filter.: " &  ui_filters( iCurrentFilter ) )
+                endif
             endif
             
         next iAPIFilterList

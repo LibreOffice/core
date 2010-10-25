@@ -25,61 +25,12 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : functions for directories and files; execution happens in the office
 '*
 '\************************************************************************
 
-function hFileExists ( Dat as String ) as Boolean
-    '/// Checks if a file exists
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the file exists.
-    if app.Dir ( Dat ) = "" then
-        hFileExists = FALSE
-    else
-        hFileExists = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hDirectoryExists ( Verz as String ) as Boolean
-    '/// Checks if a directory exists
-    '/// <u>Input</u>: Directory with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the directory exists.
-    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-    if right ( Verz, 1 ) <> gPathSigne then Verz = Verz + gPathsigne
-    if app.Dir ( Verz, 16 ) = "" then
-        hDirectoryExists = FALSE
-    else
-        hDirectoryExists = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hKillFile ( Dat as String ) as Boolean
-    '/// Delete a file
-    '/// <u>Input</u>: File with complete path
-    '/// <u>Return</u>: TRUE or FALSE success on deleting?
-    if app.Dir ( Dat ) <> "" then
-        try
-            app.kill ( Dat )
-        catch
-        endcatch
-        if app.Dir ( Dat ) <> "" then
-            hKillFile = FALSE
-        else
-            hKillFile = TRUE
-        end if
-    else
-        hKillFile = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function DirNameList (ByVal sPfad$ , lsDirName() as String ) as Integer
     '/// seperate a path in its parts
     '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
@@ -293,45 +244,8 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function PfadExtract ( sFiledat$ ) as string
-    '/// Get the path from a file
-    '/// <u>Input</u>: file with path
-    '/// <u>Return</u>: path without the filename
-    Dim s$ : Dim i% : Dim k%
-    dim ls(25) as String
-
-    s$ = ""
-    i% = DirNameList( sFileDat$, ls() )
-    k% = 2
-    do until K%>=i%
-        ls( 1 ) = ls( 1 ) +  ls(k%)
-        k% = k% +1
-    loop
-    PfadExtract = Left( ls(1), Len(ls( 1 ))-1)
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hPfadname (Dateipfad$) as string
-    '/// Get the path from a file
-    '/// <u>Input</u>: file with path
-    '/// <u>Return</u>: path without the filename
-    dim wh as integer
-
-    for wh = len(Dateipfad$) to 1 step -1
-        if mid(Dateipfad$,wh,1) = gPathSigne then
-            hpfadname = left(Dateipfad$,wh)
-            exit for
-        else
-            hpfadname = Dateipfad$
-        end if
-    next wh
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function DateiExtract ( sFileDat$ )
-    '/// Get the filename from a path
+   '/// Get the filename from a path
     '/// <u>Input</u>: path with file
     '/// <u>Return</u>: filename without the path
     Dim i%

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test of Hangul/Hanja Conversion - 2
 '*
@@ -61,6 +61,9 @@
 '\***********************************************************************
 
 testcase tHHConversion_1
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -77,12 +80,12 @@ testcase tHHConversion_1
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + Press Peplace button
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion : WaitSlot
    Kontext "HangulHanjaConversion"
      For i = 1 to 15
          if NOT HangulHanjaConversion.Exists then
@@ -108,6 +111,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_2
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -123,7 +129,7 @@ testcase tHHConversion_2
 
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check hanja only .
@@ -155,6 +161,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_3
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -171,7 +180,7 @@ testcase tHHConversion_3
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hanja(Hangul)
@@ -204,6 +213,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_4
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -220,7 +232,7 @@ testcase tHHConversion_4
 
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hanja(Hangul).
@@ -253,6 +265,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_5
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -269,7 +284,7 @@ testcase tHHConversion_5
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hangul(Hanja) ,
@@ -302,6 +317,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_6
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -319,7 +337,7 @@ testcase tHHConversion_6
 
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hangul(Hanja),
@@ -352,6 +370,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_7
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -369,7 +390,7 @@ testcase tHHConversion_7
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Above Hangul' ,
@@ -409,6 +430,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_8
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -426,7 +450,7 @@ testcase tHHConversion_8
   Call hNewDocument
 
   '/// Open a test file , which includes some Chinese chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Above Hangul' ,
@@ -466,6 +490,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_9
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -483,7 +510,7 @@ testcase tHHConversion_9
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Below Hangul' ,
@@ -523,6 +550,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_10
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -540,7 +570,7 @@ testcase tHHConversion_10
   Call hNewDocument
 
   '/// Open a test file , which includes some Chinese chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Below Hangul' ,
@@ -580,6 +610,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_11
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -597,7 +630,7 @@ testcase tHHConversion_11
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Above Hanja' ,
@@ -637,6 +670,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_12
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -654,7 +690,7 @@ testcase tHHConversion_12
   Call hNewDocument
 
   '/// Open a test file , which includes some Chinese chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Above Hanja' ,
@@ -694,6 +730,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_13
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -711,7 +750,7 @@ testcase tHHConversion_13
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Below Hanja' ,
@@ -751,6 +790,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_14
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                as String
   Dim  sHangulText , sHanjaText as String
@@ -768,7 +810,7 @@ testcase tHHConversion_14
   Call hNewDocument
 
   '/// Open a test file , which includes some Chinese chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Below Hanja' ,
@@ -808,6 +850,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_15
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
 
@@ -820,7 +865,7 @@ testcase tHHConversion_15
 
   '/// Open a test file , which includes some Korean chacters .
   '/// + Set focus before Korean character
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -853,6 +898,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_16
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
 
@@ -865,7 +913,7 @@ testcase tHHConversion_16
 
   '/// Open a test file , which includes some Chinese chacters .
   '/// + Set focus before Chinese character
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -898,6 +946,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_17
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile            as String
   Dim  sResult   , sWord    as String
@@ -913,7 +964,7 @@ testcase tHHConversion_17
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters .
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Ignore ,
@@ -943,6 +994,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_18
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile   as String
   Dim  sResult     as String
@@ -961,7 +1015,7 @@ testcase tHHConversion_18
 
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Always Ignore ,
@@ -992,7 +1046,7 @@ testcase tHHConversion_18
   '/// So far , there is still a StarOffice session exists .
 
   '/// Reopen the test file
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
@@ -1026,6 +1080,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_19
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sWord      as String
@@ -1040,7 +1097,7 @@ testcase tHHConversion_19
 
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Always Ignore ,
@@ -1063,7 +1120,7 @@ testcase tHHConversion_19
 
   Call hNewDocument
   '/// Reopen the test file
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , 山下 should be selcted
@@ -1081,6 +1138,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_20
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sWord      as String
@@ -1099,7 +1159,7 @@ testcase tHHConversion_20
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , select a word in selection
@@ -1140,6 +1200,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_21
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sWord1      as String
@@ -1162,7 +1225,7 @@ testcase tHHConversion_21
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , select a word in selection,
@@ -1204,7 +1267,7 @@ testcase tHHConversion_21
     Call hNewDocument
 
     '/// Reopen this test file
-    Call hFileOpen(sTestFile)
+    Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
     Call wTypeKeys "<Home>"
 
     '/// Tools / HangulHanjaConversion
@@ -1241,6 +1304,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_22
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
     Dim  sTestFile  as String
     Dim  i          as Integer
@@ -1255,7 +1321,7 @@ testcase tHHConversion_22
     Call hNewDocument
 
     '/// Open a test file , which includes some Korean chacters
-    Call hFileOpen(sTestFile)
+    Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
     Call wTypeKeys "<Home>"
 
     '/// Tools / HangulHanjaConversion , select a word in selection,
@@ -1284,7 +1350,7 @@ testcase tHHConversion_22
     Call hStartTheOffice
     Call hNewDocument
   	'/// Reopen this test file
-   	Call hFileOpen(sTestFile)
+   	Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    	Call wTypeKeys "<Home>"
 
 	'/// Tools / HangulHanjaConversion
@@ -1303,6 +1369,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_23
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
     Dim  sTestFile  as String
     Dim  sWord      as String
@@ -1320,7 +1389,7 @@ testcase tHHConversion_23
     Call hNewDocument
     
     '/// Open a test file , which includes some Korean chacters
-    Call hFileOpen(sTestFile)
+    Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
     Call wTypeKeys "<Home>"
 
     '/// Tools / HangulHanjaConversion , select a word in selection,
@@ -1367,6 +1436,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_24
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -1382,7 +1454,7 @@ testcase tHHConversion_24
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , the default for 'Replace by character'
@@ -1417,6 +1489,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_25
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile   as String
   Dim  sResult     as String
@@ -1434,7 +1509,7 @@ testcase tHHConversion_25
 
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , Check 'Replace by character' ,
@@ -1477,6 +1552,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHConversion_26
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sWord      as String
@@ -1495,7 +1573,7 @@ testcase tHHConversion_26
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
+   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
    Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,  Check 'Replace by character' ,

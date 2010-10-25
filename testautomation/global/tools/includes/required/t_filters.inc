@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Retrieve and set filternames and suffixes
 '*
@@ -33,6 +33,21 @@
 
 private const LENGTH_OF_FILTERFILE = 100
 private const FILE_DATA_SIZE = 300
+
+function hCheckForBinfilters() as boolean
+
+    try
+        hGetSuffix( "569" )
+        hCheckForBinfilters() = true
+    catch
+        warnlog( "Optional legacy filters package is not installed" )
+        printlog( "Please restart the setup to install the missing filters" )
+        hCheckForBinfilters() = false
+    endcatch
+
+end function
+
+'*******************************************************************************
 
 function hGetSuffix( optional cBuildId as string ) as string
 
@@ -516,4 +531,19 @@ function hGetSection( lsList() as string , iSectionBegin as integer , iSectionEn
 
 end function
 
+'*******************************************************************************
+
+function hGetUsedFilter () as string
+
+    ' used in math and graphics modules
+    '/// Get used filter for loaded file.
+    try
+        FileSaveAs
+        Kontext "SpeichernDlg"
+        hGetUsedFilter = dateityp.getseltext
+        SpeichernDlg.Cancel
+    catch
+        hGetUsedFilter = "Not possible; try/catch fail in function"
+    endcatch
+end function
 

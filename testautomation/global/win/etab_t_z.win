@@ -101,6 +101,8 @@ ColumnLength HID_TAB_ENT_TEXT_LEN
 ColumnAutoValue dbaccess:NumericField:TAB_WIZ_TYPE_SELECT:ET_AUTO
 ColumnAuto dbaccess:PushButton:TAB_WIZ_TYPE_SELECT:PB_AUTO
 
+*TabWeblog sym:vnd.com.sun.star.blogger:settings
+
 *TabXMLGeneral HID_XML_FILTER_TABPAGE_BASIC
 FilterName HID_XML_FILTER_NAME
 Application HID_XML_FILTER_APPLICATION

@@ -25,334 +25,148 @@
 '
 '/******************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Global routines for loading, saving, printing, export
 '*
 '\******************************************************************************
 
-private const VERBOSE = FALSE ' set to TRUE for debugging
+function hGrafikEinfuegen( cFile as string ) as Boolean
 
-function hGrafikEinfuegen  ( Grafik$ ) as Boolean
-    '/// hGrafikEinfuegen hGraphicInsert
-    '/// A graphic will be inserted (not linked).
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the graphic could be inserted or not.
-
-    Dim DieDatei as String
-    Dim IsActive as Boolean
-
-    DieDatei = ConvertPath ( Grafik$ )
-
-    InsertGraphicsFromFile
-    WaitSlot()
-
-    Kontext
-    If Active.Exists(1) then
-        warnlog "  Hinweis: " & Active.GetText
-        Active.Ok
-    End If
-
-
-    Kontext "GrafikEinfuegenDlg"
-    if ( GrafikEinfuegenDlg.exists( 2 ) ) then
-
-        Vorschau.Uncheck
-        if gApplication <> "HTML" then
-            Verknuepfen.UnCheck
-        end if
-
-        Dateiname.SetText DieDatei
-        DateiTyp.Select 1                               ' set the filter to 'all formats'
-        Oeffnen.Click
-
-        Kontext "Active"
-        if Active.Exists(2) then
-            Warnlog "  Hinweis: " & Active.GetText
-            try
-                Active.OK
-            catch
-                try
-                    Active.Yes
-                catch
-                    Active.Cancel
-                endcatch
-            endcatch
-            Kontext "GrafikEinfuegenDlg"
-            if GrafikEinfuegenDlg.Exists then
-                GrafikEinfuegenDlg.Cancel
-                GarfikEinfuegenDlg.notExists( 4 )
-            endif
-        else
-            hGrafikEinfuegen = IsImageLoaded
-        end if
-    else
-        warnlog( "Insert graphics dialog not open" )
-    endif
+    hGrafikEinfuegen() = hInsertGraphic( cFile, "Static" )
+    exit function
     
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function hGrafikVerknuepftEinfuegen  ( Grafik$ ) as Boolean
-    '/// hGrafikEinfuegenEinfuegen hGraphicInsertLinked
-    '/// A graphic will be inserted <b>LINKED</b>
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the graphic could be inserted or not.
-    Dim DieDatei as String
-    Dim IsActive as Boolean
 
-    DieDatei = ConvertPath ( Grafik$ )
+'*******************************************************************************
 
-    InsertGraphicsFromFile
-    WaitSlot()
+function hGrafikVerknuepftEinfuegen( cFile as string ) as Boolean
 
-    Kontext
-    If Active.Exists(1) then
-        warnlog "  Hinweis: " & Active.GetText
-        Active.Ok
-    End If
-    Kontext "GrafikEinfuegenDlg"
-    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+    hGrafikVerknuepftEinfuegen() = hInsertGraphic( cFile, "Linked" )
+    exit function
 
-        Vorschau.UnCheck
-        if gApplication <> "HTML" AND gApplication <> "HTML" then
-            Verknuepfen.Check
-        end if
+end function
 
-        Dateiname.SetText DieDatei
-        DateiTyp.Select 1                               ' set the filter to 'all formats'
-        Oeffnen.Click
+'*******************************************************************************
 
-        Kontext "Active"
-        if Active.Exists(2) then
-            Warnlog "  Hinweis: " + Active.GetText
-            try
-                Active.OK
-            catch
-                Active.Yes
-            endcatch
-            Kontext "GrafikEinfuegenDlg"
-            if GrafikEinfuegenDlg.Exists then
-                GrafikEinfuegenDlg.Cancel
+function hInsertGraphic( byval cFile as string, byval cMode as string ) as boolean
+
+    ' Insert a graphic file to the current document either linked or static
+    ' cFile: Fully qualified path to the file to be inserted
+    ' cMode: Supply "Linked" to link, empty string or anything else is static
+
+    ' In difference to the older functions (GrafikEinfuegen etc.) this function
+    ' does provide a working returnvalue and does not secretly hide warnings and
+    ' errors. It does not set the file type.
+
+    ' Make hFileWait() complain about any messageboxes
+    const SHOW_WARNINGS = true
+
+    ' Find out whether we link the file or not
+    dim bLinked as boolean : bLinked = false
+    if ( lcase( cMode ) = "linked" ) then bLinked = true
+
+    hInsertGraphic() = false
+    cFile = convertpath( cFile )
+
+    if ( FileExists( cFile ) ) then
+        InsertGraphicsFromFile
+
+        kontext "GrafikEinfuegenDlg"
+        if ( GrafikEinfuegenDlg.exists( 3 ) ) then
+
+            Vorschau.unCheck()
+            if ( Verknuepfen.isEnabled() ) then
+                if ( bLinked ) then
+                    Verknuepfen.check()
+                else
+                    Verknuepfen.unCheck()
+                endif
             endif
+
+            DateiName.setText( cFile )
+            Oeffnen.click()
+
+            if ( hFileWait( SHOW_WARNINGS ) >= 0 ) then hInsertGraphic() = true
+            
         else
-            hGrafikVerknuepftEinfuegen = IsImageLoaded
-        end if
-    else
-        'GrafikEinfuegenDlg not open
-    endif
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function IsItSaved as boolean
-    '/// IsItSaved
-    '/// Wait until document is saved.
-    Dim iLoop as integer
-
-    IsItSaved = FALSE
-    sleep(3)
-    for iLoop =1 to 20
-        try
-            'Calling slot 'IsDocSaving'
-            IsItSaved = IsDocSaving
-        catch
-            IsItSaved = FALSE
-        endcatch
-
-        if IsItSaved = TRUE then
-            exit for
-        end if
-        sleep(1)
-    next iLoop
-    sleep(2)
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function IsItLoaded as boolean
-    '/// IsItLoaded
-    '/// Wait until document is loaded
-    Dim iLoop as integer
-
-    IsItLoaded = FALSE
-    sleep(3)
-    for iLoop =1 to 20
-        try
-            'Calling slot 'IsDocLoading'
-            IsItLoaded = IsDocLoading
-        catch
-            IsItLoaded = FALSE
-        endcatch
-
-        if IsItLoaded = TRUE then
-            exit for
-        end if
-        sleep(1)
-    next iLoop
-    sleep(2)
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hIsNamedDocLoaded (ShouldFile as String, optional bSilent as boolean) as Boolean
-    dim sTemp as string
-    '/// hIsNamedDocLoaded ///'
-    '/// !fails always if a template is loaded, because you have to set a new filename in the save-dialog -> not usable in this case ! ///'
-    '/// Input: name of loaded file; Output: True/False ///'
-    '///+' if a doc got loaded, the filename in a 'SaveAs' Dlg is different from "" ///
-    '///+' usually the file name of the loaded document with an changed extension chosen from SO ///
-
-    if (isMissing(bSilent)) then
-        bSilent = False
-    endif
-
-    hIsNamedDocLoaded  = FALSE      ' Let's  start WorstCase :-(
-    FileSaveAs
-    Kontext "SpeichernDlg"
-    If DateiOhneExt(DateiExtract(Dateiname.GetSelText)) = DateiOhneExt(DateiExtract(ShouldFile)) Then
-        hIsNamedDocLoaded = True
-    Else
-        sTemp = left(right(ShouldFile,2),1) ' get the 2nd last character ' vor;dot;sti;pot;std;xlt
-        if (((sTemp="o") or (sTemp="t") or (sTemp="l")) and ((left(right(ShouldFile,4),1)=".") or (left(right(ShouldFile,5),1)="."))) then
-            hIsNamedDocLoaded = TRUE ' exception! for linux! and MS-Office Templates
-        else
-            if ((Dateiname.GetSeltext = "") and not bSilent) then
-                Warnlog "Default filename is empty!"+left(right(ShouldFile,3),1)
-            endif
+            warnlog( "hInsertGraphic(): Failed to open <Insert Graphics> dialog" )
         endif
-    End If
-    SpeichernDlg.Cancel
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function IsImageLoaded
-    '/// IsImageLoaded
-    '/// Wait until images in document are loaded
-    Dim i% : Dim Herbert as Boolean
+    else
+        warnlog( "hInsertGraphic(): File does not exist: " & cFile )
+    endif
 
-    Sleep 3
-    for i%=1 to 20
-        try
-            Herbert = IsDocImageLoading
-        catch
-            Herbert = FALSE
-        endcatch
-        if Herbert = TRUE then
-            i%=100
-        endif
-        Sleep (1)
-    next i%
-    if i<100 then
-        IsImageLoaded = FALSE
-    else
-        IsImageLoaded = TRUE
-    end if
 end function
-'
-'-------------------------------------------------------------------------------
-'
-sub hIsWebPageLoaded as boolean
-    'Author: Joerg Sievers
-    '/// If a document in StarOffice Writer is loaded all 9 items in the
-    '///+ statusbar are visible otherwise not.
-    '///+ This sub checks the state of these items.
-    Dim i as integer
-    Dim iGibtdenStatusraus as integer
-    printlog "- global::tools::inc::tfiles.inc::hIsWebPageLoaded"
-    hIsWebPageLoaded = FALSE
-    for i = 1 to 20
-        Kontext "DocumentWriter"
-        if DocumentWriter.Exists(3) then
-            'Count the items on the status bar.
-            iGibtdenStatusraus = DocumentWriter.StatusGetItemCount
-            'There are nine items on the status bar if the web page has been loaded.
-            if iGibtdenStatusraus = 9 then
-                hIsWebPageLoaded = TRUE
-                exit for
-            end If
-        end if
-        WaitSlot( 3000 )
-    next i
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hSys2IntDlg
-    '/// Change from system to StarOffice-internal file-dialog (only for Win32)
-    if gPlatgroup <> "unx" then
-        Call hhSysToInt ( TRUE )
-    endif
-    gUseSysDlg = FALSE
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hInt2SysDlg
-    '/// Change from StarOffice-internal to system file-dialog (only for Win32)
-    if gPlatgroup <> "unx" then
-        Call hhSysToInt ( FALSE )
-    endif
-    gUseSysDlg = TRUE
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hhSysToInt ( bwhats as Boolean )
-    '/// subroutine for <i>hSys2IntDlg</i> and </i>hInt2SysDlg</i>
-    ToolsOptions
-    hToolsOptions ( "StarOffice", "General" )
-    if bwhats = TRUE then
-        StarOfficeDialogeBenutzen.Check
-    else
-        StarOfficeDialogeBenutzen.Uncheck
-    end if
-    Sleep 1
-    Kontext "OptionenDlg"
-    OptionenDlg.OK
-    WaitSlot( 3000 )
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-function hGetUsedFilter () as string
-    '/// Get used filter for loaded file.
-    try
-        FileSaveAs
-        Kontext "SpeichernDlg"
-        hGetUsedFilter = dateityp.getseltext
-        SpeichernDlg.Cancel
-    catch
-        hGetUsedFilter = "Not possible; try/catch fail in function"
-    endcatch
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hFileExport (sName as string, sFilter as string) as boolean
-    '/// Wrapper function to simplify the use of the export functions, just give a filename and export format.
-    '///+ INPUT:<ul><li>sName: filename</li><li>sFilter: &quot;PDF&quot;: call export for PDF</li></ul>
-    '///+ RETURN: execution success?
-    select case sFilter
-    case "PDF" : '/// use the function 'hExportAsPDF' with RECOMMENDED values /// '
-        hFileExport = hExportAsPDFmulti (3, TRUE,  sName, FALSE, TRUE, 1, 1)
+
+'*******************************************************************************
+
+function hIsNamedDocLoaded( cFileName as string ) as boolean
+
+    ' Retrieve the current filename from the document properties - which in
+    ' comparision to the old approach to retrive the name from the file save
+    ' dialog - gives us the file including its extension. So we only need
+    ' to compare the last characters from a full path to be relatively
+    ' certain that we work with the correct file. There is some small margin of
+    ' error, though.
+
+    const CFN = "global::tools::includes::required::hIsNamedDocumentLoaded(): "
+    const RC_FAILURE = -1
+
+    dim cDocumentName as string
+    dim iDocumentNameLength as integer
+    dim bTemplateDocument as boolean
+
+    hIsNamedDocLoaded() = false
+
+    ' If the requested document is a template, we cannot use its filename to
+    ' identify the document as it is named "Untitled 1" or "Untitled" in the
+    ' FileSave dialog and the document properties dialog. The string is locale
+    ' dependent. So we do a shortcut here, the calling tests fail at a later
+    ' point if this function does not work properly
+    
+    select case( right( cFileName, 4 ) )
+    case ".vor", ".dot", ".sti", ".pot", ".std", ".xlt", ".stc", ".ots", "xltm", "xltx"
+        if ( GVERBOSE ) then printlog( CFN & "Template document filtered" )
+        hIsNamedDocLoaded() = true
+        exit function
     end select
-    kontext
-    if active.exists(5) then
-        try
-            printlog active.getText
-            active.ok
-            warnLog "i26820 - errormessage about saving"
-        catch
-            printlog "pdf unexpected error in hFileExport()"
-        endcatch
+
+    if ( hUseAsyncSlot( "FileProperties" ) <> RC_FAILURE ) then
+
+        kontext
+        active.setpage(tabdokument)
+
+        kontext "TabDokument"
+        if ( TabDokument.exists( 2 ) ) then
+
+            cDocumentName = DokumentName.getText()
+            iDocumentNameLength = len( cDocumentName )
+
+            if ( GVERBOSE ) then
+                printlog( CFN & "Expected file: " & cFileName )
+                printlog( CFN & "Current file.: " & cDocumentName )
+                printlog( CFN & "Comparing last " & iDocumentNameLength & " characters" )
+            endif
+
+            if ( right( cFileName, iDocumentNameLength ) = cDocumentName ) then
+                if ( GVERBOSE ) then printlog( CFN & "This is the expected file" )
+                hIsNamedDocLoaded() = true
+            else
+                if ( GVERBOSE ) then printlog( CFN & "This is *not* the expected file" )
+            endif
+
+            hCloseDialog( TabDokument, "cancel" )
+        else
+            warnlog( CFN & "Unable to open dialog <Document Properties>" )
+        endif
+    else
+        warnlog( CFN & "Unable to execute slot <FileProperties>" )
     endif
+
 end function
-'
-'-------------------------------------------------------------------------------
-'
+
+'*******************************************************************************
+
 function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileName as string, bAutoExtension as boolean, bOverwriteFile as boolean, iRange as integer, iConpression as integer, optional sRange as string) as boolean
     '/// Export a document to PDF with various options.
     '///+ INPUT
@@ -633,6 +447,12 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
+function hFileDelete( cFileOrig as string ) as boolean
+    hFileDelete() = hDeleteFile( cFileOrig )
+end function
+'
+'-------------------------------------------------------------------------------
+'
 function hDeleteFile( cFileOrig as string ) as boolean
 
     const CFN = "global::tools::includes::required::t_files.inc::hDeleteFile():"
@@ -665,7 +485,7 @@ function hDeleteFile( cFileOrig as string ) as boolean
                 warnlog( CFN & "File was not deleted: " & cFile )
                 hDeleteFile() = false
             else
-                if ( VERBOSE ) then printlog( CFN & "File successfully deleted: " & cFile )
+                if ( GVERBOSE ) then printlog( CFN & "File successfully deleted: " & cFile )
                 hDeleteFile() = true
             endif
         catch
@@ -698,8 +518,8 @@ function hFileOpen( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     hFileOpen() = FALSE
-    const CFN = "global::tools::inc::t_files.inc::hFileOpen():"
-    if ( VERBOSE ) then printlog( CFN & "Load: " & sFile )
+    const CFN = "global::tools::inc::t_files.inc::hFileOpen(): "
+    if ( GVERBOSE ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
 
@@ -715,9 +535,9 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
     ' cFlag = <Any other string> treats string as password
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial():"
+    const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial(): "
     hFileOpenSpecial() = FALSE
-    if ( VERBOSE ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
+    if ( GVERBOSE ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
 
     select case( lcase( cFlag ) )
     case "readonly"
@@ -740,9 +560,9 @@ end function
 function hFileOpenWithFilter( cFile as string, cFilter as string )
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter():"
+    const CFN = "global::tools::inc::t_files.inc::hFileOpenWithFilter(): "
     hFileOpenWithFilter() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
+    if ( GVERBOSE ) then printlog( CFN & "Load (Filter): " & sFile & " (" & cFilter & ")" )
     FileOpen( "URL", sFile, "FrameName", "_default", "FilterName", cFilter )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpenWithFilter() = TRUE
 
@@ -752,9 +572,9 @@ end function
 '
 function hFileSave() as boolean
 
-    const CFN = "global::tools::inc::t_files.inc::hFileSave():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSave(): "
     hFileSave() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save file." )
+    if ( GVERBOSE ) then printlog( CFN & "Save file." )
     FileSave( "SynchronMode", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
 
@@ -765,9 +585,9 @@ end function
 function hFileSaveAs( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAs():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAs(): "
     hFileSaveAs() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save: " & sFile )
+    if ( GVERBOSE ) then printlog( CFN & "Save: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAs() = TRUE
 
@@ -778,9 +598,9 @@ end function
 function hFileSaveAsKill( cFile as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKill(): "
     hFileSaveAsKill() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save, replacing: " & sFile )
+    if ( GVERBOSE ) then printlog( CFN & "Save, replacing: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKill() = TRUE
 
@@ -791,9 +611,9 @@ end function
 function hFileSaveAsKillWithPassword( cFile as string, cPassword as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsKillWithPassword(): "
     hFileSaveAsKillWithPassword() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
+    if ( GVERBOSE ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE, "Password", cPassword )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKillWithPassword() = TRUE
 
@@ -804,9 +624,9 @@ end function
 function hFileSaveAsWithFilter( cFile as string, cFilter as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilter(): "
     hFileSaveAsWithFilter() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
+    if ( GVERBOSE ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilter() = TRUE
 
@@ -817,9 +637,9 @@ end function
 function hFileSaveAsWithFilterKill( cFile as string, cFilter as string ) as boolean
 
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
-    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill():"
+    const CFN = "global::tools::inc::t_files.inc::hFileSaveAsWithFilterKill(): "
     hFileSaveAsWithFilterKill() = FALSE
-    if ( VERBOSE ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
+    if ( GVERBOSE ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilterKill() = TRUE
 
@@ -833,7 +653,7 @@ function hFileWait( optional bWarn as boolean ) as integer
     ' Returns the time it took the slot to finish
     ' Negative returnvalues are given on timeout or any blocking dialog
 
-    const CFN = "global::tools::inc::t_files.inc::hFileWait():"
+    const CFN = "global::tools::inc::t_files.inc::hFileWait(): "
     const MAX_WAIT = 10
     dim iWait as integer : iWait = 0
     dim bWarnlog as boolean
@@ -924,7 +744,7 @@ function hFileWait( optional bWarn as boolean ) as integer
 
     loop
 
-    if ( VERBOSE ) then
+    if ( GVERBOSE ) then
         select case iWait
         case -1   : printlog( CFN & "Timeout reached, rc = " & iWait )
         case -2   : printlog( CFN & "Macro security warning displayed, rc = " & iWait )

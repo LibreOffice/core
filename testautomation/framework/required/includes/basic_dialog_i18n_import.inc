@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : 
 '*
@@ -43,15 +43,19 @@ testcase tBasicDialogI18nImport
     dim iTry as integer
         
     const LANGUAGE_COUNT = 5
+    const MAX_RETRIES = 5
+    const WAIT_TIME = 100
+    const MODULE_NAME = "tDialogI18nImport"
+    const DIALOG_WAIT_TIMEOUT = 2
+    const MSG_LOCALE_CLASH_WARNING_BUTTONCOUNT = 4
+    const MSG_DIALOG_REPLACE_WARNING_BUTTONCOUNT = 3
         
     printlog( "Open BASIC-IDE" )
     hCreateDocument()
-    hInitFormControls( "tDialogI18nImport" )
+    hInitFormControls( MODULE_NAME )
     
     kontext "ToolsCollectionBar"
-    if ( ToolsCollectionBar.exists() ) then
-        ToolsCollectionBar.close()
-    endif
+    if ( ToolsCollectionBar.exists() ) then ToolsCollectionBar.close()
     
     Kontext "DialogBar"
     if ( DialogBar.exists() ) then
@@ -60,7 +64,7 @@ testcase tBasicDialogI18nImport
         Import.click()
         
         kontext "OeffnenDlg"
-        if ( OeffnenDlg.exists( 2 ) ) then
+        if ( OeffnenDlg.exists( DIALOG_WAIT_TIMEOUT ) ) then
         
             printlog( "Enter path to test dialog" )
             DateiName.setText( cDialogPath ) 
@@ -68,27 +72,25 @@ testcase tBasicDialogI18nImport
             
             printlog( "Test messagebox" )
             kontext "active"
-            if ( Active.exists( 2 ) ) then
+            if ( Active.exists( DIALOG_WAIT_TIMEOUT ) ) then
             
                 printlog( "Messagebox: " & Active.getText() ) 
-                if ( Active.getButtonCount() <> 4 ) then
+                if ( Active.getButtonCount() <> MSG_LOCALE_CLASH_WARNING_BUTTONCOUNT ) then
                     warnlog( "Incorrect messagebox, expected locale clash warning" )
                 endif
                 
                 call DialogTest( Active )
                 
                 printlog( "Accept with yes" )
-                Active.Yes()
-                sleep(1)
+                hCloseDialog( Active, "yes" )
+
                 Kontext "TranslationBar"
                 if ( TranslationBar.exists() ) then
 
-                    for iTry = 1 to 5
+                    for iTry = 1 to MAX_RETRIES
                         iNumberOfLanguages = CurrentLanguage.getItemCount()
-                        if ( iNumberOfLanguages = LANGUAGE_COUNT ) then
-                            exit for
-                        endif
-                        wait( 100 )
+                        if ( iNumberOfLanguages = LANGUAGE_COUNT ) then exit for
+                        wait( WAIT_TIME )
                     next iTry
                 
                     printlog( "Check number of imported languages" )
@@ -105,7 +107,7 @@ testcase tBasicDialogI18nImport
                         Import.click()
                         
                         kontext "OeffnenDlg"
-                        if ( OeffnenDlg.exists( 2 ) ) then
+                        if ( OeffnenDlg.exists( DIALOG_WAIT_TIMEOUT ) ) then
 
                             printlog( "Enter path to test dialog" )                        
                             DateiName.setText( cDialogPath )
@@ -113,17 +115,17 @@ testcase tBasicDialogI18nImport
                             
                             printlog( "Test messagebox" )
                             kontext "Active"
-                            if ( Active.exists( 2 ) ) then
+                            if ( Active.exists( DIALOG_WAIT_TIMEOUT ) ) then
                             
                                 printlog( "Messagebox: " & Active.getText() ) 
-                                if ( Active.getButtonCount() <> 3 ) then
+                                if ( Active.getButtonCount() <> MSG_DIALOG_REPLACE_WARNING_BUTTONCOUNT ) then
                                     warnlog( "Incorrect messagebox, expected dialog replace warning" )
                                 endif
                                 
                                 call DialogTest( Active )
                                 
                                 Printlog( "Rename the new dialog" )
-                                Active.Yes()
+                                hCloseDialog( Active, "yes" )
                             else
                                 warnlog( "Overwrite warning missing" )
                             endif

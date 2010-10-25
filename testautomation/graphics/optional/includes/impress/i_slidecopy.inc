@@ -25,24 +25,23 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description: includefile for Slidecopy-testing
 '*
-'*******************************************************************************
-' #1 tiSlideCopyNewPresentation
-' #1 tiSlideCopyDuplicate
-' #1 tiSlideCopyPasteSpecial
-' #1 tiSlideCopyInSlideSorter
 '\******************************************************************************
 
 testcase tiSlideCopyNewPresentation
+
+    const MENUITEM_RENAME = 27027
+
     Dim value1 as string
     Dim value2 as string
     Dim value12 as string
     Dim value13 as string
-     printlog "This test copies one slide from one presentation to another."
-     printlog "Make new presentation"
+
+    printlog "This test copies one slide from one presentation to another."
+    printlog "Make new presentation"
     Call  hNewDocument
     Call sSelectEmptyLayout
      printlog "Insert three objects: Connector, Door-plate, and Smiley."
@@ -52,209 +51,228 @@ testcase tiSlideCopyNewPresentation
      sleep 1
      try
         Verbinder.TearOff
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "Connectorsbar"
-     sleep 2
-     Verbinder.click
-     sleep 5
-     gMouseDown (10,10)
-     gMouseMove (10,10,30,30)
-     gMouseUp (30,30)
-     kontext "Connectorsbar"
-     Connectorsbar.Close
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 1
-     printlog "We rename the object via the contextmenu."
-     sleep (1)
-     DocumentImpress.TypeKeys "<SHIFT F10>"
-     sleep (2)
-     printlog "then Choose rename."
-     if hMenuFindSelect(27027, true, 14) = false then
+    endcatch
+    kontext "Connectorsbar"
+    sleep 2
+    Verbinder.click
+    sleep 5
+    gMouseDown (10,10)
+    gMouseMove (10,10,30,30)
+    gMouseUp (30,30)
+    kontext "Connectorsbar"
+    Connectorsbar.Close
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 1
+    printlog "We rename the object via the contextmenu."
+    sleep (1)
+    DocumentImpress.TypeKeys "<SHIFT F10>"
+    sleep (2)
+    printlog "then Choose rename."
+    if hMenuFindSelect( MENUITEM_RENAME, true, 14) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     sleep 2
-     kontext "NameDlgObject"
-     NameField.SetText "First"
-     NameDlgObject.OK
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-'----------------------------------------------------------------------------1
-     printlog "Then we insert the second object: a Door-plate."
-     kontext "Toolbar"
-     sleep 2
-     try
-        StarShapes.TearOff
-     catch
-        warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     sleep 2
-     kontext "StarShapes"
-     StarShapesDoorplate.click
-     sleep (3)
-     gMouseDown (40,40)
-     gMouseMove (40,40,60,60)
-     gMouseUp (60,60)
-    kontext "StarShapes"
-     StarShapes.Close
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 2
-     printlog "And then we rename the object."
-     sleep (1)
-     DocumentImpress.TypeKeys "<SHIFT F10>"
-     sleep 2
-     if hMenuFindSelect(27027, true, 15) = false then
-        Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
-        Call hCloseDocument
-        Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "Second"
-     NameDlgObject.OK
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-'----------------------------------------------------------------------------2
-     printlog "Then we insert the thrid object: a Smiley."
-     kontext "Toolbar"
-     sleep 1
-     try
-        SymbolShapes.TearOff
-     catch
-        warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "SymbolShapes"
-     sleep 1
-     SymbolShapesSmiley.Click
-     sleep 2
-     gMouseDown (70,70)
-     gMouseMove  (70,70,89,89)
-     gMouseUp (89,89)
-     kontext "SymbolShapes"
-     SymbolShapes.Close
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 3
-     printlog "We rename the object via the Context-menu."
-     DocumentImpress.TypeKeys "<SHIFT F10>"
-     sleep (2)
-     'Choose rename.
-     if hMenuFindSelect(27027, true, 15) = false then
-        Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
-        Call hCloseDocument
-        Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "Third"
-     NameDlgObject.OK
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-'---------------------------------------------------------------------------3
-     '/// Copy the slide to the clipboard ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<PAGEUP>"
-     sleep (1)
-     SlidesControl.TypeKeys "<SHIFT F10>"
-     sleep 2
-     printlog "We copy the object via the Context-menu."
+    endif
+    
+    kontext "NameDlgObject"
+    if ( NameDlgObject.exists( 2 ) ) then
+        NameField.SetText "First"
+        NameDlgObject.OK
+    else
+        warnlog( "<NameDlgObject> failed to open" )
+    endif
 
-     if hMenuFindSelect(5711, true, 10) = false then
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    '----------------------------------------------------------------------------1
+    printlog "Then we insert the second object: a Door-plate."
+
+    kontext "Toolbar"
+    sleep 2
+    try
+        StarShapes.TearOff
+    catch
+        warnlog( "<StarShapes.TearOff> failed" )
+        goto endsub
+    endcatch
+
+    kontext "StarShapes"
+    if ( StarShapes.exists( 2 ) ) then
+        StarShapesDoorplate.click
+    else
+        warnlog( "<StarShapesDoorplate> could not be clicked" )
+    endif
+
+    sleep (3)
+    gMouseDown (40,40)
+    gMouseMove (40,40,60,60)
+    gMouseUp (60,60)
+
+    kontext "StarShapes"
+    hCloseDialog( StarShapes, "close" )
+
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 2
+    printlog "And then we rename the object."
+    sleep (1)
+    DocumentImpress.TypeKeys "<SHIFT F10>"
+    sleep 2
+    if hMenuFindSelect( MENUITEM_RENAME, true, 15) = false then
+        Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+        Call hCloseDocument
+        Goto Endsub
+    endif
+    kontext "NameDlgObject"
+    if ( NameDlgObject.exists( 2 ) ) then
+        NameField.SetText "Second"
+        NameDlgObject.OK
+    else
+        warnlog( "<NameDlgObject> could not be accessed" )
+    endif
+
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    '----------------------------------------------------------------------------2
+    printlog "Then we insert the thrid object: a Smiley."
+    kontext "Toolbar"
+    sleep 1
+    try
+        SymbolShapes.TearOff
+    catch
+        warnlog "bug for GH from FHA; .tearoff doesnt tell success"
+    endcatch
+    kontext "SymbolShapes"
+    sleep 1
+    SymbolShapesSmiley.Click
+    sleep 2
+    gMouseDown (70,70)
+    gMouseMove  (70,70,89,89)
+    gMouseUp (89,89)
+    kontext "SymbolShapes"
+    SymbolShapes.Close
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 3
+    printlog "We rename the object via the Context-menu."
+    DocumentImpress.TypeKeys "<SHIFT F10>"
+    sleep (2)
+    'Choose rename.
+    if hMenuFindSelect( MENUITEM_RENAME, true, 15) = false then
+        Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+        Call hCloseDocument
+        Goto Endsub
+    endif
+    kontext "NameDlgObject"
+    NameField.SetText "Third"
+    NameDlgObject.OK
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    '---------------------------------------------------------------------------3
+    '/// Copy the slide to the clipboard ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<PAGEUP>"
+    sleep (1)
+    SlidesControl.TypeKeys "<SHIFT F10>"
+    sleep 2
+    printlog "We copy the object via the Context-menu."
+
+    if hMenuFindSelect(5711, true, 10) = false then
         Warnlog "Context-Menu-entry `Copy` was not found. Therefore the test ends."
         Call hCloseDocument
-     Goto Endsub
-     endif
-     '/// Close the presentation-window ///'
-     Call hCloseDocument
-     '/// Open a new presentation ///'
-     Call  hNewDocument
-     '/// Paste the slide from the clipboard ///'
-     kontext "Slides"
-     EditPaste
-     '/// Delete the first slide ///'
-     EditDeleteSlide
-     '/// Check if all three objects exists, and has the right values ///'
-     kontext "DocumentImpress"
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 1 'Select the first object.
-     'Bring up the kontext-menu for the object
-     sleep (1)
-     DocumentImpress.TypeKeys "<SHIFT F10>"
-     sleep 2
-     printlog "We rename the object via the Context-menu."
-     if hMenuFindSelect(27027, true, 14) = false then
+        Goto Endsub
+    endif
+    '/// Close the presentation-window ///'
+    Call hCloseDocument
+    '/// Open a new presentation ///'
+    Call  hNewDocument
+    '/// Paste the slide from the clipboard ///'
+    kontext "Slides"
+    hUseAsyncSlot( "EditPaste" )
+    '/// Delete the first slide ///'
+    hUseAsyncSlot( "EditDeleteSlide" )
+    '/// Check if all three objects exists, and has the right values ///'
+    kontext "DocumentImpress"
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 1 'Select the first object.
+    'Bring up the kontext-menu for the object
+    sleep (1)
+    DocumentImpress.TypeKeys "<SHIFT F10>"
+    sleep 2
+    printlog "We rename the object via the Context-menu."
+    if hMenuFindSelect( MENUITEM_RENAME, true, 14) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     printlog "Read out what the name is, and checks if it's correct."
-     kontext "NameDlgObject"
-     value1 = NameField.GetText
-     NameDlgObject.OK
-     if value1 = "First" then
+    endif
+    printlog "Read out what the name is, and checks if it's correct."
+    kontext "NameDlgObject"
+    value1 = NameField.GetText
+    NameDlgObject.OK
+    if value1 = "First" then
         printlog "First object was found correctly"
-     else
+    else
         Warnlog "Wrong object or object-name! The name found was: " + value1
-     endif
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-     DocumentImpress.TypeKeys "<TAB TAB>" 'Select the second object.
-     'Bring up the kontext-menu for the object
-     sleep (1)
-     DocumentImpress.TypeKeys "<SHIFT F10>"
-     sleep 2
-     printlog "We rename the object via the Context-menu."
-     if hMenuFindSelect(27027, true, 15) = false then
+    endif
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    DocumentImpress.TypeKeys "<TAB TAB>" 'Select the second object.
+    'Bring up the kontext-menu for the object
+    sleep (1)
+    DocumentImpress.TypeKeys "<SHIFT F10>"
+    sleep 2
+    printlog "We rename the object via the Context-menu."
+    if hMenuFindSelect( MENUITEM_RENAME, true, 15) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     printlog "Read out what the name is, and check if it's correct."
-     sleep 1
-     kontext "NameDlgObject"
-     value12 = NameField.GetText
-     NameDlgObject.OK
+    endif
+    printlog "Read out what the name is, and check if it's correct."
+    sleep 1
+    kontext "NameDlgObject"
+    value12 = NameField.GetText
+    NameDlgObject.OK
 
-     if value12 = "Second" then
+    if value12 = "Second" then
         printlog "Second object was found correctly"
-     else
+    else
         Warnlog "Wrong object or object-name! The name found was: " + value12
-     endif
+    endif
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-     DocumentImpress.TypeKeys "<TAB TAB TAB>" 'Select the third object.
-     'Bring up the kontext-menu for the object
-     sleep (2)
-     DocumentImpress.TypeKeys "<SHIFT F10>"
-     sleep 2
-     printlog "We rename the object via the Context-menu."
-     if hMenuFindSelect(27027, true, 15) = false then
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    DocumentImpress.TypeKeys "<TAB TAB TAB>" 'Select the third object.
+    'Bring up the kontext-menu for the object
+    sleep (2)
+    DocumentImpress.TypeKeys "<SHIFT F10>"
+    sleep 2
+    printlog "We rename the object via the Context-menu."
+    if hMenuFindSelect( MENUITEM_RENAME, true, 15) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     printlog "Read out what the name is, and check if it's correct."
-     kontext "NameDlgObject"
-     value13 = NameField.GetText
-     NameDlgObject.OK
+    endif
+    printlog "Read out what the name is, and check if it's correct."
+    kontext "NameDlgObject"
+    value13 = NameField.GetText
+    NameDlgObject.OK
 
-     if value13 = "Third" then
+    if value13 = "Third" then
         printlog "Third object was found correctly"
-     else
+    else
         Warnlog "Wrong object or object-name! The name found was: " + value13
-     endif
+    endif
 
-     '/// Close the bars we opened before. ///'
-     kontext "Connectorsbar"
-     if Connectorsbar.Exists then Connectorsbar.Close
-     kontext "SymbolShapes"
-     if SymbolShapes.Exists then SymbolShapes.Close
-     kontext "StarShapes"
-     if StarShapes.Exists then StarShapes.Close
+    '/// Close the bars we opened before. ///'
+    kontext "Connectorsbar"
+    if Connectorsbar.Exists then Connectorsbar.Close
+    kontext "SymbolShapes"
+    if SymbolShapes.Exists then SymbolShapes.Close
+    kontext "StarShapes"
+    if StarShapes.Exists then StarShapes.Close
 
-     '/// Close Presentation. End testcase ///'
-     Call hCloseDocument
+    '/// Close Presentation. End testcase ///'
+    Call hCloseDocument
 endcase 'tiSlideCopyNewPresentation
 
 '-------------------------------------------------------------------------
@@ -273,17 +291,17 @@ testcase tiSlideCopyDuplicate
      sleep 1
      try
         Verbinder.TearOff  ' insert connector
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "Connectorsbar"
-     sleep 1
-     Verbinder.click
-     sleep 1
-     kontext "DocumentImpress"
-     gMouseDown (10,10)
-     gMouseMove (10,10,30,30)
-     gMouseUp (30,30)
+    endcatch
+    kontext "Connectorsbar"
+    sleep 1
+    Verbinder.click
+    sleep 1
+    kontext "DocumentImpress"
+    gMouseDown (10,10)
+    gMouseMove (10,10,30,30)
+    gMouseUp (30,30)
 
      hTypeKeys "<ESCAPE>"
      hTypeKeys "<TAB>", 1
@@ -298,14 +316,14 @@ testcase tiSlideCopyDuplicate
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "First"
-     NameDlgObject.OK
-     sleep 1
+    endif
+    kontext "NameDlgObject"
+    NameField.SetText "First"
+    NameDlgObject.OK
+    sleep 1
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
 
      printlog "2 Insert Door-plate"
      kontext "Toolbar"
@@ -314,19 +332,19 @@ testcase tiSlideCopyDuplicate
         StarShapes.TearOff
      catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "StarShapes"
-     sleep 1
-     StarShapesDoorplate.click
-     sleep 1
-     kontext "DocumentImpress"
-     gMouseDown (40,40)
-     gMouseMove (40,40,60,60)
-     gMouseUp (60,60)
+    endcatch
+    kontext "StarShapes"
+    sleep 1
+    StarShapesDoorplate.click
+    sleep 1
+    kontext "DocumentImpress"
+    gMouseDown (40,40)
+    gMouseMove (40,40,60,60)
+    gMouseUp (60,60)
 
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 2
-     sleep (1)
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 2
+    sleep (1)
 
      printlog "Rename object"
      kontext "DocumentImpress"
@@ -337,14 +355,14 @@ testcase tiSlideCopyDuplicate
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "Second"
-     NameDlgObject.OK
-     sleep 1
+    endif
+    kontext "NameDlgObject"
+    NameField.SetText "Second"
+    NameDlgObject.OK
+    sleep 1
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
 
      printlog "Insert Smiley."
      kontext "Toolbar"
@@ -353,18 +371,18 @@ testcase tiSlideCopyDuplicate
         SymbolShapes.TearOff  
      catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "SymbolShapes"
-     sleep 1
-     SymbolShapesSmiley.Click
-     sleep 1
-     gMouseDown (70,70)
-     gMouseMove  (70,70,89,89)
-     gMouseUp (89,89)
+    endcatch
+    kontext "SymbolShapes"
+    sleep 1
+    SymbolShapesSmiley.Click
+    sleep 1
+    gMouseDown (70,70)
+    gMouseMove  (70,70,89,89)
+    gMouseUp (89,89)
 
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 3
-     sleep (1)
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 3
+    sleep (1)
 
      printlog "rename object"
      DocumentImpress.TypeKeys "<SHIFT F10>"
@@ -374,14 +392,14 @@ testcase tiSlideCopyDuplicate
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "Third"
-     NameDlgObject.OK
-     sleep 1
+    endif
+    kontext "NameDlgObject"
+    NameField.SetText "Third"
+    NameDlgObject.OK
+    sleep 1
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
 
      printlog "Close the bars we opened before."
      kontext "Connectorsbar"
@@ -402,24 +420,24 @@ testcase tiSlideCopyDuplicate
         Warnlog "Context-Menu-entry `Copy` was not found.Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
      printlog "Paste the content from the Clipboard"
      kontext "Slides"
      printlog "open context-menu choose 'paste'"
 
-     EditPaste
+    EditPaste
 
-     kontext "InsertPaste"
-     if InsertPaste.Exists(1) then
+    kontext "InsertPaste"
+    if InsertPaste.Exists(1) then
         After.Check
         InsertPaste.OK
      endif
      sleep (2)
      printlog "Check if we have two slides, and that the objects exists, and has the right values "
 
-     kontext "Slides"
-     SlidesControl.TypeKeys "<PAGEUP>"
+    kontext "Slides"
+    SlidesControl.TypeKeys "<PAGEUP>"
 
      for i = 1 to 2   
         Printlog "Checking objects the " + i + " + time."
@@ -443,21 +461,21 @@ testcase tiSlideCopyDuplicate
         NameDlgObject.OK 
 
         if value1 = "First" then
-           printlog "First object was found correctly"
+            printlog "First object was found correctly"
         else
-           Warnlog "Wrong object or object-name! The name found was: " + value1
+            Warnlog "Wrong object or object-name! The name found was: " + value1
         endif
 
         hTypeKeys "<ESCAPE>"
         DocumentImpress.TypeKeys "<TAB>", 2
-     sleep (1)
+        sleep (1)
         DocumentImpress.TypeKeys "<SHIFT F10>"
 
         printlog "Choose rename"
         if hMenuFindSelect(27027, true, 15) = false then
-           Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
-           Call hCloseDocument
-           Goto Endsub
+            Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+            Call hCloseDocument
+            Goto Endsub
         endif
 
         printlog "Read out what the name is, and check if its correct."
@@ -466,9 +484,9 @@ testcase tiSlideCopyDuplicate
         NameDlgObject.OK
 
         if value12 = "Second" then
-           printlog "Second object was found correctly"
+            printlog "Second object was found correctly"
         else
-           Warnlog "Wrong object or object-name! The name found was: " + value12
+            Warnlog "Wrong object or object-name! The name found was: " + value12
         endif
 
         hTypeKeys "<ESCAPE>"
@@ -481,9 +499,9 @@ testcase tiSlideCopyDuplicate
         sleep 1
         printlog "Choose rename"
         if hMenuFindSelect(27027, true, 15) = false then
-           Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
-           Call hCloseDocument
-           Goto Endsub
+            Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+            Call hCloseDocument
+            Goto Endsub
         endif
 
         printlog "Read out what the name is, and check if its correct."
@@ -492,13 +510,13 @@ testcase tiSlideCopyDuplicate
         NameDlgObject.OK
 
         if value13 = "Third" then
-           printlog "Third object was found correctly"
+            printlog "Third object was found correctly"
         else
-           Warnlog "Wrong object or object-name! The name found was: " + value13
+            Warnlog "Wrong object or object-name! The name found was: " + value13
         endif
         kontext "Slides"
         SlidesControl.TypeKeys "<DOWN>"
-     next i
+    next i
 
      printlog " Close Presentation. End testcase "
      Call hCloseDocument
@@ -507,453 +525,453 @@ endcase 'tiSlidecopyDuplicate
 '-----------------------------------------------------------------------
 
 testcase tiSlideCopyPasteSpecial
-qaerrorlog "#i93377#: Paste special dialog does not come up with kontext on slide pane"
-goto endsub
-    
+    qaerrorlog "#i93377#: Paste special dialog does not come up with kontext on slide pane"
+    goto endsub
+
     Dim value1 as string
     Dim value2 as string
     Dim value3 as string
-     '/// Copies slide, and pastes it with "Paste Special", ///'
-     '/// just to see if the office can handle it ///'
-     '/// Make new presentation ///'
-     Call  hNewDocument
-     '/// Insert three objects: Connector, Door-plate, and Smiley ///'
+    '/// Copies slide, and pastes it with "Paste Special", ///'
+    '/// just to see if the office can handle it ///'
+    '/// Make new presentation ///'
+    Call  hNewDocument
+    '/// Insert three objects: Connector, Door-plate, and Smiley ///'
 
-     '1 Insert Connector.
-     kontext "Toolbar"
-     sleep 1
-     try
+    '1 Insert Connector.
+    kontext "Toolbar"
+    sleep 1
+    try
         Verbinder.TearOff  ' insert connector
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "Connectorsbar"
-     sleep 1
-     Verbinder.click
-     sleep 1
-     gMouseDown (10,10)
-     gMouseMove (10,10,30,30)
-     gMouseUp (30,30)
+    endcatch
+    kontext "Connectorsbar"
+    sleep 1
+    Verbinder.click
+    sleep 1
+    gMouseDown (10,10)
+    gMouseMove (10,10,30,30)
+    gMouseUp (30,30)
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
 
-     '2 Insert Door-plate.
-     kontext "Toolbar"
-     sleep 1
-     try
+    '2 Insert Door-plate.
+    kontext "Toolbar"
+    sleep 1
+    try
         StarShapes.TearOff  ' insert connector
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "StarShapes"
-     sleep 1
-     StarShapesDoorplate.click
-     sleep 1
-     gMouseDown (40,40)
-     gMouseMove (40,40,60,60)
-     gMouseUp (60,60)
+    endcatch
+    kontext "StarShapes"
+    sleep 1
+    StarShapesDoorplate.click
+    sleep 1
+    gMouseDown (40,40)
+    gMouseMove (40,40,60,60)
+    gMouseUp (60,60)
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
 
-     '3 Insert Smiley.
-     kontext "Toolbar"
-     sleep 1
-     try
+    '3 Insert Smiley.
+    kontext "Toolbar"
+    sleep 1
+    try
         SymbolShapes.TearOff  ' insert connector
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "SymbolShapes"
-     sleep 1
-     SymbolShapesSmiley.Click
-     sleep 1
-     gMouseDown (70,70)
-     gMouseMove  (70,70,89,89)
-     gMouseUp (89,89)
+    endcatch
+    kontext "SymbolShapes"
+    sleep 1
+    SymbolShapesSmiley.Click
+    sleep 1
+    gMouseDown (70,70)
+    gMouseMove  (70,70,89,89)
+    gMouseUp (89,89)
 
-     '/// Copy the slide to the clipboard ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<PAGEUP>"
-     SlidesControl.TypeKeys "<SHIFT F10>"
-     sleep 1
-     'Choose `Copy`
-     if hMenuFindSelect(5711, true, 10) = false then
+    '/// Copy the slide to the clipboard ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<PAGEUP>"
+    SlidesControl.TypeKeys "<SHIFT F10>"
+    sleep 1
+    'Choose `Copy`
+    if hMenuFindSelect(5711, true, 10) = false then
         Warnlog "Context-Menu-entry `Copy` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     '/// Try to paste special. And check that the office still stays alive ///'
-     EditPasteSpecial
-     kontext "InhaltEinfuegen"
-     InhaltEinfuegen.OK
+    '/// Try to paste special. And check that the office still stays alive ///'
+    EditPasteSpecial
+    kontext "InhaltEinfuegen"
+    InhaltEinfuegen.OK
 
-     '/// Close the bars we opened before. ///'
-     kontext "Connectorsbar"
-     if Connectorsbar.Exists then Connectorsbar.Close
-     kontext "SymbolShapes"
-     if SymbolShapes.Exists then SymbolShapes.Close
-     kontext "StarShapes"
-     if StarShapes.Exists then StarShapes.Close
+    '/// Close the bars we opened before. ///'
+    kontext "Connectorsbar"
+    if Connectorsbar.Exists then Connectorsbar.Close
+    kontext "SymbolShapes"
+    if SymbolShapes.Exists then SymbolShapes.Close
+    kontext "StarShapes"
+    if StarShapes.Exists then StarShapes.Close
 
-     sleep 1
-     kontext "DocumentImpress"
-     '/// Close Presentation. End testcase ///'
+    sleep 1
+    kontext "DocumentImpress"
+    '/// Close Presentation. End testcase ///'
 
-     Call hCloseDocument
+    Call hCloseDocument
 endcase 'tiSlideCopyPasteSpecial
 
 '-----------------------------------------------------------------------
 testcase tiSlideCopyInSlideSorter
-qaerrorlog "#i58418#: Pasting in slide sorter sets slide to wrong position"
-goto endsub
-    
+    qaerrorlog "#i58418#: Pasting in slide sorter sets slide to wrong position"
+    goto endsub
+
     Dim value1 as string
     Dim value2 as string
     Dim value3 as string
-     '/// Copies slides within the slidesorter, and makes sure they are pasted on the correct position ///'
-     '/// Make new presentation ///'
-     Call  hNewDocument
-     '/// Insert an object: Connector, on the first slide ///'
-     kontext "Toolbar"
-     sleep 1
-     try
+    '/// Copies slides within the slidesorter, and makes sure they are pasted on the correct position ///'
+    '/// Make new presentation ///'
+    Call  hNewDocument
+    '/// Insert an object: Connector, on the first slide ///'
+    kontext "Toolbar"
+    sleep 1
+    try
         Verbinder.TearOff
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "Connectorsbar"
-     sleep 1
-     Verbinder.click
-     Verbinder.click
-     Verbinder.click
-     sleep 1
-     kontext "DocumentImpress"
-     gMouseDown (10,10)
-     gMouseMove (10,10,30,30)
-     gMouseUp (30,30)
-     Printlog "   Inserted a Connector-object."
-     'Rename object
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 1
-     DocumentImpress.TypeKeys "<SHIFT F10>"
+    endcatch
+    kontext "Connectorsbar"
+    sleep 1
+    Verbinder.click
+    Verbinder.click
+    Verbinder.click
+    sleep 1
+    kontext "DocumentImpress"
+    gMouseDown (10,10)
+    gMouseMove (10,10,30,30)
+    gMouseUp (30,30)
+    Printlog "   Inserted a Connector-object."
+    'Rename object
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 1
+    DocumentImpress.TypeKeys "<SHIFT F10>"
 
-     'Rename
-     if hMenuFindSelect(27027, true, 14) = false then
+    'Rename
+    if hMenuFindSelect(27027, true, 14) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "First"
-     NameDlgObject.OK
-     sleep 1
-     Printlog "   Renamed a the object to 'First'"
+    endif
+    kontext "NameDlgObject"
+    NameField.SetText "First"
+    NameDlgObject.OK
+    sleep 1
+    Printlog "   Renamed a the object to 'First'"
 
-     sleep 3
-     '/// Rename slide to "1" ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<PAGEUP>"
-     SlidesControl.TypeKeys "<SHIFT F10>"
-     sleep 3
-     'Rename
-     if hMenuFindSelect(27268, true, 2) = false then
+    sleep 3
+    '/// Rename slide to "1" ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<PAGEUP>"
+    SlidesControl.TypeKeys "<SHIFT F10>"
+    sleep 3
+    'Rename
+    if hMenuFindSelect(27268, true, 2) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     kontext "NameDlgPage"
-     NameField.SetText "1"
-     NameDlgPage.OK
-     sleep 1
-     Printlog "   Renamed the Slide to '1'"
+    kontext "NameDlgPage"
+    NameField.SetText "1"
+    NameDlgPage.OK
+    sleep 1
+    Printlog "   Renamed the Slide to '1'"
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-     sleep 3
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    sleep 3
 
-     '/// Insert a new slide ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<TAB><PAGEDOWN>"
-     SlidesControl.OpenContextMenu
-     sleep 3
-     'Insert slide
-     if hMenuFindSelect(27014, true, 1) = false then
+    '/// Insert a new slide ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<TAB><PAGEDOWN>"
+    SlidesControl.OpenContextMenu
+    sleep 3
+    'Insert slide
+    if hMenuFindSelect(27014, true, 1) = false then
         Warnlog "Context-Menu-entry `Insert slide` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     Printlog "   Inserted a new slide."
-     '/// Insert an object: Door-plate, on the second slide ///'
-     kontext "Toolbar"
-     sleep 1
-     try
+    endif
+    Printlog "   Inserted a new slide."
+    '/// Insert an object: Door-plate, on the second slide ///'
+    kontext "Toolbar"
+    sleep 1
+    try
         StarShapes.TearOff
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "StarShapes"
-     sleep 1
-     StarShapesDoorplate.click
-     sleep 1
-     kontext "DocumentImpress"
-     gMouseDown (40,40)
-     gMouseMove (40,40,60,60)
-     gMouseUp (60,60)
-     Printlog "   Inserted a Door-Plate-object."
+    endcatch
+    kontext "StarShapes"
+    sleep 1
+    StarShapesDoorplate.click
+    sleep 1
+    kontext "DocumentImpress"
+    gMouseDown (40,40)
+    gMouseMove (40,40,60,60)
+    gMouseUp (60,60)
+    Printlog "   Inserted a Door-Plate-object."
 
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 2
-     hTypeKeys "<SHIFT F10>"
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 2
+    hTypeKeys "<SHIFT F10>"
 
-     ' Rename
-     if hMenuFindSelect(27027, true, 15) = false then
+    ' Rename
+    if hMenuFindSelect(27027, true, 15) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     kontext "NameDlgObject"
-     NameField.SetText "Second"
-     NameDlgObject.OK
-     sleep 1
-     Printlog "   Renamed a the object to 'Second'"
+    kontext "NameDlgObject"
+    NameField.SetText "Second"
+    NameDlgObject.OK
+    sleep 1
+    Printlog "   Renamed a the object to 'Second'"
 
-     kontext "DocumentImpress"
-     hMouseClick DocumentImpress, 90, 90
-     sleep 2
-     '/// Rename slide to "2" ///'
-     kontext "Slides"
-     SlidesControl.OpenContextMenu
-     sleep 3
-     ' Rename
-     if hMenuFindSelect(27268, true, 3) = false then
+    kontext "DocumentImpress"
+    hMouseClick DocumentImpress, 90, 90
+    sleep 2
+    '/// Rename slide to "2" ///'
+    kontext "Slides"
+    SlidesControl.OpenContextMenu
+    sleep 3
+    ' Rename
+    if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgPage"
-     NameField.SetText "2"
-     NameDlgPage.OK
-     sleep 1
-     Printlog "   Renamed the slide '2'"
+    endif
+    kontext "NameDlgPage"
+    NameField.SetText "2"
+    NameDlgPage.OK
+    sleep 1
+    Printlog "   Renamed the slide '2'"
 
-     '/// Insert a new slide ///'
-     kontext "Slides"
-     Slidescontrol.TypeKeys "<PAGEDOWN>", 2
-     Slidescontrol.TypeKeys "<SHIFT F10>"
-     sleep 3
-     'Insert slide
-     if hMenuFindSelect(27014, true, 1) = false then
+    '/// Insert a new slide ///'
+    kontext "Slides"
+    Slidescontrol.TypeKeys "<PAGEDOWN>", 2
+    Slidescontrol.TypeKeys "<SHIFT F10>"
+    sleep 3
+    'Insert slide
+    if hMenuFindSelect(27014, true, 1) = false then
         Warnlog "Context-Menu-entry `Insert slide` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     Printlog "   Inserted a new slide."
+    endif
+    Printlog "   Inserted a new slide."
 
-     '/// Insert an object: Smiley, on the second slide ///'
-     kontext "Toolbar"
-     sleep 1
-     try
+    '/// Insert an object: Smiley, on the second slide ///'
+    kontext "Toolbar"
+    sleep 1
+    try
         SymbolShapes.TearOff
-     catch
+    catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
-     endcatch
-     kontext "SymbolShapes"
-     sleep 1
-     SymbolShapesSmiley.Click
-     sleep 1
-     gMouseDown (70,70)
-     gMouseMove  (70,70,89,89)
-     gMouseUp (89,89)
-     Printlog "   Inserted a Smiley-object."
+    endcatch
+    kontext "SymbolShapes"
+    sleep 1
+    SymbolShapesSmiley.Click
+    sleep 1
+    gMouseDown (70,70)
+    gMouseMove  (70,70,89,89)
+    gMouseUp (89,89)
+    Printlog "   Inserted a Smiley-object."
 
-     'Rename object
-     hTypeKeys "<ESCAPE>"
-     hTypeKeys "<TAB>", 2
-     hTypeKeys "<SHIFT F10>"
+    'Rename object
+    hTypeKeys "<ESCAPE>"
+    hTypeKeys "<TAB>", 2
+    hTypeKeys "<SHIFT F10>"
 
-     'Choose rename.
-     if hMenuFindSelect(27027, true, 15) = false then
+    'Choose rename.
+    if hMenuFindSelect(27027, true, 15) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     kontext "NameDlgObject"
-     NameField.SetText "Third"
-     NameDlgObject.OK
-     Printlog "   Renamed a the object to 'Third'"
+    endif
+    kontext "NameDlgObject"
+    NameField.SetText "Third"
+    NameDlgObject.OK
+    Printlog "   Renamed a the object to 'Third'"
 
-     '/// Rename slide to "3" ///'
-     kontext "Slides"
-     Slidescontrol.TypeKeys "<PAGEDOWN>", 2
-     SlidesControl.OpenContextMenu
-     sleep 3
-     ' Rename
-     if hMenuFindSelect(27268, true, 3) = false then
+    '/// Rename slide to "3" ///'
+    kontext "Slides"
+    Slidescontrol.TypeKeys "<PAGEDOWN>", 2
+    SlidesControl.OpenContextMenu
+    sleep 3
+    ' Rename
+    if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     kontext "NameDlgPage"
-     NameField.SetText "3"
-     NameDlgPage.OK
-     sleep 1
-     Printlog "   Renamed the slide '3'"
+    kontext "NameDlgPage"
+    NameField.SetText "3"
+    NameDlgPage.OK
+    sleep 1
+    Printlog "   Renamed the slide '3'"
 
-     '/// Close the bars we opened before. ///'
-     kontext "Connectorsbar"
-     if Connectorsbar.Exists then Connectorsbar.Close
-     kontext "SymbolShapes"
-     if SymbolShapes.Exists then SymbolShapes.Close
-     kontext "StarShapes"
-     if StarShapes.Exists then StarShapes.Close
+    '/// Close the bars we opened before. ///'
+    kontext "Connectorsbar"
+    if Connectorsbar.Exists then Connectorsbar.Close
+    kontext "SymbolShapes"
+    if SymbolShapes.Exists then SymbolShapes.Close
+    kontext "StarShapes"
+    if StarShapes.Exists then StarShapes.Close
 
-     '/// Change to Slidesorter ///'
-     kontext "DocumentImpress"
-     ViewSlideSorter
+    '/// Change to Slidesorter ///'
+    kontext "DocumentImpress"
+    ViewSlideSorter
 
-     '/// Now we have changed view to the slidesorter ///'
-     
-     kontext "Slides"
-     Printlog "   Changed view to 'SlideSorter'"
-     '/// Make sure the last slide is selcted ///'
-     SlidesControl.TypeKeys "<TAB>"
-     SlidesControl.TypeKeys "<PAGEDOWN>", 3
-     
-     '/// Cut the last slide ///'
-     SlidesControl.TypeKeys "<MOD1 X>"
+    '/// Now we have changed view to the slidesorter ///'
 
-     '/// Make sure the first slide is selected ///'
-     SlidesControl.TypeKeys "<TAB>"
-     SlidesControl.TypeKeys "<PAGEUP>", 2
-     sleep 1
+    kontext "Slides"
+    Printlog "   Changed view to 'SlideSorter'"
+    '/// Make sure the last slide is selcted ///'
+    SlidesControl.TypeKeys "<TAB>"
+    SlidesControl.TypeKeys "<PAGEDOWN>", 3
 
-     '/// Paste the Slide ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<MOD1 V>"
+    '/// Cut the last slide ///'
+    SlidesControl.TypeKeys "<MOD1 X>"
 
-     '/// choose "Before" as specification for where
-     Kontext "InsertPaste"
-     if InsertPaste.Exists(3) then
+    '/// Make sure the first slide is selected ///'
+    SlidesControl.TypeKeys "<TAB>"
+    SlidesControl.TypeKeys "<PAGEUP>", 2
+    sleep 1
+
+    '/// Paste the Slide ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<MOD1 V>"
+
+    '/// choose "Before" as specification for where
+    Kontext "InsertPaste"
+    if InsertPaste.Exists(3) then
         Before.Check
         InsertPaste.OK
         Printlog "   Pasted slide 'Before'"
-     else
+    else
         warnlog "   Problem when copying/pasting slide."
-     endif
+    endif
 
-     '/// Check where the slide ended up ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<TAB>"
-     SlidesControl.TypeKeys "<PAGEUP>", 3 'to get to the first slide
-     SlidesControl.TypeKeys "<SHIFT F10>"
-     sleep 3
-     ' Rename
-     if hMenuFindSelect(27268, true, 3) = false then
+    '/// Check where the slide ended up ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<TAB>"
+    SlidesControl.TypeKeys "<PAGEUP>", 3 'to get to the first slide
+    SlidesControl.TypeKeys "<SHIFT F10>"
+    sleep 3
+    ' Rename
+    if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     kontext "NameDlgPage"
-     if NameField.GetText <> "3" then
+    kontext "NameDlgPage"
+    if NameField.GetText <> "3" then
         Warnlog "Wrong slide found! Expected nr 3, but found " + NameField.GetText + "."
-     else
+    else
         Printlog "   Slide nr 3 was found correctly."
-     endif
-     NameDlgPage.OK
-     sleep 1
+    endif
+    NameDlgPage.OK
+    sleep 1
 
-     kontext "Slides"
-     '/// Choose the slide in the middle (named "1") ///'
-     SlidesControl.TypeKeys "<TAB>"
-     SlidesControl.TypeKeys "<PAGEDOWN>", 3 'to get to the last slide
-     SlidesControl.TypeKeys "<PAGEUP>" 'to go back one step
-     SlidesControl.OpenContextMenu (true)
-     ' Check the name of that slide (via Rename)
-     if hMenuFindSelect(27268, true, 3) = false then
+    kontext "Slides"
+    '/// Choose the slide in the middle (named "1") ///'
+    SlidesControl.TypeKeys "<TAB>"
+    SlidesControl.TypeKeys "<PAGEDOWN>", 3 'to get to the last slide
+    SlidesControl.TypeKeys "<PAGEUP>" 'to go back one step
+    SlidesControl.OpenContextMenu (true)
+    ' Check the name of that slide (via Rename)
+    if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     kontext "NameDlgPage"
-     if NameField.GetText <> "1" then
+    kontext "NameDlgPage"
+    if NameField.GetText <> "1" then
         Warnlog "Wrong slide found! Expected nr 1, but found " + NameField.GetText + "."
-     else
+    else
         Printlog "   Slide nr 1 was found correctly in the middle position."
-     endif
-     NameDlgPage.OK
-     sleep 1
-     kontext "Slides"
-     
-     '/// Cut the slide ///'
-     SlidesControl.TypeKeys "<SHIFT F10>"
-     sleep 3
-     if hMenuFindSelect(5710, true, 10) = false then
+    endif
+    NameDlgPage.OK
+    sleep 1
+    kontext "Slides"
+
+    '/// Cut the slide ///'
+    SlidesControl.TypeKeys "<SHIFT F10>"
+    sleep 3
+    if hMenuFindSelect(5710, true, 10) = false then
         Warnlog "Context-Menu-entry `Cut` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     '/// Make sure we have selected the last slide ///'
-     SlidesControl.TypeKeys "<TAB>"
-     SlidesControl.TypeKeys "<PAGEDOWN>", 2
+    '/// Make sure we have selected the last slide ///'
+    SlidesControl.TypeKeys "<TAB>"
+    SlidesControl.TypeKeys "<PAGEDOWN>", 2
 
-     '/// Place the mousepointer to the left of the first slide ///'
-     sleep 1
-     kontext "Slides"
-     SlidesControl.MouseMove 2, 3
-     SlidesControl.OpenContextMenu true
-     sleep 3
+    '/// Place the mousepointer to the left of the first slide ///'
+    sleep 1
+    kontext "Slides"
+    SlidesControl.MouseMove 2, 3
+    SlidesControl.OpenContextMenu true
+    sleep 3
 
-     '/// Paste the Slide ///'
-     if hMenuFindSelect(5712, true, 12) = false then
+    '/// Paste the Slide ///'
+    if hMenuFindSelect(5712, true, 12) = false then
         Warnlog "Context-Menu-entry `Paste` were not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
-     sleep 1
+    endif
+    sleep 1
 
-     '/// Choose "After" as specification for where ///'
-     Kontext "InsertPaste"
-     if InsertPaste.Exists(3) then
+    '/// Choose "After" as specification for where ///'
+    Kontext "InsertPaste"
+    if InsertPaste.Exists(3) then
         After.Check
         InsertPaste.OK
         Printlog "   Pasted slide 'After'"
-     else
+    else
         warnlog "   Problem when copying/pasting slide."
-     endif
+    endif
 
-     '/// Check where the slide ended up. Should have showed up at the last position ///'
-     kontext "Slides"
-     SlidesControl.TypeKeys "<TAB>"
-     SlidesControl.TypeKeys "<PAGEDOWN>", 3 'to get to the last slide
-     SlidesControl.TypeKeys "<SHIFT F10>" '= open context menu
-     sleep 3
-     ' Rename
-     if hMenuFindSelect(27268, true, 3) = false then
+    '/// Check where the slide ended up. Should have showed up at the last position ///'
+    kontext "Slides"
+    SlidesControl.TypeKeys "<TAB>"
+    SlidesControl.TypeKeys "<PAGEDOWN>", 3 'to get to the last slide
+    SlidesControl.TypeKeys "<SHIFT F10>" '= open context menu
+    sleep 3
+    ' Rename
+    if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
         Goto Endsub
-     endif
+    endif
 
-     kontext "NameDlgPage"
-     if NameField.GetText <> "1" then
+    kontext "NameDlgPage"
+    if NameField.GetText <> "1" then
         Warnlog "Wrong slide found! Expected nr 1, but found " + NameField.GetText + "."
-     else
+    else
         Printlog "   Slide nr 1 was found correctly."
-     endif
-     NameDlgPage.OK
-     sleep 1
+    endif
+    NameDlgPage.OK
+    sleep 1
 
-     '/// Close Presentation. End testcase ///'
-     Call hCloseDocument
+    '/// Close Presentation. End testcase ///'
+    Call hCloseDocument
 endcase 'tiSlideCopyInSlideSorter
 
 '------------------------------------------------------------------------

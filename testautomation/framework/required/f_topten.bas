@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : smoke test for each application
 '*
@@ -35,21 +35,21 @@ sub main
 
     use "framework\required\includes\topten.inc"
     use "framework\required\includes\smoketest.inc"
-        
-    call hStatusIn ("framework", "f_topten.bas")
-    
-    printlog Chr(13) + "* ------       Top-Ten-Test       ------ *"
-    call topten
-    
-    
+    use "framework\required\includes\first.inc"
+
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
+
+    call hStatusIn ("framework", "f_topten.bas")
+    call tAllNew
+    call tInFilterCountCompare
+    call tJava
+    call tDatabaseCheck
+    call topten
     call tSmokeTest
-    
-    ' Do not use hSetMacroSecurityAPI here as this is the ONLY place within
-    ' the framework module where the setting is done via UI.    
-    hSetMacroSecurity( GC_MACRO_SECURITY_LEVEL_DEFAULT )
-    
     call hStatusOut
+
+    hSetMacroSecurity( GC_MACRO_SECURITY_LEVEL_DEFAULT )
+
 end sub
 
 '*******************************************************************************
@@ -60,6 +60,10 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     
     use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_ui_filters.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_listfuncs.inc"
    
     gApplication = "BACKGROUND"
     Call GetUseFiles

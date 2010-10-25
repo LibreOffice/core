@@ -20,6 +20,8 @@ FileAutopilotPresentation SID_SD_AUTOPILOT
 FileAutopilotAddressDataSource SID_ADDRESS_DATA_SOURCE
 FirstTimeWizard service:com.sun.star.comp.desktop.FirstStart?start
 FileWizardsWebPage service:com.sun.star.wizards.web.CallWizard?start
+FileWizardDocumentConverter sym:vnd.sun.star.script:ImportWizard.Main.Main?language=Basic&location=application
+FileWizardEuroConverter sym:vnd.sun.star.script:Euro.AutoPilotRun.StartAutoPilot?language=Basic&location=application
 FileCloseAndReturn SID_CLOSEDOC
 FileSaveCopy SID_SAVEASDOC
 FileClose .uno:CloseDoc
@@ -545,6 +547,7 @@ FormatSheetHide FID_TABLE_HIDE
 FormatSheetShow FID_TABLE_SHOW
 FormatSheetRename FID_TAB_MENU_RENAME FID_TAB_RENAME
 FormatSheetRightToLeft .uno:SheetRightToLeft
+FormatSheetTabColor .uno:SetTabBgColor
 FormatMergeCells .uno:ToggleMergeCells
 FormatPrintRangesRemove SID_DELETE_PRINTAREA
 FormatPrintRangesEdit SID_OPENDLG_EDIT_PRINTAREA
@@ -773,7 +776,7 @@ ToolsLanguageHyphenationDraw SID_HYPHENATION
 
 ' **** Math
 ToolsSymbolsCatalog SID_SYMBOLS_CATALOGUE
-ToolsImportFormula SID_INSERT_FORMULA
+ToolsImportFormula SID_IMPORT_FORMULA
 
 ' ******************************************
 ' ***********  Slide Show Menu  ************

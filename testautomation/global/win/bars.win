@@ -26,7 +26,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* Description : Declaration of bars and buttons
 '*               Note: To be in kmost cases compatible with old regresson
@@ -804,7 +804,7 @@ ManageBreakpoints .uno:ManageBreakPoints
 Modules SID_BASICIDE_MODULEDLG
 ObjectCatalog SID_BASICIDE_OBJCAT
 ProcedureStep .uno:BasicStepOver
-SaveSourceTest .uno:SaveBasicAs
+SaveSourceText .uno:SaveBasicAs
 SingleStep .uno:BasicStepInto
 StepBack .uno:BasicStepOut
 '-------------------------------------------------------------------------

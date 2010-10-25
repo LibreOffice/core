@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -302,8 +302,8 @@ testcase tToolsCatalog
     dim bChecked as boolean
     dim sFileName as string
     dim sAllSymbols as string
-    dim lAllSymbols(100) as string
-    dim lAllSymbolsSort(100) as string
+    dim lAllSymbols(200) as string
+    dim lAllSymbolsSort(200) as string
     dim iTimeOut as integer
     dim sFilterName as string
     dim sFilter as string
@@ -335,8 +335,8 @@ testcase tToolsCatalog
             '/// There are 2 Symbol sets: 1. 'Greek' with 54 entries and 2. 'Special' with 12 entries ///'
             '///+ These symbol set names are availble in 2 listboxes 1. 'Old Symbol Set' and 2. 'Symbol Set' ///'
             iSymbolSets = OldSymbolSet.GetItemCount
-            if (iSymbolSets <> 2) then
-                WarnLog "- OldSymbolSet: '" + iSymbolSets + "' is not 2; expected is 2. ('Special' and 'Greek')"
+            if (iSymbolSets <> 3) then
+                WarnLog "- OldSymbolSet: '" + iSymbolSets + "' is not 3; expected is 3. ('Special' and 'Greek' and 'iGreek')"
                 for i = 1 to iSymbolSets
                     qaErrorLog "- " + i + ": '" + OldSymbolSet.GetItemText(i) + "'"
                 next i
@@ -448,12 +448,12 @@ testcase tToolsCatalog
                 '///+ insert the copied text into the document ///'
                 DocumentWriter.typeKeys "<Mod1 End> - " + sTemp + ": " + j + "<Tab>"
                 sAllSymbols = sAllSymbols + sTemp
-                listAppend(lAllSymbols(), sTemp)
+                listAppend(lAllSymbols(), rtrim(sTemp))
             next j
         next i
 
-    if (listCount(lAllSymbols()) <> 66) then
-        warnlog "There have to be 66 Symbols, but there are: " + listCount(lAllSymbols())
+    if (listCount(lAllSymbols()) <> 106) then
+        warnlog "There have to be 106 Symbols, but there are: " + listCount(lAllSymbols())
     endif
     ' TODO: check sAllSymbols for not allowed characters!
     listCopy(lAllSymbols(),lAllSymbolsSort())
@@ -487,8 +487,6 @@ testcase tToolsCatalog
 endcase
 
 testcase tToolsCatalogNew
-   qaerrorlog "#i64504# Symbol set name is not saved on exiting OOo"
-goto endsub
     dim i, j as integer
     dim sTemp as string
     dim iStartingSymbolSetCount as integer
@@ -511,8 +509,8 @@ goto endsub
                 Kontext "EditSymbols"
                 if EditSymbols.exists then
                     iStartingSymbolSetCount = SymbolSet.getItemCount
-                    if iStartingSymbolSetCount <> 2 then
-                        qaErrorLog "There are already other symbolsets, instead of 2: " + iStartingSymbolSetCount
+                    if iStartingSymbolSetCount <> 3 then
+                        qaErrorLog "There are already other symbolsets, instead of 3: " + iStartingSymbolSetCount
                         for i = 1 to iStartingSymbolSetCount
                             printlog "("+i+"/"+iStartingSymbolSetCount+"): '" + SymbolSet.getItemText (i) + "'"
                         next i
@@ -626,7 +624,7 @@ goto endsub
                         SymbolSet.select ""
                     endcatch
                     i = Symbol.getItemCount
-                    if i <> 1 then
+                    if i < 2 then
                         warnlog "Symbol not available in new Symbolset: intsead of 1: " + i
                     endif
                     SymbolSet.setText "TBOnewSymbolSetdelete"
@@ -675,8 +673,8 @@ goto endsub
         endif
             Kontext "SymboleMath"
             j = symbolset.getItemCount
-            if j <> 2 then
-                warnlog "There is a number != 2 of symbollists listed"
+            if j <> 3 then
+                warnlog "There is a number != 3 of symbollists listed"
             else
                 printlog "Everything is cleaned up."
             endif

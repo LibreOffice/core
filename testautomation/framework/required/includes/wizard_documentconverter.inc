@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for documentconverter
 '*
@@ -49,18 +49,11 @@ testcase tUpdtWizardDocumentConverter
     dim iCurrentFile as integer
     
     hInitSingleDoc()
-    
-    irc = hOpenWizardWithMenu( "DOCCONV" )
-    if ( irc <> 0 ) then
-        warnlog( "Unable to open requested wizard, aborting test" )
-        goto endsub
-    endif
-    
     sTargetFile = hGetWorkPath() 
     sLogFile = sTargetFile & "Logfile.odt"
-    
-    stargetFile = sTargetFile & "docconv1" & hGetSuffix( "current" )
-    
+    sTargetFile = sTargetFile & "docconv1" & hGetSuffix( "current" )
+
+    FileWizardDocumentConverter
     
     Kontext "DocumentConverter"
     hWaitForObject( CreateLogfile, 3000 )
@@ -85,7 +78,7 @@ testcase tUpdtWizardDocumentConverter
             printlog( "Page " & 1 + iDocumentType & " is visible" )
         else
             warnlog( "Cannot access page 2, aborting test" )
-            hFinishWizard()
+            hCloseDialog( DocumentConverter, "Cancel" )
             goto endsub
         endif
         

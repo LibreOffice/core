@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test the functionality of Page Formatting / Page Styles - 1
 '*
@@ -53,18 +53,18 @@ testcase tFormatPage_1
 
 	PrintLog "- Open format/page dialog"
 	'/// <b> Open format/page dialog </b> ///
-	
+
 	Call hNewDocument
-	
+
 	'/// 1. via Mouse clicks in Menu: Format-Page
 	try
 		fFormatPageWriter("TabSeite")
 		TabSeite.Cancel
 	catch
 	endcatch
-	
+
 	'/// 2. via shortcuts in menu  (manual test is needed)
-	
+
 	'/// 3. via Context menu when Cursor is in the document
 	try
 		hMenuSelectNr(5)
@@ -77,7 +77,7 @@ testcase tFormatPage_1
 		TabSeite.Cancel
 	catch
 	endcatch
-	
+
 	Call hCloseDocument
 
 endcase
@@ -125,21 +125,21 @@ endcase
 testcase tFormatPage_3
 
     Dim iTextLength as integer
-	
+
 	PrintLog "- Test Landscape in tabpage Page"
 	'/// Test Landscape in tabpage Page
-	
+
 	Call hNewDocument
 
 	Call wOptionsUndo( "Grundschriften" )
-	
+
 	'/// Input a long test string
 	Call wTypeKeys "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Shift End>"
     EditCopy
     iTextLength = Len(GetClipBoardtext)
-	
+
 	'/// Format/Page , tabpage page , check 'Landscape'
 	fFormatPageWriter("TabSeite")
 	Papierformat.Select 2 ' A4 Paper
@@ -147,14 +147,14 @@ testcase tFormatPage_3
 	Quer.Check
 	Wait 500
 	TabSeite.OK
-	
+
 	'/// Check if Checkbox -- Landscape works fine
 	Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Shift End>"
 	EditCopy
 	wait 500
 	if Len(GetClipboardText) <= iTextLength then Warnlog "Checkbox Landscape doesn't work fine!"
-	
+
 	Call hCloseDocument
 
 endcase
@@ -166,14 +166,14 @@ testcase tFormatPage_4
 	Dim iFormat as Integer
 	Dim sWidth  as String
     Dim sHeight as String
-	
+
 	iFormat = 2   'A4 paper
-	
+
 	PrintLog "- Width and Height boxes must change after changing between Portrait and Landscape"
 	'/// Width and Height boxes must change after changing between Portrait and Landscape
-	
+
 	Call hNewDocument
-	
+
 	'/// Format/Page  tabpage page ,
 	'/// + check 'Portrait' first and get width and height ,
 	'/// + then change from Portrait to Landscape
@@ -185,13 +185,13 @@ testcase tFormatPage_4
 	Sleep 1
 	sWidth  = Breite.GetText
 	sHeight = Hoehe.GetText
-	
+
 	Quer.Check
 	Sleep 1
 	if Breite.GetText <> sHeight  then Warnlog "Width isn't changed when changing from Portrait to Landscape !"
 	if Hoehe.GetText  <> sWidth   then Warnlog "Height isn't changed when changing from Portrait to Landscape !"
 	TabSeite.Cancel
-	
+
 	'/// Format/Page  tabpage page ,
 	'/// + check 'Landscape' first and get width and height ,
 	'/// + then change from Landscape to Portrait
@@ -203,13 +203,13 @@ testcase tFormatPage_4
 	Sleep 1
 	sWidth  = Breite.GetText
 	sHeight = Hoehe.GetText
-	
+
 	Hoch.Check
 	Sleep 1
 	if Breite.GetText <> sHeight  then Warnlog "Width isn't changed when changing from Landscape to Portrait !"
 	if Hoehe.GetText  <> sWidth   then Warnlog "Height isn't changed when changing from Landscape to Portrait !"
 	TabSeite.Cancel
-	
+
 	Call hCloseDocument
 
 endcase
@@ -222,28 +222,28 @@ testcase tFormatPage_5
 	Dim sWidth  as String , sHeight as String
 	Dim sLeft   as String , sRight as String   , sUp as String  , sBottom as String  ' set page size
 	Dim sLeft1 as String  , sRight1 as String  ,  sUp1 as String  , sBottom1 as String  ' get page size
-	
+
 	iFormat    = 2   'A4 paper
 	sWidth     = "20" + gSeperator + "00" + gMeasurementUnit
 	sHeight    = "25" + gSeperator + "00" + gMeasurementUnit
-	
+
 	sLeft      = "15" + gSeperator + "00" + gMeasurementUnit
 	sRight     = "15" + gSeperator + "00" + gMeasurementUnit
 	sUp        = "15" + gSeperator + "00" + gMeasurementUnit
 	sBottom    = "15" + gSeperator + "00" + gMeasurementUnit
-	
+
 	sLeft1     = "15" + gSeperator + "00" + gMeasurementUnit
 	sRight1    = "4"  + gSeperator + "50" + gMeasurementUnit
 	sUp1       = "15" + gSeperator + "00" + gMeasurementUnit
 	sBottom1   = "9"  + gSeperator + "50" + gMeasurementUnit
-	
+
 	PrintLog "- The sum of 'Left margin' and 'Right margin' must always stay below the Paper width."
 	PrintLog "  (Same for top/bottom and height)"
 	'/// The sum of "Left margin" and "Right margin" must always stay below the Paper width.
 	'/// (Same for top/bottom and height)
-	
+
 	Call hNewDocument
-	
+
 	'/// Format/Page , tabpage Page , set width and height , close the dialog
 	fFormatPageWriter("TabSeite")
 	Papierformat.Select iFormat
@@ -255,7 +255,7 @@ testcase tFormatPage_5
 	Hoehe.SetText sHeight
 	Wait 500
 	TabSeite.OK
-	
+
 	'/// Format/Page , tabpage Page ,
 	'/// + Set the sum of "Left margin" and "Right margin" more than Width
 	fFormatPageWriter("TabSeite")
@@ -264,13 +264,13 @@ testcase tFormatPage_5
 	Rechts.SetText  sRight
 	Wait 500
 	TabSeite.OK
-	
+
 	'/// Check if the setting is OK
 	fFormatPageWriter("TabSeite")
 	if Left$(Links.GetText,5)   <>  Left$(sLeft1,5)   then Warnlog "The Margin(left) is wrong!"
 	if Left$(Rechts.GetText,4)  <>  Left$(sRight1,4)  then Warnlog "The Margin(right) is wrong!"
 	TabSeite.Cancel
-	
+
 	'/// Format/Page , tabpage Page ,
 	'/// + Set the sum of "Up margin" and "Bottom margin" more than Heigth
 	fFormatPageWriter("TabSeite")
@@ -279,13 +279,13 @@ testcase tFormatPage_5
 	Unten.SetText  sBottom
 	Wait 500
 	TabSeite.OK
-	
+
 	'/// Check if the setting is OK
 	fFormatPageWriter("TabSeite")
 	if Left$(Oben.GetText,5)   <>  Left$(sUp1,5)      then Warnlog "The Margin(Up) is wrong!"
 	if Left$(Unten.GetText,4)  <>  Left$(sBottom1,4)  then Warnlog "The Margin(Bottom) is wrong!"
 	TabSeite.Cancel
-	
+
 	Call hCloseDocument
 
 endcase
@@ -298,22 +298,22 @@ testcase tFormatPage_6
 	Dim iFormatLayout as Integer  ,  iReferenceStyle as Integer
 	Dim sWidth as String, sHeight as String
 	Dim sLeft as String  ,  sRight as String  ,  sUp as String  ,  sBottom as String
-	
+
 	iPaperTray    = 1 :  iPageLayout     = 2
 	iFormatLayout = 2 :  iReferenceStyle = 5
-	
+
 	sWidth        = "20" + gSeperator + "00" + gMeasurementUnit
 	sHeight       = "25" + gSeperator + "00" + gMeasurementUnit
 	sLeft         = "2"  + gSeperator + "00" + gMeasurementUnit
 	sRight        = "2"  + gSeperator + "00" + gMeasurementUnit
 	sUp           = "2"  + gSeperator + "00" + gMeasurementUnit
 	sBottom       = "2"  + gSeperator + "00" + gMeasurementUnit
-	
+
 	PrintLog "- Test Pre-defined formats"
 	'/// Test Pre-defined formats
-	
+
 	Call hNewDocument
-	
+
 	'/// Format/Page , tabpage page , do some configuration
 	fFormatPageWriter("TabSeite")
 	Hoch.Check
@@ -341,15 +341,15 @@ testcase tFormatPage_6
 	AbsatzVorlage.Select iReferenceStyle
 	Wait 500
 	TabSeite.OK
-	
+
 	'/// Save the file  , close the file and reload the file
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\tFormatPage_6.odt", "writer8")
 	Call hCloseDocument
-	
+
 	Call hNewDocument
-	
+
 	Call hFileOpen(gOfficepath + "user\work\tFormatPage_6.odt")
-	
+
 	'/// Check if Pre-defined formats are correct
 	fFormatPageWriter("TabSeite")
 	if Hoch.IsChecked            <> TRUE             then Warnlog "Portrait should be checked!"
@@ -365,7 +365,7 @@ testcase tFormatPage_6
 	if Einschalten.IsChecked     <> TRUE             then Warnlog "Portrait should be checked!"
 	if AbsatzVorlage.GetSelIndex <> iReferenceStyle  then Warnlog "The reference style is wrong!"
 	TabSeite.Cancel
-	
+
 	Call hCloseDocument
 
 endcase
@@ -378,22 +378,22 @@ testcase tFormatPage_7
 	Dim iFormatLayout as Integer  ,  iReferenceStyle as Integer
 	Dim sWidth as String  ,  sHeight as String
 	Dim sLeft as String  ,  sRight as String  ,  sUp as String  ,  sBottom as String
-	
+
 	iPaperTray    = 1 :  iPageLayout     = 2
 	iFormatLayout = 2 :  iReferenceStyle = 5
-	
+
 	sWidth        = "20" + gSeperator + "00" + gMeasurementUnit
 	sHeight       = "25" + gSeperator + "00" + gMeasurementUnit
 	sLeft         = "2"  + gSeperator + "00" + gMeasurementUnit
 	sRight        = "2"  + gSeperator + "00" + gMeasurementUnit
 	sUp           = "2"  + gSeperator + "00" + gMeasurementUnit
 	sBottom       = "2"  + gSeperator + "00" + gMeasurementUnit
-	
+
 	PrintLog "- Test user defined formats"
 	'/// Test user defined formats
-	
+
 	Call hNewDocument
-	
+
 	'/// Format/Page , tabpage page , do some configuration
 	fFormatPageWriter("TabSeite")
 	Hoch.Check
@@ -421,7 +421,7 @@ testcase tFormatPage_7
 	AbsatzVorlage.Select iReferenceStyle
 	Wait 500
 	TabSeite.OK
-	
+
 	'/// Check if user defined formats are correct
 	fFormatPageWriter("TabSeite")
 	if Hoch.IsChecked            <> TRUE                then Warnlog "Portrait should be checked!"
@@ -437,7 +437,7 @@ testcase tFormatPage_7
 	if Einschalten.IsChecked     <> TRUE                then Warnlog "Portrait should be checked!"
 	if AbsatzVorlage.GetSelIndex <> iReferenceStyle     then Warnlog "The reference style is wrong!"
 	TabSeite.Cancel
-	
+
 	Call hCloseDocument
 endcase
 
@@ -479,7 +479,7 @@ testcase tFormatPage_8
         Warnlog "Listbox 'Text Direction' is visible though asian support is disabled"
     end if
     TabSeite.Cancel
-    
+
     if RecheckCTLSupport = True then
         Call ActiveDeactivateCTLSupport(TRUE)
     else
@@ -551,20 +551,20 @@ testcase tFormatPage_10
     Dim RecheckAsianSupport as string
     RecheckCTLSupport = gCTLSup
     RecheckAsianSupport = gAsianSup
-    
-    PrintLog "- when Asian support and CTL are all enabled , 4 entries should be in Text Direction listbox"
-    '/// when Asian support and CTL are all enabled , 4 entries should be in Text Direction listbox
-    
+
+    PrintLog "- when Asian support and CTL are all enabled , 3 entries should be in Text Direction listbox"
+    '/// when Asian support and CTL are all enabled , 3 entries should be in Text Direction listbox
+
     Call hNewDocument
-    
+
     '/// Set Asian support enabled and Set CTL enabled
     Call ActiveDeactivateAsianSupport(TRUE)
     Call ActiveDeactivateCTLSupport(TRUE)
-    
-    '/// Check if there are 4 entires in Text Direction listbox
+
+    '/// Check if there are 3 entires in Text Direction listbox
     fFormatPageWriter("TabSeite")
-    if Textfluss.GetItemCount <> 4 then
-        Warnlog "There should be 4 entries in Text direction listbox , but get " & Textfluss.GetItemCount
+    if Textfluss.GetItemCount <> 3 then
+        Warnlog "There should be 3 entries in Text direction listbox , but get " & Textfluss.GetItemCount
     end if
     TabSeite.Cancel
 
@@ -578,7 +578,7 @@ testcase tFormatPage_10
     else
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 endcase
 
@@ -843,6 +843,8 @@ testcase tFormatPage_15
                     sFormat = "Som sidformatmall"
         case 49:    sType   = "Seite"
                     sFormat = "Wie Seitenvorlage"
+        case 50:    sType   = "Stran"
+                    sFormat = "Kot predloga za stran"
         case 55   : sType   = "Estatísticas"
                     sFormat = "Como Estilo de Página"
         case 81   : sType   = "ページ"
@@ -856,12 +858,12 @@ testcase tFormatPage_15
         case else : QAErrorLog "The test does not support the language " + iSprache
         Goto endsub
     end select
-    
+
     PrintLog "- Insertfields / other / Document / Type/Page -> As page Style must be set."
     '/// Insertfield / other / Document / Type/Page -> As page Style must be set.
-    
+
     Call hNewDocument
-    
+
     '/// InsertFields / other , tabpage document , select page ,
     '/// + check if Page format is right
     Call fInsertFieldsOther("TabDokumentFeldbefehle")

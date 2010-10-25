@@ -25,30 +25,39 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiInsertSlide
-' #1 tiInsertDuplicateSlide
-' #1 tiInsertField
-' #1 tiInsertSpecialCharacter
-' #1 tiInsertHyperlink
-' #1 tiInsertGraphic
-' #1 tiInsertObjectSound
-' #1 tiInsertObjectVideo
-' #1 tiInsertChart
-' #1 tiInsertObjectOLEObjects
-' #1 tiInsertSpreadsheet
-' #1 tiInsertFormula
-' #1 tiInsertFloatingFrame
-' #1 tiInsertFile
-' #1 tiInsertPlugin
-' #1 tiInsertScan
-' #1 tiInsertSnappointLine
-' #1 tdInsertLayer
-'\**********************************************************************************
+'\******************************************************************************
+sub id_004
+
+    printLog Chr(13) + "---------    id_004    ----------"
+
+    call tiInsertSlide
+    call tiInsertDuplicateSlide
+    ' v expand slide
+    '  v summary slide
+    call tiInsertField
+    call tiInsertSpecialCharacter
+    call tiInsertHyperlink
+    call tiInsertScan
+    call tiInsertGraphic
+    call tiInsertObjectSound
+    call tiInsertObjectVideo
+    call tiInsertObjectSound
+    call tiInsertObjectVideo
+    call tiInsertChart
+    call tiInsertObjectOLEObjects
+    call tiInsertSpreadsheet
+    call tiInsertFormula
+    call tiInsertFloatingFrame
+    call tiInsertFile
+    call tiInsertPlugin
+    call tiInsertSnappointLine
+    call tdInsertLayer ' IMPRESS: Edit->Layer->Insert
+end sub
+'------------------------------------------------------------------------------
 testcase tiInsertSlide
 
     printlog "Dateiname.settext Convertpath (gTesttoolPath + global\input\graf_inp\stabler.tif) "
@@ -177,15 +186,16 @@ testcase tiInsertHyperlink
     Call hNewDocument
     printlog "Insert->Hyperlink "
     InsertHyperlink
-    WaitSlot (5000)
-    Kontext "Hyperlink"
-    if Hyperlink.exists (5) then
+
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
+
+        Kontext "TabHyperlinkInternet"
+        
         Auswahl.MouseDown 50, 5
         Auswahl.MouseUp 50, 5
         Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
         Auswahl.typekeys "<TAB>"
-        sleep 3
-        Kontext "TabHyperlinkInternet"
 
         printlog "Workaround to get rid of a Focusing-problem..."
         NameText.Typekeys "alal <RETURN>"
@@ -195,10 +205,13 @@ testcase tiInsertHyperlink
         printlog "End of workaround..."
 
         Internet.Check
-        ZielUrl.Settext "http://mahler"
-        Kontext "Hyperlink"
-        Uebernehmen.Click
-        Hyperlink.Close
+        ZielUrl.Settext "http://www.nowhere.com"
+
+        Uebernehmen.Click()
+
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+        
     else
         warnlog "Failed to open hyperlink ??!!"
     end if

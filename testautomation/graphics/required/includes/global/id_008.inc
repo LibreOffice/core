@@ -25,15 +25,20 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'******************************************************************
-' #1 tiWindowNewWindow
-' #1 tidWindow123       'wrn:2
 '\*****************************************************************
+sub id_008
 
+    printLog Chr(13) + "---------    id_008    ----------"
+
+    Call tiWindowNewWindow
+    call tidWindow123
+
+end sub
+'-------------------------------------------------------------------------------
 testcase tiWindowNewWindow
 
     '/// open application ///'

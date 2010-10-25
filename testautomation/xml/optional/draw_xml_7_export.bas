@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Export test for the Draw XML 6.0/7/OOo 1.x format
 '*

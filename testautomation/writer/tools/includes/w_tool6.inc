@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Tools for writer tests.
 '*
@@ -575,54 +575,6 @@ end function
 
 '--------------------------------------------------------------
 
-function hIsNamedDocLoaded (ShouldFile as String) as Boolean
-    '/// Input: name of loaded file; Output: True/False///'
-    '///+ Several checks may be combined: ///'
-    '///+ disabled: Plan A: requires clippboard: check, if not untitled 1 window... ///'
-    '///+ Plan B: SaveAs Dialog ///'
-    '///+ not used now: Plan C: check if hNavigatorOpenWindows() > 0 ///'
-
-    '///' Plan A :-( ///
-    ''///+ to be able to check, that document was loaded, print something before opening new doc ///'
-    ''///+ during test, check if it is readable ... ///'
-    '   Kontext "DocumentWriter"
-    '   DocumentWriter.TypeKeys "<Mod1 home>"
-    '   DocumentWriter.TypeKeys "TBOlastWindow"
-    '   DocumentWriter.TypeKeys "<Return>"
-
-    '   Kontext "DocumentWriter"
-    '   DocumentWriter.TypeKeys "<Mod1 Home>"
-    '   DocumentWriter.TypeKeys "<Shift End>"
-    '   EditCopy
-    '   DocumentWriter.TypeKeys "<Home>"
-    '   if GetClipboardText <> "TBOlastWindow" Then ///'
-
-    '///      ' Plan B :-) ///
-    '///+' if a doc got loaded, the filename in a 'SaveAs' Dlg is different from "" ///
-    '///+' usually the file name of the loaded document with an changed extension chosen from SO ///
-
-    hIsNamedDocLoaded  = False      ' Let's  start WorstCase :-(
-    FileSaveAs                   ' (Plan B)
-    Kontext "SpeichernDlg"
-    If DateiOhneExt(DateiExtract(Dateiname.GetSelText)) = DateiOhneExt(DateiExtract(ShouldFile)) Then
-        hIsNamedDocLoaded = True
-        '       Printlog "Filename: " + Dateiname.GetSelText+"; "+ShouldFile
-        '       Printlog "--------------------------------------------------Loaded as: " + Dateityp.GetSelText
-    Else
-        'exception! for templates
-        if lcase(right(ShouldFile,3)) = "vor" or lcase(right(ShouldFile,3)) = "dot" then hIsNamedDocLoaded = True
-    End If
-    SpeichernDlg.Cancel
-
-    '/ remove text of last window test text ///'
-    '   Kontext "DocumentWriter"
-    '   DocumentWriter.TypeKeys "<Mod1 home>"
-    '   DocumentWriter.TypeKeys "TBOlastWindow"
-    '   DocumentWriter.TypeKeys "<delete>"
-end function
-
-'--------------------------------------------------------------
-
 sub hSetSpellHypLanguage
     dim sTrieit
     if bAsianLan then
@@ -753,7 +705,7 @@ end sub
 function fInsertFrame (x1 as Integer , y1 as Integer , x2 as Integer , y2 as Integer)
     'This function will insert a frame with the coordinate
 
-    Call wDocSetContext
+    hSetDocumentContext()
 
     Call hToolbarSelect("INSERT", true )
     Sleep 1

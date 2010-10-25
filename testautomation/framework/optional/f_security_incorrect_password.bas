@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Verify that documents really get password protected
 '*
@@ -61,8 +61,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_security_tools.inc"
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
-
-    use "framework\tools\includes\init_tools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Invisible items on the standardbar
 '*
@@ -34,24 +34,32 @@
 testcase tStandardBar_4
 
     printlog( "Invisible items on the standardbar" )
-    
-    dim brc as boolean
-   
-    hResetStandardBar()
-    
-    hInitSingleDoc()
-    DocumentWriter.maximize() ' Needed to avoid toolbar clipping on resolutions < 1024x768 or small windows.
-    hStandardbarItemGetCount()
-    
-    hStandardbarLoadUrl()
-    
-    hStandardbarNewDialog()
-    
-    hStandardbarSaveAs()
-    
-    brc = hInitBackingMode()
 
-        
+    printlog( "Reset standardbar to defaults" )
+    hResetStandardBar()
+
+    gApplication = "WRITER"
+    printlog( "Open one single Writer document" )
+    hInitSingleDoc()
+
+    kontext "DocumentWriter"
+    DocumentWriter.maximize() ' Needed to avoid toolbar clipping on resolutions < 1024x768 or small windows.
+
+    printlog( "Check item count on toolbar" )
+    hStandardbarItemGetCount()
+
+    printlog( "Load URL" )
+    hStandardbarLoadUrl()
+
+    printlog( "<NEW> dialog" )
+    hStandardbarNewDialog()
+
+    printlog( "<Save As>" )
+    hStandardbarSaveAs()
+
+    printlog( "Close all open documents" )
+    hFileCloseAll()
+
 endcase
 
     

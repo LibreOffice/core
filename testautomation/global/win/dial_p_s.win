@@ -6,33 +6,23 @@ PasswortBestaetigen sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 *PasswordFileOpen HID_DLG_PASSWORD_UUI
 PasswortName uui:Edit:DLG_UUI_PASSWORD:ED_PASSWORD
 
-*PasswordFileSave HID_DLG_PASSWORD_CRT
-Password uui:Edit:DLG_UUI_PASSWORD_CRT:ED_PASSWORD_CRT
-PasswordConfirm uui:Edit:DLG_UUI_PASSWORD_CRT:ED_PASSWORD_REPEAT
+*PasswordFileSave HID_DLG_PASSWORD_TO_OPEN_MODIFY
+Password HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN
+PasswordConfirm HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN
+PasswordMoreOptions HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE
+PasswordFileReadonly HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY
+PasswordToModify HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY
+PasswordToModifyConfirm HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY
 
 *PasswortEingeben SID_CHG_PROTECT
 SchutzAufheben HID_CHG_PROTECT
 PasswortEingabe sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
 PasswortBestaetigen sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 
-*PBMOptionen filter:ModalDialog:DLG_EXPORT_EPBM
-Binaer filter:RadioButton:DLG_EXPORT_EPBM:RB_RAW
-Ascii filter:RadioButton:DLG_EXPORT_EPBM:RB_ASCII
-
 *PfadeAuswaehlen HID_MULTIPATH
 Pfade HID_OPTIONS_MULTIPATH_LIST
 Hinzufuegen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
 Loeschen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
-
-*PGMOptionen filter:ModalDialog:DLG_EXPORT_EPGM
-Binaer filter:RadioButton:DLG_EXPORT_EPGM:RB_RAW
-Ascii filter:RadioButton:DLG_EXPORT_EPGM:RB_ASCII
-
-*PICTOPtionen filter:ModalDialog:DLG_EXPORT_EPCT
-Original filter:RadioButton:DLG_EXPORT_EPCT:RB_ORIGINAL
-Groesse filter:RadioButton:DLG_EXPORT_EPCT:RB_SIZE
-Breite filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEX
-Hoehe filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEY
 
 *Pipette SID_BMPMASK svx:DockingWindow:RID_SVXDLG_BMPMASK
 PipetteKnopf HID_BMPMASK_TBI_PIPETTE
@@ -74,14 +64,6 @@ NoDuplication sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_UNIQUE
 DateiUrl cui:EDIT:MD_INSERT_OBJECT_PLUGIN:ED_FILEURL
 Durchsuchen cui:PUSHBUTTON:MD_INSERT_OBJECT_PLUGIN:BTN_FILEURL
 Optionen cui:MULTILINEEDIT:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS
-
-*PNGOptionen svtools:ModalDialog:DLG_EXPORT_EPNG
-Kompression svtools:NumericField:DLG_EXPORT_EPNG:NUM_COMPRESSION
-Interlaced svtools:CheckBox:DLG_EXPORT_EPNG:CBX_INTERLACED
-
-*PPMOptionen filter:ModalDialog:DLG_EXPORT_EPPM
-Binaer filter:RadioButton:DLG_EXPORT_EPPM:RB_RAW
-Ascii filter:RadioButton:DLG_EXPORT_EPPM:RB_ASCII
 
 *QuelleAuswaehlen HID_DATAPILOT_TYPE
 AktuelleSelektion sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_SELECTION
@@ -369,12 +351,6 @@ Persistent sc:CheckBox:RID_SCDLG_FILTER:BTN_DEST_PERS
 'Protokollauswahl HID_PROTOCOLS
 
 +Stylist Gestalter
-
-*SVMOptionen svtools:ModalDialog:DLG_EXPORT_VEC
-Original svtools:RadioButton:DLG_EXPORT_VEC:RB_ORIGINAL_VEC
-Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
-Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
-Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
 
 *SymboleMath starmath:ModalDialog:RID_SYMBOLDIALOG
 Symbolset starmath:ListBox:RID_SYMBOLDIALOG:1

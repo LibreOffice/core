@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - Tools Menu Part I
 '*
@@ -416,7 +416,9 @@ testcase tToolsLanguageThesaurus
     printlog " Check that there are alternatives available"
     if Alternatives.GetItemCount < 1 then
         warnlog "There are no alternatives available"
-    else Alternatives.Select (1)
+    else
+        Alternatives.Select (1)
+        sleep (1)
         if ReplaceWith.GetText = "" then
             warnlog "The repacle with field is empty"
         end if

@@ -261,16 +261,6 @@ AnimationenZulassen sd:CheckBox:DLG_START_PRESENTATION:CBX_ANIMATION_ALLOWED
 DiawechselAufHintergrund SD:CHECKBOX:DLG_START_PRESENTATION:CBX_CHANGE_PAGE
 PraesentationImmerImVordergrund sd:CheckBox:DLG_START_PRESENTATION:CBX_ALWAYS_ON_TOP
 
-*BMPOptionen svtools:ModalDialog:DLG_EXPORT_PIX
-Farbaufloesung svtools:ListBox:DLG_EXPORT_PIX:LB_COLORS
-RLEKodierung svtools:CheckBox:DLG_EXPORT_PIX:CBX_RLE
-Original svtools:RadioButton:DLG_EXPORT_PIX:RB_ORIGINAL_PIX
-Aufloesung svtools:RadioButton:DLG_EXPORT_PIX:RB_RES_PIX
-DPI svtools:ComboBox:DLG_EXPORT_PIX:CBB_RES_PIX
-Groesse svtools:RadioButton:DLG_EXPORT_PIX:RB_SIZE_PIX
-Breite svtools:MetricField:DLG_EXPORT_PIX:MTF_SIZEX_PIX
-Hoehe svtools:MetricField:DLG_EXPORT_PIX:MTF_SIZEY_PIX
-
 *Browser SID_BROWSER
 
 *ChineseTranslation svx:CB_USE_VARIANTS:DLG_CHINESETRANSLATION

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : very important routines to start a testscript
 '*
@@ -69,6 +69,8 @@ sub GetUseFiles
     Dim sEnvironmentVersionMinor as string
 
     gTestcaseStart = Now()   ' get start time of test preparation phase
+
+    GVERBOSE = FALSE ' global switch to make some functions more talkative for profiling purposes
 
     use "global\system\includes\sysinfo.inc"     '///+ sysinfo.inc  : routines to get all system informations
     use "global\system\includes\inivalue.inc"    '///+ inivalue.inc : routines to work with ini-files
@@ -281,7 +283,6 @@ end sub
 sub LoadGlobalIncludeFiles
 '///Load all important global files.    
     use "global\tools\includes\required\t_dir.inc"          '///+<li><b>t_dir</b>: Routines to parse directories (methods execute on the office side)</li>
-    use "global\tools\includes\required\t_dirloc.inc"       '///+<li><b>t_dirloc</b>: Routines to parse directories (execute on the testtool side)</li>
     use "global\tools\includes\required\t_doc1.inc"         '///+<li><b>t_doc1</b>: Global routines to work on office documents (I)</li>
     use "global\tools\includes\required\t_doc2.inc"         '///+<li><b>t_doc2</b>: Global routines to work on office documents (II)</li>
     use "global\tools\includes\required\t_files.inc"        '///+<ul><li><b>t_files</b>: Routines to open/save/print files</li>
@@ -314,9 +315,7 @@ sub FirstOfficeStart
     'Needs to get executed everytime after a 'ResetApplication' command
     catchGPF false
      ' Recover to backingwindow, until resetApplication can handle this
-     for i = 1 to getDocumentCount
-         hCloseDocument() 
-     next i
+     hFileCloseAll()
 end sub
 
 '-------------------------------------------------------------------------
@@ -334,7 +333,7 @@ sub hStartTheOffice (optional sProfPath as String, optional sProfParameter as St
     
     sErrorInformation = "global::systen::inc::master.inc:hStartTheOffice: "
     
-    if gPlatform = lcase("osx") then
+    if lcase( gPlatform ) = "osx" then
         sPlatformProgramPath = "MacOS"
     else
         sPlatformProgramPath = "program"
@@ -533,11 +532,11 @@ sub ExitRestartTheOffice (optional sProfPath as String, optional sProfParameter 
     catch
     endcatch
     'Disable Quickstarter internaly
-    hDisableQuickstarterAPI 
+    hDisableQuickstarterAPI
+
     ' Recover to backingwindow, until resetApplication can handle this
-    for i = 1 to getDocumentCount
-        hCloseDocument() 
-    next i
+    hFileCloseAll()
+
 end sub
 
 '-------------------------------------------------------------------------
@@ -671,15 +670,7 @@ sub PleaseRecover (sWhat as String)
     Kontext
 
     ' Recover to backingwindow, until resetApplication can handle this
-    a = getDocumentCount
-    for i = 1 to a
-        qaErrorLog "Needed to close window: (" + i + "/"+a+") on " + sWhat
-        hCloseDocument()
-    next i
-    a = getDocumentCount
-    if a > 0 then
-        warnlog "Failed to close window; There are still open: " + a
-    endif
+    hFileCloseAll()
 end sub
 
 '-------------------------------------------------------------------------
@@ -1144,7 +1135,7 @@ sub sStartUpOffice (optional sProfPath as String, optional sProfParameter as Str
             
     ' Set a valid URE_BOOTSTRAP path for soffice, else the invalid one from this testtool instance
     ' will get used i86718 - would result in a message about vcl stuff and a not starting soffice
-    if gPlatform = lcase("osx") then
+    if lcase( gPlatform ) = "osx" then
         sPlatformProgramPath = "MacOS"
         sPlatformBinExt = "rc"
     else

@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Replacements for routines in t_lists.inc adds some
 '*
@@ -33,81 +33,35 @@
 
 function hOpenHelp() as boolean
 
-    '///<h3>Function to open the Help Browser</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the help is open</li>
-    '///+<li>FALSE if the help did not open</li>
-    '///</ul>
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-   
-    const CFN = "hOpenHelp::"
+    printlog( "Open Help Browser" )
 
     HelpContents
-    
-    if ( WaitSlot( 3000 ) <> WSFinished ) then
-        printlog( CFN & "Failed to open help" )
-        hOpenHelp() = FALSE
+
+    kontext "StarOfficeHelp"
+    if ( StarOfficeHelp.exists( 5 ) ) then
+        hOpenHelp() = TRUE
     else
-        kontext "StarOfficeHelp"
-        if ( StarOfficeHelp.exists() ) then
-            printlog( CFN & "Help was opened" )
-            hOpenHelp() = TRUE
-        else
-            printlog( CFN & "Help was not opened" )
-            hOpenHelp() = FALSE
-        endif
+        warnlog( "Unable to open help browser" )
+        hOpenHelp() = FALSE
     endif
-    
+
+
 end function
 
 '*******************************************************************************
 
 function hCloseHelp() as boolean
 
-    '///<h3>Function to close the Help Browser</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the help is closed</li>
-    '///+<li>FALSE if the help did not close</li>
-    '///</ul>
-    '///</ol>
-    
-    const CFN = "hCloseHelp::"
+    printlog( "Close Help Browser" )
 
     kontext "StarOfficeHelp"
-    if ( StarOfficeHelp.exists() ) then
-        
-        hUseAsyncSlot( "FileClose")
-        StarOfficeHelp.notExists( 3 )
-        
-        if ( StarOfficeHelp.Exists() ) then
-            printlog( CFN & "Help was not closed")
-            hCloseHelp() = FALSE
-        else
-            printlog( CFN & "Help was closed")
-            hCloseHelp() = TRUE
-        endif
-    else
-        printlog( CFN & "Help is not open, no action taken")
+    StarOfficeHelp.typeKeys( "<MOD1 F4>" )
+
+    if ( StarOfficeHelp.notExists( 3 ) ) then
         hCloseHelp() = TRUE
+    else
+        warnlog( "Help browser could not be closed" )
+        hCloseHelp() = FALSE
     endif
 
 end function
@@ -125,9 +79,9 @@ function hSelectHelpTab( cTab as string ) as boolean
     '///+<li>&quot;index&quot; for the index tab</li>
     '///+<li>&quot;find&quot; for the find tab</li>
     '///+<li>&quot;bookmarks&quot; for the bookmarks tab</li>
-    '///</ul>    
+    '///</ul>
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
     '///+<li>Errorcondition (boolean)</li>
@@ -136,19 +90,16 @@ function hSelectHelpTab( cTab as string ) as boolean
     '///+<li>FALSE if the requested tabpage did not open</li>
     '///</ul>
     '///</ol>
-    
-    '///<u>Description</u>:    
+
+    '///<u>Description</u>:
     '///<ul>
     const CFN = "hSelectHelpTab::"
 
-    dim brc as boolean
-        brc = false
-
-    dim cTabName as string
-        cTabName = lcase( cTab )
+    dim brc as boolean     : brc = false
+    dim cTabName as string : cTabName = lcase( cTab )
 
     kontext "StarOfficeHelp"
-    
+
     printlog( CFN & "Enter" )
 
     '///+<li>Select the requested Tabpage, verify that it is open</li>
@@ -173,7 +124,7 @@ function hSelectHelpTab( cTab as string ) as boolean
                                call DialogTest( BookmarksPage )
                                brc = true
                            endif
-    case else 
+    case else
         printlog( CFN & "Invalid parameter passed to function: " & cTab )
         printlog( CFN & "Valid are: content, index, find, bookmarks" )
         brc = false
@@ -183,9 +134,9 @@ function hSelectHelpTab( cTab as string ) as boolean
     if ( brc ) then
         printlog( CFN & "Exit: Selected Tabpage: " & cTab )
     endif
- 
+
     '///+<li>Return TRUE or FALSE</li>
-    hSelectHelpTab() = brc    
+    hSelectHelpTab() = brc
 
     '///</ul>
 end function
@@ -202,9 +153,9 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
     '///+<li>&quot;show&quot;</li>
     '///+<li>&quot;rename&quot;</li>
     '///+<li>&quot;delete&quot;</li>
-    '///</ul>    
+    '///</ul>
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
     '///+<li>Errorcondition (boolean)</li>
@@ -213,13 +164,13 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
     '///+<li>FALSE on any other error</li>
     '///</ul>
     '///</ol>
-    
-    '///<u>Description</u>:        
+
+    '///<u>Description</u>:
     '///<ul>
     const CFN = "hUseBookmarksContextMenu::"
     dim cSelection as string
     dim iActionPos as integer
-    
+
     printlog( CFN & "Enter" )
 
     '///+<li>Verify that we are on the Bookmarks Page</li>
@@ -245,7 +196,7 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
         hUseBookmarksContextMenu() = false
         exit function
     endif
-    
+
     '///+<li>Open the context menu and select the requested index</li>
     kontext "Bookmarks"
     Bookmarks.openContextMenu()
@@ -254,7 +205,7 @@ function hUseBookmarksContextMenu( cAction as string ) as boolean
 
     '///+<li>Return TRUE if all went well so far</li>
     hUseBookmarksContextMenu() = true
-   
+
     '///</ul>
 
 end function
@@ -263,169 +214,26 @@ end function
 
 function hHelpGetAboutItemCount() as integer
 
-    '///<h3>Get the number of applications listed in the Help ListBox</h3>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Number of applications listed (integer)</li>
-    '///<ul>
-    '///+<li>The default is 7</li>
-    '///</ul>
-    '///</ol
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const I_ABOUT_ITEMS = 8
-    const CFN = "hHelpGetAboutItemCount::"
-    
-    dim iItem as integer
-    dim cItemName as string
-    dim iAboutItems as integer
-    dim brc as boolean
-    
-    printlog( CFN & "Enter" )
-    
-    '///+<li>Open Help</li>
-    brc = hOpenHelp()
-    if ( not brc ) then
-        qaerrorlog( CFN & "Help not open, aborting" )
-        hHelpGetAboutItemCount() = 0
-        exit function
-    endif
-    
+    printlog( "Get the number of applications listed in the help listbox (should be 8)" )
+    const ABOUT_ITEMS = 8
+
+    dim itemcount as integer
+
+    hOpenHelp()
     hSelectHelpTab( "index" )
+
     Kontext "IndexPage"
-    
-    '///+<li>get the number of applications from the drop down box</li>
-    iAboutItems = HelpAbout.getItemCount()
-    if ( iAboutItems <> I_ABOUT_ITEMS ) then
-        warnlog( "The list of topics is incomplete:" )
+    itemcount = HelpAbout.getItemCount()
+
+    if ( itemcount <> ABOUT_ITEMS ) then
+        warnlog( "Number of applications is incorrect" )
+        printlog( "Found...: " & itemcount )
+        printlog( "Expected: " & ABOUT_ITEMS
     endif
-    
-    '///+<li>Print the list of items to the log</li>
-    printlog( CFN & "Items listed in Application Listbox (HelpAbout)" )
-    for iItem = 1 to iAboutItems
-        cItemName = HelpAbout.getItemText( iItem )
-        printlog( "     " & cItemName )
-    next iItem
-    
-    '///+<li>close help</li>
+
     hCloseHelp()
-    '///</ul>    
-    
-    printlog( CFN & "Exit with item count = " & iAboutItems )
-    hHelpGetAboutItemCount() = iAboutItems
-    
-end function
 
-'*******************************************************************************
-
-function hHelpGetSearchIndexItemCount() as integer
-
-    '///<h3>Get the number of items in the Help Search Index</h3>
-    '///<i>Starting point: Help / Index page</i><br>
-    '///<i>Note: Workaround for incorrect value returned by .getItemCount()</i><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Number of items in the list (integer)</li>
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hHelpGetSearchIndexItemCount:"
-    
-    dim iItem as integer
-    printlog( CFN & "Enter" )
-    
-    '///+<li>Run through the list and count the items, break on error</li>
-    for iItem = 1 to 10000
-    
-        try
-            SearchIndex.select( iItem )
-        catch
-            iItem = iItem - 1
-            exit for
-        endcatch
-            
-    next iItem
-
-    printlog( CFN & "Exit with item count = " & iItem )    
-    hHelpGetSearchIndexItemCount() = iItem
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
-
-function hGetHelpContentHeader( iLength as integer ) as string
-
-
-    '///<h3>Get the header of the content in the help browser</h3>
-    '///<i>This is the first line of the content page, truncated (if desired)</i><br><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>Length of the requested string (Integer)</li>
-    '///<ul>
-    '///+<li>The max length of the string to be returned</li>
-    '///+<li>&le; 0 = do not truncate</li>
-    '///</ul>
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Header (String)</li>
-    '///<ul>
-    '///+<li>A string containing the content header</li>
-    '///+<li>The header is the first line of the content page</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "hGetHelpContentHeader::"
-    printlog( CFN & "Enter with option (iLength): " & iLength )
-    dim cHeaderString as string
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Maximize the help viewer (required to avoid cut off strings)</li>
-    kontext "HelpContent"
-    'StarOfficeHelp.maximize()
-    
-    '///+<li>Go to the top left position in the help browser</li>
-    HelpContent.typeKeys( "<MOD1 HOME>" )
-    
-    '///+<li>Mark the entire line - note that this ends at the linebreak</li>
-    HelpContent.typeKeys( "<SHIFT END>" )
-    
-    '///+<li>Copy the string to the clipboard</li>
-    EditCopy
-    
-    '///+<li>Assign the string to a variable</li>
-    cHeaderString = getClipboardText
-    
-    '///+<li>Truncate string</li>
-    if ( iLength > 0 ) then
-        if ( len( cHeaderString ) > iLength ) then
-            cHeaderString = left( cHeaderString, iLength )
-        endif
-    endif
-    '///</ul>
-
-    printlog( CFN & "Exit: " & cHeaderString )
-    hGetHelpContentHeader() = cHeaderString
+    hHelpGetAboutItemCount() = itemcount
 
 end function
+

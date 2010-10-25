@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -40,33 +40,33 @@ testcase tMainToolbar
    '/// open application ///'
    Call hNewDocument
       '/// type something into document ///'
-      hTBOtypeInDoc
+      SchreibenInMathdok( "a over b" )
       kontext "Toolbar"
       '/// click buttons on Main Toolbar ///'
       '/// click 'Zoom in' ///'
-      Vergroessern.Click
+      hClickButton( Vergroessern )
       '/// click 'Zoom out' ///'
-      Verkleinern.Click
+      hClickButton( Verkleinern )
       '/// click 'Zoom 100%' ///'
-      ZoomHundertProzent.Click
+      hClickButton( ZoomHundertProzent )
       '/// click 'Zoom inEntire Formula' ///'
-      GanzeFormel.Click
+      hClickButton( GanzeFormel )
       '/// click 'Refresh' ///'
-      FormelAktualisieren.Click
+      hClickButton( FormelAktualisieren )
       '/// click 'Formula Cursor' ///'
-      FormulaCursor.Click
+      hClickButton( FormulaCursor )
       '/// click 'Symbols' ///'
-      FormelSymbole.Click
+      hClickButton( FormelSymbole )
       kontext "SymboleMath"
-      if (SymboleMath.exists <> TRUE) then
-         warnlog "Symbols Dialog didn't came up :-("
-      else
+      if ( SymboleMath.exists( 1 ) ) then
          '/// close dialog 'Symbols' ///'
-         SymboleMath.close
+         hCloseDialog( SymboleMath, "close" )
+      else
+         warnlog( "Dialog <SymboleMath> did not open" )
       endif
       kontext "Toolbar"
       '/// click 'Formula Cursor' ///'
-      FormulaCursor.Click
+      hClickButton( FormulaCursor )
    '/// close application ///'
    Call hCloseDocument
 endcase

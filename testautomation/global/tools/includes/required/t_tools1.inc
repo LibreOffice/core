@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Tools (1)
 '*
@@ -34,8 +34,6 @@
 private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
-
-private const VERBOSE = FALSE
 
 function GetClipboardText as string
 
@@ -318,7 +316,7 @@ function Sleep( optional _iSeconds as integer ) as integer
         printlog( CFN & "Zero time. Please consider removing Sleep() statement" )
     endif
     
-    if ( VERBOSE ) then
+    if ( GVERBOSE ) then
         SLEEP_CALLS_SUM      = SLEEP_CALLS_SUM + 1
         SLEEP_TIME_USED      = SLEEP_TIME_USED + iTimeDiff / 1000 ' good enough
         SLEEP_TIME_REQUESTED = SLEEP_TIME_REQUESTED + iSeconds 
@@ -412,10 +410,10 @@ sub DialogTest( Window, optional iNumber as integer)
         'save with respect to application and language
         sCapturePath = ConvertPath (gOfficePath + "user\work\screenshots"+iSprache+"\")
         sPicName = sCapturePath + lCase(gApplication)
+
         'create directory if it doesn't exist
-        if hDirectoryExists(sPicName) <> TRUE then
-            mkdir (sPicName)
-        end if
+        if ( not FileExists(sPicName) ) then mkdir sPicName
+
         sPicName = sPicName + sName
         try
             sleep 1
@@ -697,28 +695,6 @@ end function
 
 '*******************************************************************************
 
-sub ErgebnisSchreiben ( Window, Name$ )
-
-    '/// ErgebnisSchreiben
-    '///+ Used in context with making screenshots.
-    
-    Dim FileNum% : Dim i%
-    Dim Datei$
-    Dim Text$ : Dim Text2$
-
-    Datei$ = sCapturePath + "Ergebis.txt"
-    Text2$ = Window.Name
-    Text$ = Text2$ +  "    =>   " + Name$
-
-    FileNum% = FreeFile
-    Open Datei$ for Append  as #FileNum%
-    Print #FileNum%, Text$
-    Close #FileNum%
-    
-end sub
-
-'*******************************************************************************
-
 sub TextInDatei ( TextText$, Datei$ )
 
     '/// TextInDatei
@@ -860,16 +836,14 @@ function ActiveDeactivateAsianSupport ( WhatState as Boolean ) as Boolean
         gAsianSup = WhatState    ' Set the global variable
 
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         ActiveDeactivateAsianSupport = TRUE
         If WhatState = FALSE then
             warnlog "Deactivating of asian language support is not possible, because it is disabled in cjk versions"
         end if
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     end if
 
 end function
@@ -899,16 +873,14 @@ function ActiveDeactivateCTLSupport ( WhatState as Boolean ) as Boolean
         gCTLSup = WhatState    ' Set the global variable
 
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         ActiveDeactivateCTLSupport = TRUE
         If WhatState = FALSE then
             warnlog "Deactivating of CTL language support is not possible, because it is disabled in ctl versions"
         end if
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        Sleep (3)
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     end if
 
 end function
@@ -1147,183 +1119,30 @@ end sub
 sub raiseApplication
 
     ' Try to solve focus problem on MacOS X; After calling this function, OOo should be most front;
-    Dim i as integer
-    Dim a as integer
-    Dim b as integer
-    Dim tBundle as string
-    Dim aPath
+    dim iCurrentDir as integer
+    dim iNumberOfHits as integer : iNumberOfHits = 0
+    dim iDirPosition as integer
+    dim tBundle as string
+    dim aPath ' string array with dynamic itemcount, intended.
 
     ' Calling just the .app with open on MacOS X via shell command
     if ( lcase( gPlatform ) = "osx" ) then
-    
+
+        ' Split the path into its components
         aPath = split(gNetzOfficePath, gPathSigne)
-        a=0
+
         ' make sure 'Contents' is just one time in path
-        for i=0 to uBound(aPath)
-        
-            if "Contents" = aPath(i) then
-                a=a+1
-            endif
-            
-        next i
+        for iCurrentDir = 0 to uBound(aPath)
+            if "Contents" = aPath( iCurrentDir ) then iNumberOfHits = iNumberOfHits + 1
+        next iCurrentDir
         
         ' exit if not
-        if a<>1 then
-            exit sub
-        end if
+        if ( iNumberOfHits <> 1 ) then exit sub
         
-        i=inStr(gNetzOfficePath, "Contents")
-        tBundle=left(gNetzOfficePath, i-2)
-        shell("open",1 ,tBundle, true)
+        iDirPosition = inStr( gNetzOfficePath, "Contents" )
+        tBundle = left( gNetzOfficePath, iDirPosition - 2 )
+
+        shell( "open", 1, tBundle, true )
         
     end if
 end sub
-
-'*******************************************************************************
-
-function hUseAsyncSlot( cSlot as string ) as integer
-
-    dim iWait as integer
-    dim iTime as integer : iTime = 0
-    const MAX_WAIT = 100
-    const DELAY = 100
-    const CFN = "global::tools::includes::required::hUseAsyncSlot():"
-
-    if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )    
-    WaitSlot()
-    for iWait = 1 to MAX_WAIT
-        try
-            select case ( lcase( cSlot ) )
-            case "fileclose"                      : FileClose
-            case "filesaveas"                     : FileSaveAs( "SynchronMode", TRUE )
-            case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
-            case "fileexport"                     : FileExport
-            case "filereload"                     : FileReload( "SynchronMode", TRUE )
-            case "fileopen"                       : FileOpen
-            
-            case "editdoc"                        : EditDoc
-            case "editcopy"                       : EditCopy
-            case "editchangesrecord"              : EditChangesRecord
-            case "editchangesshow"                : EditChangesShow
-            case "editchangesprotecttrace"        : EditChangesProtectTrace
-            case "editchangescomment"             : EditChangesComment
-
-            case "editpaste"                      : EditPaste
-            case "editcopy"                       : EditCopy
-            case "editcut"                        : EditCut
-            case "editselectall"                  : EditSelectAll
-            case "editselectallmath"              : EditSelectAllMath
-            case "editselectionmodeblock"         : EditSelectionModeBlock
-            case "editselectionmodestandard"      : EditSelectionModeStandard
-            case "editdeletecontents"             : EditDeleteContents
-            case "editundo"                       : EditUndo
-            case "editredo"                       : EditRedo
-            case "editrepeat"                     : EditRepeat
-            case "editpastespecial"               : EditPasteSpecial
-            case "editpastespecialwriter"         : EditPasteSpecialWriter
-            case "editsearchandreplace"           : EditSearchAndReplace
-            case "editduplicate"                  : EditDuplicate
-            case "editgluepoints"                 : EditGluePoints
-            case "editdeleteslide"                : EditDeleteSlide
-            case "editobjectproperties"           : EditObjectProperties
-            case "editobjectedit"                 : EditObjectEdit
-            case "editobjectsavecopyas"           : EditObjectSaveCopyAs
-            
-            case "formatcharttype"                : FormatChartType
-            case "formatcontrol"                  : FormatControl
-            case "formateditpoints"               : FormatEditPoints
-            case "formatsections"                 : FormatSections
-            case "formatchangecaseupper"          : FormatChangeCaseUpper
-            case "formatchangecaselower"          : FormatChangeCaseLower
-            case "formatarea"                     : FormatArea
-            case "formatarrangebringtofrontcalc"  : FormatArrangeBringToFrontCalc
-            case "formatflipvertically"           : FormatFlipVertically
-            case "formatfliphorizontally"         : FormatFlipHorizontally
-            case "formatline"                     : FormatLine
-            case "formatpositionandsize"          : FormatPositionAndSize
-            case "formatfontwork"                 : FormatFontwork
-            case "formatparagraph"                : FormatParagraph
-            case "formatstylebold"                : FormatStyleBold
-            case "formatungroupdraw"              : FormatUngroupDraw
-            case "formatexitgroupdraw"            : FormatExitGroupDraw
-            case "formatgroupgroup"               : FormatGroupGroup
-            case "formatgroupeditgroupcalc"       : FormatGroupEditGroupCalc
-            case "formatalignmentlefttext"        : FormatAlignmentLeftText
-            case "formatgraphics"                 : FormatGraphics
-            case "formatanchortopage"             : FormatAnchorToPage
-            case "formatwrapcontour"              : FormatWrapContour
-            case "formatwrapeditcontour"          : FormatWrapEditContour
-            case "formatpagewriter"               : FormatPageWriter
-            
-            case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
-            case "insertobjectchart"              : InsertObjectChart
-            case "inserttablewriter"              : InsertTableWriter
-            case "insertobjectformulawriter"      : InsertObjectFormulaWriter
-            case "insertfloatingframe"            : InsertFloatingFrame
-            
-            case "contextpositionandsize"         : ContextPositionAndSize
-            
-            case "toolslanguagehyphenate"         : ToolsLanguageHyphenate
-            case "toolsupdateallindexes"          : ToolsUpdateAllIndexes
-            case "toolsupdatefields"              : ToolsUpdateFields
-            case "toolsupdatelinks"               : ToolsUpdateLinks
-            case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
-            
-            ' This is the property browser in the BASIC IDE
-            case "contextproperties"              : ContextProperties
-            
-            case else : warnlog( "Unknown slot called: " & cSlot )
-            end select
-            
-            exit for
-        catch
-            wait( DELAY )
-            iTime = iWait * DELAY
-        endcatch
-    next iWait
-    
-    ' Timeout is -1
-    if ( iTime = MAX_WAIT * DELAY ) then
-        iTime = -1 
-    endif
-    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
-    hUseAsyncSlot() = iTime
-    
-    
-end function
-
-'*******************************************************************************
-
-function hClickButton( oButton as object ) as integer
-
-    dim iWait as integer
-    dim iTime as integer : iTime = 0
-    const MAX_WAIT = 50
-    const CFN = "global::tools::includes::required::hClickButton():"
-
-    if ( VERBOSE ) then printlog( CFN & "Click button: " & oButton.name() )    
-    WaitSlot()
-    for iWait = 1 to MAX_WAIT
-        try
-            if ( oButton.exists() ) then
-                if ( VERBOSE ) then printlog( CFN & "Button exists" )
-                if ( oButton.isEnabled() ) then
-                    if ( VERBOSE ) then printlog( "Button is enabled" )
-                    oButton.click()
-                endif
-            endif
-            exit for
-        catch
-            wait( 100 )
-            iTime = iWait * 100
-        endcatch
-    next iWait
-    if ( iTime = 5000 ) then
-        iTime = -1 
-    endif
-    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
-    hClickButton() = iTime
-    
-end function
-
-

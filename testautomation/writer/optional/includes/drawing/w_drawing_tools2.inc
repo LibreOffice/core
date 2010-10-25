@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test of the drawing tools - group
 '*
@@ -610,7 +610,7 @@ testcase  tGroup_12
     PrintLog "- Edit object group  via Menu Format/Group/Edit Group"
 
     sDocument = ConvertPath ( gOfficePath +"user\work\tGroup_12.odt")
-    if hFileExists ( sDocument ) then app.kill ( sDocument )
+    if FileExists ( sDocument ) then app.kill ( sDocument )
     
     Call hNewDocument
     

@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.coms
+'* owner : helge.delfs@oracle.coms
 '*
 '* short description : HTML-Options-Test
 '*

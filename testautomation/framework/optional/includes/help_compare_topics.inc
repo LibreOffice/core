@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : 
 '*
@@ -46,7 +46,7 @@ testcase tCompareHelpTopics()
     '       handle this. If problems occur, this shuld be the first place to
     '       look.
 
-    const MAX_ENTRIES = 30000
+    const MAX_ENTRIES = 25000
 
     ' variables related to filenames
     dim sFileOut as string
@@ -59,23 +59,23 @@ testcase tCompareHelpTopics()
     ' some increment operators and temporary variables
     dim iCurrentItem as integer
     dim sCurrentItem as string
+    dim sProductName as string
     dim iCurrentApp as integer
     dim iAboutItems as integer
     dim cAboutItem as string
     dim irc as integer
-    dim brc as boolean
     dim bNextItem as boolean
     
     ' define input and output paths, presetting variables
-    sFileName = gProductName & "_help_topics_" & gIsoLang & ".txt"
+    sProductName = hStringReplaceChar( gProductName, " ", "_" )
+    sFileName = sProductName & "_help_topics_" & gIsoLang & ".txt"
     sFileOut = hGetWorkFile( sFilename )
     sFileIn  = gTesttoolPath & "framework\optional\input\help_browser\"  
     sFileIn  = convertpath( sFileIn & sFileName )
     
     aTopicsFromUI( 0 ) = "0"    
     
-    brc = hOpenHelp()
-    if ( not brc ) then
+    if ( not hOpenHelp() ) then
         warnlog( "Help not open, aborting test" )
         goto endsub
     endif
@@ -120,9 +120,7 @@ testcase tCompareHelpTopics()
     printlog( "Beginning comparision. This will take a while ..." )
     
     irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )    
-    if ( irc <> 0 ) then
-	    warnlog( "The list has changed, please review" )
-    endif
+    hListResultEvaluation( irc , 0 )
     
 endcase
 

@@ -25,18 +25,26 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress Required Test Library (11)
 '*
 '\*****************************************************************
 
+sub m_011_
+
+    call tiDiaLeiste()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiDiaLeiste
-    
+
     ' only in IMPRESS
     dim sTemp as string
     Dim i,x as integer
-    
+
     printlog " open application "
     Call hNewDocument
     sleep 1
@@ -46,7 +54,7 @@ testcase tiDiaLeiste
     MitAktuellerSeite.Uncheck
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    
+
     printlog " insert a graphic: global\input\graf_inp\desp.bmp) "
     Printlog "- Insert graphic from file so there is something for the slide mode"
     hGrafikEinfuegen ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
@@ -66,19 +74,19 @@ testcase tiDiaLeiste
     Printlog "- Test blend effect"
     Kontext "SlideViewObjectbar"  ' CORRECT
     sleep 5
-    
+
     if Ueberblendeffekt.GetItemCount <> 57 then warnlog "these are not 57: " + Ueberblendeffekt.GetItemCount
     printlog " select last entry 'Automatic (random)' in listbox 'Slide Effects' on object toolbar "
     Ueberblendeffekt.Select (Ueberblendeffekt.GetItemCount)
     Printlog " select last effect (random effect): " + Ueberblendeffekt.GetSelText
-    
+
     '   Printlog Geschwindigkeit.GetRT  ' 341 listbox
     '   Printlog Diawechsel.GetRT       ' 341 listbox
     '   Printlog Zeit.GetRT             ' 353 spinfield
     '   Printlog DiasProReihe.GetRT     ' 353 spinfield
     '   Printlog PraesentationMitZeitnahme.GetRT doesn't work, but behave as button
     '   Printlog DiaAnzeigen.GetRT               doesn't work, but behave as button
-    
+
     '-------------------------------- Geschwindigkeit -----------------------------------------
     Printlog "- Check different speed settings"
     Kontext "SlideViewObjectbar"
@@ -116,21 +124,21 @@ testcase tiDiaLeiste
     sleep 2
     Kontext "DocumentPresentation"
     if DocumentPresentation.exists (5) then
-    sleep 5
-    printlog " wait some seconds and click with mouse "
-    DocumentPresentation.MouseDown 50,50
-    DocumentPresentation.MouseUp 50,50
-    sleep 2
-    printlog " wait some seconds and click with mouse "
-    DocumentPresentation.MouseDown 50,50
-    DocumentPresentation.MouseUp 50,50
-    sleep 3
+        sleep 5
+        printlog " wait some seconds and click with mouse "
+        DocumentPresentation.MouseDown 50,50
+        DocumentPresentation.MouseUp 50,50
+        sleep 2
+        printlog " wait some seconds and click with mouse "
+        DocumentPresentation.MouseDown 50,50
+        DocumentPresentation.MouseUp 50,50
+        sleep 3
     else
-    warnlog "Didn't switch into presentation mode :-("
+        warnlog "Didn't switch into presentation mode :-("
     endif
     Kontext "DocumentPresentation"
     if DocumentPresentation.exists (5) then
-    warnlog "We are still in presentation mode :-( WHY!!!!???"
+        warnlog "We are still in presentation mode :-( WHY!!!!???"
     endif
     '------------------------------- Dia anzeigen ja/nein --------------------------------------
     Printlog "- Show slide yes/no"
@@ -168,5 +176,5 @@ testcase tiDiaLeiste
     printlog " close application "
     Call hCloseDocument
     sleep 2
- 
+
 endcase 'tiDiaLeiste

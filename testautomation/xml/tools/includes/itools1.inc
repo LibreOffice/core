@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Internet- and XML Tools
 '*

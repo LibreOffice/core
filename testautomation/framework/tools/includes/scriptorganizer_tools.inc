@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Test scripting-organizers / document-attached scripts
 '*
@@ -55,28 +55,12 @@ function hCreateScriptingObject( cName as string ) as boolean
     
 
     const CFN = "hNewScriptingObject::"
-    dim brc as boolean
 
-    '///+<li>Verify the function parameter</li>
-    if ( cName = "" ) then
-        warnlog( CFN & "Empty Name for scripting object passed to function" )
-        hCreateScriptingObject() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that the &quot;Create...&quot; button exists</li>
-    Kontext "ScriptOrganizer"
-    if ( not PBCreate.exists( 2 ) ) then
-        warnlog( CFN & "Create-button does not exist" )
-        hCreateScriptingObject() = false
-        exit function        
-    endif    
-    
     '///+<li>Verify that the &quot;Create...&quot; button is enabled</li>
     if ( PBCreate.isEnabled() ) then
              
         '///+<li>Click &quot;Create...&quot; to open the naming dialog</li> 
-        PBCreate.click()
+        hClickButton( PBCreate )
         
         '///+<li>Name the new script</li>
         Kontext "ScriptNameDlg"
@@ -84,23 +68,22 @@ function hCreateScriptingObject( cName as string ) as boolean
             
             EFObjectName.setText( cName )
             ScriptNameDlg.OK()  
-            brc = true
+            hCreateScriptingObject() = true
             
         endif
 
     else
         printlog( CFN & "Button is disabled" )
-        brc = false
+        hCreateScriptingObject() = false
     endif
     
     '///+<li>Verify that we are back on the script organizer</li>
     kontext "ScriptOrganizer"
     if ( not ScriptOrganizer.exists( 2 ) ) then
         warnlog( CFN & "Could not return to ScriptOrganizer" )
-        brc = false
+        hCreateScriptingObject() = false
     endif    
     
-   hCreateScriptingObject() = brc
    '///</ul>
 
 end function
@@ -129,63 +112,35 @@ function hRenameScriptingObject( cName as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
 
-    use "global\tools\includes\optional\t_stringtools.inc"    
-
     const CFN = "hRenameScriptingObject::"
-    dim cMessage as string
-    dim brc as boolean
+    hRenameScriptingObject() = true
     
-    brc = true
-    
-    '///+<li>Verify the function parameter</li>
-    if ( cName = "" ) then
-        warnlog( CFN & "Empty Name for scripting object passed to function" )
-        hRenameScriptingObject() = false
-        exit function
-    endif    
-    
-    '///+<li>Verify that the &quot;Rename...&quot; button exists</li>
-    Kontext "ScriptOrganizer"
-    if ( not PBRename.exists( 2 ) ) then
-        warnlog( CFN & "Rename button does not exist, aborting" )
-        hRenameScriptingObject() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that the &quot;Rename...&quot; button is enabled</li>
-    if ( PBRename.isEnabled() ) then
-    
-        '///+<li>Click &quot;Rename...&quot; to open the renaming dialog</li>
-        PBRename.click()
-        
-        '///+<li>Name the new script</li>
-        Kontext "ScriptNameDlg"
-        if ( ScriptNameDlg.exists( 2 ) ) then
-        
-            EFObjectName.setText( cName )
-            ScriptNameDlg.OK()
-            
-            '///+<li>Test for any messagebox, try to close it with OK</li>
-            kontext "active"
-            if ( active.exists( 1 ) ) then
-                cMessage = hRemoveLineBreaks( active.getText )
-                printlog( CFN & cMessage )
-                brc = false
-                active.OK()
-            endif
-            
+    '///+<li>Click &quot;Rename...&quot; to open the renaming dialog</li>
+    hClickButton( PBRename )
+
+    '///+<li>Name the new script</li>
+    Kontext "ScriptNameDlg"
+    if ( ScriptNameDlg.exists( 2 ) ) then
+
+        EFObjectName.setText( cName )
+        hCloseDialog( ScriptNameDlg, "ok" )
+
+        '///+<li>Test for any messagebox, try to close it with OK</li>
+        kontext "active"
+        if ( active.exists( 1 ) ) then
+            printlog( CFN & active.getText() )
+            hRenameScriptingObject() = false
+            active.OK()
         endif
-        
+
     endif
     
     '///+<li>Verify that we are back on the script organizer</li>
     kontext "ScriptOrganizer"
     if ( not ScriptOrganizer.exists( 2 ) ) then
         warnlog( CFN & "Could not return to ScriptOrganizer" )
-        brc = false
+        hRenameScriptingObject() = false
     endif
-    
-    hRenameScriptingObject() = brc
     '///</ul>
     
 end function
@@ -220,11 +175,7 @@ function hDeleteScript( cName as string , bSuccess as boolean ) as boolean
     '///<u>Description</u>:
     '///<ul>
 
-    use "global\tools\includes\optional\t_stringtools.inc"
-    
     const CFN = "hDeleteScript::"
-    dim iPos as integer
-    dim cMessage as string
     
     '///+<li>Test for the possible conditions:</li>
     '///<ol>
@@ -232,19 +183,17 @@ function hDeleteScript( cName as string , bSuccess as boolean ) as boolean
     kontext "ScriptOrganizer"
     if ( PBDelete.isEnabled() and bSuccess ) then
     
-        PBDelete.click()
+        hClickButton( PBDelete )
         kontext "active"
-        cMessage = active.getText()
-        cMessage = hRemoveLineBreaks( cMessage )
-        printlog( CFN & cMessage ) 
-        active.yes()
+        if ( Active.exists( 1 ) ) then
+            printlog( CFN & active.getText() )
+            active.yes()
+        endif
 
         kontext "active"
         if ( active.exists( 1 ) ) then
-            cMessage = active.getText()
-            cMessage = hRemoveLineBreaks( cMessage )
             qaerrorlog( CFN & "Message: Failed to delete object: " & cName )
-            printlog( CFN & cMessage )
+            printlog( CFN & active.getText() )
             active.ok()
         endif
         hDeleteScript() = true
@@ -257,24 +206,20 @@ function hDeleteScript( cName as string , bSuccess as boolean ) as boolean
         
     '///+<li>Delete is enabled but should not be (failure)</li>
     elseif ( PBDelete.isEnabled() and ( not bSuccess ) ) then
-    
-        PBDelete.click()
+
+        hClickButton( PBDelete )
         
         kontext "active"
         if ( active.exists( 1 ) ) then
-            cMessage = active.getText()
-            cMessage = hRemoveLineBreaks( cMessage )
             printlog( CFN & "Delete-Button enabled for non deletable object" )
-            printlog( CFN & cMessage )
+            printlog( CFN & active.getText() )
             active.yes()
         endif
         
         kontext "active"
         if ( active.exists( 2 ) ) then
-            cMessage = active.getText()
-            cMessage = hRemoveLineBreaks( cMessage )
             printlog( CFN & "Message: Failed to delete object" )
-            printlog( CFN & cMessage )
+            printlog( CFN & active.getText() )
             active.ok()
         endif
         hDeleteScript() = false
@@ -335,85 +280,12 @@ function hOpenScriptOrganizer( iDialog as integer ) as boolean
     kontext "ScriptOrganizer"
     if ( ScriptOrganizer.exists( 5 ) ) then
         hOpenScriptOrganizer() = true
-        printlog( CFN & "Dialog is open" )
+        printlog( "Script Organizer is open" )
     else
-        hopenScriptOrganizer() = false
+        hOpenScriptOrganizer() = false
         warnlog( CFN & "Slot failed, dialog not open" )
     endif
 
-    '///</ul>
-
-end function
-    
-'*******************************************************************************
-
-function hCloseScriptOrganizer() as boolean
-
-    '///<h3>Close a Script Organizer (Cancel)</h3>
-    '///<i>Starting point: Any open Script Organizer</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the Script Organizer was closed</li>
-    '///+<li>FALSE if the Script Organizer is still open</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
-    const CFN = "hCloseScriptOrganizer::" 
-    
-    hCloseScriptOrganizer() = false
-    
-    '///+<li>Try to close the script </li>
-    kontext "ScriptOrganizer"
-    if ( ScriptOrganizer.exists( 5 ) ) then
-        ScriptOrganizer.cancel()
-        hCloseScriptOrganizer() = true
-    endif
-        
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
-
-function hOpenRunMacroDialog() as boolean
-
-    '///<h3>Open the &quot;Run Macro&quot; dialog</h3>
-    '///<i>Starting point: Any document</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition</li>
-    '///<ul>
-    '///+<li>TRUE if dialog is open</li>
-    '///+<li>FALSE if the Script Selector does not exist</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
-    '///+<li>Execute the ToolsMacrosRunMacro slot</li>
-    ToolsMacrosRunMacro
-
-    '///+<li>Verify that the dialog is present</li>
-    kontext "ScriptSelector"
-    if ( ScriptSelector.exists( 2 ) ) then
-        hOpenRunMacroDialog() = true
-    else
-        hOpenRunMacroDialog() = false
-    endif
     '///</ul>
 
 end function

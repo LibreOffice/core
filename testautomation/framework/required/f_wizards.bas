@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Category 0 tests for all included wizards
 '*
@@ -75,9 +75,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_accels.inc"
 
     use "framework\tools\includes\wizards.inc"
-    use "framework\tools\includes\init_tools.inc"
     use "framework\tools\includes\template_tools.inc"
-    use "framework\tools\includes\performance.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test the functionality of Page Formatting / Page Styles - 4
 '*
@@ -58,32 +58,32 @@ testcase tFormatPage_48
             printlog "No test with asian lovale, because checkbox 'Asian language support' is disabled by default!"
             goto endsub
     end select
-    
+
     sTestText1    = "This is the test!"
     sTestText2    = "That isn't a test!"
-    
+
     PrintLog "- Text flow direction test Right to Left (Vertical) - Paragraph"
     '/// Text flow direction test Right to Left (Vertical) - Paragraph
-    
+
     Call hNewDocument
-    
+
     '/// Set Asian language support enabled
     Call ActiveDeactivateCTLSupport(FALSE)
     Call ActiveDeactivateAsianSupport(TRUE)
-    
+
     '/// Input some test words
     Call wTypeKeys sTestText1
     Call wTypeKeys "<Return>"
     Call wTypeKeys sTestText2
     Sleep 1
-    
+
     '/// formatPage , tabpage page, select right to left (vertical)
     fFormatPageWriter("TabSeite")
     Textfluss.Select 2
     Sleep 1
     TabSeite.OK
     Sleep 2
-    
+
     '/// Check if the direction of the test words is changed
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Down>", 4
@@ -92,7 +92,7 @@ testcase tFormatPage_48
     if GetClipboardText <> "This" then
         Warnlog "Something wrong in first word - get " &GetClipboardText
     end if
-    
+
     Call wTypeKeys "<Home><Left>"
     Call wTypeKeys "<Shift Down>"  , 4
     Sleep 1
@@ -100,11 +100,11 @@ testcase tFormatPage_48
     if GetClipboardText <> "That" then
         Warnlog "Something wrong in second word - get " &GetClipboardText
     end if
-    
+
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -116,32 +116,32 @@ testcase tFormatPage_49
     Dim sTestText as String
     Dim RecheckAsianSupport as boolean
     RecheckAsianSupport = gAsianSup
-    
+
     sTestText     = "This is the test!"
-       
+
     PrintLog "- Text flow direction test Right to Left (Vertical) - Section"
     '/// Text flow direction test Right to Left (Vertical) - Section
-    
+
     Call hNewDocument
-    
+
     '/// Set Asian language support enabled
     Call ActiveDeactivateAsianSupport(TRUE)
-    
+
     '/// Insert a section
     fInsertSection("TabBereiche")
     TabBereiche.OK
-    
+
     '/// insert something in the section
     Call wTypeKeys "<Up>"
     Call wTypeKeys sTestText
-    
+
     '/// formatPage , tabpage page, select right to left (vertical)
     fFormatPageWriter("TabSeite")
     Textfluss.Select 2
     Sleep 1
     TabSeite.OK
     Sleep 2
-    
+
     '/// Check if the direction of the test words is changed
     Call wTypeKeys "<Home>"
     Call wTypeKeys "<Shift Down>" , 4
@@ -151,7 +151,7 @@ testcase tFormatPage_49
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -165,12 +165,12 @@ testcase tFormatPage_50
 
     PrintLog "- Text flow direction test Right to Left (Vertical) - Footnotes"
     '/// Text flow direction test Right to Left (Vertical) - Footnotes
-    
+
     Call hNewDocument
-    
+
     '/// Set Asian language support enabled
     Call ActiveDeactivateAsianSupport(TRUE)
-    
+
     '/// Insert a footnotes
     InsertFootnote
     Kontext "FussnoteEinfuegen"
@@ -179,17 +179,17 @@ testcase tFormatPage_50
     Sleep 1
     FussnoteEinfuegen.OK
     Sleep 1
-    
+
     Call wTypeKeys "<PageUp>"
     Sleep 1
-    
+
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
     Textfluss.Select 2
     Sleep 1
     TabSeite.OK
     Sleep 2
-    
+
     '/// Check if the direction of the footnote is changed
     Call wTypeKeys "<Down>"
     try
@@ -199,7 +199,7 @@ testcase tFormatPage_50
         Warnlog "Should NOT execute edit/footnote  when focus is under the footnote"
     catch
     endcatch
-    
+
     Call wTypeKeys "<Up>"
     try
         EditFootnote
@@ -212,7 +212,7 @@ testcase tFormatPage_50
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -223,15 +223,15 @@ testcase tFormatPage_51
 
     Dim RecheckAsianSupport as boolean
     RecheckAsianSupport = gAsianSup
-    
+
     PrintLog "- Text flow direction test Right to Left (Vertical) - Endnotes"
     '/// Text flow direction test Right to Left (Vertical) - Endnotes
-    
+
     Call hNewDocument
-    
+
     '/// Set Asian language support enabled
     Call ActiveDeactivateAsianSupport(TRUE)
-    
+
     '/// Insert a endnotes
     InsertFootnote
     Kontext "FussnoteEinfuegen"
@@ -240,17 +240,17 @@ testcase tFormatPage_51
     Sleep 1
     FussnoteEinfuegen.OK
     Sleep 1
-    
+
     Call wTypeKeys "<PageUp>"
     Sleep 1
-    
+
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
     Textfluss.Select 2
     Sleep 1
     TabSeite.OK
     Sleep 2
-    
+
     '/// Check if the direction of the endnote is changed
     Call wTypeKeys "<Down>"
     try
@@ -260,7 +260,7 @@ testcase tFormatPage_51
         Warnlog "Should NOT execute edit/footnote when focus is under the endnote"
     catch
     endcatch
-    
+
     Call wTypeKeys "<Up>"
     try
         EditFootnote
@@ -273,7 +273,7 @@ testcase tFormatPage_51
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -285,20 +285,20 @@ testcase tFormatPage_52
     Dim sTest1 as String  ,  sTest2 as String  ,  sTest3 as String
     Dim RecheckAsianSupport as boolean
     RecheckAsianSupport = gAsianSup
-    
+
     sTest1 = "A1" : sTest2 = "B1" : sTest3 = "A2"
-    
+
     PrintLog "- Text flow direction test Right to Left (Vertical) - Table"
     '/// Text flow direction test Right to Left (Vertical) - Table
-    
+
     Call hNewDocument
-    
+
     '/// Set Asian language support enabled
     Call ActiveDeactivateAsianSupport(TRUE)
-    
+
     '/// Insert a table
     Call hTabelleEinfuegen
-    
+
     '/// + input some string in the table , like
     '/// a1  b1
     '/// a2
@@ -312,14 +312,14 @@ testcase tFormatPage_52
     wait 500
     Call wTypeKeys sTest3
     Call wTypeKeys "<Up><Home>"     'so far, the focus should be in front of A1
-    
+
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
     Textfluss.Select 2
     Sleep 1
     TabSeite.OK
     Sleep 2
-    
+
     '/// Check if the direction of the table is changed
     Call wTypeKeys "<Shift Down>" , 2
     Sleep 1
@@ -327,7 +327,7 @@ testcase tFormatPage_52
     if GetClipboardText <> sTest1 then
         Warnlog "1st word in table is wrong!"
     end if
-    
+
     Call wTypeKeys "<Down>"
     Call wTypeKeys "<Shift Down>" , 2
     Sleep 1
@@ -335,7 +335,7 @@ testcase tFormatPage_52
     if GetClipboardText <> sTest2 then
         Warnlog "2nd word in table is wrong!"
     end if
-    
+
     Call wTypeKeys "<Left><Up>"
     Call wTypeKeys "<Shift Home>"
     Sleep 1
@@ -347,7 +347,7 @@ testcase tFormatPage_52
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -355,36 +355,36 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_53
-    
+
     Dim sTest as String
     Dim sTestFile as String
     Dim RecheckAsianSupport as boolean
     RecheckAsianSupport = gAsianSup
-    
+
     sTest         = "Test"
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testColumnVertical.sxw")
-    
+
     PrintLog "- Text flow direction test Right to Left (Vertical) - Column"
     '/// Text flow direction test Right to Left (Vertical) - Column
-    
+
     Call hNewDocument
-    
+
     '/// Set Asian language support enabled
     Call ActiveDeactivateAsianSupport(TRUE)
-    
+
     '/// Open test file testColumnVertical.sxw
     '/// + There are 8 columns in the page , and a test
     '/// + word is in 3rd column
     Call hFileOpen(sTestFile)
     Call sMakeReadOnlyDocumentEditable
-    
+
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
     Textfluss.Select 2
     Sleep 1
     TabSeite.OK
     Sleep 2
-    
+
     '/// Check if the direction of the column is changed
     Kontext
     EditSearchAndReplace
@@ -395,20 +395,20 @@ testcase tFormatPage_53
     Sleep 1
     FindAndReplace.Close
     Sleep 1
-    
+
     Call wTypeKeys "<Down>"
     Sleep 1
-    
+
     Call wTypeKeys "<Shift Up>" , 4
     EditCopy
     if GetClipboardText <> sTest then
         Warnlog "the test word is wrong!"
     end if
-    
+
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
-    
+
     printlog "  Close active document "
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -626,6 +626,7 @@ testcase tFormatPage_58
         case 39   : sDefaultShadowColor = "Grigio"
         case 46   : sDefaultShadowColor = "Grått"
         case 49   : sDefaultShadowColor = "Grau"
+        case 50   : sDefaultShadowColor = "Siva"
         case 55   : sDefaultShadowColor = "Cinza"
         case 81   : sDefaultShadowColor = "灰色"
         case 82   : sDefaultShadowColor = "회색"
@@ -749,7 +750,7 @@ testcase tFormatPage_60
     Oben.SetText     sSpacingToContentsU
     Unten.SetText    sSpacingToContentsB
     StilFarbe.Select iBorderColor            'set border color
-    
+
     Position.TypeKeys "<Right>" , 4
     Sleep 2
     Groesse.SetText      sShadowDistance

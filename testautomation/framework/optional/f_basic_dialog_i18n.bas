@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Testing the dialog i18n feature of the BASIC IDE
 '*
@@ -56,6 +56,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_control_objects.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
+    use "global\tools\includes\optional\t_treelist_tools.inc"
     
     use "framework\tools\includes\formcontrols.inc"
     use "framework\tools\includes\pbrowser_tools.inc"

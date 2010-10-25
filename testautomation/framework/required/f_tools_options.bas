@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Verify that the applications appear in tools/options
 '*
@@ -34,9 +34,11 @@
 sub main
 
     use "framework\required\includes\tools_options.inc"
+    use "global\required\includes\g_option_application.inc"
 
     call hStatusIn( "framework" , "f_tools_options.bas" )
     call tUpdtOptionItems()
+    call tToolsOptionsTestFirst() ' Global test that should be called from within the application modules really.
     call hStatusOut()
 
 end sub

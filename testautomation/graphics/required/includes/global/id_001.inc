@@ -25,26 +25,39 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiFileSaveAs
-' #1 tiFileReload (sFileIn as string)
-' #1 tiFileVersion (sFileIn as string)
-' #1 tiFilePassword
-' #1 tiFileTemplates
-' #1 tmFileNewFromTemplate
-' #1 tmFileOpen
-' #1 tmFileClose
-' #1 tmFileSave
-' #1 tmFileSaveAs
-' #1 tmFileSaveAll
-' #1 tmFileProperties
-' #1 tmFilePrinterSetting
-'\**********************************************************************************
+'\******************************************************************************
+sub id_001
 
+    printLog Chr(13) + "---------    id_001    ----------"
+
+    qaerrorlog "#74988# tiFilePassword outcommented due to bug. -FHA"
+    call tiFilePassword
+    call tiFileSaveAs
+    call tiFileReload
+    call tiFileVersion
+    printlog " File->Send not possible to test, because extrnal prg get's called!"
+    call tiFileTemplates
+    '   Call tiFileNew instead i call:
+    call tmFileNewFromTemplate
+    call tmFileOpen
+    call tmFileClose
+    call tmFileSave
+    call tmFileSaveAs
+    call tmFileExit
+
+    call tmFileSaveAll
+    call tmFileProperties
+    call tdFileExport
+    call tmFilePrinterSetting
+    ' special cases
+    '   Call AutoPilot      'inc\desktop\autopilo.inc
+    call tmFileExit ' don't test because unpredictable behaviour
+end sub
+'------------------------------------------------------------------------------
 testcase tiFileSaveAs
 
     dim sFileName as string ' test document & new created doc

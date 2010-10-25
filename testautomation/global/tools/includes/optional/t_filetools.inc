@@ -25,13 +25,11 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Functions that work with files like deleting, loading...
 '*
 '\******************************************************************************
-
-private const VERBOSE = false
 
 function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
 
@@ -74,7 +72,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
     dim cMessage as string
     dim bSkip as boolean
 
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     ' not good but apparently required - else hDestroyDocument will handle the
     ' dialogs and warn about them.
@@ -169,7 +167,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
         printlog( CFN & "Exit: The test closed more dialogs than expected" )
         hHandleActivesOnLoad() = false
     else
-        if ( VERBOSE ) then printlog( CFN & "Exit" )
+        if ( GVERBOSE ) then printlog( CFN & "Exit" )
     endif
        
 end function       
@@ -208,7 +206,7 @@ function hHandleInitialDialogs() as integer
     dim incident as integer
         incident = 0
         
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
     try
 
         '///+<li>Test for UseOfThisTemplate-dialog</li>
@@ -254,7 +252,7 @@ function hHandleInitialDialogs() as integer
     endcatch
          
     hHandleInitialDialogs() = incident
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     
     '///</ul>
 
@@ -325,7 +323,7 @@ function hGetWorkPath() as string
     sPath = convertpath( sPath ) 
     
     '///+<li>Print info to the log and return the path</li>
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         if ( bPathIsFromAPI ) then
         	printlog( CFN & "(From API): " & sPath )
         else

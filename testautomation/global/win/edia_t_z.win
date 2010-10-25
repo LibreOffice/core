@@ -1,3 +1,5 @@
+*TabColor FID_TAB_SET_TAB_BG_COLOR
+
 *TableDesignTable HID_TABDESIGN_BACKGROUND
 TableWindow HID_CTL_TABLEEDIT
 Fieldname HID_TABDESIGN_NAMECELL
@@ -157,11 +159,6 @@ Preview HID_SC_ASCII_TABCTR
 *UnsatisfiedDependencies desktop:ModalDialog:RID_DLG_DEPENDENCIES
 UnsatisfiedDependencyList desktop:ListBox:RID_DLG_DEPENDENCIES:RID_DLG_DEPENDENCIES_LIST
 
-*WarningPrintOptions sd:ModalDialog:DLG_PRINT_WARNINGS
-FitPage sd:RadioButton:DLG_PRINT_WARNINGS:RBT_SCALE
-Posterize sd:RadioButton:DLG_PRINT_WARNINGS:RBT_POSTER
-TrimPage sd:RadioButton:DLG_PRINT_WARNINGS:RBT_CUT
-
 *WarningPrintTransparency sfx2:ModalDialog:RID_WARN_PRINTTRANSPARENCY
 NoButton sfx2:PushButton:RID_WARN_PRINTTRANSPARENCY:BTN_PRINTTRANS_NO
 DoNotShowAgain sfx2:CheckBox:RID_WARN_PRINTTRANSPARENCY:CBX_NOPRINTTRANSWARN
@@ -238,6 +235,11 @@ BackBtn HID_FIRSTSTART_PREV
 NextBtn HID_FIRSTSTART_NEXT
 OKBtn HID_FIRSTSTART_FINISH
 CancelBtn HID_FIRSTSTART_CANCEL
+
+*WMFOptions svtools:ModalDialog:DLG_EXPORT
+Exportwidth svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight svtools:MetricField:DLG_EXPORT:MF_SIZEY
 
 *XFormAddInstance HID_XFORMS_ADDINSTANCE_DLG
 InstanceName svx:Edit:RID_SVXDLG_ADD_INSTANCE:ED_INST_NAME

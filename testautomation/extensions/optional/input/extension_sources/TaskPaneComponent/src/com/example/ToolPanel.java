@@ -33,7 +33,7 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  *
- * @author frank.schoenheit@sun.com
+ * @author frank.schoenheit@oracle.com
  */
 public class ToolPanel implements XToolPanel
 {

@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test of autotext in writer
 '*
@@ -199,7 +199,7 @@ testcase tEditAutotext_1
             Warnlog "New autotext has not been found!"
             Autotext.Close
         else
-            Call wDocSetContext
+            hSetDocumentContext()
             Call wTypeKeys("<Shift Home>")
             EditCopy
             if GetClipboardtext <> "This becomes an autotext!" then
@@ -263,7 +263,7 @@ testcase tEditAutotext_2
     wait 500
     Kontext "Autotext"
     Autotext.Close
-    Call wDocSetContext
+    hSetDocumentContext()
     printlog " Insert some text and format text"
     Call wTypeKeys("This becomes an autotext!")
     ' Format word 'This'
@@ -392,7 +392,7 @@ testcase tEditAutotext_2
             Warnlog "New autotext has not been found!"
             Autotext.Close
         else
-            Call wDocSetContext
+            hSetDocumentContext()
             Call wTypeKeys("<Home><Up>" , 4)
             Call wTypeKeys("<Shift End>")
             EditCopy

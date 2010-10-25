@@ -25,60 +25,79 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : XML Tools
 '*
-'***************************************************************************************
-'*
-' #1 CreateWorkXMLExportDir
-' #1 hEnablePrettyPrinting
-'*
 '\***********************************************************************************
+
 sub CreateWorkXMLExportDir ( DirName as string )
-'/*** <i>CreateWorkXMLExportDir</i> creates in the StarOffice/work-
-'/*** +directory a directory. If the same name exists the content (files only)
-'/*** +will be deleted.
- Dim OutputPath as string
- Dim Isliste(200) as string
- Dim i, BornToKill
- printlog "Checking work-dir & creating '" & gOfficePath & ConvertPath(DirName) & "'."
-  if hDirectoryExists ( gOfficePath & ConvertPath(DirName) ) = TRUE then
-    OutputPath = gOfficePath & ConvertPath(DirName)
-    IsListe(0) = 0
-    GetFileList ( OutputPath ,  "*", IsListe() )
-    BornToKill = KillFileList ( IsListe() )
-     for i = 1 to BornToKill
-      warnlog IsListe(i) & " could not be deleted!"
-     next i
-   else
-    app.mkDir( gOfficePath & ConvertPath(DirName))
-  end if
+
+    '/*** <i>CreateWorkXMLExportDir</i> creates in the StarOffice/work-
+    '/*** +directory a directory. If the same name exists the content (files only)
+    '/*** +will be deleted.
+    
+    Dim OutputPath as string
+    Dim Isliste(200) as string
+    Dim iCurrentFile as integer
+    dim iFileCount as integer
+
+    printlog "Checking work-dir & creating '" & gOfficePath & ConvertPath(DirName) & "'."
+    if ( FileExists( gOfficePath & ConvertPath( DirName ) ) ) then
+
+        OutputPath = gOfficePath & ConvertPath( DirName )
+        IsListe(0) = 0
+        GetFileList ( OutputPath ,  "*", IsListe() )
+        iFileCount = KillFileList ( IsListe() )
+
+        for iCurrentFile = 1 to iFileCount
+            warnlog IsListe( iCurrentFile ) & " could not be deleted!"
+        next iCurrentFile
+
+    else
+
+        app.mkDir( gOfficePath & ConvertPath(DirName))
+
+    endif
+
 end sub
-'-------------------------------------------------------------------------
-sub hEnablePrettyPrinting (OPTIONAL A)
-'/// <i>hEnablePrettyPrinting</i> enables the pretty printing (=better
-'/// +formated view) in XML file export. It takes >10 percent more time
-'/// +to save files!!! OPTIONAL parameter is used to DISABLE it.
- ToolsOptions
- Kontext "ExtrasOptionenDLG"
-  call hToolsOptions("loadsave","general")
- Kontext "TabSpeichern"
-   if IsMissing(A) then
-    if NoPrettyPrinting.IsChecked = TRUE then
-     NoPrettyPrinting.Uncheck
-     sleep(1)
-     printlog "- XML pretty printing enabled ( xmltool1.inc )"
-    end if
-   else
-    if NoPrettyPrinting.IsChecked = FALSE then
-     NoPrettyPrinting.Check
-     sleep(1)
-     printlog "- XML pretty printing disabled ( xmltool1.inc )"
-    end if
-  end if
- Kontext "ExtrasOptionenDLG"
-  ExtrasOptionenDLG.OK
+
+'-------------------------------------------------------------------------------
+
+sub hEnablePrettyPrinting ( optional bDisablePrettyPrinting )
+
+    '/// <i>hEnablePrettyPrinting</i> enables the pretty printing (=better
+    '/// +formated view) in XML file export. It takes >10 percent more time
+    '/// +to save files!!! OPTIONAL parameter is used to DISABLE it.
+
+    ToolsOptions
+    Kontext "ExtrasOptionenDLG"
+    if ( ExtrasOptionenDlg.exists( 1 ) ) then
+
+        call hToolsOptions("loadsave","general")
+
+        Kontext "TabSpeichern"
+        if IsMissing( bDisablePrettyPrinting ) then
+
+            if ( NoPrettyPrinting.IsChecked() ) then
+                NoPrettyPrinting.Uncheck()
+                printlog "- XML pretty printing enabled ( xmltool1.inc )"
+            endif
+
+        else
+            
+            if ( Not NoPrettyPrinting.IsChecked() ) then
+                NoPrettyPrinting.Check()
+                printlog "- XML pretty printing disabled ( xmltool1.inc )"
+            endif
+
+        endif
+        Kontext "ExtrasOptionenDLG"
+        hCloseDialog( ExtrasOptionenDLG, "ok" )
+    else
+        warnlog( "hEnablePrettyPrinting(): Tools/Options dialog not open" )
+    endif
+
 end sub
-'-------------------------------------------------------------------------
+
 

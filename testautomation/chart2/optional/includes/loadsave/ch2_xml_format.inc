@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Verify the Chart2 XML file format
 '*
@@ -37,17 +37,17 @@
 '\***********************************************************************
 
 testcase tCompareXMLFormatCreate
-'///+ Test purpose: Verify within three characteristics that there is really a chart 
+    '///+ Test purpose: Verify within three characteristics that there is really a chart
 
     dim sOutputFile as string
     dim sUnpackedStorageDir as string
     dim sChartContentXML as string
-    
+
     gApplication   = "WRITER"
     sOutputFile = convertpath(gOfficepath & "user\work\Chart2_XML.odt")
     sUnpackedStorageDir = (gOfficePath & ConvertPath("user\work\chart2_XML2"))
     sChartContentXML = (gOfficePath & ConvertPath("user\work\chart2_XML2") & ConvertPath("\Object 1\content.xml"))
-    
+
     '/// File / New / Text
     printlog " Open new Writer document"
     call hNewDocument
@@ -62,25 +62,25 @@ testcase tCompareXMLFormatCreate
         goto endsub
     else
         printlog "File saved successfully."
-    endif    
+    endif
     '/// File / Close
     call hCloseDocument
     sleep(3)
-    printlog "File closed"    
-    '/// Uncompress with <i>unzip</i> or <i>jar</i> the 
+    printlog "File closed"
+    '/// Uncompress with <i>unzip</i> or <i>jar</i> the
     '///+ <i>gOfficepath</i>/user/work/verySimpleChart.ods document
     '///+ into <i>gOfficePath</i>/user/work/chart2_XML-directory
     printlog "Unpack storage of test document."
     UnpackStorage(sOutputFile, sUnpackedStorageDir)
-    printlog "Read the test documents DOM."    
+    printlog "Read the test documents DOM."
     '/// Load the XML file <i>gOfficePath</i>/user/work/chart2_XML/Object 1/content.xml
     '///+ in an XML editor
-    SAXReadFile(sChartContentXML)       
+    SAXReadFile(sChartContentXML)
     printlog "Set the DOM pointer to document root"
     printlog "|-/"
     SAXSeekElement("/")
     printlog "  |-office:document-content"
-    '/// Open the element 'office:document-content' 
+    '/// Open the element 'office:document-content'
     SAXSeekElement("office:document-content")
     printlog "    |-office:body"
     '/// Open the element 'office:body'
@@ -96,9 +96,9 @@ testcase tCompareXMLFormatCreate
     '///+ passed.
     if SAXGetAttributeValue("chart:class") = "chart:bar" then
         printlog "This is a bar chart as expected"
-    else 
+    else
         warnlog "This is no bar chart, it is a " & SaxGetAttributeValue("chart:class")
-    endif        
+    endif
     printlog "Seek for chart:plot-area"
     printlog "            |-chart:plot-area"
     '/// Open the element 'chart:plot-area'
@@ -107,9 +107,9 @@ testcase tCompareXMLFormatCreate
     '///+ the second characteristics validation has been passed.
     if SAXGetAttributeValue("chart:data-source-has-labels") = "both" then
         printlog "The label attribute for chart:plot-area is correct"
-    else 
+    else
         warnlog "The lable attribute is not both, it is " & SaxGetAttributeValue("chart:data-source-has-labels")
-    endif    
+    endif
     printlog "Seek for chart:series"
     printlog "               |-chart:series"
     '/// Open the element 'chart:series'
@@ -118,51 +118,51 @@ testcase tCompareXMLFormatCreate
     '///+ the hird characteristics validation has been passed.
     if SAXGetAttributeValue("chart:values-cell-range-address") = "local-table.$B$2:.$B$5" then
         printlog "The cell range for chart:series is correct"
-    else 
+    else
         warnlog "The cell range is not local-table.$B$2:.$B$5, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
     endif
-    ' DEBUG: printlog "I'm here: " & SAXGetElementName   
+    ' DEBUG: printlog "I'm here: " & SAXGetElementName
     '/// Close the XML editor.
-    SAXRelease    
+    SAXRelease
 endcase
 '
 '--------------------------------------------------------------------
 '
 testcase tCompareXMLFormatLoad
-'///+ Test purpose: Verify within three characteristics that there is really a chart 
+    '///+ Test purpose: Verify within three characteristics that there is really a chart
 
     dim sOutputFile as string
     dim sUnpackedStorageDir as string
     dim sChartContentXML as string
-    
+
     gApplication   = "CALC"
     sOutputFile = convertpath(gOfficepath & "user\work\verySimpleChart.ods")
     sUnpackedStorageDir = (gOfficePath & ConvertPath("user\work\chart2_XML"))
     sChartContentXML = (gOfficePath & ConvertPath("user\work\chart2_XML") & ConvertPath("\Object 1\content.xml"))
-    
+
     '/// File / Open / <i>gTestToolPath</i>/chart2/update/input/verySimpleChart.ods
-    '/// File / Save As / <i>gOfficepath</i>/user/work/verySimpleChart.ods 
+    '/// File / Save As / <i>gOfficepath</i>/user/work/verySimpleChart.ods
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document failed!"
         goto endsub
     else
         printlog "Test document has successfully been loaded."
     endif
-    
+
     '/// Select the chart object using the navigator
     printlog "Select chart using navigator"
     if fSelectFirstOLE = 0 then
         printlog "Chart is selected"
-    else 
+    else
         warnlog "Chart could not be selected"
         call hCloseDocument
         goto endsub
     endif
-    
+
     '/// Activate chart with Edit / Object / Edit
     printlog "Activate chart by Edit / Object / Edit"
     EditObjectEdit
-    
+
     'Save document localy
     Kontext "DocumentCalc"
     '/// Press twice <ESCAPE> to leave the chart object
@@ -178,25 +178,25 @@ testcase tCompareXMLFormatLoad
         goto endsub
     else
         printlog "File with very simple chart saved successfully."
-    endif    
+    endif
     '/// File / Close
     call hCloseDocument
     sleep(3)
-    printlog "File with very simple chart closed"    
-    '/// Uncompress with <i>unzip</i> or <i>jar</i> the 
+    printlog "File with very simple chart closed"
+    '/// Uncompress with <i>unzip</i> or <i>jar</i> the
     '///+ <i>gOfficepath</i>/user/work/verySimpleChart.ods document
     '///+ into <i>gOfficePath</i>/user/work/chart2_XML-directory
     printlog "Unpack storage of test document."
     UnpackStorage(sOutputFile, sUnpackedStorageDir)
-    printlog "Read the test documents DOM."    
+    printlog "Read the test documents DOM."
     '/// Load the XML file <i>gOfficePath</i>/user/work/chart2_XML/Object 1/content.xml
     '///+ in an XML editor
-    SAXReadFile(sChartContentXML)       
+    SAXReadFile(sChartContentXML)
     printlog "Set the DOM pointer to document root"
     printlog "|-/"
     SAXSeekElement("/")
     printlog "  |-office:document-content"
-    '/// Open the element 'office:document-content' 
+    '/// Open the element 'office:document-content'
     SAXSeekElement("office:document-content")
     printlog "    |-office:body"
     '/// Open the element 'office:body'
@@ -212,32 +212,32 @@ testcase tCompareXMLFormatLoad
     '///+ passed.
     if SAXGetAttributeValue("chart:class") = "chart:bar" then
         printlog "This is a bar chart as expected"
-    else 
+    else
         warnlog "This is no bar chart, it is a " & SaxGetAttributeValue("chart:class")
-    endif        
+    endif
     printlog "Seek for chart:plot-area"
     printlog "            |-chart:plot-area"
     '/// Open the element 'chart:plot-area'
     SAXSeekElement("chart:plot-area")
     '/// If the attribute value of 'table:cell-range-address' is 'Sheet1.A1:Sheet1.B2'
     '///+ the second characteristics validation has been passed.
-    if SAXGetAttributeValue("table:cell-range-address") = "Sheet1.A1:B2" then
+    if SAXGetAttributeValue("table:cell-range-address") = "Sheet1.A1:Sheet1.B2" then
         printlog "The cell range for chart:plot-area is correct"
-    else 
-        warnlog "#i100780#: The cell range is not Sheet1.A1:B2, it is " & SaxGetAttributeValue("table:cell-range-address")
-    endif    
+    else
+        warnlog "The cell range is not Sheet1.A1:Sheet1.B2, it is " & SaxGetAttributeValue("table:cell-range-address")
+    endif
     printlog "Seek for chart:series"
     printlog "               |-chart:series"
     '/// Open the element 'chart:series'
     SAXSeekElement("chart:series")
     '/// If the attribute valie of 'chart:values-cell-range-address' is Sheet1.A1:Sheet1.A2''
     '///+ the hird characteristics validation has been passed.
-    if SAXGetAttributeValue("chart:values-cell-range-address") = "Sheet1.A1:A2" then
+    if SAXGetAttributeValue("chart:values-cell-range-address") = "Sheet1.A1:Sheet1.A2" then
         printlog "The cell range for chart:series is correct"
-    else 
-        warnlog "#i100780#: The cell range is not Sheet1.A1:A2, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
+    else
+        warnlog "The cell range is not Sheet1.A1:Sheet1.A2, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
     endif
-    ' DEBUG: printlog "I'm here: " & SAXGetElementName   
+    ' DEBUG: printlog "I'm here: " & SAXGetElementName
     '/// Close the XML editor.
-    SAXRelease    
+    SAXRelease
 endcase

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : 
 '*
@@ -43,6 +43,7 @@ testcase tCompareHelpContent()
     dim sFileOut as string
     dim sFilein as string
     dim sFileName as string
+    dim sProductName as string : sProductName = hStringReplaceChar( gProductName, " ", "_" )
     
     ' the array that holds the names of the applications
     dim aTopicsFromUI( 1200 ) as string 
@@ -55,7 +56,8 @@ testcase tCompareHelpContent()
     dim brc as boolean
     
     ' define input and output paths, presetting variables
-    sFileName = gProductName & "_help_content_" & gIsoLang & ".txt"
+
+    sFileName = sProductName & "_help_content_" & gIsoLang & ".txt"
     sFileOut = hGetWorkFile( sFilename )
     sFileIn  = gTesttoolPath & "framework\optional\input\help_browser\"  
     sFileIn  = convertpath( sFileIn & sFileName )
@@ -85,9 +87,7 @@ testcase tCompareHelpContent()
     printlog( "" )
     printlog( "Beginning comparision" )
     irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )
-    if ( irc <> 0 ) then
-	warnlog( "Something went wrong, please review the log." )
-    endif
+    hListResultEvaluation( irc , 0 )
     
 endcase
 

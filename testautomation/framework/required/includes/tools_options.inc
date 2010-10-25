@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Verify that the applications appear in tools/options
 '*
@@ -59,24 +59,29 @@ testcase tUpdtOptionItems
         ToolsOptions
         
         kontext "ExtrasOptionenDlg"
-        
-        iAppItems = Optionsliste.getItemCount()
-        Optionsliste.typeKeys( "<HOME>" )
-        for iNodes = 1 to iAppItems
-            Optionsliste.typeKeys( "-" )
-            Optionsliste.typeKeys( "<DOWN>" )
-        next iNodes
-        
-        iAppItems = Optionsliste.getItemCount()
-        if ( iAppItems <> iAppCount( iDocType ) ) then
-            warnlog( "#i68068# The number of top nodes in Tools/Options is incorrect." )
-            printlog( "Found...: " & iAppItems )
-            printlog( "Expected: " & iAppCount( iDocType ) )
+        if ( ExtrasOptionenDlg.exists( 2 ) ) then
+
+            iAppItems = Optionsliste.getItemCount()
+            Optionsliste.typeKeys( "<HOME>" )
+            for iNodes = 1 to iAppItems
+                Optionsliste.typeKeys( "-" )
+                Optionsliste.typeKeys( "<DOWN>" )
+            next iNodes
+
+            iAppItems = Optionsliste.getItemCount()
+            if ( iAppItems <> iAppCount( iDocType ) ) then
+                warnlog( "#i68068# The number of top nodes in Tools/Options is incorrect." )
+                printlog( "Found...: " & iAppItems )
+                printlog( "Expected: " & iAppCount( iDocType ) )
+            else
+                printlog( "The number of top nodes is correct." )
+            endif
+
+            hCloseDialog( ExtrasOptionenDlg, "Cancel" )
         else
-            printlog( "The number of top nodes is correct." )
+            warnlog( "Dialog <Tools/Options> did not open " )
         endif
-        
-        ExtrasOptionenDlg.cancel()
+
         hDestroyDocument()
         
     next iDocType

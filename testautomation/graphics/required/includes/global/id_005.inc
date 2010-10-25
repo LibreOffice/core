@@ -25,31 +25,38 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiFormatDefault
-' #1 tiFormatLine
-' #1 tdFormatArea
-' #1 tiFormatText
-' #1 tiFormatPositionAndSize
-' #1 tiFormatCharacter
-' #1 tiFormatControlForm
-' #1 tiFormatDimensions
-' #1 tiFormatConnector
-' #1 tiFormat3D_Effects
-' #1 tiFormatNumberingBullets
-' #1 tiFormatCaseCharacter
-' #1 tiFormatParagraph
-' #1 tiFormatPage
-' #1 tiFormatStylesAndFormatting
-' #1 tiFormatStylesSlideDesign
-' #1 tiFormatFontwork
-' #1 tiFormatGroup
-' #1 hWalkTheStyles
-'\**********************************************************************************
+'\******************************************************************************
+sub id_005
+
+    printLog Chr(13) + "---------    id_005    ----------"
+
+    call tiFormatDefault
+    call tiFormatLine
+    call tdFormatArea
+    call tiFormatText
+    call tiFormatPositionAndSize
+    call tiFormatCharacter
+    call tiFormatControlForm
+    '       ^ Form
+    call tiFormatDimensions
+    call tiFormatConnector
+    call tiFormat3D_Effects
+    call tiFormatNumberingBullets
+    call tiFormatCaseCharacter
+    call tiFormatParagraph
+    call tiFormatPage
+    call tiFormatStylesAndFormatting
+    call tiFormatStylesSlideDesign
+    call tiFormatFontwork
+    call tiFormatGroup
+    printlog " format->group is also modify->group "
+    '        tiFormatLayer ' not in impress
+end sub
+'------------------------------------------------------------------------------
 testcase tiFormatDefault
 
     printlog "open application"
@@ -1005,8 +1012,8 @@ testcase tiFormatStylesSlideDesign
       DeleteUnusedBackgrounds.check
     printlog "click button 'Load...'"
       Laden.Click
-      kontext "Neu"
-    printlog "click button 'more'"
+      sleep (10)
+    Kontext "Neu"
          Zusaetze.click
          sleep 1
       kontext "Neu"

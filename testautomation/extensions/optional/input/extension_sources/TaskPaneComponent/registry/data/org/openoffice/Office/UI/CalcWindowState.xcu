@@ -4,7 +4,7 @@
     <node oor:name="States">
       <node oor:name="private:resource/toolpanel/com.example.TestPanel1" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">ein Panel</value>
+          <value>ein Panel</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>true</value>
@@ -12,7 +12,7 @@
       </node>
       <node oor:name="private:resource/toolpanel/com.example.TestPanel2" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">noch ein Panel</value>
+          <value>noch ein Panel</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>true</value>

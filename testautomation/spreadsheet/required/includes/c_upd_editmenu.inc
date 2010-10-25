@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - Edit Menu
 '*
@@ -304,18 +304,13 @@ testcase tEditSelectAll
     '/// Select whole sheet via Edit - Select All
     printlog " Select whole sheet via Edit - Select All"
     EditSelectAll
-    '/// Check in areafield if the whole sheet is selected (A1:AMJ65536)
-    printlog " Check in areafield if the whole sheet is selected (A1:AMJ65536)"
+    '/// Check in areafield if the whole sheet is selected (A1:AMJ1048576)
+    printlog " Check in areafield if the whole sheet is selected (A1:AMJ1048576)"
     kontext "RechenleisteCalc"
-    if Bereich.getSelText = "A1:AMJ65536" then
+    if Bereich.getSelText = "A1:AMJ1048576" then
         printlog "  - SelectAll is working"
     else
-        if Bereich.getSelText = "A1:IV65536" then
-            printlog "  - SelectAll is working"
-            QaErrorLog "This should be a spreadsheet before the column limit (256 -> 1024) was enhanced"
-        else
-            warnlog "SelectAll is not working as expected. The area is " & Bereich.getSelText & " instead of A1:IV65536"
-        end if
+       warnlog "SelectAll is not working as expected. The area is " & Bereich.getSelText & " instead of A1:AMJ1048576"
     end if
     '/// Close document
     printlog " Close document"

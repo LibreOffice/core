@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Global resource tests for the menu: Help
 '*
@@ -43,10 +43,10 @@ testcase tHelpCheckForUpdates
     dim bOnceAgain as boolean
     dim sProxyFile as string
     dim iOldProxy as integer
-   
+
     bProxy = FALSE
     bOnceAgain = TRUE
-   
+
     '/// open application ///'
     Call hNewDocument
 
@@ -56,7 +56,7 @@ testcase tHelpCheckForUpdates
         sIniFile = convertPath(gNetzOfficePath+"program\version.ini")
     endif
     sTemp = GetIniValue (sIniFile, "Version", "UpdateURL")
-    if (sTemp <> "" AND NOT gOOO) then 
+    if (sTemp <> "" AND NOT gOOO) then
         '/// choose Help -> Check for Updates... ///'
         while (bOnceAgain)
             if bProxy AND bOnceAgain then
@@ -70,14 +70,14 @@ testcase tHelpCheckForUpdates
                     printlog "This could be a (patched) installation on Solaris Sparc/Intel or OOo - No Online Update Feature available."
                     hCloseDocument
                 else
-                        warnlog "Help->Check for Updates failed"
-                        hCloseDocument
+                    warnlog "Help->Check for Updates failed"
+                    hCloseDocument
                 endif
                 goto endsub
             endcatch
             ' The dialog has to come up: 'Check for Updates'
             Kontext "CheckForUpdates"
-'            if CheckForUpdates.exists(10) then ' id not in build for dialog workaround: ' not working due to i 80859
+            '            if CheckForUpdates.exists(10) then ' id not in build for dialog workaround: ' not working due to i 80859
             if Status.exists(10) then
                 if sTemp <> "" then
                     printlog "'Check for Updates' came up"
@@ -103,25 +103,25 @@ testcase tHelpCheckForUpdates
                     bOnceAgain = FALSE
                     Kontext "CheckForUpdates"
                     try
-                       CheckForUpdates.cancel
+                        CheckForUpdates.cancel
                     catch
-                       'cancel button is no more availabale
-                       printlog "cancel wasnt possible"
-                       try
-                           'CheckForUpdates.close
-                           ' close method doesn't work
-                           printlog "1:"+status.gettext
-                           printlog "2:"+description.gettext
-                           closebtn.click
-                       catch
-                           printlog "close wasnt possible"
-                           ' last fallback
-                           'printlog resetapplication
-                           'hNewDocument
-                           printlog "1:"+status.gettext
-                           printlog "2:"+description.gettext
-                           cancel.click
-                       endcatch
+                        'cancel button is no more availabale
+                        printlog "cancel wasnt possible"
+                        try
+                            'CheckForUpdates.close
+                            ' close method doesn't work
+                            printlog "1:"+status.gettext
+                            printlog "2:"+description.gettext
+                            closebtn.click
+                        catch
+                            printlog "close wasnt possible"
+                            ' last fallback
+                            'printlog resetapplication
+                            'hNewDocument
+                            printlog "1:"+status.gettext
+                            printlog "2:"+description.gettext
+                            cancel.click
+                        endcatch
                     endcatch
                 endif
             else
@@ -167,7 +167,7 @@ testcase tHelpCheckForUpdates
                     bOnceAgain = FALSE
                 endif
             endif
-                    bOnceAgain = FALSE
+            bOnceAgain = FALSE
         wend
     else
         qaErrorlog "Test disabled, because it is OOo build and UpdateURL is empty and calling the slot would succeed"

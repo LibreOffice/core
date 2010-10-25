@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : helper functions for SPAdmin
 '*
@@ -109,8 +109,6 @@ function hDelPrinter( cPrinterName as string ) as integer
     endif
 
     dim iPrinterPos as integer
-    dim iErr as integer
-        iErr = 1 
 
     Kontext "SpAdmin"
     iPrinterPos = hGetPrinterPosition( cPrinterName , true )
@@ -125,25 +123,24 @@ function hDelPrinter( cPrinterName as string ) as integer
             if ( active.exists( 2 ) ) then
                 Active.Yes()
                 printlog( CFN & "Printer Queue deleted" )
-                iErr = 0
+                hDelPrinter() = 0
             else
                 warnlog( CFN & "Confirm Delete Dialog is missing" )
-                iErr = 1
+                hDelPrinter() = 1
             endif
         catch
             warnlog( CFN & "Unable to confirm printer deletion" )
-            iErr = 2
+            hDelPrinter() = 2
         endcatch
       
     else
    
         printlog( CFN & "The printer queue does not exist" )
-        iErr = 3
+        hDelPrinter() = 3
       
     endif
    
     Kontext "SpAdmin"
-    hDelPrinter() = iErr
 
 end function            
 
@@ -151,55 +148,17 @@ end function
 
 function hGetSpadminPath() as string
 
-    '///<h3>Retrieve the path to the SpAdmin script/binary</h3>
-    const CFN = "hGetSpadminPath::"
-    const C_REL_PATH = "program\spadmin"
-
-    dim sPath as string
-   
-    sPath = gNetzOfficePath & C_REL_PATH
-    sPath = convertpath( sPath ) 
-
-    printlog( CFN & "Using SPAdmin from: " & sPath
-
-    hGetSpadminPath() = sPath
+    hGetSpadminPath() = convertpath( gNetzOfficePath & "program\spadmin" )
    
 end function
 
 '*******************************************************************************
 
-function hShutdownOffice() as integer
+function hShutdownOffice()
 
-    '///<h3>Shutdown the office by closing all docs and the backing window</h3>
-    const CFN = "hShutdownOffice::"
-
-    dim iOpenDocs as integer
-        iOpenDocs = getDocumentCount()
-    dim iThisDoc as integer
-       
-    ' close all open documents (One open document to remain)
-    for iThisDoc = 1 to iOpenDocs
-        call hCloseDocument()
-    next iThisDoc
-   
-    ' see how many documents are still open - should be exactly one
-    iOpenDocs = getDocumentCount()
-    if ( iOpenDocs <> 0 ) then
-        warnlog( CFN & "No open documents expected but found: " & iOpenDocs )
-    endif
-   
-    ' shutdown the backing window, do not test with getDocumentCount() because
-    ' this would inevitably restart the office
-    ' we need some additional parameter for FileExit, this is a bug
+    hFileCloseAll()
     FileExit( "SynchronMode", TRUE ) 
-    
-    ' wait long enough to ensure all office threads are removed from memory
-    sleep( 5 )
-   
-    ' Print a somehow fuzzy message, we do not know for sure whether the office
-    ' has been shutdown or not
-    printlog( CFN & "The office should have been closed by now." )
-    hShutdownOffice() = iOpenDocs
+    Wait( 5000 )
    
 end function
 
@@ -207,27 +166,16 @@ end function
 
 function hOpenSpadmin() as boolean
 
-    '///<h3>Execute the SpAdmin binary/Script and verify that it is open</h3>
-    ' Return TRUE if hWaitForSpadmin() completes successfully
-
-    const CFN = "hOpenSpadmin::"
-
-    dim cSpadminPath as string
-        cSpadminPath = hGetSpadminPath()
+    dim cSpadminPath as string : cSpadminPath = hGetSpadminPath()
         
-    dim brc as boolean
-       
-    ' start SPAdmin in automation mode. 
     try
         start( cSpadminPath  , "-enableautomation" )
-        printlog( CFN & "SpAdmin command executed successfully" )
-        brc = true
+        printlog( "Printer administration start-command was dispatched correctly" )
+        hOpenSpAdmin() = true
     catch
-        warnlog( CFN & "Failure: SpAdmin command did not succeed" )
-        brc = false
+        warnlog( "hOpenSpAdmin(): Failed to open printer administration tool" )
+        hOpenSpAdmin() = false
     endcatch
-    
-    hOpenSpAdmin() = brc 
 
 end function
 
@@ -235,23 +183,15 @@ end function
 
 function hWaitForSpAdmin() as boolean
 
-    '///<h3>Wait for SpAdmin to be loaded and displayed</h3>
-    const CFN = "hWaitForSpAdmin::"
-   
-    dim bOpen as boolean
-   
-    ' Wait for SpAdmin to open
     kontext "SpAdmin"
     if ( SpAdmin.exists( 10 ) ) then
-        printlog( CFN & "SpAdmin is open. Good." )
+        printlog( "Printer administration tool is open" )
+        hWaitForSpadmin() = true
         sleep( 10 )
-        bOpen = true
     else
-        warnlog( CFN & "SpAdmin is not open, the test cannot continue" )
-        bOpen = false
+        warnlog( "hWaitForSpAdmin(): The dialog did not open within 10 seconds, aborting" )
+        hWaitForSpadmin() = false
     endif
-   
-    hWaitForSpadmin() = bOpen
 
 end function
 

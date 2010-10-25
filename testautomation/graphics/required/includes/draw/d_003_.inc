@@ -25,11 +25,20 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
 '\*****************************************************************
+
+sub d_003
+
+    call tdViewPagePane()
+    call tdViewSlide()
+
+end sub
+
+'*******************************************************************************
 
 testcase tdViewPagePane
 

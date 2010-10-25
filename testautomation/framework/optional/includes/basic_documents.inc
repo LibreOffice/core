@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : BASIC organizers and documents
 '*
@@ -37,7 +37,6 @@ testcase tBasicDocuments
 
     const CFN = "tBasicDocuments::"
 
-    dim brc as boolean
     dim sFileWriter as string
     dim sFileCalc as string
     dim iDocumentCount as integer
@@ -62,32 +61,32 @@ testcase tBasicDocuments
 
     gApplication = "WRITER"
     printlog( "Create a Writer workfilename (build path and filename)" )
-    brc = hCreateBasicWorkFiles()
+    hCreateBasicWorkFiles()
     sFileWriter = hGetBasicWorkFile( "current" )
 
     gApplication = "CALC"
     printlog( "Create a Calc workfilename (build path and filename)" )
-    brc = hCreateBasicWorkFiles()
+    hCreateBasicWorkFiles()
     sFileCalc = hGetBasicWorkFile( "current" )
 
     printlog( "Open the writer file" )
-    brc = hFileOpen( sFileWriter )
-    brc = hAllowMacroExecution()
-    if ( not brc ) then 
+    hFileOpen( sFileWriter )
+    if ( not hAllowMacroExecution() ) then
         warnlog( "Missing Macro execution dialog. Please check the file/security settings" )
     endif
 
     printlog( "Open the Calc file" )
-    brc = hFileOpen( sFileCalc )
-    brc = hAllowMacroExecution()
-    if ( not brc ) then 
+    hFileOpen( sFileCalc )
+    if ( not hAllowMacroExecution() ) then
         warnlog( "Missing Macro execution dialog. Please check the file/security settings" )
     endif
 
     printlog( "Open the BASIC organizer" )
-    brc = hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
+    WaitSlot()
 
     printlog( "Retreive the names of all nodes from the treelist" )
+    kontext "Makro"
     hGetVisibleNodeNames( MakroAus , cNodeListA() )
     
     printlog( "Verify that both documents are listed - one Writer, one Calc with identical names" )
@@ -97,10 +96,10 @@ testcase tBasicDocuments
     endif
 
     printlog( "Click Manage..." )
-    verwalten.click()
+    hClickButton( verwalten )
     
     printlog( "Get the nodes list from the object organizer tabs - first tab" )
-    brc = hSelectBasicObjectOrganizerTab( 1 )
+    hSelectBasicObjectOrganizerTab( 1 )
     ListAllDelete( cNodeListB() )
     hGetVisibleNodeNames( ModulListe , cNodeListB() )
     
@@ -111,7 +110,7 @@ testcase tBasicDocuments
     endif
 
     printlog( "Switch to second tab" )
-    brc = hSelectBasicObjectOrganizerTab( 2 )
+    hSelectBasicObjectOrganizerTab( 2 )
     ListAllDelete( cNodeListB() )
     hGetVisibleNodeNames( ModuleList , cNodeListB() )
     if ( listcount( cNodeListB() ) <> 5 ) then
@@ -126,22 +125,22 @@ testcase tBasicDocuments
     endif
 
     printlog( "Third tab (should not list the document" )
-    brc = hSelectBasicObjectOrganizerTab( 3 )
-    brc = hTestLibraryListBox( cNodeListA() )
+    hSelectBasicObjectOrganizerTab( 3 )
+    hTestLibraryListBox( cNodeListA() )
     
     printlog( CFN & "Closing dialogs..." )
-    TabBibliotheken.cancel()
+    hCloseDialog( TabBibliotheken, "cancel" )
 
     printlog( "Cleanup: Close macro organizer" )
     Kontext "Makro"
-    Makro.cancel()
+    hCloseDialog( Makro, "cancel" )
 
     printlog( "Cleanup: Close all files" )
     hFileCloseAll()
 
     printlog( "Cleanup: Remove workfiles" )
-    brc = hDeleteFile( sFileWriter )
-    brc = hDeleteFile( sFileCalc )
+    hDeleteFile( sFileWriter )
+    hDeleteFile( sFileCalc )
 
     printlog( "Rest macro security level" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
@@ -153,17 +152,19 @@ endcase
 function hTestLibraryListBox( cNodeList() ) as boolean
 
     const CFN = "hTestLibraryListBox::"
+    const EXACT_MATCH = 1
 
     dim iEntry as integer
     dim cEntry as string
-    dim brc as boolean : brc = true
     dim irc as integer
+
+    hTestLibraryListBox() = true
     
     if ( bibliothek.getItemCount() <> IDOCS ) then
         warnlog( CFN & "Incorrect number of items in listbox" )
         printlog( CFN & "Expected: " & bibliothek.getItemCount() )
         printlog( CFN & "Found...: " & listcount( cNodeList() ) )
-        brc = false
+        hTestLibraryListBox() = false
     endif
         
     for iEntry = 3 to IDOCS
@@ -171,11 +172,10 @@ function hTestLibraryListBox( cNodeList() ) as boolean
         Bibliothek.select( iEntry )
         cEntry = Bibliothek.getSelText()
         
-        irc = hCompareSubStrings( cNodeList( iEntry ) , cEntry )
-        if ( irc <> 1 ) then
+        if ( hCompareSubStrings( cNodeList( iEntry ) , cEntry ) <> EXACT_MATCH ) then
             warnlog( CFN & "Comparision failed" )
             printlog( CFN & "Expected: " & cNodeList( iEntry ) & "<>" & cEntry )
-            brc = false
+            hTestLibraryListBox() = false
         else
             printlog( CFN & "Comparision succeeded:" & cEntry )
         endif

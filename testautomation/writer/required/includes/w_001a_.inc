@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description:  Testcases for the Writer Required-test.
 '*
@@ -224,23 +224,15 @@ testcase tFileTemplatesAddressbookSource
     UseBindings
     FileTemplatesAddressbookSource
 
-    WaitSlot(2000)
     PrintLog " In 'Address Book Assignement' dialog click pushbutton 'Administrate'"
     Kontext "AddressbookSource"
-    if AddressbookSource.Exists then
+    if AddressbookSource.Exists( 2 ) then
         Call DialogTest (AddressbookSource)
         Administrate.Click
-        Sleep 2
+
         PrintLog " Close 'Data Source Administration' with 'Cancel'"
         Kontext "DatabaseProperties"
-        if Not DatabaseProperties.Exists then
-            Kontext "AddressSourceAutopilot"
-            if AddressSourceAutopilot.Exists then
-                AddressSourceAutopilot.Cancel
-            end if
-            Kontext "AddressbookSource"
-            AddressbookSource.Cancel
-        else
+        if ( DatabaseProperties.Exists( 2 ) ) then
             PrintLog " DatabaseProperties.SetPage TabConnection"
             Kontext "TabConnection"
             Call DialogTest ( TabConnection )
@@ -248,6 +240,13 @@ testcase tFileTemplatesAddressbookSource
             DatabaseProperties.Close
             Kontext "AddressbookSource"
             PrintLog " Close dialog"
+            AddressbookSource.Cancel
+        else
+            Kontext "AddressSourceAutopilot"
+            if AddressSourceAutopilot.Exists( 1 ) then
+                AddressSourceAutopilot.Cancel
+            end if
+            Kontext "AddressbookSource"
             AddressbookSource.Cancel
         end if
     end if
@@ -315,13 +314,8 @@ testcase tFilePagePreview
     gehtnicht = FALSE
     printlog " Open new document"
     Select Case gApplication
-    Case "WRITER"
-        Call hNewDocument
-
-    Case "MASTERDOCUMENT"
-        Call hNewDocument
-
-    Case "HTML"
+    Case "WRITER", "MASTERDOCUMENT" : hNewDocument()
+    Case else
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -358,9 +352,9 @@ testcase tFilePagePreview
             if Active.Exists then
                 QAErrorlog "No default printer!"
                 Active.ok
-                Sleep 1
+
                 Kontext "Printing"
-                if Printing.Exists then Printing.Cancel
+                if Printing.Exists( 2 ) then Printing.Cancel
             else
                 printlog " Close 'Print' dialog with cancel"
                 Kontext "Printing"
@@ -392,9 +386,9 @@ testcase tFilePrinterSetup
         if Active.GetRT = 304 then
             QAErrorLog "No Default Printer!"
             Active.Ok
-            Sleep 2
+
             Kontext "DruckerEinrichten"
-            if DruckerEinrichten.Exists then
+            if DruckerEinrichten.Exists( 2 ) then
                 Call DialogTest ( DruckerEinrichten )
                 DruckerEinrichten.Cancel
             end if

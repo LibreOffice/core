@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Extension Update Test
 '*
@@ -120,161 +120,30 @@ testcase tExtensionManagerResources()
             printlog( "Extension Options button does not exist, no options available" )
         endif
         
-        if ( bUserIsAdmin ) then
-        
-            ' If the user is Admin or the office was installed in the users
-            ' home directory we have access to the extensions that reside in 
-            ' the shared layer. This means that the user can remove and disable
-            ' these extensions.
-        
-            kontext "PackageManager"
-            BrowsePackages.select( 1 )
-            if ( disable.exists() ) then
-                if ( disable.isEnabled() ) then
-                
-                    disable.click()
+        kontext "PackageManager"
+        BrowsePackages.select( 1 )
 
-                    kontext "Active"
-                    if ( Active.exists( 1 ) ) then
-                        printlog( "Disable extension: Warning for other office instance. Good." )
-                        active.ok()
-                    else
-                        warnlog( "No warning for other office instances running" )
-                    endif
-                    
-                    ' We now re-enable the extensions. Depending on the "size"
-                    ' of the extension it might take the Extension Manager UI
-                    ' a few seconds to complete the "disable" action. We need to
-                    ' wait for that.
-                    kontext "PackageManager"
-                    BrowsePackages.select( 1 )
-                    iBreakCounter = 0
-                    do while( not enable.exists() ) 
-                        iBreakCounter = iBreakCounter + 1
-                        wait( 100 )
-                        if ( iBreakCounter = MAX_ITERATIONS ) then
-                            warnlog( "Extension not ready within timeframe. Aborting" )
-                            goto endsub
-                        endif
-                    loop
-                    enable.click()
-                    
-                    kontext "Active"
-                    if ( Active.exists( 1 ) ) then
-                        printlog( "Enable extension: Warning for other office instance. Good." )
-                        active.ok()
-                    else
-                        warnlog( "No warning for other office instances running" )
-                    endif
-
-                    ' The Extension Manager UI remembers when it has warned about 
-                    ' other running instances of the office, so the next time we try
-                    ' to disable/enable the extension there should be no warning.
-                    
-                    kontext "PackageManager"
-                    iBreakCounter = 0
-                    do while( not disable.exists() ) 
-                        iBreakCounter = iBreakCounter + 1
-                        wait( 100 )
-                        if ( iBreakCounter = MAX_ITERATIONS ) then
-                            warnlog( "Extension not ready within timeframe. Aborting" )
-                            goto endsub
-                        endif
-                    loop
-                    disable.click()
-
-                    kontext "Active"
-                    if ( Active.exists( 1 ) ) then
-                        warnlog( "There should be no warning when disabling the extension a second time" )
-                        active.ok()
-                    else
-                        printlog( "Disable extension: No warning for other office instances. Good." )
-                    endif
-                    
-                    kontext "PackageManager"
-                    iBreakCounter = 0
-                    do while( not enable.exists() ) 
-                        iBreakCounter = iBreakCounter + 1
-                        wait( 100 )
-                        if ( iBreakCounter = MAX_ITERATIONS ) then
-                            warnlog( "Extension not ready within timeframe. Aborting" )
-                            goto endsub
-                        endif
-                    loop
-                    enable.click()
-                    
-                    kontext "Active"
-                    if ( Active.exists( 1 ) ) then
-                        warnlog( "There should be no warning when enabling the extension a second time" )
-                        active.ok()
-                    else
-                        printlog( "Enable extension: No warning for other office instances. Good." )
-                    endif
-                    WaitSlot()
-                    
-                else
-                    warnlog( "User should be able to disable shared extension" )
-                endif
+        printlog( "Check visibility of some controls, many are hidden for bundled extensions" )
+        if ( disable.exists() ) then
+            if ( disable.isVisible() ) then
+                warnlog( "Button <Disable> should not be visible for shared extensions" )
             else
-                warnlog( "Cannot disable extension. It might be disabled already or defunct" )
-            endif
-            
-            kontext "PackageManager"
-            iBreakCounter = 0
-            do while( not remove.isEnabled() ) 
-                iBreakCounter = iBreakCounter + 1
-                wait( 100 )
-                if ( iBreakCounter = MAX_ITERATIONS ) then
-                    warnlog( "Extension not ready within timeframe. Aborting" )
-                    goto endsub
-                endif
-            loop
-    
-            kontext "PackageManager"
-            if ( remove.isEnabled() ) then
-            
-                remove.click()
-                
-                ' Note: First time we try to remove an extension we should get a 
-                ' warning that we must make sure that no other office instances 
-                ' are running. If this warning is missing we actually remove the 
-                ' extension which leaves the installation in an inconsistent
-                ' state. In a "real life" installation this would not work, in a
-                ' "user space" installation we have to reinstall. Bad that is.
-                
-                kontext "Active"
-                if ( Active.exists( 1 ) ) then
-                    printlog( "Remove extension: Warning for other office instances. Good." )
-                    active.cancel()
-                else
-                    warnlog( "No warning for other office instances running" )
-                    warnlog( "Installation inconsistency: Extension was removed!" )
-                endif
-                WaitSlot()
-                
-                ' Note: Like for the disable/enable buttons we should not get 
-                ' a warning for another running office instance when removing
-                ' an extension for the second time. 
-            
-            else
-                warnlog( "User should be able to remove extension" )
+                printlog( "Button <Disable> is hidden" )
             endif
         else
-       
-            ' if the user does not have Administrator rights he may neither 
-            ' he may neither disable or remove extensions.
-             
-            kontext "PackageManager"
-            if ( disable.isEnabled() ) then
-                warnlog( "Disable-button enabled for shared extension" )
-            endif
-            
-            kontext "PackageManager"
-            if ( remove.isEnabled() ) then
-                warnlog( "Remove-button enabled for shared extension" )
-            endif
+            printlog( "The control <Disable> is not defined in this context" )
         endif
-        
+
+        if ( remove.exists() ) then
+            if ( remove.isVisible() ) then
+                warnlog( "Button <Remove> should not be visible for shared extensions" )
+            else
+                printlog( "Button <Remove> is hidden" )
+            endif
+        else
+            printlog( "The control <Remove> is not defined in this context" )
+        endif
+
         kontext "PackageManager"
         PackageManager.close()
         

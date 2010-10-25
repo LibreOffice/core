@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for the presentation wizard
 '*
@@ -47,27 +47,24 @@ testcase tUpdtWizardPresentation
         
         printlog( "Page 1" )
         call Dialogtest( AutopilotPraesentation1 )
-        
-        hClickNextButton()
+        hClickButton( NextButton )
         
         printlog( "Page 2" )
         kontext "AutopilotPraesentation2"
         call DialogTest( AutopilotPraesentation2 )
-        
-        hClickNextButton()
+        hClickButton( NextButton )
         
         printlog( "Page 3" )
         kontext "AutopilotPraesentation3" 
         call DialogTest( AutopilotPraesentation3 )
-        
-        hFinishWizard( 1 )
+
+        kontext "AutopilotPraesentation3" 
+        hCloseDialog( AutopilotPraesentation3, "ok" )
     else
         warnlog( "Presentation wizard not open/exceeded timeout" )
     endif
     
-    do while( getDocumentCount() > 0 )
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
 
     gApplication = "WRITER"
 

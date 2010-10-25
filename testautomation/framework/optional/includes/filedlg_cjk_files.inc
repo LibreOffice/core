@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : check the internal file dialog ( extended tests )
 '*
@@ -71,7 +71,8 @@ testcase tSaveLoadDelFilesCJK()
         hDeleteFile( hGetWorkPath() & cStrangeName )        
         
         printlog( "Close navigator, if it exists" )
-        hCloseNavigator()
+        kontext "Navigator"
+        hCloseDialog( Navigator, "close,optional" )
         
     next iCounter
     

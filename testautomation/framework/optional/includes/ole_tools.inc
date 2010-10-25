@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : global-level-1-test -> insert all OLE-Objects out of OLE-dialog into all doc-types
 '*
@@ -74,22 +74,38 @@ end sub
 
 '*******************************************************************************
 
-sub hSetToStandardView ( DieApp$ )
-    select case DieApp$
+function hSetToStandardView ( cApplication as string ) as boolean
+
+    const MAX_WAIT_FOR_DIALOG = 2
+
+    select case ( cApplication )
     case "WRITER"
-    gApplication = "WRITER"
+        gApplication = cApplication
         Call hNewDocument
         Kontext "DocumentWriter"
     case "MASTERDOCUMENT"
-    gApplication = "MASTERDOCUMENT"
+        gApplication = cApplication
         Call hNewDocument
         Kontext "DocumentMasterDoc"
+    case else
+        printlog( "Application not supported by this function: " & cApplication )
+        hSetToStandardView() = false
+        exit function
     end select
-    ViewZoom
+
+    hUseAsyncSlot( "ViewZoom" )
+
     Kontext "Massstab"
-    Optimal.Check
-    Massstab.ok()
+    if ( Massstab.exists( MAX_WAIT_FOR_DIALOG ) ) then
+        Optimal.Check()
+        hCloseDialog( Massstab, "ok" )
+    else
+        warnlog( "Zoom-Dialog did not open" )
+    endif
+
     Call hCloseDocument
+    hSetToStandardView() = true
+
 end sub
 
 '*******************************************************************************
@@ -136,23 +152,6 @@ sub SendEscape(optional iTimes as Integer)
     case else
     warnlog( "Invalid gApplication: " & gApplication )
     end select
-end sub
-
-'*******************************************************************************
-
-sub DisableNavigator()
-    printlog( "    - disable the navigator in globaldoc/writer" )
-    select case gApplication
-    case "MASTERDOCUMENT" : Kontext "NavigatorGlobalDoc"
-        if NavigatorGlobalDoc.Exists() then
-            ViewNavigator
-        endif
-    case "WRITER"    : Kontext "NavigatorWriter"
-        if NavigatorWriter.Exists() then
-            ViewNavigator
-        endif
-    end select
-    sleep( 1)
 end sub
 
 '*******************************************************************************

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : global update test (Standardbar)
 '*
@@ -73,7 +73,8 @@ function hAccessStandardBar() as boolean
     endif
 
     '///+<li>Close the navigator</li>
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
     
     '///+<li>Close the document</li>
     hDestroyDocument()
@@ -103,6 +104,13 @@ function hResetStandardBar() as boolean
     '///<ul>
     
     const CFN = "hResetStandardBar::"
+    const MIN_STATIC_DELAY = 1
+    const DEFAULT_DELAY = 2
+    const MENUITEM_RESTORE = 1
+    const MENUITEM_CLOSEMENU = 0
+    const TOOLBAR_MENUITEM_CUSTOMIZE = 2
+    const EXPECTED_RESOURCE_ID = 304
+
     
     printlog( CFN & "Enter" )
 
@@ -115,36 +123,36 @@ function hResetStandardBar() as boolean
     
         '///+<li>Open the context menu on Standardbar</li>
         Standardbar.OpenContextmenu
-        sleep( 1 ) 
+        sleep( MIN_STATIC_DELAY )
         
         '///+<li>Click on 2. entry (Cutomize Toolbar)</li>
-        hMenuselectNr (2)
-        sleep( 1 )
+        hMenuselectNr ( TOOLBAR_MENUITEM_CUSTOMIZE )
+        sleep( MIN_STATIC_DELAY )
         
         kontext
         Active.SetPage TabCustomizeToolbars
-        sleep( 1 )
+        sleep( MIN_STATIC_DELAY )
 
         '///+<li>Toggle to 'Toolbars' tab page.</li>
         kontext "TabCustomizeToolbars"
-        if TabCustomizeToolbars.Exists( 2 ) then
-            sleep( 1 )
+        if TabCustomizeToolbars.Exists( DEFAULT_DELAY ) then
+            sleep( MIN_STATIC_DELAY )
 
             '///+<li>Press in first section '... Toolbars' the 'toolbar'-button</li>
             MenuBtn.Click
-            sleep( 1 )
+            sleep( MIN_STATIC_DELAY )
             
             '///+<li>A drop down menu will be opened.</li>
             '///+<li>Select the first enabled menu entry which should be 'Restore...'</li>
-            hMenuSelectNr(1)
-            sleep( 1 )
+            hMenuSelectNr( MENUITEM_RESTORE )
+            sleep( MIN_STATIC_DELAY )
 
             kontext
-            if ( active.exists( 2 ) ) then
-                if Active.GetRT = 304 then
+            if ( active.exists( DEFAULT_DELAY ) ) then
+                if ( Active.GetRT = EXPECTED_RESOURCE_ID ) then
                 
                     '///+<li>Press Yes button on verification dialog.</li>
-                    Active.Yes
+                    Active.Yes()
                 end if
             else
                 warnlog( "No verification comes up if the RESET button has been pressed!" )
@@ -152,11 +160,11 @@ function hResetStandardBar() as boolean
 
             '///+<li>Close 'Toolbars' tab page and the dialog with OK.</li>
             kontext "tabcustomizetoolbars"
-            TabCustomizeToolbars.OK
+            hCloseDialog( TabCustomizeToolbars, "ok" )
         else
             warnlog( "Cutomuze Toolbar not open (from context menu)" )
             'Closing the Context menu if the dialog does not come up.
-            Menuselect(0)
+            Menuselect( MENUITEM_CLOSEMENU )
         endif
             
     else
@@ -192,8 +200,8 @@ function hStandardbarItemGetCount() as integer
     '///<ul>
     
     dim iToolbarItemsCurrent as integer
-    dim iToolbarItemsExpected as integer
-        iToolbarItemsExpected = 30
+    const DEFAULT_TOOLBAR_ITEMCOUNT = 30
+    const WEBLOG_PUBLISHER = 2
     
     const CFN = "hStandardbarItemGetCount::"
 
@@ -219,13 +227,14 @@ function hStandardbarItemGetCount() as integer
     ' violate Sun's patching policy. So StarSuite/StarOffice now have 30 or 31
     ' items on the standardbar, OOo and its spinoffs have 30.
     
-    
-    if ( iToolbarItemsCurrent = iToolbarItemsExpected ) then
-        printlog( CFN & "Correct number of items on the StandardBar. Good" )
-    else
-        warnlog( CFN & "Expected: " & iToolbarItemsExpected & _
-                " entries, found: " & iToolbarItemsCurrent )
-    endif
+    select case ( iToolbarItemsCurrent )
+    case DEFAULT_TOOLBAR_ITEMCOUNT
+        printlog( CFN & "Default number of items found" )
+    case DEFAULT_TOOLBAR_ITEMCOUNT + WEBLOG_PUBLISHER
+        printlog( CFN & "Default icons + Weblog publisher icons found" )
+    case else
+        warnlog( CFN & "Number of icons is unexpected: " & iToolbarItemsCurrent )
+    end select
 
     '///+<li>close the context menu</li>
     hMenuClose()
@@ -252,7 +261,8 @@ function hToggleToolbarItem( iMenuPos as integer )
     '///<u>Description</u>:
     '///<ul>
     
-    const CFN = "hToggleToolbarItem::"    
+    const CFN = "hToggleToolbarItem::"
+    const INVISIBLE_ITEMS_MODIFIER = 3
     dim iItemsInMenu as integer
     
     printlog( CFN & "Enter with option (Menu position): " & iMenuPos )
@@ -268,7 +278,7 @@ function hToggleToolbarItem( iMenuPos as integer )
     ' (those that are invisible will be listed as context menu entries),
     ' the menuitem (invisible items) is placed at position nItems - 3
     '///+<li>Take the number of items -3, select the entry</li>
-    hMenuselectNr( iItemsInMenu - 3 )
+    hMenuselectNr( iItemsInMenu - INVISIBLE_ITEMS_MODIFIER )
     
     '///+<li>Select the provided menu position</li>
     hMenuselectNr( iMenuPos )        
@@ -300,8 +310,7 @@ function hStandardbarLoadUrl() as boolean
     ' written to and disabled again (no use of reset toolbar here, this is
     ' done in another testcase
     
-    dim iItemMenuPos as integer
-    iItemMenuPos = 1
+    dim iItemMenuPos as integer : iItemMenuPos = 1
     
     const ITEM_MENU_POSITION = 1
     const CFN = "hStandardbarLoadUrl::"
@@ -367,6 +376,10 @@ function hStandardbarNewDialog()
     
     const CFN = "hStandardbarNewDialog::"
     const ITEM_MENU_POSITION = 3
+    const TEMPLATE_DIALOG_MAX_RETRIES = 3
+    const RC_TIMEOUT = -1
+
+    dim iTry as integer
 
     printlog( CFN & "Enter" )
 
@@ -383,35 +396,36 @@ function hStandardbarNewDialog()
     hToggleToolbarItem( ITEM_MENU_POSITION )
 
     '///+<li>click the button</li>
-    Kontext "Standardbar"
-    sleep( 1 )
-    try
-        NeuDialog.click()    
-    catch
-    endcatch
-    
-    '///+<li>handle possible dialogs (there should never be one)</li>
-    kontext "Active"
-    if ( active.exists( 1 ) ) then
-        warnlog( CFN & "Unexpected active" )
-        printlog( CFN & active.gettext() )
-        try
-            printlog( CFN & "Closing dialog" )
-            active.ok()
-        catch
-            warnlog( CFN & "Unknown dialog blocks test, now crashing" )
-        endcatch
-    endif
+    for iTry = 1 to TEMPLATE_DIALOG_MAX_RETRIES
 
-    '///+<li>close the templates and samples dialog</li>
-    printlog( CFN & "Close templates and samples (cancel)" )
-    Kontext "TemplateAndDocuments"
-    if ( TemplateAndDocuments.Exists( 5 ) ) then
-        TemplateAndDocuments.cancel()
-    else
-        warnlog( CFN & "The 'Template and Documents'-dialog was not activated" )
-    endif
-   
+        Kontext "Standardbar"
+        hClickButton( NeuDialog )
+
+        '///+<li>handle possible dialogs (there should never be one)</li>
+        kontext "Active"
+        if ( active.exists() ) then
+            warnlog( CFN & "Unexpected active" )
+            printlog( CFN & active.gettext() )
+            if ( hCloseDialog( Active, "ok" ) = RC_TIMEOUT ) then
+                warnlog( CFN & "Unknown dialog blocks test, now crashing" )
+            endif
+        endif
+
+        '///+<li>close the templates and samples dialog</li>
+        printlog( CFN & "Close templates and samples (cancel)" )
+        Kontext "TemplateAndDocuments"
+        if ( TemplateAndDocuments.Exists( 5 ) ) then
+            hCloseDialog( TemplateAndDocuments, "cancel" )
+            exit for
+        else
+            if ( iTry = TEMPLATE_DIALOG_MAX_RETRIES ) then
+                warnlog( CFN & "The 'Template and Documents'-dialog was not activated" )
+            endif
+        endif
+
+    next iTry
+
+
     '///+<li>finally remove the button from the toolbar</li>
     printlog( CFN & "Deactivate New from Template button" )
     hToggleToolbarItem( ITEM_MENU_POSITION )
@@ -455,7 +469,7 @@ function hStandardbarSaveAs()
     kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 1 ) ) then
         warnlog( "#i46363# (?)The 'SaveAs'-button should be invisible." )
-        SpeichernDlg.cancel()
+        hCloseDialog( SpeichernDlg, "cancel" )
     else
         
         '///+<li>Add the control to the standardbar</li>
@@ -471,7 +485,7 @@ function hStandardbarSaveAs()
         printlog( CFN & "Close Save As (cancel)" )
         Kontext "SpeichernDlg"
         if ( SpeichernDlg.Exists( 2 ) ) then
-            SpeichernDlg.cancel()
+            hCloseDialog( SpeichernDlg, "cancel" )
         else
             qaerrorlog( "Retrying" )
             Kontext "Standardbar"
@@ -479,7 +493,7 @@ function hStandardbarSaveAs()
             Kontext "SpeichernDlg"
             if ( SpeichernDlg.exists( 1 ) ) then
                 printlog( "FileSaveAs dialog is open" )
-                SpeichernDlg.cancel()
+                hCloseDialog( SpeichernDlg, "cancel" )
             else
                 warnlog( CFN & "The 'Save As'-dialog was not activated" )
             endif

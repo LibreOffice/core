@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : First test of basic functionality
 '*
@@ -271,62 +271,129 @@ endcase
 
 '*******************************************************************************
 
-function fDocumentCheck (SollFilter as String) as boolean
+function fDocumentCheck( SollFilter as String ) as boolean
     ' Check the name of the file type in the Save dialog and validate
     ' it against a given string.
     Dim sFiltername as String
     
     FileSaveAs
+
     Kontext "SpeichernDlg"
-    sFiltername = DateiTyp.GetItemText (1)
-    if (Instr(lcase(sFiltername), lcase (SollFilter)) <> 0) then
-        fDocumentCheck() = TRUE
+    if ( SpeichernDlg.exists( 1 ) ) then
+        sFiltername = DateiTyp.GetItemText (1)
+        if (Instr(lcase(sFiltername), lcase (SollFilter)) <> 0) then
+            fDocumentCheck() = TRUE
+        else
+            printlog("Filter names do not match:")
+            printlog("Found:    [" & sFilterName & "]")
+            printlog("Expected: [" & SollFilter  & "]")
+            SollFilter = sFiltername
+            fDocumentCheck() = FALSE
+        end if
+        SpeichernDlg.Cancel()
     else
-        printlog("Filter names do not match:")
-        printlog("Found:    [" & sFilterName & "]")
-        printlog("Expected: [" & SollFilter  & "]")
-        SollFilter = sFiltername
+        warnlog( "Dialog <File Save As> did not open" )
         fDocumentCheck() = FALSE
-    end if
-    SpeichernDlg.Cancel()
+    endif
 end function
 
 '*******************************************************************************
 
-testcase tHelpRegistration
+testcase tInFilterCountCompare()
 
-    ' Check i69670 which was a showstopper in OOo 2.0.4
-    ' Menu-entry "Help / Registration" is disabled
+    printlog( "Check filterlist (filterstring) for graphics files" )
 
-    dim iCurrentMenuEntry as integer
-    dim iMenuEntryCount as integer
-    
-    printlog "Check if all entries in Help Menu are enabled"
-    call hNewDocument
+    const FILE_NAME = "graphic_filters.txt"
+    const SUFFIX_STRING_LENGTH = 178
 
-    printlog "Open menu"
-    hUseMenu()
-    iMenuEntryCount = hMenuItemGetCount
+'   List of filter suffixes for verification in case of error
+'   *.bmp;*.dxf;*.emf;*.eps;*.gif;*.jpg;*.jpeg;*.jfif;*.jif;*.met;*.pbm;*.pcd;
+'   *.pct;*.pcx;*.pgm;*.png;*.ppm;*.psd;*.ras;*.sgf;*.sgv;*.svm;*.tga;*.tif;
+'   *.tiff;*.wmf;*.xbm;*.xpm;*.pict
 
-    printlog "Select the last entry 'Help'"
-    hMenuSelectNr( iMenuEntryCount )
-    iMenuEntryCount = hMenuItemGetCount
-    for iCurrentMenuEntry = 1 to iMenuEntryCount
-        if ( hMenuItemIsEnabled( iCurrentMenuEntry ) ) then
-            printlog "(" & iCurrentMenuEntry & "/" & iMenuEntryCount & _
-            "): Menu entry is enabled:     Help-> " & hMenuItemGetText( iCurrentMenuEntry )
-        else
-	        if (lcase(gPlatform) = "osx") then
-	            warnlog "#i86247# Help->Registration is disabled on MacOS X"
-	        else
-                warnlog "(" & iCurrentMenuEntry & "/" & iMenuEntryCount & _
-                "): Menu entry is not enabled: Help-> " & hMenuItemGetText( iCurrentMenuEntry )
-	        endif
+    dim caUIFilters( 30 ) as string
+
+    dim cReferencePath as string
+        cReferencePath = gTesttoolPath & "global/input/filters/"
+        cReferencePath = convertpath ( cReferencePath & FILE_NAME )
+
+    dim cUIFiltersPath as string
+        cUIFiltersPath = hGetWorkPath() & FILE_NAME
+
+    dim iCurrentFilter as integer
+    dim iFilterCount as integer
+
+    dim cAllFormats as string
+
+    dim irc as integer
+    dim iBegin as integer
+    dim iEnd as integer
+
+    printlog( "" )
+    printlog( "Verify filternames listed on the Insert Graphics dialog" )
+
+    hCreateDocument()
+    hChangeDoc()
+
+    InsertGraphicsFromFile
+
+    kontext "GrafikEinfuegenDlg"
+    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+        iFilterCount = DateiTyp.getItemCount()
+
+        'Make list compatible with listfunctions
+        caUIFilters( 0 ) = iFilterCount - 1
+
+        for iCurrentFilter = 2 to iFilterCount
+
+            caUIFilters( iCurrentFilter - 1 ) = DateiTyp.getItemText( iCurrentFilter )
+
+        next iCurrentFilter
+
+        irc = hManageComparisionList( cReferencePath, cUIFiltersPath, caUIFilters() )
+        hListResultEvaluation( irc , 0 )
+
+        printlog( "" )
+        printlog( "Verify <All formats>-string" )
+        cAllFormats = DateiTyp.getItemText( 1 )
+
+        iBegin = instr( cAllFormats, "<" )
+        if ( iBegin <> 1 ) then
+            warnlog( "The opening bracket < is missing in <All formats> string" )
         endif
-    next iCurrentMenuEntry
-    hMenuClose()
-    call hCloseDocument
+
+        iEnd = instr( cAllFormats, ">" )
+        if ( iEnd = 0 ) then
+            warnlog( "The closing bracket > is missing in <All formats> string" )
+        endif
+
+        if ( ( iEnd - iBegin ) < 2 ) then
+            warnlog( "<All formats> string is shorter than expected, please check" )
+            printlog( "String is: " & cAllFormats & ", length (" & len( cAllFormats ) & ")" )
+        endif
+
+        iBegin = instr( cAllFormats, "(" )
+        if ( iBegin <> iEnd + 2 ) then
+            warnlog( "The opening bracket ( is missing in <All formats> string" )
+        endif
+
+        iEnd = instr( cAllFormats, ")" )
+        if ( iEnd < 10 ) then
+            warnlog( "The closing bracket ) is missing in <All formats> string" )
+        endif
+
+        irc = iEnd - iBegin
+        if ( irc <> SUFFIX_STRING_LENGTH ) then
+            warnlog( "The list of file suffixes has changed, please verify" )
+            printlog( "Found: " & irc & " chars, expected " & SUFFIX_STRING_LENGTH )
+        endif
+
+        kontext "GrafikEinfuegenDlg"
+        GrafikEinfuegenDlg.cancel()
+    else
+        warnlog( "<Insert Graphics> dialog did not open" )
+    endif
+
+    hDestroyDocument()
+
 endcase
-
-
-

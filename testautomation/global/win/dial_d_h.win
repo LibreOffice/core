@@ -172,19 +172,6 @@ WiederholungsspalteButton sc:ImageButton:RID_SCDLG_AREAS:RB_REPEATCOL
 
 *Druckbestaetigung HID_PRINTMONITOR
 
-*Druckoptionen HID_DLG_PRV_PRT_OPTIONS
-Zeilen sw:NumericField:DLG_PAGEPREVIEW_PRINTOPTIONS:NF_ROWS
-Spalten sw:NumericField:DLG_PAGEPREVIEW_PRINTOPTIONS:NF_COLS
-Links sw:MetricField:DLG_PAGEPREVIEW_PRINTOPTIONS:MF_LMARGIN
-Rechts sw:MetricField:DLG_PAGEPREVIEW_PRINTOPTIONS:MF_RMARGIN
-Oben sw:MetricField:DLG_PAGEPREVIEW_PRINTOPTIONS:MF_TMARGIN
-Unten sw:MetricField:DLG_PAGEPREVIEW_PRINTOPTIONS:MF_BMARGIN
-Horizontal sw:MetricField:DLG_PAGEPREVIEW_PRINTOPTIONS:MF_HMARGIN
-Vertikal sw:MetricField:DLG_PAGEPREVIEW_PRINTOPTIONS:MF_VMARGIN
-Querformat sw:RadioButton:DLG_PAGEPREVIEW_PRINTOPTIONS:RB_LANDSCAPE
-Hochformat sw:RadioButton:DLG_PAGEPREVIEW_PRINTOPTIONS:RB_PORTRAIT
-Standard sw:PushButton:DLG_PAGEPREVIEW_PRINTOPTIONS:PB_STANDARD
-
 *DruckerZusaetzeDraw HID_SD_PRINT_OPTIONS
 Zeichnung sd:CheckBox:TP_PRINT_OPTIONS:CBX_DRAW
 Notizen sd:CheckBox:TP_PRINT_OPTIONS:CBX_NOTES
@@ -269,22 +256,6 @@ Gesperrt sd:CheckBox:DLG_INSERT_LAYER:CBX_LOCKED
 Titel SW:EDIT:DLG_FLD_INPUT:ED_LABEL
 EingabeText sw:MultiLineEdit:DLG_FLD_INPUT:ED_EDIT
 Weiter SW:PUSHBUTTON:DLG_FLD_INPUT:PB_NEXT
-
-*EMFOptionen svtools:ModalDialog:DLG_EXPORT_VEC
-Original svtools:RadioButton:DLG_EXPORT_VEC:RB_ORIGINAL_VEC
-Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
-Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
-Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
-
-*EPSOptionen filter:ModalDialog:DLG_EXPORT_EPS
-VorschauTif filter:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_TIFF
-InterchangeEPSI filter:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_EPSI
-Level1 filter:RadioButton:DLG_EXPORT_EPS:RB_LEVEL1
-Level2 filter:RadioButton:DLG_EXPORT_EPS:RB_LEVEL2
-Farbe filter:RadioButton:DLG_EXPORT_EPS:RB_COLOR
-Graustufen filter:RadioButton:DLG_EXPORT_EPS:RB_GRAYSCALE
-LZWKodierung filter:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_LZW
-Keine filter:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_NONE
 
 *EtikettenSynchronisieren HID_SYNC_BTN
 Synchronisieren SW:PUSHBUTTON:DLG_SYNC_BTN:BTN_SYNC
@@ -403,14 +374,6 @@ Loeschen HID_FLDVAR_DELETE
 *Filterauswahl HID_DLG_FILTER_SELECT
 Filter uui:ListBox:DLG_FILTER_SELECT:LB_FILTERS
 
-*FilterDlg svtools:ModalDialog:DLG_EXPORT_PIX
-Original svtools:RadioButton:DLG_EXPORT_PIX:RB_ORIGINAL_PIX
-Aufloesung svtools:RadioButton:DLG_EXPORT_PIX:RB_RES_PIX
-Groesse svtools:RadioButton:DLG_EXPORT_PIX:RB_SIZE_PIX
-AufloesungDPI svtools:ComboBox:DLG_EXPORT_PIX:CBB_RES_PIX
-Breite svtools:MetricField:DLG_EXPORT_PIX:MTF_SIZEX_PIX
-Hoehe svtools:MetricField:DLG_EXPORT_PIX:MTF_SIZEY_PIX
-
 *Fontwork SID_FONTWORK
 KreisAuswahl HID_FONTWORK_CTL_FORMS
 Aus HID_FONTWORK_TBI_STYLE_OFF
@@ -478,10 +441,6 @@ AusSelektion HID_TEMPLDLG_NEWBYEXAMPLE
 Aktualisieren HID_TEMPLDLG_UPDATEBYEXAMPLE
 Vorlagenliste HID_TEMPLATE_FMT
 Gruppenliste HID_TEMPLATE_FILTER
-
-*GifOptionen filter:ModalDialog:DLG_EXPORT_GIF
-Interlace filter:CheckBox:DLG_EXPORT_GIF:CBX_INTERLACED
-TransparentSpeichern filter:CheckBox:DLG_EXPORT_GIF:CBX_TRANSLUCENT
 
 *GridControlDialogStarter ACTIVE
 ShowGridcontrol sym:showGridcontrol
