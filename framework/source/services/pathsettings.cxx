@@ -63,10 +63,8 @@
 
 #define CFG_READONLY_DEFAULT    sal_False
 
-const ::rtl::OUString CFGPROP_INTERNALPATHES = ::rtl::OUString::createFromAscii("InternalPaths");
-const ::rtl::OUString CFGPROP_USERPATHES     = ::rtl::OUString::createFromAscii("UserPaths"    );
-const ::rtl::OUString CFGPROP_WRITEPATH      = ::rtl::OUString::createFromAscii("WritePath"    );
-const ::rtl::OUString CFGPROP_ISSINGLEPATH   = ::rtl::OUString::createFromAscii("IsSinglePath" );
+const ::rtl::OUString CFGPROP_USERPATHES(RTL_CONSTASCII_USTRINGPARAM("UserPaths"));
+const ::rtl::OUString CFGPROP_WRITEPATH(RTL_CONSTASCII_USTRINGPARAM("WritePath"));
 
 /*
     0 : old style              "Template"              string using ";" as seperator
@@ -75,9 +73,9 @@ const ::rtl::OUString CFGPROP_ISSINGLEPATH   = ::rtl::OUString::createFromAscii(
     3 : write path             "Template_write"        string
  */
 
-const ::rtl::OUString POSTFIX_INTERNAL_PATHES = ::rtl::OUString::createFromAscii("_internal");
-const ::rtl::OUString POSTFIX_USER_PATHES     = ::rtl::OUString::createFromAscii("_user"    );
-const ::rtl::OUString POSTFIX_WRITE_PATH      = ::rtl::OUString::createFromAscii("_writable");
+const ::rtl::OUString POSTFIX_INTERNAL_PATHES(RTL_CONSTASCII_USTRINGPARAM("_internal"));
+const ::rtl::OUString POSTFIX_USER_PATHES(RTL_CONSTASCII_USTRINGPARAM("_user"));
+const ::rtl::OUString POSTFIX_WRITE_PATH(RTL_CONSTASCII_USTRINGPARAM("_writable"));
 
 const sal_Int32 IDGROUP_OLDSTYLE        = 0;
 const sal_Int32 IDGROUP_INTERNAL_PATHES = 1;
@@ -272,6 +270,9 @@ OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 // NO substitution here ! It's done outside ...
 PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& sPath)
 {
+    const static ::rtl::OUString CFGPROP_INTERNALPATHES(RTL_CONSTASCII_USTRINGPARAM("InternalPaths"));
+    const static ::rtl::OUString CFGPROP_ISSINGLEPATH(RTL_CONSTASCII_USTRINGPARAM("IsSinglePath"));
+
     css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew();
 
     // get access to the "queried" path
@@ -1117,7 +1118,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
-    const static ::rtl::OUString CFG_NODE_OLD = ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/Path/Current");
+    const static ::rtl::OUString CFG_NODE_OLD(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Path/Current"));
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -1147,7 +1148,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {
-    const static ::rtl::OUString CFG_NODE_NEW = ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths/Paths");
+    const static ::rtl::OUString CFG_NODE_NEW(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths/Paths"));
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
