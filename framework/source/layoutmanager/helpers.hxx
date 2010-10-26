@@ -31,40 +31,27 @@
 #ifndef __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
 #define __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
+// my own includes
 #include <macros/generic.hxx>
 #include <stdtypes.h>
 #include <properties.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
+// interface includes
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/ui/DockingArea.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-
+// other includes
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
-
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
 
 #define UIRESOURCE_PROTOCO_ASCII        "private:"
 #define UIRESOURCE_RESOURCE_ASCII       "resource"
 #define UIRESOURCE_URL_ASCII            "private:resource"
 #define UIRESOURCE_URL                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UIRESOURCE_URL_ASCII ))
-
 #define UIRESOURCETYPE_TOOLBAR          "toolbar"
 #define UIRESOURCETYPE_STATUSBAR        "statusbar"
 #define UIRESOURCETYPE_MENUBAR          "menubar"
@@ -72,6 +59,9 @@
 namespace framework
 {
 
+bool isToolboxHorizontalAligned( ToolBox* pToolBox );
+bool isHorizontalDockingArea( const sal_Int16 nDockArea );
+bool isHorizontalDockingArea( const ::com::sun::star::ui::DockingArea& nDockArea );
 ::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow );
 ToolBox* getToolboxPtr( Window* pWindow );
 Window* getWindowFromXUIElement( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement );

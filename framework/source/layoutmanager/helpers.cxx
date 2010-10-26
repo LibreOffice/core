@@ -31,18 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
+// my own includes
 #include "helpers.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
+// interface includes
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
@@ -51,23 +45,35 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-
+// other includes
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/unohlp.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
+// namespace
 using namespace com::sun::star;
 
 namespace framework
 {
+
+bool isToolboxHorizontalAligned( ToolBox* pToolBox )
+{
+    if ( pToolBox )
+        return (( pToolBox->GetAlign() == WINDOWALIGN_TOP ) || ( pToolBox->GetAlign() == WINDOWALIGN_BOTTOM ));
+    return false;
+}
+
+bool isHorizontalDockingArea( const sal_Int16 nDockArea )
+{
+    ::ui::DockingArea nDockingArea = (ui::DockingArea)nDockArea;
+    return (( nDockingArea == ui::DockingArea_DOCKINGAREA_TOP ) || ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM ));
+}
+
+bool isHorizontalDockingArea( const ui::DockingArea& nDockingArea )
+{
+    return (( nDockingArea == ui::DockingArea_DOCKINGAREA_TOP ) || ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM ));
+}
 
 ::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
 {
