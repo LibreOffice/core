@@ -289,9 +289,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // Main-Thread-Id merken
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
-    rtl_uString*  aExeFileName;
-
-
     // Sal initialisieren
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
@@ -311,7 +308,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Den AppFileName gleich holen und absolut machen, bevor das
     // WorkingDirectory sich aendert...
-    osl_getExecutableFile( &aExeFileName );
+    rtl::OUString aExeFileName;
+    osl_getExecutableFile( &aExeFileName.pData );
 
     // convert path to native file format
     rtl::OUString aNativeFileName;

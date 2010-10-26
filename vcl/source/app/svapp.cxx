@@ -333,9 +333,9 @@ sal_uInt16 Application::GetCommandLineParamCount()
 
 XubString Application::GetCommandLineParam( USHORT nParam )
 {
-    rtl_uString* aParam;
-    osl_getCommandArg( nParam, &aParam );
-    return XubString( rtl_uString_getStr(aParam) );
+    rtl::OUString aParam;
+    osl_getCommandArg( nParam, &aParam.pData );
+    return aParam;
 }
 
 // -----------------------------------------------------------------------
@@ -354,9 +354,8 @@ const XubString& Application::GetAppFileName()
     static String aAppFileName;
     if( !aAppFileName.Len() )
     {
-        rtl_uString* aExeFileName;
-
-        osl_getExecutableFile( &aExeFileName );
+        rtl::OUString aExeFileName;
+        osl_getExecutableFile( &aExeFileName.pData );
 
         // convert path to native file format
         rtl::OUString aNativeFileName;
