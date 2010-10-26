@@ -554,7 +554,9 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
     for( USHORT nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         pOwner->ImplCheckNumBulletItem( nPara );
-        pOwner->ImplCalcBulletText( nPara, FALSE, FALSE );
+        // update following paras as well, numbering depends on
+        // previous paras
+        pOwner->ImplCalcBulletText( nPara, TRUE, FALSE );
 
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
             pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
