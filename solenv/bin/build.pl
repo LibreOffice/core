@@ -2154,35 +2154,35 @@ sub print_announce {
 };
 
 sub zenity_open {
-    if (defined $ENV{ENABLE_ZENITY}) {
+    if ($ENV{ENABLE_ZENITY} eq "TRUE") {
         my $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
                                "zenity --notification --listen");
     };
 };
 
 sub zenity_close {
-    if (defined $ENV{ENABLE_ZENITY}) {
+    if ($ENV{ENABLE_ZENITY} eq "TRUE") {
         sleep(1); # Give Zenity a chance to show the message.
         kill 1, $zenity_pid;
     };
 };
 
 sub zenity_icon {
-    if (defined $ENV{ENABLE_ZENITY}) {
+    if ($ENV{ENABLE_ZENITY} eq "TRUE") {
         my $filename = shift;
         print $zenity_in "icon: $filename\n";
     };
 };
 
 sub zenity_tooltip {
-    if (defined $ENV{ENABLE_ZENITY}) {
+    if ($ENV{ENABLE_ZENITY} eq "TRUE") {
         my $text = shift;
         print $zenity_in "tooltip: LibreOffice Build: $text\n";
     };
 };
 
 sub zenity_message {
-    if (defined $ENV{ENABLE_ZENITY}) {
+    if ($ENV{ENABLE_ZENITY} eq "TRUE") {
         my $text = shift;
         print $zenity_in "message: $text\n";
     };
