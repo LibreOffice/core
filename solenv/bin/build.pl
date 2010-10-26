@@ -1712,8 +1712,6 @@ sub cancel_build {
     print "            http://wiki.documentfoundation.org/Development\n";
     print "\n";
 
-    zenity_set_message("LibreOffice Build Failed!");
-
     if (!$broken_modules_number || !$build_all_parents) {
         while (children_number()) {
             handle_dead_children(1);
