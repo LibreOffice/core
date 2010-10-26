@@ -624,16 +624,17 @@ function hFileOpenLocally( byVal sSourcePath as string ) as boolean
     sTargetPath = hFileGetLocalPath( sSourcePath ) ' The path + file
 
     ' For debugging purposes set global variable gVerbose to TRUE
-
-    printlog( CFN & "Copying file" )
-    printlog( CFN & "From: " & sSourcePath )
-    printlog( CFN & "To..: " & sTargetPath )
+    if ( gVerbose ) then
+        printlog( CFN & "Copying file" )
+        printlog( CFN & "From: " & sSourcePath )
+        printlog( CFN & "To..: " & sTargetPath )
+    endif
 
     ' Copy the file from anywhere to the local user directory if it does not
     ' exist. This behavior was discussed on IRC
     if ( FileExists( sTargetPath ) ) then
-        'printlog( CFN & "Re-using existing local copy of workfile" )
-        warnlog( CFN & "Target file exists, it has not been deleted by prior test" )
+        printlog( CFN & "Re-using existing local copy of workfile" )
+        'warnlog( CFN & "Target file exists, it has not been deleted by prior test" )
     endif
 
     FileCopy( sSourcePath, sTargetPath )
