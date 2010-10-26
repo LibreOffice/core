@@ -516,7 +516,9 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 {
     mpTabControl = new TabControl( this, SdResId( 1 ) );
     mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
+    mpOKButton->SetStyle(WB_DEFBUTTON);
     mpCancelButton = new CancelButton(this, SdResId( 1 ) );
+    mpCancelButton->SetStyle(WB_DEFBUTTON);
     mpHelpButton = new HelpButton(this, SdResId( 1 ) );
 
     FreeResource();
