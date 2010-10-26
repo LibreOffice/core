@@ -65,7 +65,9 @@
 #ifdef ENABLE_GRAPHITE
 #include "vcl/graphite_features.hxx"
 #endif
+#ifdef USE_BUILTIN_RASTERIZER
 #include "vcl/glyphcache.hxx"
+#endif
 
 #include "vcl/unohelp.hxx"
 #include "pdfwriter_impl.hxx"
