@@ -2833,7 +2833,7 @@ sub create_new_directory_structure
                     $rpmdir = "$installer::globals::epmoutpath/RPMS/i586";
                 }
         elsif ( $installer::globals::compiler =~ /unxaigppc/) {
-                    $machine = ppc;
+                    $machine = "ppc";
                     $rpmdir = "$installer::globals::epmoutpath/RPMS/$machine";
                 }
         elsif ( $installer::globals::compiler =~ /unxlng/) {
