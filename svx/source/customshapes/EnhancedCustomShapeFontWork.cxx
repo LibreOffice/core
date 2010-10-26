@@ -633,7 +633,7 @@ void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vec
 void GetPoint( const Polygon& rPoly, const std::vector< double >& rDistances, const double& fX, double& fx1, double& fy1 )
 {
     fy1 = fx1 = 0.0;
-    if ( rPoly.GetSize() )
+    if ( rPoly.GetSize() > 1 )
     {
         std::vector< double >::const_iterator aIter = std::lower_bound( rDistances.begin(), rDistances.end(), fX );
         sal_uInt16 nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );

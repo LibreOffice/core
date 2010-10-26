@@ -509,10 +509,11 @@ namespace drawinglayer
         {
             // copy local polygon, it may be changed
             basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
+            aLocalPolygon.removeDoublePoints();
             basegfx::B2DPolyPolygon aArrowA;
             basegfx::B2DPolyPolygon aArrowB;
 
-            if(!aLocalPolygon.isClosed())
+            if(!aLocalPolygon.isClosed() && aLocalPolygon.count() > 1)
             {
                 // apply arrows
                 const double fPolyLength(basegfx::tools::getLength(aLocalPolygon));
