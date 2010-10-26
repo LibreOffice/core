@@ -2856,7 +2856,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     {
         // --> TL, OD 2010-09-07 #i114210#
         // determine the correct page number from the renderer index
-        const USHORT nPage = m_pRenderData->GetPagesToPrint()[ nRenderer ];
+        // --> OD 2010-10-01 #i114875
+        // consider brochure print
+        const USHORT nPage = bPrintProspect
+                             ? nRenderer + 1
+                             : m_pRenderData->GetPagesToPrint()[ nRenderer ];
         // <--
 
         // get paper tray to use ...
