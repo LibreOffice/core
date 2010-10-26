@@ -38,6 +38,7 @@
 #include <editeng/protitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/ruler.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/zoomitem.hxx>
 #include <svx/svxids.hrc>
@@ -686,14 +687,75 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                             pArgs->Get( nId );
 
-                SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+                static const USHORT aWhichTable[]=
+                {
+                    EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
+                    EE_PARA_LRSPACE, EE_PARA_LRSPACE,
+                    EE_PARA_NUMBULLET, EE_PARA_NUMBULLET,
+                    0, 0
+                };
+
+                SfxItemSet aEditAttr( GetDoc()->GetPool(),
+                                      aWhichTable );
+                mpDrawView->GetAttributes( aEditAttr );
 
                 nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
-                aEditAttr.Put( aLRSpaceItem );
-                mpDrawView->SetAttributes( aEditAttr );
+
+                const INT16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                const SvxLRSpaceItem& rOrigLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
+                const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
+                if( nOutlineLevel != -1 &&
+                    rNumBulletItem.GetNumRule() &&
+                    rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
+                {
+                    const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
+                    SvxNumberFormat aFormat(rFormat);
+
+                    // left margin always controls LRSpace item
+                    aLRSpaceItem.SetTxtLeft(rItem.GetTxtLeft() - aFormat.GetAbsLSpace());
+
+                    // negative first line indent goes to the number
+                    // format, positive to the lrSpace item
+                    if( rItem.GetTxtFirstLineOfst() < 0 )
+                    {
+                        aFormat.SetFirstLineOffset(
+                            rItem.GetTxtFirstLineOfst()
+                            - rOrigLRSpaceItem.GetTxtFirstLineOfst()
+                            + aFormat.GetCharTextDistance());
+                        aLRSpaceItem.SetTxtFirstLineOfst(0);
+                    }
+                    else
+                    {
+                        aFormat.SetFirstLineOffset(0);
+                        aLRSpaceItem.SetTxtFirstLineOfst(
+                            rItem.GetTxtFirstLineOfst()
+                            - aFormat.GetFirstLineOffset()
+                            + aFormat.GetCharTextDistance());
+                    }
+
+                    if( rFormat != aFormat )
+                    {
+                        // put all items
+                        SvxNumBulletItem aNumBulletItem(rNumBulletItem);
+                        aNumBulletItem.GetNumRule()->SetLevel(nOutlineLevel,aFormat);
+                        aEditAttr.Put( aNumBulletItem );
+                        aEditAttr.Put( aLRSpaceItem );
+                        mpDrawView->SetAttributes( aEditAttr );
+
+                        // #92557# Invalidate is missing here
+                        Invalidate(SID_ATTR_PARA_LRSPACE);
+                        break;
+                    }
+                }
+
+                // only put lrSpace item
+                SfxItemSet aEditAttrReduced( GetDoc()->GetPool(),
+                                             EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+                aEditAttrReduced.Put( aLRSpaceItem );
+                mpDrawView->SetAttributes( aEditAttrReduced );
 
                 // #92557# Invalidate is missing here
                 Invalidate(SID_ATTR_PARA_LRSPACE);
@@ -779,6 +841,20 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTxtLeft(),
                             rLRSpaceItem.GetTxtFirstLineOfst(), nId );
+
+                    const INT16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                    const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
+                    if( nOutlineLevel != -1 &&
+                        rNumBulletItem.GetNumRule() &&
+                        rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
+                    {
+                        const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
+                        aLRSpaceItem.SetTxtLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTxtLeft());
+                        aLRSpaceItem.SetTxtFirstLineOfst(
+                            rLRSpaceItem.GetTxtFirstLineOfst() + rFormat.GetFirstLineOffset()
+                            - rFormat.GetCharTextDistance());
+                    }
+
                     rSet.Put( aLRSpaceItem );
 
                     Point aPos( aPagePos + maMarkRect.TopLeft() );
