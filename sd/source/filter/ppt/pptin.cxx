@@ -1780,12 +1780,8 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     break;
                                     case PPT_TRANSITION_TYPE_NEWSFLASH :
                                     {
-                                        pPage->setTransitionType( animations::TransitionType::FOURBOXWIPE );
-                                        pPage->setTransitionSubtype( animations::TransitionSubType::CORNERSOUT );
-/*
                                         pPage->setTransitionType( animations::TransitionType::ZOOM );
                                         pPage->setTransitionSubtype( animations::TransitionSubType::ROTATEIN );
-*/
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_SMOOTHFADE :
