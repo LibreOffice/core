@@ -145,7 +145,7 @@ sub register_extensions
 
         $preregdir =~ s/\/\s*$//g;
 
-        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
+        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
