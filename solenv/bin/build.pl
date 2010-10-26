@@ -1750,6 +1750,9 @@ sub cancel_build {
     print "when the problem is isolated and fixed exit and re-run 'make' from the top-level\n";
     print "sometimes (sadly) it is necessary to rm -Rf " . $ENV{INPATH} . " in a module.\n";
 
+    zenity_message("LibreOffice Build Failed!");
+    zenity_close();
+
     do_exit(1);
 };
 
@@ -1997,6 +2000,8 @@ sub mp_success_exit {
 #    };
     print "\nMultiprocessing build is finished\n";
     print "Maximal number of processes run: $maximal_processes\n";
+    zenity_message("LibreOffice Build Success!");
+    zenity_close();
     do_exit(0);
 };
 
@@ -2151,7 +2156,7 @@ sub print_announce {
 sub zenity_open {
     if (defined $ENV{ENABLE_ZENITY}) {
         my $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
-                               "/bin/env zenity --notification --listen");
+                               "zenity --notification --listen");
     };
 };
 
@@ -2780,12 +2785,6 @@ sub do_exit {
 #    close_server_socket();
     my $exit_code = shift;
     $build_finished++;
-    if ($exit_code) {
-        zenity_message("LibreOffice Build Failed!")
-    } else {
-        zenity_message("LibreOffice Build Success!")
-    };
-    zenity_close();
     generate_html_file(1);
     if ( $^O eq 'os2' )
     {
