@@ -170,6 +170,7 @@ protected:
     Point maWinPos;
     Point maViewOrigin;
     Size maViewSize;
+    Size maPrevSize; // contains previous window size in logical coords
     USHORT mnMinZoom;
     USHORT mnMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
