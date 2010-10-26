@@ -109,12 +109,12 @@ struct SwContentAtPos
         SW_TOXMARK          = 0x0080,
         SW_REFMARK          = 0x0100,
         SW_NUMLABEL         = 0x0200, // #i23726#
-        SW_CONTENT_CHECK    = 0x0400, // --> FME 2005-05-13 #i43742# <--
+        SW_CONTENT_CHECK    = 0x0400, // #i43742#
         SW_SMARTTAG         = 0x0800,
         SW_FORMCTRL         = 0x1000
-#ifndef PRODUCT
-        ,SW_CURR_ATTRS      = 0x4000        // nur zum Debuggen
-        ,SW_TABLEBOXVALUE   = 0x8000        // nur zum Debuggen
+#ifdef OSL_DEBUG_LEVEL > 1
+        ,SW_CURR_ATTRS      = 0x4000        // only for debugging
+        ,SW_TABLEBOXVALUE   = 0x8000        // only for debugging
 #endif
     } eCntntAtPos;
 
