@@ -134,10 +134,6 @@
 #include <sfxresid.hxx>
 
 //________________________________________________________________________________________________________
-// const
-static const ::rtl::OUString SERVICENAME_DESKTOP = ::rtl::OUString::createFromAscii ("com.sun.star.frame.Desktop");
-
-//________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
 
@@ -3646,6 +3642,7 @@ css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
     if ( ! m_pData->m_xTitleHelper.is ())
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory ();
+        static const ::rtl::OUString SERVICENAME_DESKTOP(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
         css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
 
