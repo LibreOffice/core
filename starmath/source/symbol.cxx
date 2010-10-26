@@ -78,7 +78,7 @@ SmSym::SmSym(const SmSym& rSymbol)
 }
 
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
              const String& rSet, BOOL bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
