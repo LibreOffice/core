@@ -1114,29 +1114,39 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
 
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
 {
+    //get the function jfw_plugin_existJRE
+    jfw::VendorSettings aVendorSettings;
+    jfw::CJavaInfo aInfo;
+    aInfo = (const ::JavaInfo*) pInfo; //makes a copy of pInfo
+    rtl::OUString sLibPath = aVendorSettings.getPluginLibrary(aInfo.getVendor());
+    osl::Module modulePlugin(sLibPath);
+    if ( ! modulePlugin)
+        return JFW_E_NO_PLUGIN;
+    rtl::OUString sFunctionName(
+        RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_existJRE"));
+    jfw_plugin_existJRE_ptr pFunc =
+        (jfw_plugin_existJRE_ptr)
+        osl_getFunctionSymbol(modulePlugin, sFunctionName.pData);
+    if (pFunc == NULL)
+        return JFW_E_ERROR;
+
+    javaPluginError plerr = (*pFunc)(pInfo, exist);
+
     javaFrameworkError ret = JFW_E_NONE;
-    if (!pInfo || !exist)
-        return JFW_E_INVALID_ARG;
-    ::rtl::OUString sLocation(pInfo->sLocation);
-
-    if (sLocation.getLength() == 0)
-        return JFW_E_INVALID_ARG;
-
-    ::osl::DirectoryItem item;
-    ::osl::File::RC rc_item = ::osl::DirectoryItem::get(sLocation, item);
-    if (::osl::File::E_None == rc_item)
+    switch (plerr)
     {
-        *exist = sal_True;
-    }
-    else if (::osl::File::E_NOENT == rc_item)
-    {
-        *exist = sal_False;
-    }
-    else
-    {
+    case JFW_PLUGIN_E_NONE:
+        ret = JFW_E_NONE;
+        break;
+    case JFW_PLUGIN_E_INVALID_ARG:
+        ret = JFW_E_INVALID_ARG;
+        break;
+    case JFW_PLUGIN_E_ERROR:
+        ret = JFW_E_ERROR;
+        break;
+    default:
         ret = JFW_E_ERROR;
     }
-
     return ret;
 }
 
