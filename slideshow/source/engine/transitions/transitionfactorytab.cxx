@@ -2016,6 +2016,20 @@ static const TransitionInfo lcl_transitionInfo[] =
         true,                   // 'out' by parameter sweep inversion
         false                   // scale isotrophically to target size
     },
+    // this is the cut through black fade (does not fade, but does a
+    // hard cut)
+    {
+        animations::TransitionType::BARWIPE,
+        animations::TransitionSubType::FADEOVERCOLOR,
+        TransitionInfo::TRANSITION_SPECIAL,
+        // TODO(F2): Setup parameters
+        0.0,                    // no rotation
+        1.0,                    // no scaling
+        1.0,                    // no scaling
+        TransitionInfo::REVERSEMETHOD_IGNORE,
+        true,                   // 'out' by parameter sweep inversion
+        false                   // scale isotrophically to target size
+    },
 
     {
         // mapped to RandomWipe:

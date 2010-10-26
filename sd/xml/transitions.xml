@@ -111,6 +111,9 @@
  <anim:par pres:preset-id="fade-through-black">
   <anim:transitionFilter smil:type="fade" smil:subtype="fadeOverColor" smil:fadeColor="#000000"/>
  </anim:par>
+ <anim:par pres:preset-id="cut-through-black">
+  <anim:transitionFilter smil:type="barWipe" smil:subtype="fadeOverColor" smil:fadeColor="#000000"/>
+ </anim:par>
  <anim:par pres:preset-id="cover-down">
   <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromTop"/>
  </anim:par>

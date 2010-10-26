@@ -474,6 +474,89 @@ void FadingSlideChange::performOut(
     }
 }
 
+class CutSlideChange : public SlideChangeBase
+{
+public:
+    /** Create a new SlideChanger, for the given leaving and
+        entering slides, which applies a cut effect.
+    */
+    CutSlideChange(
+        boost::optional<SlideSharedPtr> const & leavingSlide,
+        const SlideSharedPtr&                   pEnteringSlide,
+        const RGBColor&                          rFadeColor,
+        const SoundPlayerSharedPtr&             pSoundPlayer,
+        const UnoViewContainer&                 rViewContainer,
+        ScreenUpdater&                          rScreenUpdater,
+        EventMultiplexer&                       rEventMultiplexer )
+        : SlideChangeBase( leavingSlide,
+                           pEnteringSlide,
+                           pSoundPlayer,
+                           rViewContainer,
+                           rScreenUpdater,
+                           rEventMultiplexer ),
+          maFadeColor( rFadeColor ),
+          mbFirstTurn( true )
+        {}
+
+    virtual void performIn(
+        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
+        const ViewEntry&                            rViewEntry,
+        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
+        double                                      t );
+
+    virtual void performOut(
+        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
+        const ViewEntry&                           rViewEntry,
+        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
+        double                                     t );
+
+private:
+    RGBColor maFadeColor;
+    bool    mbFirstTurn;
+};
+
+void CutSlideChange::performIn(
+    const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
+    const ViewEntry&                            /*rViewEntry*/,
+    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
+    double                                      t )
+{
+    ENSURE_OR_THROW(
+        rSprite,
+        "CutSlideChange::performIn(): Invalid sprite" );
+
+    // After 2/3rd of the active time, display new slide
+    rSprite->setAlpha( t > 2/3.0 ? 1.0 : 0.0 );
+}
+
+void CutSlideChange::performOut(
+    const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
+    const ViewEntry&                           rViewEntry,
+    const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
+    double                                     t )
+{
+    ENSURE_OR_THROW(
+        rSprite,
+        "CutSlideChange::performOut(): Invalid sprite" );
+    ENSURE_OR_THROW(
+        rDestinationCanvas,
+        "FadingSlideChange::performOut(): Invalid dest canvas" );
+
+    if( mbFirstTurn )
+    {
+        mbFirstTurn = false;
+
+        // clear page to given fade color. 'Leaving' slide is
+        // painted atop of that
+        fillPage( rDestinationCanvas,
+                  getEnteringSlideSizePixel( rViewEntry.mpView ),
+                  maFadeColor );
+    }
+
+    // Until 1/3rd of the active time, display old slide.
+    rSprite->setAlpha( t > 1/3.0 ? 0.0 : 1.0 );
+}
+
 class MovingSlideChange : public SlideChangeBase
 {
     /// Direction vector for leaving slide,
@@ -1008,6 +1091,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             pSoundPlayer );
                     }
 
+                    case animations::TransitionType::BARWIPE:
                     case animations::TransitionType::FADE:
                     {
                         // black page:
@@ -1039,16 +1123,27 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                                   "SlideTransitionFactory::createSlideTransition(): Unknown FADE subtype" );
                         }
 
-                        return NumberAnimationSharedPtr(
-                            new FadingSlideChange(
-                                leavingSlide,
-                                pEnteringSlide,
-                                comphelper::make_optional(
-                                    rTransitionFadeColor),
-                                pSoundPlayer,
-                                rViewContainer,
-                                rScreenUpdater,
-                                rEventMultiplexer ));
+                        if( nTransitionType == animations::TransitionType::FADE )
+                            return NumberAnimationSharedPtr(
+                                new FadingSlideChange(
+                                    leavingSlide,
+                                    pEnteringSlide,
+                                    comphelper::make_optional(
+                                        rTransitionFadeColor),
+                                    pSoundPlayer,
+                                    rViewContainer,
+                                    rScreenUpdater,
+                                    rEventMultiplexer ));
+                        else
+                            return NumberAnimationSharedPtr(
+                                new CutSlideChange(
+                                    leavingSlide,
+                                    pEnteringSlide,
+                                    rTransitionFadeColor,
+                                    pSoundPlayer,
+                                    rViewContainer,
+                                    rScreenUpdater,
+                                    rEventMultiplexer ));
                     }
                 }
             }

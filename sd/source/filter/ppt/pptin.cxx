@@ -1622,7 +1622,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                             if ( nDirection == 0 )
                                                 pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt
                                             else if ( nDirection == 1 )
-                                                pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt ueber Schwarz
+                                            {
+                                                pPage->setTransitionType( animations::TransitionType::BARWIPE );
+                                                pPage->setTransitionSubtype( animations::TransitionSubType::FADEOVERCOLOR );
+                                                pPage->setTransitionFadeColor( 0 );
+                                            }
                                         }
                                         else
                                             pPage->setTransitionType( 0 );
