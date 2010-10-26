@@ -180,7 +180,9 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
             else
                 pObject->UpdateReplacement();
         }
-        else if ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE )
+        else if ( nState == embed::EmbedStates::ACTIVE ||
+                  nState == embed::EmbedStates::UI_ACTIVE ||
+                  nState == embed::EmbedStates::INPLACE_ACTIVE )
         {
             // in case the object is inplace or UI active the replacement image should be updated on demand
             pObject->UpdateReplacementOnDemand();
