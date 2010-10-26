@@ -302,7 +302,7 @@ function TBOloadFormulaFromFile () as string
 '///+  take formula out of command window ///
 '///+  save it into a variable ///
 '///  close dokument ///
-   Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
+   Call hFileOpenLocally ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
    kontext "dokumentwriter"
    try
    EditSelectAllMath
@@ -344,8 +344,7 @@ testcase tFilePrint
        goto endsub
    endif
 
-    Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
-    TBOmakeWriteable()
+    Call hFileOpenLocally ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
 
     '/// find the translated formula in the document and get the language it belongs to ///'
     '///+ compare it to the officelanguage ///'
@@ -580,28 +579,6 @@ testcase tFilePrint
     Call hCloseDocument
 endcase
 
-
-function TBOmakeWriteable()
-   ' check if writeable! (especially for HTML Doks!!)
-   sleep (3)
-   try
-      UseBindings
-      FormatStyleBold
-      sleep 2
-      FormatStyleBold
-   catch
-   '/// make document writeable :-)///'
-      kontext "Funktionsleiste"
-      printlog "ReadOnly, changed it to writeable."
-      Bearbeiten.click
-      kontext
-      if active.exists (5) then
-         Printlog " active, accessrights ?!: '"+active.GetText+"'"
-         active.yes
-      endif
-   endcatch
-   sleep (3)
-end function
 
 function isCheckedWarnAlienFormat (optional bChange as boolean)
     dim uno

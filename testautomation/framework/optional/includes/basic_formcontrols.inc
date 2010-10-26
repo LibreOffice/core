@@ -122,7 +122,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         if ( hFindFirstDialog() ) then
             printlog( "First dialog found. Good." )
         else
-            warnlog( "Could not access dialog, aborting test" )
+            warnlog( "#i115117 - Could not access dialog, accelerator not working? (Test interrupted)" )
             hCloseBasicIde()
             hDestroyDocument()
             goto endsub
