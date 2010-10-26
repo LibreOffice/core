@@ -2020,8 +2020,8 @@ namespace cppcanvas
                                     ::vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
                                     ::vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                                     ::basegfx::B2DPoint(1,1) ),
-                                static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound(),
-                                static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ));
+                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound() ) / rRect.GetWidth(),
+                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ) / rRect.GetHeight() ) );
                         aPoly.transform( getState( rStates ).mapModeTransform );
 
                         createFillAndStroke( aPoly,
