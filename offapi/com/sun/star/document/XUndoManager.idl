@@ -28,10 +28,10 @@
 #define __com_sun_star_document_XUndoManager_idl__
 
 #include <com/sun/star/document/EmptyUndoStackException.idl>
-#include <com/sun/star/document/NotLockedException.idl>
 #include <com/sun/star/document/UndoContextNotClosedException.idl>
 #include <com/sun/star/document/UndoFailedException.idl>
 #include <com/sun/star/util/InvalidStateException.idl>
+#include <com/sun/star/util/XLockable.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
@@ -71,12 +71,16 @@ interface XUndoManagerListener;
 
     <a name="locking"></a>
     <h3>Locking</h3>
-    <p>An Undo manager can be locked and unlocked, using the <member>lock</member> and <member>unlock</member> methods.
-    When it is locked, then every attempt to add an undo action, or to enter or leave an Undo context, will be silently
-    ignored.</p>
+    <p>An Undo manager can be locked and unlocked, using the <member>XLockable::lock</member> and
+    <member>XLockable::unlock</member> methods. When it is locked, then every attempt to add an undo action, or to
+    enter or leave an Undo context, will be silently ignored.</p>
  */
 interface XUndoManager
 {
+    /** allows <a href="#locking">locking</a> the undo manager.
+    */
+    interface ::com::sun::star::util::XLockable;
+
     /** enters a new undo context.
 
         <p>A new undo action will be added to the undo stack, with the title given as <code>i_title</code>. As long
@@ -302,36 +306,6 @@ interface XUndoManager
         notified of the reset by calling their <member>XUndoManagerListener::resetAll</member> method.</p>
     */
     void    reset();
-
-    /** locks</a> the Undo manager
-
-        <p><code>lock</code> and <code>unlock</code> calls can be nested. However, they must be in
-        pairs. As long as there has been one more call to <code>lock</code> than to <code>unlock</code>, the
-        Undo manager is considered <a href="#locking">locked</a>.</p>
-
-        @see unlock
-        @see isLocked
-    */
-    void    lock();
-
-    /** unlocks the Undo manager
-
-        @throws ::com::sun::star::document::NotLockedException
-            if the Undo manager is not currently locked.
-
-        @see lock
-        @see isLocked
-    */
-    void    unlock()
-        raises  (   ::com::sun::star::document::NotLockedException
-                );
-
-    /** determines whether the Undo manager is currently locked.
-
-        @see lock
-        @see unlock
-    */
-    boolean isLocked();
 
     /** adds a listener to be notified of changes in the Undo/Redo stacks.
     */

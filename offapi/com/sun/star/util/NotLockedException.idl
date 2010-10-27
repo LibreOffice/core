@@ -24,14 +24,14 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_document_NotLockedException_idl__
-#define __com_sun_star_document_NotLockedException_idl__
+#ifndef __com_sun_star_util_NotLockedException_idl__
+#define __com_sun_star_util_NotLockedException_idl__
 
 #include <com/sun/star/util/InvalidStateException.idl>
 
 //==================================================================================================================
 
-module com { module sun { module star { module document {
+module com { module sun { module star { module util {
 
 //==================================================================================================================
 
