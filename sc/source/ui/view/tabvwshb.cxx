@@ -539,7 +539,8 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 }
                 catch ( const uno::Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    // no need to handle. By definition, the UndoManager handled this by clearing the
+                    // Undo/Redo stacks
                 }
 
                 if ( bLockPaint )
