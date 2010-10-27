@@ -170,3 +170,17 @@ sw.SwXTextEmbeddedObject::com::sun::star::document::XEmbeddedObjectSupplier
 
 ### i111332 ###
 sw.XMLStylesExporter::com::sun::star::document::XFilter
+
+### i113020 ###
+sw.SwXTextEmbeddedObject::com::sun::star::beans::XPropertySet
+sw.SwXTextGraphicObject::com::sun::star::beans::XPropertySet
+sw.SwXTextFrame::com::sun::star::beans::XPropertySet
+
+### i113136 ###
+sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleEditableText
+
+### i114205 ###
+sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleText
+
+### i114889 ###
+sw.SwXTextViewCursor::com::sun::star::view::XScreenCursor
