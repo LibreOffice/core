@@ -130,8 +130,6 @@ static short lcl_GetPassword(
 {
     bool bRes = false;
     SfxPasswordDialog aPasswdDlg( pParent );
-    const String aTitle( SfxResId( bProtect ? RID_SFX_PROTECT_RECORDS : RID_SFX_UNPROTECT_RECORDS ) );
-    aPasswdDlg.SetText( aTitle );
     aPasswdDlg.SetMinLen( 1 );
     if (bProtect)
         aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
