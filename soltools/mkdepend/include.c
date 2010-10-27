@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: include.c,v 1.17 94/12/05 19:33:08 gildea Exp $ */
 /*
 
@@ -324,3 +325,5 @@ void inc_clean ()
         ip->i_marked = FALSE;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

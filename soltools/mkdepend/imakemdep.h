@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /* $XConsortium: imakemdep.h,v 1.83 95/04/07 19:47:46 kaleb Exp $ */
 /* $XFree86: xc/config/imake/imakemdep.h,v 3.12 1995/07/08 10:22:17 dawes Exp $ */
@@ -728,3 +729,5 @@ struct pair predefs[] = {
 
 #endif /* MAKEDEPEND */
 #endif /* CCIMAKE */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

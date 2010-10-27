@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: parse.c,v 1.30 94/04/17 20:10:38 gildea Exp $ */
 /*
 
@@ -612,3 +613,5 @@ void hash_undefine( symbol, symbols )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: pr.c,v 1.17 94/04/17 20:10:38 gildea Exp $ */
 /*
 
@@ -135,3 +136,5 @@ void pr(ip, file, base)
     for (i=0; i<ip->i_listlen; i++)
         printf("\n#\t%s", ip->i_list[ i ]->i_incstring);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

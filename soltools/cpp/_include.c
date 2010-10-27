@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #   include <io.h>
 #else
@@ -233,3 +234,4 @@ void
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,3 +76,4 @@
 //ext_std resolves to the std that external c++ libs, e.g. Graphite were built
 //against regardless of whether that is stlport or system stl
 namespace ext_std = std;
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

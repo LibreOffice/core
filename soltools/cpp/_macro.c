@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifdef _MSC_VER
 #   define _POSIX_
 #endif
@@ -754,3 +755,4 @@ void
     outptr = op;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

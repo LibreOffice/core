@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef COLLECTDIRCONTENT_H
 #define COLLECTDIRCONTENT_H
 
@@ -56,3 +57,5 @@ int call_IncludesCollection_exists(struct IncludesCollection* m, const char* fil
 #endif
 
 #endif // COLLECTDIRCONTENT_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

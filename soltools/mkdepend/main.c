@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: main.c,v 1.84 94/11/30 16:10:44 kaleb Exp $ */
 /* $XFree86: xc/config/makedepend/main.c,v 3.4 1995/07/15 14:53:49 dawes Exp $ */
 /*
@@ -797,3 +798,4 @@ char* append_slash(path)
     return new_string;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
