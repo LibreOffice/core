@@ -264,7 +264,8 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
         if ( m_nTableDepth > 0 && !m_bTableCellOpen )
         {
             ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_nTableDepth ) );
-            if ( pDeepInner->getCell() == 0 )
+            OSL_ENSURE( pDeepInner, "TableNodeInfoInner not found");
+            if ( pDeepInner && pDeepInner->getCell() == 0 )
                 StartTableRow( pDeepInner );
 
             StartTableCell( pDeepInner );
