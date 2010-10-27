@@ -1157,6 +1157,4 @@ sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLTHDASHDD, "\\olthdashdd" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLHWAVE, "\\olhwave" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_OLOLDBWAVE, "\\ololdbwave" );
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

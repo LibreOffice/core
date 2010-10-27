@@ -283,6 +283,4 @@ SV_IMPL_REF(SvKeyValueIterator);
 
 #endif //_SVPARSER_HXX
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

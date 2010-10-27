@@ -1225,6 +1225,5 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 }
 
 // vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
