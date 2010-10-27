@@ -27,11 +27,16 @@
 
 package complex.sfx2;
 
+import com.sun.star.document.EmptyUndoStackException;
+import com.sun.star.document.NotLockedException;
+import com.sun.star.document.UndoContextNotClosedException;
+import com.sun.star.document.UndoFailedException;
 import com.sun.star.document.UndoManagerEvent;
 import com.sun.star.document.XUndoAction;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XEventListener;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.openoffice.test.tools.OfficeDocument;
 import com.sun.star.document.XUndoManagerSupplier;
 import complex.sfx2.undo.CalcDocumentTest;
@@ -46,6 +51,7 @@ import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
 import complex.sfx2.undo.WriterDocumentTest;
+import java.lang.reflect.Method;
 import java.util.Stack;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -139,6 +145,12 @@ public class UndoManager
             m_redoWasCleared = true;
         }
 
+        public void resetAll( EventObject i_event )
+        {
+            m_managerWasReset = true;
+            m_activeUndoContexts.clear();
+        }
+
         public void enteredContext( UndoManagerEvent i_event )
         {
             m_activeUndoContexts.push( i_event.UndoActionTitle );
@@ -196,6 +208,7 @@ public class UndoManager
         boolean contextCancelled() { return m_cancelledContext; }
         boolean stackWasCleared() { return m_wasCleared; }
         boolean redoStackWasCleared() { return m_redoWasCleared; }
+        boolean managerWasReset() { return m_managerWasReset; }
 
         void reset()
         {
@@ -203,7 +216,7 @@ public class UndoManager
             m_activeUndoContexts.clear();
             m_mostRecentlyAddedAction = m_mostRecentlyUndone = m_mostRecentlyRedone = null;
             // m_isDisposed is not cleared, intentionally
-            m_leftContext = m_leftHiddenContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = false;
+            m_leftContext = m_leftHiddenContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = m_managerWasReset = false;
         }
 
         private int     m_undoActionsAdded = 0;
@@ -215,6 +228,7 @@ public class UndoManager
         private boolean m_cancelledContext = false;
         private boolean m_wasCleared = false;
         private boolean m_redoWasCleared = false;
+        private boolean m_managerWasReset = false;
         private Stack< String >
                         m_activeUndoContexts = new Stack<String>();
         private String  m_mostRecentlyAddedAction = null;
@@ -265,7 +279,7 @@ public class UndoManager
         impl_testContextHandling( undoManager, listener );
         impl_testStackHandling( undoManager, listener );
         impl_testClearance( undoManager, listener );
-        impl_testHiddenContexts( test, undoManager, listener );
+        impl_testHiddenContexts( undoManager, listener );
 
         // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
@@ -388,7 +402,7 @@ public class UndoManager
 
     private void impl_testLocking( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         // implicit Undo actions, triggered by changes to the document
@@ -422,13 +436,13 @@ public class UndoManager
         // |unlock| error handling
         assertFalse( "internal error: manager should not be locked at this point in time", i_undoManager.isLocked() );
         boolean caughtExpected = false;
-        try { i_undoManager.unlock(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+        try { i_undoManager.unlock(); } catch ( final NotLockedException e ) { caughtExpected = true; }
         assertTrue( "unlocking the manager when it is not locked should throw", caughtExpected );
     }
 
     private void impl_testContextHandling( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         i_undoManager.enterUndoContext( "Undo Context" );
@@ -439,7 +453,7 @@ public class UndoManager
         assertFalse( "leaving a non-empty context should not call cancelledUndoContext", i_listener.contextCancelled() );
         assertEquals( "unexpected undo context depth leaving a non-empty context", 0, i_listener.getUndoContextDepth() );
 
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         i_undoManager.enterUndoContext( "Undo Context" );
@@ -452,7 +466,7 @@ public class UndoManager
 
     private void impl_testNestedContexts( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
         i_undoManager.enterUndoContext( "context 1" );
         i_undoManager.enterUndoContext( "context 1.1" );
@@ -479,26 +493,26 @@ public class UndoManager
 
     private void impl_testErrorHandling( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         // try retrieving the comments for the current Undo/Redo - this should fail
         boolean caughtExpected = false;
         try { i_undoManager.getCurrentUndoActionTitle(); }
-        catch( final InvalidStateException e ) { caughtExpected = true; }
+        catch( final EmptyUndoStackException e ) { caughtExpected = true; }
         assertTrue( "trying the title of the current Undo action is expected to fail for an empty stack", caughtExpected );
 
         caughtExpected = false;
         try { i_undoManager.getCurrentRedoActionTitle(); }
-        catch( final InvalidStateException e ) { caughtExpected = true; }
+        catch( final EmptyUndoStackException e ) { caughtExpected = true; }
         assertTrue( "trying the title of the current Redo action is expected to fail for an empty stack", caughtExpected );
 
         caughtExpected = false;
-        try { i_undoManager.undo(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+        try { i_undoManager.undo(); } catch ( final EmptyUndoStackException e ) { caughtExpected = true; }
         assertTrue( "undo should throw if no Undo action is on the stack", caughtExpected );
 
         caughtExpected = false;
-        try { i_undoManager.redo(); } catch ( final InvalidStateException e ) { caughtExpected = true; }
+        try { i_undoManager.redo(); } catch ( final EmptyUndoStackException e ) { caughtExpected = true; }
         assertTrue( "redo should throw if no Redo action is on the stack", caughtExpected );
 
         caughtExpected = false;
@@ -509,21 +523,90 @@ public class UndoManager
         try { i_undoManager.addUndoAction( null ); } catch ( com.sun.star.lang.IllegalArgumentException e ) { caughtExpected = true; }
         assertTrue( "adding a NULL action should be rejected", caughtExpected );
 
-        // an Undo action which throws when undone should propagate this to the API caller
-        i_undoManager.clear();
-        i_undoManager.addUndoAction( new FailingUndoAction() );
-        caughtExpected = false;
-        try { i_undoManager.undo(); } catch ( com.sun.star.uno.RuntimeException e ) { caughtExpected = true; }
-        assertTrue( "RuntimeExceptions in XUndoAction.undo should be propagated at the API", caughtExpected );
-        assertTrue( "an Undo action which fails should not be removed from the stack", i_undoManager.isUndoPossible() );
+        i_undoManager.reset();
+        i_undoManager.addUndoAction( new CustomUndoAction() );
+        i_undoManager.addUndoAction( new CustomUndoAction() );
+        i_undoManager.undo();
+        i_undoManager.enterUndoContext( "Undo Context" );
+        // those methods should fail when a context is open:
+        final String[] methodNames = new String[] { "undo", "redo", "clear", "clearRedo" };
+        for ( int i=0; i<methodNames.length; ++i )
+        {
+            caughtExpected = false;
+            try
+            {
+                Method method = i_undoManager.getClass().getMethod( methodNames[i], new Class[0] );
+                method.invoke( i_undoManager, new Object[0] );
+            }
+            catch ( IllegalAccessException ex ) { }
+            catch ( IllegalArgumentException ex ) { }
+            catch ( InvocationTargetException ex )
+            {
+                Throwable targetException = ex.getTargetException();
+                caughtExpected = ( targetException instanceof UndoContextNotClosedException );
+            }
+            catch ( NoSuchMethodException ex ) { }
+            catch ( SecurityException ex ) { }
 
-        // but on the other hand, doing the Undo via UI should not throw
-        i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            assertTrue( methodNames[i] + " should be rejected when there is an open context", caughtExpected );
+        }
+        i_undoManager.leaveUndoContext();
+
+        // try Undo actions which fail in their Undo/Redo
+        for ( int i=0; i<4; ++i )
+        {
+            final boolean undo = ( i < 2 );
+            final boolean doByAPI = ( i % 2 ) == 0;
+
+            i_undoManager.reset();
+            i_undoManager.addUndoAction( new CustomUndoAction() );
+            i_undoManager.addUndoAction( new FailingUndoAction( undo ? FAIL_UNDO : FAIL_REDO ) );
+            i_undoManager.addUndoAction( new CustomUndoAction() );
+            i_undoManager.undo();
+            if ( !undo )
+                i_undoManager.undo();
+            // assert preconditions for the below test
+            assertTrue( i_undoManager.isUndoPossible() );
+            assertTrue( i_undoManager.isRedoPossible() );
+
+            boolean caughtUndoFailed = false;
+            try
+            {
+                if ( undo )
+                    if ( doByAPI )
+                        i_undoManager.undo();
+                    else
+                        i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+                else
+                    if ( doByAPI )
+                        i_undoManager.redo();
+                    else
+                        i_test.getDocument().getCurrentView().dispatch( ".uno:Redo" );
+            }
+            catch ( UndoFailedException e )
+            {
+                caughtUndoFailed = true;
+            }
+            if ( doByAPI )
+                assertTrue( "Exceptions in XUndoAction.undo should be propagated at the API", caughtUndoFailed );
+            else
+                assertFalse( "Undo/Redo by UI should not let escape Exceptions", caughtUndoFailed );
+            if ( undo )
+            {
+                assertFalse( "a failing Undo should clear the Undo stack", i_undoManager.isUndoPossible() );
+                assertTrue( "a failing Undo should /not/ clear the Redo stack", i_undoManager.isRedoPossible() );
+            }
+            else
+            {
+                assertTrue( "a failing Redo should /not/ clear the Undo stack", i_undoManager.isUndoPossible() );
+                assertFalse( "a failing Redo should clear the Redo stack", i_undoManager.isRedoPossible() );
+            }
+        }
     }
 
     private void impl_testStackHandling( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         assertFalse( i_undoManager.isUndoPossible() );    // just for completeness, those two
@@ -547,7 +630,7 @@ public class UndoManager
 
     private void impl_testClearance( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         // add an action, clear the stack, verify the listener has been called
@@ -580,18 +663,42 @@ public class UndoManager
         i_undoManager.addUndoAction( new CustomUndoAction() );
         assertFalse( i_undoManager.isRedoPossible() );
         assertTrue( "implicit clearance of the Redo stack does not notify listeners", i_listener.redoStackWasCleared() );
+
+        // test resetting the manager
+        i_listener.reset();
+        i_undoManager.addUndoAction( new CustomUndoAction() );
+        i_undoManager.addUndoAction( new CustomUndoAction() );
+        i_undoManager.undo();
+        assertTrue( i_undoManager.isUndoPossible() );
+        assertTrue( i_undoManager.isRedoPossible() );
+        i_undoManager.reset();
+        assertFalse( i_undoManager.isUndoPossible() );
+        assertFalse( i_undoManager.isRedoPossible() );
+        assertTrue( "|reset| does not properly notify", i_listener.managerWasReset() );
+
+        // resetting the manager, with open undo contexts
+        i_listener.reset();
+        i_undoManager.addUndoAction( new CustomUndoAction() );
+        i_undoManager.enterUndoContext( "Undo Context" );
+        i_undoManager.addUndoAction( new CustomUndoAction() );
+        i_undoManager.enterHiddenUndoContext();
+        i_undoManager.reset();
+        assertTrue( "|reset| while contexts are open does not properly notify", i_listener.managerWasReset() );
+        // verify the manager really has the proper context depth now
+        i_undoManager.enterUndoContext( "Undo Context" );
+        assertEquals( "seems that |reset| did not really close the open contexts", 1, i_listener.getUndoContextDepth() );
     }
 
-    private void impl_testHiddenContexts( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testHiddenContexts( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
     {
-        i_undoManager.clear();
+        i_undoManager.reset();
         i_listener.reset();
 
         // entering a hidden context should be rejected if the stack is empty
         assertFalse( "precondition for testing hidden undo contexts not met", i_undoManager.isUndoPossible() );
         boolean caughtExpected = false;
         try { i_undoManager.enterHiddenUndoContext(); }
-        catch ( final com.sun.star.util.InvalidStateException e ) { caughtExpected = true; }
+        catch ( final EmptyUndoStackException e ) { caughtExpected = true; }
         assertTrue( "entering hidden contexts should be denied on an empty stack", caughtExpected );
 
         // but it should be allowed if the context is not empty
@@ -631,7 +738,7 @@ public class UndoManager
 
         // nesting hidden and normal contexts
         i_listener.reset();
-        i_undoManager.clear();
+        i_undoManager.reset();
         final CustomUndoAction action0 = new CustomUndoAction( "action 0" );
         i_undoManager.addUndoAction( action0 );
         i_undoManager.enterUndoContext( "context 1" );
@@ -644,7 +751,7 @@ public class UndoManager
         // is entering a hidden context rejected even at the nesting level > 0 (the above test was for nesting level == 0)?
         caughtExpected = false;
         try { i_undoManager.enterHiddenUndoContext(); }
-        catch( final InvalidStateException e ) { caughtExpected = true; }
+        catch( final EmptyUndoStackException e ) { caughtExpected = true; }
         assertTrue( "at a nesting level > 0, denied hidden contexts does not work as expected", caughtExpected );
         final CustomUndoAction action3 = new CustomUndoAction( "action 3" );
         i_undoManager.addUndoAction( action3 );
@@ -712,12 +819,12 @@ public class UndoManager
             return m_title;
         }
 
-        public void undo()
+        public void undo() throws UndoFailedException
         {
             m_undoCalled = true;
         }
 
-        public void redo()
+        public void redo() throws UndoFailedException
         {
             m_redoCalled = true;
         }
@@ -747,10 +854,14 @@ public class UndoManager
         private boolean         m_disposed = false;
     }
 
+    private static short FAIL_UNDO = 1;
+    private static short FAIL_REDO = 2;
+
     private static class FailingUndoAction implements XUndoAction
     {
-        FailingUndoAction()
+        FailingUndoAction( final short i_failWhich )
         {
+            m_failWhich = i_failWhich;
         }
 
         public String getTitle()
@@ -758,20 +869,24 @@ public class UndoManager
             return "failing undo";
         }
 
-        public void undo()
+        public void undo() throws UndoFailedException
         {
-            impl_throw();
+            if ( m_failWhich != FAIL_REDO )
+                impl_throw();
         }
 
-        public void redo()
+        public void redo() throws UndoFailedException
         {
-            impl_throw();
+            if ( m_failWhich != FAIL_UNDO )
+                impl_throw();
         }
 
-        private void impl_throw()
+        private void impl_throw() throws UndoFailedException
         {
-            throw new com.sun.star.uno.RuntimeException();
+            throw new UndoFailedException();
         }
+
+        private final short m_failWhich;
     }
 
     private static final OfficeConnection m_connection = new OfficeConnection();
