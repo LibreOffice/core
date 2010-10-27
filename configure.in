@@ -981,6 +981,11 @@ dnl ===================================================================
 dnl Configure pre-requisites.
 dnl ===================================================================
 cat /dev/null > warn
+
+if test "$EUID" -eq "0"  -a "z`uname -o 2>/dev/null`" = "zCygwin" ; then
+   AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
+fi
+
 AC_PROG_EGREP
 AC_PROG_AWK
 AC_PATH_PROG( AWK, $AWK)
