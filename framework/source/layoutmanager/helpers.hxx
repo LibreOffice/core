@@ -60,6 +60,7 @@ namespace framework
 {
 
 bool isToolboxHorizontalAligned( ToolBox* pToolBox );
+bool isReverseOrderDockingArea( const sal_Int16 nDockArea );
 bool isHorizontalDockingArea( const sal_Int16 nDockArea );
 bool isHorizontalDockingArea( const ::com::sun::star::ui::DockingArea& nDockArea );
 ::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow );

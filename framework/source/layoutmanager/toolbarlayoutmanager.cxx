@@ -155,8 +155,6 @@ void ToolbarLayoutManager::setDockingArea( const awt::Rectangle& rDockingArea )
     m_aDockingArea = putAWTToRectangle( rDockingArea );
     m_bLayoutDirty = true;
     aWriteLock.unlock();
-
-    implts_setDockingAreaWindowSizes( rDockingArea );
 }
 
 void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& rBorderSpace )
@@ -246,6 +244,7 @@ void ToolbarLayoutManager::doLayout(const ::Size& aContainerSize)
     WriteGuard aWriteLock( m_aLock );
     bool bLayoutInProgress( m_bLayoutInProgress );
     m_bLayoutInProgress = true;
+    awt::Rectangle aDockingArea = putRectangleValueToAWT( m_aDockingArea );
     aWriteLock.unlock();
 
     if ( bLayoutInProgress )
@@ -254,6 +253,7 @@ void ToolbarLayoutManager::doLayout(const ::Size& aContainerSize)
     // Retrieve row/column dependent data from all docked user-interface elements
     for ( sal_Int32 i = 0; i < DOCKINGAREAS_COUNT; i++ )
     {
+        bool bReverse( isReverseOrderDockingArea( i ));
         std::vector< SingleRowColumnWindowData > aRowColumnsWindowData;
 
         implts_getDockingAreaElementInfos( (ui::DockingArea)i, aRowColumnsWindowData );
@@ -262,10 +262,13 @@ void ToolbarLayoutManager::doLayout(const ::Size& aContainerSize)
         const sal_uInt32 nCount = aRowColumnsWindowData.size();
         for ( sal_uInt32 j = 0; j < nCount; ++j )
         {
-            implts_calcWindowPosSizeOnSingleRowColumn( i, nOffset, aRowColumnsWindowData[j], aContainerSize );
+        sal_uInt32 nIndex = bReverse ? nCount-j-1 : j;
+            implts_calcWindowPosSizeOnSingleRowColumn( i, nOffset, aRowColumnsWindowData[nIndex], aContainerSize );
             nOffset += aRowColumnsWindowData[j].nStaticSize;
         }
     }
+
+    implts_setDockingAreaWindowSizes( aDockingArea );
 
     aWriteLock.lock();
     m_bLayoutDirty      = false;
@@ -581,12 +584,13 @@ bool ToolbarLayoutManager::showToolbar( const ::rtl::OUString& rResourceURL )
     Window* pWindow = getWindowFromXUIElement( aUIElement.m_xUIElement );
     if ( pWindow )
     {
-        pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         if ( !aUIElement.m_bFloating )
         {
             WriteGuard aWriteLock( m_aLock );
             m_bLayoutDirty = true;
         }
+        else
+            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
 
         aUIElement.m_bVisible = true;
         implts_writeWindowStateData( aUIElement );
@@ -637,7 +641,10 @@ void ToolbarLayoutManager::refreshToolbarsVisibility()
         if ( pWindow )
         {
             if ( pIter->m_bVisible && !pIter->m_bMasterHide )
-                pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+        {
+            if ( pIter->m_bFloating )
+                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            }
             else
                 pWindow->Show( FALSE );
 
@@ -693,7 +700,7 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
 
         pIter->m_bMasterHide = !bVisible;
         Window* pWindow = getWindowFromXUIElement( pIter->m_xUIElement );
-        if ( pWindow )
+        if ( pWindow && pIter->m_bFloating )
             pWindow->Show(bVisible & bToolbarVisible, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
     }
 
@@ -1485,19 +1492,14 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
                 }
             }
 
-            xWindow->setPosSize( aPixelPos.X(),
-                                 aPixelPos.Y(),
-                                 0, 0,
-                                 awt::PosSize::POS );
+            xWindow->setPosSize( aPixelPos.X(), aPixelPos.Y(), 0, 0, awt::PosSize::POS );
             if( bSetSize )
                 xWindow->setOutputSize( AWTSize( aSize) );
 
             if ( pWindow )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
-            if ( bShowElement )
-                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                else
+            if ( !bShowElement )
             pWindow->Hide();
             }
         }
@@ -2712,14 +2714,8 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
     aReadLock.unlock();
 
     sal_Int32 nCurrPos( 0 );
-    sal_Int32 nStartOffset( 0 );
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( nDockingArea == ui::DockingArea_DOCKINGAREA_RIGHT )
-        nStartOffset = pDockAreaWindow->GetSizePixel().Width() - rRowColumnWindowData.nStaticSize;
-    else if ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM )
-        nStartOffset = pDockAreaWindow->GetSizePixel().Height() - rRowColumnWindowData.nStaticSize;
-
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         uno::Reference< awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
@@ -2730,36 +2726,22 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             pWindow->SetParent( pDockAreaWindow );
 
         awt::Rectangle aWinRect = rRowColumnWindowData.aRowColumnWindowSizes[i];
-        if ( nDockingArea == ui::DockingArea_DOCKINGAREA_TOP )
+        if ( isHorizontalDockingArea( nDockingArea ))
         {
             if ( aWinRect.X < nCurrPos )
                 aWinRect.X = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( aWinRect.X, nOffset ),
                                       ::Size( aWinRect.Width, rRowColumnWindowData.nStaticSize ));
+            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             nCurrPos += ( aWinRect.X - nCurrPos ) + aWinRect.Width;
         }
-        else if ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM )
-        {
-            if ( aWinRect.X < nCurrPos )
-                aWinRect.X = nCurrPos;
-            pWindow->SetPosSizePixel( ::Point( aWinRect.X, nStartOffset - nOffset ),
-                                      ::Size( aWinRect.Width, rRowColumnWindowData.nStaticSize ));
-            nCurrPos += ( aWinRect.X - nCurrPos ) + aWinRect.Width;
-        }
-        else if ( nDockingArea == ui::DockingArea_DOCKINGAREA_LEFT )
+        else
         {
             if ( aWinRect.Y < nCurrPos )
                 aWinRect.Y = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( nOffset, aWinRect.Y ),
                                       ::Size( rRowColumnWindowData.nStaticSize, aWinRect.Height ));
-            nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
-        }
-        else if ( nDockingArea == ui::DockingArea_DOCKINGAREA_RIGHT )
-        {
-            if ( aWinRect.Y < nCurrPos )
-                aWinRect.Y = nCurrPos;
-            pWindow->SetPosSizePixel( ::Point( nStartOffset - nOffset, aWinRect.Y ),
-                                      ::Size( rRowColumnWindowData.nStaticSize, aWinRect.Height ));
+            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
         }
     }

@@ -57,6 +57,13 @@ using namespace com::sun::star;
 namespace framework
 {
 
+bool isReverseOrderDockingArea( const sal_Int16 nDockArea )
+{
+    ui::DockingArea eDockArea = (ui::DockingArea)nDockArea;
+    return (( eDockArea == ui::DockingArea_DOCKINGAREA_BOTTOM ) ||
+            ( eDockArea == ui::DockingArea_DOCKINGAREA_RIGHT ));
+}
+
 bool isToolboxHorizontalAligned( ToolBox* pToolBox )
 {
     if ( pToolBox )
@@ -64,15 +71,15 @@ bool isToolboxHorizontalAligned( ToolBox* pToolBox )
     return false;
 }
 
-bool isHorizontalDockingArea( const sal_Int16 nDockArea )
-{
-    ::ui::DockingArea nDockingArea = (ui::DockingArea)nDockArea;
-    return (( nDockingArea == ui::DockingArea_DOCKINGAREA_TOP ) || ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM ));
-}
-
 bool isHorizontalDockingArea( const ui::DockingArea& nDockingArea )
 {
-    return (( nDockingArea == ui::DockingArea_DOCKINGAREA_TOP ) || ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM ));
+    return (( nDockingArea == ui::DockingArea_DOCKINGAREA_TOP ) ||
+            ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM ));
+}
+
+bool isHorizontalDockingArea( const sal_Int16 nDockArea )
+{
+  return isHorizontalDockingArea((ui::DockingArea)nDockArea );
 }
 
 ::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow )

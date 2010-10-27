@@ -2507,11 +2507,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
 
             // if we did not do an container window resize, or it failed, then use the DockingAcceptor as usual
             if ( !bGotRequestedBorderSpace )
-            {
                 bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace );
-                if ( bGotRequestedBorderSpace )
-                    xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
-            }
 
             if ( bGotRequestedBorderSpace )
             {
@@ -2546,6 +2542,8 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
                 implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), long( 0 ))),
                                             ::Size( aContainerSize.Width(),aStatusBarSize.Height() ));
             }
+
+            xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
 
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
             aWriteGuard.lock();
