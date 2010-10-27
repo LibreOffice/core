@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,3 +144,5 @@ enum FillInteriorStyle  { FIS_HOLLOW = 0, FIS_SOLID = 1, FIS_PATTERN = 2, FIS_HA
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

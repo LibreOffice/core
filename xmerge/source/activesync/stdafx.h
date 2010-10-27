@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //
 //  stdafx.h : include file for standard system include files,
 //  or project specific include files that are used frequently,
@@ -26,3 +27,4 @@
 //
 extern CXMergeSyncModule _Module;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -193,3 +194,5 @@ inline void LwpCharacterBorderOverride::RevertBelowWidth()
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

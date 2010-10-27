@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -217,3 +218,5 @@ extern rtl::OUString pFilterStrings[];
 #define  QUERY_CONSTVALUE_ALL                       _FILTER_CONFIG_FROM_ASCII_("all")
 
 #endif // _FILTER_CONFIG_CONSTANT_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

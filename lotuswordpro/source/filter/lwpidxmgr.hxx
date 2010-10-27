@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -114,3 +115,5 @@ public:
     sal_uInt32 GetObjTime( sal_uInt16 index ) { return m_TimeTable[index-1]; }
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

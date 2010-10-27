@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // XMergeFilter.h: interface for the CXMergeFilter class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -71,3 +72,5 @@ public:
 };
 
 #endif // !defined(AFX_XMERGEFILTER_H__25C39F6B_A1D7_408E_8F58_9CBEE9A666CC__INCLUDED_)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

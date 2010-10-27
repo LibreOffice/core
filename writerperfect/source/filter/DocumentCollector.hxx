@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* DocumentCollector: Collects sections and runs of text from a
  * file (and styles to go along with them) and writes them
  * to a target file
@@ -200,3 +201,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

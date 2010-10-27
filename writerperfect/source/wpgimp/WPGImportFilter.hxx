@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright (C) 2000 by Sun Microsystems, Inc.
  * Copyright (C) 2002-2004 William Lachance (wlach@interlog.com)
@@ -112,3 +113,5 @@ SAL_CALL WPGImportFilter_createInstance( const ::com::sun::star::uno::Reference<
     throw ( ::com::sun::star::uno::Exception );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

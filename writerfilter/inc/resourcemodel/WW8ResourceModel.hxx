@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -399,3 +400,5 @@ Stream::Pointer_t WRITERFILTER_DLLPUBLIC createStreamHandler();
 
 
 #endif // INCLUDED_WW8_EVENT_HANDLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

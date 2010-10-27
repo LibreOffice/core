@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // XMergeSyncModule.h: interface for the CXMergeSyncModule class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -27,3 +28,5 @@ public:
 };
 
 #endif // !defined(AFX_XMERGESYNCMODULE_H__0788DA0C_4DCB_4876_9722_F9EAF1EB5462__INCLUDED_)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <filter/msfilter/mstoolbar.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
@@ -815,3 +816,4 @@ void TBVisualData::Print( FILE* fp )
     rcFloat.Print( fp );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

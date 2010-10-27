@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -143,3 +144,5 @@ static sal_uInt8 s_pLwpPatternTab[][8] = {                //Id  Name
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

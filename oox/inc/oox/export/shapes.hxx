@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -160,3 +161,5 @@ public:
 }}
 
 #endif /* ndef _OOX_EXPORT_SHAPES_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

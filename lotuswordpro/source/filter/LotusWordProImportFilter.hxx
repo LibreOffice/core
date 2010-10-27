@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _WORDPERFECTIMPORTFILTER_HXX
 #define _WORDPERFECTIMPORTFILTER_HXX
 
@@ -88,3 +89,5 @@ SAL_CALL LotusWordProImportFilter_createInstance( const ::com::sun::star::uno::R
     throw ( ::com::sun::star::uno::Exception );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -314,3 +315,5 @@ sal_uInt32 getU32(const WW8StructBase::Sequence & rSeq, sal_uInt32 nOffset);
 }}
 
 #endif // INCLUDED_WW8_STRUCT_BASE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

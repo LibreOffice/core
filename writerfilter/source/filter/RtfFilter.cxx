@@ -143,6 +143,4 @@ uno::Reference< uno::XInterface > RtfFilter_createInstance( const uno::Reference
    return (cppu::OWeakObject*) new RtfFilter( xContext );
 }
 
-/* vi:set shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

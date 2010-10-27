@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,3 +80,5 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _FastTokenHandlerService_cr
 
 }}
 #endif // OOX_SHAPE_FAST_TOKEN_HANDLER_SERVICE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

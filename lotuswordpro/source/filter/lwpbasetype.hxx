@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -115,3 +116,5 @@ void LwpPoint::SetX(sal_Int32 nX){m_nX = nX;}
 void LwpPoint::SetY(sal_Int32 nY){m_nY = nY;}
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

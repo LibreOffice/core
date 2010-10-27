@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,3 +146,5 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 } // namespace filter
 
 #endif // __FILTER_CONFIG_CACHEUPDATELISTENER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
