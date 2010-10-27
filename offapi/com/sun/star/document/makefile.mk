@@ -119,7 +119,11 @@ IDLFILES=\
     XUndoManager.idl \
     XUndoManagerListener.idl \
     XUndoManagerSupplier.idl \
-    UndoManagerEvent.idl
+    UndoManagerEvent.idl \
+    NotLockedException.idl \
+    EmptyUndoStackException.idl \
+    UndoContextNotClosedException.idl \
+    UndoFailedException.idl \
 
 
 # ------------------------------------------------------------------

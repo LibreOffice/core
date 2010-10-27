@@ -76,6 +76,10 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     */
     void    redoActionsCleared( [in] ::com::sun::star::lang::EventObject i_event );
 
+    /** called when the complete undo manager has been reset
+    */
+    void    resetAll( [in] ::com::sun::star::lang::EventObject i_event );
+
     /** is called when a new Undo context has been entered.
 
         <p><member>UndoManagerEvent::UndoActionTitle</member> carries the title of the Undo context, and

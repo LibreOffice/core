@@ -27,6 +27,10 @@
 #ifndef __com_sun_star_document_XUndoManager_idl__
 #define __com_sun_star_document_XUndoManager_idl__
 
+#include <com/sun/star/document/EmptyUndoStackException.idl>
+#include <com/sun/star/document/NotLockedException.idl>
+#include <com/sun/star/document/UndoContextNotClosedException.idl>
+#include <com/sun/star/document/UndoFailedException.idl>
 #include <com/sun/star/util/InvalidStateException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
@@ -118,7 +122,7 @@ interface XUndoManager
 
         <p>The redo stack is cleared when a new hidden Undo context is entered.</p>
 
-        @throws ::com::sun::star::util::InvalidStateException
+        @throws EmptyUndoStackException
             if the undo stack is currently empty, in which case it is impossible to push a hidden undo action onto
             it.
 
@@ -126,7 +130,7 @@ interface XUndoManager
         @see leaveUndoContext
     */
     void    enterHiddenUndoContext()
-        raises( ::com::sun::star::util::InvalidStateException );
+        raises( EmptyUndoStackException );
 
     /** leaves the undo context previously opened via <member>enterUndoContext</member> respectively
         <member>enterHiddenUndoContext</member>.
@@ -168,69 +172,86 @@ interface XUndoManager
     /** reverts the most recent action on the document.
 
         <p>Effectively, invoking this method will
-        <ul><li>close any undo contexts which are currently open</p>
-            <li>invoke <member>XUndoAction::undo</member> on the top-most action of the undo stack</li>
+        <ul><li>invoke <member>XUndoAction::undo</member> on the top-most action of the undo stack</li>
             <li>move this undo action from the undo stack to the redo stack</li>
         </ul></p>
 
-        @throws ::com::sun::star::util::InvalidStateException
-            when the undo stack is currently empty
+        @throws EmptyUndoStackException
+            if the undo stack is currently empty
 
-        @throws ::com::sun::star::lang::WrappedTargetException
-            if the invocation of <member>XUndoAction::undo</member> raises an exception other than a <member scope="com::sun::star::uno">RuntimeException</member>
+        @throws UndoContextNotClosedException
+            if there currently is an open undo context
+
+        @throws UndoFailedException
+            if the invocation of <member>XUndoAction::undo</member> raised this exception. In this case, the undo stack
+            of the undo manager will have been cleared.
 
         @see redo
+        @see enterUndoContext
     */
     void    undo()
-            raises( ::com::sun::star::util::InvalidStateException,
-                    ::com::sun::star::lang::WrappedTargetException );
+            raises( ::com::sun::star::document::EmptyUndoStackException,
+                    ::com::sun::star::document::UndoContextNotClosedException,
+                    ::com::sun::star::document::UndoFailedException );
 
     /** replays the action on the document which has most recently been undone
 
         <p>Effectively, invoking this method will
-        <ul><li>close any undo contexts which are currently open</p>
-            <li>invoke <member>XUndoAction::redo</member> on the top-most action of the redo stack</li>
+        <ul><li>invoke <member>XUndoAction::redo</member> on the top-most action of the redo stack</li>
             <li>move this action from the redo stack to the undo stack</li>
         </ul></p>
 
-        @throws ::com::sun::star::util::InvalidStateException
+        @throws EmptyUndoStackException
             when the Redo stack is currently empty
 
-        @throws ::com::sun::star::lang::WrappedTargetException
-            if the invocation of <member>XUndoAction::redo</member> raises an exception other than a <member scope="com::sun::star::uno">RuntimeException</member>
+        @throws UndoContextNotClosedException
+            if there currently is an open undo context
+
+        @throws UndoFailedException
+            if the invocation of <member>XUndoAction::redo</member> raised this exception. In this case, the redo stack
+            of the undo manager will have been cleared.
 
         @see undo
     */
     void    redo()
-            raises( ::com::sun::star::util::InvalidStateException,
-                    ::com::sun::star::lang::WrappedTargetException );
+            raises( ::com::sun::star::document::EmptyUndoStackException,
+                    ::com::sun::star::document::UndoContextNotClosedException,
+                    ::com::sun::star::document::UndoFailedException );
 
-    /** determines whether the undo stack is currently non-empty.
+    /** determines whether <member>undo</member> can reasonably be expected to succeed.
+
+        @return
+            <FALSE/> if and only if the undo stack is currently, empty, or there is an open and not-yet-closed
+            undo context.
     */
     boolean isUndoPossible();
 
-    /** determines whether the Redo stack is currently non-empty.
+    /** determines whether <member>redo</member> can reasonably be expected to succeed.
+
+        @return
+            <FALSE/> if and only if the redo stack is currently, empty, or there is an open and not-yet-closed
+            undo context.
     */
     boolean isRedoPossible();
 
     /** returns the title of the top-most action on the undo stack
 
-        @throws ::com::sun::star::util::InvalidStateException
+        @throws EmptyUndoStackException
             when the undo stack is currently empty
 
         @see XUndoAction::Title
     */
     string  getCurrentUndoActionTitle()
-            raises( ::com::sun::star::util::InvalidStateException );
+            raises( ::com::sun::star::document::EmptyUndoStackException );
 
     /** returns the title of the top-most action on the Redo stack
 
-        @throws ::com::sun::star::util::InvalidStateException
+        @throws EmptyUndoStackException
             when the Redo stack is currently empty
         @see XUndoAction::Title
     */
     string  getCurrentRedoActionTitle()
-            raises( ::com::sun::star::util::InvalidStateException );
+            raises( ::com::sun::star::document::EmptyUndoStackException );
 
     /** returns the titles of all actions currently on the undo stack, from top to bottom
         @see XUndoAction::Title
@@ -249,15 +270,38 @@ interface XUndoManager
 
         <p>All actions will be removed from both the Undo and the Redo stack. Actions which implement the
         <type scope="com::sun::star::lang">XComponent</type> interface will be disposed.</p>
+
+        @throws UndoContextNotClosedException
+            if the method is invoked while an undo context is still open
     */
-    void    clear();
+    void    clear()
+            raises( ::com::sun::star::document::UndoContextNotClosedException );
 
     /** clears the redo stack.
 
         <p>All actions will be removed from the Redo stack. Actions which implement the <type scope="com::sun::star::lang">XComponent</type>
         interface will be disposed.</p>
+
+        @throws UndoContextNotClosedException
+            if the method is invoked while an undo context is still open
     */
-    void    clearRedo();
+    void    clearRedo()
+            raises( ::com::sun::star::document::UndoContextNotClosedException );
+
+    /** resets the Undo manager
+
+        <p>In particular, this method will
+            <ul><li>close all open undo contexts</li>
+                <li>clear the undo stack</li>
+                <li>clear the redo stack</li>
+            </ul></p>
+
+        <p>Note that possible listeners will not get notifications for the single parts of the reset, i.e. there
+        will be no single <member>XUndoManagerListener::allActionsCleared</member>,
+        <member>XUndoManagerListener::leftContext</member>, etc., notifications. Instead, listeners will be
+        notified of the reset by calling their <member>XUndoManagerListener::resetAll</member> method.</p>
+    */
+    void    reset();
 
     /** locks</a> the Undo manager
 
@@ -272,14 +316,14 @@ interface XUndoManager
 
     /** unlocks the Undo manager
 
-        @throws ::com::sun::star::util::InvalidStateException
+        @throws ::com::sun::star::document::NotLockedException
             if the Undo manager is not currently locked.
 
         @see lock
         @see isLocked
     */
     void    unlock()
-        raises  (   ::com::sun::star::util::InvalidStateException
+        raises  (   ::com::sun::star::document::NotLockedException
                 );
 
     /** determines whether the Undo manager is currently locked.

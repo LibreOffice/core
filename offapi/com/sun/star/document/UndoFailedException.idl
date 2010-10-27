@@ -24,11 +24,10 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_document_XUndoAction_idl__
-#define __com_sun_star_document_XUndoAction_idl__
+#ifndef __com_sun_star_document_UndoFailedException_idl__
+#define __com_sun_star_document_UndoFailedException_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/document/UndoFailedException.idl>
+#include <com/sun/star/uno/Exception.idl>
 
 //==================================================================================================================
 
@@ -36,35 +35,16 @@ module com { module sun { module star { module document {
 
 //==================================================================================================================
 
-/** represents a single (undoable) action on a document
+/** thrown when reverting to re-applying an undoable action fails.
+
+    @see XUndoAction::undo
+    @see XUndoManager::undo
  */
-interface XUndoAction
+exception UndoFailedException : ::com::sun::star::uno::Exception
 {
-    /** reverts the action represented by the instance
-
-        @throws UndoFailedException
-            if reverting the action failed. In this case, the caller should assume that this is a permanent failure,
-            and take appropriate action, such as discarding the <code>XUndoAction</code> instance, and any possibly
-            depending instances.
+    /** describes the reason why the operation failed. Usually, this member will carry an exception.
     */
-    void    undo()
-            raises  (   ::com::sun::star::document::UndoFailedException
-                    );
-
-    /** repeats the action represented by the instance, after it had previously been reverted.
-
-        @throws UndoFailedException
-            if repeating the action failed. In this case, the caller should assume that this is a permanent failure,
-            and take appropriate action, such as discarding the <code>XUndoAction</code> instance, and any possibly
-            depending instances.
-    */
-    void    redo()
-            raises  (   ::com::sun::star::document::UndoFailedException
-                    );
-
-    /** is the human-readable, localized description of the action.
-    */
-    [attribute, readonly]   string  Title;
+    any Reason;
 };
 
 //==================================================================================================================
