@@ -188,6 +188,7 @@ public:
     virtual void WriteUserData (String&, BOOL bBrowse = FALSE);
     virtual void ReadUserData (const String&, BOOL bBrowse = FALSE);
     virtual SdrView* GetDrawView (void) const;
+    virtual void EnterStandardMode();
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
     /** When <TRUE/> is given, then the mouse shape is set to hour glass (or

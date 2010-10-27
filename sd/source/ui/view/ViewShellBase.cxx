@@ -1003,6 +1003,18 @@ SdrView* ViewShellBase::GetDrawView (void) const
 
 
 
+void ViewShellBase::EnterStandardMode()
+{
+    SdrView* pView = GetDrawView();
+    // finish text editing
+    if ( pView && pView->IsTextEdit() )
+        pView->SdrEndTextEdit();
+    // more?
+}
+
+
+
+
 void ViewShellBase::AdjustPosSizePixel (const Point &rOfs, const Size &rSize)
 {
     SfxViewShell::AdjustPosSizePixel (rOfs, rSize);
