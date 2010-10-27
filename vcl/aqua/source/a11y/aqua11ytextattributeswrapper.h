@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,3 +38,5 @@
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange;
 @end
 #endif // _SV_AQUA11TEXTATTRIBUTESWRAPPER_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

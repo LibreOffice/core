@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -356,3 +357,5 @@ inline bool ImplOs2FontData::HasChar( sal_uInt32 cChar ) const
 }
 
 #endif // _SV_SALGDI_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

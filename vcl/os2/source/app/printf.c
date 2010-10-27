@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* ----------------------------------------------------------------- */
 /* PRINTF: diverts PRINTF calls to an OS/2 Named Queue               */
 /* Copyright (c) IBM Corporation, 1991, 1992                         */
@@ -282,3 +283,5 @@ int printf_(struct perthread *tp)  /* pointer to per-thread data */
   tp->bell     =FALSE;             /* true if line has bell */
   return 0;                        /* success! */
   } /* printf_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

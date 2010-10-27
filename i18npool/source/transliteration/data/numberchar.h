@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,3 +91,5 @@ const sal_Int16 ExponentCount_short_CJK     = 2;
 } } } }
 
 #endif // _L10N_TRANSLITERATION_NUMTOCHAR_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

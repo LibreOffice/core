@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,3 +67,5 @@ static const long kPixMapHRes = 72;
 static const long kPixMapVRes = 72;
 
 #endif // _SV_SALCONST_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
