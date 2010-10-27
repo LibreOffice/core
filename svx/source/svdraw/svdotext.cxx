@@ -1430,8 +1430,6 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
 
     FASTBOOL bContourFrame=IsContourTextFrame();
 
-    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
-
     if( GetModel() )
     {
         MapMode aMapMode(GetModel()->GetScaleUnit(), Point(0,0),
@@ -1439,6 +1437,8 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
                          GetModel()->GetScaleFraction());
         rOutl.SetRefMapMode(aMapMode);
     }
+
+    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
