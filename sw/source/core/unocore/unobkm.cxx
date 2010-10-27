@@ -242,7 +242,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     UnoActionContext aCont(m_pImpl->m_pDoc);
     if (!m_pImpl->m_sMarkName.getLength())
     {
-         m_pImpl->m_sMarkName =  OUString::createFromAscii("Bookmark");
+         m_pImpl->m_sMarkName =  OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"));
     }
     if ((eType == IDocumentMarkAccess::BOOKMARK) &&
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))
@@ -388,7 +388,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXBookmark::getImplementationName() throw (uno::RuntimeException)
 {
-    return OUString::createFromAscii("SwXBookmark");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXBookmark"));
 }
 
 static char const*const g_ServicesBookmark[] =

@@ -407,7 +407,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl::OUString _text ) throw (uno::RuntimeException)
 {
-    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString::createFromAscii("com.sun.star.text.TextField.FileName") ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.FileName")) ), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( _text.getLength() > 0 )
     {

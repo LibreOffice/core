@@ -1776,7 +1776,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         if( xModel.is() )
         {
             uno::Any aVal;
-            OUString sName = OUString::createFromAscii("ButtonType");
+            OUString sName(RTL_CONSTASCII_USTRINGPARAM("ButtonType"));
             uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
 
             uno::Reference< beans::XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();

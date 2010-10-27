@@ -74,7 +74,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getListLevelNumber() throw (css::uno::RuntimeException);
 
     //XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return rtl::OUString::createFromAscii("Name"); }
+    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")); }
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

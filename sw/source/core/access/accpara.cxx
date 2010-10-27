@@ -1471,7 +1471,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
     // --> OD 2010-03-08 #i92233#
-    static rtl::OUString sMMToPixelRatio( rtl::OUString::createFromAscii( "MMToPixelRatio" ) );
+    static rtl::OUString sMMToPixelRatio(RTL_CONSTASCII_USTRINGPARAM("MMToPixelRatio"));
     bool bProvideMMToPixelRatio( false );
     {
         if ( aRequestedAttributes.getLength() == 0 )

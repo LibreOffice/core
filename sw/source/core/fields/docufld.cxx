@@ -994,7 +994,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                 aAny = xSet->getPropertyValue( rName );
 
                 uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
-                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
+                    ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), uno::UNO_QUERY );
                 uno::Any aNew;
                     aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                 aNew >>= sVal;
@@ -1150,7 +1150,7 @@ String SwDocInfoField::Expand() const
                     // if the field is "fixed" we don't update it from the property
                     ::rtl::OUString sVal;
                     uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
-                        ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
+                        ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), uno::UNO_QUERY );
                     util::Date aDate;
                     util::DateTime aDateTime;
                     util::Duration aDuration;

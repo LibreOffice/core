@@ -289,7 +289,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             {
                 // create object with desired ClassId
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+                ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
@@ -581,13 +581,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Reference < embed::XLinkCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OOoEmbeddedObjectFactory")) ),
                 uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
-        aMediaDescriptor[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+        aMediaDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
         aMediaDescriptor[0].Value <<= ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
@@ -713,7 +713,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
@@ -734,10 +734,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             if ( xSet.is() )
             {
                 if( bValidURL )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                         makeAny( ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 if( bValidMimeType )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")),
                         makeAny( ::rtl::OUString( rMimeType ) ) );
             }
 
@@ -845,7 +845,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
@@ -865,31 +865,31 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")),
                     makeAny( ::rtl::OUString( URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")),
                     makeAny( ::rtl::OUString( rName ) ) );
 
                 if ( eScrollMode == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                         makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
 
                 if ( bIsBorderSet )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                         makeAny( bHasBorder ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
                         makeAny( sal_True ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                     makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
@@ -952,14 +952,14 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             }
 
             // unfortunately the names of the properties are depending on the object
-            ::rtl::OUString aParaName = ::rtl::OUString::createFromAscii("AppletCommands");
+            ::rtl::OUString aParaName(RTL_CONSTASCII_USTRINGPARAM("AppletCommands"));
             try
             {
                 xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
             }
             catch ( uno::Exception& )
             {
-                aParaName = ::rtl::OUString::createFromAscii("PluginCommands");
+                aParaName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands"));
                 try
                 {
                     xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );

@@ -215,9 +215,9 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, pWin->GetAuthor());
         aText = aRewriter.Apply(aText);
-        aText.Append(String(rtl::OUString::createFromAscii(" (") +
-        String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString::createFromAscii(", ") +
-        String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString::createFromAscii("): \"")));
+        aText.Append(String(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
+        String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ")) +
+        String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("): \""))));
     GetOutlinerView()->InsertText(aText,false);
 
     // insert old, selected text or "..."
@@ -225,8 +225,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     if (pText->GetTextObject().GetText(0) != String(rtl::OUString::createFromAscii("")))
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
-        GetOutlinerView()->InsertText(rtl::OUString::createFromAscii("..."),false);
-    GetOutlinerView()->InsertText(rtl::OUString::createFromAscii("\"\n"),false);
+        GetOutlinerView()->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")),false);
+    GetOutlinerView()->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"\n")),false);
 
     GetOutlinerView()->SetSelection(ESelection(0x0,0x0,0xFFFF,0xFFFF));
     SfxItemSet aAnswerSet( DocView().GetDocShell()->GetPool() );

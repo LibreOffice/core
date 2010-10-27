@@ -842,7 +842,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer));
         if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
         {
-            sBodyMimeType = ::rtl::OUString::createFromAscii("text/html; charset=");
+            sBodyMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/html; charset="));
             sBodyMimeType += ::rtl::OUString::createFromAscii(
                                 rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
             SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
@@ -850,7 +850,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         }
         else
             sBodyMimeType =
-                ::rtl::OUString::createFromAscii("text/plain; charset=UTF-8; format=flowed");
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain; charset=UTF-8; format=flowed"));
     }
 
     uno::Reference< XPropertySet > xColumnProp;
@@ -1286,7 +1286,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                     const sal_Int32 nOpts = aOptions.getLength();
                     aOptions.realloc( nOpts + 1 );
-                    aOptions[ nOpts ].Name = rtl::OUString::createFromAscii( "Wait" );
+                    aOptions[ nOpts ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                     aOptions[ nOpts ].Value <<= sal_True ;
 //                    aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, TRUE) );
 //                    // #i52629# aynchronous printing should only be done in silent mode - otherwise

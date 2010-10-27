@@ -918,7 +918,7 @@ String SwOLEObj::GetDescription()
 
 SwOLELRUCache::SwOLELRUCache()
     : SvPtrarr( 64, 16 ),
-    utl::ConfigItem( OUString::createFromAscii( "Office.Common/Cache" )),
+    utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"))),
     nLRU_InitSize( 20 ),
     bInUnload( sal_False )
 {
@@ -930,7 +930,7 @@ uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
 {
     Sequence< OUString > aNames( 1 );
     OUString* pNames = aNames.getArray();
-    pNames[0] = OUString::createFromAscii( "Writer/OLE_Objects" );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/OLE_Objects"));
     return aNames;
 }
 

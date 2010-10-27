@@ -142,7 +142,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                         new SwConnectionContext(
                             rConfigItem.GetInServerName(),
                             rConfigItem.GetInServerPort(),
-                            ::rtl::OUString::createFromAscii( "Insecure" ));
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
                 xInMailService->connect(xConnectionContext, xAuthenticator);
                 rxInMailService = xInMailService;
             }
@@ -681,7 +681,7 @@ uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
 {
     uno::Reference< beans::XPropertySet > xPropSet =
                 uno::Reference< beans::XPropertySet>(rSrvMgr, uno::UNO_QUERY);
-    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii("DefaultContext"));
+    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     uno::Reference< uno::XComponentContext> rCmpCtx;
     aAny >>= rCmpCtx;
     return rCmpCtx;

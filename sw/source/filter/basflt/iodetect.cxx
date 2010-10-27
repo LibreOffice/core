@@ -149,7 +149,7 @@ BOOL SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
     try
     {
         ULONG nStgFmtId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( ::rtl::OUString::createFromAscii("content.xml") );
+        bRet = rStg->isStreamElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")) );
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }

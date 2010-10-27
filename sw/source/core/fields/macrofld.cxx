@@ -248,8 +248,8 @@ BOOL SwMacroField::isScriptURL( const String& str )
 
     uno::Reference< uri::XUriReferenceFactory >
         xFactory( xSMgr->createInstance(
-            OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory" ) ), uno::UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.uri.UriReferenceFactory")) ), uno::UNO_QUERY );
 
     if ( xFactory.is() )
     {

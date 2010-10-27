@@ -72,12 +72,12 @@ SwBreakIt::SwBreakIt(
     //{
  //       xBreak = uno::Reference< i18n::XBreakIterator >(
     //      m_xMSF->createInstance(
-    //          rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+    //          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),
  //           uno::UNO_QUERY);
 
  //       xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
  //           m_xMSF->createInstance(
- //                rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
+ //                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.ScriptTypeDetector")) ),
  //           uno::UNO_QUERY);
  //   }
 }

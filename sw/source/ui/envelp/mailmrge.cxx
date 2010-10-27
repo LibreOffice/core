@@ -431,9 +431,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         sCommand += String::CreateFromInt32(SFX_FILTER_NOTINFILEDLG);
         sCommand += C2U(":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
-        const ::rtl::OUString sName = OUString::createFromAscii("Name");
-        const ::rtl::OUString sFlags = OUString::createFromAscii("Flags");
-        const ::rtl::OUString sUIName = OUString::createFromAscii("UIName");
+        const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        const ::rtl::OUString sFlags(RTL_CONSTASCII_USTRINGPARAM("Flags"));
+        const ::rtl::OUString sUIName(RTL_CONSTASCII_USTRINGPARAM("UIName"));
         USHORT nODT = USHRT_MAX;
         while(xList->hasMoreElements())
         {

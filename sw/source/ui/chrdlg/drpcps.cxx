@@ -399,7 +399,7 @@ void SwDropCapsPict::CheckScript( void )
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xBreak = Reference< I18N::XBreakIterator >(xMSF->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),UNO_QUERY);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),UNO_QUERY);
     }
     if( xBreak.is() )
     {

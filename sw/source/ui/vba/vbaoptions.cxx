@@ -104,7 +104,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     value >>= sNewPath;
     rtl::OUString sNewPathUrl;
     ::osl::File::getFileURLFromSystemPath( sNewPath, sNewPathUrl );
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings")) ), uno::UNO_QUERY_THROW );
     rtl::OUString sOldPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sOldPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
@@ -119,7 +119,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
 
 uno::Any SwVbaOptions::getValueEvent()
 {
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings")) ), uno::UNO_QUERY_THROW );
     rtl::OUString sPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently

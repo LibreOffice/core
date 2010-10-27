@@ -253,7 +253,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                 uno::makeAny( ::rtl::OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                     }
                 }
@@ -319,7 +319,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aCommandList.FillSequence( aSeq );
                         try
                         {
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), uno::makeAny( aSeq ) );
+                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands")), uno::makeAny( aSeq ) );
                         }
                         catch ( uno::Exception& )
                         {
@@ -340,7 +340,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     try
                     {
                         if ( sClassLocation.Len() )
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                 uno::makeAny(
                                     ::rtl::OUString(
                                         URIHelper::SmartRel2Abs(
@@ -350,7 +350,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         if ( aCommandList.Count() )
                         {
                             aCommandList.FillSequence( aSeq );
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aSeq ) );
+                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aSeq ) );
                         }
                     }
                     catch ( uno::Exception& )
@@ -400,31 +400,31 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aMargin = pMarginItem->GetSize();
 
                     if ( pURLItem )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
 
                     if ( eScroll == ScrollingAuto )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
                             uno::makeAny( sal_True ) );
                     else
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                             uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
                     //if ( aFrmDescr.IsFrameBorderSet() )
                     if ( pBorderItem )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                             uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
                     /*else
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
                             makeAny( sal_True ) );*/
 
                     if ( pMarginItem )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                             uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
                             uno::makeAny( sal_Int32( aMargin.Height() ) ) );
                     }
                 }

@@ -388,7 +388,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAva
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                        rtl::OUString::createFromAscii("_beamer"),
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")),
                                         FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
     {   // the beamer has been opened by the SfxViewFrame

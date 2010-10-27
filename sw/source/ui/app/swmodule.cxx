@@ -228,8 +228,8 @@ SwModule::GetScannerManager()
             m_xScannerManager =
                 uno::Reference< scanner::XScannerManager >(
                     xMgr->createInstance(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.scanner.ScannerManager" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.scanner.ScannerManager")) ),
                     uno::UNO_QUERY );
         }
     }
@@ -245,7 +245,7 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
         {
             m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
                     xMgr->createInstance(
-                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing"))),
                         uno::UNO_QUERY );
         }
     }

@@ -1785,22 +1785,22 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
 
         com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
         sal_Int32 n=0;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("TableCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nTbl;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ImageCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nGrf;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ObjectCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nOLE;
         if ( rStat.nPage )
         {
-            aStat[n].Name = ::rtl::OUString::createFromAscii("PageCount");
+            aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount"));
             aStat[n++].Value <<= (sal_Int32)rStat.nPage;
         }
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ParagraphCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nPara;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("WordCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nWord;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("CharacterCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)

@@ -374,7 +374,7 @@ void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-            rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::READ );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::READ );
     SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
 
     SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(

@@ -175,7 +175,7 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -758,19 +758,19 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         OUString *pSeq = aFamiliesSeq.getArray();
         if( aOpt.IsFrmFmts() )
             // SFX_STYLE_FAMILY_FRAME;
-            *pSeq++ = OUString::createFromAscii("FrameStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("FrameStyles"));
         if( aOpt.IsPageDescs() )
             // SFX_STYLE_FAMILY_PAGE;
-            *pSeq++ = OUString::createFromAscii("PageStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
         if( aOpt.IsTxtFmts() )
         {
             // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
-            *pSeq++ = OUString::createFromAscii("CharacterStyles");
-            *pSeq++ = OUString::createFromAscii("ParagraphStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"));
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"));
         }
         if( aOpt.IsNumRules() )
             // SFX_STYLE_FAMILY_PSEUDO;
-            *pSeq++ = OUString::createFromAscii("NumberingStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"));
 
         OUString sStyleInsertModeFamilies(
                 RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
@@ -841,7 +841,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         }
         else
         {
-            StreamPath = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            StreamPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
         }
 
         if( StreamPath.getLength() )
@@ -1104,7 +1104,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
 
             // get parser
             uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
             ASSERT( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( xXMLParser.is() )

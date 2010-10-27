@@ -355,7 +355,7 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
                 uno::Reference< container::XNameAccess > xUICommandLabels;
@@ -570,7 +570,7 @@ bGrammarResults(false)
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING_DLG, rImg );
 
@@ -703,7 +703,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING_DLG, rImg );
 

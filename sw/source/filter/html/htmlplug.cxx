@@ -432,15 +432,15 @@ void SwHTMLParser::InsertEmbed()
         if ( xSet.is() )
         {
             if( bHasURL )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                     uno::makeAny( ::rtl::OUString( aURL ) ) );
             if( bHasType )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")),
                     uno::makeAny( ::rtl::OUString( aType ) ) );
 
             uno::Sequence < beans::PropertyValue > aProps;
             aCmdLst.FillSequence( aProps );
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aProps ) );
+            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aProps ) );
 
             // TODO/LATER: EnableSetModified?!
             //pPlugin->EnableSetModified( TRUE );
@@ -910,27 +910,27 @@ void SwHTMLParser::InsertFloatingFrame()
                 sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( aName ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")), uno::makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
                         uno::makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                         uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
                 //if ( aFrmDescr.IsFrameBorderSet() )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                         uno::makeAny( bHasBorder ) );
                 /*else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
                         uno::makeAny( sal_True ) );*/
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                     uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
                     uno::makeAny( sal_Int32( aMargin.Height() ) ) );
             }
         }
@@ -1136,7 +1136,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         ::rtl::OUString aStr;
         String aURL;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")) );
         if( (aAny >>= aStr) && aStr.getLength() )
         {
             aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
@@ -1152,7 +1152,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         ::rtl::OUString aType;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")) );
         if( (aAny >>= aType) && aType.getLength() )
         {
             ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += "=\"";
@@ -1183,7 +1183,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         // CODEBASE
         ::rtl::OUString aCd;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")) );
         if( (aAny >>= aCd) && aCd.getLength() )
         {
             String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
@@ -1198,7 +1198,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         // CODE
         ::rtl::OUString aClass;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")) );
         aAny >>= aClass;
         ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_code) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
@@ -1207,7 +1207,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         // NAME
         ::rtl::OUString aAppletName;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletName" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")) );
         aAny >>= aAppletName;
         if( aAppletName.getLength() )
         {
@@ -1218,7 +1218,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         sal_Bool bScript = sal_False;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletIsScript")) );
         aAny >>= bScript;
         if( bScript )
             (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_mayscript;
@@ -1259,7 +1259,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // und ein </APPLET> schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands")) );
         aAny >>= aProps;
 
         SvCommandList aCommands;
@@ -1316,7 +1316,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // fuer Plugins die Paramater als Optionen schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")) );
         aAny >>= aProps;
 
         SvCommandList aCommands;

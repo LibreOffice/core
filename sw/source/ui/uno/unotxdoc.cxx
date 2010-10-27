@@ -1710,7 +1710,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 if ( bShape &&
                      rServiceName.compareToAscii( "com.sun.star.drawing.temporaryForXMLImportOLE2Shape" ) == 0 )
                 {
-                    aTmpServiceName = OUString::createFromAscii( "com.sun.star.drawing.OLE2Shape" );
+                    aTmpServiceName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape"));
                 }
                 //hier den Draw - Service suchen
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
@@ -3043,7 +3043,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     const bool bComplex = 0 != (nScriptTypes & nComplex);
 
     if (nScriptTypes < nLatin || nScriptTypes > (nLatin | nAsian | nComplex))
-        throw IllegalArgumentException(::rtl::OUString::createFromAscii("nScriptTypes ranges from 1 to 7!"), Reference< XInterface >(), 1);
+        throw IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nScriptTypes ranges from 1 to 7!")), Reference< XInterface >(), 1);
     if (!pDocShell)
         throw DisposedException();
     SwDoc* pDoc = pDocShell->GetDoc();

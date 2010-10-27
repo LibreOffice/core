@@ -1052,7 +1052,7 @@ void makeRedline( SwPaM& rPaM,
     //todo: what about REDLINE_FMTCOLL?
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
-    aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineAuthor"), aAuthorValue);
+    aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")), aAuthorValue);
     USHORT nAuthor = 0;
     ::rtl::OUString sAuthor;
     if( aAuthorValue >>= sAuthor )
@@ -1060,7 +1060,7 @@ void makeRedline( SwPaM& rPaM,
 
     ::rtl::OUString sComment;
     uno::Any aCommentValue;
-    aCommentValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineComment"), aCommentValue);
+    aCommentValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineComment")), aCommentValue);
 
     SwRedlineData aRedlineData( eType, nAuthor );
     if( aCommentValue >>= sComment )
@@ -1068,7 +1068,7 @@ void makeRedline( SwPaM& rPaM,
 
     ::util::DateTime aStamp;
     uno::Any aDateTimeValue;
-    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineDateTime"), aDateTimeValue);
+    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime")), aDateTimeValue);
     if( aDateTimeValue >>= aStamp )
     {
        aRedlineData.SetTimeStamp(

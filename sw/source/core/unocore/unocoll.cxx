@@ -603,7 +603,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
-                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "ooo.vba.word.Globals"), aArgs );
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals")), aArgs );
                     pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
                 }
                 aGlobs >>= xRet;
@@ -1605,18 +1605,18 @@ uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 
 OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
 {
-    return OUString::createFromAscii("SwXBookmarks");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXBookmarks"));
 }
 
 BOOL SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return OUString::createFromAscii("com.sun.star.text.Bookmarks") == rServiceName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks")) == rServiceName;
 }
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.text.Bookmarks");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks"));
     return aRet;
 }
 

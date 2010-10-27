@@ -2257,7 +2257,7 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             if( xMgr.is() )
             {
                 uno::Reference<XInterface> xInstance = xMgr->createInstance(
-                    OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
                 xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
             }
             if(!xDBContext.is())

@@ -679,7 +679,7 @@ void SwVbaListHelper::CreateOutlineNumberForType7() throw( css::uno::RuntimeExce
 {
     sal_Int16 nNumberingType = style::NumberingType::ARABIC;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
-    rtl::OUString sPrefix = rtl::OUString::createFromAscii("Chapter ");
+    rtl::OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM("Chapter "));
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {

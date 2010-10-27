@@ -916,7 +916,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
 
     rtl::OUString sPages(rtl::OUString::valueOf( rStartInfo.nStartPageInTarget ));
-    sPages += rtl::OUString::createFromAscii( " - ");
+    sPages += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - "));
     sPages += rtl::OUString::valueOf(  rEndInfo.nEndPageInTarget );
 
     SwWrtShell& rSh = pTargetView->GetWrtShell();
@@ -935,9 +935,9 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
-    aProps[0]. Name = rtl::OUString::createFromAscii("MonitorVisible");
+    aProps[0]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MonitorVisible"));
     aProps[0].Value <<= sal_True;
-    aProps[1]. Name = rtl::OUString::createFromAscii("Pages");
+    aProps[1]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pages"));
     aProps[1]. Value <<= sPages;
 
     pTargetView->ExecPrint( aProps, false, true );
@@ -1305,13 +1305,13 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aDesc.sBodyContent = sBody;
         if(MM_DOCTYPE_HTML == nDocType)
         {
-            aDesc.sBodyMimeType = ::rtl::OUString::createFromAscii("text/html; charset=");
+            aDesc.sBodyMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/html; charset="));
             aDesc.sBodyMimeType += ::rtl::OUString::createFromAscii(
                                 rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
         }
         else
             aDesc.sBodyMimeType =
-                ::rtl::OUString::createFromAscii("text/plain; charset=UTF-8; format=flowed");
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain; charset=UTF-8; format=flowed"));
 
         aDesc.sSubject = m_aSubjectED.GetText();
         aDesc.sCC = m_sCC;

@@ -139,7 +139,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                 {
                     Reference< ui::dialogs::XExecutableDialog > xDialog(
                             xMCF->createInstanceWithContext(
-                                rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                                 , xContext), UNO_QUERY);
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
@@ -149,7 +149,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
                         PropertyValue aParam;
-                        aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                        aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                         aParam.Value <<= makeAny(xDialogParentWindow);
                         pArray[0] <<= makeAny(aParam);
                         xInit->initialize( aSeq );
@@ -848,7 +848,7 @@ class SwFieldPopup : public PopupMenu
 {
 public:
     SwFieldPopup()  {
-    InsertItem(1, ::rtl::OUString::createFromAscii("Hello"));
+    InsertItem(1, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello")));
     }
 };
 
@@ -909,7 +909,7 @@ public:
     aListBox.SetSizePixel(lbSize);
     aListBox.SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
     aListBox.Show();
-    aText.SetText(rtl::OUString::createFromAscii("Cancel"));
+    aText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cancel")));
     Size tSize=aText.GetOptimalSize(WINDOWSIZE_PREFERRED);
     aText.SetSizePixel(Size(lbSize.Width(), tSize.Height()));
     aText.SetPosPixel(Point(0, lbSize.Height()));

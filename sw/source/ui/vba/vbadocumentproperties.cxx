@@ -306,7 +306,7 @@ public:
     virtual rtl::OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setLinkSource( const rtl::OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
     //XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString::createFromAscii("Value"); }
+    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual uno::Sequence<rtl::OUString> getServiceNames();

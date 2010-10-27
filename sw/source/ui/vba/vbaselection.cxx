@@ -877,7 +877,7 @@ SwVbaSelection::ShapeRange( ) throw (uno::RuntimeException)
     {
         uno::Reference< drawing::XShape > xShape( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
         uno::Reference< lang::XMultiServiceFactory > xMSF( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        xShapes.set( xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.drawing.ShapeCollection" ) ), uno::UNO_QUERY_THROW );
+        xShapes.set( xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection")) ), uno::UNO_QUERY_THROW );
         xShapes->add( xShape );
     }
 

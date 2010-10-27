@@ -160,7 +160,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
 
     uno::Reference< text::XTextTable > xTable;
-    xTable.set( xMsf->createInstance( rtl::OUString::createFromAscii("com.sun.star.text.TextTable") ), uno::UNO_QUERY_THROW );
+    xTable.set( xMsf->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")) ), uno::UNO_QUERY_THROW );
 /*
     comphelper::ComponentContext aCtx( xMsf );
     if ( !aCtx.createComponent( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable") ), xTable ) );

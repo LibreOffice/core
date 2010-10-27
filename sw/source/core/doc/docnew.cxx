@@ -149,7 +149,7 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
         {
             try
             {
-                rtl::OUString aServiceName( rtl::OUString::createFromAscii("com.sun.star.linguistic2.ProofreadingIterator") );
+                rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ProofreadingIterator"));
                 m_xGCIterator = uno::Reference< linguistic2::XProofreadingIterator >
                     ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
             }
@@ -1007,13 +1007,13 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
                     if ( mbApplyWorkaroundForB6375613 )
                     {
                         xDocInfo->addProperty(
-                            rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")),
                             beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::REMOVABLE,
                             uno::makeAny( false ) );
                     }
                     else
                     {
-                        xDocInfo->removeProperty( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied") );
+                        xDocInfo->removeProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")) );
                     }
                 }
                 catch( uno::Exception& )

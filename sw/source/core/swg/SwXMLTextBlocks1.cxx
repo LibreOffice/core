@@ -123,7 +123,7 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
 
             // get parser
             uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")));
             ASSERT( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( !xXMLParser.is() )
@@ -205,7 +205,7 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
             long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
             sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
-            OUString sStreamName = OUString::createFromAscii("atevent.xml");
+            OUString sStreamName(RTL_CONSTASCII_USTRINGPARAM("atevent.xml"));
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
                 sStreamName, embed::ElementModes::READ );
             DBG_ASSERT(xDocStream.is(), "Can't create stream");
@@ -348,7 +348,7 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 
         // get parser
         uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
         ASSERT( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( !xXMLParser.is() )
@@ -504,7 +504,7 @@ void SwXMLTextBlocks::ReadInfo( void )
 
         // get parser
         uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")));
         ASSERT( xXMLParser.is(),
             "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( !xXMLParser.is() )
@@ -663,7 +663,7 @@ ULONG SwXMLTextBlocks::SetMacroTable(
             // get XML writer
             uno::Reference< io::XActiveDataSource > xSaxWriter(
                 xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) ),
                 UNO_QUERY );
             ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
             if( xSaxWriter.is() )

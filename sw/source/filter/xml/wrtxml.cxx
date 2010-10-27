@@ -369,8 +369,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
             uno::UNO_QUERY_THROW);
-        const ::rtl::OUString VersionProp(
-            ::rtl::OUString::createFromAscii("Version"));
+        const ::rtl::OUString VersionProp(RTL_CONSTASCII_USTRINGPARAM("Version"));
         try
         {
             ::rtl::OUString Version;

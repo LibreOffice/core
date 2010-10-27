@@ -374,7 +374,7 @@ void SwTestAccountSettingsDialog::Test()
                         new SwConnectionContext(
                             m_pParent->m_pConfigItem->GetInServerName(),
                             m_pParent->m_pConfigItem->GetInServerPort(),
-                            ::rtl::OUString::createFromAscii( "Insecure" ));
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
                 xInMailService->connect(xConnectionContext, xAuthenticator);
             }
             if(m_bStop)

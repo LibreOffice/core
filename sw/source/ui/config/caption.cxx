@@ -42,7 +42,7 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     bUseCaption(FALSE),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
-    sNumberSeparator( ::rtl::OUString::createFromAscii(". ") ),
+    sNumberSeparator(RTL_CONSTASCII_USTRINGPARAM((". "))),
     nPos(1),
     nLevel(0),
     sSeparator( String::CreateFromAscii( ": " ) ),

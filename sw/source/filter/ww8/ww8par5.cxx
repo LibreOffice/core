@@ -784,7 +784,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             // Store it now!
                             uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();
                             uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                                    rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::WRITE );
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
                             SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
                             if ( xObjDst.Is() )
@@ -2255,7 +2255,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_REF");
+    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_REF"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_PAGEREF));
     maFieldStack.back().AddParam(rtl::OUString(), sName);
@@ -2353,7 +2353,7 @@ bool CanUseRemoteLink(const String &rGrfName)
             ucb::XCommandEnvironment >() );
         rtl::OUString   aTitle;
 
-        aCnt.getPropertyValue(rtl::OUString::createFromAscii("Title" ))
+        aCnt.getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")))
             >>= aTitle;
         bUseRemote = (aTitle.getLength() > 0);
     }
@@ -2966,10 +2966,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_TOC");
+    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_TOC"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_TOC));
-//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif
@@ -3494,10 +3494,10 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_HYPERLINK");
+    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_HYPERLINK"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_HYPERLINK));
-//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif

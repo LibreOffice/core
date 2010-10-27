@@ -133,7 +133,7 @@ void SwHTMLParser::EndScript()
         if( aBasicLib.Len() )
             aLibName = aBasicLib;
         else
-            aLibName = ::rtl::OUString::createFromAscii( "Standard" );
+            aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
         // get module library container
         Reference< script::XLibraryContainer > xModLibContainer( pDocSh->GetBasicContainer(), UNO_QUERY );

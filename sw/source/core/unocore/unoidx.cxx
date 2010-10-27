@@ -3042,7 +3042,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[nCurrentElement].Name = C2U("TokenType");
                 pArr[nCurrentElement++].Value <<=
-                    OUString::createFromAscii("TokenEntryNumber");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryNumber"));
 
                 pArr[nCurrentElement].Name = C2U("CharacterStyleName");
                 pArr[nCurrentElement++].Value <<= aProgCharStyle;
@@ -3082,7 +3082,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenEntryText");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryText"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3094,7 +3094,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenTabStop");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenTabStop"));
 
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
@@ -3125,7 +3125,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenText");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenText"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3140,7 +3140,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenPageNumber");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenPageNumber"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3152,7 +3152,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenChapterInfo");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenChapterInfo"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3192,7 +3192,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<=
-                    OUString::createFromAscii("TokenHyperlinkStart");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkStart"));
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
             }
@@ -3204,7 +3204,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<=
-                    OUString::createFromAscii("TokenHyperlinkEnd");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkEnd"));
             }
             break;
             case TOKEN_AUTHORITY:
@@ -3214,7 +3214,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<=
-                    OUString::createFromAscii("TokenBibliographyDataField");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenBibliographyDataField"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;

@@ -106,9 +106,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientModule(), "SwDbtoolsClient::registerClient: inconsistence: already have a module!");
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-            SVLIBRARY( "dbtools" )
-        );
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("dbtools")));
 
         // load the dbtools library
         getDbToolsClientModule() = osl_loadModuleRelative(
@@ -117,7 +115,7 @@ void SwDbtoolsClient::registerClient()
         if (NULL != getDbToolsClientModule())
         {
             // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
+            const ::rtl::OUString sFactoryCreationFunc(RTL_CONSTASCII_USTRINGPARAM("createDataAccessToolsFactory"));
             //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
             getDbToolsClientFactoryFunction() = reinterpret_cast< createDataAccessToolsFactoryFunction >(
                 osl_getFunctionSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));

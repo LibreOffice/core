@@ -80,7 +80,7 @@ BOOL UCB_DeleteFile( const String& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
         aTempContent.executeCommand(
-                        rtl::OUString::createFromAscii( "delete" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                         UNO_NMSPC::makeAny( sal_Bool( sal_True ) ) );
         bRemoved = TRUE;
     }
@@ -113,7 +113,7 @@ BOOL UCB_CopyFile( const String& rURL, const String& rNewURL, BOOL bCopyIsMove )
         aInfo.MoveData = bCopyIsMove;
         aAny <<= aInfo;
         aTempContent.executeCommand(
-                            rtl::OUString::createFromAscii( "transfer" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                             aAny );
     }
     catch( UNO_NMSPC::Exception& )
@@ -164,7 +164,7 @@ BOOL UCB_IsReadOnlyFileName( const String& rURL )
     {
         ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
         UNO_NMSPC::Any aAny = aCnt.getPropertyValue(
-                            rtl::OUString::createFromAscii( "IsReadOnly" ));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")));
         if(aAny.hasValue())
             bIsReadOnly = *(sal_Bool*)aAny.getValue();
     }
@@ -221,9 +221,9 @@ BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
         USHORT nSeqSize = pDateTimeList ? 2 : 1;
         UNO_NMSPC::Sequence < rtl::OUString > aProps( nSeqSize );
         rtl::OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = rtl::OUString::createFromAscii( "Title" );
+        pProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         if( pDateTimeList )
-            pProps[ 1 ] = rtl::OUString::createFromAscii( "DateModified" );
+            pProps[ 1 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified"));
 
         try
         {

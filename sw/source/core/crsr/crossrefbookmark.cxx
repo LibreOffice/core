@@ -80,7 +80,7 @@ namespace sw { namespace mark
         : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
     { }
 
-    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefHeading__");
+    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__RefHeading__"));
 
     bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
@@ -94,7 +94,7 @@ namespace sw { namespace mark
         : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
     { }
 
-    const ::rtl::OUString CrossRefNumItemBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefNumPara__");
+    const ::rtl::OUString CrossRefNumItemBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__RefNumPara__"));
 
     bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
     {

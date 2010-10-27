@@ -140,7 +140,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                     static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(IMPL_NAME "/UNO/SERVICES/" ))) );
             xNewKey1->createKey( DocxExport_getSupportedServiceNames().getConstArray()[0] );
 
             bRet = sal_True;
@@ -194,7 +194,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
 
     if ( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME ) );
+        const OUString aServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM(IMPL_NAME)) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                     reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),

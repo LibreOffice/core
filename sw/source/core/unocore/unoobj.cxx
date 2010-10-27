@@ -2972,7 +2972,7 @@ SwXTextCursor::getAvailableServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString::createFromAscii("com.sun.star.text.TextContent");
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextContent"));
     return aRet;
 }
 

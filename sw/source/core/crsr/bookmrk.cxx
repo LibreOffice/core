@@ -181,13 +181,13 @@ namespace sw { namespace mark
         : MarkBase(rPaM, our_sNamePrefix)
     { }
 
-    const ::rtl::OUString NavigatorReminder::our_sNamePrefix = ::rtl::OUString::createFromAscii("__NavigatorReminder__");
+    const ::rtl::OUString NavigatorReminder::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__NavigatorReminder__"));
 
     UnoMark::UnoMark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
     { }
 
-    const ::rtl::OUString UnoMark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__UnoMark__");
+    const ::rtl::OUString UnoMark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__UnoMark__"));
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
@@ -199,7 +199,7 @@ namespace sw { namespace mark
         m_aRefObj = pObj;
     }
 
-    const ::rtl::OUString DdeBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__DdeLink__");
+    const ::rtl::OUString DdeBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__DdeLink__"));
 
     void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
     {
@@ -309,7 +309,7 @@ namespace sw { namespace mark
         aPaM.InvalidatePaM();
     }
 
-    const ::rtl::OUString Fieldmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__Fieldmark__");
+    const ::rtl::OUString Fieldmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__Fieldmark__"));
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)

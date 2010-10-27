@@ -569,7 +569,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
         uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj*)pObj)->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
-        OUString sName( rtl::OUString::createFromAscii("Name") );
+        OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )

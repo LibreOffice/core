@@ -1070,7 +1070,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
    uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
-            OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")), frame::FrameSearchFlag::CHILDREN);
     if(xBeamerFrame.is())
     {
         SwDBData aData = pWrtShell->GetDBData();

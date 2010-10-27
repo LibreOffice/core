@@ -1269,7 +1269,7 @@ namespace numfunc
     SwDefBulletConfig* SwDefBulletConfig::mpInstance = 0;
 
     SwDefBulletConfig::SwDefBulletConfig()
-        : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/DefaultBulletList") ),
+        : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/DefaultBulletList")) ),
           // default bullet font is now OpenSymbol
           msFontname( String::CreateFromAscii("OpenSymbol") ),
           mbUserDefinedFontname( false ),
@@ -1322,19 +1322,19 @@ namespace numfunc
     {
         uno::Sequence<rtl::OUString> aPropNames(13);
         rtl::OUString* pNames = aPropNames.getArray();
-        pNames[0] = rtl::OUString::createFromAscii("BulletFont/FontFamilyname");
-        pNames[1] = rtl::OUString::createFromAscii("BulletFont/FontWeight");
-        pNames[2] = rtl::OUString::createFromAscii("BulletFont/FontItalic");
-        pNames[3] = rtl::OUString::createFromAscii("BulletCharLvl1");
-        pNames[4] = rtl::OUString::createFromAscii("BulletCharLvl2");
-        pNames[5] = rtl::OUString::createFromAscii("BulletCharLvl3");
-        pNames[6] = rtl::OUString::createFromAscii("BulletCharLvl4");
-        pNames[7] = rtl::OUString::createFromAscii("BulletCharLvl5");
-        pNames[8] = rtl::OUString::createFromAscii("BulletCharLvl6");
-        pNames[9] = rtl::OUString::createFromAscii("BulletCharLvl7");
-        pNames[10] = rtl::OUString::createFromAscii("BulletCharLvl8");
-        pNames[11] = rtl::OUString::createFromAscii("BulletCharLvl9");
-        pNames[12] = rtl::OUString::createFromAscii("BulletCharLvl10");
+        pNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFont/FontFamilyname"));
+        pNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFont/FontWeight"));
+        pNames[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFont/FontItalic"));
+        pNames[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl1"));
+        pNames[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl2"));
+        pNames[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl3"));
+        pNames[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl4"));
+        pNames[7] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl5"));
+        pNames[8] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl6"));
+        pNames[9] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl7"));
+        pNames[10] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl8"));
+        pNames[11] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl9"));
+        pNames[12] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl10"));
 
         return aPropNames;
     }
@@ -1501,7 +1501,7 @@ namespace numfunc
     SwNumberingUIBehaviorConfig* SwNumberingUIBehaviorConfig::mpInstance = 0;
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
-        : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/UserInterfaceBehavior") ),
+        : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/UserInterfaceBehavior")) ),
           mbChangeIndentOnTabAtFirstPosOfFirstListItem( sal_True )
     {
         SetToDefault();
@@ -1520,7 +1520,7 @@ namespace numfunc
     {
         com::sun::star::uno::Sequence<rtl::OUString> aPropNames(1);
         rtl::OUString* pNames = aPropNames.getArray();
-        pNames[0] = rtl::OUString::createFromAscii("ChangeIndentOnTabAtFirstPosOfFirstListItem");
+        pNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChangeIndentOnTabAtFirstPosOfFirstListItem"));
 
         return aPropNames;
     }

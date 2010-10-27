@@ -2206,7 +2206,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     if( !aClassName.MakeId( aCLSID ) )
                     {
                         lang::IllegalArgumentException aExcept;
-                        aExcept.Message = OUString::createFromAscii("CLSID invalid");
+                        aExcept.Message = OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID invalid"));
                         throw aExcept;
                     }
 

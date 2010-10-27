@@ -433,7 +433,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     bool bRemoveSoftHyphens = true;
     if ( bRegSearch )
     {
-        const rtl::OUString a00AD( rtl::OUString::createFromAscii( "\\x00AD" ) );
+        const rtl::OUString a00AD(RTL_CONSTASCII_USTRINGPARAM("\\x00AD"));
         if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
              bRemoveSoftHyphens = false;
     }

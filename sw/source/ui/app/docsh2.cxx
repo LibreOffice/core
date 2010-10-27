@@ -981,12 +981,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
                         uno::Reference< frame::XDispatchProvider > xProv(
-                            xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                            xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
                         if ( xProv.is() )
                         {
-                            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
+                            ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
                             uno::Reference< frame::XDispatchHelper > xHelper(
-                                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                             if ( xHelper.is() )
                             {
                                 pStrm->Seek( STREAM_SEEK_TO_END );
@@ -1004,7 +1004,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                                     uno::Sequence< beans::PropertyValue > aArgs(1);
-                                    aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
+                                    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
                                     aArgs[0].Value <<= aSeq;
                                     xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
                                 }
@@ -1052,12 +1052,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
                         uno::Reference< frame::XDispatchProvider > xProv(
-                            xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                            xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
                         if ( xProv.is() )
                         {
-                            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
+                            ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
                             uno::Reference< frame::XDispatchHelper > xHelper(
-                                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                             if ( xHelper.is() )
                             {
                                 pStrm->Seek( STREAM_SEEK_TO_END );
@@ -1075,7 +1075,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                                     uno::Sequence< beans::PropertyValue > aArgs(1);
-                                    aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
+                                    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
                                     aArgs[0].Value <<= aSeq;
                                     xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
                                 }
