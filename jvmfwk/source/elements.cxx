@@ -938,7 +938,8 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
             //nRequirements does not have the flag JFW_REQUIRE_NEEDRESTART the
             //jvm of the new selected JRE will be started. Old settings (before
             //OOo 3.3) still contain the flag which can be safely ignored.
-            nRequirements ^= JFW_REQUIRE_NEEDRESTART;
+            if (nRequirements & JFW_REQUIRE_NEEDRESTART)
+                nRequirements ^= JFW_REQUIRE_NEEDRESTART;
 #endif
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "vendorData") == 0)
