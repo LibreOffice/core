@@ -413,7 +413,7 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 
 ::rtl::OUString SmModel::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.math.FormulaDocument"));
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )

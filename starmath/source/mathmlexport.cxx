@@ -276,7 +276,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") )),
         UNO_QUERY );
     OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if (!xSaxWriter.is())
