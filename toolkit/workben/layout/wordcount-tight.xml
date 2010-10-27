@@ -16,14 +16,21 @@
         <fixedtext id="FT_CURRENTCHARACTER" label="Characters:" cnt:padding="13"/>
         <fixedinfo id="FI_CURRENTCHARACTER" right="true" label="00" cnt:padding="13"/>
         </hbox>
+        <hbox>
+        <fixedtext id="FT_CURRENTCHARACTEREXCLUDINGSPACES" label="Characters excluding spaces:" cnt:padding="13"/>
+        <fixedinfo id="FI_CURRENTCHARACTEREXCLUDINGSPACES" right="true" label="000" cnt:padding="13"/>
+        </hbox>
         <fixedline id="FL_DOC" text="Whole document"/>
         <hbox>
         <fixedtext id="FT_DOCWORD" label="Words:" cnt:padding="13"/>
-        <fixedinfo id="FI_DOCWORD" right="true" label="000" cnt:padding="13"/>
+        <fixedinfo id="FI_DOCWORD" right="true" label="0000" cnt:padding="13"/>
         </hbox>
         <hbox>
         <fixedtext id="FT_DOCCHARACTER" label="Characters:" cnt:padding="13"/>
-        <fixedinfo id="FI_DOCCHARACTER" right="true" label="0000" cnt:padding="13"/>
+        <fixedinfo id="FI_DOCCHARACTER" right="true" label="00000" cnt:padding="13"/>
+        </hbox>
+        <fixedtext id="FT_DOCCHARACTEREXCLUDINGSPACES" label="Characters excluding spaces:" cnt:padding="13"/>
+        <fixedinfo id="FI_DOCCHARACTEREXCLUDINGSPACES" right="true" label="000000" cnt:padding="13"/>
         </hbox>
         <fixedline cnt:padding="1" id="FL_BOTTOM"/>
         <hbox border="5">

@@ -54,9 +54,6 @@
 #include <helpid.h>
 #endif /* ENABLE_LAYOUT */
 
-/*-- 06.04.2004 16:05:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_WORDCOUNT)),
 #if defined _MSC_VER
@@ -67,12 +64,16 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     aCurrentWordFI( this, SW_RES(          FI_CURRENTWORD        )),
     aCurrentCharacterFT( this, SW_RES(     FT_CURRENTCHARACTER   )),
     aCurrentCharacterFI( this, SW_RES(     FI_CURRENTCHARACTER   )),
+    aCurrentCharacterExcludingSpacesFT( this, SW_RES(     FT_CURRENTCHARACTEREXCLUDINGSPACES   )),
+    aCurrentCharacterExcludingSpacesFI( this, SW_RES(     FI_CURRENTCHARACTEREXCLUDINGSPACES   )),
 
     aDocFL( this, SW_RES(                  FL_DOC                )),
     aDocWordFT( this, SW_RES(              FT_DOCWORD            )),
     aDocWordFI( this, SW_RES(              FI_DOCWORD            )),
     aDocCharacterFT( this, SW_RES(         FT_DOCCHARACTER       )),
     aDocCharacterFI( this, SW_RES(         FI_DOCCHARACTER       )),
+    aDocCharacterExcludingSpacesFT( this, SW_RES(         FT_DOCCHARACTEREXCLUDINGSPACES       )),
+    aDocCharacterExcludingSpacesFI( this, SW_RES(         FI_DOCCHARACTEREXCLUDINGSPACES       )),
     aBottomFL(this, SW_RES(                FL_BOTTOM             )),
     aOK( this, SW_RES(                     PB_OK                 )),
     aHelp( this, SW_RES(                   PB_HELP               ))
@@ -85,15 +86,11 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
 #endif /* ENABLE_LAYOUT */
     FreeResource();
 }
-/*-- 06.04.2004 16:05:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwWordCountDialog::~SwWordCountDialog()
 {
 }
-/*-- 06.04.2004 16:05:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
 #if TEST_LAYOUT
@@ -102,8 +99,10 @@ void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& r
 #else /* !TEST_LAYOUT */
     aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
     aCurrentCharacterFI.SetText(String::CreateFromInt32(rCurrent.nChar ));
+    aCurrentCharacterExcludingSpacesFI.SetText(String::CreateFromInt32(rCurrent.nCharExcludingSpaces ));
     aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));
     aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
+    aDocCharacterExcludingSpacesFI.SetText(    String::CreateFromInt32(rDoc.nCharExcludingSpaces ));
 #endif /* !TEST_LAYOUT */
 }
 
