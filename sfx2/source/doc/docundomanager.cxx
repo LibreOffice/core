@@ -89,7 +89,7 @@ namespace sfx2
                             );
         virtual             ~UndoActionWrapper();
 
-        virtual String   GetComment() const;
+        virtual String      GetComment() const;
         virtual void        Undo();
         virtual void        Redo();
         virtual BOOL        CanRepeat(SfxRepeatTarget&) const;
@@ -164,6 +164,9 @@ namespace sfx2
         DocumentUndoManager&                rAntiImpl;
         bool                                bAPIActionRunning;
         ::std::stack< bool >                aContextVisibilities;
+#if OSL_DEBUG_LEVEL > 0
+        ::std::stack< bool >                aContextAPIFlags;
+#endif
 
         DocumentUndoManager_Impl( DocumentUndoManager& i_antiImpl )
             :aUndoListeners( i_antiImpl.getMutex() )
@@ -320,6 +323,10 @@ namespace sfx2
      //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager_Impl::listActionEntered( const String& i_comment )
     {
+#if OSL_DEBUG_LEVEL > 0
+        aContextAPIFlags.push( bAPIActionRunning );
+#endif
+
         if ( bAPIActionRunning )
             return;
 
@@ -329,6 +336,12 @@ namespace sfx2
      //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager_Impl::listActionLeft()
     {
+#if OSL_DEBUG_LEVEL > 0
+        const bool bCurrentContextIsAPIContext = aContextAPIFlags.top();
+        aContextAPIFlags.pop();
+        OSL_ENSURE( bCurrentContextIsAPIContext == bAPIActionRunning, "DocumentUndoManager_Impl::listActionLeft: API and non-API contexts interwoven!" );
+#endif
+
         if ( bAPIActionRunning )
             return;
 
@@ -338,6 +351,12 @@ namespace sfx2
      //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager_Impl::listActionLeftAndMerged()
     {
+#if OSL_DEBUG_LEVEL > 0
+        const bool bCurrentContextIsAPIContext = aContextAPIFlags.top();
+        aContextAPIFlags.pop();
+        OSL_ENSURE( bCurrentContextIsAPIContext == bAPIActionRunning, "DocumentUndoManager_Impl::listActionLeftAndMerged: API and non-API contexts interwoven!" );
+#endif
+
         if ( bAPIActionRunning )
             return;
 
@@ -347,6 +366,12 @@ namespace sfx2
      //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager_Impl::listActionCancelled()
     {
+#if OSL_DEBUG_LEVEL > 0
+        const bool bCurrentContextIsAPIContext = aContextAPIFlags.top();
+        aContextAPIFlags.pop();
+        OSL_ENSURE( bCurrentContextIsAPIContext == bAPIActionRunning, "DocumentUndoManager_Impl::listActionCancelled: API and non-API contexts interwoven!" );
+#endif
+
         if ( bAPIActionRunning )
             return;
 
