@@ -93,7 +93,8 @@ testcase t_Introduction
     catch
         Warnlog "Insert graphic doesn't work"
     endcatch
-    
+    sleep 5
+
     '///Resize object 
     printlog "Resize object"
     Kontext "DocumentImpress"
@@ -251,7 +252,7 @@ testcase t_Interoperability
     wait(20000)
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
-    sleep (5)
+    sleep (10)
     printlog "    Verify that the background has changed"
     Kontext "DocumentImpress"
     printlog "    Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
@@ -265,7 +266,7 @@ testcase t_Interoperability
     Kontext "Tasks"
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RETURN>"
-    sleep (5)
+    sleep (10)
     Kontext "DocumentImpress"
     if DocumentImpress.StatusGetText (6) = sTemplatename then
             printlog "    The background has been set back to default"
@@ -290,6 +291,7 @@ testcase t_Interoperability
      endif
      Printlog "    Verify that the slide was moved correctly"
      Kontext "Slides"
+     sleep (5)
      SlidesControl.TypeKeys "<PAGEUP>"
      SlidesControl.TypeKeys "<SHIFT F10>"
      if hMenuFindSelect(27268, true, 3) = false then

@@ -32,12 +32,15 @@
 '\******************************************************************************
 testcase tiDatei_Fuer_Anordnen_Erstellen
 
-   dim sTemp as string
-   dim i as integer
-   dim zaehler as integer
-   '/// This function creates the document, that will be used as reference and working object inthe following cases :-) ///'
-   '///'Dim Datei ' somewhere global :-) defined in calling sub! :sub im_107c_ ///
-   call hNewDocument
+    dim sTemp as string
+    dim i as integer
+    dim zaehler as integer
+    '/// This function creates the document, that will be used as reference and working object inthe following cases :-) ///'
+    '///'Dim Datei ' somewhere global :-) defined in calling sub! :sub im_107c_ ///
+    call hNewDocument
+    DocumentImpress.UseMenu
+    hMenuSelectNr(4)
+    hMenuSelectNr(13)
     call sSelectEmptyLayout								'/// new document  ///'
    if Dir(Datei)<>"" then app.Kill(Datei) ' kill old file
    for Zaehler = 1 to 3									'/// create 3 overlapping objects  ///'
