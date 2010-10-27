@@ -29,23 +29,23 @@ package complex.passwordcontainer;
 
 import com.sun.star.task.UserRecord;
 
-import share.LogWriter;
+// import share.LogWriter;
 
 public class TestHelper {
-    LogWriter m_aLogWriter;
+    // LogWriter m_aLogWriter;
     String m_sTestPrefix;
 
-    public TestHelper( LogWriter aLogWriter, String sTestPrefix ) {
-        m_aLogWriter = aLogWriter;
+    public TestHelper(  String sTestPrefix ) {
+        // m_aLogWriter = aLogWriter;
         m_sTestPrefix = sTestPrefix;
     }
 
     public void Error( String sError ) {
-        m_aLogWriter.println( m_sTestPrefix + "Error: " + sError );
+        System.out.println( m_sTestPrefix + "Error: " + sError );
     }
 
     public void Message( String sMessage ) {
-        m_aLogWriter.println( m_sTestPrefix + sMessage );
+        System.out.println( m_sTestPrefix + sMessage );
     }
 
     public boolean sameLists(UserRecord aUserList1[], UserRecord aUserList2[]) {
@@ -60,7 +60,9 @@ public class TestHelper {
             int j;
             for(j = 0; j < aUserList2.length; j++) {
                 if(!aUserList1[i].UserName.equals(aUserList2[j].UserName))
+                {
                     continue;
+                }
                 if(aUserList1[i].Passwords[0].equals(aUserList2[j].Passwords[0])) {
                     break;
                 }
