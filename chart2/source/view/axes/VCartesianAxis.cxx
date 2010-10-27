@@ -757,6 +757,20 @@ bool VCartesianAxis::createTextShapes(
 
         recordMaximumTextSize( pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
 
+         //better rotate if single words are broken apart
+        if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
+                && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 )
+                && m_aAxisProperties.m_bComplexCategories
+                && lcl_hasWordBreak( pTickInfo->xTextShape ) )
+        {
+            rAxisLabelProperties.fRotationAngleDegree = 90;
+            rAxisLabelProperties.bLineBreakAllowed = false;
+            m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
+            m_aAxisLabelProperties.bLineBreakAllowed = false;
+            removeTextShapesFromTicks();
+            return false;
+        }
+
         //if NO OVERLAP -> remove overlapping shapes
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
