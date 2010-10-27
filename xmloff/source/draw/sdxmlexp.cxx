@@ -2282,7 +2282,9 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
     // write draw:style-name for object graphic-styles
     GetShapeExport()->ExportGraphicDefaults();
 
-    GetShapeExport()->GetShapeTableExport()->exportTableStyles();
+    // do not export in ODF 1.1 or older
+    if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+        GetShapeExport()->GetShapeTableExport()->exportTableStyles();
 
     // write presentation styles
     ImpWritePresentationStyles();

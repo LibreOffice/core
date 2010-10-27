@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..$/..
+PRJ = ../../../..
 TARGET  = TransientDocument
 PRJNAME = $(TARGET)
-PACKAGE = complex$/tdoc$/interfaces
+PACKAGE = complex/tdoc/interfaces
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
