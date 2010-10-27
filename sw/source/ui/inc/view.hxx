@@ -420,6 +420,7 @@ public:
 
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
+    virtual void            EnterStandardMode();
     virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
     virtual void            ShowCursor( FASTBOOL bOn = TRUE );
     virtual ErrCode         DoVerb( long nVerb );

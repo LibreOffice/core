@@ -649,6 +649,11 @@ SdrView* SwView::GetDrawView() const
     return GetWrtShell().GetDrawView();
 }
 
+void SwView::EnterStandardMode()
+{
+    GetWrtShell().EnterStdMode();
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
