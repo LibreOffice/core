@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // poll.h
 // MacOS X does not implement poll().  Therefore, this replacement
 // is required.  It uses select().
@@ -171,3 +172,5 @@ inline int poll(struct pollfd *pollSet, int pollCount, int pollTimeout)
 #undef FD_SETSIZE
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
