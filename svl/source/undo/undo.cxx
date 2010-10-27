@@ -489,27 +489,47 @@ BOOL SfxUndoManager::Undo()
     ::comphelper::FlagGuard aGuard( m_pData->mbDoing );
     LockGuard aLockGuard( *this );
 
-    BOOL bRet = FALSE;
-
-    DBG_ASSERT( m_pData->pActUndoArray == m_pData->pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
-    if ( m_pData->pActUndoArray->nCurUndoAction )
+    if ( IsInListAction() )
     {
-        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction - 1 ];
-        pAction->Undo();
-        // decrement nCurUndoAction *after* having called Undo - in case it raises an exception
-        --m_pData->pActUndoArray->nCurUndoAction;
-        bRet = TRUE;
-
-        for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
-                listener != m_pData->aListeners.end();
-                ++listener
-            )
-        {
-            (*listener)->actionUndone( *pAction );
-        }
+        OSL_ENSURE( false, "SfxUndoManager::Undo: not possible when within a list action!" );
+        return FALSE;
     }
 
-    return bRet;
+    if ( m_pData->pActUndoArray->nCurUndoAction == 0 )
+    {
+        OSL_ENSURE( false, "SfxUndoManager::Undo: undo stack is empty!" );
+        return FALSE;
+    }
+
+    SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction - 1 ];
+    try
+    {
+        pAction->Undo();
+    }
+    catch( const Exception& )
+    {
+        // assume that this is a permanent failure, and clear the Undo stack.
+        while ( m_pData->pActUndoArray->nCurUndoAction > 0 )
+        {
+            SfxUndoAction* pUndoAction = m_pData->pActUndoArray->aUndoActions[0];
+            m_pData->pActUndoArray->aUndoActions.Remove( 0 );
+            delete pUndoAction;
+            --m_pData->pActUndoArray->nCurUndoAction;
+        }
+        // TODO: notifications? We don't have clearedUndo, only cleared and clearedRedo at the SfxUndoListener
+        throw;
+    }
+    --m_pData->pActUndoArray->nCurUndoAction;
+
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->actionUndone( *pAction );
+    }
+
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -536,26 +556,39 @@ BOOL SfxUndoManager::Redo()
     ::comphelper::FlagGuard aGuard( m_pData->mbDoing );
     LockGuard aLockGuard( *this );
 
-    BOOL bRet = FALSE;
-
-    if ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
+    if ( IsInListAction() )
     {
-        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction];
-        pAction->Redo();
-        // increment nCurUndoAction *after* having called Redo - in case it raises an exception
-        ++m_pData->pActUndoArray->nCurUndoAction;
-        bRet = TRUE;
-
-        for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
-                listener != m_pData->aListeners.end();
-                ++listener
-            )
-        {
-            (*listener)->actionRedone( *pAction );
-        }
+        OSL_ENSURE( false, "SfxUndoManager::Redo: not possible when within a list action!" );
+        return FALSE;
     }
 
-    return bRet;
+    if ( m_pData->pActUndoArray->nCurUndoAction >= m_pData->pActUndoArray->aUndoActions.Count() )
+    {
+        OSL_ENSURE( false, "SfxUndoManager::Redo: redo stack is empty!" );
+        return FALSE;
+    }
+
+    SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction];
+    try
+    {
+        pAction->Redo();
+    }
+    catch( const Exception& )
+    {
+        ClearRedo();
+        throw;
+    }
+    ++m_pData->pActUndoArray->nCurUndoAction;
+
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->actionRedone( *pAction );
+    }
+
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -748,7 +781,7 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
             m_pData->pActUndoArray->aUndoActions.Remove( m_pData->pActUndoArray->nCurUndoAction - 2 );
             --m_pData->pActUndoArray->nCurUndoAction;
             pListAction->aUndoActions.Insert( pPreviousAction, 0 );
-            ++pListAction->nCurUndoAction;  // should not matter, as we're not expected to ever re-enter this list ...
+            ++pListAction->nCurUndoAction;
 
             pListAction->SetComment( pPreviousAction->GetComment() );
         }
