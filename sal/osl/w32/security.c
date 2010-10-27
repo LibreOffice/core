@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -990,3 +991,4 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

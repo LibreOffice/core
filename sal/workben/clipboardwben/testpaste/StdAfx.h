@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // stdafx.h : Include-Datei für Standard-System-Include-Dateien,
 //  oder projektspezifische Include-Dateien, die häufig benutzt, aber
 //      in unregelmäßigen Abständen geändert werden.
@@ -30,3 +31,5 @@
 // Microsoft Visual C++ fügt zusätzliche Deklarationen unmittelbar vor der vorherigen Zeile ein.
 
 #endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

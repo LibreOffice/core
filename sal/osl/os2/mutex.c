@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -165,3 +166,5 @@ oslMutex * SAL_CALL osl_getGlobalMutex(void)
         g_Mutex = osl_createMutex();
     return &g_Mutex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

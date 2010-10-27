@@ -285,6 +285,5 @@ void fillUnoException( __cxa_exception * header, uno_Any * pExc, uno_Mapping * p
 }
 
 }
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

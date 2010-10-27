@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -532,3 +533,5 @@ uchar *
     ns[l + o] = '\0';
     return (uchar *) strncpy((char *) ns + o, (char *) s, l) - o;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

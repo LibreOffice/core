@@ -140,6 +140,4 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     MapReturn(r28, r29, pReturnTypeDescr, bRegisterReturn, (sal_uInt32*)pRegisterReturn);
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

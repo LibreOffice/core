@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _SNPRINTF_H
 #define _SNPRINTF_H
 
@@ -62,3 +63,5 @@ _SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char
 #endif
 
 #endif /* _SNPRINTF_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

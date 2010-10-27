@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifndef _RTL_PROCESS_CONST_H_
 #define _RTL_PROCESS_CONST_H_
@@ -24,3 +25,5 @@ extern "C"
 #endif
 
 #endif /* RTL_PROCESS_CONST_H*/
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

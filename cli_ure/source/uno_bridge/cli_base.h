@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,3 +179,5 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
 
 } //end namespace cli_uno
  #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

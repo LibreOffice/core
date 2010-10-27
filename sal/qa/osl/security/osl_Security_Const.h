@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,3 +71,5 @@ OSLTEST_DECLARE_USTRING( NullURL,  "" );
 sal_Bool isAdmin = sal_False;
 
 #endif /* _OSL_SECURITY_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

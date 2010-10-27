@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -165,3 +166,4 @@ typedef struct __store_FindData storeFindData;
 
 #endif /* _STORE_TYPES_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

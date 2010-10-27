@@ -96,6 +96,4 @@ namespace s390x
     enum s390xlimits { MAX_GPR_REGS = 5, MAX_SSE_REGS = 4 };
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

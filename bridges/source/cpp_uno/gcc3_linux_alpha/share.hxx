@@ -96,6 +96,4 @@ namespace axp
     enum axplimits { MAX_WORDS_IN_REGS = 6, MAX_GPR_REGS = 6, MAX_SSE_REGS = 6 };
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

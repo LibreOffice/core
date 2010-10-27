@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,3 +71,5 @@ const char pTestString[17] = "Sun Microsystems";
 
 
 #endif /* _OSL_CONDITION_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

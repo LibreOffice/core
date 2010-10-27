@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -483,3 +484,5 @@ void TimerManager::run()
 // process termination.
 // -> TODO : rewrite this file, so that the timerManager thread gets destroyed,
 //           when there are no timers anymore !
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

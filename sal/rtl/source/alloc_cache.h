@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,3 +181,5 @@ struct rtl_cache_st
 #endif
 
 #endif /* INCLUDED_RTL_ALLOC_CACHE_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

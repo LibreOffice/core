@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -472,3 +473,5 @@ double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C();
 #endif /* __cplusplus */
 
 #endif /* INCLUDED_RTL_MATH_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

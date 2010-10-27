@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1534,3 +1535,5 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
     return osl_joinProcessWithTimeout(Process, NULL);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

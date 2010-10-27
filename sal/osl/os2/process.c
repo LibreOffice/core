@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -985,3 +986,5 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
