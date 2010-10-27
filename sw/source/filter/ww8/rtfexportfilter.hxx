@@ -82,6 +82,5 @@ public:
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
 
 #endif // _RTFEXPORTFILTER_HXX_
-/* vi:set shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

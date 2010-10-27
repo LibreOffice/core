@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _WW8GRAF_HXX
 #define _WW8GRAF_HXX
 
@@ -105,7 +103,5 @@ public:
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );
 #endif
-
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

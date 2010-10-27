@@ -2086,6 +2086,4 @@ void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
         rDoc.ChgPageDesc(i, const_cast<const SwDoc &>(rDoc).GetPageDesc(i));
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

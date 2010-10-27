@@ -134,6 +134,4 @@ uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::R
     return (cppu::OWeakObject*) new RtfExportFilter( rSMgr );
 }
 
-/* vi:set shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

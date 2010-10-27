@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #ifndef WW_STATICASSERT_HXX
 #define WW_STATICASSERT_HXX
 
@@ -69,6 +68,5 @@ namespace ww
 #endif
 
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

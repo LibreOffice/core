@@ -3422,6 +3422,4 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
     m_aRunText.append(m_rExport.sNewLine);
 }
 
-/* vi:set shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

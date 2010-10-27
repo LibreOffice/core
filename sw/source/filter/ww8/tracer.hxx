@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef SW_TRACER_HXX
 #define SW_TRACER_HXX
 
@@ -89,6 +87,5 @@ namespace sw
     }
 }
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

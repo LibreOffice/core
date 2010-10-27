@@ -575,6 +575,4 @@ UINT32 RtfSdrExport::AddSdrObject( const SdrObject& rObj )
     return EscherEx::AddSdrObject(rObj);
 }
 
-/* vi:set shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1264,6 +1264,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName,
     xRet = new SwRTFWriter( rFltName, rBaseURL );
 }
 
-/* vi:set shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

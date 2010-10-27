@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <ctype.h>
 #include <hintids.hxx>
@@ -1223,7 +1222,5 @@ INSINGLECHAR:
 
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
-
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

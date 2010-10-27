@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <com/sun/star/embed/Aspects.hpp>
 
 
@@ -2842,7 +2841,5 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     rWW8Wrt.OutputField(0, ww::eCONTROL, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE);
     return true;
 }
-
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

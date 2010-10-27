@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -982,3 +983,5 @@
 #define HID_MM_HEADER_13                            (HID_BASE + 2280)
 
 #define HID_TITLEPAGE                               (HID_BASE + 2281)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

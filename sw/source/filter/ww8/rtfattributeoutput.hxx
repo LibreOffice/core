@@ -587,6 +587,4 @@ public:
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_
 
-/* vi:set shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
