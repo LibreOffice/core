@@ -30,11 +30,5 @@
 STD_LIB_FILE(gid_File_Lib_CppCanvas, cppcanvas)
 STD_LIB_FILE(gid_File_Lib_CanvasTools, canvastools)
 
-#ifdef ENABLE_AGG
-#ifndef SYSTEM_AGG
-STD_LIB_FILE(gid_File_Lib_Agg, agg)
-#endif
-#endif
-
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_CanvasFactory, canvasfactory.uno)
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_SimpleCanvas, simplecanvas.uno)

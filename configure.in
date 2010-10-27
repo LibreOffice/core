@@ -19,9 +19,6 @@ echo "$@" >config.parms
 AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
 ],,)
-AC_ARG_WITH(agg,
-[  --without-agg           Disable the use of agg altogether
-],,with_agg=yes)
 AC_ARG_WITH(gnu-cp,
 [  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
 ],,)
@@ -565,9 +562,6 @@ AC_ARG_ENABLE(Xaw,
 ],,)
 AC_ARG_WITH(system-neon,
 [  --with-system-neon      Use neon already on system
-],,)
-AC_ARG_WITH(system-agg,
-[  --with-system-agg       Use AGG already on system
 ],,)
 AC_ARG_WITH(system-hunspell,
 [  --with-system-hunspell   Use libhunspell already on system
@@ -5199,57 +5193,6 @@ fi
 AC_SUBST(SYSTEM_OPENSSL)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
-
-dnl ===================================================================
-dnl Test for disabling agg
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable agg])
-if test "$with_agg" = "no"; then
-  AC_MSG_RESULT([no])
-else
-  AC_MSG_RESULT([yes])
-  ENABLE_AGG=YES
-  AC_SUBST(ENABLE_AGG)
-
-  dnl ===================================================================
-  dnl Check for system AGG
-  dnl ===================================================================
-  AC_MSG_CHECKING([which AGG to use])
-  if test -n "$with_system_agg" -o -n "$with_system_libs" && \
-     test "$with_system_agg" != "no"; then
-         AC_MSG_RESULT([external])
-         PKG_CHECK_MODULES(AGG, libagg >= 2.3)
-         AC_MSG_CHECKING([agg version])
-         # workaround; if AGG_CFLAGS is empty (broken libagg.pc in 2.3), add /usr/include/agg2 anyway
-         # (/usr/include gets stripped from pkg-config output)
-         if test -z "$AGG_CFLAGS" || test "$AGG_CFLAGS" = " "; then
-            AGG_INCDIR="`$PKG_CONFIG --variable includedir libagg`/agg2"
-         else
-            AGG_INCDIR="`echo $AGG_CFLAGS | $SED -e s/-I//`"
-         fi
-     if $PKG_CONFIG --modversion libagg | grep -q 2.3 || \
-         $PKG_CONFIG --modversion libagg | grep -q 2.4; then
-            # 2.4's libagg.pc.in still contains 2.3 :/
-            if $EGREP -q "Version 2.4" `echo $AGG_INCDIR`/agg_basics.h; then
-               AC_MSG_RESULT([2.4])
-               AGG_VERSION=2400
-            else
-               AC_MSG_RESULT([2.3])
-               AGG_VERSION=2300
-            fi
-            SYSTEM_AGG=YES
-     else
-        AC_MSG_ERROR([only agg 2.3 and 2.4 are supported])
-     fi
-  else
-         AC_MSG_RESULT([internal])
-         SYSTEM_AGG=NO
-         AGG_VERSION=2300
-         BUILD_TYPE="$BUILD_TYPE AGG"
-  fi
-  AC_SUBST(SYSTEM_AGG)
-  AC_SUBST(AGG_VERSION)
-fi
 
 dnl ===================================================================
 dnl Check for system redland

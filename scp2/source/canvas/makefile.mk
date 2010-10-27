@@ -39,13 +39,6 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
-.IF "$(ENABLE_AGG)" == "YES"
-SCPDEFS+=-DENABLE_AGG
-.IF "$(SYSTEM_AGG)" == "YES"
-SCPDEFS+=-DSYSTEM_AGG
-.ENDIF
-.ENDIF
-
 PARFILES= canvascommons.par		\
           vclcanvas.par         \
           mtfrenderer.par
