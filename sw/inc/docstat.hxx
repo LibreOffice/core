@@ -44,6 +44,7 @@ struct SW_DLLPUBLIC SwDocStat
     ULONG           nAllPara;
     ULONG           nWord;
     ULONG           nChar;
+    ULONG           nCharExcludingSpaces;
     BOOL            bModified;
 
     SwDocStat();

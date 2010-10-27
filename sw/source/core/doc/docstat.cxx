@@ -46,6 +46,7 @@ SwDocStat::SwDocStat() :
     nAllPara(1),
     nWord(0),
     nChar(0),
+    nCharExcludingSpaces(0),
     bModified(TRUE)
 {}
 
@@ -63,6 +64,7 @@ void SwDocStat::Reset()
     nAllPara= 1;
     nWord   = 0;
     nChar   = 0;
+    nCharExcludingSpaces = 0;
     bModified = TRUE;
 }
 

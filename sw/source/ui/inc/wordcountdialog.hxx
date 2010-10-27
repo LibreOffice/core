@@ -40,12 +40,16 @@ class SwWordCountDialog : public SfxModalDialog
     FixedInfo       aCurrentWordFI;
     FixedText       aCurrentCharacterFT;
     FixedInfo       aCurrentCharacterFI;
+    FixedText       aCurrentCharacterExcludingSpacesFT;
+    FixedInfo       aCurrentCharacterExcludingSpacesFI;
 
     FixedLine       aDocFL;
     FixedText       aDocWordFT;
     FixedInfo       aDocWordFI;
     FixedText       aDocCharacterFT;
     FixedInfo       aDocCharacterFI;
+    FixedText       aDocCharacterExcludingSpacesFT;
+    FixedInfo       aDocCharacterExcludingSpacesFI;
 
     FixedLine       aBottomFL;
 

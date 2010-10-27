@@ -189,6 +189,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SW_DLLPRIVATE ULONG GetParaNumberOfWords() const;
     SW_DLLPRIVATE void SetParaNumberOfChars( ULONG nTmpChars ) const;
     SW_DLLPRIVATE ULONG GetParaNumberOfChars() const;
+    SW_DLLPRIVATE void SetParaNumberOfCharsExcludingSpaces( ULONG nTmpChars ) const;
+    SW_DLLPRIVATE ULONG GetParaNumberOfCharsExcludingSpaces() const;
     SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
     /** create number for this text node, if not already existing

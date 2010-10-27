@@ -93,7 +93,6 @@
 
 #include <vector>
 
-
 using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -481,7 +480,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
             continue;
         }
 
-
         if( nStt <= nAttrStart )          // Faelle: 1,3,5
         {
             if( nEnd > nAttrStart
@@ -599,7 +597,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                                 nsSetAttrMode::SETATTR_NOHINTADJUST );
                         }
 
-
                         // jetzt kein i+1, weil das eingefuegte Attribut
                         // ein anderes auf die Position geschoben hat !
                         continue;
@@ -623,8 +620,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         SwModify::Modify( 0, &aNew );
     }
 }
-
-
 
 /*************************************************************************
  *                SwTxtNode::GetCurWord()
@@ -810,7 +805,6 @@ BOOL SwScanner::NextWord()
     return TRUE;
 }
 
-
 USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 {
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
@@ -938,7 +932,6 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     return pArgs->xSpellAlt.is() ? 1 : 0;
 }
 
-
 void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     LanguageType nLang, USHORT nLangWhichId,
     const Font *pFont,  USHORT nFontWhichId )
@@ -973,7 +966,6 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     //                     <- over empty selection are removed.
 
 }
-
 
 USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
@@ -1405,7 +1397,6 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     return aRet;
 }
 
-
 // Wird vom CollectAutoCmplWords gerufen
 void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
 {
@@ -1420,7 +1411,6 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     xub_StrLen nEnd = pNode->GetTxt().Len();
     xub_StrLen nLen;
     BOOL bACWDirty = FALSE, bAnyWrd = FALSE;
-
 
     if( nBegin < nEnd )
     {
@@ -1456,7 +1446,6 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( bAnyWrd && !bACWDirty )
         pNode->SetAutoCompleteWordDirty( FALSE );
 }
-
 
 /*************************************************************************
  *                      SwTxtNode::Hyphenate
@@ -1517,7 +1506,6 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 
 // globale Variable
 SwLinguStatistik aSwLinguStat;
-
 
 void SwLinguStatistik::Flush()
 {
@@ -1585,7 +1573,6 @@ void SwLinguStatistik::Flush()
 }
 
 #endif
-
 
 struct TransliterationChgData
 {
@@ -1830,7 +1817,6 @@ void SwTxtNode::TransliterateText(
     }
 }
 
-
 void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
                                 const XubString& rText,
                                 const Sequence<sal_Int32>& rOffsets )
@@ -1886,6 +1872,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             ++rStat.nPara;
             ULONG nTmpWords = 0;
             ULONG nTmpChars = 0;
+            ULONG nTmpCharsExcludingSpaces = 0;  // Number of characters in actual words (i.e. excluding spaces)
 
             // Shortcut: Whole paragraph should be considered and cached values
             // are valid:
@@ -1893,6 +1880,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             {
                 nTmpWords = GetParaNumberOfWords();
                 nTmpChars = GetParaNumberOfChars();
+                nTmpCharsExcludingSpaces = GetParaNumberOfCharsExcludingSpaces();
             }
             else
             {
@@ -1926,9 +1914,13 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 
                     while ( aScanner.NextWord() )
                     {
-                        if ( aScanner.GetLen() > 1 ||
-                             CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ) )
+
+                        if(CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
+                        {
                             ++nTmpWords;
+                            nTmpCharsExcludingSpaces += aScanner.GetLen();
+                        }
+
                     }
                 }
 
@@ -1972,12 +1964,14 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 {
                     SetParaNumberOfWords( nTmpWords );
                     SetParaNumberOfChars( nTmpChars );
+                    SetParaNumberOfCharsExcludingSpaces( nTmpCharsExcludingSpaces );
                     SetWordCountDirty( false );
                 }
             }
 
             rStat.nWord += nTmpWords;
             rStat.nChar += nTmpChars;
+            rStat.nCharExcludingSpaces += nTmpCharsExcludingSpaces;
         }
     }
 }
@@ -1992,6 +1986,7 @@ struct SwParaIdleData_Impl
     SwWrongList* pSmartTags;
     ULONG nNumberOfWords;
     ULONG nNumberOfChars;
+    ULONG nNumberOfCharsExcludingSpaces;
     bool bWordCountDirty        : 1;
     bool bWrongDirty            : 1;    // Ist das Wrong-Feld auf invalid?
     bool bGrammarCheckDirty     : 1;
@@ -2004,6 +1999,7 @@ struct SwParaIdleData_Impl
         pSmartTags          ( 0 ),
         nNumberOfWords      ( 0 ),
         nNumberOfChars      ( 0 ),
+        nNumberOfCharsExcludingSpaces      ( 0 ),
         bWordCountDirty     ( true ),
         bWrongDirty         ( true ),
         bGrammarCheckDirty  ( true ),
@@ -2050,7 +2046,6 @@ const SwWrongList* SwTxtNode::GetWrong() const
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
 // <--
-
 
 void SwTxtNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
 {
@@ -2118,6 +2113,20 @@ void SwTxtNode::SetWordCountDirty( bool bNew ) const
         m_pParaIdleData_Impl->bWordCountDirty = bNew;
     }
 }
+
+ULONG SwTxtNode::GetParaNumberOfCharsExcludingSpaces() const
+{
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces : 0;
+}
+
+void SwTxtNode::SetParaNumberOfCharsExcludingSpaces( ULONG nNew ) const
+{
+    if ( m_pParaIdleData_Impl )
+    {
+        m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces = nNew;
+    }
+}
+
 bool SwTxtNode::IsWordCountDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bWordCountDirty : 0;
