@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by Fps.rc
@@ -19,3 +20,5 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

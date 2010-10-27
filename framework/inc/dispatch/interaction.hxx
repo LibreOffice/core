@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -323,3 +324,5 @@ class InteractionRequest : public ::cppu::WeakImplHelper1< ::com::sun::star::tas
 }       //  namespace framework
 
 #endif  // #define __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

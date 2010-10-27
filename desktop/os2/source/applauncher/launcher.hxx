@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #define INCL_DOS
 #define INCL_PM
@@ -7,3 +8,4 @@
 
 extern CHAR APPLICATION_SWITCH[];
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

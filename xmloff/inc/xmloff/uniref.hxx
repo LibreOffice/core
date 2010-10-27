@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -227,3 +228,5 @@ inline sal_Bool UniReference< T >::operator != ( const UniReference & rRef ) con
 }
 
 #endif  // _UNIVERSALL_REFERENCE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

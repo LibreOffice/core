@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,3 +114,5 @@ class ActionTriggerSeparatorPropertySet :   public ThreadHelpBase               
 }
 
 #endif // __FRAMEWORK_CLASSES_ACTIONTRIGGERSEPARATORPROPERTYSET_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

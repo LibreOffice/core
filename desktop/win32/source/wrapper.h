@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #pragma once
 #ifndef __cplusplus
 #error Need C++ to compile
@@ -171,3 +172,4 @@ extern "C" int Main()
     return GetLastError();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

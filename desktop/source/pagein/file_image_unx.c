@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,3 +149,5 @@ int file_image_close (file_image * image)
     image->m_base = 0, image->m_size = 0;
     return (0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

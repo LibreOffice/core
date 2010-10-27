@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,3 +100,5 @@
 #define EDITITEMCOUNT ( EE_ITEMS_END - EE_ITEMS_START + 1 )
 
 #endif // _EEITEM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

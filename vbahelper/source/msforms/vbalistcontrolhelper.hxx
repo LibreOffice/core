@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef SC_VBA_LISTCONTROLHELPER
 #define SC_VBA_LISTCONTROLHELPER
 
@@ -18,3 +19,5 @@ public:
     virtual void SAL_CALL Clear(  ) throw (css::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

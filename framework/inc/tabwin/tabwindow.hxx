@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -194,3 +195,5 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 }
 
 #endif // __FRAMEWORK_TABWIN_TABWINDOW_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

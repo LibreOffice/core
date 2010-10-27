@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,3 +39,5 @@
 // Format: -> "/ImplName/UNO/SERVICES/ServiceName"
 //  <Implementation-Name></UNO/SERVICES/><Service-Name>
 #define FILE_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.KDE4FilePickerImpl/UNO/SERVICES/com.sun.star.ui.dialogs.KDE4FilePicker"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

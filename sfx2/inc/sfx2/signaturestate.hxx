@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,3 +43,5 @@
 #define SIGNATURESTATE_SIGNATURES_PARTIAL_OK    (sal_Int16)5
 
 #endif // SFX2_SIGNATURESTATE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
