@@ -31,6 +31,7 @@
 #include "sfx2/sfxbasemodel.hxx"
 #include "sfx2/objsh.hxx"
 #include "sfx2/viewfrm.hxx"
+#include "sfx2/viewsh.hxx"
 #include "sfx2/bindings.hxx"
 
 /** === begin UNO includes === **/
@@ -543,6 +544,24 @@ namespace sfx2
         ::svl::IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
             throw UndoContextNotClosedException( ::rtl::OUString(), static_cast< XUndoManager* >( this ) );
+
+        // let all views enter the standard mode
+        // TODO: not sure this is a good idea: This might add another action to the Undo/Redo stack, which
+        // will render the call somewhat meaningless - finally, the caller can't be sure that really the action
+        // is undone/redone which s/he intended to.
+        SfxObjectShell* pDocShell = m_pImpl->getObjectShell();
+        OSL_ENSURE( pDocShell, "DocumentUndoManager::impl_do_nolck: do doc shell!" );
+        if ( pDocShell )
+        {
+            SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pDocShell );
+            while ( pViewFrame )
+            {
+                SfxViewShell* pViewShell = pViewFrame->GetViewShell();
+                ENSURE_OR_CONTINUE( pViewShell, "DocumentUndoManager::impl_do_nolck: no view shell in the frame!" );
+                pViewShell->EnterStandardMode();
+                pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDocShell );
+            }
+        }
 
         if ( (rUndoManager.*i_checkMethod)() == 0 )
             throw EmptyUndoStackException( ::rtl::OUString::createFromAscii( "stack is empty" ), static_cast< XUndoManager* >( this ) );
