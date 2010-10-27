@@ -1211,6 +1211,9 @@ void OGLTransitionerImpl::disposeContextAndWindow()
 
 void OGLTransitionerImpl::disposeTextures()
 {
+    if( !GLWin.ctx )
+        return;
+
 #ifdef WNT
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #endif
@@ -1308,11 +1311,21 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
     GLenteringSlide( 0 ),
     pWindow( NULL ),
     mxView(),
+    mxLeavingBitmap(),
+    mxEnteringBitmap(),
     EnteringBytes(),
     LeavingBytes(),
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+    LeavingPixmap(0),
+    EnteringPixmap(0),
+#endif
     mbRestoreSync( false ),
     mbUseLeavingPixmap( false ),
     mbUseEnteringPixmap( false ),
+    mbFreeLeavingPixmap( false ),
+    mbFreeEnteringPixmap( false ),
+    maLeavingPixmap(0),
+    maEnteringPixmap(0),
     SlideBitmapLayout(),
     SlideSize(),
     pTransition(pOGLTransition)
