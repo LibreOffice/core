@@ -87,11 +87,13 @@ namespace sfx2
         virtual void SAL_CALL clear(  ) throw (::com::sun::star::document::UndoContextNotClosedException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearRedo(  ) throw (::com::sun::star::document::UndoContextNotClosedException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL unlock(  ) throw (::com::sun::star::document::NotLockedException, ::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XLockable, base of XUndoManager
+        virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL unlock(  ) throw (::com::sun::star::util::NotLockedException, ::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
         void impl_notify(

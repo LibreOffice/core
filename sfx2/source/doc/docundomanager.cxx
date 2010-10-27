@@ -63,7 +63,7 @@ namespace sfx2
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::util::InvalidStateException;
     using ::com::sun::star::document::EmptyUndoStackException;
-    using ::com::sun::star::document::NotLockedException;
+    using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::document::UndoContextNotClosedException;
     using ::com::sun::star::document::XUndoAction;
     using ::com::sun::star::document::XUndoManagerSupplier;

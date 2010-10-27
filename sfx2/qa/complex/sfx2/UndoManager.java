@@ -28,7 +28,6 @@
 package complex.sfx2;
 
 import com.sun.star.document.EmptyUndoStackException;
-import com.sun.star.document.NotLockedException;
 import com.sun.star.document.UndoContextNotClosedException;
 import com.sun.star.document.UndoFailedException;
 import com.sun.star.document.UndoManagerEvent;
@@ -47,6 +46,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.InvalidStateException;
+import com.sun.star.util.NotLockedException;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
