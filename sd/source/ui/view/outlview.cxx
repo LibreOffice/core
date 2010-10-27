@@ -1801,6 +1801,9 @@ void OutlineView::EndModelChange()
 
     if( bHasUndoActions && mpOutliner->GetEditEngine().HasTriedMergeOnLastAddUndo() )
         TryToMergeUndoActions();
+
+    mpOutlineViewShell->Invalidate( SID_UNDO );
+    mpOutlineViewShell->Invalidate( SID_REDO );
 }
 
 /** updates all changes in the outliner model to the draw model */
