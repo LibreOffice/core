@@ -46,6 +46,4 @@ const sal_Char *dbg_dump(const UniString &rStr)
     return dbg_dump(ByteString(rStr, RTL_TEXTENCODING_UTF8));
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
