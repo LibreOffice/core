@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef MYSQLC_STATEMENT_HXX
 #define MYSQLC_STATEMENT_HXX
 
@@ -187,3 +188,5 @@ namespace connectivity
  * vim600: noet sw=4 ts=4 fdm=marker
  * vim<600: noet sw=4 ts=4
  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
