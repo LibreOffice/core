@@ -1914,12 +1914,12 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 
                     while ( aScanner.NextWord() )
                     {
-
-                        if(CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
-                        {
+                        if( aScanner.GetLen()  > 1 ||
+                            CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
                             ++nTmpWords;
+
+                        if( CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
                             nTmpCharsExcludingSpaces += aScanner.GetLen();
-                        }
 
                     }
                 }
