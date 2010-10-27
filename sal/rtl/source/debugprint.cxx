@@ -29,16 +29,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 const sal_Char *dbg_dump(const rtl::OString &rStr)
 {
-    static rtl::OStringBuffer aStr;
+    return rStr.getStr();
+}
 
-    aStr = rtl::OStringBuffer(rStr);
-    aStr.append(static_cast<char>(0));
-    return aStr.getStr();
+const sal_Char *dbg_dump(const rtl::OStringBuffer &rStrBuf)
+{
+    return rStrBuf.getStr();
+}
+
+const sal_Char *dbg_dump(rtl_String *pStr)
+{
+    return rtl_string_getStr(pStr);
 }
 
 const sal_Char *dbg_dump(const rtl::OUString &rStr)
@@ -46,16 +54,14 @@ const sal_Char *dbg_dump(const rtl::OUString &rStr)
     return dbg_dump(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
 }
 
-const sal_Char *dbg_dump(rtl_String *pStr)
+const sal_Char *dbg_dump(const rtl::OUStringBuffer &rStrBuf)
 {
-    return dbg_dump(rtl::OString(pStr));
+    return dbg_dump(rtl::OUString(rStrBuf.getStr()));
 }
 
 const sal_Char *dbg_dump(rtl_uString *pStr)
 {
     return dbg_dump(rtl::OUString(pStr));
 }
-
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
