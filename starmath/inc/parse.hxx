@@ -118,7 +118,7 @@ struct SmToken
     String  aText;
     // token info
     SmTokenType eType;
-    sal_Unicode     cMathChar;
+    sal_Unicode cMathChar;
     // parse-help info
     ULONG       nGroup;
     USHORT      nLevel;
@@ -127,6 +127,11 @@ struct SmToken
     xub_StrLen  nCol;
 
     SmToken();
+    SmToken(SmTokenType eTokenType,
+            sal_Unicode cMath,
+            const sal_Char* pText,
+            ULONG nTokenGroup = 0,
+            USHORT nTokenLevel = 0);
 };
 
 
@@ -168,6 +173,14 @@ enum SmConvert
     CONVERT_60_TO_50
 };
 
+struct SmTokenTableEntry
+{
+    const sal_Char* pIdent;
+    SmTokenType     eType;
+    sal_Unicode     cMathChar;
+    ULONG           nGroup;
+    USHORT          nLevel;
+};
 
 class SmParser
 {
@@ -240,7 +253,10 @@ protected:
 public:
                  SmParser();
 
+    /** Parse rBuffer to formula tree */
     SmNode      *Parse(const String &rBuffer);
+    /** Parse rBuffer to formula subtree that constitutes an expression */
+    SmNode      *ParseExpression(const String &rBuffer);
 
     const String & GetText() const { return BufferString; };
 
@@ -257,6 +273,7 @@ public:
     const SmErrorDesc * NextError();
     const SmErrorDesc * PrevError();
     const SmErrorDesc * GetError(USHORT i = 0xFFFF);
+    static const SmTokenTableEntry* GetTokenTableEntry( const String &rName );
 };
 
 

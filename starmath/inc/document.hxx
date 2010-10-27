@@ -48,6 +48,7 @@ class SmNode;
 class SfxMenuBarManager;
 class SfxPrinter;
 class Printer;
+class SmCursor;
 
 #define HINT_DATACHANGED    1004
 
@@ -108,6 +109,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
     friend class SmModel;
+    friend class SmCursor;
 
     String              aText;
     SmFormat            aFormat;
@@ -125,6 +127,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         nBottomBorder;
     USHORT              nModifyCount;
     BOOL                bIsFormulaArranged;
+    SmCursor           *pCursor;
 
 
 
@@ -163,6 +166,11 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     void                SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
 
     virtual BOOL        ConvertFrom(SfxMedium &rMedium);
+
+    /** Called whenever the formula is changed
+     * Deletes the current cursor
+     */
+    void                InvalidateCursor();
 
 public:
     TYPEINFO();
@@ -207,7 +215,7 @@ public:
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();
 
-    void        Draw(OutputDevice &rDev, Point &rPosition);
+    void        DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSelection = FALSE);
     Size        GetSize();
 
     void        Repaint();
@@ -221,6 +229,15 @@ public:
 
     virtual void SetVisArea (const Rectangle & rVisArea);
     virtual void SetModified(BOOL bModified);
+
+    /** Get a cursor for modifying this document
+     * @remarks Don't store this reference, a new cursor may be made...
+     */
+    SmCursor&   GetCursor();
+    /** True, if cursor have previously been requested and thus
+     * has some sort of position.
+     */
+    BOOL        HasCursor() { return pCursor != NULL; }
 };
 
 #endif

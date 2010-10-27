@@ -36,6 +36,7 @@
 #include "document.hxx"
 #include "view.hxx"
 #include "mathtype.hxx"
+#include "visitors.hxx"
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
@@ -143,6 +144,8 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     eScaleMode = SCALE_NONE;
     aNodeToken = rNodeToken;
     nAccIndex  = -1;
+    SetSelected(false);
+    aParentNode = NULL;
 }
 
 
@@ -445,28 +448,6 @@ void SmNode::AdaptToY(const OutputDevice &/*rDev*/, ULONG /*nHeight*/)
 }
 
 
-void SmNode::Draw(OutputDevice &rDev, const Point &rPosition) const
-{
-    if (IsPhantom())
-        return;
-
-    const SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
-        if (NULL != (pNode = GetSubNode(i)))
-        {   Point  aOffset (pNode->GetTopLeft() - GetTopLeft());
-            pNode->Draw(rDev, rPosition + aOffset);
-        }
-
-#ifdef SM_RECT_DEBUG
-    if (!IsDebug())
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    SmRect::Draw(rDev, rPosition, nRFlags);
-#endif
-}
-
 const SmNode * SmNode::FindTokenAt(USHORT nRow, USHORT nCol) const
     // returns (first) ** visible ** (sub)node with the tokens text at
     // position 'nRow', 'nCol'.
@@ -567,6 +548,100 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
     return pResult;
 }
 
+#ifdef DEBUG_ENABLE_DUMPASDOT
+void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, int parent) const
+{
+    //If this is the root start the file
+    if(number == -1){
+        out<<"digraph {"<<std::endl;
+        if(label){
+            out<<"labelloc = \"t\";"<<std::endl;
+            String eq(*label);
+            //CreateTextFromNode(eq);
+            eq.SearchAndReplaceAll(String::CreateFromAscii("\n"), String::CreateFromAscii(" "));
+            eq.SearchAndReplaceAll(String::CreateFromAscii("\\"), String::CreateFromAscii("\\\\"));
+            eq.SearchAndReplaceAll(String::CreateFromAscii("\""), String::CreateFromAscii("\\\""));
+            out<<"label= \"Equation: \\\"";
+            out<<ByteString( eq, RTL_TEXTENCODING_UTF8).GetBuffer();
+            out<<"\\\"\";"<<std::endl;
+        }
+    }
+
+    //Some how out<<(int)this; doesn't work... So we  do this nasty workaround...
+    char strid[100];
+    sprintf(strid, "%i", id);
+
+    char strnr[100];
+    sprintf(strnr, "%i", number);
+
+    //Dump connection to this node
+    if( parent != -1 ){
+        char pid[100];
+        sprintf(pid, "%i", parent);
+        out<<"n"<<pid<<" -> n"<<strid<<" [label=\""<<strnr<<"\"];"<<std::endl;
+    //If doesn't have parent and isn't a rootnode:
+    } else if(number != -1) {
+        out<<"orphaned -> n"<<strid<<" [label=\""<<strnr<<"\"];"<<std::endl;
+    }
+
+    //Dump this node
+    out<<"n"<< strid<<" [label=\"";
+    switch( GetType() ) {
+        case NTABLE:           out<<"SmTableNode"; break;
+        case NBRACE:           out<<"SmBraceNode"; break;
+        case NBRACEBODY:       out<<"SmBracebodyNode"; break;
+        case NOPER:            out<<"SmOperNode"; break;
+        case NALIGN:           out<<"SmAlignNode"; break;
+        case NATTRIBUT:        out<<"SmAttributNode"; break;
+        case NFONT:            out<<"SmFontNode"; break;
+        case NUNHOR:           out<<"SmUnHorNode"; break;
+        case NBINHOR:          out<<"SmBinHorNode"; break;
+        case NBINVER:          out<<"SmBinVerNode"; break;
+        case NBINDIAGONAL:     out<<"SmBinDiagonalNode"; break;
+        case NSUBSUP:          out<<"SmSubSupNode"; break;
+        case NMATRIX:          out<<"SmMatrixNode"; break;
+        case NPLACE:           out<<"SmPlaceNode"; break;
+        case NTEXT:
+            out<<"SmTextNode: ";
+            out<< ByteString( ((SmTextNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).GetBuffer();
+            break;
+        case NSPECIAL:             out<<"SmSpecialNode"; break;
+        case NGLYPH_SPECIAL:   out<<"SmGlyphSpecialNode"; break;
+        case NMATH:
+            out<<"SmMathSymbolNode: ";
+            out<< ByteString( ((SmMathSymbolNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).GetBuffer();
+            break;
+        case NBLANK:           out<<"SmBlankNode"; break;
+        case NERROR:           out<<"SmErrorNode"; break;
+        case NLINE:            out<<"SmLineNode"; break;
+        case NEXPRESSION:      out<<"SmExpressionNode"; break;
+        case NPOLYLINE:        out<<"SmPolyLineNode"; break;
+        case NROOT:            out<<"SmRootNode"; break;
+        case NROOTSYMBOL:      out<<"SmRootSymbolNode"; break;
+        case NRECTANGLE:       out<<"SmRectangleNode"; break;
+        case NVERTICAL_BRACE:  out<<"SmVerticalBraceNode"; break;
+        default:
+            out<<"Unknown Node";
+    }
+    out<<"\"";
+    if(IsSelected())
+        out<<", style=dashed";
+    out<<"];"<<std::endl;
+
+    //Dump subnodes
+    int myid = id;
+    const SmNode *pNode;
+    USHORT nSize = GetNumSubNodes();
+    for (USHORT i = 0; i < nSize;  i++)
+        if (NULL != (pNode = GetSubNode(i)))
+            pNode->DumpAsDot(out, NULL, i, ++id, myid);
+
+    //If this is the root end the file
+    if( number == -1 )
+        out<<"}"<<std::endl;
+}
+#endif /* DEBUG_ENABLE_DUMPASDOT */
+
 ///////////////////////////////////////////////////////////////////////////
 
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
@@ -584,6 +659,7 @@ SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
         SmNode *pNode = rNode.aSubNodes[i];
         aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
     }
+    ClaimPaternity();
 }
 
 
@@ -614,6 +690,8 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
         aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
     }
 
+    ClaimPaternity();
+
     return *this;
 }
 
@@ -628,12 +706,15 @@ void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThir
         aSubNodes[1] = pSecond;
     if (pThird)
         aSubNodes[2] = pThird;
+
+    ClaimPaternity();
 }
 
 
 void SmStructureNode::SetSubNodes(const SmNodeArray &rNodeArray)
 {
     aSubNodes = rNodeArray;
+    ClaimPaternity();
 }
 
 
@@ -2175,36 +2256,6 @@ void SmPolyLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmPolyLineNode::Draw(OutputDevice &rDev, const Point &rPosition) const
-{
-    if (IsPhantom())
-        return;
-
-    long nBorderwidth = GetFont().GetBorderWidth();
-
-    LineInfo  aInfo;
-    aInfo.SetWidth(nWidth - 2 * nBorderwidth);
-
-    Point aOffset (Point() - aPoly.GetBoundRect().TopLeft()
-                   + Point(nBorderwidth, nBorderwidth)),
-          aPos (rPosition + aOffset);
-    ((Polygon &) aPoly).Move(aPos.X(), aPos.Y());
-
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, FALSE);
-    aTmpDev.SetLineColor( GetFont().GetColor() );
-
-    rDev.DrawPolyLine(aPoly, aInfo);
-
-#ifdef SM_RECT_DEBUG
-    if (!IsDebug())
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    SmRect::Draw(rDev, rPosition, nRFlags);
-#endif
-}
-
-
 /**************************************************************************/
 
 void SmRootSymbolNode::AdaptToX(const OutputDevice &/*rDev*/, ULONG nWidth)
@@ -2218,48 +2269,6 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
     // etwas extra Laenge damit der horizontale Balken spaeter ueber dem
     // Argument positioniert ist
     SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
-}
-
-
-void SmRootSymbolNode::Draw(OutputDevice &rDev, const Point &rPosition) const
-{
-    if (IsPhantom())
-        return;
-
-    // draw root-sign itself
-    SmMathSymbolNode::Draw(rDev, rPosition);
-
-    SmTmpDevice  aTmpDev( (OutputDevice &) rDev, TRUE );
-    aTmpDev.SetFillColor(GetFont().GetColor());
-    rDev.SetLineColor();
-    aTmpDev.SetFont( GetFont() );
-
-    // since the width is always unscaled it corresponds ot the _original_
-    // _unscaled_ font height to be used, we use that to calculate the
-    // bar height. Thus it is independent of the arguments height.
-    // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )
-    long nBarHeight = GetWidth() * 7L / 100L;
-    long nBarWidth = nBodyWidth + GetBorderWidth();
-    Point aBarOffset( GetWidth(), +GetBorderWidth() );
-    Point aBarPos( rPosition + aBarOffset );
-
-    Rectangle  aBar(aBarPos, Size( nBarWidth, nBarHeight) );
-    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
-    //! increasing zoomfactor.
-    //  This is done by shifting it's output-position to a point that
-    //  corresponds exactly to a pixel on the output device.
-    Point  aDrawPos( rDev.PixelToLogic(rDev.LogicToPixel(aBar.TopLeft())) );
-    aBar.SetPos( aDrawPos );
-
-    rDev.DrawRect( aBar );
-
-#ifdef SM_RECT_DEBUG
-    if (!IsDebug())
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    SmRect::Draw(rDev, rPosition, nRFlags);
-#endif
 }
 
 
@@ -2299,47 +2308,6 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
     //! use this method in order to have 'SmRect::HasAlignInfo() == TRUE'
     //! and thus having the attribut-fences updated in 'SmRect::ExtendBy'
     SmRect::operator = (SmRect(nWidth, nHeight));
-}
-
-
-void SmRectangleNode::Draw(OutputDevice &rDev, const Point &rPosition) const
-{
-    if (IsPhantom())
-        return;
-
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, FALSE);
-    aTmpDev.SetFillColor(GetFont().GetColor());
-    rDev.SetLineColor();
-    aTmpDev.SetFont(GetFont());
-
-    ULONG  nTmpBorderWidth = GetFont().GetBorderWidth();
-
-    // get rectangle and remove borderspace
-    Rectangle  aTmp (AsRectangle() + rPosition - GetTopLeft());
-    aTmp.Left()   += nTmpBorderWidth;
-    aTmp.Right()  -= nTmpBorderWidth;
-    aTmp.Top()    += nTmpBorderWidth;
-    aTmp.Bottom() -= nTmpBorderWidth;
-
-    OSL_ENSURE(aTmp.GetHeight() > 0  &&  aTmp.GetWidth() > 0,
-               "Sm: empty rectangle");
-
-    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
-    //! increasing zoomfactor.
-    //  This is done by shifting it's output-position to a point that
-    //  corresponds exactly to a pixel on the output device.
-    Point  aPos (rDev.PixelToLogic(rDev.LogicToPixel(aTmp.TopLeft())));
-    aTmp.SetPos(aPos);
-
-    rDev.DrawRect(aTmp);
-
-#ifdef SM_RECT_DEBUG
-    if (!IsDebug())
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    SmRect::Draw(rDev, rPosition, nRFlags);
-#endif
 }
 
 
@@ -2451,33 +2419,41 @@ void SmTextNode::CreateTextFromNode(String &rText)
     rText.Append(' ');
 }
 
-void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
-{
-    if (IsPhantom()  ||  aText.Len() == 0  ||  aText.GetChar(0) == xub_Unicode('\0'))
-        return;
-
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, FALSE);
-    aTmpDev.SetFont(GetFont());
-
-    Point  aPos (rPosition);
-    aPos.Y() += GetBaselineOffset();
-    // auf Pixelkoordinaten runden
-    aPos = rDev.PixelToLogic( rDev.LogicToPixel(aPos) );
-
-    rDev.DrawStretchText(aPos, GetWidth(), aText);
-
-#ifdef SM_RECT_DEBUG
-    if (!IsDebug())
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    SmRect::Draw(rDev, rPosition, nRFlags);
-#endif
-}
 
 void SmTextNode::GetAccessibleText( String &rText ) const
 {
     rText += aText;
+}
+
+void SmTextNode::AdjustFontDesc()
+{
+    if (GetToken().eType == TTEXT)
+        nFontDesc = FNT_TEXT;
+    else if(GetToken().eType == TFUNC)
+        nFontDesc = FNT_FUNCTION;
+    else {
+        SmTokenType nTok;
+        const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( aText );
+        if (pEntry && pEntry->nGroup == TGFUNCTION) {
+            nTok = pEntry->eType;
+            nFontDesc = FNT_FUNCTION;
+        } else {
+            sal_Unicode firstChar = aText.GetChar(0);
+            if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',') {
+                nFontDesc = FNT_NUMBER;
+                nTok = TNUMBER;
+            } else if (aText.Len() > 1) {
+                nFontDesc = FNT_VARIABLE;
+                nTok = TIDENT;
+            } else {
+                nFontDesc = FNT_VARIABLE;
+                nTok = TCHARACTER;
+            }
+        }
+        SmToken tok = GetToken();
+        tok.eType = nTok;
+        SetToken(tok);
+    }
 }
 
 /**************************************************************************/
@@ -2908,17 +2884,6 @@ void SmSpecialNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
 }
 
-
-void SmSpecialNode::Draw(OutputDevice &rDev, const Point& rPosition) const
-{
-    //! since this chars might come from any font, that we may not have
-    //! set to ALIGN_BASELINE yet, we do it now.
-    ((SmSpecialNode *)this)->GetFont().SetAlign(ALIGN_BASELINE);
-
-    SmTextNode::Draw(rDev, rPosition);
-}
-
-
 /**************************************************************************/
 
 
@@ -3029,6 +2994,123 @@ void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SetWidth(nSpace);
 }
 
+/**************************************************************************/
+//Implementation of all accept methods for SmVisitor
 
+void SmNode::Accept(SmVisitor*){
+    //This method is only implemented to avoid making SmNode abstract because an
+    //obscure copy constructor is used... I can't find it's implementation, and
+    //don't want to figure out how to fix it... If you want to, just delete this
+    //method, making SmNode abstract, and see where you can an problem with that.
+    j_assert(false, "SmNode should not be visitable!");
+}
+
+void SmTableNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmBraceNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmBracebodyNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmOperNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmAlignNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmAttributNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmFontNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmUnHorNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmBinHorNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmBinVerNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmBinDiagonalNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmSubSupNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmMatrixNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmPlaceNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmTextNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmSpecialNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmGlyphSpecialNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmMathSymbolNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmBlankNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmErrorNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmLineNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmExpressionNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmPolyLineNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmRootNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmRootSymbolNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmRectangleNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
+
+void SmVerticalBraceNode::Accept(SmVisitor* pVisitor) {
+    pVisitor->Visit(this);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

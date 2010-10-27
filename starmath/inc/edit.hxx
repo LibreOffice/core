@@ -135,6 +135,8 @@ public:
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
     BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                IsInlineEditEnabled();
+    void                StartCursorMove();
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
