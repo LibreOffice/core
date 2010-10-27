@@ -31,31 +31,26 @@
 '*
 '\******************************************************************************
 testcase tGallery_DialogTest
-    '///Open a new Writer document
-    '///Tools / Gallery
-    printlog "- Working with Gallery-Beamer!"
+    printlog "Open a new Writer document"
     gApplication = "WRITER"
     call hNewDocument
+    printlog "Tools / Gallery"
     call hOpenGallery
     Kontext "DocumentWriter"
-        '///+Undock the <i>Gallery Beamer</i>
-        printlog "- undock the Gallery Beamer"
-        Kontext "Gallery"
-            Gallery.Undock ( AlignTop )
-            sleep(2)
-            '///+<ul><li>Move the gallery-window</li></ul>
-            printlog "  - move the gallery window"
-            Gallery.move ( 20, 20 )
-            sleep(2)
-            '///+Dock the <i>Gallery Beamer</i>
-            printlog "- dock the Gallery Beamer"
-            Gallery.Dock ( AlignTop )
-            sleep(2)
-            '///+Close the <i>Gallery Beamer</i> (Tools / Gallery)
-            printlog "- close the Gallery Beamer"
-        ToolsGallery
+    printlog "Undock the Gallery Beamer"
+    Kontext "Gallery"
+    Gallery.Undock ( AlignTop )
+    sleep(2)
+    printlog "Move the gallery-window"
+    Gallery.move ( 20, 20 )
+    sleep(2)
+    printlog "- dock the Gallery Beamer"
+    Gallery.Dock ( AlignTop )
+    sleep(2)
+    printlog "- close the Gallery Beamer"
+    ToolsGallery
     call hCloseDocument
-endcase
+endcase 'tGallery_DialogTest
 
 '-------------------------------------------------------------------------
 
@@ -64,51 +59,50 @@ testcase tGallery_ActivateAndUpdateAllThemes
     Dim i as Integer 
     Dim j as Integer
     Dim Gallerytext as string
-    '///Activate and update all gallery themes (NET installation: Activate only!)
-    '///Open a new Writer document
-    '///+Tools / Gallery
-    '///+Click on each theme and update it (via context menu)
+    printlog "Open a new Writer document"
+    printlog "Tools / Gallery"
+    printlog "Click on each theme and update it (via context menu)"
     printlog "activate and update all gallery-themes"
     gApplication = "WRITER"
     call hNewDocument
     Kontext
     call hOpenGallery
     Kontext "Gallery"
-        iThemeCount = Gallerys.GetItemCount
-        for i=1 to iThemeCount
-            if gNetzInst = FALSE then
-                Kontext "Gallery"
-                    Gallerytext = Gallerys.GetItemText(i)
-                    printlog "- " + i + ". entry (" & Gallerytext & ")"
-                    Gallerys.Select i
-                    Gallerys.MouseMove ( 10, 10 )
-                    Gallerys.OpenContextMenu
-                    sleep (3)
-                    printlog "  - update"
-                    hMenuSelectNr (1)
-                    sleep (3)
-                    Kontext "Messagebox"
-                    if Messagebox.Exists(3) then
-                        if Messagebox.getRT=304 then
-                            printlog "- 'MyTheme' is the " & i & "'s entry."
-                            Messagebox.No
-                        end if
+    iThemeCount = Gallerys.GetItemCount
+    for i=1 to iThemeCount
+        if gNetzInst = FALSE then
+            Kontext "Gallery"
+            Gallerytext = Gallerys.GetItemText(i)
+            printlog "- " + i + ". entry (" & Gallerytext & ")"
+            Gallerys.Select i
+            Gallerys.MouseMove ( 10, 10 )
+            Gallerys.OpenContextMenu
+            sleep (3)
+            printlog "update the theme"
+            hMenuSelectNr (1)
+            sleep (3)
+            Kontext "Messagebox"
+            if Messagebox.Exists(3) then
+                if Messagebox.getRT=304 then
+                    printlog "- 'MyTheme' is the " & i & "'s entry."
+                    Messagebox.No
+                end if
+            else
+                for j = 1 to 800
+                    Kontext "AktualisierenGallery"
+                    if AktualisierenGallery.Exists then
+                        printlog "DEBUG (j): " & j
+                        sleep (1)
                     else
-                        for j = 1 to 800
-                            Kontext "AktualisierenGallery"
-                                if AktualisierenGallery.Exists then
-                                    printlog "DEBUG (j): " & j
-                                    sleep (1)
-                                else
-                                    printlog "DEBUG: 800 reached!"
-                                    j=801
-                                end if
-                        next j
+                        printlog "DEBUG: 800 reached!"
+                        j=801
                     end if
+                next j
             end if
-        next i
+        end if
+    next i
     call hCloseDocument
-endcase
+endcase 'tGallery_ActivateAndUpdateAllThemes
 
 '-------------------------------------------------------------------------
 
@@ -127,38 +121,36 @@ testcase tGallery_CheckNames
         sFileName = ConvertPath ( gTesttoolPath + "graphics\required\input\gallery\gal_" + iSprache + ".txt" )
     end if
 
-    '///Check the names for the gallery themes
-    '///Open a new Writer document
-    '///+Tools / Gallery
+    printlog "Open a new Writer document"
+    printlog "+Tools / Gallery"
     gApplication = "WRITER"
     call hNewDocument
     Kontext
     call hOpenGallery
-    '///+Check the number of gallery themes. For StarOffice: should be 32. For OpenOffice.Org: should be 6.
+    printlog "+Check the number of gallery themes. For StarOffice: should be 32. For OpenOffice.Org: should be 6."
     printlog "- check the number of gallery-themes"
     Kontext "Gallery"
-        if NOT gOOO then 
-            if bAsianLan then
-                iGalleryThemes = 29 ' Flags are not allowed!
-            else
-                iGalleryThemes = 30
-            end if
+    if NOT gOOO then 
+        if bAsianLan then
+            iGalleryThemes = 29 ' Flags are not allowed!
         else
-            if bAsianLan then
-                iGalleryThemes = 6  ' Flags are not allowed!
-            else
-                iGalleryThemes = 6
-            end if
+           iGalleryThemes = 30
         end if
-        iThemeCount = Gallerys.GetItemCount
-        if (iThemeCount <> iGalleryThemes) then
-            warnlog "Difference in count of gallery themes; found: '" + iThemeCount + "'; expected: '"+ iGalleryThemes +"'"
+    else
+        if bAsianLan then
+             iGalleryThemes = 6  ' Flags are not allowed!
+        else
+             iGalleryThemes = 6
         end if
-        for i=1 to iThemeCount
+    end if
+    iThemeCount = Gallerys.GetItemCount
+    if (iThemeCount <> iGalleryThemes) then
+        warnlog "Difference in count of gallery themes; found: '" + iThemeCount + "'; expected: '"+ iGalleryThemes +"'"
+    end if
+    for i=1 to iThemeCount
         Gallerys.Select i
         ListAppend ( siList(), Gallerys.GetSelText )
     next i
-    '///+Check all names with a list which depends on language (<i>gTestToolPath</i>/graphics/udpate/input/gallery)
     printlog "- check the names of gallery-themes"
     if Dir ( sFilename ) = "" then
         warnlog "The file for comparison does not exists. The file will be written!"
@@ -171,7 +163,7 @@ testcase tGallery_CheckNames
     end if
     ToolsGallery
     call hCloseDocument
-endcase
+endcase 'tGallery_CheckNames
 
 '-------------------------------------------------------------------------
 
@@ -180,15 +172,14 @@ testcase tGallery_CheckContextMenuForGalleryThemes
     Dim iMenuEntries as Integer
     Dim i as Integer
     Dim iThemeCount as Integer
-    '/// Check the contextmenu for the gallery themes
-    '/// Open a new Writer document
-    '/// +Tools / Gallery
+    printlog " Open a new Writer document"
+    printlog " +Tools / Gallery"
     printlog "check the contextmenu for the gallery-themes"
     gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
-    '/// +Testing <i>rename</i> and <i>properties</i> for each gallery theme (via context-menu)
-    '/// +<ul><li>Only the private gallery theme must be deleteable (different 3 entries in the context-menu than the rest)</li></ul>
+    printlog " Testing rename and properties for each gallery theme (via context-menu)"
+    printlog " Only the private gallery theme must be deleteable (different 3 entries in the context-menu than the rest)"
     Kontext "Gallery"
         iThemeCount = Gallerys.GetItemCount
         Gallerys.MouseMove ( 10, 10 )
@@ -242,55 +233,50 @@ testcase tGallery_CheckContextMenuForGalleryThemes
         next i
         ToolsGallery
     call hCloseDocument
-endcase
+endcase 'tGallery_CheckContextMenuForGalleryThemes
 
 '-------------------------------------------------------------------------
 
 testcase tGallery_CreateAndWorkWithANewGalleryThemes
     Dim iMenuEntries as Integer
     Dim j as Integer
-    '/// Open a new Writer document
-    '/// Tools / Gallery
+    printlog "Open a new Writer document"
+    printlog "Tools / Gallery"
     printlog "create a new gallery-theme ( TT-theme )"
     gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
     iMenuEntries = Gallerys.GetItemCount
     printlog "- Clicking on 'New Theme' and creating a new theme"
-    '/// Create a new gallery-theme
-    '/// + by clicking on <i>New Theme</i>
     NewTheme.Click
-    '/// +Activate <i>General</i> tabpage and insert <b><i>TT-theme</b></i> as name
+    printlog "Activate General tabpage and insert TT-theme as name"
     Kontext
     Active.SetPage TabAllgemeinGallery
     Kontext "TabAllgemeinGallery"
         NeuesThema.SetText "TT-theme"
         sleep (1)
-        printlog "  - named the new theme 'TT-theme' on the general-page"
-        printlog "  - insert all files out of '[gTestToolpath]\global\input\graf_inp' in the files-page"
-        '/// +Activate <i>Files</i> tabpage
+        printlog "named the new theme 'TT-theme' on the general-page"
+        printlog "insert all files out of '[gTestToolpath]\global\input\graf_inp' in the files-page"
+        printlog "Activate Files tabpage"
         Kontext
         Active.SetPage TabDateien
         Kontext "TabDateien"
             printlog "     - click 'add' without a selected file => insert-graphic-dialog has to be be visible"
-            '/// +Click on <i>Add</i> (If no file is selected the <i>Graphic-Insert</i> dialog has to be be opened -> close it)
             Hinzufuegen.Click
             sleep (1)
             Kontext "GrafikEinfuegenDlg"
                 GrafikEinfuegenDlg.Cancel
                 sleep (1)
                 printlog "     - click 'find files' to insert the path for graphics"
-                '///+Click on <i>Find Files</i> => <i>select-path</i> dialog will be visible
         Kontext "TabDateien"
             Suche.Click
             sleep (1)
-            '/// +Insert [gTesttoolPath]/input/global/graf_inp as path-name as click on <i>Select</i>
+            printlog "Insert [gTesttoolPath]/input/global/graf_inp as path-name as click on Select"
         Kontext "OeffnenDlg"
             Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
             sleep (1)
             Auswaehlen.Click
             sleep (10)
-            '/// +Click on <i>Add</i> for some graphics
             printlog "     - 'add' one by one"
         Kontext "TabDateien"
         DateiListe.Select 1
@@ -300,10 +286,8 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
         DateiListe.Select 1
         Hinzufuegen.Click
         sleep (1)
-        '/// +Click on <i>Add all</i> for rest of the graphics
-        '/// +<ul><li>apply-dialog -> cancel</li></ul>
-        '/// +click on <i>Add all</i> for rest of the graphics
-        printlog "     - 'add all' for the rest of the files"
+        printlog " Click on Add all for rest of the graphics"
+        printlog " click on Add all for rest of the graphics"
         DateiListe.Select 1
         HinzufuegenAlle.Click
         printlog "     - apply-dialog -> cancel"
@@ -335,24 +319,23 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                 next j
         end if
         Kontext "TabDateien"
-            printlog "  - click 'OK' for the tabpages"
+            printlog "click 'OK' for the tabpages"
             TabDateien.OK
-            '/// +Check if the new entry is inserted and select it
-            printlog "  - check if the new entrie is inserted and select it"
+            printlog "Check if the new entry is inserted and select it"
         Kontext "Gallery"
             if Gallerys.GetItemCount <> ( iMenuEntries + 1 ) then
                 warnlog "No new theme was created => the test ends here"
                 ToolsGallery
                 call hCloseDocument
             else
-                gMouseClick 50,50            '/// make mouseclick to set focus ///'
+                gMouseClick 50,50            
+                printlog " make mouseclick to set focus"
                 Kontext "Gallery"
                 Gallerys.Select "TT-theme"
                 Gallerys.MouseMove ( 10, 10 )
                 sleep (1)
                 Gallerys.OpenContextMenu
-                '/// +Update the entry (1. entry in context menu ) => cancel it
-                printlog "  - update the entry => cancel the update"
+                printlog "Update the entry (1. entry in context menu ) => cancel it"
                 sleep (3)
                 hMenuSelectNr (1)
                 sleep (1)
@@ -366,8 +349,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                     Kontext "Gallery"
                         Gallerys.Select "TT-theme"
                         Gallerys.OpenContextMenu
-                        '/// +Update it (1. entry in context menu )
-                        printlog "  - update"
+                        printlog " +Update it (1. entry in context menu )"
                         sleep (3)
                         hMenuSelectNr (1)
                         for j=1 to 100
@@ -378,8 +360,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                                 sleep (1)
                             end if
                         next j
-                    '/// +Rename it (3. entry in context menu)
-                    printlog "  - rename ( 3. entry in context-menu )"
+                    printlog "Rename it (3. entry in context menu)"
                     Kontext "Gallery"
                         Gallerys.OpenContextMenu
                         sleep (3)
@@ -389,8 +370,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                             GalleryNewTitle.OK
                     Kontext "Gallery"
                         Gallerys.Select "New TT-theme"
-                        '///+Add new files in properties (4. entry in context menu)
-                        printlog "  - add new graphics in properties ( 4. entry in context-menu )"
+                        printlog "add new graphics in properties ( 4. entry in context-menu )"
                     Kontext "Gallery"
                         Gallerys.OpenContextMenu
                         sleep (3)
@@ -407,9 +387,8 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                             DateiListe.Select 1
                             Hinzufuegen.Click
                             TabDateien.OK
-                            '/// +Delete the entry (2. entry in context menu)
-                            printlog "  - delete the entry ( 2. entry in context-menu )"
-                            printlog "     - messagebox -> no"
+                            printlog "delete the entry ( 2. entry in context-menu )"
+                            printlog "messagebox -> no"
                     Kontext "Gallery"
                         Gallerys.Select "New TT-theme"
                         sleep (3)
@@ -419,7 +398,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                         Kontext "Active"
                             sleep (1)
                             Active.No
-                            printlog "     - messagebox -> yes"
+                            printlog "messagebox -> yes"
                     Kontext "Gallery"
                         sleep (1)
                         Gallerys.Select "New TT-theme"
@@ -429,7 +408,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                         hMenuSelectNr (2)
                         Kontext "Active"
                             Active.Yes
-                    try
+                        try
                         Kontext "Gallery"
                         Gallerys.Select "New TT-theme"
                         warnlog "The entry isn't deleted!"
@@ -439,7 +418,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
             sleep 10
         ToolsGallery
     call hCloseDocument
-endcase
+endcase 'tGallery_CreateAndWorkWithANewGalleryThemes
 
 '-------------------------------------------------------------------------
 
@@ -463,14 +442,14 @@ testcase tGallery_GalleryView_Preview
         case 48     :   jpeg_bkg =  2    : iAnimation =  1   :   iSound = 17
         case 49     :   jpeg_bkg = 12   : iAnimation =  1   :   iSound = 16
         case 55     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 28
-        case 81     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 10  'FHA TODO: Find out the right numbers for Asian languages.
+        case 81     :   jpeg_bkg = 21   : iAnimation =  1   :   iSound = 10  
         case 82     :   jpeg_bkg =  1    : iAnimation = 17  :   iSound = 12
         case 86     :   jpeg_bkg =  1    : iAnimation =  9   :   iSound = 13
         case 88     :   jpeg_bkg =  1    : iAnimation =  7   :   iSound = 20
         case else :   jpeg_bkg = 10   : iAnimation =  1    :   iSound = 17
-                  warnlog "Please insert the entrienumbers for 'Backgrounds', 'Sounds' and one with normal files ( Animations )"
+        warnlog "Please insert the entrienumbers for 'Backgrounds', 'Sounds' and one with normal files ( Animations )"
         end select
-    else  ' Testing OOO
+    else 
         select case iSprache
             case 01     :   jpeg_bkg =  1   :   iAnimation =  5     :   iSound =  2
             case 07     :   jpeg_bkg =  1   :   iAnimation =  5     :   iSound =  2
@@ -491,14 +470,12 @@ testcase tGallery_GalleryView_Preview
                 warnlog "Please insert the entrienumbers for 'Backgrounds', 'Sounds' and one with normal files ( Animations )"
         end select
     end if
-    '/// Open a new Writer document
-    '/// Tools / Gallery
     printlog "open a writer and the gallery"
     gApplication = "WRITER"
     call hNewDocument
     Kontext
     call hOpenGallery
-    '/// Check the view for Background-pictures (JPEGs), for standard graphic files (Animation) and for <i>Sound</i> objects
+    printlog "Check the view for Background-pictures (JPEGs), for standard graphic files (Animation) and for Sound objects"
     for i=1 to 3
         if i=1 then
             Gallerys.Select jpeg_bkg
@@ -517,22 +494,17 @@ testcase tGallery_GalleryView_Preview
         else
             iPreview = 2 : iTitle = 0
         end if
-        '/// Test the list-view
-        '/// +Click on List-View-Button in toolbar
-        printlog "- list-view"
-        printlog "  - open the list-view"
+        printlog " Click on List-View-Button in toolbar
         ListView.Click
         sleep (1)
-        printlog "  - Press Home + Enter to focus and enter Preview-mode."
-        '/// +Double-click on an object (preview has to be visible)
+        printlog "Press Home + Enter to focus and enter Preview-mode."
         View.TypeKeys "<HOME>"
         View.TypeKeys "<RETURN>"
         sleep (2)
-        '/// +Back to normal view with Enter
+        printlog "Back to normal view with Enter"
         View.TypeKeys "<RETURN>"
         sleep (2)
-        '/// +Preview out of context menu on/off
-        printlog "  - preview out of context menu on/off"
+        printlog "preview out of context menu on/off"
         View.TypeKeys "<HOME>"
         Sleep (2)
         View.OpenContextMenu true
@@ -540,96 +512,91 @@ testcase tGallery_GalleryView_Preview
         hMenuSelectNr ( iPreview )
         sleep (3)
         kontext "Gallery"
-            Sleep (2)
-            View.OpenContextMenu true
+        Sleep (2)
+        View.OpenContextMenu true
+        sleep (2)
+        hMenuSelectNr ( iPreview )
+        sleep (3)
+        printlog " +Title (FAT installation only)
+        if gNetzInst = FALSE then
+            printlog "  - title"
+            Kontext "Gallery"
             sleep (2)
-            hMenuSelectNr ( iPreview )
-            sleep (3)
-            '/// +Title (FAT installation only)
-            if gNetzInst = FALSE then
-                printlog "  - title"
-                Kontext "Gallery"
-                    sleep (2)
-                    View.OpenContextMenu true
-                    sleep (3)
-                    hMenuSelectNr ( iTitle )
-                    Kontext "GalleryNewTitle"
-                        sleep (1)
-                        GalleryNewTitle.Cancel
-                        sleep (1)
-                    Kontext "Gallery"
-            end if
             View.OpenContextMenu true
             sleep (3)
-            hMenuSelectNr ( iPreview )
-            sleep (3)
-            '/// Should now be in Preview-mode. Check if we are. ///'
-            View.OpenContextMenu true
-            sleep (3)
-            printlog MenuIsItemChecked (MenuGetItemID(iPreview+1))
-            if MenuIsItemChecked (MenuGetItemID(iPreview+1)) then
-                Printlog "   Entered Preview-mode correctly"
-                sleep (1)
-            else
-                Warnlog "   Didnt seem to enter preview-mode correctly."
-            end if
-            MenuSelect (0)
+            hMenuSelectNr ( iTitle )
+            Kontext "GalleryNewTitle"
             sleep (1)
-            '/// From here, try switching to icon-view ///'
-            '///+Click on Icon-View-Button in toolbar
-            printlog "- icon-view"
-            if IconView.isEnabled then
-                IconView.Click
-                qaErrorLog "The bug 64543 has been fixed! Please report to FHA."
-            end if
+            GalleryNewTitle.Cancel
             sleep (1)
-            View.TypeKeys "<HOME>"
-            printlog "  - Enter to get out of Preview-mode"
-            '/// +Press Return on an object (preview has to be visible)
-            View.TypeKeys "<RETURN>"
-            sleep (2)
-            '/// +Back to normal view with Return
-            View.TypeKeys "<RETURN>"
-            sleep (2)
-            '/// +Preview out of context menu on/off
-            printlog "  - preview out of context menu on/off"
-            View.TypeKeys "<HOME>"
-            sleep (3)
-            View.OpenContextMenu true
-            sleep (3)
-            hMenuSelectNr ( iPreview )
-            sleep (3)
-            View.OpenContextMenu true
-            sleep (3)
-            hMenuSelectNr ( iPreview )
-            sleep (3)
-            '/// +Title (FAT installation only)
-            if gNetzInst = FALSE then
-                printlog "  - title"
-                try
-                    View.OpenContextMenu true
-                    sleep (3)
-                catch
-                    warnlog "Could not open Contextmenu for Title nr:" +iTitle
-                endcatch
-                hMenuSelectNr ( iTitle )
-                Kontext "GalleryNewTitle"
-                    GalleryNewTitle.Cancel
-                Kontext "Gallery"
-            end if
-        next i
-        sleep 1 ' else crash
-   ToolsGallery
-
-    '/// If the MediaPlayer exists - close it ///'
+            Kontext "Gallery"
+        end if
+        View.OpenContextMenu true
+        sleep (3)
+        hMenuSelectNr ( iPreview )
+        sleep (3)
+        printlog " Should now be in Preview-mode. Check if we are."
+        View.OpenContextMenu true
+        sleep (3)
+        printlog MenuIsItemChecked (MenuGetItemID(iPreview+1))
+        if MenuIsItemChecked (MenuGetItemID(iPreview+1)) then
+            printlog "   Entered Preview-mode correctly"
+            sleep (1)
+        else
+            Warnlog "   Didnt seem to enter preview-mode correctly."
+        end if
+        MenuSelect (0)
+        sleep (1)
+        printlog "Click on Icon-View-Button in toolbar"
+        if IconView.isEnabled then
+            IconView.Click
+            qaErrorLog "The bug 64543 has been fixed! Please report to FHA."
+        end if
+        sleep (1)
+        View.TypeKeys "<HOME>"
+        printlog "Enter to get out of Preview-mode"
+        View.TypeKeys "<RETURN>"
+        sleep (2)
+        printlog "Back to normal view with Return"
+        View.TypeKeys "<RETURN>"
+        sleep (2)
+        printlog "preview out of context menu on/off"
+        View.TypeKeys "<HOME>"
+        sleep (3)
+        View.OpenContextMenu true
+        sleep (3)
+        hMenuSelectNr ( iPreview )
+        sleep (3)
+        View.OpenContextMenu true
+        sleep (3)
+        hMenuSelectNr ( iPreview )
+        sleep (3)
+        printlog "Title (FAT installation only)"
+        if gNetzInst = FALSE then
+            printlog "title"
+            try
+                View.OpenContextMenu true
+                sleep (3)
+            catch
+                warnlog "Could not open Contextmenu for Title nr:" +iTitle
+            endcatch
+            hMenuSelectNr ( iTitle )
+            Kontext "GalleryNewTitle"
+            GalleryNewTitle.Cancel
+            Kontext "Gallery"
+        end if
+    next i
+    sleep 1 ' else crash
+    ToolsGallery
+    printlog " If the MediaPlayer exists - close it"
     kontext "Mplayer"
-        if Mplayer.Exists then
-            if (gApplication = "IMPRESS") then
-                kontext "DocumentImpress"
-            else
-                kontext "DocumentDraw"
-            end if
-            ToolsMediaPlayer
+    if Mplayer.Exists then
+        if (gApplication = "IMPRESS") then
+            kontext "DocumentImpress"
+        else
+            kontext "DocumentDraw"
+        end if
+        ToolsMediaPlayer
         else
             if (gApplication = "IMPRESS") then
                 kontext "DocumentImpress"
@@ -639,7 +606,7 @@ testcase tGallery_GalleryView_Preview
         end if
 
     call hCloseDocument
-endcase
+endcase 'tGallery_GalleryView_Preview
 
 '-------------------------------------------------------------------------
 
@@ -649,7 +616,7 @@ testcase tGallery_GalleryView_Insert
     Dim i as Integer
     Dim j as Integer
     Dim k as Integer
-    '/// Test gallery-view -> insert gallery-object with context-menu (3D-Object (<i>internal object</i>), Animation (<i>as file</i>))
+    printlog " Test gallery-view -> insert gallery-object with context-menu (3D-Object internal object), Animation (as file))"
     if NOT gOOO then
         select case iSprache
             case 01     :   jpeg_bkg = 3     :   iAnimation =  1
@@ -691,36 +658,34 @@ testcase tGallery_GalleryView_Insert
                                 warnlog "Please insert the entrienumbers for 'Backgrounds' and one with normal files ( Animations )"
         end select
     end if
-    '/// Test following for all applications (Writer, Calc, Impress, Draw)
-    for i=1 to 4           ' each application
+    printlog "Test following for all applications (Writer, Calc, Impress, Draw)"
+    for i=1 to 4
         if i=1 then gApplication = "WRITER"
         if i=2 then gApplication = "CALC"
         if i=3 then gApplication = "IMPRESS"
         if i=4 then gApplication = "DRAW"
 
-        '/// +Open a new document
-        '/// +Open the Gallery
+        printlog "Open a new document"
+        printlog "Open the Gallery"
         printlog gApplication  'Chr(13)
         call hNewDocument
         call hOpenGallery
-        '/// +Select 3D-theme (these are internal objects and not realy files)
-        '/// +<ul><li>on context menu there are only 2 entries for insert (copy, link)
-        '/// +<li>insert the object per <i>copy</i></li>
-        '/// +<li>insert the object per <i>link</i></li></ul>
-        '/// +Select Animation theme (these are realy files)
-        '/// +<ul><li>On context menu there are only 2 entries for insert (copy, link ) for Calc, Draw Impress</li>
-        '/// +<li>On context menu there are only 3 entries for insert (copy, link, background / page, paragraph ) for Writer</li>
-        '/// +<li>insert the object per <i>copy</i></li>
-        '/// +<li>insert the object per <i>link</i></li>
-        '/// +<li>Only for the Writer:<ul>
-        '/// +<li>Insert the object per background / page</li>
-        '/// +<li>insert the object per background / paragraph</li></ul></li></ul>
-        '/// +Close the Gallery
-        '/// +Close the document
-        '/// Since the GraphicObjectbar could disturb our testing, we close it if it is open ///'
-        '      kontext "GraphicObjectbar"
-        '      if GraphicObjectbar.Exists then GraphicObjectbar.Close
-        for j=1 to 2        ' the two gallery-theme
+        printlog "Select 3D-theme (these are internal objects and not realy files)"
+        printlog "on context menu there are only 2 entries for insert (copy, link)"
+        printlog "insert the object per copy"
+        printlog "Select Animation theme (these are realy files)"
+        printlog "On context menu there are only 2 entries for insert (copy, link ) for Calc, Draw Impress"
+        printlog "On context menu there are only 3 entries for insert (copy, link, background / page, paragraph ) for Writer"
+        printlog "insert the object per copy"
+        printlog "insert the object per link"
+        printlog "Only for the Writer:"
+        printlog "Insert the object per background / page"
+        printlog "insert the object per background / paragraph"
+        printlog "Close the Gallery"
+        printlog "Close the document"
+        printlog "Since the GraphicObjectbar could disturb our testing, we close it if it is open"
+       
+        for j=1 to 2        
             if j=1 then
                 Gallerys.Select jpeg_bkg
                 printlog " selected gallery-theme : Backgrounds"
@@ -747,7 +712,7 @@ testcase tGallery_GalleryView_Insert
                     View.typekeys "<DOWN>,<UP>"
 
                     sleep (3)
-                    View.TypeKeys "<SHIFT F10>" ' OpenContextMenu
+                    View.TypeKeys "<SHIFT F10>" 
                     sleep (3)
                     hMenuSelectNr ( 1 )
 
@@ -763,14 +728,14 @@ testcase tGallery_GalleryView_Insert
                         sleep (3)
 
                         printlog "   - link"
-                        View.TypeKeys "<SHIFT F10>" 'OpenContextMenu
+                        View.TypeKeys "<SHIFT F10>" 
                         sleep (1)
                         hMenuSelectNr ( 1 )
                         hMenuSelectNr ( 2 )
                         sleep (3)
 
                         printlog "   - background -> page"
-                        View.TypeKeys "<SHIFT F10>" 'OpenContextMenu
+                        View.TypeKeys "<SHIFT F10>" 
                         sleep (2)
                         hMenuSelectNr ( 1 )
                         hMenuSelectNr ( 3 )
@@ -778,7 +743,7 @@ testcase tGallery_GalleryView_Insert
                         sleep (3)
 
                         printlog "   - background -> paragraph"
-                        View.TypeKeys "<SHIFT F10>" 'OpenContextMenu
+                        View.TypeKeys "<SHIFT F10>" 
                         sleep (2)
                         hMenuSelectNr ( 1 )
                         hMenuSelectNr ( 3 )
@@ -795,7 +760,7 @@ testcase tGallery_GalleryView_Insert
                     kontext "Gallery"
 
                 next k
-            else              ' test for other applications ( calc, impress, draw )
+            else             
                 kontext "GraphicObjectbar"
                     if GraphicObjectbar.Exists then
                         if GraphicObjectbar.isDocked = False then
@@ -823,10 +788,10 @@ testcase tGallery_GalleryView_Insert
                     for k=1 to 2
                         if k=1 then
                             ListView.Click
-                            printlog "  - insert on list view"
+                            printlog "insert on list view"
                         else
                             IconView.Click
-                            printlog "  - insert on icon view"
+                            printlog "insert on icon view"
                         end if
 
                     sleep (1)
@@ -835,7 +800,7 @@ testcase tGallery_GalleryView_Insert
                     View.typekeys "<DOWN>,<UP>"
 
                     sleep (1)
-                    View.TypeKeys "<SHIFT F10>" 'OpenContextMenu
+                    View.TypeKeys "<SHIFT F10>" 
                     printlog "    - copy"
                     sleep (3)
                     hMenuSelectNr ( 1 )
@@ -843,7 +808,7 @@ testcase tGallery_GalleryView_Insert
                     sleep (3)
 
                     if j=2 then
-                        View.TypeKeys "<SHIFT F10>" 'OpenContextMenu
+                        View.TypeKeys "<SHIFT F10>" 
                         printlog "    - link"
                         sleep (3)
                         hMenuSelectNr ( 1 )
@@ -859,7 +824,7 @@ testcase tGallery_GalleryView_Insert
         call hCloseDocument
         WaitSlot (2000)
     next i
-endcase
+endcase 'tGallery_GalleryView_Insert
 
 '-------------------------------------------------------------------------
 
@@ -878,7 +843,7 @@ testcase tGallery_GalleryView_Delete
         Goto NotForNetInst
     end if
 
-    '/// Test gallery view -> delete objects with context-menu ( Backgrounds (<i>internal object</i>), Animation (<i>file</i>), Sound (<i>file</i>))
+    printlog " Test gallery view -> delete objects with context-menu ( Backgrounds (internal object), Animation (file), Sound (file))"
     select case iSprache
         case 01   : jpeg_bkg = 1    :   iAnimation = 2   :  iSound = 28
         case 07   : jpeg_bkg = 29  :   iAnimation = 1   :  iSound =  6
@@ -898,12 +863,12 @@ testcase tGallery_GalleryView_Delete
                   warnlog "Please insert the entrienumbers for '3D-graphics', 'Sounds' and one with normal files ( Animations )"
     end select
 
-    '/// Open a new writer-doc
-    '/// Tools / Gallery
+    printlog " Open a new writer-doc"
+    printlog " Tools / Gallery"
     gApplication = "WRITER"
     call hNewDocument
     call hOpenGallery
-    '/// Delete one object in list-view and icon-view for 3D, Animation and Sound
+    printlog "Delete one object in list-view and icon-view for 3D, Animation and Sound"
     for i=1 to 3
         Kontext "Gallery"
             if i=1 then
@@ -937,39 +902,37 @@ testcase tGallery_GalleryView_Delete
                         Kontext "Gallery"
                             sleep (1)
                             View.MouseMove ( 5, 15 )
-                            View.TypeKeys "<SHIFT F10>" 'OpenContextMenu true
+                            View.TypeKeys "<SHIFT F10>"
                             hMenuSelectNr ( 4 )
                             kontext "Active"
                                 if k=1 then
                                     Active.No
-                                    printlog "      delete one object => no"
+                                    printlog "delete one object => no"
                                 else
                                     Active.Yes
-                                    printlog "      delete one object => yes"
+                                    printlog "delete one object => yes"
                                 end if
                     next k
             next j
     next i
     ToolsGallery
     call hCloseDocument
-    'NOTE: Jump End NotForNetInst
-    NotForNetInst:
-endcase
+endcase 'tGallery_GalleryView_Delete
 
 '-------------------------------------------------------------------------
 testcase tGallery_Quick_check
 
-    '/// Short check, if at least 2 files exist in the gallery, and if they are > 0 in size ///'
-    '/// One in the gallery folder itself and the other one in a subfolder. ///'
+    printlog " Short check, if at least 2 files exist in the gallery, and if they are > 0 in size"
+    printlog " One in the gallery folder itself and the other one in a subfolder."
     dim sFile(1) as string
     dim i as integer
 
     sFile(0) = ConvertPath ( gOfficeBasisPath + "share/gallery/apples.gif" ) '
     sFile(1) = ConvertPath ( gOfficeBasisPath + "share/gallery/bullets/coffee_1.gif" ) '
-    '/// Open a new document
+    printlog " Open a new document"
     call hNewDocument
     for i = 0 to 1
-    '/// Click to deselect any selected objects ///'
+    printlog " Click to deselect any selected objects"
         gMouseclick 1, 50
         if FileExists(sFile(i)) then
             if (FileLen(sFile(i)) > 0 ) then
@@ -981,7 +944,6 @@ testcase tGallery_Quick_check
             warnlog "File doesn't exist: '" + sFile(i) + "'"
         end if
     next i
-    '///close the document
+    printlog "close the document"
     call hCloseDocument
-endcase
-
+endcase 'tGallery_Quick_check
