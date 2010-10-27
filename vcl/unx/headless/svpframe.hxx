@@ -125,6 +125,7 @@ public:
 
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
+    virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
 };
 #endif // _SVP_SVPFRAME_HXX
 

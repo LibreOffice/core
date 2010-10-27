@@ -192,6 +192,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
     String                          m_aTitle;
+    rtl::OUString                   m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
 
@@ -269,6 +270,8 @@ class GtkSalFrame : public SalFrame
     void setMinMaxSize();
     void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
+
+    void updateWMClass();
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
@@ -387,6 +390,7 @@ public:
     virtual void                SetBackgroundBitmap( SalBitmap* );
 
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)

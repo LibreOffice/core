@@ -159,6 +159,7 @@ public:
     virtual void                SetExtendedFrameStyle( SalExtStyle );
     virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber(unsigned int);
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)

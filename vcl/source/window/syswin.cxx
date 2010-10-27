@@ -1079,9 +1079,14 @@ unsigned int SystemWindow::GetScreenNumber() const
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetScreenNumber( unsigned int nScreen)
+void SystemWindow::SetScreenNumber(unsigned int nScreen)
 {
     mpWindowImpl->mpFrame->SetScreenNumber( nScreen );
+}
+
+void SystemWindow::SetApplicationID(const rtl::OUString &rApplicationID)
+{
+    mpWindowImpl->mpFrame->SetApplicationID(rApplicationID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

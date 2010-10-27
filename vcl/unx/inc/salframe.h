@@ -129,6 +129,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 
     String          m_aTitle;
 
+    rtl::OUString   m_sWMClass;
+
     SystemChildData maSystemChildData;
 
     SalI18N_InputContext *mpInputContext;
@@ -171,6 +173,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 
     void            setXEmbedInfo();
     void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
+
+    void            updateWMClass();
 public:
     X11SalFrame( SalFrame* pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
@@ -261,6 +265,7 @@ public:
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
 
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)

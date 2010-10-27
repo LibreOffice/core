@@ -277,6 +277,8 @@ public:
     @see GetScreenNumber
     */
     void            SetScreenNumber( unsigned int nNewScreen );
+
+    void            SetApplicationID( const rtl::OUString &rApplicationID );
 };
 
 #endif // _SV_SYSWIN_HXX

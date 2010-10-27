@@ -664,6 +664,10 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
     }
 }
 
+void AquaSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
+}
+
 // -----------------------------------------------------------------------
 
 void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )

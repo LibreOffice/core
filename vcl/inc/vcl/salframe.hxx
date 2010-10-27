@@ -266,6 +266,8 @@ public:
     // move the frame to a new screen
     virtual void                SetScreenNumber( unsigned int nScreen ) = 0;
 
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID) = 0;
+
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion() = 0;

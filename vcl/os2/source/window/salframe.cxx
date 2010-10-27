@@ -1366,6 +1366,10 @@ void Os2SalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
 }
 
+void Os2SalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
+}
+
 // -----------------------------------------------------------------------
 
 // native menu implementation - currently empty

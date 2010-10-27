@@ -542,11 +542,11 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
-        XClassHint* pClass = XAllocClassHint();
-        pClass->res_name  = const_cast<char*>(X11SalData::getFrameResName());
-        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
-        XFree( pClass );
+        // force wm class hint
+        mnExtStyle = ~0;
+        if (mpParent)
+            m_sWMClass = mpParent->m_sWMClass;
+        SetExtendedFrameStyle( 0 );
 
         XSizeHints* pHints = XAllocSizeHints();
         pHints->flags       = PWinGravity | PPosition;
@@ -849,13 +849,7 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     if( nStyle != mnExtStyle && ! IsChildWindow() )
     {
         mnExtStyle = nStyle;
-
-        XClassHint* pClass = XAllocClassHint();
-        rtl::OString aResHint = X11SalData::getFrameResName( mnExtStyle );
-        pClass->res_name  = const_cast<char*>(aResHint.getStr());
-        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
-        XFree( pClass );
+        updateWMClass();
     }
 }
 
@@ -2191,6 +2185,33 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
         maGeometry.nScreenNumber = nNewScreen;
     }
 }
+
+void X11SalFrame::SetApplicationID( const rtl::OUString &rWMClass )
+{
+    if( rWMClass != m_sWMClass && ! IsChildWindow() )
+    {
+        m_sWMClass = rWMClass;
+        updateWMClass();
+        std::list< X11SalFrame* >::const_iterator it;
+        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+            (*it)->SetApplicationID(rWMClass);
+    }
+}
+
+void X11SalFrame::updateWMClass()
+{
+    XClassHint* pClass = XAllocClassHint();
+    rtl::OString aResName = X11SalData::getFrameResName( mnExtStyle );
+    pClass->res_name  = const_cast<char*>(aResName.getStr());
+
+    rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
+
+    pClass->res_class = const_cast<char*>(pResClass);
+    XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
+    XFree( pClass );
+}
+
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

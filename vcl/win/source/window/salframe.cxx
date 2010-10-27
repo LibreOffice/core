@@ -2036,6 +2036,10 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
+void WinSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
+}
+
 // -----------------------------------------------------------------------
 
 void WinSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )

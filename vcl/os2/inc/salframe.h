@@ -158,6 +158,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
     virtual void                ResetClipRegion();
     virtual void                BeginSetClipRegion( ULONG nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
