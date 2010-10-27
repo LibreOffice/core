@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "xltoolbar.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
@@ -429,3 +430,5 @@ bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     }
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

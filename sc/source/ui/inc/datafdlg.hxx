@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -109,3 +110,5 @@ private:
     DECL_LINK( Impl_DataModifyHdl,  Edit*    );
 };
 #endif // SC_DATAFDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

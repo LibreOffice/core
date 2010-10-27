@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _XLTOOLBAR_HXX
 #define _XLTOOLBAR_HXX
 
@@ -93,3 +94,5 @@ public:
 
 
 #endif //_XLTOOLBAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
