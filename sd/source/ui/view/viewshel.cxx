@@ -1178,7 +1178,8 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
             }
             catch( const Exception& e )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                // no need to handle. By definition, the UndoManager handled this by clearing the
+                // Undo/Redo stacks
             }
         }
 
@@ -1226,7 +1227,8 @@ void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
             }
             catch( const Exception& e )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                // no need to handle. By definition, the UndoManager handled this by clearing the
+                // Undo/Redo stacks
             }
         }
 
