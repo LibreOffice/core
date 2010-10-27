@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
@@ -435,6 +436,26 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
         if( aGraphicUrl.getLength() > 0 )
             rPropMap[ PROP_GraphicURL ] <<= aGraphicUrl;
+
+        // cropping
+        if ( maBlipProps.moClipRect.has() )
+        {
+            geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.get() );
+            awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
+            if ( aOriginalSize.Width && aOriginalSize.Height )
+            {
+                text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
+                if ( oClipRect.X1 )
+                    aGraphCrop.Left = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X1 ) / 100000 );
+                if ( oClipRect.Y1 )
+                    aGraphCrop.Top = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y1 ) / 100000 );
+                if ( oClipRect.X2 )
+                    aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
+                if ( oClipRect.Y2 )
+                    aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
+                rPropMap[ PROP_GraphicCrop ] <<= aGraphCrop;
+            }
+        }
     }
 
     // color effect
