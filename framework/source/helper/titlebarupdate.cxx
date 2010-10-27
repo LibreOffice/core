@@ -199,6 +199,89 @@ void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
     // nothing todo here - because we hold the frame as weak reference only
 }
 
+//http://live.gnome.org/GnomeShell/ApplicationBased
+//See http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx for future
+//Windows 7 equivalent support
+void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame)
+{
+    css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
+    if ( ! xWindow.is() )
+        return;
+
+    ::rtl::OUString sApplicationID;
+    try
+    {
+        ::rtl::OUString aProductName;
+        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
+
+        // SYNCHRONIZED ->
+        ReadGuard aReadLock(m_aLock);
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+        aReadLock.unlock();
+        // <- SYNCHRONIZED
+
+        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
+            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
+            css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::container::XNameAccess > xConfig(
+            xModuleManager,
+            css::uno::UNO_QUERY_THROW);
+
+        rtl::OUString aModuleId = xModuleManager->identify(xFrame);
+        rtl::OUString sDesktopName;
+
+        if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
+             aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
+             aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) ||
+             aModuleId.equalsAscii( "com.sun.star.xforms.XMLFormDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("writer");
+        else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("calc");
+        else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("impress");
+        else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("draw");
+        else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("math");
+        else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.OfficeDatabaseDocument" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("base");
+        else if ( aModuleId.equalsAscii( "com.sun.star.frame.StartModule" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
+        else
+            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
+        sApplicationID = aProductName.toAsciiLowerCase();
+        sApplicationID += ::rtl::OUString(sal_Unicode('-'));
+        sApplicationID += sDesktopName;
+    }
+    catch(const css::uno::Exception&)
+    {
+    }
+
+    // VCL SYNCHRONIZED ->
+    SolarMutexGuard aSolarGuard;
+
+    Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    if (
+        ( pWindow                                 ) &&
+        ( pWindow->GetType() == WINDOW_WORKWINDOW )
+       )
+    {
+        WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+#ifdef COPY_TO_TITLE_FOR_DEBUG
+        pWorkWindow->SetText( sApplicationID );
+#endif
+        pWorkWindow->SetApplicationID( sApplicationID );
+    }
+    // <- VCL SYNCHRONIZED
+}
+
+
 //*****************************************************************************************************************
 ::sal_Bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                                       TModuleInfo&                               rInfo )
@@ -260,6 +343,9 @@ void TitleBarUpdate::impl_forceUpdate()
 
     impl_updateIcon  (xFrame);
     impl_updateTitle (xFrame);
+#if defined(UNX) && !defined(MACOSX)
+    impl_updateApplicationID (xFrame);
+#endif
 }
 
 //*****************************************************************************************************************

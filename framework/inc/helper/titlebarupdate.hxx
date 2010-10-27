@@ -212,6 +212,10 @@ class TitleBarUpdate : // interfaces
          */
         void impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
+        //Hook to set GNOME3/Windows 7 applicationID for toplevel frames
+        //http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx
+        //http://live.gnome.org/GnomeShell/ApplicationBased
+        void impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame);
 }; // class TitleBarUpdate
 
 } // namespace framework
