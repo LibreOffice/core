@@ -48,6 +48,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <editeng/unoprnms.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/unoshtxt.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -317,6 +319,47 @@ void lcl_shiftLables( TickIter& rIter, const B2DVector& rStaggerDistance )
             xShape2DText->setPosition( aPos );
         }
     }
+}
+
+bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
+{
+    if ( rxShape.is() )
+    {
+        SvxShape* pShape = SvxShape::getImplementation( rxShape );
+        SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( pShape );
+        if ( pShapeText )
+        {
+            SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
+            if ( pTextEditSource )
+            {
+                pTextEditSource->UpdateOutliner();
+                SvxTextForwarder* pTextForwarder = pTextEditSource->GetTextForwarder();
+                if ( pTextForwarder )
+                {
+                    USHORT nParaCount = pTextForwarder->GetParagraphCount();
+                    for ( USHORT nPara = 0; nPara < nParaCount; ++nPara )
+                    {
+                        USHORT nLineCount = pTextForwarder->GetLineCount( nPara );
+                        for ( USHORT nLine = 0; nLine < nLineCount; ++nLine )
+                        {
+                            USHORT nLineStart = 0;
+                            USHORT nLineEnd = 0;
+                            pTextForwarder->GetLineBoundaries( nLineStart, nLineEnd, nPara, nLine );
+                            USHORT nWordStart = 0;
+                            USHORT nWordEnd = 0;
+                            if ( pTextForwarder->GetWordIndices( nPara, nLineStart, nWordStart, nWordEnd ) &&
+                                 ( nWordStart != nLineStart ) )
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 class MaxLabelEquidistantTickIter : public EquidistantTickIter
