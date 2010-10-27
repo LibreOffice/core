@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _MyListener_HXX
 #define _MyListener_HXX
 
@@ -94,3 +95,5 @@ class WriterListener : public cppu::WeakImplHelper1< css::document::XEventListen
 };
 
 #endif // _MyListener_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

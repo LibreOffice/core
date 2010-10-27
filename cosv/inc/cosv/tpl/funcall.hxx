@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -305,3 +306,5 @@ for_each_in(C & i_container, F io_functionToBeCalled)
 
 }   // namespace csv
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

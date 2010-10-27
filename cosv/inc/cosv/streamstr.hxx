@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -389,3 +390,5 @@ Join( StreamStr &           o_text,
 
 }   // namespace csv
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

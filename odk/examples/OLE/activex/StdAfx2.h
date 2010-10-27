@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -63,3 +64,5 @@ extern CComModule _Module;
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // !defined(AFX_STDAFX_H__C1799EA0_62CC_44DE_A2DD_C9F0410FF7F1__INCLUDED)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
