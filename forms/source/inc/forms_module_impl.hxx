@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef FORMS_MODULE_IMPLEMENTATION_INCLUDE_CONTEXT
     #error "not to be included directly! use 'foo_module.hxx instead'!"
 #endif
@@ -207,3 +208,4 @@ namespace FORMS_MODULE_NAMESPACE
 }   // namespace FORMS_MODULE_NAMESPACE
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

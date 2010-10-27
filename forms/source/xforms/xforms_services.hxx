@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 
 namespace com { namespace sun { namespace star {
@@ -25,3 +26,5 @@ namespace frm
         const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
         throw( com::sun::star::uno::RuntimeException );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

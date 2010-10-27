@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -369,3 +370,5 @@ public:
 #define PROPERTY_RO( NAME, TYPE )   PROPERTY_FLAGS( NAME, TYPE, com::sun::star::beans::PropertyAttribute::BOUND | com::sun::star::beans::PropertyAttribute::READONLY )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

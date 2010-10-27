@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -239,3 +240,4 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
 char* PriPK11PasswordFunc( PK11SlotInfo *slot , PRBool retry , void* arg ) ;
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

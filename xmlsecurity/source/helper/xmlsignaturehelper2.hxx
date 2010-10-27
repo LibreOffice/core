@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -132,3 +133,4 @@ public:
     static com::sun::star::uno::Reference < com::sun::star::io::XInputStream > OpenInputStream( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore, const rtl::OUString& rURI );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

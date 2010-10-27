@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #pragma once
 
 #ifdef _MSC_VER
@@ -16,3 +17,5 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle);
 std::string GetOfficeProductName(MSIHANDLE handle);
 std::string GetQuickstarterLinkName(MSIHANDLE handle);
 std::string GetProcessImagePath( DWORD dwProcessId );
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

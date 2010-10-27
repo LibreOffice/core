@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,3 +120,5 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
 } ;
 
 #endif  // _XMLSIGNATURETEMPLATE_XMLSECIMPL_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

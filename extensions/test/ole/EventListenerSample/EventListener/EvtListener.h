@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // EvtListener.h : Deklaration von CEvtListener
 
 #ifndef __EVTLISTENER_H_
@@ -33,3 +34,5 @@ public:
 };
 
 #endif //__EVTLISTENER_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

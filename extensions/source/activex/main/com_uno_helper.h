@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "stdafx2.h"
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
@@ -22,3 +23,4 @@ HRESULT GetPropertiesFromIDisp( IDispatch* pdispObject,
                                 CComVariant* pVariant,
                                 unsigned int count );
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

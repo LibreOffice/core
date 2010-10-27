@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,3 +55,4 @@ extern CComModule _Module;
 
 #endif // !defined(AFX_STDAFX_H__180FF568_6F5C_11D4_8330_005004526AB4__INCLUDED_)
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

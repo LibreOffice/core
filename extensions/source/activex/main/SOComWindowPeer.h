@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SOComWindowPeer.h: Definition of the SOComWindowPeer class
 //
 //////////////////////////////////////////////////////////////////////
@@ -131,3 +132,5 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
 };
 
 #endif // __SOCOMWINDOWPEER_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

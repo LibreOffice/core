@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #if !defined(AFX_MFCCONTROL_H__AC221FBC_A0D8_11D4_833B_005004526AB4__INCLUDED_)
 #define AFX_MFCCONTROL_H__AC221FBC_A0D8_11D4_833B_005004526AB4__INCLUDED_
 
@@ -31,3 +32,5 @@ extern const WORD _wVerMinor;
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // !defined(AFX_MFCCONTROL_H__AC221FBC_A0D8_11D4_833B_005004526AB4__INCLUDED)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

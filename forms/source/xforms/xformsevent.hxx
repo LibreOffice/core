@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __XFORMSEVENT_HXX
 #define __XFORMSEVENT_HXX
 
@@ -64,3 +65,5 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
 } } } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

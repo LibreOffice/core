@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SOActiveX.h : Declaration of the CSOActiveX
 
 #ifndef __SOACTIVEX_H_
@@ -174,3 +175,4 @@ public:
 
 #endif //__SOACTIVEX_H_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

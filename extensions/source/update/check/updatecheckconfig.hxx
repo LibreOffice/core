@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -236,3 +237,5 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
 
     return T();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
