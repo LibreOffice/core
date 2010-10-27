@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,3 +50,5 @@ static const String pStarDrawXMLContent( RTL_CONSTASCII_USTRINGPARAM( "content.x
 static const String pStarDrawOldXMLContent( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ));
 
 #endif  // _SD_STRMNAME_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
