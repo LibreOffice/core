@@ -57,6 +57,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/awt/XItemList.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/numbers.hxx>
@@ -342,11 +343,16 @@ namespace frm
 
             case FormComponentType::LISTBOX:
             {
-                Sequence< ::rtl::OUString> aValueSelection;
-                Reference< XPropertySet > aPropertyPointer(getModel(), UNO_QUERY);
-                aPropertyPointer->getPropertyValue(PROPERTY_VALUE_SEQ) >>= aValueSelection;
-                if (rEvent.Selected <= aValueSelection.getLength())
-                    aText.append( aValueSelection[ rEvent.Selected ] );
+                try
+                {
+                    const Reference< XItemList > xItemList( getModel(), UNO_QUERY_THROW );
+                    const ::rtl::OUString sItemText( xItemList->getItemText( rEvent.Selected ) );
+                    aText.append( sItemText );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
             break;
 
