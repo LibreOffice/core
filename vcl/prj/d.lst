@@ -58,6 +58,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
 ..\inc\vcl\imagerepository.hxx %_DEST%\inc%_EXT%\vcl\imagerepository.hxx
 ..\inc\vcl\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
+..\inc\vcl\throbber.hxx %_DEST%\inc%_EXT%\vcl\throbber.hxx
 ..\inc\vcl\impdel.hxx %_DEST%\inc%_EXT%\vcl\impdel.hxx
 ..\inc\vcl\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
 ..\inc\vcl\javachild.hxx %_DEST%\inc%_EXT%\vcl\javachild.hxx
@@ -78,6 +79,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\metric.hxx %_DEST%\inc%_EXT%\vcl\metric.hxx
 ..\inc\vcl\mnemonic.hxx %_DEST%\inc%_EXT%\vcl\mnemonic.hxx
 ..\inc\vcl\mnemonicengine.hxx %_DEST%\inc%_EXT%\vcl\mnemonicengine.hxx
+..\inc\vcl\quickselectionengine.hxx %_DEST%\inc%_EXT%\vcl\quickselectionengine.hxx
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx

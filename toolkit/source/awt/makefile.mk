@@ -72,7 +72,8 @@ SLOFILES=   \
             $(SLO)/vclxscroller.obj\
             $(SLO)/vclxsplitter.obj\
             $(SLO)/vclxtabcontrol.obj\
-            $(SLO)/vclxtabpage.obj
+            $(SLO)/vclxtabpage.obj\
+            $(SLO)/animatedimagespeer.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\

@@ -599,6 +599,7 @@ public:
     virtual void        KeyUp( const KeyEvent& rKEvt );
     virtual void        PrePaint();
     virtual void        Paint( const Rectangle& rRect );
+    virtual void        PostPaint();
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
     virtual void        Move();
     virtual void        Resize();

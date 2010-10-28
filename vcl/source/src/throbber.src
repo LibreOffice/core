@@ -1,0 +1,114 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// TODO: we need a mechanism to add images to images.zip, *without*
+// referring them in resource files. The below resources are never loaded
+// at runtime, instead, the images in images.zip are accessed via
+// private:graphicrepository/* URLs.
+
+Resource 1000
+{
+    Image 1 { ImageBitmap = Bitmap{ file = "shared/spinner-16-01.png"; }; };
+    Image 2 { ImageBitmap = Bitmap{ file = "shared/spinner-16-02.png"; }; };
+    Image 3 { ImageBitmap = Bitmap{ file = "shared/spinner-16-03.png"; }; };
+    Image 4 { ImageBitmap = Bitmap{ file = "shared/spinner-16-04.png"; }; };
+    Image 5 { ImageBitmap = Bitmap{ file = "shared/spinner-16-05.png"; }; };
+    Image 6 { ImageBitmap = Bitmap{ file = "shared/spinner-16-06.png"; }; };
+};
+
+Resource 1001
+{
+    Image 1 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-16-01.png"; }; };
+    Image 2 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-16-02.png"; }; };
+    Image 3 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-16-03.png"; }; };
+    Image 4 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-16-04.png"; }; };
+    Image 5 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-16-05.png"; }; };
+    Image 6 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-16-06.png"; }; };
+};
+
+Resource 1002
+{
+    Image  1 { ImageBitmap = Bitmap{ file = "shared/spinner-32-01.png"; }; };
+    Image  2 { ImageBitmap = Bitmap{ file = "shared/spinner-32-02.png"; }; };
+    Image  3 { ImageBitmap = Bitmap{ file = "shared/spinner-32-03.png"; }; };
+    Image  4 { ImageBitmap = Bitmap{ file = "shared/spinner-32-04.png"; }; };
+    Image  5 { ImageBitmap = Bitmap{ file = "shared/spinner-32-05.png"; }; };
+    Image  6 { ImageBitmap = Bitmap{ file = "shared/spinner-32-06.png"; }; };
+    Image  7 { ImageBitmap = Bitmap{ file = "shared/spinner-32-07.png"; }; };
+    Image  8 { ImageBitmap = Bitmap{ file = "shared/spinner-32-08.png"; }; };
+    Image  9 { ImageBitmap = Bitmap{ file = "shared/spinner-32-09.png"; }; };
+    Image 10 { ImageBitmap = Bitmap{ file = "shared/spinner-32-10.png"; }; };
+    Image 11 { ImageBitmap = Bitmap{ file = "shared/spinner-32-11.png"; }; };
+    Image 12 { ImageBitmap = Bitmap{ file = "shared/spinner-32-12.png"; }; };
+};
+
+Resource 1003
+{
+    Image  1 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-01.png"; }; };
+    Image  2 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-02.png"; }; };
+    Image  3 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-03.png"; }; };
+    Image  4 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-04.png"; }; };
+    Image  5 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-05.png"; }; };
+    Image  6 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-06.png"; }; };
+    Image  7 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-07.png"; }; };
+    Image  8 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-08.png"; }; };
+    Image  9 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-09.png"; }; };
+    Image 10 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-10.png"; }; };
+    Image 11 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-11.png"; }; };
+    Image 12 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-32-12.png"; }; };
+};
+
+Resource 1004
+{
+    Image  1 { ImageBitmap = Bitmap{ file = "shared/spinner-64-01.png"; }; };
+    Image  2 { ImageBitmap = Bitmap{ file = "shared/spinner-64-02.png"; }; };
+    Image  3 { ImageBitmap = Bitmap{ file = "shared/spinner-64-03.png"; }; };
+    Image  4 { ImageBitmap = Bitmap{ file = "shared/spinner-64-04.png"; }; };
+    Image  5 { ImageBitmap = Bitmap{ file = "shared/spinner-64-05.png"; }; };
+    Image  6 { ImageBitmap = Bitmap{ file = "shared/spinner-64-06.png"; }; };
+    Image  7 { ImageBitmap = Bitmap{ file = "shared/spinner-64-07.png"; }; };
+    Image  8 { ImageBitmap = Bitmap{ file = "shared/spinner-64-08.png"; }; };
+    Image  9 { ImageBitmap = Bitmap{ file = "shared/spinner-64-09.png"; }; };
+    Image 10 { ImageBitmap = Bitmap{ file = "shared/spinner-64-10.png"; }; };
+    Image 11 { ImageBitmap = Bitmap{ file = "shared/spinner-64-11.png"; }; };
+    Image 12 { ImageBitmap = Bitmap{ file = "shared/spinner-64-12.png"; }; };
+};
+
+Resource 1005
+{
+    Image  1 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-01.png"; }; };
+    Image  2 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-02.png"; }; };
+    Image  3 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-03.png"; }; };
+    Image  4 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-04.png"; }; };
+    Image  5 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-05.png"; }; };
+    Image  6 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-06.png"; }; };
+    Image  7 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-07.png"; }; };
+    Image  8 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-08.png"; }; };
+    Image  9 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-09.png"; }; };
+    Image 10 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-10.png"; }; };
+    Image 11 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-11.png"; }; };
+    Image 12 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-12.png"; }; };
+};
