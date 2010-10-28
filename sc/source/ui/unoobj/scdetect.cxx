@@ -424,8 +424,8 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
                 bool bIsXLS = false;
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
-                if ( ( pPreselectedFilter && pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND ) ||
-                    ( !aPreselectedFilterName.Len() && pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) ) )
+                if ( pPreselectedFilter && ( ( pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND ) ||
+                    ( !aPreselectedFilterName.Len() && pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) ) ) )
                     bIsXLS = true;
                 pFilter = 0;
                 if ( pStream )
