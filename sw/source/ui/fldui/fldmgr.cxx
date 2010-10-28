@@ -197,7 +197,7 @@ struct SwFldPack
  --------------------------------------------------------------------*/
 static const SwFldPack __FAR_DATA aSwFlds[] =
 {
-    // Dokument
+    // Document
     { TYP_EXTUSERFLD,       FLD_EU_BEGIN,       FLD_EU_END,     0,                  0 },
     { TYP_AUTHORFLD,        0,                  0,              FMT_AUTHOR_BEGIN,   FMT_AUTHOR_END },
     { TYP_DATEFLD,          FLD_DATE_BEGIN,     FLD_DATE_END,   0,                  0 },
@@ -211,7 +211,7 @@ static const SwFldPack __FAR_DATA aSwFlds[] =
     { TYP_CHAPTERFLD,       0,                  0,              FMT_CHAPTER_BEGIN,  FMT_CHAPTER_END },
     { TYP_TEMPLNAMEFLD,     0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
 
-    // Funktion
+    // Functions
     { TYP_CONDTXTFLD,       0,                  0,              0,                  0 },
     { TYP_DROPDOWN,         0,                  0,              0,                  0 },
     { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
@@ -221,21 +221,21 @@ static const SwFldPack __FAR_DATA aSwFlds[] =
     { TYP_HIDDENTXTFLD,     0,                  0,              0,                  0 },
     { TYP_HIDDENPARAFLD,    0,                  0,              0,                  0 },
 
-    // Referenzen
+    // Cross-References
     { TYP_SETREFFLD,        0,                  0,              0,                  0 },
     { TYP_GETREFFLD,        0,                  0,              FMT_REF_BEGIN,      FMT_REF_END },
 
-    // Ablage
+    // DocInformation
     { TYP_DOCINFOFLD,       0,                  0,              FMT_REG_BEGIN,      FMT_REG_END },
 
-    // Datenbank
+    // Database
     { TYP_DBFLD,            0,                  0,              FMT_DBFLD_BEGIN,    FMT_DBFLD_END },
     { TYP_DBNEXTSETFLD,     0,                  0,              0,                  0 },
     { TYP_DBNUMSETFLD,      0,                  0,              0,                  0 },
     { TYP_DBSETNUMBERFLD,   0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
     { TYP_DBNAMEFLD,        0,                  0,              0,                  0 },
 
-    // Variablen
+    // Variables
     { TYP_SETFLD,           0,                  0,              FMT_SETVAR_BEGIN,   FMT_SETVAR_END },
 
     { TYP_GETFLD,           0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
@@ -393,21 +393,21 @@ const SwFldGroupRgn& SwFldMgr::GetGroupRange(BOOL bHtmlMode, USHORT nGrpId) cons
 {
 static SwFldGroupRgn __READONLY_DATA aRanges[] =
 {
-    { /* Dokument   */  GRP_DOC_BEGIN,  GRP_DOC_END },
-    { /* Funktionen */  GRP_FKT_BEGIN,  GRP_FKT_END },
-    { /* Referenzen */  GRP_REF_BEGIN,  GRP_REF_END },
-    { /* Ablage     */  GRP_REG_BEGIN,  GRP_REG_END },
-    { /* DB         */  GRP_DB_BEGIN,   GRP_DB_END },
+    { /* Document   */  GRP_DOC_BEGIN,  GRP_DOC_END },
+    { /* Functions  */  GRP_FKT_BEGIN,  GRP_FKT_END },
+    { /* Cross-Refs */  GRP_REF_BEGIN,  GRP_REF_END },
+    { /* DocInfos   */  GRP_REG_BEGIN,  GRP_REG_END },
+    { /* Database   */  GRP_DB_BEGIN,   GRP_DB_END  },
     { /* User       */  GRP_VAR_BEGIN,  GRP_VAR_END }
 };
 static SwFldGroupRgn __READONLY_DATA aWebRanges[] =
 {
-    { /* Dokument   */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
-    { /* Funktionen */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
-    { /* Referenzen */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
-    { /* Ablage     */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
-    { /* DB         */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END },
-    { /* User       */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END }
+    { /* Document    */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
+    { /* Functions   */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
+    { /* Cross-Refs  */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
+    { /* DocInfos    */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
+    { /* Database    */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END  },
+    { /* User        */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END }
 };
 
     if (bHtmlMode)
