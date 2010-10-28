@@ -96,7 +96,7 @@ namespace dbaui
         ~SbaExternalSourceBrowser();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm();
-        virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
+        virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties );
 
         virtual sal_Bool LoadForm();
 
