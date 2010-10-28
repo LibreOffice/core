@@ -35,6 +35,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
 
     protected String m_sEditTime = "";
     protected String m_sEditToken = "";
+    protected String m_sLoginToken = "";
     protected String m_sMainURL = "";
 
     private int m_nWikiArticleHash = 0;
@@ -99,6 +100,10 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
                 else if ( sName.equalsIgnoreCase( "wpEditToken" ) )
                 {
                     this.m_sEditToken = ( String ) a.getAttribute( HTML.Attribute.VALUE );
+                }
+                else if ( sName.equalsIgnoreCase( "wpLoginToken" ) )
+                {
+                    this.m_sLoginToken = ( String ) a.getAttribute( HTML.Attribute.VALUE );
                 }
             }
 

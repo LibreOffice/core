@@ -784,6 +784,29 @@ public class Helper
         return bResult;
     }
 
+    static protected String GetLoginToken( String sLoginPage )
+    {
+        String sResult = "";
+        if ( sLoginPage != null && sLoginPage.length() > 0 )
+        {
+            try
+            {
+                StringReader aReader = new StringReader( sLoginPage );
+                HTMLEditorKit.Parser aParser = Helper.GetHTMLParser();
+                EditPageParser aCallbacks = new EditPageParser();
+
+                aParser.parse( aReader, aCallbacks, true );
+                sResult = aCallbacks.m_sLoginToken;
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return sResult;
+    }
+
     static protected HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext )
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
@@ -799,10 +822,16 @@ public class Helper
             ExecuteMethod( aGetCookie, aNewHostConfig, aURI, xContext, true );
 
             int nResultCode = aGetCookie.getStatusCode();
+            String sLoginPage = null;
+            if ( nResultCode == 200 )
+                sLoginPage = aGetCookie.getResponseBodyAsString();
+
             aGetCookie.releaseConnection();
 
-            if ( nResultCode == 200 )
+            if ( sLoginPage != null )
             {
+                String sLoginToken = GetLoginToken( sLoginPage );
+
                 PostMethod aPost = new PostMethod();
                 URI aPostURI = new URI( aMainURL.getPath() + "index.php?title=Special:Userlogin&action=submitlogin" );
                 aPost.setPath( aPostURI.getEscapedPathQuery() );
@@ -810,6 +839,9 @@ public class Helper
                 aPost.addParameter( "wpName", sWikiUser );
                 aPost.addParameter( "wpRemember", "1" );
                 aPost.addParameter( "wpPassword", sWikiPass );
+                if ( sLoginToken.length() > 0 )
+                    aPost.addParameter( "wpLoginToken", sLoginToken );
+
                 String[][] pArgs = GetSpecialArgs( xContext, aMainURL.getHost() );
                 if ( pArgs != null )
                     for ( int nArgInd = 0; nArgInd < pArgs.length; nArgInd++ )
