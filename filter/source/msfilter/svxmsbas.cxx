@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <tools/debug.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>

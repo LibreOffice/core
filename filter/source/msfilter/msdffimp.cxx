@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <math.h>
