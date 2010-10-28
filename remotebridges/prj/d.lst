@@ -15,3 +15,6 @@
 ..\%__SRC%\lib\dynamicloader.uno.so %_DEST%\lib%_EXT%\dynamicloader.uno.so
 ..\%__SRC%\lib\uuresolver.uno.so %_DEST%\lib%_EXT%\uuresolver.uno.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
+..\%__SRC%\misc\bridgefac.component %_DEST%\xml%_EXT%\bridgefac.component
+..\%__SRC%\misc\remotebridge.component %_DEST%\xml%_EXT%\remotebridge.component
+..\%__SRC%\misc\uuresolver.component %_DEST%\xml%_EXT%\uuresolver.component

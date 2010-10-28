@@ -140,9 +140,8 @@ enum rtl_math_DecimalPlaces
 
 /** Conversions analogous to sprintf() using internal rounding.
 
-    +/-HUGE_VAL are converted to "1.#INF" and "-1.#INF", NAN values are
-    converted to "1.#NAN" and "-1.#NAN", of course using cDecSeparator instead
-    of '.'.
+    +/-HUGE_VAL are converted to "INF" and "-INF", NAN values are
+    converted to "NaN".
 
     @param pResult
     Returns the resulting byte string.  Must itself not be null, and must point
@@ -216,9 +215,8 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
 
 /** Conversions analogous to sprintf() using internal rounding.
 
-    +/-HUGE_VAL are converted to "1.#INF" and "-1.#INF", NAN values are
-    converted to "1.#NAN" and "-1.#NAN", of course using cDecSeparator instead
-    of '.'.
+    +/-HUGE_VAL are converted to "INF" and "-INF", NAN values are
+    converted to "NaN".
 
     @param pResult
     Returns the resulting Unicode string.  Must itself not be null, and must
@@ -296,8 +294,9 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
     Leading tabs (0x09) and spaces (0x20) are eaten.  Overflow returns
     +/-HUGE_VAL, underflow 0.  In both cases pStatus is set to
     rtl_math_ConversionStatus_OutOfRange, otherwise to
-    rtl_math_ConversionStatus_Ok.  "+/-1.#INF" is recognized as +/-HUGE_VAL,
-    pStatus is set to rtl_math_ConversionStatus_OutOfRange.  "+/-1.#NAN" is
+    rtl_math_ConversionStatus_Ok.  "INF", "-INF" and "+/-1.#INF" are
+    recognized as +/-HUGE_VAL, pStatus is set to
+    rtl_math_ConversionStatus_OutOfRange.  "NaN" and "+/-1.#NAN" are
     recognized and the value is set to +/-NAN, pStatus is set to
     rtl_math_ConversionStatus_Ok.
 
@@ -333,8 +332,9 @@ double SAL_CALL rtl_math_stringToDouble(
     Leading tabs (U+0009) and spaces (U+0020) are eaten.  Overflow returns
     +/-HUGE_VAL, underflow 0.  In both cases pStatus is set to
     rtl_math_ConversionStatus_OutOfRange, otherwise to
-    rtl_math_ConversionStatus_Ok.  "+/-1.#INF" is recognized as +/-HUGE_VAL,
-    pStatus is set to rtl_math_ConversionStatus_OutOfRange.  "+/-1.#NAN" is
+    rtl_math_ConversionStatus_Ok.  "INF", "-INF" and "+/-1.#INF" are
+    recognized as +/-HUGE_VAL, pStatus is set to
+    rtl_math_ConversionStatus_OutOfRange.  "NaN" and "+/-1.#NAN" are
     recognized and the value is set to +/-NAN, pStatus is set to
     rtl_math_ConversionStatus_Ok.
 

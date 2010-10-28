@@ -388,6 +388,21 @@ void SAL_CALL osl_setCommandArgs (int argc, char **argv);
 */
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue);
 
+/** Set the value of one enviroment variable.
+    @param strVar [in] denotes the name of the variable to set.
+    @param strValue [in] string of the new value of environment variable.
+
+    @since UDK 3.2.13
+*/
+oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *strVar, rtl_uString *strValue);
+
+/** Unsets the value of one enviroment variable.
+    @param strVar [in] denotes the name of the variable to unset.
+
+    @since UDK 3.2.13
+*/
+oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *strVar);
+
 /** Get the working directory of the current process as a file URL.
 
     The file URL is encoded as common for the OSL file API.

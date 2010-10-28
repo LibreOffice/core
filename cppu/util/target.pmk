@@ -51,12 +51,3 @@ CFLAGS += -Ob0
 .ENDIF
 
 .ENDIF
-
-# other stuff
-
-.IF "$(cppu_no_leak)" == ""
-.IF "$(bndchk)" == ""
-CFLAGS += -DCPPU_LEAK_STATIC_DATA
-.ENDIF
-.ENDIF
-

@@ -213,8 +213,19 @@ published service UnoControlListBoxModel
 
     /** allows mmanipulating the list of items in the list box more fine-grained than the
         <member>StringItemList</member> property.
+
+        @since OOo 3.3
     */
     [optional] interface XItemList;
+
+    /** specifies where an item separator - a horizontal line - is drawn.
+
+        <p>If this is not <NULL/>, then a horizontal line will be drawn between the item at the given position,
+        and the following item.</p>
+
+        @since OOo 3.3
+    */
+    [optional, property, maybevoid] short ItemSeparatorPos;
 };
 
 //=============================================================================
