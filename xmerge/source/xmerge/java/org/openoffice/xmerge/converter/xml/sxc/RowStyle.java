@@ -48,7 +48,7 @@ public class RowStyle extends Style implements Cloneable {
     /**
      *  Constructor for use when going from DOM to client device format.
      *
-     *  @param  Node  The <i>style:style</i> <code>Node</code> containing
+     *  @param  node  The <i>style:style</i> <code>Node</code> containing
      *                the <code>Style</code>.  (This <code>Node</code> is
      *                assumed have a <i>family</i> attribute of <i>text</i>).
      *  @param  sc    The <code>StyleCatalog</code>, which is used for
@@ -92,16 +92,15 @@ public class RowStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
      *  Constructor for use when going from client device format to DOM
      *
-     *  @param  name     Name of text <code>Style</code>.  Can be null.
-     *  @param  family   Family of text <code>Style</code> (usually
+     *  @param name      Name of text <code>Style</code>.  Can be null.
+     *  @param family    Family of text <code>Style</code> (usually
      *                   <i>text</i>).  Can be null.
-     *  @param  parent   Name of parent text <code>Style</code>, or null
+     *  @param parent    Name of parent text <code>Style</code>, or null
      *                   for none.
-     *  @param  mask     The height of this row
+     *  @param rowHeight The height of this row
      *  @param sc        The <code>StyleCatalog</code>, which is used for
      *                   looking up ancestor <code>Style</code> objects.
      */
@@ -113,7 +112,7 @@ public class RowStyle extends Style implements Cloneable {
     /**
      * Returns the height of this row
      *
-     * @return the <code>Format</code> object
+     * @return The height of this row.
      */
     public int getRowHeight() {
         return rowHeight;
@@ -122,14 +121,14 @@ public class RowStyle extends Style implements Cloneable {
     /**
      * Sets the height of this row
      *
-     * @return the <code>Format</code> object
+     * @param RowHeight The height of this row.
      */
     public void setRowHeight(int RowHeight) {
 
         this.rowHeight = rowHeight;
     }
     /**
-     *  Parse a colheight in the form "1.234cm" to twips
+     *  Parse a rowheight in the form "1.234cm" to twips
      *
      *  @param  value  <code>String</code> specification to parse.
      *
@@ -151,7 +150,6 @@ public class RowStyle extends Style implements Cloneable {
 
     }
 
-
     /**
      *  Set an attribute.
      *
@@ -167,7 +165,6 @@ public class RowStyle extends Style implements Cloneable {
             Debug.log(Debug.INFO, "RowStyle Unhandled: " + attr + "=" + value);
         }
     }
-
 
     /**
      *  Return a <code>Style</code> object corresponding to this one,
@@ -218,7 +215,6 @@ public class RowStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
     /**
      *  Create a new <code>Node</code> in the <code>Document</code>, and
      *  write this <code>Style</code> to it.
@@ -235,7 +231,6 @@ public class RowStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-
 
     /**
      *  Return true if <code>style</code> specifies as much or less
@@ -258,7 +253,6 @@ public class RowStyle extends Style implements Cloneable {
         return true;
     }
 
-
     /**
      *  Write this <code>Style</code> object's attributes to a
      *  <code>Node</code> in the <code>Document</code>.
@@ -274,11 +268,9 @@ public class RowStyle extends Style implements Cloneable {
         }
     }
 
-
     private static String[] ignored = {
         "fo:break-before", "fo:keep-with-next"
     };
-
 
     /*
      * This code checks whether an attribute is one that we
@@ -297,4 +289,3 @@ public class RowStyle extends Style implements Cloneable {
         return false;
     }
 }
-
