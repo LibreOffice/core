@@ -275,8 +275,7 @@ Service::createInstanceWithArguments(
             static_cast< cppu::OWeakObject * >(this));
     }
     osl::MutexGuard guard(lock);
-    Components::initSingleton(context_);
-    Components & components = Components::getSingleton();
+    Components & components = Components::getSingleton(context_);
     rtl::Reference< RootAccess > root(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
@@ -387,8 +386,7 @@ void Service::flushModifications() const {
     Components * components;
     {
         osl::MutexGuard guard(lock);
-        Components::initSingleton(context_);
-        components = &Components::getSingleton();
+        components = &Components::getSingleton(context_);
     }
     components->flushModifications();
 }

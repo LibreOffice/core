@@ -71,7 +71,11 @@ class Service:
     private boost::noncopyable
 {
 public:
-    Service() {}
+    Service(css::uno::Reference< css::uno::XComponentContext > const context):
+        context_(context)
+    {
+        OSL_ASSERT(context.is());
+    }
 
 private:
     virtual ~Service() {}
@@ -92,6 +96,8 @@ private:
         css::uno::Sequence< rtl::OUString > const & includedPaths,
         css::uno::Sequence< rtl::OUString > const & excludedPaths)
         throw (css::uno::RuntimeException);
+
+    css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
 void Service::insertExtensionXcsFile(
@@ -99,7 +105,7 @@ void Service::insertExtensionXcsFile(
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(lock);
-    Components::getSingleton().insertExtensionXcsFile(shared, fileUri);
+    Components::getSingleton(context_).insertExtensionXcsFile(shared, fileUri);
 }
 
 void Service::insertExtensionXcuFile(
@@ -109,10 +115,10 @@ void Service::insertExtensionXcuFile(
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
+        Components & components = Components::getSingleton(context_);
         Modifications mods;
-        Components::getSingleton().insertExtensionXcuFile(
-            shared, fileUri, &mods);
-        Components::getSingleton().initGlobalBroadcaster(
+        components.insertExtensionXcuFile(shared, fileUri, &mods);
+        components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
@@ -124,9 +130,10 @@ void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
+        Components & components = Components::getSingleton(context_);
         Modifications mods;
-        Components::getSingleton().removeExtensionXcuFile(fileUri, &mods);
-        Components::getSingleton().initGlobalBroadcaster(
+        components.removeExtensionXcuFile(fileUri, &mods);
+        components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
@@ -141,10 +148,11 @@ void Service::insertModificationXcuFile(
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
+        Components & components = Components::getSingleton(context_);
         Modifications mods;
-        Components::getSingleton().insertModificationXcuFile(
+        components.insertModificationXcuFile(
             fileUri, seqToSet(includedPaths), seqToSet(excludedPaths), &mods);
-        Components::getSingleton().initGlobalBroadcaster(
+        components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
@@ -153,9 +161,9 @@ void Service::insertModificationXcuFile(
 }
 
 css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return static_cast< cppu::OWeakObject * >(new Service);
+    return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
 rtl::OUString getImplementationName() {
