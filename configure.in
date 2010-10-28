@@ -70,9 +70,6 @@ AC_ARG_WITH(vba-package-format,
 AC_ARG_ENABLE(pch,
 [  --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
 ],,)
-AC_ARG_ENABLE(hids,
-[  --enable-hids            Enables generation of HelpId lists.
-],,)
 AC_ARG_ENABLE(mozilla,
 [  --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
@@ -198,6 +195,10 @@ AC_ARG_ENABLE(gtk,
 [  --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
                           where Gtk+ is available.
 ],,enable_gtk=yes)
+AC_ARG_ENABLE(gstreamer,
+[  --disable-gstreamer     Determines whether to use the GStreamer media
+                          backend on platforms where GStreamer is available.
+],,enable_gstreamer=yes)
 AC_ARG_ENABLE(systray,
 [  --disable-systray       Determines whether to build the systray quickstarter.
 ],,enable_systray=yes)
@@ -546,6 +547,12 @@ AC_ARG_WITH(system-altlinuxhyph,
 AC_ARG_WITH(system-lpsolve,
 [  --with-system-lpsolve         Use lpsolve already on system
 ],,)
+AC_ARG_WITH(system-libtextcat,
+[  --with-system-libtextcat      Use libtextcat already on system
+],,)
+AC_ARG_WITH(external-libtextcat-data,
+[  --with-system-libtextcat-data Use libtextcat data already on system
+],,)
 AC_ARG_WITH(system-cppunit,
 [  --with-system-cppunit         Use cppunit already on system
 ],,)
@@ -810,7 +817,9 @@ AC_ARG_WITH(build-version,
 ],with_build_version=$withval)
 AC_ARG_WITH(alloc,
 [  --with-alloc            Define which allocator to build with
-			                 (choices are oo, system, tcmalloc)
+                          (choices are oo, system, tcmalloc, jemalloc)
+
+                          Note that on FreeBSD/NetBSD system==jemalloc
 ],,)
 AC_ARG_ENABLE(verbose,
 [  --enable-verbose        Increase build verbosity.
@@ -924,6 +933,7 @@ case "$build_os" in
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		_os=SunOS
 		AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
 		if test -z "$GNUTAR"; then
@@ -958,7 +968,8 @@ case "$build_os" in
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
-		_os=Linux
+        test_gstreamer=yes
+        _os=Linux	
 		;;
 	gnu)
 		test_cups=no
@@ -968,6 +979,7 @@ case "$build_os" in
 		test_cups=no
 		test_cairo=yes
 		test_freetype=no
+        test_gstreamer=no
 		_os=WINNT
 		;;
 	darwin*) # Mac OS X
@@ -976,6 +988,7 @@ case "$build_os" in
 		test_cairo=yes
         test_randr=no
 		test_freetype=no
+        test_gstreamer=no
 		_os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
          AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
@@ -989,6 +1002,7 @@ case "$build_os" in
         test_randr=no
 		test_gtk=no
 		test_freetype=no
+        test_gstreamer=no
 		_os=OS2
 		;;
 	freebsd*)
@@ -999,6 +1013,7 @@ case "$build_os" in
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		AC_MSG_CHECKING([the FreeBSD operating system release])
 		if test -n "$with_os_version"; then
 			OSVERSION="$with_os_version"
@@ -1033,6 +1048,7 @@ case "$build_os" in
 		test_cups=no
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
@@ -1041,6 +1057,7 @@ case "$build_os" in
 		test_cups=no
         test_randr=no
 		test_freetype=yes
+        test_gstreamer=yes
 	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
 		_os=AIX
@@ -1430,7 +1447,7 @@ if test "$COMPATH" = "." ; then
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
-echo $COMPATH
+
 dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
@@ -1452,7 +1469,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
    fi
    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         CC=$GCC_HOME/bin/gcc-4.0
+         export CC=$GCC_HOME/bin/gcc-4.0
+          dnl  export CC to have it available in set_soenv -> config.guess
          GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
          if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
             GCCVER=$GCCVER2
@@ -1516,19 +1534,6 @@ else
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PCH)
-
-dnl ===================================================================
-dnl Set the NO_HIDS variable. (enable with --enable-hids)
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable hid list feature])
-if test -n "$enable_hids" && test "$enable_hids" != "no"; then
-   NO_HIDS=""
-   AC_MSG_RESULT([yes])
-else
-   NO_HIDS="TRUE"
-   AC_MSG_RESULT([no])
-fi
-AC_SUBST(NO_HIDS)
 
 dnl ===================================================================
 dnl Search all the common names for GNU make
@@ -2675,6 +2680,21 @@ if test "$with_alloc" = "tcmalloc"; then
         [AC_MSG_ERROR(tcmalloc not found or functional. Install the Google Profiling Tools)], [])
     ALLOC="TCMALLOC";
 fi
+if test "$with_alloc" = "jemalloc"; then
+  if test "$_os" != "FreeBSD" -o "$_os" != "NetBSD"; then
+    AC_MSG_RESULT(jemalloc)
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -pthread"
+    AC_CHECK_LIB(jemalloc, malloc, [],
+        [AC_MSG_ERROR(jemalloc not found or functional. Install the jemalloc allocator.)], [])
+    ALLOC="JEMALLOC";
+    CFLAGS=$save_CFLAGS
+  else
+    AC_MSG_RESULT([system])
+    ALLOC="SYS_ALLOC";
+    AC_CHECK_FUNCS([malloc realloc calloc free])
+  fi
+fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
    AC_MSG_RESULT([internal])
 fi
@@ -2966,7 +2986,7 @@ fi
 
 if test "$SOLAR_JAVA" != ""; then
     dnl first check if we have been asked to autodetect JAVA_HOME with a recent gij
-    if test "$JDK" == "gcj" -a -z "$JAVA_HOME"; then
+    if test "$JDK" = "gcj" -a -z "$JAVA_HOME"; then
       if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
         cat > findhome.java <<_ACEOF
 [import java.io.File;
@@ -3054,7 +3074,7 @@ _ACEOF
          echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
          echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
          echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
-#         if test "$JDK" == "gcj"; then
+#         if test "$JDK" = "gcj"; then
 #             echo "e.g. install java-1.4.2-gcj-compat-devel and use --with-jdk-home=/usr/lib/jvm/java-1.4.2-gcj" >> warn
 #         fi
       fi
@@ -3329,9 +3349,11 @@ msi - Windows .msi
        done
        if test -z "$RPM" ; then
           AC_MSG_ERROR([not found])
-       else
-	  RPM_PATH=`which $RPM`
+       elif "$RPM" --usage 2>&1 | $EGREP -- -bb >/dev/null; then
+          RPM_PATH=`which $RPM`
           AC_MSG_RESULT([$RPM_PATH])
+       else
+          AC_MSG_ERROR([cannot build packages. Try installing rpmbuild.])
        fi
    fi
    if echo "$PKGFORMAT" | $EGREP deb 2>&1 >/dev/null; then
@@ -3385,15 +3407,16 @@ msi - Windows .msi
       fi
    fi
    AC_SUBST(BUILD_EPM)
-   AC_SUBST(PKGFORMAT)
    AC_SUBST(RPM)
    AC_SUBST(DPKG)
    AC_SUBST(PKGMK)
 else
    AC_MSG_RESULT([no])
    EPM=NO
+   PKGFORMAT=native
 fi
 AC_SUBST(EPM)
+AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
 dnl Check for gperf
@@ -3408,6 +3431,19 @@ if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. 
 else
 	AC_MSG_ERROR([too old, you need at least 3.0.0])
 fi
+
+dnl ===================================================================
+dnl Check for building stax
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build the stax])
+if test -f "./stax/download/jsr173_1.0_api.jar"; then
+   BUILD_STAX=NO
+   AC_MSG_RESULT([no, will use the prebuilt stax/download/jsr173_1.0_api.jar])
+else
+   BUILD_STAX=YES
+   AC_MSG_RESULT([yes])
+fi
+AC_SUBST(BUILD_STAX)
 
 dnl ===================================================================
 dnl Check for building ODK
@@ -3599,12 +3635,6 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
     # a system-cppunit before the first version using a proper cppunit
     # (and that being 1.12.1) anyway
     PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.1 )
-    AC_MSG_CHECKING([STL compatibility])
-    if test "$WITH_STLPORT" != "no"; then
-	AC_MSG_ERROR([to use system cppunit you need to use --without-stlport])
-    else
-	AC_MSG_RESULT([OK])	
-    fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CPPUNIT=NO
@@ -3644,7 +3674,7 @@ AC_SUBST(USE_FT_EMBOLDEN)
 if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
    test "$with_system_libxslt" != "no"; then
     if test -z "$with_system_libxml" -a -z "$with_system_libs" || \
-      test "$with_system_libxml" == "no"; then
+      test "$with_system_libxml" = "no"; then
       # somehow AC_MSG_WARN won't work...
        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
@@ -3654,7 +3684,7 @@ fi
 if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
    test "$with_system_libxml" != "no"; then
     if test -z "$with_system_libxslt" -a -z "$with_system_libs" || \
-      test "$with_system_libxslt" == "no"; then
+      test "$with_system_libxslt" = "no"; then
       # somehow AC_MSG_WARN won't work...
        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
@@ -3809,9 +3839,13 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
           AC_CHECK_FILE(/usr/share/java/lucene-core-2.3.jar, 
             [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar ],
             [
-              AC_CHECK_FILE(/usr/share/java/lucene.jar, 
-                [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
-                [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
+              AC_CHECK_FILE(/usr/share/java/lucene-core.jar, 
+                [ LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar ],
+                [ AC_CHECK_FILE(/usr/share/java/lucene.jar, 
+                   [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
+                   [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
+                  )
+                ]
               )
             ]
           )
@@ -3834,6 +3868,22 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
           AC_CHECK_FILE($LUCENE_CORE_JAR, [],
                [ AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
         fi
+        AC_MSG_CHECKING([whether lucene is version 2.x])
+        export LUCENE_CORE_JAR
+        if $PERL -e 'use Archive::Zip;
+            my $file = "$ENV{'LUCENE_CORE_JAR'}";
+            my $zip = Archive::Zip->new( $file );
+            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+            if ( $mf =~ m/Specification-Version: 2.*/ ) {
+                exit 0;
+            } else {
+                exit 1;
+            }'; then
+            AC_MSG_RESULT([yes])
+         else
+            AC_MSG_ERROR([no, you need lucene 2])
+         fi
+
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LUCENE=NO
@@ -3971,32 +4021,32 @@ if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
         fi
         AC_CHECK_FILE($HSQLDB_JAR, [],
                [AC_MSG_ERROR(hsqldb.jar not found.)], [])
-        AC_MSG_CHECKING([whether hsqldb is >= 1.8.0.9])
+        AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
         export HSQLDB_JAR
         if $PERL -e 'use Archive::Zip;
             my $file = "$ENV{'HSQLDB_JAR'}";
             my $zip = Archive::Zip->new( $file );
             my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
-	    if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
-	    	push @l, split(/\n/, $mf);
-	    	foreach my $line (@l) {
-		    if ($line =~ m/Specification-Version:/) {
-		        ($t, $version) = split (/:/,$line);
-		        $version =~ s/^\s//;
-		        ($a, $b, $c, $d) = split (/\./,$version);
-		        if (($c == "0" && $d > "8") || $c > 0)  {
-		            exit 0;
-		        } else {
-		            exit 1;
-		        }
-		    }
-		}
-	    } else {
-	        exit 1;
+            if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
+               push @l, split(/\n/, $mf);
+               foreach my $line (@l) {
+                  if ($line =~ m/Specification-Version:/) {
+                      ($t, $version) = split (/:/,$line);
+                      $version =~ s/^\s//;
+                      ($a, $b, $c, $d) = split (/\./,$version);
+                      if ($c == "0" && $d > "8")  {
+                          exit 0;
+                      } else {
+                          exit 1;
+                      }
+                  }
+               }
+            } else {
+                exit 1;
             }'; then
             AC_MSG_RESULT([yes])
          else
-            AC_MSG_ERROR([no, hsqldb >= 1.8.0.9 is needed])
+            AC_MSG_ERROR([no, you need hsqldb >= 1.8.0.9 but < 1.8.1])
          fi
 else
     AC_MSG_RESULT([internal])
@@ -4203,7 +4253,7 @@ if test -n "$with_system_boost" -o -n "$with_system_headers" && \
    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
    AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
-       [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.38)], [])
+       [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
    AC_CHECK_HEADER(boost/function.hpp, [],
        [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
 
@@ -4420,7 +4470,7 @@ Please recompile $tmp with --enable-ldap or use --with-openldap.])
 
     #e.g. http://fedoraproject.org/wiki/Releases/FeatureXULRunnerAPIChanges
     #the plugin pkg-config etc. reverts to "mozilla-plugin" with libxul
-    if test "$MOZ_FLAVOUR" == "libxul"; then
+    if test "$MOZ_FLAVOUR" = "libxul"; then
         MOZ_FLAVOUR="mozilla"
     fi
 
@@ -4681,7 +4731,7 @@ dnl Graphite
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to enable graphite support])
-if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" == "z" -o "$enable_graphite" != "no" ; then
+if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -o "$enable_graphite" != "no" ; then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_MSG_CHECKING([which graphite to use])
@@ -5125,6 +5175,9 @@ if test -n "$with_system_lpsolve" -o -n "$with_system_libs" && \
     SYSTEM_LPSOLVE=YES
     AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
        [ AC_MSG_ERROR(lpsolve headers not found.)], [])
+    # some systems need this. Like Ubuntu....
+    AC_CHECK_LIB(m, floor)
+    AC_CHECK_LIB(dl, dlopen)
     AC_CHECK_LIB(lpsolve55, make_lp, ,
         [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
 else
@@ -5133,6 +5186,38 @@ else
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
+
+dnl ===================================================================
+dnl Checking for libtextcat
+dnl ===================================================================
+AC_MSG_CHECKING([which libtextcat to use])
+if test -n "$with_system_libtextcat" && test "$with_system_libtextcat" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBTEXTCAT=YES
+    AC_CHECK_HEADER(libtextcat/textcat.h, [],
+       [ AC_MSG_ERROR(libtextcat headers not found.)], [])
+    AC_CHECK_LIB(textcat, special_textcat_Init, ,
+        [ AC_MSG_ERROR(libtextcat library not found or not suitable. libtextcat typically needs to be patched)], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBTEXTCAT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCAT"
+fi
+AC_SUBST(SYSTEM_LIBTEXTCAT)
+
+AC_MSG_CHECKING([which libtextcat data directory to use])
+if test -n "$with_system_libtextcat_data" && test "$with_system_libtextcat_data" != "no"; then
+    if test "$with_system_libtextcat_data" = "yes"; then
+        SYSTEM_LIBTEXTCAT_DATA=file:///usr/share/libtextcat
+    else
+        SYSTEM_LIBTEXTCAT_DATA=file://$with_system_libtextcat_data
+    fi
+    AC_MSG_RESULT([$SYSTEM_LIBTEXTCAT_DATA])
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCATDATA"
+fi
+AC_SUBST(SYSTEM_LIBTEXTCAT_DATA)
 
 dnl ***************************************
 dnl testing libc version for Linux...
@@ -5438,13 +5523,11 @@ if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
        with_asm_home="ASM_IN_PATH"
     fi
   fi
+  AC_MSG_RESULT([$ASM_HOME])
 else
-	with_asm_home="NO_ASM_HOME"
+  with_asm_home="NO_ASM_HOME"
 fi
 ASM_HOME="$with_asm_home"
-if test -n "$ASM_HOME"; then
-  AC_MSG_RESULT([$ASM_HOME])
-fi
 AC_SUBST(ASM_HOME)
  
 dnl ===================================================================
@@ -5692,6 +5775,29 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
 dnl ===================================================================
+dnl Check whether the GStreamer libraries are available.
+dnl ===================================================================
+
+GSTREAMER_CFLAGS=""
+GSTREAMER_LIBS=""
+ENABLE_GSTREAMER=""
+
+if test "$test_gstreamer" = "yes"; then
+    AC_MSG_CHECKING([whether to build the GStreamer media backend])
+    if test "x$enable_gstreamer" != "xno" ; then
+        PKG_CHECK_MODULES( GSTREAMER, gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 ,,AC_MSG_ERROR([requirements to build the GStreamer media backend not met. Use --disable-gstreamer or install the missing packages]))
+        ENABLE_GSTREAMER="TRUE"
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(ENABLE_GSTREAMER)
+AC_SUBST(GSTREAMER_CFLAGS)
+AC_SUBST(GSTREAMER_LIBS)
+
+
+dnl ===================================================================
 dnl Check whether the Cairo libraries are available.
 dnl ===================================================================
 
@@ -5861,7 +5967,7 @@ else
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
-if test "$ENABLE_MEDIAWIKI" == "YES"; then
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
   AC_MSG_CHECKING([which Servlet API Jar to use])
   if test -n "$with_system_servlet_api"; then
     AC_MSG_RESULT([external])
@@ -5891,9 +5997,9 @@ if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test 
     AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
   fi
   AC_MSG_CHECKING([which jfreereport libs to use])
-  if test "$with_system_jfreereport" == "yes"; then
-   	SYSTEM_JFREEREPORT=YES
-  	   AC_MSG_RESULT([external])
+  if test "$with_system_jfreereport" = "yes"; then
+      SYSTEM_JFREEREPORT=YES
+      AC_MSG_RESULT([external])
       if test -z $SAC_JAR; then
              SAC_JAR=/usr/share/java/sac.jar
       fi
@@ -6298,7 +6404,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    kde_incdirs="/usr/include $x_includes"
    kde_libdirs="/usr/lib $x_libraries"
    
-   if test "$build_cpu" == "x86_64" ; then
+   if test "$build_cpu" = "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
    fi
@@ -6496,6 +6602,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include AFMs])
 if test "$with_afms" != "no"; then
   AC_MSG_RESULT([yes])
+  BUILD_TYPE="$BUILD_TYPE AFMS"
 else
   AC_MSG_RESULT([no])
   WITHOUT_AFMS=YES
@@ -6597,27 +6704,6 @@ else
     export ANT_HOME
   fi
 
-  ant_minver=1.6.0
-  # update for more extensions...
-  if test "$ENABLE_MEDIAWIKI" = "YES"; then
-    ant_minver=1.7.0
-  fi
-  ant_minminor1=`echo $ant_minver | cut -d"." -f2`
-
-  AC_MSG_CHECKING([whether ant is >= $ant_minver])
-  ant_version=`$ANT -version | $AWK '{ print $4; }'`
-  ant_version_major=`echo $ant_version | cut -d. -f1`
-  ant_version_minor=`echo $ant_version | cut -d. -f2`
-echo "configure: ant_version $ant_version " >&5
-echo "configure: ant_version_major $ant_version_major " >&5
-echo "configure: ant_version_minor $ant_version_minor " >&5
-  if test "$ant_version_major" -ge "2"; then
-  	AC_MSG_RESULT([yes, $ant_version])
-  elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
-  	AC_MSG_RESULT([yes, $ant_version])
-  else
-  	AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
-  fi
   AC_MSG_CHECKING([if $ANT works])
 cat > conftest.java << EOF
     public class conftest {
@@ -6698,24 +6784,46 @@ fi
 AC_SUBST(ANT_LIB)
 fi
 
+ant_minver=1.6.0
+# update for more extensions...
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
+  ant_minver=1.7.0
+fi
+ant_minminor1=`echo $ant_minver | cut -d"." -f2`
+
+AC_MSG_CHECKING([whether ant is >= $ant_minver])
+ant_version=`$ANT -version | $AWK '{ print $4; }'`
+ant_version_major=`echo $ant_version | cut -d. -f1`
+ant_version_minor=`echo $ant_version | cut -d. -f2`
+echo "configure: ant_version $ant_version " >&5
+echo "configure: ant_version_major $ant_version_major " >&5
+echo "configure: ant_version_minor $ant_version_minor " >&5
+if test "$ant_version_major" -ge "2"; then
+   AC_MSG_RESULT([yes, $ant_version])
+elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
+   AC_MSG_RESULT([yes, $ant_version])
+else
+   AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
+fi
+
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
 AC_MSG_CHECKING([whether ant supports mapper type="regexp"])
 rm -rf confdir
 mkdir confdir
 cat > conftest.java << EOF
     public class conftest {
-	int testmethod(int a, int b) {
+        int testmethod(int a, int b) {
             return a + b;
-	}
+        }
     }
 EOF
 
 cat > conftest.xml << EOF
     <project name="conftest" default="conftest">
-	<target name="conftest" depends="copytest">
+        <target name="conftest" depends="copytest">
             <javac srcdir="." includes="conftest.java">
-	    </javac>
-	</target>
+            </javac>
+        </target>
         <target name="copytest">
              <copy todir="confdir">
                  <fileset dir="confdir" includes="**/*.abc" casesensitive="yes"/>
@@ -6884,11 +6992,11 @@ AC_SUBST(ENABLE_LAYOUT)
 # ===================================================================
 AC_MSG_CHECKING([build verbosity])
 if test -n "$enable_verbose"; then
-   if test "$enable_verbose" == "yes"; then
+   if test "$enable_verbose" = "yes"; then
       VERBOSE="TRUE"
       AC_MSG_RESULT([high])
    fi
-   if test "$enable_verbose" == "no"; then
+   if test "$enable_verbose" = "no"; then
       VERBOSE="FALSE"
       AC_MSG_RESULT([low])
    fi

@@ -292,6 +292,27 @@ sub remove_empty_directory
 }
 
 #######################################################################
+# Calculating the number of languages in the string
+#######################################################################
+
+sub get_number_of_langs
+{
+    my ($languagestring) = @_;
+
+    my $number = 1;
+
+    my $workstring = $languagestring;
+
+    while ( $workstring =~ /^\s*(.*)_(.*?)\s*$/ )
+    {
+        $workstring = $1;
+        $number++;
+    }
+
+    return $number;
+}
+
+#######################################################################
 # Creating the directories, in which files are generated or unzipped
 #######################################################################
 
@@ -380,8 +401,11 @@ sub create_directories
 
             if (length($languagestring) > $installer::globals::max_lang_length )
             {
+                my $number_of_languages = get_number_of_langs($languagestring);
                 chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-                $languagestring = $shorter;
+                # $languagestring = $shorter;
+                my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+                $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
             }
 
             $path = $path . $languagestring  . $installer::globals::separator;

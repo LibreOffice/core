@@ -368,19 +368,6 @@ sub setglobalvariables
 
     if ( ! $installer::globals::packageformat ) { $installer::globals::packageformat = "native"; }
 
-    # $installer::globals::servicesrdb_can_be_created can only be set, if regcomp (regcomp.exe) can be executed.
-
-    if ( $installer::globals::iswin && $installer::globals::iswindowsbuild ) { $installer::globals::servicesrdb_can_be_created = 1; }
-    if ( $installer::globals::islinux && $installer::globals::islinuxbuild ) { $installer::globals::servicesrdb_can_be_created = 1; }
-    if ( $installer::globals::issolaris && $installer::globals::issolarisbuild ) { $installer::globals::servicesrdb_can_be_created = 1; }
-
-    # ToDo: Needs to be expanded for additional compiler (setting $installer::globals::servicesrdb_can_be_created = 1 for all external platforms)
-
-    if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::islinuxbuild)) && (!($installer::globals::issolarisbuild)))
-    {
-        $installer::globals::servicesrdb_can_be_created = 1;
-    }
-
     # extension, if $installer::globals::pro is set
     if ($installer::globals::pro) { $installer::globals::productextension = ".pro"; }
 
@@ -530,7 +517,7 @@ sub control_required_parameter
         # and the UpgradeCode for the product are defined.
         # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME (msiglobal.pm)
 
-        if ($installer::globals::iswindowsbuild)
+        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
         {
             $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::codefilename;
             installer::files::check_file($installer::globals::codefilename);
@@ -638,8 +625,6 @@ sub outputparameter
     if ( $installer::globals::debian ) { push(@output, "Linux: Creating Debian packages\n"); }
     if ( $installer::globals::dounzip ) { push(@output, "Unzip ARCHIVE files\n"); }
     else  { push(@output, "Not unzipping ARCHIVE files\n"); }
-    if ( $installer::globals::servicesrdb_can_be_created ) { push(@output, "services.rdb can be created\n"); }
-    else  { push(@output, "services.rdb cannot be created !\n"); }
     if (!($installer::globals::languages_defined_in_productlist))
     {
         push(@output, "Languages:\n");

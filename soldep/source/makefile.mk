@@ -125,16 +125,6 @@ APP1OBJS= \
 
 .INCLUDE :	target.mk
 
-ALLTAR : $(BIN)$/applicat.rdb
-
-$(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
-    rm -f $@
-    $(GNUCOPY) $(UNOUCRRDB) $@
-     cd $(BIN) && \
-    $(REGCOMP) -register -r applicat.rdb \
-             -c i18nsearch.uno$(DLLPOST) \
-             -c i18npool.uno$(DLLPOST)
-
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@

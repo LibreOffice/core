@@ -45,6 +45,7 @@
 
     use lib ("$ENV{SOLARENV}/bin/modules");
     use SourceConfig;
+    use RepositoryHelper;
 
     my $in_so_env = 0;
     if (defined $ENV{COMMON_ENV_TOOLS}) {
@@ -139,6 +140,8 @@
     $html = '';
     @ignored_errors = ();
     %incompatibles = ();
+    %skip_modules = ();
+    %exclude_branches = ();
     $only_platform = ''; # the only platform to prepare
     $only_common = ''; # the only common output tree to delete when preparing
     %build_modes = ();
@@ -167,8 +170,8 @@
     $html_last_updated = 0;
     %jobs_hash = ();
     $html_path = undef;
-    $html_file = CorrectPath($ENV{SOLARSRC} . '/' . $ENV{INPATH}. '.build.html');
     $build_finished = 0;
+    $html_file = '';
     %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
     $mkout = CorrectPath("$ENV{SOLARENV}/bin/mkout.pl");
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
@@ -209,7 +212,6 @@
 
     get_options();
 
-    $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html') if (defined $html_path);
 #    my $temp_html_file = CorrectPath($tmp_dir. '/' . $ENV{INPATH}. '.build.html');
     get_build_modes();
     %deliver_env = ();
@@ -225,12 +227,26 @@
         $deliver_env{'OUTPATH'}++;
         $deliver_env{'L10N_framework'}++;
     };
+    $StandDir = get_stand_dir();   # This also sets $initial_module
+    $source_config = SourceConfig -> new($StandDir);
+
+    if ($html) {
+        if (defined $html_path) {
+            $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html');
+        } else {
+            my $log_directory = Cwd::realpath(CorrectPath($StandDir . '/..')) . '/log';
+            if ((!-d $log_directory) && (!mkdir($log_directory))) {
+                print_error("Cannot create $log_directory for writing html file\n");
+            };
+            $html_file = $log_directory . '/' . $ENV{INPATH}. '.build.html';
+            print "\nPath to html status page: $html_file\n";
+        };
+    };
 
     if ($generate_config && ($clear_config || (scalar keys %remove_from_config)||(scalar keys %add_to_config))) {
         generate_config_file();
         exit 0;
     }
-    $StandDir = get_stand_dir();   # This also sets $initial_module
     get_module_and_buildlist_paths();
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
@@ -342,7 +358,6 @@ sub rename_file {
 };
 
 sub generate_config_file {
-    my $source_config = SourceConfig->new();
     $source_config->add_active_modules([keys %add_to_config], 1) if (scalar %add_to_config);
     $source_config->remove_activated_modules([keys %remove_from_config], 1) if (scalar %remove_from_config);
     $source_config->remove_all_activated_modules() if ($clear_config);
@@ -556,23 +571,36 @@ sub get_build_list_path {
 # Get dependencies hash of the current and all parent projects
 #
 sub get_parent_deps {
-    my (%parents_deps_hash, $module, $parent);
     my $prj_dir = shift;
     my $deps_hash = shift;
-    my @unresolved_parents = get_parents_array($prj_dir);
-    $parents_deps_hash{$_}++ foreach (@unresolved_parents);
-    $$deps_hash{$prj_dir} = \%parents_deps_hash;
-    while ($module = pop(@unresolved_parents)) {
+    my @unresolved_parents = ($prj_dir);
+    my %skipped_branches = ();
+    while (my $module = pop(@unresolved_parents)) {
+        next if (defined $$deps_hash{$module});
         my %parents_deps_hash = ();
-        $parents_deps_hash{$_}++ foreach (get_parents_array($module));
+        foreach (get_parents_array($module)) {
+            if (defined $exclude_branches{$_}) {
+                $skipped_branches{$_}++;
+                next;
+            };
+            $parents_deps_hash{$_}++;
+        }
         $$deps_hash{$module} = \%parents_deps_hash;
         foreach $Parent (keys %parents_deps_hash) {
-            if (!defined($$deps_hash{$Parent})) {
+            if (!defined($$deps_hash{$Parent}) && (!defined $exclude_branches{$module})) {
                 push (@unresolved_parents, $Parent);
             };
         };
     };
     check_deps_hash($deps_hash);
+    foreach (keys %skipped_branches) {
+        print $echo . "Skipping module's $_ branch\n";
+        delete $exclude_branches{$_};
+    };
+    my @missing_branches = keys %exclude_branches;
+    if (scalar @missing_branches) {
+        print_error("For $prj_dir branche(s): \"@missing_branches\" not found\n");
+    };
 };
 
 sub store_weights {
@@ -605,18 +633,18 @@ sub expand_dependencies {
 };
 
 #
-# This procedure fills out the %reversed_dependencies hash,
-# the hash contaninig the info about modules "waiting" for the module
+# This procedure fills the second hash with reversed dependencies,
+# ie, with info about modules "waiting" for the module
 #
 sub reverse_dependensies {
-    my $deps_hash = shift;
+    my ($deps_hash, $reversed) = @_;
     foreach my $module (keys %$deps_hash) {
         foreach (keys %{$$deps_hash{$module}}) {
-            if (defined $reversed_dependencies{$_}) {
-                ${$reversed_dependencies{$_}}{$module}++
+            if (defined $$reversed{$_}) {
+                ${$$reversed{$_}}{$module}++
             } else {
                 my %single_module_dep_hash = ($module => 1);
-                $reversed_dependencies{$_} = \%single_module_dep_hash;
+                $$reversed{$_} = \%single_module_dep_hash;
             };
         };
     };
@@ -635,10 +663,16 @@ sub build_all {
         };
         modules_classify(keys %global_deps_hash);
         expand_dependencies (\%global_deps_hash);
-#        prepare_build_from(\%global_deps_hash) if (scalar keys %incompatibles);
-        prepare_incompatible_build(\%global_deps_hash) if ($incompatible);
+        prepare_incompatible_build(\%global_deps_hash) if ($incompatible && (!$build_from_with_branches));
+        if ($build_from_with_branches) {
+            my %reversed_full_deps_hash = ();
+            reverse_dependensies(\%global_deps_hash, \%reversed_full_deps_hash);
+            prepare_build_from_with_branches(\%global_deps_hash, \%reversed_full_deps_hash);
+        }
         if ($build_all_cont || $build_since) {
+            store_weights(\%global_deps_hash);
             prepare_build_all_cont(\%global_deps_hash);
+            %weights_hash = ();
         };
         if ($generate_config) {
             %add_to_config = %global_deps_hash;
@@ -653,13 +687,13 @@ sub build_all {
                 print_error("There are modules:\n@missing_modules\n\nthat should be built, but they are not activated. Please, verify your $source_config_file.\n");
             };
         };
-        foreach my $module (%dead_parents) {
+        foreach my $module (keys %dead_parents, keys %skip_modules) {
             remove_from_dependencies($module, \%global_deps_hash);
             delete ($global_deps_hash{$module}) if (defined $global_deps_hash{$module});
         };
         store_weights(\%global_deps_hash);
         backup_deps_hash(\%global_deps_hash, \%global_deps_hash_backup);
-        reverse_dependensies(\%global_deps_hash_backup);
+        reverse_dependensies(\%global_deps_hash_backup, \%reversed_dependencies);
         $modules_number = scalar keys %global_deps_hash;
         initialize_html_info($_) foreach (keys %global_deps_hash);
         if ($processes_to_run) {
@@ -1100,6 +1134,7 @@ sub get_commands {
     while ($arg = pop(@dmake_args)) {
         $dmake .= ' '.$arg;
     };
+    $dmake .= ' verbose=true' if ($html);
 };
 
 #
@@ -1110,34 +1145,44 @@ sub get_stand_dir {
         $ENV{mk_tmp} = '';
         die "No environment set\n";
     };
-    my $StandDir;
-    if ( defined $ENV{PWD} ) {
-        $StandDir = $ENV{PWD};
-    } elsif (defined $ENV{_cwd}) {
-        $StandDir = $ENV{_cwd};
-    } else {
-        $StandDir = cwd();
+    my $repository_helper = RepositoryHelper->new();
+    my $StandDir = $repository_helper->get_repository_root();
+    my $initial_dir = $repository_helper->get_initial_directory();
+    if ($StandDir eq $initial_dir) {
+        print_error('Found no project to build');
     };
-    my $previous_dir = '';
-    do {
-        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
-            if (-e $StandDir . '/prj/'.$_) {
-                $initial_module = File::Basename::basename($StandDir);
-                $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
-                $StandDir = File::Basename::dirname($StandDir);
-                $module_paths{$initial_module} = $StandDir . "/$initial_module";
+    $initial_module = substr($initial_dir, length($StandDir) + 1);
+    if ($initial_module =~ /(\\|\/)/) {
+        $initial_module = $`;
+    };
+    $module_paths{$initial_module} = $StandDir . "/$initial_module";
+#    $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
+#    if ( defined $ENV{PWD} ) {
+#       $StandDir = $ENV{PWD};
+#   } elsif (defined $ENV{_cwd}) {
+#       $StandDir = $ENV{_cwd};
+#   } else {
+#       $StandDir = cwd();
+#    };
+#    my $previous_dir = '';
+#    do {
+#        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
+#            if (-e $StandDir . '/prj/'.$_) {
+#                $initial_module = File::Basename::basename($StandDir);
+#                $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
+#                $StandDir = File::Basename::dirname($StandDir);
+#                $module_paths{$initial_module} = $StandDir . "/$initial_module";
                 return $StandDir;
-            } elsif ($StandDir eq $previous_dir) {
-                $ENV{mk_tmp} = '';
-                print_error('Found no project to build');
-            };
-        };
-        $previous_dir = $StandDir;
-        $StandDir = File::Basename::dirname(Cwd::realpath($StandDir));
-        print_error('Found no project to build') if (!$StandDir);
-    }
-#    while (chdir '..');
-    while (chdir "$StandDir");
+#            } elsif ($StandDir eq $previous_dir) {
+#                $ENV{mk_tmp} = '';
+#                print_error('Found no project to build');
+#            };
+#        };
+#        $previous_dir = $StandDir;
+#        $StandDir = File::Basename::dirname(Cwd::realpath($StandDir));
+#        print_error('Found no project to build') if (!$StandDir);
+#    }
+#    while (chdir "$StandDir");
 };
 
 #
@@ -1236,7 +1281,7 @@ sub check_deps_hash {
                     $jobs_hash{$key} = {    SHORT_NAME => $string,
                                             BUILD_NUMBER => $build_number,
                                             STATUS => 'waiting',
-                                            LOG_PATH => $module . "/$ENV{INPATH}/misc/logs/$log_name",
+                                            LOG_PATH => '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
                                             LONG_LOG_PATH => CorrectPath($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
                                             START_TIME => 0,
                                             FINISH_TIME => 0,
@@ -1279,7 +1324,10 @@ sub find_indep_prj {
     $Dependencies = shift;
     if (scalar keys %$Dependencies) {
         foreach my $job (keys %$Dependencies) {
-            push(@candidates, $job) if (!scalar keys %{$$Dependencies{$job}});
+            if (!scalar keys %{$$Dependencies{$job}}) {
+                push(@candidates, $job);
+                last if (!$processes_to_run);
+            };
         };
         if (scalar @candidates) {
             $all_dependent = 0;
@@ -1392,7 +1440,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--interactive]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1405,9 +1453,11 @@ sub usage {
     print STDERR "\nSwitches:\n";
     print STDERR "        --all        - build all projects from very beginning till current one\n";
     print STDERR "        --from       - build all projects dependent from the specified (including it) till current one\n";
+    print STDERR "        --exclude_branch_from    - exclude module(s) and its branch from the build\n";
     print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
     print STDERR "        --prepare    - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
-    print STDERR "        --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
+    print STDERR "        --with_branches- the same as \"--from\" but with build all projects in neighbour branches\n";
+    print STDERR "        --skip       - do not build certain module(s)\n";
     print STDERR "        --since      - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
     print STDERR "        --checkmodules      - check if all required parent projects are availlable\n";
     print STDERR "        --show       - show what is going to be built\n";
@@ -1462,19 +1512,25 @@ sub get_options {
         $arg =~ /^--dlv_switch$/    and $dlv_switch = shift @ARGV    and next;
         $arg =~ /^--file$/        and $cmd_file = shift @ARGV             and next;
         $arg =~ /^-F$/        and $cmd_file = shift @ARGV             and next;
+        $arg =~ /^--skip$/    and get_modules_passed(\%skip_modules)      and next;
 
-        $arg =~ /^--with_branches$/        and $build_all_parents = 1
-                                and $build_from_with_branches = shift @ARGV         and next;
-        $arg =~ /^-b$/        and $build_all_parents = 1
-                                and $build_from_with_branches = shift @ARGV         and next;
-
+        if ($arg =~ /^--with_branches$/ || $arg =~ /^-b$/) {
+                                    $build_from_with_branches = 1;
+                                    $build_all_parents = 1;
+                                    get_modules_passed(\%incompatibles);
+                                    next;
+        };
         $arg =~ /^--all:(\S+)$/ and $build_all_parents = 1
                                 and $build_all_cont = $1            and next;
         $arg =~ /^-a:(\S+)$/ and $build_all_parents = 1
                                 and $build_all_cont = $1            and next;
         if ($arg =~ /^--from$/ || $arg =~ /^-f$/) {
                                     $build_all_parents = 1;
-                                    get_incomp_projects();
+                                    get_modules_passed(\%incompatibles);
+                                    next;
+        };
+        if ($arg =~ /^--exclude_branch_from$/) {
+                                    get_modules_passed(\%exclude_branches);
                                     next;
         };
         $arg =~ /^--prepare$/    and $prepare = 1 and next;
@@ -1527,8 +1583,12 @@ sub get_options {
         print_error("\"--html_path\" switch is used only with \"--html\"") if ($html_path);
         print_error("\"--dontgraboutput\" switch is used only with \"--html\"") if ($dont_grab_output);
     };
+    if ((scalar keys %exclude_branches) && !$build_all_parents) {
+        print_error("\"--exclude_branch_from\" is not applicable for one module builds!!");
+    };
     $grab_output = 0 if ($dont_grab_output);
     print_error('Switches --with_branches and --all collision') if ($build_from_with_branches && $build_all_cont);
+    print_error('Switch --skip is for building multiple modules only!!') if ((scalar keys %skip_modules) && (!$build_all_parents));
 #    print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     print_error('Switches --with_branches and --since collision') if ($build_from_with_branches && $build_since);
     if ($show) {
@@ -1593,7 +1653,6 @@ sub get_options {
 
 sub get_module_and_buildlist_paths {
     if ($build_all_parents || $checkparents) {
-        my $source_config = SourceConfig -> new($StandDir);
         $source_config_file = $source_config->get_config_file_path();
         $active_modules{$_}++ foreach ($source_config->get_active_modules());
         my %active_modules_copy = %active_modules;
@@ -1652,7 +1711,13 @@ sub cancel_build {
             $message_part .= "--from @broken_modules_names\n";
         };
     } else {
-        $message_part .= "--all:@broken_modules_names\n";
+        if ($processes_to_run) {
+            $message_part .= "--from ";
+        } else {
+            $message_part .= "--all:";
+        };
+        $message_part .= "@broken_modules_names\n";
+
     };
     if ($broken_modules_number && $build_all_parents) {
         print "\n";
@@ -2109,12 +2174,12 @@ sub modules_classify {
 
 #
 # This procedure provides consistency for cws
-# and optimized build (ie in case of -with_branches, -all:prj_name
+# and optimized build (ie in case of --with_branches, -all:prj_name
 # and -since switches)
 #
 sub provide_consistency {
     check_dir();
-    foreach $var_ref (\$build_from_with_branches, \$build_all_cont, \$build_since) {
+    foreach $var_ref (\$build_all_cont, \$build_since) {
         if ($$var_ref) {
             return if (defined $module_paths{$$var_ref});
             print_error("Cannot find module '$$var_ref'", 9);
@@ -2257,6 +2322,20 @@ sub fix_permissions {
      chmod '0664', $file;
 };
 
+sub prepare_build_from_with_branches {
+    ($full_deps_hash, $reversed_full_deps_hash) = @_;
+    foreach my $prerequisite (keys %$full_deps_hash) {
+        foreach my $dependent_module (keys %incompatibles) {
+            if (defined ${$$reversed_full_deps_hash{$prerequisite}}{$dependent_module}) {
+                remove_from_dependencies($prerequisite, $full_deps_hash);
+                delete $$full_deps_hash{$prerequisite};
+#                print "Removed $prerequisite\n";
+                last;
+            };
+        };
+    };
+};
+
 #
 # Removes projects which it is not necessary to build
 # in incompatible build
@@ -2268,7 +2347,6 @@ sub prepare_incompatible_build {
         if (!defined $$deps_hash{$module}) {
             print_error("The module $initial_module is independent from $module\n");
         }
-        delete $incompatibles{$module};
         $incompatibles{$module} = $$deps_hash{$module};
         delete $$deps_hash{$module};
     }
@@ -2286,8 +2364,8 @@ sub prepare_incompatible_build {
     @modules_built = keys %$deps_hash;
     %add_to_config = %$deps_hash;
     if ($prepare) {
-        if ((!defined $ENV{UPDATER}) || (defined $ENV{CWS_WORK_STAMP})) {
-            SourceConfig->new()->add_active_modules([keys %add_to_config], 0);
+        if ((!(defined $ENV{UPDATER} && (!defined $ENV{CWS_WORK_STAMP}))) || (defined $ENV{CWS_WORK_STAMP})) {
+            $source_config->add_active_modules([keys %add_to_config], 0);
         }
         clear_delivered();
     }
@@ -2329,21 +2407,6 @@ sub prepare_incompatible_build {
     }
     do_exit(0) if ($prepare);
 };
-
-#
-# Removes projects which it is not necessary to build
-# with -with_branches switch
-#
-#sub prepare_build_from {
-#    my ($prj, $deps_hash);
-#    $deps_hash = shift;
-#    my %from_deps_hash = ();   # hash of dependencies of the -from project
-#    get_parent_deps($build_from_with_branches, \%from_deps_hash);
-#    foreach $prj (keys %from_deps_hash) {
-#        delete $$deps_hash{$prj};
-#        remove_from_dependencies($prj, $deps_hash);
-#    };
-#};
 
 #
 # Removes projects which it is not necessary to build
@@ -2412,7 +2475,8 @@ sub get_list_of_modules {
 #    };
 };
 
-sub get_incomp_projects {
+sub get_modules_passed {
+    my $hash_ref = shift;
     my $option = '';
     while ($option = shift @ARGV) {
         if ($option =~ /^-+/) {
@@ -2424,7 +2488,7 @@ sub get_incomp_projects {
                 print_error("\'--from\' switch collision") if ($build_all_cont);
                 $build_all_cont = $';
             };
-            $incompatibles{$option}++;
+            $$hash_ref{$option}++;
         };
     };
 };

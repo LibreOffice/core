@@ -51,9 +51,8 @@ Module gid_Module_Optional
 End
 
 Module gid_Module_Dictionaries
-    ParentID = gid_Module_Root;
-    XPDParentID = "root";
-    Sortkey = "300";
+    ParentID = gid_Module_Optional;
+    Sortkey = "215";
     MOD_NAME_DESC ( MODULE_DICTIONARIES );
 End
 

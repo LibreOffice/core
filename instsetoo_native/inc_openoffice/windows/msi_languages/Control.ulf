@@ -620,7 +620,7 @@ en-US = "< &Back"
 en-US = "Cancel"
 
 [OOO_CONTROL_255]
-en-US = "All program features will be installed. (Requires the most disk space.)"
+en-US = "The main components will be installed. Recommended for most users."
 
 [OOO_CONTROL_256]
 en-US = "Choose which program features you want installed and where they will be installed. Recommended for advanced users."

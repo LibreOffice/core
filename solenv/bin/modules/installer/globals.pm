@@ -118,8 +118,6 @@ BEGIN
     $dounzip = 1;
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
-    $services_rdb_created = 0;
-    $servicesrdb_can_be_created = 0;
     $islinux = 0;
     $issolaris = 0;
     $ismacosx = 0;
@@ -179,11 +177,12 @@ BEGIN
     $rpm = "";
     $rpmcommand = "";
     $rpmquerycommand = "";
+    $rpminfologged = 0;
     $debian = "";
     $installertypedir = "";
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
-    $max_lang_length = 65;
+    $max_lang_length = 50;
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
@@ -237,9 +236,6 @@ BEGIN
     $creating_windows_installer_patch = 0;
 
     $strip = 1;
-    $solarjava = 0;
-    $jdklib = "";
-    $jrepath = "";
 
     $globallogging = 0;
     $globalloggingform21 = 1;
@@ -408,9 +404,6 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $unomaxservices = 1800; # regcomp -c argument length
-    $javamaxservices = 15;
-
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
     $cab_file_per_component = 0;
@@ -453,8 +446,6 @@ BEGIN
     @solarispatchfiles = (".diPatch", "patchinfo");
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
-    @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar", "commonwizards.jar" );
-    @regcompregisterlibs = ( "javavm.uno", "javaloader.uno", "stocservices.uno" );
     @languagepackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
@@ -501,7 +492,6 @@ BEGIN
         $separator = "/";
         $pathseparator = "\:";
         $libextension = "\.dll";
-        $quote = "\'";
         $isunix = 0;
         $iswin = 1;
                 $archiveformat = ".zip";
@@ -526,7 +516,6 @@ BEGIN
             $libextension = "\.so";
         }
         $archiveformat = ".tar.gz";
-        $quote = "\'";
         $isunix = 1;
         $iswin = 0;
     }

@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
+     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
@@ -1384,7 +1384,7 @@ if ($platform =~ m/linux|freebsd|netbsd/)
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
 }
-if ($platform =~ m/solaris/ && $CC !=~ "gcc")
+if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
 }
@@ -1619,6 +1619,7 @@ ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
 ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
 ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
+ToFile( "ENABLE_GSTREAMER",  "@ENABLE_GSTREAMER@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
 ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
 ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
@@ -1788,7 +1789,6 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
-ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
 ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
 ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
 ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
@@ -1850,6 +1850,8 @@ ToFile( "FREETYPE_LIBS",     "@FREETYPE_LIBS@",    "e" );
 ToFile( "SYSTEM_POPPLER",    "@SYSTEM_POPPLER@",   "e" );
 ToFile( "POPPLER_CFLAGS",    "@POPPLER_CFLAGS@",   "e" );
 ToFile( "POPPLER_LIBS",      "@POPPLER_LIBS@",     "e" );
+ToFile( "GSTREAMER_CFLAGS",  "@GSTREAMER_CFLAGS@", "e" );
+ToFile( "GSTREAMER_LIBS",    "@GSTREAMER_LIBS@",   "e" );
 ToFile( "SYSTEM_CAIRO",      "@SYSTEM_CAIRO@",     "e" );
 ToFile( "BUILD_PIXMAN",      "@BUILD_PIXMAN@",     "e" );
 ToFile( "CAIRO_CFLAGS",      "@CAIRO_CFLAGS@",     "e" );
@@ -1909,6 +1911,7 @@ ToFile( "ENABLE_AGG",        "@ENABLE_AGG@",       "e" );
 ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "AGG_VERSION",	     "@AGG_VERSION@",      "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
+ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
 ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
@@ -1926,6 +1929,8 @@ ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
 ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
 ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
+ToFile( "SYSTEM_LIBTEXTCAT", "@SYSTEM_LIBTEXTCAT@","e" );
+ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );

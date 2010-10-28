@@ -65,7 +65,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 .IF "$(SYSBASE)"!=""
-CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CFLAGS_SYSBASE:=--sysroot=$(SYSBASE)
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
@@ -153,8 +153,7 @@ LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$O
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
-# flag -Wl,-z,noexecstack sets the NX bit on the stack
-LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
 LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
 .ENDIF
@@ -198,6 +197,14 @@ STDLIBCUIMT+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
 STDSHLCUIMT+=-ltcmalloc
 .ENDIF
+
+.IF "$(ALLOC)" == "JEMALLOC"
+STDLIBGUIMT+=-ljemalloc
+STDLIBCUIMT+=-ljemalloc
+STDSHLGUIMT+=-ljemalloc
+STDSHLCUIMT+=-ljemalloc
+.ENDIF
+
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
 LINKFLAGS += -Wl,--hash-style=both
 .ELSE

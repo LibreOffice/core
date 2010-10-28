@@ -66,9 +66,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Dbw,
              gid_File_Res_Dkt,
              gid_File_Res_Editeng,
-             gid_File_Res_Epb,
-             gid_File_Res_Epg,
-             gid_File_Res_Epp,
              gid_File_Res_Eur,
              gid_File_Res_For,
              gid_File_Res_Forui,
@@ -109,9 +106,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Stt,
              gid_File_Res_Tfu,
              gid_File_Res_Eps,
-             gid_File_Res_Egi,
-             gid_File_Res_Ept,
-             gid_File_Res_Eme,
              gid_File_Res_UpdChk,
              gid_File_Res_Upd);
 End

@@ -829,6 +829,9 @@ LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI)
 .IF  "$(LOCALIZESDF)"==""
 LOCALSDFFILE:=$(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip $(THEN) echo $(LOCALSDFFILE) $(FI)))
+.IF  "$(LOCALIZESDF)"==""
+LOCALSDFFILE!:=
+.ENDIF			# "$(LOCALIZESDF)"==""
 .ENDIF			# "$(LOCALIZESDF)"==""
 # dummy target to keep the build happy.
 .IF  "$(LOCALIZESDF)"==""
@@ -966,9 +969,6 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
     .IF "$(VERBOSE)" == "FALSE"
         VERBOSITY=-quiet
         ZIP_VERBOSITY=-q
-        TRANSEX_VERBOSITY=-QQ
-        CFGEX_VERBOSITY=-QQ
-        ULFEX_VERBOSITY=-QQ
     .ENDIF
 .ENDIF # "$(VERBOSE)" == "TRUE"
 COMPILE_ECHO_SWITCH=
@@ -1020,15 +1020,15 @@ LNTFLAGSOUTOBJ=-os
 .ENDIF
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
-# Add SOLARLIBDIR to the end of a (potentially previously undefined) library
-# path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
-# the end over adding at the start); the ": &&" in the bash case enables this to
+# Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
+# path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
+# an existing office/URE installation ; the ": &&" in the bash case enables this to
 # work at the start of a recipe line that is not prefixed by "+" as well as in
 # the middle of an existing && chain:
 AUGMENT_LIBRARY_PATH = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 .END
 
 # remove if .Net 2003 support has expired 
@@ -1355,6 +1355,19 @@ XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 .IF "$(SYSTEM_CPPUNIT)" != "YES"
 CPPUNIT_CFLAGS =
 .END
+
+COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
+COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
+.IF "$(OS)" == "WNT"
+COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
+.ELSE
+COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+.END
+COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$OOO_BASE_DIR/program/classes/
+COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
+COMPONENTPREFIX_INBUILD_NATIVE = \
+    vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/
+COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$OOO_INBUILD_JAR_DIR/
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized
