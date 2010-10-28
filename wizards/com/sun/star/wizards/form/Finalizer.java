@@ -72,7 +72,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:34481", new Integer(97), new Integer(35), UIConsts.INTEGERS[8], new Short((short) 82), "", new Integer(185)
+                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGFORM_TXTPATH", new Integer(97), new Integer(35), UIConsts.INTEGERS[8], new Short((short) 82), "", new Integer(185)
                 });
         CurUnoDialog.insertLabel("lblProceed",
                 new String[]
@@ -90,7 +90,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:34482", sWorkWithForm, new Integer(101), new Integer(77), new Short((short) 1), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTWORKWITHFORM", sWorkWithForm, new Integer(101), new Integer(77), new Short((short) 1), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
                 });
         optModifyForm = CurUnoDialog.insertRadioButton("optModifyForm", null,
                 new String[]
@@ -99,7 +99,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:34483", sModifyForm, new Integer(101), new Integer(89), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTMODIFYFORM", sModifyForm, new Integer(101), new Integer(89), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
                 });
     }
 

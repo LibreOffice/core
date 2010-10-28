@@ -83,7 +83,7 @@ using namespace com::sun::star;
 
 ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
                                         const String& rDesc,
-                                        USHORT nCat, USHORT nHelp,
+                                        USHORT nCat, const rtl::OString& sHelp,
                                         const uno::Reference<reflection::XIdlMethod>& rFunc,
                                         const uno::Any& rO,
                                         long nAC, const ScAddInArgDesc* pAD,
@@ -98,7 +98,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
     nArgCount( nAC ),
     nCallerPos( nCP ),
     nCategory( nCat ),
-    nHelpId( nHelp ),
+    sHelpId( sHelp ),
     bCompInitialized( FALSE )
 {
     if ( nArgCount )
@@ -608,7 +608,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     }
                 }
 
-                USHORT nHelpId = aHelpIdGenerator.GetHelpId( pFuncNameArray[nFuncPos] );
+                rtl::OString sHelpId = aHelpIdGenerator.GetHelpId( pFuncNameArray[nFuncPos] );
 
                 uno::Reference<reflection::XIdlMethod> xFunc;       // remains empty
                 uno::Any aObject;                                   // also empty
@@ -617,7 +617,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 ScUnoAddInFuncData* pData = new ScUnoAddInFuncData(
                     aFuncName, aLocalName, aDescription,
-                    nCategory, nHelpId,
+                    nCategory, sHelpId,
                     xFunc, aObject,
                     nVisibleCount, pVisibleArgs, nCallerPos );
 
@@ -936,7 +936,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             xAddIn->getProgrammaticCategoryName(
                                             aFuncU ) ) );
 
-                                        USHORT nHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
+                                        rtl::OString sHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
 
                                         rtl::OUString aLocalU;
                                         try
@@ -1015,7 +1015,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
                                         ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
                                             aFuncName, aLocalName, aDescription,
-                                            nCategory, nHelpId,
+                                            nCategory, sHelpId,
                                             xFunc, aObject,
                                             nVisibleCount, pVisibleArgs, nCallerPos );
 
@@ -1338,7 +1338,7 @@ BOOL ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     rDesc.pFuncName = new String( rFuncData.GetUpperLocal() );     //! upper?
     rDesc.nCategory = rFuncData.GetCategory();
-    rDesc.nHelpId = rFuncData.GetHelpId();
+    rDesc.sHelpId = rFuncData.GetHelpId();
 
     String aDesc = rFuncData.GetDescription();
     if (!aDesc.Len())

@@ -270,7 +270,7 @@ sub UndoRichtigBeiSortierung
     if Fehler = TRUE then
         Warnlog "Undo after sorting has not been functioned correctly"
         Call hCloseDocument
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\st1_5.sdw" )
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\st1_5.sdw" )
     end if
     Call wTypeKeys "<End>"
     Call wTypeKeys "<Down>",6

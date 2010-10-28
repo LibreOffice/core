@@ -57,6 +57,7 @@ TabPage TP_ENV_FMT
     };
     MetricField FLD_ADDR_LEFT
     {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_ADDR_LEFT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -81,6 +82,7 @@ TabPage TP_ENV_FMT
     };
     MetricField FLD_ADDR_TOP
     {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_ADDR_TOP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 41 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -105,6 +107,7 @@ TabPage TP_ENV_FMT
     };
     MenuButton BTN_ADDR_EDIT
     {
+        HelpID = "sw:MenuButton:TP_ENV_FMT:BTN_ADDR_EDIT";
         Pos = MAP_APPFONT ( 194 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -132,6 +135,7 @@ TabPage TP_ENV_FMT
     };
     MetricField FLD_SEND_LEFT
     {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SEND_LEFT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -156,6 +160,7 @@ TabPage TP_ENV_FMT
     };
     MetricField FLD_SEND_TOP
     {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SEND_TOP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 94 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -180,6 +185,7 @@ TabPage TP_ENV_FMT
     };
     MenuButton BTN_SEND_EDIT
     {
+        HelpID = "sw:MenuButton:TP_ENV_FMT:BTN_SEND_EDIT";
         Pos = MAP_APPFONT ( 194 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Edit" ;
@@ -200,6 +206,7 @@ TabPage TP_ENV_FMT
     };
     ListBox BOX_SIZE_FORMAT
     {
+        HelpID = "sw:ListBox:TP_ENV_FMT:BOX_SIZE_FORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 120 ) ;
         Size = MAP_APPFONT ( 40 , 72 ) ;
@@ -215,6 +222,7 @@ TabPage TP_ENV_FMT
     };
     MetricField FLD_SIZE_WIDTH
     {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SIZE_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 136 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -239,6 +247,7 @@ TabPage TP_ENV_FMT
     };
     MetricField FLD_SIZE_HEIGHT
     {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SIZE_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 152 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;

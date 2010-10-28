@@ -104,8 +104,8 @@ public:
     sal_Bool                GetParentURL( String& _rParentURL ) const;
     sal_Bool                CreateNewFolder( const String& rNewFolder );
 
-    void                    SetHelpId( sal_uInt32 nHelpId );
-    sal_uInt32              GetHelpId( ) const;
+    void                    SetHelpId( const rtl::OString& rHelpId );
+    const rtl::OString&     GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
     using Window::SetPosSizePixel;
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );

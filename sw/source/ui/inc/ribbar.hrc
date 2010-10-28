@@ -69,10 +69,7 @@
 #define MN_CALC_POPUP               (RC_RIBBAR_BEGIN + 22)
 
 #define MN_NUMNAMES_POPUP           (RC_RIBBAR_BEGIN + 23)
-#define RID_INSERT_CTRL             (RC_RIBBAR_BEGIN + 24)
-#define RID_INSERT_OBJ_CTRL         (RC_RIBBAR_BEGIN + 25)
 #define RID_INSERT_FIELD_CTRL       (RC_RIBBAR_BEGIN + 26)
-#define RID_TBL_OPT_CTRL            (RC_RIBBAR_BEGIN + 27)
 #define RID_BEZIER_WIN              (RC_RIBBAR_BEGIN + 28)
 #define RID_SCROLL_NAVI_TBX         (RC_RIBBAR_BEGIN + 29)
 #define RID_SCROLL_NAVIGATION_WIN   (RC_RIBBAR_BEGIN + 30)

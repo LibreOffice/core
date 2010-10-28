@@ -45,24 +45,28 @@ ModalDialog DLG_DOCINFO_EDT
     };
     Edit ED_INFO1
     {
+        HelpID = "sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
     };
     Edit ED_INFO2
     {
+        HelpID = "sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
     };
     Edit ED_INFO3
     {
+        HelpID = "sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
     };
     Edit ED_INFO4
     {
+        HelpID = "sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;

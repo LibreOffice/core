@@ -46,6 +46,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     RadioButton RB_AUTOSTART
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOSTART";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -53,6 +54,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     RadioButton RB_MANSTART
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_MANSTART";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -60,6 +62,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     Edit ED_START
     {
+        HelpID = "sc:Edit:RID_SCDLG_DPNUMGROUP:ED_START";
         Pos = MAP_APPFONT ( 94 , 26 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
@@ -73,6 +76,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     RadioButton RB_AUTOEND
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOEND";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -80,6 +84,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     RadioButton RB_MANEND
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_MANEND";
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -87,6 +92,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     Edit ED_END
     {
+        HelpID = "sc:Edit:RID_SCDLG_DPNUMGROUP:ED_END";
         Pos = MAP_APPFONT ( 94 , 65 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
@@ -100,6 +106,7 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     };
     Edit ED_BY
     {
+        HelpID = "sc:Edit:RID_SCDLG_DPNUMGROUP:ED_BY";
         Pos = MAP_APPFONT ( 94 , 92 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
@@ -146,6 +153,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     RadioButton RB_AUTOSTART
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_AUTOSTART";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -153,6 +161,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     RadioButton RB_MANSTART
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_MANSTART";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -160,6 +169,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     DateField ED_START
     {
+        HelpID = "sc:DateField:RID_SCDLG_DPDATEGROUP:ED_START";
         Pos = MAP_APPFONT ( 94 , 26 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
@@ -173,6 +183,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     RadioButton RB_AUTOEND
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_AUTOEND";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -180,6 +191,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     RadioButton RB_MANEND
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_MANEND";
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -187,6 +199,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     DateField ED_END
     {
+        HelpID = "sc:DateField:RID_SCDLG_DPDATEGROUP:ED_END";
         Pos = MAP_APPFONT ( 94 , 65 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
@@ -200,6 +213,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     RadioButton RB_NUMDAYS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_NUMDAYS";
         Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -207,6 +221,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     RadioButton RB_UNITS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_UNITS";
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -214,6 +229,7 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     NumericField ED_NUMDAYS
     {
+        HelpID = "sc:NumericField:RID_SCDLG_DPDATEGROUP:ED_NUMDAYS";
         Pos = MAP_APPFONT ( 94, 92 ) ;
         Size = MAP_APPFONT ( 35, 12 ) ;
         TabStop = TRUE ;

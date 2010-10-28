@@ -78,15 +78,15 @@ EditWindow *StatementList::m_pDbgWin;
 #endif
 
 
-SmartId StatementList::aWindowWaitUId = SmartId();
+rtl::OString StatementList::aWindowWaitUId = rtl::OString();
 Window *StatementList::pWindowWaitPointer = NULL;
-SmartId StatementList::aWindowWaitOldHelpId = SmartId();
-SmartId StatementList::aWindowWaitOldUniqueId = SmartId();
+rtl::OString StatementList::aWindowWaitOldHelpId = rtl::OString();
+rtl::OString StatementList::aWindowWaitOldUniqueId = rtl::OString();
 USHORT StatementList::nUseBindings = 0;
 
-SmartId StatementList::aSubMenuId1 = SmartId(); // Untermenüs bei PopupMenus
-SmartId StatementList::aSubMenuId2 = SmartId(); // erstmal 2-Stufig
-SmartId StatementList::aSubMenuId3 = SmartId(); // and now even 3 levels #i31512#
+USHORT StatementList::aSubMenuId1 = 0;  // Untermenüs bei PopupMenus
+USHORT StatementList::aSubMenuId2 = 0;  // erstmal 2-Stufig
+USHORT StatementList::aSubMenuId3 = 0;  // and now even 3 levels #i31512#
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
@@ -130,7 +130,8 @@ TTSettings* GetTTSettings()
 
 
 
-#define IS_WINP_CLOSING(pWin) (pWin->GetSmartHelpId().Matches( 4321 ) && pWin->GetSmartUniqueId().Matches( 1234 ))
+// FIXME: HELPID
+#define IS_WINP_CLOSING(pWin) (pWin->GetHelpId().equals( "TT_Win_is_closing_HID" ) && pWin->GetUniqueId().equals( "TT_Win_is_closing_UID" ))
 
 /*
 UniString GEN_RES_STR0( ULONG nResId ) { return ResString( nResId ); }
@@ -155,7 +156,7 @@ void StatementList::InitProfile()
 
 #if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement != NULL && pCurrentProfileStatement != this )
-            pRet->GenReturn( RET_ProfileInfo, SmartId(), CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
+            pRet->GenReturn( RET_ProfileInfo, 0, CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
 #endif
         pCurrentProfileStatement = this;
     }
@@ -171,18 +172,19 @@ void StatementList::SendProfile( String aText )
                 pProfiler->EndProfileInterval();
 
             if ( pProfiler->IsProfilingPerCommand() )
-                pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileLine( aText ) );
+                pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetProfileLine( aText ) );
 
             if ( pProfiler->IsPartitioning() )
-                pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileTime ), static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
+                                // FIXME: HELPID
+                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() ULONG != comm_ULONG on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )
-            pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetAutoProfiling() );
+            pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetAutoProfiling() );
 
 #if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement == NULL )
-            pRet->GenReturn( RET_ProfileInfo, SmartId(), CUniString("SendProfile ohne InitProfile\n") );
+            pRet->GenReturn( RET_ProfileInfo, 0, CUniString("SendProfile ohne InitProfile\n") );
 #endif
         pCurrentProfileStatement = NULL;
     }
@@ -390,7 +392,7 @@ Window* StatementList::SearchClientWin( Window *pBase, Search &aSearch, BOOL May
 
 BOOL SearchUID::IsWinOK( Window *pWin )
 {
-    if ( aUId.Matches( pWin->GetSmartUniqueOrHelpId() ) )
+    if ( aUId.equals( pWin->GetUniqueOrHelpId() ) )
     {
         if ( ( pWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pWin->IsVisible() )
             return TRUE;
@@ -407,7 +409,7 @@ BOOL SearchUID::IsWinOK( Window *pWin )
         USHORT i;
         for ( i = 0; i < pTB->GetItemCount() ; i++ )
         {
-            if ( aUId.Matches( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Matches( pTB->GetHelpId(pTB->GetItemId( i )) ) )
+            if ( aUId.equals( Str2Id( pTB->GetItemCommand(pTB->GetItemId( i )) ) ) || aUId.equals( pTB->GetHelpId(pTB->GetItemId( i )) ) )
             {       // ID matches.
                 Window *pItemWin;
                 pItemWin = pTB->GetItemWindow( pTB->GetItemId( i ) );
@@ -455,7 +457,7 @@ BOOL SearchUID::IsWinOK( Window *pWin )
         return FALSE;
 }
 
-Window* StatementList::SearchTree( SmartId aUId ,BOOL bSearchButtonOnToolbox )
+Window* StatementList::SearchTree( rtl::OString aUId ,BOOL bSearchButtonOnToolbox )
 {
     SearchUID aSearch(aUId,bSearchButtonOnToolbox);
 
@@ -974,7 +976,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
 
     WRITE(sIndent);
     WRITEc("UId : ");
-    WRITE(UIdString(pBase->GetSmartUniqueOrHelpId()));
+    WRITE(Id2Str(pBase->GetUniqueOrHelpId()));
     WRITEc(":0x");
     WRITE(
         String::CreateFromInt64(
@@ -1031,7 +1033,7 @@ BOOL StatementList::CheckWindowWait()
         if ( WinPtrValid(pWindowWaitPointer) && IS_WINP_CLOSING(pWindowWaitPointer) )
         {
 #if OSL_DEBUG_LEVEL > 1
-            m_pDbgWin->AddText( aWindowWaitUId.GetText().AppendAscii(" Still Open. RType=") );
+            m_pDbgWin->AddText( Id2Str(aWindowWaitUId).AppendAscii(" Still Open. RType=") );
             m_pDbgWin->AddText( String::CreateFromInt32( pWindowWaitPointer->GetType() ).AppendAscii("\n") );
 #endif
 
@@ -1041,10 +1043,10 @@ BOOL StatementList::CheckWindowWait()
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );
 #endif
-                pWindowWaitPointer->SetSmartHelpId(aWindowWaitOldHelpId, SMART_SET_ALL);
-                pWindowWaitPointer->SetSmartUniqueId(aWindowWaitOldUniqueId, SMART_SET_ALL);
+                pWindowWaitPointer->SetHelpId(aWindowWaitOldHelpId);
+                pWindowWaitPointer->SetUniqueId(aWindowWaitOldUniqueId);
 
-                aWindowWaitUId = SmartId();
+                aWindowWaitUId = rtl::OString();
                 pWindowWaitPointer = NULL;
                 StartTime = Time(0L);
                 return TRUE;
@@ -1053,7 +1055,7 @@ BOOL StatementList::CheckWindowWait()
             return FALSE;
         }
         pWindowWaitPointer = NULL;
-        aWindowWaitUId = SmartId();
+        aWindowWaitUId = rtl::OString();
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Closed, Going on.\n" );
 #endif
@@ -1064,10 +1066,10 @@ BOOL StatementList::CheckWindowWait()
 
 void StatementList::ReportError(String aMessage)
 {
-    ReportError ( SmartId(), aMessage );
+    ReportError ( rtl::OString(), aMessage );
 }
 
-void StatementList::ReportError(SmartId aUId, String aMessage)
+void StatementList::ReportError(rtl::OString aUId, String aMessage)
 {
     pRet->GenError ( aUId, aMessage );
     IsError = TRUE;
@@ -1081,7 +1083,7 @@ void StatementList::ReportError(String aMessage, ULONG nWhatever)
 void StatementList::DirectLog( ULONG nType, String aMessage )
 {
     if ( pRet )
-        pRet->GenReturn( RET_DirectLoging, SmartId(nType), aMessage );
+        pRet->GenReturn( RET_DirectLoging, (USHORT) nType, aMessage );
 }
 
 

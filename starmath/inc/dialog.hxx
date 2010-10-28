@@ -255,7 +255,7 @@ class SmDistanceDialog : public ModalDialog
     DECL_LINK(CheckBoxClickHdl, CheckBox *);
 
     using   Window::SetHelpId;
-    void    SetHelpId(MetricField &rField, ULONG nHelpId);
+    void    SetHelpId(MetricField &rField, const rtl::OString& sHelpId);
     void    SetCategory(USHORT Category);
 
     void    ApplyImages();

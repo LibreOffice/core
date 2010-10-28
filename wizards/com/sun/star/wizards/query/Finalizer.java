@@ -78,7 +78,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(12), "HID:" + curHelpIndex++, new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
+                    new Integer(12), HelpIds.getHelpIdString(curHelpIndex++), new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
                 });
         m_queryWizard.insertLabel("lblHowGoOn", new String[]
                 {
@@ -95,7 +95,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
+                    new Integer(9), HelpIds.getHelpIdString(curHelpIndex++), resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
 
         m_queryWizard.insertRadioButton("optModifyQuery",
@@ -105,7 +105,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
+                    new Integer(10), HelpIds.getHelpIdString(curHelpIndex++), resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
         m_queryWizard.insertFixedLine("flnSummary", new String[]
                 {
@@ -121,7 +121,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(96), "HID:" + curHelpIndex++, Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(209)
+                    new Integer(96), HelpIds.getHelpIdString(curHelpIndex++), Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(209)
                 });
     }
 

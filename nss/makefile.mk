@@ -136,8 +136,6 @@ OUT2LIB= \
 MOZ_MSVCVERSION= 9
 .EXPORT : MOZ_MSVCVERSION
 moz_build:=$(shell cygpath -p $(MOZILLABUILD))
-PATH!:=$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)
-.EXPORT : PATH
 
 #Using WINNT will cause at least that nspr4.dll, plc4.dll, plds4.dll 
 #become libnspr4.dll, libplc4.dll, libplds4.dll
@@ -152,7 +150,7 @@ EXT_USE_STLPORT=TRUE
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss
 NSS_BUILD_DIR= $(subst,\,/ $(PWD)/$(MISC)/build/$(TARFILE_ROOTDIR)/mozilla/security/nss)
-BUILD_ACTION= $(subst,/,$/ $(MOZILLABUILD)/msys/bin/bash) -i \
+BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && $(subst,/,$/ $(MOZILLABUILD)/msys/bin/bash) -i \
     -c "cd $(NSS_BUILD_DIR) && make nss_build_all"
 
 OUT2LIB= \

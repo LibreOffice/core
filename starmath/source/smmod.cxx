@@ -336,16 +336,6 @@ void SmModule::GetState(SfxItemSet &rSet)
         }
 }
 
-void SmModule::FillStatusBar(StatusBar &rBar)
-{
-    rBar.InsertItem(SID_TEXTSTATUS, 300, SIB_LEFT | SIB_IN);
-    rBar.InsertItem(SID_ATTR_ZOOM, rBar.GetTextWidth(C2S(" 100% ")));
-    rBar.InsertItem(SID_MODIFYSTATUS, rBar.GetTextWidth(C2S(" * ")));
-    rBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rBar ), SIB_USERDRAW );
-    rBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-
-}
-
 /* -----------------15.02.99 12:45-------------------
  *
  * --------------------------------------------------*/

@@ -54,7 +54,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-
+#include <sfx2/msgpool.hxx>
+#include <scmod.hxx>
 
 // BM/IHA --
 #include <cppuhelper/component_context.hxx>
@@ -261,12 +262,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Starcalc nicht anzeigen
                 //TODO/LATER: currently no inserting of ClassId into SfxRequest!
             case SID_INSERT_PLUGIN :
-            case SID_INSERT_APPLET :
             case SID_INSERT_FLOATINGFRAME :
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 SfxAbstractInsertObjectDialog* pDlg =
-                        pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), nSlot,
+                        pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommandString(),
                         xStorage, &aServerLst );
                 if ( pDlg )
                 {

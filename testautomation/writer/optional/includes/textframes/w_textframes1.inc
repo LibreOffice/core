@@ -408,8 +408,8 @@ testcase tTextframes_6
     '/// + This test file is designed for Anchor To Page test.
     '/// + There are 2 pages in the file , and the frame is in
     '/// + the bottom of first page
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     Check1:
     EditSearchAndReplace
@@ -506,8 +506,8 @@ testcase tTextframes_7
     '/// + There are 2 paragraphs in the file , and the head of 2nd
     '/// + paragraph is in the bottom of the first page .
     '/// + The frame is in the first line of 2nd paragraph
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// check if the frame is in the first page
     Call wTypeKeys ( "<Shift F4>" )
@@ -586,8 +586,8 @@ testcase tTextframes_8
     '/// + The frame is anchored to the character 't' of That .
     '/// + The frame is in the bottom of the first page
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// check if the frame is in the first page
     Call wTypeKeys ( "<Shift F4>" )
@@ -643,8 +643,8 @@ testcase tTextframes_8
     
     Call hCloseDocument
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
@@ -718,8 +718,8 @@ testcase tTextframes_9
     '/// + This test file is designed for Anchor as Character test.
     '/// + The frame is anchored as the character.
     '/// + The frame is in the right and bottom of the first page
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'check if the frame is in the first page
     Call wTypeKeys ( "<Shift F4>" )
@@ -775,8 +775,8 @@ testcase tTextframes_9
     
     Call hCloseDocument
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     Check2:
     Kontext
@@ -852,8 +852,8 @@ testcase tTextframes_10
     '/// Open a test file
     '/// + This test file is designed for Anchor in gathering pages&columns test.
     '/// + There are 2 columns in the page. And the frame is in the second column.
-    Call hFileOpen(sTestFile1,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile1,false)
+    
     
     'Press return to ensure the frame is in 2nd column
     Call wTypeKeys "<MOD1 Home>"
@@ -888,8 +888,8 @@ testcase tTextframes_10
     '/// + This test file is designed for Anchor in seperating
     '/// + pages&columns test.
     '/// + There are 2 pages. And the frame is in the second page.
-    Call hFileOpen(sTestFile2,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile2,false)
+    
     
     'check if the frame is in the 2nd page
     Call wTypeKeys ( "<Shift F4>" )
@@ -957,8 +957,8 @@ testcase tTextframes_11
     '/// + There are 2 paragraph in the file .
     '/// + The 1st paragraph is in 1st page and the 2nd paragraph is in 2nd page
     '/// + Two paragraphs, a frame is anchored to the second one. When deleting the paragraph mark, the anchor of the frame has to move the the first paragraph.
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
 Check1:
     'First check

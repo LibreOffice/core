@@ -221,7 +221,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
 
-    SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
+    Window::SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
@@ -231,7 +231,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
 
     // Add this new object as shell to the shell factory.
-    GetShellManager()->AddSubShell(HID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
+    GetShellManager()->AddSubShell(SHELLID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
 }
 
 

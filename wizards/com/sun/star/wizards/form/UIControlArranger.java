@@ -92,7 +92,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:34451", sAlignLeft, new Integer(107), new Integer(38), new Short((short) 1), IControlStep, new Short(curtabindex++), new Integer(171)
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, new Integer(107), new Integer(38), new Short((short) 1), IControlStep, new Short(curtabindex++), new Integer(171)
                 });
         // Radio Button "Align Right"
         optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
@@ -102,7 +102,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:34452", sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)
                 });
 
 
@@ -142,7 +142,7 @@ public class UIControlArranger
 //                {
 //                    Boolean.valueOf(bEnabled),
 //                    new Integer(14),
-///* TODO: WRONG!*/   "HID:34452",
+///* TODO: WRONG!*/   "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT",
 //                    "1",
 //                    new Integer(nXPos + nBtnWidth),
 //                    new Integer(nYPos),

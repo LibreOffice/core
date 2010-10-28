@@ -160,9 +160,6 @@ void SfxModalDialog::GetDialogData_Impl()
 void SfxModalDialog::init()
 {
     GetDialogData_Impl();
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
 }
 
 // -----------------------------------------------------------------------
@@ -214,13 +211,7 @@ SfxModalDialog::~SfxModalDialog()
 */
 
 {
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->ResetTopic();
-*/
     SetDialogData_Impl();
-    aTimer.Stop();
     delete pOutputSet;
 }
 
@@ -232,16 +223,6 @@ void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
 }
 
 // -----------------------------------------------------------------------
-
-IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
-{
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->LoadTopic( GetHelpId() );
- */
-    return 0L;
-}
 
 void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 {
@@ -373,9 +354,8 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -393,9 +373,8 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -418,15 +397,15 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
@@ -520,15 +499,15 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {
@@ -561,9 +540,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -582,9 +560,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 {
     pImp->pMgr = pCW;
     pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);

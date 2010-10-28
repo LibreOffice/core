@@ -1042,7 +1042,7 @@ end sub
 
 function wInsertDocumentinMasterDoc(DocumentName as string) as boolean
     Call hNewDocument
-    Call hFileOpen(DocumentName)
+    hFileOpenLocally( DocumentName)
     Sleep 2
     Call wTypeKeys "<Mod1 A>"
     Sleep 2

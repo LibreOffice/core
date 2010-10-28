@@ -134,7 +134,6 @@ using namespace ::com::sun::star::io;
 #include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
-// #include "applet.hxx"
 #include "plugin.hxx"
 #include "iframe.hxx"
 #include <ownsubfilterservice.hxx>

@@ -35,10 +35,9 @@
  // RID_SVXDLG_CHARMAP ----------------------------------------------------
 ModalDialog RID_SVXDLG_CHARMAP
 {
-    HelpId = SID_CHARMAP ;
+    HelpId = CMD_SID_CHARMAP ;
     SvLook = TRUE ;
     Text [ en-US ] = "Special Characters";
-/*  Size = MAP_APPFONT ( 297 , 169 ) ; */
     Size = MAP_APPFONT ( 297 , 153 ) ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
@@ -61,6 +60,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     ListBox LB_FONT
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_CHARMAP:LB_FONT";
         Pos = MAP_APPFONT ( 42 , 6 ) ;
         Size = MAP_APPFONT ( 70 , 58 ) ;
         Sort = TRUE ;
@@ -75,6 +75,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     ListBox LB_SUBSET
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_CHARMAP:LB_SUBSET";
         Pos = MAP_APPFONT ( 161 , 6 ) ;
         Size = MAP_APPFONT ( 63 , 68 ) ;
         Sort = FALSE ;
@@ -92,7 +93,6 @@ ModalDialog RID_SVXDLG_CHARMAP
     {
         HelpId = HID_CHARMAP_CTL_SHOWTEXT ;
         Pos = MAP_APPFONT ( 46 , 137 ) ;
-/*      Size = MAP_APPFONT ( 190 , 16 ) ; */
         Size = MAP_APPFONT ( 244 , 16 ) ;
         Group = TRUE ;
     };
@@ -130,30 +130,11 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_CHARMAP:BTN_DELETE";
         Pos = MAP_APPFONT ( 242 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete";
     };
-/*
-    PushButton BT_ASSIGN
-    {
-        Pos = MAP_APPFONT ( 242 , 140 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Assign shortcut...";
-    };
-    FixedText FT_ASSIGN
-    {
-        Pos = MAP_APPFONT ( 6 , 156 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Left = TRUE ;
-        Text [ en-US ] = "Shortcut key: ";
-    };
-    Control CT_ASSIGN
-    {
-        Pos = MAP_APPFONT ( 60 , 156 ) ;
-        Size = MAP_APPFONT ( 160 , 8 ) ;
-    };
-*/
 };
 
 // ********************************************************************** EOF

@@ -454,20 +454,33 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
     for( int i = 0; i < pOrig->nfont; ++i )
     {
         FcPattern* pOrigPattern = pOrig->fonts[i];
-        // create a pattern to find eventually better alternatives
-        FcPattern* pTestPattern = FcPatternDuplicate( pOrigPattern );
-        FcPatternAddBool( pTestPattern, FC_OUTLINE, FcTrue );
-        // TODO: use pattern->ImplFontAttr->pattern to filter out
-        //       all attribute that are not interesting for finding dupes
-        FcPatternDel( pTestPattern, FC_FONTVERSION );
-        FcPatternDel( pTestPattern, FC_CHARSET );
-        FcPatternDel( pTestPattern, FC_FILE );
-        // find the font face for the dupe-search pattern
-        FcResult eFcResult = FcResultMatch;
-        FcPattern* pBetterPattern = FcFontMatch( FcConfigGetCurrent(), pTestPattern, &eFcResult );
-        FcPatternDestroy( pTestPattern );
-        if( eFcResult != FcResultMatch )
+        // #i115131# ignore non-outline fonts
+        FcBool bOutline = FcFalse;
+        FcResult eOutRes = FcPatternGetBool( pOrigPattern, FC_OUTLINE, 0, &bOutline );
+        if( (eOutRes != FcResultMatch) || (bOutline == FcFalse) )
             continue;
+        // create a pattern to find eventually better alternatives
+        FcPattern* pBetterPattern = pOrigPattern;
+        if( m_nFcVersion > 20400 ) // #i115204# avoid trouble with old FC versions
+        {
+            FcPattern* pTestPattern = FcPatternDuplicate( pOrigPattern );
+            FcPatternAddBool( pTestPattern, FC_OUTLINE, FcTrue );
+            // TODO: ignore all attributes that are not interesting for finding dupes
+            //       e.g. by using pattern->ImplFontAttr->pattern conversion
+            FcPatternDel( pTestPattern, FC_FONTVERSION );
+            FcPatternDel( pTestPattern, FC_CHARSET );
+            FcPatternDel( pTestPattern, FC_FILE );
+            // find the font face for the dupe-search pattern
+            FcResult eFcResult = FcResultMatch;
+            pBetterPattern = FcFontMatch( FcConfigGetCurrent(), pTestPattern, &eFcResult );
+            FcPatternDestroy( pTestPattern );
+            if( eFcResult != FcResultMatch )
+                continue;
+            // #i115131# double check results and eventually ignore them
+            eOutRes = FcPatternGetBool( pBetterPattern, FC_OUTLINE, 0, &bOutline );
+            if( (eOutRes != FcResultMatch) || (bOutline == FcFalse) )
+                continue;
+        }
         // insert best found pattern for the dupe-search pattern
         // TODO: skip inserting patterns that are already known in the target fontset
         FcPatternReference( pBetterPattern );
@@ -773,7 +786,10 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
 #endif
             }
             if( aFonts.empty() )
+            {
+                // TODO: remove fonts unusable to psprint from fontset
                 continue;
+            }
 
             int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), sal_True );
             PrintFont* pUpdate = aFonts.front();
@@ -1103,6 +1119,7 @@ bool PrintFontManager::getFontOptions(
     ImplFontOptions& rOptions) const
 {
 #ifndef ENABLE_FONTCONFIG
+    (void)rInfo;(void)nSize;(void)subcallback;(void)rOptions;
     return false;
 #else // ENABLE_FONTCONFIG
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();

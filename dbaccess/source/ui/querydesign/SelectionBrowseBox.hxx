@@ -261,7 +261,7 @@ namespace dbaui
         void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
         void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
-        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,ULONG _nHelpId);
+        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,const rtl::OString& _sHelpId);
         void            invalidateUndoRedo();
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
 

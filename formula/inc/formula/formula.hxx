@@ -80,8 +80,8 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( BOOL bForced = FALSE );
-    ULONG           FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,ULONG nUniqueId);
+    rtl::OString    FindFocusWin(Window *pWin);
+    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
     void            HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);
@@ -129,8 +129,8 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( BOOL bForced = FALSE );
-    ULONG           FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,ULONG nUniqueId);
+    rtl::OString    FindFocusWin(Window *pWin);
+    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
     void            HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);

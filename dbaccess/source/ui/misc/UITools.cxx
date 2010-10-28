@@ -1498,13 +1498,13 @@ namespace
 } // annonymous
 // .........................................................................
 // -----------------------------------------------------------------------------
-::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
+::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName, const rtl::OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
     aURL.Complete += _sModuleName;
     aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-    aURL.Complete += ::rtl::OUString::valueOf(_nHelpId);
+    aURL.Complete += ::rtl::OUString(sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8);
 
     ::rtl::OUString sAnchor;
     ::rtl::OUString sTempURL = aURL.Complete;

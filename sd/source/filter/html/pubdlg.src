@@ -30,6 +30,7 @@
 
 ModalDialog DLG_PUBLISHING
 {
+    HelpID = "sd:ModalDialog:DLG_PUBLISHING";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 272 , 190 ) ;
@@ -59,6 +60,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE1_NEW_DESIGN
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE1_NEW_DESIGN";
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 153, 10 );
         Text [ en-US ] = "New design";
@@ -66,6 +68,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE1_OLD_DESIGN
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE1_OLD_DESIGN";
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 153, 10 );
         Text [ en-US ] = "Existing design";
@@ -73,6 +76,7 @@ ModalDialog DLG_PUBLISHING
 
     ListBox PAGE1_DESIGNS
     {
+        HelpID = "sd:ListBox:DLG_PUBLISHING:PAGE1_DESIGNS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 21 , 75 ) ;
         Size = MAP_APPFONT ( 144 , 63 ) ;
@@ -82,6 +86,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton PAGE1_DEL_DESIGN
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE1_DEL_DESIGN";
         Pos = MAP_APPFONT ( 168 , 75 ) ;
         Size = MAP_APPFONT ( 92 , 14 ) ;
         TabStop = TRUE ;
@@ -120,6 +125,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_STANDARD
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_STANDARD";
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Standard H~TML format";
@@ -127,6 +133,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_FRAMES
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_FRAMES";
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Standard HTML with ~frames";
@@ -134,6 +141,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_KIOSK
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_KIOSK";
         Pos = MAP_APPFONT( 12, 76 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~Automatic";
@@ -141,6 +149,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_WEBCAST
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_WEBCAST";
         Pos = MAP_APPFONT( 12, 89 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~WebCast";
@@ -199,6 +208,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE2_CONTENT
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE2_CONTENT";
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Create title page";
@@ -213,6 +223,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE2_NOTES
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE2_NOTES";
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Show notes";
@@ -231,6 +242,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_CHG_DEFAULT
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_CHG_DEFAULT";
         Pos = MAP_APPFONT ( 144 , 49 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
@@ -239,6 +251,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_CHG_AUTO
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_CHG_AUTO";
         Pos = MAP_APPFONT ( 144 , 63 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
@@ -254,6 +267,7 @@ ModalDialog DLG_PUBLISHING
 
     TimeField PAGE2_DURATION_TMF
     {
+        HelpID = "sd:TimeField:DLG_PUBLISHING:PAGE2_DURATION_TMF";
         Pos = MAP_APPFONT ( 196, 76 ) ;
         Size = MAP_APPFONT ( 48, 12 ) ;
         Border = TRUE ;
@@ -279,6 +293,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE2_ENDLESS
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE2_ENDLESS";
         Pos = MAP_APPFONT ( 154, 91 );
         Size = MAP_APPFONT ( 108, 10 );
         Text [ en-US ] = "~Endless" ;
@@ -297,6 +312,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_ASP
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_ASP";
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~Active Server Pages (ASP)";
@@ -304,6 +320,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE2_PERL
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_PERL";
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Perl" ;
@@ -318,6 +335,7 @@ ModalDialog DLG_PUBLISHING
 
     Edit PAGE2_INDEX
     {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_INDEX";
         BORDER = TRUE;
         Pos = MAP_APPFONT( 154, 88 );
         Size  = MAP_APPFONT( 105, 12 );
@@ -333,6 +351,7 @@ ModalDialog DLG_PUBLISHING
 
     Edit PAGE2_URL
     {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_URL";
         BORDER = TRUE;
         Pos = MAP_APPFONT( 154, 116 );
         Size = MAP_APPFONT( 105, 12 );
@@ -348,6 +367,7 @@ ModalDialog DLG_PUBLISHING
 
     Edit PAGE2_CGI
     {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_CGI";
         BORDER = TRUE;
         Pos = MAP_APPFONT( 154, 144 );
         Size = MAP_APPFONT( 105, 12 );
@@ -382,6 +402,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE3_PNG
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_PNG";
         Pos = MAP_APPFONT( 12, 49 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~PNG";
@@ -389,6 +410,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE3_GIF
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_GIF";
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~GIF";
@@ -396,6 +418,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE3_JPG
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_JPG";
         Pos = MAP_APPFONT( 12, 77 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~JPG";
@@ -403,6 +426,7 @@ ModalDialog DLG_PUBLISHING
 
     ComboBox PAGE3_QUALITY
     {
+        HelpID = "sd:ComboBox:DLG_PUBLISHING:PAGE3_QUALITY";
         Pos = MAP_APPFONT( 18, 91 );
         Size = MAP_APPFONT( 28, 70 );
         TabStop = TRUE ;
@@ -436,6 +460,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE3_RESOLUTION_1
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_1";
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Low resolution (~640x480 pixels)";
@@ -443,6 +468,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE3_RESOLUTION_2
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_2";
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Medium resolution (~800x600 pixels)";
@@ -450,6 +476,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE3_RESOLUTION_3
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_3";
         Pos = MAP_APPFONT ( 144, 77 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         Text [ en-US ] = "High resolution (~1024x768 pixels)";
@@ -468,6 +495,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE3_SLD_SOUND
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE3_SLD_SOUND";
         Pos = MAP_APPFONT ( 12, 125 );
         Size = MAP_APPFONT ( 252, 10 );
         Text [ en-US ] = "~Export sounds when slide advances" ;
@@ -475,6 +503,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE3_HIDDEN_SLIDES
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE3_HIDDEN_SLIDES";
         Pos = MAP_APPFONT ( 12, 138 );
         Size = MAP_APPFONT ( 252, 10 );
         Text [ en-US ] = "Export ~hidden slides" ;
@@ -509,6 +538,7 @@ ModalDialog DLG_PUBLISHING
 
     Edit PAGE4_AUTHOR
     {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_AUTHOR";
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 136, 49 );
         Size = MAP_APPFONT ( 128, 12 );
@@ -524,6 +554,7 @@ ModalDialog DLG_PUBLISHING
 
     Edit PAGE4_EMAIL_EDIT
     {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_EMAIL_EDIT";
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 136 , 65 ) ;
         Size = MAP_APPFONT ( 128 , 12 ) ;
@@ -539,6 +570,7 @@ ModalDialog DLG_PUBLISHING
 
     Edit PAGE4_WWW_EDIT
     {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_WWW_EDIT";
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 136, 81 ) ;
         Size = MAP_APPFONT ( 128, 12 ) ;
@@ -554,6 +586,7 @@ ModalDialog DLG_PUBLISHING
 
     MultiLineEdit PAGE4_MISC
     {
+        HelpID = "sd:MultiLineEdit:DLG_PUBLISHING:PAGE4_MISC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 136, 97 ) ;
         Size = MAP_APPFONT ( 128 , 45 ) ;
@@ -564,6 +597,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE4_DOWNLOAD
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE4_DOWNLOAD";
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 252 , 10 ) ;
         TabStop = TRUE ;
@@ -572,6 +606,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE4_CREATED
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE4_CREATED";
         Pos = MAP_APPFONT ( 12 , 152 ) ;
         Size = MAP_APPFONT ( 252 , 10 ) ;
         TabStop = TRUE ;
@@ -600,6 +635,7 @@ ModalDialog DLG_PUBLISHING
 
     CheckBox PAGE5_TEXTONLY
     {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE5_TEXTONLY";
         Pos = MAP_APPFONT ( 12, 50 );
         Size = MAP_APPFONT ( 243, 10 );
         Text [ en-US ] = "~Text only";
@@ -635,6 +671,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE6_DOCCOLORS
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE6_DOCCOLORS";
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 246, 10 );
         Text [ en-US ] = "~Apply color scheme from document";
@@ -642,6 +679,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE6_DEFAULT
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE6_DEFAULT";
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 246, 10 );
         Text [ en-US ] = "Use ~browser colors";
@@ -649,6 +687,7 @@ ModalDialog DLG_PUBLISHING
 
     RadioButton PAGE6_USER
     {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE6_USER";
         Pos = MAP_APPFONT( 12, 76 );
         Size = MAP_APPFONT( 246, 10 );
         Text [ en-US ] = "~Use custom color scheme";
@@ -656,6 +695,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton PAGE6_TEXT
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_TEXT";
         Pos = MAP_APPFONT( 21, 89 );
         Size = MAP_APPFONT( 72, 14 );
         Text [ en-US ] = "Text";
@@ -663,6 +703,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton PAGE6_LINK
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_LINK";
         Pos = MAP_APPFONT( 21, 106 );
         Size = MAP_APPFONT( 72, 14 );
         Text [ en-US ] = "Hyper~link";
@@ -670,6 +711,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton PAGE6_ALINK
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_ALINK";
         Pos = MAP_APPFONT( 21, 123 );
         Size = MAP_APPFONT( 72, 14 );
         Text [ en-US ] = "Active Li~nk";
@@ -677,6 +719,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton PAGE6_VLINK
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_VLINK";
         Pos = MAP_APPFONT( 21, 140 );
         Size = MAP_APPFONT( 72, 14 );
         Text [ en-US ] = "~Visited Link";
@@ -691,6 +734,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton PAGE6_BACK
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_BACK";
         Pos = MAP_APPFONT( 199, 89 );
         Size = MAP_APPFONT( 60, 14 );
         Text [ en-US ] = "Bac~kground";
@@ -706,6 +750,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton BUT_LAST
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:BUT_LAST";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -715,6 +760,7 @@ ModalDialog DLG_PUBLISHING
 
     PushButton BUT_NEXT
     {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:BUT_NEXT";
         DefButton = TRUE ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 165 , 170 ) ;
@@ -758,6 +804,7 @@ ModalDialog DLG_DESIGNNAME
 
     Edit EDT_NAME
     {
+        HelpID = "sd:Edit:DLG_DESIGNNAME:EDT_NAME";
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 4, 4 );
         Size = MAP_APPFONT ( 152, 14 );

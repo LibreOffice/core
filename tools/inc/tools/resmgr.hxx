@@ -181,13 +181,15 @@ public:
     static sal_uInt32   GetObjSize( RSHEADER_TYPE* pHT )
                             { return( pHT->GetGlobOff() ); }
 
-    // Liefert einen String aus der Resource
+    // returns a string and its length out of the resource
     static sal_uInt32   GetString( UniString& rStr, const BYTE* pStr );
+    // returns a byte string and its length out of the resource
+    static sal_uInt32   GetByteString( rtl::OString& rStr, const BYTE* pStr );
 
     // Groesse eines Strings in der Resource
     static sal_uInt32   GetStringSize( sal_uInt32 nLen )
                             { nLen++; return (nLen + nLen%2); }
-    static sal_uInt32   GetStringSize( const BYTE* pStr );
+    static sal_uInt32   GetStringSize( const BYTE* pStr, sal_uInt32& nLen );
 
     // return a int64
     static sal_uInt64   GetUInt64( void* pDatum );
@@ -209,9 +211,10 @@ public:
     INT16               ReadShort();
     INT32               ReadLong();
     UniString           ReadString();
+    rtl::OString        ReadByteString();
 
-     // generate auto help id for current resource stack
-    ULONG               GetAutoHelpId();
+    // generate auto help id for current resource stack
+    rtl::OString        GetAutoHelpId();
 
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();

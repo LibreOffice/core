@@ -98,7 +98,7 @@ ToolBox RID_SVXDLG_HYPERLINK
         };
         ToolBoxItem
         {
-            HelpID = SID_HYPERLINK_SETLINK ;
+            HelpID = CMD_SID_HYPERLINK_SETLINK ;
             Identifier = BTN_LINK ;
             Disable = TRUE ;
             DropDown = TRUE ;
@@ -106,7 +106,7 @@ ToolBox RID_SVXDLG_HYPERLINK
         };
         ToolBoxItem
         {
-            HelpID = SID_CREATELINK ;
+            HelpID = CMD_SID_CREATELINK ;
             Identifier = BTN_INSERT_BOOKMARK ;
             Disable = TRUE ;
             Hide = TRUE;

@@ -337,7 +337,7 @@ namespace dbaui
         @return
             The URL for the help agent to dispatch.
     */
-    ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId);
+    ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const rtl::OString& _rHelpId);
 
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter

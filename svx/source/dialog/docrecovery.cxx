@@ -1585,7 +1585,6 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 {
     css::uno::Reference< css::ui::dialogs::XFolderPicker > xFolderPicker(
         m_pCore->getSMGR()->createInstance(SERVICENAME_FOLDERPICKER), css::uno::UNO_QUERY_THROW);
-//  svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
 
     INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));

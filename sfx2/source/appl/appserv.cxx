@@ -346,11 +346,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                ULONG nHelpId = ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE ) ? 66056 : 0;
-                if ( 66056 == nHelpId )
+                if ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE )
                 {
                     // show Support page with new URL
-                    String sHelpURL = SfxHelp::CreateHelpURL( nHelpId, String() );
+                    String sHelpURL = SfxHelp::CreateHelpURL( String::CreateFromAscii(".uno:HelpSupport"), String() );
                     String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
                     sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
                     sHelpURL += sParams;
@@ -358,7 +357,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pHelp->Start( sHelpURL, NULL );
                 }
                 else
-                    pHelp->Start( nHelpId, NULL ); // show start page
+                    pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
                 bDone = TRUE;
             }
             break;

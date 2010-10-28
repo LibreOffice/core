@@ -681,10 +681,10 @@ namespace
     struct PanelFactory
     {
         ControlFactoryFactory   pFactory;
-        ULONG                   nHelpID;
-        PanelFactory( const ControlFactoryFactory i_pFactory, const ULONG i_nHelpID )
+        rtl::OString            sHelpID;
+        PanelFactory( const ControlFactoryFactory i_pFactory, const rtl::OString& i_nHelpID )
             :pFactory( i_pFactory )
-            ,nHelpID( i_nHelpID )
+            ,sHelpID( i_nHelpID )
         {
         }
     };
@@ -722,7 +722,7 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
     ::std::auto_ptr< TreeNode > pNode( pControlFactory->CreateControl( mpImpl->GetToolPanelDeck().GetPanelWindowAnchor() ) );
     ENSURE_OR_THROW( ( pNode.get() != NULL ) && ( pNode->GetWindow() != NULL ),
         "illegal node returned by the control factory" );
-    pNode->GetWindow()->SetHelpId( aPanelFactory.nHelpID );
+    pNode->GetWindow()->SetHelpId( aPanelFactory.sHelpID );
 
     // create an XToolPanel
     Reference< XToolPanel > xPanel( new ToolPanel( pNode ) );

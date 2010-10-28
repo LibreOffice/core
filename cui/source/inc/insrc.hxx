@@ -57,7 +57,7 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
     bool            bColumn;
 
 public:
-    SvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId );
+    SvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId );
 
     virtual short Execute(void);
 

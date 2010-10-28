@@ -1387,6 +1387,32 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
     if( nRet )
     {
+        const char* aHelpIds[] =
+        {
+            HID_AUTOCORR_HELP_WORD,
+            HID_AUTOCORR_HELP_SENT,
+            HID_AUTOCORR_HELP_SENTWORD,
+            HID_AUTOCORR_HELP_ACORWORD,
+            "",
+            HID_AUTOCORR_HELP_ACORSENTWORD,
+            "",
+            HID_AUTOCORR_HELP_CHGTOENEMDASH,
+            HID_AUTOCORR_HELP_WORDENEMDASH,
+            HID_AUTOCORR_HELP_SENTENEMDASH,
+            HID_AUTOCORR_HELP_SENTWORDENEMDASH,
+            HID_AUTOCORR_HELP_ACORWORDENEMDASH,
+            "",
+            HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH,
+            "",
+            HID_AUTOCORR_HELP_CHGQUOTES,
+            HID_AUTOCORR_HELP_CHGSGLQUOTES,
+            HID_AUTOCORR_HELP_SETINETATTR,
+            HID_AUTOCORR_HELP_INGNOREDOUBLESPACE,
+            HID_AUTOCORR_HELP_CHGWEIGHTUNDERL,
+            HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL,
+            HID_AUTOCORR_HELP_CHGORDINALNUMBER
+        };
+
         ULONG nHelpId = 0;
         if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd|ChgToEnEmDash ) )
         {
@@ -1413,8 +1439,8 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
         if( nHelpId )
         {
-            nHelpId += HID_AUTOCORR_HELP_START - 1;
-            Application::GetHelp()->OpenHelpAgent( nHelpId );
+            nHelpId -= 1;
+            Application::GetHelp()->OpenHelpAgent( aHelpIds[nHelpId] );
         }
     }
 

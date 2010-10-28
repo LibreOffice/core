@@ -53,7 +53,7 @@ struct ImplHeadItem
     USHORT              mnId;
     HeaderBarItemBits   mnBits;
     long                mnSize;
-    ULONG               mnHelpId;
+    rtl::OString        maHelpId;
     Image               maImage;
     XubString           maOutText;
     XubString           maText;
@@ -1132,13 +1132,13 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            ULONG nHelpId = GetHelpId( nItemId );
-            if ( nHelpId )
+            rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
+            if ( aHelpId.getLength() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId, this );
+                    pHelp->Start( aHelpId, this );
                 return;
             }
         }
@@ -1266,7 +1266,6 @@ void HeaderBar::InsertItem( USHORT nItemId, const XubString& rText,
     pItem->mnId         = nItemId;
     pItem->mnBits       = nBits;
     pItem->mnSize       = nSize;
-    pItem->mnHelpId     = 0;
     pItem->maText       = rText;
     pItem->mpUserData   = 0;
     mpItemList->Insert( pItem, nPos );
@@ -1291,7 +1290,6 @@ void HeaderBar::InsertItem( USHORT nItemId,
     pItem->mnId         = nItemId;
     pItem->mnBits       = nBits;
     pItem->mnSize       = nSize;
-    pItem->mnHelpId     = 0;
     pItem->maImage      = rImage;
     pItem->maText       = rText;
     pItem->mpUserData   = 0;
@@ -1563,11 +1561,11 @@ XubString HeaderBar::GetHelpText( USHORT nItemId ) const
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
         ImplHeadItem* pItem = mpItemList->GetObject( nPos );
-        if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
+        if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+                pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
         }
 
         return pItem->maHelpText;
@@ -1578,22 +1576,22 @@ XubString HeaderBar::GetHelpText( USHORT nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void HeaderBar::SetHelpId( USHORT nItemId, ULONG nHelpId )
+void HeaderBar::SetHelpId( USHORT nItemId, const rtl::OString& rHelpId )
 {
     USHORT nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->mnHelpId = nHelpId;
+        mpItemList->GetObject( nPos )->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG HeaderBar::GetHelpId( USHORT nItemId ) const
+rtl::OString HeaderBar::GetHelpId( USHORT nItemId ) const
 {
     USHORT nPos = GetItemPos( nItemId );
+    rtl::OString aRet;
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnHelpId;
-    else
-        return 0;
+        aRet = mpItemList->GetObject( nPos )->maHelpId;
+    return aRet;
 }
 
 // -----------------------------------------------------------------------

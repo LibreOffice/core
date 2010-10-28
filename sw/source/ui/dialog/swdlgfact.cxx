@@ -451,9 +451,9 @@ String AbstractInsFootNoteDlg_Impl::GetStr()
 {
     return pDlg->GetStr();
 }
-void AbstractInsFootNoteDlg_Impl::SetHelpId( ULONG nHelpId )
+void AbstractInsFootNoteDlg_Impl::SetHelpId( const rtl::OString& sHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    pDlg->SetHelpId( sHelpId );
 }
 void AbstractInsFootNoteDlg_Impl::SetText( const XubString& rStr )
 {

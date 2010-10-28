@@ -157,7 +157,7 @@ struct MenuItemData
     XubString       aTipHelpText;           // TipHelp-String (eg, expanded filenames)
     XubString       aCommandStr;            // CommandString
     XubString       aHelpCommandStr;        // Help command string (to reference external help)
-    ULONG           nHelpId;                // Help-Id
+    rtl::OString    aHelpId;                // Help-Id
     ULONG           nUserValue;             // User value
     Image           aImage;                 // Image
     KeyCode         aAccelKey;              // Accelerator-Key
@@ -252,7 +252,6 @@ MenuItemData* MenuItemList::Insert( USHORT nId, MenuItemType eType,
     pData->nBits            = nBits;
     pData->pSubMenu         = NULL;
     pData->pAutoSubMenu     = NULL;
-    pData->nHelpId          = 0;
     pData->nUserValue       = 0;
     pData->bChecked         = FALSE;
     pData->bEnabled         = TRUE;
@@ -284,7 +283,6 @@ void MenuItemList::InsertSeparator( USHORT nPos )
     pData->nBits            = 0;
     pData->pSubMenu         = NULL;
     pData->pAutoSubMenu     = NULL;
-    pData->nHelpId          = 0;
     pData->nUserValue       = 0;
     pData->bChecked         = FALSE;
     pData->bEnabled         = TRUE;
@@ -844,14 +842,14 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             // Ist eine ID vorhanden, dann Hilfe mit der ID aufrufen, sonst
             // den Hilfe-Index
             String aCommand = pMenu->GetItemCommand( nId );
-            ULONG  nHelpId  = pMenu->GetHelpId( nId );
+            rtl::OString aHelpId(  pMenu->GetHelpId( nId ) );
+            if( ! aHelpId.getLength() )
+                aHelpId = OOO_HELP_INDEX;
 
             if ( aCommand.Len() )
                 pHelp->Start( aCommand, NULL );
-            else if ( nHelpId )
-                pHelp->Start( nHelpId, NULL );
             else
-                pHelp->Start( OOO_HELP_INDEX, NULL );
+                pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
         }
         bDone = TRUE;
     }
@@ -1330,15 +1328,14 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
             SetHelpText( nItemId, aHelpText );
     }
 
-    ULONG  nHelpId = 0;
     if ( nObjMask & RSC_MENUITEM_HELPID )
     {
-        nHelpId = ReadLongRes();
+        rtl::OString aHelpId( ReadByteStringRes() );
         if ( !bSep )
-            SetHelpId( nItemId, nHelpId );
+            SetHelpId( nItemId, aHelpId );
     }
 
-    if( !bSep /* && SvHelpSettings::HelpText( aHelpText, nHelpId ) */ )
+    if( !bSep )
         SetHelpText( nItemId, aHelpText );
 
     if ( nObjMask & RSC_MENUITEM_KEYCODE )
@@ -1463,7 +1460,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
             pThis->CheckItem( nId, TRUE );
         if ( !rMenu.IsItemEnabled( nId ) )
             pThis->EnableItem( nId, FALSE );
-        pThis->SetHelpId( nId, pData->nHelpId );
+        pThis->SetHelpId( nId, pData->aHelpId );
         pThis->SetHelpText( nId, pData->aHelpText );
         pThis->SetAccelKey( nId, pData->aAccelKey );
         pThis->SetItemCommand( nId, pData->aCommandStr );
@@ -2039,7 +2036,7 @@ const XubString& Menu::ImplGetHelpText( USHORT nItemId ) const
     if ( pData )
     {
         if ( !pData->aHelpText.Len() &&
-             (( pData->nHelpId  ) || ( pData->aCommandStr.Len() )))
+             (( pData->aHelpId.getLength()  ) || ( pData->aCommandStr.Len() )))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -2047,8 +2044,8 @@ const XubString& Menu::ImplGetHelpText( USHORT nItemId ) const
                 if ( pData->aCommandStr.Len() )
                     pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
 
-                if( !pData->aHelpText.Len() && pData->nHelpId )
-                    pData->aHelpText = pHelp->GetHelpText( pData->nHelpId, NULL );
+                if( !pData->aHelpText.Len() && pData->aHelpId.getLength() )
+                    pData->aHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
             }
         }
 
@@ -2081,22 +2078,29 @@ const XubString& Menu::GetTipHelpText( USHORT nItemId ) const
         return ImplGetSVEmptyStr();
 }
 
-void Menu::SetHelpId( USHORT nItemId, ULONG nHelpId )
+void Menu::SetHelpId( USHORT nItemId, const rtl::OString& rHelpId )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        pData->nHelpId = nHelpId;
+        pData->aHelpId = rHelpId;
 }
 
-ULONG Menu::GetHelpId( USHORT nItemId ) const
+rtl::OString Menu::GetHelpId( USHORT nItemId ) const
 {
+    rtl::OString aRet;
+
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        return pData->nHelpId;
-    else
-        return 0;
+    {
+        if ( pData->aHelpId.getLength() )
+            aRet = pData->aHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );
+    }
+
+    return aRet;
 }
 
 Menu& Menu::operator=( const Menu& rMenu )

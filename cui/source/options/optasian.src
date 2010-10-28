@@ -45,12 +45,14 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     RadioButton RB_CHAR_KERNING
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ASIAN_LAYOUT:RB_CHAR_KERNING";
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text [ en-US ] = "~Western characters only";
     };
     RadioButton RB_CHAR_PUNCT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ASIAN_LAYOUT:RB_CHAR_PUNCT";
         Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text [ en-US ] = "Western ~text and Asian punctuation";
@@ -63,18 +65,21 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     RadioButton RB_NO_COMP
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ASIAN_LAYOUT:RB_NO_COMP";
         Pos = MAP_APPFONT ( 12, 54 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text [ en-US ] = "~No compression";
     };
     RadioButton RB_PUNCT_COMP
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ASIAN_LAYOUT:RB_PUNCT_COMP";
         Pos = MAP_APPFONT ( 12, 67) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text [ en-US ] = "~Compress punctuation only";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ASIAN_LAYOUT:RB_PUNCT_KANA_COMP";
         Pos = MAP_APPFONT ( 12, 80 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text [ en-US ] = "Compress ~punctuation and Japanese Kana";
@@ -93,6 +98,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     ListBox LB_LANGUAGE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ASIAN_LAYOUT:LB_LANGUAGE";
         Pos = MAP_APPFONT ( 95 , 107 ) ;
         Size = MAP_APPFONT ( 80 , 48 ) ;
         Border = TRUE ;
@@ -100,6 +106,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     CheckBox CB_STANDARD
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_ASIAN_LAYOUT:CB_STANDARD";
         Pos = MAP_APPFONT ( 180, 109 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "~Default";
@@ -112,6 +119,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     Edit ED_START
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_ASIAN_LAYOUT:ED_START";
         Pos = MAP_APPFONT ( 95 , 123 ) ;
         Size = MAP_APPFONT ( 159 , 12 ) ;
         Border = TRUE ;
@@ -124,6 +132,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     Edit ED_END
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_ASIAN_LAYOUT:ED_END";
         Pos = MAP_APPFONT ( 95 , 139 ) ;
         Size = MAP_APPFONT ( 159 , 12 ) ;
         Border = TRUE ;

@@ -27,23 +27,15 @@
 #ifndef EXTENSIONS_UPDATE_HRC
 #define EXTENSIONS_UPDATE_HRC
 
-#include "extensio.hrc"
-
-#define HID_CHECK_FOR_UPD_DLG                   ( HID_UPDATE_START +   0)
-#define HID_CHECK_FOR_UPD_CLOSE                 ( HID_UPDATE_START +   1)
-#define HID_CHECK_FOR_UPD_PAUSE                 ( HID_UPDATE_START +   2)
-#define HID_CHECK_FOR_UPD_RESUME                ( HID_UPDATE_START +   3)
-#define HID_CHECK_FOR_UPD_DOWNLOAD              ( HID_UPDATE_START +   4)
-#define HID_CHECK_FOR_UPD_DOWNLOAD2             ( HID_UPDATE_START +   5)
-#define HID_CHECK_FOR_UPD_INSTALL               ( HID_UPDATE_START +   6)
-#define HID_CHECK_FOR_UPD_STATUS                ( HID_UPDATE_START +   7)
-#define HID_CHECK_FOR_UPD_DESCRIPTION           ( HID_UPDATE_START +   8)
-#define HID_CHECK_FOR_UPD_CANCEL                ( HID_UPDATE_START +   9)
-    // !! if you add new IDs, please also adjust HID_UPDATE_LAST below !!
-#define HID_UPDATE_LAST    HID_CHECK_FOR_UPD_CANCEL
-
-#if HID_UPDATE_LAST > HID_UPDATE_END
-    #error help id range overflow (UPDATE)
-#endif
+#define HID_CHECK_FOR_UPD_DLG                           "EXTENSIONS_HID_CHECK_FOR_UPD_DLG"
+#define HID_CHECK_FOR_UPD_CLOSE                         "EXTENSIONS_HID_CHECK_FOR_UPD_CLOSE"
+#define HID_CHECK_FOR_UPD_PAUSE                         "EXTENSIONS_HID_CHECK_FOR_UPD_PAUSE"
+#define HID_CHECK_FOR_UPD_RESUME                        "EXTENSIONS_HID_CHECK_FOR_UPD_RESUME"
+#define HID_CHECK_FOR_UPD_DOWNLOAD                      "EXTENSIONS_HID_CHECK_FOR_UPD_DOWNLOAD"
+#define HID_CHECK_FOR_UPD_DOWNLOAD2                     "EXTENSIONS_HID_CHECK_FOR_UPD_DOWNLOAD2"
+#define HID_CHECK_FOR_UPD_INSTALL                       "EXTENSIONS_HID_CHECK_FOR_UPD_INSTALL"
+#define HID_CHECK_FOR_UPD_STATUS                        "EXTENSIONS_HID_CHECK_FOR_UPD_STATUS"
+#define HID_CHECK_FOR_UPD_DESCRIPTION                   "EXTENSIONS_HID_CHECK_FOR_UPD_DESCRIPTION"
+#define HID_CHECK_FOR_UPD_CANCEL                        "EXTENSIONS_HID_CHECK_FOR_UPD_CANCEL"
 
 #endif // EXTENSIONS_UPDATE_HRC

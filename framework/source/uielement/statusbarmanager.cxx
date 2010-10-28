@@ -531,16 +531,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
                     m_pStatusBar->SetItemCommand( nId, aCommandURL );
                     m_pStatusBar->SetAccessibleName( nId, aString );
-//                    m_pStatusBar->SetHelpText( nId, aString );
-
-                    if ( aHelpURL.indexOf( aHelpIdPrefix ) == 0 )
-                    {
-                        rtl::OUString aId( aHelpURL.copy( HELPID_PREFIX_LENGTH ));
-                        sal_uInt16    nHelpId = (sal_uInt16)(aId.toInt32());
-                        if ( nHelpId > 0 )
-                            m_pStatusBar->SetHelpId( nId, nHelpId );
-                    }
-
                     ++nId;
                 }
             }

@@ -29,7 +29,7 @@
 #include <moptions.hrc>
 ModalDialog RID_MACROOPTIONS
 {
-     // HelpId = HID_MACRO_OPTIONS ;
+    HelpId = "basctl:ModalDialog:RID_MACROOPTIONS" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 224 , 121 ) ;
@@ -70,6 +70,7 @@ ModalDialog RID_MACROOPTIONS
     };
     MultiLineEdit RID_ME_DESCR
     {
+        HelpID = "basctl:MultiLineEdit:RID_MACROOPTIONS:RID_ME_DESCR";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 32 ) ;
@@ -93,6 +94,7 @@ ModalDialog RID_MACROOPTIONS
     };
     NumericField RID_NF_HELPID
     {
+        HelpID = "basctl:NumericField:RID_MACROOPTIONS:RID_NF_HELPID";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 95 , 83 ) ;
@@ -110,6 +112,7 @@ ModalDialog RID_MACROOPTIONS
     };
     Edit RID_ED_HELPNAME
     {
+        HelpID = "basctl:Edit:RID_MACROOPTIONS:RID_ED_HELPNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 95 , 99 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;

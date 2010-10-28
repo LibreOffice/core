@@ -28,10 +28,11 @@
 #include "dlg_View3D.hrc"
 #include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
+#include "HelpIds.hrc"
 
 TabDialog DLG_3D_VIEW
 {
-    HelpID = SID_3D_VIEW ;
+    HelpID = HID_3D_VIEW ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;

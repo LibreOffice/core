@@ -57,7 +57,7 @@ public:
     virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
     virtual void initArgumentInfo()  const;
     virtual ::rtl::OUString getSignature() const ;
-    virtual long getHelpId() const ;
+    virtual rtl::OString getHelpId() const ;
 
     // parameter
     virtual sal_uInt32 getParameterCount() const ;
@@ -100,7 +100,7 @@ public:
     USHORT           nFIndex;                // Unique function index
     USHORT           nCategory;              // Function category
     USHORT           nArgCount;              // All parameter count, suppressed and unsuppressed
-    USHORT           nHelpId;                // HelpID of function
+    rtl::OString     sHelpId;                // HelpID of function
     bool             bIncomplete         :1; // Incomplete argument info (set for add-in info from configuration)
     bool             bHasSuppressedArgs  :1; // Whether there is any suppressed parameter.
 };

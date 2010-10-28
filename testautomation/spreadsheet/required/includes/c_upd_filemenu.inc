@@ -358,10 +358,10 @@ endcase
 
 testcase tFileRecentDocuments
 
-if gPlatform = "lin" then
-    warnlog "#110649# Due to bug this testcase is not available"
-    goto endsub
-end if
+'if gPlatform = "lin" then
+'    warnlog "#110649# Due to bug this testcase is not available"
+'    goto endsub
+'end if
     
     dim sTestFile as string
       
@@ -372,11 +372,15 @@ end if
     Printlog " Enter some text"
     Kontext "DocumentCalc"
     DocumentCalc.Typekeys "The first doc!<RETURN>"
+
     Printlog " Copy Test File spreadsheet/required/input/recentdocument.ods locally"
-    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\required\input\recentdocument.ods"),gOfficePath + ConvertPath("user/work/recentdocument.ods")
-    Printlog " Load local copied testfile recentdocument.ods"
-    sTestFile = convertpath(gOfficePath & "user/work/recentdocument.ods")
-    Call hFileOpen(sTestFile)
+    hFileOpenLocally( gTesttoolpath & "spreadsheet\required\input\recentdocument.ods" )
+    sTestFile = gLastWorkFile ' get the new file location
+
+    'app.FileCopy convertpath(gTesttoolpath & "spreadsheet\required\input\recentdocument.ods"),gOfficePath + ConvertPath("user/work/recentdocument.ods")
+    'Printlog " Load local copied testfile recentdocument.ods"
+    'sTestFile = convertpath(gOfficePath & "user/work/recentdocument.ods")
+    'Call hFileOpen(sTestFile)
     '/// Close the document.
     Printlog " Close the document."
     '/// Now an item in <i>File / Recent Documents</i> should exist
@@ -413,6 +417,8 @@ end if
     '/// Close starting document
     Printlog " Close starting document"
     Call hCloseDocument
+    Printlog " Delete local copy of the workfile"
+    hFileDelete( sTestFile )
 endcase
 
 '-----------------------------------------------------------

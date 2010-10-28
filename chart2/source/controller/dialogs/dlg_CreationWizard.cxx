@@ -117,7 +117,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
 #endif
         , WZS_INVALID_STATE
     );
-    this->SetRoadmapSmartHelpId( SmartId( HID_SCH_WIZARD_ROADMAP ) );
+    this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
     this->SetRoadmapInteractive( sal_True );
     Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
     Size aSize( this->GetSizePixel() );

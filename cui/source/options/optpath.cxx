@@ -35,7 +35,6 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
-#include <svl/pickerhelper.hxx>
 #include <svl/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/filedlg.hxx>
@@ -638,8 +637,6 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
             Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
                 xFactory->createInstance( aService ), UNO_QUERY );
-
-//          svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
 
             INetURLObject aURL( sWritable, INET_PROT_FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );

@@ -2324,13 +2324,13 @@ void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeExcept
         pDialog->EndDialog( i_result );
 }
 
-void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+void SAL_CALL VCLXDialog::setHelpId( const ::rtl::OUString& rId ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
-        pWindow->SetHelpId( i_id );
+        pWindow->SetHelpId( rtl::OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
 }
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)

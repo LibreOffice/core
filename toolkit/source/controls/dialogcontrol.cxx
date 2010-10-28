@@ -1990,7 +1990,7 @@ void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result ) throw (Runtime
         xPeerDialog->endDialog( i_result );
 }
 
-void SAL_CALL UnoDialogControl::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+void SAL_CALL UnoDialogControl::setHelpId( const rtl::OUString& i_id ) throw (RuntimeException)
 {
     Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
     if ( xPeerDialog.is() )

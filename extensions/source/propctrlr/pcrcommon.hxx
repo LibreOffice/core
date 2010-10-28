@@ -37,7 +37,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 /** === end UNO includes === **/
 
-#include <vcl/smartid.hxx>
 #include <tools/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/listenernotification.hxx>
@@ -78,8 +77,8 @@ namespace pcr
     class HelpIdUrl
     {
     public:
-        static SmartId getHelpId( const ::rtl::OUString& _rHelpURL );
-        static ::rtl::OUString getHelpURL( sal_uInt32 _nHelpId );
+        static rtl::OString getHelpId( const ::rtl::OUString& _rHelpURL );
+        static ::rtl::OUString getHelpURL( const rtl::OString& );
     };
 
     //====================================================================

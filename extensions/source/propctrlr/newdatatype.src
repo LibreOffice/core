@@ -39,6 +39,7 @@
 
 ModalDialog RID_DLG_NEW_DATA_TYPE
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_NEW_DATA_TYPE";
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -57,6 +58,7 @@ ModalDialog RID_DLG_NEW_DATA_TYPE
 
     Edit ED_NAME
     {
+        HelpID = "extensions:Edit:RID_DLG_NEW_DATA_TYPE:ED_NAME";
         Pos = MAP_APPFONT( 6, 17 );
         Size = MAP_APPFONT( DIALOG_WIDTH - 2 * 6, 12 );
         Border = TRUE;

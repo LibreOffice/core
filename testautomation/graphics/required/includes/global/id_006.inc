@@ -167,14 +167,13 @@ testcase tiToolsThesaurus
 
     PrintLog "Thesaurus with 1 word: " + sWord
 
-    if( Ucase(gApplication) = "DRAW" ) then
+    if( gApplication = "DRAW" ) then
         sExt = ".odg"
     elseif( Ucase(gApplication) = "IMPRESS" ) then
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-    Call sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally( gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 

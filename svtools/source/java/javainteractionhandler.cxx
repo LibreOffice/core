@@ -149,10 +149,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bJavaNotFound_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
             String aTitle( SvtResId( STR_WARNING_JAVANOTFOUND ) );
-
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
-
         }
         else
         {
@@ -168,7 +166,6 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bInvalidSettings_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
             String aTitle( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
-
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
         }
@@ -186,7 +183,6 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             // Java disabled. Give user a chance to enable Java inside Office.
             QueryBox aQueryBox( NULL, SvtResId( QBX_JAVADISABLED ) );
             String aTitle( SvtResId( STR_QUESTION_JAVADISABLED ) );
-
             aQueryBox.SetText( aTitle );
             nResult = aQueryBox.Execute();
             if ( nResult == RET_YES )
@@ -211,7 +207,6 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bVMCreationFailure_Handled = true;
             ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
             String aTitle( SvtResId( STR_ERROR_JVMCREATIONFAILED ) );
-
             aErrorBox.SetText( aTitle );
             nResult = aErrorBox.Execute();
         }
@@ -230,7 +225,6 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bRestartRequired_Handled = true;
             ErrorBox aErrorBox(NULL, SvtResId( ERRORBOX_RESTARTREQUIRED ) );
             String aTitle( SvtResId( STR_ERROR_RESTARTREQUIRED ) );
-
             aErrorBox.SetText( aTitle );
             nResult = aErrorBox.Execute();
         }

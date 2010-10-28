@@ -690,7 +690,7 @@ ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* 
         pActiveWin(NULL)
 {
     m_aHelper.SetWindow(/*this*/&m_rWindow);
-    if(m_rWindow.GetHelpId()==0)                //Hack, da im SfxModelessDialog die HelpId
+    if(m_rWindow.GetHelpId().getLength()==0)                //Hack, da im SfxModelessDialog die HelpId
         m_rWindow.SetHelpId(m_rWindow.GetUniqueId());   //fuer einen ModelessDialog entfernt und
                                     //in eine UniqueId gewandelt wird, machen
                                     //wir das an dieser Stelle rueckgaengig.

@@ -29,14 +29,6 @@
 '*
 '* short description : Resource Test - Format Menu Part III
 '*
-'************************************************************************
-'*
-' #1 tFormatGraphicPositionAndSize
-' #1 tFormatGraphicLine
-' #1 tFormatGraphicArea
-' #1 tFormatGraphicText
-' #1 tFormatGraphicPoints
-'*
 '\***********************************************************************
 
 sub c_upd_formatmenu3
@@ -58,10 +50,7 @@ testcase tFormatGraphicPositionAndSize
 
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" )
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -132,6 +121,7 @@ testcase tFormatGraphicPositionAndSize
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -144,10 +134,8 @@ testcase tFormatGraphicLine
 
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\twoobjects.ods" )
+    
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -374,6 +362,7 @@ testcase tFormatGraphicLine
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -384,10 +373,7 @@ testcase tFormatGraphicArea
 
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\twoobjects.ods" )
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -919,6 +905,7 @@ testcase tFormatGraphicArea
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -929,10 +916,7 @@ testcase tFormatGraphicText
 
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\twoobjects.ods" )
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -1038,6 +1022,7 @@ testcase tFormatGraphicText
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -1048,10 +1033,7 @@ testcase tFormatGraphicPoints
 
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\twoobjects.ods" )
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -1061,6 +1043,7 @@ testcase tFormatGraphicPoints
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 

@@ -57,7 +57,6 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT _nSlotId,
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     bInsert( TRUE )
 {
-    rStb.SetHelpId( _nId, _nSlotId );
 }
 
 // -----------------------------------------------------------------------

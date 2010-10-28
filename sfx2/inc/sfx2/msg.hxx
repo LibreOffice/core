@@ -29,6 +29,9 @@
 
 #include <tools/rtti.hxx>
 #include <sfx2/shell.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sfx2/dllapi.h>
 
 //--------------------------------------------------------------------
 
@@ -287,6 +290,8 @@ public:
     USHORT          GetValue() const { return nValue; }
     const SfxType*  GetType() const { return pType; }
     const char*     GetUnoName() const { return pUnoName; }
+    SFX2_DLLPUBLIC rtl::OString    GetCommand() const;
+    SFX2_DLLPUBLIC rtl::OUString    GetCommandString() const;
 
     USHORT          GetFormalArgumentCount() const { return nArgDefCount; }
     const SfxFormalArgument& GetFormalArgument( USHORT nNo ) const

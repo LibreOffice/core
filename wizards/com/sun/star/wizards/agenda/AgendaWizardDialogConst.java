@@ -26,6 +26,8 @@
  ************************************************************************/
 package com.sun.star.wizards.agenda;
 
+import com.sun.star.wizards.common.HelpIds;
+
 public interface AgendaWizardDialogConst {
 
    /**
@@ -58,37 +60,37 @@ public interface AgendaWizardDialogConst {
    * "HID:(hid+5)" - the cancel button
    */
 
-   final String LISTPAGEDESIGN_HID =          "HID:" + (HID + 6);
-   final String CHKMINUTES_HID =              "HID:" + (HID + 7);
-   final String TXTTIME_HID =                 "HID:" + (HID + 8);
-   final String TXTDATE_HID =                 "HID:" + (HID + 9);
-   final String TXTTITLE_HID =                "HID:" + (HID + 10);
-   final String CBLOCATION_HID =              "HID:" + (HID + 11);
+   final String LISTPAGEDESIGN_HID =          HelpIds.getHelpIdString((HID + 6));
+   final String CHKMINUTES_HID =              HelpIds.getHelpIdString((HID + 7));
+   final String TXTTIME_HID =                 HelpIds.getHelpIdString((HID + 8));
+   final String TXTDATE_HID =                 HelpIds.getHelpIdString((HID + 9));
+   final String TXTTITLE_HID =                HelpIds.getHelpIdString((HID + 10));
+   final String CBLOCATION_HID =              HelpIds.getHelpIdString((HID + 11));
 
-   final String CHKMEETINGTITLE_HID =         "HID:" + (HID + 12);
-   final String CHKREAD_HID =                 "HID:" + (HID + 13);
-   final String CHKBRING_HID =                "HID:" + (HID + 14);
-   final String CHKNOTES_HID =                "HID:" + (HID + 15);
+   final String CHKMEETINGTITLE_HID =         HelpIds.getHelpIdString((HID + 12));
+   final String CHKREAD_HID =                 HelpIds.getHelpIdString((HID + 13));
+   final String CHKBRING_HID =                HelpIds.getHelpIdString((HID + 14));
+   final String CHKNOTES_HID =                HelpIds.getHelpIdString((HID + 15));
 
-   final String CHKCONVENEDBY_HID =           "HID:" + (HID + 16);
-   final String CHKPRESIDING_HID =            "HID:" + (HID + 17);
-   final String CHKNOTETAKER_HID =            "HID:" + (HID + 18);
-   final String CHKTIMEKEEPER_HID =           "HID:" + (HID + 19);
-   final String CHKATTENDEES_HID =            "HID:" + (HID + 20);
-   final String CHKOBSERVERS_HID =            "HID:" + (HID + 21);
-   final String CHKRESOURCEPERSONS_HID =      "HID:" + (HID + 22);
+   final String CHKCONVENEDBY_HID =           HelpIds.getHelpIdString((HID + 16));
+   final String CHKPRESIDING_HID =            HelpIds.getHelpIdString((HID + 17));
+   final String CHKNOTETAKER_HID =            HelpIds.getHelpIdString((HID + 18));
+   final String CHKTIMEKEEPER_HID =           HelpIds.getHelpIdString((HID + 19));
+   final String CHKATTENDEES_HID =            HelpIds.getHelpIdString((HID + 20));
+   final String CHKOBSERVERS_HID =            HelpIds.getHelpIdString((HID + 21));
+   final String CHKRESOURCEPERSONS_HID =      HelpIds.getHelpIdString((HID + 22));
 
-   final String TXTTEMPLATENAME_HID =         "HID:" + (HID + 23);
-   final String TXTTEMPLATEPATH_HID =         "HID:" + (HID + 24);
-   final String BTNTEMPLATEPATH_HID =         "HID:" + (HID + 25);
+   final String TXTTEMPLATENAME_HID =         HelpIds.getHelpIdString((HID + 23));
+   final String TXTTEMPLATEPATH_HID =         HelpIds.getHelpIdString((HID + 24));
+   final String BTNTEMPLATEPATH_HID =         HelpIds.getHelpIdString((HID + 25));
 
-   final String OPTCREATEAGENDA_HID =         "HID:" + (HID + 26);
-   final String OPTMAKECHANGES_HID =          "HID:" + (HID + 27);
+   final String OPTCREATEAGENDA_HID =         HelpIds.getHelpIdString((HID + 26));
+   final String OPTMAKECHANGES_HID =          HelpIds.getHelpIdString((HID + 27));
 
-   final String BTNINSERT_HID =               "HID:" + (HID + 28);
-   final String BTNREMOVE_HID =               "HID:" + (HID + 29);
-   final String BTNUP_HID =                   "HID:" + (HID + 30);
-   final String BTNDOWN_HID =                 "HID:" + (HID + 31);
+   final String BTNINSERT_HID =               HelpIds.getHelpIdString((HID + 28));
+   final String BTNREMOVE_HID =               HelpIds.getHelpIdString((HID + 29));
+   final String BTNUP_HID =                   HelpIds.getHelpIdString((HID + 30));
+   final String BTNDOWN_HID =                 HelpIds.getHelpIdString((HID + 31));
 
    final int LAST_HID = HID + 32;
 
@@ -104,4 +106,4 @@ public interface AgendaWizardDialogConst {
 
 
 }
-  
+

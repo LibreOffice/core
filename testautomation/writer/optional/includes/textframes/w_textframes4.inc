@@ -95,8 +95,8 @@ testcase tTextframes_50
     
     '/// Open a test file , which includes a frame and
     '/// + it is StarOffice 7 format
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -132,8 +132,8 @@ testcase tTextframes_51
     
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'in front of text' mode
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -169,8 +169,8 @@ testcase tTextframes_52
     
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'behind text' mode
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -206,8 +206,8 @@ testcase tTextframes_53
     
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'tight' mode
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -222,9 +222,7 @@ testcase tTextframes_53
     TabType.Cancel
     
     printlog " Close active document "
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
 
 endcase
 
@@ -243,8 +241,8 @@ testcase tTextframes_54
     
     '/// Open a test file , which is a Word file and includes
     '/// + a frame that is in 'square' mode
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -376,8 +374,8 @@ testcase tTextframes_57
     
     '/// Open a test file , which includes a frame in header and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -455,8 +453,8 @@ testcase tTextframes_58
     
     '/// Open a test file , which includes a frame in header and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -529,8 +527,8 @@ testcase tTextframes_59
     
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -615,8 +613,8 @@ testcase tTextframes_60
     
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -711,8 +709,8 @@ testcase tTextframes_61
     
     '/// Open a test file , which includes a frame in footer and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -789,8 +787,8 @@ testcase tTextframes_62
     
     '/// Open a test file , which includes a frame in footer and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -867,8 +865,8 @@ testcase tTextframes_63
     
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -957,8 +955,8 @@ testcase tTextframes_64
     
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1048,8 +1046,8 @@ testcase tTextframes_65
     '/// Open a test file , which includes 2 frames ,
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1127,8 +1125,8 @@ testcase tTextframes_66
     '/// Open a test file , which includes 2 frames ,
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1205,8 +1203,8 @@ testcase tTextframes_67
     
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1295,8 +1293,8 @@ testcase tTextframes_68
     
     '/// Open a test file , which includes a frame in table and
     '/// + a picture which is anchored to frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1386,8 +1384,8 @@ testcase tTextframes_69
     '/// Open a test file , which includes 2 frames ,
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )
@@ -1465,8 +1463,8 @@ testcase tTextframes_70
     '/// Open a test file , which includes 2 frames ,
     '/// Frame A is anchored Frame B
     '/// + a picture which is anchored to Frame A
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to the picture
     Call wTypeKeys ( "<Shift F4>" )

@@ -42,7 +42,6 @@
 #include "vcl/controldata.hxx"
 #include "vcl/sound.hxx"
 #include "vcl/lstbox.hxx"
-#include "vcl/smartid.hxx"
 
 #include "vcl/window.h"
 
@@ -59,7 +58,7 @@ struct ImplTabItem
     String              maText;
     String              maFormatText;
     String              maHelpText;
-    ULONG               mnHelpId;
+    rtl::OString        maHelpId;
     Rectangle           maRect;
     USHORT              mnLine;
     bool                mbFullVisible;
@@ -67,7 +66,7 @@ struct ImplTabItem
     Image               maTabImage;
 
     ImplTabItem()
-    : mnId( 0 ), mnTabPageResId( 0 ), mpTabPage( NULL ), mnHelpId( 0 ),
+    : mnId( 0 ), mnTabPageResId( 0 ), mpTabPage( NULL ),
       mnLine( 0 ), mbFullVisible( FALSE ), mbEnabled( true )
     {}
 };
@@ -151,7 +150,6 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbRestoreUnqId              = FALSE;
     mbSingleLine                = FALSE;
     mbScroll                    = FALSE;
-    mbRestoreSmartId            = FALSE;
     mbSmallInvalidate           = FALSE;
     mbExtraSpace                = FALSE;
     mpTabCtrlData               = new ImplTabCtrlData;
@@ -705,11 +703,9 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
     if ( pOldPage )
     {
         if ( mbRestoreHelpId )
-            pCtrlParent->SetHelpId( 0 );
+            pCtrlParent->SetHelpId( rtl::OString() );
         if ( mbRestoreUnqId )
-            pCtrlParent->SetUniqueId( 0 );
-        if( mbRestoreSmartId )
-            pCtrlParent->SetSmartHelpId( SmartId() );
+            pCtrlParent->SetUniqueId( rtl::OString() );
         pOldPage->DeactivatePage();
     }
 
@@ -719,20 +715,15 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
 
         // activate page here so the conbtrols can be switched
         // also set the help id of the parent window to that of the tab page
-        if ( !GetHelpId() )
+        if ( !GetHelpId().getLength() )
         {
             mbRestoreHelpId = TRUE;
             pCtrlParent->SetHelpId( pPage->GetHelpId() );
         }
-        if ( !pCtrlParent->GetUniqueId() )
+        if ( !pCtrlParent->GetUniqueId().getLength() )
         {
             mbRestoreUnqId = TRUE;
             pCtrlParent->SetUniqueId( pPage->GetUniqueId() );
-        }
-        if( ! GetSmartHelpId().HasAny() )
-        {
-            mbRestoreSmartId = TRUE;
-            pCtrlParent->SetSmartHelpId( pPage->GetSmartHelpId() );
         }
 
         pPage->ActivatePage();
@@ -1486,13 +1477,13 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            ULONG nHelpId = GetHelpId( nItemId );
-            if ( nHelpId )
+            rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
+            if ( aHelpId.getLength() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId, this );
+                    pHelp->Start( aHelpId, this );
                 return;
             }
         }
@@ -1574,7 +1565,7 @@ void TabControl::Command( const CommandEvent& rCEvt )
                 aMenu.InsertItem( it->mnId, it->maText, MIB_CHECKABLE | MIB_RADIOCHECK );
                 if ( it->mnId == mnCurPageId )
                     aMenu.CheckItem( it->mnId );
-                aMenu.SetHelpId( it->mnId, it->mnHelpId );
+                aMenu.SetHelpId( it->mnId, it->maHelpId );
             }
 
             USHORT nId = aMenu.Execute( this, aMenuPos );
@@ -1826,7 +1817,6 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
     pItem->mnId             = nPageId;
     pItem->mpTabPage        = NULL;
     pItem->mnTabPageResId   = 0;
-    pItem->mnHelpId         = 0;
     pItem->maText           = rText;
     pItem->mbFullVisible    = FALSE;
 
@@ -2154,11 +2144,11 @@ const XubString& TabControl::GetHelpText( USHORT nPageId ) const
 
     if ( pItem )
     {
-        if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
+        if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+                pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
         }
 
         return pItem->maHelpText;
@@ -2169,24 +2159,25 @@ const XubString& TabControl::GetHelpText( USHORT nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabControl::SetHelpId( USHORT nPageId, ULONG nHelpId )
+void TabControl::SetHelpId( USHORT nPageId, const rtl::OString& rHelpId )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
     if ( pItem )
-        pItem->mnHelpId = nHelpId;
+        pItem->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG TabControl::GetHelpId( USHORT nPageId ) const
+rtl::OString TabControl::GetHelpId( USHORT nPageId ) const
 {
+    rtl::OString aRet;
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
     if ( pItem )
-        return pItem->mnHelpId;
-    else
-        return 0;
+        aRet = pItem->maHelpId;
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------

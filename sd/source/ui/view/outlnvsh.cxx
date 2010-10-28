@@ -32,7 +32,7 @@
 
 #include "ViewShellImplementation.hxx"
 #include <memory>
-
+#include "helpids.h"
 #include "app.hrc"
 #include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
@@ -180,8 +180,8 @@ void OutlineViewShell::Construct(DrawDocShell* )
     SetName (aName);
 
     SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
-    GetActiveWindow()->SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
-    GetActiveWindow()->SetUniqueId( SD_IF_SDOUTLINEVIEWSHELL );
+    GetActiveWindow()->SetHelpId( HID_SDOUTLINEVIEWSHELL );
+    GetActiveWindow()->SetUniqueId( HID_SDOUTLINEVIEWSHELL );
 }
 
 

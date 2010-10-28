@@ -30,7 +30,7 @@
 ModalDialog RID_SCDLG_SHAREDOCUMENT
 {
     OutputSize = TRUE ;
-    HelpId = SID_SHARE_DOC ;
+    HelpId = CMD_SID_SHARE_DOC ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 204 , 186 ) ;
     Text [ en-US ] = "Share Document" ;
@@ -38,6 +38,7 @@ ModalDialog RID_SCDLG_SHAREDOCUMENT
     Closeable = TRUE ;
     CheckBox CB_SHARE
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_SHAREDOCUMENT:CB_SHARE";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 192 , 8 ) ;
         Text [ en-US ] = "Share this spreadsheet with other users" ;

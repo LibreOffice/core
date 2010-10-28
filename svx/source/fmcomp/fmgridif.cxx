@@ -38,6 +38,7 @@
 #include "sdbdatacolumn.hxx"
 #include "svx/fmgridcl.hxx"
 #include "svx/svxids.hrc"
+#include <tools/urlobj.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
@@ -1973,14 +1974,10 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
     {
-        String sHelpURL(::comphelper::getString(Value));
-        String sPattern;
-        sPattern.AssignAscii("HID:");
-        if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
-        {
-            String sID = sHelpURL.Copy(sPattern.Len());
-            pGrid->SetHelpId(sID.ToInt32());
-        }
+        INetURLObject aHID( ::comphelper::getString(Value) );
+        DBG_ASSERT( aHID.GetProtocol() == INET_PROT_HID, "Wrong HelpURL!" );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              pGrid->SetHelpId( rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {

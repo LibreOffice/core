@@ -54,7 +54,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
-
+#include "app.hrc"
 #include "stlsheet.hxx"
 #include "sdpage.hxx"
 #include "stlpool.hxx"

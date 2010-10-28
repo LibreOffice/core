@@ -54,8 +54,8 @@ testcase HTMLToHTMLText
     printlog "  Jump to beginning of document "
     printlog "  Select first paragraph "
     printlog "  Copy selected text "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Shift Down><Shift End>"
@@ -86,7 +86,7 @@ testcase HTMLToHTMLText
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_html_text.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_text.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -110,8 +110,8 @@ testcase HTMLToHTMLField
     printlog "  Jump to beginning of document "
     printlog "  Select paragraph with 'Date Field' "
     printlog "  Copy selected text "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",2
@@ -143,7 +143,7 @@ testcase HTMLToHTMLField
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_html_field.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_field.html" )
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -167,8 +167,8 @@ testcase HTMLToHTMLTable
     printlog "  Jump to beginning of document "
     printlog "  Select 'Table' "
     printlog "  Copy selected table "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",5
@@ -200,7 +200,7 @@ testcase HTMLToHTMLTable
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_html_table.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_table.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -224,8 +224,8 @@ testcase HTMLToHTMLGraphicLinked
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
     printlog "  Copy selected Linked Graphic "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -256,7 +256,7 @@ testcase HTMLToHTMLGraphicLinked
         Call hCloseDocument
         printlog "  Close saved document "
         sleep (2)
-        Call hFileOpen (gOfficepath + "user\work\html_to_html_graphic1.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_graphic1.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -280,8 +280,8 @@ testcase HTMLToHTMLControl
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
     printlog "  Copy selected Control "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -313,7 +313,7 @@ testcase HTMLToHTMLControl
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_html_control.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_control.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -337,8 +337,8 @@ testcase HTMLToHTMLFloatingFrame
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "
     printlog "  Copy selected Floating Frame "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -375,7 +375,7 @@ testcase HTMLToHTMLFloatingFrame
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_html_float.html",false)
+        hFileOpen( gOfficepath + "user\work\html_to_html_float.html",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument

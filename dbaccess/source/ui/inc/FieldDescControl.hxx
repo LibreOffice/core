@@ -159,9 +159,9 @@ namespace dbaui
 
         sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
         void                Contruct();
-        OPropNumericEditCtrl* CreateNumericControl(USHORT _nHelpStr,short _nProperty,ULONG _nHelpId);
+        OPropNumericEditCtrl* CreateNumericControl(USHORT _nHelpStr,short _nProperty,const rtl::OString& _sHelpId);
         FixedText*          CreateText(USHORT _nTextRes);
-        void                InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler);
+        void                InitializeControl(Control* _pControl,const rtl::OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:
         inline  void    setRightAligned()       { m_bRightAligned = true; }

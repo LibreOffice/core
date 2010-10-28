@@ -46,7 +46,7 @@ public:
                             const String& rTitle,
                             const String& rEditTitle,
                             const String& rDefault,
-                            ULONG nHelpId );
+                            const rtl::OString& sHelpId, const rtl::OString& sEditHelpId );
             ~ScStringInputDlg();
 
     void GetInputString( String& rString ) const;

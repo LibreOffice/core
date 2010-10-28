@@ -42,6 +42,7 @@ FloatingWindow RID_SVXTBX_UNDO_REDO_CTRL
 
     ListBox LB_SVXTBX_UNDO_REDO_CTRL
     {
+        HelpID = "svx:ListBox:RID_SVXTBX_UNDO_REDO_CTRL:LB_SVXTBX_UNDO_REDO_CTRL";
         Pos = MAP_APPFONT ( 0 , 0 ) ;
         Size = MAP_APPFONT ( 150 , 60 ) ;
         Border = TRUE ;

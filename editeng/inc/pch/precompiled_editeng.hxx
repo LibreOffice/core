@@ -739,7 +739,6 @@
 #include "svtools/parhtml.hxx"
 #include "svtools/parrtf.hxx"
 #include "unotools/pathoptions.hxx"
-#include "svl/pickerhelper.hxx"
 #include "svl/poolitem.hxx"
 #include "unotools/printwarningoptions.hxx"
 #include "svl/ptitem.hxx"

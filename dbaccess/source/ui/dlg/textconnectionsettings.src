@@ -34,6 +34,7 @@
 
 ModalDialog DLG_TEXT_CONNECTION_SETTINGS
 {
+    HelpID = "dbaccess:ModalDialog:DLG_TEXT_CONNECTION_SETTINGS";
     Size = MAP_APPFONT( DIALOG_WIDTH, DIALOG_HEIGHT );
     OutputSize = TRUE ;
 

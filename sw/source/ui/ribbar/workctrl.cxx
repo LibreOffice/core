@@ -454,7 +454,7 @@ static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR,
     NID_NEXT
 };
-static USHORT __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
+static const char* __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
 {
     // -- first line
     HID_NID_TBL,

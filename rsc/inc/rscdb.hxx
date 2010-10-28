@@ -285,6 +285,7 @@ public:
     RscRange            a0to9999Short;
     RscIdRange          aIdLong;
     RscString           aString;
+    RscString           aStringLiteral;
     RscFlag             aWinBits;
     RscLangEnum         aLangType;
     RscLangArray        aLangString;

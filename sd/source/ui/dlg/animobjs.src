@@ -28,6 +28,8 @@
 #include "res_bmp.hrc"
 #include "app.hrc"
 #include "animobjs.hrc"
+#include "helpids.h"
+
 #define BUTTON_WIDTH 16
 #define BUTTON_HEIGHT 14
 #define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
@@ -36,7 +38,7 @@
 #define MIN_BUTTON_SIZE MAP_APPFONT( MIN_BUTTON_WIDTH, MIN_BUTTON_HEIGHT );
 DockingWindow FLT_WIN_ANIMATION
 {
-    HelpID = SID_ANIMATION_OBJECTS ;
+    HelpID = CMD_SID_ANIMATION_OBJECTS ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -57,6 +59,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_FIRST
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_FIRST";
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_WINDSTART ;
@@ -64,6 +67,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_REVERSE
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_REVERSE";
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_REVERSEPLAY ;
@@ -72,6 +76,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_STOP
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_STOP";
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 2 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_STOP ;
@@ -80,6 +85,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_PLAY
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_PLAY";
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 3 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_PLAY ;
@@ -87,6 +93,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_LAST
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_LAST";
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 4 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_WINDEND ;
@@ -94,6 +101,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     NumericField NUM_FLD_BITMAP
     {
+        HelpID = "sd:NumericField:FLT_WIN_ANIMATION:NUM_FLD_BITMAP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 + 3 + MIN_BUTTON_WIDTH * 5 , 100 ) ;
         Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 , 12 ) ;
@@ -110,6 +118,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     TimeField TIME_FIELD
     {
+        HelpID = "sd:TimeField:FLT_WIN_ANIMATION:TIME_FIELD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 + 6 + MIN_BUTTON_WIDTH * 7 , 100 ) ;
         Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 + 3 , 12 ) ;
@@ -132,6 +141,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ListBox LB_LOOP_COUNT
     {
+        HelpID = "sd:ListBox:FLT_WIN_ANIMATION:LB_LOOP_COUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 + 12 + MIN_BUTTON_WIDTH * 9 , 100 ) ;
         Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 + 3 , 100 ) ;
@@ -164,6 +174,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_GET_ONE_OBJECT";
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 16 , 14 ) ;
         ButtonImage = Image
@@ -180,6 +191,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_GET_ALL_OBJECTS";
         Pos = MAP_APPFONT ( 31 , 132 ) ;
         Size = MAP_APPFONT ( 16 , 14 ) ;
         ButtonImage = Image
@@ -196,6 +208,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_REMOVE_BITMAP
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_REMOVE_BITMAP";
         Pos = MAP_APPFONT ( 60 , 132 ) ;
         Size = MAP_APPFONT ( 16 , 14 ) ;
         ButtonImage = Image
@@ -212,6 +225,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ImageButton BTN_REMOVE_ALL
     {
+        HelpID = "sd:ImageButton:FLT_WIN_ANIMATION:BTN_REMOVE_ALL";
         Pos = MAP_APPFONT ( 79 , 132 ) ;
         Size = MAP_APPFONT ( 16 , 14 ) ;
         ButtonImage = Image
@@ -248,12 +262,14 @@ DockingWindow FLT_WIN_ANIMATION
     };
     RadioButton RBT_GROUP
     {
+        HelpID = "sd:RadioButton:FLT_WIN_ANIMATION:RBT_GROUP";
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         Text [ en-US ] = "Group object" ;
     };
     RadioButton RBT_BITMAP
     {
+        HelpID = "sd:RadioButton:FLT_WIN_ANIMATION:RBT_BITMAP";
         Pos = MAP_APPFONT ( 12 , 181 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         Text [ en-US ] = "Bitmap object" ;
@@ -268,6 +284,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     ListBox LB_ADJUSTMENT
     {
+        HelpID = "sd:ListBox:FLT_WIN_ANIMATION:LB_ADJUSTMENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 196 ) ;
         Size = MAP_APPFONT ( 72 , 100 ) ;
@@ -290,6 +307,7 @@ DockingWindow FLT_WIN_ANIMATION
     };
     PushButton BTN_CREATE_GROUP
     {
+        HelpID = "sd:PushButton:FLT_WIN_ANIMATION:BTN_CREATE_GROUP";
         Pos = MAP_APPFONT ( 107 , 216 ) ;
         Size = MAP_APPFONT ( 41 , 14 ) ;
         TabStop = TRUE ;

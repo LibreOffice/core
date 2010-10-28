@@ -340,7 +340,7 @@ testcase tToolsNumbering6
 			Call hFileSaveAsKill ( gOfficepath & "user\work\tToolsNumbering6.odt" )
 			'/// Close and reload document
 			Call hCloseDocument
-			Call hFileOpen ( gOfficepath & "user\work\tToolsNumbering6.odt" )
+			hFileOpen( gOfficepath & "user\work\tToolsNumbering6.odt" )
 		end if
 		call wTypeKeys ( "<MOD1 A>" )	
 		EditCopy
@@ -448,7 +448,7 @@ testcase tToolsNumbering7
 			Call hFileSaveAsKill ( gOfficepath & "user\work\tToolsNumbering7.odt" )
 			'/// Close and reload document
 			Call hCloseDocument
-			Call hFileOpen ( gOfficepath & "user\work\tToolsNumbering7.odt" )
+			hFileOpen( gOfficepath & "user\work\tToolsNumbering7.odt" )
 		end if
         
 		call wTypeKeys ( "<MOD1 A>" )	

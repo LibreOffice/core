@@ -42,7 +42,6 @@ SRS1NAME=$(TARGET)
 SRC1FILES =  \
         tbxanchr.src \
         inputwin.src \
-        tblctrl.src \
         workctrl.src
 
 EXCEPTIONSFILES = \

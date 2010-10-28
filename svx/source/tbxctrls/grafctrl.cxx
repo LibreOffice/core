@@ -316,7 +316,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
+ImplGrafControl::ImplGrafControl( Window* pParent, USHORT, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
     Control( pParent, WB_TABSTOP ),
     maImage     ( this ),
     maField     ( this, rCmd, rFrame )
@@ -353,8 +353,7 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
 
     maImage.Show();
 
-    maField.SetHelpId( nSlotId );
-    maField.SetSmartHelpId( SmartId( rCmd ));
+    maField.SetHelpId( rtl::OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
     maField.Show();
 }
 

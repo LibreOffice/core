@@ -94,7 +94,7 @@ struct LineDescriptor
         <p>If a primary button exists for a property's UI representation (<member>HasPrimaryButton</member>),
         it gets the ID specified herein.</p>
     */
-    long PrimaryButtonId;
+    string PrimaryButtonId;
 
     /** describes the URL of an image to display on the primary button, if any.
 
@@ -139,7 +139,7 @@ struct LineDescriptor
 
         @see PrimaryButtonId
     */
-    long SecondaryButtonId;
+    string SecondaryButtonId;
 
     /** describes the URL of an image to display on the secondary button, if any.
 

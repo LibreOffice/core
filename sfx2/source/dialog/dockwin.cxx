@@ -46,6 +46,7 @@
 #include <sfx2/viewsh.hxx>
 #include "sfxhelp.hxx"
 #include <sfx2/objsh.hxx>
+#include <sfx2/msgpool.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -918,11 +919,23 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 
 {
-    ULONG nId = GetHelpId();
-    if ( !nId && pCW )
-        nId = pCW->GetType();
-    SetHelpId( 0 );
-    SetUniqueId( nId );
+    if ( GetHelpId().getLength() )
+    {
+        SetUniqueId( GetHelpId() );
+        SetHelpId("");
+    }
+    else
+    {
+        SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
+        SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
+        const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
+        if ( pSlot )
+        {
+            rtl::OString aCmd("SFXDOCKINGWINDOW_");
+            aCmd += pSlot->GetUnoName();
+            SetUniqueId( aCmd );
+        }
+    }
 
     pImp = new SfxDockingWindow_Impl;
     pImp->bConstructed = FALSE;
@@ -960,9 +973,23 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 
 {
-    ULONG nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    if ( GetHelpId().getLength() )
+    {
+        SetUniqueId( GetHelpId() );
+        SetHelpId("");
+    }
+    else
+    {
+        SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
+        SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
+        const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
+        if ( pSlot )
+        {
+            rtl::OString aCmd("SFXDOCKINGWINDOW_");
+            aCmd += pSlot->GetUnoName();
+            SetUniqueId( aCmd );
+        }
+    }
 
     pImp = new SfxDockingWindow_Impl;
     pImp->bConstructed = FALSE;
@@ -1844,15 +1871,15 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
             pMgr->Activate_Impl();
 
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
 
         // In VCL geht Notify zun"achst an das Fenster selbst,
         // also base class rufen, sonst erf"ahrt der parent nichts

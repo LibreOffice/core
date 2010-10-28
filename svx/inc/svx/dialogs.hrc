@@ -317,10 +317,6 @@
 #define RID_SVXBMP_3D_FOCAL_LENGTH_09       (RID_SVX_START + 180)
 #define RID_SVXBMP_3D_FOCAL_LENGTH_10       (RID_SVX_START + 181)
 
-// fuer ToolboxControls Alignment und Drawobjekte
-#define RID_SVXTBX_DRAW                     (RID_SVX_START + 189)
-#define RID_SVXTBX_ALIGNMENT                (RID_SVX_START + 190)
-
 // Ids fuer Autokorrektur
 #define RID_SVX_AUTOCORR                    (RID_SVX_START + 192)
 

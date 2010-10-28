@@ -1436,9 +1436,9 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
         Reference< XPropertySetInfo > xPropInfo = xPropSet->getPropertySetInfo();
         if (xPropInfo->hasPropertyByName(uProp))
         {
-            ::rtl::OUString sId = ::rtl::OUString::createFromAscii( "HID:" );
-            sId += ::rtl::OUString::valueOf( (sal_Int32) HID_BIB_DB_GRIDCTRL );
-            xPropSet->setPropertyValue( uProp, makeAny( ::rtl::OUString( sId ) ) );
+            ::rtl::OUString sId = ::rtl::OUString::createFromAscii( INET_HID_SCHEME );
+            sId += ::rtl::OUString::createFromAscii( HID_BIB_DB_GRIDCTRL );
+            xPropSet->setPropertyValue( uProp, makeAny( sId ) );
         }
     }
     catch(Exception& e )

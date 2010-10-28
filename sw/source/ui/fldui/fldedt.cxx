@@ -195,21 +195,21 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 {
     // TabPage erzeugen
     SfxTabPage* pTabPage = 0;
-    USHORT nHelpId = 0;
+    const char* pHelpId = 0;
 
     switch (nGroup)
     {
         case GRP_DOC:
             pTabPage = SwFldDokPage::Create(this, *(SfxItemSet*)0);
-            nHelpId = HID_EDIT_FLD_DOK;
+            pHelpId = HID_EDIT_FLD_DOK;
             break;
         case GRP_FKT:
             pTabPage = SwFldFuncPage::Create(this, *(SfxItemSet*)0);
-            nHelpId = HID_EDIT_FLD_FUNC;
+            pHelpId = HID_EDIT_FLD_FUNC;
             break;
         case GRP_REF:
             pTabPage = SwFldRefPage::Create(this, *(SfxItemSet*)0);
-            nHelpId = HID_EDIT_FLD_REF;
+            pHelpId = HID_EDIT_FLD_REF;
             break;
         case GRP_REG:
             {
@@ -233,21 +233,22 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 //                }
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
                 pTabPage = SwFldDokInfPage::Create(this, *pSet);
-                nHelpId = HID_EDIT_FLD_DOKINF;
+                pHelpId = HID_EDIT_FLD_DOKINF;
                 break;
             }
         case GRP_DB:
             pTabPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
             static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
-            nHelpId = HID_EDIT_FLD_DB;
+            pHelpId = HID_EDIT_FLD_DB;
             break;
         case GRP_VAR:
             pTabPage = SwFldVarPage::Create(this, *(SfxItemSet*)0);
-            nHelpId = HID_EDIT_FLD_VAR;
+            pHelpId = HID_EDIT_FLD_VAR;
             break;
 
     }
-    pTabPage->SetHelpId(nHelpId);
+
+    pTabPage->SetHelpId(pHelpId);
     static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
 
     SetTabPage(pTabPage);

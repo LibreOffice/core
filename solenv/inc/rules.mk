@@ -600,7 +600,7 @@ $(MISC)/%.dpr :
 .IF "$(nodep)"==""
     @echo "Making:   " $(@:f)
     @@-$(RM) $@
-    $(COMMAND_ECHO)dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) NO_HIDS=true make_srs_deps=true $(DEPSRSFILES)
+    $(COMMAND_ECHO)dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_srs_deps=true $(DEPSRSFILES)
     $(COMMAND_ECHO)-$(TYPE) $(MISC)/$(TARGET).*.dprr >> $@
 .ENDIF			# "$(nodep)"==""
 
@@ -688,11 +688,6 @@ $(OUT)/ucr/$(IDLPACKAGE)/%.urd : %.idl
 
 $(OUT)/ucrdoc/$(IDLPACKAGE)/%.urd : %.idl
         @noop $(assign all_outdated_doc_idl+:=$<)
-
-# generate hid files
-$(SRS)/%.hid : %.src
-    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(*:f).src
-    $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(PERL) $(SOLARENV)/bin/mhids.pl $*.src $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
 
 # make *.xml descriptions available in $(MISC)
 $(MISC)/%$($(WINVERSIONNAMES)_MAJOR).xml : %.xml

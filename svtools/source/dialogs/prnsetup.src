@@ -138,6 +138,7 @@ String STR_SVT_PRNDLG_JOBCOUNT
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
 {
+    HelpID = "svtools:ModalDialog:DLG_SVT_PRNDLG_PRNSETUPDLG";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -157,6 +158,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     };
     ListBox LB_NAMES
     {
+        HelpID = "svtools:ListBox:DLG_SVT_PRNDLG_PRNSETUPDLG:LB_NAMES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 12 ) ;
         Size = MAP_APPFONT ( 125 , 80 ) ;
@@ -165,6 +167,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     };
     PushButton BTN_PROPERTIES
     {
+        HelpID = "svtools:PushButton:DLG_SVT_PRNDLG_PRNSETUPDLG:BTN_PROPERTIES";
         Pos = MAP_APPFONT ( 188 , 12 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Propert~ies..." ;
@@ -220,6 +223,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     };
     PushButton BTN_OPTIONS
     {
+        HelpID = "svtools:PushButton:DLG_SVT_PRNDLG_PRNSETUPDLG:BTN_OPTIONS";
         Pos = MAP_APPFONT ( 5 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Options..." ;

@@ -27,19 +27,11 @@
 #ifndef EXTENSIONS_ABPILOT_HRC
 #define EXTENSIONS_ABPILOT_HRC
 
-#include "extensio.hrc"
-
-#define HID_ABSPILOT_PREVIOUS                   ( HID_ABP_START +   0)
-#define HID_ABSPILOT_NEXT                       ( HID_ABP_START +   1)
-#define HID_ABSPILOT_CANCEL                     ( HID_ABP_START +   2)
-#define HID_ABSPILOT_FINISH                     ( HID_ABP_START +   3)
-#define UID_ABSPILOT_HELP                       ( HID_ABP_START +   4)
-#define HID_ABSPILOT                            ( HID_ABP_START +   5)
-    // !! if you add new IDs, please also adjust HID_ABP_LAST below !!
-#define HID_ABP_LAST    HID_ABSPILOT
-
-#if HID_ABP_LAST > HID_ABP_END
-    #error help id range overflow (ABP)
-#endif
+#define HID_ABSPILOT_PREVIOUS                           "EXTENSIONS_HID_ABSPILOT_PREVIOUS"
+#define HID_ABSPILOT_NEXT                               "EXTENSIONS_HID_ABSPILOT_NEXT"
+#define HID_ABSPILOT_CANCEL                             "EXTENSIONS_HID_ABSPILOT_CANCEL"
+#define HID_ABSPILOT_FINISH                             "EXTENSIONS_HID_ABSPILOT_FINISH"
+#define UID_ABSPILOT_HELP                               "EXTENSIONS_UID_ABSPILOT_HELP"
+#define HID_ABSPILOT                                    "EXTENSIONS_HID_ABSPILOT"
 
 #endif // EXTENSIONS_ABPILOT_HRC

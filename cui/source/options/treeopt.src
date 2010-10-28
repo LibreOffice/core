@@ -63,6 +63,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     };
     PushButton PB_BACK
     {
+        HelpID = "cui:PushButton:RID_OFADLG_OPTIONS_TREE:PB_BACK";
         Pos = MAP_APPFONT ( COL_10, ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;

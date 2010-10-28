@@ -44,12 +44,14 @@ TabPage TP_MANAGE_STYLES
     };
     Edit ED_NAME
     {
+        HelpID = "sfx2:Edit:TP_MANAGE_STYLES:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6  ) ;
         Size = MAP_APPFONT ( 184 , 12 ) ;
     };
     CheckBox CB_AUTO
     {
+        HelpID = "sfx2:CheckBox:TP_MANAGE_STYLES:CB_AUTO";
         Pos = MAP_APPFONT ( 164 , 8 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Hide = TRUE ;
@@ -63,6 +65,7 @@ TabPage TP_MANAGE_STYLES
     };
     ListBox LB_NEXT
     {
+        HelpID = "sfx2:ListBox:TP_MANAGE_STYLES:LB_NEXT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
         Size = MAP_APPFONT ( 184 , 65 ) ;
@@ -79,6 +82,7 @@ TabPage TP_MANAGE_STYLES
     };
     ListBox LB_BASE
     {
+        HelpID = "sfx2:ListBox:TP_MANAGE_STYLES:LB_BASE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 42 ) ;
         Size = MAP_APPFONT ( 184 , 65 ) ;
@@ -93,6 +97,7 @@ TabPage TP_MANAGE_STYLES
     };
     ListBox LB_REGION
     {
+        HelpID = "sfx2:ListBox:TP_MANAGE_STYLES:LB_REGION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 60 ) ;
         Size = MAP_APPFONT ( 184 , 64 ) ;
@@ -107,6 +112,7 @@ TabPage TP_MANAGE_STYLES
     };
     MultiLineEdit ED_DESC
     {
+        HelpID = "sfx2:MultiLineEdit:TP_MANAGE_STYLES:ED_DESC";
         Pos = MAP_APPFONT ( 12 , 88  ) ;
         Size = MAP_APPFONT ( 236 , 85 ) ;
         ReadOnly = TRUE ;

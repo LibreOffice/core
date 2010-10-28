@@ -70,7 +70,6 @@ private:
     BOOL                mbRestoreUnqId;
     BOOL                mbSingleLine;
     BOOL                mbScroll;
-    BOOL                mbRestoreSmartId;
     BOOL                mbSmallInvalidate;
     BOOL                mbExtraSpace;
     Link                maActivateHdl;
@@ -177,8 +176,8 @@ public:
     void                SetHelpText( USHORT nPageId, const XubString& rText );
     const XubString&    GetHelpText( USHORT nPageId ) const;
 
-    void                SetHelpId( USHORT nPageId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nPageId ) const;
+    void                SetHelpId( USHORT nPageId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( USHORT nPageId ) const;
 
     void                SetPageImage( USHORT nPageId, const Image& rImage );
     const Image*        GetPageImage( USHORT nPageId ) const;
@@ -188,9 +187,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Control::GetHelpText(); }
 
-    void                SetHelpId( ULONG nId )
-                            { Control::SetHelpId( nId ); }
-    ULONG               GetHelpId() const
+    void                SetHelpId( const rtl::OString& rId )
+                            { Control::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                             { return Control::GetHelpId(); }
 
     void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }

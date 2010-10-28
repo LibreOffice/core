@@ -38,7 +38,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------------
 
 SLOFILES =\
-        $(SLO)$/pickerhelper.obj \
         $(SLO)$/pickerhistory.obj
 
 # --- Targets -------------------------------------------------------

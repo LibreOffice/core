@@ -32,6 +32,7 @@ import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -86,8 +87,8 @@ public class FieldLinker extends DBLimitedFieldSelection
                             SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
                         };
             }
-            sSlaveHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2));
-            sMasterHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2) + 1);
+            sSlaveHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2));
+            sMasterHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2) + 1);
             boolean bDoEnable = (i < 2);
             lblSlaveFields[i] = CurUnoDialog.insertLabel("lblSlaveFieldLink" + new Integer(i + 1).toString(),
                     new String[]

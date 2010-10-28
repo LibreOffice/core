@@ -63,6 +63,7 @@ TabPage RID_SVXPAGE_EVENTS
     };
     ListBox LB_SAVEIN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_EVENTS:LB_SAVEIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 238 ) ;
         Size = MAP_APPFONT ( 132 , 53 ) ;
@@ -76,6 +77,7 @@ TabPage RID_SVXPAGE_EVENTS
     };
     PushButton PB_ASSIGN
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_EVENTS:PB_ASSIGN";
         Pos = MAP_APPFONT ( 217 , ROW0A ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
@@ -83,6 +85,7 @@ TabPage RID_SVXPAGE_EVENTS
     };
     PushButton PB_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_EVENTS:PB_DELETE";
         Pos = MAP_APPFONT ( 217 , ROW0A+RSC_CD_PUSHBUTTON_HEIGHT+12 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;

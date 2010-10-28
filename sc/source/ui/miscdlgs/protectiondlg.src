@@ -29,6 +29,7 @@
 
 ModalDialog RID_SCDLG_TABPROTECTION
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_TABPROTECTION";
     Text [ en-US ] = "Protect Sheet" ;
     Size = MAP_APPFONT ( 220 , 135 ) ;
     Moveable = TRUE ;
@@ -53,6 +54,7 @@ ModalDialog RID_SCDLG_TABPROTECTION
 
     CheckBox BTN_PROTECT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_TABPROTECTION:BTN_PROTECT";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 150 , 10 );
 
@@ -69,6 +71,7 @@ ModalDialog RID_SCDLG_TABPROTECTION
 
     Edit ED_PASSWORD1
     {
+        HelpID = "sc:Edit:RID_SCDLG_TABPROTECTION:ED_PASSWORD1";
         Border = TRUE;
         PassWord = TRUE;
         Pos = MAP_APPFONT ( 56, 22 );
@@ -85,6 +88,7 @@ ModalDialog RID_SCDLG_TABPROTECTION
 
     Edit ED_PASSWORD2
     {
+        HelpID = "sc:Edit:RID_SCDLG_TABPROTECTION:ED_PASSWORD2";
         Border = TRUE;
         PassWord = TRUE;
         Pos = MAP_APPFONT ( 56, 39 );

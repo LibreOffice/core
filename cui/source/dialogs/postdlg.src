@@ -27,12 +27,13 @@
  // include ---------------------------------------------------------------
 #include <cuires.hrc>
 #include "postdlg.hrc"
+#include "helpid.hrc"
 #include <svx/dialogs.hrc> // for RID_SVXDLG_POSTIT
 
  // RID_SVXDLG_POSTIT -----------------------------------------------------
 ModalDialog RID_SVXDLG_POSTIT
 {
-    HelpId = SID_POSTIT ;
+    HelpId = HID_POSTIT_DIALOG ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 198 , 134 ) ;
@@ -60,6 +61,7 @@ ModalDialog RID_SVXDLG_POSTIT
     };
     MultiLineEdit ED_EDIT
     {
+        HelpID = "cui:MultiLineEdit:RID_SVXDLG_POSTIT:ED_EDIT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 38 ) ;
         Size = MAP_APPFONT ( 123 , 72 ) ;
@@ -92,12 +94,14 @@ ModalDialog RID_SVXDLG_POSTIT
     };
     ImageButton BTN_PREV
     {
+        HelpID = "cui:ImageButton:RID_SVXDLG_POSTIT:BTN_PREV";
         Pos = MAP_APPFONT ( 141 , 60 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT ;
     };
     ImageButton BTN_NEXT
     {
+        HelpID = "cui:ImageButton:RID_SVXDLG_POSTIT:BTN_NEXT";
         Pos = MAP_APPFONT ( 167 , 60 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT ;
@@ -110,6 +114,7 @@ ModalDialog RID_SVXDLG_POSTIT
     };
     PushButton BTN_AUTHOR
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_POSTIT:BTN_AUTHOR";
         Pos = MAP_APPFONT ( 75 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Author" ;

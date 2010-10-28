@@ -57,14 +57,12 @@ namespace pcr
         ::rtl::OUString sDisplayName;
         ::rtl::OUString sListenerClassName;
         ::rtl::OUString sListenerMethodName;
-        sal_Int32       nHelpId;
-        sal_Int32       nUniqueBrowseId;
+        ::rtl::OString  sHelpId;
+        ::rtl::OString  sUniqueBrowseId;
         EventId         nId;
 
         EventDescription()
-            :nHelpId( 0 )
-            ,nUniqueBrowseId( 0 )
-            ,nId( 0 )
+            :nId( 0 )
             {
             }
 
@@ -74,8 +72,8 @@ namespace pcr
             const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName,
             sal_uInt16 _nDisplayNameResId,
-            sal_Int32 _nHelpId,
-            sal_Int32 _nUniqueBrowseId );
+            const rtl::OString& _sHelpId,
+            const rtl::OString& _sUniqueBrowseId );
     };
 
     typedef ::std::hash_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;

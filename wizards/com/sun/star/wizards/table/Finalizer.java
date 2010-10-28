@@ -91,7 +91,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGER_12, "HID:41240", new Integer(97), new Integer(35), IFINALSTEP, new Short(curtabindex++), "", new Integer(223)
+                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", new Integer(97), new Integer(35), IFINALSTEP, new Short(curtabindex++), "", new Integer(223)
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -130,7 +130,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:41244", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
@@ -185,7 +185,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:41245", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
@@ -236,7 +236,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:41242", sWorkWithTable, new Integer(101), new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, new Integer(101), new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), new Integer(177)
                     });
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
                     new String[]
@@ -245,7 +245,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:41241", sModifyTable, new Integer(101), new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, new Integer(101), new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
                     });
             optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
@@ -254,7 +254,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:41243", sStartFormWizard, new Integer(101), new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, new Integer(101), new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
                     });
         }
         catch (SQLException e)

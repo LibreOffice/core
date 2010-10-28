@@ -131,7 +131,6 @@ class SmModule : public SfxModule, utl::ConfigurationListener
     SvtSysLocale            *pSysLocale;
     VirtualDevice           *pVirtualDev;
 
-    virtual void FillStatusBar(StatusBar &rBar);
     void _CreateSysLocale() const;
     void _CreateVirtualDev() const;
 

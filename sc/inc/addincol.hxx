@@ -40,6 +40,7 @@
 #include <i18npool/lang.h>
 #include <rtl/ustring.h>
 #include "scdllapi.h"
+#include <rtl/ustring.hxx>
 
 #ifndef SC_SCMATRIX_HXX
 #include "scmatrix.hxx"
@@ -99,14 +100,14 @@ private:
     ScAddInArgDesc*     pArgDescs;
     long                nCallerPos;
     USHORT              nCategory;
-    USHORT              nHelpId;
+    rtl::OString        sHelpId;
     mutable com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName> aCompNames;
     mutable BOOL        bCompInitialized;
 
 public:
                 ScUnoAddInFuncData( const String& rNam, const String& rLoc,
                                     const String& rDesc,
-                                    USHORT nCat, USHORT nHelp,
+                                    USHORT nCat, const rtl::OString&,
                                     const com::sun::star::uno::Reference<
                                         com::sun::star::reflection::XIdlMethod>& rFunc,
                                     const com::sun::star::uno::Any& rO,
@@ -126,7 +127,7 @@ public:
     long                    GetCallerPos() const        { return nCallerPos; }
     const String&           GetDescription() const      { return aDescription; }
     USHORT                  GetCategory() const         { return nCategory; }
-    USHORT                  GetHelpId() const           { return nHelpId; }
+    const rtl::OString      GetHelpId() const           { return sHelpId; }
 
     const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>&  GetCompNames() const;
     BOOL                    GetExcelName( LanguageType eDestLang, String& rRetExcelName ) const;

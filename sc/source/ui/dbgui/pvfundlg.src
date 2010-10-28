@@ -64,6 +64,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     };
     MultiListBox LB_FUNC
     {
+        HelpID = "sc:MultiListBox:RID_SCDLG_DPDATAFIELD:LB_FUNC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 140 , 65 ) ;
@@ -96,6 +97,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     };
     ListBox LB_TYPE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_TYPE";
         Pos = MAP_APPFONT( 75, 110 );
         Size = MAP_APPFONT( 77, 120 );
         TabStop = TRUE;
@@ -122,6 +124,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     };
     ListBox LB_BASEFIELD
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_BASEFIELD";
         Pos = MAP_APPFONT( 75, 126 );
         Size = MAP_APPFONT( 77, 120 );
         TabStop = TRUE;
@@ -136,6 +139,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     };
     ListBox LB_BASEITEM
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_BASEITEM";
         Pos = MAP_APPFONT( 75, 142 );
         Size = MAP_APPFONT( 77, 120 );
         TabStop = TRUE;
@@ -168,6 +172,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     };
     MoreButton BTN_MORE
     {
+        HelpID = "sc:MoreButton:RID_SCDLG_DPDATAFIELD:BTN_MORE";
         Pos = MAP_APPFONT ( 164 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -191,6 +196,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Hide = TRUE ;
     RadioButton RB_NONE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_PIVOTSUBT:RB_NONE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
         Text [ en-US ] = "~None" ;
@@ -198,6 +204,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     RadioButton RB_AUTO
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_PIVOTSUBT:RB_AUTO";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
         Text [ en-US ] = "~Automatic" ;
@@ -205,6 +212,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     RadioButton RB_USER
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_PIVOTSUBT:RB_USER";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
         Text [ en-US ] = "~User-defined" ;
@@ -212,6 +220,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     MultiListBox LB_FUNC
     {
+        HelpID = "sc:MultiListBox:RID_SCDLG_PIVOTSUBT:LB_FUNC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 140 , 65 ) ;
@@ -227,6 +236,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     CheckBox CB_SHOWALL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOTSUBT:CB_SHOWALL";
         Pos = MAP_APPFONT ( 6 , 127 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Show it~ems without data";
@@ -264,6 +274,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     PushButton BTN_OPTIONS
     {
+        HelpID = "sc:PushButton:RID_SCDLG_PIVOTSUBT:BTN_OPTIONS";
         Pos = MAP_APPFONT ( 164 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -290,6 +301,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     ListBox LB_SORT_BY
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_SORT_BY";
         Pos = MAP_APPFONT( 12, 26 );
         Size = MAP_APPFONT( 96, 120 );
         TabStop = TRUE;
@@ -298,6 +310,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     RadioButton RB_SORT_ASC
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPSUBTOTAL_OPT:RB_SORT_ASC";
         Pos = MAP_APPFONT( 114, 14 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
@@ -305,6 +318,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     RadioButton RB_SORT_DESC
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPSUBTOTAL_OPT:RB_SORT_DESC";
         Pos = MAP_APPFONT( 114, 28 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
@@ -312,6 +326,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     RadioButton RB_SORT_MAN
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPSUBTOTAL_OPT:RB_SORT_MAN";
         Pos = MAP_APPFONT( 114, 42 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
@@ -331,6 +346,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     ListBox LB_LAYOUT
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_LAYOUT";
         Pos = MAP_APPFONT( 84, 67 );
         Size = MAP_APPFONT( 114, 120 );
         TabStop = TRUE;
@@ -345,6 +361,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     CheckBox CB_LAYOUT_EMPTY
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DPSUBTOTAL_OPT:CB_LAYOUT_EMPTY";
         Pos = MAP_APPFONT( 12, 85 );
         Size = MAP_APPFONT( 186, 10 );
         TabStop = TRUE;
@@ -358,6 +375,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     CheckBox CB_SHOW
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DPSUBTOTAL_OPT:CB_SHOW";
         Pos = MAP_APPFONT( 12, 112 );
         Size = MAP_APPFONT( 70, 10 );
         TabStop = TRUE;
@@ -365,6 +383,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     NumericField NF_SHOW
     {
+        HelpID = "sc:NumericField:RID_SCDLG_DPSUBTOTAL_OPT:NF_SHOW";
         Pos = MAP_APPFONT( 84, 110 );
         Size = MAP_APPFONT( 30, 12 );
         TabStop = TRUE;
@@ -390,6 +409,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     ListBox LB_SHOW_FROM
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_SHOW_FROM";
         Pos = MAP_APPFONT( 84, 126 );
         Size = MAP_APPFONT( 114, 50 );
         TabStop = TRUE;
@@ -409,6 +429,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     ListBox LB_SHOW_USING
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_SHOW_USING";
         Pos = MAP_APPFONT( 84, 142 );
         Size = MAP_APPFONT( 114, 120 );
         TabStop = TRUE;
@@ -436,6 +457,7 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     ListBox LB_HIERARCHY
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_HIERARCHY";
         Pos = MAP_APPFONT( 84, 222 );
         Size = MAP_APPFONT( 114, 120 );
         TabStop = TRUE;
@@ -483,6 +505,7 @@ ModalDialog RID_SCDLG_DPSHOWDETAIL
     };
     ListBox LB_DIMS
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSHOWDETAIL:LB_DIMS";
         Pos = MAP_APPFONT( 6, 30 );
         Size = MAP_APPFONT( 132, 80 );
         TabStop = TRUE;

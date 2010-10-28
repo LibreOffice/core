@@ -53,7 +53,7 @@ end sub
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_1
+testcase tGroup_1
 
     PrintLog "- Generate a objects group via menu Format/Group/Group"
 
@@ -80,7 +80,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_2
+testcase tGroup_2
 
     PrintLog "- Generate a objects group via contextmenu Format/Group/Group"
 
@@ -109,7 +109,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_3
+testcase tGroup_3
 
     PrintLog "- Menu entries may not be enabled if less then two objects are selected."
 
@@ -138,7 +138,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_4
+testcase tGroup_4
 
     Dim sGroupName as String
 
@@ -193,7 +193,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_5
+testcase tGroup_5
 
     Dim sGroupName as String
 
@@ -248,7 +248,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_6
+testcase tGroup_6
 
     Dim sPositionX1 as String
     Dim sPositionY1 as String
@@ -317,7 +317,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_7
+testcase tGroup_7
 
     Dim sPositionX1 as String
     Dim sPositionY1 as String
@@ -388,7 +388,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_8
+testcase tGroup_8
 
     Dim sPositionX as String
     Dim sPositionY as String
@@ -445,7 +445,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_9
+testcase tGroup_9
 
     Dim sPositionX as String
     Dim sPositionY as String
@@ -507,7 +507,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_10
+testcase tGroup_10
 
     PrintLog "- create new objects inside the group ,"
     PrintLog "  Undo new created objects before leaving the group"
@@ -554,7 +554,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_11
+testcase tGroup_11
 
     PrintLog "- create new objects inside the group ,"
     PrintLog "  Undo new created objects after leaving the group"
@@ -603,7 +603,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_12
+testcase tGroup_12
 
     Dim sDocument as String
 
@@ -636,8 +636,8 @@ testcase  tGroup_12
     Call hCloseDocument
     
       PrintLog "- Open previous saved document "
-    Call hFileOpen (sDocument)
-    Call sMakeReadOnlyDocumentEditable
+    Call hFileOpen( sDocument)
+    
     Kontext "DocumentWriter"
     Call gMouseClick(34,34)    'set focus in the group
     
@@ -655,7 +655,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tEncapsulatedGroup_1
+testcase tEncapsulatedGroup_1
 
     PrintLog "- Group objects inside the group ,Encapsulated Group"
     

@@ -169,7 +169,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 1), resources.resoptBusinessLetter_value, "optBusinessLetter", new Integer(97), new Integer(28), INTEGERS[1], new Short((short) 1), new Integer(184)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 1), resources.resoptBusinessLetter_value, "optBusinessLetter", new Integer(97), new Integer(28), INTEGERS[1], new Short((short) 1), new Integer(184)
                 });
         optPrivOfficialLetter = insertRadioButton("optPrivOfficialLetter", OPTPRIVOFFICIALLETTER_ITEM_CHANGED,
                 new String[]
@@ -178,7 +178,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 2), resources.resoptPrivOfficialLetter_value, "optPrivOfficialLetter", new Integer(97), new Integer(74), INTEGERS[1], new Short((short) 2), new Integer(184)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 2), resources.resoptPrivOfficialLetter_value, "optPrivOfficialLetter", new Integer(97), new Integer(74), INTEGERS[1], new Short((short) 2), new Integer(184)
                 });
         optPrivateLetter = insertRadioButton("optPrivateLetter", OPTPRIVATELETTER_ITEM_CHANGED,
                 new String[]
@@ -187,7 +187,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 3), resources.resoptPrivateLetter_value, "optPrivateLetter", new Integer(97), new Integer(106), INTEGERS[1], new Short((short) 3), new Integer(184)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 3), resources.resoptPrivateLetter_value, "optPrivateLetter", new Integer(97), new Integer(106), INTEGERS[1], new Short((short) 3), new Integer(184)
                 });
         lstBusinessStyle = insertListBox("lstBusinessStyle", LSTBUSINESSSTYLE_ACTION_PERFORMED, LSTBUSINESSSTYLE_ITEM_CHANGED,
                 new String[]
@@ -196,7 +196,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + (HID + 4), "lstBusinessStyle", new Integer(180), INTEGER_40, INTEGERS[1], new Short((short) 4), new Integer(74)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 4), "lstBusinessStyle", new Integer(180), INTEGER_40, INTEGERS[1], new Short((short) 4), new Integer(74)
                 });
         chkBusinessPaper = insertCheckBox("chkBusinessPaper", CHKBUSINESSPAPER_ITEM_CHANGED,
                 new String[]
@@ -205,7 +205,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 5), resources.reschkBusinessPaper_value, "chkBusinessPaper", new Integer(110), new Integer(56), new Short((short) 0), INTEGERS[1], new Short((short) 5), new Integer(168)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 5), resources.reschkBusinessPaper_value, "chkBusinessPaper", new Integer(110), new Integer(56), new Short((short) 0), INTEGERS[1], new Short((short) 5), new Integer(168)
                 });
         lstPrivOfficialStyle = insertListBox("lstPrivOfficialStyle", LSTPRIVOFFICIALSTYLE_ACTION_PERFORMED, LSTPRIVOFFICIALSTYLE_ITEM_CHANGED,
                 new String[]
@@ -214,7 +214,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + (HID + 6), "lstPrivOfficialStyle", new Integer(180), new Integer(86), INTEGERS[1], new Short((short) 6), new Integer(74)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 6), "lstPrivOfficialStyle", new Integer(180), new Integer(86), INTEGERS[1], new Short((short) 6), new Integer(74)
                 });
         lstPrivateStyle = insertListBox("lstPrivateStyle", LSTPRIVATESTYLE_ACTION_PERFORMED, LSTPRIVATESTYLE_ITEM_CHANGED,
                 new String[]
@@ -223,7 +223,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + (HID + 7), "lstPrivateStyle", new Integer(180), new Integer(118), INTEGERS[1], new Short((short) 7), new Integer(74)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 7), "lstPrivateStyle", new Integer(180), new Integer(118), INTEGERS[1], new Short((short) 7), new Integer(74)
                 });
         lblBusinessStyle = insertLabel("lblBusinessStyle",
                 new String[]
@@ -287,7 +287,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 8), resources.reschkPaperCompanyLogo_value, "chkPaperCompanyLogo", new Integer(97), new Integer(28), new Short((short) 0), INTEGERS[2], new Short((short) 8), new Integer(68)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 8), resources.reschkPaperCompanyLogo_value, "chkPaperCompanyLogo", new Integer(97), new Integer(28), new Short((short) 0), INTEGERS[2], new Short((short) 8), new Integer(68)
                 });
         numLogoHeight = insertNumericField("numLogoHeight", NUMLOGOHEIGHT_TEXT_CHANGED,
                 new String[]
@@ -296,7 +296,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 9), "numLogoHeight", new Integer(138), INTEGER_40, Boolean.TRUE, INTEGERS[2], Boolean.TRUE, new Short((short) 9), INTEGERS[3], new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 9), "numLogoHeight", new Integer(138), INTEGER_40, Boolean.TRUE, INTEGERS[2], Boolean.TRUE, new Short((short) 9), INTEGERS[3], new Integer(30)
                 });
         numLogoX = insertNumericField("numLogoX", NUMLOGOX_TEXT_CHANGED,
                 new String[]
@@ -305,7 +305,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 10), "numLogoX", new Integer(266), INTEGER_40, Boolean.TRUE, INTEGERS[2], new Short((short) 10), INTEGERS[0], new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 10), "numLogoX", new Integer(266), INTEGER_40, Boolean.TRUE, INTEGERS[2], new Short((short) 10), INTEGERS[0], new Integer(30)
                 });
         numLogoWidth = insertNumericField("numLogoWidth", NUMLOGOWIDTH_TEXT_CHANGED,
                 new String[]
@@ -314,7 +314,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 11), "numLogoWidth", new Integer(138), new Integer(56), Boolean.TRUE, INTEGERS[2], new Short((short) 11), new Double(3.8), new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 11), "numLogoWidth", new Integer(138), new Integer(56), Boolean.TRUE, INTEGERS[2], new Short((short) 11), new Double(3.8), new Integer(30)
                 });
         numLogoY = insertNumericField("numLogoY", NUMLOGOY_TEXT_CHANGED,
                 new String[]
@@ -323,7 +323,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 12), "numLogoY", new Integer(266), new Integer(56), Boolean.TRUE, INTEGERS[2], new Short((short) 12), new Double(-3.4), new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 12), "numLogoY", new Integer(266), new Integer(56), Boolean.TRUE, INTEGERS[2], new Short((short) 12), new Double(-3.4), new Integer(30)
                 });
         chkPaperCompanyAddress = insertCheckBox("chkPaperCompanyAddress", CHKPAPERCOMPANYADDRESS_ITEM_CHANGED,
                 new String[]
@@ -332,7 +332,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 13), resources.reschkPaperCompanyAddress_value, "chkPaperCompanyAddress", new Integer(98), new Integer(84), new Short((short) 0), INTEGERS[2], new Short((short) 13), new Integer(68)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 13), resources.reschkPaperCompanyAddress_value, "chkPaperCompanyAddress", new Integer(98), new Integer(84), new Short((short) 0), INTEGERS[2], new Short((short) 13), new Integer(68)
                 });
         numAddressHeight = insertNumericField("numAddressHeight", NUMADDRESSHEIGHT_TEXT_CHANGED,
                 new String[]
@@ -341,7 +341,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 14), "numAddressHeight", new Integer(138), new Integer(96), Boolean.TRUE, INTEGERS[2], Boolean.TRUE, new Short((short) 14), INTEGERS[3], new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 14), "numAddressHeight", new Integer(138), new Integer(96), Boolean.TRUE, INTEGERS[2], Boolean.TRUE, new Short((short) 14), INTEGERS[3], new Integer(30)
                 });
         numAddressX = insertNumericField("numAddressX", NUMADDRESSX_TEXT_CHANGED,
                 new String[]
@@ -350,7 +350,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 15), "numAddressX", new Integer(266), new Integer(96), Boolean.TRUE, INTEGERS[2], new Short((short) 15), new Double(3.8), new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 15), "numAddressX", new Integer(266), new Integer(96), Boolean.TRUE, INTEGERS[2], new Short((short) 15), new Double(3.8), new Integer(30)
                 });
         numAddressWidth = insertNumericField("numAddressWidth", NUMADDRESSWIDTH_TEXT_CHANGED,
                 new String[]
@@ -359,7 +359,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 16), "numAddressWidth", new Integer(138), new Integer(112), Boolean.TRUE, INTEGERS[2], new Short((short) 16), new Double(13.8), new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 16), "numAddressWidth", new Integer(138), new Integer(112), Boolean.TRUE, INTEGERS[2], new Short((short) 16), new Double(13.8), new Integer(30)
                 });
         numAddressY = insertNumericField("numAddressY", NUMADDRESSY_TEXT_CHANGED,
                 new String[]
@@ -368,7 +368,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 17), "numAddressY", new Integer(266), new Integer(112), Boolean.TRUE, INTEGERS[2], new Short((short) 17), new Double(-3.4), new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 17), "numAddressY", new Integer(266), new Integer(112), Boolean.TRUE, INTEGERS[2], new Short((short) 17), new Double(-3.4), new Integer(30)
                 });
         chkCompanyReceiver = insertCheckBox("chkCompanyReceiver", CHKCOMPANYRECEIVER_ITEM_CHANGED,
                 new String[]
@@ -377,7 +377,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 18), resources.reschkCompanyReceiver_value, "chkCompanyReceiver", new Integer(103), new Integer(131), new Short((short) 0), INTEGERS[2], new Short((short) 18), new Integer(185)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 18), resources.reschkCompanyReceiver_value, "chkCompanyReceiver", new Integer(103), new Integer(131), new Short((short) 0), INTEGERS[2], new Short((short) 18), new Integer(185)
                 });
         chkPaperFooter = insertCheckBox("chkPaperFooter", CHKPAPERFOOTER_ITEM_CHANGED,
                 new String[]
@@ -386,7 +386,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 19), resources.reschkPaperFooter_value, "chkPaperFooter", new Integer(97), new Integer(158), new Short((short) 0), INTEGERS[2], new Short((short) 19), new Integer(68)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 19), resources.reschkPaperFooter_value, "chkPaperFooter", new Integer(97), new Integer(158), new Short((short) 0), INTEGERS[2], new Short((short) 19), new Integer(68)
                 });
         numFooterHeight = insertNumericField("numFooterHeight", NUMFOOTERHEIGHT_TEXT_CHANGED,
                 new String[]
@@ -395,7 +395,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 20), "numFooterHeight", new Integer(236), new Integer(156), Boolean.TRUE, INTEGERS[2], new Short((short) 20), INTEGERS[5], new Integer(30)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 20), "numFooterHeight", new Integer(236), new Integer(156), Boolean.TRUE, INTEGERS[2], new Short((short) 20), INTEGERS[5], new Integer(30)
                 });
         lblLogoHeight = insertLabel("lblLogoHeight",
                 new String[]
@@ -516,7 +516,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + (HID + 21), "lstLetterNorm", new Integer(210), new Integer(34), INTEGERS[3], new Short((short) 21), new Integer(74)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 21), "lstLetterNorm", new Integer(210), new Integer(34), INTEGERS[3], new Short((short) 21), new Integer(74)
                 });
         chkUseLogo = insertCheckBox("chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
                 new String[]
@@ -525,7 +525,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 22), resources.reschkUseLogo_value, "chkUseLogo", new Integer(97), new Integer(54), new Short((short) 0), INTEGERS[3], new Short((short) 22), new Integer(212)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 22), resources.reschkUseLogo_value, "chkUseLogo", new Integer(97), new Integer(54), new Short((short) 0), INTEGERS[3], new Short((short) 22), new Integer(212)
                 });
         chkUseAddressReceiver = insertCheckBox("chkUseAddressReceiver", CHKUSEADDRESSRECEIVER_ITEM_CHANGED,
                 new String[]
@@ -534,7 +534,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 23), resources.reschkUseAddressReceiver_value, "chkUseAddressReceiver", new Integer(97), new Integer(69), new Short((short) 0), INTEGERS[3], new Short((short) 23), new Integer(212)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 23), resources.reschkUseAddressReceiver_value, "chkUseAddressReceiver", new Integer(97), new Integer(69), new Short((short) 0), INTEGERS[3], new Short((short) 23), new Integer(212)
                 });
         chkUseSigns = insertCheckBox("chkUseSigns", CHKUSESIGNS_ITEM_CHANGED,
                 new String[]
@@ -543,7 +543,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 24), resources.reschkUseSigns_value, "chkUseSigns", new Integer(97), new Integer(82), new Short((short) 0), INTEGERS[3], new Short((short) 24), new Integer(212)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 24), resources.reschkUseSigns_value, "chkUseSigns", new Integer(97), new Integer(82), new Short((short) 0), INTEGERS[3], new Short((short) 24), new Integer(212)
                 });
         chkUseSubject = insertCheckBox("chkUseSubject", CHKUSESUBJECT_ITEM_CHANGED,
                 new String[]
@@ -552,7 +552,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 25), resources.reschkUseSubject_value, "chkUseSubject", new Integer(97), new Integer(98), new Short((short) 0), INTEGERS[3], new Short((short) 25), new Integer(212)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 25), resources.reschkUseSubject_value, "chkUseSubject", new Integer(97), new Integer(98), new Short((short) 0), INTEGERS[3], new Short((short) 25), new Integer(212)
                 });
         chkUseSalutation = insertCheckBox("chkUseSalutation", CHKUSESALUTATION_ITEM_CHANGED,
                 new String[]
@@ -561,7 +561,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 26), resources.reschkUseSalutation_value, "chkUseSalutation", new Integer(97), new Integer(113), new Short((short) 0), INTEGERS[3], new Short((short) 26), new Integer(66)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 26), resources.reschkUseSalutation_value, "chkUseSalutation", new Integer(97), new Integer(113), new Short((short) 0), INTEGERS[3], new Short((short) 26), new Integer(66)
                 });
         lstSalutation = insertComboBox("lstSalutation", LSTSALUTATION_ACTION_PERFORMED, LSTSALUTATION_ITEM_CHANGED, LSTSALUTATION_TEXT_CHANGED,
                 new String[]
@@ -570,7 +570,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + (HID + 27), "lstSalutation", new Integer(210), new Integer(110), INTEGERS[3], new Short((short) 27), new Integer(74)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 27), "lstSalutation", new Integer(210), new Integer(110), INTEGERS[3], new Short((short) 27), new Integer(74)
                 });
         chkUseBendMarks = insertCheckBox("chkUseBendMarks", CHKUSEBENDMARKS_ITEM_CHANGED,
                 new String[]
@@ -579,7 +579,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 28), resources.reschkUseBendMarks_value, "chkUseBendMarks", new Integer(97), new Integer(127), new Short((short) 0), INTEGERS[3], new Short((short) 28), new Integer(212)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 28), resources.reschkUseBendMarks_value, "chkUseBendMarks", new Integer(97), new Integer(127), new Short((short) 0), INTEGERS[3], new Short((short) 28), new Integer(212)
                 });
         chkUseGreeting = insertCheckBox("chkUseGreeting", CHKUSEGREETING_ITEM_CHANGED,
                 new String[]
@@ -588,7 +588,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 29), resources.reschkUseGreeting_value, "chkUseGreeting", new Integer(97), new Integer(142), new Short((short) 0), INTEGERS[3], new Short((short) 29), new Integer(66)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 29), resources.reschkUseGreeting_value, "chkUseGreeting", new Integer(97), new Integer(142), new Short((short) 0), INTEGERS[3], new Short((short) 29), new Integer(66)
                 });
         lstGreeting = insertComboBox("lstGreeting", LSTGREETING_ACTION_PERFORMED, LSTGREETING_ITEM_CHANGED, LSTGREETING_TEXT_CHANGED,
                 new String[]
@@ -597,7 +597,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + (HID + 30), "lstGreeting", new Integer(210), new Integer(141), INTEGERS[3], new Short((short) 30), new Integer(74)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID + 30), "lstGreeting", new Integer(210), new Integer(141), INTEGERS[3], new Short((short) 30), new Integer(74)
                 });
         chkUseFooter = insertCheckBox("chkUseFooter", CHKUSEFOOTER_ITEM_CHANGED,
                 new String[]
@@ -606,7 +606,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 31), resources.reschkUseFooter_value, "chkUseFooter", new Integer(97), new Integer(158), new Short((short) 0), INTEGERS[3], new Short((short) 31), new Integer(212)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 31), resources.reschkUseFooter_value, "chkUseFooter", new Integer(97), new Integer(158), new Short((short) 0), INTEGERS[3], new Short((short) 31), new Integer(212)
                 });
         lblLetterNorm = insertLabel("lblLetterNorm",
                 new String[]
@@ -637,7 +637,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 32), resources.resoptSenderPlaceholder_value, "optSenderPlaceholder", new Integer(104), new Integer(42), INTEGERS[4], new Short((short) 32), new Integer(149)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 32), resources.resoptSenderPlaceholder_value, "optSenderPlaceholder", new Integer(104), new Integer(42), INTEGERS[4], new Short((short) 32), new Integer(149)
                 });
         optSenderDefine = insertRadioButton("optSenderDefine", OPTSENDERDEFINE_ITEM_CHANGED,
                 new String[]
@@ -646,7 +646,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 33), resources.resoptSenderDefine_value, "optSenderDefine", new Integer(104), new Integer(54), INTEGERS[4], new Short((short) 33), new Integer(149)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 33), resources.resoptSenderDefine_value, "optSenderDefine", new Integer(104), new Integer(54), INTEGERS[4], new Short((short) 33), new Integer(149)
                 });
         txtSenderName = insertTextField("txtSenderName", TXTSENDERNAME_TEXT_CHANGED,
                 new String[]
@@ -655,7 +655,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 34), "txtSenderName", new Integer(182), new Integer(67), INTEGERS[4], new Short((short) 34), new Integer(119)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 34), "txtSenderName", new Integer(182), new Integer(67), INTEGERS[4], new Short((short) 34), new Integer(119)
                 });
         txtSenderStreet = insertTextField("txtSenderStreet", TXTSENDERSTREET_TEXT_CHANGED,
                 new String[]
@@ -664,7 +664,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 35), "txtSenderStreet", new Integer(182), new Integer(81), INTEGERS[4], new Short((short) 35), new Integer(119)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 35), "txtSenderStreet", new Integer(182), new Integer(81), INTEGERS[4], new Short((short) 35), new Integer(119)
                 });
         txtSenderPostCode = insertTextField("txtSenderPostCode", TXTSENDERPOSTCODE_TEXT_CHANGED,
                 new String[]
@@ -673,7 +673,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 36), "txtSenderPostCode", new Integer(182), new Integer(95), INTEGERS[4], new Short((short) 36), new Integer(25)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 36), "txtSenderPostCode", new Integer(182), new Integer(95), INTEGERS[4], new Short((short) 36), new Integer(25)
                 });
         txtSenderState = insertTextField("txtSenderState", TXTSENDERSTATE_TEXT_CHANGED,
                 new String[]
@@ -682,7 +682,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 37), "txtSenderState", new Integer(211), new Integer(95), INTEGERS[4], new Short((short) 37), new Integer(21)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 37), "txtSenderState", new Integer(211), new Integer(95), INTEGERS[4], new Short((short) 37), new Integer(21)
                 });
         txtSenderCity = insertTextField("txtSenderCity", TXTSENDERCITY_TEXT_CHANGED,
                 new String[]
@@ -691,7 +691,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 38), "txtSenderCity", new Integer(236), new Integer(95), INTEGERS[4], new Short((short) 38), new Integer(65)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 38), "txtSenderCity", new Integer(236), new Integer(95), INTEGERS[4], new Short((short) 38), new Integer(65)
                 });
         optReceiverPlaceholder = insertRadioButton("optReceiverPlaceholder", OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
                 new String[]
@@ -700,7 +700,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 39), resources.resoptReceiverPlaceholder_value, "optReceiverPlaceholder", new Integer(104), new Integer(145), INTEGERS[4], new Short((short) 39), new Integer(200)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 39), resources.resoptReceiverPlaceholder_value, "optReceiverPlaceholder", new Integer(104), new Integer(145), INTEGERS[4], new Short((short) 39), new Integer(200)
                 });
         optReceiverDatabase = insertRadioButton("optReceiverDatabase", OPTRECEIVERDATABASE_ITEM_CHANGED,
                 new String[]
@@ -709,7 +709,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 40), resources.resoptReceiverDatabase_value, "optReceiverDatabase", new Integer(104), new Integer(157), INTEGERS[4], new Short((short) 40), new Integer(200)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 40), resources.resoptReceiverDatabase_value, "optReceiverDatabase", new Integer(104), new Integer(157), INTEGERS[4], new Short((short) 40), new Integer(200)
                 });
         lblSenderAddress = insertLabel("lblSenderAddress",
                 new String[]
@@ -785,7 +785,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    new Integer(47), "HID:" + (HID + 41), Boolean.TRUE, "txtFooter", new Integer(97), INTEGER_40, INTEGERS[5], new Short((short) 41), new Integer(203)
+                    new Integer(47), HelpIds.getHelpIdString(HID + 41), Boolean.TRUE, "txtFooter", new Integer(97), INTEGER_40, INTEGERS[5], new Short((short) 41), new Integer(203)
                 });
         chkFooterNextPages = insertCheckBox("chkFooterNextPages", CHKFOOTERNEXTPAGES_ITEM_CHANGED,
                 new String[]
@@ -794,7 +794,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 42), resources.reschkFooterNextPages_value, "chkFooterNextPages", new Integer(97), new Integer(92), new Short((short) 0), INTEGERS[5], new Short((short) 42), new Integer(202)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 42), resources.reschkFooterNextPages_value, "chkFooterNextPages", new Integer(97), new Integer(92), new Short((short) 0), INTEGERS[5], new Short((short) 42), new Integer(202)
                 });
         chkFooterPageNumbers = insertCheckBox("chkFooterPageNumbers", CHKFOOTERPAGENUMBERS_ITEM_CHANGED,
                 new String[]
@@ -803,7 +803,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 43), resources.reschkFooterPageNumbers_value, "chkFooterPageNumbers", new Integer(97), new Integer(106), new Short((short) 0), INTEGERS[5], new Short((short) 43), new Integer(201)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 43), resources.reschkFooterPageNumbers_value, "chkFooterPageNumbers", new Integer(97), new Integer(106), new Short((short) 0), INTEGERS[5], new Short((short) 43), new Integer(201)
                 });
         lblFooter = insertLabel("lblFooter",
                 new String[]
@@ -834,7 +834,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + (HID + 44), "txtTemplateName", new Integer(202), new Integer(56), INTEGERS[6], new Short((short) 44), resources.restxtTemplateName_value, new Integer(100)
+                    INTEGER_12, HelpIds.getHelpIdString(HID + 44), "txtTemplateName", new Integer(202), new Integer(56), INTEGERS[6], new Short((short) 44), resources.restxtTemplateName_value, new Integer(100)
                 });
         optCreateLetter = insertRadioButton("optCreateLetter", OPTCREATELETTER_ITEM_CHANGED,
                 new String[]
@@ -843,7 +843,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 45), resources.resoptCreateLetter_value, "optCreateLetter", new Integer(104), new Integer(111), INTEGERS[6], new Short((short) 50), new Integer(198)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 45), resources.resoptCreateLetter_value, "optCreateLetter", new Integer(104), new Integer(111), INTEGERS[6], new Short((short) 50), new Integer(198)
                 });
         optMakeChanges = insertRadioButton("optMakeChanges", OPTMAKECHANGES_ITEM_CHANGED,
                 new String[]
@@ -852,7 +852,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 },
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + (HID + 46), resources.resoptMakeChanges_value, "optMakeChanges", new Integer(104), new Integer(123), INTEGERS[6], new Short((short) 51), new Integer(198)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID + 46), resources.resoptMakeChanges_value, "optMakeChanges", new Integer(104), new Integer(123), INTEGERS[6], new Short((short) 51), new Integer(198)
                 });
         lblFinalExplanation1 = insertLabel("lblFinalExplanation1",
                 new String[]

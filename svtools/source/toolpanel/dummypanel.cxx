@@ -80,9 +80,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    SmartId DummyPanel::GetHelpID() const
+    rtl::OString DummyPanel::GetHelpID() const
     {
-        return SmartId();
+        return rtl::OString();
     }
 
     //--------------------------------------------------------------------

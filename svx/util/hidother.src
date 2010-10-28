@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 #include "../inc/helpid.hrc"            // HID_XXX
-#include "hidother.hrc"
-#include <svx/svxids.hrc>
 #include "../inc/fmhelp.hrc"
 
 /* #define HID_AUTOCORR_HELP_CHGNONBRKSPACE        HID_AUTOCORR_HELP_START+20 */
@@ -54,7 +52,6 @@ hidspecial HID_GRID_TRAVEL_LAST             { HelpID = HID_GRID_TRAVEL_LAST ;};
 hidspecial HID_GRID_TRAVEL_NEW              { HelpID = HID_GRID_TRAVEL_NEW ;};
 hidspecial HID_GRID_TRAVEL_NEXT             { HelpID = HID_GRID_TRAVEL_NEXT ;};
 hidspecial HID_GRID_TRAVEL_PREV             { HelpID = HID_GRID_TRAVEL_PREV ;};
-hidspecial HID_INTERFACE_BASIDE_VIEWSH      { HelpID = HID_INTERFACE_BASIDE_VIEWSH; };
 hidspecial HID_POPUP_COLOR                  { HelpID = HID_POPUP_COLOR; };
 hidspecial HID_POPUP_COLOR_CTRL             { HelpID = HID_POPUP_COLOR_CTRL; };
 hidspecial HID_POPUP_FRAME                  { HelpID = HID_POPUP_FRAME; };
@@ -74,6 +71,4 @@ hidspecial HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL { HelpId = HI
 hidspecial HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS { HelpId = HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS; };
 hidspecial HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED { HelpId = HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED; };
 hidspecial HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL { HelpId = HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL; };
-hidspecial SID_DSBROWSER_EXPLORER               { HelpID =  SID_DSBROWSER_EXPLORER          ;};
-hidspecial SID_GALLERY_IMPORTTHEME          { HelpID = SID_GALLERY_IMPORTTHEME; };
 hidspecial UID_FORMPROPBROWSER_FRAME            { HelpID =  UID_FORMPROPBROWSER_FRAME       ;};

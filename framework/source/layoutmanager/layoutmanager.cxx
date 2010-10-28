@@ -4005,7 +4005,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
                 pToolBox = (ToolBox *)pWindow;
-                aToolbarName = pToolBox->GetSmartHelpId().GetStr();
+                aToolbarName = rtl::OStringToOUString( pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8 );
                 sal_Int32 i = aToolbarName.lastIndexOf( ':' );
                 if (( aToolbarName.getLength() > 0 ) &&
                     ( i > 0 ) && (( i+ 1 ) < aToolbarName.getLength() ))
@@ -4066,7 +4066,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
                 pToolBox = (ToolBox *)pWindow;
-                aToolbarName = pToolBox->GetSmartHelpId().GetStr();
+                aToolbarName = rtl::OStringToOUString( pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8 );
                 if (( aToolbarName.getLength() > 0 ) && ( m_nLockCount == 0 ))
                     m_aAsyncLayoutTimer.Start();
             }

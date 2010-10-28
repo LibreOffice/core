@@ -102,7 +102,7 @@ void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 // ====================================================================
 // ====================================================================
 
-UINT32 PageHelpIds[] =
+const char* PageHelpIds[] =
 {
     HID_SD_AUTOPILOT_PAGE1,
     HID_SD_AUTOPILOT_PAGE2,
@@ -1119,7 +1119,9 @@ void AssistentDlgImpl::ChangePage()
     USHORT nPage = (USHORT)maAssistentFunc.GetCurrentPage();
 
     if( mpWindow )
+    {
         mpWindow->SetHelpId( PageHelpIds[nPage-1]);
+    }
 
     UpdatePage();
 

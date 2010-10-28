@@ -15,6 +15,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 mkdir: %_DEST%\inc%_EXT%\svx
+..\inc\svx\svxcommands.h %_DEST%\inc%_EXT%\svx\svxcommands.h
 ..\sdi\svx.sdi %_DEST%\inc%_EXT%\svx\svx.sdi
 ..\sdi\svxitems.sdi %_DEST%\inc%_EXT%\svx\svxitems.sdi
 ..\sdi\xoitems.sdi %_DEST%\inc%_EXT%\svx\xoitems.sdi

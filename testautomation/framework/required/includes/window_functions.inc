@@ -36,7 +36,7 @@ testcase tWindowFunctions
     printlog( "Update test for window functions" )
 
     if ( gtSysName = "Mac OS X" ) then
-        printlog( "No testing for Mac as some Window attributes do not exist" )
+        qaErrorLog( "#i114476# No testing for Mac as some Window attributes do not exist" )
         goto endsub
     endif
 

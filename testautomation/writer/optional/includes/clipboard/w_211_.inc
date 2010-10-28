@@ -79,7 +79,7 @@ testcase WriterToCalcText
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_text.ods",true)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_text.ods",true)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -133,7 +133,7 @@ testcase WriterToCalcField
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_field.ods",true)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_field.ods",true)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -192,7 +192,7 @@ testcase WriterToCalcTable
             kontext "navigator"
             if navigator.exists then navigator.close
 
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_table.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_table.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -248,7 +248,7 @@ testcase WriterToCalcFrame
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_frame.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_frame.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -302,7 +302,7 @@ testcase WriterToCalcDrawingObject
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_draw.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_draw.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -357,7 +357,7 @@ testcase WriterToCalcGraphicLinked
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_graphic1.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_graphic1.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -412,7 +412,7 @@ testcase WriterToCalcGraphicEmbedded
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_graphic2.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_graphic2.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -466,7 +466,7 @@ testcase WriterToCalcOLEObject
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_ole.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_ole.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -520,7 +520,7 @@ testcase WriterToCalcControl
             Call hCloseDocument
             printlog "  Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_calc_control.ods",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_calc_control.ods",false)
             printlog "  Reopen saved document "
             Wait 500
             Call hCloseDocument

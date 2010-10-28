@@ -361,59 +361,5 @@ void ScDLL::Exit()
     //  ScGlobal::Clear ist schon im Module-dtor
 }
 
-//------------------------------------------------------------------
-//  Statusbar
-//------------------------------------------------------------------
-
-#define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
-
-//UNUSED2008-05  void ScDLL::FillStatusBar(StatusBar &rStatusBar)
-//UNUSED2008-05  {
-//UNUSED2008-05      // Dokumentposition (Tabelle x / y)
-//UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_DOCPOS,
-//UNUSED2008-05                              TEXT_WIDTH( String().Fill( 10, 'X' ) ),
-//UNUSED2008-05                              SIB_LEFT|SIB_AUTOSIZE );
-//UNUSED2008-05
-//UNUSED2008-05      // Seitenvorlage
-//UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_PAGESTYLE,
-//UNUSED2008-05                              TEXT_WIDTH( String().Fill( 15, 'X' ) ),
-//UNUSED2008-05                              SIB_LEFT|SIB_AUTOSIZE );
-//UNUSED2008-05
-//UNUSED2008-05      // Ma"sstab
-//UNUSED2008-05      rStatusBar.InsertItem(  SID_ATTR_ZOOM,
-//UNUSED2008-05                              SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
-//UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
-//UNUSED2008-05      // Einfuege-/Ueberschreibmodus
-//UNUSED2008-05      rStatusBar.InsertItem( SID_ATTR_INSERT,
-//UNUSED2008-05                              SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
-//UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
-//UNUSED2008-05      // Selektionsmodus
-//UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_SELMODE,
-//UNUSED2008-05                              SvxSelectionModeControl::GetDefItemWidth(rStatusBar),
-//UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
-//UNUSED2008-05      // Dokument geaendert
-//UNUSED2008-05      rStatusBar.InsertItem( SID_DOC_MODIFIED,
-//UNUSED2008-05                              SvxModifyControl::GetDefItemWidth(rStatusBar));
-//UNUSED2008-05
-//UNUSED2008-05      // signatures
-//UNUSED2008-05      rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-//UNUSED2008-05      rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-//UNUSED2008-05
-//UNUSED2008-05      // Mail
-//UNUSED2008-05      rStatusBar.InsertItem( SID_MAIL_NOTIFY,
-//UNUSED2008-05                              TEXT_WIDTH( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Mail")) ),
-//UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
-//UNUSED2008-05      // den aktuellen Kontext anzeigen Uhrzeit / FramePos / TabellenInfo / Errors
-//UNUSED2008-05      rStatusBar.InsertItem( SID_ATTR_SIZE,
-//UNUSED2008-05                              SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
-//UNUSED2008-05                              SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
-//UNUSED2008-05  }
-
-#undef TEXT_WIDTH
-
 // DetectFilter functionality has moved - please update your bookmarks
 // see sc/source/ui/unoobj/scdetect.cxx, have a nice day.

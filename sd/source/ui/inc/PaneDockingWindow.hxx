@@ -64,7 +64,6 @@ public:
         const ::rtl::OUString& rsTitle);
 
     virtual ~PaneDockingWindow (void);
-
     virtual void StateChanged( StateChangedType nType );
     virtual void MouseButtonDown (const MouseEvent& rEvent);
     /** When docked the given range is passed to the parent SplitWindow.

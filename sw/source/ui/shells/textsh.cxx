@@ -282,7 +282,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:
-    case SID_INSERT_APPLET:
     {
         SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
         SvGlobalName *pName = NULL;
@@ -293,18 +292,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        SFX_REQUEST_ARG( rReq, pClassItem,          SfxStringItem, FN_PARAM_1, sal_False );
         SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
         SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
         //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
-        if((SID_INSERT_APPLET == nSlot || SID_INSERT_PLUGIN)
-                && (pClassItem || pClassLocationItem || pCommandsItem))
+        if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
         {
-            String sClass;
             String sClassLocation;
-            if(pClassItem)
-                sClass = pClassItem->GetValue();
             if(pClassLocationItem)
                 sClassLocation = pClassLocationItem->GetValue();
 
@@ -315,36 +309,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCommandList.AppendCommands( pCommandsItem->GetValue(), &nTemp );
             }
 
-            if(SID_INSERT_APPLET == nSlot)
-            {
-                SwApplet_Impl aApplImpl( rSh.GetAttrPool(),
-                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-                String sBaseURL;
-                SfxMedium* pMedium = GetView().GetDocShell()->GetMedium();
-                if(pMedium)
-                    sBaseURL = pMedium->GetURLObject().GetMainURL(INetURLObject::NO_DECODE);
-
-                aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation, sBaseURL );
-                aApplImpl.FinishApplet();
-                xObj.Assign( aApplImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT );
-                if( aCommandList.Count() )
-                {
-                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-                    if ( xSet.is() )
-                    {
-                        uno::Sequence < beans::PropertyValue > aSeq;
-                        aCommandList.FillSequence( aSeq );
-                        try
-                        {
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), uno::makeAny( aSeq ) );
-                        }
-                        catch ( uno::Exception& )
-                        {
-                        }
-                    }
-                }
-            }
-            else
             {
                 comphelper::EmbeddedObjectContainer aCnt;
                 ::rtl::OUString sName;
@@ -851,13 +815,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_FLOATINGFRAME:
             case SID_INSERT_OBJECT:
             case SID_INSERT_PLUGIN:
-            case SID_INSERT_APPLET:
             {
-                if(
-#ifndef SOLAR_JAVA
-                    nWhich == SID_INSERT_APPLET ||
-#endif
-                    eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
+                if( eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
                 }

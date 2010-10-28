@@ -1451,9 +1451,9 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     {
 
         pPageUpBtn      = new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
-        pPageUpBtn->SetHelpId(FN_PAGEUP);
+        pPageUpBtn->SetHelpId(GetStaticInterface()->GetSlot(FN_PAGEUP)->GetCommand());
         pPageDownBtn    = new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
-        pPageDownBtn->SetHelpId(FN_PAGEDOWN);
+        pPageDownBtn->SetHelpId(GetStaticInterface()->GetSlot(FN_PAGEDOWN)->GetCommand());
         Link aLk( LINK( this, SwPagePreView, BtnPage ) );
         pPageUpBtn->SetClickHdl( aLk );
         pPageDownBtn->SetClickHdl( aLk );

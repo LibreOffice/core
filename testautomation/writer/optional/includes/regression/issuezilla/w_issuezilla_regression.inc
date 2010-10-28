@@ -153,8 +153,8 @@ testcase i65094
     Call hNewDocument
     '/// Open file \\writer\\optional\\input\\regression\\issuezilla\\i65094a.odt
     printlog "- Open file: i65094a.odt" 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\regression\issuezilla\i65094a.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\regression\issuezilla\i65094a.odt" )
+    
     '/// Compare document with other version \\writer\\optional\\input\\regression\\issuezilla\\i65094b.odt
 '    UseBindings
     printlog "- Compare document with other version"
@@ -165,7 +165,7 @@ testcase i65094
 '    Sleep 2
     Oeffnen.Click
     Sleep 5
-    Call sMakeReadOnlyDocumentEditable
+    
     printlog "- Accept all"
     '/// In Redlining dialog select 'Accept all'
     Kontext "Redlining"
@@ -205,7 +205,7 @@ testcase i69045
     Call hCloseDocument
     printlog "- Save, close and load document"
     '/// Open saved document
-    Call hFileOpen ( gOfficepath & "user\work\i69045.odt" )
+    hFileOpen( gOfficepath & "user\work\i69045.odt" )
     '/// Check 
     try
         EditChangesAcceptOrReject
@@ -236,8 +236,8 @@ testcase i69521
     '/// New writer document
     Call hNewDocument
     '/// Load document: \\writer\\optional\\input\\regression\\issuezilla\\i69521.odt
-    Call hFileOpen (gTesttoolpath & "writer\optional\input\regression\issuezilla\i69521.odt")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolpath & "writer\optional\input\regression\issuezilla\i69521.odt")
+    
     '/// Loaded document should have 5 EPS Graphics
     iItems = CountItemsInNavigatorGroup(4)
     if iItems <> 5 then
@@ -251,7 +251,7 @@ testcase i69521
     '/// close document
     Call hCloseDocument
     '/// reload previous saved document
-    Call hFileOpen (gOfficePath & "user\work\i96521-1.odt")
+    hFileOpen( gOfficePath & "user\work\i96521-1.odt")
     '/// Check if all 5 Graphics are still in document
     iItems = CountItemsInNavigatorGroup(4)
     if iItems <> 5 then
@@ -325,7 +325,7 @@ testcase i75027
     Call hFileSaveAsKill (gOfficepath & "user\work\i75027.html")    
     '/// Reload previous saved document
     Call hCloseDocument
-    Call hFileOpen (gOfficepath & "user\work\i75027.html")
+    hFileOpen( gOfficepath & "user\work\i75027.html")
     '/// Check that the numbering is still the same.
     printlog "- check numbering (previous saved)"
     Call wTypeKeys ( "<MOD1 A>" )
@@ -444,8 +444,8 @@ testcase i103265
 	printlog "ODF Hyperlinks in TOCs"
 	Call hNewDocument
     printlog "- Open test document"
-	Call hFileOpen ( gTesttoolPath + "writer\optional\input\regression\issuezilla\i103265.odt" )
-    Call sMakeReadOnlyDocumentEditable
+	hFileOpenLocally(  gTesttoolPath + "writer\optional\input\regression\issuezilla\i103265.odt" )
+    
     printlog "- Update TOC"
 	ToolsUpdateAllIndexes
 	
@@ -482,7 +482,7 @@ testcase i103265
     Call hCloseDocument
 	
     printlog "- Reload"
-	Call hFileOpen ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html" )		
+	hFileOpen( gOfficePath & "user\work\ODFHyperlinksInTOCs.html" )
 	printlog "Check that every hyperlink jumps correctly to its target"
 	For i = 1 to 3
 		' point cursor to beginning of document

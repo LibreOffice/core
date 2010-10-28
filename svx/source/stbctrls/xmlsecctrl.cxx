@@ -107,12 +107,8 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
     delete mpImpl;
 }
 
-void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 {
-    GetStatusBar().SetHelpText( GetId(), String() );// necessary ?
-
-    GetStatusBar().SetHelpId( GetId(), nSID );      // necessary ?
-
     if( SFX_ITEM_AVAILABLE != eState )
     {
         mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;

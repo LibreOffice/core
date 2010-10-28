@@ -44,7 +44,7 @@ ToolBox RID_TBX_FORMULA
         ToolBoxItem
         {
             Identifier = FN_FORMULA_CALC ;
-            HelpID = FN_FORMULA_CALC ;
+            HelpId = HID_TBX_FORMULA_CALC ;
             DropDown = TRUE ;
             Text [ en-US ] = "Formula" ;
             /* ### ACHTUNG: Neuer Text in Resource? Formel auswählen : Formel auswõhlen */
@@ -52,14 +52,14 @@ ToolBox RID_TBX_FORMULA
         ToolBoxItem
         {
             Identifier = FN_FORMULA_CANCEL ;
-            HelpID = FN_FORMULA_CANCEL ;
+            HelpId = HID_TBX_FORMULA_CANCEL ;
             Text [ en-US ] = "Cancel" ;
             /* ### ACHTUNG: Neuer Text in Resource? Formel nicht übenehmen : Formel nicht ³benehmen */
         };
         ToolBoxItem
         {
             Identifier = FN_FORMULA_APPLY ;
-            HelpID = FN_FORMULA_APPLY ;
+            HelpId = HID_TBX_FORMULA_APPLY ;
             /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
             Text [ en-US ] = "Apply" ;
             /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */
@@ -287,21 +287,21 @@ String STR_TBL_FORMULA
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_CALC ; \
-        HelpID = FN_FORMULA_CALC ; \
+        HelpID = HID_TBX_FORMULA_CALC ; \
         Text [ en-US ] = "Formula" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Formel auswählen : Formel auswõhlen */\
     };\
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_CANCEL ; \
-        HelpID = FN_FORMULA_CANCEL ; \
+        HelpId = HID_TBX_FORMULA_CANCEL ; \
         Text [ en-US ] = "Cancel" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Formel nicht übenehmen : Formel nicht ³benehmen */\
     };\
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_APPLY ; \
-        HelpID = FN_FORMULA_APPLY ; \
+        HelpID = HID_TBX_FORMULA_APPLY ; \
         /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */\
         Text [ en-US ] = "Apply" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */\

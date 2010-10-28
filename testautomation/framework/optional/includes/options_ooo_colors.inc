@@ -40,8 +40,8 @@ testcase tOOoColors
     dim currentColor(4) as String
     dim chColor(4)      as String
     
-    const DEFAULT_COLOR_COUNT = 103
-    const CHANGED_COLOR_COUNT = 104
+    const DEFAULT_COLOR_COUNT = 99
+    const CHANGED_COLOR_COUNT = 100
     const USER_COLOR = "TT-Test-Color"
     
     myColor(1) = USER_COLOR
@@ -106,8 +106,7 @@ testcase tOOoColors
 
         printlog( "Close the Tools/Options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        WaitSlot( 2000 )
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         warnlog( "Tools/Options dialog not open" )
     endif
@@ -163,9 +162,7 @@ testcase tOOoColors
         
         printlog( "Close options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        WaitSlot( 2000 )
-        
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         warnlog( "Tools/Options dialog not open" )
     endif
@@ -196,9 +193,7 @@ testcase tOOoColors
 
         printlog( "Close options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        WaitSlot( 2000 )
-        
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     else
         warnlog( "Tools/Options dialog not open" )
     endif

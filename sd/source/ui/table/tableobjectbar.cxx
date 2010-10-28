@@ -35,7 +35,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-
+#include <sfx2/msgpool.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
@@ -166,7 +166,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
             case SID_TABLE_INSERT_COL_DLG:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, nSlotId) : 0);
+                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : 0);
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {

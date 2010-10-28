@@ -325,12 +325,6 @@ interface BaseText
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_INSERT_APPLET  // status(final|play)
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
     FN_INSERT_TABLE // status(final|play)
     [
         ExecMethod = ExecInsert ;

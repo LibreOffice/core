@@ -169,6 +169,7 @@ String RID_STR_ERROR_MISSING_LICENSE
 
 ModalDialog RID_DLG_LICENSE
 {
+    HelpID = "desktop:ModalDialog:RID_DLG_LICENSE";
     Text [ en-US ] = "Extension Software License Agreement";
 
     Size = MAP_APPFONT(LIC_DLG_WIDTH, LIC_DLG_HEIGHT);
@@ -181,6 +182,7 @@ ModalDialog RID_DLG_LICENSE
 
     MultiLineEdit ML_LICENSE
     {
+        HelpID = "desktop:MultiLineEdit:RID_DLG_LICENSE:ML_LICENSE";
         Pos = MAP_APPFONT(COL1_X, ROW1_Y);
         Size = MAP_APPFONT(BODYWIDTH, ROW1_HEIGHT);
         Border = TRUE;
@@ -230,6 +232,7 @@ ModalDialog RID_DLG_LICENSE
     };
     PushButton PB_LICENSE_DOWN
     {
+        HelpID = "desktop:PushButton:RID_DLG_LICENSE:PB_LICENSE_DOWN";
         TabStop = TRUE ;
         Pos = MAP_APPFONT(COL5_X , ROW3_Y) ;
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT) ;

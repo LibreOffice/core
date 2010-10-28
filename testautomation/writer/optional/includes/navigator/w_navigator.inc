@@ -216,8 +216,8 @@ testcase tViewNavigator3
 	'/// Edit / Navigator : check some Navigator-Functions ///
     printlog "- Edit / Navigator : check some Navigator-Functions"
     '/// Open document ( navigator.odt ) ///
-    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    
     '/// Open Navigator ///
     Kontext "Navigator"
     if Navigator.NotExists then ViewNavigator
@@ -363,8 +363,8 @@ testcase tViewNavigator4
     endif
     printlog "- Edit / Navigator : check entry's in Navigator Index"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"' ///
-    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    
     '/// Open Navigator through Edit / Navigator ///
     ViewNavigator
     Kontext "NavigatorWriter"
@@ -432,8 +432,8 @@ testcase tViewNavigator5
 
     printlog "- Edit / Navigator : Check Jumpmark from Index in Navigator"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"'  ///
-    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    
     '/// Open Navigator ///
     Kontext "NavigatorWriter"
     if Not NavigatorWriter.Exists then
@@ -617,8 +617,8 @@ testcase tViewNavigator6
     
     printlog "- Edit / Navigator : Rename Objects"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" ' ///
-    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" )
+    
     Kontext "Navigator"
     '/// Open Navigator ///
     if Navigator.NotExists then ViewNavigator
@@ -674,7 +674,7 @@ testcase tViewNavigator6
     Sleep 2
 
     printlog "- Saving and Loading the document, check settings"
-    Call hFileOpen(gOfficePath + "user\work\uvobj.odt")
+    hFileOpen( gOfficePath & "user\work\uvobj.odt")
     '/// Navigator has to be opened with document ///
     Kontext "Navigator"
     if Navigator.NotExists then

@@ -54,7 +54,6 @@
 #include <basic/sbstar.hxx>
 #include <vcl/event.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/smartid.hxx>
 #include <automation/commtypes.hxx>
 
 class Window;
@@ -241,7 +240,7 @@ public:
 protected:
     static Window* SearchClientWin( Window *pBase, Search &aSearch, BOOL MaybeBase = TRUE );
 
-    Window* SearchTree( SmartId aUId, BOOL bSearchButtonOnToolbox = FALSE );
+    Window* SearchTree( rtl::OString aUId, BOOL bSearchButtonOnToolbox = FALSE );
     Window* GetActive( WindowType nRT, BOOL MaybeBase = TRUE );
     Window* GetFocus( WindowType nRT, BOOL MaybeBase = TRUE );
     Window* GetAnyActive( BOOL MaybeBase = TRUE );
@@ -253,7 +252,7 @@ protected:
     Window* GetDocWin( USHORT nNr );
     USHORT GetDocWinCount();
     Window* GetFadeSplitWin( Window *pBase, WindowAlign nAlign, BOOL MaybeBase = TRUE );
-    BOOL ValueOK(SmartId nId, String aBezeichnung, ULONG nValue, ULONG nMax);
+    BOOL ValueOK(rtl::OString nId, String aBezeichnung, ULONG nValue, ULONG nMax);
 
     USHORT GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu );
 
@@ -274,7 +273,7 @@ public:
 ***************************************************************************/
 
     void ReportError(String aMessage);
-    void ReportError(SmartId aUId, String aMessage);
+    void ReportError(rtl::OString aUId, String aMessage);
     void ReportError(String aMessage, ULONG nWhatever);
 
     static void DirectLog( ULONG nType, String aString );
@@ -285,18 +284,18 @@ public:
     StatementList *pNext;
     static StatementList /**pCurrent,*/ *pFirst;
     static BOOL bReadingCommands;
-    static SmartId aWindowWaitUId;
+    static rtl::OString aWindowWaitUId;
     static Window *pWindowWaitPointer;
-    static SmartId aWindowWaitOldHelpId;
-    static SmartId aWindowWaitOldUniqueId;
+    static rtl::OString aWindowWaitOldHelpId;
+    static rtl::OString aWindowWaitOldUniqueId;
     static RetStream *pRet;
     static BOOL IsError;
     static BOOL bDying;
     static BOOL bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
     BOOL bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static SmartId aSubMenuId1;         // Untermenüs bei PopupMenus
-    static SmartId aSubMenuId2;         // erstmal 2-Stufig
-    static SmartId aSubMenuId3;         // and now even 3 levels #i31512#
+    static USHORT aSubMenuId1;          // Untermenüs bei PopupMenus
+    static USHORT aSubMenuId2;          // erstmal 2-Stufig
+    static USHORT aSubMenuId3;          // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
     static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
 
@@ -350,7 +349,6 @@ class StatementCommand : public StatementList   // Befehl ausführen (wintree, re
     friend class ImplRemoteControl;
 protected:
     USHORT nMethodId;
-    SmartId aSmartMethodId;
     USHORT nParams;
     comm_USHORT nNr1,nNr2,nNr3,nNr4;
     comm_ULONG nLNr1;
@@ -385,7 +383,7 @@ enum TTHotSpots  { MitteLinks, Mitte, MitteOben };
 class StatementControl : public StatementList
 {
 protected:
-    SmartId aUId;
+    rtl::OString aUId;
     USHORT nMethodId;
     USHORT nParams;
     comm_USHORT nNr1,nNr2,nNr3,nNr4;
@@ -436,10 +434,10 @@ class SearchUID : public Search
 {
     Window *pMaybeResult;
     Window *pAlternateResult;
-    SmartId aUId;
+    rtl::OString aUId;
     BOOL bSearchButtonOnToolbox;
 public:
-    SearchUID( SmartId aUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), pAlternateResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
+    SearchUID( rtl::OString aUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), pAlternateResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
     virtual BOOL IsWinOK( Window *pWin );
     Window* GetMaybeWin() { return pMaybeResult; }
     Window* GetAlternateResultWin() { return pAlternateResult; }

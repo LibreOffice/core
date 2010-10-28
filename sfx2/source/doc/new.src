@@ -28,12 +28,14 @@
 #include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #include "new.hrc"
+#include <sfx2/sfxcommands.h>
+
  // pragma ----------------------------------------------------------------
 
  // DLG_NEW_FILE ----------------------------------------------------------
 ModalDialog DLG_NEW_FILE
 {
-    HelpId = SID_NEWDOC ;
+    HelpId = CMD_SID_NEWDOC ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 336 , 96 ) ;
@@ -57,6 +59,7 @@ ModalDialog DLG_NEW_FILE
     };
     ListBox LB_REGION
     {
+        HelpID = "sfx2:ListBox:DLG_NEW_FILE:LB_REGION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
         Size = MAP_APPFONT ( 127 , 72 ) ;
@@ -78,6 +81,7 @@ ModalDialog DLG_NEW_FILE
     };
     ListBox LB_TEMPLATE
     {
+        HelpID = "sfx2:ListBox:DLG_NEW_FILE:LB_TEMPLATE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 139 , 18 ) ;
         Size = MAP_APPFONT ( 127 , 72 ) ;
@@ -85,6 +89,7 @@ ModalDialog DLG_NEW_FILE
     };
     MoreButton BT_MORE
     {
+        HelpID = "sfx2:MoreButton:DLG_NEW_FILE:BT_MORE";
         Pos = MAP_APPFONT ( 274 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~More" ;
@@ -101,6 +106,7 @@ ModalDialog DLG_NEW_FILE
     };
     CheckBox BTN_PREVIEW
     {
+        HelpID = "sfx2:CheckBox:DLG_NEW_FILE:BTN_PREVIEW";
         Pos = MAP_APPFONT ( 6 , 96 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
         Text [ en-US ] = "Pre~view" ;
@@ -115,6 +121,7 @@ ModalDialog DLG_NEW_FILE
     };
     CheckBox CB_TEXT_STYLE
     {
+        HelpID = "sfx2:CheckBox:DLG_NEW_FILE:CB_TEXT_STYLE";
         Pos = MAP_APPFONT ( 6 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
@@ -122,6 +129,7 @@ ModalDialog DLG_NEW_FILE
     };
     CheckBox CB_FRAME_STYLE
     {
+        HelpID = "sfx2:CheckBox:DLG_NEW_FILE:CB_FRAME_STYLE";
         Pos = MAP_APPFONT ( 60 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
@@ -129,6 +137,7 @@ ModalDialog DLG_NEW_FILE
     };
     CheckBox CB_PAGE_STYLE
     {
+        HelpID = "sfx2:CheckBox:DLG_NEW_FILE:CB_PAGE_STYLE";
         Pos = MAP_APPFONT ( 114 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
@@ -136,6 +145,7 @@ ModalDialog DLG_NEW_FILE
     };
     CheckBox CB_NUM_STYLE
     {
+        HelpID = "sfx2:CheckBox:DLG_NEW_FILE:CB_NUM_STYLE";
         Pos = MAP_APPFONT ( 168 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
@@ -143,6 +153,7 @@ ModalDialog DLG_NEW_FILE
     };
     CheckBox CB_MERGE_STYLE
     {
+        HelpID = "sfx2:CheckBox:DLG_NEW_FILE:CB_MERGE_STYLE";
         Pos = MAP_APPFONT ( 222 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
@@ -150,6 +161,7 @@ ModalDialog DLG_NEW_FILE
     };
     PushButton PB_LOAD_FILE
     {
+        HelpID = "sfx2:PushButton:DLG_NEW_FILE:PB_LOAD_FILE";
         Pos = MAP_APPFONT ( 274 , 92 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         Hide = TRUE;
@@ -168,6 +180,7 @@ ModalDialog DLG_NEW_FILE
     };
     Edit ED_TITLE
     {
+        HelpID = "sfx2:Edit:DLG_NEW_FILE:ED_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 145 , 121 ) ;
         Size = MAP_APPFONT ( 175 , 12 ) ;
@@ -183,6 +196,7 @@ ModalDialog DLG_NEW_FILE
     };
     Edit ED_THEMA
     {
+        HelpID = "sfx2:Edit:DLG_NEW_FILE:ED_THEMA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 145 , 148 ) ;
         Size = MAP_APPFONT ( 175 , 12 ) ;
@@ -198,6 +212,7 @@ ModalDialog DLG_NEW_FILE
     };
     Edit ED_KEYWORDS
     {
+        HelpID = "sfx2:Edit:DLG_NEW_FILE:ED_KEYWORDS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 145 , 175 ) ;
         Size = MAP_APPFONT ( 175 , 12 ) ;
@@ -213,6 +228,7 @@ ModalDialog DLG_NEW_FILE
     };
     MultiLineEdit ED_DESC
     {
+        HelpID = "sfx2:MultiLineEdit:DLG_NEW_FILE:ED_DESC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 144 , 202 ) ;
         Size = MAP_APPFONT ( 175 , 32 ) ;

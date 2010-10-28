@@ -42,6 +42,7 @@ ModelessDialog RID_SVXDLG_RUBY
     Closeable = TRUE ;
     CheckBox CB_AUTO_DETECT
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_RUBY:CB_AUTO_DETECT";
         Pos = MAP_APPFONT ( 6, 6 ) ;
         Size = MAP_APPFONT ( 186 , 12 ) ;
         Text [ en-US ] = "Automatic detection";
@@ -60,6 +61,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     Edit ED_LEFT_1
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_1";
         Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Hide = False;
@@ -67,42 +69,49 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     Edit ED_RIGHT_1
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_1";
         Pos = MAP_APPFONT ( 109 , 30 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_2
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_2";
         Pos = MAP_APPFONT ( 6 ,  42) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_2
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_2";
         Pos = MAP_APPFONT ( 109 , 42 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_3
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_3";
         Pos = MAP_APPFONT ( 6 , 54 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_3
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_3";
         Pos = MAP_APPFONT ( 109 , 54 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_4
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_4";
         Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_4
     {
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_4";
         Pos = MAP_APPFONT ( 109 , 66 ) ;
         Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
@@ -122,6 +131,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     ListBox LB_ADJUST
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_ADJUST";
         Pos = MAP_APPFONT ( 6 , 93) ;
         Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
@@ -143,6 +153,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     ListBox LB_POSITION
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_POSITION";
         Pos = MAP_APPFONT ( 43 , 93) ;
         Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
@@ -161,6 +172,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     ListBox LB_CHAR_STYLE
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_CHAR_STYLE";
         Pos = MAP_APPFONT ( 80 , 93) ;
         Size = MAP_APPFONT ( 89 , 60 ) ;
         DropDown = TRUE;
@@ -169,6 +181,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     PushButton PB_STYLIST
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_RUBY:PB_STYLIST";
         Pos = MAP_APPFONT ( 171 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Styles";
@@ -194,6 +207,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     PushButton PB_CLOSE
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_RUBY:PB_CLOSE";
         Pos = MAP_APPFONT (  118, 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Close";

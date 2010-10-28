@@ -107,6 +107,8 @@
 #endif
 #include "dsntypes.hxx"
 
+#include "dbaccess_slotid.hrc"
+
 using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::svt;
