@@ -48,7 +48,7 @@ public class ColumnStyle extends Style implements Cloneable {
     /**
      *  Constructor for use when going from DOM to client device format.
      *
-     *  @param  Node  The <i>style:style</i> <code>Node</code> containing
+     *  @param  node  The <i>style:style</i> <code>Node</code> containing
      *                the <code>Style</code>.  (This <code>Node</code> is
      *                assumed have a <i>family</i> attribute of <i>text</i>).
      *  @param  sc    The <code>StyleCatalog</code>, which is used for
@@ -92,7 +92,6 @@ public class ColumnStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
      *  Constructor for use when going from client device format to DOM
      *
@@ -101,11 +100,11 @@ public class ColumnStyle extends Style implements Cloneable {
      *                   <i>text</i>).  Can be null.
      *  @param  parent   Name of parent text <code>Style</code>, or null
      *                   for none.
-     *  @param  mask     the width of this column
-     *  @param sc        The <code>StyleCatalog</code>, which is used for
+     *  @param  colWidth the width of this column
+     *  @param  sc       The <code>StyleCatalog</code>, which is used for
      *                   looking up ancestor <code>Style</code> objects.
      */
-    public ColumnStyle(String name, String family, String parent,int colWidth, StyleCatalog sc) {
+    public ColumnStyle(String name, String family, String parent, int colWidth, StyleCatalog sc) {
         super(name, family, parent, sc);
         this.colWidth = colWidth;
     }
@@ -113,7 +112,7 @@ public class ColumnStyle extends Style implements Cloneable {
     /**
      * Returns the width of this column
      *
-     * @return the <code>Format</code> object
+     * @return The width of this column.
      */
     public int getColWidth() {
         return colWidth;
@@ -122,7 +121,7 @@ public class ColumnStyle extends Style implements Cloneable {
     /**
      * Sets the width of this column
      *
-     * @return the <code>Format</code> object
+     * @param colWidth The width of this column.
      */
     public void setColWidth(int colWidth) {
 
@@ -151,7 +150,6 @@ public class ColumnStyle extends Style implements Cloneable {
         return (width);
     }
 
-
     /**
      *  Set an attribute.
      *
@@ -168,7 +166,6 @@ public class ColumnStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
      *  Return a <code>Style</code> object corresponding to this one,
      *  but with all of the inherited information from parent
@@ -176,7 +173,7 @@ public class ColumnStyle extends Style implements Cloneable {
      *  be a new object, not a reference to this object, even if it does
      *  not need any information added.
      *
-     *  @return  The <code>StyleCatalog</code> in which to look up
+     *  @return  The <code>Style</code> in which to look up
      *           ancestors.
      */
     public Style getResolved() {
@@ -218,7 +215,6 @@ public class ColumnStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
     /**
      *  Create a new <code>Node</code> in the <code>Document</code>, and
      *  write this <code>Style</code> to it.
@@ -235,7 +231,6 @@ public class ColumnStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-
 
     /**
      *  Return true if <code>style</code> specifies as much or less
@@ -258,7 +253,6 @@ public class ColumnStyle extends Style implements Cloneable {
         return true;
     }
 
-
     /**
      *  Write this <code>Style</code> object's attributes to a
      *  <code>Node</code> in the <code>Document</code>.
@@ -274,11 +268,9 @@ public class ColumnStyle extends Style implements Cloneable {
         }
     }
 
-
     private static String[] ignored = {
         "fo:break-before", "fo:keep-with-next"
     };
-
 
     /*
      * This code checks whether an attribute is one that we
@@ -297,4 +289,3 @@ public class ColumnStyle extends Style implements Cloneable {
         return false;
     }
 }
-
