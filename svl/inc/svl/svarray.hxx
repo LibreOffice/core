@@ -672,15 +672,9 @@ _SV_DECL_PTRARR_DEF_PLAIN( SvPtrarrPlain, VoidPtr, 0, 1, SVL_DLLPUBLIC )
 
 // SORTARR - Begin
 
-#ifdef __MWERKS__
-#define __MWERKS__PRIVATE public
-#else
-#define __MWERKS__PRIVATE private
-#endif
-
 #define _SORT_CLASS_DEF(nm, AE, IS, GS, vis)\
 typedef BOOL (*FnForEach_##nm)( const AE&, void* );\
-class vis nm : __MWERKS__PRIVATE nm##_SAR \
+class vis nm : private nm##_SAR \
 {\
 public:\
     nm(USHORT nSize = IS, BYTE nG = GS)\
