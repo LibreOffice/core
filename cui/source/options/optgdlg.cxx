@@ -216,8 +216,8 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
     aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
     aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
-    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) )
-
+    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) ),
+    aExperimentalCB     ( this, CUI_RES( CB_EXPERIMENTAL ) )
 {
     FreeResource();
 
@@ -235,26 +235,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #ifdef WNT
     aFileDlgCB.SetToggleHdl( LINK( this, OfaMiscTabPage, OnFileDlgToggled ) );
 #else
-    {
-        aODMADlgCB.Hide();
-        // rearrange the following controls
-        Point aNewPos = aDocStatusFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aODMADlgCB.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
-    }
+    aODMADlgCB.Hide();
 #endif
 
     if ( !aFileDlgCB.IsVisible() )
@@ -266,7 +247,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
@@ -283,23 +264,23 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         aFileDlgCB.Disable();
     }
 
-    if ( aPrintDlgCB.IsVisible() )
+    if ( !aPrintDlgCB.IsVisible() )
     {
         // rearrange the following controls
         Point aNewPos = aDocStatusFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aFileDlgFL.GetPosPixel().Y();
+        long nDelta = aNewPos.Y() - aPrintDlgFL.GetPosPixel().Y();
 
         Window* pWins[] =
         {
             &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT
+            &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
         {
             aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() += nDelta;
+            aNewPos.Y() -= nDelta;
             (*pCurrent)->SetPosPixel( aNewPos );
         }
     }
@@ -429,6 +410,13 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
+    if ( aExperimentalCB.IsChecked() != aExperimentalCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetExperimentalMode( aExperimentalCB.IsChecked() );
+        bModified = TRUE;
+    }
+
     const SfxUInt16Item* pUInt16Item =
         PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
     USHORT nNum = (USHORT)aYearValueField.GetText().ToInt32();
@@ -472,6 +460,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aPrintDlgCB.SaveValue();
     aSaveAlwaysCB.Check( aMiscOpt.IsSaveAlwaysAllowed() );
     aSaveAlwaysCB.SaveValue();
+    aExperimentalCB.Check( aMiscOpt.IsExperimentalMode() );
+    aExperimentalCB.SaveValue();
 
     aODMADlgCB.Check( aMiscOpt.TryODMADialog() );
     aODMADlgCB.SaveValue();
