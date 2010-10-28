@@ -68,8 +68,13 @@ public class NameDefinition implements OfficeConstants {
     }
 
     /**
-     * Default Constructor for a <code>NameDefinition</code>
+     * Constructor for a <code>NameDefinition</code>
      *
+     * @param name            Name that identifies the definition
+     * @param definition      The definition itself
+     * @param baseCellAddress The base cell address
+     * @param rangeType       True if definition of range type
+     * @param expressionType  True if definition of expression type
      */
     public NameDefinition(String name, String definition, String
     baseCellAddress, boolean rangeType, boolean expressionType ) {
@@ -139,8 +144,8 @@ public class NameDefinition implements OfficeConstants {
     /**
      * Writes out a content.xml entry for this NameDefinition object
      *
-     * @param settings a <code>Document</code> object representing the settings.xml
-     * @param root the root xml node to add to
+     * @param doc  A <code>Document</code> object representing the settings.xml
+     * @param root The root xml node to add to
      */
     public void writeNode(org.w3c.dom.Document doc, Node root) {
 
