@@ -1,0 +1,2 @@
+Put msvcp100.dll, msvcr100.dll in this directory for Windows builds using a
+VS 2010 / VC 10.0 compiler.
