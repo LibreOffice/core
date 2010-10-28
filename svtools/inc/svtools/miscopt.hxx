@@ -150,6 +150,9 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void        SetSaveAlwaysAllowed( sal_Bool bSet );
         sal_Bool    IsSaveAlwaysAllowed() const;
 
+        void        SetExperimentalMode( sal_Bool bSet );
+        sal_Bool    IsExperimentalMode() const;
+
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------

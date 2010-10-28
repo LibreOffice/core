@@ -79,16 +79,18 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSTYLE          4
 #define PROPERTYNAME_USESYSTEMPRINTDIALOG   ASCII_STR("UseSystemPrintDialog")
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG 5
-#define PROPERTYNAME_TRYODMADIALOG  ASCII_STR("TryODMADialog")
-#define PROPERTYHANDLE_TRYODMADIALOG    6
+#define PROPERTYNAME_TRYODMADIALOG          ASCII_STR("TryODMADialog")
+#define PROPERTYHANDLE_TRYODMADIALOG        6
 #define PROPERTYNAME_SHOWLINKWARNINGDIALOG  ASCII_STR("ShowLinkWarningDialog")
 #define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 7
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION ASCII_STR("DisableUICustomization")
 #define PROPERTYHANDLE_DISABLEUICUSTOMIZATION           8
-#define PROPERTYNAME_ALWAYSALLOWSAVE ASCII_STR("AlwaysAllowSave")
-#define PROPERTYHANDLE_ALWAYSALLOWSAVE 9
+#define PROPERTYNAME_ALWAYSALLOWSAVE        ASCII_STR("AlwaysAllowSave")
+#define PROPERTYHANDLE_ALWAYSALLOWSAVE      9
+#define PROPERTYNAME_EXPERIMENTALMODE       ASCII_STR("ExperimentalMode")
+#define PROPERTYHANDLE_EXPERIMENTALMODE     10
 
-#define PROPERTYCOUNT                       10
+#define PROPERTYCOUNT                       11
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -123,6 +125,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bIsShowLinkWarningDialogRO;
     sal_Bool    m_bDisableUICustomization;
     sal_Bool    m_bAlwaysAllowSave;
+    sal_Bool    m_bExperimentalMode;
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -208,6 +211,12 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsSaveAlwaysAllowed() const
         { return m_bAlwaysAllowSave; }
+
+        inline void SetExperimentalMode( sal_Bool bSet )
+        { m_bExperimentalMode = bSet; SetModified(); }
+
+        inline sal_Bool IsExperimentalMode() const
+        { return m_bExperimentalMode; }
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
@@ -318,6 +327,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bShowLinkWarningDialog( sal_True )
     , m_bIsShowLinkWarningDialogRO( sal_False )
     , m_bAlwaysAllowSave( sal_False )
+    , m_bExperimentalMode( sal_False )
 
 {
     // Use our static list of configuration keys to get his values.
@@ -427,13 +437,19 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
                     DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
-                    break;
+                break;
             }
             case PROPERTYHANDLE_ALWAYSALLOWSAVE :
             {
                 if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
                     DBG_ERROR("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
-                    break;
+                break;
+            }
+            case PROPERTYHANDLE_EXPERIMENTALMODE :
+            {
+                if( !(seqValues[nProperty] >>= m_bExperimentalMode) )
+                    DBG_ERROR("Wrong type of \"Misc\\ExperimentalMode\"!" );
+                break;
             }
         }
     }
@@ -735,6 +751,11 @@ void SvtMiscOptions_Impl::Commit()
                 seqValues[nProperty] <<= m_bAlwaysAllowSave;
                 break;
             }
+            case PROPERTYHANDLE_EXPERIMENTALMODE :
+            {
+                seqValues[nProperty] <<= m_bExperimentalMode;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -758,11 +779,12 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_TRYODMADIALOG,
         PROPERTYNAME_SHOWLINKWARNINGDIALOG,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
-        PROPERTYNAME_ALWAYSALLOWSAVE
+        PROPERTYNAME_ALWAYSALLOWSAVE,
+        PROPERTYNAME_EXPERIMENTALMODE
     };
 
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    static const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -972,6 +994,16 @@ void SvtMiscOptions::SetSaveAlwaysAllowed( sal_Bool bSet )
 sal_Bool SvtMiscOptions::IsSaveAlwaysAllowed() const
 {
     return m_pDataContainer->IsSaveAlwaysAllowed();
+}
+
+void SvtMiscOptions::SetExperimentalMode( sal_Bool bSet )
+{
+    m_pDataContainer->SetExperimentalMode( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsExperimentalMode() const
+{
+    return m_pDataContainer->IsExperimentalMode();
 }
 
 //*****************************************************************************************************************
