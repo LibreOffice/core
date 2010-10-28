@@ -143,17 +143,25 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
         aRenderOptions[1].Value = i_rViewProp;
         aRenderOptions[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
         aRenderOptions[2].Value <<= sal_True;
-        Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
-        int nProps = aRenderParms.getLength();
-        for( int i = 0; i < nProps; i++ )
+        try
         {
-            if( aRenderParms[i].Name.equalsAscii( "ExtraPrintUIOptions" ) )
+            Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
+            int nProps = aRenderParms.getLength();
+            for( int i = 0; i < nProps; i++ )
             {
-                Sequence< beans::PropertyValue > aUIProps;
-                aRenderParms[i].Value >>= aUIProps;
-                setUIOptions( aUIProps );
-                break;
+                if( aRenderParms[i].Name.equalsAscii( "ExtraPrintUIOptions" ) )
+                {
+                    Sequence< beans::PropertyValue > aUIProps;
+                    aRenderParms[i].Value >>= aUIProps;
+                    setUIOptions( aUIProps );
+                    break;
+                }
             }
+        }
+        catch( lang::IllegalArgumentException& )
+        {
+            // the first renderer should always be available for the UI options,
+            // but catch the exception to be safe
         }
     }
 
@@ -234,7 +242,13 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        aResult = mxRenderable->getRenderer( i_nPage, getSelectionObject(), aJobOptions );
+        try
+        {
+            aResult = mxRenderable->getRenderer( i_nPage, getSelectionObject(), aJobOptions );
+        }
+        catch( lang::IllegalArgumentException& )
+        {
+        }
     }
     return aResult;
 }
