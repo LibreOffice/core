@@ -61,6 +61,7 @@ ModalDialog DLG_SAVE_AS
     };
     ComboBox ET_CATALOG
     {
+        HelpID = "dbaccess:ComboBox:DLG_SAVE_AS:ET_CATALOG";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 25 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
@@ -77,6 +78,7 @@ ModalDialog DLG_SAVE_AS
     };
     ComboBox ET_SCHEMA
     {
+        HelpID = "dbaccess:ComboBox:DLG_SAVE_AS:ET_SCHEMA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 42 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
@@ -92,6 +94,7 @@ ModalDialog DLG_SAVE_AS
     };
     Edit ET_TITLE
     {
+        HelpID = "dbaccess:Edit:DLG_SAVE_AS:ET_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 59 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;

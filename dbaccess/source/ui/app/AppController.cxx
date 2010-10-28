@@ -1347,7 +1347,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 InvalidateAll();
                 break;
             case SID_DB_APP_DSRELDESIGN:
-                if ( !m_pSubComponentManager->activateSubFrame( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN ) )
+            {
+                Reference< XComponent > xRelationDesigner;
+                if ( !m_pSubComponentManager->activateSubFrame( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xRelationDesigner ) )
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
@@ -1359,7 +1361,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         onDocumentOpened( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
-                break;
+            }
+            break;
             case SID_DB_APP_DSUSERADMIN:
                 {
                     SharedConnection xConnection( ensureConnection() );
@@ -1786,7 +1789,7 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Could not open element!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return false;   // not handled
@@ -1839,12 +1842,20 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         getContainer()->showPreview(NULL);
     }
 
+    bool isStandaloneDocument = false;
     switch ( _eType )
     {
     case E_REPORT:
+        if ( _eOpenMode != E_OPEN_DESIGN )
+        {
+            // reports which are opened in a mode other than design are no sub components of our application
+            // component, but standalone documents.
+            isStandaloneDocument = true;
+        }
+        // NO break!
     case E_FORM:
     {
-        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode ) )
+        if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
             ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
@@ -1853,7 +1864,8 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             Reference< XComponent > xDefinition;
             xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
 
-            onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
+            if ( !isStandaloneDocument )
+                onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
         }
     }
     break;
@@ -1861,7 +1873,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     case E_QUERY:
     case E_TABLE:
     {
-        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode ) )
+        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
             SharedConnection xConnection( ensureConnection() );
             if ( !xConnection.is() )
@@ -2778,9 +2790,9 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
             _xContainer->addContainerListener(this);
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
-        OSL_ENSURE(0,"Could not listener on the container!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------

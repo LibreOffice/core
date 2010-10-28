@@ -29,6 +29,7 @@
 #include "xmlExportDocumentHandler.hxx"
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
@@ -289,7 +290,9 @@ void SAL_CALL ExportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
 void SAL_CALL ExportDocumentHandler::characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if ( !(m_bTableRowsStarted || m_bFirstRowExported) )
+    {
         m_xDelegatee->characters(aChars);
+    }
     else if ( m_bExportChar )
     {
         static const ::rtl::OUString s_sZero(RTL_CONSTASCII_USTRINGPARAM("0"));
@@ -336,12 +339,27 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
     // set ourself as delegator
     m_xProxy->setDelegator( *this );
-
     const ::rtl::OUString sCommand = m_xDatabaseDataProvider->getCommand();
     if ( sCommand.getLength() )
         m_aColumns = ::dbtools::getFieldNamesByCommandDescriptor(m_xDatabaseDataProvider->getActiveConnection()
                     ,m_xDatabaseDataProvider->getCommandType()
                     ,sCommand);
+
+    uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xDatabaseDataProvider,uno::UNO_QUERY);
+    if ( xDataProvider.is() )
+    {
+        m_aColumns.realloc(1);
+        uno::Sequence< ::rtl::OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+        for(sal_Int32 i = 0 ; i < aColumnNames.getLength();++i)
+        {
+            if ( aColumnNames[i].getLength() )
+            {
+                sal_Int32 nCount = m_aColumns.getLength();
+                m_aColumns.realloc(nCount+1);
+                m_aColumns[nCount] = aColumnNames[i];
+            }
+        }
+    }
 }
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL ExportDocumentHandler::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)

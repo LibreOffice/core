@@ -27,6 +27,7 @@
 #include "precompiled_reportdesign.hxx"
 #include "DataProviderHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
@@ -284,7 +285,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
-            aOut.PrimaryButtonId = UID_RPT_PROP_CHARTTYPE_DLG;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_CHARTTYPE_DLG);
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::TextField , sal_True);
             aOut.HasPrimaryButton = sal_True;
             break;
@@ -294,7 +295,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::StringListField , sal_False);
-            aOut.PrimaryButtonId = UID_RPT_PROP_DLG_LINKFIELDS;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_DLG_LINKFIELDS);
             aOut.HasPrimaryButton = sal_True;
             break;
         default:
@@ -469,21 +470,13 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
 
             sal_Bool bModified = xReport->isModified();
             // this fills the chart again
-            uno::Sequence< beans::PropertyValue > aArgs( 4 );
-            aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-                uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("HasCategories"), -1,
-                uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-                uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-                uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+            ::comphelper::NamedValueCollection aArgs;
+            aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );
+            aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
+            aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+            aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
             uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xChartModel,uno::UNO_QUERY_THROW);
-            xReceiver->setArguments( aArgs );
+            xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )
                 xReport->setModified(sal_False);
         } // if ( NewValue != OldValue )

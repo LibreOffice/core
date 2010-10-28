@@ -580,6 +580,9 @@ void ORowSet::freeResources( bool _bComplete )
             m_xComposer = NULL;
         }
 
+        // let our warnings container forget the reference to the (possibly disposed) old result set
+        m_aWarnings.setExternalWarnings( NULL );
+
         DELETEZ(m_pCache);
 
         impl_resetTables_nothrow();

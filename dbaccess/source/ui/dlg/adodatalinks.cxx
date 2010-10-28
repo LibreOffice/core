@@ -29,7 +29,7 @@
 #include "precompiled_dbaccess.hxx"
 
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)

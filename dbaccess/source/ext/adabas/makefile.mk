@@ -91,3 +91,10 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 .INCLUDE : target.mk
 
+ALLTAR : $(MISC)/adabasui.component
+
+$(MISC)/adabasui.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        adabasui.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt adabasui.component

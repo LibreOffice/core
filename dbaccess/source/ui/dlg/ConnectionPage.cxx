@@ -153,7 +153,7 @@
 #include <sfx2/docfilt.hxx>
 #endif
 #include "dsnItem.hxx"
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #define _ADO_DATALINK_BROWSE_
 #endif
 
