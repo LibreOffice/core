@@ -1434,7 +1434,7 @@ DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId)
         SvTreeListBox(pParent, rResId),
         m_pParentDialog(pParent)
 {
-    SetWindowBits( /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
+    SetStyle( GetStyle() | /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
                             WB_CLIPCHILDREN );
 //    SetSpaceBetweenEntries(3);
     SetSelectionMode( SINGLE_SELECTION );
