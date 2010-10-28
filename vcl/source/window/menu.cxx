@@ -2583,6 +2583,26 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     }
 }
 
+static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_nMaxWidth )
+{
+    xub_StrLen nPos = STRING_NOTFOUND;
+    String aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
+    aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth );
+    // re-insert mnemonic
+    if( nPos != STRING_NOTFOUND )
+    {
+        if( nPos < aNonMnem.Len() && i_rLong.GetChar(nPos+1) == aNonMnem.GetChar(nPos) )
+        {
+            rtl::OUStringBuffer aBuf( i_rLong.Len() );
+            aBuf.append( aNonMnem.GetBuffer(), nPos );
+            aBuf.append( sal_Unicode('~') );
+            aBuf.append( aNonMnem.GetBuffer()+nPos );
+            aNonMnem = aBuf.makeStringAndClear();
+        }
+    }
+    return aNonMnem;
+}
+
 void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* pThisItemOnly, BOOL bHighlighted, bool bLayout ) const
 {
     // Fuer Symbole: nFontHeight x nFontHeight
@@ -2778,13 +2798,13 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     if( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
                     {
                         XubString aAccText = pData->aAccelKey.GetName();
-                        nMaxItemTextWidth -= pWin->GetTextWidth( aAccText ) + 4*nExtra;
+                        nMaxItemTextWidth -= pWin->GetTextWidth( aAccText ) + 3*nExtra;
                     }
                     if( !bIsMenuBar && pData->pSubMenu )
                     {
                         nMaxItemTextWidth -= nFontHeight + nExtra;
                     }
-                    String aItemText( pWin->GetEllipsisString( pData->aText, nMaxItemTextWidth ) );
+                    String aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
                     pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.Len(), nStyle, pVector, pDisplayText );
                     if( bSetTmpBackground )
                         pWin->SetBackground();
