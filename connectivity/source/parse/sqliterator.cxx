@@ -1910,12 +1910,12 @@ void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumn
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::setOrderByColumnName" );
     Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
     if ( xColumn.is() )
-        m_aOrderColumns->get().push_back(new OOrderColumn(xColumn,isCaseSensitive(),bAscending));
+        m_aOrderColumns->get().push_back(new OOrderColumn( xColumn, rTableRange, isCaseSensitive(), bAscending ) );
     else
     {
         sal_Int32 nId = rColumnName.toInt32();
         if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->get().size()) )
-            m_aOrderColumns->get().push_back(new OOrderColumn((m_aSelectColumns->get())[nId-1],isCaseSensitive(),bAscending));
+            m_aOrderColumns->get().push_back( new OOrderColumn( ( m_aSelectColumns->get() )[nId-1], isCaseSensitive(), bAscending ) );
     }
 
 #ifdef SQL_TEST_PARSETREEITERATOR

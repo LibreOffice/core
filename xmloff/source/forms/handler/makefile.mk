@@ -25,41 +25,31 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..
-TARGET  = GeneralTest
-PRJNAME = connectivity
-PACKAGE = complex$/connectivity
+PRJ=../../..
+
+PRJNAME=xmloff
+TARGET=form_handlers
+
+INCEXT=..
+
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
 
-#----- compile .java files -----------------------------------------
+.INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)/util/makefile.pmk
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       =\
-        $(TARGET).java
-        
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+# --- Files --------------------------------------------------------
 
-#----- make a jar from compiled files ------------------------------
+SLOFILES =	\
+    $(SLO)/form_handler_factory.obj \
+    $(SLO)/property_handler_base.obj \
+    $(SLO)/vcl_date_handler.obj \
+    $(SLO)/vcl_time_handler.obj
 
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Targets ------------------------------------------------------
-
-.IF "$(depend)" == ""
-ALL :   ALLTAR
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
+# --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-
-run:
-    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -o complex.connectivity.$(TARGET)
-
+test:
+    echo $(INCLUDE)

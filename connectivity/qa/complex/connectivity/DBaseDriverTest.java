@@ -24,36 +24,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package qa.drivers.dbase;
+package complex.connectivity;
 
-import com.sun.star.sdbc.*;
+import complex.connectivity.dbase.DBaseDateFunctions;
+import complex.connectivity.dbase.DBaseStringFunctions;
+import complex.connectivity.dbase.DBaseSqlTests;
+import complex.connectivity.dbase.DBaseNumericFunctions;
 import com.sun.star.lang.XMultiServiceFactory;
 import complexlib.ComplexTestCase;
-import java.util.*;
-import java.io.*;
 import share.LogWriter;
-//import complex.connectivity.DBaseStringFunctions;
 
-public class DBaseDriverTest extends ComplexTestCase
+public class DBaseDriverTest extends ComplexTestCase implements TestCase
 {
-
-    private static Properties props = new Properties();
-    private XDriver m_xDiver;
-    private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
-
-    static
-    {
-        try
-        {
-            String propsFile = "test.properties";
-            props.load(new FileInputStream(propsFile));
-        }
-        catch (Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
-    }
-
     public String[] getTestMethodNames()
     {
         return new String[]
@@ -62,19 +44,21 @@ public class DBaseDriverTest extends ComplexTestCase
                 };
     }
 
+    @Override
     public String getTestObjectName()
     {
         return "DBaseDriverTest";
     }
 
-    public void assure2(String s, boolean b)
+    @Override
+    public void assure( final String i_message, final boolean i_condition )
     {
-        assure(s, b);
+        super.assure( i_message, i_condition );
     }
 
     public LogWriter getLog()
     {
-        return log;
+        return ComplexTestCase.log;
     }
 
     public void Functions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException

@@ -25,40 +25,48 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = DBaseDriverTest
+PRJ = ..
+TARGET  = ConnectivityComplexTests
 PRJNAME = connectivity
-PACKAGE = qa$/drivers$/dbase
+PACKAGE = complex/connectivity
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       =\
-        DBaseDateFunctions.java\
-        DBaseDriverTest.java\
-        DBaseNumericFunctions.java\
-        DBaseStringFunctions.java\
-        DBaseSqlTests.java
-        
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar hsqldb.jar
+JAVAFILES       :=  $(shell @$(FIND) complex -name "*.java")
 
 #----- make a jar from compiled files ------------------------------
 
-MAXLINELENGTH = 100000
+JARCLASSDIRS = $(PACKAGE)
+JARTARGET    = $(TARGET).jar
 
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
+# --- Runner Settings ----------------------------------------------
+
+# classpath and argument list
+RUNNER_CLASSPATH = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar"
+RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 
 # --- Targets ------------------------------------------------------
 
+.IF "$(depend)" == ""
+ALL :   ALLTAR
+    @echo -----------------------------------------------------
+    @echo - do a 'dmake show_targets' to show available targets
+    @echo -----------------------------------------------------
+.ELSE
+ALL: 	ALLDEP
+.ENDIF
+
 .INCLUDE :  target.mk
 
+show_targets:
+    +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
 run: $(CLASSDIR)$/$(JARTARGET)
-    java -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex -o qa.drivers.dbase.$(TARGET)
+    +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce scenarios.sce
 
+run_%: $(CLASSDIR)$/$(JARTARGET)
+    +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)

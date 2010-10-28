@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,39 +23,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.connectivity;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sdbc.*;
+#ifndef XMLOFF_PROPERTY_IDS_HXX
+#define XMLOFF_PROPERTY_IDS_HXX
 
-import com.sun.star.lang.XMultiServiceFactory;
+//......................................................................................................................
+namespace xmloff
+{
+//......................................................................................................................
 
-import complexlib.ComplexTestCase;
+    //==================================================================================================================
+    //= PropertyId
+    //==================================================================================================================
+    enum PropertyId
+    {
+        PID_DATE_MIN,
+        PID_DATE_MAX,
+        PID_DEFAULT_DATE,
+        PID_DATE,
+        PID_TIME_MIN,
+        PID_TIME_MAX,
+        PID_DEFAULT_TIME,
+        PID_TIME,
 
+        PID_INVALID
+    };
 
-//import complex.connectivity.DBaseStringFunctions;
+//......................................................................................................................
+} // namespace xmloff
+//......................................................................................................................
 
-public class GeneralTest  extends ComplexTestCase {
-
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public String getTestObjectName() {
-        return "GeneralTest";
-    }
-    public void assure2(String s,boolean b){
-        assure(s,b);
-    }
-
-    public void test() throws com.sun.star.uno.Exception,com.sun.star.beans.UnknownPropertyException {
-        try
-        {
-            XDriverManager driverManager = UnoRuntime.queryInterface( XDriverManager.class, ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.sdbc.DriverManager" ) );
-            String databaseURL = "sdbc:calc:singin' in the rain" ;
-            XConnection catalogConnection = driverManager.getConnection(databaseURL);
-            failed();
-        }
-        catch(SQLException e){}
-    }
-}
+#endif // XMLOFF_PROPERTY_IDS_HXX
