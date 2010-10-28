@@ -651,6 +651,26 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
     }
 }
 
+void ScDocumentPool::CellStyleCreated( const String& rName )
+{
+    // If a style was created, don't keep any pattern with its name string in the pool,
+    // because it would compare equal to a pattern with a pointer to the new style.
+    // Calling StyleSheetChanged isn't enough because the pool may still contain items
+    // for undo or clipboard content.
+
+    sal_uInt16 nCount = GetItemCount(ATTR_PATTERN);
+    for (sal_uInt16 i=0; i<nCount; i++)
+    {
+        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem(ATTR_PATTERN, i);
+        if ( pPattern && pPattern->GetStyleSheet() == NULL )
+        {
+            const String* pStyleName = pPattern->GetStyleName();
+            if ( pStyleName && *pStyleName == rName )
+                pPattern->UpdateStyleSheet();           // find and store style pointer
+        }
+    }
+}
+
 SfxItemPool* __EXPORT ScDocumentPool::Clone() const
 {
     return new SfxItemPool (*this, TRUE);

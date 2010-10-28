@@ -326,6 +326,22 @@ BOOL ScTable::HasManualBreaks() const
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
 
+void ScTable::SetRowManualBreaks( const ::std::set<SCROW>& rBreaks )
+{
+    maRowManualBreaks = rBreaks;
+    InvalidatePageBreaks();
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
+}
+
+void ScTable::SetColManualBreaks( const ::std::set<SCCOL>& rBreaks )
+{
+    maColManualBreaks = rBreaks;
+    InvalidatePageBreaks();
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
+}
+
 void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) const
 {
     if (bPage)
@@ -355,7 +371,7 @@ bool ScTable::HasRowPageBreak(SCROW nRow) const
     if (!ValidRow(nRow))
         return false;
 
-    return maRowPageBreaks.count(nRow) > 0;
+    return maRowPageBreaks.find(nRow) != maRowPageBreaks.end();
 }
 
 bool ScTable::HasColPageBreak(SCCOL nCol) const
@@ -363,7 +379,7 @@ bool ScTable::HasColPageBreak(SCCOL nCol) const
     if (!ValidCol(nCol))
         return false;
 
-    return maColPageBreaks.count(nCol) > 0;
+    return maColPageBreaks.find(nCol) != maColPageBreaks.end();
 }
 
 bool ScTable::HasRowManualBreak(SCROW nRow) const
@@ -371,7 +387,7 @@ bool ScTable::HasRowManualBreak(SCROW nRow) const
     if (!ValidRow(nRow))
         return false;
 
-    return maRowManualBreaks.count(nRow) > 0;
+    return maRowManualBreaks.find(nRow) != maRowManualBreaks.end();
 }
 
 bool ScTable::HasColManualBreak(SCCOL nCol) const
@@ -379,7 +395,7 @@ bool ScTable::HasColManualBreak(SCCOL nCol) const
     if (!ValidCol(nCol))
         return false;
 
-    return (maColManualBreaks.count(nCol) > 0);
+    return maColManualBreaks.find(nCol) != maColManualBreaks.end();
 }
 
 SCROW ScTable::GetNextManualBreak(SCROW nRow) const
@@ -483,15 +499,27 @@ Sequence<TablePageBreakData> ScTable::GetRowBreakData() const
     return aSeq;
 }
 
-bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow)
+bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 {
     if (!ValidRow(nRow))
+    {
+        if (pFirstRow)
+            *pFirstRow = nRow;
+        if (pLastRow)
+            *pLastRow = nRow;
         return true;
+    }
 
     ScFlatBoolRowSegments::RangeData aData;
     if (!mpHiddenRows->getRangeData(nRow, aData))
+    {
         // search failed.
+        if (pFirstRow)
+            *pFirstRow = nRow;
+        if (pLastRow)
+            *pLastRow = nRow;
         return true;
+    }
 
     if (pFirstRow)
         *pFirstRow = aData.mnRow1;
@@ -502,7 +530,7 @@ bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow)
 }
 
 
-bool ScTable::RowHidden(SCROW nRow, SCROW& rLastRow)
+bool ScTable::RowHidden(SCROW nRow, SCROW& rLastRow) const
 {
     rLastRow = nRow;
     if (!ValidRow(nRow))
@@ -517,7 +545,7 @@ bool ScTable::RowHidden(SCROW nRow, SCROW& rLastRow)
     return aData.mbValue;
 }
 
-bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow)
+bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nStartRow;
     while (nRow <= nEndRow)
@@ -532,7 +560,7 @@ bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow)
     return false;
 }
 
-bool ScTable::ColHidden(SCCOL nCol, SCCOL& rLastCol)
+bool ScTable::ColHidden(SCCOL nCol, SCCOL& rLastCol) const
 {
     rLastCol = nCol;
     if (!ValidCol(nCol))
@@ -546,7 +574,7 @@ bool ScTable::ColHidden(SCCOL nCol, SCCOL& rLastCol)
     return aData.mbValue;
 }
 
-bool ScTable::ColHidden(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol)
+bool ScTable::ColHidden(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
 {
     if (!ValidCol(nCol))
         return true;
@@ -627,7 +655,7 @@ void ScTable::CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, 
     }
 }
 
-SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow)
+SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nStartRow;
     ScFlatBoolRowSegments::RangeData aData;
@@ -650,7 +678,7 @@ SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow)
     return ::std::numeric_limits<SCROW>::max();
 }
 
-SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow)
+SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nEndRow;
     ScFlatBoolRowSegments::RangeData aData;
@@ -673,7 +701,7 @@ SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow)
     return ::std::numeric_limits<SCROW>::max();
 }
 
-SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow)
+SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nCount = 0;
     SCROW nRow = nStartRow;
@@ -694,7 +722,7 @@ SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow)
     return nCount;
 }
 
-sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow)
+sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow) const
 {
     sal_uInt32 nHeight = 0;
     SCROW nRow = nStartRow;
@@ -717,7 +745,7 @@ sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow)
     return nHeight;
 }
 
-SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol)
+SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
 {
     if (bCol)
     {
@@ -741,7 +769,7 @@ SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol)
     return ::std::numeric_limits<SCCOLROW>::max();
 }
 
-bool ScTable::RowFiltered(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow)
+bool ScTable::RowFiltered(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 {
     if (!ValidRow(nRow))
         return false;
@@ -759,7 +787,7 @@ bool ScTable::RowFiltered(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow)
     return aData.mbValue;
 }
 
-bool ScTable::ColFiltered(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol)
+bool ScTable::ColFiltered(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
 {
     if (!ValidCol(nCol))
         return false;
@@ -777,7 +805,7 @@ bool ScTable::ColFiltered(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol)
     return aData.mbValue;
 }
 
-bool ScTable::HasFilteredRows(SCROW nStartRow, SCROW nEndRow)
+bool ScTable::HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nStartRow;
     while (nRow <= nEndRow)
@@ -837,7 +865,7 @@ void ScTable::SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, bool bFiltered)
         mpFilteredCols->setFalse(nStartCol, nEndCol);
 }
 
-SCROW ScTable::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow)
+SCROW ScTable::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nStartRow;
     ScFlatBoolRowSegments::RangeData aData;
@@ -860,7 +888,7 @@ SCROW ScTable::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow)
     return ::std::numeric_limits<SCROW>::max();
 }
 
-SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow)
+SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nEndRow;
     ScFlatBoolRowSegments::RangeData aData;
@@ -883,7 +911,7 @@ SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow)
     return ::std::numeric_limits<SCROW>::max();
 }
 
-SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow)
+SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nCount = 0;
     SCROW nRow = nStartRow;

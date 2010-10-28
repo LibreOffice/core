@@ -105,6 +105,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pAllBorderWidthProperty = NULL;
     XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pDiagBorders[2] = { 0 };
+    XMLPropertyState* pOldDiagBorderWidths[2] = { 0 };      // old attribute names without "s"
     XMLPropertyState* pDiagBorderWidths[2] = { 0 };
 
     ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
@@ -134,8 +135,10 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
                 case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = &*property; break;
                 case CTF_SC_DIAGONALTLBR                : pDiagBorders[XML_LINE_TLBR] = &*property; break;
                 case CTF_SC_DIAGONALBLTR                : pDiagBorders[XML_LINE_BLTR] = &*property; break;
-                case CTF_SC_DIAGONALTLBRWIDTH           : pDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
-                case CTF_SC_DIAGONALBLTRWIDTH           : pDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
+                case CTF_SC_DIAGONALTLBRWIDTH           : pOldDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
+                case CTF_SC_DIAGONALTLBRWIDTHS          : pDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
+                case CTF_SC_DIAGONALBLTRWIDTH           : pOldDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
+                case CTF_SC_DIAGONALBLTRWIDTHS          : pDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
             }
         }
     }
@@ -179,17 +182,23 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     }
     for( i = 0; i < 2; ++i )
     {
-        if( pDiagBorders[i] && pDiagBorderWidths[i] )
+        if( pDiagBorders[i] && ( pDiagBorderWidths[i] || pOldDiagBorderWidths[i] ) )
         {
             table::BorderLine aBorderLine;
             pDiagBorders[i]->maValue >>= aBorderLine;
             table::BorderLine aBorderLineWidth;
-            pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;
+            if (pDiagBorderWidths[i])
+                pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;     // prefer new attribute
+            else
+                pOldDiagBorderWidths[i]->maValue >>= aBorderLineWidth;
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
             pDiagBorders[i]->maValue <<= aBorderLine;
-            pDiagBorderWidths[i]->mnIndex = -1;
+            if (pDiagBorderWidths[i])
+                pDiagBorderWidths[i]->mnIndex = -1;
+            if (pOldDiagBorderWidths[i])
+                pOldDiagBorderWidths[i]->mnIndex = -1;      // reset mnIndex for old and new attribute if both are present
         }
     }
 

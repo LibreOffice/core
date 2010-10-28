@@ -628,12 +628,12 @@ public:
                         // nPPT fuer Test auf Veraenderung
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual );
 
-    USHORT      GetColWidth( SCCOL nCol );
-    SC_DLLPUBLIC USHORT GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true );
-    ULONG       GetRowHeight( SCROW nStartRow, SCROW nEndRow );
-    ULONG       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale );
-    ULONG       GetColOffset( SCCOL nCol );
-    ULONG       GetRowOffset( SCROW nRow );
+    USHORT      GetColWidth( SCCOL nCol ) const;
+    SC_DLLPUBLIC USHORT GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true ) const;
+    ULONG       GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const;
+    ULONG       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
+    ULONG       GetColOffset( SCCOL nCol ) const;
+    ULONG       GetRowOffset( SCROW nRow ) const;
 
     /**
      * Get the last row such that the height of row 0 to the end row is as
@@ -643,7 +643,7 @@ public:
      *
      * @return SCROW last row of the range within specified height.
      */
-    SCROW       GetRowForHeight(ULONG nHeight);
+    SCROW       GetRowForHeight(ULONG nHeight) const;
 
     USHORT      GetOriginalWidth( SCCOL nCol ) const;
     USHORT      GetOriginalHeight( SCROW nRow ) const;
@@ -683,6 +683,8 @@ public:
     void        UpdatePageBreaks( const ScRange* pUserArea );
     void        RemoveManualBreaks();
     BOOL        HasManualBreaks() const;
+    void        SetRowManualBreaks( const ::std::set<SCROW>& rBreaks );
+    void        SetColManualBreaks( const ::std::set<SCCOL>& rBreaks );
 
     void        GetAllRowBreaks(::std::set<SCROW>& rBreaks, bool bPage, bool bManual) const;
     void        GetAllColBreaks(::std::set<SCCOL>& rBreaks, bool bPage, bool bManual) const;
@@ -711,33 +713,33 @@ public:
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData() const;
 
-    bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL);
-    bool        RowHidden(SCROW nRow, SCROW& rLastRow);
-    bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow);
-    bool        ColHidden(SCCOL nCol, SCCOL& rLastCol);
-    bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL);
+    bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
+    bool        RowHidden(SCROW nRow, SCROW& rLastRow) const;
+    bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
+    bool        ColHidden(SCCOL nCol, SCCOL& rLastCol) const;
+    bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
     void        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
     void        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
     void        CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
     void        CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
     void        CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset);
-    SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow);
-    SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow);
-    SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow);
-    sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow);
+    SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
+    sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow) const;
 
-    SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol);
+    SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 
-    bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL);
-    bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL);
-    bool        HasFilteredRows(SCROW nStartRow, SCROW nEndRow);
+    bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
+    bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
+    bool        HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
     void        CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
     void        CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
     void        SetRowFiltered(SCROW nStartRow, SCROW nEndRow, bool bFiltered);
     void        SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, bool bFiltered);
-    SCROW       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow);
-    SCROW       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow);
-    SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow);
+    SCROW       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
 
     void        SyncColRowFlags();
 

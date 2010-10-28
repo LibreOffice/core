@@ -239,14 +239,14 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "DisableComplexChartTypes" ),
                   PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ) );
+                  //#i112666# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ) );
     rOutProperties.push_back(
         Property( C2U( "DisableDataTableDialog" ),
                   PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ) );
+                  //#i112666# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ) );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()

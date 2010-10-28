@@ -59,6 +59,8 @@ public:
     void                    SetScript(sal_Int32 nEvent, const rtl::OUString* pNew);
 
     static rtl::OUString    GetEventName(sal_Int32 nEvent);
+    static sal_Int32        GetVbaSheetEventId(sal_Int32 nEvent);
+    static sal_Int32        GetVbaDocumentEventId(sal_Int32 nEvent);
 };
 
 #endif

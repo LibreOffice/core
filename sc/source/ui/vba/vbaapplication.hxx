@@ -43,7 +43,9 @@ class ScVbaApplication : public ScVbaApplication_BASE
 {
 private:
     sal_Int32 m_xCalculation;
-    sal_Bool m_xDisplayAlerts;
+    sal_Bool m_bDisplayAlerts;
+     sal_Bool m_bEnableEvents;
+
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
 
 protected:
@@ -99,6 +101,9 @@ public:
     virtual void SAL_CALL setStatusBar( const css::uno::Any& _statusbar ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCursor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL getEnableEvents() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) throw (css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL wait( double time ) throw (css::uno::RuntimeException);

@@ -115,13 +115,11 @@ public:
     ScExtTabSettings&   GetOrCreateTabSettings( SCTAB nTab );
 
     /** Returns the number of sheet codenames. */
-    size_t              GetCodeNameCount() const;
+    SCTAB               GetCodeNameCount() const;
     /** Returns the specified codename (empty string = no codename). */
-    const String&       GetCodeName( size_t nIdx ) const;
+    const String&       GetCodeName( SCTAB nTab ) const;
     /** Appends a codename for a sheet. */
-    void                AppendCodeName( const String& rCodeName );
-    void                SetCodeName( const String& rCodeName, size_t nIdx );
-    void                DeleteCodeName( size_t nIdx );
+    void                SetCodeName( SCTAB nTab, const String& rCodeName );
 
 private:
     ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;

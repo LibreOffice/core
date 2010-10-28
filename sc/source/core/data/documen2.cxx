@@ -50,6 +50,7 @@
 #include <tools/tenccvt.hxx>
 #include <tools/list.hxx>
 #include <rtl/crc.h>
+#include <basic/basmgr.hxx>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -93,7 +94,8 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
-#include <basic/basmgr.hxx>
+
+using namespace com::sun::star;
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -1118,11 +1120,11 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             String sCodeName;
             String sSource;
-            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
-            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+            uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
+            uno::Reference< container::XNameContainer > xLib;
             if( xLibContainer.is() )
             {
-                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                uno::Any aLibAny = xLibContainer->getByName( aLibName );
                 aLibAny >>= xLib;
             }
 

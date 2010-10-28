@@ -64,15 +64,17 @@ class ScAccessibleFilterMenu;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL);
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL,
+                    ScDocument* pDoc = NULL);
     ~ScDPFieldButton();
 
     void setText(const ::rtl::OUString& rText);
-    void setBoundingBox(const Point& rPos, const Size& rSize);
+    void setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL);
     void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
     void setHasHiddenMember(bool b);
     void setPopupPressed(bool b);
+    void setPopupLeft(bool b);
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
@@ -86,12 +88,14 @@ private:
     ::rtl::OUString         maText;
     Fraction                maZoomX;
     Fraction                maZoomY;
+    ScDocument*             mpDoc;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;
     bool                    mbBaseButton;
     bool                    mbPopupButton;
     bool                    mbHasHiddenMember;
     bool                    mbPopupPressed;
+    bool                    mbPopupLeft;
 };
 
 // ============================================================================

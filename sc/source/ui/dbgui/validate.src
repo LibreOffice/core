@@ -67,6 +67,7 @@ TabDialog TAB_DLG_VALIDATION
 //-->Added by PengYunQuan for Validity Cell Range Picker
 TabPage TP_VALIDATION_VALUES
 {
+    HelpID = "sc:TabPage:TP_VALIDATION_VALUES";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -82,6 +83,7 @@ TabPage TP_VALIDATION_VALUES
     };
     ListBox LB_ALLOW
     {
+        HelpID = "sc:ListBox:TP_VALIDATION_VALUES:LB_ALLOW";
         Border = TRUE ;
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 14 ) ;
@@ -113,6 +115,7 @@ TabPage TP_VALIDATION_VALUES
     };
     ListBox LB_VALUE
     {
+        HelpID = "sc:ListBox:TP_VALIDATION_VALUES:LB_VALUE";
         Border = TRUE ;
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 56 ) ;
@@ -145,6 +148,7 @@ TabPage TP_VALIDATION_VALUES
     };
     Edit EDT_MIN
     {
+        HelpID = "sc:Edit:TP_VALIDATION_VALUES:EDT_MIN";
         Border = TRUE ;
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 74 ) ;
@@ -156,6 +160,7 @@ TabPage TP_VALIDATION_VALUES
     };
     MultiLineEdit EDT_LIST
     {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_VALUES:EDT_LIST";
         Border = TRUE ;
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 74 ) ;
@@ -177,6 +182,7 @@ TabPage TP_VALIDATION_VALUES
     };
     Edit EDT_MAX
     {
+        HelpID = "sc:Edit:TP_VALIDATION_VALUES:EDT_MAX";
         Border = TRUE ;
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 90 ) ;
@@ -188,6 +194,7 @@ TabPage TP_VALIDATION_VALUES
     };
     CheckBox TSB_ALLOW_BLANKS
     {
+        HelpID = "sc:CheckBox:TP_VALIDATION_VALUES:TSB_ALLOW_BLANKS";
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 30 ) ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 30 ) ;
@@ -198,6 +205,7 @@ TabPage TP_VALIDATION_VALUES
     };
     CheckBox CB_SHOWLIST
     {
+        HelpID = "sc:CheckBox:TP_VALIDATION_VALUES:CB_SHOWLIST";
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 80 , 44 ) ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 44 ) ;
@@ -208,6 +216,7 @@ TabPage TP_VALIDATION_VALUES
     };
     CheckBox CB_SORTLIST
     {
+        HelpID = "sc:CheckBox:TP_VALIDATION_VALUES:CB_SORTLIST";
         //<!--Modified by PengYunQuan for Validity Cell Range Picker
         //Pos = MAP_APPFONT ( 90 , 58 ) ;
         Pos = MAP_APPFONT ( 90 - OFFSET_X , 58 ) ;
@@ -226,6 +235,7 @@ TabPage TP_VALIDATION_VALUES
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     ImageButton RB_VALIDITY_REF
     {
+        HelpID = "sc:ImageButton:TP_VALIDATION_VALUES:RB_VALIDITY_REF";
         Pos = MAP_APPFONT ( 142 , 73 ) ;
         Size = MAP_APPFONT ( 13 , 14 ) ;
         TabStop = TRUE ;
@@ -236,12 +246,14 @@ TabPage TP_VALIDATION_VALUES
 
 TabPage TP_VALIDATION_INPUTHELP
 {
+    HelpID = "sc:TabPage:TP_VALIDATION_INPUTHELP";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Eingabehilfe" ;
     TriStateBox TSB_HELP
     {
+        HelpID = "sc:TriStateBox:TP_VALIDATION_INPUTHELP:TSB_HELP";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -267,6 +279,7 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     Edit EDT_TITLE
     {
+        HelpID = "sc:Edit:TP_VALIDATION_INPUTHELP:EDT_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 33 ) ;
         Size = MAP_APPFONT ( 171 , 12 ) ;
@@ -274,6 +287,7 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     MultiLineEdit EDT_INPUTHELP
     {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_INPUTHELP:EDT_INPUTHELP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 51 ) ;
         Size = MAP_APPFONT ( 171 , 128 ) ;
@@ -285,6 +299,7 @@ TabPage TP_VALIDATION_INPUTHELP
 
 TabPage TP_VALIDATION_ERROR
 {
+    HelpID = "sc:TabPage:TP_VALIDATION_ERROR";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -296,6 +311,7 @@ TabPage TP_VALIDATION_ERROR
     };
     TriStateBox TSB_SHOW
     {
+        HelpID = "sc:TriStateBox:TP_VALIDATION_ERROR:TSB_SHOW";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -303,6 +319,7 @@ TabPage TP_VALIDATION_ERROR
     };
     MultiLineEdit EDT_ERROR
     {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_ERROR:EDT_ERROR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 69 ) ;
         Size = MAP_APPFONT ( 171 , 110 ) ;
@@ -312,6 +329,7 @@ TabPage TP_VALIDATION_ERROR
     };
     Edit EDT_TITLE
     {
+        HelpID = "sc:Edit:TP_VALIDATION_ERROR:EDT_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 51 ) ;
         Size = MAP_APPFONT ( 171 , 12 ) ;
@@ -337,6 +355,7 @@ TabPage TP_VALIDATION_ERROR
     };
     ListBox LB_ACTION
     {
+        HelpID = "sc:ListBox:TP_VALIDATION_ERROR:LB_ACTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 33 ) ;
         Size = MAP_APPFONT ( 107 , 76 ) ;
@@ -353,6 +372,7 @@ TabPage TP_VALIDATION_ERROR
     };
     PushButton BTN_SEARCH
     {
+        HelpID = "sc:PushButton:TP_VALIDATION_ERROR:BTN_SEARCH";
         Pos = MAP_APPFONT ( 191 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;

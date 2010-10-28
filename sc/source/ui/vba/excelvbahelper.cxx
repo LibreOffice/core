@@ -31,6 +31,7 @@
 #include "scmod.hxx"
 #include "cellsuno.hxx"
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/sheet/XSheetCellRange.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -41,6 +42,27 @@ namespace vba
 {
 namespace excel
 {
+
+ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
+{
+    ScCellRangesBase* pScCellRangesBase = ScCellRangesBase::getImplementation( xRange );
+    if ( !pScCellRangesBase )
+    {
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying doc shell uno range object" ) ), uno::Reference< uno::XInterface >() );
+    }
+    return pScCellRangesBase->GetDocShell();
+}
+
+ScDocument* GetDocumentFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
+{
+        ScDocShell* pDocShell = GetDocShellFromRange( xRange );
+        if ( !pDocShell )
+        {
+                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying document from uno range object" ) ), uno::Reference< uno::XInterface >() );
+        }
+        return pDocShell->GetDocument();
+}
+
 void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs )
 {
     ScTabViewShell* pViewSh = excel::getBestViewShell( xModel );
@@ -207,11 +229,39 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
     return NULL;
 }
 
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
+    rtl::OUString sCodeName;
+    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CodeName") ) ) >>= sCodeName;
+    // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
+    // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
+    // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
+    // the document in the future could fix this, especially IF the switching of the vba mode takes care to
+    // create the special document module objects if they don't exist.
+    uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xRange ) ), uno::UNO_QUERY );
+
+    return xParent;
+}
+
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
+{
+    uno::Reference< container::XEnumerationAccess > xEnumAccess( xRanges, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
+    uno::Reference< table::XCellRange > xRange( xEnum->nextElement(), uno::UNO_QUERY_THROW );
+
+    return getUnoSheetModuleObj( xRange );
+}
+
 SfxItemSet*
 ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
 {
     return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
 }
+
 
 } //excel
 } //vba

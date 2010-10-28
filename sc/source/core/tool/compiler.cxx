@@ -121,24 +121,6 @@ enum ScanState
     ssStop
 };
 
-// ODFF names that are not written in the current mapping but to be recognized.
-// New names will be written in a future relase, then exchange (!) with the
-// names in formula/source/core/resource/core_resource.src to be able to still
-// read the old names as well.
-struct FunctionName
-{
-    const sal_Char* pName;
-    OpCode          eOp;
-};
-static const FunctionName aOdffAliases[] = {
-    // Renamed old names:
-    // XXX none yet.
-    // Renamed new names:
-    { "BINOM.DIST.RANGE",   ocB },      // B -> BINOM.DIST.RANGE
-    { "LEGACY.TDIST",       ocTDist }   // TDIST -> LEGACY.TDIST
-};
-static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
-
 static const sal_Char* pInternal[ 1 ] = { "TTT" };
 
 using namespace ::com::sun::star::i18n;
@@ -2524,6 +2506,25 @@ BOOL ScCompiler::IsOpCode( const String& rName, bool bInArray )
     }
     else if (mxSymbols->isODFF())
     {
+        // ODFF names that are not written in the current mapping but to be
+        // recognized. New names will be written in a future relase, then
+        // exchange (!) with the names in
+        // formula/source/core/resource/core_resource.src to be able to still
+        // read the old names as well.
+        struct FunctionName
+        {
+            const sal_Char* pName;
+            OpCode          eOp;
+        };
+        static const FunctionName aOdffAliases[] = {
+            // Renamed old names:
+            // XXX none yet.
+            // Renamed new names:
+            { "BINOM.DIST.RANGE",               ocB },              // B -> BINOM.DIST.RANGE
+            { "LEGACY.TDIST",                   ocTDist },          // TDIST -> LEGACY.TDIST
+            { "ORG.OPENOFFICE.EASTERSUNDAY",    ocEasterSunday }    // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
+        };
+        static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
         for (size_t i=0; i<nOdffAliases; ++i)
         {
             if (rName.EqualsIgnoreCaseAscii( aOdffAliases[i].pName))

@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include <stdio.h>
 
-
-#include<com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include<com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include<ooo/vba/excel/XlCalculation.hpp>
+#include <ooo/vba/excel/XlCalculation.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -88,12 +88,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// Enable our own join detection for Intersection and Union
-// should be more efficient than using ScRangeList::Join ( because
-// we already are testing the same things )
-
-#define OWN_JOIN 1
-
 // #TODO is this defined somewhere else?
 #if ( defined UNX ) || ( defined OS2 ) //unix
 #define FILE_PATH_SEPERATOR "/"
@@ -117,7 +111,8 @@ public:
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
     m_xCalculation( excel::XlCalculation::xlCalculationAutomatic ),
-    m_xDisplayAlerts( sal_True)
+    m_bDisplayAlerts( sal_True ),
+    m_bEnableEvents( sal_True )
 {
 }
 
@@ -193,18 +188,47 @@ ScVbaApplication::hasProperty( const ::rtl::OUString& Name ) throw(uno::RuntimeE
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
-    return new ActiveWorkbook( this, mxContext );
+    uno::Reference< excel::XWorkbook > xWrkbk;
+    ScDocShell* pShell = excel::getDocShell( getCurrentExcelDoc( mxContext ) );
+    if ( pShell )
+    {
+        String aName;
+        if ( pShell->GetDocument() )
+        {
+            aName = pShell->GetDocument()->GetCodeName();
+            xWrkbk.set( getUnoDocModule(  aName, pShell ), uno::UNO_QUERY );
+            // fallback ( e.g. it's possible a new document was created via the api )
+            // in that case the document will not have the appropriate Document Modules
+            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
+            // vba mode etc. )
+            if ( !xWrkbk.is() )
+                return new ActiveWorkbook( this, mxContext );
+        }
+    }
+    return xWrkbk;
 }
 
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel = getThisExcelDoc(mxContext);
-    if( !xModel.is() )
-        return uno::Reference< excel::XWorkbook >();
-
-    ScVbaWorkbook *pWb = new ScVbaWorkbook( this, mxContext, xModel );
-    return uno::Reference< excel::XWorkbook > (pWb);
+    uno::Reference< excel::XWorkbook > xWrkbk;
+    ScDocShell* pShell = excel::getDocShell( getThisExcelDoc( mxContext ) );
+    if ( pShell )
+    {
+        String aName;
+        if ( pShell->GetDocument() )
+        {
+            aName = pShell->GetDocument()->GetCodeName();
+            xWrkbk.set( getUnoDocModule( aName, pShell ), uno::UNO_QUERY );
+            // fallback ( e.g. it's possible a new document was created via the api )
+            // in that case the document will not have the appropriate Document Modules
+            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
+            // vba mode etc. )
+            if ( !xWrkbk.is() )
+                return new ActiveWorkbook( this, mxContext );
+        }
+    }
+    return xWrkbk;
 }
 
 uno::Reference< XAssistant > SAL_CALL
@@ -246,10 +270,10 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
         {
             uno::Reference< sheet::XSheetCellRangeContainer > xRanges( getCurrentDocument()->getCurrentSelection(), ::uno::UNO_QUERY);
             if ( xRanges.is() )
-                return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( this, mxContext, xRanges ) ) );
+                return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), mxContext, xRanges ) ) );
 
         }
-        return uno::makeAny( uno::Reference< excel::XRange >(new ScVbaRange( this, mxContext, xRange ) ) );
+        return uno::makeAny( uno::Reference< excel::XRange >(new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange ) ) );
     }
     else
     {
@@ -272,7 +296,8 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
     sal_Int32 nCursorX = pTabView->GetCurX();
     sal_Int32 nCursorY = pTabView->GetCurY();
 
-    return  new ScVbaRange( this, mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
+    uno::Reference< XHelperInterface > xParent( excel::getUnoSheetModuleObj( xRange ), uno::UNO_QUERY_THROW );
+    return new ScVbaRange( xParent, mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
 }
 
 uno::Any SAL_CALL
@@ -531,10 +556,8 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
         try
         {
-            // FIXME: pass proper Worksheet parent
             uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName(
-                uno::Reference< XHelperInterface >(), mxContext, sRangeName,
-                excel::getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
+                mxContext, sRangeName, excel::getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
 
             if( bScroll )
             {
@@ -681,14 +704,27 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts) throw (uno::RuntimeException)
 {
-    m_xDisplayAlerts = displayAlerts;
+    m_bDisplayAlerts = displayAlerts;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getDisplayAlerts() throw (uno::RuntimeException)
 {
-    return m_xDisplayAlerts;
+    return m_bDisplayAlerts;
 }
+
+void SAL_CALL
+ScVbaApplication::setEnableEvents(sal_Bool bEnable) throw (uno::RuntimeException)
+{
+    m_bEnableEvents = bEnable;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
+{
+    return m_bEnableEvents;
+}
+
 void SAL_CALL
 ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::RuntimeException )
 {
@@ -764,410 +800,289 @@ ScVbaApplication::PathSeparator(  ) throw (script::BasicErrorException, uno::Run
     return sPathSep;
 }
 
-typedef std::list< ScRange > Ranges;
-typedef std::list< ScRangeList > RangesList;
+// ----------------------------------------------------------------------------
+// Helpers for Intersect and Union
 
-void lcl_addRangesToVec( RangesList& vRanges, const uno::Any& aArg ) throw ( script::BasicErrorException, uno::RuntimeException )
-{
-    ScRangeList theRanges;
-    uno::Reference< excel::XRange > xRange( aArg, uno::UNO_QUERY_THROW );
-    uno::Reference< XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY_THROW );
-    sal_Int32 nCount = xCol->getCount();
-    for( sal_Int32 i = 1; i <= nCount; ++i )
-    {
-        uno::Reference< excel::XRange > xAreaRange( xCol->Item( uno::makeAny( sal_Int32(i) ), uno::Any() ), uno::UNO_QUERY_THROW );
-        uno::Reference< sheet::XCellRangeAddressable > xAddressable( xAreaRange->getCellRange(), uno::UNO_QUERY_THROW );
-        table::CellRangeAddress addr = xAddressable->getRangeAddress();
-        ScRange refRange;
-        ScUnoConversion::FillScRange( refRange, addr );
-        theRanges.Append( refRange );
-    }
-    vRanges.push_back( theRanges );
-}
+namespace {
 
-void lcl_addRangeToVec( Ranges& vRanges, const uno::Any& aArg ) throw ( script::BasicErrorException, uno::RuntimeException )
-{
-    uno::Reference< excel::XRange > xRange( aArg, uno::UNO_QUERY_THROW );
-    uno::Reference< XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY_THROW );
-    sal_Int32 nCount = xCol->getCount();
-    for( sal_Int32 i = 1; i <= nCount; ++i )
-    {
-        uno::Reference< excel::XRange > xAreaRange( xCol->Item( uno::makeAny( sal_Int32(i) ), uno::Any() ), uno::UNO_QUERY_THROW );
-        uno::Reference< sheet::XCellRangeAddressable > xAddressable( xAreaRange->getCellRange(), uno::UNO_QUERY_THROW );
-        table::CellRangeAddress addr = xAddressable->getRangeAddress();
-        ScRange refRange;
-        ScUnoConversion::FillScRange( refRange, addr );
-        vRanges.push_back( refRange );
-    }
-}
+typedef ::std::list< ScRange > ListOfScRange;
 
-bool lcl_canJoin( ScRange& r1, ScRange& r2 )
+/** Appends all ranges of a VBA Range object in the passed Any to the list of ranges. */
+void lclAddToListOfScRange( ListOfScRange& rList, const uno::Any& rArg )
+        throw (script::BasicErrorException, uno::RuntimeException)
 {
-    bool bCanJoin = false;
-    SCCOL startEndColDiff = r2.aStart.Col() - r1.aEnd.Col();
-    SCROW startEndRowDiff = r2.aStart.Row() - r1.aEnd.Row();
-    SCCOL startColDiff = r2.aStart.Col() - r1.aStart.Col();
-    SCCOL endColDiff = r2.aEnd.Col() - r1.aEnd.Col();
-    SCROW startRowDiff =  r2.aStart.Row() - r1.aStart.Row();
-    SCROW endRowDiff = r2.aEnd.Row() - r1.aEnd.Row();
-    if ( ( startRowDiff == endRowDiff ) && startRowDiff == 0 && startColDiff >=0 && endColDiff > 0 && ( startEndColDiff <= 1 && startEndColDiff >= -r1.aEnd.Col() ) )
-        bCanJoin = true;
-    else if ( ( startColDiff == endColDiff ) && startColDiff == 0 && startRowDiff >= 0 && endRowDiff > 0 && ( startEndRowDiff <= 1 && startEndRowDiff  >= -r1.aEnd.Row() ) )
-        bCanJoin = true;
-#ifdef DEBUG
-    String sr1;
-    String sr2;
-    r1.Format( sr1, SCA_VALID ) ;
-    r2.Format( sr2, SCA_VALID ) ;
-    OSL_TRACE(" canJoin address %s with %s %s ( startRowDiff(%d), endRowDiff(%d), startColDiff(%d) endColDiff(%d) startEndRowDiff(%d), startEndColDiff(%d) ",
-        rtl::OUStringToOString( sr1, RTL_TEXTENCODING_UTF8 ).getStr(),
-        rtl::OUStringToOString( sr2, RTL_TEXTENCODING_UTF8 ).getStr(), bCanJoin ? "true" : "false", startRowDiff, endRowDiff, startColDiff, endColDiff, startEndRowDiff, startEndColDiff );
-#endif
-    return bCanJoin;
-}
-// strips out ranges that contain other ranges, also
-// if the borders of the intersecting ranges are alligned
-// then the the range is extended to the larger
-// e.g. Range("A4:D10"), Range("B4:E10") would be combined
-// to Range("A4:E10")
-void lcl_strip_containedRanges( Ranges& vRanges )
-{
-    // get rid of ranges that are surrounded by other ranges
-    Ranges::iterator it_outer = vRanges.begin();
-    while( it_outer != vRanges.end() )
+    if( rArg.hasValue() )
     {
-        bool it_outer_erased = false;   // true = it_outer erased from vRanges
-        Ranges::iterator it_inner = vRanges.begin();
-        /*  Exit the inner loop if outer iterator has been erased in its last
-            iteration (this means it has been joined to last it_inner, or that
-            the it_inner contains it completely). The inner loop will restart
-            with next element of the outer loop, and all elements (from the
-            beginning of the list) will be checked against that new element. */
-        while( !it_outer_erased && (it_inner != vRanges.end()) )
+        uno::Reference< excel::XRange > xRange( rArg, uno::UNO_QUERY_THROW );
+        uno::Reference< XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY_THROW );
+        for( sal_Int32 nIdx = 1, nCount = xCol->getCount(); nIdx <= nCount; ++nIdx )
         {
-            bool it_inner_erased = false;   // true = it_inner erased from vRanges
-            if ( it_outer != it_inner )
+            uno::Reference< excel::XRange > xAreaRange( xCol->Item( uno::Any( nIdx ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< sheet::XCellRangeAddressable > xAddressable( xAreaRange->getCellRange(), uno::UNO_QUERY_THROW );
+            ScRange aScRange;
+            ScUnoConversion::FillScRange( aScRange, xAddressable->getRangeAddress() );
+            rList.push_back( aScRange );
+        }
+    }
+}
+
+/** Returns true, if the passed ranges can be expressed by a single range. The
+    new range will be contained in r1 then, the range r2 can be removed. */
+bool lclTryJoin( ScRange& r1, const ScRange& r2 )
+{
+    // 1) r2 is completely inside r1
+    if( r1.In( r2 ) )
+        return true;
+
+    // 2) r1 is completely inside r2
+    if( r2.In( r1 ) )
+    {
+        r1 = r2;
+        return true;
+    }
+
+    SCCOL n1L = r1.aStart.Col();
+    SCCOL n1R = r1.aEnd.Col();
+    SCROW n1T = r1.aStart.Row();
+    SCROW n1B = r1.aEnd.Row();
+    SCCOL n2L = r2.aStart.Col();
+    SCCOL n2R = r2.aEnd.Col();
+    SCROW n2T = r2.aStart.Row();
+    SCROW n2B = r2.aEnd.Row();
+
+    // 3) r1 and r2 have equal upper and lower border
+    if( (n1T == n2T) && (n1B == n2B) )
+    {
+        // check that r1 overlaps or touches r2
+        if( ((n1L < n2L) && (n2L - 1 <= n1R)) || ((n2L < n1L) && (n1L - 1 <= n2R)) )
+        {
+            r1.aStart.SetCol( ::std::min( n1L, n2L ) );
+            r1.aEnd.SetCol( ::std::max( n1R, n2R ) );
+            return true;
+        }
+        return false;
+    }
+
+    // 4) r1 and r2 have equal left and right border
+    if( (n1L == n2L) && (n1R == n2R) )
+    {
+        // check that r1 overlaps or touches r2
+        if( ((n1T < n2T) && (n2T + 1 <= n1B)) || ((n2T < n1T) && (n1T + 1 <= n2B)) )
+        {
+            r1.aStart.SetRow( ::std::min( n1T, n2T ) );
+            r1.aEnd.SetRow( ::std::max( n1B, n2B ) );
+            return true;
+        }
+        return false;
+    }
+
+    // 5) cannot join these ranges
+    return false;
+}
+
+/** Strips out ranges that are contained by other ranges, joins ranges that can be joined
+    together (aligned borders, e.g. A4:D10 and B4:E10 would be combined to A4:E10. */
+void lclJoinRanges( ListOfScRange& rList )
+{
+    ListOfScRange::iterator aOuterIt = rList.begin();
+    while( aOuterIt != rList.end() )
+    {
+        bool bAnyErased = false;    // true = any range erased from rList
+        ListOfScRange::iterator aInnerIt = rList.begin();
+        while( aInnerIt != rList.end() )
+        {
+            bool bInnerErased = false;   // true = aInnerIt erased from rList
+            // do not compare a range with itself
+            if( (aOuterIt != aInnerIt) && lclTryJoin( *aOuterIt, *aInnerIt ) )
             {
-#ifdef DEBUG
-                String r1;
-                String r2;
-                it_outer->Format( r1, SCA_VALID ) ;
-                it_inner->Format( r2, SCA_VALID ) ;
-                OSL_TRACE( "try strip/join address %s with %s ",
-                    rtl::OUStringToOString( r1, RTL_TEXTENCODING_UTF8 ).getStr(),
-                    rtl::OUStringToOString( r2, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-                if ( it_outer->In( *it_inner ) )
-                {
-                    it_inner = vRanges.erase( it_inner );
-                    it_inner_erased = true;
-                }
-                else if ( it_inner->In( *it_outer ) )
-                {
-                    it_outer = vRanges.erase( it_outer );
-                    it_outer_erased = true;
-                }
-#ifndef OWN_JOIN
-                else if ( (*it_inner).aStart.Row() == (*it_outer).aStart.Row()
-                        && (*it_inner).aEnd.Row() == (*it_outer).aEnd.Row() )
-                {
-                    it_outer->ExtendTo( *it_inner );
-                    it_inner = vRanges.erase( it_inner );
-                    it_inner_erased = true;
-                }
-#else
-                else if ( lcl_canJoin( *it_outer, *it_inner ) )
-                {
-                    it_outer->ExtendTo( *it_inner );
-                    it_inner = vRanges.erase( it_inner );
-                    it_inner_erased = true;
-                }
-                else if ( lcl_canJoin( *it_inner, *it_outer) )
-                {
-                    it_inner->ExtendTo( *it_outer );
-                    it_outer = vRanges.erase( it_outer );
-                    it_outer_erased = true;
-                }
-#endif
+                // aOuterIt points to joined range, aInnerIt will be removed
+                aInnerIt = rList.erase( aInnerIt );
+                bInnerErased = bAnyErased = true;
             }
-            /*  If it_inner has not been erased from vRanges, continue inner
-                loop with next element. Otherwise, it_inner already points to
+            /*  If aInnerIt has been erased from rList, it already points to
                 the next element (return value of list::erase()). */
-            if( !it_inner_erased )
-                ++it_inner;
+            if( !bInnerErased )
+                ++aInnerIt;
         }
-        /*  If it_outer has not been erased from vRanges, continue outer loop
-            with next element. Otherwise, it_outer already points to the next
-            element (return value of list::erase()). */
-        if( !it_outer_erased )
-            ++it_outer;
+        // if any range has been erased, repeat outer loop with the same range
+        if( !bAnyErased )
+            ++aOuterIt;
     }
-
 }
 
-Ranges
-lcl_intersectionImpl( ScRangeList& rl1, ScRangeList& rl2 )
+/** Intersects the passed list with all ranges of a VBA Range object in the passed Any. */
+void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
+        throw (script::BasicErrorException, uno::RuntimeException)
 {
-    Ranges intersections;
-    for ( USHORT x = 0 ; x < rl1.Count(); ++x )
+    // extract the ranges from the passed argument, will throw on invalid data
+    ListOfScRange aList2;
+    lclAddToListOfScRange( aList2, rArg );
+    // do nothing, if the passed list is already empty
+    if( !rList.empty() && !aList2.empty() )
     {
-        for ( USHORT y = 0 ; y < rl2.Count(); ++y )
+        // save original list in a local
+        ListOfScRange aList1;
+        aList1.swap( rList );
+        // join ranges from passed argument
+        lclJoinRanges( aList2 );
+        // calculate intersection of the ranges in both lists
+        for( ListOfScRange::const_iterator aOuterIt = aList1.begin(), aOuterEnd = aList1.end(); aOuterIt != aOuterEnd; ++aOuterIt )
         {
-#ifdef DEBUG
-            String r1;
-            String r2;
-            rl1.GetObject( x )->Format( r1, SCA_VALID ) ;
-            rl2.GetObject( y )->Format( r2, SCA_VALID ) ;
-            OSL_TRACE( "comparing address %s with %s ",
-                rtl::OUStringToOString( r1, RTL_TEXTENCODING_UTF8 ).getStr(),
-                rtl::OUStringToOString( r2, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-            if( rl1.GetObject( x )->Intersects( *rl2.GetObject( y ) ) )
+            for( ListOfScRange::const_iterator aInnerIt = aList2.begin(), aInnerEnd = aList2.end(); aInnerIt != aInnerEnd; ++aInnerIt )
             {
-                ScRange aIntersection = ScRange( Max( rl1.GetObject( x )->aStart.Col(), rl2.GetObject( y )->aStart.Col() ),
-                    Max( rl1.GetObject( x )->aStart.Row(), rl2.GetObject( y )->aStart.Row() ),
-                    Max( rl1.GetObject( x )->aStart.Tab(), rl2.GetObject( y )->aStart.Tab() ),
-                    Min( rl1.GetObject( x )->aEnd.Col(), rl2.GetObject( y )->aEnd.Col() ),
-                    Min( rl1.GetObject( x )->aEnd.Row(), rl2.GetObject( y )->aEnd.Row() ),
-                        Min( rl1.GetObject( x )->aEnd.Tab(), rl2.GetObject( y )->aEnd.Tab() ) );
-                intersections.push_back( aIntersection );
+                if( aOuterIt->Intersects( *aInnerIt ) )
+                {
+                    ScRange aIsectRange(
+                        Max( aOuterIt->aStart.Col(), aInnerIt->aStart.Col() ),
+                        Max( aOuterIt->aStart.Row(), aInnerIt->aStart.Row() ),
+                        Max( aOuterIt->aStart.Tab(), aInnerIt->aStart.Tab() ),
+                        Min( aOuterIt->aEnd.Col(),   aInnerIt->aEnd.Col() ),
+                        Min( aOuterIt->aEnd.Row(),   aInnerIt->aEnd.Row() ),
+                        Min( aOuterIt->aEnd.Tab(),   aInnerIt->aEnd.Tab() ) );
+                    rList.push_back( aIsectRange );
+                }
             }
         }
+        // again, join the result ranges
+        lclJoinRanges( rList );
     }
-    lcl_strip_containedRanges( intersections );
-    return intersections;
 }
 
-// Intersection of a set of ranges ( where each range is represented by a ScRangeList e.g.
-// any range can be a multi-area range )
-// An intersection is performed between each range in the set of ranges.
-// The resulting set of intersections is then processed to strip out any
-// intersections that contain other intersections ( and also ranges that directly line up
-// are joined ) ( see lcl_strip_containedRanges )
-RangesList lcl_intersections( RangesList& vRanges )
+/** Creates a VBA Range object from the passed list of ranges. */
+uno::Reference< excel::XRange > lclCreateVbaRange(
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< frame::XModel >& rxModel,
+        const ListOfScRange& rList ) throw (uno::RuntimeException)
 {
-    RangesList intersections;
-    RangesList::iterator it = vRanges.begin();
-    while( it != vRanges.end() )
-    {
-        Ranges intermediateList;
-        for( RangesList::iterator it_inner = vRanges.begin(); it_inner != vRanges.end(); ++it_inner )
-        {
-            if ( it != it_inner )
-            {
-                Ranges ranges = lcl_intersectionImpl( *it, *it_inner );
-                for ( Ranges::iterator range_it = ranges.begin(); range_it != ranges.end(); ++range_it )
-                    intermediateList.push_back( *range_it );
-            }
-        }
-        it = vRanges.erase( it ); // remove it so we don't include it in the next pass.
-        // 'it' is removed uncontidionally from vRanges, so the while loop will terminate
-
-        ScRangeList argIntersect;
-        lcl_strip_containedRanges( intermediateList );
-
-        for( Ranges::iterator it_inter = intermediateList.begin(); it_inter != intermediateList.end(); ++it_inter )
-#ifndef OWN_JOIN
-            argIntersect.Join( *it_inter );
-#else
-            argIntersect.Append( *it_inter );
-#endif
-
-        intersections.push_back( argIntersect );
-    }
-    return intersections;
-}
-
-uno::Reference< excel::XRange > SAL_CALL
-ScVbaApplication::Intersect( const uno::Reference< excel::XRange >& Arg1, const uno::Reference< excel::XRange >& Arg2, const uno::Any& Arg3, const uno::Any& Arg4, const uno::Any& Arg5, const uno::Any& Arg6, const uno::Any& Arg7, const uno::Any& Arg8, const uno::Any& Arg9, const uno::Any& Arg10, const uno::Any& Arg11, const uno::Any& Arg12, const uno::Any& Arg13, const uno::Any& Arg14, const uno::Any& Arg15, const uno::Any& Arg16, const uno::Any& Arg17, const uno::Any& Arg18, const uno::Any& Arg19, const uno::Any& Arg20, const uno::Any& Arg21, const uno::Any& Arg22, const uno::Any& Arg23, const uno::Any& Arg24, const uno::Any& Arg25, const uno::Any& Arg26, const uno::Any& Arg27, const uno::Any& Arg28, const uno::Any& Arg29, const uno::Any& Arg30 ) throw (script::BasicErrorException, uno::RuntimeException)
-{
-    if ( !Arg1.is() || !Arg2.is() )
-        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
-
-    RangesList vRanges;
-    lcl_addRangesToVec( vRanges, uno::makeAny( Arg1 ) );
-    lcl_addRangesToVec( vRanges, uno::makeAny( Arg2 ) );
-
-    if ( Arg3.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg3 );
-    if ( Arg4.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg4 );
-    if ( Arg5.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg5 );
-    if ( Arg6.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg6 );
-    if ( Arg7.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg7 );
-    if ( Arg8.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg8 );
-    if ( Arg9.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg9 );
-    if ( Arg10.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg10 );
-    if ( Arg11.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg11 );
-    if ( Arg12.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg12 );
-    if ( Arg13.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg13 );
-    if ( Arg14.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg14 );
-    if ( Arg15.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg15 );
-    if ( Arg16.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg16 );
-    if ( Arg17.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg17 );
-    if ( Arg18.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg18 );
-    if ( Arg19.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg19 );
-    if ( Arg20.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg20 );
-    if ( Arg21.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg21 );
-    if ( Arg22.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg22 );
-    if ( Arg23.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg23 );
-    if ( Arg24.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg24 );
-    if ( Arg25.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg25 );
-    if ( Arg26.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg26 );
-    if ( Arg27.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg27 );
-    if ( Arg28.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg28 );
-    if ( Arg29.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg29 );
-    if ( Arg30.hasValue() )
-        lcl_addRangesToVec( vRanges, Arg30 );
-
-    uno::Reference< excel::XRange > xRefRange;
+    ScDocShell* pDocShell = excel::getDocShell( rxModel );
+    if( !pDocShell ) throw uno::RuntimeException();
 
     ScRangeList aCellRanges;
-    // first pass - gets the set of all possible interections of Arg1..ArgN
-    RangesList intersections = lcl_intersections( vRanges );
-    // second pass - gets the intersections of the intersections ( don't ask, but this
-    // is what seems to happen )
-    if ( intersections.size() > 1)
-        intersections = lcl_intersections( intersections );
-    for( RangesList::iterator it = intersections.begin(); it != intersections.end(); ++it )
-    {
-        for ( USHORT x = 0 ; x < it->Count(); ++x )
-#ifndef OWN_JOIN
-            aCellRanges.Join( *it->GetObject(x) );
-#else
-            aCellRanges.Append( *it->GetObject(x) );
-#endif
-    }
+    for( ListOfScRange::const_iterator aIt = rList.begin(), aEnd = rList.end(); aIt != aEnd; ++aIt )
+        aCellRanges.Append( *aIt );
 
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    ScDocShell* pDocShell = excel::getDocShell( xModel );
-    if ( aCellRanges.Count() == 1 )
+    if( aCellRanges.Count() == 1 )
     {
-        xRefRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+        return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), rxContext, xRange );
     }
-    else if ( aCellRanges.Count() > 1 )
+    if( aCellRanges.Count() > 1 )
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
-        xRefRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, xRanges );
-
+        return new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), rxContext, xRanges );
     }
-    return xRefRange;
+    return 0;
 }
 
-uno::Reference< excel::XRange > SAL_CALL
-ScVbaApplication::Union( const uno::Reference< excel::XRange >& Arg1, const uno::Reference< excel::XRange >& Arg2, const uno::Any& Arg3, const uno::Any& Arg4, const uno::Any& Arg5, const uno::Any& Arg6, const uno::Any& Arg7, const uno::Any& Arg8, const uno::Any& Arg9, const uno::Any& Arg10, const uno::Any& Arg11, const uno::Any& Arg12, const uno::Any& Arg13, const uno::Any& Arg14, const uno::Any& Arg15, const uno::Any& Arg16, const uno::Any& Arg17, const uno::Any& Arg18, const uno::Any& Arg19, const uno::Any& Arg20, const uno::Any& Arg21, const uno::Any& Arg22, const uno::Any& Arg23, const uno::Any& Arg24, const uno::Any& Arg25, const uno::Any& Arg26, const uno::Any& Arg27, const uno::Any& Arg28, const uno::Any& Arg29, const uno::Any& Arg30 ) throw (script::BasicErrorException, uno::RuntimeException)
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Intersect(
+        const uno::Reference< excel::XRange >& rArg1, const uno::Reference< excel::XRange >& rArg2,
+        const uno::Any& rArg3, const uno::Any& rArg4, const uno::Any& rArg5, const uno::Any& rArg6,
+        const uno::Any& rArg7, const uno::Any& rArg8, const uno::Any& rArg9, const uno::Any& rArg10,
+        const uno::Any& rArg11, const uno::Any& rArg12, const uno::Any& rArg13, const uno::Any& rArg14,
+        const uno::Any& rArg15, const uno::Any& rArg16, const uno::Any& rArg17, const uno::Any& rArg18,
+        const uno::Any& rArg19, const uno::Any& rArg20, const uno::Any& rArg21, const uno::Any& rArg22,
+        const uno::Any& rArg23, const uno::Any& rArg24, const uno::Any& rArg25, const uno::Any& rArg26,
+        const uno::Any& rArg27, const uno::Any& rArg28, const uno::Any& rArg29, const uno::Any& rArg30 )
+        throw (script::BasicErrorException, uno::RuntimeException)
 {
-    if ( !Arg1.is() || !Arg2.is() )
-        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
+    if( !rArg1.is() || !rArg2.is() )
+        DebugHelper::exception( SbERR_BAD_PARAMETER, rtl::OUString() );
 
-    uno::Reference< excel::XRange > xRange;
-    Ranges vRanges;
-    lcl_addRangeToVec( vRanges, uno::makeAny( Arg1 ) );
-    lcl_addRangeToVec( vRanges, uno::makeAny( Arg2 ) );
+    // initialize the result list with 1st parameter, join its ranges together
+    ListOfScRange aList;
+    lclAddToListOfScRange( aList, uno::Any( rArg1 ) );
+    lclJoinRanges( aList );
 
-    if ( Arg3.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg3 );
-    if ( Arg4.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg4 );
-    if ( Arg5.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg5 );
-    if ( Arg6.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg6 );
-    if ( Arg7.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg7 );
-    if ( Arg8.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg8 );
-    if ( Arg9.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg9 );
-    if ( Arg10.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg10 );
-    if ( Arg11.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg11 );
-    if ( Arg12.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg12 );
-    if ( Arg13.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg13 );
-    if ( Arg14.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg14 );
-    if ( Arg15.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg15 );
-    if ( Arg16.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg16 );
-    if ( Arg17.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg17 );
-    if ( Arg18.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg18 );
-    if ( Arg19.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg19 );
-    if ( Arg20.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg20 );
-    if ( Arg21.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg21 );
-    if ( Arg22.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg22 );
-    if ( Arg23.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg23 );
-    if ( Arg24.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg24 );
-    if ( Arg25.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg25 );
-    if ( Arg26.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg26 );
-    if ( Arg27.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg27 );
-    if ( Arg28.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg28 );
-    if ( Arg29.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg29 );
-    if ( Arg30.hasValue() )
-        lcl_addRangeToVec( vRanges, Arg30 );
+    // process all other parameters, this updates the list with intersection
+    lclIntersectRanges( aList, uno::Any( rArg2 ) );
+    lclIntersectRanges( aList, rArg3 );
+    lclIntersectRanges( aList, rArg4 );
+    lclIntersectRanges( aList, rArg5 );
+    lclIntersectRanges( aList, rArg6 );
+    lclIntersectRanges( aList, rArg7 );
+    lclIntersectRanges( aList, rArg8 );
+    lclIntersectRanges( aList, rArg9 );
+    lclIntersectRanges( aList, rArg10 );
+    lclIntersectRanges( aList, rArg11 );
+    lclIntersectRanges( aList, rArg12 );
+    lclIntersectRanges( aList, rArg13 );
+    lclIntersectRanges( aList, rArg14 );
+    lclIntersectRanges( aList, rArg15 );
+    lclIntersectRanges( aList, rArg16 );
+    lclIntersectRanges( aList, rArg17 );
+    lclIntersectRanges( aList, rArg18 );
+    lclIntersectRanges( aList, rArg19 );
+    lclIntersectRanges( aList, rArg20 );
+    lclIntersectRanges( aList, rArg21 );
+    lclIntersectRanges( aList, rArg22 );
+    lclIntersectRanges( aList, rArg23 );
+    lclIntersectRanges( aList, rArg24 );
+    lclIntersectRanges( aList, rArg25 );
+    lclIntersectRanges( aList, rArg26 );
+    lclIntersectRanges( aList, rArg27 );
+    lclIntersectRanges( aList, rArg28 );
+    lclIntersectRanges( aList, rArg29 );
+    lclIntersectRanges( aList, rArg30 );
 
-    ScRangeList aCellRanges;
-    lcl_strip_containedRanges( vRanges );
+    // create the VBA Range object
+    return lclCreateVbaRange( mxContext, getCurrentDocument(), aList );
+}
 
-    for( Ranges::iterator it = vRanges.begin(); it != vRanges.end(); ++it )
-        aCellRanges.Append( *it );
+uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Union(
+        const uno::Reference< excel::XRange >& rArg1, const uno::Reference< excel::XRange >& rArg2,
+        const uno::Any& rArg3, const uno::Any& rArg4, const uno::Any& rArg5, const uno::Any& rArg6,
+        const uno::Any& rArg7, const uno::Any& rArg8, const uno::Any& rArg9, const uno::Any& rArg10,
+        const uno::Any& rArg11, const uno::Any& rArg12, const uno::Any& rArg13, const uno::Any& rArg14,
+        const uno::Any& rArg15, const uno::Any& rArg16, const uno::Any& rArg17, const uno::Any& rArg18,
+        const uno::Any& rArg19, const uno::Any& rArg20, const uno::Any& rArg21, const uno::Any& rArg22,
+        const uno::Any& rArg23, const uno::Any& rArg24, const uno::Any& rArg25, const uno::Any& rArg26,
+        const uno::Any& rArg27, const uno::Any& rArg28, const uno::Any& rArg29, const uno::Any& rArg30 )
+        throw (script::BasicErrorException, uno::RuntimeException)
+{
+    if( !rArg1.is() || !rArg2.is() )
+        DebugHelper::exception( SbERR_BAD_PARAMETER, rtl::OUString() );
 
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    ScDocShell* pDocShell = excel::getDocShell( xModel );
-    if ( aCellRanges.Count() == 1 )
-    {
-    // normal range
-        xRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
-    }
-    else if ( aCellRanges.Count() > 1 ) // Multi-Area
-    {
-        uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
-        xRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, xRanges );
-    }
+    ListOfScRange aList;
+    lclAddToListOfScRange( aList, uno::Any( rArg1 ) );
+    lclAddToListOfScRange( aList, uno::Any( rArg2 ) );
+    lclAddToListOfScRange( aList, rArg3 );
+    lclAddToListOfScRange( aList, rArg4 );
+    lclAddToListOfScRange( aList, rArg5 );
+    lclAddToListOfScRange( aList, rArg6 );
+    lclAddToListOfScRange( aList, rArg7 );
+    lclAddToListOfScRange( aList, rArg8 );
+    lclAddToListOfScRange( aList, rArg9 );
+    lclAddToListOfScRange( aList, rArg10 );
+    lclAddToListOfScRange( aList, rArg11 );
+    lclAddToListOfScRange( aList, rArg12 );
+    lclAddToListOfScRange( aList, rArg13 );
+    lclAddToListOfScRange( aList, rArg14 );
+    lclAddToListOfScRange( aList, rArg15 );
+    lclAddToListOfScRange( aList, rArg16 );
+    lclAddToListOfScRange( aList, rArg17 );
+    lclAddToListOfScRange( aList, rArg18 );
+    lclAddToListOfScRange( aList, rArg19 );
+    lclAddToListOfScRange( aList, rArg20 );
+    lclAddToListOfScRange( aList, rArg21 );
+    lclAddToListOfScRange( aList, rArg22 );
+    lclAddToListOfScRange( aList, rArg23 );
+    lclAddToListOfScRange( aList, rArg24 );
+    lclAddToListOfScRange( aList, rArg25 );
+    lclAddToListOfScRange( aList, rArg26 );
+    lclAddToListOfScRange( aList, rArg27 );
+    lclAddToListOfScRange( aList, rArg28 );
+    lclAddToListOfScRange( aList, rArg29 );
+    lclAddToListOfScRange( aList, rArg30 );
 
-    // #FIXME need proper (WorkSheet) parent
-    return xRange;
+    // simply join together all ranges as much as possible, strip out covered ranges etc.
+    lclJoinRanges( aList );
+
+    // create the VBA Range object
+    return lclCreateVbaRange( mxContext, getCurrentDocument(), aList );
 }
 
 void

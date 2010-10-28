@@ -33,9 +33,9 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "sheetevents.hxx"
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <tools/debug.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -59,6 +59,37 @@ rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
         "OnCalculate"               // SC_SHEETEVENT_CALCULATE
     };
     return rtl::OUString::createFromAscii(aEventNames[nEvent]);
+}
+
+// static
+sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
+{
+    using namespace ::com::sun::star::script::vba::VBAEventId;
+    if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
+    {
+        DBG_ERRORFILE("invalid event number");
+        return NO_EVENT;
+    }
+
+    static const sal_Int32 nVbaEventIds[] =
+    {
+        WORKSHEET_ACTIVATE,             // SC_SHEETEVENT_FOCUS
+        WORKSHEET_DEACTIVATE,           // SC_SHEETEVENT_UNFOCUS
+        WORKSHEET_SELECTIONCHANGE,      // SC_SHEETEVENT_SELECT
+        WORKSHEET_BEFOREDOUBLECLICK,    // SC_SHEETEVENT_DOUBLECLICK
+        WORKSHEET_BEFORERIGHTCLICK,     // SC_SHEETEVENT_RIGHTCLICK
+        WORKSHEET_CHANGE,               // SC_SHEETEVENT_CHANGE
+        WORKSHEET_CALCULATE             // SC_SHEETEVENT_CALCULATE
+    };
+    return nVbaEventIds[nEvent];
+}
+
+// static
+sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
+{
+    using namespace ::com::sun::star::script::vba::VBAEventId;
+    sal_Int32 nSheetEventId = GetVbaSheetEventId(nEvent);
+    return (nSheetEventId != NO_EVENT) ? (nSheetEventId + USERDEFINED_START) : NO_EVENT;
 }
 
 // -----------------------------------------------------------------------

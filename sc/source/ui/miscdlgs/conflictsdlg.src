@@ -52,12 +52,14 @@ ModalDialog RID_SCDLG_CONFLICTS
     };
     PushButton BTN_KEEPMINE
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPMINE";
         Pos = MAP_APPFONT ( 72 , 145 ) ;
         Size = MAP_APPFONT ( 76 , 14 ) ;
         Text [ en-US ] = "Keep ~Mine" ;
     };
     PushButton BTN_KEEPOTHER
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPOTHER";
         Pos = MAP_APPFONT ( 190 , 145 ) ;
         Size = MAP_APPFONT ( 76 , 14 ) ;
         Text [ en-US ] = "Keep ~Other" ;
@@ -69,12 +71,14 @@ ModalDialog RID_SCDLG_CONFLICTS
     };
     PushButton BTN_KEEPALLMINE
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLMINE";
         Pos = MAP_APPFONT ( 6 , 172 ) ;
         Size = MAP_APPFONT ( 104 , 14 ) ;
         Text [ en-US ] = "~Keep All Mine" ;
     };
     PushButton BTN_KEEPALLOTHERS
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLOTHERS";
         Pos = MAP_APPFONT ( 116 , 172 ) ;
         Size = MAP_APPFONT ( 104 , 14 ) ;
         Text [ en-US ] = "Keep ~All Others" ;

@@ -39,14 +39,15 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-#include "tools/debug.hxx"
-#include "tools/color.hxx"
-#include "sfx2/objsh.hxx"
-#include "svx/xtable.hxx"
-#include "svx/drawitem.hxx"
-#include "unotools/pathoptions.hxx"
-#include "tools/resid.hxx"
-#include "editeng/editrids.hrc"
+#include <tools/debug.hxx>
+#include <tools/color.hxx>
+#include <sfx2/objsh.hxx>
+#include <svx/xtable.hxx>
+#include <svx/drawitem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <tools/resid.hxx>
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -58,24 +59,22 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
                                   const String&   rTitle,
                                   const String&   rTabBgColorNoColorText,
                                   const Color&    rDefaultColor,
-                                  ULONG nHelpId ) :
+                                  const rtl::OString& sHelpId ) :
     ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
     aBorderWin              ( this, ScResId( TAB_BG_COLOR_CT_BORDER ) ),
     aTabBgColorSet          ( &aBorderWin, ScResId( TAB_BG_COLOR_SET_BGDCOLOR ), this ),
-    aTabBgColorBox          ( this, ScResId( TAB_BG_COLOR_GB_BGDCOLOR ) ),
     aBtnOk                  ( this, ScResId( BTN_OK ) ),
     aBtnCancel              ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp                ( this, ScResId( BTN_HELP ) ),
     aTabBgColor             ( rDefaultColor ),
     aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
-    mnHelpId                ( nHelpId )
+    msHelpId                ( sHelpId )
 
 {
-    SetHelpId( nHelpId );
+    SetHelpId( sHelpId );
     this->SetText( rTitle );
     this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
 
-    aTabBgColorBox.SetText(rTitle);
     FillColorValueSets_Impl();
     aTabBgColorSet.SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
     aBtnOk.SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
@@ -120,7 +119,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
-        String aStrWhite( ScResId( RID_SVXITEMS_COLOR_WHITE ) );
+        String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
         WinBits nBits = ( aTabBgColorSet.GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
         aTabBgColorSet.SetText( aTabBgColorNoColorText );
         aTabBgColorSet.SetStyle( nBits );

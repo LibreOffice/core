@@ -231,6 +231,12 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
     double fValue = 0.0;
+    if (mnStringNoValueError == errCellNoValue)
+    {
+        // Requested that all strings result in 0, error handled by caller.
+        SetError( mnStringNoValueError);
+        return fValue;
+    }
     ::rtl::OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
@@ -3964,5 +3970,10 @@ StackVar ScInterpreter::Interpret()
     while( maxsp-- )
         (*p++)->DecRef();
 
-    return xResult->GetType();
+    StackVar eType = xResult->GetType();
+    if (eType == svMatrix)
+        // Results are immutable in case they would be reused as input for new
+        // interpreters.
+        static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
+    return eType;
 }

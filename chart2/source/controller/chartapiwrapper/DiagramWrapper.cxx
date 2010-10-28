@@ -749,20 +749,19 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
     {
-        if( aPosition.X < 0 || aPosition.Y < 0 || aPosition.X > 1 || aPosition.Y > 1 )
-        {
-            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
-            uno::Any aEmpty;
-            xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
-            return;
-        }
-
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
 
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
+        if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
+        {
+            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+            uno::Any aEmpty;
+            xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
+            return;
+        }
         xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
         xProp->setPropertyValue( C2U( "PosSizeExcludeAxes" ), uno::makeAny(false) );
     }

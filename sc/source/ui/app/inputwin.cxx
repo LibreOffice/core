@@ -757,7 +757,11 @@ ScTextWnd::ScTextWnd( Window* pParent )
     aTextFont.SetColor       (aTxtColor);
     aTextFont.SetWeight      ( WEIGHT_NORMAL );
 
-    SetSizePixel        ( Size(1,TBX_WINDOW_HEIGHT) );
+    Size aSize(1,TBX_WINDOW_HEIGHT);
+    Size aMinEditSize( Edit::GetMinimumEditSize() );
+    if( aMinEditSize.Height() > aSize.Height() )
+        aSize.Height() = aMinEditSize.Height();
+    SetSizePixel        ( aSize );
     SetBackground       ( aBgColor );
     SetLineColor        ( COL_BLACK );
     SetMapMode          ( MAP_TWIP );

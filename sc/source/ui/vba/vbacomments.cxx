@@ -50,10 +50,11 @@ class CommentEnumeration : public EnumerationHelperImpl
     css::uno::Reference< css::frame::XModel > mxModel;
 public:
     CommentEnumeration(
+            const uno::Reference< XHelperInterface >& xParent,
             const uno::Reference< uno::XComponentContext >& xContext,
             const uno::Reference< container::XEnumeration >& xEnumeration,
             const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException ) :
-        EnumerationHelperImpl( xContext, xEnumeration ),
+        EnumerationHelperImpl( xParent, xContext, xEnumeration ),
         mxModel( xModel, uno::UNO_SET_THROW )
     {}
 
@@ -80,8 +81,7 @@ uno::Reference< container::XEnumeration >
 ScVbaComments::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-
-    return new CommentEnumeration( mxContext, xEnumAccess->createEnumeration(), mxModel );
+    return new CommentEnumeration( mxParent, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 
 uno::Any

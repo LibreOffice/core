@@ -81,7 +81,6 @@ protected:
 
 private:
     void                    LoadDocumentProperties();
-    void                    AttachDocumentEvents();
 };
 
 

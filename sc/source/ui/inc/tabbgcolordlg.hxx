@@ -32,8 +32,12 @@
 #define SC_TABBGCOLORDLG_HXX
 
 #include <vcl/dialog.hxx>
+<<<<<<< local
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+=======
+#include <vcl/imagebtn.hxx>
+>>>>>>> other
 #include <svtools/valueset.hxx>
 
 //------------------------------------------------------------------------
@@ -45,7 +49,7 @@ public:
                      const String& rTitle,
                      const String& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
-                     ULONG nHelpId );
+                     const rtl::OString& nHelpId );
     ~ScTabBgColorDlg();
 
     void GetSelectedColor( Color& rColor ) const;
@@ -63,13 +67,12 @@ private:
 
     Control                 aBorderWin;
     ScTabBgColorValueSet    aTabBgColorSet;
-    FixedLine               aTabBgColorBox;
     OKButton                aBtnOk;
     CancelButton            aBtnCancel;
     HelpButton              aBtnHelp;
     Color                   aTabBgColor;
     const String            aTabBgColorNoColorText;
-    ULONG                   mnHelpId;
+    rtl::OString            msHelpId;
 
     void            FillColorValueSets_Impl();
 

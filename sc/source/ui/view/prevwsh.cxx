@@ -108,7 +108,11 @@ SFX_IMPL_INTERFACE( ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL) )
     SFX_POPUPMENU_REGISTRATION(ScResId(RID_POPUP_PREVIEW));
 }
 
+<<<<<<< local
 SFX_IMPL_VIEWFACTORY( ScPreviewShell )
+=======
+SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )
+>>>>>>> other
 {
     SFX_VIEW_REGISTRATION(ScDocShell);
 }

@@ -32,43 +32,45 @@
 
 ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_TEXT_IMPORT_OPTIONS";
     Text [ en-US ] = "Import Options" ;
-    Size = MAP_APPFONT ( 190 , 101 ) ;
+    Size = MAP_APPFONT ( 230 , 101 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OutputSize = TRUE ;
 
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 135, 6 ) ;
+        Pos = MAP_APPFONT ( 175, 6 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         DefButton = TRUE ;
     };
 
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 135, 23 ) ;
+        Pos = MAP_APPFONT ( 175, 23 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
     };
 
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 135, 43 ) ;
+        Pos = MAP_APPFONT ( 175, 43 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
     };
 
     FixedLine FL_CHOOSE_LANG
     {
         Pos = MAP_APPFONT( 6, 3 ) ;
-        Size = MAP_APPFONT( 125, 14 ) ;
+        Size = MAP_APPFONT( 165, 14 ) ;
 
         Text [ en-US ] = "Select the language to use for import" ;
     };
 
     RadioButton RB_AUTOMATIC
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_AUTOMATIC";
         Pos = MAP_APPFONT( 12, 20 ) ;
-        Size = MAP_APPFONT( 50, 10 ) ;
+        Size = MAP_APPFONT( 159, 10 ) ;
         TabStop = TRUE ;
 
         Text [ en-US ] = "Automatic" ;
@@ -76,8 +78,9 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
 
     RadioButton RB_CUSTOM
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_CUSTOM";
         Pos = MAP_APPFONT( 12, 34 ) ;
-        Size = MAP_APPFONT( 50, 10 ) ;
+        Size = MAP_APPFONT( 159, 10 ) ;
         TabStop = TRUE ;
 
         Text [ en-US ] = "Custom" ;
@@ -85,8 +88,9 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
 
     ListBox LB_CUSTOM_LANG
     {
+        HelpID = "sc:ListBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:LB_CUSTOM_LANG";
         Pos = MAP_APPFONT( 20, 50 ) ;
-        Size = MAP_APPFONT( 100, 55 ) ;
+        Size = MAP_APPFONT( 140, 120 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -94,19 +98,18 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
 
     FixedLine FL_OPTION
     {
-    Pos = MAP_APPFONT( 6, 70 );
-    Size = MAP_APPFONT( 125, 14 );
-
-    Text [ en-US ] = "Options" ;
+       Pos = MAP_APPFONT( 6, 70 );
+       Size = MAP_APPFONT( 165, 14 );
+       Text [ en-US ] = "Options" ;
     };
 
     CheckBox BTN_CONVERT_DATE
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:BTN_CONVERT_DATE";
         Pos = MAP_APPFONT( 12, 86 );
-    Size = MAP_APPFONT( 125, 10 );
-    TabStop = TRUE ;
-
-    Text [ en-US ] = "Detect special numbers (such as dates)." ;
+        Size = MAP_APPFONT( 159, 10 );
+        TabStop = TRUE ;
+        Text [ en-US ] = "Detect special numbers (such as dates)." ;
     };
 };
 

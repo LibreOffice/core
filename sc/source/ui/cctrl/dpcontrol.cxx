@@ -33,12 +33,16 @@
 #include "dpcontrol.hxx"
 #include "dpcontrol.hrc"
 
-#include "vcl/outdev.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/wintypes.hxx"
-#include "vcl/decoview.hxx"
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/wintypes.hxx>
+#include <vcl/decoview.hxx>
 #include "strload.hxx"
 #include "global.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
+#include "docpool.hxx"
+#include "patattr.hxx"
 
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterTopWindow.hxx"
@@ -55,13 +59,15 @@ using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
+    mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
     mbBaseButton(true),
     mbPopupButton(false),
     mbHasHiddenMember(false),
-    mbPopupPressed(false)
+    mbPopupPressed(false),
+    mbPopupLeft(false)
 {
     if (pZoomX)
         maZoomX = *pZoomX;
@@ -83,10 +89,15 @@ void ScDPFieldButton::setText(const OUString& rText)
     maText = rText;
 }
 
-void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize)
+void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL)
 {
     maPos = rPos;
     maSize = rSize;
+    if (bLayoutRTL)
+    {
+        // rPos is the logical-left position, adjust maPos to visual-left (inside the cell border)
+        maPos.X() -= maSize.Width() - 1;
+    }
 }
 
 void ScDPFieldButton::setDrawBaseButton(bool b)
@@ -107,6 +118,11 @@ void ScDPFieldButton::setHasHiddenMember(bool b)
 void ScDPFieldButton::setPopupPressed(bool b)
 {
     mbPopupPressed = b;
+}
+
+void ScDPFieldButton::setPopupLeft(bool b)
+{
+    mbPopupLeft = b;
 }
 
 void ScDPFieldButton::draw()
@@ -135,17 +151,28 @@ void ScDPFieldButton::draw()
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
 
         // Field name.
-        Font aTextFont( mpStyle->GetLabelFont() );
-        double fFontHeight = 12.0;
-        fFontHeight *= static_cast<double>(maZoomY.GetNumerator()) / static_cast<double>(maZoomY.GetDenominator());
-        aTextFont.SetHeight(static_cast<long>(fFontHeight));
+        // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
+        Font aTextFont( mpStyle->GetAppFont() );
+        if ( mpDoc )
+        {
+            //  use ScPatternAttr::GetFont only for font size
+            Font aAttrFont;
+            static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+                GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
+            aTextFont.SetSize( aAttrFont.GetSize() );
+        }
         mpOutDev->SetFont(aTextFont);
+        mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());
 
         Point aTextPos = maPos;
-        long nTHeight = static_cast<long>(fFontHeight);
+        long nTHeight = mpOutDev->GetTextHeight();
         aTextPos.setX(maPos.getX() + nMargin);
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
+
+        mpOutDev->Push(PUSH_CLIPREGION);
+        mpOutDev->IntersectClipRegion(aRect);
         mpOutDev->DrawText(aTextPos, maText);
+        mpOutDev->Pop();
     }
 
     if (mbPopupButton)
@@ -163,7 +190,12 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     if (nH > 18)
         nH = 18;
 
-    rPos.setX(maPos.getX() + maSize.getWidth() - nW);
+    // #i114944# AutoFilter button is left-aligned in RTL.
+    // DataPilot button is always right-aligned for now, so text output isn't affected.
+    if (mbPopupLeft)
+        rPos.setX(maPos.getX());
+    else
+        rPos.setX(maPos.getX() + maSize.getWidth() - nW);
     rPos.setY(maPos.getY() + maSize.getHeight() - nH);
     rSize.setWidth(nW);
     rSize.setHeight(nH);
@@ -392,7 +424,7 @@ void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
     {
         SetClipRegion();
         bNativeDrawn = DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, Region(aCtrlRect), CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
             ImplControlValue(), OUString());
     }
     else
@@ -755,7 +787,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
-    Region aRegion(Rectangle(aPos,aSize));
+    Rectangle aRegion(aPos,aSize);
 
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
@@ -763,7 +795,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
         IntersectClipRegion(Rectangle(aPos, aSize));
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, Region(aCtrlRect), CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
             ImplControlValue(), OUString());
 
         Pop();
@@ -959,7 +991,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
-    maWndSize(160, 330),
+    maWndSize(240, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
     maTabStopCtrls.reserve(7);
@@ -1032,7 +1064,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nMenuHeight = 60;
     const sal_uInt16 nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
     const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
-    const sal_uInt16 nBtnWidth = 60;
+    const sal_uInt16 nBtnWidth = 90;
     const sal_uInt16 nLabelHeight = static_cast< sal_uInt16 >( getLabelFont().GetHeight() );
     const sal_uInt16 nBtnHeight = nLabelHeight*2;
     const sal_uInt16 nBottomMargin = 10;
@@ -1089,7 +1121,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         {
             long h = 26;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 75;
+            rPos.X() += 150;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
             rSize = Size(h, h);
         }
@@ -1098,7 +1130,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         {
             long h = 26;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 75 + h + 10;
+            rPos.X() += 150 + h + 10;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
             rSize = Size(h, h);
         }

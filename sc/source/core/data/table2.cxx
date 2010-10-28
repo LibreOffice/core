@@ -155,6 +155,22 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         mpFilteredRows->insertSegment(nStartRow, nSize, true);
         mpHiddenRows->insertSegment(nStartRow, nSize, true);
+
+        if (!maRowManualBreaks.empty())
+        {
+            std::set<SCROW>::reverse_iterator rit = maRowManualBreaks.rbegin();
+            while (rit != maRowManualBreaks.rend())
+            {
+                SCROW nRow = *rit;
+                if (nRow < nStartRow)
+                    break;  // while
+                else
+                {
+                    maRowManualBreaks.erase( (++rit).base());
+                    maRowManualBreaks.insert( static_cast<SCROW>( nRow + nSize));
+                }
+            }
+        }
     }
 
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
@@ -185,6 +201,18 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         mpFilteredRows->removeSegment(nStartRow, nStartRow+nSize);
         mpHiddenRows->removeSegment(nStartRow, nStartRow+nSize);
+
+        if (!maRowManualBreaks.empty())
+        {
+            std::set<SCROW>::iterator it = maRowManualBreaks.upper_bound( static_cast<SCROW>( nStartRow + nSize - 1));
+            maRowManualBreaks.erase( maRowManualBreaks.lower_bound( nStartRow), it);
+            while (it != maRowManualBreaks.end())
+            {
+                SCROW nRow = *it;
+                maRowManualBreaks.erase( it++);
+                maRowManualBreaks.insert( static_cast<SCROW>( nRow - nSize));
+            }
+        }
     }
 
     {   // scope for bulk broadcast
@@ -233,6 +261,22 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
         mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize), true);
         mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize), true);
+
+        if (!maColManualBreaks.empty())
+        {
+            std::set<SCCOL>::reverse_iterator rit = maColManualBreaks.rbegin();
+            while (rit != maColManualBreaks.rend())
+            {
+                SCCOL nCol = *rit;
+                if (nCol < nStartCol)
+                    break;  // while
+                else
+                {
+                    maColManualBreaks.erase( (++rit).base());
+                    maColManualBreaks.insert( static_cast<SCCOL>( nCol + nSize));
+                }
+            }
+        }
     }
 
 
@@ -291,6 +335,18 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         SCCOL nRmSize = nStartCol + static_cast<SCCOL>(nSize);
         mpHiddenCols->removeSegment(nStartCol, nRmSize);
         mpFilteredCols->removeSegment(nStartCol, nRmSize);
+
+        if (!maColManualBreaks.empty())
+        {
+            std::set<SCCOL>::iterator it = maColManualBreaks.upper_bound( static_cast<SCCOL>( nStartCol + nSize - 1));
+            maColManualBreaks.erase( maColManualBreaks.lower_bound( nStartCol), it);
+            while (it != maColManualBreaks.end())
+            {
+                SCCOL nCol = *it;
+                maColManualBreaks.erase( it++);
+                maColManualBreaks.insert( static_cast<SCCOL>( nCol - nSize));
+            }
+        }
     }
 
 
@@ -688,6 +744,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 pDestTab->IncRecalcLevel();
 
                 if (bWidth)
+                {
                     for (SCCOL i=nCol1; i<=nCol2; i++)
                     {
                         bool bThisHidden = ColHidden(i);
@@ -703,6 +760,8 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (bChange)
                             bFlagChange = true;
                     }
+                    pDestTab->SetColManualBreaks( maColManualBreaks);
+                }
 
                 if (bHeight)
                 {
@@ -754,6 +813,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
                         i = nLastRow;
                     }
+                    pDestTab->SetRowManualBreaks( maRowManualBreaks);
                 }
                 pDestTab->DecRecalcLevel();
             }
@@ -791,11 +851,17 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if (bWidth||bHeight)
         {
             if (bWidth)
+            {
                 for (SCCOL i=nCol1; i<=nCol2; i++)
                     pDestTab->pColWidth[i] = pColWidth[i];
+                pDestTab->SetColManualBreaks( maColManualBreaks);
+            }
             if (bHeight)
+            {
                 pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-        DecRecalcLevel();
+                pDestTab->SetRowManualBreaks( maRowManualBreaks);
+            }
+            DecRecalcLevel();
         }
     }
 }
@@ -2189,7 +2255,9 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
         {
             if (pDrawLayer)
             {
-                unsigned long nOldHeights = GetRowHeight(nStartRow, nEndRow);
+                // #i115025# When comparing to nNewHeight for the whole range, the height
+                // including hidden rows has to be used (same behavior as 3.2).
+                unsigned long nOldHeights = mpRowHeights->getSumValue(nStartRow, nEndRow);
                 // FIXME: should we test for overflows?
                 long nHeightDif = (long) (unsigned long) nNewHeight *
                     (nEndRow - nStartRow + 1) - nOldHeights;
@@ -2241,7 +2309,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
 }
 
 
-USHORT ScTable::GetColWidth( SCCOL nCol )
+USHORT ScTable::GetColWidth( SCCOL nCol ) const
 {
     DBG_ASSERT(VALIDCOL(nCol),"Falsche Spaltennummer");
 
@@ -2315,34 +2383,50 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
 }
 
 
-USHORT ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero )
+USHORT ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
-    DBG_ASSERT(VALIDROW(nRow),"Falsche Zeilennummer");
+    DBG_ASSERT(VALIDROW(nRow),"Invalid row number");
 
     if (VALIDROW(nRow) && mpRowHeights)
     {
-        if (bHiddenAsZero && RowHidden(nRow))
+        if (bHiddenAsZero && RowHidden( nRow, pStartRow, pEndRow))
             return 0;
         else
         {
             ScFlatUInt16RowSegments::RangeData aData;
             if (!mpRowHeights->getRangeData(nRow, aData))
+            {
+                if (pStartRow)
+                    *pStartRow = nRow;
+                if (pEndRow)
+                    *pEndRow = nRow;
                 // TODO: What should we return in case the search fails?
                 return 0;
+            }
 
+            // If bHiddenAsZero, pStartRow and pEndRow were initialized to
+            // boundaries of a non-hidden segment. Assume that the previous and
+            // next segment are hidden then and limit the current height
+            // segment.
             if (pStartRow)
-                *pStartRow = aData.mnRow1;
+                *pStartRow = (bHiddenAsZero ? std::max( *pStartRow, aData.mnRow1) : aData.mnRow1);
             if (pEndRow)
-                *pEndRow = aData.mnRow2;
+                *pEndRow = (bHiddenAsZero ? std::min( *pEndRow, aData.mnRow2) : aData.mnRow2);
             return aData.mnValue;
         }
     }
     else
+    {
+        if (pStartRow)
+            *pStartRow = nRow;
+        if (pEndRow)
+            *pEndRow = nRow;
         return (USHORT) ScGlobal::nStdRowHeight;
+    }
 }
 
 
-ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow )
+ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 {
     DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
@@ -2368,7 +2452,7 @@ ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow )
 }
 
 
-ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale )
+ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
 {
     DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
@@ -3018,10 +3102,13 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
     {
-        long x = GetColOffset( MAXCOL + 1 );
-        long y = GetRowOffset( MAXROW + 1 );
-        x = (long) ((double) x * HMM_PER_TWIPS);
-        y = (long) ((double) y * HMM_PER_TWIPS);
+        double fValX = GetColOffset( MAXCOL + 1 ) * HMM_PER_TWIPS;
+        double fValY = GetRowOffset( MAXROW + 1 ) * HMM_PER_TWIPS;
+        const long nMax = ::std::numeric_limits<long>::max();
+        // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
+        // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
+        long x = ( fValX > (double)nMax ) ? nMax : (long) fValX;
+        long y = ( fValY > (double)nMax ) ? nMax : (long) fValY;
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;
@@ -3036,7 +3123,7 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
 }
 
 
-ULONG ScTable::GetRowOffset( SCROW nRow )
+ULONG ScTable::GetRowOffset( SCROW nRow ) const
 {
     ULONG n = 0;
     if ( mpHiddenRows && mpRowHeights )
@@ -3059,7 +3146,7 @@ ULONG ScTable::GetRowOffset( SCROW nRow )
     return n;
 }
 
-SCROW ScTable::GetRowForHeight(ULONG nHeight)
+SCROW ScTable::GetRowForHeight(ULONG nHeight) const
 {
     sal_uInt32 nSum = 0;
 
@@ -3086,7 +3173,7 @@ SCROW ScTable::GetRowForHeight(ULONG nHeight)
 }
 
 
-ULONG ScTable::GetColOffset( SCCOL nCol )
+ULONG ScTable::GetColOffset( SCCOL nCol ) const
 {
     ULONG n = 0;
     if ( pColWidth )

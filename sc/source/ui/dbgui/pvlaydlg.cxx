@@ -567,7 +567,9 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
         }
     }
 
-    if (   (toArr->back().get() == NULL)
+    bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
+    if ( bAllowed
+        && (toArr->back().get() == NULL)
         && (!Contains( toArr, fData.mnCol, nAt )) )
     {
         // ggF. in anderem Fenster entfernen
@@ -714,7 +716,8 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
         {
             ScDPFuncData fData( *((*fromArr)[nFromIndex]) );
 
-            if ( Contains( fromArr, fData.mnCol, nAt ) )
+            bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
+            if ( bAllowed && Contains( fromArr, fData.mnCol, nAt ) )
             {
                 fromWnd->DelField( nAt );
                 Remove( fromArr, nAt );
@@ -935,21 +938,41 @@ PointerStyle ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
     if ( bIsDrag )
     {
         Point aPos = ScreenToOutputPixel( rAt );
+        ScDPFieldType eCheckTarget = TYPE_SELECT;
 
         if ( aRectPage.IsInside( aPos ) )
-            ePtr = lclGetPointerForField( TYPE_PAGE );
+            eCheckTarget = TYPE_PAGE;
         else if ( aRectCol.IsInside( aPos ) )
-            ePtr = lclGetPointerForField( TYPE_COL );
+            eCheckTarget = TYPE_COL;
         else if ( aRectRow.IsInside( aPos ) )
-            ePtr = lclGetPointerForField( TYPE_ROW );
+            eCheckTarget = TYPE_ROW;
         else if ( aRectData.IsInside( aPos ) )
-            ePtr = lclGetPointerForField( TYPE_DATA );
+            eCheckTarget = TYPE_DATA;
         else if ( eDnDFromType != TYPE_SELECT )
             ePtr = POINTER_PIVOT_DELETE;
         else if ( aRectSelect.IsInside( aPos ) )
             ePtr = lclGetPointerForField( TYPE_SELECT );
         else
             ePtr = POINTER_NOTALLOWED;
+
+        if ( eCheckTarget != TYPE_SELECT )
+        {
+            // check if the target orientation is allowed for this field
+            ScDPFuncDataVec* fromArr = NULL;
+            switch ( eDnDFromType )
+            {
+                case TYPE_PAGE:   fromArr = &aPageArr;   break;
+                case TYPE_COL:    fromArr = &aColArr;    break;
+                case TYPE_ROW:    fromArr = &aRowArr;    break;
+                case TYPE_DATA:   fromArr = &aDataArr;   break;
+                case TYPE_SELECT: fromArr = &aSelectArr; break;
+            }
+            ScDPFuncData fData( *((*fromArr)[nDnDFromIndex]) );
+            if (IsOrientationAllowed( fData.mnCol, eCheckTarget ))
+                ePtr = lclGetPointerForField( eCheckTarget );
+            else
+                ePtr = POINTER_NOTALLOWED;
+        }
     }
 
     return ePtr;
@@ -1218,6 +1241,28 @@ String ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
     return String();
 }
 
+//----------------------------------------------------------------------------
+
+bool ScDPLayoutDlg::IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType )
+{
+    bool bAllowed = true;
+    ScDPLabelData* pData = GetLabelData( nCol );
+    DBG_ASSERT( pData, "LabelData not found" );
+    if (pData)
+    {
+        sheet::DataPilotFieldOrientation eOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+        switch (eType)
+        {
+            case TYPE_PAGE:   eOrient = sheet::DataPilotFieldOrientation_PAGE;   break;
+            case TYPE_COL:    eOrient = sheet::DataPilotFieldOrientation_COLUMN; break;
+            case TYPE_ROW:    eOrient = sheet::DataPilotFieldOrientation_ROW;    break;
+            case TYPE_DATA:   eOrient = sheet::DataPilotFieldOrientation_DATA;   break;
+            case TYPE_SELECT: eOrient = sheet::DataPilotFieldOrientation_HIDDEN; break;
+        }
+        bAllowed = ScDPObject::IsOrientationAllowed( (USHORT)eOrient, pData->mnFlags );
+    }
+    return bAllowed;
+}
 
 //----------------------------------------------------------------------------
 

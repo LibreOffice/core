@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <editeng/eeitem.hxx>
-
+#include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -1188,7 +1188,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             _pParent ? _pParent : GetActiveDialogParent(), &aText );
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
-        pDlg->SetHelpId( SID_CHG_PROTECT );
+        pDlg->SetHelpId( GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand() );
         pDlg->SetEditHelpId( HID_CHG_PROTECT );
         if ( !bProtected )
             pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
@@ -1293,7 +1293,7 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     // (might check for the presence of any formulas on each sheet)
     SCTAB nTabCount = aDocument.GetTableCount();
     SCTAB nTab;
-    if (aDocument.HasSheetEventScript( SC_SHEETEVENT_CALCULATE ))
+    if (aDocument.HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true )) // search also for VBA hendler
         for (nTab=0; nTab<nTabCount; nTab++)
             aDocument.SetCalcNotification(nTab);
 
