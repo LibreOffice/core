@@ -115,19 +115,18 @@ ExcelFilter::~ExcelFilter()
 
 bool ExcelFilter::importDocument() throw()
 {
-    /*  to activate the XLSX/XLSB dumper, define the environment variable
-        OOO_XLSBDUMPER and insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/xlsbdumper.ini. */
+    /*  To activate the XLSX/XLSB dumper, insert the full path to the file
+        file:///<path-to-oox-module>/source/dump/xlsbdumper.ini
+        into the environment variable OOO_XLSBDUMPER and start the office with
+        this variable (nonpro only). */
     OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
-    bool bRet = false;
     OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
-    if( aWorkbookPath.getLength() > 0 )
-    {
-        WorkbookHelperRoot aHelper( *this );
-        bRet = aHelper.isValid() && importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) );
-    }
-    return bRet;
+    if( aWorkbookPath.getLength() == 0 )
+        return false;
+
+    WorkbookHelperRoot aHelper( *this );
+    return aHelper.isValid() && importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) );
 }
 
 bool ExcelFilter::exportDocument() throw()
@@ -198,31 +197,30 @@ ExcelBiffFilter::~ExcelBiffFilter()
 
 bool ExcelBiffFilter::importDocument() throw()
 {
-    /*  to activate the BIFF dumper, define the environment variable
-        OOO_BIFFDUMPER and insert the full path to the file
-        file:///<path-to-oox-module>/source/dump/biffdumper.ini. */
+    /*  To activate the BIFF dumper, insert the full path to the file
+        file:///<path-to-oox-module>/source/dump/biffdumper.ini
+        into the environment variable OOO_BIFFDUMPER and start the office with
+        this variable (nonpro only). */
     OOX_DUMP_FILE( ::oox::dump::biff::Dumper );
 
     /*  The boolean argument "UseBiffFilter" passed through XInitialisation
-        decides whether to use the BIFF file dumper implemented in this filter
-        only (false or missing), or to import/export the document (true). */
+        decides whether to import/export the document with this filter (true),
+        or to only use the BIFF file dumper implemented in this filter (false
+        or missing) */
     Any aUseBiffFilter = getArgument( CREATE_OUSTRING( "UseBiffFilter" ) );
     bool bUseBiffFilter = false;
     if( !(aUseBiffFilter >>= bUseBiffFilter) || !bUseBiffFilter )
         return true;
 
-    bool bRet = false;
-
     // detect BIFF version and workbook stream name
     OUString aWorkbookName;
     BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );
     OSL_ENSURE( eBiff != BIFF_UNKNOWN, "ExcelBiffFilter::ExcelBiffFilter - invalid file format" );
-    if( eBiff != BIFF_UNKNOWN )
-    {
-        WorkbookHelperRoot aHelper( *this, eBiff );
-        bRet = aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
-    }
-    return bRet;
+    if( eBiff == BIFF_UNKNOWN )
+        return false;
+
+    WorkbookHelperRoot aHelper( *this, eBiff );
+    return aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
 }
 
 bool ExcelBiffFilter::exportDocument() throw()
@@ -244,4 +242,3 @@ OUString ExcelBiffFilter::implGetImplementationName() const
 
 } // namespace xls
 } // namespace oox
-

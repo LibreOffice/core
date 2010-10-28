@@ -28,6 +28,8 @@
 #ifndef INCLUDED_OOXML_LOGGERS_HXX
 #define INCLUDED_OOXML_LOGGERS_HXX
 
+#ifdef DEBUG
+
 #include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter {
@@ -35,4 +37,5 @@ namespace writerfilter {
         extern TagLogger::Pointer_t debug_logger;
     }
 }
+#endif
 #endif // INCLUDED_OOXML_LOGGERS_HXX

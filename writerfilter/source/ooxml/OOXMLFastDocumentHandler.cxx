@@ -152,13 +152,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
 }
 
-OOXMLParserState::Pointer_t OOXMLFastDocumentHandler::getParserState() const
-{
-    OOXMLParserState::Pointer_t pParserState;
-
-    return getContextHandler()->getParserState();
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastDocumentHandler::createUnknownChildContext
 (const ::rtl::OUString &

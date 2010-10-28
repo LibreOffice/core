@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "oox/helper/attributelist.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
@@ -71,9 +72,13 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
     switch( aElementToken )
     {
     case NMSP_PPT|XML_cNvPr:
+    {
+        AttributeList aAttribs( xAttribs );
+        mpGroupShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
         mpGroupShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
         mpGroupShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
+    }
     case NMSP_PPT|XML_ph:
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
         mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );

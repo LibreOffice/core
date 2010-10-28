@@ -64,6 +64,37 @@ void logger(string prefix, string message)
     logger_stream().flush();
 }
 
+    string xmlify(const string & str)
+    {
+        string result = "";
+        char sBuffer[16];
+
+        for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
+        {
+            char c = *aIt;
+
+            if (isprint(c) && c != '\"')
+            {
+                if (c == '<')
+                    result += "&lt;";
+                else if (c == '>')
+                    result += "&gt;";
+                else if (c == '&')
+                    result += "&amp;";
+                else
+                    result += c;
+            }
+            else
+            {
+                snprintf(sBuffer, sizeof(sBuffer), "\\%03d", c);
+                result += sBuffer;
+            }
+        }
+
+        return result;
+    }
+
+#ifdef DEBUG
 string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     string sResult;
@@ -368,57 +399,29 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
     return sResult;
 }
-    string xmlify(const string & str)
+
+string toString(uno::Reference< text::XTextRange > textRange)
+{
+    string result;
+
+    if (textRange.get())
     {
-        string result = "";
-        char sBuffer[16];
+        rtl::OUString aOUStr = textRange->getString();
+        rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
 
-        for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
-        {
-            char c = *aIt;
-
-            if (isprint(c) && c != '\"')
-            {
-                if (c == '<')
-                    result += "&lt;";
-                else if (c == '>')
-                    result += "&gt;";
-                else if (c == '&')
-                    result += "&amp;";
-                else
-                    result += c;
-            }
-            else
-            {
-                snprintf(sBuffer, sizeof(sBuffer), "\\%03d", c);
-                result += sBuffer;
-            }
-        }
-
-        return result;
+        result = aOStr.getStr();
+    }
+    else
+    {
+        result="(nil)";
     }
 
-    string toString(uno::Reference< text::XTextRange > textRange)
-    {
-        string result;
+    return result;
+}
 
-        if (textRange.get())
-        {
-            rtl::OUString aOUStr = textRange->getString();
-            rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
-
-            result = aOStr.getStr();
-        }
-        else
-        {
-            result="(nil)";
-        }
-
-        return result;
-    }
-
-    string toString(const string & rString)
-    {
-        return rString;
-    }
+string toString(const string & rString)
+{
+    return rString;
+}
+#endif
 }

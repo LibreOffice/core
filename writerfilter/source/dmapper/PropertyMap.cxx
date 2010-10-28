@@ -40,6 +40,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include "dmapperLoggers.hxx"
 #include "PropertyMapHelper.hxx"
@@ -155,6 +156,18 @@ XMLTag::Pointer_t PropertyMap::toTag() const
                     sal_Int32 aInt;
                     aMapIter->second >>= aInt;
                     pTag->addAttr("value", aInt);
+
+                    sal_uInt32 auInt;
+                    aMapIter->second >>= auInt;
+                    pTag->addAttr("unsignedValue", auInt);
+
+                    float aFloat;
+                    aMapIter->second >>= aFloat;
+                    pTag->addAttr("floatValue", aFloat);
+
+                    ::rtl::OUString aStr;
+                    aMapIter->second >>= auInt;
+                    pTag->addAttr("stringValue", aStr);
                 }
                 catch (...) {
                 }
@@ -244,6 +257,7 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_nDzaGutter( 0 )
     ,m_bGutterRTL( false )
     ,m_bSFBiDi( false )
+    ,m_nGridType(0)
     ,m_nGridLinePitch( 1 )
     ,m_nDxtCharSpace( 0 )
     ,m_nLnnMod( 0 )
@@ -274,7 +288,7 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     uno::Any aFalse( ::uno::makeAny( false ) );
     Insert( PROP_GRID_DISPLAY, false, aFalse);
     Insert( PROP_GRID_PRINT, false, aFalse);
-
+    Insert( PROP_GRID_MODE, false, uno::makeAny(text::TextGridMode::NONE));
 
 
     if( m_bIsFirstSection )
@@ -907,6 +921,22 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if(nRubyHeight < 0 )
             nRubyHeight = 0;
         operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
+
+        sal_Int16 nGridMode = text::TextGridMode::NONE;
+
+        switch (m_nGridType)
+        {
+            case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_lines:
+                nGridMode = text::TextGridMode::LINES;
+                break;
+            case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_linesAndChars:
+                nGridMode = text::TextGridMode::LINES_AND_CHARS;
+                break;
+            default:
+                break;
+        }
+
+        operator[](PropertyDefinition(PROP_GRID_MODE, false)) = uno::makeAny(nGridMode);
 
         _ApplyProperties( xFollowPageStyle );
 

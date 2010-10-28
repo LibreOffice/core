@@ -4029,13 +4029,7 @@
 									<xsl:element name="字:文本串">
 										<xsl:attribute name="uof:locID">t0109</xsl:attribute>
 										<xsl:attribute name="uof:attrList">标识符</xsl:attribute>
-										<xsl:variable name="stt">
-											<xsl:value-of select="./text:a"/>
-										</xsl:variable>
-										<xsl:variable name="end">
-											<xsl:value-of select="."/>
-										</xsl:variable>
-										<xsl:value-of select="substring-after($end,$stt)"/>
+										<xsl:value-of select="$bijiao"/>
 									</xsl:element>
 								</xsl:if>
 							</字:句>

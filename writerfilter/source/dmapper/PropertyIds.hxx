@@ -284,6 +284,8 @@ enum PropertyIds
 /*248*/ ,PROP_LISTTAB_STOP_POSITION
 /*249*/ ,PROP_POSITION_AND_SPACE_MODE
 /*250*/ ,PROP_HEADING_STYLE_NAME
+/*251*/ ,PROP_PARA_SPLIT
+/*252*/ ,PROP_HELP
 };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

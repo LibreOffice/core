@@ -64,11 +64,6 @@ void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvType
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo( ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
-{
-    return ::cppu::component_writeInfoHelper( xMgr, xRegistry, s_component_entries );
-}
-
 void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
 {
     return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries );

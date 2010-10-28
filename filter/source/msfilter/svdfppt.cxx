@@ -7122,6 +7122,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             PPTCharPropSet* pCurrent = (PPTCharPropSet*)aCharPropList.GetObject( nIdx );
                                                             sal_Int32       nNextStringLen = pCurrent->maString.Len();
 
+                                                            DBG_ASSERT( pFE->pField1, "missing field!" );
+                                                            if (!pFE->pField1)
+                                                                break;
+
                                                             const SvxURLField* pField = (const SvxURLField*)pFE->pField1->GetField();
 
                                                             if ( pCurrent->mpFieldItem )

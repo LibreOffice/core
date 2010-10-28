@@ -30,6 +30,8 @@
 #ifndef INCLUDE_WRITERFILTER_PROTOCOL_HXX
 #define INCLUDE_WRITERFILTER_PROTOCOL_HXX
 
+#ifdef DEBUG
+
 #include <boost/shared_ptr.hpp>
 #include "WW8ResourceModel.hxx"
 #include "TagLogger.hxx"
@@ -95,4 +97,6 @@ public:
 };
 
 }
+
+#endif // DEBUG
 #endif // INCLUDE_WRITERFILTER_PROTOCOL_HXX

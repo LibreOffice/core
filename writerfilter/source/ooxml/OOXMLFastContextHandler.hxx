@@ -132,10 +132,6 @@ public:
 
     virtual ResourceEnum_t getResource() const { return STREAM; }
 
-    static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
-    virtual XMLTag::Pointer_t toTag() const;
-    virtual string toString() const;
-
     virtual void attributes
     (const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
@@ -179,17 +175,8 @@ public:
 
     void setDefine(Id nDefine);
     Id getDefine() const;
-    void setFallback(bool bFallbac);
-    bool isFallback() const;
 
     OOXMLParserState::Pointer_t getParserState() const;
-
-#ifdef DEBUG_MEMORY
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-#endif
-
-    sal_uInt32 getInstanceNumber() const;
 
     void sendTableDepth() const;
     void setHandle();
@@ -227,8 +214,6 @@ public:
     void sendCellProperties();
     void sendRowProperties();
     void sendTableProperties();
-    void clearCellProps();
-    void clearRowProps();
     void clearTableProps();
     void clearProps();
 
@@ -237,10 +222,18 @@ public:
     virtual void setDefaultHexValue();
     virtual void setDefaultStringValue();
 
-    const ::rtl::OUString & getText() const;
-
     void sendPropertyToParent();
-    static void dumpOpenContexts();
+
+#ifdef DEBUG
+    static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
+    virtual XMLTag::Pointer_t toTag() const;
+    virtual string toString() const;
+#endif
+
+#ifdef DEBUG_MEMORY
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+#endif
 
 protected:
     OOXMLFastContextHandler * mpParent;
@@ -302,14 +295,6 @@ private:
 
     static sal_uInt32 mnInstanceCount;
 
-    bool mbFallback;
-};
-
-class OOXMLFastContextHandlerNoResource : public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerNoResource(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerNoResource();
 };
 
 class OOXMLFastContextHandlerStream : public OOXMLFastContextHandler
@@ -329,10 +314,10 @@ public:
     void handleHyperlink();
 
 protected:
-    void setPropertySetAttrs(OOXMLPropertySet::Pointer_t pPropertySetAttrs);
     virtual void resolvePropertySetAttrs();
     virtual void lcl_characters(const ::rtl::OUString & aChars)
                 throw (uno::RuntimeException, xml::sax::SAXException);
+
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
 };
@@ -346,8 +331,6 @@ public:
     virtual OOXMLValue::Pointer_t getValue() const;
     virtual ResourceEnum_t getResource() const { return PROPERTIES; }
 
-    virtual XMLTag::Pointer_t toTag() const;
-
     virtual void newProperty(const Id & nId, OOXMLValue::Pointer_t pVal);
 
     void handleXNotes();
@@ -359,6 +342,10 @@ public:
 
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
+
+#ifdef DEBUG
+    virtual XMLTag::Pointer_t toTag() const;
+#endif
 
 protected:
     /// the properties
