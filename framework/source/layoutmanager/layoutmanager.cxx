@@ -2920,10 +2920,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
 
 IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-
-    // Request to set docking area space again.
     m_aAsyncLayoutTimer.Stop();
 
     if( !m_xContainerWindow.is() )

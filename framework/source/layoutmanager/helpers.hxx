@@ -43,6 +43,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <com/sun/star/awt/Point.hpp>
 
 // other includes
 #include <vcl/window.hxx>
@@ -59,6 +60,10 @@
 namespace framework
 {
 
+bool hasEmptySize( const:: Size& aSize );
+bool hasDefaultPosValue( const ::Point& aPos );
+bool isDefaultPos( const ::com::sun::star::awt::Point& aPos );
+bool isDefaultPos( const ::Point& aPos );
 bool isToolboxHorizontalAligned( ToolBox* pToolBox );
 bool isReverseOrderDockingArea( const sal_Int16 nDockArea );
 bool isHorizontalDockingArea( const sal_Int16 nDockArea );
