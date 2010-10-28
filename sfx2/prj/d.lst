@@ -30,3 +30,4 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\sdi\sfx.sdi %_DEST%\inc%_EXT%\sfx2\sfx.sdi
 ..\sdi\sfxitems.sdi %_DEST%\inc%_EXT%\sfx2\sfxitems.sdi
 
+..\%__SRC%\misc\sfx.component %_DEST%\xml%_EXT%\sfx.component

@@ -75,7 +75,7 @@ struct SfxViewShell_Impl
     ::svt::AcceleratorExecute*  pAccExec;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
-    vcl::PrinterController*     pPrinterController;
+    ::boost::shared_ptr< vcl::PrinterController > m_pPrinterController;
 
     SfxViewShell_Impl();
 };

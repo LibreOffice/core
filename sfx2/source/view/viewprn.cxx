@@ -332,7 +332,9 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
             mpObjectShell->EnableSetModified( m_bOrigStatus );
 
         if ( mpViewShell )
-            mpViewShell->pImp->pPrinterController = 0;
+        {
+            mpViewShell->pImp->m_pPrinterController.reset();
+        }
     }
 }
 
@@ -643,7 +645,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                                                                                this,
                                                                                rProps
                                                                                ) );
-    pImp->pPrinterController = pController.get();
+    pImp->m_pPrinterController = pController;
 
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
@@ -661,7 +663,8 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
 
 Printer* SfxViewShell::GetActivePrinter() const
 {
-    return pImp->pPrinterController ? pImp->pPrinterController->getPrinter().get() : 0;
+    return (pImp->m_pPrinterController)
+        ?  pImp->m_pPrinterController->getPrinter().get() : 0;
 }
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
@@ -697,6 +700,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTDOCDIRECT:
         {
             SfxObjectShell* pDoc = GetObjectShell();
+
+            // derived class may decide to abort this
+            if( !pDoc->QuerySlotExecutable( nId ) )
+            {
+                rReq.SetReturnValue( SfxBoolItem( 0, FALSE ) );
+                return;
+            }
+
             bool bDetectHidden = ( !bSilent && pDoc );
             if ( bDetectHidden && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 break;

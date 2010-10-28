@@ -26,7 +26,13 @@
  ************************************************************************/
 
 #include <svx/svxids.hrc>
+<<<<<<< local
 #include "svx/fmresids.hrc"
+=======
+#include "fmresids.hrc"
+#include "fmhelp.hrc"
+
+>>>>>>> other
 Menu RID_FM_FILTER_MENU
 {
     ItemList =
@@ -34,25 +40,25 @@ Menu RID_FM_FILTER_MENU
         MenuItem
         {
             Identifier = SID_FM_DELETE ;
-            HelpID = SID_FM_DELETE ;
+            HelpId = HID_FM_DELETE;
             Text [ en-US ] = "~Delete" ;
         };
         MenuItem
         {
             Identifier = SID_FM_FILTER_EDIT ;
-            HelpID = SID_FM_FILTER_EDIT ;
+            HelpId = HID_FM_FILTER_EDIT;
             Text [ en-US ] = "~Edit" ;
         };
         MenuItem
         {
             Identifier = SID_FM_FILTER_IS_NULL ;
-            HelpID = SID_FM_FILTER_IS_NULL ;
+            HelpId = HID_FM_FILTER_IS_NULL;
             Text [ en-US ] = "~Is Null" ;
         };
         MenuItem
         {
             Identifier = SID_FM_FILTER_IS_NOT_NULL ;
-            HelpID = SID_FM_FILTER_IS_NOT_NULL ;
+            HelpId = HID_FM_FILTER_IS_NOT_NULL;
             Text [ en-US ] = "I~s not Null" ;
         };
     };

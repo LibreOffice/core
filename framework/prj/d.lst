@@ -25,8 +25,29 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\%__SRC%\lib\ifwi.lib %_DEST%\lib%_EXT%\ifwi.lib
+<<<<<<< local
 ..\inc\framework/*.h %_DEST%\inc%_EXT%\framework\*.h
 ..\inc\framework/*.hxx %_DEST%\inc%_EXT%\framework\*.hxx
+=======
+..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
+..\inc\helper\acceleratorinfo.hxx %_DEST%\inc%_EXT%\framework\acceleratorinfo.hxx
+..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
+..\inc\xml\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
+..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
+..\inc\xml\toolboxconfiguration.hxx %_DEST%\inc%_EXT%\framework\toolboxconfiguration.hxx
+..\inc\xml\statusbarconfiguration.hxx %_DEST%\inc%_EXT%\framework\statusbarconfiguration.hxx
+..\inc\xml\eventsconfiguration.hxx %_DEST%\inc%_EXT%\framework\eventsconfiguration.hxx
+..\inc\xml\imagesconfiguration.hxx %_DEST%\inc%_EXT%\framework\imagesconfiguration.hxx
+..\inc\classes\addonsoptions.hxx %_DEST%\inc%_EXT%\framework\addonsoptions.hxx
+..\inc\dispatch\interaction.hxx %_DEST%\inc%_EXT%\framework\interaction.hxx
+..\inc\classes\addonmenu.hxx %_DEST%\inc%_EXT%\framework\addonmenu.hxx
+..\inc\classes\sfxhelperfunctions.hxx %_DEST%\inc%_EXT%\framework\sfxhelperfunctions.hxx
+..\inc\helper\configimporter.hxx %_DEST%\inc%_EXT%\framework\configimporter.hxx
+..\inc\classes\menuextensionsupplier.hxx %_DEST%\inc%_EXT%\framework\menuextensionsupplier.hxx
+..\inc\interaction\preventduplicateinteraction.hxx %_DEST%\inc%_EXT%\framework\preventduplicateinteraction.hxx
+..\inc\helper\titlehelper.hxx %_DEST%\inc%_EXT%\framework\titlehelper.hxx
+..\inc\classes\framelistanalyzer.hxx %_DEST%\inc%_EXT%\framework\framelistanalyzer.hxx
+>>>>>>> other
 
 ..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar\*.xml
 ..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar\*.xml
@@ -34,3 +55,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
 
+..\%__SRC%\misc\fwk.component %_DEST%\xml%_EXT%\fwk.component
+..\%__SRC%\misc\fwl.component %_DEST%\xml%_EXT%\fwl.component
+..\%__SRC%\misc\fwm.component %_DEST%\xml%_EXT%\fwm.component

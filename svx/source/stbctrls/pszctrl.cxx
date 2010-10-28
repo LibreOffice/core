@@ -176,6 +176,10 @@ struct SvxPosSizeStatusBarControl_Impl
     Images fu"r die Position und Gro"sse laden.
 */
 
+#define STR_POSITION ".uno:Position"
+#define STR_TABLECELL ".uno:StateTableCell"
+#define STR_FUNC ".uno:StatusBarFunc"
+
 SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT _nSlotId,
                                                         USHORT _nId,
                                                         StatusBar& rStb ) :
@@ -190,9 +194,9 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT _nSlotId,
     pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
 
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Position" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StateTableCell" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StatusBarFunc" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STR_POSITION )));         // SID_ATTR_POSITION
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STR_TABLECELL )));   // SID_TABLE_CELL
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STR_FUNC )));    // SID_PSZ_FUNCTION
 }
 
 // -----------------------------------------------------------------------
@@ -233,7 +237,14 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
     // da Kombi-Controller, immer die aktuelle Id als HelpId setzen
     // gecachten HelpText vorher l"oschen
     GetStatusBar().SetHelpText( GetId(), String() );
-    GetStatusBar().SetHelpId( GetId(), nSID );
+
+    switch ( nSID )
+    {
+        case SID_ATTR_POSITION : GetStatusBar().SetHelpId( GetId(), STR_POSITION ); break;
+        case SID_TABLE_CELL: GetStatusBar().SetHelpId( GetId(), STR_TABLECELL ); break;
+        case SID_PSZ_FUNCTION: GetStatusBar().SetHelpId( GetId(), STR_FUNC ); break;
+        default: break;
+    }
 
     if ( nSID == SID_PSZ_FUNCTION )
     {

@@ -54,7 +54,7 @@
 #include "sfxresid.hxx"
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
-
+#include <sfx2/sfxcommands.h>
 #include "dialog.hrc"
 
 // defines ---------------------------------------------------------------
@@ -282,8 +282,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     FreeResource();
 
-    // explizite Help-Id
-    SetHelpId( SID_ABOUT );
+    SetHelpId( CMD_SID_ABOUT );
 }
 
 // -----------------------------------------------------------------------

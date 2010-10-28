@@ -708,6 +708,7 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
             // next entry
             ++aSrcIt;
         }
+        const_cast< SvxItemPropertySet& >(rPropSet).ClearAllUsrAny();
     }
 }
 

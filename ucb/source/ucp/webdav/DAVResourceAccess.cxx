@@ -1201,8 +1201,7 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
     // if we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
         // retry up to three times, if not a client-side error.
-        if ( e.getStatus() > 0 &&
-             ( e.getStatus() < 400 || e.getStatus() > 499 ) &&
+        if ( ( e.getStatus() < 400 || e.getStatus() >= 500 ) &&
              errorCount < 3 )
         {
             return sal_True;

@@ -102,7 +102,6 @@ SFX_OBJECTS = \
     $(SLO)$/module.obj \
     $(SLO)$/newhelp.obj \
     $(SLO)$/opengrf.obj			\
-    $(SLO)$/sfxdll.obj \
     $(SLO)$/sfxhelp.obj \
     $(SLO)$/sfxpicklist.obj \
     $(SLO)$/shutdownicon.obj \

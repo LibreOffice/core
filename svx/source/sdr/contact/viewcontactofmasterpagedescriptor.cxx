@@ -62,23 +62,7 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             drawinglayer::attribute::SdrFillAttribute aFill;
-            const SdrPage* pCorrectPage = &GetMasterPageDescriptor().GetOwnerPage();
-            const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
-
-            if(XFILL_NONE == ((const XFillStyleItem&)pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
-            {
-                pCorrectPage = &GetMasterPageDescriptor().GetUsedPage();
-                pCorrectProperties = &pCorrectPage->getSdrPageProperties();
-            }
-
-            if(pCorrectPage->IsMasterPage() && !pCorrectProperties->GetStyleSheet())
-            {
-                // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
-                // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
-                // MasterPages should have a StyleSheet excactly for this reason, but historically
-                // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
-                pCorrectProperties = 0;
-            }
+            const SdrPageProperties* pCorrectProperties = GetMasterPageDescriptor().getCorrectSdrPageProperties();
 
             if(pCorrectProperties)
             {

@@ -2301,35 +2301,48 @@ namespace
                         {
                             const Gradient& rGradient = pA->GetGradient();
                             const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
+                            basegfx::B2DPolyPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
 
                             if(aAttribute.getStartColor() == aAttribute.getEndColor())
                             {
                                 // not really a gradient. Create filled rectangle
-                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-                                createFillPrimitive(basegfx::B2DPolyPolygon(aOutline), rTargetHolders.Current(), rPropertyHolders.Current());
+                                createFillPrimitive(
+                                    aOutline,
+                                    rTargetHolders.Current(),
+                                    rPropertyHolders.Current());
                             }
                             else
                             {
                                 // really a gradient
                                 aRange.transform(rPropertyHolders.Current().getTransformation());
+                                drawinglayer::primitive2d::Primitive2DSequence xGradient(1);
 
                                 if(rPropertyHolders.Current().isRasterOpInvert())
                                 {
                                     // use a special version of FillGradientPrimitive2D which creates
                                     // non-overlapping geometry on decomposition to makethe old XOR
                                     // paint 'trick' work.
-                                    rTargetHolders.Current().append(
+                                    xGradient[0] = drawinglayer::primitive2d::Primitive2DReference(
                                         new drawinglayer::primitive2d::NonOverlappingFillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));
                                 }
                                 else
                                 {
-                                    rTargetHolders.Current().append(
+                                    xGradient[0] = drawinglayer::primitive2d::Primitive2DReference(
                                         new drawinglayer::primitive2d::FillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));
                                 }
+
+                                // #i112300# clip against polygon representing the rectangle from
+                                // the action. This is implicitely done using a temp Clipping in VCL
+                                // when a MetaGradientAction is executed
+                                aOutline.transform(rPropertyHolders.Current().getTransformation());
+                                rTargetHolders.Current().append(
+                                    new drawinglayer::primitive2d::MaskPrimitive2D(
+                                        aOutline,
+                                        xGradient));
                             }
                         }
                     }

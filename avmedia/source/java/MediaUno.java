@@ -64,13 +64,4 @@ public class MediaUno
 
         return null;
     }
-
-    // -------------------------------------------------------------------------
-
-    public static boolean __writeRegistryServiceInfo(
-        com.sun.star.registry.XRegistryKey regKey )
-    {
-        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-            s_implName, s_serviceName, regKey );
-    }
 }

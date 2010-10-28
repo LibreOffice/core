@@ -52,26 +52,6 @@ jclass java_lang_String::st_getMyClass()
 }
 
 //--------------------------------------------------------------------------
-java_lang_String::java_lang_String( const ::rtl::OUString& _par0 ): java_lang_Object( NULL, (jobject)NULL )
-{
-    SDBThreadAttach t;
-    if( !t.pEnv )
-        return;
-    jvalue args[1];
-    // Parameter konvertieren
-    args[0].l = convertwchar_tToJavaString(t.pEnv,_par0);
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
-    static const char * cSignature = "(Ljava/lang/String;)V";
-    jobject tempObj;
-    static jmethodID mID(NULL);
-    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
-    tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
-    saveRef( t.pEnv, tempObj );
-    t.pEnv->DeleteLocalRef( tempObj );
-    t.pEnv->DeleteLocalRef((jstring)args[0].l);
-}
-//--------------------------------------------------------------------------
 java_lang_String::operator ::rtl::OUString()
 {
     SDBThreadAttach t;

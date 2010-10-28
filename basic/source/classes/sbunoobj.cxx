@@ -71,6 +71,7 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 
 
 using com::sun::star::uno::Reference;
@@ -300,7 +301,12 @@ SbUnoObject* createOLEObject_Impl( const String& aType )
     SbUnoObject* pUnoObj = NULL;
     if( xOLEFactory.is() )
     {
-        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aType );
+        // some type names available in VBA can not be directly used in COM
+        ::rtl::OUString aOLEType = aType;
+        if ( aOLEType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SAXXMLReader30" ) ) ) )
+            aOLEType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Msxml2.SAXXMLReader.3.0" ) );
+
+        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
         if( xOLEObject.is() )
         {
             Any aAny;
@@ -911,7 +917,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
         //case SbxDATAOBJECT: break;
         case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int16*)0 ); break;
+        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
         case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
         //case SbxLONG64:   break;
@@ -1460,7 +1466,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             aRetVal.setValue( &c , getCharCppuType() );
             break;
         }
-        case TypeClass_STRING:          aRetVal <<= ::rtl::OUString( pVar->GetString() ); break;
+        case TypeClass_STRING:          aRetVal <<= pVar->GetOUString(); break;
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
         //case TypeClass_OCTET:         break;
@@ -2265,6 +2271,7 @@ Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( TRUE )
+    , bIgnoreNativeCOMObjectMembers( FALSE )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2310,6 +2317,12 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
             bNeedIntrospection = FALSE;
             return;
         }
+
+        // Ignore introspection based members for COM objects to avoid
+        // hiding of equally named COM symbols, e.g. XInvocation::getValue
+        Reference< oleautomation::XAutomationObject > xAutomationObject( aUnoObj_, UNO_QUERY );
+        if( xAutomationObject.is() )
+            bIgnoreNativeCOMObjectMembers = TRUE;
     }
 
     maTmpUnoObj = aUnoObj_;
@@ -2553,7 +2566,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
     if( !pRes )
     {
         ::rtl::OUString aUName( rName );
-        if( mxUnoAccess.is() )
+        if( mxUnoAccess.is() && !bIgnoreNativeCOMObjectMembers )
         {
             if( mxExactName.is() )
             {
@@ -2713,10 +2726,12 @@ void SbUnoObject::implCreateAll( void )
 
     // Instrospection besorgen
     Reference< XIntrospectionAccess > xAccess = mxUnoAccess;
-    if( !xAccess.is() )
+    if( !xAccess.is() || bIgnoreNativeCOMObjectMembers )
     {
         if( mxInvocation.is() )
             xAccess = mxInvocation->getIntrospection();
+        else if( bIgnoreNativeCOMObjectMembers )
+            return;
     }
     if( !xAccess.is() )
         return;
@@ -3762,7 +3777,7 @@ BasicAllListener_Impl::~BasicAllListener_Impl()
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     if( xSbxObj.Is() )
     {
@@ -3827,7 +3842,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
 // Methoden von XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     xSbxObj.Clear();
 }
@@ -4201,7 +4216,7 @@ void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty,
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
 
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Set ") );
     aPropertyFunctionName += m_aPrefix;
@@ -4242,7 +4257,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue( const ::rtl::OUString& rProperty )
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
 
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Get ") );
     aPropertyFunctionName += m_aPrefix;
@@ -4280,7 +4295,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
                                             Sequence< Any >& )
     throw( CannotConvertException, InvocationTargetException )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     Any aRet;
     if( !m_xScopeObj.Is() )

@@ -30,7 +30,7 @@
 
 #include "namecont.hxx"
 #include <basic/basmgr.hxx>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <comphelper/uno3.hxx>
 
 class BasicManager;
@@ -141,7 +141,7 @@ public:
 //============================================================================
 typedef std::hash_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::XVBAModuleInfo
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::vba::XVBAModuleInfo
                             >   SfxScriptLibrary_BASE;
 
 class SfxScriptLibrary : public SfxLibrary

@@ -127,15 +127,15 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
         // TODO/LATER: do we still need this code?
         Window* pWindow = rNEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( pFrame, nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( pFrame, sHelpId );
 
         // if focus was on an external window, the clipboard content might have been changed
         pView->GetBindings().Invalidate( SID_PASTE );
@@ -280,10 +280,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewI
         aLoadArgs = aArgs.getPropertyValues();
 
         // load the doc into that frame
-        ::rtl::OUString sLoaderURL( rDoc.GetModel()->getURL() );
-        if ( sLoaderURL.getLength() == 0 )
-            sLoaderURL = rDoc.GetFactory().GetFactoryURL();
-
+        ::rtl::OUString sLoaderURL( RTL_CONSTASCII_USTRINGPARAM( "private:object" ) );
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
             sLoaderURL,

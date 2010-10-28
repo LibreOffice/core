@@ -52,3 +52,5 @@ mkdir: %_DEST%\inc%_EXT%\xmloff\table
 ..\inc\xmloff\table\XMLTableImport.hxx %_DEST%\inc%_EXT%\xmloff\table\XMLTableImport.hxx
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\misc\xo.component %_DEST%\xml%_EXT%\xo.component
+..\%__SRC%\misc\xof.component %_DEST%\xml%_EXT%\xof.component

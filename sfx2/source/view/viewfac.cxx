@@ -49,7 +49,7 @@ void SfxViewFactory::InitFactory()
     (*fnInit)();
 }
 
-String SfxViewFactory::GetViewName() const
+String SfxViewFactory::GetLegacyViewName() const
 {
     ::rtl::OUStringBuffer aViewName;
     aViewName.appendAscii( "view" );
@@ -57,12 +57,33 @@ String SfxViewFactory::GetViewName() const
     return aViewName.makeStringAndClear();
 }
 
+String SfxViewFactory::GetAPIViewName() const
+{
+    if ( m_sViewName.Len() > 0 )
+        return m_sViewName;
+
+    if ( GetOrdinal() == 0 )
+        return String::CreateFromAscii( "Default" );
+
+    return GetLegacyViewName();
+}
+
 // CTOR / DTOR -----------------------------------------------------------
 
+<<<<<<< local
 SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI, USHORT nOrdinal ):
+=======
+SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
+                                USHORT nOrdinal, const sal_Char* asciiViewName ):
+>>>>>>> other
     fnCreate(fnC),
     fnInit(fnI),
+<<<<<<< local
     nOrd(nOrdinal)
+=======
+    nOrd(nOrdinal),
+    m_sViewName( String::CreateFromAscii( asciiViewName ) )
+>>>>>>> other
 {
     DBG_CTOR(SfxViewFactory, 0);
 }

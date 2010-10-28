@@ -649,7 +649,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         // ensure the ID of the to-be-created view is in the descriptor, if possible
         const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
         const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
-        const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetViewName() );
+        const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetAPIViewName() );
 
         // if the document is created hidden, prevent it from being deleted until it is shown or disposed
         impl_lockHiddenDocument( *xDoc, aDescriptor );

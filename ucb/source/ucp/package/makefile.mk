@@ -68,6 +68,7 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1STDLIBS=\
+    $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
@@ -86,3 +87,11 @@ DEF1NAME=$(SHL1TARGET)
 .ENDIF # L10N_framework
 .INCLUDE: target.mk
 
+
+ALLTAR : $(MISC)/ucppkg1.component
+
+$(MISC)/ucppkg1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucppkg1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucppkg1.component

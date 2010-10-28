@@ -34,6 +34,7 @@
 #include "SchXMLImport.hxx"
 #include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
+#include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -687,6 +688,35 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
     return pContext;
 }
 
+//---------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------
+
+class SchXMLRangeSomewhereContext : public SvXMLImportContext
+{
+//#i113950# previously the range was exported to attribute text:id,
+//but that attribute does not allow arbitrary strings anymore
+//so we need to find an alternative to save that range info for copy/paste scenario ...
+//-> use description at an empty group element for now
+
+private:
+    ::rtl::OUString& mrRangeString;
+    ::rtl::OUStringBuffer maRangeStringBuffer;
+
+public:
+    SchXMLRangeSomewhereContext( SvXMLImport& rImport,
+                            const ::rtl::OUString& rLocalName,
+                            ::rtl::OUString& rRangeString );
+    virtual ~SchXMLRangeSomewhereContext();
+
+    virtual SvXMLImportContext* CreateChildContext(
+        USHORT nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+};
+
+//---------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------
 
 // ========================================
 // classes for cells and their content
@@ -778,10 +808,17 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
         pContext = new SchXMLTextListContext( GetImport(), rLocalName, *rCell.pComplexString );
         mbReadText = sal_False;//don't apply text from <text:p>
     }
-    // <text:p> element - read text and range-id
+    // <text:p> element - read text (and range from text:id old version)
     else if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_P ) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent, &maRangeId );
+    }
+    // <draw:g> element - read range
+    else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_G ) )
+    {
+        //#i113950# previously the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore
+        //so we need to find an alternative to save that range info for copy/paste scenario ... -> use description at an empty group element for now
+        pContext = new SchXMLRangeSomewhereContext( GetImport(), rLocalName, maRangeId );
     }
     else
     {
@@ -1148,3 +1185,34 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     }
 }
 
+//---------------------------------------------------------------------------------------------------
+
+SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
+                                                const OUString& rLocalName,
+                                                OUString& rRangeString ) :
+        SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName ),
+        mrRangeString( rRangeString )
+{
+}
+
+SchXMLRangeSomewhereContext::~SchXMLRangeSomewhereContext()
+{
+}
+
+SvXMLImportContext* SchXMLRangeSomewhereContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList >& )
+{
+    if( XML_NAMESPACE_SVG == nPrefix && IsXMLToken( rLocalName, XML_DESC ) )
+    {
+        return new XMLStringBufferImportContext(
+            GetImport(), nPrefix, rLocalName, maRangeStringBuffer );
+    }
+    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+}
+
+void SchXMLRangeSomewhereContext::EndElement()
+{
+    mrRangeString = maRangeStringBuffer.makeStringAndClear();
+}
