@@ -25,10 +25,7 @@ CLI_LIB_LOCATION = $(PRJ)\cli
 
 # Targets
 .PHONY : ALL
-ALL : SpreadsheetSample \
-	GeneralTableSample 	\
-	ViewSample \
-	Info	
+ALL : Info	
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -56,7 +53,8 @@ GeneralTableSample : $(SPREADSHEET_OUT)/GeneralTableSample.exe
 ViewSample : $(SPREADSHEET_OUT)/ViewSample.exe
 
 .PHONY : Info
-Info : 
+ifeq "$(OS)" "WIN"
+Info : SpreadsheetSample GenerateTableSample ViewSample
 	@echo -------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
@@ -64,7 +62,12 @@ Info :
 	@echo $(MAKE) SpreadsheetSample.run
 	@echo $(MAKE) ViewSample.run
 	@echo -------------------------------------------------------------------------------
-
+else
+Info : 
+	@echo --------------------------------------------------------------------------------
+	@echo This example works only under Windows!
+	@echo --------------------------------------------------------------------------------
+endif
 
 %.run : $(SPREADSHEET_OUT)/%.exe
 	@echo -------------------------------------------------------------------------------
