@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,35 +23,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XThrobber_idl__
-#define __com_sun_star_awt_XThrobber_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_awt_AnimatedImagesControl_idl__
+#define __com_sun_star_awt_AnimatedImagesControl_idl__
 
-#ifndef com_sun_star_graphic_XGraphic_idl
-#include <com/sun/star/graphic/XGraphic.idl>
-#endif
+#include <com/sun/star/awt/UnoControl.idl>
 
-//=============================================================================
+//======================================================================================================================
 
- module com {  module sun {  module star {  module awt {
+module com { module sun { module star { module awt {
 
-//=============================================================================
+interface XAnimation;
 
-/**
-    @deprecatd
-        You should use <type>XAnimation</type>, <type>AnimatedImagesControl</type>, and <type>AnimatedImagesControlModel</type>.
+//======================================================================================================================
+
+/** is the default control used for an <type>AnimatedImagesControlModel</type>, displayed a series of
+    images.
+
+    @since OOo 3.4
  */
-published interface XThrobber: com::sun::star::uno::XInterface
+service AnimatedImagesControl
 {
-    void start();
-    void stop();
+    service com::sun::star::awt::UnoControl;
+
+    interface XAnimation;
 };
 
-//=============================================================================
+//======================================================================================================================
 
 }; }; }; };
+
+//======================================================================================================================
 
 #endif
