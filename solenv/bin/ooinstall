@@ -94,7 +94,7 @@ if ( defined $setup_vars{OOO_STRIP} &&
 
 print "Running OOo installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
-	"perl -d:DProf -w $ENV{SOLARENV}/bin/make_installer.pl " .
+	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l $langs -p LibreOffice " .
 	"-buildid $BUILD $destdir $strip " .
 	"-simple $path") && die "Failed to install: $!";
