@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _SVPARSER_HXX
 #define _SVPARSER_HXX
 
