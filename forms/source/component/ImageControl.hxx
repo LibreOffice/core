@@ -33,6 +33,7 @@
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -57,7 +58,11 @@ class OImageControlModel
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
     ImageProducer*                                  m_pImageProducer;
+    bool                                            m_bExternalGraphic;
     sal_Bool                                        m_bReadOnly;
+    ::rtl::OUString                                 m_sImageURL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >
+                                                    m_xGraphicObject;
     ::rtl::OUString                                 m_sDocumentURL;
 
 protected:
@@ -86,9 +91,6 @@ public:
     // OComponentHelper
     virtual void SAL_CALL disposing();
 
-    // OPropertyChangeListener
-    virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException);
-
     // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -103,6 +105,9 @@ public:
     virtual void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // OControlModel's property handling
+    virtual void describeAggregateProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+    ) const;
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
     ) const;
@@ -119,6 +124,8 @@ protected:
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
+    virtual ::com::sun::star::uno::Any
+                            getControlValue( ) const;
     virtual void            doSetControlValue( const ::com::sun::star::uno::Any& _rValue );
 
     virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
@@ -134,12 +141,14 @@ protected:
         @precond
             our own mutex is locked
     */
-    sal_Bool    impl_handleNewImageURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
+    sal_Bool    impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator );
 
     /** updates the binary stream, created from loading the file which the given URL points to, into our
         bound field, or the control itself if there is no bound field
     */
     sal_Bool    impl_updateStreamForURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
+
+    DECL_LINK( OnImageImportDone, ::Graphic* );
 };
 
 //==================================================================

@@ -66,7 +66,6 @@ sub usage
 {
     print <<Ende;
 ----------------------------------------------------------------------
-$prog V1.0 (c) Sun Microsystems 2009
 This program installs a Windows Installer installation set
 without using msiexec.exe. The installation is comparable
 with an administrative installation using the Windows Installer
@@ -296,6 +295,69 @@ sub get_sourcepath_from_filename_and_includepath
     if (!($foundsourcefile)) { $onefile = ""; }
 
     return \$onefile;
+}
+
+##############################################################
+# Removing all empty directories below a specified directory
+##############################################################
+
+sub remove_empty_dirs_in_folder
+{
+    my ( $dir, $firstrun ) = @_;
+
+    if ( $firstrun )
+    {
+        print "Removing superfluous directories\n";
+    }
+
+    my @content = ();
+
+    $dir =~ s/\Q$separator\E\s*$//;
+
+    if ( -d $dir )
+    {
+        opendir(DIR, $dir);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $dir . $separator . $oneitem;
+
+                if ( -d $item ) # recursive
+                {
+                    remove_empty_dirs_in_folder($item, 0);
+                }
+            }
+        }
+
+        # try to remove empty directory
+        my $returnvalue = rmdir $dir;
+
+        # if ( $returnvalue ) { print "Successfully removed empty dir $dir\n"; }
+    }
+}
+
+####################################################
+# Detecting the directory with extensions
+####################################################
+
+sub get_extensions_dir
+{
+    my ( $unopkgfile ) = @_;
+
+    my $localbranddir = $unopkgfile;
+    get_path_from_fullqualifiedname(\$localbranddir); # "program" dir in brand layer
+    get_path_from_fullqualifiedname(\$localbranddir); # root dir in brand layer
+    $localbranddir =~ s/\Q$separator\E\s*$//;
+    my $extensiondir = $localbranddir . $separator . "share" . $separator . "extensions";
+    my $preregdir = $localbranddir . $separator . "share" . $separator . "prereg" . $separator . "bundled";
+
+    return ($extensiondir, $preregdir);
 }
 
 ########################################################
@@ -785,6 +847,12 @@ sub create_directory_structure
 
     foreach $dir (@startparents) { create_directory_tree($dir, \%fullpathhash, $targetdir, $dirhash); }
 
+    # Also adding the pathes of the startparents
+    foreach $dir (@startparents)
+    {
+        if ( ! exists($fullpathhash{$dir}) ) { $fullpathhash{$dir} = $targetdir; }
+    }
+
     return \%fullpathhash;
 }
 
@@ -874,7 +942,6 @@ sub copy_files_into_directory_structure
     print "Copying files\n";
 
     my $unopkgfile = "";
-    my @extensions = ();
 
     for ( my $i = 1; $i <= $maxsequence; $i++ )
     {
@@ -917,8 +984,6 @@ sub copy_files_into_directory_structure
 
             if ( ! $copyreturn) { exit_program("ERROR: Could not copy $source to $dest\n"); }
 
-            # Collecting all extensions
-            if ( $destfile =~ /\.oxt\s*$/ ) { push(@extensions, $destfile); }
             # Searching unopkg.exe
             if ( $destfile =~ /unopkg\.exe\s*$/ ) { $unopkgfile = $destfile; }
             # if (( $^O =~ /cygwin/i ) && ( $destfile =~ /\.exe\s*$/ )) { change_privileges($destfile, "775"); }
@@ -929,7 +994,7 @@ sub copy_files_into_directory_structure
         # }
     }
 
-    return ($unopkgfile, \@extensions);
+    return ($unopkgfile);
 }
 
 ######################################################
@@ -1020,12 +1085,19 @@ sub get_temppath
 }
 
 ####################################################################################
-# Registering one extension
+# Registering extensions
 ####################################################################################
 
-sub register_one_extension
+sub register_extensions_sync
 {
-    my ($unopkgfile, $extension, $temppath) = @_;
+    my ($unopkgfile, $localtemppath, $preregdir) = @_;
+
+    if ( $preregdir eq "" )
+    {
+        my $logtext = "ERROR: Failed to determine \"prereg\" folder for extension registration! Please check your installation set.";
+        print $logtext . "\n";
+        exit_program($logtext);
+    }
 
     my $from = cwd();
 
@@ -1045,22 +1117,17 @@ sub register_one_extension
         $path_displayed = 1;
     }
 
-    $temppath =~ s/\\/\//g;
-    $temppath = "/".$temppath;
-
-    # Converting path of $extension for cygwin
-
-    my $localextension = $extension;
-    if ( $^O =~ /cygwin/i ) {
-        $localextension = qx{cygpath -w "$extension"};
-        $localextension =~ s/\\/\\\\/g;
-    }
+    $localtemppath =~ s/\\/\//g;
 
     if ( $^O =~ /cygwin/i ) {
         $executable = "./" . $executable;
+        $preregdir = qx{cygpath -m "$preregdir"};
+        chomp($preregdir);
     }
 
-    my $systemcall = $executable . " add --shared --verbose --suppress-license " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
+    $preregdir =~ s/\/\s*$//g;
+
+    my $systemcall = $executable . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $preregdir . "\"" . " -env:UserInstallation=file:///" . $localtemppath . " 2\>\&1 |";
 
     print "... $systemcall\n";
 
@@ -1088,26 +1155,20 @@ sub register_one_extension
 
 sub register_extensions
 {
-    my ($unopkgfile, $extensions, $temppath) = @_;
+    my ($unopkgfile, $temppath, $preregdir) = @_;
 
-    if ( $#{$extensions} > -1 )
+    print "Registering extensions:\n";
+
+    if (( ! -f $unopkgfile ) || ( $unopkgfile eq "" ))
     {
-        print "Registering extensions:\n";
-
-        if (( ! -f $unopkgfile ) || ( $unopkgfile eq "" ))
-        {
-            print("WARNING: Could not find unopkg.exe (Language Pack?)!\n");
-        }
-        else
-        {
-            foreach $extension ( @{$extensions} ) { register_one_extension($unopkgfile, $extension, $temppath); }
-            remove_complete_directory($temppath, 1)
-        }
+        print("WARNING: Could not find unopkg.exe (Language Pack?)!\n");
     }
     else
     {
-        print "No extensions to register.\n";
+        register_extensions_sync($unopkgfile, $temppath, $preregdir);
+        remove_complete_directory($temppath, 1);
     }
+
 }
 
 ####################################################################################
@@ -1351,7 +1412,7 @@ my ( $filehash, $fileorder, $maxsequence ) = analyze_file_file($filecontent);
 my $fullpathhash = create_directory_structure($dirhash, $targetdir);
 
 # Copying files
-my ($unopkgfile, $extensions) = copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
+my ($unopkgfile) = copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
 if ( $^O =~ /cygwin/i ) { change_privileges_full($targetdir); }
 
 my $msidatabase = $targetdir . $separator . $databasefilename;
@@ -1363,10 +1424,14 @@ $filename = $helperdir . $separator . "CustomAction.idt";
 $filecontent = read_file($filename);
 my $register_extensions_exists = analyze_customaction_file($filecontent);
 
+# Removing empty dirs in extension folder
+my ( $extensionfolder, $preregdir ) = get_extensions_dir($unopkgfile);
+if ( -d $extensionfolder ) { remove_empty_dirs_in_folder($extensionfolder, 1); }
+
 if ( $register_extensions_exists )
 {
     # Registering extensions
-    register_extensions($unopkgfile, $extensions, $temppath);
+    register_extensions($unopkgfile, $temppath, $preregdir);
 }
 
 # Saving info in Summary Information Stream of msi database (required for following patches)

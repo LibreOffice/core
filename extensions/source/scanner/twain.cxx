@@ -31,7 +31,7 @@
 #include <string.h>
 #include <math.h>
 
-#if defined( WNT ) || defined (WIN)
+#if defined( WNT )
 #include <tools/svwin.h>
 #endif
 #ifdef OS2
@@ -52,10 +52,7 @@
 #define FIXTODOUBLE( nFix )         ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )           ((long)floor(FIXTODOUBLE(nFix)+0.5))
 
-#if defined WIN
-#define TWAIN_LIBNAME               "TWAIN.DLL"
-#define TWAIN_FUNCNAME              "DSM_Entry"
-#elif defined WNT
+#if defined WNT
 #define TWAIN_LIBNAME               "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME              "DSM_Entry"
 #elif defined OS2
@@ -242,7 +239,7 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if( 1 == nCurState )
     {
-        pMod = new NAMESPACE_VOS( OModule )();
+        pMod = new vos:: OModule ();
 
         if( pMod->load( TWAIN_LIBNAME ) )
         {

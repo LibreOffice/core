@@ -50,11 +50,14 @@
 #endif
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/script/XDefaultMethod.hpp>
 
 #include <typelib/typedescription.hxx>
 #include "unoconversionutilities.hxx"
@@ -78,7 +81,8 @@ typedef hash_multimap<OUString, unsigned int, hashOUString_Impl, equalOUString_I
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper_Impl : public WeakImplHelper4<XInvocation, XBridgeSupplier2, XInitialization, XAutomationObject>,
+class IUnknownWrapper_Impl : public WeakImplHelper6<XInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>,
+
                              public UnoConversionUtilities<IUnknownWrapper_Impl>
 
 {
@@ -126,7 +130,9 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 protected:
+    virtual ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 
     // ----------------------------------------------------------------------------
     virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
@@ -253,6 +259,9 @@ protected:
     bool m_bComTlbIndexInit;
     // Keeps the ITypeInfo obtained from IDispatch::GetTypeInfo
     CComPtr< ITypeInfo > m_spTypeInfo;
+    rtl::OUString m_sDefaultMember;
+    bool m_bHasDfltMethod;
+    bool m_bHasDfltProperty;
 };
 
 } // end namespace

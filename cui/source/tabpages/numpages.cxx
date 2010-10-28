@@ -939,28 +939,6 @@ void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
         SetCharFmtNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
 //end of CHINA001
-/*-----------------07.02.97 15.59-------------------
-
---------------------------------------------------*/
-void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
-                        const OUString& rBulletChar, const OUString& rText, const OUString& rFontName,
-                        Point& rLeft, Font& rRuleFont, const Font& rTextFont)
-{
-
-    if(NumberingType::CHAR_SPECIAL == nNumberingType )
-    {
-        rRuleFont.SetStyleName(rFontName);
-        pVDev->SetFont(rRuleFont);
-        pVDev->DrawText(rLeft, rBulletChar);
-        rLeft.X() += pVDev->GetTextWidth(rBulletChar);
-    }
-    else
-    {
-        pVDev->SetFont(rTextFont);
-        pVDev->DrawText(rLeft, rText);
-        rLeft.X() += pVDev->GetTextWidth(rText);
-    }
-}
 
 /**************************************************************************/
 /*                                                                        */
@@ -2269,7 +2247,6 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     Size                    aSize;
     sal_Bool                bSucc(sal_False);
     SvxOpenGraphicDialog    aGrfDlg( CUI_RES(RID_STR_EDIT_GRAPHIC) );
-//  aGrfDlg.SetDialogHelpId( HID_NUMBERINGOPT_SEL_GRF_FROM_FILE );
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {

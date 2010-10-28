@@ -507,14 +507,12 @@ DBG_NAME(OControlModel)
 //------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getImplementationId" );
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------
 Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getTypes" );
     TypeBag aTypes( _getTypes() );
 
     Reference< XTypeProvider > xProv;
@@ -527,7 +525,6 @@ Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException)
 //------------------------------------------------------------------------------
 Sequence<Type> OControlModel::_getTypes()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::_getTypes" );
     return TypeBag( OComponentHelper::getTypes(),
         OPropertySetAggregationHelper::getTypes(),
         OControlModel_BASE::getTypes()
@@ -537,7 +534,6 @@ Sequence<Type> OControlModel::_getTypes()
 //------------------------------------------------------------------
 Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::queryAggregation" );
     // base class 1
     Any aReturn(OComponentHelper::queryAggregation(_rType));
 
@@ -561,7 +557,6 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
 //------------------------------------------------------------------------------
 void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XObjectInputStream >& _rxInStream)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::readHelpTextCompatibly" );
     ::rtl::OUString sHelpText;
     ::comphelper::operator>>( _rxInStream, sHelpText);
     try
@@ -578,7 +573,6 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
 //------------------------------------------------------------------------------
 void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XObjectOutputStream >& _rxOutStream)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::writeHelpTextCompatibly" );
     ::rtl::OUString sHelpText;
     try
     {
@@ -609,7 +603,6 @@ OControlModel::OControlModel(
         // the native look is ugly ....
         // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::OControlModel" );
     DBG_CTOR(OControlModel, NULL);
     if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
     {
@@ -651,7 +644,6 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
     ,m_nClassId( FormComponentType::CONTROL )
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::OControlModel(copy)" );
     DBG_CTOR( OControlModel, NULL );
     DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
 
@@ -696,14 +688,12 @@ OControlModel::~OControlModel()
 //------------------------------------------------------------------
 void OControlModel::clonedFrom( const OControlModel* /*_pOriginal*/ )
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::clonedFrom" );
     // nothing to do in this base class
 }
 
 //------------------------------------------------------------------------------
 void OControlModel::doResetDelegator()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::doResetDelegator" );
     if (m_xAggregate.is())
         m_xAggregate->setDelegator(NULL);
 }
@@ -711,7 +701,6 @@ void OControlModel::doResetDelegator()
 //------------------------------------------------------------------------------
 void OControlModel::doSetDelegator()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::doSetDelegator" );
     increment(m_refCount);
     if (m_xAggregate.is())
     {
@@ -724,14 +713,12 @@ void OControlModel::doSetDelegator()
 //------------------------------------------------------------------------------
 InterfaceRef SAL_CALL OControlModel::getParent() throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getParent" );
     return m_xParent;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setParent" );
     osl::MutexGuard aGuard(m_aMutex);
 
     Reference<XComponent> xComp(m_xParent, UNO_QUERY);
@@ -749,7 +736,6 @@ void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com:
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getName" );
     ::rtl::OUString aReturn;
     OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
     return aReturn;
@@ -758,7 +744,6 @@ void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com:
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setName" );
         setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
 }
 
@@ -766,7 +751,6 @@ void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(Runtim
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::supportsService" );
     Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
@@ -778,7 +762,6 @@ sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceN
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getAggregateServiceNames" );
     Sequence< ::rtl::OUString > aAggServices;
     Reference< XServiceInfo > xInfo;
     if ( query_aggregation( m_xAggregate, xInfo ) )
@@ -789,7 +772,6 @@ Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
 //------------------------------------------------------------------------------
 Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getSupportedServiceNames" );
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
         getSupportedServiceNames_Static()
@@ -799,7 +781,6 @@ Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getSupportedServiceNames_Static" );
     Sequence< ::rtl::OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
     aServiceNames[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.FormControlModel" );
@@ -810,7 +791,6 @@ Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Sta
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& _rSource) throw (RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::disposing" );
     // release the parent
     if (_rSource.Source == m_xParent)
     {
@@ -832,7 +812,6 @@ void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& 
 //-----------------------------------------------------------------------------
 void OControlModel::disposing()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::disposing" );
     OPropertySetAggregationHelper::disposing();
 
     Reference<com::sun::star::lang::XComponent> xComp;
@@ -847,7 +826,6 @@ void OControlModel::disposing()
 //------------------------------------------------------------------------------
 void OControlModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::writeAggregate" );
     Reference< XPersistObject > xPersist;
     if ( query_aggregation( m_xAggregate, xPersist ) )
         xPersist->write( _rxOutStream );
@@ -856,7 +834,6 @@ void OControlModel::writeAggregate( const Reference< XObjectOutputStream >& _rxO
 //------------------------------------------------------------------------------
 void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::readAggregate" );
     Reference< XPersistObject > xPersist;
     if ( query_aggregation( m_xAggregate, xPersist ) )
         xPersist->read( _rxInStream );
@@ -866,7 +843,6 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
 void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
                         throw(stario::IOException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::write" );
     osl::MutexGuard aGuard(m_aMutex);
 
     // 1. Schreiben des UnoControls
@@ -912,7 +888,6 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
 //------------------------------------------------------------------------------
 void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::read" );
     osl::MutexGuard aGuard(m_aMutex);
 
     Reference<stario::XMarkableStream> xMark(InStream, UNO_QUERY);
@@ -966,7 +941,6 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
 //------------------------------------------------------------------------------
 PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertyStateByHandle" );
     // simply compare the current and the default value
     Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
     Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
@@ -983,7 +957,6 @@ PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
 //------------------------------------------------------------------------------
 void OControlModel::setPropertyToDefaultByHandle( sal_Int32 _nHandle)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setPropertyToDefaultByHandle" );
     Any aDefault = getPropertyDefaultByHandle( _nHandle );
 
     Any aConvertedValue, aOldValue;
@@ -997,7 +970,6 @@ void OControlModel::setPropertyToDefaultByHandle( sal_Int32 _nHandle)
 //------------------------------------------------------------------------------
 Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertyDefaultByHandle" );
     Any aReturn;
     switch ( _nHandle )
     {
@@ -1030,7 +1002,6 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 //------------------------------------------------------------------------------
 void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getFastPropertyValue" );
     switch ( _nHandle )
     {
         case PROPERTY_ID_NAME:
@@ -1062,7 +1033,6 @@ sal_Bool OControlModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
                         throw (com::sun::star::lang::IllegalArgumentException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::convertFastPropertyValue" );
     sal_Bool bModified(sal_False);
     switch (_nHandle)
     {
@@ -1092,7 +1062,6 @@ sal_Bool OControlModel::convertFastPropertyValue(
 void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
                         throw (Exception)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setFastPropertyValue_NoBroadcast" );
     switch (_nHandle)
     {
         case PROPERTY_ID_NAME:
@@ -1125,7 +1094,6 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 //------------------------------------------------------------------------------
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::describeFixedProperties" );
     BEGIN_DESCRIBE_BASE_PROPERTIES( 4 )
         DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
         DECL_PROP1      (NAME,        ::rtl::OUString,  BOUND);
@@ -1137,7 +1105,6 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 //------------------------------------------------------------------------------
 void OControlModel::describeAggregateProperties( Sequence< Property >& /* [out] */ _rAggregateProps ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::describeAggregateProperties" );
     if ( m_xAggregateSet.is() )
     {
         Reference< XPropertySetInfo > xPSI( m_xAggregateSet->getPropertySetInfo() );
@@ -1149,14 +1116,12 @@ void OControlModel::describeAggregateProperties( Sequence< Property >& /* [out] 
 //------------------------------------------------------------------------------
 ::osl::Mutex& OControlModel::getMutex()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getMutex" );
     return m_aMutex;
 }
 
 //------------------------------------------------------------------------------
 void OControlModel::describeFixedAndAggregateProperties( Sequence< Property >& _out_rFixedProperties, Sequence< Property >& _out_rAggregateProperties ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::describeFixedAndAggregateProperties" );
     describeFixedProperties( _out_rFixedProperties );
     describeAggregateProperties( _out_rAggregateProperties );
 }
@@ -1164,49 +1129,42 @@ void OControlModel::describeFixedAndAggregateProperties( Sequence< Property >& _
 //------------------------------------------------------------------------------
 Reference< XMultiPropertySet > OControlModel::getPropertiesInterface()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertiesInterface" );
     return Reference< XMultiPropertySet >( *this, UNO_QUERY );
 }
 
 //------------------------------------------------------------------------------
 Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw( RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() );
 }
 
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OControlModel::getInfoHelper()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getInfoHelper" );
     return m_aPropertyBagHelper.getInfoHelper();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::addProperty" );
     m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::removeProperty" );
     m_aPropertyBagHelper.removeProperty( _rName );
 }
 
 //--------------------------------------------------------------------
 Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues() throw (RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertyValues" );
     return m_aPropertyBagHelper.getPropertyValues();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setPropertyValues" );
     m_aPropertyBagHelper.setPropertyValues( _rProps );
 }
 
@@ -1249,7 +1207,6 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
     Any aReturn( OControlModel::queryAggregation(_rType) );
     if (!aReturn.hasValue())
     {
-        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::queryAggregation" );
         aReturn = OBoundControlModel_BASE1::queryInterface(_rType);
 
         if ( !aReturn.hasValue() && m_bCommitable )
@@ -1427,10 +1384,19 @@ void OBoundControlModel::implInitValuePropertyListening( ) const
 }
 
 //-----------------------------------------------------------------------------
+void OBoundControlModel::initOwnValueProperty( const ::rtl::OUString& i_rValuePropertyName )
+{
+    OSL_PRECOND( !m_sValuePropertyName.getLength() && -1 == m_nValuePropertyAggregateHandle,
+        "OBoundControlModel::initOwnValueProperty: value property is already initialized!" );
+    OSL_ENSURE( i_rValuePropertyName.getLength(), "OBoundControlModel::initOwnValueProperty: invalid property name!" );
+    m_sValuePropertyName = i_rValuePropertyName;
+}
+
+//-----------------------------------------------------------------------------
 void OBoundControlModel::initValueProperty( const ::rtl::OUString& _rValuePropertyName, sal_Int32 _nValuePropertyExternalHandle )
 {
     OSL_PRECOND( !m_sValuePropertyName.getLength() && -1 == m_nValuePropertyAggregateHandle,
-        "OBoundControlModel::initValueProperty: already called before!" );
+        "OBoundControlModel::initValueProperty: value property is already initialized!" );
     OSL_ENSURE( _rValuePropertyName.getLength(), "OBoundControlModel::initValueProperty: invalid property name!" );
     OSL_ENSURE( _nValuePropertyExternalHandle != -1, "OBoundControlModel::initValueProperty: invalid property handle!" );
 
@@ -1495,7 +1461,6 @@ Sequence< Type > OBoundControlModel::_getTypes()
 //-----------------------------------------------------------------------------
 void OBoundControlModel::disposing()
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::_getTypes" );
     OControlModel::disposing();
 
     ::osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1533,6 +1498,29 @@ void OBoundControlModel::disposing()
 }
 
 //------------------------------------------------------------------------------
+void OBoundControlModel::onValuePropertyChange( ControlModelLock& i_rControLock )
+{
+    if ( hasExternalValueBinding() )
+    {   // the control value changed, while we have an external value binding
+        // -> forward the value to it
+        if ( m_eControlValueChangeInstigator != eExternalBinding )
+            transferControlValueToExternal( i_rControLock );
+    }
+    else if ( !m_bCommitable && m_xColumnUpdate.is() )
+    {   // the control value changed, while we are  bound to a database column,
+        // but not committable (which means changes in the control have to be reflected to
+        // the underlying database column immediately)
+        // -> forward the value to the database column
+        if ( m_eControlValueChangeInstigator != eDbColumnBinding )
+            commitControlValueToDbColumn( false );
+    }
+
+    // validate the new value
+    if ( m_bSupportsValidation )
+        recheckValidity( true );
+}
+
+//------------------------------------------------------------------------------
 void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) throw ( RuntimeException )
 {
     ControlModelLock aLock( *this );
@@ -1543,26 +1531,8 @@ void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) th
         "OBoundControlModel::_propertyChanged: where did this come from (2)?" );
 
     if ( _rEvt.PropertyName == m_sValuePropertyName )
-    {   // our control value changed
-
-        if ( hasExternalValueBinding() )
-        {   // the control value changed, while we have an external value binding
-            // -> forward the value to it
-            if ( m_eControlValueChangeInstigator != eExternalBinding )
-                transferControlValueToExternal( aLock );
-        }
-        else if ( !m_bCommitable && m_xColumnUpdate.is() )
-        {   // the control value changed, while we are  bound to a database column,
-            // but not committable (which means changes in the control have to be reflected to
-            // the underlying database column immediately)
-            // -> forward the value to the database column
-            if ( m_eControlValueChangeInstigator !=  eDbColumnBinding )
-                commitControlValueToDbColumn( false );
-        }
-
-        // validate the new value
-        if ( m_bSupportsValidation )
-            recheckValidity( true );
+    {
+        onValuePropertyChange( aLock );
     }
 }
 
@@ -1673,7 +1643,6 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::disposing" );
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
         getSupportedServiceNames_Static()
@@ -1696,7 +1665,6 @@ Sequence< ::rtl::OUString > SAL_CALL OBoundControlModel::getSupportedServiceName
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, RuntimeException)
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getSupportedServiceNames_Static" );
     OControlModel::write(_rxOutStream);
 
     osl::MutexGuard aGuard(m_aMutex);
@@ -1797,7 +1765,6 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
 //------------------------------------------------------------------------------
 void OBoundControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OBoundControlModel::getFastPropertyValue" );
     switch (nHandle)
     {
         case PROPERTY_ID_INPUT_REQUIRED:
@@ -1866,7 +1833,6 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
 //------------------------------------------------------------------------------
 Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
-    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::convertFastPropertyValue" );
     Any aDefault;
     switch ( _nHandle )
     {

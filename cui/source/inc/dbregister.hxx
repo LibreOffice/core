@@ -95,13 +95,6 @@ namespace svx
         */
         void openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry = NULL);
 
-        /** opens a file pciker to select a database file
-            @param  _sLocation
-                If set, the file picker use it as default directory
-            @return
-                the location of the database file
-        */
-        String getFileLocation(const String& _sLocation);
 #endif
 
     public:

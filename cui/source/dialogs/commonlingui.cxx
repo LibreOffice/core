@@ -183,52 +183,6 @@ void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow,
         // (FirstWindow, LastWindow) was no valid control group
 }
 
-// -----------------------------------------------------------------------
-String SvxCommonLinguisticControl::GetNewEditWord()
-{
-    return aNewWordED.GetText();
-}
-
-// -----------------------------------------------------------------------
-void SvxCommonLinguisticControl::SetNewEditWord( const String& _rNew )
-{
-    aNewWordED.SetText( _rNew );
-}
-
-//-----------------------------------------------------------------------------
-void SvxCommonLinguisticControl::UpdateIgnoreHelp( )
-{
-
-    String aInfoStr( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
-    aInfoStr.Append( GetCurrentText() );
-
-    String aString = GetNonMnemonicString( aIgnoreAllBtn.GetText() );
-    aString.Append( aInfoStr );
-    aIgnoreAllBtn.SetQuickHelpText( aString );
-
-    aString = GetNonMnemonicString( aIgnoreBtn.GetText() );
-    aString.Append( aInfoStr );
-    aIgnoreBtn.SetQuickHelpText( aString );
-}
-
-//-----------------------------------------------------------------------------
-void SvxCommonLinguisticControl::UpdateChangesHelp( const String& _rNewText )
-{
-    String aInfoStr( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
-    aInfoStr.Append( GetCurrentText() );
-    aInfoStr.Append( String( RTL_CONSTASCII_USTRINGPARAM( " -> " ) ) );
-    aInfoStr.Append( _rNewText );
-        // TODO: shouldn't this be part of the resources, for proper localization?
-
-    String aString = GetNonMnemonicString( aChangeAllBtn.GetText() );
-    aString.Append( aInfoStr );
-    aChangeAllBtn.SetQuickHelpText( aString );
-
-    aString = GetNonMnemonicString( aChangeBtn.GetText() );
-    aString.Append( aInfoStr );
-    aChangeBtn.SetQuickHelpText( aString );
-}
-
 //-----------------------------------------------------------------------------
 void SvxCommonLinguisticControl::Paint( const Rectangle& rRect )
 {

@@ -53,8 +53,6 @@ private:
     DECL_LINK (ClickNewHdl_Impl          , void * );        // Button : New
 
     Image GetImage( USHORT nId );
-    void ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder);//, String* pFrame, String* pOpenAs, String* pDefTempl, String* pDefURL );
-    //String ReadURL_Impl( Config& rURLFile, const DirEntry& rFile );
 
 protected:
     void FillDlgFields     ( String& aStrURL );

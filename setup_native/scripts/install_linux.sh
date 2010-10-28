@@ -121,6 +121,14 @@ then
   exit 2
 fi
 
+# #163256# check if we are on a debian system...
+if rpm --help | grep debian >/dev/null;
+then
+    DEBIAN_FLAGS="--force-debian --nodeps"
+else
+    DEBIAN_FLAGS=
+fi
+
 #
 # Determine whether this should be an update or a fresh install
 #
@@ -227,7 +235,7 @@ FAKEDBRPM=/tmp/fake-db-1.0-$$.noarch.rpm
 linenum=???
 tail -n +$linenum $0 > $FAKEDBRPM
 
-rpm --upgrade --ignoresize --dbpath $RPM_DB_PATH $FAKEDBRPM
+rpm ${DEBIAN_FLAGS} --upgrade --ignoresize --dbpath $RPM_DB_PATH $FAKEDBRPM
 
 rm -f $FAKEDBRPM
 
@@ -253,7 +261,7 @@ echo "Installing the RPMs"
 
 ABSROOT=`cd ${INSTALLDIR}; pwd`
 RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${ABSROOT}%{PREFIXES} \n" $RPMLIST | sort -u | tr -d "\012"`
-UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
+UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm ${DEBIAN_FLAGS} $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
 
 #
 # Create a link into the users home directory
@@ -268,11 +276,11 @@ if [ "$UPDATE" = "yes" -a ! -f $INSTALLDIR/program/bootstraprc ]
 then
   echo
   echo "Update failed due to a bug in RPM, uninstalling .."
-  rpm --erase -v --nodeps --dbpath $RPM_DB_PATH `rpm --query --queryformat "%{NAME} " --package $RPMLIST --dbpath $RPM_DB_PATH`
+  rpm ${DEBIAN_FLAGS} --erase -v --nodeps --dbpath $RPM_DB_PATH `rpm --query --queryformat "%{NAME} " --package $RPMLIST --dbpath $RPM_DB_PATH`
   echo
   echo "Now re-installing new packages .."
   echo
-  rpm --install --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
+  rpm ${DEBIAN_FLAGS} --install --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
   echo
 fi
 

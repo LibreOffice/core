@@ -1368,133 +1368,6 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
     return 0;
 }
 
-::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
-{
-    ::rtl::OUString aLabel;
-    if ( aCmdURL.getLength() )
-    {
-        try
-        {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                uno::Reference< container::XNameAccess > xUICommandLabels;
-                const ::rtl::OUString aModule( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) );
-                uno::Any a = xNameAccess->getByName( aModule );
-                uno::Reference< container::XNameAccess > xUICommands;
-                a >>= xUICommandLabels;
-                rtl::OUString aStr;
-                uno::Sequence< beans::PropertyValue > aPropSeq;
-                a = xUICommandLabels->getByName( aCmdURL );
-                if ( a >>= aPropSeq )
-                {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                    {
-                        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
-                        {
-                            aPropSeq[i].Value >>= aStr;
-                            break;
-                        }
-                    }
-                }
-                aLabel = aStr;
-            }
-        }
-        catch ( uno::Exception& )
-        {
-        }
-    }
-
-    return aLabel;
-}
-
-
-//-----------------------------------------------
-String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
-{
-    ::rtl::OUStringBuffer sName(256);
-    sName.appendAscii("\"");
-    switch(eType)
-    {
-        case KEYFUNC_NEW :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:NewDoc") ) );
-            break;
-
-        case KEYFUNC_OPEN :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Open") ) );
-            break;
-
-        case KEYFUNC_SAVE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Save") ) );
-            break;
-
-        case KEYFUNC_SAVEAS :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:SaveAs") ) );
-            break;
-
-        case KEYFUNC_PRINT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Print") ) );
-            break;
-
-        case KEYFUNC_CLOSE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Close") ) );
-            break;
-
-        case KEYFUNC_QUIT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Quit") ) );
-            break;
-
-        case KEYFUNC_CUT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Cut") ) );
-            break;
-
-        case KEYFUNC_COPY :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Copy") ) );
-            break;
-
-        case KEYFUNC_PASTE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Paste") ) );
-            break;
-
-        case KEYFUNC_UNDO :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Undo") ) );
-            break;
-
-        case KEYFUNC_REDO :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Redo") ) );
-            break;
-
-        case KEYFUNC_DELETE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Delete") ) );
-            break;
-
-        case KEYFUNC_REPEAT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Repeat") ) );
-            break;
-
-        case KEYFUNC_FIND :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Search") ) );
-            break;
-
-        case KEYFUNC_FINDBACKWARD :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:SearchBackwards") ) );
-            break;
-
-        case KEYFUNC_PROPERTIES :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Options") ) );
-            break;
-
-        case KEYFUNC_FRONT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:ToFront") ) );
-            break;
-
-        default:
-            break;
-    }
-    sName.appendAscii("\"");
-    return String(sName.makeStringAndClear());
-}
-
 //-----------------------------------------------
 void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTitle )
 {
@@ -1506,7 +1379,6 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );
-//  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
     m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
 
@@ -1574,37 +1446,6 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
         if ( m_pStringItem )
             pGroupLBox->AddAndSelect( m_pStringItem, m_pFontItem );
     }
-}
-
-//-----------------------------------------------
-void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
-{
-    m_pMacroInfoItem = pItem;
-    pGroupLBox->SelectMacro( pItem );
-}
-
-//-----------------------------------------------
-void SfxAcceleratorConfigPage::CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
-                                                 const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr)
-{
-    const css::uno::Sequence< css::awt::KeyEvent > lKeys = xSourceAccMgr->getAllKeyEvents();
-          sal_Int32                                c     = lKeys.getLength();
-          sal_Int32                                i     = 0;
-    for (i=0; i<c; ++i)
-    {
-        const css::awt::KeyEvent& rKey     = lKeys[i];
-              ::rtl::OUString     sCommand = xSourceAccMgr->getCommandByKeyEvent(rKey);
-        xTargetAccMgr->setKeyEvent(rKey, sCommand);
-    }
-}
-
-//-----------------------------------------------
-KeyCode SfxAcceleratorConfigPage::MapPosToKeyCode(USHORT nPos) const
-{
-    TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-    KeyCode aCode(KEYCODE_ARRAY[pEntry->m_nKeyPos] & 0xFFF                 ,
-                  KEYCODE_ARRAY[pEntry->m_nKeyPos] & (KEY_SHIFT | KEY_MOD2));
-    return aCode;
 }
 
 //-----------------------------------------------

@@ -75,6 +75,9 @@ public class InstallData
     static private boolean databaseQueried = false;
     static private boolean useRtl = false;
     static private boolean installedProductMinorSet = false;
+    static private boolean isDebianSystem = false;
+    static private boolean useForceDebian = false;  /* --force-debian */
+    static private boolean debianInvestigated = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
@@ -647,6 +650,30 @@ public class InstallData
 
     public void setInstalledProductMinorSet(boolean value) {
         installedProductMinorSet = value;
+    }
+
+    public boolean debianInvestigated() {
+        return debianInvestigated;
+    }
+
+    public void setDebianInvestigated(boolean value) {
+        debianInvestigated = value;
+    }
+
+    public boolean isDebianSystem() {
+        return isDebianSystem;
+    }
+
+    public void setIsDebianSystem(boolean value) {
+        isDebianSystem = value;
+    }
+
+    public boolean useForceDebian() {
+        return useForceDebian;
+    }
+
+    public void setUseForceDebian(boolean value) {
+        useForceDebian = value;
     }
 
     public boolean databaseQueried() {

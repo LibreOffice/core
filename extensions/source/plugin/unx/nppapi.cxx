@@ -1,10 +1,29 @@
 /*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.7 2008-01-14 14:53:38 ihi Exp $
-
-*************************************************************************/
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
@@ -27,7 +46,7 @@ PluginConnector::PluginConnector( int nSocket ) :
 
 PluginConnector::~PluginConnector()
 {
-    NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
+    vos::OGuard aGuard( m_aUserEventMutex );
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
          it != allConnectors.end(); ++it )
     {
@@ -41,7 +60,7 @@ PluginConnector::~PluginConnector()
 
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
-    NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
+    vos::OGuard aGuard( m_aUserEventMutex );
     bool bFound = false;
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
          it != allConnectors.end() && bFound == false; ++it )
@@ -68,7 +87,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         return 0;
 /*
     {
-        NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
+        vos::OGuard aGuard( m_aUserEventMutex );
         m_aUserEventIDs.pop_front();
     }
 */

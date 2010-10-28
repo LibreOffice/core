@@ -70,26 +70,6 @@ struct GeneralTabPage_Impl
 
 // -----------------------------------------------------------------------
 
-// kommt aus adritem.cxx
-//CHINA001 extern String ConvertToStore_Impl( const String& );
-//copy from adritem.cxx, since it will leave in svx.
-String ConvertToStore_Impl( const String& rText )
-{
-    String sRet;
-    USHORT i = 0;
-
-    while ( i < rText.Len() )
-    {
-        if ( rText.GetChar(i) == '\\' || rText.GetChar(i) == '#' )
-            sRet += '\\';
-        sRet += rText.GetChar(i++);
-    }
-    return sRet;
-}
-
-
-// -----------------------------------------------------------------------
-
 SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),

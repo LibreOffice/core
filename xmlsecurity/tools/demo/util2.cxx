@@ -384,7 +384,7 @@ void QueryPrintSignatureDetails( const SignatureInformations& SignatureInformati
 {
     char cShowDetails;
     fprintf( stdout, "\nDisplay details (y/n) [y]?" );
-    fflush(stdin);
+    fflush( stdout );
     fscanf( stdin, "%c", &cShowDetails);
     if ( cShowDetails == 'y' )
     {
@@ -409,7 +409,7 @@ int QuerySelectNumber( int nMin, int nMax )
     do
     {
         fprintf( stdout, "\nSelect <%d-%d>:", nMin, nMax ) ;
-        fflush(stdin);
+        fflush( stdout );
         fscanf( stdin, "%d", &sel ) ;
     } while( ( sel < nMin ) || ( sel > nMax ) );
 
@@ -420,7 +420,7 @@ long QueryVerifySignature()
 {
     char answer;
     fprintf( stdout, "\nFound a signature - verify this one (y/n) [y]?" );
-    fflush(stdin);
+    fflush( stdout );
     fscanf( stdin, "%c", &answer);
     return  (answer == 'n')?0:1;
 }

@@ -58,10 +58,12 @@ SLOFILES = \
     $(SLO)$/iconcache.obj \
     $(SLO)$/postuninstall.obj \
     $(SLO)$/migrateinstallpath.obj \
+    $(SLO)$/completeinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
     $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
     $(SLO)$/dotnetcheck.obj \
+    $(SLO)$/registerextensions.obj \
     $(SLO)$/copyeditiondata.obj \
     $(SLO)$/vistaspecial.obj \
     $(SLO)$/checkrunningoffice.obj \

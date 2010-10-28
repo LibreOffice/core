@@ -105,7 +105,7 @@ public class SortingComponent
                             new Boolean(bDoEnable), new Integer(8), sSortHeader[i], new Integer(0), ICompPosX, new Integer(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
                         });
 
-                HIDString = "HID:" + Integer.toString(FirstHelpIndex);
+                HIDString = HelpIds.getHelpIdString(FirstHelpIndex);
                 xSortListBox[i] = CurUnoDialog.insertListBox("lstSort" + new Integer(i + 1).toString(), SOSORTLST[i], null, new ItemListenerImpl(), new String[]
                         {
                             "Dropdown", "Enabled", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
@@ -114,7 +114,7 @@ public class SortingComponent
                             new Boolean(true), new Boolean(bDoEnable), new Integer(12), HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
                         }); //new Short((short) (17+i*4))
 
-                HIDString = "HID:" + Integer.toString(FirstHelpIndex + 1);
+                HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 1);
                 XRadioButton xRadioButtonAsc = CurUnoDialog.insertRadioButton("optAscend" + Integer.toString(i + 1), 0, new String[]
                         {
                             "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"
@@ -123,7 +123,7 @@ public class SortingComponent
                             new Boolean(bDoEnable), new Integer(10), HIDString, sSortAscend[i], IOptButtonPosX, new Integer(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), new String("ASC"), IOptButtonWidth
                         }); //, new Short((short) (18+i*4))
 
-                HIDString = "HID:" + Integer.toString(FirstHelpIndex + 2);
+                HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 2);
                 XRadioButton xRadioButtonDesc = CurUnoDialog.insertRadioButton("optDescend" + Integer.toString(i + 1), 0, new String[]
                         {
                             "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"

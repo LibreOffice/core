@@ -155,7 +155,11 @@ public:
 
 TYPEINIT1( BasicIDEShell, SfxViewShell );
 
+<<<<<<< local
 SFX_IMPL_VIEWFACTORY( BasicIDEShell )
+=======
+SFX_IMPL_NAMED_VIEWFACTORY( BasicIDEShell, "Default" )
+>>>>>>> other
 {
     SFX_VIEW_REGISTRATION( BasicDocShell );
 }
