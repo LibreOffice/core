@@ -73,16 +73,15 @@
 
 
 #if defined (XP_UNIX)
-#define USER_ENVIRONMENT_VARIABLE "USER"
-#define LOGNAME_ENVIRONMENT_VARIABLE "LOGNAME"
-#define HOME_ENVIRONMENT_VARIABLE "HOME"
-#define PROFILE_NAME_ENVIRONMENT_VARIABLE "PROFILE_NAME"
-#define PROFILE_HOME_ENVIRONMENT_VARIABLE "PROFILE_HOME"
-#define DEFAULT_UNIX_PROFILE_NAME "default"
-#ifndef XP_MACOSX   /* Don't use symlink-based locking on OS X */
-#define USE_SYMLINK_LOCKING
-#endif
-#elif defined (XP_BEOS)
+#   define USER_ENVIRONMENT_VARIABLE "USER"
+#   define LOGNAME_ENVIRONMENT_VARIABLE "LOGNAME"
+#   define HOME_ENVIRONMENT_VARIABLE "HOME"
+#   define PROFILE_NAME_ENVIRONMENT_VARIABLE "PROFILE_NAME"
+#   define PROFILE_HOME_ENVIRONMENT_VARIABLE "PROFILE_HOME"
+#   define DEFAULT_UNIX_PROFILE_NAME "default"
+#   ifndef XP_MACOSX   /* Don't use symlink-based locking on OS X */
+#       define USE_SYMLINK_LOCKING
+#   endif
 #endif
 
 // IID and CIDs of all the services needed
