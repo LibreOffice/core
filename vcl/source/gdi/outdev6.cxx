@@ -345,6 +345,12 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
         if( OUTDEV_PRINTER == meOutDevType )
         {
+            if(100 <= nTransparencePercent)
+            {
+                // #i112959# 100% transparent, draw nothing
+                return;
+            }
+
             Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
             const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
             const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
@@ -359,30 +365,40 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 case( 25 ): nMove = nBaseExtent * 3; break;
                 case( 50 ): nMove = nBaseExtent * 4; break;
                 case( 75 ): nMove = nBaseExtent * 6; break;
-                            // TODO What is the correct VALUE???
+
+                // #i112959#  very transparent (88 < nTransparencePercent <= 99)
+                case( 100 ): nMove = nBaseExtent * 8; break;
+
+                // #i112959# not transparent (nTransparencePercent < 13)
                 default:    nMove = 0; break;
             }
 
             Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
             IntersectClipRegion( rPolyPoly );
             SetLineColor( GetFillColor() );
-
-            Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
-
             const BOOL bOldMap = mbMap;
             EnableMapMode( FALSE );
 
-            while( aRect.Top() <= aPolyRect.Bottom() )
+            if(nMove)
             {
-                DrawRect( aRect );
-                aRect.Move( 0, nMove );
-            }
+                Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
+                while( aRect.Top() <= aPolyRect.Bottom() )
+                {
+                    DrawRect( aRect );
+                    aRect.Move( 0, nMove );
+                }
 
-            aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
-            while( aRect.Left() <= aPolyRect.Right() )
+                aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
+                while( aRect.Left() <= aPolyRect.Right() )
+                {
+                    DrawRect( aRect );
+                    aRect.Move( nMove, 0 );
+                }
+            }
+            else
             {
-                DrawRect( aRect );
-                aRect.Move( nMove, 0 );
+                // #i112959# if not transparent, draw full rectangle in clip region
+                DrawRect( aPolyRect );
             }
 
             EnableMapMode( bOldMap );
@@ -1135,7 +1151,7 @@ void OutputDevice::Erase()
         {
             ImplControlValue    aControlValue;
             Point               aGcc3WorkaroundTemporary;
-            Region              aCtrlRegion( Rectangle( aGcc3WorkaroundTemporary, GetOutputSizePixel() ) );
+            Rectangle           aCtrlRegion( aGcc3WorkaroundTemporary, GetOutputSizePixel() );
             ControlState        nState = 0;
 
             if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;

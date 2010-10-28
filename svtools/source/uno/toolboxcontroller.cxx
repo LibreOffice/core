@@ -803,7 +803,7 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
     {
         case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
         {
-            sal_Bool aNewValue;
+            sal_Bool aNewValue(sal_False);
             aValue >>= aNewValue;
             if (aNewValue != m_bSupportVisiable)
             {

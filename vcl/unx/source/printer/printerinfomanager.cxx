@@ -35,6 +35,7 @@
 #include "cupsmgr.hxx"
 #include "vcl/fontmanager.hxx"
 #include "vcl/strhelper.hxx"
+#include "saldata.hxx"
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
@@ -92,22 +93,28 @@ namespace psp
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    static PrinterInfoManager* pManager = NULL;
+    SalData* pSalData = GetSalData();
 
-    if( ! pManager )
+    if( ! pSalData->m_pPIManager )
     {
-        pManager = CUPSManager::tryLoadCUPS();
-        if( ! pManager )
-            pManager = new PrinterInfoManager();
+        pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
+        if( ! pSalData->m_pPIManager )
+            pSalData->m_pPIManager = new PrinterInfoManager();
 
-        if( pManager )
-            pManager->initialize();
+        pSalData->m_pPIManager->initialize();
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pManager->getType() );
+        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pSalData->m_pPIManager->getType() );
         #endif
     }
 
-    return *pManager;
+    return *pSalData->m_pPIManager;
+}
+
+void PrinterInfoManager::release()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->m_pPIManager;
+    pSalData->m_pPIManager = NULL;
 }
 
 // -----------------------------------------------------------------
@@ -130,6 +137,9 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 PrinterInfoManager::~PrinterInfoManager()
 {
     delete m_pQueueInfo;
+    #if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
+    #endif
 }
 
 // -----------------------------------------------------------------
@@ -283,6 +293,10 @@ void PrinterInfoManager::initialize()
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
 
+            aValue = aConfig.ReadKey( "PDFDevice" );
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_nPDFDevice = aValue.ToInt32();
+
             aValue = aConfig.ReadKey( "PerformFontSubstitution" );
             if( aValue.Len() )
             {
@@ -324,7 +338,7 @@ void PrinterInfoManager::initialize()
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
+            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", (int)m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
         }
     }
@@ -493,6 +507,10 @@ void PrinterInfoManager::initialize()
                 aValue = aConfig.ReadKey( "PSLevel" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nPSLevel = aValue.ToInt32();
+
+                aValue = aConfig.ReadKey( "PDFDevice" );
+                if( aValue.Len() )
+                    aPrinter.m_aInfo.m_nPDFDevice = aValue.ToInt32();
 
                 aValue = aConfig.ReadKey( "PerformFontSubstitution" );
                 if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
@@ -758,6 +776,7 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
             pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
+            pConfig->WriteKey( "PDFDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPDFDevice ) );
             pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
             pConfig->WriteKey( "ColorDepth", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDepth ) );
             aValue = ByteString::CreateFromInt32( it->second.m_aInfo.m_nLeftMarginAdjust );
@@ -845,9 +864,10 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "new printer %s, level = %d, colordevice = %d, depth = %d\n",
+        fprintf( stderr, "new printer %s, level = %d, pdfdevice = %d, colordevice = %d, depth = %d\n",
         OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
         m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
+        m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
         #endif
@@ -1095,7 +1115,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     return popen (aShellCommand.getStr(), "w");
 }
 
-int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/ )
+int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
 {
     return (0 == pclose( pFile ));
 }
@@ -1166,7 +1186,11 @@ SystemQueueInfo::SystemQueueInfo() :
 
 SystemQueueInfo::~SystemQueueInfo()
 {
-    terminate();
+    static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
+    if( ! pNoSyncDetection || !*pNoSyncDetection )
+        join();
+    else
+        terminate();
 }
 
 bool SystemQueueInfo::hasChanged() const

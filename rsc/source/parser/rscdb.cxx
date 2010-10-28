@@ -81,6 +81,7 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
       a0to9999Short( pHS->getID( "YearShort" ), RSC_NOTYPE ),
       aIdLong( pHS->getID( "IDLONG" ), RSC_NOTYPE ),
       aString( pHS->getID( "Chars" ), RSC_NOTYPE ),
+      aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE ),
       aWinBits( pHS->getID( "WinBits" ), RSC_NOTYPE ),
       aLangType(),
       aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType ),
@@ -125,7 +126,11 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
     else
         rLang = rtl::OString();
 #if OSL_DEBUG_LEVEL > 1
+<<<<<<< local
         fprintf( stderr, " %s (0x%" SAL_PRIxUINT32 ")", aL.getStr(), nRet );
+=======
+        fprintf( stderr, " %s (0x%hx)", aL.getStr(), (int)nRet );
+>>>>>>> other
 #endif
     return nRet;
 }

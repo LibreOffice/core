@@ -1442,16 +1442,16 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 SvtFileView::GetHelpId( ) const
+const rtl::OString& SvtFileView::GetHelpId( ) const
 {
     return mpImp->mpView->GetHelpId( );
 }
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::SetHelpId( sal_uInt32 nHelpId )
+void SvtFileView::SetHelpId( const rtl::OString& rHelpId )
 {
-    mpImp->mpView->SetHelpId( nHelpId );
+    mpImp->mpView->SetHelpId( rHelpId );
 }
 
 // -----------------------------------------------------------------------

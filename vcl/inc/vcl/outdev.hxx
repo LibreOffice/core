@@ -1191,14 +1191,14 @@ public:
     // Query the native control to determine if it was acted upon
     BOOL                HitTestNativeControl(   ControlType nType,
                                                 ControlPart nPart,
-                                                const Region& rControlRegion,
+                                                const Rectangle& rControlRegion,
                                                 const Point& aPos,
                                                 BOOL& rIsInside );
 
     // Request rendering of a particular control and/or part
     BOOL                DrawNativeControl(  ControlType nType,
                                             ControlPart nPart,
-                                            const Region& rControlRegion,
+                                            const Rectangle& rControlRegion,
                                             ControlState nState,
                                             const ImplControlValue& aValue,
                                             ::rtl::OUString aCaption );
@@ -1206,7 +1206,7 @@ public:
      // Request rendering of a caption string for a control
     BOOL                DrawNativeControlText(  ControlType nType,
                                                 ControlPart nPart,
-                                                const Region& rControlRegion,
+                                                const Rectangle& rControlRegion,
                                                 ControlState nState,
                                                 const ImplControlValue& aValue,
                                                 ::rtl::OUString aCaption );
@@ -1214,12 +1214,12 @@ public:
     // Query the native control's actual drawing region (including adornment)
     BOOL                GetNativeControlRegion( ControlType nType,
                                                 ControlPart nPart,
-                                                const Region& rControlRegion,
+                                                const Rectangle& rControlRegion,
                                                 ControlState nState,
                                                 const ImplControlValue& aValue,
                                                 ::rtl::OUString aCaption,
-                                                Region &rNativeBoundingRegion,
-                                                Region &rNativeContentRegion );
+                                                Rectangle &rNativeBoundingRegion,
+                                                Rectangle &rNativeContentRegion );
 
 };
 

@@ -1518,6 +1518,13 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
 void SvLBox::Command( const CommandEvent& i_rCommandEvent )
 {
     DBG_CHKTHIS(SvLBox,0);
+
+    if ( COMMAND_STARTDRAG == i_rCommandEvent.GetCommand() )
+    {
+        Point aEventPos( i_rCommandEvent.GetMousePosPixel() );
+        MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
+        MouseButtonUp( aMouseEvt );
+    }
     Control::Command( i_rCommandEvent );
 }
 
@@ -1774,6 +1781,10 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
+
+    Point aEventPos( rPosPixel );
+    MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
+    MouseButtonUp( aMouseEvt );
 
     nOldDragMode = GetDragDropMode();
     if ( !nOldDragMode )

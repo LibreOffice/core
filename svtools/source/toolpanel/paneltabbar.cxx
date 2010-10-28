@@ -296,19 +296,18 @@ namespace svt
         const ControlState nState( lcl_ItemToControlState( i_nItemFlags ) );
 
         TabitemValue tiValue;
-        ImplControlValue aControlValue( (void*)(&tiValue) );
 
-        Region aBoundingRegion, aContentRegion;
+        Rectangle aBoundingRegion, aContentRegion;
         bool bNativeOK = getTargetDevice().GetNativeControlRegion(
             CTRL_TAB_ITEM, PART_ENTIRE_CONTROL,
             i_rContentArea, nState,
-            aControlValue, ::rtl::OUString(),
+            tiValue, ::rtl::OUString(),
             aBoundingRegion, aContentRegion
         );
         (void)bNativeOK;
         OSL_ENSURE( bNativeOK, "NWFTabItemRenderer::calculateDecorations: GetNativeControlRegion not implemented for CTRL_TAB_ITEM?!" );
 
-        return aBoundingRegion.GetBoundRect();
+        return aBoundingRegion;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -322,9 +321,8 @@ namespace svt
         if ( i_nItemFlags & ITEM_POSITION_LAST )
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
 
-        ImplControlValue aControlValue( (void *)(&tiValue) );
 
-        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, i_rContentRect, nState, aControlValue, rtl::OUString() );
+        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, i_rContentRect, nState, tiValue, rtl::OUString() );
         (void)bNativeOK;
         OSL_ENSURE( bNativeOK, "NWFTabItemRenderer::preRenderItem: inconsistent NWF implementation!" );
             // IsNativeControlSupported returned true, previously, otherwise we would not be here ...

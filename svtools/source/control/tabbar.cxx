@@ -60,7 +60,7 @@ struct ImplTabBarItem
     XubString       maHelpText;
     Rectangle       maRect;
     long            mnWidth;
-    ULONG           mnHelpId;
+    rtl::OString    maHelpId;
     BOOL            mbShort;
     BOOL            mbSelect;
     BOOL            mbEnable;
@@ -76,7 +76,6 @@ struct ImplTabBarItem
                         mnId     = nItemId;
                         mnBits   = nPageBits;
                         mnWidth  = 0;
-                        mnHelpId = 0;
                         mbShort  = FALSE;
                         mbSelect = FALSE;
                         mbEnable = TRUE;
@@ -1394,13 +1393,13 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            ULONG nHelpId = GetHelpId( nItemId );
-            if ( nHelpId )
+            rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
+            if ( aHelpId.getLength() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId, this );
+                    pHelp->Start( aHelpId, this );
                 return;
             }
         }
@@ -2400,11 +2399,11 @@ XubString TabBar::GetHelpText( USHORT nPageId ) const
     if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
-        if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
+        if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+                pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
         }
 
         return pItem->maHelpText;
@@ -2415,22 +2414,22 @@ XubString TabBar::GetHelpText( USHORT nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetHelpId( USHORT nPageId, ULONG nHelpId )
+void TabBar::SetHelpId( USHORT nPageId, const rtl::OString& rHelpId )
 {
     USHORT nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
-        mpItemList->GetObject( nPos )->mnHelpId = nHelpId;
+        mpItemList->GetObject( nPos )->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG TabBar::GetHelpId( USHORT nPageId ) const
+rtl::OString TabBar::GetHelpId( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
+    rtl::OString aRet;
     if ( nPos != PAGE_NOT_FOUND )
-        return mpItemList->GetObject( nPos )->mnHelpId;
-    else
-        return 0;
+        aRet = mpItemList->GetObject( nPos )->maHelpId;
+    return aRet;
 }
 
 // -----------------------------------------------------------------------

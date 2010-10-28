@@ -208,7 +208,6 @@ struct ImplSVGDIData
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
     utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
     utl::FontSubstConfiguration* mpFontSubstConfiguration;
-    bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
@@ -318,6 +317,9 @@ struct ImplSVNWFData
                                                           // window background before drawing the native
                                                           // checkbox
     bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
+    int                     mnStatusBarLowerRightOffset;  // amount in pixel to avoid in the lower righthand corner
+                                                          // used on the Mac where the system resizer paints over
+                                                          // our window content
 };
 
 

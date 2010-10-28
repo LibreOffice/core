@@ -204,6 +204,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
 SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems )
 :   PropertySetHelper( createPropertySetInfo( nType ) ),
     mnType( nType )
+,   mbIsActive( true )
+,   mnRadius( 0 )
 {
     mpEvents = new SvMacroTableEventDescriptor( pSupportedMacroItems );
     mpEvents->acquire();
@@ -212,6 +214,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription
 SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems )
 :   PropertySetHelper( createPropertySetInfo( rMapObject.GetType() ) ),
     mnType( rMapObject.GetType() )
+,   mbIsActive( true )
+,   mnRadius( 0 )
 {
     maURL = rMapObject.GetURL();
     maAltText = rMapObject.GetAltText();

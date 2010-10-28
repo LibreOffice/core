@@ -36,10 +36,10 @@
 #include <tools/debug.hxx>
 #include <vcl/sallayout.hxx>
 
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Segment.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 #include <rtl/ustring.hxx>
 #include <vcl/graphite_layout.hxx>
@@ -105,7 +105,7 @@ GrSegRecord * GraphiteSegmentCache::cacheSegment(TextSourceAdaptor * adapter, gr
     // when the next key is added, the record for the prevKey's m_nextKey field
     // is updated to the newest key so that m_oldestKey can be updated to the
     // next oldest key when the record for m_oldestKey is deleted
-    if (m_segMap.size() > SEG_CACHE_SIZE)
+    if (m_segMap.size() > m_nSegCacheSize)
     {
       GraphiteSegMap::iterator oldestPair = m_segMap.find(reinterpret_cast<long>(m_oldestKey));
       // oldest record may no longer exist if a buffer was changed

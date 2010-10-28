@@ -185,3 +185,11 @@ ALL: $(SLB)$/svt.lib \
 .INCLUDE :	target.mk
 
 
+
+ALLTAR : $(MISC)/svt.component
+
+$(MISC)/svt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        svt.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt svt.component
