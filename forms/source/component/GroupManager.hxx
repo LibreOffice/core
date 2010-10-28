@@ -71,7 +71,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Int32 insert_sorted(::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, const LESS_COMPARE& _rCompareOp)
     {
-        typename ::std::vector<ELEMENT>::iterator aInsertPos = lower_bound(
+        typename ::std::vector<ELEMENT>::iterator aInsertPos = ::std::lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
@@ -84,7 +84,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Bool seek_entry(const ::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, sal_Int32& nPos, const LESS_COMPARE& _rCompareOp)
     {
-        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = lower_bound(
+        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = ::std::lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
