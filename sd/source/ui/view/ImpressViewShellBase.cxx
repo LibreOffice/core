@@ -62,7 +62,11 @@ SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
 void ImpressViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
+<<<<<<< local
         &CreateInstance,&InitFactory,nPrio);
+=======
+        &CreateInstance,&InitFactory,nPrio,"Default");
+>>>>>>> other
     InitFactory();
 }
 void ImpressViewShellBase::InitFactory()

@@ -62,7 +62,11 @@ SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
 void GraphicViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
+<<<<<<< local
         &CreateInstance,&InitFactory,nPrio);
+=======
+        &CreateInstance,&InitFactory,nPrio,"Default");
+>>>>>>> other
     InitFactory();
 }
 void GraphicViewShellBase::InitFactory()

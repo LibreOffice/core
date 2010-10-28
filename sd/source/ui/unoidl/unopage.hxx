@@ -74,6 +74,7 @@ class SdGenericDrawPage : public SvxFmDrawPage,
 private:
     SdXImpressDocument* mpModel;
     SdrModel* mpSdrModel;
+    sal_Int16 mnTempPageNumber; // for printing handouts
 
 protected:
     friend class SdXImpressDocument;

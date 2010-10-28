@@ -59,6 +59,7 @@
 #include "FactoryIds.hxx"
 #include "ViewShell.hxx"
 #include "SlideShowRestarter.hxx"
+#include "DrawController.hxx"
 #include <boost/bind.hpp>
 
 using ::com::sun::star::presentation::XSlideShowController;
@@ -769,6 +770,16 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
                     if( pDrawViewShell )
                         pDrawViewShell->SwitchPage( (USHORT)xController->getRestoreSlide() );
+                    else
+                    {
+                        Reference<XDrawView> xDrawView (
+                            Reference<XWeak>(&mpCurrentViewShellBase->GetDrawController()), UNO_QUERY);
+                        if (xDrawView.is())
+                            xDrawView->setCurrentPage(
+                                Reference<XDrawPage>(
+                                    mpDoc->GetSdPage(xController->getRestoreSlide(), PK_STANDARD)->getUnoPage(),
+                                    UNO_QUERY));
+                    }
                 }
             }
         }
@@ -1171,9 +1182,9 @@ void SlideShow::StartFullscreenPresentation( )
     // fullscreen.
     const sal_Int32 nDisplay (GetDisplay());
     WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
+    pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
     pWorkWindow->StartPresentationMode( TRUE, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(FALSE, nDisplay);
-    pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
 
     if (pWorkWindow->IsVisible())
     {

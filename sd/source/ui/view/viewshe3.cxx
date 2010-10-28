@@ -216,7 +216,8 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 SdPage* ViewShell::CreateOrDuplicatePage (
     SfxRequest& rRequest,
     PageKind ePageKind,
-    SdPage* pPage)
+    SdPage* pPage,
+    const sal_Int32 nInsertPosition)
 {
     USHORT nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
@@ -255,7 +256,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-                framework::FrameworkHelper::msLayoutTaskPanelURL);
+                framework::FrameworkHelper::msLayoutTaskPanelURL,
+                false);
         }
 */
 
@@ -377,7 +379,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         eStandardLayout,
                         eNotesLayout,
                         bIsPageBack,
-                        bIsPageObj);
+                        bIsPageObj,
+                        nInsertPosition);
                     // Select exactly the new page.
                     USHORT nPageCount (pDocument->GetSdPageCount(ePageKind));
                     for (USHORT i=0; i<nPageCount; i++)
@@ -400,7 +403,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     eStandardLayout,
                     eNotesLayout,
                     bIsPageBack,
-                    bIsPageObj);
+                    bIsPageObj,
+                    nInsertPosition);
             break;
 
         case SID_DUPLICATE_PAGE:
@@ -414,7 +418,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     eStandardLayout,
                     eNotesLayout,
                     bIsPageBack,
-                    bIsPageObj);
+                    bIsPageObj,
+                    nInsertPosition);
             break;
 
         default:

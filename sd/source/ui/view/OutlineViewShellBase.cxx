@@ -60,7 +60,11 @@ SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
 void OutlineViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
+<<<<<<< local
         &CreateInstance,&InitFactory,nPrio);
+=======
+        &CreateInstance,&InitFactory,nPrio,"Outline");
+>>>>>>> other
     InitFactory();
 }
 void OutlineViewShellBase::InitFactory()

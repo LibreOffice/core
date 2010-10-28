@@ -684,9 +684,9 @@ long ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
 }
 
 
-BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin)
+bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
-    BOOL bDone = FALSE;
+    bool bDone = false;
 
     switch( rCEvt.GetCommand() )
     {
@@ -736,7 +736,7 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
 
-                        bDone = TRUE;
+                        bDone = true;
                     }
                 }
                 else
@@ -752,7 +752,7 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                             rCEvt.IsMouseEvent(),(const void *) &aWheelData );
                         bDone = pWin->HandleScrollCommand( aReWrite,
                             mpHorizontalScrollBar.get(),
-                            mpVerticalScrollBar.get());
+                            mpVerticalScrollBar.get()) == TRUE;
                     }
                 }
             }

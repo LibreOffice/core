@@ -209,7 +209,7 @@ public:
     virtual BOOL RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
     virtual long Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
-    BOOL HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
+    virtual bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
     virtual void Draw(OutputDevice &rDev, const Region &rReg);
 
@@ -441,6 +441,30 @@ public:
     void AdaptDefaultsForChart(
         const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > & xEmbObj );
 
+    /** Depending on the given request create a new page or duplicate an
+        existing one.  A new page is created behind the given slide.
+        @param rRequest
+            The request as passed to an Execute() method.  Its arguments are
+            evaluated.  Its slot id determines whether to create or
+            duplicate a slide.
+        @param pPage
+            This page is either duplicated or becomes the predecessor of the
+            new slide.  If NULL a duplication request is ignored.  A new
+            slide is inserted as first slide.
+        @param nInsertPosition
+            When -1 (the default) then insert after pPage.  Otherwise insert
+            before the given index (of a standard page).
+        @return
+            The new slide is returned.  If for some reason a new page can
+            not be created then NULL is returned.
+    */
+    virtual SdPage* CreateOrDuplicatePage (
+        SfxRequest& rRequest,
+        PageKind ePageKind,
+        SdPage* pPage,
+        const sal_Int32 nInsertPosition = -1);
+
+
     class Implementation;
 
 protected:
@@ -538,25 +562,6 @@ protected:
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );
-
-    /** Depending on the given request create a new page or duplicate an
-        existing one.  A new page is created behind the given slide.
-        @param rRequest
-            The request as passed to an Execute() method.  Its arguments are
-            evaluated.  Its slot id determines whether to create or
-            duplicate a slide.
-        @param pPage
-            This page is either duplicated or becomes the predecessor of the
-            new slide.  If NULL a duplication request is ignored.  A new
-            slide is inserted as first slide.
-        @return
-            The new slide is returned.  If for some reason a new page can
-            not be created then NULL is returned.
-    */
-    virtual SdPage* CreateOrDuplicatePage (
-        SfxRequest& rRequest,
-        PageKind ePageKind,
-        SdPage* pPage);
 
 private:
     ::Window* mpParentWindow;
