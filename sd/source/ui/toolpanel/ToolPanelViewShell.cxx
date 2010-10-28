@@ -612,18 +612,6 @@ SdPage* ToolPanelViewShell::getCurrentPage() const
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Execute( SfxRequest& )
-{
-    OSL_ENSURE( false, "ToolPanelViewShell::Execute: not to be called! (right?)" );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::GetState( SfxItemSet& )
-{
-    OSL_ENSURE( false, "ToolPanelViewShell::GetState: not to be called! (right?)" );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 TaskPaneShellManager& ToolPanelViewShell::GetSubShellManager() const
 {
     return *mpSubShellManager.get();
