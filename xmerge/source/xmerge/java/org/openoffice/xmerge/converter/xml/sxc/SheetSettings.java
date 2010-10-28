@@ -63,9 +63,8 @@ public class SheetSettings implements OfficeConstants {
     final public static int SPLIT   = 0x01;
     final public static int FREEZE  = 0x02;
 
-
     /**
-     * Default Constructor for a <code>ColumnRowInfo</code>
+     * Default Constructor for a <code>SheetSettings</code>
      *
      */
     public SheetSettings() {
@@ -81,10 +80,9 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * Constructor for a <code>ColumnRowInfo</code>
+     * Constructor for a <code>SheetSettings</code>
      *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param name The name for the new sheet
      */
     public SheetSettings(String name) {
         sheetName = name;
@@ -138,7 +136,7 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * sets the position and type of the split
+     * gets the position of the split
      *
      * @return The position as a <code>Point</code> where the split occurs
      */
@@ -148,9 +146,9 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * sets the position and type of the split
+     * gets the type of the split
      *
-     * @return The position as a <code>Point</code> where the split occurs
+     * @return The split type as a <code>Point</code>
      */
     public Point getSplitType() {
 
@@ -180,11 +178,9 @@ public class SheetSettings implements OfficeConstants {
         return posLeft;
     }
     /**
-     * Sets the top row visible in the lower pane and the leftmost column
-     * visibile in the right pane.
+     * Gets the top row visible in the lower pane.
      *
-     * @param top The top row visible in the lower pane
-     * @param left The leftmost column visibile in the right pane
+     * @return The top row visible in the lower pane
      */
     public int getTop() {
 
