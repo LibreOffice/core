@@ -196,7 +196,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "~Install";
         DefButton = TRUE;
     };
-    CancelButton RID_DLG_UPDATE_CANCEL {
+    PushButton RID_DLG_UPDATE_CLOSE {
         Pos = MAP_APPFONT(
             RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - RSC_CD_PUSHBUTTON_WIDTH,
             (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
@@ -205,6 +205,7 @@ ModalDialog RID_DLG_UPDATE {
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT2 + RSC_SP_FLGR_SPACE_Y +
              RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
+        Text[en-US] = "Close";
     };
 
     Image RID_DLG_UPDATE_NORMALALERT {
@@ -247,9 +248,20 @@ ModalDialog RID_DLG_UPDATE {
     String RID_DLG_UPDATE_BROWSERBASED {
         Text[en-US] = "browser based update";
     };
-
     String RID_DLG_UPDATE_VERSION {
         Text[en-US] = "Version";
+    };
+    String RID_DLG_UPDATE_IGNORE {
+        Text[en-US] = "Ignore this Update";
+    };
+    String RID_DLG_UPDATE_IGNORE_ALL {
+        Text[en-US] = "Ignore all Updates";
+    };
+    String RID_DLG_UPDATE_ENABLE {
+        Text[en-US] = "Enable Updates";
+    };
+    String RID_DLG_UPDATE_IGNORED_UPDATE {
+        Text[en-US] = "This update will be ignored.\n";
     };
 };
 

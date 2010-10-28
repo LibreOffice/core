@@ -26,28 +26,52 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ExtensionManager" oor:package="org.openoffice.Office" xml:lang="en-US"> 
-  <info>
-    <author>JL</author>
-    <desc >Contains information for the Extension Manager.</desc>
-  </info>
-  <component>
-    <group oor:name="ExtensionRepositories">
-      <info>
-	<desc>Information about repositories for extensions.
-	</desc>
-      </info>
-      <prop oor:name="WebsiteLink" oor:type="xs:string">
-	<info>
-	  <desc>This links is used from the Extension Manager. A user can click on the &amp;Download extensions...&amp;
-	    control so that a browser is opened which displayed the website to which directs this URL.
-	  </desc>
-	</info>
-	<value></value>
-      </prop>
-      
-    </group>
-  </component>
-
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ExtensionManager" oor:package="org.openoffice.Office" xml:lang="en-US">
+    <info>
+        <author>JL</author>
+        <desc>Contains information for the Extension Manager.</desc>
+    </info>
+    <templates>
+        <group oor:name="UpdateInfo">
+            <info>
+                <desc>Holds the information about updates for extensions.</desc>
+            </info>
+            <prop oor:name="Version" oor:type="xs:string" oor:localized="false">
+                <info>
+                    <desc>The version of the extension</desc>
+                </info>
+            </prop>
+        </group>
+    </templates>
+    <component>
+        <group oor:name="ExtensionRepositories">
+            <info>
+                <desc>Information about repositories for extensions.</desc>
+            </info>
+            <prop oor:name="WebsiteLink" oor:type="xs:string">
+                <info>
+                    <desc>This links is used from the Extension Manager. A user can click on the &amp;Download extensions...&amp;
+                        control so that a browser is opened which displayed the website to which directs this URL.
+                    </desc>
+                </info>
+                <value></value>
+            </prop>
+        </group>
+        <group oor:name="ExtensionUpdateData">
+            <info>
+                <desc>Contains inforamtion about availabe or ignored updates for extensions."</desc>
+            </info>
+            <set oor:name="AvailableUpdates" oor:node-type="UpdateInfo">
+                <info>
+                    <desc>This set lists all known updates for extensions, which where not applied yet.</desc>
+                </info>
+            </set>
+            <set oor:name="IgnoredUpdates" oor:node-type="UpdateInfo">
+                <info>
+                    <desc>This set lists all updates for extensions which the user wanted to ignore.</desc>
+                </info>
+            </set>
+        </group>
+    </component>
 </oor:component-schema>
 

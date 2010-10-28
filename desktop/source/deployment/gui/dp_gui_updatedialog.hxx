@@ -112,8 +112,7 @@ private:
 
     struct DisabledUpdate;
     struct SpecificError;
-    union IndexUnion;
-    friend union IndexUnion;
+    struct IgnoredUpdate;
     struct Index;
     friend struct Index;
     class Thread;
@@ -135,39 +134,35 @@ private:
         void operator =(UpdateDialog::CheckListBox &); // not defined
 
         virtual void MouseButtonDown(MouseEvent const & event);
-
         virtual void MouseButtonUp(MouseEvent const & event);
-
         virtual void KeyInput(KeyEvent const & event);
 
+        void handlePopupMenu( const Point &rPos );
+
+        rtl::OUString m_ignoreUpdate;
+        rtl::OUString m_ignoreAllUpdates;
+        rtl::OUString m_enableUpdate;
         UpdateDialog & m_dialog;
     };
 
 
     friend class CheckListBox;
 
-    void insertItem(
-        rtl::OUString const & name, USHORT position,
-        std::auto_ptr< UpdateDialog::Index const > index,
-        SvLBoxButtonKind kind);
+    USHORT insertItem( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
+    void addAdditional( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
+    bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
+    void setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll );
 
-    void addAdditional(
-        rtl::OUString const & name, USHORT position,
-        std::auto_ptr< UpdateDialog::Index const > index,
-        SvLBoxButtonKind kind);
-
-    void addEnabledUpdate(
-        rtl::OUString const & name, dp_gui::UpdateData const & data);
-
-    void addDisabledUpdate(UpdateDialog::DisabledUpdate const & data);
-#if 0
-    void addGeneralError(rtl::OUString const & message);
-#endif
-    void addSpecificError(UpdateDialog::SpecificError const & data);
+    void addEnabledUpdate( rtl::OUString const & name, dp_gui::UpdateData & data );
+    void addDisabledUpdate( UpdateDialog::DisabledUpdate & data );
+    void addSpecificError( UpdateDialog::SpecificError & data );
 
     void checkingDone();
 
     void enableOk();
+
+    void getIgnoredUpdates();
+    void storeIgnoredUpdates();
 
     void initDescription();
     void clearDescription();
@@ -183,7 +178,7 @@ private:
     DECL_LINK(selectionHandler, void *);
     DECL_LINK(allHandler, void *);
     DECL_LINK(okHandler, void *);
-    DECL_LINK(cancelHandler, void *);
+    DECL_LINK(closeHandler, void *);
     DECL_LINK(hyperlink_clicked, svt::FixedHyperlink *);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -202,7 +197,7 @@ private:
     FixedLine m_line;
     HelpButton m_help;
     PushButton m_ok;
-    CancelButton m_cancel;
+    PushButton m_close;
     rtl::OUString m_error;
     rtl::OUString m_none;
     rtl::OUString m_noInstallable;
@@ -214,18 +209,22 @@ private:
     rtl::OUString m_noDependencyCurVer;
     rtl::OUString m_browserbased;
     rtl::OUString m_version;
+    rtl::OUString m_ignoredUpdate;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
-    std::vector< rtl::OUString > m_generalErrors;
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
+    std::vector< UpdateDialog::IgnoredUpdate* > m_ignoredUpdates;
+    std::vector< Index* > m_ListboxEntries;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
 
-    Point m_aFirstLinePos;
-    Size m_aFirstLineSize;
-    long m_nFirstLineDelta;
-    long m_nOneLineMissing;
+    Point   m_aFirstLinePos;
+    Size    m_aFirstLineSize;
+    long    m_nFirstLineDelta;
+    long    m_nOneLineMissing;
+    USHORT  m_nLastID;
+    bool    m_bModified;
 };
 
 }
