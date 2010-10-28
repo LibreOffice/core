@@ -684,19 +684,22 @@ AC_ARG_WITH(cl-home,
 ],,)
 AC_ARG_WITH(mspdb-path,
 [  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the
-                          path pointing to the mspdb71.dll (.NET 2003).
+                          path pointing to the mspdb80.dll (if using Visual
+                          Studio 2008) or mspdb100.dl (if using Visual Studio
+                          2010).
 
-                          Usage: --with-mspdb-path=<absolute path to mspdb71.dll>
+                          Usage: --with-mspdb-path=<path to mspdb80.dll/mspdb100.dll>
 ],,)
 AC_ARG_WITH(midl-path,
-[  --with-midl-path        For Microsoft C/C++ .NET compiler users, please supply
+[  --with-midl-path        For Microsoft compiler users, please supply
                           the path pointing to the midl.exe.
 
                           Usage: --with-midl-path=<absolute path to midl.exe>
 ],,)
 AC_ARG_WITH(csc-path,
-[  --with-csc-path         For Microsoft C/C++ .NET compiler users, please supply
+[  --with-csc-path         For Windows builds, please supply
                           the path pointing to the csc.exe.
+                          Usually found automatically
 
                           Usage: --with-csc-path=<absolute path to csc.exe>
 ],,)
@@ -710,23 +713,21 @@ AC_ARG_WITH(nsis-path,
                           Usage: --with-nsis-path=<absolute path to nsis.exe>
 ],,)
 AC_ARG_WITH(frame-home,
-[  --with-frame-home       For Microsoft C/C++ .NET compiler users, please supply
+[  --with-frame-home       For Microsoft compiler users, please supply
                           the path pointing to lib/mscoree.lib, usually
                           something like:
-                          "/cygdrive/c/Program Files/Microsoft Visual Studio .NET/FrameworkSDK"
+                          "/cygdrive/c/Program Files/Windows SDKs/Windows/v7.0"
 
-                          MS Visual Toolkit compiler users, please supply the
-                          path pointing to lib/msvcrt.lib, usually something
-                          like:
-                          "/cygdrive/c/Program Files/Microsoft Visual Studio .NET 2003/Vc7"
+                          Note that in most cases it will be automatically found,
+                          though.
 
-                          Usage: --with-frame-home=<absolute path to Framework SDK [[home]]>
+                          Usage: --with-frame-home=<absolute path to .NET Framework]>
 ],,)
 AC_ARG_WITH(psdk-home,
 [  --with-psdk-home        For Windows users, please supply the path to the
-                          Microsoft Platform SDK.
+                          Windnows SDK. Usually found automatically.
 
-                          Usage: --with-psdk-home=<absolute path to Microsoft Platform SDK>
+                          Usage: --with-psdk-home=<absolute path to Windows SDK>
 ],,)
 AC_ARG_WITH(directx-home,
 [  --with-directx-home     For Windows users, please supply the path to the
@@ -1846,6 +1847,8 @@ if test "$_os" = "WINNT"; then
     if test "$WITH_MINGWIN" != "yes"; then
         AC_MSG_CHECKING([for friendly registry keys])
         # VS.Net 2003, VS.Net 2005
+        # (is that just a misleading comment, or does this really apply
+        # only to .NET 2003 and MSVS 2005? which we don't support any more?)
         if test -z "$with_cl_home"; then
             vctest=`./oowintool --msvc-productdir`;
             if test -x "$vctest/bin/cl.exe"; then
@@ -1857,20 +1860,16 @@ if test "$_os" = "WINNT"; then
         AC_MSG_RESULT([done])
 
         dnl ===========================================================
-        dnl  Check for mspdb71.dll/mspdb80.dll/mspdb100.dll
+        dnl  Check for mspdb80.dll/mspdb100.dll
         dnl ===========================================================
-        dnl  .NET 2003/5/8/10 Compiler
+        dnl MSVS 2008/10 Compiler
         if test -n "$with_mspdb_path";then
             with_mspdb_path=`cygpath -u "$with_mspdb_path"`
         fi
-        if test -e "$with_mspdb_path/mspdb71.dll" -o -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll"; then
+        if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll"; then
             MSPDB_PATH="$with_mspdb_path"
         fi
-        dnl .NET 2003 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb71.dll"; then
-            MSPDB_PATH="$with_cl_home/../Common7/IDE"
-        fi
-        dnl .NET 2005/2008 case
+        dnl MSVS 2008 case
         if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb80.dll"; then
             MSPDB_PATH="$with_cl_home/../Common7/IDE"
         fi
@@ -1878,7 +1877,7 @@ if test "$_os" = "WINNT"; then
         if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb80.dll"; then
             MSPDB_PATH="$with_cl_home/bin"
         fi
-        dnl .NET 2010 case
+        dnl MSVS 2010 case
         if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb100.dll"; then
             MSPDB_PATH="$with_cl_home/../Common7/IDE"
         fi
@@ -1886,13 +1885,12 @@ if test "$_os" = "WINNT"; then
         if test -z "$MSPDB_PATH";then
             dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
             AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
-            AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
             AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
             MSPDB_PATH=`dirname "$MSPDB_PATH"`
         fi
 
         if test -z "$MSPDB_PATH"; then
-            AC_MSG_ERROR([You need a mspdb71.dll/mspdb80.dll/mspdb100.dll, make sure it's in the path or use --with-mspdb-path])
+            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it's in the path or use --with-mspdb-path])
         fi
         MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
         MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
@@ -1928,21 +1926,13 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
             if test "$CCNUMVER" -ge "001600000000"; then
                 COMEX=13
                 MSVSVER=2010
-                AC_MSG_RESULT([found .NET 2010 / VS 10.0.])
+                AC_MSG_RESULT([found MSVS 2010.])
             elif test "$CCNUMVER" -ge "001500000000"; then
                 COMEX=12
                 MSVSVER=2008
-                AC_MSG_RESULT([found .NET 2008 / VS 9.0.])
-            elif test "$CCNUMVER" -ge "001400000000"; then
-                COMEX=11
-                MSVSVER=2005
-                AC_MSG_RESULT([found .NET 2005.])
-            elif test "$CCNUMVER" -ge "001300102240"; then
-                COMEX=10
-                MSVSVER=2003
-                AC_MSG_RESULT([found .NET 2003.])
+                AC_MSG_RESULT([found MSVS 2008.])
             else
-                AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2003/2005/2008/2010 compiler.])
+                AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
             fi
         else
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
@@ -1967,6 +1957,10 @@ AC_SUBST(USE_MINGW)
 
 dnl ===================================================================
 dnl  .NET needs special treatment
+dnl (does the above comment really mean .NET, or is it misusing
+dnl that to mean Visual Studio .NET 2003 ? And does this also
+dnl in fact apply equally to what we actually support, i.e.
+dnl Visual Studio 2008 and 2010?)
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
 if test "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
@@ -2026,17 +2020,13 @@ if test "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
     CSC_PATH=`cygpath -d "$CSC_PATH"`
     CSC_PATH=`cygpath -u "$CSC_PATH"`
 
-    dnl Check mscoree.lib / .NET Frameworks dir
-    dnl For VS2003/2005 $with_frame_home has to point to the directory with lib/mscoree.lib.
-       AC_MSG_CHECKING(.NET Framework)
+    dnl Check mscoree.lib / .NET Framework dir
+        AC_MSG_CHECKING(.NET Framework)
         if test -n "$with_frame_home"; then
         with_frame_home=`cygpath -u "$with_frame_home"`
         fi
         if test -f "$with_frame_home/lib/mscoree.lib"; then
             FRAME_HOME="$with_frame_home"
-        fi
-        if test -z "$FRAME_HOME" -a -e "$with_cl_home/../SDK/v1.1/lib/mscoree.lib"; then
-            FRAME_HOME="$with_cl_home/../SDK/v1.1"
         fi
         if test -z "$FRAME_HOME" ; then
           frametest=`./oowintool --dotnetsdk-dir`
@@ -2050,7 +2040,7 @@ if test "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
           fi
         fi
         if test ! -f "$FRAME_HOME/lib/mscoree.lib"; then
-        AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-frame-home])
+            AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-frame-home])
         fi
         AC_MSG_RESULT(found)
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
@@ -4765,11 +4755,11 @@ if test "$BUILD_MOZAB" = "TRUE"; then
     if test "$WITH_MINGWIN" != "yes"; then
       # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
       if test "$MSVSVER" != "2005"; then
-        AC_MSG_ERROR([Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only.])
+        AC_MSG_ERROR([Building SeaMonkey is supported with Microsoft Visual Studio 2005 only.])
       fi
     else
       AC_MSG_WARN([Building SeaMonkey with mingwin is not tested, and likely to break.])
-      echo "Building SeaMonkey with mingwin is not tested, and likely to break." >> warn
+      echo "Building SeaMonkey with MinGW is not tested, and likely to break." >> warn
     fi
   fi
 
@@ -5854,29 +5844,15 @@ if test "$_os" = "WINNT"; then
 fi
 
 dnl ===================================================================
-dnl Windows builds with VS 2003/2005/2008 need instmsiw.exe in external/msi
+dnl Windows builds with MSVS 2008/2010 need instmsiw.exe in external/msi
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-   if test  "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
    AC_MSG_CHECKING([for instmsiw.exe])
    if test -f ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
    else
-      MSIWPATH=`/bin/find "$COMPATH/.." -iname instmsiw.exe | head -n 1`
-      if test -n "$MSIWPATH"; then
-         cp "$MSIWPATH" ./external/msi/ && MSIWCOPY="OK"
-      fi
-      if test -z "$MSIWCOPY"; then
-         AC_MSG_ERROR([instmsiw.exe is missing in the default location.
-These programs are part of the Visual Studio installation and should be found in a
-directory similar to:
-"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Common7\\Tools\\Deployment\\MsiRedist\\"
-As the automatic detection fails please copy the files to external/msi/.])
-      else
-         AC_MSG_RESULT([found and copied])
-      fi
+      AC_MSG_ERROR([instmsiw.exe is missing in external/msi.])
    fi
-fi
 fi
 
 dnl ===================================================================

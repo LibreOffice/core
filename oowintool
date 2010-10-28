@@ -120,55 +120,6 @@ sub print_psdk_home()
     print cygpath ($value, 'w', $output_format);
 }
 
-my %msvc_net_2003 = (
-    'ver' => '7.1',
-    'key' => 'Microsoft/VisualStudio/7.1/Setup/VC/ProductDir',
-    'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => '../Visual Studio .NET Professional 2003 - English',
-    'dll_suffix' => '71'
-);
-my %msvs_net_2003 = (
-    'ver' => '7.1',
-    'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => 'Visual Studio .NET Professional 2003 - English',
-    'dll_suffix' => '71'
-);
-my %msvs_net_2003_ea = (
-    'ver' => '7.1',
-    'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => 'Visual Studio .NET Enterprise Architect 2003 - English', # testme ...
-    'dll_suffix' => '71'
-);
-my %msvs_express_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VCExpress/8.0/Setup/VS/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => '../SDK/v2.0/Bin',
-    'dll_suffix' => '80'
-);
-my %msvc_express_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VCExpress/8.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => '../SDK/v2.0/Bin',
-    'dll_suffix' => '80'
-);
-my %msvs_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VisualStudio/8.0/Setup/VS/ProductDir',
-    'instmsi_path' => 'SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => 'Visual Studio .NET Professional 2005 - English',
-    'dll_suffix' => '80'
-);
-my %msvc_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VisualStudio/8.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => '../SDK/v2.0/Bin',
-    'dll_suffix' => '80'
-);
 my %msvs_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VisualStudio/9.0/Setup/VS/ProductDir',
@@ -197,7 +148,6 @@ my %msvc_express_2008 = (
     'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
-
 my %msvs_2010 = (
     'ver' => '10.0',
     'key' => 'Microsoft/VisualStudio/10.0/Setup/VS/ProductDir',
@@ -205,7 +155,6 @@ my %msvs_2010 = (
     'dll_path' => 'VC/redist/x86/Microsoft.VC100.CRT',
     'dll_suffix' => '100'
 );
-
 my %msvc_2010 = (
     'ver' => '10.0',
     'key' => 'Microsoft/VisualStudio/10.0/Setup/VC/ProductDir',
@@ -216,7 +165,7 @@ my %msvc_2010 = (
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2005, \%msvs_express_2005,\%msvs_net_2003_ea, \%msvs_net_2003, \%msvs_2010 );
+    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2010 );
 
     for $ver (@ms_versions)
     {
@@ -231,7 +180,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2005, \%msvc_express_2005, \%msvc_net_2003, \%msvc_2010 );
+    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2010 );
 
     for $ver (@ms_versions)
     {
