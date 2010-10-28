@@ -1048,13 +1048,13 @@ MAXPROCESS!:=1
 # allow seperate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
 
-GDBTRACE=gdb --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
+GDBTRACE=gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
 
 IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/idlc
 REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regmerge
 REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regcompare
 
-.IF "$(DEBUGREGCOMP)" != ""
+.IF "$(DEBUGREGCOMP)" != "" || "$(debugregcomp)" != ""
 GDBREGCOMPTRACE=$(GDBTRACE)
 .ENDIF
 
@@ -1064,7 +1064,7 @@ JAVAMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/javamaker
 RDBMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rdbmaker
 CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 
-.IF "$(DEBUGCPPUNIT)" != ""
+.IF "$(DEBUGCPPUNIT)" != "" || "$(debugcppunit)" != ""
 GDBCPPUNITTRACE=$(GDBTRACE)
 .ENDIF
 
