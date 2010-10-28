@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/// @HTML
 #include <msfilter.hxx>
 #   include "writerwordglue.hxx"
 #include <doc.hxx>

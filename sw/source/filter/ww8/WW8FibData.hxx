@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef INCLUDED_WW8_FIB_DATA_HXX
 #define INCLUDED_WW8_FIB_DATA_HXX
 #include <IDocumentExternalData.hxx>

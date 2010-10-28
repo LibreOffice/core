@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/// @HTML
 
 #ifndef SW_WRITERWORDGLUE
 #define SW_WRITERWORDGLUE

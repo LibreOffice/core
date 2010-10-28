@@ -30,9 +30,7 @@
 #include "precompiled_starmath.hxx"
 
 #include <mathtype.hxx>
-
 #include <osl/diagnose.h>
-
 #include <sfx2/docfile.hxx>
 
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
