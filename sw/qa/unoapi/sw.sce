@@ -4,10 +4,10 @@
 -o sw.ParagraphStyle
 #i111197 -o sw.SwAccessibleDocumentPageView
 #i86751 -o sw.SwAccessibleDocumentView
-#i111185 -o sw.SwAccessibleEndnoteView
--o sw.SwAccessibleFooterView
-#i111185 -o sw.SwAccessibleFootnoteView
--o sw.SwAccessibleHeaderView
+-o sw.SwAccessibleEndnoteView
+#i113142 -o sw.SwAccessibleFooterView
+#i114637 -o sw.SwAccessibleFootnoteView
+#i113142 -o sw.SwAccessibleHeaderView
 #i89022 -o sw.SwAccessiblePageView
 -o sw.SwAccessibleParagraphView
 -o sw.SwAccessibleTableCellView
@@ -18,25 +18,25 @@
 -o sw.SwXAutoTextContainer
 -o sw.SwXAutoTextEntry
 -o sw.SwXAutoTextGroup
-#i111185 -o sw.SwXBodyText
+-o sw.SwXBodyText
 -o sw.SwXBookmark
 -o sw.SwXBookmarks
 -o sw.SwXCell
 -o sw.SwXCellRange
 -o sw.SwXChapterNumbering
-#i111185 -o sw.SwXDocumentIndex
-#i111185 -o sw.SwXDocumentIndexMark
+-o sw.SwXDocumentIndex
+-o sw.SwXDocumentIndexMark
 -o sw.SwXDocumentIndexes
 -o sw.SwXDrawPage
-#i111185 -o sw.SwXEndnoteProperties
+-o sw.SwXEndnoteProperties
 -o sw.SwXFieldEnumeration
 -o sw.SwXFieldMaster
-#i111185 -o sw.SwXFootnote
-#i111185 -o sw.SwXFootnoteProperties
-#i111185 -o sw.SwXFootnoteText
-#i111185 -o sw.SwXFootnotes
+-o sw.SwXFootnote
+-o sw.SwXFootnoteProperties
+-o sw.SwXFootnoteText
+-o sw.SwXFootnotes
 -o sw.SwXFrames
-#i111185 -o sw.SwXHeadFootText
+-o sw.SwXHeadFootText
 -o sw.SwXLineNumberingProperties
 #i85640 -o sw.SwXMailMerge
 -o sw.SwXModule
@@ -51,20 +51,20 @@
 #i111190 -o sw.SwXShape
 -o sw.SwXStyleFamilies
 -o sw.SwXStyleFamily
-#i111185 -o sw.SwXTableCellText
+-o sw.SwXTableCellText
 -o sw.SwXTableColumns
 -o sw.SwXTableRows
 -o sw.SwXTextColumns
 -o sw.SwXTextCursor
 #i89021 -o sw.SwXTextDefaults
-#i111185 -o sw.SwXTextDocument
+-o sw.SwXTextDocument
 -o sw.SwXTextEmbeddedObject
 -o sw.SwXTextEmbeddedObjects
 -o sw.SwXTextField
 -o sw.SwXTextFieldMasters
 -o sw.SwXTextFieldTypes
 -o sw.SwXTextFrame
-#i111185 -o sw.SwXTextFrameText
+-o sw.SwXTextFrameText
 -o sw.SwXTextGraphicObject
 -o sw.SwXTextGraphicObjects
 #i103696 -o sw.SwXTextPortion

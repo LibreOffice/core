@@ -749,7 +749,11 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 }
 
 
+<<<<<<< local
 SFX_IMPL_VIEWFACTORY(SmViewShell)
+=======
+SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
+>>>>>>> other
 {
     SFX_VIEW_REGISTRATION(SmDocShell);
 }
@@ -1545,14 +1549,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_INSERTTEXT:
         {
             const SfxStringItem& rItem =
-                (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
-
+                    (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
             if (pWin)
                 pWin->InsertText(rItem.GetValue());
             break;
         }
 
-        case SID_INSERT_FORMULA:
+        case SID_IMPORT_FORMULA:
         {
             delete pImpl->pRequest;
             pImpl->pRequest = new SfxRequest( rReq );

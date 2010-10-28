@@ -34,21 +34,12 @@
 
 
 #include "stdlib.h"
-#ifdef WIN
-#endif
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <errhdl.hxx>
 #include <error.h>              // fuer die defines von ERR_SW6MSG_ ...
 
-// break into CodeView
-#if defined(ZTC) && defined(WIN)
-#define CVBREAK     asm( 0xCC );
-#endif
-#if defined(MSC) && defined(WIN)
-#define CVBREAK     __asm int 3;
-#endif
 #ifndef CVBREAK
 #define CVBREAK
 #endif

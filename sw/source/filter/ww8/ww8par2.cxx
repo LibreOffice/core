@@ -1509,15 +1509,15 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
         return;
     mbHasSpacing=true;
 #ifdef DBG_UTIL
-    BYTE nWhichCell =
-#endif
-            *pParams++;
+    BYTE nWhichCell = *pParams;
     ASSERT(nWhichCell == 0, "Expected cell to be 0!");
-    *pParams++; //unknown byte
+#endif
+    ++pParams; //Skip which cell
+    ++pParams; //unknown byte
 
     BYTE nSideBits = *pParams++;
     ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
-    *pParams++; //unknown byte
+    ++pParams; //unknown byte
     USHORT nValue =  SVBT16ToShort( pParams );
     for (int i = wwTOP; i <= wwRIGHT; i++)
     {
@@ -1555,7 +1555,7 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
     if (nWhichCell >= MAX_COL + 1)
         return;
 
-    *pParams++; //unknown byte
+    ++pParams; //unknown byte
     BYTE nSideBits = *pParams++;
     ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
     nOverrideSpacing[nWhichCell] |= nSideBits;
@@ -1563,10 +1563,10 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
     ASSERT(nOverrideSpacing[nWhichCell] < 0x10,
         "Unexpected value for nSideBits");
 #ifdef DBG_UTIL
-    BYTE nUnknown2 =
-#endif
-            *pParams++;
+    BYTE nUnknown2 = *pParams;
     ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
+#endif
+    ++pParams;
     USHORT nValue =  SVBT16ToShort( pParams );
 
     for (int i=0; i < 4; i++)

@@ -127,7 +127,11 @@ using ::com::sun::star::util::SearchOptions;
 
 
 
+<<<<<<< local
 SFX_IMPL_VIEWFACTORY(SwSrcView)
+=======
+SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
+>>>>>>> other
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }

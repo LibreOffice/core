@@ -119,7 +119,10 @@
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-
+#ifdef FUTURE_VBA
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#endif
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
@@ -137,7 +140,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using namespace ::sfx2;
-
 extern BOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 /*--------------------------------------------------------------------
@@ -188,6 +190,26 @@ void SwDocShell::DoFlushDocInfo()
     }
 }
 
+#ifdef FUTURE_VBA
+void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
+{
+    using namespace com::sun::star::script::vba::VBAEventId;
+    if ( rHint.ISA( SfxEventHint ) )
+    {
+        uno::Sequence< uno::Any > aArgs;
+        ULONG nEventId = ((SfxEventHint&)rHint).GetEventId();
+        switch( nEventId )
+        {
+            case SFX_EVENT_CREATEDOC:
+                xVbaEvents->processVbaEvent( DOCUMENT_NEW, aArgs );
+            break;
+            case SFX_EVENT_OPENDOC:
+                xVbaEvents->processVbaEvent( DOCUMENT_OPEN, aArgs );
+            break;
+        }
+    }
+}
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:   Benachrichtigung bei geaenderter DocInfo
@@ -201,6 +223,12 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 //      ASSERT( !this, "DocShell ist nicht richtig initialisiert!" );
         return ;
     }
+
+#ifdef FUTURE_VBA
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+    if( xVbaEvents.is() )
+        lcl_processCompatibleSfxHint( xVbaEvents, rHint );
+#endif
 
     USHORT nAction = 0;
     if( rHint.ISA(SfxSimpleHint) )
@@ -283,6 +311,18 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     if( TRUE == nRet ) //Unbedingt auf TRUE abfragen! (RET_NEWTASK)
         EndListening( *this );
 
+#ifdef FUTURE_VBA
+    if( pDoc && IsInPrepareClose() )
+    {
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+        if( xVbaEvents.is() )
+        {
+            using namespace com::sun::star::script::vba::VBAEventId;
+            uno::Sequence< uno::Any > aArgs;
+            xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
+        }
+    }
+#endif
     return nRet;
 }
 
@@ -1200,7 +1240,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if ( !aFileName.Len() )
                 {
                     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
-                    //set HelpIds
+
                     const sal_Int16 nControlIds[] = {
                         CommonFilePickerElementIds::PUSHBUTTON_OK,
                         CommonFilePickerElementIds::PUSHBUTTON_CANCEL,
@@ -1211,17 +1251,33 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                         0
                     };
-                    sal_Int32 nHelpIds[8];
-                    sal_Int32 nStartHelpId =
-                        bCreateHtml ?
-                            HID_SEND_HTML_CTRL_PUSHBUTTON_OK : HID_SEND_MASTER_CTRL_PUSHBUTTON_OK ;
-                    for(int nHelp = 0; nHelp < 7; nHelp++)
-                        nHelpIds[nHelp] = nStartHelpId++;
-                    nHelpIds[7] = 0;
 
-                    aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
-//                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
+                    const char* aHTMLHelpIds[] =
+                    {
+                         HID_SEND_HTML_CTRL_PUSHBUTTON_OK,
+                         HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL,
+                         HID_SEND_HTML_CTRL_LISTBOX_FILTER,
+                         HID_SEND_HTML_CTRL_CONTROL_FILEVIEW,
+                         HID_SEND_HTML_CTRL_EDIT_FILEURL,
+                         HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION,
+                         HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE,
+                         ""
+                    };
 
+                    const char* aMasterHelpIds[] =
+                    {
+                         HID_SEND_MASTER_CTRL_PUSHBUTTON_OK,
+                         HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL,
+                         HID_SEND_MASTER_CTRL_LISTBOX_FILTER,
+                         HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW,
+                         HID_SEND_MASTER_CTRL_EDIT_FILEURL,
+                         HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION,
+                         HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE,
+                         ""
+                    };
+
+                    const char** pHelpIds = bCreateHtml ? aHTMLHelpIds : aMasterHelpIds;
+                    aDlgHelper.SetControlHelpIds( nControlIds, pHelpIds );
                     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                     const SfxFilter* pFlt;

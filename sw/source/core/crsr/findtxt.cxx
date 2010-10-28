@@ -53,8 +53,6 @@
 #include <viewsh.hxx>
 #include <vcl/window.hxx>
 
-#define POSTITMGR ((ViewShell*)pNode->GetDoc()->GetDocShell()->GetWrtShell())->GetPostItMgr()
-
 using namespace ::com::sun::star;
 using namespace util;
 
@@ -333,9 +331,13 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
 
             }
 
+            SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
+            ViewShell *const pWrtShell = (pDocShell) ? (ViewShell*)(pDocShell->GetWrtShell()) : 0;
+            SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
+
             xub_StrLen aStart = 0;
             // do we need to finish a note?
-            if (POSTITMGR->HasActiveSidebarWin())
+            if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
             {
                 if (bSearchInNotes)
                 {
@@ -347,7 +349,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
                             --aNumberPostits;
                     }
                     //search inside and finsih and put focus back into the doc
-                    if (POSTITMGR->FinishSearchReplace(rSearchOpt,bSrchForward))
+                    if (pPostItMgr->FinishSearchReplace(rSearchOpt,bSrchForward))
                     {
                         bFound = true ;
                         break;
@@ -355,7 +357,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
                 }
                 else
                 {
-                    POSTITMGR->SetActiveSidebarWin(0);
+                    pPostItMgr->SetActiveSidebarWin(0);
                 }
             }
 
@@ -391,7 +393,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
                         if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
                         {
                             const SwTxtAttr* pTxtAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
-                            if ( POSTITMGR->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFld(),rSearchOpt,bSrchForward) )
+                            if ( pPostItMgr && pPostItMgr->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFld(),rSearchOpt,bSrchForward) )
                             {
                                 bFound = true ;
                                 break;

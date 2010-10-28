@@ -294,7 +294,7 @@ SwScannerEventListener::~SwScannerEventListener()
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     if( pView )
         pView->ScannerEventHdl( rEventObject );
 #endif

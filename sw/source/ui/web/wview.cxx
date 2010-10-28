@@ -93,7 +93,11 @@
 #include <swslots.hxx>
 
 
+<<<<<<< local
 SFX_IMPL_VIEWFACTORY(SwWebView)
+=======
+SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
+>>>>>>> other
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }

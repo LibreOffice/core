@@ -920,8 +920,12 @@
 #include "vcl/group.hxx"
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"
+<<<<<<< local
 #include "vcl/button.hxx"
 #include "vcl/imgcons.hxx"
+=======
+#include "vcl/imagebtn.hxx"
+>>>>>>> other
 #include "vcl/inputctx.hxx"
 #include "vcl/jobset.hxx"
 #include "vcl/keycod.hxx"

@@ -1009,12 +1009,9 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
 double SwXCell::getValue(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    double fRet = lcl_getValue( *this );
-    //lcl_getValue was changed thus it can return nan values,
-    //so I make this additional nan check here to not change the behaviour
-    //but maybe it would even be more correct to just return nan here? ... todo?
-    if( ::rtl::math::isNan( fRet ) )
-        fRet = 0.0;
+
+    double const fRet = lcl_getValue( *this );
+    // #i112652# a table cell may contain NaN as a value, do not filter that
     return fRet;
 }
 /*-- 11.12.98 10:56:26---------------------------------------------------
