@@ -33,7 +33,7 @@
 
 #include <tools/presys.h>
 #define STRICT
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
 #if OSL_DEBUG_LEVEL > 0
 //#define _ATL_DEBUG_INTERFACES
