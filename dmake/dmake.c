@@ -791,11 +791,7 @@ va_list  args;
 ** Print error message and abort
 */
 PUBLIC void
-#ifndef __MWERKS__
 Fatal(ARG(char *,fmt), ARG(va_alist_type,va_alist))
-#else
-Fatal(char * fmt, ...)
-#endif
 DARG(char *,fmt)
 DARG(va_alist_type,va_alist)
 {
@@ -811,11 +807,7 @@ DARG(va_alist_type,va_alist)
 ** error message and exit (unless -k)
 */
 PUBLIC void
-#ifndef __MWERKS__
 Error(ARG(char *,fmt), ARG(va_alist_type,va_alist))
-#else
-Error(char * fmt, ...)
-#endif
 DARG(char *,fmt)
 DARG(va_alist_type,va_alist)
 {
@@ -831,11 +823,7 @@ DARG(va_alist_type,va_alist)
 ** non-fatal message
 */
 PUBLIC void
-#ifndef __MWERKS__
 Warning(ARG(char *,fmt), ARG(va_alist_type,va_alist))
-#else
-Warning(char * fmt , ...)
-#endif
 DARG(char *,fmt)
 DARG(va_alist_type,va_alist)
 {
