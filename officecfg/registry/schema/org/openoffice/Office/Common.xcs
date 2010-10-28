@@ -5798,6 +5798,13 @@
                 </info>
                 <value>false</value>
             </prop>
+            <prop oor:name="ExperimentalMode" oor:type="xs:boolean">
+                <info>
+                    <author>mmeeks</author>
+                    <desc>Determins if various experimental, and potentially unstable features should be enabled in the user interface.</desc>
+                </info>
+                <value>false</value>
+            </prop>
 			<prop oor:name="SymbolSet" oor:type="xs:short">
 				<!-- UIHints: Tools  Options General View -->
 				<info>
