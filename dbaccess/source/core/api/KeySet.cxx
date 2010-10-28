@@ -983,8 +983,8 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
     {
+        impl_convertValue_throw(_rInsertRow,aPosIter->second);
         *aIter = (_rInsertRow->get())[aPosIter->second.nPosition];
-        impl_convertValue_throw(_rKeyRow,aPosIter->second);
         aIter->setTypeKind(aPosIter->second.nType);
     }
 }
