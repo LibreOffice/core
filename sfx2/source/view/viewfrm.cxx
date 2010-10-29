@@ -49,6 +49,7 @@
 #include <svl/undo.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -3242,8 +3243,10 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_RECORDMACRO :
                 {
+                    SvtMiscOptions aMiscOptions;
                     const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if (  strcmp(pName,"swriter") && strcmp(pName,"scalc") )
+                    if ( !aMiscOptions.IsExperimentalMode() ||
+                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
                         break;
@@ -3265,8 +3268,10 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_STOP_RECORDING :
                 {
+                    SvtMiscOptions aMiscOptions;
                     const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if (  strcmp(pName,"swriter") && strcmp(pName,"scalc") )
+                    if ( !aMiscOptions.IsExperimentalMode() ||
+                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
                         break;
