@@ -606,7 +606,7 @@ void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::G
     else if(Event.valueName == rtl::OUString::createFromAscii("CellUpdated"))
     {
         std::vector< std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
-        sal_Int32 col = -1;
+        sal_Int32 col(0);
         Event.oldValue>>=col;
         rowContent[Event.index][col] = Event.newValue;
         pTable->InvalidateDataWindow(Event.index, Event.index, false);
