@@ -66,14 +66,14 @@ namespace framework
 {
 
 //-----------------------------------------------
-const ::rtl::OUString TaskCreatorService::ARGUMENT_PARENTFRAME                   = ::rtl::OUString::createFromAscii("ParentFrame"                   ); // XFrame
-const ::rtl::OUString TaskCreatorService::ARGUMENT_FRAMENAME                     = ::rtl::OUString::createFromAscii("FrameName"                     ); // OUString
-const ::rtl::OUString TaskCreatorService::ARGUMENT_MAKEVISIBLE                   = ::rtl::OUString::createFromAscii("MakeVisible"                   ); // sal_Bool
-const ::rtl::OUString TaskCreatorService::ARGUMENT_CREATETOPWINDOW               = ::rtl::OUString::createFromAscii("CreateTopWindow"               ); // sal_Bool
-const ::rtl::OUString TaskCreatorService::ARGUMENT_POSSIZE                       = ::rtl::OUString::createFromAscii("PosSize"                       ); // Rectangle
-const ::rtl::OUString TaskCreatorService::ARGUMENT_CONTAINERWINDOW               = ::rtl::OUString::createFromAscii("ContainerWindow"               ); // XWindow
-const ::rtl::OUString TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE  = ::rtl::OUString::createFromAscii("SupportPersistentWindowState"  ); // sal_Bool
-const ::rtl::OUString TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE         = ::rtl::OUString::createFromAscii("EnableTitleBarUpdate"          ); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_PARENTFRAME(RTL_CONSTASCII_USTRINGPARAM("ParentFrame")); // XFrame
+const ::rtl::OUString TaskCreatorService::ARGUMENT_FRAMENAME(RTL_CONSTASCII_USTRINGPARAM("FrameName")); // OUString
+const ::rtl::OUString TaskCreatorService::ARGUMENT_MAKEVISIBLE(RTL_CONSTASCII_USTRINGPARAM("MakeVisible")); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_CREATETOPWINDOW(RTL_CONSTASCII_USTRINGPARAM("CreateTopWindow")); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_POSSIZE(RTL_CONSTASCII_USTRINGPARAM("PosSize")); // Rectangle
+const ::rtl::OUString TaskCreatorService::ARGUMENT_CONTAINERWINDOW(RTL_CONSTASCII_USTRINGPARAM("ContainerWindow")); // XWindow
+const ::rtl::OUString TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE(RTL_CONSTASCII_USTRINGPARAM("SupportPersistentWindowState")); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE(RTL_CONSTASCII_USTRINGPARAM("EnableTitleBarUpdate")); // sal_Bool
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_3(TaskCreatorService                                ,
@@ -263,7 +263,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     if (bTopWindow)
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                         ;
+        aDescriptor.WindowServiceName   =   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("window"));
         aDescriptor.ParentIndex         =   -1                                              ;
         aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
         aDescriptor.Bounds              =   aPosSize                                        ;
@@ -276,7 +276,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     else
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   DECLARE_ASCII("dockingwindow")                  ;
+        aDescriptor.WindowServiceName   =   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dockingwindow"));
         aDescriptor.ParentIndex         =   1                                               ;
         aDescriptor.Parent              =   xParentWindowPeer                               ;
         aDescriptor.Bounds              =   aPosSize                                        ;
@@ -287,7 +287,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
     css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
     if ( ! xWindow.is())
-        throw css::uno::Exception(::rtl::OUString::createFromAscii("TaskCreator service was not able to create suitable frame window."),
+        throw css::uno::Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TaskCreator service was not able to create suitable frame window.")),
                                   static_cast< ::cppu::OWeakObject* >(this));
     if (bTopWindow)
         xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
