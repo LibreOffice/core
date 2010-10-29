@@ -56,6 +56,7 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <svx/dialogs.hrc>
@@ -826,6 +827,7 @@ struct SmViewShell_Impl
 {
     sfx2::DocumentInserter* pDocInserter;
     SfxRequest*             pRequest;
+    SvtMiscOptions          aOpts;
 
     SmViewShell_Impl() :
           pDocInserter( NULL )
@@ -1992,6 +1994,11 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
                 break;
         }
     }
+}
+
+bool SmViewShell::IsInlineEditEnabled() const
+{
+    return pImpl->aOpts.IsExperimentalMode();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

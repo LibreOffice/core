@@ -313,9 +313,7 @@ public:
     void SetInsertIntoEditWindow(BOOL bEditWindowHadFocusLast = TRUE){
         bInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
-    bool IsInlineEditEnabled() const {
-        return false;
-    }
+    bool IsInlineEditEnabled() const;
 };
 
 #endif
