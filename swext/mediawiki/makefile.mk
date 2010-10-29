@@ -41,7 +41,13 @@ COMMONS_LOGGING_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-logging-1
 COMP=fix_system_commons
 .ENDIF
 
-ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR)
+.IF defined(debug) || defined(DEBUG)
+ANTDEBUG=true
+.ELSE
+ANTDEBUG=off
+.ENDIF
+
+ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR) -Dantdebug=$(ANTDEBUG)
 
 # creates two files wiki-publisher.oxt and mediawiki_develop.zip, the second one might be used in further build process
 ALLTAR: $(COMP) ANTBUILD
