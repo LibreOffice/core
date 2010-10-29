@@ -1,4 +1,4 @@
-rb	remotebridges	:	bridges rdbmaker NULL
+rb	remotebridges	: LIBXSLT:libxslt bridges rdbmaker NULL
 rb	remotebridges							usr1	-	all	rb_mkout NULL
 rb	remotebridges\source\bridge				nmake	-	all	rb_iiop NULL
 rb	remotebridges\source\factory			nmake	-	all	rb_factory NULL

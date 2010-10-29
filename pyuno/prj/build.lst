@@ -1,4 +1,4 @@
-bgpu	pyuno	:	stoc cpputools cppuhelper bridges tools PYTHON:python NULL
+bgpu	pyuno	:	stoc cpputools cppuhelper bridges tools PYTHON:python LIBXSLT:libxslt NULL
 pu	pyuno				  usr1	-	all	br_mkout NULL
 pu	pyuno\zipcore	nmake	-	all	pu_zipcore NULL
 pu	pyuno\source\module	nmake	-	all	pu_module NULL
