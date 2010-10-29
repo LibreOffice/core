@@ -39,11 +39,26 @@ TARGET=pyprov
 
 # --- Targets ------------------------------------------------------
 ALL : ALLTAR \
-        $(DLLDEST)$/pythonscript.py	\
     $(DLLDEST)$/officehelper.py	\
         $(DLLDEST)$/mailmerge.py
 
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
-.INCLUDE :  target.mk
+# scripting provider extension
+.IF "$(L10N_framework)"==""
+
+EXTENSIONNAME:=ScriptProviderForPython
+EXTENSION_ZIPNAME:=script-provider-for-python
+
+COMPONENT_FILES=$(EXTENSIONDIR)$/pythonscript.py
+
+.INCLUDE : extension_pre.mk
+.INCLUDE : target.mk
+.INCLUDE : extension_post.mk
+
+.ELSE
+
+.INCLUDE : target.mk
+
+.ENDIF

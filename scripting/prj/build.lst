@@ -12,3 +12,5 @@ tc	scripting\java						nmake	-	all	tc1_scriptingjava tc1_scriptingprovider tc1_s
 tc	scripting\examples\java				nmake	-	all	tc1_scriptingexamplesjava tc1_scriptingjava  NULL
 tc	scripting\examples				nmake	-	all	tc1_scriptingexamples tc1_scriptingexamplesjava  tc1_inc NULL
 tc	scripting\util						nmake	-	all	tc1_scriptingutil tc1_scriptingprovider tc1_scriptingprotocolhandler tc1_scriptingbasprov tc1_scriptingstringresource tc1_scriptingvbaevents tc1_scriptingpyprov tc1_scriptingjava tc1_scriptingexamplesjava tc1_scriptingexamples NULL
+tc  scripting\util\provider\javascript  nmake   -   all tc1_scriptingjsprov tc1_scriptingjava NULL
+tc  scripting\util\provider\beanshell   nmake   -   all tc1_scriptingbshprov tc1_scriptingjava NULL
