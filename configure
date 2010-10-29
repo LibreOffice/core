@@ -909,7 +909,6 @@ PERL
 HAVE_LD_HASH_STYLE
 _cc
 GNUMAKE
-NO_HIDS
 ENABLE_PCH
 HAVE_LD_BSYMBOLIC_FUNCTIONS
 GCCVER
@@ -1025,7 +1024,6 @@ enable_lockdown
 enable_vba
 with_vba_package_format
 enable_pch
-enable_hids
 enable_mozilla
 with_fonts
 with_ppds
@@ -1834,8 +1832,6 @@ Optional Features:
   --disable-vba           disables the vba compatibility feature
 
   --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
-
-  --enable-hids            Enables generation of HelpId lists.
 
   --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
@@ -3769,11 +3765,6 @@ fi
 # Check whether --enable-pch was given.
 if test "${enable_pch+set}" = set; then :
   enableval=$enable_pch;
-fi
-
-# Check whether --enable-hids was given.
-if test "${enable_hids+set}" = set; then :
-  enableval=$enable_hids;
 fi
 
 # Check whether --enable-mozilla was given.
@@ -6796,19 +6787,6 @@ $as_echo "$as_me: WARNING: Precompiled header not yet supported for your platfor
    fi
 else
    ENABLE_PCH=""
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable hid list feature" >&5
-$as_echo_n "checking whether to enable hid list feature... " >&6; }
-if test -n "$enable_hids" && test "$enable_hids" != "no"; then
-   NO_HIDS=""
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-   NO_HIDS="TRUE"
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
