@@ -2381,7 +2381,11 @@ IMPL_LINK( ImplListBox, MRUChanged, void*, EMPTYARG )
 
 IMPL_LINK( ImplListBox, LBWindowScrolled, void*, EMPTYARG )
 {
+    long nSet = GetTopEntry();
+    if( nSet > mpVScrollBar->GetRangeMax() )
+        mpVScrollBar->SetRangeMax( GetEntryList()->GetEntryCount() );
     mpVScrollBar->SetThumbPos( GetTopEntry() );
+
     mpHScrollBar->SetThumbPos( GetLeftIndent() );
 
     maScrollHdl.Call( this );
@@ -2420,7 +2424,11 @@ void ImplListBox::ImplCheckScrollBars()
         mbVScroll = TRUE;
 
         // Ueberpruefung des rausgescrollten Bereichs
-        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+        if( GetEntryList()->GetSelectEntryCount() == 1 &&
+            GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+            ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+        else
+            SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
     }
     else
     {
@@ -2453,7 +2461,11 @@ void ImplListBox::ImplCheckScrollBars()
                     mbVScroll = TRUE;
 
                     // Ueberpruefung des rausgescrollten Bereichs
-                    SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+                    if( GetEntryList()->GetSelectEntryCount() == 1 &&
+                        GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+                        ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+                    else
+                        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
                 }
             }
 

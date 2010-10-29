@@ -49,7 +49,7 @@ namespace svt
         // IToolPanel
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual SmartId GetHelpID() const;
+        virtual rtl::OString GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );

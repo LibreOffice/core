@@ -27,6 +27,7 @@
 
 #include "bmp.hrc"
 ModalDialog DLG_PATH {
+    HelpID = "svtools:ModalDialog:DLG_PATH";
     OutputSize = TRUE;
     SVLook = TRUE;
     Size = MAP_APPFONT( 301, 104 );
@@ -54,36 +55,42 @@ ModalDialog DLG_PATH {
             Text = "Bitmap-Pfad:";
         };
     Edit EDT_SRS {
+        HelpID = "svtools:Edit:DLG_PATH:EDT_SRS";
             Border = TRUE;
             Pos = MAP_APPFONT( 65, 14 );
             Size = MAP_APPFONT( 160, 12 );
             TabStop = TRUE;
         };
     Edit EDT_RES {
+        HelpID = "svtools:Edit:DLG_PATH:EDT_RES";
             Border = TRUE;
             Pos = MAP_APPFONT( 65, 29 );
             Size = MAP_APPFONT( 160, 12 );
             TabStop = TRUE;
         };
     Edit EDT_OUT {
+        HelpID = "svtools:Edit:DLG_PATH:EDT_OUT";
             Border = TRUE;
             Pos = MAP_APPFONT( 65, 44 );
             Size = MAP_APPFONT( 160, 12 );
             TabStop = TRUE;
         };
     PushButton BTN_SRS {
+        HelpID = "svtools:PushButton:DLG_PATH:BTN_SRS";
             Pos = MAP_APPFONT( 228, 14 );
             Size = MAP_APPFONT( 15, 12 );
             Text = "...";
             TabStop = TRUE;
         };
     PushButton BTN_RES {
+        HelpID = "svtools:PushButton:DLG_PATH:BTN_RES";
             Pos = MAP_APPFONT( 228, 29 );
             Size = MAP_APPFONT( 15, 12 );
             Text = "...";
             TabStop = TRUE;
         };
     PushButton BTN_OUT {
+        HelpID = "svtools:PushButton:DLG_PATH:BTN_OUT";
             Pos = MAP_APPFONT( 228, 44 );
             Size = MAP_APPFONT( 15, 12 );
             Text = "...";
@@ -106,6 +113,7 @@ ModalDialog DLG_PATH {
             Text = "Sprache";
         };
     ListBox LB_LANG {
+        HelpID = "svtools:ListBox:DLG_PATH:LB_LANG";
             Border = TRUE;
             Pos = MAP_APPFONT( 12, 76 );
             Size = MAP_APPFONT( 231, 70 );

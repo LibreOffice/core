@@ -68,9 +68,9 @@ DECLARE_LIST( UniStringList, UniString* )
 //      #define STD_BTN_WIDTH   90
 //      #define STD_BTN_HEIGHT  35
 
-#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, nHelpId ) \
+#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, rHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
-    p->SetHelpId( nHelpId ); \
+    p->SetHelpId( rHelpId ); \
     p->SetPosSizePixel( aPos, aSize ); \
     p->SetText( aTitel ); \
     p->Show();
@@ -226,10 +226,10 @@ void ImpPathDialog::InitControls()
     aPnt.X() = 2 * a6Siz.Width() + aEDSiz.Width();
     aPnt.Y() = a6Siz.Height();
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, aOkStr, 0 );
+                 aPnt, aBtnSiz, aOkStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pCancelBtn, CancelButton, 0,
-                 aPnt, aBtnSiz, aCancelStr, 0 );
+                 aPnt, aBtnSiz, aCancelStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
@@ -782,10 +782,10 @@ void ImpFileDialog::InitControls()
     const long nButtonStartX = 2*nW+20+15;
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
         Point(nButtonStartX, 10), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_OK ), 0 );
+        Button::GetStandardText( BUTTON_OK ), "" );
     INITCONTROL( pCancelBtn, CancelButton, 0,
         Point(nButtonStartX, 45 ), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_CANCEL ), 0 );
+        Button::GetStandardText( BUTTON_CANCEL ), "" );
 
     pLoadBtn = 0;
 
