@@ -281,7 +281,11 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             if ( !pView )
                 pView = SfxViewFrame::Current();
             if ( pView )
-              SfxHelp::OpenHelpAgent( &pView->GetFrame(), rReq.GetSlot() );
+            {
+                rtl::OString aCmd(".uno:");
+                aCmd += rSlot.GetUnoName();
+                SfxHelp::OpenHelpAgent( &pView->GetFrame(), aCmd );
+            }
 
             SfxExecFunc pFunc = rSlot.GetExecFnc();
             rShell.CallExec( pFunc, rReq );
@@ -1675,14 +1679,14 @@ void SfxDispatcher::SetMenu_Impl()
 }
 
 //--------------------------------------------------------------------
-long SfxDispatcher::Update_Impl( sal_Bool bForce )
+void SfxDispatcher::Update_Impl( sal_Bool bForce )
 {
     SFX_STACK(SfxDispatcher::Update_Impl);
 
     Flush();
 
     if ( !pImp->pFrame || pImp->bUILocked )
-        return 0;
+        return;
 
     SFX_APP();  // -Wall is this required???
     SfxDispatcher *pDisp = this;
@@ -1704,7 +1708,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     }
 
     if ( !bUpdate || pImp->pFrame->GetFrame().IsClosing_Impl() )
-        return 0;
+        return;
 
     SfxViewFrame* pTop = pImp->pFrame ? pImp->pFrame->GetTopViewFrame() : NULL;
     sal_Bool bUIActive = pTop && pTop->GetBindings().GetDispatcher() == this;
@@ -1778,12 +1782,11 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( xLayoutManager.is() )
         xLayoutManager->unlock();
 
-    return 1;
+    return;
 }
 
-sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bool bIsIPOwner, SfxWorkWindow *pTaskWin )
+void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bool bIsIPOwner, SfxWorkWindow *pTaskWin )
 {
-    sal_uInt32 nHelpId = 0;
     SFX_APP();
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
     sal_Bool bIsActive = sal_False;
@@ -1798,7 +1801,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
     }
 
     if ( pImp->pParent && !pImp->bQuiet /* && bUIActive */ )
-        nHelpId = pImp->pParent->_Update_Impl( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
+        pImp->pParent->_Update_Impl( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aObjBars[n].nResId = 0;
@@ -1807,7 +1810,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
     // bQuiet : own shells aren't considered for UI and SlotServer
     // bNoUI: own Shells aren't considered fors UI
     if ( pImp->bQuiet || pImp->bNoUI || (pImp->pFrame && pImp->pFrame->GetObjectShell()->IsPreview()) )
-        return nHelpId;
+        return;
 
     sal_uInt32 nStatBarId=0;
     SfxShell *pStatusBarShell = NULL;
@@ -1818,8 +1821,6 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
     {
         SfxShell *pShell = GetShell( nShell-1 );
         SfxInterface *pIFace = pShell->GetInterface();
-        if (pShell->GetHelpId())
-            nHelpId = pShell->GetHelpId();
 
         // don't consider shells if "Hidden" oder "Quiet"
         sal_Bool bReadOnlyShell = IsReadOnlyShell_Impl( nShell-1 );
@@ -1950,8 +1951,6 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
             pImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
         }
     }
-
-    return nHelpId;
 }
 
 //--------------------------------------------------------------------

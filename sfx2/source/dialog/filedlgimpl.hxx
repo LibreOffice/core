@@ -142,8 +142,7 @@ namespace sfx2
 
         void                    correctVirtualDialogType();
 
-        void                    setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
-        void                    setDialogHelpId( const sal_Int32 _nHelpId );
+        void                    setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 
         sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
 
