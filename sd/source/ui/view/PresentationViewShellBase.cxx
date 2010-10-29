@@ -64,11 +64,7 @@ SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
 void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
-<<<<<<< local
-        &CreateInstance,&InitFactory,nPrio);
-=======
         &CreateInstance,&InitFactory,nPrio,"FullScreenPresentation");
->>>>>>> other
     InitFactory();
 }
 void PresentationViewShellBase::InitFactory()
@@ -113,7 +109,6 @@ PresentationViewShellBase::PresentationViewShellBase (
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
-
 
 
 

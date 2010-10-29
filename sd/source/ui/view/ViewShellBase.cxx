@@ -241,12 +241,6 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(ViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-*/
 SfxViewFactory* ViewShellBase::pFactory;
 SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
@@ -258,11 +252,7 @@ SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
 void ViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
-<<<<<<< local
-        &CreateInstance,&InitFactory,nPrio);
-=======
         &CreateInstance,&InitFactory,nPrio,"Default");
->>>>>>> other
     InitFactory();
 }
 void ViewShellBase::InitFactory()

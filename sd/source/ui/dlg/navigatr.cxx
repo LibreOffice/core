@@ -324,18 +324,9 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
                 USHORT nRId = GetDragTypeSdResId( (NavigatorDragType)nID );
                 if( nRId > 0 )
                 {
-<<<<<<< local
-                    if (nID==STR_NONE)
-                        pMenu->InsertItem( nID, String( SfxResId( nRId ) ) );
-                    else
-                        pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
-                    pMenu->SetHelpId( nID, HID_SD_NAVIGATOR_MENU1 +
-                                            nID - NAVIGATOR_DRAGTYPE_URL );
-=======
                     DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
                     pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
                     pMenu->SetHelpId( nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL] );
->>>>>>> other
                 }
 
             }
@@ -354,7 +345,6 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             pMenu->Execute( this, maToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
             delete pMenu;
-            //pBox->Invalidate();
         }
         break;
 
