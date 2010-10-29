@@ -45,6 +45,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     RadioButton RB_SEARCHFORTEXT
     {
+        HelpID = "cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SEARCHFORTEXT";
         Pos = MAP_APPFONT( 12, 23 );
         Size = MAP_APPFONT( 50, 10 );
         Group = TRUE;
@@ -52,12 +53,14 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     RadioButton RB_SEARCHFORNULL
     {
+        HelpID = "cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SEARCHFORNULL";
         Pos = MAP_APPFONT( 12, 36 );
         Size = MAP_APPFONT( 207, 10 );
         Text [ en-US ] = "Field content is ~NULL";
     };
     RadioButton RB_SEARCHFORNOTNULL
     {
+        HelpID = "cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SEARCHFORNOTNULL";
         Pos = MAP_APPFONT( 12, 49 );
         Size = MAP_APPFONT( 207, 10 );
         Text [ en-US ] = "Field content is not NU~LL";
@@ -86,6 +89,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     ListBox LB_FORM
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_SEARCHFORM:LB_FORM";
         Border = TRUE;
         Pos = MAP_APPFONT( 110, 76 );
         Size = MAP_APPFONT( 109, 60 );
@@ -102,6 +106,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     RadioButton RB_SINGLEFIELD
     {
+        HelpID = "cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SINGLEFIELD";
         Pos = MAP_APPFONT( 24, 106 );
         Size = MAP_APPFONT( 75, 10 );
         Text [ en-US ] = "Single field";
@@ -204,6 +209,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     CheckBox CB_HALFFULLFORMS
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SEARCHFORM:CB_HALFFULLFORMS";
         Pos = MAP_APPFONT( 105, 209 );
         Size = MAP_APPFONT( 85, 10 );
         TabStop = TRUE ;
@@ -211,6 +217,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     CheckBox CB_SOUNDSLIKECJK
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SEARCHFORM:CB_SOUNDSLIKECJK";
         Pos = MAP_APPFONT( 190, 209 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE ;
@@ -218,6 +225,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     PushButton PB_SOUNDSLIKESETTINGS
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SEARCHFORM:PB_SOUNDSLIKESETTINGS";
         Pos = MAP_APPFONT( 275, 207 );
         Size = MAP_APPFONT( 14, 14 );
         TabStop = TRUE ;

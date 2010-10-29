@@ -340,7 +340,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     public void insertPathSelectionControl()
     {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + (HID + 34), "HID:" + (HID + 35));
+        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, HelpIds.getHelpIdString(HID + 34), HelpIds.getHelpIdString(HID + 35));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myFaxTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";

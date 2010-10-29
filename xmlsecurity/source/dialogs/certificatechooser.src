@@ -59,6 +59,7 @@ ModalDialog RID_XMLSECDLG_CERTCHOOSER
     };
     PushButton BTN_VIEWCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_CERTCHOOSER:BTN_VIEWCERT";
         Pos = MAP_APPFONT( CS_COL_1, CS_ROW_3 );
         Size = MAP_APPFONT( CS_COL_2-CS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "View Certificate...";

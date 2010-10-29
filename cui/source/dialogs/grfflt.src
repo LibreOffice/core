@@ -37,7 +37,7 @@
 
 ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 {
-    HelpID = SID_GRFFILTER_MOSAIC;
+    HelpID = CMD_SID_GRFFILTER_MOSAIC;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -66,6 +66,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 #define MA_Y1   MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
     {
+        HelpID = "cui:MetricField:RID_SVX_GRFFILTER_DLG_MOSAIC:DLG_FILTERMOSAIC_MTR_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y1 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
@@ -91,6 +92,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 #define MA_Y3   MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
     {
+        HelpID = "cui:MetricField:RID_SVX_GRFFILTER_DLG_MOSAIC:DLG_FILTERMOSAIC_MTR_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12, MA_Y3 ) ;
         Size = MAP_APPFONT ( 35, 12 ) ;
@@ -109,6 +111,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 #define MA_Y4   MA_Y3 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_Y
     CheckBox DLG_FILTERMOSAIC_CBX_EDGES
     {
+        HelpID = "cui:CheckBox:RID_SVX_GRFFILTER_DLG_MOSAIC:DLG_FILTERMOSAIC_CBX_EDGES";
         Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
         Size = MAP_APPFONT ( 91, 12 ) ;
         TabStop = TRUE ;
@@ -141,7 +144,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 
 ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 {
-    HelpID = SID_GRFFILTER_SOLARIZE;
+    HelpID = CMD_SID_GRFFILTER_SOLARIZE;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -170,6 +173,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 #define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
     {
+        HelpID = "cui:MetricField:RID_SVX_GRFFILTER_DLG_SOLARIZE:DLG_FILTERSOLARIZE_MTR_THRESHOLD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y6 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
@@ -186,6 +190,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 #define MA_Y7   MA_Y6 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     CheckBox DLG_FILTERSOLARIZE_CBX_INVERT
     {
+        HelpID = "cui:CheckBox:RID_SVX_GRFFILTER_DLG_SOLARIZE:DLG_FILTERSOLARIZE_CBX_INVERT";
         Pos = MAP_APPFONT ( 12, 46 ) ;
         Size = MAP_APPFONT ( 77, 12 ) ;
         TabStop = TRUE ;
@@ -218,7 +223,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 
 ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
 {
-    HelpID = SID_GRFFILTER_SEPIA;
+    HelpID = CMD_SID_GRFFILTER_SEPIA;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -247,6 +252,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
 #define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
     {
+        HelpID = "cui:MetricField:RID_SVX_GRFFILTER_DLG_SEPIA:DLG_FILTERSEPIA_MTR_SEPIA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y9 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
@@ -290,7 +296,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
 
 ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 {
-    HelpID = SID_GRFFILTER_POSTER;
+    HelpID = CMD_SID_GRFFILTER_POSTER;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -319,6 +325,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 #define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     NumericField DLG_FILTERPOSTER_NUM_POSTER
     {
+        HelpID = "cui:NumericField:RID_SVX_GRFFILTER_DLG_POSTER:DLG_FILTERPOSTER_NUM_POSTER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y11 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
@@ -359,13 +366,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 
 TabPage RID_SVX_GRFFILTER_DLG_EMBOSS_TAB
 {
+    HelpID = "cui:TabPage:RID_SVX_GRFFILTER_DLG_EMBOSS_TAB";
     Pos = MAP_APPFONT ( 0, 0 ) ;
     Size = MAP_APPFONT ( 0, 0 ) ;
 };
 
 ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
 {
-    HelpID = SID_GRFFILTER_EMBOSS;
+    HelpID = CMD_SID_GRFFILTER_EMBOSS;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
