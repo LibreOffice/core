@@ -129,86 +129,86 @@ namespace framework
 
 //-----------------------------------------------
 // recovery.xcu
-static const ::rtl::OUString CFG_PACKAGE_RECOVERY             = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
-static const ::rtl::OUString CFG_ENTRY_RECOVERYLIST           = ::rtl::OUString::createFromAscii("RecoveryList"                   );
-static const ::rtl::OUString CFG_PATH_RECOVERYINFO            = ::rtl::OUString::createFromAscii("RecoveryInfo"                   );
-static const ::rtl::OUString CFG_ENTRY_ENABLED                = ::rtl::OUString::createFromAscii("Enabled"                        );
-static const ::rtl::OUString CFG_ENTRY_CRASHED                = ::rtl::OUString::createFromAscii("Crashed"                        );
-static const ::rtl::OUString CFG_ENTRY_SESSIONDATA            = ::rtl::OUString::createFromAscii("SessionData"                    );
+static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
+static const ::rtl::OUString CFG_ENTRY_RECOVERYLIST(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"));
+static const ::rtl::OUString CFG_PATH_RECOVERYINFO(RTL_CONSTASCII_USTRINGPARAM("RecoveryInfo"));
+static const ::rtl::OUString CFG_ENTRY_ENABLED(RTL_CONSTASCII_USTRINGPARAM("Enabled"));
+static const ::rtl::OUString CFG_ENTRY_CRASHED(RTL_CONSTASCII_USTRINGPARAM("Crashed"));
+static const ::rtl::OUString CFG_ENTRY_SESSIONDATA(RTL_CONSTASCII_USTRINGPARAM("SessionData"));
 
-static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_ENABLED       = ::rtl::OUString::createFromAscii("AutoSave/Enabled"               );
-static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_TIMEINTERVALL = ::rtl::OUString::createFromAscii("AutoSave/TimeIntervall"         );
+static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_ENABLED(RTL_CONSTASCII_USTRINGPARAM("AutoSave/Enabled"));
+static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_TIMEINTERVALL(RTL_CONSTASCII_USTRINGPARAM("AutoSave/TimeIntervall"));
 
-static const ::rtl::OUString CFG_PATH_AUTOSAVE                = ::rtl::OUString::createFromAscii("AutoSave"                       );
-static const ::rtl::OUString CFG_ENTRY_MINSPACE_DOCSAVE       = ::rtl::OUString::createFromAscii("MinSpaceDocSave"                );
-static const ::rtl::OUString CFG_ENTRY_MINSPACE_CONFIGSAVE    = ::rtl::OUString::createFromAscii("MinSpaceConfigSave"             );
+static const ::rtl::OUString CFG_PATH_AUTOSAVE(RTL_CONSTASCII_USTRINGPARAM("AutoSave"));
+static const ::rtl::OUString CFG_ENTRY_MINSPACE_DOCSAVE(RTL_CONSTASCII_USTRINGPARAM("MinSpaceDocSave"));
+static const ::rtl::OUString CFG_ENTRY_MINSPACE_CONFIGSAVE(RTL_CONSTASCII_USTRINGPARAM("MinSpaceConfigSave"));
 
-static const ::rtl::OUString CFG_PACKAGE_MODULES              = ::rtl::OUString::createFromAscii("org.openoffice.Setup/Office/Factories");
-static const ::rtl::OUString CFG_ENTRY_REALDEFAULTFILTER      = ::rtl::OUString::createFromAscii("ooSetupFactoryActualFilter"           );
+static const ::rtl::OUString CFG_PACKAGE_MODULES(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office/Factories"));
+static const ::rtl::OUString CFG_ENTRY_REALDEFAULTFILTER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryActualFilter"));
 
-static const ::rtl::OUString CFG_ENTRY_PROP_TEMPURL           = ::rtl::OUString::createFromAscii("TempURL"      );
-static const ::rtl::OUString CFG_ENTRY_PROP_ORIGINALURL       = ::rtl::OUString::createFromAscii("OriginalURL"  );
-static const ::rtl::OUString CFG_ENTRY_PROP_TEMPLATEURL       = ::rtl::OUString::createFromAscii("TemplateURL"  );
-static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYURL        = ::rtl::OUString::createFromAscii("FactoryURL"   );
-static const ::rtl::OUString CFG_ENTRY_PROP_MODULE            = ::rtl::OUString::createFromAscii("Module"       );
-static const ::rtl::OUString CFG_ENTRY_PROP_DOCUMENTSTATE     = ::rtl::OUString::createFromAscii("DocumentState");
-static const ::rtl::OUString CFG_ENTRY_PROP_FILTER            = ::rtl::OUString::createFromAscii("Filter"       );
-static const ::rtl::OUString CFG_ENTRY_PROP_TITLE             = ::rtl::OUString::createFromAscii("Title"        );
-static const ::rtl::OUString CFG_ENTRY_PROP_ID                = ::rtl::OUString::createFromAscii("ID"           );
-static const ::rtl::OUString CFG_ENTRY_PROP_VIEWNAMES         = ::rtl::OUString::createFromAscii("ViewNames"    );
+static const ::rtl::OUString CFG_ENTRY_PROP_TEMPURL(RTL_CONSTASCII_USTRINGPARAM("TempURL"));
+static const ::rtl::OUString CFG_ENTRY_PROP_ORIGINALURL(RTL_CONSTASCII_USTRINGPARAM("OriginalURL"));
+static const ::rtl::OUString CFG_ENTRY_PROP_TEMPLATEURL(RTL_CONSTASCII_USTRINGPARAM("TemplateURL"));
+static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYURL(RTL_CONSTASCII_USTRINGPARAM("FactoryURL"));
+static const ::rtl::OUString CFG_ENTRY_PROP_MODULE(RTL_CONSTASCII_USTRINGPARAM("Module"));
+static const ::rtl::OUString CFG_ENTRY_PROP_DOCUMENTSTATE(RTL_CONSTASCII_USTRINGPARAM("DocumentState"));
+static const ::rtl::OUString CFG_ENTRY_PROP_FILTER(RTL_CONSTASCII_USTRINGPARAM("Filter"));
+static const ::rtl::OUString CFG_ENTRY_PROP_TITLE(RTL_CONSTASCII_USTRINGPARAM("Title"));
+static const ::rtl::OUString CFG_ENTRY_PROP_ID(RTL_CONSTASCII_USTRINGPARAM("ID"));
+static const ::rtl::OUString CFG_ENTRY_PROP_VIEWNAMES(RTL_CONSTASCII_USTRINGPARAM("ViewNames"));
 
-static const ::rtl::OUString FILTER_PROP_TYPE                = ::rtl::OUString::createFromAscii("Type"            );
-static const ::rtl::OUString FILTER_PROP_NAME                = ::rtl::OUString::createFromAscii("Name"            );
-static const ::rtl::OUString TYPE_PROP_EXTENSIONS            = ::rtl::OUString::createFromAscii("Extensions"      );
-static const ::rtl::OUString DOCINFO_PROP_TEMPLATE           = ::rtl::OUString::createFromAscii("TemplateFileName");
+static const ::rtl::OUString FILTER_PROP_TYPE(RTL_CONSTASCII_USTRINGPARAM("Type"));
+static const ::rtl::OUString FILTER_PROP_NAME(RTL_CONSTASCII_USTRINGPARAM("Name"));
+static const ::rtl::OUString TYPE_PROP_EXTENSIONS(RTL_CONSTASCII_USTRINGPARAM("Extensions"));
+static const ::rtl::OUString DOCINFO_PROP_TEMPLATE(RTL_CONSTASCII_USTRINGPARAM("TemplateFileName"));
 
 // setup.xcu
-static const ::rtl::OUString CFG_ENTRY_PROP_EMPTYDOCUMENTURL = ::rtl::OUString::createFromAscii("ooSetupFactoryEmptyDocumentURL");
-static const ::rtl::OUString CFG_ENTRY_PROP_DEFAULTFILTER    = ::rtl::OUString::createFromAscii("ooSetupFactoryDefaultFilter"   );
-static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYSERVICE   = ::rtl::OUString::createFromAscii("ooSetupFactoryDocumentService"   );
+static const ::rtl::OUString CFG_ENTRY_PROP_EMPTYDOCUMENTURL(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryEmptyDocumentURL"));
+static const ::rtl::OUString CFG_ENTRY_PROP_DEFAULTFILTER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDefaultFilter"));
+static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYSERVICE(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDocumentService"));
 
-static const ::rtl::OUString EVENT_ON_NEW                    = ::rtl::OUString::createFromAscii("OnNew"          );
-static const ::rtl::OUString EVENT_ON_LOAD                   = ::rtl::OUString::createFromAscii("OnLoad"         );
-static const ::rtl::OUString EVENT_ON_UNLOAD                 = ::rtl::OUString::createFromAscii("OnUnload"       );
-static const ::rtl::OUString EVENT_ON_MODIFYCHANGED          = ::rtl::OUString::createFromAscii("OnModifyChanged");
-static const ::rtl::OUString EVENT_ON_SAVE                   = ::rtl::OUString::createFromAscii("OnSave"         );
-static const ::rtl::OUString EVENT_ON_SAVEAS                 = ::rtl::OUString::createFromAscii("OnSaveAs"       );
-static const ::rtl::OUString EVENT_ON_SAVETO                 = ::rtl::OUString::createFromAscii("OnCopyTo"       );
-static const ::rtl::OUString EVENT_ON_SAVEDONE               = ::rtl::OUString::createFromAscii("OnSaveDone"     );
-static const ::rtl::OUString EVENT_ON_SAVEASDONE             = ::rtl::OUString::createFromAscii("OnSaveAsDone"   );
-static const ::rtl::OUString EVENT_ON_SAVETODONE             = ::rtl::OUString::createFromAscii("OnCopyToDone"   );
-static const ::rtl::OUString EVENT_ON_SAVEFAILED             = ::rtl::OUString::createFromAscii("OnSaveFailed"   );
-static const ::rtl::OUString EVENT_ON_SAVEASFAILED           = ::rtl::OUString::createFromAscii("OnSaveAsFailed" );
-static const ::rtl::OUString EVENT_ON_SAVETOFAILED           = ::rtl::OUString::createFromAscii("OnCopyToFailed" );
+static const ::rtl::OUString EVENT_ON_NEW(RTL_CONSTASCII_USTRINGPARAM("OnNew"));
+static const ::rtl::OUString EVENT_ON_LOAD(RTL_CONSTASCII_USTRINGPARAM("OnLoad"));
+static const ::rtl::OUString EVENT_ON_UNLOAD(RTL_CONSTASCII_USTRINGPARAM("OnUnload"));
+static const ::rtl::OUString EVENT_ON_MODIFYCHANGED(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged"));
+static const ::rtl::OUString EVENT_ON_SAVE(RTL_CONSTASCII_USTRINGPARAM("OnSave"));
+static const ::rtl::OUString EVENT_ON_SAVEAS(RTL_CONSTASCII_USTRINGPARAM("OnSaveAs"));
+static const ::rtl::OUString EVENT_ON_SAVETO(RTL_CONSTASCII_USTRINGPARAM("OnCopyTo"));
+static const ::rtl::OUString EVENT_ON_SAVEDONE(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone"));
+static const ::rtl::OUString EVENT_ON_SAVEASDONE(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone"));
+static const ::rtl::OUString EVENT_ON_SAVETODONE(RTL_CONSTASCII_USTRINGPARAM("OnCopyToDone"));
+static const ::rtl::OUString EVENT_ON_SAVEFAILED(RTL_CONSTASCII_USTRINGPARAM("OnSaveFailed"));
+static const ::rtl::OUString EVENT_ON_SAVEASFAILED(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsFailed"));
+static const ::rtl::OUString EVENT_ON_SAVETOFAILED(RTL_CONSTASCII_USTRINGPARAM("OnCopyToFailed"));
 
-static const ::rtl::OUString RECOVERY_ITEM_BASE_IDENTIFIER   = ::rtl::OUString::createFromAscii("recovery_item_" );
+static const ::rtl::OUString RECOVERY_ITEM_BASE_IDENTIFIER(RTL_CONSTASCII_USTRINGPARAM("recovery_item_"));
 
-static const ::rtl::OUString CMD_PROTOCOL                    = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:");
+static const ::rtl::OUString CMD_PROTOCOL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:"));
 
-static const ::rtl::OUString CMD_DO_AUTO_SAVE                = ::rtl::OUString::createFromAscii("/doAutoSave"             );    // force AutoSave ignoring the AutoSave timer
-static const ::rtl::OUString CMD_DO_PREPARE_EMERGENCY_SAVE   = ::rtl::OUString::createFromAscii("/doPrepareEmergencySave" );    // prepare the office for the following EmergencySave step (hide windows etcpp.)
-static const ::rtl::OUString CMD_DO_EMERGENCY_SAVE           = ::rtl::OUString::createFromAscii("/doEmergencySave"        );    // do EmergencySave on crash
-static const ::rtl::OUString CMD_DO_RECOVERY                 = ::rtl::OUString::createFromAscii("/doAutoRecovery"         );    // recover all crashed documents
-static const ::rtl::OUString CMD_DO_ENTRY_BACKUP             = ::rtl::OUString::createFromAscii("/doEntryBackup"          );    // try to store a temp or original file to a user defined location
-static const ::rtl::OUString CMD_DO_ENTRY_CLEANUP            = ::rtl::OUString::createFromAscii("/doEntryCleanUp"         );    // remove the specified entry from the recovery cache
-static const ::rtl::OUString CMD_DO_SESSION_SAVE             = ::rtl::OUString::createFromAscii("/doSessionSave"          );    // save all open documents if e.g. a window manager closes an user session
-static const ::rtl::OUString CMD_DO_SESSION_QUIET_QUIT       = ::rtl::OUString::createFromAscii("/doSessionQuietQuit"     );    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
-static const ::rtl::OUString CMD_DO_SESSION_RESTORE          = ::rtl::OUString::createFromAscii("/doSessionRestore"       );    // restore a saved user session from disc
-static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY         = ::rtl::OUString::createFromAscii("/disableRecovery"        );    // disable recovery and auto save (!) temp. for this office session
-static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE       = ::rtl::OUString::createFromAscii("/setAutoSaveState"       );    // disable/enable auto save (not crash save) for this office session
+static const ::rtl::OUString CMD_DO_AUTO_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doAutoSave"));    // force AutoSave ignoring the AutoSave timer
+static const ::rtl::OUString CMD_DO_PREPARE_EMERGENCY_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doPrepareEmergencySave"));    // prepare the office for the following EmergencySave step (hide windows etcpp.)
+static const ::rtl::OUString CMD_DO_EMERGENCY_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doEmergencySave"));    // do EmergencySave on crash
+static const ::rtl::OUString CMD_DO_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("/doAutoRecovery"));    // recover all crashed documents
+static const ::rtl::OUString CMD_DO_ENTRY_BACKUP(RTL_CONSTASCII_USTRINGPARAM("/doEntryBackup"));    // try to store a temp or original file to a user defined location
+static const ::rtl::OUString CMD_DO_ENTRY_CLEANUP(RTL_CONSTASCII_USTRINGPARAM("/doEntryCleanUp"));    // remove the specified entry from the recovery cache
+static const ::rtl::OUString CMD_DO_SESSION_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doSessionSave"));    // save all open documents if e.g. a window manager closes an user session
+static const ::rtl::OUString CMD_DO_SESSION_QUIET_QUIT(RTL_CONSTASCII_USTRINGPARAM("/doSessionQuietQuit"));    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
+static const ::rtl::OUString CMD_DO_SESSION_RESTORE(RTL_CONSTASCII_USTRINGPARAM("/doSessionRestore"));    // restore a saved user session from disc
+static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("/disableRecovery"));    // disable recovery and auto save (!) temp. for this office session
+static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("/setAutoSaveState"));    // disable/enable auto save (not crash save) for this office session
 
-static const ::rtl::OUString REFERRER_USER                   = ::rtl::OUString::createFromAscii("private:user");
+static const ::rtl::OUString REFERRER_USER(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
-static const ::rtl::OUString PROP_DISPATCH_ASYNCHRON         = ::rtl::OUString::createFromAscii("DispatchAsynchron");
-static const ::rtl::OUString PROP_PROGRESS                   = ::rtl::OUString::createFromAscii("StatusIndicator"  );
-static const ::rtl::OUString PROP_SAVEPATH                   = ::rtl::OUString::createFromAscii("SavePath"         );
-static const ::rtl::OUString PROP_ENTRY_ID                   = ::rtl::OUString::createFromAscii("EntryID"          );
-static const ::rtl::OUString PROP_DBG_MAKE_IT_FASTER         = ::rtl::OUString::createFromAscii("DBGMakeItFaster"  );
-static const ::rtl::OUString PROP_AUTOSAVE_STATE             = ::rtl::OUString::createFromAscii("AutoSaveState"    );
+static const ::rtl::OUString PROP_DISPATCH_ASYNCHRON(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron"));
+static const ::rtl::OUString PROP_PROGRESS(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
+static const ::rtl::OUString PROP_SAVEPATH(RTL_CONSTASCII_USTRINGPARAM("SavePath"));
+static const ::rtl::OUString PROP_ENTRY_ID(RTL_CONSTASCII_USTRINGPARAM("EntryID"));
+static const ::rtl::OUString PROP_DBG_MAKE_IT_FASTER(RTL_CONSTASCII_USTRINGPARAM("DBGMakeItFaster"));
+static const ::rtl::OUString PROP_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
 
-static const ::rtl::OUString OPERATION_START                 = ::rtl::OUString::createFromAscii("start" );
-static const ::rtl::OUString OPERATION_STOP                  = ::rtl::OUString::createFromAscii("stop"  );
-static const ::rtl::OUString OPERATION_UPDATE                = ::rtl::OUString::createFromAscii("update");
+static const ::rtl::OUString OPERATION_START(RTL_CONSTASCII_USTRINGPARAM("start"));
+static const ::rtl::OUString OPERATION_STOP(RTL_CONSTASCII_USTRINGPARAM("stop"));
+static const ::rtl::OUString OPERATION_UPDATE(RTL_CONSTASCII_USTRINGPARAM("update"));
 
 static const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
 static const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
@@ -423,7 +423,7 @@ void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
     {
         OSL_ENSURE(sal_False, "Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.")),
                 m_xOwner);
     }
 
@@ -450,7 +450,7 @@ void CacheLockGuard::unlock()
     {
         OSL_ENSURE(sal_False, "Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)")),
                 m_xOwner);
     }
     aWriteLock.unlock();
@@ -813,7 +813,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(::rtl::OUString::createFromAscii("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid listener reference.")), static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
@@ -848,7 +848,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(::rtl::OUString::createFromAscii("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid listener reference.")), static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
@@ -1212,7 +1212,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     if (!rInfo.AppModule.getLength())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Cant find out the default filter and its extension, if no application module is known!"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find out the default filter and its extension, if no application module is known!")),
                 static_cast< css::frame::XDispatch* >(this));
     }
 
@@ -1254,11 +1254,11 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         css::uno::Sequence< ::rtl::OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(TYPE_PROP_EXTENSIONS, css::uno::Sequence< ::rtl::OUString >());
         if (lExtensions.getLength())
         {
-            rInfo.Extension  = ::rtl::OUString::createFromAscii(".");
+            rInfo.Extension  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
             rInfo.Extension += lExtensions[0];
         }
         else
-            rInfo.Extension = ::rtl::OUString::createFromAscii(".unknown");
+            rInfo.Extension = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".unknown"));
     }
     catch(const css::uno::Exception&)
     {
@@ -3715,7 +3715,7 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
-        aContent.executeCommand(::rtl::OUString::createFromAscii("delete"), css::uno::makeAny(sal_True));
+        aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
         {}
