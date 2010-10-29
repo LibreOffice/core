@@ -570,7 +570,7 @@ LwpDrawPolygon::~LwpDrawPolygon()
 {
     if (m_pVector)
     {
-        delete m_pVector;
+        delete [] m_pVector;
         m_pVector = NULL;
     }
 }
