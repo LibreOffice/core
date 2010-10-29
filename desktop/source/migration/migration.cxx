@@ -214,9 +214,23 @@ static void releaseImpl()
     }
 }
 
-// static main entry point for the migration process
-void Migration::doMigration()
+sal_Bool MigrationImpl::needsMigration()
 {
+    sal_Bool bRet = sal_False;
+
+    if (m_aInfo.userdata.getLength() > 0 && ! checkMigrationCompleted())
+        return sal_True;
+
+    OSL_TRACE( "Migration %s\n", bRet ? "needed" : "not required" );
+
+    return bRet;
+}
+
+void Migration::migrateSettingsIfNecessary()
+{
+    if ( !getImpl()->needsMigration() )
+        return;
+
     sal_Bool bResult = sal_False;
     try {
         bResult = getImpl()->doMigration();
@@ -229,34 +243,6 @@ void Migration::doMigration()
     OSL_ENSURE(bResult, "Migration has not been successfull");
     // shut down migration framework
     releaseImpl();
-}
-
-void Migration::cancelMigration()
-{
-    releaseImpl();
-}
-
-sal_Bool Migration::checkMigration()
-{
-    return getImpl()->checkMigration();
-}
-
-OUString Migration::getOldVersionName()
-{
-    return getImpl()->getOldVersionName();
-}
-
-OUString MigrationImpl::getOldVersionName()
-{
-    return m_aInfo.productname;
-}
-
-sal_Bool MigrationImpl::checkMigration()
-{
-    if (m_aInfo.userdata.getLength() > 0 && ! checkMigrationCompleted())
-        return sal_True;
-    else
-        return sal_False;
 }
 
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
@@ -708,7 +694,7 @@ strings_vr MigrationImpl::compileFileList()
     {
         vrInclude = applyPatterns(*vrFiles, i_migr->includeFiles);
         vrExclude = applyPatterns(*vrFiles, i_migr->excludeFiles);
-        substract(*vrInclude, *vrExclude);
+        subtract(*vrInclude, *vrExclude);
         vrResult->insert(vrResult->end(), vrInclude->begin(), vrInclude->end());
         i_migr++;
     }
@@ -817,7 +803,7 @@ void MigrationImpl::copyConfig() {
 }
 
 // removes elements of vector 2 in vector 1
-void MigrationImpl::substract(strings_v& va, const strings_v& vb_c) const
+void MigrationImpl::subtract(strings_v& va, const strings_v& vb_c) const
 {
     strings_v vb(vb_c);
     // ensure uniqueness of entries

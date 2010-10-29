@@ -48,7 +48,7 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
-#include "../migration/migration.hxx"
+#include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -1720,8 +1720,7 @@ void Desktop::Main()
         if ( bAbort )
             return;
 
-        if ( Migration::checkMigration() )
-            Migration::doMigration();
+        Migration::migrateSettingsIfNecessary();
 
         // keep a language options instance...
         pLanguageOptions.reset( new SvtLanguageOptions(sal_True));

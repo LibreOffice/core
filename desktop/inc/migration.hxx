@@ -37,11 +37,7 @@ namespace desktop {
 class Migration
 {
 public:
-    // starts the migration process
-    static void doMigration();
-    static void cancelMigration();
-    static sal_Bool checkMigration();
-    static rtl::OUString getOldVersionName();
+    static void migrateSettingsIfNecessary();
 };
 }
 #endif

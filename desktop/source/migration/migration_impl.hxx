@@ -213,7 +213,7 @@ private:
     strings_vr    compileFileList();
 
     // helpers
-    void substract(strings_v& va, const strings_v& vb_c) const;
+    void subtract(strings_v& va, const strings_v& vb_c) const;
     strings_vr getAllFiles(const rtl::OUString& baseURL) const;
     strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const;
     NS_UNO::Reference< NS_CSS::container::XNameAccess > getConfigAccess(const sal_Char* path, sal_Bool rw=sal_False);
@@ -241,10 +241,8 @@ public:
     MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
     ~MigrationImpl();
     sal_Bool doMigration();
-    sal_Bool checkMigration();
+    sal_Bool needsMigration();
     rtl::OUString getOldVersionName();
-
-
 };
 }
 #undef NS_CSS
