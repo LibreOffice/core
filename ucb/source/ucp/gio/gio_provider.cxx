@@ -108,14 +108,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void *, void *pRegistryKey )
-{
-    return pRegistryKey &&
-        writeInfo( pRegistryKey,
-            ::gio::ContentProvider::getImplementationName_Static(),
-            ::gio::ContentProvider::getSupportedServiceNames_Static() );
-}
-
 extern "C" void * SAL_CALL component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
