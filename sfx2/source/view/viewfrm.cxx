@@ -92,12 +92,9 @@
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
-<<<<<<< local
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
-=======
 #include <framework/framelistanalyzer.hxx>
->>>>>>> other
 
 #include <boost/optional.hpp>
 
@@ -111,9 +108,6 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexContainer;
 namespace css = ::com::sun::star;
-
-#ifndef GCC
-#endif
 
 // wg. ViewFrame::Current
 #include "appdata.hxx"

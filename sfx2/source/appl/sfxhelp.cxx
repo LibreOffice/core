@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-<<<<<<< local
 #include "sfx2/sfxhelp.hxx"
 
-=======
-#include "sfxhelp.hxx"
 #include <set>
->>>>>>> other
 #include <algorithm>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>

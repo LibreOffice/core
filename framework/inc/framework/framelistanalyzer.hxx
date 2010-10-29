@@ -34,7 +34,7 @@
 
 //_______________________________________________
 //  other includes
-#include <fwidllapi.h>
+#include <framework/fwedllapi.h>
 
 //_______________________________________________
 //  namespace
@@ -54,7 +54,7 @@ namespace framework{
     to switch into the backing mode, close the current active frame only or
     exit the whole application explicitly or implicitly.
  */
-class FWI_DLLPUBLIC FrameListAnalyzer
+class FWE_DLLPUBLIC FrameListAnalyzer
 {
     //_______________________________________
     // types

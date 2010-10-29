@@ -46,7 +46,7 @@
 #include <classes/droptargetlistener.hxx>
 #include <classes/taskcreator.hxx>
 #include <loadenv/targethelper.hxx>
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <threadhelp/transactionguard.hxx>

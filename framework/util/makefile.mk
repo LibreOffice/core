@@ -45,7 +45,6 @@ SHL3USE_EXPORTS=name
 SHL4USE_EXPORTS=name
 SHL5USE_EXPORTS=name
 
-
 # --- internal import -------------------------------------------------
 
 LIB1TARGET=     $(SLB)$/fwiobj.lib
@@ -362,30 +361,6 @@ SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 .INCLUDE :  target.mk
 
-<<<<<<< local
-=======
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo _Impl>$@
-    @echo WEP>>$@
-    @echo m_pLoader>$@
-    @echo _TI2>>$@
-    @echo _TI3>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-    @echo _STL::pair>>$@
-
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo _Impl>$@
-    @echo WEP>>$@
-    @echo m_pLoader>$@
-    @echo _TI2>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
 ALLTAR : $(MISC)/fwk.component $(MISC)/fwl.component $(MISC)/fwm.component
 
 $(MISC)/fwk.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
@@ -405,4 +380,4 @@ $(MISC)/fwm.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL5TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt fwm.component
->>>>>>> other
+

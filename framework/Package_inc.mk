@@ -33,6 +33,7 @@ $(eval $(call gb_Package_add_file,framework_inc,inc/framework/addonsoptions.hxx,
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/bmkmenu.hxx,framework/bmkmenu.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/configimporter.hxx,framework/configimporter.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/eventsconfiguration.hxx,framework/eventsconfiguration.hxx))
+$(eval $(call gb_Package_add_file,framework_inc,inc/framework/framelistanalyzer.hxx,framework/framelistanalyzer.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/imageproducer.hxx,framework/imageproducer.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/imagesconfiguration.hxx,framework/imagesconfiguration.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/interaction.hxx,framework/interaction.hxx))

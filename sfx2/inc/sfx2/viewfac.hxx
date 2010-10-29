@@ -30,9 +30,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 
 class SfxViewFrame;
 class SfxViewShell;
@@ -45,20 +43,12 @@ typedef void (*SfxViewInit)();
 class SFX2_DLLPUBLIC SfxViewFactory
 {
 public:
-<<<<<<< local
-    SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI, USHORT nOrdinal );
-=======
     SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
                     USHORT nOrdinal, const sal_Char* asciiViewName );
->>>>>>> other
     ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
     void          InitFactory();
-<<<<<<< local
-=======
-
->>>>>>> other
     USHORT        GetOrdinal() const { return nOrd; }
 
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.
@@ -75,10 +65,7 @@ private:
     SfxViewCtor fnCreate;
     SfxViewInit fnInit;
     USHORT      nOrd;
-<<<<<<< local
-=======
     const String    m_sViewName;
->>>>>>> other
 };
 
 #endif

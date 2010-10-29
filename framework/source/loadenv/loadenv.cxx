@@ -34,7 +34,7 @@
 #ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
 #endif
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 
 #ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
 #include <constant/frameloader.hxx>

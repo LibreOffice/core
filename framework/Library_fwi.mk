@@ -62,7 +62,6 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
 
 $(eval $(call gb_Library_add_exception_objects,fwi,\
     framework/source/fwi/classes/converter \
-    framework/source/fwi/classes/framelistanalyzer \
     framework/source/fwi/classes/propertysethelper \
     framework/source/fwi/classes/protocolhandlercache \
     framework/source/fwi/helper/mischelper \

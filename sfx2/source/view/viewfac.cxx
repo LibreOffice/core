@@ -70,20 +70,12 @@ String SfxViewFactory::GetAPIViewName() const
 
 // CTOR / DTOR -----------------------------------------------------------
 
-<<<<<<< local
-SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI, USHORT nOrdinal ):
-=======
 SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
                                 USHORT nOrdinal, const sal_Char* asciiViewName ):
->>>>>>> other
     fnCreate(fnC),
     fnInit(fnI),
-<<<<<<< local
-    nOrd(nOrdinal)
-=======
     nOrd(nOrdinal),
     m_sViewName( String::CreateFromAscii( asciiViewName ) )
->>>>>>> other
 {
     DBG_CTOR(SfxViewFactory, 0);
 }

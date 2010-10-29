@@ -114,7 +114,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/module \
     sfx2/source/appl/newhelp \
     sfx2/source/appl/opengrf \
-    sfx2/source/appl/sfxdll \
     sfx2/source/appl/sfxhelp \
     sfx2/source/appl/sfxpicklist \
     sfx2/source/appl/shutdownicon \
