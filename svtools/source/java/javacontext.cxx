@@ -39,14 +39,6 @@ using namespace com::sun::star::task;
 namespace svt
 {
 
-JavaContext::JavaContext( const Reference< XCurrentContext > & ctx )
-    :
-    m_aRefCount(0),
-    m_xNextContext( ctx ),
-    m_bShowErrorsOnce(false)
-{
-}
-
 JavaContext::JavaContext( const Reference< XCurrentContext > & ctx,
                           bool bShowErrorsOnce)
     : m_aRefCount(0),

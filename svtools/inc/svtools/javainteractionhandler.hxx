@@ -48,8 +48,7 @@ class SVT_DLLPUBLIC JavaInteractionHandler:
         public com::sun::star::task::XInteractionHandler
 {
 public:
-    JavaInteractionHandler();
-    JavaInteractionHandler(bool bReportErrorOnce);
+    JavaInteractionHandler(bool bReportErrorOnce = true);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
