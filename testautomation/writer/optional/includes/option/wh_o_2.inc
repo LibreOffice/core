@@ -48,8 +48,8 @@ testcase tToolsOptionsHTMLPrint
     dim bRadioBut(4) as boolean         ' RadioButtons
     dim bTempRadioBut(4) as boolean
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\test.html" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\test.html" )
+    
     printlog "- Tools/Options/HTML: PrintHTML "
 
     printlog (" - save states ")
@@ -83,7 +83,13 @@ testcase tToolsOptionsHTMLPrint
 
     if bCheckboxStatus(6) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
 
-    if (Keine.IsChecked = True) Then NurNotizen.Check Else Keine.Check
+    if ( Keine.IsEnabled) then
+        if (Keine.IsChecked = True) Then
+            NurNotizen.Check
+        Else
+            Keine.Check
+        end if
+    end if
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -163,7 +169,7 @@ testcase tToolsOptionsHTMLPrint
     ' Is saved with document
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    Call hFileOpen(gOfficepath + "user\work\printtest.html")
+    hFileOpen( gOfficePath & "user\work\printtest.html")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
@@ -185,7 +191,13 @@ testcase tToolsOptionsHTMLPrint
 
     AusDruckereinstellung.Check
 
-    if (Dokumentende.IsChecked = True) Then Seitenende.Check Else Dokumentende.Check
+    if ( Dokumentende.IsEnabled ) then
+        if (Dokumentende.IsChecked = True) Then
+            Seitenende.Check
+        Else
+            Dokumentende.Check
+        end if
+    end if
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked

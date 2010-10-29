@@ -348,7 +348,7 @@ testcase tFormatPage_6
 
 	Call hNewDocument
 
-	Call hFileOpen(gOfficepath + "user\work\tFormatPage_6.odt")
+	hFileOpen( gOfficepath + "user\work\tFormatPage_6.odt")
 
 	'/// Check if Pre-defined formats are correct
 	fFormatPageWriter("TabSeite")
@@ -602,8 +602,8 @@ testcase tFormatPage_11
     '/// Open a test file ,
     '/// + There are 2 pictures in 2 pages separately ,
     '/// + and they are anchored as character
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Right to left"
@@ -662,8 +662,8 @@ testcase tFormatPage_12
 
     '/// Open a test file ,
     '/// + there are 2 pictures in 2 pages separately , and they are anchored as character
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Mirrored"
@@ -724,8 +724,8 @@ testcase tFormatPage_13
 
     '/// Open a test file ,
     '/// + there are 2 pictures in 2 pages separately
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Only right"
@@ -781,8 +781,8 @@ testcase tFormatPage_14
 
     '/// Open a test file ,
     '/// + there are 2 pictures in 2 pages separately
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Only left"

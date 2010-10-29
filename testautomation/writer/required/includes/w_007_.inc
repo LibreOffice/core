@@ -84,8 +84,7 @@ testcase tToolsSpellcheck
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
-    hFileOpen ( TheFile )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( TheFile )
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -246,8 +245,7 @@ testcase tToolsThesaurus
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
-    call hFileOpen( TheFile )
-    Call sMakeReadOnlyDocumentEditable
+    call hFileOpenLocally( TheFile )
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -337,7 +335,7 @@ testcase tToolsHyphenation
 
     Select Case gApplication
     Case "WRITER"
-        hFileOpen( DieDatei )
+        hFileOpenLocally( DieDatei )
 
     Case "MASTERDOCUMENT"
         if wInsertDocumentinMasterDoc(DieDatei) = False then
@@ -354,7 +352,6 @@ testcase tToolsHyphenation
         goto endsub
     end select
 
-    Call sMakeReadOnlyDocumentEditable
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
@@ -986,8 +983,7 @@ testcase tToolsHangulHanjaConversion
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
 
     printlog " Open the test file"
-    hFileOpen (sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(sTestFile)
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
@@ -1126,8 +1122,7 @@ testcase tHtmlDocToolsHangulHanjaConversion
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
 
     printlog " Open the test file"
-    hFileOpen (sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(sTestFile)
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
@@ -1238,7 +1233,7 @@ testcase tMasterDocToolsHyphenation
         hUseAsyncSlot( "EditPaste" )
     end if
 
-    Call sMakeReadOnlyDocumentEditable
+    
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
