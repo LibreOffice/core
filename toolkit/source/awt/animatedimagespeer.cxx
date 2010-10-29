@@ -46,7 +46,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/throbber.hxx>
 
-#include <stl/limits>
+#include <limits>
 
 //......................................................................................................................
 namespace toolkit
