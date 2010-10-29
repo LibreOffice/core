@@ -79,19 +79,19 @@ using namespace com::sun::star;
 
 namespace desktop {
 
-static const ::rtl::OUString ITEM_DESCRIPTOR_COMMANDURL = ::rtl::OUString::createFromAscii("CommandURL");
-static const ::rtl::OUString ITEM_DESCRIPTOR_CONTAINER = ::rtl::OUString::createFromAscii("ItemDescriptorContainer");
-static const ::rtl::OUString ITEM_DESCRIPTOR_LABEL = ::rtl::OUString::createFromAscii("Label");
+static const ::rtl::OUString ITEM_DESCRIPTOR_COMMANDURL(RTL_CONSTASCII_USTRINGPARAM("CommandURL"));
+static const ::rtl::OUString ITEM_DESCRIPTOR_CONTAINER(RTL_CONSTASCII_USTRINGPARAM("ItemDescriptorContainer"));
+static const ::rtl::OUString ITEM_DESCRIPTOR_LABEL(RTL_CONSTASCII_USTRINGPARAM("Label"));
 
-static const ::rtl::OUString MENU_SEPERATOR = ::rtl::OUString::createFromAscii(" | ");
-static const ::rtl::OUString MENU_SUBMENU = ::rtl::OUString::createFromAscii("...");
+static const ::rtl::OUString MENU_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM(" | "));
+static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
 
 ::rtl::OUString retrieveLabelFromCommand(const ::rtl::OUString& sCommand, const ::rtl::OUString& sModuleIdentifier)
 {
     ::rtl::OUString sLabel;
 
     uno::Reference< container::XNameAccess > xUICommands;
-    uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
     if ( xNameAccess.is() )
     {
         uno::Any a = xNameAccess->getByName( sModuleIdentifier );
@@ -152,44 +152,44 @@ static const ::rtl::OUString MENU_SUBMENU = ::rtl::OUString::createFromAscii("..
 {
     ::rtl::OUString sIdentifier;
 
-    if (sShortName.equals(::rtl::OUString::createFromAscii("StartModule")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.frame.StartModule");
+    if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartModule"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("swriter")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("scalc")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("sdraw")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("simpress")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("smath")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("schart")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("BasicIDE")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.script.BasicIDE");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.BasicIDE"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("dbapp")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.sdb.OfficeDatabaseDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbapp"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("sglobal")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sglobal"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("sweb")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sweb"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("swxform")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.xforms.XMLFormDocument");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swxform"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xforms.XMLFormDocument"));
 
-    else if (sShortName.equals(::rtl::OUString::createFromAscii("sbibliography")))
-        sIdentifier = ::rtl::OUString::createFromAscii("com.sun.star.frame.Bibliography");
+    else if (sShortName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sbibliography"))))
+        sIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Bibliography"));
 
     return sIdentifier;
 }
@@ -288,8 +288,8 @@ sal_Bool MigrationImpl::doMigration()
 
         copyFiles();
 
-        const ::rtl::OUString sMenubarResourceURL = ::rtl::OUString::createFromAscii("private:resource/menubar/menubar");
-        const ::rtl::OUString sToolbarResourcePre = ::rtl::OUString::createFromAscii("private:resource/toolbar/");
+        const ::rtl::OUString sMenubarResourceURL(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"));
+        const ::rtl::OUString sToolbarResourcePre(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/"));
         for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
         {
             ::rtl::OUString sModuleIdentifier = mapModuleShortNameToIdentifier(vModulesInfo[i].sModuleShortName);
@@ -297,15 +297,15 @@ sal_Bool MigrationImpl::doMigration()
                 continue;
 
             uno::Sequence< uno::Any > lArgs(2);
-            ::rtl::OUString aOldCfgDataPath = m_aInfo.userdata + ::rtl::OUString::createFromAscii("/user/config/soffice.cfg/modules/");
+            ::rtl::OUString aOldCfgDataPath = m_aInfo.userdata + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user/config/soffice.cfg/modules/"));
             lArgs[0] <<= aOldCfgDataPath + vModulesInfo[i].sModuleShortName;
             lArgs[1] <<= embed::ElementModes::READ;
 
-            uno::Reference< lang::XSingleServiceFactory > xStorageFactory(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.embed.FileSystemStorageFactory")), uno::UNO_QUERY);
+            uno::Reference< lang::XSingleServiceFactory > xStorageFactory(m_xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"))), uno::UNO_QUERY);
             uno::Reference< embed::XStorage >             xModules;
 
             xModules = uno::Reference< embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
-            uno::Reference< ui::XUIConfigurationManager > xOldCfgManager( m_xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.ui.UIConfigurationManager")), uno::UNO_QUERY );
+            uno::Reference< ui::XUIConfigurationManager > xOldCfgManager( m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"))), uno::UNO_QUERY );
             uno::Reference< ui::XUIConfigurationStorage > xOldCfgStorage( xOldCfgManager, uno::UNO_QUERY );
             uno::Reference< ui::XUIConfigurationPersistence > xOldCfgPersistence( xOldCfgManager, uno::UNO_QUERY );
 
@@ -371,7 +371,7 @@ sal_Bool MigrationImpl::doMigration()
 void MigrationImpl::refresh()
 {
     uno::Reference< XRefreshable > xRefresh(m_xFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY);
     if (xRefresh.is())
         xRefresh->refresh();
     else
@@ -383,7 +383,7 @@ void MigrationImpl::setMigrationCompleted()
 {
     try {
         uno::Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), uno::UNO_QUERY_THROW);
-        aPropertySet->setPropertyValue(OUString::createFromAscii("MigrationCompleted"), uno::makeAny(sal_True));
+        aPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("MigrationCompleted")), uno::makeAny(sal_True));
         uno::Reference< XChangesBatch >(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
     } catch (...) {
         // fail silently
@@ -397,7 +397,7 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
         uno::Reference< XPropertySet > aPropertySet(
             getConfigAccess("org.openoffice.Setup/Office"), uno::UNO_QUERY_THROW);
         aPropertySet->getPropertyValue(
-            OUString::createFromAscii("MigrationCompleted")) >>= bMigrationCompleted;
+            OUString(RTL_CONSTASCII_USTRINGPARAM("MigrationCompleted"))) >>= bMigrationCompleted;
 
         static const char* pEnv = getenv("SAL_DISABLE_USERMIGRATION" );
         if( !bMigrationCompleted && pEnv != NULL )
@@ -482,7 +482,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
 
         // read included files from current step description
         ::rtl::OUString aSeqEntry;
-        if (tmpAccess->getByName(OUString::createFromAscii("IncludedFiles")) >>= tmpSeq)
+        if (tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IncludedFiles"))) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
             {
@@ -492,35 +492,35 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
         }
 
         // exluded files...
-        if (tmpAccess->getByName(OUString::createFromAscii("ExcludedFiles")) >>= tmpSeq)
+        if (tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("ExcludedFiles"))) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.excludeFiles.push_back(tmpSeq[j]);
         }
 
         // included nodes...
-        if (tmpAccess->getByName(OUString::createFromAscii("IncludedNodes")) >>= tmpSeq)
+        if (tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IncludedNodes"))) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.includeConfig.push_back(tmpSeq[j]);
         }
 
         // excluded nodes...
-        if (tmpAccess->getByName(OUString::createFromAscii("ExcludedNodes")) >>= tmpSeq)
+        if (tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("ExcludedNodes"))) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.excludeConfig.push_back(tmpSeq[j]);
         }
 
         // included extensions...
-        if (tmpAccess->getByName(OUString::createFromAscii("IncludedExtensions")) >>= tmpSeq)
+        if (tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IncludedExtensions"))) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
                 tmpStep.includeExtensions.push_back(tmpSeq[j]);
         }
 
         // excluded extensions...
-        if (tmpAccess->getByName(OUString::createFromAscii("ExcludedExtensions")) >>= tmpSeq)
+        if (tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("ExcludedExtensions"))) >>= tmpSeq)
         {
             for (sal_Int32 j=0; j<tmpSeq.getLength(); j++)
             {
@@ -530,7 +530,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
         }
 
         // generic service
-        tmpAccess->getByName(OUString::createFromAscii("MigrationService")) >>= tmpStep.service;
+        tmpAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("MigrationService"))) >>= tmpStep.service;
 
         vrMigrations->push_back(tmpStep);
     }
@@ -559,7 +559,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 
     install_info aInfo;
     strings_v::const_iterator i_ver = rVersions.begin();
-    uno::Reference < util::XStringSubstitution > xSubst( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.PathSubstitution")), uno::UNO_QUERY );
+    uno::Reference < util::XStringSubstitution > xSubst( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution"))), uno::UNO_QUERY );
     while (i_ver != rVersions.end())
     {
         ::rtl::OUString aVersion, aProfileName;
@@ -577,10 +577,10 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             ::rtl::OUString aUserInst;
             osl::Security().getConfigDir( aUserInst );
             if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
-                aUserInst += ::rtl::OUString::createFromAscii("/");
+                aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 #if defined UNX && ! defined MACOSX
             // tribute to whoever had the "great" idea to use different names on Windows and Unix
-            aUserInst += ::rtl::OUString::createFromAscii(".");
+            aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
 #endif
             aUserInst += aProfileName;
             try
@@ -854,12 +854,12 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
 {
     uno::Reference< XNameAccess > xNameAccess;
     try{
-        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
         OUString sAccessSrvc;
         if (bUpdate)
-            sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+            sAccessSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
         else
-            sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+            sAccessSrvc = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess"));
 
         OUString sConfigURL = OUString::createFromAscii(pPath);
 
@@ -924,10 +924,10 @@ void MigrationImpl::runServices()
     // Build argument array
     uno::Sequence< uno::Any > seqArguments(3);
     seqArguments[0] = uno::makeAny(NamedValue(
-        OUString::createFromAscii("Productname"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Productname")),
         uno::makeAny(m_aInfo.productname)));
     seqArguments[1] = uno::makeAny(NamedValue(
-        OUString::createFromAscii("UserData"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("UserData")),
         uno::makeAny(m_aInfo.userdata)));
 
 
@@ -950,7 +950,7 @@ void MigrationImpl::runServices()
                     seqExtBlackList = comphelper::arrayToSequence< ::rtl::OUString >(
                         &i_mig->excludeExtensions[0], nSize );
                 seqArguments[2] = uno::makeAny(NamedValue(
-                    OUString::createFromAscii("ExtensionBlackList"),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("ExtensionBlackList")),
                     uno::makeAny( seqExtBlackList )));
 
                 xMigrationJob = uno::Reference< XJob >(m_xFactory->createInstanceWithArguments(
@@ -981,14 +981,14 @@ void MigrationImpl::runServices()
 ::std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules() const
 {
     ::std::vector< MigrationModuleInfo > vModulesInfo;
-    const ::rtl::OUString MENUBAR = ::rtl::OUString::createFromAscii("menubar");
-    const ::rtl::OUString TOOLBAR = ::rtl::OUString::createFromAscii("toolbar");
+    const ::rtl::OUString MENUBAR(RTL_CONSTASCII_USTRINGPARAM("menubar"));
+    const ::rtl::OUString TOOLBAR(RTL_CONSTASCII_USTRINGPARAM("toolbar"));
 
     uno::Sequence< uno::Any > lArgs(2);
-    lArgs[0] <<= m_aInfo.userdata + ::rtl::OUString::createFromAscii("/user/config/soffice.cfg/modules");
+    lArgs[0] <<= m_aInfo.userdata + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user/config/soffice.cfg/modules"));
     lArgs[1] <<= embed::ElementModes::READ;
 
-    uno::Reference< lang::XSingleServiceFactory > xStorageFactory(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.embed.FileSystemStorageFactory")), uno::UNO_QUERY);
+    uno::Reference< lang::XSingleServiceFactory > xStorageFactory(m_xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"))), uno::UNO_QUERY);
     uno::Reference< embed::XStorage >             xModules;
 
     xModules = uno::Reference< embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
@@ -1020,7 +1020,7 @@ void MigrationImpl::runServices()
             uno::Reference< embed::XStorage > xToolbar = xModule->openStorageElement(TOOLBAR, embed::ElementModes::READ);
             if (xToolbar.is())
             {
-                const ::rtl::OUString RESOURCEURL_CUSTOM_ELEMENT = ::rtl::OUString::createFromAscii("custom_");
+                const ::rtl::OUString RESOURCEURL_CUSTOM_ELEMENT(RTL_CONSTASCII_USTRINGPARAM("custom_"));
                 sal_Int32 nCustomLen = 7;
 
                 uno::Reference< container::XNameAccess > xNameAccess = uno::Reference< container::XNameAccess >(xToolbar, uno::UNO_QUERY);
@@ -1329,9 +1329,9 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     m_lNewVersionMenubarSettingsSeq.realloc(vModulesInfo.size());
     m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
 
-    const ::rtl::OUString sModuleCfgSupplier = ::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
-    const ::rtl::OUString sMenubarResourceURL = ::rtl::OUString::createFromAscii("private:resource/menubar/menubar");
-    const ::rtl::OUString sToolbarResourcePre = ::rtl::OUString::createFromAscii("private:resource/toolbar/");
+    const ::rtl::OUString sModuleCfgSupplier(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
+    const ::rtl::OUString sMenubarResourceURL(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"));
+    const ::rtl::OUString sToolbarResourcePre(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/"));
 
     uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = uno::Reference< ui::XModuleUIConfigurationManagerSupplier >(::comphelper::getProcessServiceFactory()->createInstance(sModuleCfgSupplier), uno::UNO_QUERY);
 
