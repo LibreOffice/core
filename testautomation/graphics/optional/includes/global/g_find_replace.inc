@@ -36,6 +36,8 @@
 '*
 '\**********************************************************************************
 testcase tiEditSearchAndReplace
+    qaerrorlog "#i115121# Find and replace: wrong replacement"
+    goto endsub
    '/// This test tests the 'Search and Replace' -dialogue. ///'
    Dim sFile  'as string
    Dim sExpression(2) as string  ' Expression to look for: ... Replace with

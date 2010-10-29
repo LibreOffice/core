@@ -722,7 +722,7 @@ testcase tVariablesDDEFieldManual
 
     '/// Open the test file which you just closed , add something ,
     '/// Save the file
-    Call hFileOpen(sDDEFile)
+    hFileOpenLocally( sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave
@@ -818,7 +818,7 @@ testcase tVariablesDDEFieldAutomatic
 
   '/// Open the test file which you just closed , add something ,
   '/// Save the file
-   Call hFileOpen(sDDEFile)
+   hFileOpenLocally( sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave

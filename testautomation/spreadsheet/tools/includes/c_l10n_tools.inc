@@ -29,11 +29,6 @@
 '*
 '* short description : tools for localisation in calc
 '*
-'**************************************************************************************************
-'*
-' #1 fFunctionname        'Returns the localized name of a given function in the current UI language
-' #1 fError_l10n          'Returns the localized name of a given errorcode in the current UI language
-'*
 '\************************************************************************************************
 
 function fFunctionname ( sFunctionname_en as string ) as string
@@ -42,89 +37,101 @@ function fFunctionname ( sFunctionname_en as string ) as string
     '///+ -Input is the english name of the function as string
     '///+ -Output is the localized name of the function as string
     '///+ -If there is no translation available the fallback is the english name
-    
+
     dim sloaddocument as string
     dim sfunctionstring as string
     dim scelladress as string
-    
-    use "global/tools/includes/required/t_doc2.inc" 
-    const CFN = "qa:qatesttool:spreadsheet:tools:includes:c_l10n_tools.in:fFunctionname "
-    
-    sloaddocument = Convertpath (gTesttoolPath + "spreadsheet\tools\input\Functionnames.ods" )
-        
+
+    use "global/tools/includes/required/t_doc2.inc"
+    const CFN = "spreadsheet:tools:includes:c_l10n_tools.in:fFunctionname "
+
+    sloaddocument = gTesttoolPath & "spreadsheet\tools\input\Functionnames.ods"
+
     '///Load document with all functions <i>gTestToolPath</i>/spreadsheet/tools/input/Functionnames.ods
-    call hFileOpen ( sloaddocument )
+    hFileOpenLocally( sloaddocument )
     sleep (2)
-    '///Make sure that the file is editable
-    call sMakeReadOnlyDocumentEditable()
 
     '///Setting selection to A1 to avoid messagebox in Search and Replace dialog.
     call fCalcSelectRange ("A1")
     '///Search for function by Search and Replace dialog
     kontext "DocumentCalc"
     EditSearchAndReplace
-    sleep (1)
+
     kontext "FindAndReplace"
-    '///Setting dialog to defaults 
-    More.Click
-    SimilaritySearch.UnCheck
-    CurrentSelectionOnly.UnCheck
-    Backwards.UnCheck
-    SearchForStyles.UnCheck
-    SearchIn.Select 1
-    '///Setting search parameter
-    WholeWordsOnly.Check
-    SearchFor.SetText sFunctionname_en
-    SearchNow.click
-    kontext
-    '///If a MsgBox appears the search must have failed => Fallback to english name
-    if active.exists then
-        if active.getRT = 304 then
-            warnlog CFN & "Function not found, falling back to english name"
-            fFunctionname = sFunctionname_en
-            active.OK
+    printlog( "Reset <Find and Replace> dialog to default settings" )
+    if ( FindAndReplace.exists( 1 ) ) then
+        More.Click
+        SimilaritySearch.UnCheck
+        CurrentSelectionOnly.UnCheck
+        Backwards.UnCheck
+        SearchForStyles.UnCheck
+        SearchIn.Select 1
+        '///Setting search parameter
+        WholeWordsOnly.Check
+        SearchFor.SetText sFunctionname_en
+        SearchNow.click
+        kontext
+        '///If a MsgBox appears the search must have failed => Fallback to english name
+        if active.exists then
+            if active.getRT = 304 then
+                warnlog CFN & "Function not found, falling back to english name"
+                fFunctionname = sFunctionname_en
+                active.OK
+            else
+                '///Throw a warning if a dialog of unexpected resource type appears
+                warnlog CFN & "Unknown message box! " & active.GetText
+                active.Default
+                fFunctionname = sFunctionname_en
+            end if
+
+            kontext "FindAndReplace"
+            printlog( "Reset dialog to default settings" )
+            if ( FindAndReplace.exists( 1 ) ) then
+                WholeWordsOnly.UnCheck
+                hCloseDialog( FindAndReplace, "close" )
+            else
+                warnlog( CFN & "<FindAndReplace> not open" )
+            endif
+            call hCloseDocument
+            exit function
+        end if
+
+        kontext "FindAndReplace"
+        printlog( "Reset <Find and Replace> dialog to default settings" )
+        if ( FindAndReplace.exists( 1 ) ) then
+            WholeWordsOnly.UnCheck
+            hCloseDialog( FindAndReplace, "close" )
         else
-            '///Throw a warning if a dialog of unexpected resource type appears
-           warnlog CFN & "Unknown message box! " & active.GetText
-           active.Default
-           fFunctionname = sFunctionname_en
-       end if
-       kontext "FindAndReplace"
-       sleep (1)
-       '///Reset dialog to defaultsetting
-       WholeWordsOnly.UnCheck
-       FindAndReplace.Close
-       call hCloseDocument
-       exit function
-    end if 
-    kontext "FindAndReplace"
-    sleep (1)
-    '///Reset dialog to defaultsettings
-    WholeWordsOnly.UnCheck
-    FindAndReplace.Close
-    Kontext "RechenleisteCalc"
-    scelladress = Bereich.GetSelText    
-    if fCalcGetCellValue (scelladress) = sFunctionname_en then
-        '///Get localised string for function by extracting functionname out of next cell 
-        call fCalcSelectRange ( "B" & mid(scelladress,2) )
-        kontext ( "RechenleisteCalc" ) 
-        EingabeZeileCalc.TypeKeys ("<f2><mod1 a>")
-        editcopy
-        sfunctionstring = GetClipboardText ()
-        kontext "DocumentCalc"
-        DocumentCalc.TypeKeys ("<ESCAPE>",2)
-        ' DEBUG: printlog sfunctionstring
-        ' DEBUG: printlog len(sfunctionstring)
-        ' DEBUG: printlog instr(sfunctionstring,"(")
-        fFunctionname = mid(sfunctionstring,2,(instr(sfunctionstring,"(")-2)
-        printlog "  The name of the function in this locale (" & iSprache & ") is " & fFunctionname
+            warnlog( CFN & "<FindAndReplace> not open" )
+        endif
+
+        Kontext "RechenleisteCalc"
+        scelladress = Bereich.GetSelText
+        if fCalcGetCellValue (scelladress) = sFunctionname_en then
+            '///Get localised string for function by extracting functionname out of next cell
+            call fCalcSelectRange ( "B" & mid(scelladress,2) )
+            kontext ( "RechenleisteCalc" )
+            EingabeZeileCalc.TypeKeys ("<f2><mod1 a>")
+            editcopy
+            sfunctionstring = GetClipboardText ()
+            kontext "DocumentCalc"
+            DocumentCalc.TypeKeys ("<ESCAPE>",2)
+            ' DEBUG: printlog sfunctionstring
+            ' DEBUG: printlog len(sfunctionstring)
+            ' DEBUG: printlog instr(sfunctionstring,"(")
+            fFunctionname = mid(sfunctionstring,2,(instr(sfunctionstring,"(")-2)
+            printlog "  The name of the function in this locale (" & iSprache & ") is " & fFunctionname
+        else
+            warnlog CFN & "Function not found, falling back to english version"
+            fFunctionname = sFunctionname_en
+        end if
     else
-        warnlog CFN & "Function not found, falling back to english version"
-        fFunctionname = sFunctionname_en
-    end if
-    
+        warnlog( CFN & "Unable to open <FindAndReplace> dialog" )
+    endif
+
     call hCloseDocument
-    
+    hFileDelete( gLastWorkFile )
+
 end function
 
 '
@@ -137,21 +144,18 @@ function fError_l10n ( sError_en as string ) as string
     '///+ -Input is the english name of the error as string
     '///+ -Output is the localized name of the error as string
     '///+ -If there is no translation available the fallback is the english name
-    
+
     dim sloaddocument as string
     dim sfunctionstring as string
     dim scelladress as string
-    
-    use "global/tools/includes/required/t_doc2.inc" 
+
+    use "global/tools/includes/required/t_doc2.inc"
     const CFN = "qa:qatesttool:spreadsheet:tools:includes:c_l10n_tools.in:fError_l10n "
-    
-    sloaddocument = Convertpath (gTesttoolPath + "spreadsheet\tools\input\Errorcodes.ods" )
-        
+
+    sloaddocument = gTesttoolPath & "spreadsheet\tools\input\Errorcodes.ods"
+
     '///Load document with all errorcodes <i>gTestToolPath</i>/spreadsheet/tools/input/Errorcodes.ods
-    call hFileOpen ( sloaddocument )
-    sleep (2)
-    '///Make sure that the file is editable
-    call sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally( sloaddocument )
 
     '///Setting selection to A1 to avoid messagebox in Search and Replace dialog.
     call fCalcSelectRange ("A1")
@@ -160,7 +164,7 @@ function fError_l10n ( sError_en as string ) as string
     EditSearchAndReplace
     sleep (1)
     kontext "FindAndReplace"
-    '///Setting dialog to defaults 
+    '///Setting dialog to defaults
     More.Click
     SimilaritySearch.UnCheck
     CurrentSelectionOnly.UnCheck
@@ -180,27 +184,37 @@ function fError_l10n ( sError_en as string ) as string
             active.OK
         else
             '///Throw a warning if a dialog of unexpected resource type appears
-           warnlog CFN & "Unknown message box! " & active.GetText
-           active.Default
-           fError_l10n = sError_en
-       end if
-       kontext "FindAndReplace"
-       sleep (1)
-       '///Reset dialog to defaultsetting
-       WholeWordsOnly.UnCheck
-       FindAndReplace.Close
-       call hCloseDocument
-       exit function
-    end if 
+            warnlog CFN & "Unknown message box! " & active.GetText
+            active.Default
+            fError_l10n = sError_en
+        end if
+
+        kontext "FindAndReplace"
+        '///Reset dialog to defaultsetting
+        if ( FindAndReplace.exists( 1 ) ) then
+            WholeWordsOnly.UnCheck
+            hCloseDialog( FindAndReplace, "close" )
+        else
+            warnlog( CFN & "Failed to open <FindAndReplace>" )
+        endif
+
+        call hCloseDocument
+        exit function
+    end if
+
     kontext "FindAndReplace"
-    sleep (1)
     '///Reset dialog to defaultsetting
-    WholeWordsOnly.UnCheck
-    FindAndReplace.Close
+    if ( FindAndReplace.exists( 1 ) ) then
+        WholeWordsOnly.UnCheck
+        hCloseDialog( FindAndReplace, "close" )
+    else
+        warnlog( CFN & "Failed to open <FindAndReplace>" )
+    endif
+    
     Kontext "RechenleisteCalc"
-    scelladress = Bereich.GetSelText    
+    scelladress = Bereich.GetSelText
     if fCalcGetCellValue (scelladress) = sError_en then
-        '///Get localised string for ERR by extracting errorcode out of next cell 
+        '///Get localised string for ERR by extracting errorcode out of next cell
         call fCalcSelectRange ( "B" & mid(scelladress,2) )
         kontext "DocumentCalc"
         editcopy
@@ -211,7 +225,8 @@ function fError_l10n ( sError_en as string ) as string
         warnlog CFN & "Errorcode not found, falling back to english version"
         fError_l10n = sError_en
     end if
-    
+
     call hCloseDocument
-    
+    hFileDelete( gLastWorkFile )
+
 end function

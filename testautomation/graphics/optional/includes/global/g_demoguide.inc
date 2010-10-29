@@ -224,10 +224,8 @@ testcase t_Interoperability
     
     '///Open PowerPoint presentation
     printlog "Open PowerPoint presentation"
-    hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/dotNetOverview.ppt"))
+    hFileOpenLocally( gTesttoolPath + "graphics/required/input/dotNetOverview.ppt" )
 
-    Call sMakeReadOnlyDocumentEditable
-    
     'Save the name of the origin background (taken from last slide)
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<END>"
@@ -251,7 +249,7 @@ testcase t_Interoperability
     wait(20000)
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
-    sleep (5)
+    sleep (10)
     printlog "    Verify that the background has changed"
     Kontext "DocumentImpress"
     printlog "    Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
@@ -265,7 +263,7 @@ testcase t_Interoperability
     Kontext "Tasks"
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RETURN>"
-    sleep (5)
+    sleep (10)
     Kontext "DocumentImpress"
     if DocumentImpress.StatusGetText (6) = sTemplatename then
             printlog "    The background has been set back to default"
@@ -277,20 +275,21 @@ testcase t_Interoperability
     Kontext "DocumentImpress"
     Kontext "Slides"
     Kontext "SlidesControl"
-    SlidesControl.TypeKeys "<Mod1 X>"
+    SlidesControl.OpenContextMenu
+    sleep 1
+    hMenuSelectNr (8)
     Kontext "DocumentImpress"
-    DocumentImpress.TypeKeys "<HOME>"
+    DocumentImpress.TypeKeys "<HOME>", true
     Kontext "Slides"
     Kontext "SlidesControl"
-    SlidesControl.TypeKeys "<Mod1 V>"
-    kontext "InsertPaste"
-     if InsertPaste.Exists(1) then
-        Before.Check
-        InsertPaste.OK
-     endif
+    SlidesControl.OpenContextMenu
+    sleep 1
+    hMenuSelectNr (10)
+
      Printlog "    Verify that the slide was moved correctly"
      Kontext "Slides"
-     SlidesControl.TypeKeys "<PAGEUP>"
+     sleep (5)
+
      SlidesControl.TypeKeys "<SHIFT F10>"
      if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
@@ -313,10 +312,9 @@ testcase t_Interoperability
     setclipboard("")
     try
         Kontext "DocumentImpressOutlineView"
-        DocumentImpressOutlineView.TypeKeys "<MOD1 HOME><SHIFT END>"
         DocumentImpressOutlineView.TypeKeys "<Mod1 C>"
         sleep (5)
-        if getclipboard() <> ".NET Enterprise" then
+        if getclipboard() <> ".NET Enterprise Federation" then
                 warnlog "    Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
             else printlog "    Switching to Outlineview was successfull"
         endif
