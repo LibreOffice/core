@@ -32,12 +32,8 @@
 #define SC_TABBGCOLORDLG_HXX
 
 #include <vcl/dialog.hxx>
-<<<<<<< local
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-=======
-#include <vcl/imagebtn.hxx>
->>>>>>> other
 #include <svtools/valueset.hxx>
 
 //------------------------------------------------------------------------
