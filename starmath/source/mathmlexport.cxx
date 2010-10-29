@@ -621,7 +621,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
         // make use of a default namespace
         ResetNamespaceMap();    // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)
-        _GetNamespaceMap().Add( OUString::createFromAscii(""), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        _GetNamespaceMap().Add( OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
 
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH_IDX),
                 GetNamespaceMap().GetNameByKey( XML_NAMESPACE_MATH_IDX));
