@@ -240,8 +240,8 @@ private:
 public:
     MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
     ~MigrationImpl();
+    sal_Bool initializeMigration();
     sal_Bool doMigration();
-    sal_Bool needsMigration();
     rtl::OUString getOldVersionName();
 };
 }

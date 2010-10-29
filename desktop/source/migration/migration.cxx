@@ -194,32 +194,18 @@ static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
     return sIdentifier;
 }
 
-static MigrationImpl *pImpl = 0;
-static Mutex aMutex;
-static MigrationImpl *getImpl()
-{
-    MutexGuard aGuard(aMutex);
-    if (pImpl == 0)
-        pImpl = new MigrationImpl(comphelper::getProcessServiceFactory());
-    return pImpl;
-}
-
-static void releaseImpl()
-{
-    MutexGuard aGuard(aMutex);
-    if (pImpl != 0)
-    {
-        delete pImpl;
-        pImpl = 0;
-    }
-}
-
-sal_Bool MigrationImpl::needsMigration()
+sal_Bool MigrationImpl::initializeMigration()
 {
     sal_Bool bRet = sal_False;
 
-    if (m_aInfo.userdata.getLength() > 0 && ! checkMigrationCompleted())
-        return sal_True;
+    if (!checkMigrationCompleted()) {
+        readAvailableMigrations(m_vMigrationsAvailable);
+        sal_Int32 nIndex = findPreferedMigrationProcess(m_vMigrationsAvailable);
+        if ( nIndex >= 0 )
+            m_vrMigrations = readMigrationSteps(m_vMigrationsAvailable[nIndex].name);
+
+        bRet = m_aInfo.userdata.getLength() > 0;
+    }
 
     OSL_TRACE( "Migration %s\n", bRet ? "needed" : "not required" );
 
@@ -228,12 +214,14 @@ sal_Bool MigrationImpl::needsMigration()
 
 void Migration::migrateSettingsIfNecessary()
 {
-    if ( !getImpl()->needsMigration() )
+    MigrationImpl aImpl( comphelper::getProcessServiceFactory() );
+
+    if (! aImpl.initializeMigration() )
         return;
 
     sal_Bool bResult = sal_False;
     try {
-        bResult = getImpl()->doMigration();
+        bResult = aImpl.doMigration();
     } catch (Exception& e)
     {
         OString aMsg("doMigration() exception: ");
@@ -241,25 +229,19 @@ void Migration::migrateSettingsIfNecessary()
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
     OSL_ENSURE(bResult, "Migration has not been successfull");
-    // shut down migration framework
-    releaseImpl();
 }
 
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
     : m_vrVersions(new strings_v)
     , m_xFactory(xFactory)
 {
-    readAvailableMigrations(m_vMigrationsAvailable);
-    sal_Int32 nIndex = findPreferedMigrationProcess(m_vMigrationsAvailable);
-    if ( nIndex >= 0 )
-        m_vrMigrations = readMigrationSteps(m_vMigrationsAvailable[nIndex].name);
 }
 
 MigrationImpl::~MigrationImpl()
 {
-
 }
 
+// The main entry point for migrating settings
 sal_Bool MigrationImpl::doMigration()
 {
     // compile file list for migration
@@ -438,6 +420,8 @@ bool MigrationImpl::readAvailableMigrations(migrations_available& rAvailableMigr
         for (sal_Int32 j=0; j<seqVersions.getLength(); j++)
             aSupportedMigration.supported_versions.push_back(seqVersions[j].trim());
         insertSorted( rAvailableMigrations, aSupportedMigration );
+        OSL_TRACE( " available migration '%s'\n",
+                   rtl::OUStringToOString( aSupportedMigration.name, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 
     return true;
@@ -603,6 +587,11 @@ sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available
         ++i;
         ++rIter;
     }
+
+    OSL_TRACE( " preferred migration is from product '%s'\n",
+               rtl::OUStringToOString( m_aInfo.productname, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    OSL_TRACE( " and settings directory '%s'\n",
+               rtl::OUStringToOString( m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US ).getStr() );
 
     return nIndex;
 }
