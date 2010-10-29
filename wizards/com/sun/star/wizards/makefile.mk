@@ -55,6 +55,7 @@ JARTARGET	= commonwizards.jar
 # --- Files --------------------------------------------------------
 
 JAVAFILES=							\
+    common$/HelpIds.java	                		\
     common$/Desktop.java	                		\
     common$/NumberFormatter.java                 		\
     common$/FileAccess.java                 		\

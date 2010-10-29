@@ -37,13 +37,13 @@
 #define _RCONTROL_HXX
 
 
-#define UID_ACTIVE          0
+#define UID_ACTIVE          "UID_ACTIVE"
 
 
 #define SI_IPCCommandBlock  1
 #define SI_SocketCommandBlock   SI_IPCCommandBlock  // Zumindest erstmal
 #define SI_DirectCommandBlock   2
-#define SIControl           3
+#define SIControl           3   // remove after numeric HelpIDs are completely removed and no legacy testtool is used anymore
 #define SISlot              4
 #define SIFlow              5
 #define SICommand           6
