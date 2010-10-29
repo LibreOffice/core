@@ -122,7 +122,7 @@ void TextRun::insertAt(
                         if ( nIndex >= getText().getLength() )
                             break;
 
-                        Reference< XTextRange > xStart( xAt, UNO_QUERY );
+                        xStart = Reference< XTextRange >( xAt, UNO_QUERY );
                         aPropSet = PropertySet( xStart );
                         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
                     }
