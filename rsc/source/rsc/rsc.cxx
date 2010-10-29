@@ -474,23 +474,12 @@ ERRTYPE RscCompiler::Start()
     ByteString*     pString;
     RscFile*        pFName;
 
-<<<<<<< local
-    if( PRINTSYNTAX_FLAG & pCL->nCommands )
-    {
-#ifndef W30
-        pTC->WriteSyntax( stdout );
-printf( "khg\n" );
-#endif
-        return ERR_OK;
-    }
-=======
     if( PRINTSYNTAX_FLAG & pCL->nCommands )
     {
         pTC->WriteSyntax( stdout );
         printf( "khg\n" );
         return ERR_OK;
     }
->>>>>>> other
 
     // Kein Parameter, dann Hilfe
     pString = pCL->aInputList.First();
@@ -1378,3 +1367,4 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
     if( pSysListFile )
         fclose( pSysListFile );
 }
+

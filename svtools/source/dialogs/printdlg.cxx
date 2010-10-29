@@ -38,12 +38,8 @@
 #include <svtools/prnsetup.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
-<<<<<<< local
 #include <svtools/filedlg.hxx>
 #include "svl/pickerhelper.hxx"
-=======
-#include <filedlg.hxx>
->>>>>>> other
 #include <svtools/helpid.hrc>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

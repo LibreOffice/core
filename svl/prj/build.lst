@@ -5,5 +5,5 @@ sl	svl\prj	nmake	-	all	svl_prj NULL
 # complex test for ConfigItems are marked as defect
 # sl	svl\qa\complex\ConfigItems\helper       nmake	-	all	svl_qa_complex_help svl_util svl_passcont NULL
 # sl	svl\qa\complex\ConfigItems	        nmake	-	all	svl_qa_complex svl_qa_complex_help svl_util svl_passcont NULL
-sl	svl\qa\complex\passwordcontainer	nmake	-	all	svl_qa_complex svl_util svl_passcont NULL
+sl	svl\qa\complex\passwordcontainer	nmake	-	all	svl_qa_complex svl_prj NULL
 

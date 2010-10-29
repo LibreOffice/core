@@ -84,6 +84,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxwindow \
     toolkit/source/awt/vclxwindow1 \
     toolkit/source/awt/vclxwindows \
+    toolkit/source/awt/stylesettings \
     toolkit/source/awt/xsimpleanimation \
     toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \

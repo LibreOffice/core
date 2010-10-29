@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/optionsdrawinglayer \
     svtools/source/config/printoptions \
     svtools/source/contnr/contentenumeration \
-    svtools/source/contnr/ctrdll \
     svtools/source/contnr/fileview \
     svtools/source/contnr/imivctl1 \
     svtools/source/contnr/imivctl2 \
@@ -124,7 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/calendar \
     svtools/source/control/collatorres \
     svtools/source/control/ctrlbox \
-    svtools/source/control/ctrldll \
     svtools/source/control/ctrltool \
     svtools/source/control/filectrl \
     svtools/source/control/filectrl2 \
@@ -178,15 +176,12 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/textwindowpeer \
     svtools/source/edit/txtattr \
     svtools/source/edit/xtextedt \
+    svtools/source/filter.vcl/filter/exportdialog \
     svtools/source/filter.vcl/filter/FilterConfigCache \
     svtools/source/filter.vcl/filter/FilterConfigItem \
     svtools/source/filter.vcl/filter/SvFilterOptionsDialog \
-    svtools/source/filter.vcl/filter/dlgejpg \
-    svtools/source/filter.vcl/filter/dlgepng \
-    svtools/source/filter.vcl/filter/dlgexpor \
     svtools/source/filter.vcl/filter/filter \
     svtools/source/filter.vcl/filter/filter2 \
-    svtools/source/filter.vcl/filter/fldll \
     svtools/source/filter.vcl/filter/sgfbram \
     svtools/source/filter.vcl/filter/sgvmain \
     svtools/source/filter.vcl/filter/sgvspln \

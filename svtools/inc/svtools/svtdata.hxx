@@ -57,23 +57,7 @@ public:
 };
 
 //============================================================================
-<<<<<<< local
-
-class SvpResId: public ResId
-{
-public:
-    SvpResId( USHORT nId, const ::com::sun::star::lang::Locale aLocale ):
-        ResId( nId, *ImpSvtData::GetSvtData().GetResMgr( aLocale ) ) {}
-
-     // VCL dependant, only available in SVT, not in SVL!
-    SvpResId( USHORT nId );
-};
-
-
 class SVT_DLLPUBLIC SvtResId: public ResId
-=======
-class SvtResId: public ResId
->>>>>>> other
 {
 public:
     SvtResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale);

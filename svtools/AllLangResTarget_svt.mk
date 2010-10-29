@@ -61,10 +61,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/prnsetup.src \
     svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
-    svtools/source/filter.vcl/filter/dlgejpg.src \
-    svtools/source/filter.vcl/filter/dlgepng.src \
-    svtools/source/filter.vcl/filter/dlgexpor.src \
-    svtools/source/filter.vcl/filter/strings.src \
     svtools/source/java/javaerror.src \
     svtools/source/misc/ehdl.src \
     svtools/source/misc/helpagent.src \

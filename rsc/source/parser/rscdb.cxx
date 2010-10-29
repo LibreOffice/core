@@ -126,11 +126,7 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
     else
         rLang = rtl::OString();
 #if OSL_DEBUG_LEVEL > 1
-<<<<<<< local
-        fprintf( stderr, " %s (0x%" SAL_PRIxUINT32 ")", aL.getStr(), nRet );
-=======
         fprintf( stderr, " %s (0x%hx)", aL.getStr(), (int)nRet );
->>>>>>> other
 #endif
     return nRet;
 }
@@ -1117,3 +1113,4 @@ sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
     aIdTranslator[ nKey ] = nFilePos;
     return nPMId++;
 }
+

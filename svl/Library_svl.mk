@@ -80,7 +80,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/itemholder2 \
     svl/source/config/languageoptions \
     svl/source/config/srchcfg \
-    svl/source/filepicker/pickerhelper \
     svl/source/filepicker/pickerhistory \
     svl/source/filerec/filerec \
     svl/source/items/aeitem \
@@ -144,7 +143,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/notify/listeneriter \
     svl/source/notify/lstner \
     svl/source/notify/smplhint \
-    svl/source/numbers/nbdll \
     svl/source/numbers/numfmuno \
     svl/source/numbers/numhead \
     svl/source/numbers/numuno \
