@@ -823,7 +823,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
                 pEquData[nIndex] = pGrafData[nBegin + nIndex];
             }
             pXFNotePara->Add(rtl::OUString((sal_Char*)pEquData, (nEnd - nBegin + 1), gsl_getSystemTextEncoding()));
-            delete pEquData;
+            delete [] pEquData;
         }
         pXFNote->Add(pXFNotePara);
 
