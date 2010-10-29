@@ -6841,7 +6841,20 @@ String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, c
 
     if ( nIndex != STRING_LEN )
     {
-        if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
+        if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
+        {
+            String aTmpStr( aStr );
+            xub_StrLen nEraseChars = 4;
+            while( nEraseChars < aStr.Len() && _rLayout.GetTextWidth( aTmpStr, 0, aTmpStr.Len() ) > nMaxWidth )
+            {
+                aTmpStr = aStr;
+                xub_StrLen i = (aTmpStr.Len() - nEraseChars)/2;
+                aTmpStr.Erase( i, nEraseChars++ );
+                aTmpStr.InsertAscii( "...", i );
+            }
+            aStr = aTmpStr;
+        }
+        else if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
         {
             aStr.Erase( nIndex );
             if ( nIndex > 1 )

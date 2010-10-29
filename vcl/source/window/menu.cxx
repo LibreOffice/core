@@ -2587,7 +2587,7 @@ static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_
 {
     xub_StrLen nPos = STRING_NOTFOUND;
     String aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
-    aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth );
+    aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS );
     // re-insert mnemonic
     if( nPos != STRING_NOTFOUND )
     {
@@ -2802,7 +2802,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     }
                     if( !bIsMenuBar && pData->pSubMenu )
                     {
-                        nMaxItemTextWidth -= nFontHeight + nExtra;
+                        nMaxItemTextWidth -= nFontHeight - nExtra;
                     }
                     String aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
                     pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.Len(), nStyle, pVector, pDisplayText );
