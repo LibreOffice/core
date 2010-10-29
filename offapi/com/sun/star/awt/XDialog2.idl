@@ -25,7 +25,7 @@ interface XDialog2: com::sun::star::awt::XDialog
     /** sets the help id so that the standard help button action will
         show the appropriate help page.
     */
-    void setHelpId ( [in] long Id );
+    void setHelpId ( [in] string Id );
 };
 
 //=============================================================================
