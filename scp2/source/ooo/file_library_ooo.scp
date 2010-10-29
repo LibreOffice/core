@@ -1710,6 +1710,18 @@ File gid_File_Lib_Migrationoo2
   #endif
 End
 
+File gid_File_Lib_Migrationoo3
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(migrationoo3.uno,UNXSUFFIX));
+  #else
+    Name = "migrationoo3.uno.dll";
+  #endif
+End
+
 #ifndef SYSTEM_LIBTEXTCAT
 File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;

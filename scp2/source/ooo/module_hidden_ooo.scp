@@ -332,6 +332,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Unoxml,
 	gid_File_Lib_Localebe,
 	gid_File_Lib_Migrationoo2,
+	gid_File_Lib_Migrationoo3,
 	gid_File_Lib_Syssh,
 	gid_File_Ucptdoc1,
 	gid_File_Ucpexpand1,
