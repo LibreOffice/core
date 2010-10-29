@@ -126,7 +126,14 @@ private:
 private:
     void            UpdateActiveView();
     void            SyncViews( EditView* pSourceView = NULL );
-    BOOL            StartTable( sal_Unicode cTyped, BOOL bFromCommand );
+    /**
+     * @param cTyped typed character. If 0, look at existing document content
+     *               for text or number.
+     * @param bInputActivated true if the cell input mode is activated (via
+     *                        F2), false otherwise.
+     * @return true if the new edit mode has been started.
+     */
+    bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated );
     void            RemoveSelection();
     void            UpdateFormulaMode();
     void            InvalidateAttribs();
@@ -187,7 +194,6 @@ public:
 
     void            ViewShellGone(ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
-
 
     void            NotifyChange( const ScInputHdlState* pState, BOOL bForce = FALSE,
                                     ScTabViewShell* pSourceSh = NULL,
@@ -289,8 +295,6 @@ private:
     String          aString;
     EditTextObject* pEditData;
 };
-
-
 
 #endif
 

@@ -1831,145 +1831,40 @@ void ScInputHandler::RemoveRangeFinder()
     DeleteRangeFinder();        // loescht die Liste und die Markierungen auf der Tabelle
 }
 
-BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
+bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated )
 {
-    // returns TRUE if a new edit mode was started
+    bool bNewTable = false;
 
-    BOOL bNewTable = FALSE;
+    if (bModified || !ValidCol(aCursorPos.Col()))
+        return false;
 
-    if (!bModified && ValidCol(aCursorPos.Col()))
+    if (pActiveViewSh)
     {
-        if (pActiveViewSh)
+        ImplCreateEditEngine();
+        UpdateActiveView();
+        SyncViews();
+
+        ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
+
+        const ScMarkData& rMark = pActiveViewSh->GetViewData()->GetMarkData();
+        ScEditableTester aTester;
+        if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+            aTester.TestSelection( pDoc, rMark );
+        else
+            aTester.TestSelectedBlock(
+                pDoc, aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Col(), aCursorPos.Row(), rMark );
+
+        bool bStartInputMode = true;
+
+        if (!aTester.IsEditable())
         {
-            ImplCreateEditEngine();
-            UpdateActiveView();
-            SyncViews();
-
-            ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
-
-            const ScMarkData& rMark = pActiveViewSh->GetViewData()->GetMarkData();
-            ScEditableTester aTester;
-            if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-                aTester.TestSelection( pDoc, rMark );
-            else
-                aTester.TestSelectedBlock( pDoc, aCursorPos.Col(),aCursorPos.Row(),
-                                                 aCursorPos.Col(),aCursorPos.Row(), rMark );
-            if ( aTester.IsEditable() )
+            bProtected = TRUE;
+            // We allow read-only input mode activation when explicit cell
+            // activation is requested (double-click or F2) and if it's not
+            // part of an array.
+            bool bShowError = !bInputActivated || aTester.GetMessageId() != STR_PROTECTIONERR;
+            if (bShowError)
             {
-                // UpdateMode is enabled again in ScViewData::SetEditEngine (and not needed otherwise)
-                pEngine->SetUpdateMode( FALSE );
-
-                //  Attribute in EditEngine uebernehmen
-
-                const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(),
-                                                                  aCursorPos.Row(),
-                                                                  aCursorPos.Tab() );
-                if (pPattern != pLastPattern)
-                {
-                    //  Prozent-Format?
-
-                    const SfxItemSet& rAttrSet = pPattern->GetItemSet();
-                    const SfxPoolItem* pItem;
-
-                    if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, TRUE, &pItem ) )
-                    {
-                        ULONG nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
-                        bCellHasPercentFormat = ( NUMBERFORMAT_PERCENT ==
-                                                  pDoc->GetFormatTable()->GetType( nFormat ) );
-                    }
-                    else
-                        bCellHasPercentFormat = FALSE; // Default: kein Prozent
-
-                    //  Gueltigkeit angegeben?
-
-                    if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALIDDATA, TRUE, &pItem ) )
-                        nValidation = ((const SfxUInt32Item*)pItem)->GetValue();
-                    else
-                        nValidation = 0;
-
-                    //  EditEngine Defaults
-
-                    //  Hier auf keinen Fall SetParaAttribs, weil die EditEngine evtl.
-                    //  schon gefuellt ist (bei Edit-Zellen).
-                    //  SetParaAttribs wuerde dann den Inhalt aendern
-
-                    //! ER 30.08.00  The SetDefaults is now (since MUST/src602
-                    //! EditEngine changes) implemented as a SetParaAttribs.
-                    //! Any problems?
-
-                    pPattern->FillEditItemSet( pEditDefaults );
-                    pEngine->SetDefaults( *pEditDefaults );
-                    pLastPattern = pPattern;
-                    bLastIsSymbol = pPattern->IsSymbolFont();
-
-                    //  Background color must be known for automatic font color.
-                    //  For transparent cell background, the document background color must be used.
-
-                    Color aBackCol = ((const SvxBrushItem&)
-                                    pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
-                    ScModule* pScMod = SC_MOD();
-                    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-                    if ( aBackCol.GetTransparency() > 0 ||
-                            Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
-                    pEngine->SetBackgroundColor( aBackCol );
-
-                    //  Ausrichtung
-
-                    eAttrAdjust = (SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
-                                    GetItem(ATTR_HOR_JUSTIFY)).GetValue();
-                    if ( eAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
-                         static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
-                    {
-                        // #i31843# "repeat" with "line breaks" is treated as default alignment
-                        eAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
-                    }
-                }
-
-                //  UpdateSpellSettings enables online spelling if needed
-                //  -> also call if attributes are unchanged
-
-                UpdateSpellSettings( TRUE );    // uses pLastPattern
-
-                //  Edit-Engine fuellen
-
-                String aStr;
-                if (bTextValid)
-                {
-                    pEngine->SetText(aCurrentText);
-                    aStr = aCurrentText;
-                    bTextValid = FALSE;
-                    aCurrentText.Erase();
-                }
-                else
-                    aStr = GetEditText(pEngine);
-
-                if (aStr.Len() > 3 &&                   // Matrix-Formel ?
-                    aStr.GetChar(0) == '{' &&
-                    aStr.GetChar(1) == '=' &&
-                    aStr.GetChar(aStr.Len()-1) == '}')
-                {
-                    aStr.Erase(0,1);
-                    aStr.Erase(aStr.Len()-1,1);
-                    pEngine->SetText(aStr);
-                    if ( pInputWin )
-                        pInputWin->SetTextString(aStr);
-                }
-
-                UpdateAdjust( cTyped );
-
-                if ( bAutoComplete )
-                    GetColData();
-
-                if ( ( aStr.GetChar(0) == '=' || aStr.GetChar(0) == '+' || aStr.GetChar(0) == '-' ) &&
-                     !cTyped && !bCreatingFuncView )
-                    InitRangeFinder(aStr);              // Formel wird editiert -> RangeFinder
-
-                bNewTable = TRUE;       //  -> PostEditView-Aufruf
-            }
-            else
-            {
-                bProtected = TRUE;
                 eMode = SC_INPUT_NONE;
                 StopInputWinEngine( TRUE );
                 UpdateFormulaMode();
@@ -1985,12 +1880,127 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
                     pActiveViewSh->GetActiveWin()->GrabFocus();
                     pActiveViewSh->ErrorMessage(aTester.GetMessageId());
                 }
+                bStartInputMode = false;
             }
         }
 
-        if (!bProtected && pInputWin)
-            pInputWin->SetOkCancelMode();
+        if (bStartInputMode)
+        {
+            // UpdateMode is enabled again in ScViewData::SetEditEngine (and not needed otherwise)
+            pEngine->SetUpdateMode( FALSE );
+
+            //  Attribute in EditEngine uebernehmen
+
+            const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(),
+                                                              aCursorPos.Row(),
+                                                              aCursorPos.Tab() );
+            if (pPattern != pLastPattern)
+            {
+                //  Prozent-Format?
+
+                const SfxItemSet& rAttrSet = pPattern->GetItemSet();
+                const SfxPoolItem* pItem;
+
+                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, TRUE, &pItem ) )
+                {
+                    ULONG nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    bCellHasPercentFormat = ( NUMBERFORMAT_PERCENT ==
+                                              pDoc->GetFormatTable()->GetType( nFormat ) );
+                }
+                else
+                    bCellHasPercentFormat = FALSE; // Default: kein Prozent
+
+                //  Gueltigkeit angegeben?
+
+                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALIDDATA, TRUE, &pItem ) )
+                    nValidation = ((const SfxUInt32Item*)pItem)->GetValue();
+                else
+                    nValidation = 0;
+
+                //  EditEngine Defaults
+
+                //  Hier auf keinen Fall SetParaAttribs, weil die EditEngine evtl.
+                //  schon gefuellt ist (bei Edit-Zellen).
+                //  SetParaAttribs wuerde dann den Inhalt aendern
+
+                //! ER 30.08.00  The SetDefaults is now (since MUST/src602
+                //! EditEngine changes) implemented as a SetParaAttribs.
+                //! Any problems?
+
+                pPattern->FillEditItemSet( pEditDefaults );
+                pEngine->SetDefaults( *pEditDefaults );
+                pLastPattern = pPattern;
+                bLastIsSymbol = pPattern->IsSymbolFont();
+
+                //  Background color must be known for automatic font color.
+                //  For transparent cell background, the document background color must be used.
+
+                Color aBackCol = ((const SvxBrushItem&)
+                                pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
+                ScModule* pScMod = SC_MOD();
+                //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+                if ( aBackCol.GetTransparency() > 0 ||
+                        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                    aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+                pEngine->SetBackgroundColor( aBackCol );
+
+                //  Ausrichtung
+
+                eAttrAdjust = (SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
+                                GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+                if ( eAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
+                     static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
+                {
+                    // #i31843# "repeat" with "line breaks" is treated as default alignment
+                    eAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
+                }
+            }
+
+            //  UpdateSpellSettings enables online spelling if needed
+            //  -> also call if attributes are unchanged
+
+            UpdateSpellSettings( TRUE );    // uses pLastPattern
+
+            //  Edit-Engine fuellen
+
+            String aStr;
+            if (bTextValid)
+            {
+                pEngine->SetText(aCurrentText);
+                aStr = aCurrentText;
+                bTextValid = FALSE;
+                aCurrentText.Erase();
+            }
+            else
+                aStr = GetEditText(pEngine);
+
+            if (aStr.Len() > 3 &&                   // Matrix-Formel ?
+                aStr.GetChar(0) == '{' &&
+                aStr.GetChar(1) == '=' &&
+                aStr.GetChar(aStr.Len()-1) == '}')
+            {
+                aStr.Erase(0,1);
+                aStr.Erase(aStr.Len()-1,1);
+                pEngine->SetText(aStr);
+                if ( pInputWin )
+                    pInputWin->SetTextString(aStr);
+            }
+
+            UpdateAdjust( cTyped );
+
+            if ( bAutoComplete )
+                GetColData();
+
+            if ( ( aStr.GetChar(0) == '=' || aStr.GetChar(0) == '+' || aStr.GetChar(0) == '-' ) &&
+                 !cTyped && !bCreatingFuncView )
+                InitRangeFinder(aStr);              // Formel wird editiert -> RangeFinder
+
+            bNewTable = true;       //  -> PostEditView-Aufruf
+        }
     }
+
+    if (!bProtected && pInputWin)
+        pInputWin->SetOkCancelMode();
 
     return bNewTable;
 }
@@ -2065,7 +2075,7 @@ BOOL ScInputHandler::DataChanging( sal_Unicode cTyped, BOOL bFromCommand )      
     bInOwnChange = TRUE;                // disable ModifyHdl (reset in DataChanged)
 
     if ( eMode == SC_INPUT_NONE )
-        return StartTable( cTyped, bFromCommand );
+        return StartTable( cTyped, bFromCommand, false );
     else
         return FALSE;
 }
@@ -2261,7 +2271,6 @@ void ScInputHandler::InvalidateAttribs()
     }
 }
 
-
 //
 //      --------------- public Methoden --------------------------------------------
 //
@@ -2297,7 +2306,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     {
         if (eOldMode == SC_INPUT_NONE)      // not when switching between modes
         {
-            if (StartTable(0, FALSE))       // 0 = look at existing document content for text or number
+            if (StartTable(0, false, eMode == SC_INPUT_TABLE))
             {
                 if (pActiveViewSh)
                     pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
@@ -3661,7 +3670,6 @@ BOOL ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
     return bRet;
 }
 
-
 //------------------------------------------------------------------------
 // Methoden fuer FunktionsAutopiloten:
 // InputGetSelection, InputSetSelection, InputReplaceSelection, InputGetFormulaStr
@@ -3816,8 +3824,5 @@ ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
 
     return *this;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
