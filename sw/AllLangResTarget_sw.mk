@@ -153,7 +153,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/misc/insrule.src \
     sw/source/ui/misc/autocorr.src \
     sw/source/ui/ribbar/tbxanchr.src \
-    sw/source/ui/ribbar/tblctrl.src \
     sw/source/ui/ribbar/workctrl.src \
     sw/source/ui/ribbar/inputwin.src \
     sw/source/ui/shells/shells.src \

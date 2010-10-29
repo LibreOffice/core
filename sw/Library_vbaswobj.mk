@@ -79,6 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/vbaautotextentry \
     sw/source/ui/vba/vbarange \
     sw/source/ui/vba/vbadocumentproperties \
+    sw/source/ui/vba/vbaeventshelper \
     sw/source/ui/vba/vbastyle \
     sw/source/ui/vba/vbapane \
     sw/source/ui/vba/vbaglobals \

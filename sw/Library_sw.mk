@@ -676,7 +676,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/uno/RefreshListenerContainer \
     sw/source/ui/uno/SwXDocumentSettings \
     sw/source/ui/uno/SwXFilterOptions \
-    sw/source/ui/uno/SwXPrintPreviewSettings \
     sw/source/ui/uno/dlelstnr \
     sw/source/ui/uno/unoatxt \
     sw/source/ui/uno/unodefaults \

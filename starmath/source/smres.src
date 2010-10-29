@@ -1743,77 +1743,6 @@ String RID_ERR_RIGHTEXPECTED
     Text [ en-US ] = "'RIGHT' expected" ;
 };
 
-<<<<<<< local
-ToolBox RID_MATH_TOOLBOX
-{
-    HelpId = RID_MATH_TOOLBOX ;
-    Customize = TRUE ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Align = BOXALIGN_LEFT ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOMIN ;
-            HelpID = SID_ZOOMIN ;
-            Text [ en-US ] = "Zoom In" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOMOUT ;
-            HelpID = SID_ZOOMOUT ;
-            Text [ en-US ] = "Zoom Out" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_VIEW100 ;
-            HelpID = SID_VIEW100 ;
-            Text [ en-US ] = "Zoom 100%" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ADJUST ;
-            HelpID = SID_ADJUST ;
-            Text [ en-US ] = "Entire Formula" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DRAW ;
-            HelpID = SID_DRAW ;
-            Text [ en-US ] = "Refresh" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FORMULACURSOR ;
-            HelpID = SID_FORMULACURSOR ;
-            Text [ en-US ] = "Formula Cursor";
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SYMBOLS_CATALOGUE ;
-            HelpID = SID_SYMBOLS_CATALOGUE ;
-            Text [ en-US ] = "Symbols" ;
-        };
-    };
-};
-
-=======
->>>>>>> other
 String RID_MATH_TOOLBOX
 {
     Text [ en-US ] = "Main Toolbar" ;
@@ -1838,9 +1767,6 @@ StringArray RID_PRINTUIOPTIONS
         < "Adjusts the formula to the page format used in the printout."; >;
         < "~Scaling"; >;
         < "Reduces or enlarges the size of the printed formula by a specified enlargement factor."; >;
-//        < "Miscellaneous options"; >;
-//        < "Ig~nore ~~ and ` at the end of the line"; >;
-//        < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
     };
 };
 

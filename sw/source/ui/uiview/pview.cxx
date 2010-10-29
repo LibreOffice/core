@@ -107,12 +107,7 @@
 
 using namespace ::com::sun::star;
 
-
-<<<<<<< local
-SFX_IMPL_VIEWFACTORY(SwPagePreView)
-=======
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreView, "PrintPreview")
->>>>>>> other
 {
     SFX_VIEW_REGISTRATION(SwDocShell);
     SFX_VIEW_REGISTRATION(SwWebDocShell);

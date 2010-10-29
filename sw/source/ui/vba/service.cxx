@@ -66,21 +66,7 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-<<<<<<< local
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        OSL_TRACE("In component_writeInfo");
-
-    // Component registration
-        return component_writeInfoHelper( pServiceManager, pRegistryKey,
-        globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl  );
-    }
-
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-=======
-    void * SAL_CALL component_getFactory(
->>>>>>> other
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
@@ -91,3 +77,4 @@ extern "C"
     return pRet;
     }
 }
+

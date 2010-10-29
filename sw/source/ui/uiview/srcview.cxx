@@ -125,17 +125,10 @@ using ::com::sun::star::util::SearchOptions;
 #define BMARGPRN        1000
 #define BORDERPRN       300
 
-
-
-<<<<<<< local
-SFX_IMPL_VIEWFACTORY(SwSrcView)
-=======
 SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
->>>>>>> other
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
-
 
 SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 {
