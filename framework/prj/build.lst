@@ -1,4 +1,4 @@
-fr	framework	:    l10n svtools NULL
+fr	framework	: LIBXSLT:libxslt l10n svtools NULL
 fr	framework								usr1	-	all	fr_mkout NULL
 fr  framework\inc			        	    nmake   -   all fr_inc NULL
 fr  framework\source\constant               nmake   -   all fr_constant fr_inc NULL

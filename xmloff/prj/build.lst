@@ -1,4 +1,4 @@
-xo	xmloff	:	offapi svl vos NULL
+xo	xmloff	: LIBXSLT:libxslt offapi svl vos NULL
 xo	xmloff									usr1	-	all	xo_mkout NULL
 xo	xmloff\prj								get		-	all	xo_prj NULL
 xo	xmloff\inc								nmake	-	all	xo_inc NULL

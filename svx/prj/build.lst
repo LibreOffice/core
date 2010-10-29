@@ -1,4 +1,4 @@
-sx	svx	:	sfx2 l10n oovbaapi connectivity xmloff linguistic jvmfwk avmedia drawinglayer editeng NULL
+sx	svx	:	sfx2 l10n oovbaapi connectivity xmloff linguistic jvmfwk avmedia drawinglayer editeng LIBXSLT:libxslt NULL
 sx	svx										usr1	-	all	sx_mkout NULL
 sx	svx\inc									nmake	-	all	sx_inc NULL
 sx	svx\uiconfig\layout						nmake	-	all	sx_layout NULL
