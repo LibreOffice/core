@@ -606,19 +606,14 @@ $(OUT)/inc/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
-# don't need/want output trees in solenv!!!
-.IF "$(PRJNAME)"!="solenv"
 .INCLUDE : $(OUT)/inc/myworld.mk
-.ENDIF			# "$(PRJNAME)"!="solenv"
 
 .IF "$(common_build)"!=""
 $(LOCAL_COMMON_OUT)/inc/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
-.IF "$(PRJNAME)"!="solenv"
 .INCLUDE : $(LOCAL_COMMON_OUT)/inc/myworld.mk
-.ENDIF			# "$(PRJNAME)"!="solenv"
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : office.mk
