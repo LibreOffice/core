@@ -51,8 +51,8 @@ testcase tHyphenation_1
 	printlog "Test Hyphenation  using ctrl and -"
 	
 	printlog "open a test file"
-	Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
-	Call sMakeReadOnlyDocumentEditable
+	hFileOpenLocally(  gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+	
 		
 	' we must assure the word 'following' is the first word in second line
 	' otherwise the test will not work correctly	
@@ -98,8 +98,8 @@ testcase tHyphenation_2
 	printlog "Test Hyphenation using ctrl and -"
 	
 	printlog "open a test file"
-	Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
-	Call sMakeReadOnlyDocumentEditable
+	hFileOpenLocally(  gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+	
 		
 	' we must assure the word 'following' is the first word in second line
 	' otherwise the test will not work correctly	
@@ -153,8 +153,8 @@ testcase tHyphenation_3
 	printlog "Test Hyphenation  using Tools/Hyphenation ,test like fol-lowing"
 	
 	printlog "open a test file"
-	Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
-	Call sMakeReadOnlyDocumentEditable
+	hFileOpenLocally(  gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+	
 
 	' we must assure the word 'following' is the first word in second line
 	' otherwise the test will not work correctly	
@@ -265,8 +265,8 @@ testcase tHyphenation_4
 	printlog "Test Hyphenation  using Tools/Hyphenation ,test like follow-ing"
 	
 	printlog "open a test file"
-	Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
-	Call sMakeReadOnlyDocumentEditable
+	hFileOpenLocally(  gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
+	
 	
 	' we must assure the word 'following' is the first word in second line
 	' otherwise the test will not work correctly	

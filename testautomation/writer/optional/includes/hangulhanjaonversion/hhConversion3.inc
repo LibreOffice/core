@@ -29,21 +29,6 @@
 '*
 '* short description : Test of Hangul/Hanja Conversion - 3
 '*
-'************************************************************************
-'*
-' #1 tHHOptions_1             'User defined dictionaries
-' #1 tHHOptions_2             'Options - New 1
-' #1 tHHOptions_3             'Options - New 2
-' #1 tHHOptions_4             'Options - New 3
-' #1 tHHOptions_5             'Options - Edit (Book)
-' #1 tHHOptions_6             'Options - Edit (Original) -1
-' #1 tHHOptions_7             'Options - Edit (Original) -2
-' #1 tHHOptions_8             'Options - Edit (Original) -3
-' #1 tHHOptions_9             'Options - Edit (Original) -4
-' #1 tHHOptions_10            'Options - Edit (Original) -5
-' #1 tHHOptions_11            'Options - Edit (Original) -6
-' #1 tHHOptions_12            'Options - Edit (Original) -7
-'*
 '\***********************************************************************
 
 testcase tHHOptions_1
@@ -62,7 +47,7 @@ testcase tHHOptions_1
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
 
    Call wTypeKeys "<MOD1 Home>"
 
@@ -107,7 +92,7 @@ testcase tHHOptions_2
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -189,7 +174,7 @@ testcase tHHOptions_3
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese characters
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -254,7 +239,7 @@ warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -321,7 +306,7 @@ testcase tHHOptions_5
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -396,7 +381,7 @@ testcase tHHOptions_6
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -507,7 +492,7 @@ testcase tHHOptions_7
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -615,7 +600,7 @@ testcase tHHOptions_8
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -705,7 +690,7 @@ testcase tHHOptions_9
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -791,7 +776,7 @@ testcase tHHOptions_10
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -879,7 +864,7 @@ testcase tHHOptions_11
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -962,7 +947,7 @@ testcase tHHOptions_12
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile) : sMakeReadOnlyDocumentEditable()
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,

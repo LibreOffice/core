@@ -779,6 +779,7 @@ testcase tShortcutPasteUnformattedText
 	Kontext	
 	Active.Setpage TabFont
 	Kontext "TabFont"
+    wait 500
 	DefaultSize = Size.GetSelIndex
 	Size.Select 14 ' Size 20
 	DefaultStyle = Style.GetSelIndex
@@ -824,6 +825,7 @@ testcase tShortcutPasteUnformattedText
 	Kontext	
 	Active.Setpage TabFont
 	Kontext "TabFont"
+    wait 500
 	if Size.GetSelIndex <> 14 then
 		Warnlog "formatted word has lost its size"
 	endif
@@ -842,6 +844,7 @@ testcase tShortcutPasteUnformattedText
 	Kontext	
 	Active.Setpage TabFont
 	Kontext "TabFont"
+    wait 500
 	if Size.GetSelIndex <>  DefaultSize then
 		Warnlog "formatted word has no default size"
 	endif

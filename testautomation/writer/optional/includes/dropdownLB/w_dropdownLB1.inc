@@ -1024,8 +1024,8 @@ testcase tDropDownLB_17
     PrintLog "- Open a new document"
     Call hNewDocument
     PrintLog "- Open a word document  which includes 2 entries."
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     Kontext "EditInputList"
     if EditInputList.Exists then EditInputList.Cancel

@@ -93,8 +93,8 @@ testcase tSort_1
 
 				
 		printlog " open a test file"
-		Call hFileOpen ( TestFile )
-        Call sMakeReadOnlyDocumentEditable
+		hFileOpenLocally(  TestFile )
+        
 
 		printlog " select all table"
 		Call wTypeKeys "<Mod1 a>", 2
@@ -187,8 +187,8 @@ testcase tSort_2
 		end select
 
 		printlog " open a test file"
-		Call hFileOpen ( TestFile )
-        Call sMakeReadOnlyDocumentEditable
+		hFileOpenLocally(  TestFile )
+        
 
 		printlog " select all table"
 		Call wTypeKeys "<Mod1 a>", 2

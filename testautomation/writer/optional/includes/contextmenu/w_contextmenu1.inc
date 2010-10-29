@@ -177,6 +177,8 @@ endcase
 
 testcase tPickGraphic
 
+    Warnlog "#i115132#Missing .uno Slots in context menus"
+    goto endsub
 	printlog "Open context menu on not focussed graphic"
 	Call hNewDocument
 	Printlog "   Set zoom to 100%"
@@ -187,19 +189,12 @@ testcase tPickGraphic
 	Call wTypeKeys "<Escape>"
 	Call wTypeKeys "Don't be afraid !"
 
-	Call DocumentWriter.MouseMove 50,30
+	Call gMouseClick ( 50,30 )
 	Printlog "   Open context menu upon graphic with mouse"
 	Call wOpenContextMenu(true)
 
 	printlog "   Select 'ImageMap' in context menu"
-	try
-            CALL hMenuFindSelect (".uno:ImageMapDialog", true, 9, true)   'Find "ImageMap" and call the slot.
-            wait 500
-	catch
-            Warnlog "Unable to open context menu"
-            Call hCloseDocument
-            goto endsub
-	endcatch
+        Call hMenuSelectNr(9)
 	Printlog "   The graphic has to be selected and the context menu has to show graphics related commands"
 	Kontext "ImageMapEditor"
 	if Not ImageMapEditor.Exists(3) then
@@ -265,6 +260,9 @@ endcase
 
 testcase tHyperlinkEdit
 
+    Warnlog "#i115132#Missing .uno Slots in context menus"
+    goto endsub
+
     printlog "Context menu on hyperlinks"
     printlog "   Open a new text document"
 	CALL hNewDocument
@@ -277,19 +275,19 @@ testcase tHyperlinkEdit
 	Call wTypeKeys " "
 	Call wTypeKeys "<HOME>"
     printlog "   Open context menu on hyperlink"
-        Call wTypeKeys "<SHIFT F10>"
+    Call wTypeKeys "<SHIFT F10>"
 
     printlog "   Open contextmenu, find the entry 'Edit Hyperlink', and call the slot..."
-        CALL hMenuFindSelect (21835, true, 18, true)   'Find "Edit Hyperlink" and call the slot.
+    CALL hMenuFindSelect (21835, true, 18, true)   'Find "Edit Hyperlink" and call the slot.
     printlog "   Check if the Hyperlink-dialogue comes up correctly."
-        kontext "TabHyperlinkInternet"
-        if NOT TabHyperlinkInternet.Exists(3) then
-            Warnlog "No Hyperlink-Dialog visible!"
+    kontext "HyperlinkDialog"
+    if NOT HyperlinkDialog.Exists(3) then
+        Warnlog "No Hyperlink-Dialog visible!"
 	else
-	    TabHyperlinkInternet.Close
-        end if
+	    HyperlinkDialog.Close
+    end if
     printlog "   Close text document"
-        CALL hCloseDocument
+    CALL hCloseDocument
 endcase
 
 ' -----------------------------------------------------------------------------
@@ -386,6 +384,9 @@ endcase
 ' -----------------------------------------------------------------------------
 
 testcase tPickDrawingObjects
+
+    Warnlog "#i115132#Missing .uno Slots in context menus"
+    goto endsub
 
     printlog "Context menu on drawing objects"
     printlog "   Open a new text document"

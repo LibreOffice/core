@@ -43,9 +43,7 @@ testcase tExampleCalculation
 	sDecimalseperator = GetDecimalSeperator
 
     printlog " Open testdocument 'gTesttoolPath + spreadsheet\optional\input\Solver_testdoc01.ods'"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\optional\input\Solver_testdoc01.ods" ))
-    printlog " If the file is not editable, click the edit button on standardbar"
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\optional\input\Solver_testdoc01.ods" )
 	printlog " Tools - Solver"
 	ToolsSolver
 	Kontext "Solver"
@@ -148,9 +146,7 @@ endcase
 testcase tExampleCalculation2
 	
     printlog " Open testdocument 'gTesttoolPath + spreadsheet\optional\input\stest_large.ods'"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\optional\input\stest_large.ods" ))
-    printlog " If the file is not editable, click the edit button on standardbar"
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\optional\input\stest_large.ods" )
 	printlog " Tools - Solver"
 	ToolsSolver
 	Kontext "Solver"
