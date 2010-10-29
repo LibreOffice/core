@@ -25,6 +25,10 @@
 #
 #***********************************************************************/
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ = ../../..
 PRJNAME = sal
 TARGET = qa_rtl_profile
@@ -47,3 +51,5 @@ SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
 .INCLUDE: _cppunit.mk
+
+.END
