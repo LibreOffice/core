@@ -61,6 +61,7 @@
 
 #include "accessibility.hxx"
 #include <applicat.hxx>
+#include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
 
@@ -69,8 +70,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-
-#define A2OU(cChar)  rtl::OUString::createFromAscii(cChar)
 
 //////////////////////////////////////////////////////////////////////
 
