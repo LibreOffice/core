@@ -765,7 +765,7 @@ IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, CheckBox *, pCheckBox )
 }
 
 
-void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
+void SmDistanceDialog::SetHelpId(MetricField &rField, const rtl::OString& sHelpId)
 {
     //! HelpID's die auf diese Weise explizit gesetzt werden, muessen im
     //! util Verzeichnis im File "hidother.src" mit Hilfe von "hidspecial"
@@ -776,7 +776,7 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
     DBG_ASSERT(aEmptyText.Len() == 0, "Sm: Ooops...");
 #endif
 
-    rField.SetHelpId(nHelpId);
+    rField.SetHelpId(sHelpId);
     rField.SetHelpText(aEmptyText);
 
     // since MetricField inherits from SpinField which has a sub Edit field
@@ -784,7 +784,8 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
     // for it too.
     Edit *pSubEdit = rField.GetSubEdit();
     if (pSubEdit)
-    {   pSubEdit->SetHelpId(nHelpId);
+    {
+        pSubEdit->SetHelpId(sHelpId);
         pSubEdit->SetHelpText(aEmptyText);
     }
 }
@@ -802,7 +803,7 @@ void SmDistanceDialog::SetCategory(USHORT nCategory)
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(NOCATEGORIES == 10, "Sm : Array passt nicht zu Anzahl der Kategorien");
 #endif
-    ULONG __READONLY_DATA  aCatMf2Hid[10][4] =
+    const char* __READONLY_DATA  aCatMf2Hid[10][4] =
     {
         { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, 0 },
         { HID_SMA_SUP_DIST,             HID_SMA_SUB_DIST ,          0, 0 },

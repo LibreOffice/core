@@ -127,7 +127,7 @@
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-
+#include <sfx2/objface.hxx>
 #include <langhelper.hxx>
 
 using namespace ::com::sun::star;
@@ -461,7 +461,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         GetView().GetWindow(), rWrtSh, FALSE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            pDlg->SetHelpId(nSlot);
+            pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
                 USHORT nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
