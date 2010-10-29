@@ -49,11 +49,14 @@ extern "C"
         migration::WordbookMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
-//     {
-//         migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
-//         migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-//         0, 0
-//     },
+    // Extension migration was disabled by Oracle / OpenOffice.org
+#if 0
+    {
+         migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
+         migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+         0, 0
+    },
+#endif
     { 0, 0, 0, 0, 0, 0 }
 };
 

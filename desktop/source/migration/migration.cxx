@@ -869,7 +869,6 @@ void MigrationImpl::copyFiles()
     {
         while (i_file != m_vrFileList->end())
         {
-
             // remove installation prefix from file
             localName = i_file->copy(m_aInfo.userdata.getLength());
             destName = userInstall + localName;
