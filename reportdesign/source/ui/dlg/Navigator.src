@@ -110,7 +110,6 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_SORTINGANDGROUPING;
-            HelpId = SID_SORTINGANDGROUPING ;
             Command = ".uno:DbSortingAndGrouping";
             Text [ en-US ] = "Sorting and Grouping...";
         };
@@ -121,7 +120,6 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_PAGEHEADERFOOTER;
-            HelpId = SID_PAGEHEADERFOOTER ;
             Command = ".uno:PageHeaderFooter";
             Checkable = TRUE;
             Text [ en-US ] = "Page Header/Footer...";
@@ -129,7 +127,6 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_REPORTHEADERFOOTER;
-            HelpId = SID_REPORTHEADERFOOTER ;
             Command = ".uno:ReportHeaderFooter";
             Checkable = TRUE;
             Text [ en-US ] = "Report Header/Footer...";
@@ -141,7 +138,6 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_RPT_NEW_FUNCTION;
-            HelpId = SID_RPT_NEW_FUNCTION;
             Command = ".uno:NewFunction";
             Text [ en-US ] = "New Function";
         };
@@ -152,7 +148,6 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_SHOW_PROPERTYBROWSER;
-            HelpId = SID_SHOW_PROPERTYBROWSER ;
             Command = ".uno:FormProperties";
             Text [ en-US ] = "Properties...";
         };
