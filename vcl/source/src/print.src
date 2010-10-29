@@ -29,6 +29,7 @@
 
 ModalDialog SV_DLG_PRINT
 {
+    HelpID = "vcl:ModalDialog:SV_DLG_PRINT";
     Text [en-US] = "Print";
     Closeable = TRUE;
     Sizeable = TRUE;
@@ -64,6 +65,7 @@ ModalDialog SV_DLG_PRINT
     };
     NumericField SV_PRINT_PAGE_EDIT
     {
+        HelpID = "vcl:NumericField:SV_DLG_PRINT:SV_PRINT_PAGE_EDIT";
         Pos = MAP_APPFONT( 5, 140 );
         Size = MAP_APPFONT( 30, 12 );
         SVLook = TRUE;
@@ -80,18 +82,21 @@ ModalDialog SV_DLG_PRINT
     };
     PushButton SV_PRINT_PAGE_FORWARD
     {
+        HelpID = "vcl:PushButton:SV_DLG_PRINT:SV_PRINT_PAGE_FORWARD";
         Pos = MAP_APPFONT( 95, 140 );
         Size = MAP_APPFONT( 15, 12 );
         HelpText [en-US] = "Scroll one page forward.";
     };
     PushButton SV_PRINT_PAGE_BACKWARD
     {
+        HelpID = "vcl:PushButton:SV_DLG_PRINT:SV_PRINT_PAGE_BACKWARD";
         Pos = MAP_APPFONT( 80, 140 );
         Size = MAP_APPFONT( 15, 12 );
         HelpText [en-US] = "Scroll one page backward.";
     };
     TabControl SV_PRINT_TABCTRL
     {
+        HelpID = "vcl:TabControl:SV_DLG_PRINT:SV_PRINT_TABCTRL";
         Pos = MAP_APPFONT( 140, 5 );
         Size = MAP_APPFONT( 205, 175 );
     };
@@ -123,6 +128,7 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_NUP
     {
+        HelpID = "vcl:TabPage:SV_PRINT_TAB_NUP";
         Text [en-US] = "Page Layout";
         Hide = TRUE;
 
@@ -134,6 +140,7 @@ ModalDialog SV_DLG_PRINT
         };
         RadioButton SV_PRINT_PRT_NUP_DEFAULT_BTN
         {
+            HelpID = "vcl:RadioButton:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_DEFAULT_BTN";
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 10 );
             Text [en-US] = "~Default";
@@ -141,12 +148,14 @@ ModalDialog SV_DLG_PRINT
         };
         RadioButton SV_PRINT_PRT_NUP_BROCHURE_BTN
         {
+            HelpID = "vcl:RadioButton:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_BROCHURE_BTN";
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 10 );
             Text = "";
         };
         RadioButton SV_PRINT_PRT_NUP_PAGES_BTN
         {
+            HelpID = "vcl:RadioButton:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_PAGES_BTN";
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 10 );
             Text [en-US] = "Pa~ges per sheet";
@@ -154,6 +163,7 @@ ModalDialog SV_DLG_PRINT
         };
         ListBox SV_PRINT_PRT_NUP_PAGES_BOX
         {
+            HelpID = "vcl:ListBox:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_PAGES_BOX";
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 80 );
             Border = TRUE;
@@ -180,6 +190,7 @@ ModalDialog SV_DLG_PRINT
         };
         NumericField SV_PRINT_PRT_NUP_COLS_EDT
         {
+            HelpID = "vcl:NumericField:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_COLS_EDT";
             Pos = MAP_APPFONT( 55, 20 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
@@ -198,6 +209,7 @@ ModalDialog SV_DLG_PRINT
         };
         NumericField SV_PRINT_PRT_NUP_ROWS_EDT
         {
+            HelpID = "vcl:NumericField:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_ROWS_EDT";
             Pos = MAP_APPFONT( 55, 35 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
@@ -215,6 +227,7 @@ ModalDialog SV_DLG_PRINT
         };
         MetricField SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT
         {
+            HelpID = "vcl:MetricField:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT";
             Pos = MAP_APPFONT( 55, 95 );
             Size = MAP_APPFONT( 40, 12 );
             Spin = TRUE;
@@ -237,6 +250,7 @@ ModalDialog SV_DLG_PRINT
         };
         MetricField SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT
         {
+            HelpID = "vcl:MetricField:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT";
             Pos = MAP_APPFONT( 155, 95 );
             Size = MAP_APPFONT( 40, 12 );
             Spin = TRUE;
@@ -259,6 +273,7 @@ ModalDialog SV_DLG_PRINT
         };
         ListBox SV_PRINT_PRT_NUP_ORIENTATION_BOX
         {
+            HelpID = "vcl:ListBox:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_ORIENTATION_BOX";
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 40 );
             Border = TRUE;
@@ -280,6 +295,7 @@ ModalDialog SV_DLG_PRINT
         };
         ListBox SV_PRINT_PRT_NUP_ORDER_BOX
         {
+            HelpID = "vcl:ListBox:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_ORDER_BOX";
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 20 );
             DropDown = TRUE;
@@ -294,6 +310,7 @@ ModalDialog SV_DLG_PRINT
         };
         CheckBox SV_PRINT_PRT_NUP_BORDER_CB
         {
+            HelpID = "vcl:CheckBox:SV_PRINT_TAB_NUP:SV_PRINT_PRT_NUP_BORDER_CB";
             Pos = MAP_APPFONT( 10, 65 );
             Size = MAP_APPFONT( 150, 12 );
             Text [en-US] = "Draw a border around each page";
@@ -303,6 +320,7 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_JOB
     {
+        HelpID = "vcl:TabPage:SV_PRINT_TAB_JOB";
         Text [en-US] = "General";
         Hide = TRUE;
 
@@ -314,6 +332,7 @@ ModalDialog SV_DLG_PRINT
         };
         ListBox SV_PRINT_PRINTERS
         {
+            HelpID = "vcl:ListBox:SV_PRINT_TAB_JOB:SV_PRINT_PRINTERS";
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 100, 80 );
             Border = TRUE;
@@ -322,6 +341,7 @@ ModalDialog SV_DLG_PRINT
         };
         CheckBox SV_PRINT_DETAILS_BTN
         {
+            HelpID = "vcl:CheckBox:SV_PRINT_TAB_JOB:SV_PRINT_DETAILS_BTN";
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 5, 5 );
             Text [en-US] = "Details";
@@ -347,6 +367,7 @@ ModalDialog SV_DLG_PRINT
         };
         PushButton SV_PRINT_PRT_SETUP
         {
+            HelpID = "vcl:PushButton:SV_PRINT_TAB_JOB:SV_PRINT_PRT_SETUP";
             Pos = MAP_APPFONT( 115, 5 );
             Size = MAP_APPFONT( 50, 15 );
             Text [en-US] = "Properties...";
@@ -366,6 +387,7 @@ ModalDialog SV_DLG_PRINT
         };
         NumericField SV_PRINT_COPYCOUNT_FIELD
         {
+            HelpID = "vcl:NumericField:SV_PRINT_TAB_JOB:SV_PRINT_COPYCOUNT_FIELD";
             Pos = MAP_APPFONT( 10, 56 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
@@ -382,6 +404,7 @@ ModalDialog SV_DLG_PRINT
         };
         CheckBox SV_PRINT_COLLATE
         {
+            HelpID = "vcl:CheckBox:SV_PRINT_TAB_JOB:SV_PRINT_COLLATE";
             Pos = MAP_APPFONT( 95, 45 );
             Size = MAP_APPFONT( 70, 10 );
             Text [en-US] = "Collate";
@@ -411,6 +434,7 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_OPT
     {
+        HelpID = "vcl:TabPage:SV_PRINT_TAB_OPT";
         Text [en-US] = "Options";
         Hide = TRUE;
 
@@ -422,6 +446,7 @@ ModalDialog SV_DLG_PRINT
         };
         CheckBox SV_PRINT_OPT_TOFILE
         {
+            HelpID = "vcl:CheckBox:SV_PRINT_TAB_OPT:SV_PRINT_OPT_TOFILE";
             Pos = MAP_APPFONT( 10, 20 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "Print to ~file";
@@ -429,6 +454,7 @@ ModalDialog SV_DLG_PRINT
         };
         CheckBox SV_PRINT_OPT_SINGLEJOBS
         {
+            HelpID = "vcl:CheckBox:SV_PRINT_TAB_OPT:SV_PRINT_OPT_SINGLEJOBS";
             Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "~Create single print jobs for collated output";
@@ -436,6 +462,7 @@ ModalDialog SV_DLG_PRINT
         };
         CheckBox SV_PRINT_OPT_REVERSE
         {
+            HelpID = "vcl:CheckBox:SV_PRINT_TAB_OPT:SV_PRINT_OPT_REVERSE";
             Pos = MAP_APPFONT( 10, 50 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "Print in ~reverse page order";
@@ -446,6 +473,7 @@ ModalDialog SV_DLG_PRINT
 
 ModelessDialog SV_DLG_PRINT_PROGRESS
 {
+    HelpID = "vcl:ModelessDialog:SV_DLG_PRINT_PROGRESS";
     Text [en-US] = "Printing";
     Closeable = FALSE;
     Sizeable = FALSE;

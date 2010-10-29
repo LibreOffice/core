@@ -56,7 +56,7 @@ class VirtualDevice;
 class Cursor;
 class ImplDevFontList;
 class ImplFontCache;
-class SmartId;
+class SalControlHandle;
 class VCLXWindow;
 class SalFrame;
 class SalObject;
@@ -120,8 +120,6 @@ struct ImplWinData
     USHORT              mnIsTopWindow;
     BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
     BOOL                mbEnableNativeWidget; // toggle native widget rendering
-    SmartId*            mpSmartHelpId;
-    SmartId*            mpSmartUniqueId;
     ::std::list< Window* >
                         maTopWindowChildren;
 };
@@ -254,8 +252,8 @@ public:
     long                mnY;
     long                mnAbsScreenX;
     Point               maPos;
-    ULONG               mnHelpId;
-    ULONG               mnUniqId;
+    rtl::OString        maHelpId;
+    rtl::OString        maUniqId;
     XubString           maHelpText;
     XubString           maQuickHelpText;
     InputContext        maInputContext;
