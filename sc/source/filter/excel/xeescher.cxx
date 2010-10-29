@@ -1050,7 +1050,6 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 #endif
 
-
 // ----------------------------------------------------------------------------
 
 XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
@@ -1335,7 +1334,6 @@ void XclExpNote::Save( XclExpStream& rStrm )
     }
 }
 
-
 void XclExpNote::WriteBody( XclExpStream& rStrm )
 {
     // BIFF5/BIFF7 is written separately
@@ -1373,6 +1371,11 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
 #endif
     rComments->endElement( XML_text );
 
+/*
+   Export of commentPr is disabled, since the current (Oct 2010)
+   version of MSO 2010 doesn't yet support commentPr
+ */
+#ifdef XLSX_OOXML_FUTURE
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
     {
         rComments->startElement( XML_commentPr,
@@ -1399,6 +1402,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
         rComments->endElement( XML_anchor );
         rComments->endElement( XML_commentPr );
     }
+#endif
     rComments->endElement( XML_comment );
 }
 
