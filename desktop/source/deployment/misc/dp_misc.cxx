@@ -618,6 +618,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
                 OUSTR( "/singletons/com.sun.star.task.OfficeRestartManager") ), UNO_QUERY );
         if (restarter.is())
         {
+            OSL_TRACE( "Request restart for modified extensions manager" );
             restarter->requestRestart(xCmdEnv.is() == sal_True ? xCmdEnv->getInteractionHandler() :
                                       Reference<task::XInteractionHandler>());
         }
