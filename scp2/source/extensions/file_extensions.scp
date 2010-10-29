@@ -302,4 +302,27 @@ File gid_File_Optional_Extensions_Sun_Template_Pack
    UnixRights = 444;
 End
 
+/* script providers */
+
+File gid_File_Oxt_Script_Provider_For_Beanshell
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell;
+    Name = "script-provider-for-beanshell.oxt";
+End
+
+File gid_File_Oxt_Script_Provider_For_Javascript
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript;
+    Name = "script-provider-for-javascript.oxt";
+End
+
+File gid_File_Oxt_Script_Provider_For_Python
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python;
+    Name = "script-provider-for-python.oxt";
+End
+
 #endif

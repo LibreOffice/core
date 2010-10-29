@@ -453,10 +453,6 @@ UNO_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
 #endif
 
 #ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Js, js )
-#endif
-
-#ifdef SOLAR_JAVA
 
 #ifndef MACOSX
 
@@ -501,9 +497,7 @@ End
 
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 #endif
 
 #ifdef SOLAR_JAVA

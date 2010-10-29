@@ -104,18 +104,6 @@ End
 #endif
 #endif
 
-// Scripting Framework Python script proxy
-
-#ifndef AIX
-File gid_File_Py_Pythonscript
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "pythonscript.py";
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Styles = (PACKED,UNO_COMPONENT);
-End
-#endif
- 
 //Scripting Framework Python example scripts
 
 File gid_File_Scripts_Python
