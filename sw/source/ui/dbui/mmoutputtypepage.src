@@ -48,12 +48,14 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
     };
     RadioButton RB_LETTER
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUTTYPE_PAGE:RB_LETTER";
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text[ en-US ] = "~Letter";
     };
     RadioButton RB_MAIL
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUTTYPE_PAGE:RB_MAIL";
         Pos = MAP_APPFONT ( 12 , 57 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text[ en-US ] = "~E-mail message";

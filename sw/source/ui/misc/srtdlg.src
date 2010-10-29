@@ -32,7 +32,7 @@
 
 ModalDialog DLG_SORTING
 {
-    HelpID = FN_SORTING_DLG ;
+    HelpID = CMD_FN_SORTING_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 268 , 193 ) ;
@@ -80,6 +80,7 @@ ModalDialog DLG_SORTING
     };
     CheckBox CB_KEY1
     {
+        HelpID = "sw:CheckBox:DLG_SORTING:CB_KEY1";
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~1 : Schl³ssel ~1 */
@@ -88,6 +89,7 @@ ModalDialog DLG_SORTING
     };
     NumericField ED_KEY1
     {
+        HelpID = "sw:NumericField:DLG_SORTING:ED_KEY1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 23 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
@@ -109,6 +111,7 @@ ModalDialog DLG_SORTING
     };
     ListBox DLB_KEY1
     {
+        HelpID = "sw:ListBox:DLG_SORTING:DLB_KEY1";
         Pos = MAP_APPFONT ( 96 , 23 ) ;
         Size = MAP_APPFONT ( 55 , 45 ) ;
         TabStop = TRUE ;
@@ -118,6 +121,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_UP
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_UP";
         Pos = MAP_APPFONT ( 155 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "~Ascending" ;
@@ -126,6 +130,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_DN
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_DN";
         Pos = MAP_APPFONT ( 155 , 35 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "~Descending" ;
@@ -133,6 +138,7 @@ ModalDialog DLG_SORTING
     };
     CheckBox CB_KEY2
     {
+        HelpID = "sw:CheckBox:DLG_SORTING:CB_KEY2";
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~2 : Schl³ssel ~2 */
@@ -140,6 +146,7 @@ ModalDialog DLG_SORTING
     };
     NumericField ED_KEY2
     {
+        HelpID = "sw:NumericField:DLG_SORTING:ED_KEY2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 50 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
@@ -156,6 +163,7 @@ ModalDialog DLG_SORTING
     };
     ListBox DLB_KEY2
     {
+        HelpID = "sw:ListBox:DLG_SORTING:DLB_KEY2";
         Pos = MAP_APPFONT ( 96 , 50 ) ;
         Size = MAP_APPFONT ( 55 , 45 ) ;
         TabStop = TRUE ;
@@ -165,6 +173,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_UP2
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_UP2";
         Pos = MAP_APPFONT ( 155 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Ascending" ;
@@ -173,6 +182,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_DN2
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_DN2";
         Pos = MAP_APPFONT ( 155 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Descending" ;
@@ -180,6 +190,7 @@ ModalDialog DLG_SORTING
     };
     CheckBox CB_KEY3
     {
+        HelpID = "sw:CheckBox:DLG_SORTING:CB_KEY3";
         Pos = MAP_APPFONT ( 12 , 81 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~3 : Schl³ssel ~3 */
@@ -187,6 +198,7 @@ ModalDialog DLG_SORTING
     };
     NumericField ED_KEY3
     {
+        HelpID = "sw:NumericField:DLG_SORTING:ED_KEY3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 79 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
@@ -203,6 +215,7 @@ ModalDialog DLG_SORTING
     };
     ListBox DLB_KEY3
     {
+        HelpID = "sw:ListBox:DLG_SORTING:DLB_KEY3";
         Pos = MAP_APPFONT ( 96 , 79 ) ;
         Size = MAP_APPFONT ( 55 , 45 ) ;
         TabStop = TRUE ;
@@ -212,6 +225,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_UP3
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_UP3";
         Pos = MAP_APPFONT ( 155 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Ascending" ;
@@ -220,6 +234,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_DN3
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_DN3";
         Pos = MAP_APPFONT ( 155 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Descending" ;
@@ -233,6 +248,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_COL
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_COL";
         Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text [ en-US ] = "Col~umns" ;
@@ -240,6 +256,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_ROW
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_ROW";
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
         Text [ en-US ] = "~Rows" ;
@@ -254,6 +271,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_TAB
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_TAB";
         Pos = MAP_APPFONT ( 113 , 120 ) ;
         Size = MAP_APPFONT ( 44 , 9 ) ;
         Text [ en-US ] = "~Tabs" ;
@@ -262,6 +280,7 @@ ModalDialog DLG_SORTING
     };
     RadioButton RB_TABCH
     {
+        HelpID = "sw:RadioButton:DLG_SORTING:RB_TABCH";
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text [ en-US ] = "~Character" ;
@@ -269,6 +288,7 @@ ModalDialog DLG_SORTING
     };
     Edit ED_TABCH
     {
+        HelpID = "sw:Edit:DLG_SORTING:ED_TABCH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 180 , 133 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
@@ -291,6 +311,7 @@ ModalDialog DLG_SORTING
     };
     PushButton PB_DELIM
     {
+        HelpID = "sw:PushButton:DLG_SORTING:PB_DELIM";
         Pos = MAP_APPFONT ( 195 , 133 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
@@ -304,6 +325,7 @@ ModalDialog DLG_SORTING
     };
     ListBox LB_LANG
     {
+        HelpID = "sw:ListBox:DLG_SORTING:LB_LANG";
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 83 , 61 ) ;
         TabStop = TRUE ;
@@ -318,6 +340,7 @@ ModalDialog DLG_SORTING
     };
     CheckBox CB_CASE
     {
+        HelpID = "sw:CheckBox:DLG_SORTING:CB_CASE";
         Pos = MAP_APPFONT ( 113 , 159 ) ;
         Size = MAP_APPFONT ( 147 , 10 ) ;
         TabStop = TRUE ;
