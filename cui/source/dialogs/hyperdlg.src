@@ -56,18 +56,21 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     RadioButton RB_LINKTYP_INTERNET
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_INTERNET:RB_LINKTYP_INTERNET";
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 57, 10 );
         Text [ en-US ] = "~Web";
     };
     RadioButton RB_LINKTYP_FTP
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_INTERNET:RB_LINKTYP_FTP";
         Pos = MAP_APPFONT( 114 + COL_DIFF, 13 );
         Size = MAP_APPFONT( 56 - COL_DIFF, 10 );
         Text [ en-US ] = "~FTP";
     };
     RadioButton RB_LINKTYP_TELNET
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_INTERNET:RB_LINKTYP_TELNET";
         Pos = MAP_APPFONT( 173, 13 );
         Size = MAP_APPFONT( 56, 10 );
         Text [ en-US ] = "~Telnet";
@@ -86,6 +89,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     Edit ED_LOGIN
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_INTERNET:ED_LOGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 42 ) ;
         Size = MAP_APPFONT ( 80 - COL_DIFF , 12 ) ;
@@ -98,6 +102,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     Edit ED_PASSWD
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_INTERNET:ED_PASSWD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 59 ) ;
         Size = MAP_APPFONT ( 80 - COL_DIFF , 12 ) ;
@@ -105,6 +110,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     CheckBox CBX_ANONYMOUS
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_HYPERLINK_INTERNET:CBX_ANONYMOUS";
         Pos = MAP_APPFONT ( COL_2 , 75 ) ;
         Size = MAP_APPFONT ( 89 - COL_DIFF , 10 ) ;
         TabStop = TRUE ;
@@ -112,6 +118,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     ImageButton BTN_BROWSE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_INTERNET:BTN_BROWSE";
         Pos = MAP_APPFONT ( 235, 24 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -131,6 +138,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     ImageButton BTN_TARGET
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_INTERNET:BTN_TARGET";
         Pos = MAP_APPFONT ( 235, 40+2 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -162,6 +170,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     ComboBox CB_FRAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_HYPERLINK_INTERNET:CB_FRAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 104 ) ;
         Size = MAP_APPFONT ( 66 - COL_DIFF , 60 ) ;
@@ -177,6 +186,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     ListBox LB_FORM
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HYPERLINK_INTERNET:LB_FORM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 104 ) ;
         Size = MAP_APPFONT ( 70 , 60 ) ;
@@ -198,6 +208,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     Edit ED_INDICATION
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_INTERNET:ED_INDICATION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 122 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
@@ -210,12 +221,14 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     Edit ED_TEXT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_INTERNET:ED_TEXT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 139 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
     };
     ImageButton BTN_SCRIPT
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_INTERNET:BTN_SCRIPT";
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -258,12 +271,14 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     RadioButton RB_LINKTYP_MAIL
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_MAIL:RB_LINKTYP_MAIL";
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 56 - COL_DIFF, 10 );
         Text [ en-US ] = "~E-mail";
     };
     RadioButton RB_LINKTYP_NEWS
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_MAIL:RB_LINKTYP_NEWS";
         Pos = MAP_APPFONT( 113, 13 );
         Size = MAP_APPFONT( 56, 10 );
         Text [ en-US ] = "~News";
@@ -282,12 +297,14 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     Edit ED_SUBJECT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_MAIL:ED_SUBJECT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 42 ) ;
         Size = MAP_APPFONT ( 176 - COL_DIFF , 12 ) ;
     };
     ImageButton BTN_ADRESSBOOK
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_MAIL:BTN_ADRESSBOOK";
         Pos = MAP_APPFONT ( 235, 24 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -321,6 +338,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     ComboBox CB_FRAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_HYPERLINK_MAIL:CB_FRAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 104 ) ;
         Size = MAP_APPFONT ( 66 - COL_DIFF , 60 ) ;
@@ -336,6 +354,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     ListBox LB_FORM
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HYPERLINK_MAIL:LB_FORM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 104 ) ;
         Size = MAP_APPFONT ( 70 , 60 ) ;
@@ -357,6 +376,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     Edit ED_INDICATION
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_MAIL:ED_INDICATION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 122 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
@@ -369,12 +389,14 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     Edit ED_TEXT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_MAIL:ED_TEXT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 139 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
     };
     ImageButton BTN_SCRIPT
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_MAIL:BTN_SCRIPT";
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -422,6 +444,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     ImageButton BTN_FILEOPEN
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_DOCUMENT:BTN_FILEOPEN";
         Pos = MAP_APPFONT ( 235, 14 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -453,6 +476,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     Edit ED_TARGET_DOC
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_DOCUMENT:ED_TARGET_DOC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 52 ) ;
         Size = MAP_APPFONT ( 176 - COL_DIFF , 12 ) ;
@@ -471,6 +495,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     ImageButton BTN_BROWSE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_DOCUMENT:BTN_BROWSE";
         Pos = MAP_APPFONT ( 235, 51 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -502,6 +527,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     ComboBox CB_FRAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_HYPERLINK_DOCUMENT:CB_FRAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 104 ) ;
         Size = MAP_APPFONT ( 66 - COL_DIFF , 60 ) ;
@@ -517,6 +543,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     ListBox LB_FORM
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HYPERLINK_DOCUMENT:LB_FORM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 104 ) ;
         Size = MAP_APPFONT ( 70 , 60 ) ;
@@ -538,6 +565,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     Edit ED_INDICATION
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_DOCUMENT:ED_INDICATION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 122 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
@@ -550,12 +578,14 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     Edit ED_TEXT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_DOCUMENT:ED_TEXT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 139 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
     };
     ImageButton BTN_SCRIPT
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_DOCUMENT:BTN_SCRIPT";
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -597,12 +627,14 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     RadioButton RB_EDITNOW
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:RB_EDITNOW";
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 85 - COL_DIFF, 10 );
         Text [ en-US ] = "Edit ~now";
     };
     RadioButton RB_EDITLATER
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:RB_EDITLATER";
         Pos = MAP_APPFONT( 142, 13 );
         Size = MAP_APPFONT( 84, 10 );
         Text [ en-US ] = "Edit ~later";
@@ -615,6 +647,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     Edit ED_PATH_NEWDOC
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:ED_PATH_NEWDOC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 25 ) ;
         Size = MAP_APPFONT ( 176 - COL_DIFF , 12 ) ;
@@ -627,6 +660,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     ListBox LB_DOCUMENT_TYPES
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:LB_DOCUMENT_TYPES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 42 ) ;
         Size = MAP_APPFONT ( 176 - COL_DIFF , 40 ) ;
@@ -635,6 +669,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     ImageButton BTN_CREATE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:BTN_CREATE";
         Pos = MAP_APPFONT ( 235, 24 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -667,6 +702,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     ComboBox CB_FRAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:CB_FRAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 104 ) ;
         Size = MAP_APPFONT ( 66 - COL_DIFF , 60 ) ;
@@ -682,6 +718,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     ListBox LB_FORM
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:LB_FORM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 104 ) ;
         Size = MAP_APPFONT ( 70 , 60 ) ;
@@ -703,6 +740,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     Edit ED_INDICATION
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:ED_INDICATION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 122 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
@@ -715,12 +753,14 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     Edit ED_TEXT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:ED_TEXT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , 139 ) ;
         Size = MAP_APPFONT ( 194 - COL_DIFF , 12 ) ;
     };
     ImageButton BTN_SCRIPT
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_NEWDOCUMENT:BTN_SCRIPT";
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
@@ -746,7 +786,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
 *************************************************************************/
 ModalDialog RID_SVXDLG_NEWHYPERLINK
 {
-    HelpID = SID_HYPERLINK_DIALOG;
+    HelpID = CMD_SID_HYPERLINK_DIALOG;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 325 , 185 ) ;

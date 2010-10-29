@@ -730,7 +730,7 @@ public:
             aBtnOK.Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId(ULONG nHelpId) {aEdtName.SetHelpId(nHelpId);}
+    void    SetEditHelpId( const rtl::OString& aHelpId) {aEdtName.SetHelpId(aHelpId);}
 };
 
 class SvxIconSelectorDialog : public ModalDialog
