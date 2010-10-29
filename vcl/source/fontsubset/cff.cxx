@@ -611,14 +611,18 @@ void CffSubsetterContext::readDictOp( void)
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
         int nOpId = *(mpReadPtr++);
-        const char* pCmdName;
+        const char* pCmdName = 0;
         if( nOpId != 12)
-            pCmdName = pDictOps[ nOpId];
+            pCmdName = pDictOps[nOpId];
         else {
             const U8 nExtId = *(mpReadPtr++);
-            pCmdName = pDictEscs[ nExtId];
+            if (nExtId < 39)
+               pCmdName = pDictEscs[nExtId];
             nOpId = 900 + nExtId;
         }
+
+        if (!pCmdName)  // skip reserved operators
+            return;
 
         //TODO: if( nStackIdx > 0)
         switch( *pCmdName) {
