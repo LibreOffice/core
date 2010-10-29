@@ -59,7 +59,7 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
                                   const String&   rTitle,
                                   const String&   rTabBgColorNoColorText,
                                   const Color&    rDefaultColor,
-                                  ULONG nHelpId ) :
+                                  const rtl::OString& sHelpId ) :
     ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
     aBorderWin              ( this, ScResId( TAB_BG_COLOR_CT_BORDER ) ),
     aTabBgColorSet          ( &aBorderWin, ScResId( TAB_BG_COLOR_SET_BGDCOLOR ), this ),
@@ -68,10 +68,10 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
     aBtnHelp                ( this, ScResId( BTN_HELP ) ),
     aTabBgColor             ( rDefaultColor ),
     aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
-    mnHelpId                ( nHelpId )
+    msHelpId                ( sHelpId )
 
 {
-    SetHelpId( nHelpId );
+    SetHelpId( sHelpId );
     this->SetText( rTitle );
     this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
 
