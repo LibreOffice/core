@@ -2700,7 +2700,7 @@ void OSelectionBrowseBox::enableControl(const OTableFieldDescRef& _rEntry,Window
     _pControl->EnableInput(bEnable);
 }
 // -----------------------------------------------------------------------------
-void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,ULONG _nHelpId)
+void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,const rtl::OString& _sHelpId)
 {
     m_pTextCell->SetText(_sText);
     m_pTextCell->ClearModifyFlag();
@@ -2709,10 +2709,10 @@ void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,c
 
     enableControl(_rEntry,m_pTextCell);
 
-    if (m_pTextCell->GetHelpId() != _nHelpId)
+    if (m_pTextCell->GetHelpId() != _sHelpId)
         // da TextCell in verschiedenen Kontexten verwendet wird, muss ich den gecachten HelpText loeschen
         m_pTextCell->SetHelpText(String());
-    m_pTextCell->SetHelpId(_nHelpId);
+    m_pTextCell->SetHelpId(_sHelpId);
 }
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::invalidateUndoRedo()

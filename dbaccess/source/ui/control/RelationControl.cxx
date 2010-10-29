@@ -338,18 +338,18 @@ namespace dbaui
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
-        ULONG nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
+        rtl::OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )
         {
             case SOURCE_COLUMN:
                 xDef    = m_xSourceDef;
-                nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
+                sHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
                 break;
             case DEST_COLUMN:
                 xDef    = m_xDestDef;
-                nHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
+                sHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
                 break;
             default:
                 //  ?????????
@@ -367,7 +367,7 @@ namespace dbaui
                 m_pListCell->SelectEntry( sName );
             }
 
-            m_pListCell->SetHelpId(nHelpId);
+            m_pListCell->SetHelpId(sHelpId);
         }
     }
 
