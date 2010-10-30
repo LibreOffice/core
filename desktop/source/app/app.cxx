@@ -633,7 +633,7 @@ throw()
                 }
 
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString::createFromAscii( "/" );
+                    newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                 newDstUnqPath += tit;
 
@@ -1168,9 +1168,9 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
 void Desktop::retrieveCrashReporterState()
 {
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY   = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
-    static const ::rtl::OUString CFG_PATH_CRASHREPORTER = ::rtl::OUString::createFromAscii("CrashReporter"                  );
-    static const ::rtl::OUString CFG_ENTRY_ENABLED      = ::rtl::OUString::createFromAscii("Enabled"                                   );
+    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
+    static const ::rtl::OUString CFG_PATH_CRASHREPORTER(RTL_CONSTASCII_USTRINGPARAM("CrashReporter"));
+    static const ::rtl::OUString CFG_ENTRY_ENABLED(RTL_CONSTASCII_USTRINGPARAM("Enabled"));
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -1190,9 +1190,9 @@ void Desktop::retrieveCrashReporterState()
 
 sal_Bool Desktop::isUIOnSessionShutdownAllowed()
 {
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
-    static const ::rtl::OUString CFG_PATH_SESSION     = ::rtl::OUString::createFromAscii("SessionShutdown"                );
-    static const ::rtl::OUString CFG_ENTRY_UIENABLED  = ::rtl::OUString::createFromAscii("DocumentStoreUIEnabled"         );
+    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
+    static const ::rtl::OUString CFG_PATH_SESSION(RTL_CONSTASCII_USTRINGPARAM("SessionShutdown"));
+    static const ::rtl::OUString CFG_ENTRY_UIENABLED(RTL_CONSTASCII_USTRINGPARAM("DocumentStoreUIEnabled"));
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -1241,12 +1241,12 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
                              sal_Bool& bRecoveryDataExists,
                              sal_Bool& bSessionDataExists )
 {
-    static const ::rtl::OUString SERVICENAME_RECOVERYCORE = ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery");
-    static const ::rtl::OUString PROP_CRASHED             = ::rtl::OUString::createFromAscii("Crashed"                        );
-    static const ::rtl::OUString PROP_EXISTSRECOVERY      = ::rtl::OUString::createFromAscii("ExistsRecoveryData"             );
-    static const ::rtl::OUString PROP_EXISTSSESSION       = ::rtl::OUString::createFromAscii("ExistsSessionData"              );
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY     = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
-    static const ::rtl::OUString CFG_PATH_RECOVERYINFO    = ::rtl::OUString::createFromAscii("RecoveryInfo"                   );
+    static const ::rtl::OUString SERVICENAME_RECOVERYCORE(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery"));
+    static const ::rtl::OUString PROP_CRASHED(RTL_CONSTASCII_USTRINGPARAM("Crashed"));
+    static const ::rtl::OUString PROP_EXISTSRECOVERY(RTL_CONSTASCII_USTRINGPARAM("ExistsRecoveryData"));
+    static const ::rtl::OUString PROP_EXISTSSESSION(RTL_CONSTASCII_USTRINGPARAM("ExistsSessionData"));
+    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
+    static const ::rtl::OUString CFG_PATH_RECOVERYINFO(RTL_CONSTASCII_USTRINGPARAM("RecoveryInfo"));
 
     bCrashed            = sal_False;
     bRecoveryDataExists = sal_False;
@@ -1276,11 +1276,11 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
                              sal_Bool bCrashed           ,
                              sal_Bool bExistsRecoveryData)
 {
-    static ::rtl::OUString SERVICENAME_RECOVERYUI = ::rtl::OUString::createFromAscii("com.sun.star.comp.svx.RecoveryUI"          );
-    static ::rtl::OUString SERVICENAME_URLPARSER  = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer"          );
-    static ::rtl::OUString COMMAND_EMERGENCYSAVE  = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEmergencySave");
-    static ::rtl::OUString COMMAND_RECOVERY       = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doAutoRecovery" );
-    static ::rtl::OUString COMMAND_CRASHREPORT    = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doCrashReport"  );
+    static ::rtl::OUString SERVICENAME_RECOVERYUI(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svx.RecoveryUI"));
+    static ::rtl::OUString SERVICENAME_URLPARSER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"));
+    static ::rtl::OUString COMMAND_EMERGENCYSAVE(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doEmergencySave"));
+    static ::rtl::OUString COMMAND_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doAutoRecovery"));
+    static ::rtl::OUString COMMAND_CRASHREPORT(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doCrashReport"));
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
@@ -1729,7 +1729,7 @@ void Desktop::Main()
         if (xGlobalBroadcaster.is())
         {
             css::document::EventObject aEvent;
-            aEvent.EventName = ::rtl::OUString::createFromAscii("OnStartApp");
+            aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp"));
             xGlobalBroadcaster->notifyEvent(aEvent);
         }
 
@@ -1940,7 +1940,7 @@ void Desktop::Main()
     if (xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
-        aEvent.EventName = ::rtl::OUString::createFromAscii("OnCloseApp");
+        aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
         xGlobalBroadcaster->notifyEvent(aEvent);
     }
 
@@ -2224,7 +2224,7 @@ sal_Bool Desktop::CheckOEM()
 {
     Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
     Reference<XJob> rOemJob(rFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.office.OEMPreloadJob")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.OEMPreloadJob"))),
         UNO_QUERY );
     Sequence<NamedValue> args;
     sal_Bool bResult = sal_False;
@@ -2481,7 +2481,7 @@ void Desktop::PreloadConfigurationData()
     {
         // preload writer configuration
         Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Writer/MailMergeWizard" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Writer/MailMergeWizard"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2492,7 +2492,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // WriterWeb
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.WriterWeb/Content" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.WriterWeb/Content"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2503,7 +2503,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // preload compatibility
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Compatibility/WriterCompatibilityVersion" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Compatibility/WriterCompatibilityVersion"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2514,7 +2514,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // preload calc configuration
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Calc/Content" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Calc/Content"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2525,7 +2525,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // preload impress configuration
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.UI.Effects/UserInterface" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.UI.Effects/UserInterface"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2535,7 +2535,7 @@ void Desktop::PreloadConfigurationData()
         {
         }
 
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Impress/Layout" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Impress/Layout"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2546,7 +2546,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // preload draw configuration
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Draw/Layout" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Draw/Layout"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2557,7 +2557,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // preload ui configuration
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.UI/FilterClassification" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.UI/FilterClassification"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2568,7 +2568,7 @@ void Desktop::PreloadConfigurationData()
         }
 
         // preload addons configuration
-        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Addons/AddonUI" );
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Addons/AddonUI"));
         try
         {
             xNameAccess = Reference< XNameAccess >(
@@ -2712,14 +2712,14 @@ void Desktop::OpenClients()
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
             css::util::URL aCmd;
-            aCmd.Complete = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/disableRecovery");
+            aCmd.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/disableRecovery"));
             xParser->parseStrict(aCmd);
 
             xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
         }
         catch(const css::uno::Exception& e)
         {
-            OUString aMessage = OUString::createFromAscii("Could not disable AutoRecovery.\n")
+            OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not disable AutoRecovery.\n"))
                 + e.Message;
             OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
@@ -2761,7 +2761,7 @@ void Desktop::OpenClients()
             }
             catch(const css::uno::Exception& e)
             {
-                OUString aMessage = OUString::createFromAscii("Error during recovery\n")
+                OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error during recovery\n"))
                     + e.Message;
                 OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
@@ -2771,7 +2771,7 @@ void Desktop::OpenClients()
         try
         {
             xSessionListener = Reference< XInitialization >(::comphelper::getProcessServiceFactory()->createInstance(
-                        OUString::createFromAscii("com.sun.star.frame.SessionListener")), UNO_QUERY_THROW);
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionListener"))), UNO_QUERY_THROW);
 
             // specifies whether the UI-interaction on Session shutdown is allowed
             sal_Bool bAllowUI = isUIOnSessionShutdownAllowed();
@@ -2784,7 +2784,7 @@ void Desktop::OpenClients()
         }
         catch(const com::sun::star::uno::Exception& e)
         {
-            OUString aMessage = OUString::createFromAscii("Registration of session listener failed\n")
+            OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Registration of session listener failed\n"))
                 + e.Message;
             OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
@@ -2802,7 +2802,7 @@ void Desktop::OpenClients()
             }
             catch(const com::sun::star::uno::Exception& e)
             {
-                OUString aMessage = OUString::createFromAscii("Error in session management\n")
+                OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error in session management\n"))
                     + e.Message;
                 OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
@@ -3212,7 +3212,7 @@ void Desktop::OpenSplashScreen()
         // Which splash to use
         OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
         if ( pCmdLine->GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).getLength() )
-            aSplashService = OUString::createFromAscii("com.sun.star.office.PipeSplashScreen");
+            aSplashService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.PipeSplashScreen"));
 
         bVisible = sal_True;
         Sequence< Any > aSeq( 2 );
@@ -3223,7 +3223,7 @@ void Desktop::OpenSplashScreen()
             aSplashService, aSeq), UNO_QUERY);
 
         if(m_rSplashScreen.is())
-                m_rSplashScreen->start(OUString::createFromAscii("SplashScreen"), 100);
+                m_rSplashScreen->start(OUString(RTL_CONSTASCII_USTRINGPARAM("SplashScreen")), 100);
     }
 
 }
@@ -3258,9 +3258,9 @@ void Desktop::DoFirstRunInitializations()
 {
     try
     {
-        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.task.JobExecutor" ) ), UNO_QUERY );
+        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.JobExecutor")) ), UNO_QUERY );
         if( xExecutor.is() )
-            xExecutor->trigger( ::rtl::OUString::createFromAscii("onFirstRunInitialization") );
+            xExecutor->trigger( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("onFirstRunInitialization")) );
     }
     catch(const ::com::sun::star::uno::Exception&)
     {
@@ -3271,8 +3271,8 @@ void Desktop::DoFirstRunInitializations()
 // ========================================================================
 void Desktop::CheckFirstRun( )
 {
-    const ::rtl::OUString sCommonMiscNodeName = ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Common/Misc" );
-    const ::rtl::OUString sFirstRunNodeName = ::rtl::OUString::createFromAscii( "FirstRun" );
+    const ::rtl::OUString sCommonMiscNodeName(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Misc"));
+    const ::rtl::OUString sFirstRunNodeName(RTL_CONSTASCII_USTRINGPARAM("FirstRun"));
 
     // --------------------------------------------------------------------
     // check if this is the first office start
