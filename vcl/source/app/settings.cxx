@@ -705,35 +705,35 @@ void StyleSettings::Set3DColors( const Color& rColor )
 {
     switch ( nStyle )
     {
-        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString::createFromAscii( "default" );
-        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString::createFromAscii( "hicontrast" );
-        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "tango" ); // industrial is dead
-        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
-        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString::createFromAscii( "tango" );
-        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString::createFromAscii( "oxygen" );
-        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString::createFromAscii( "classic" );
+        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
+        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hicontrast"));
+        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango")); // industrial is dead
+        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("crystal"));
+        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango"));
+        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen"));
+        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic"));
     }
 
-    return ::rtl::OUString::createFromAscii( "auto" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto"));
 }
 
 // -----------------------------------------------------------------------
 
 ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
 {
-    if ( rName == ::rtl::OUString::createFromAscii( "default" ) )
+    if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")) )
         return STYLE_SYMBOLS_DEFAULT;
-    else if ( rName == ::rtl::OUString::createFromAscii( "hicontrast" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hicontrast")) )
         return STYLE_SYMBOLS_HICONTRAST;
-    else if ( rName == ::rtl::OUString::createFromAscii( "industrial" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("industrial")) )
         return STYLE_SYMBOLS_TANGO; // industrial is dead
-    else if ( rName == ::rtl::OUString::createFromAscii( "crystal" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("crystal")) )
         return STYLE_SYMBOLS_CRYSTAL;
-    else if ( rName == ::rtl::OUString::createFromAscii( "tango" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango")) )
         return STYLE_SYMBOLS_TANGO;
-    else if ( rName == ::rtl::OUString::createFromAscii( "oxygen" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen")) )
         return STYLE_SYMBOLS_OXYGEN;
-    else if ( rName == ::rtl::OUString::createFromAscii( "classic" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic")) )
         return STYLE_SYMBOLS_CLASSIC;
 
     return STYLE_SYMBOLS_AUTO;
@@ -1947,11 +1947,11 @@ BOOL AllSettings::GetLayoutRTL() const
         nUIMirroring = 0; // ask configuration only once
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/I18N/CTL" ) );    // note: case sensisitive !
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/I18N/CTL")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
             BOOL bTmp = BOOL();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "UIMirroring" ) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("UIMirroring")) );
             if( aValue >>= bTmp )
             {
                 // found true or false; if it was nil, nothing is changed
