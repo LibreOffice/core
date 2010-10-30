@@ -187,8 +187,8 @@ void GlobalEventConfig_Impl::Commit()
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
-    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString::createFromAscii("BindingType['"));
-    static const OUString sPostfix(OUString::createFromAscii("']") + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
+    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString(RTL_CONSTASCII_USTRINGPARAM("BindingType['")));
+    static const OUString sPostfix(OUString(RTL_CONSTASCII_USTRINGPARAM("']")) + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
     //step through the list of events
     for(int i=0;it!=it_end;++it,++i)
     {
@@ -290,9 +290,9 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
-    props[0].Name = OUString::createFromAscii("EventType");
-    props[0].Value <<= OUString::createFromAscii("Script");
-    props[1].Name = OUString::createFromAscii("Script");
+    props[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
+    props[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+    props[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
     EventBindingHash::const_iterator it = m_eventBindingHash.find( aName );
     if( it != m_eventBindingHash.end() )
     {
