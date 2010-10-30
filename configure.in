@@ -897,6 +897,11 @@ AC_ARG_WITH(watch-window,
   --with-watch-window      Integrate Watch Window extension to Calc],
 ,)
 
+AC_ARG_WITH(diagram,
+[
+  --with-diagram      Integrate Diagram extension],
+,)
+
 AC_ARG_WITH(google-docs,
 [
   --with-google-docs      Download and integrate Google Documents extension.],
@@ -6812,6 +6817,18 @@ else
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
 fi
 AC_SUBST(WITH_WATCH_WINDOW_EXTENSION)
+
+dnl ===================================================================
+dnl Test whether to include Diagram extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Diagram extension integration])
+if test "z$with_diagram" = "z" -o "z$with_diagram" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
+fi
+AC_SUBST(WITH_DIAGRAM_EXTENSION)
 
 dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension

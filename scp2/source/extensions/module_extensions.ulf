@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_accessories.ulf,v $
  *
- *  $Revision: 1.0 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: KAMI $ $Date: 2006/02/18 14:50:39 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/30 19:40:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -104,6 +104,12 @@ en-US = "Watch Window"
 
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_WATCH_WINDOW]
 en-US = "Watch Window"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_DIAGRAM]
+en-US = "Diagram"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_DIAGRAM]
+en-US = "Diagram"
 
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS]
 en-US = "Google Docs & Zoho"
