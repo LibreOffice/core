@@ -53,7 +53,7 @@ sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
      Beschreibung:
  --------------------------------------------------------------------*/
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
-    :ConfigItem(OUString::createFromAscii("Office.Common/View"))
+    :ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View")))
     ,nLookNFeel         ( DEFAULT_LOOKNFEEL )
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
