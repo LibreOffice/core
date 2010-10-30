@@ -396,7 +396,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
     aSql.append(m_aComposedTableName);
     aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
 
