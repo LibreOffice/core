@@ -95,7 +95,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 // ::com::sun::star::lang::XServiceInfo
 rtl::OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumnDescriptor");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OTableColumnDescriptor"));
 }
 
 Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -158,7 +158,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
 rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumn");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OTableColumn"));
 }
 
 ::cppu::IPropertyArrayHelper& SAL_CALL OTableColumn::getInfoHelper()
@@ -442,7 +442,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 // ::com::sun::star::lang::XServiceInfo
 rtl::OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumnDescriptorWrapper");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OTableColumnDescriptorWrapper"));
 }
 
 Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -608,7 +608,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
 rtl::OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.sdb.OTableColumnWrapper" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(  "com.sun.star.sdb.OTableColumnWrapper" ));
 }
 
 Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)

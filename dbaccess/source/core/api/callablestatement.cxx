@@ -99,7 +99,7 @@ void OCallableStatement::release() throw ()
 rtl::OUString OCallableStatement::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getImplementationName" );
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OCallableStatement");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OCallableStatement"));
 }
 
 Sequence< ::rtl::OUString > OCallableStatement::getSupportedServiceNames(  ) throw (RuntimeException)

@@ -200,7 +200,7 @@ void OResultSet::close(void) throw( SQLException, RuntimeException )
 rtl::OUString OResultSet::getImplementationName(  ) throw(RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::getImplementationName" );
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OResultSet");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OResultSet"));
 }
 
 sal_Bool OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)

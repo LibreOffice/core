@@ -362,7 +362,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
                 }
             }
 
-            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+            static const ::rtl::OUString sAll(RTL_CONSTASCII_USTRINGPARAM("%"));
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
 

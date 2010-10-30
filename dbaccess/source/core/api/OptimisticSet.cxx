@@ -187,9 +187,9 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
     // list all cloumns that should be set
-    static ::rtl::OUString s_sPara  = ::rtl::OUString::createFromAscii(" = ?");
+    static ::rtl::OUString s_sPara(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
 
@@ -277,7 +277,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
 
@@ -663,7 +663,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     // here we build the condition part for the update statement

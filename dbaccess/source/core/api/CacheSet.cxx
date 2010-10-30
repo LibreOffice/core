@@ -173,9 +173,9 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     fillTableName(xSet);
 
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString::createFromAscii(" ( "));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( ")));
     // set values and column names
-    ::rtl::OUStringBuffer aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
+    ::rtl::OUStringBuffer aValues = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
     static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
     ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
@@ -248,8 +248,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     ::rtl::OUString aColumnName;
 
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
@@ -304,9 +304,9 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("UPDATE ");
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE "));
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString::createFromAscii(" SET "));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SET ")));
     // list all cloumns that should be set
 
     ::rtl::OUStringBuffer aCondition;
@@ -317,7 +317,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
         aSql.append(aCondition.makeStringAndClear());
     }
     else
@@ -352,13 +352,13 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("DELETE FROM ");
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
 
     // list all cloumns that should be set
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
     // use keys and indexes for excat postioning
     // first the keys

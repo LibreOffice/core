@@ -206,7 +206,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             if(!sComposedName.getLength())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW ");
+            ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("DROP VIEW "));
             aSql += sComposedName;
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");

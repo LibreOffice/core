@@ -408,7 +408,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             if(!sComposedName.getLength())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
+            ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("DROP "));
 
             if ( bIsView ) // here we have a view
                 aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));

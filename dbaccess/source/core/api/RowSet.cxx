@@ -486,7 +486,7 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType ) throw(RuntimeExcepti
 
 rtl::OUString ORowSet::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ORowSet");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dba.ORowSet"));
 }
 
 // ::com::sun::star::XServiceInfo
@@ -2228,7 +2228,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
         m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL,NULL,m_nInAppend);
         xTables = m_pTables;
         Sequence< ::rtl::OUString> aTableFilter(1);
-        aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
+        aTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
         m_pTables->construct(aTableFilter,Sequence< ::rtl::OUString>());
     }
 
@@ -2284,7 +2284,7 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
         // filter contains paramters (since a keyset may add parameters itself)
         // 2003-12-12 - #23418# - fs@openoffice.org
         m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
-        m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
+        m_xComposer->setFilter( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0 = 1" ) ) );
     }
 
     m_xComposer->setOrder( m_aOrder );
@@ -2336,7 +2336,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
             }
             else
             {
-                sCommand = rtl::OUString::createFromAscii("SELECT * FROM ");
+                sCommand = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
                 ::rtl::OUString sCatalog, sSchema, sTable;
                 ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
                 sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
@@ -2852,7 +2852,7 @@ void ORowSetClone::release() throw()
 // XServiceInfo
 rtl::OUString ORowSetClone::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.ORowSetClone");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ORowSetClone"));
 }
 
 sal_Bool ORowSetClone::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)

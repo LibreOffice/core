@@ -107,7 +107,7 @@ Any SAL_CALL ODataColumn::queryInterface( const Type & _rType ) throw (RuntimeEx
 // XServiceInfo
 rtl::OUString ODataColumn::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.ODataColumn");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ODataColumn"));
 }
 
 Sequence< ::rtl::OUString > ODataColumn::getSupportedServiceNames(  ) throw (RuntimeException)

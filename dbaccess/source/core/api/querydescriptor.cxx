@@ -224,7 +224,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
 
 ::rtl::OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdb.OQueryDescriptor");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OQueryDescriptor"));
 }
 
 sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)

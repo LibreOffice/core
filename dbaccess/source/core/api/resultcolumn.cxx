@@ -133,7 +133,7 @@ Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeExceptio
 // XServiceInfo
 rtl::OUString OResultColumn::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OResultColumn");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OResultColumn"));
 }
 
 Sequence< ::rtl::OUString > OResultColumn::getSupportedServiceNames(  ) throw (RuntimeException)

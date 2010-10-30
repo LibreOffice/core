@@ -464,7 +464,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE )
 rtl::OUString OStatement::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::getImplementationName" );
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OStatement");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OStatement"));
 }
 
 sal_Bool OStatement::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
