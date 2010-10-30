@@ -576,35 +576,35 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     static tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.LineChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.LineDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.LineDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.AreaChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.AreaDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.AreaChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.AreaDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BarDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BarDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.PieChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.PieDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.PieDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.DonutChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.DonutDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DonutChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.DonutDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ScatterChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.XYDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.XYDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.FilledNetChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.FilledNetDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.NetDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.StockDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BubbleDiagram" ) ) )
 
         ;
     return g_aChartTypeNameMap;

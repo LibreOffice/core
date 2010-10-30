@@ -346,7 +346,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
     aSNS.getArray()[ 0 ] = CHART_CONTROLLER_SERVICE_NAME;
-    aSNS.getArray()[ 1 ] = ::rtl::OUString::createFromAscii("com.sun.star.frame.Controller");
+    aSNS.getArray()[ 1 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Controller" ) );
     //// @todo : add additional services if you support any further
     return aSNS;
 }
