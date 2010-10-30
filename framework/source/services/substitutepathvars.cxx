@@ -286,7 +286,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
         while ( nSharePoints < aSharePointNames.getLength() )
         {
             rtl::OUString aSharePointNodeName( m_aSharePointsNodeName );
-            aSharePointNodeName += rtl::OUString::createFromAscii( "/" );
+            aSharePointNodeName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             aSharePointNodeName += aSharePointNames[ nSharePoints ];
 
             SubstituteRuleVector aRuleSet;
@@ -723,9 +723,9 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
-                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
-                            ::rtl::OUString::createFromAscii("Paths/Work"),
-                            ::rtl::OUString::createFromAscii("WritePath"),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paths/Work")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     }
     catch(RuntimeException &)
@@ -748,9 +748,9 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
-                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
-                            ::rtl::OUString::createFromAscii("Variables"),
-                            ::rtl::OUString::createFromAscii("Work"),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Variables")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Work")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     }
     catch(RuntimeException &)
