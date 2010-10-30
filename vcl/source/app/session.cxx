@@ -356,7 +356,7 @@ OUString SAL_CALL vcl_session_getImplementationName()
 Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.frame.SessionManagerClient");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionManagerClient"));
     return aRet;
 }
 
