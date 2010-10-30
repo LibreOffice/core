@@ -45,8 +45,4 @@ DEF1NAME = $(SHL1TARGET)
 SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
-
-ALLTAR: test
-
-test .PHONY: $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN) -forward $(BIN)$/$(TARGET).rdb
+.INCLUDE: _cppunit.mk
