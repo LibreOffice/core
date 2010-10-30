@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <WriterFilterDllApi.hxx>
 
+/// File format detection service for DOC (unused) / DOCX.
 class WRITERFILTER_DLLPUBLIC WriterFilterDetection : public cppu::WeakImplHelper2
 <
     com::sun::star::document::XExtendedFilterDetection,

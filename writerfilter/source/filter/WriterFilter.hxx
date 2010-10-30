@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <WriterFilterDllApi.hxx>
 
+/// Common DOC/DOCX filter, calls DocxExportFilter via UNO or does the DOC (currently unused) / DOCX import.
 class WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper5
 <
     com::sun::star::document::XFilter,

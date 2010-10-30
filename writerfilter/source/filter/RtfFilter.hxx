@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <WriterFilterDllApi.hxx>
 
+/// Common RTF filter, calls RtfImportFilter and RtfExportFilter via UNO.
 class WRITERFILTER_DLLPUBLIC RtfFilter : public cppu::WeakImplHelper5
 <
     com::sun::star::document::XFilter,
