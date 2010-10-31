@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_extensions.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: KAMI $ $Date: 2010/10/30 19:40:10 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:40:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -161,6 +161,17 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Diagram
 	ParentID = gid_Brand_Dir_Share_Extensions;
 	DosName = "Diagram";
+End
+
+#endif
+
+/* ** Validator ** */
+
+#ifdef WITH_EXTENSION_VALIDATOR
+
+Directory gid_Brand_Dir_Share_Extensions_Validator
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "Validator";
 End
 
 #endif

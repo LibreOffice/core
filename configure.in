@@ -902,6 +902,11 @@ AC_ARG_WITH(diagram,
   --with-diagram      Integrate Diagram extension],
 ,)
 
+AC_ARG_WITH(validator,
+[
+  --with-validator      Integrate Validator extension],
+,)
+
 AC_ARG_WITH(google-docs,
 [
   --with-google-docs      Download and integrate Google Documents extension.],
@@ -6829,6 +6834,18 @@ else
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
 fi
 AC_SUBST(WITH_DIAGRAM_EXTENSION)
+
+dnl ===================================================================
+dnl Test whether to include Validator extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Validator extension integration])
+if test "z$with_validator" = "z" -o "z$with_validator" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_VALIDATOR"
+fi
+AC_SUBST(WITH_VALIDATOR_EXTENSION)
 
 dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension

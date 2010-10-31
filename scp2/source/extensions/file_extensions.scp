@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_extensions.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: KAMI $ $Date: 2010/10/30 19:40:10 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:40:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -190,6 +190,19 @@ File gid_File_Oxt_Diagram
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Diagram;
     Name = "Diagram.oxt";
+End
+
+#endif
+
+/* ** Validator ** */
+
+#ifdef WITH_EXTENSION_VALIDATOR
+
+File gid_File_Oxt_Validator
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Validator;
+    Name = "Validator.oxt";
 End
 
 #endif
