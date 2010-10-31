@@ -347,7 +347,7 @@ int deftype (line, filep, file_red, file, parse_it, symbols)
         /*
          * copy the definition back to the beginning of the line.
          */
-        strcpy (line, p);
+        memmove (line, p, strlen(p));
         break;
     case ELSE:
     case ENDIF:
