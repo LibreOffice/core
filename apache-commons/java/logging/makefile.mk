@@ -53,6 +53,9 @@ CONVERTFILES=build.xml
                 
 OUT2CLASS=target$/commons-logging-1.1.1-SNAPSHOT.jar
 
+ANT_OPTS+="-Dfile.encoding=ISO-8859-1"
+.EXPORT : ANT_OPTS
+
 .IF "$(SYSTEM_TOMCAT)" != "YES"
 SERVLETAPI_JAR := $(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/servlet-api.jar
 .ENDIF
