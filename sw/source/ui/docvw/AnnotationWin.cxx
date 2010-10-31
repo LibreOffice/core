@@ -222,7 +222,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 
     // insert old, selected text or "..."
     // TOOD: iterate over all paragraphs, not only first one to find out if it is empty
-    if (pText->GetTextObject().GetText(0) != String(rtl::OUString::createFromAscii("")))
+    if (pText->GetTextObject().GetText(0).Len())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
         GetOutlinerView()->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")),false);

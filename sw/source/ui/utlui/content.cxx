@@ -428,7 +428,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                     else    // redcomment
                     {
                         SwRedline* pRedline = static_cast<SwRedline*>((*i)->GetBroadCaster());
-                        if ( pRedline->GetComment() != String(::rtl::OUString::createFromAscii("")) )
+                        if ( pRedline->GetComment().Len() )
                         {
                             String sEntry = pRedline->GetComment();
                             RemoveNewline(sEntry);
@@ -780,7 +780,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                     else    // redcomment
                     {
                         SwRedline* pRedline = static_cast<SwRedline*>((*i)->GetBroadCaster());
-                        if ( pRedline->GetComment() != String(::rtl::OUString::createFromAscii("")) )
+                        if ( pRedline->GetComment().Len() )
                         {
                             String sEntry = pRedline->GetComment();
                             RemoveNewline(sEntry);
@@ -1173,11 +1173,11 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 pSubPop4->InsertItem(601, sPostItHide );
                 pSubPop4->InsertItem(602, sPostItDelete );
                 /*
-                pSubPop4->InsertItem(603,rtl::OUString::createFromAscii("Sort"));
+                pSubPop4->InsertItem(603,rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sort")));
                 PopupMenu* pMenuSort = new PopupMenu;
-                pMenuSort->InsertItem(604,rtl::OUString::createFromAscii("By Position"));
-                pMenuSort->InsertItem(605,rtl::OUString::createFromAscii("By Author"));
-                pMenuSort->InsertItem(606,rtl::OUString::createFromAscii("By Date"));
+                pMenuSort->InsertItem(604,rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("By Position")));
+                pMenuSort->InsertItem(605,rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("By Author")));
+                pMenuSort->InsertItem(606,rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("By Date")));
                 pSubPop4->SetPopupMenu(603, pMenuSort);
                 */
                 pPop->InsertItem(4, pType->GetSingleName());

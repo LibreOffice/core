@@ -401,7 +401,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if (pRedline)
                 {
                     sComment = pRedline->GetComment();
-                    if ( sComment == String(rtl::OUString::createFromAscii("")) )
+                    if ( !sComment.Len() )
                         GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
                     const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
                 }

@@ -741,8 +741,8 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 break;
                 default:
                     throw IllegalArgumentException(
-                        ::rtl::OUString::createFromAscii(
-                            "SwXViewSettings: invalid zoom type"), 0, 0);
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "SwXViewSettings: invalid zoom type")), 0, 0);
                 break;
             }
             if(eZoom < USHRT_MAX)

@@ -466,16 +466,16 @@ UNOSEQUENCE< UNOOUSTRING > SwFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 3 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
-    seqServiceNames.getArray() [1] = UNOOUSTRING::createFromAscii( "com.sun.star.text.FormatDetector"  );
-    seqServiceNames.getArray() [2] = UNOOUSTRING::createFromAscii( "com.sun.star.text.W4WFormatDetector"  );
+    seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.FormatDetector"  ));
+    seqServiceNames.getArray() [2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.W4WFormatDetector"  ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SwFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.writer.FormatDetector" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.writer.FormatDetector" ));
 }
 
 /* Helper for registry */

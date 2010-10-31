@@ -1120,7 +1120,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
                         /* enable again once we have redline comments in the margin
                         sComment = rRedline.GetComment();
-                        if ( sComment == String(::rtl::OUString::createFromAscii("")) )
+                        if ( !sComment.Len() )
                             GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
                         const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
                         */
