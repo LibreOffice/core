@@ -28,7 +28,6 @@
 #ifndef _UNOPRNMS_HXX
 #define _UNOPRNMS_HXX
 
-
 #include <sal/types.h>
 #include <tools/solar.h>
 #include "swdllapi.h"
@@ -705,27 +704,25 @@ enum SwPropNameIds
 /* 0662 */  UNO_NAME_SELITEM,
 /* 0663 */  UNO_NAME_IS_SPLIT_ALLOWED,
 /* 0664 */  UNO_NAME_CHAR_HIDDEN,
-// OD 18.09.2003 #i18732#
+
 /* 0665 */  UNO_NAME_IS_FOLLOWING_TEXT_FLOW,
 /* 0666 */  UNO_NAME_WIDTH_TYPE,
 /* 0667 */  UNO_NAME_SCRIPT_URL,
 /* 0668 */  UNO_NAME_RUNTIME_UID,
 /* 0669 */  UNO_NAME_COLLAPSING_BORDERS,
-// OD 2004-05-05 #i28701#
+
 /* 0670 */  UNO_NAME_WRAP_INFLUENCE_ON_POSITION,
 /* 0671 */  UNO_NAME_DATA_BASE_URL,
 /* 0672 */  UNO_NAME_DATA_BASE_RESOURCE,
-// --> OD 2004-08-06 #i28749#
+
 /* 0673 */  UNO_NAME_TRANSFORMATION_IN_HORI_L2R,
 /* 0674 */  UNO_NAME_POSITION_LAYOUT_DIR,
-// <--
+
 /* 0675 */  UNO_NAME_NUMBERING_IS_OUTLINE,
-///* 0676 */  UNO_NAME_DEFAULT_OUTLINE_LEVEL,   //#outline level, removed by zhaojianwei
-// --> OD 2004-10-28 #i36248#
+
 /* 0677 */  UNO_NAME_STARTPOSITION_IN_HORI_L2R,
 /* 0678 */  UNO_NAME_ENDPOSITION_IN_HORI_L2R,
-// <--
-// --> OS 2004-12-13 #30916#
+
 /* 0679 */  UNO_NAME_SUBJECT,
 /* 0680 */  UNO_NAME_ADDRESS_FROM_COLUMN,
 /* 0681 */  UNO_NAME_SEND_AS_HTML,
@@ -744,74 +741,72 @@ enum SwPropNameIds
 /* 0693 */  UNO_NAME_SAVE_FILTER_OPTIONS,
 /* 0694 */  UNO_NAME_SAVE_FILTER_DATA,
 /* 0695 */  UNO_NAME_LOCK_UPDATES,
-// --> TL 2005-02-14 #i37766#
+
 /* 0696 */  UNO_NAME_PAGE_COUNT,
 /* 0697 */  UNO_NAME_LINE_COUNT,
 /* 0698 */  UNO_NAME_IS_CONSTANT_SPELLCHECK,
 /* 0699 */  UNO_NAME_IS_HIDE_SPELL_MARKS,       // deprecated #i91949
-// <--
+
 /* 0700 */  UNO_NAME_IS_FIELD_USED,
 /* 0701 */  UNO_NAME_IS_FIELD_DISPLAYED,
 /* 0702 */  UNO_NAME_BUILDID,
 /* 0703 */  UNO_NAME_PARA_STYLE_CONDITIONS,
-// --> FME 2005-12-13 #b6354161# Print empty pages
+
 /* 0704 */  UNO_NAME_PRINT_EMPTY_PAGES,
-// <--
-// --> BM 2006 New Chart (chart2)
+
 /* 0705 */  UNO_NAME_ROLE,
-// <--
+
 /* 0706 */  UNO_NAME_FIELD_CODE,
 /* 0707 */  UNO_NAME_HAS_VALID_SIGNATURES,
-// --> AMA #i65476# automatic styles
+
 /* 0708 */   UNO_NAME_CHAR_AUTO_STYLE_NAME,
 /* 0709 */   UNO_NAME_PARA_AUTO_STYLE_NAME,
-// --> OD 2006-03-21 #b6375613#
+
 /* 0710 */  UNO_NAME_APPLY_WORKAROUND_FOR_B6375613,
 /* 0711 */  UNO_NAME_LAYOUT_SIZE,
-// --> HB #144146#
+
 /* 0712 */  UNO_NAME_HELP,
 /* 0713 */  UNO_NAME_TOOLTIP,
-// --> #i73329# / 2007-01-11 / frank.schoenheit@sun.com
+
 /* 0714 */  UNO_NAME_DIALOG_LIBRARIES,
 /* 0715 */  UNO_NAME_HEADER_ROW_COUNT,
 /* 0716 */  UNO_NAME_INPUT,
 /* 0717 */  UNO_NAME_ROW_SPAN,
-// --> OD 2008-01-15 #newlistlevelattrs#
+
 /* 0718 */  UNO_NAME_POSITION_AND_SPACE_MODE,
 /* 0719 */  UNO_NAME_LABEL_FOLLOWED_BY,
 /* 0720 */  UNO_NAME_LISTTAB_STOP_POSITION,
 /* 0721 */  UNO_NAME_FIRST_LINE_INDENT,
 /* 0722 */  UNO_NAME_INDENT_AT,
-// --> #i52420# / 2008-02-07 / beppec56@openoffice.org
+
 /* 0723 */  UNO_NAME_CHAPTER_LEVEL,
-// --> 2007-03-27 text grid enhancement for better CJK support
+
 /* 0724 */  UNO_NAME_GRID_BASE_WIDTH,
 /* 0725 */  UNO_NAME_GRID_SNAP_TO_CHARS,
 /* 0726 */  UNO_NAME_GRID_STANDARD_PAGE_MODE,
 /* 0727 */  UNO_NAME_TABLE_BORDER_DISTANCES,
-// --> OD 2008-04-22 #refactorlists#
+
 /* 0728 */  UNO_NAME_LIST_ID,
 /* 0729 */  UNO_NAME_DEFAULT_LIST_ID,
 // <--
 /* 0730 */  UNO_NAME_STREAM_NAME,
-// --> OD 2008-11-26 #158694#
+
 /* 0731 */  UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
 /* 0732 */  UNO_NAME_PARA_LIST_LABEL_STRING,
 // <--
 /* 0733 */  UNO_NAME_CHAR_OVERLINE,
 /* 0734 */  UNO_NAME_CHAR_OVERLINE_COLOR,
 /* 0735 */  UNO_NAME_CHAR_OVERLINE_HAS_COLOR,
-/* 0736 */  UNO_NAME_OUTLINE_LEVEL,  //#outline level,add<-zhaojianwei outlinelevel
-// --> OD 2009-07-13 #i73249#
+/* 0736 */  UNO_NAME_OUTLINE_LEVEL,
+
 /* 0737 */  UNO_NAME_DESCRIPTION,
-// <--
-/* 0738 */  UNO_NAME_META,       // #i91565#
+
+/* 0738 */  UNO_NAME_META,
 /* 0739 */  UNO_NAME_IS_TEMPLATE,
 /* 0740 */  UNO_NAME_VBA_DOCOBJ,
-/* 0741 */  UNO_NAME_NESTED_TEXT_CONTENT, // #i109601#
+/* 0741 */  UNO_NAME_NESTED_TEXT_CONTENT,
 /* 0742 */  SW_PROPNAME_END
 };
-
 
 struct SwPropNameLen
 {
@@ -819,8 +814,6 @@ struct SwPropNameLen
     USHORT      nNameLen;
     operator const char*() const { return pName; }
 };
-
-
 
 typedef const SwPropNameLen SwPropNameTab[ SW_PROPNAME_END - SW_PROPNAME_BEGIN ];
 extern const SwPropNameTab aPropNameTab;
@@ -839,7 +832,6 @@ SW_DLLPUBLIC const SwPropNameLen& SwGetPropName( USHORT nId );
 
 #define SW_PROP_NAME_STR(nId) \
     GetPropName( nId ).pName
-
 
 #endif
 

@@ -40,7 +40,7 @@
 #define WARN_SW_WRITE_BASE      (WARN_SW_BASE | ERRCODE_CLASS_WRITE )
 
 
-// Import Fehler
+// Import Errors
 #define ERR_SWG_FILE_FORMAT_ERROR     (ERROR_SW_READ_BASE | 1 )
 #define ERR_SWG_READ_ERROR              (ERROR_SW_READ_BASE   | 2 )
 
@@ -59,17 +59,17 @@
 
 #define ERR_FORMAT_FILE_ROWCOL          (ERROR_SW_READ_BASE | 15)
 
-// Export Fehler
+// Export errors
 #define ERR_SWG_WRITE_ERROR               (ERROR_SW_WRITE_BASE | 30 )
 #define   ERR_SWG_OLD_GLOSSARY            (ERROR_SW_WRITE_BASE | 31 )
 #define ERR_WRITE_ERROR_FILE            (ERROR_SW_WRITE_BASE | 35 )
 
-// Import/Export Fehler
+// Import/Export errors
 #define ERR_SWG_INTERNAL_ERROR            (ERROR_SW_BASE  | 50 )
 
 #define ERR_TXTBLOCK_NEWFILE_ERROR      (ERROR_SW_BASE|ERRCODE_CLASS_LOCKING | 55 )
 
-// weitere Fehler und Fehlerklassen
+// other errors and errorclasses
 #define ERR_AUTOPATH_ERROR              (ERROR_SW_BASE|ERRCODE_CLASS_PATH | 55 )
 #define ERR_TBLSPLIT_ERROR              (ERROR_SW_BASE|ERRCODE_CLASS_NONE| 56 )
 #define ERR_TBLINSCOL_ERROR             (ERROR_SW_BASE|ERRCODE_CLASS_NONE| 57 )

@@ -112,7 +112,7 @@ protected:
 
     SwNode( const SwNodeIndex &rWhere, const BYTE nNodeId );
 
-    // fuer den initialen StartNode
+    // for the initial StartNode
     SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNodeId );
 
 public:
@@ -270,8 +270,6 @@ public:
 
     /** Provides access to the document's numbered items interface
 
-        OD 2007-10-31 #i83479#
-
         @author OD
     */
     IDocumentListItems& getIDocumentListItems();
@@ -287,7 +285,7 @@ public:
     // suche den PageDesc, mit dem dieser Node formatiert ist. Wenn das
     // Layout vorhanden ist wird ueber das gesucht, ansonsten gibt es nur
     // die harte Tour ueber die Nodes nach vorne suchen!!
-    // OD 18.03.2003 #106326#
+
     const SwPageDesc* FindPageDesc( BOOL bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
 
     // falls der Node in einem Fly steht, dann wird das entsprechende Format
@@ -317,12 +315,12 @@ class SwStartNode: public SwNode
 {
     friend class SwNode;
     friend class SwNodes;
-    friend class SwEndNode;     // um theEndOfSection zu setzen !!
+    friend class SwEndNode;     // to set the theEndOfSection !!
 
     SwEndNode* pEndOfSection;
     SwStartNodeType eSttNdTyp;
 
-    // fuer den initialen StartNode
+    // for the initial StartNode
     SwStartNode( SwNodes& rNodes, ULONG nPos );
 
 protected:
@@ -353,7 +351,7 @@ class SwEndNode : public SwNode
     friend class SwTableNode;       // um seinen EndNode anlegen zukoennen
     friend class SwSectionNode;     // um seinen EndNode anlegen zukoennen
 
-    // fuer den initialen StartNode
+    // for the initial StartNode
     SwEndNode( SwNodes& rNodes, ULONG nPos, SwStartNode& rSttNd );
 
 protected:
@@ -459,7 +457,6 @@ public:
     // Ist bInParent FALSE, wird nur in diesem Node nach dem Attribut gesucht.
     const SfxPoolItem& GetAttr( USHORT nWhich, BOOL bInParent=TRUE ) const;
     BOOL GetAttr( SfxItemSet& rSet, BOOL bInParent=TRUE ) const;
-    // --> OD 2008-03-13 #refactorlists#
     // made virtual
     virtual BOOL SetAttr( const SfxPoolItem& );
     virtual BOOL SetAttr( const SfxItemSet& rSet );
@@ -493,7 +490,7 @@ public:
     // spaetestend in EndAction einer Shell geupdatet
     BOOL InvalidateNumRule();
 
-    // --> OD 2005-02-21 #i42921# - determines the text direction for a certain
+    // determines the text direction for a certain
     // position. Return -1, if text direction could *not* be determined.
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt ) const;
@@ -604,7 +601,6 @@ public:
 
 
 
-// ---------------------- einige inline Methoden ----------------------
 inline       SwEndNode   *SwNode::GetEndNode()
 {
      return ND_ENDNODE == nNodeType ? (SwEndNode*)this : 0;

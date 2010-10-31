@@ -30,14 +30,10 @@
 #include <sfx2/lnkbase.hxx>
 #include <svtools/grfmgr.hxx>
 #include <ndnotxt.hxx>
-// --> OD, MAV 2005-08-17 #i53025#
 #include <com/sun/star/embed/XStorage.hpp>
-// <--
-// --> OD 2007-03-28 #i73788#
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 class SwAsyncRetrieveInputStreamThreadConsumer;
-// <--
 
 class SwGrfFmtColl;
 class SwDoc;
@@ -69,12 +65,10 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                                     //SwapIn zu verhindern.
     BOOL bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
 
-    // --> OD 2007-01-19 #i73788#
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
     sal_Bool mbIsStreamReadOnly;
-    // <--
 
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
@@ -94,9 +88,9 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     void InsertLink( const String& rGrfName, const String& rFltName );
     BOOL ImportGraphic( SvStream& rStrm );
     BOOL HasStreamName() const { return aGrfObj.HasUserData(); }
-    // --> OD 2005-05-04 #i48434# - adjust return type and rename method to
+    // adjust return type and rename method to
     // indicate that its an private one.
-    // --> OD 2005-08-17 #i53025#
+
     // embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
     // Thus, return value isn't needed any more.
     void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
@@ -106,9 +100,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     /** helper method to determine stream for the embedded graphic.
 
-        OD 2005-05-04 #i48434#
         Important note: caller of this method has to handle the thrown exceptions
-        OD, MAV 2005-08-17 #i53025#
         Storage, which should contain the stream of the embedded graphic, is
         provided via parameter. Otherwise the returned stream will be closed
         after the the method returns, because its parent stream is closed and deleted.
@@ -133,7 +125,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     /** helper method to get a substorage of the document storage for readonly access.
 
-        OD, MAV 2005-08-17 #i53025#
         A substorage with the specified name will be opened readonly. If the provided
         name is empty the root storage will be returned.
 
@@ -175,7 +166,7 @@ public:
     inline BOOL IsScaleImageMap() const         { return bScaleImageMap; }
     inline void SetScaleImageMap( BOOL b )      { bScaleImageMap = b; }
 #endif
-        // steht in ndcopy.cxx
+        // in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
@@ -217,7 +208,6 @@ public:
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
 #endif
-    // --> OD 2007-01-18 #i73788#
     boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
     bool IsLinkedInputStreamReady() const;
     void TriggerAsyncRetrieveInputStream();
@@ -225,15 +215,11 @@ public:
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
         const sal_Bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
-    // <--
-    // --> OD 2008-07-21 #i90395#
     bool IsAsyncRetrieveInputStreamPossible() const;
-    // <--
 };
 
-
 // ----------------------------------------------------------------------
-// Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
+// Inline methods from Node.hxx - erst hier ist der TxtNode bekannt !!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;
@@ -253,7 +239,6 @@ inline BOOL SwGrfNode::IsLinkedDDE() const
     return refLink.Is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
 }
 #endif
-
 
 #endif
 

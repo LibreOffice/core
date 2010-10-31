@@ -41,17 +41,11 @@
 #include <hints.hxx>
 #include <hash_map>
 #include <stringhash.hxx>
-// --> OD 2008-02-21 #refactorlists#
 class SwNodeNum;
 #include <SwNumberTreeTypes.hxx>
-// <--
-// --> OD 2008-02-19 #refactorlists#
 #include <vector>
 class SwTxtFmtColl;
-// <--
-// --> OD 2008-07-08 #i91400#
 class IDocumentListsAccess;
-// <--
 
 class Font;
 class SvxBrushItem;
@@ -98,19 +92,18 @@ public:
     virtual sal_Int16   GetVertOrient() const;
     const SwFmtVertOrient*      GetGraphicOrientation() const;
 
-    BOOL IsEnumeration() const; // #i22362#
-    BOOL IsItemize() const; // #i29560#
+    BOOL IsEnumeration() const;
+    BOOL IsItemize() const;
 };
 
 class SwPaM;
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SW_DLLPUBLIC SwNumRule
 {
-// --> OD 2008-02-19 #refactorlists#
+
 public:
     typedef std::vector< SwTxtNode* > tTxtNodeList;
     typedef std::vector< SwTxtFmtColl* > tParagraphStyleList;
-// <--
 private:
     friend void _FinitCore();
 
@@ -121,33 +114,20 @@ private:
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
     static USHORT aDefNumIndents[ MAXLEVEL ];
-    // --> OD 2008-02-11 #newlistlevelattrs#
     // default list level properties for position-and-space mode LABEL_ALIGNMENT
     static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
-    // <--
     static USHORT nRefCount;
     static char* pDefOutlineName;
 
     SwNumFmt* aFmts[ MAXLEVEL ];
 
-    /** container for associated text nodes
-
-    */
-    // --> OD 2008-02-19 #refactorlists#
-//    SwTxtNodeTable* pTxtNodeList;
+    /** container for associated text nodes */
     tTxtNodeList maTxtNodeList;
-    // <--
 
-    /** container for associated paragraph styles
-
-        OD 2008-03-03 #refactorlists#
-    */
+    /** container for associated paragraph styles */
     tParagraphStyleList maParagraphStyleList;
 
-    // #i36749#
-    /**
-       hash_map containing "name->rule" relation
-     */
+    /** hash_map containing "name->rule" relation */
     std::hash_map<String, SwNumRule *, StringHash> * pNumRuleMap;
 
     String sName;
@@ -161,19 +141,13 @@ private:
     BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
     bool mbCountPhantoms;
 
-    // --> OD 2008-02-11 #newlistlevelattrs#
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
-    // <--
-
-    // --> OD 2008-04-03 #refactorlists#
     String msDefaultListId;
-    // <--
 
     // forbidden and not implemented.
     SwNumRule();
 
 public:
-    // --> OD 2008-02-08 #newlistlevelattrs#
     // add parameter <eDefaultNumberFormatPositionAndSpaceMode>
     SwNumRule( const String& rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
@@ -194,42 +168,30 @@ public:
     void Set( USHORT i, const SwNumFmt& );
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
-    // --> OD 2005-10-17 #126238#
     // - add optional parameter <_nRestrictToThisLevel> in order to
     //   restrict returned string to this level.
     String MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const BOOL bInclStrings = TRUE,
                           const BOOL bOnlyArabic = FALSE,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
-    // <--
-    // --> OD 2007-08-24 #i81002#
     String MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels = false,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
-    // <--
 
     /** Returns list of associated text nodes.
 
-       OD 2008-02-19 #refactorlists#
-
        @return list of associated text nodes
     */
-//    const SwTxtNodeTable * GetTxtNodeList() const { return pTxtNodeList; }
     void GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const;
     SwNumRule::tTxtNodeList::size_type GetTxtNodeListSize() const;
 
-    // --> OD 2008-02-19 #refactorlists#
     void AddTxtNode( SwTxtNode& rTxtNode );
     void RemoveTxtNode( SwTxtNode& rTxtNode );
-    // <--
 
-    // --> OD 2008-03-03 #refactorlists#
     SwNumRule::tParagraphStyleList::size_type GetParagraphStyleListSize() const;
     void AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
     void RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
-    // <--
 
-    // --> OD 2008-04-03 #refactorlists#
     inline void SetDefaultListId( const String sDefaultListId )
     {
         msDefaultListId = sDefaultListId;
@@ -238,8 +200,6 @@ public:
     {
         return msDefaultListId;
     }
-    // <--
-    // #i36749#
     /**
        Register this rule in a "name->numrule" map.
 
@@ -267,10 +227,9 @@ public:
     void CheckCharFmts( SwDoc* pDoc );
 
     const String& GetName() const       { return sName; }
-    // --> OD 2008-07-08 #i91400#
+
     void SetName( const String& rNm,
-                  IDocumentListsAccess& rDocListAccess ); // #i36749#
-    // <--
+                  IDocumentListsAccess& rDocListAccess );
 
     BOOL IsAutoRule() const             { return bAutoRuleFlag; }
     void SetAutoRule( BOOL bFlag )      { bAutoRuleFlag = bFlag; }
@@ -284,7 +243,6 @@ public:
     BOOL IsAbsSpaces() const            { return bAbsSpaces; }
     void SetAbsSpaces( BOOL bFlag )     { bAbsSpaces = bFlag; }
 
-    // #115901#
     BOOL IsOutlineRule() const { return eRuleType == OUTLINE_RULE; }
 
     bool IsCountPhantoms() const;
@@ -303,8 +261,6 @@ public:
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
 
-    // #i23726#, #i23725#
-    // --> OD 2008-06-09 #i90078#
     // refactoring: provide certain method for certain purpose
 //    void        Indent(short aAmount, int nLevel = -1,
 //                       int nReferenceLevel = -1, BOOL bRelative = TRUE,
@@ -317,12 +273,10 @@ public:
     // set indent of first list level to given value and change other list level's
     // indents accordingly
     void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
-    // <--
 
     void Validate();
 };
 
-// --> OD 2006-06-27 #b6440955#
 // namespace for static functions and methods for numbering and bullets
 namespace numfunc
 {
@@ -334,7 +288,6 @@ namespace numfunc
 
     /** determine if default bullet font is user defined
 
-        OD 2008-06-06 #i63395#
         The default bullet font is user defined, if it is given in the user configuration
 
         @author OD
@@ -358,15 +311,11 @@ namespace numfunc
         The same for <SHIFT-TAB>-key at the same position for decreasing the
         indent of the complete list or only promotes this list item.
 
-        OD 2007-10-01 #b6600435#
-
         @author OD
     */
     sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
 
     /**
-        OD 2008-06-06 #i89178#
-
         @author OD
     */
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
