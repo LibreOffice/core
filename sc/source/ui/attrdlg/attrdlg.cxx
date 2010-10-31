@@ -72,7 +72,7 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
 #if LAYOUT_SFX_TABDIALOG_BROKEN
     AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 );
 #else
-    String number = rtl::OUString::createFromAscii ("Numbers");
+    String number(RTL_CONSTASCII_USTRINGPARAM("Numbers"));
     AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, FALSE, TAB_APPEND);
 #endif
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
