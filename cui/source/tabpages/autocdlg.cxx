@@ -2730,9 +2730,9 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
                 aSmartTagCaption = aSmartTagType;
 
             const rtl::OUString aLBEntry = aSmartTagCaption +
-                                           OUString::createFromAscii(" (") +
+                                           OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
                                            aName +
-                                           OUString::createFromAscii(")");
+                                           OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
 
             SvLBoxEntry* pEntry = m_aSmartTagTypesLB.SvTreeListBox::InsertEntry( aLBEntry );
             if ( pEntry )
