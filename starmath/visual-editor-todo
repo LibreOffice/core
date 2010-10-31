@@ -17,6 +17,7 @@ Easy
 3. Code style (missing spaces, linebreaks and a few renames)
 4. More documentation
 5. Replace j_assert with DBG_ASSERT (don't do this yet).
+6. Remove the CreateTextFromNode methods and replace calls to it with NodeToTextVisitor
 
 Medium
 ------
@@ -42,3 +43,4 @@ Complex and non-essential
 4. Consider allowing users to enter commands in visual editor, by prefixing the command...
 5. Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
 6. Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
+7. Synchronized command text caret and visual editor caret.
