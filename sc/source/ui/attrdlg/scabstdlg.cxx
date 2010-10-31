@@ -50,7 +50,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear() ) )
         fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
         return fp();
     return 0;
