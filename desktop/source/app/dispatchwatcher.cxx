@@ -204,34 +204,34 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         Sequence < PropertyValue > aArgs( nCount );
 
         // mark request as user interaction from outside
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
-        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        aArgs[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:OpenEvent"));
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION)
         {
-            aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
-            aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
-            aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
-            aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
+            aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenNewView"));
+            aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+            aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"));
         }
         else
         {
             Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+                ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ),
                 com::sun::star::uno::UNO_QUERY );
 
-            aArgs[1].Name = OUString::createFromAscii( "InteractionHandler" );
+            aArgs[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
             aArgs[1].Value <<= xInteraction;
 
             sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
-            aArgs[2].Name = OUString::createFromAscii( "MacroExecutionMode" );
+            aArgs[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ));
             aArgs[2].Value <<= nMacroExecMode;
 
             sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
-            aArgs[3].Name = OUString::createFromAscii( "UpdateDocMode" );
+            aArgs[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "UpdateDocMode" ));
             aArgs[3].Value <<= nUpdateDoc;
         }
 
@@ -328,7 +328,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                     // Otherwise it would be possible to have an office running without an open
                     // window!!
                     Sequence < PropertyValue > aArgs2(1);
-                    aArgs2[0].Name    = ::rtl::OUString::createFromAscii("SynchronMode");
+                    aArgs2[0].Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SynchronMode"));
                     aArgs2[0].Value <<= sal_True;
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
@@ -338,8 +338,8 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 }
                 catch ( ::com::sun::star::uno::Exception& )
                 {
-                    OUString aMsg = OUString::createFromAscii(
-                        "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: ");
+                    OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: "));
                     OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
                 }
             }
@@ -368,7 +368,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
-                aArgs[nIndex].Name = OUString::createFromAscii("ReadOnly");
+                aArgs[nIndex].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
                 aArgs[nIndex].Value <<= sal_True;
             }
 
@@ -376,7 +376,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             if(aDispatchRequest.aRequestType == REQUEST_START) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
-                aArgs[nIndex].Name = OUString::createFromAscii("StartPresentation");
+                aArgs[nIndex].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("StartPresentation"));
                 aArgs[nIndex].Value <<= sal_True;
             }
 
@@ -385,7 +385,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
-                aArgs[nIndex].Name=OUString::createFromAscii("FilterName");
+                aArgs[nIndex].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
                 aArgs[nIndex].Value <<= aForcedInputFilter;
             }
 
@@ -397,15 +397,15 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             }
             catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
             {
-                OUString aMsg = OUString::createFromAscii(
-                    "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: ")
+                OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: "))
                     + iae.Message;
                 OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             catch (com::sun::star::io::IOException& ioe)
             {
-                OUString aMsg = OUString::createFromAscii(
-                    "Dispatchwatcher IOException while calling loadComponentFromURL: ")
+                OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Dispatchwatcher IOException while calling loadComponentFromURL: "))
                     + ioe.Message;
                 OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
@@ -453,7 +453,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             aOutFilename.SetExtension( aFilterExt );
                             FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
                             rtl::OUString aOutFile = aFilterOut+
-                                                     ::rtl::OUString::createFromAscii( "/" )+
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ))+
                                                      aOutFilename.getName();
                             //FileBase::getFileURLFromSystemPath( aOutFile, aOutFile );
 
@@ -463,10 +463,10 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             }
 
                             Sequence<PropertyValue> conversionProperties( 2 );
-                            conversionProperties[0].Name = ::rtl::OUString::createFromAscii( "Overwrite" );
+                            conversionProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Overwrite" ));
                             conversionProperties[0].Value <<= sal_True;
 
-                            conversionProperties[1].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                            conversionProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
                             conversionProperties[1].Value <<= aFilter;
 
                             rtl::OUString aTempName;
@@ -499,10 +499,10 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             aPrinterName=aParam.copy( 0, nPathIndex );
 
                         INetURLObject aOutFilename( aObj );
-                        aOutFilename.SetExtension( ::rtl::OUString::createFromAscii("ps") );
+                        aOutFilename.SetExtension( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ps")) );
                         FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
                         rtl::OUString aOutFile = aFilterOut+
-                            ::rtl::OUString::createFromAscii( "/" )+
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ))+
                             aOutFilename.getName();
 
                         rtl::OUString aTempName;
@@ -518,16 +518,16 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         Sequence < PropertyValue > aPrinterArgs( 1 );
                         if( aPrinterName.getLength() )
                         {
-                            aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                            aPrinterArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
                             aPrinterArgs[0].Value <<= aPrinterName;
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
                         // print ( also without user interaction )
                         aPrinterArgs.realloc(2);
-                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("FileName");
+                        aPrinterArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
                         aPrinterArgs[0].Value <<= aOutFile;
-                        aPrinterArgs[1].Name = ::rtl::OUString::createFromAscii("Wait");
+                        aPrinterArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                         aPrinterArgs[1].Value <<= ( sal_Bool ) sal_True;
                         xDoc->print( aPrinterArgs );
                     } else {
@@ -535,14 +535,14 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         {
                             // create the printer
                             Sequence < PropertyValue > aPrinterArgs( 1 );
-                            aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                            aPrinterArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
                             aPrinterArgs[0].Value <<= ::rtl::OUString( aDispatchRequest.aPrinterName );
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
                         // print ( also without user interaction )
                         Sequence < PropertyValue > aPrinterArgs( 1 );
-                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Wait");
+                        aPrinterArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                         aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
                         xDoc->print( aPrinterArgs );
                     }
@@ -579,9 +579,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     {
         // Execute all asynchronous dispatches now after we placed them into our request container!
         Sequence < PropertyValue > aArgs( 2 );
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
-        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
-        aArgs[1].Name = ::rtl::OUString::createFromAscii("SynchronMode");
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        aArgs[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:OpenEvent"));
+        aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SynchronMode"));
         aArgs[1].Value <<= sal_True;
 
         for ( sal_uInt32 n = 0; n < aDispatches.size(); n++ )
