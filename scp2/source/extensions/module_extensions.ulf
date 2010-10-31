@@ -6,7 +6,7 @@
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: KAMI $ $Date: 2010/10/31 04:40:10 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -116,6 +116,12 @@ en-US = "Validator"
 
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_VALIDATOR]
 en-US = "Validator"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_VALIDATOR]
+en-US = "Barcode"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_VALIDATOR]
+en-US = "Barcode"
 
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS]
 en-US = "Google Docs & Zoho"

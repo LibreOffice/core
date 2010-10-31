@@ -6848,6 +6848,18 @@ fi
 AC_SUBST(WITH_VALIDATOR_EXTENSION)
 
 dnl ===================================================================
+dnl Test whether to include Barcode extension
+dnl ===================================================================
+AC_MSG_CHECKING([for Barcode extension integration])
+if test "z$with_barcode" = "z" -o "z$with_barcode" = "zno" ; then
+  AC_MSG_RESULT([no])
+else
+  AC_MSG_RESULT([yes])
+  SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
+fi
+AC_SUBST(WITH_BARCODE_EXTENSION)
+
+dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension
 dnl ===================================================================
 AC_MSG_CHECKING([for ConvertTextToNumber extension integration])

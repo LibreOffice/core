@@ -6,7 +6,7 @@
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: KAMI $ $Date: 2010/10/31 04:40:10 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -172,6 +172,17 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Validator
 	ParentID = gid_Brand_Dir_Share_Extensions;
 	DosName = "Validator";
+End
+
+#endif
+
+/* ** Barcode ** */
+
+#ifdef WITH_EXTENSION_BARCODE
+
+Directory gid_Brand_Dir_Share_Extensions_Barcode
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "Barcode";
 End
 
 #endif

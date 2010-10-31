@@ -6,7 +6,7 @@
  *
  *  $Revision: 1.4 $
  *
- *  last change: $Author: KAMI $ $Date: 2010/10/31 04:40:10 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -203,6 +203,19 @@ File gid_File_Oxt_Validator
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Validator;
     Name = "Validator.oxt";
+End
+
+#endif
+
+/* ** Validator ** */
+
+#ifdef WITH_EXTENSION_BARCODE
+
+File gid_File_Oxt_Barcode
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Validator;
+    Name = "Barcode.oxt";
 End
 
 #endif

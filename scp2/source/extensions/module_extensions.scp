@@ -6,7 +6,7 @@
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: KAMI $ $Date: 2010/10/31 04:40:10 $
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 3.
@@ -255,6 +255,23 @@ Module gid_Module_Optional_Extensions_Validator
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Validator );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+#endif
+
+/* ** Barcode ** */
+
+#ifdef WITH_EXTENSION_BARCODE
+#ifdef WITH_EXTENSION_INTEGRATION
+Module gid_Module_Optional_Extensions_Barcode
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_BARCODE);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_Barcode );
     Minimal = NO;
     Default = YES;
     Styles = ( );
