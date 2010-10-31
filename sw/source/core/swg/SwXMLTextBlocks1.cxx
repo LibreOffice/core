@@ -53,7 +53,7 @@
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
 #define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
 
-sal_Char __FAR_DATA XMLN_BLOCKLIST[] = "BlockList.xml";
+sal_Char XMLN_BLOCKLIST[] = "BlockList.xml";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -243,10 +243,9 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
                         aFilterArguments[0] <<= xReplace;
 
                         // get filter
-                        OUString sFilterComponent( OUString::createFromAscii(
-                            bOasis
-                            ? "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"
-                            : "com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
+                        OUString sFilterComponent = bOasis
+                            ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"))
+                            : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
                         uno::Reference< xml::sax::XDocumentHandler > xFilter(
                             xServiceFactory->createInstanceWithArguments(
                                 sFilterComponent, aFilterArguments),
@@ -587,9 +586,7 @@ void SwXMLTextBlocks::WriteInfo( void )
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        // #110680#
-        // SwXMLBlockListExport aExp(*this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
-        SwXMLBlockListExport aExp( xServiceFactory, *this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
+        SwXMLBlockListExport aExp( xServiceFactory, *this, OUString(RTL_CONSTASCII_USTRINGPARAM(XMLN_BLOCKLIST)), xHandler);
 
         aExp.exportDoc( XML_BLOCK_LIST );
 
@@ -683,14 +680,14 @@ ULONG SwXMLTextBlocks::SetMacroTable(
                 aParams[0] <<= xDocHandler;
                 aParams[1] <<= xEvents;
 
+
                 // get filter component
+                OUString sFilterComponent = bOasis
+                    ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"))
+                    : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsExporter"));
                 uno::Reference< document::XExporter > xExporter(
                     xServiceFactory->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                         bOasis
-                             ? "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"
-                            : "com.sun.star.comp.Writer.XMLAutotextEventsExporter"),
-                        aParams), UNO_QUERY);
+                        sFilterComponent, aParams), UNO_QUERY);
                 ASSERT( xExporter.is(),
                         "can't instantiate export filter component" );
                 if( xExporter.is() )
