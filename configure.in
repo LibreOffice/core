@@ -907,6 +907,11 @@ AC_ARG_WITH(validator,
   --with-validator      Integrate Validator extension],
 ,)
 
+AC_ARG_WITH(barcode,
+[
+  --with-barcode      Integrate Barcode extension],
+,)
+
 AC_ARG_WITH(google-docs,
 [
   --with-google-docs      Download and integrate Google Documents extension.],
