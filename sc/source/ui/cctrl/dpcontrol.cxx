@@ -311,7 +311,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, US
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
-    maName(OUString::createFromAscii("ScMenuFloatingWindow")),
+    maName(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")),
     mnSelectedMenu(MENU_NOT_SELECTED),
     mnClickedMenu(MENU_NOT_SELECTED),
     mpDoc(pDoc),
@@ -327,7 +327,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, US
     maLabelFont.SetHeight(nPopupFontHeight);
     SetFont(maLabelFont);
 
-    SetText(OUString::createFromAscii("ScMenuFloatingWindow"));
+    SetText( OUString(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")) );
     SetPopupModeEndHdl( LINK(this, ScMenuFloatingWindow, PopupEndHdl) );
 }
 
