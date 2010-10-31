@@ -91,7 +91,6 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 using rtl::OUString;
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 SV_IMPL_PTRARR(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr);
 
@@ -126,7 +125,7 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.DefaultNumberingProvider" )) );
     Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
     DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
 
