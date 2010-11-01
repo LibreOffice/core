@@ -29,14 +29,10 @@
 #define _DCONTACT_HXX
 
 #include <svx/svdobj.hxx>
-// OD 14.05.2003 #108784#
 #include <svx/svdovirt.hxx>
-// OD 2004-01-16 #110582#
 #include <swtypes.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
-
-// OD 17.06.2003 #108784#
 #include <list>
 
 #include "calbck.hxx"
@@ -51,12 +47,10 @@ class SwVirtFlyDrawObj;
 class SwFmtAnchor;
 class SwFlyDrawObj;
 class SwRect;
-// OD 17.06.2003 #108784# - forward declaration for class <SwDrawVirtObj>
+// forward declaration for class <SwDrawVirtObj>
 class SwDrawContact;
-// OD 2004-01-16 #110582#
 struct SwPosition;
 class SwIndex;
-// OD 2004-03-25 #i26791#
 #include <anchoreddrawobject.hxx>
 
 //Der Umgekehrte Weg: Sucht das Format zum angegebenen Objekt.
@@ -77,12 +71,9 @@ void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
 void ClrContourCache( const SdrObject *pObj );
 
 // liefert BoundRect inklusive Abstand
-// --> OD 2006-08-15 #i68520# - change naming
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
-// <--
 
 //Liefert den UserCall ggf. vom Gruppenobjekt
-// OD 2004-03-31 #i26791# - change return type
 SwContact* GetUserCall( const SdrObject* );
 
 // liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
@@ -91,14 +82,13 @@ BOOL IsMarqueeTextObj( const SdrObject& rObj );
 //Basisklasse fuer die folgenden KontaktObjekte (Rahmen+Zeichenobjekte)
 class SwContact : public SdrObjUserCall, public SwClient
 {
-    // OD 05.09.2003 #112039# - boolean, indicating destruction of contact object
+    // boolean, indicating destruction of contact object
     // important note: boolean has to be set at the beginning of each destructor
     //                 in the subclasses using method <SetInDTOR()>.
     bool mbInDTOR;
 
     /** method to move object to visible/invisible layer
 
-        OD 21.08.2003 #i18447#
         Implementation for the public method <MoveObjToVisibleLayer(..)>
         and <MoveObjToInvisibleLayer(..)>
         If object is in invisble respectively visible layer, its moved to
@@ -108,7 +98,6 @@ class SwContact : public SdrObjUserCall, public SwClient
         aren't on the same layer as the group object, and
         <SdrObjGroup::SetLayer(..)|NbcSetLayer(..)> sets also the layer of
         the members.
-        OD 2004-01-15 #110582# - moved from subclass <SwDrawContact>
 
         @author OD
 
@@ -124,7 +113,6 @@ class SwContact : public SdrObjUserCall, public SwClient
                           SdrObject* _pDrawObj );
 
 protected:
-    // OD 05.09.2003 #112039# - accessor to set member <mbInDTOR>
     void SetInDTOR();
 
 public:
@@ -134,12 +122,9 @@ public:
     SwContact( SwFrmFmt *pToRegisterIn );
     virtual ~SwContact();
 
-    // OD 2004-03-29 #i26791#
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const = 0;
     virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj ) = 0;
 
-    // OD 13.05.2003 #108784# - made methods virtual and not inline
-    // OD 2004-04-01 #i26791# - made methods pure virtual
     virtual const SdrObject *GetMaster() const = 0;
     virtual SdrObject *GetMaster() = 0;
     virtual void SetMaster( SdrObject* _pNewMaster ) = 0;
@@ -148,14 +133,11 @@ public:
     const SwFrmFmt  *GetFmt() const
         { return (const SwFrmFmt*)GetRegisteredIn(); }
 
-    // OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
     bool IsInDTOR() const;
 
     /** method to move drawing object to corresponding visible layer
 
-        OD 21.08.2003 #i18447#
         uses method <_MoveObjToLayer(..)>
-        OD 2004-01-15 #110582# - moved from subclass <SwDrawContact> and made virtual
 
         @author OD
 
@@ -166,9 +148,7 @@ public:
 
     /** method to move drawing object to corresponding invisible layer
 
-        OD 21.08.2003 #i18447#
         uses method <_MoveObjToLayer(..)>
-        OD 2004-01-15 #110582# - moved from subclass <SwDrawContact> and made virtual.
 
         @author OD
 
@@ -178,7 +158,7 @@ public:
     virtual void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
 
     // -------------------------------------------------------------------------
-    // OD 2004-01-16 #110582# - some virtual helper methods for information
+    // some virtual helper methods for information
     // about the object (Writer fly frame resp. drawing object)
     const SwFmtAnchor& GetAnchorFmt() const
     {
@@ -209,25 +189,16 @@ public:
 
     /** get data collection of anchored objects, handled by with contact
 
-        OD 2004-08-23 #110810#
-
-        @author
     */
     virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
 
     /** get minimum order number of anchored objects handled by with contact
 
-        OD 2004-08-24 #110810#
-
-        @author
     */
     sal_uInt32 GetMinOrdNum() const;
 
     /** get maximum order number of anchored objects handled by with contact
 
-        OD 2004-08-24 #110810#
-
-        @author
     */
     sal_uInt32 GetMaxOrdNum() const;
 };
@@ -238,12 +209,10 @@ public:
 class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 {
 private:
-    // OD 2004-04-01 #i26791#
     SwFlyDrawObj* mpMasterObj;
 
     /** method to determine new order number for new instance of <SwVirtFlyDrawObj>
 
-        OD 2004-08-16 #i27030#
         Used in method <CreateNewRef(..)>.
 
         @author OD
@@ -257,21 +226,19 @@ public:
     SwFlyDrawContact( SwFlyFrmFmt* pToRegisterIn, SdrModel* pMod );
     virtual ~SwFlyDrawContact();
 
-    // OD 2004-03-29 #i26791#
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const;
     virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj );
 
-    // OD 2004-04-01 #i26791#
     virtual const SdrObject* GetMaster() const;
     virtual SdrObject* GetMaster();
     virtual void SetMaster( SdrObject* _pNewMaster );
 
     SwVirtFlyDrawObj* CreateNewRef( SwFlyFrm* pFly );
 
-    // virtuelle Methoden von SwClient
+    // virtual methods from SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
-    // OD 2004-01-16 #110582# - override methods to control Writer fly frames,
+    // override methods to control Writer fly frames,
     // which are linked, and to assure that all objects anchored at/inside the
     // Writer fly frame are also made visible/invisible.
     virtual void MoveObjToVisibleLayer( SdrObject* _pDrawObj );
@@ -279,20 +246,17 @@ public:
 
     /** get data collection of anchored objects handled by with contact
 
-        OD 2004-08-23 #110810#
-
-        @author
     */
     virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
 
-// OD 16.05.2003 #108784# - new class for re-direct methods calls at a 'virtual'
+// new class for re-direct methods calls at a 'virtual'
 //      drawing object to its referenced object.
 class SwDrawVirtObj : public SdrVirtObj
 {
     private:
         // data for connection to writer layout
-        // OD 2004-03-25 #i26791# - anchored drawing object instance for the
+        // anchored drawing object instance for the
         // 'virtual' drawing object
         SwAnchoredDrawObject maAnchoredDrawObj;
 
@@ -317,14 +281,12 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual ~SwDrawVirtObj();
 
         // access to offset
-        // OD 30.06.2003 #108784# - virtual!!!
         virtual const Point GetOffset() const;
 
         virtual SdrObject* Clone() const;
         virtual void operator=( const SdrObject& rObj );
 
         // connection to writer layout
-        // OD 2004-03-29 #i26791#
         const SwAnchoredObject* GetAnchoredObj() const;
         SwAnchoredObject* AnchoredObj();
         const SwFrm* GetAnchorFrm() const;
@@ -341,7 +303,6 @@ class SwDrawVirtObj : public SdrVirtObj
 
         virtual void NbcSetAnchorPos(const Point& rPnt);
 
-        // #108784#
         // All overloaded methods which need to use the offset
         virtual void RecalcBoundRect();
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
@@ -369,10 +330,8 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual Point GetPoint(sal_uInt32 i) const;
         virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
-        // #108784#
         virtual bool HasTextEdit() const;
 
-        // OD 17.06.2003 #108784# - overload 'layer' methods
         virtual SdrLayerID GetLayer() const;
         virtual void NbcSetLayer(SdrLayerID nLayer);
         virtual void SetLayer(SdrLayerID nLayer);
@@ -381,43 +340,38 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual bool supportsFullDrag() const;
         virtual SdrObject* getFullDragClone() const;
 
-        // #i97197#
         virtual void SetBoundRectDirty();
         virtual const Rectangle& GetCurrentBoundRect() const;
         virtual const Rectangle& GetLastBoundRect() const;
 };
 
-// OD 26.06.2003 #108784#
 bool CheckControlLayer( const SdrObject *pObj );
 
 //KontactObjekt fuer die Verbindung von Formaten als Repraesentanten der
 //Zeichenobjekte im StarWriter (SwClient) und den Objekten selbst im Drawing
 //(SdrObjUserCall).
 
-// --> OD 2006-01-18 #129959#
 class NestedUserCallHdl;
-// <--
 
 class SwDrawContact : public SwContact
 {
     private:
-        // OD 2004-03-25 #i26791# - anchored drawing object instance for the
+        // anchored drawing object instance for the
         // 'master' drawing object
         SwAnchoredDrawObject maAnchoredDrawObj;
 
-        // OD 16.05.2003 #108784# - data structure for collecting 'virtual'
+        // data structure for collecting 'virtual'
         // drawing object supporting drawing objects in headers/footers.
         std::list<SwDrawVirtObj*> maDrawVirtObjs;
 
-        // OD 2004-04-01 #i26791# - boolean indicating set 'master' drawing
+        // boolean indicating set 'master' drawing
         // object has been cleared.
         bool mbMasterObjCleared : 1;
 
-        // OD 10.10.2003 #112299# - internal flag to indicate that disconnect
+        // internal flag to indicate that disconnect
         // from layout is in progress
         bool mbDisconnectInProgress : 1;
 
-        // --> OD 2006-01-18 #129959#
         // Needed data for handling of nested <SdrObjUserCall> events in
         // method <_Changed(..)>
         bool mbUserCallActive : 1;
@@ -426,7 +380,6 @@ class SwDrawContact : public SwContact
         SdrUserCallType meEventTypeOfCurrentUserCall;
 
         friend class NestedUserCallHdl;
-        // <--
 
         // unary function used by <list> iterator to find a disconnected 'virtual'
         // drawing object
@@ -456,41 +409,32 @@ class SwDrawContact : public SwContact
             bool operator() ( const SwDrawVirtObj* _pDrawVirtObj );
         };
 
-        // OD 16.05.2003 #108784# - method for adding/removing 'virtual' drawing object.
+        // method for adding/removing 'virtual' drawing object.
         SwDrawVirtObj* CreateVirtObj();
         void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
         void RemoveAllVirtObjs();
 
-        // OD 2004-03-31 #i26791#
         void _InvalidateObjs( const bool _bUpdateSortedObjsList = false );
 
-        // --> OD 2006-01-23 #124157#
         // no copy-constructor and no assignment operator
         SwDrawContact( const SwDrawContact& );
         SwDrawContact& operator=( const SwDrawContact& );
-        // <--
     public:
         TYPEINFO();
 
         SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj );
         virtual ~SwDrawContact();
 
-        // OD 2004-03-29 #i26791#
-        // --> OD 2005-01-06 #i30669# - no default value for parameter <_pSdrObj>
         virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const;
         virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj );
-        // <--
 
-        // OD 2004-04-01 #i26791#
         virtual const SdrObject* GetMaster() const;
         virtual SdrObject* GetMaster();
         virtual void SetMaster( SdrObject* _pNewMaster );
 
-        // OD 2004-03-29 #i26791#
         const SwFrm* GetAnchorFrm( const SdrObject* _pDrawObj = 0L ) const;
         SwFrm* GetAnchorFrm( SdrObject* _pDrawObj = 0L );
 
-        // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
         inline const SwPageFrm* GetPageFrm() const
         {
             return maAnchoredDrawObj.GetPageFrm();
@@ -503,7 +447,6 @@ class SwDrawContact : public SwContact
         {
             return maAnchoredDrawObj.SetPageFrm( _pNewPageFrm );
         }
-        // <--
         void ChkPage();
         SwPageFrm* FindPage( const SwRect &rRect );
 
@@ -511,15 +454,15 @@ class SwDrawContact : public SwContact
         //Der Anker wird Anhand des Attributes SwFmtAnchor bestimmt.
         //Das Objekt wird ggf. beim alten Anker abgemeldet.
         void ConnectToLayout( const SwFmtAnchor *pAnch = 0 );
-        // OD 27.06.2003 #108784# - method to insert 'master' drawing object
+        // method to insert 'master' drawing object
         // into drawing page
         void InsertMasterIntoDrawPage();
 
         void DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer = true );
-        // OD 19.06.2003 #108784# - disconnect for a dedicated drawing object -
+        // disconnect for a dedicated drawing object -
         // could be 'master' or 'virtual'.
         void DisconnectObjFromLayout( SdrObject* _pDrawObj );
-        // OD 26.06.2003 #108784# - method to remove 'master' drawing object
+        // method to remove 'master' drawing object
         // from drawing page.
         // To be used by the undo for delete of object. Call it after method
         // <DisconnectFromLayout( bool = true )> is already performed.
@@ -527,7 +470,7 @@ class SwDrawContact : public SwContact
         // drawing object from drawing page.
         void RemoveMasterFromDrawPage();
 
-        // OD 19.06.2003 #108784# - get drawing object ('master' or 'virtual')
+        // get drawing object ('master' or 'virtual')
         // by frame.
         SdrObject* GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm );
 
@@ -544,17 +487,12 @@ class SwDrawContact : public SwContact
         //Moved alle SW-Verbindungen zu dem neuen Master.
         void ChangeMasterObject( SdrObject *pNewMaster );
 
-        // OD 19.06.2003 #108784#
         SwDrawVirtObj* AddVirtObj();
 
-        // OD 20.06.2003 #108784#
         void NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect );
 
         /** get data collection of anchored objects, handled by with contact
 
-            OD 2004-08-23 #110810#
-
-            @author
         */
         virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };

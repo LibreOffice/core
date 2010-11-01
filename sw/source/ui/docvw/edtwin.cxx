@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <tools/list.hxx>
 #include <swtypes.hxx>
 #include <hintids.hxx>
@@ -123,13 +122,12 @@
 #include <cmdid.h>
 #include <docvw.hrc>
 #include <uitool.hxx>
-// OD 18.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <charfmt.hxx>
 #include <numrule.hxx>
 #include <pagedesc.hxx>
-#include <svtools/ruler.hxx> // #i23726#
+#include <svtools/ruler.hxx>
 #include "formatclipboard.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -140,10 +138,8 @@
 
 #include <PostItMgr.hxx>
 
-//JP 11.10.2001: enable test code for bug fix 91313
 //TODO: This one could most probably be removed
 #if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
-//#define TEST_FOR_BUG91313
 #endif
 
 using namespace sw::mark;
@@ -181,7 +177,6 @@ Color   SwEditWin::aTextBackColor(COL_YELLOW);
 Color   SwEditWin::aTextColor(COL_RED);
 BOOL    SwEditWin::bTransparentBackColor = FALSE; // Hintergrund nicht transparent
 
-
 extern BOOL     bExecuteDrag;
 
 SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
@@ -193,17 +188,13 @@ class SwAnchorMarker
     SdrHdl* pHdl;
     Point aHdlPos;
     Point aLastPos;
-    // --> OD 2010-09-16 #i114522#
     bool bTopRightHandle;
-    // <--
 public:
     SwAnchorMarker( SdrHdl* pH )
         : pHdl( pH )
         , aHdlPos( pH->GetPos() )
         , aLastPos( pH->GetPos() )
-        // --> OD 2010-09-16 #i114522#
         , bTopRightHandle( pH->GetKind() == HDL_ANCHOR_TR )
-        // <--
     {}
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
@@ -213,14 +204,11 @@ public:
     void ChgHdl( SdrHdl* pNew )
     {
         pHdl = pNew;
-        // --> OD 2010-09-16 #i114522#
         if ( pHdl )
         {
             bTopRightHandle = (pHdl->GetKind() == HDL_ANCHOR_TR);
         }
-        // <--
     }
-    // --> OD 2010-09-16 #i114522#
     const Point GetPosForHitTest( const OutputDevice& rOut )
     {
         Point aHitTestPos( GetPos() );
@@ -237,7 +225,6 @@ public:
 
         return aHitTestPos;
     }
-    // <--
 };
 
 struct QuickHelpData
@@ -271,7 +258,6 @@ struct QuickHelpData
     void FillStrArr( SwWrtShell& rSh, const String& rWord );
 };
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Minimale Bewegung Zittern vermeiden
  --------------------------------------------------------------------*/
@@ -286,7 +272,7 @@ inline BOOL IsMinMove(const Point &rStartPos, const Point &rLPt)
 }
 
 /*--------------------------------------------------------------------
-    JP 30.07.98: fuer MouseButtonDown - feststellen, ob ein DrawObject
+                fuer MouseButtonDown - feststellen, ob ein DrawObject
                 und KEIN SwgFrame getroffen wurde! Shift/Ctrl sollen
                 nur bei DrawObjecte zum Selektieren fuehren, bei SwgFlys
                 ggfs zum ausloesen von Hyperlinks (DownLoad/NewWindow!)
@@ -312,7 +298,6 @@ inline BOOL IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
     Beschreibung:   Pointer umschalten
  --------------------------------------------------------------------*/
 
-
 void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -326,7 +311,6 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                 delete pUserMarker;
                 pUserMarker = 0L;
             }
-//          rSh.SwCrsrShell::UnSetVisCrsr( rLPt );
             eStyle = POINTER_NOTALLOWED;
         }
         else
@@ -568,7 +552,6 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
     Beschreibung: Timer fuer Selektion vergroessern
  --------------------------------------------------------------------*/
 
-
 IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
 {
     DBG_PROFSTART(edithdl);
@@ -604,14 +587,14 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
         else
             (rSh.*rSh.fnSetCrsr)( &aModPt, FALSE );
 
-        //fix(24138): Es kann sein, dass der "Sprung" ueber eine Tabelle so
+        // Es kann sein, dass der "Sprung" ueber eine Tabelle so
         //nicht geschafft wird. Deshalb wir hier eben per Up/Down ueber die
         //Tabelle gesprungen.
         const SwRect& rVisArea = rSh.VisArea();
         if( aOldVis == rVisArea && !rSh.IsStartOfDoc() && !rSh.IsEndOfDoc() )
         {
-            //JP 11.10.2001 Bug 72294 - take the center point of VisArea to
-            //              decide in which direction the user want.
+            // take the center point of VisArea to
+            // decide in which direction the user want.
             if( aModPt.Y() < ( rVisArea.Top() + rVisArea.Height() / 2 ) )
                 rSh.Up( TRUE, 1 );
             else
@@ -628,7 +611,6 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 
 void SwEditWin::JustifyAreaTimer()
 {
@@ -668,7 +650,6 @@ inline void SwEditWin::EnterArea()
  Beschreibung:  Modus fuer Rahmen einfuegen
 ------------------------------------------------------------------------*/
 
-
 void SwEditWin::InsFrm(USHORT nCols)
 {
     StdDrawMode( OBJ_NONE, FALSE );
@@ -676,14 +657,9 @@ void SwEditWin::InsFrm(USHORT nCols)
     nInsFrmColCount = nCols;
 }
 
-
-
 void SwEditWin::StdDrawMode( SdrObjKind eSdrObjectKind, BOOL bObjSelect )
 {
     SetSdrDrawMode( eSdrObjectKind );
-
-/*  if (GetDrawFuncPtr())
-        GetDrawFuncPtr()->Deactivate();*/
 
     if (bObjSelect)
         rView.SetDrawFuncPtr(new DrawSelection( &rView.GetWrtShell(), this, &rView ));
@@ -695,12 +671,10 @@ void SwEditWin::StdDrawMode( SdrObjKind eSdrObjectKind, BOOL bObjSelect )
     if (bObjSelect)
         rView.GetDrawFuncPtr()->Activate( SID_OBJECT_SELECT );
     else
-        rView.GetDrawFuncPtr()->Activate( sal::static_int_cast< USHORT >(eSdrObjectKind) );     // don't know if this is useful at all; but it keeps functionality as it was...
+        rView.GetDrawFuncPtr()->Activate( sal::static_int_cast< USHORT >(eSdrObjectKind) );
     bInsFrm = FALSE;
     nInsFrmColCount = 1;
 }
-
-
 
 void SwEditWin::StopInsFrm()
 {
@@ -716,7 +690,6 @@ void SwEditWin::StopInsFrm()
 
 /*--------------------------------------------------------------------
  --------------------------------------------------------------------*/
-
 
 BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
 {
@@ -744,11 +717,9 @@ BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPa
     return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.Len());
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung:  Der Character Buffer wird in das Dokument eingefuegt
  --------------------------------------------------------------------*/
-
 
 void SwEditWin::FlushInBuffer()
 {
@@ -873,7 +844,6 @@ void SwEditWin::FlushInBuffer()
                 aReq.Done();
             }
         }
-        //#21019# apply CTL and CJK language to the text input
         sal_Bool bLang = true;
         if(eBufferLanguage != LANGUAGE_DONTKNOW)
         {
@@ -895,7 +865,7 @@ void SwEditWin::FlushInBuffer()
                     if ( eLang == eBufferLanguage )
                         // current language attribute equal to language reported from system
                         bLang = sal_False;
-                    else if ( !bInputLanguageSwitched && RES_CHRATR_LANGUAGE == nWhich /* && (eLang&LANGUAGE_MASK_PRIMARY) == LANGUAGE_ENGLISH */ )
+                    else if ( !bInputLanguageSwitched && RES_CHRATR_LANGUAGE == nWhich )
                     {
                         // special case: switching between two "LATIN" languages
                         // In case the current keyboard setting might be suitable for both languages we can't safely assume that the user
@@ -974,14 +944,11 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
     SwWrtShell &rSh = rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
     if( aTmp.HasArea() &&
-        // --> FME 2005-01-13 #i40348#
         // IsSelObjProtected() seems to be the correct condition, not
         // !HasReadonlySel(), otherwise frame is not moveable if content is
         // protected.
         !rSh.IsSelObjProtected( FLYPROTECT_POS|FLYPROTECT_SIZE ) )
-        // <--
     {
-        // OD 18.09.2003 #i18732# - add item <RES_FOLLOW_TEXT_FLOW>
         SfxItemSet aSet(rSh.GetAttrPool(),
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_VERT_ORIENT, RES_ANCHOR,
@@ -1009,13 +976,12 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
 
         SwRect aBoundRect;
         Point aRefPoint;
-        // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
-        //      aligned to page for fly frame anchored to paragraph or to character.
+        // adjustment for allowing vertical position
+        // aligned to page for fly frame anchored to paragraph or to character.
         {
             SwFmtVertOrient aVert( (SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT) );
             const bool bFollowTextFlow =
                     static_cast<const SwFmtFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
-            // OD 12.11.2003 #i22341# - additional provide content position
             const SwPosition* pToCharCntntPos = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetCntntAnchor();
             rSh.CalcBoundRect( aBoundRect, eAnchorId,
                                text::RelOrientation::FRAME, aVert.GetRelationOrient(),
@@ -1034,10 +1000,10 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             case MOVE_UP_BIG:
             case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp ); break;
             case MOVE_RIGHT_SMALL: if( aTmp.Width() < aSnap.Width() + MINFLY ) break;
-                    nRight = aSnap.Width(); // kein break
+                    nRight = aSnap.Width(); // no break
             case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight ); break;
             case MOVE_DOWN_SMALL: if( aTmp.Height() < aSnap.Height() + MINFLY ) break;
-                    nDown = aSnap.Height(); // kein break
+                    nDown = aSnap.Height(); // no break
             case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown ); break;
             default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
         }
@@ -1133,16 +1099,13 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
         rSh.EndAllAction();
     }
 }
-/* -----------------------------23.05.2002 11:35------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwEditWin::ChangeDrawing( BYTE nDir )
 {
-    // --> OD 2005-01-31 #i40845# - start undo action in order to get only one
+    // start undo action in order to get only one
     // undo action for this change.
     SwWrtShell &rSh = rView.GetWrtShell();
     rSh.StartUndo();
-    // <--
 
     long nX = 0;
     long nY = 0;
@@ -1206,7 +1169,6 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             // if the object's position is not protected
             if(0 == (nProtect&FLYPROTECT_POS))
             {
-                // --> FME 2005-04-26 #i47138#
                 // Check if object is anchored as character and move direction
                 BOOL bDummy;
                 const bool bVertAnchor = rSh.IsFrmVertical( TRUE, bDummy );
@@ -1215,7 +1177,6 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
                     !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
                 if ( bMoveAllowed )
                 {
-                // <--
                     pSdrView->MoveAllMarked(Size(nX, nY));
                     rSh.SetModified();
                 }
@@ -1271,16 +1232,12 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
         rSh.EndAllAction();
     }
 
-    // --> OD 2005-01-31 #i40845# - end undo action
     rSh.EndUndo();
-    // <--
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
-
-
 
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
@@ -1345,7 +1302,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // look for vertical mappings
     if( !bIsDocReadOnly && !rSh.IsSelFrmMode() && !rSh.IsObjSelected() )
     {
-        //JP 21.2.2002: must changed from switch to if, because the Linux
+        // must changed from switch to if, because the Linux
         // compiler has problem with the code. Has to remove if the new general
         // handler exist.
         USHORT nKey = rKEvt.GetKeyCode().GetCode();
@@ -1466,9 +1423,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     enum SW_KeyState { KS_Start,
                        KS_CheckKey, KS_InsChar, KS_InsTab,
                        KS_NoNum, KS_NumOff, KS_NumOrNoNum, KS_NumDown, KS_NumUp,
-                       // -> #i23725#
                        KS_NumIndentInc, KS_NumIndentDec,
-                       // <- #i23725#
 
                        KS_OutlineLvOff,
                        KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
@@ -1506,20 +1461,16 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_GotoPrevFieldMark,
                        KS_Ende };
 
-
-
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
                 eNextKeyState = KS_Ende;
     BYTE nDir = 0;
 
-    // -> #i23725#
     if (nKS_NUMDOWN_Count > 0)
         nKS_NUMDOWN_Count--;
 
     if (nKS_NUMINDENTINC_Count > 0)
         nKS_NUMINDENTINC_Count--;
-    // <- #i23725#
 
     while( KS_Ende != eKeyState )
     {
@@ -1532,8 +1483,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
 #if OSL_DEBUG_LEVEL > 1
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // JP 19.01.99: zum Umschalten des Cursor Verhaltens in ReadOnly
-            //              Bereichen
+            // zum Umschalten des Cursor Verhaltens in ReadOnly
+            //  Bereichen
             if( 0x7210 == rKeyCode.GetFullCode() )
                 rSh.SetReadOnlyAvailable( !rSh.IsReadOnlyAvailable() );
             else
@@ -1542,7 +1493,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
             if( !rKeyCode.IsMod2() && '=' == aCh &&
                 !rSh.IsTableMode() && rSh.GetTableFmt() &&
-                rSh.IsSttPara() /*&& rSh.IsEndPara()*/ &&
+                rSh.IsSttPara() &&
                 !rSh.HasReadonlySel() )
             {
                 // in der Tabelle am Anfang der Zelle ein '=' ->
@@ -1619,12 +1570,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     eFlyState = KS_Fly_Change;
                     nDir = MOVE_DOWN_SMALL;
                     goto KEYINPUT_CHECKTABLE;
-//              case KEY_UP | KEY_MOD2 | KEY_SHIFT:
-//                  eKeyState = KS_ColTopBig;
-//                  goto KEYINPUT_CHECKTABLE;
-//              case KEY_DOWN | KEY_MOD2 | KEY_SHIFT:
-//                  eKeyState = KS_ColTopSmall;
-//                  goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellBottomSmall;
@@ -1675,7 +1620,6 @@ KEYINPUT_CHECKTABLE:
                     nTblChgSize = pModOpt->GetTblVInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
-//                case KEY_RIGHT:
                 case KEY_RIGHT | KEY_MOD1:
                 {
                     eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL | nsTblChgWidthHeightType::WH_CELL_RIGHT;
@@ -1817,28 +1761,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
                     {
-                        // #i23725#
                         BOOL bDone = FALSE;
-                        // --> OD 2006-01-31 - try to add comment for code snip:
+                        // try to add comment for code snip:
                         // Remove the paragraph indent, if the cursor is at the
                         // beginning of a paragraph, there is no selection
                         // and no numbering rule found at the current paragraph
-                        // --> OD 2006-01-31 #b6341339#, #i58776#
                         // Also try to remove indent, if current paragraph
                         // has numbering rule, but isn't counted and only
                         // key <backspace> is hit.
                         const bool bOnlyBackspaceKey(
                                     KEY_BACKSPACE == rKeyCode.GetFullCode() );
                         if ( rSh.IsSttPara() &&
-                             !rSh.HasSelection() && // i40834
+                             !rSh.HasSelection() &&
                              ( NULL == rSh.GetCurNumRule() ||
                                ( rSh.IsNoNum() && bOnlyBackspaceKey ) ) )
                         {
                             bDone = rSh.TryRemoveIndent();
                         }
-                        // <--
 
-                        // -> #i23725#
                         if (bDone)
                             eKeyState = KS_Ende;
                         else
@@ -1860,10 +1800,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                     bDone = TRUE;
                                 }
                             }
-                            // <- #i23725#
-                            // --> OD 2006-01-31 #b6341339#, #i58776#
-                            // --> OD 2006-04-21 #i63540#
-                            // revise fix for issues b6341339 and i58776:
+
                             // If the cursor is in an empty paragraph, which has
                             // a numbering, but not the oultine numbering, and
                             // there is no selection, the numbering has to be
@@ -1905,7 +1842,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             {
                                 eKeyState = KS_NumOrNoNum;
                             }
-                            // <--
                         }
                     }
                     break;
@@ -1932,11 +1868,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
                     {
-                        // --> OD 2007-10-02 #b660435#
-//                        if (rSh.IsFirstOfNumRule()) // #i23725#
                         if ( rSh.IsFirstOfNumRule() &&
                              numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
-                        // <--
                             eKeyState = KS_NumIndentInc;
                         else
                             eKeyState = KS_NumDown;
@@ -1963,10 +1896,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
                             if( pColl &&
-                                //0 <= pColl->GetOutlineLevel() && #i24560#
-                                //MAXLEVEL - 1 > pColl->GetOutlineLevel() )//#outline level,zhaojianwei
+
                                 pColl->IsAssignedToListLevelOfOutlineStyle()
-                                && MAXLEVEL-1 > pColl->GetAssignedOutlineStyleLevel() )//<-end,zhaojianwei
+                                && MAXLEVEL-1 > pColl->GetAssignedOutlineStyleLevel() )
                                 eKeyState = KS_OutlineDown;
                         }
                     }
@@ -1986,11 +1918,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                          !rSh.HasReadonlySel() )
                     {
-                        // --> OD 2007-10-02 #b660435#
-//                        if (rSh.IsFirstOfNumRule()) // #i23725#
+
                         if ( rSh.IsFirstOfNumRule() &&
                              numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
-                        // <--
                             eKeyState = KS_NumIndentDec;
                         else
                             eKeyState = KS_NumUp;
@@ -2016,8 +1946,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-                            //if( pColl && 0 < pColl->GetOutlineLevel() &&  //#outline level,zhaojianwei
-                            //  MAXLEVEL - 1 >= pColl->GetOutlineLevel() )
                             if( pColl &&
                                 pColl->IsAssignedToListLevelOfOutlineStyle() &&
                                 0 < pColl->GetAssignedOutlineStyleLevel())
@@ -2035,7 +1963,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() )
                         {
-                            // zum naechsten Tip
+                            // to the next Tip
                             aTmpQHD.Inc( pACorr && pACorr->GetSwFlags().
                                                    bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
@@ -2058,7 +1986,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             !rSh.HasReadonlySel() )
                         {
-                            // zum vorherigen Tip
+                            // to the previous Tip
                             aTmpQHD.Dec( pACorr && pACorr->GetSwFlags().
                                                         bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
@@ -2168,12 +2096,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     bFlushBuffer = TRUE, bNormalChar = FALSE;
                 else
                 {
-// OS 22.09.95: Da der Sfx Acceleratoren nur aufruft, wenn sie beim letzten
-//              Statusupdate enabled wurden, muss copy ggf. von uns
-//              'gewaltsam' gerufen werden.
+                    // Da der Sfx Acceleratoren nur aufruft, wenn sie beim letzten
+                    // Statusupdate enabled wurden, muss copy ggf. von uns
+                    // 'gewaltsam' gerufen werden.
                     if( rKeyCode.GetFunction() == KEYFUNC_COPY )
                         GetView().GetViewFrame()->GetBindings().Execute(SID_COPY);
-
 
                     if( !bIsDocReadOnly && bNormalChar )
                     {
@@ -2241,15 +2168,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
         }
         break;
         case KS_InsTab:
-            if( rView.ISA( SwWebView ))     //Kein Tabulator fuer Web!
+            if( rView.ISA( SwWebView ))     // no Tab for WebView
             {
-                // Bug 56196 - dann sollte der weiter gereicht werden.
+                // dann sollte der weiter gereicht werden.
                 Window::KeyInput( aKeyEvent );
                 eKeyState = KS_Ende;
                 break;
             }
             aCh = '\t';
-            // kein break!
+            // no break!
         case KS_InsChar:
             if (rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT)
             {
@@ -2295,7 +2222,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
                 }
 
-
                 BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
                 BOOL bRunNext = pACorr && pACorr->HasRunNext();
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
@@ -2335,7 +2261,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
             else
             {
                 InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-    // ???          Window::KeyInput( aKeyEvent );
                 eKeyState = KS_Ende;
             }
         break;
@@ -2348,12 +2273,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
-        /*  {
-                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                        ChgFractionSymbol | ChgOrdinalNumber |
-                                        ChgToEnEmDash | SetINetAttr |
-                                        Autocorrect ) &&
-                !rSh.HasReadonlySel() ) */
             {
                 FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
@@ -2366,8 +2285,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
         {
             USHORT nSlotId = 0;
             FlushInBuffer();
-//???           if( bFlushCharBuffer )
-//???               FlushInBuffer( &rSh );
             switch( eKeyState )
             {
             case KS_SpecialInsert:
@@ -2388,17 +2305,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case KS_NumDown:
                 rSh.NumUpDown( TRUE );
-                nKS_NUMDOWN_Count = 2; // #i23725#
+                nKS_NUMDOWN_Count = 2;
                 break;
             case KS_NumUp:
                 rSh.NumUpDown( FALSE );
                 break;
 
-                // -> #i23726#
             case KS_NumIndentInc:
-                // --> OD 2008-06-16 #i90078#
                 rSh.ChangeIndentOfAllListLevels(360);
-                // <--
                 nKS_NUMINDENTINC_Count = 2;
                 break;
 
@@ -2417,11 +2331,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NumIndentDec:
-                // --> OD 2008-06-16 #i90078#
                 rSh.ChangeIndentOfAllListLevels(-360);
-                // <--
                 break;
-                // <- #i23726#
 
             case KS_OutlineDown:
                 rSh.OutlineUpDown( 1 );
@@ -2431,7 +2342,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NextCell:
-                //In Tabelle immer 'flushen'
+                // always 'flush' in tables
                 rSh.GoNextCell();
                 nSlotId = FN_GOTO_NEXT_CELL;
                 break;
@@ -2443,8 +2354,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.SplitNode( TRUE );
                 break;
 
-//          case KS_NumOrNoNum:
-//              break;
             case KS_NextObject:
             case KS_PrevObject:
                 if(rSh.GotoObj( KS_NextObject == eKeyState, GOTOOBJ_GOTO_ANY))
@@ -2514,9 +2423,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_ColRightBig:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() );  break;
             case KS_ColLeftSmall:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTblHMove() );   break;
             case KS_ColRightSmall:      rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_RIGHT, pModOpt->GetTblHMove() );  break;
-//          case KS_ColTopBig:          rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_ROW_TOP|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVMove() );    break;
             case KS_ColBottomBig:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_ROW_BOTTOM|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVMove() ); break;
-//          case KS_ColTopSmall:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_ROW_TOP, pModOpt->GetTblVMove() );    break;
             case KS_ColBottomSmall:     rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_ROW_BOTTOM, pModOpt->GetTblVMove() ); break;
             case KS_CellLeftBig:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_LEFT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() );  break;
             case KS_CellRightBig:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() ); break;
@@ -2582,7 +2489,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     // falls die gepufferten Zeichen eingefuegt werden sollen
     if( bFlushBuffer && aInBuffer.Len() )
     {
-        //OS 16.02.96 11.04: bFlushCharBuffer wurde hier nicht zurueckgesetzt
+        // bFlushCharBuffer wurde hier nicht zurueckgesetzt
         // warum nicht?
         BOOL bSave = bFlushCharBuffer;
         FlushInBuffer();
@@ -2604,7 +2511,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
      Beschreibung:  MouseEvents
  --------------------------------------------------------------------*/
 
-
 void SwEditWin::RstMBDownFlags()
 {
     //Nicht auf allen Systemen kommt vor dem modalen
@@ -2616,8 +2522,6 @@ void SwEditWin::RstMBDownFlags()
     ReleaseMouse();
 }
 
-
-
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -2628,7 +2532,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // opened by inplace client and we would deactivate the inplace client,
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
-    // See #126086# and #128122#
     SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
     BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
@@ -2696,7 +2599,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-
     bIsInMove = FALSE;
     aStartPos = rMEvt.GetPosPixel();
     aRszMvHdlPt.X() = 0, aRszMvHdlPt.Y() = 0;
@@ -2708,7 +2610,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
          !rSh.IsObjSelectable( aDocPos ) )
     {
-        // --> FME 2004-07-30 #i32329# Enhanced table selection
         if ( SW_TABSEL_HORI <= nMouseTabCol && SW_TABCOLSEL_VERT >= nMouseTabCol )
         {
             rSh.EnterStdMode();
@@ -2724,7 +2625,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             }
             return;
         }
-        // <--
 
         if ( !rSh.IsTableMode() )
         {
@@ -2753,7 +2653,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             }
         }
     }
-    // #i23726#
     else if (bTmp &&
              rSh.IsNumLabel(aDocPos))
     {
@@ -2763,10 +2662,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
         rBind.Update();
 
-        // --> OD 2005-02-21 #i42921#
         if ( RulerMarginDrag( rMEvt,
                         rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPos ) ) )
-        // <--
         {
             rView.SetNumRuleNodeFromDoc( NULL );
             rView.InvalidateRulerPos();
@@ -2775,11 +2672,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
         else
         {
-            // --> FME 2005-11-03 #125036# Make sure the pointer is set to 0,
+            // Make sure the pointer is set to 0,
             // otherwise it may point to nowhere after deleting the corresponding
             // text node.
             rView.SetNumRuleNodeFromDoc( NULL );
-            // <--
             return;
         }
     }
@@ -2799,7 +2695,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         BOOL bOnlyText = FALSE;
         bMBPressed = bNoInterrupt = TRUE;
-        nKS_NUMDOWN_Count = 0; // #i23725#
+        nKS_NUMDOWN_Count = 0;
 
         CaptureMouse();
 
@@ -2877,11 +2773,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 bExecHyperlinks = TRUE;
         }
 
-        // --> FME 2004-07-30 #i32329# Enhanced selection
         BYTE nNumberOfClicks = static_cast< BYTE >(rMEvt.GetClicks() % 4);
         if ( 0 == nNumberOfClicks && 0 < rMEvt.GetClicks() )
             nNumberOfClicks = 4;
-        // <--
 
         BOOL bExecDrawTextLink = FALSE;
 
@@ -2914,7 +2808,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
                             !bExecDrawTextLink)
                         {
-                            // #107513#
                             // Test if there is a draw object at that position and if it should be selected.
                             sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
 
@@ -3035,7 +2928,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              0 == rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
 
-/* SJ: 01.03.2005: this is no good, on the one hand GetSelectionType is used as flag field (take a look into the GetSelectionType method)
+/* this is no good, on the one hand GetSelectionType is used as flag field (take a look into the GetSelectionType method)
    on the other hand the return value is used in a switch without proper masking (very nice), this must lead to trouble
 */
                         switch ( rSh.GetSelectionType() &~ ( nsSelectionType::SEL_FONTWORK | nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE ) )
@@ -3152,12 +3045,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( bMod )
                             rSh.EnterAddMode();
 
-                        // --> FME 2004-07-30 #i32329# Enhanced selection
                         if ( 3 == nNumberOfClicks )
                             rSh.SelSentence( &aDocPos );
                         else
                             rSh.SelPara( &aDocPos );
-                        // <--
 
                         if ( bMod )
                             rSh.LeaveAddMode();
@@ -3390,7 +3281,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bCallBase = FALSE;
                     }
 
-                    //#i42732# - notify the edit window that from now on we do not use the input language
+                    // notify the edit window that from now on we do not use the input language
                     if ( !(CRSR_POSOLD & nTmpSetCrsr) )
                         SetUseInputLanguage( sal_False );
 
@@ -3402,13 +3293,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 if ( !bOverURLGrf && !bOnlyText )
                 {
                     const int nSelType = rSh.GetSelectionType();
-                    // --> OD 2009-12-30 #i89920#
                     // Check in general, if an object is selectable at given position.
                     // Thus, also text fly frames in background become selectable via Ctrl-Click.
                     if ( nSelType & nsSelectionType::SEL_OLE ||
                          nSelType & nsSelectionType::SEL_GRF ||
                          rSh.IsObjSelectable( aDocPos ) )
-                    // <--
                     {
                         MV_KONTEXT( &rSh );
                         if( !rSh.IsFrmSelected() )
@@ -3420,8 +3309,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 // nicht mehr hier zuruecksetzen, damit -- falls durch MouseMove
                 // bei gedrueckter Ctrl-Taste eine Mehrfachselektion erfolgen soll,
                 // im Drag nicht die vorherige Selektion aufgehoben wird.
-//              if(bModePushed)
-//                  rSh.PopMode(FALSE);
                 break;
             }
         }
@@ -3433,7 +3320,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 /*--------------------------------------------------------------------
     Beschreibung:   MouseMove
  --------------------------------------------------------------------*/
-
 
 void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
@@ -3461,8 +3347,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     SET_CURR_SHELL( &rSh );
 
-    //aPixPt == Point in Pixel, rel. zu ChildWin
-    //aDocPt == Point in Twips, Dokumentkoordinaten
+    //aPixPt == Point in Pixel, relative to ChildWin
+    //aDocPt == Point in Twips, document coordinates
     const Point aPixPt( rMEvt.GetPosPixel() );
     const Point aDocPt( PixelToLogic( aPixPt ) );
 
@@ -3519,7 +3405,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         Point aDD( SwEditWin::nDDStartPosX, SwEditWin::nDDStartPosY );
         aDD = LogicToPixel( aDD );
         Rectangle aRect( aDD.X()-3, aDD.Y()-3, aDD.X()+3, aDD.Y()+3 );
-        if ( !aRect.IsInside( aPixPt ) )    // MA 23. May. 95: Tatterschutz.
+        if ( !aRect.IsInside( aPixPt ) )
             StopDDTimer( &rSh, aDocPt );
     }
 
@@ -3580,7 +3466,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     nPointer = POINTER_HSIZEBAR;
                     bChkTblSel = true;
                     break;
-                // --> FME 2004-07-30 #i20126# Enhanced table selection
                 case SW_TABSEL_HORI :
                     nPointer = POINTER_TAB_SELECT_SE;
                     break;
@@ -3599,31 +3484,26 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 case SW_TABCOLSEL_VERT :
                     nPointer = POINTER_TAB_SELECT_W;
                     break;
-                // <--
             }
 
             if ( USHRT_MAX != nPointer &&
-                // --> FME 2004-10-20 #i35543#
-                // Enhanced table selection is explicitely allowed in table mode
+                // i#35543 - Enhanced table selection is explicitely allowed in table mode
                 ( !bChkTblSel || !rSh.IsTableMode() ) )
-                // <--
             {
                 SetPointer( nPointer );
             }
 
             return;
         }
-        // #i23726#
         else if (rSh.IsNumLabel(aDocPt, RULER_MOUSE_MARGINWIDTH))
         {
-            // --> OD 2005-02-21 #i42921# - consider vertical mode
+            // i#42921 - consider vertical mode
             SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
             const USHORT nPointer =
                     rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
                     ? POINTER_VSIZEBAR
                     : POINTER_HSIZEBAR;
             SetPointer( nPointer );
-            // <--
 
             return;
         }
@@ -3645,10 +3525,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 // So the pAnchorMarker has to find the right SdrHdl, if it's
                 // the old one, it will find it with position aOld, if this one
                 // is destroyed, it will find a new one at position GetHdlPos().
-                // --> OD 2010-09-16 #i114522#
-//                const Point aOld = pAnchorMarker->GetPos();
+
                 const Point aOld = pAnchorMarker->GetPosForHitTest( *(rSh.GetOut()) );
-                // <--
                 Point aNew = rSh.FindAnchorPos( aDocPt );
                 SdrHdl* pHdl;
                 if( (0!=( pHdl = pSdrView->PickHandle( aOld ) )||
@@ -3661,7 +3539,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     {
                         pAnchorMarker->SetPos( aNew );
                         pAnchorMarker->SetLastPos( aDocPt );
-                        //OLMpSdrView->RefreshAllIAOManagers();
                     }
                 }
                 else
@@ -3724,8 +3601,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             0 != ( pMacro = pFlyFmt->GetMacro().GetMacroTable().
                             Get( nEvent )) &&
 // oder nur z.B. alle 20 Twip bescheid sagen?
-//                          ( 20 > Abs( aRszMvHdlPt.X() - aDocPt.X() ) ||
-//                            20 > Abs( aRszMvHdlPt.Y() - aDocPt.Y() ) )
                             aRszMvHdlPt != aDocPt )
                         {
                             aRszMvHdlPt = aDocPt;
@@ -3811,9 +3686,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 }
                 else
                 {
-                    //JP 24.09.98: Fix fuer die Bugs 55592 / 55931
-                    //JP 23.04.99: Fix fuer den Bugs 65289
-                    //JP 06.07.99: Fix fuer den Bugs 67360
                     if( !rMEvt.IsSynthetic() &&
                             !(( MOUSE_LEFT + KEY_MOD1 ==
                             rMEvt.GetModifier() + rMEvt.GetButtons() ) &&
@@ -3835,7 +3707,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 UpdatePointer(aDocPt, 0); // evtl. muss hier ein Rahmen markiert werden
                                 break;
                         }
-            //#i6193#, change ui if mouse is over SwPostItField
+            // change ui if mouse is over SwPostItField
             // TODO: do the same thing for redlines SW_REDLINE
             SwRect aFldRect;
             SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
@@ -3947,7 +3819,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     Beschreibung:   Button Up
  --------------------------------------------------------------------*/
 
-
 void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bCallBase = TRUE;
@@ -3963,7 +3834,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     SdrHdlKind eOldSdrMoveHdl = eSdrMoveHdl;
     eSdrMoveHdl = HDL_USER;     // fuer die MoveEvents - wieder zuruecksetzen
 
-    // sicherheitshalber zuruecksetzen Bug 27900
+    // sicherheitshalber zuruecksetzen
     rView.SetTabColFromDoc( FALSE );
     rView.SetNumRuleNodeFromDoc(NULL);
 
@@ -3983,10 +3854,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     //MouseButtonUp nur bearbeiten, wenn auch das Down an dieses Fenster ging.
     if ( !bMBPressed )
     {
-// OS 25.02.97 Undo fuer die Giesskann ist bereits im CommandHdl
-//JP 29.09.95: so sollte es sein!!!     if(pApplyTempl->bUndo)
-//      if( pApplyTempl && MOUSE_RIGHT == rMEvt.GetModifier() + rMEvt.GetButtons() )
-//          rSh.Do( SwWrtShell::UNDO );
+// Undo fuer die Giesskann ist bereits im CommandHdl
+//so sollte es sein!!!
+
         return;
     }
 
@@ -4009,7 +3879,6 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if( pAnchorMarker )
     {
         Point aPnt( pAnchorMarker->GetLastPos() );
-        //OLMpSdrView->RefreshAllIAOManagers();
         DELETEZ( pAnchorMarker );
         if( aPnt.X() || aPnt.Y() )
             rSh.FindAnchorPos( aPnt, TRUE );
@@ -4177,7 +4046,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
             if( bHoldSelection )
             {
-                //JP 27.04.99: Bug 65389 - das EndDrag sollte auf jedenfall
+                // das EndDrag sollte auf jedenfall
                 //              gerufen werden.
                 bHoldSelection = FALSE;
                 (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
@@ -4203,8 +4072,6 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
 
                     // Internetfield? --> Link-Callen (DocLaden!!)
-//JP 18.10.96: Bug 32437 -
-//                  if( !rSh.HasSelection() )
                     if( !bInSel )
                     {
                         USHORT nFilter = URLLOAD_NOFILTER;
@@ -4255,8 +4122,6 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if ( aCntntAtPos.aFnd.pFldmark != NULL)
                                 {
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
-                                    //SwDocShell* pDocSh = rView.GetDocShell();
-                                    //SwDoc *pDoc=pDocSh->GetDoc();
                                     if (fieldBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
                                     {
                                         ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
@@ -4465,11 +4330,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 case SFX_STYLE_FAMILY_PSEUDO:
                     if( !rSh.HasReadonlySel() )
                     {
-                        // --> OD 2008-03-17 #refactorlists#
                         rSh.SetCurNumRule( *pApplyTempl->aColl.pNumRule,
                                            false,
                                            pApplyTempl->aColl.pNumRule->GetDefaultListId() );
-                        // <--
                         bCallBase = FALSE;
                         pApplyTempl->bUndo = TRUE;
                         if( pApplyTempl->aColl.pNumRule )
@@ -4508,11 +4371,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         Window::MouseButtonUp(rMEvt);
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Vorlage anwenden
  --------------------------------------------------------------------*/
-
 
 void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 {
@@ -4568,7 +4429,6 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     Beschreibung:   ctor
  --------------------------------------------------------------------*/
 
-
 SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
     DropTargetHelper( this ),
@@ -4594,8 +4454,8 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
     bLockInput(FALSE),
     bObjectSelect( FALSE ),
-    nKS_NUMDOWN_Count(0), // #i23725#
-    nKS_NUMINDENTINC_Count(0) // #i23725#
+    nKS_NUMDOWN_Count(0),
+    nKS_NUMINDENTINC_Count(0)
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -4603,7 +4463,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
     bLinkRemoved = bMBPressed = bInsDraw = bInsFrm =
     bIsInDrag = bOldIdle = bOldIdleSet = bChainMode = bWasShdwCrsr = FALSE;
-    //#i42732# initially use the input language
+    // initially use the input language
     bUseInputLanguage = sal_True;
 
     SetMapMode(MapMode(MAP_TWIP));
@@ -4623,7 +4483,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     aTemplateTimer.SetTimeout(400);
     aTemplateTimer.SetTimeoutHdl(LINK(this, SwEditWin, TemplateTimerHdl));
 
-    //JP 16.12.98: temporaere Loesung!!! Sollte bei jeder Cursorbewegung
+    // temporaere Loesung!!! Sollte bei jeder Cursorbewegung
     //          den Font von der akt. einfuege Position setzen!
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
@@ -4632,8 +4492,6 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
                                             INPUTCONTEXT_EXTTEXTINPUT ) );
     }
 }
-
-
 
 SwEditWin::~SwEditWin()
 {
@@ -4654,11 +4512,9 @@ SwEditWin::~SwEditWin()
     delete pAnchorMarker;
 }
 
-
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-
 
 void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
 {
@@ -4679,14 +4535,11 @@ void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
  *  Beschreibung: DrawMode einschalten
  ******************************************************************************/
 
-
-
 BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SdrView *pSdrView = rSh.GetDrawView();
 
-//  if ( GetDrawFuncPtr() && (aActHitType == SDRHIT_NONE || rSh.IsDrawCreate()) )
     if ( rView.GetDrawFuncPtr() )
     {
         if (rSh.IsDrawCreate())
@@ -4724,18 +4577,14 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
  *  Beschreibung:
  ******************************************************************************/
 
-
-
 BOOL SwEditWin::IsDrawSelMode()
 {
-//  return (IsFrmAction() == FALSE && GetSdrDrawMode() == OBJ_NONE);
     return IsObjectSelect();
 }
 
 /******************************************************************************
  *  Beschreibung:
  ******************************************************************************/
-
 
 void SwEditWin::GetFocus()
 {
@@ -4755,8 +4604,6 @@ void SwEditWin::GetFocus()
  *  Beschreibung:
  ******************************************************************************/
 
-
-
 void SwEditWin::LoseFocus()
 {
     rView.GetWrtShell().InvalidateAccessibleFocus();
@@ -4769,8 +4616,6 @@ void SwEditWin::LoseFocus()
 /******************************************************************************
  *  Beschreibung:
  ******************************************************************************/
-
-
 
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
@@ -4787,7 +4632,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     // menu from an inplace client has been closed. Now we have the chance
     // to deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
-    // For more information, see #126086# and #128122#
     SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
     BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
@@ -4886,7 +4730,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 const CommandVoiceData *pCData = rCEvt.GetVoiceData();
                 if ( VOICECOMMANDTYPE_CONTROL == pCData->GetType() )
                     break;
-
 
                 USHORT nSlotId = 0;
                 SfxPoolItem *pItem = 0;
@@ -5006,7 +4849,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                 if ( sRecord.Len() )
                 {
-                    // #102812# convert quotes in IME text
+                    // convert quotes in IME text
                     // works on the last input character, this is escpecially in Korean text often done
                     // quotes that are inside of the string are not replaced!
                     const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
@@ -5134,7 +4977,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HANGUL_HANJA_CONVERSION);
         break;
         case COMMAND_INPUTLANGUAGECHANGE :
-            //#i42732# update state of fontname if input language changes
+            // i#42732 - update state of fontname if input language changes
             bInputLanguageSwitched = true;
             SetUseInputLanguage( sal_True );
         break;
@@ -5217,26 +5060,21 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         Window::Command(rCEvt);
 }
 
-/* -----------------25.08.2003 10:12-----------------
-    #i18686#: select the object/cursor at the mouse
-    position of the context menu request
- --------------------------------------------------*/
+/*  i#18686 select the object/cursor at the mouse
+    position of the context menu request */
 BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 {
     BOOL bRet = FALSE;
     const Point aDocPos( PixelToLogic( rMousePos ) );
-    // --> OD 2005-02-17 #i42258#
     const bool bIsInsideSelectedObj( rSh.IsInsideSelectedObj( aDocPos ) );
-    // <--
     //create a synthetic mouse event out of the coordinates
     MouseEvent aMEvt(rMousePos);
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
-        // --> OD 2005-02-17 #i42258# - no close of insert_draw and reset of
+        // no close of insert_draw and reset of
         // draw mode, if context menu position is inside a selected object.
         if ( !bIsInsideSelectedObj && rView.GetDrawFuncPtr() )
-        // <--
         {
 
             rView.GetDrawFuncPtr()->Deactivate();
@@ -5308,7 +5146,6 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     if( !rSh.IsSelFrmMode() &&
         !GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
     {
-        // #107513#
         // Test if there is a draw object at that position and if it should be selected.
         sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
 
@@ -5458,8 +5295,6 @@ SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
     return pShell;
 }
 
-
-
 void SwEditWin::ClearTip()
 {
 }
@@ -5469,7 +5304,6 @@ IMPL_LINK( SwEditWin, KeyInputFlushHandler, Timer *, EMPTYARG )
     FlushInBuffer();
     return 0;
 }
-
 
 IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
 {
@@ -5486,27 +5320,19 @@ void SwEditWin::_FinitStaticData()
 {
     delete pQuickHlpData;
 }
-/* -----------------23.01.2003 12:15-----------------
- * #i3370# remove quick help to prevent saving
- * of autocorrection suggestions
- * --------------------------------------------------*/
+/* i#3370 - remove quick help to prevent saving
+ * of autocorrection suggestions */
 void SwEditWin::StopQuickHelp()
 {
     if( HasFocus() && pQuickHlpData && pQuickHlpData->bClear  )
         pQuickHlpData->Stop( rView.GetWrtShell() );
 }
 
-/*-----------------23.02.97 18:39-------------------
-
---------------------------------------------------*/
-
-
 IMPL_LINK(SwEditWin, TemplateTimerHdl, Timer*, EMPTYARG)
 {
     SetApplyTemplate(SwApplyTemplate());
     return 0;
 }
-
 
 void SwEditWin::SetChainMode( BOOL bOn )
 {
@@ -5532,8 +5358,7 @@ void SwEditWin::SetChainMode( BOOL bOn )
 
 uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
-    SolarMutexGuard aGuard;   // this should have
-                                                        // happend already!!!
+    SolarMutexGuard aGuard;   // this should have happend already!!!
     SwWrtShell *pSh = rView.GetWrtShellPtr();
     OSL_ENSURE( pSh, "no writer shell, no accessible object" );
     uno::Reference<
@@ -5551,7 +5376,6 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     // Pointer verschieben
     aArr.Insert( &rCpy.aArr );
     rCpy.aArr.Remove( (USHORT)0, rCpy.aArr.Count() );
-//  nTipId = rCpy.nTipId;
     bClear = rCpy.bClear;
     nLen = rCpy.nLen;
     nCurArrPos = rCpy.nCurArrPos;
@@ -5580,7 +5404,6 @@ void QuickHelpData::ClearCntnt()
     delete pCETID, pCETID = 0;
     delete[] pAttrs, pAttrs = 0;
 }
-
 
 void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
 {
@@ -5629,8 +5452,6 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearCntnt();
 }
 
-
-
 void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 {
     salhelper::SingletonRef<SwCalendarWrapper>* pCalendar = s_getCalendarWrapper();
@@ -5647,8 +5468,6 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
                 if( rWord.Len() + 1 < sStr.Len() &&
 
 //!!! UNICODE: fehlendes interface
-//                  pIntl->CompareEqual( rWord, sStr.Copy( 0, rWord.Len() ),
-//                              INTN_COMPARE_IGNORECASE ) )
                     COMPARE_EQUAL == rWord.CompareIgnoreCaseToAscii(
                                         sStr, rWord.Len() ))
                 {
@@ -5670,9 +5489,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
         while( nStt < nEnd )
         {
             const String& rS = rACLst[ nStt ];
-            //JP 16.06.99: Bug 66927 - only if the count of chars
-            //              from the suggest greater as the
-            //              actual word
+            // only if the count of chars
+            // from the suggest greater as the
+            // actual word
             if( rS.Len() > rWord.Len() )
             {
                 String* pNew = new String( rS );
@@ -5683,9 +5502,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
         }
     }
 }
-/* -----------------06.11.2002 12:01-----------------
- *
- * --------------------------------------------------*/
+
 void SwEditWin::ShowAutoTextCorrectQuickHelp(
         const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
         sal_Bool bFromIME )
@@ -5717,10 +5534,6 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
         pQuickHlpData->Start( rSh, rWord.Len() );
 }
 
-/* -----------------29.03.2006 11:01-----------------
- *
- * --------------------------------------------------*/
-
 void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
 {
     if ( bNew || bUseInputLanguage )
@@ -5732,9 +5545,6 @@ void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
     bUseInputLanguage = bNew;
 }
 
-/*-- 13.11.2008 10:18:17---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 XubString SwEditWin::GetSurroundingText() const
 {
     String sReturn;
@@ -5760,9 +5570,7 @@ XubString SwEditWin::GetSurroundingText() const
 
     return sReturn;
 }
-/*-- 13.11.2008 10:18:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Selection SwEditWin::GetSurroundingTextSelection() const
 {
     SwWrtShell& rSh = rView.GetWrtShell();

@@ -47,15 +47,13 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
-// --> OD 2007-10-26 #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 #include <set>
-// <--
-// --> OD 2008-03-12 #refactorlists#
+
 #include <IDocumentListsAccess.hxx>
 class SwList;
-// <--
+
 #include <IDocumentExternalData.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
@@ -274,13 +272,9 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentLayoutAccess,
     public IDocumentTimerAccess,
     public IDocumentChartDataProviderAccess,
-    // --> OD 2007-10-26 #i83479#
     public IDocumentListItems,
     public IDocumentOutlineNodes,
-    // <--
-    // --> OD 2008-03-12 #refactorlists#
     public IDocumentListsAccess,
-    // <--
     public IDocumentExternalData
 {
 
@@ -375,13 +369,11 @@ class SW_DLLPUBLIC SwDoc :
     // Hash map to find numrules by name
     mutable std::hash_map<String, SwNumRule *, StringHash> maNumRuleMap;
 
-    // --> OD 2008-03-12 #refactorlists#
     typedef std::hash_map< String, SwList*, StringHash > tHashMapForLists;
     // container to hold the lists of the text document
     tHashMapForLists maLists;
     // relation between list style and its default list
     tHashMapForLists maListStyleLists;
-    // <--
 
     SwRedlineTbl    *pRedlineTbl;           // Liste aller Redlines
     String          *pAutoFmtRedlnComment;  // Kommentar fuer Redlines, die
@@ -410,7 +402,6 @@ class SW_DLLPUBLIC SwDoc :
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
-    // --> OD 2007-10-26 #i83479#
 public:
     struct lessThanNodeNum
     {
@@ -421,7 +412,6 @@ public:
     typedef ::std::set< const SwNodeNum*, lessThanNodeNum > tImplSortedNodeNumList;
 private:
     tImplSortedNodeNumList* mpListItemsList;
-    // <--
 
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
@@ -504,14 +494,12 @@ private:
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
-    // --> OD 2006-03-21 #b6375613#
     // Document flag to trigger conversion, which applys the workaround for documents,
     // which uses a certain layout defect in OOo 1.x to layout the documents.
     // This conversion is performed, when the frames for the layout are created.
     // Thus, this document flag has to be set after load a document and before
     // creating the document view.
     bool mbApplyWorkaroundForB6375613 : 1;
-    // <--
 
     //
     // COMPATIBILITY FLAGS START
@@ -606,7 +594,6 @@ private:
     bool mbCollapseEmptyCellPara                    : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // OD 2008-06-05 #i89181# - see above
 
-    // #i78591#
     sal_uInt32  n32DummyCompatabilityOptions1;
     sal_uInt32  n32DummyCompatabilityOptions2;
     //
@@ -618,7 +605,7 @@ private:
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
 
-    //---------------- private Methoden ------------------------------
+    //---------------- privat Methods ------------------------------
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
     sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // loescht alle UndoObjecte vom Anfang
@@ -649,9 +636,7 @@ private:
                             const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
-    // --> OD 2005-01-13 #i40550#
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, BOOL, BOOL );
-    // <--
     SwFmt* CopyFmt( const SwFmt& rFmt, const SvPtrarr& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SvPtrarr& rSourceArr, SvPtrarr& rDestArr,
@@ -699,7 +684,6 @@ private:
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         const SwTxtFmtColl* pSplitColl );
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaijianwei.
-
 
     // Charts der angegebenen Tabelle updaten
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
@@ -839,7 +823,6 @@ public:
     virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
 
-
     /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
     static sal_uInt16 GetUndoActionCount();
     static void SetUndoActionCount(sal_uInt16 nNew);
@@ -905,12 +888,11 @@ public:
     virtual void DeleteSection(SwNode* pNode);
     virtual bool DeleteRange(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
-    // --> OD 2009-08-20 #i100466#
     // Add optional parameter <bForceJoinNext>, default value <false>
     // Needed for hiding of deletion redlines
     virtual bool DeleteAndJoin( SwPaM&,
                                 const bool bForceJoinNext = false );
-    // <--
+
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
     virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
@@ -1020,8 +1002,6 @@ public:
     virtual SwChartLockController_Helper & GetChartControllerHelper();
 
     /** IDocumentListItems
-
-        OD 2007-10-26 #i83479#
     */
     virtual void addListItem( const SwNodeNum& rNodeNum );
     virtual void removeListItem( const SwNodeNum& rNodeNum );
@@ -1032,8 +1012,6 @@ public:
     virtual void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const;
 
     /** IDocumentOutlineNodes
-
-        OD 2007-11-15 #i83479#
     */
     virtual sal_Int32 getOutlineNodesCount() const;
     virtual int getOutlineLevel( const sal_Int32 nIdx ) const;
@@ -1044,8 +1022,6 @@ public:
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const;
 
     /** IDocumentListsAccess
-
-        OD 2008-03-26 #refactorlists#
     */
     virtual SwList* createList( String sListId,
                                 const String sDefaultListStyleName );
@@ -1054,16 +1030,13 @@ public:
     virtual SwList* createListForListStyle( const String sListStyleName );
     virtual SwList* getListForListStyle( const String sListStyleName ) const;
     virtual void deleteListForListStyle( const String sListStyleName );
-    // --> OD 2008-07-08 #i91400#
     virtual void trackChangeOfListStyleName( const String sListStyleName,
                                              const String sNewListStyleName );
-    // <--
 
     /** IDocumentExternalData */
     virtual void setExternalData(::sw::tExternalDataType eType,
                                  ::sw::tExternalDataPointer pPayload);
     virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType);
-
 
     /** INextInterface here
     */
@@ -1127,16 +1100,14 @@ public:
 
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
-    // --> OD 2009-07-20 #i73249#
     void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
                          const String& sNewTitle );
     void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
                                const String& sNewDescription );
-    // <--
 
     /** Footnotes
     */
-    // Fussnoten Informationen
+    // Footnote information
     const SwFtnInfo& GetFtnInfo() const         { return *pFtnInfo; }
     void SetFtnInfo(const SwFtnInfo& rInfo);
     const SwEndNoteInfo& GetEndNoteInfo() const { return *pEndNoteInfo; }
@@ -1163,7 +1134,6 @@ public:
 
     // count words in pam
     void CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const;
-
 
     /** ???
     */
@@ -1218,14 +1188,12 @@ public:
 
         //Zuruecksetzen der Attribute; es werden alle TxtHints und bei
         //vollstaendiger Selektion harte Formatierung (AUTO-Formate) entfernt
-    // --> OD 2008-11-28 #i96644#
     // introduce new optional parameter <bSendDataChangedEvents> in order to
     // control, if the side effect "send data changed events" is triggered or not.
     void ResetAttrs( const SwPaM &rRg,
                      sal_Bool bTxtAttr = sal_True,
                      const SvUShortsSort* = 0,
                      const bool bSendDataChangedEvents = true );
-    // <--
     void RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
 
         // Setze das Attribut im angegebenen Format. Ist Undo aktiv, wird
@@ -1233,11 +1201,9 @@ public:
     void SetAttr( const SfxPoolItem&, SwFmt& );
     void SetAttr( const SfxItemSet&, SwFmt& );
 
-    // --> OD 2008-02-12 #newlistlevelattrs#
     // method to reset a certain attribute at the given format
     void ResetAttrAtFormat( const USHORT nWhichId,
                             SwFmt& rChangedFormat );
-    // <--
 
         // Setze das Attribut als neues default Attribut in diesem Dokument.
         // Ist Undo aktiv, wird das alte in die Undo-History aufgenommen
@@ -1279,11 +1245,9 @@ public:
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pFrmFmtTbl, rName ); }
 
-    // --> OD 2005-01-13 #i40550#
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
                            BOOL bBroadcast = FALSE,
                            BOOL bAuto = TRUE );
-    // <--
     void       DelCharFmt(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
     void       DelCharFmt(SwCharFmt* pFmt, BOOL bBroadcast = FALSE);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
@@ -1293,18 +1257,15 @@ public:
     // TXT
     const SwTxtFmtColl* GetDfltTxtFmtColl() const { return pDfltTxtFmtColl; }
     const SwTxtFmtColls *GetTxtFmtColls() const { return pTxtFmtCollTbl; }
-    // --> OD 2005-01-13 #i40550#
     SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
                                   BOOL bBroadcast = FALSE,
                                   BOOL bAuto = TRUE );
-    // <--
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
                                                BOOL bBroadcast = FALSE);
     void DelTxtFmtColl(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
     void DelTxtFmtColl( SwTxtFmtColl* pColl, BOOL bBroadcast = FALSE );
-    // --> OD 2007-11-06 #i62675#
     // Add 4th optional parameter <bResetListAttrs>.
     // 'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
     // attributes of the affected text nodes are cleared, except the break
@@ -1315,7 +1276,6 @@ public:
     sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
                             bool bReset = true,
                             bool bResetListAttrs = false );
-    // <--
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SvPtrarr&)*pTxtFmtCollTbl, rName ); }
 
@@ -1342,7 +1302,6 @@ public:
     //iterieren ueber Flys - fuer Basic-Collections
     sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL) const;
     SwFrmFmt* GetFlyNum(sal_uInt16 nIdx, FlyCntType eType = FLYCNTTYPE_ALL);
-
 
     // kopiere die Formate in die eigenen Arrays und returne diese
     SwFrmFmt  *CopyFrmFmt ( const SwFrmFmt& );
@@ -1411,25 +1370,19 @@ public:
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
     BOOL FindPageDesc( const String & rName, sal_uInt16 * pFound );
-    // -> #116530#
     void DelPageDesc( const String & rName, BOOL bBroadcast = FALSE);
     void DelPageDesc( sal_uInt16 i, BOOL bBroadcast = FALSE );
-    // <- #116530#
-    void PreDelPageDesc(SwPageDesc * pDel); // #i7983#
-    // -> #116530#
+    void PreDelPageDesc(SwPageDesc * pDel);
     sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
                              BOOL bRegardLanguage = TRUE,
                              BOOL bBroadcast = FALSE);
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
                                  USHORT nOp);
-    // <- #116530#
 
-
-    // --> FME 2005-03-16 #i44963# The html import sometimes overwrites the
+    // The html import sometimes overwrites the
     // page sizes set in the page descriptions. This function is used to
     // correct this.
     void CheckDefaultPageFmt();
-    // <--
 
         // Methoden fuer die Verzeichnisse:
         // - Verzeichnismarke einfuegen loeschen travel
@@ -1496,7 +1449,7 @@ public:
 
         // korrigiere die im Dokument angemeldeten SwPosition-Objecte,
         // wie z.B. die ::com::sun::star::text::Bookmarks oder die Verzeichnisse.
-        // JP 22.06.95: ist bMoveCrsr gesetzt, verschiebe auch die Crsr
+        // ist bMoveCrsr gesetzt, verschiebe auch die Crsr
 
         // Setzt alles in rOldNode auf rNewPos + Offset
     void CorrAbs( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
@@ -1512,12 +1465,10 @@ public:
                     const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
 
         // GliederungsRegeln erfragen / setzen
-    // --> OD 2005-11-02 #i51089 - TUNING#
     inline SwNumRule* GetOutlineNumRule() const
     {
         return pOutlineRule;
     }
-    // <--
     void SetOutlineNumRule( const SwNumRule& rRule );
     void PropagateOutlineRule();
 
@@ -1531,13 +1482,11 @@ public:
 
         // setzt, wenn noch keine Numerierung, sonst wird geaendert
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
-    // --> OD 2005-02-18 #i42921# - re-use unused 3rd parameter
-    // --> OD 2008-02-08 #newlistlevelattrs#
+    // re-use unused 3rd parameter
     // Add optional parameter <bResetIndentAttrs> - default value FALSE.
     // If <bResetIndentAttrs> equals true, the indent attributes "before text"
     // and "first line indent" are additionally reset at the provided PaM, if
     // the list style makes use of the new list level attributes.
-    // --> OD 2008-03-17 #refactorlists#
     // introduce parameters <bCreateNewList> and <sContinuedListId>
     // <bCreateNewList> indicates, if a new list is created by applying the
     // given list style.
@@ -1547,10 +1496,8 @@ public:
                      const String sContinuedListId = String(),
                      sal_Bool bSetItem = sal_True,
                      const bool bResetIndentAttrs = false );
-    // <--
     void SetCounted( const SwPaM&, bool bCounted);
 
-    // --> OD 2009-08-25 #i86492#
     // no longer needed.
     // SwDoc::SetNumRule( rPaM, rNumRule, false, <ListId>, sal_True, true ) have to be used instead.
 //    /**
@@ -1570,7 +1517,6 @@ public:
 
     const SwNumRuleTbl& GetNumRuleTbl() const { return *pNumRuleTbl; }
 
-    // #i36749#
     /**
        Add numbering rule to document.
 
@@ -1578,26 +1524,22 @@ public:
     */
     void AddNumRule(SwNumRule * pRule);
 
-    // --> OD 2008-02-11 #newlistlevelattrs#
     // add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
     sal_uInt16 MakeNumRule( const String &rName,
         const SwNumRule* pCpy = 0,
         BOOL bBroadcast = FALSE,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    // <--
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
 
     // loeschen geht nur, wenn die ::com::sun::star::chaos::Rule niemand benutzt!
-    // #106897#
     sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
                            BOOL bBroadcast = FALSE);
     sal_Bool DelNumRule( const String& rName, BOOL bBroadCast = FALSE );
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
 
     void UpdateNumRule();   // alle invaliden Updaten
-    // #106897#
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
@@ -1608,11 +1550,10 @@ public:
     sal_Bool GotoPrevNum( SwPosition&, sal_Bool bOverUpper = sal_True,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
-    // #i23731#
     /** Searches for a text node with a numbering rule.
 
-       OD 2005-10-24 #i55391# - add optional parameter <bInvestigateStartNode>
-       OD 2008-03-18 #refactorlists# - add output parameter <sListId>
+       add optional parameter <bInvestigateStartNode>
+       add output parameter <sListId>
 
        \param rPos         position to start search
        \param bForward     - TRUE:  search forward
@@ -1660,11 +1601,10 @@ public:
 
         // fuege eine neue Tabelle auf der Position rPos ein. (es
         // wird vor dem Node eingefuegt !!)
-        //JP 28.10.96:
         //  fuer AutoFormat bei der Eingabe: dann muessen die Spalten
         //  auf die vordefinierten Breite gesetzt werden. Im Array stehen die
         //  Positionen der Spalten!! (nicht deren Breite!)
-    /* #109161# new parameter bCalledFromShell:
+    /* new parameter bCalledFromShell:
 
        TRUE: called from shell -> propagate existing adjust item at
        rPos to every new cell. A existing adjust item in the table
@@ -1726,7 +1666,6 @@ public:
                     const SwCellFrm* pBoxFrm = 0 ) const;
     void SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
                      const SwCellFrm* pBoxFrm = 0 );
-
 
     // Direktzugriff fuer Uno
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -1870,7 +1809,6 @@ public:
     void SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags );
     void InvalidateAutoCompleteFlag();
 
-    // <--
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
     // erfrage ob die ::com::sun::star::util::URL besucht war. Uebers Doc, falls nur ein ::com::sun::star::text::Bookmark
@@ -1947,7 +1885,7 @@ public:
     void SetPreViewPrtData( const SwPagePreViewPrtData* pData );
 
     // update all modified OLE-Objects. The modification is called over the
-    // StarOne - Interface              --> Bug 67026
+    // StarOne - Interface
     void SetOLEObjModified()
     {   if( GetRootFrm() ) aOLEModifiedTimer.Start(); }
 
@@ -1992,7 +1930,6 @@ public:
     //
     // -------------------- FeShell - Schnittstellen Ende ------------------
 
-
     // Schnittstelle fuer die TextInputDaten - ( fuer die Texteingabe
     // von japanischen/chinesischen Zeichen)
     SwExtTextInput* CreateExtTextInput( const SwPaM& rPam );
@@ -2028,10 +1965,8 @@ public:
 
     IGrammarContact* getGrammarContact() const { return mpGrammarContact; }
 
-    // -> #i27615#
     /** Marks/Unmarks a list level of a certain list
 
-        OD 2008-04-02 #refactorlists#
         levels of a certain lists are marked now
 
         @param sListId    list Id of the list whose level has to be marked/unmarked
@@ -2045,7 +1980,6 @@ public:
 
     /** Marks/Unmarks a list level of a certain list
 
-        OD 2008-04-02 #refactorlists#
         levels of a certain lists are marked now
 
         @param rList      list whose level has to be marked/unmarked
@@ -2056,7 +1990,6 @@ public:
     void MarkListLevel( SwList& rList,
                         const int nListLevel,
                         const BOOL bValue );
-    // <- #i27615#
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
@@ -2067,7 +2000,6 @@ public:
     // Change a TOX undoable.
     void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
 
-    // #111827#
     /**
        Returns a textual description of a PaM.
 
@@ -2087,11 +2019,9 @@ public:
      */
     String GetPaMDescr(const SwPaM & rPaM) const;
 
-    // -> #i23726#
     BOOL IsFirstOfNumRule(SwPosition & rPos);
-    // <- #i23726#
 
-    // --> #i31958# access methods for XForms model(s)
+    // access methods for XForms model(s)
 
     /// access container for XForms model; will be NULL if !isXForms()
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
@@ -2104,21 +2034,18 @@ public:
 
     /// initialize XForms models; turn this into an XForms document
     void initXForms( bool bCreateDefaultModel );
-    // <-- #i31958# access methods for XForms model(s)
+    // access methods for XForms model(s)
 
-    // --> OD 2006-03-21 #b6375613#
     inline bool ApplyWorkaroundForB6375613() const
     {
         return mbApplyWorkaroundForB6375613;
     }
     void SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 );
-    // <--
 
     //Update all the page masters
     void SetDefaultPageMode(bool bSquaredPageMode);
     sal_Bool IsSquaredPageMode() const;
 
-    // i#78591#
     void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )
     {
         n32DummyCompatabilityOptions1 = CompatabilityOptions1;
@@ -2143,13 +2070,9 @@ public:
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
-
 // Diese Methode wird im Dtor vom SwDoc gerufen und loescht den Cache
 // der Konturobjekte
 void ClrContourCache();
-
-
-//------------------ inline impl. ---------------------------------
 
 inline const SwTableNode* SwDoc::IsIdxInTbl( const SwNodeIndex& rIdx ) const
 {
@@ -2175,13 +2098,10 @@ inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
         mbAllOLENotify = sal_False;
 }
 
-// --> OD 2006-03-14 #i62875#
 // namespace <docfunc> for functions and procedures working on a Writer document.
 namespace docfunc
 {
     /** method to check, if given Writer document contains at least one drawing object
-
-        OD 2006-03-17 #i62875#
 
         @author OD
 
@@ -2192,8 +2112,6 @@ namespace docfunc
 
     /** method to check, if given Writer document contains only drawing objects,
         which are completely on its page.
-
-        OD 2006-03-17 #i62875#
 
         @author OD
 
@@ -2221,7 +2139,6 @@ namespace docfunc
     */
     bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc );
 }
-// <--
 #endif  //_DOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
