@@ -212,7 +212,7 @@ void _HeaderTabListBox::Enable( bool bEnable, bool bChild )
 // assign button ("Add Command") is enabled only if it is not read only
 // delete button ("Remove Command") is enabled if a current binding exists
 //     and it is not read only
-void _SvxMacroTabPage::EnableButtons( const String& /*rLangName*/ )
+void _SvxMacroTabPage::EnableButtons()
 {
     const SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
@@ -592,7 +592,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     }
 
     rListBox.SetUpdateMode( TRUE );
-    EnableButtons( String() );
+    EnableButtons();
 }
 
 // select event handler on the listbox
@@ -610,7 +610,7 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
         return 0;
     }
 
-    pThis->EnableButtons( String() );
+    pThis->EnableButtons();
     return 0;
 }
 
@@ -736,7 +736,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     rListBox.MakeVisible( pE );
     rListBox.SetUpdateMode( TRUE );
 
-    pThis->EnableButtons( String() );
+    pThis->EnableButtons();
     return 0;
 }
 

@@ -107,17 +107,6 @@ TabPage RID_SVXPAGE_EVENTASSIGN
         TabStop = TRUE ;
         Text [ en-US ] = "~Remove" ;
     };
-    ListBox LB_SCRIPTTYPE
-    {
-        HelpID = "cui:ListBox:RID_SVXPAGE_EVENTASSIGN:LB_SCRIPTTYPE";
-        Pos = MAP_APPFONT ( COL4 , ROW4  ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , 60 ) ;
-        // en-US was missing
-        Text [ en-US ] = "~Scripting Language" ;
-        TabStop = TRUE ;
-        Disable = FALSE ;
-        DropDown = TRUE ;
-    };
     String STR_MACROS
     {
         Text [ en-US ] = "Macros" ;

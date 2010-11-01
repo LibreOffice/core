@@ -200,7 +200,7 @@ public:
     void                SelectMacro( const String&, const String& );
     String              GetGroup();
     BasicManager*       GetBasicManager( const SvLBoxEntry& _rEntry );
-    void                SetScriptType( const String& rScriptType );
+    void                SetScriptType();
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

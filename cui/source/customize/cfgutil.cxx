@@ -449,7 +449,6 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
     String m_sDlgMacros;
     String m_aHumanAppName;
     String m_aStrGroupStyles;
-    String m_aScriptType;
     Image m_collapsedImage;
     Image m_collapsedImage_hc;
     Image m_expandedImage;
@@ -474,7 +473,6 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sDlgMacros(String(CUI_RES(STR_DLG_MACROS))),
     m_aHumanAppName(String(CUI_RES(STR_HUMAN_APPNAME))),
     m_aStrGroupStyles(String(CUI_RES(STR_GROUP_STYLES))),
-    m_aScriptType(String(CUI_RES(STR_BASICNAME))),
     m_collapsedImage(CUI_RES(BMP_COLLAPSED)),
     m_collapsedImage_hc(CUI_RES(BMP_COLLAPSED_HC)),
     m_expandedImage(CUI_RES(BMP_EXPANDED)),
@@ -522,9 +520,8 @@ void SfxConfigGroupListBox_Impl::ClearAll()
     Clear();
 }
 
-void SfxConfigGroupListBox_Impl::SetScriptType( const String& rScriptType )
+void SfxConfigGroupListBox_Impl::SetScriptType()
 {
-    pImp->m_aScriptType = rScriptType;
     ULONG nPos=0;
     SvLBoxEntry *pEntry = (SvLBoxEntry*) GetModel()->GetEntryAtAbsPos( nPos++ );
     while ( pEntry )
@@ -1368,10 +1365,6 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 {
                     SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
 
-                    BOOL bIsStarScript = FALSE; //pMod->ISA( SbJScriptModule );
-                    BOOL bWantsStarScript = pImp->m_aScriptType.EqualsAscii("StarScript");
-                    if ( bIsStarScript != bWantsStarScript )
-                        continue;
                     pModEntry = InsertEntry( pMod->GetName(), pEntry );
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_BASICMOD, 0, pMod );
                     aArr.Insert( pGrpInfo, aArr.Count() );
