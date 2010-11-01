@@ -2839,7 +2839,7 @@ void ScInterpreter::ScMacro()
         pDok->LockTable( aPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
         pDok->IncMacroInterpretLevel();
-        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, NULL, refPar, refRes );
+        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar, refRes );
         pDok->DecMacroInterpretLevel();
         pDok->UnlockTable( aPos.Tab() );
 

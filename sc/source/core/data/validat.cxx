@@ -366,7 +366,7 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         if ( pCell )
             pDocument->LockTable( rPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
-        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, NULL, refPar, refRes );
+        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar, refRes );
         if ( pCell )
             pDocument->UnlockTable( rPos.Tab() );
 
