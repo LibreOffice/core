@@ -109,7 +109,6 @@ void ImplInitSVData()
     // init global instance data
     memset( pImplSVData, 0, sizeof( ImplSVData ) );
     pImplSVData->maHelpData.mbAutoHelpId = sal_True;
-    pImplSVData->maHelpData.mbAutoHelpId = sal_True;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 
     // find out whether we are running in the testtool

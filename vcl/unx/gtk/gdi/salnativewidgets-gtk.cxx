@@ -412,11 +412,13 @@ void GtkData::initNWF( void )
     // open first menu on F10
     pSVData->maNWFData.mbOpenMenuOnF10 = true;
 
+    // omit GetNativeControl while painting (see brdwin.cxx)
+    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+
     int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
     gWidgetData = std::vector<NWFWidgetData>( nScreens );
     for( int i = 0; i < nScreens; i++ )
         gWidgetData[i].gNWPixmapCacheList = new NWPixmapCacheList;
-
 
     if( SalGetDesktopEnvironment().equalsAscii( "KDE" ) )
     {

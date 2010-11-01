@@ -315,6 +315,10 @@ struct ImplSVNWFData
                                                           // window background before drawing the native
                                                           // checkbox
     bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
+    bool                    mbCanDrawWidgetAnySize;       // set to true currently on gtk
+                                                          // signals that widgets can be drawn in any size and
+                                                          // brdwin.cxx ImplSmallBorderWindowView::DrawWindow
+                                                          // should not do GetNativeControlRegion
 };
 
 

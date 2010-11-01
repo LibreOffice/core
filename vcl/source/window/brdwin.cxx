@@ -1347,8 +1347,10 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
 
         Rectangle aBoundingRgn( aPoint, Size( mnWidth, mnHeight ) );
         Rectangle aContentRgn( aCtrlRegion );
-        if(pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
-            nState, aControlValue, rtl::OUString(), aBoundingRgn, aContentRgn ))
+        if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
+            pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
+                                          nState, aControlValue, rtl::OUString(),
+                                          aBoundingRgn, aContentRgn ))
         {
             aCtrlRegion=aContentRgn;
         }
