@@ -1198,30 +1198,30 @@ String SwDocInfoField::Expand() const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-String SwDocInfoField::GetCntnt(sal_Bool bName) const
+String SwDocInfoField::GetFieldName() const
 {
-    if ( bName )
+    String aStr(SwFieldType::GetTypeStr(GetTypeId()));
+    aStr += ':';
+
+    sal_uInt16 const nSub = nSubType & 0xff;
+
+    switch (nSub)
     {
-        String aStr(SwFieldType::GetTypeStr(GetTypeId()));
-        aStr += ':';
+        case DI_CUSTOM:
+            aStr += aName;
+            break;
 
-        sal_uInt16 nSub = nSubType & 0xff;
-
-        switch(nSub)
-        {
-            case DI_CUSTOM:
-                aStr += aName;
-                break;
-
-            default:
-                aStr += *ViewShell::GetShellRes()->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
-                break;
-        }
-        if( IsFixed() )
-            ( aStr += ' ' ) += ViewShell::GetShellRes()->aFixedStr;
-        return aStr;
+        default:
+            aStr += *ViewShell::GetShellRes()
+                        ->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
+            break;
     }
-    return Expand();
+    if (IsFixed())
+    {
+        aStr += ' ';
+        aStr += ViewShell::GetShellRes()->aFixedStr;
+    }
+    return aStr;
 }
 /* ---------------------------------------------------------------------------
 
@@ -1517,25 +1517,20 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-String SwHiddenTxtField::GetCntnt(sal_Bool bName) const
+String SwHiddenTxtField::GetFieldName() const
 {
-    if ( bName )
-    {
-        String aStr(SwFieldType::GetTypeStr(nSubType));
-        aStr += ' ';
-        aStr += aCond;
-        aStr += ' ';
-        aStr += aTRUETxt;
+    String aStr(SwFieldType::GetTypeStr(nSubType));
+    aStr += ' ';
+    aStr += aCond;
+    aStr += ' ';
+    aStr += aTRUETxt;
 
-        if(nSubType == TYP_CONDTXTFLD)
-        {
-static char __READONLY_DATA cTmp[] = " : ";
-            aStr.AppendAscii(cTmp);
-            aStr += aFALSETxt;
-        }
-        return aStr;
+    if (nSubType == TYP_CONDTXTFLD)
+    {
+        aStr.AppendAscii(" : ");
+        aStr += aFALSETxt;
     }
-    return Expand();
+    return aStr;
 }
 /* ---------------------------------------------------------------------------
 

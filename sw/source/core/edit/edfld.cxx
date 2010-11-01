@@ -224,8 +224,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
                                      *pFmtFld->GetTxtFld()->GetStart() );
 
                 // Feldinhalt durch Text ersetzen
-                String const aEntry(
-                    pFmtFld->GetFld()->ExpandField(GetDoc()->IsClipBoard()) );
+                String const aEntry( pFmtFld->GetFld()->ExpandField(true) );
                 pPaM->SetMark();
                 pPaM->Move( fnMoveForward );
                 GetDoc()->DeleteRange( *pPaM );
