@@ -574,7 +574,7 @@ static int ReportCrash( int Signal )
 
                 void *stackframes[MAX_STACK_FRAMES];
                 int  iFrame;
-                int  nFrames = backtrace( stackframes, SAL_N_ELEMENTS(stackframes);
+                int  nFrames = backtrace( stackframes, SAL_N_ELEMENTS(stackframes) );
 
                 FILE *xmlout = NULL, *stackout = NULL, *checksumout = NULL;
                 int fdxml, fdstk, fdchksum;
