@@ -42,6 +42,8 @@
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
 #include <basic/sbobjmod.hxx>
+#include <unotools/intlwrapper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
@@ -1866,6 +1868,116 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequen
         DBG_UNHANDLED_EXCEPTION();
     }
     return false;
+}
+
+
+namespace
+{
+    SbMethod* lcl_queryMacro( BasicManager* i_manager, String const& i_fullyQualifiedName )
+    {
+        sal_uInt16 nLast = 0;
+        String sMacro = i_fullyQualifiedName;
+        String sLibName = sMacro.GetToken( 0, '.', nLast );
+        String sModule = sMacro.GetToken( 0, '.', nLast );
+        sMacro.Erase( 0, nLast );
+
+        IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+        const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
+        sal_uInt16 nLibCount = i_manager->GetLibCount();
+        for ( sal_uInt16 nLib = 0; nLib < nLibCount; ++nLib )
+        {
+            if ( COMPARE_EQUAL == pCollator->compareString( i_manager->GetLibName( nLib ), sLibName ) )
+            {
+                StarBASIC* pLib = i_manager->GetLib( nLib );
+                if( !pLib )
+                {
+                    i_manager->LoadLib( nLib );
+                    pLib = i_manager->GetLib( nLib );
+                }
+
+                if( pLib )
+                {
+                    sal_uInt16 nModCount = pLib->GetModules()->Count();
+                    for( sal_uInt16 nMod = 0; nMod < nModCount; ++nMod )
+                    {
+                        SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
+                        if ( pMod && COMPARE_EQUAL == pCollator->compareString( pMod->GetName(), sModule ) )
+                        {
+                            SbMethod* pMethod = (SbMethod*)pMod->Find( sMacro, SbxCLASS_METHOD );
+                            if( pMethod )
+                                return pMethod;
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
+
+bool BasicManager::HasMacro( String const& i_fullyQualifiedName ) const
+{
+    return ( NULL != lcl_queryMacro( const_cast< BasicManager* >( this ), i_fullyQualifiedName ) );
+}
+
+ErrCode BasicManager::ExecuteMacro( String const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue )
+{
+    SbMethod* pMethod = lcl_queryMacro( this, i_fullyQualifiedName );
+    ErrCode nError = 0;
+    if ( pMethod )
+    {
+        if ( i_arguments )
+            pMethod->SetParameters( i_arguments );
+        nError = pMethod->Call( i_retValue );
+    }
+    else
+        nError = ERRCODE_BASIC_PROC_UNDEFINED;
+    return nError;
+}
+
+ErrCode BasicManager::ExecuteMacro( String const& i_fullyQualifiedName, String const& i_commaSeparatedArgs, SbxValue* i_retValue )
+{
+    SbMethod* pMethod = lcl_queryMacro( this, i_fullyQualifiedName );
+    if ( !pMethod )
+        return ERRCODE_BASIC_PROC_UNDEFINED;
+
+    // arguments must be quoted
+    String sQuotedArgs;
+    String sArgs( i_commaSeparatedArgs );
+    if ( sArgs.Len()<2 || sArgs.GetBuffer()[1] == '\"')
+        // no args or already quoted args
+        sQuotedArgs = sArgs;
+    else
+    {
+        // quote parameters
+        sArgs.Erase( 0, 1 );
+        sArgs.Erase( sArgs.Len()-1, 1 );
+
+        sQuotedArgs = '(';
+
+        sal_uInt16 nCount = sArgs.GetTokenCount(',');
+        for ( sal_uInt16 n=0; n<nCount; ++n )
+        {
+            sQuotedArgs += '\"';
+            sQuotedArgs += sArgs.GetToken( n, ',' );
+            sQuotedArgs += '\"';
+            if ( n<nCount-1 )
+                sQuotedArgs += ',';
+        }
+
+        sQuotedArgs += ')';
+    }
+
+    // add quoted arguments and do the call
+    String sCall( '[' );
+    sCall += pMethod->GetName();
+    sCall += sQuotedArgs;
+    sCall += ']';
+
+    SbxVariable* pRet = pMethod->GetParent()->Execute( sCall );
+    if ( pRet )
+        *i_retValue = *pRet;
+    return SbxBase::GetError();
 }
 
 //=====================================================================

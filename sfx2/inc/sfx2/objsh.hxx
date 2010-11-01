@@ -366,28 +366,6 @@ public:
     ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
                                     SbxArray* pArgs = 0, SbxValue* pRet = 0 );
 
-    ErrCode                     CallScript(
-        const String & rScriptType, const String & rCode, const void* pArgs = NULL, void* pRet = NULL );
-
-    /** calls a StarBasic script without magic
-    @param _rMacroName
-        specifies the name of the method to execute
-    @param _rLocation
-        specifies the location of the script to execute. Allowed values are "application" and "document".
-    @param _pArguments
-        This is a pointer to a Sequence< Any >. All elements of the Sequence are wrapped into Basic objects
-        and passed as arguments to the method specified by <arg>_rMacroName</arg>
-    @param _pReturn
-        If not <NULL/>, the Any pointed to by this argument contains the return value of the (synchronous) call
-        to the StarBasic macro
-    */
-    ErrCode     CallStarBasicScript(
-        const String& _rMacroName,
-        const String& _rLocation,
-        const void* _pArguments = NULL,
-        void* _pReturn = NULL
-    );
-
     ErrCode     CallXScript(
         const String& rScriptURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,

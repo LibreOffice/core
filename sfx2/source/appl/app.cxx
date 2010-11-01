@@ -36,7 +36,6 @@
 #endif // UNX
 
 #include <sfx2/app.hxx>
-#include "sfxbasic.hxx"
 #include <sfx2/frame.hxx>
 #include <vos/process.hxx>
 #include <tools/simplerm.hxx>
@@ -848,19 +847,5 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
 
 ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
 {
-    SfxApplication *pApp = SFX_APP();
-    pApp->EnterBasicCall();
-    SbMethod* pMethod = SfxQueryMacro( pMgr, rCode );
-    ErrCode nErr = 0;
-    if( pMethod )
-    {
-        if ( pArgs )
-            pMethod->SetParameters( pArgs );
-        nErr = pMethod->Call( pRet );
-    }
-    else
-        nErr = ERRCODE_BASIC_PROC_UNDEFINED;
-
-    pApp->LeaveBasicCall();
-    return nErr;
+    return pMgr->ExecuteMacro( rCode, pArgs, pRet);
 }

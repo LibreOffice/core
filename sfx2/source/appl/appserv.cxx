@@ -111,7 +111,6 @@
 #include <sfx2/new.hxx>
 #include <sfx2/templdlg.hxx>
 #include "sfxtypes.hxx"
-#include "sfxbasic.hxx"
 #include <sfx2/tabdlg.hxx>
 #include "arrdecl.hxx"
 #include "fltfnc.hxx"

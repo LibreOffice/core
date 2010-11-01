@@ -111,7 +111,6 @@ using namespace ::vos;
 #include <unotools/syslocale.hxx>
 
 #include "sfxhelp.hxx"
-#include "sfxbasic.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include "sfxtypes.hxx"

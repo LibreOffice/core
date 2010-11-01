@@ -120,7 +120,6 @@ using namespace ::com::sun::star::io;
 #include <sfx2/fcontnr.hxx>
 #include "frmload.hxx"
 #include <sfx2/frame.hxx>
-#include "sfxbasic.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/objuno.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -1802,35 +1801,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
             }
 
-            SbxMethod *pMethod = SfxQueryMacro( pBasMgr, aQualifiedMethod );
-            if ( pMethod )
+            if ( pBasMgr->HasMacro( aQualifiedMethod ) )
             {
-                // arguments must be quoted
-                String aQuotedArgs;
-                if ( aArgs.Len()<2 || aArgs.GetBuffer()[1] == '\"')
-                    // no args or already quoted args
-                    aQuotedArgs = aArgs;
-                else
-                {
-                    // quote parameters
-                    aArgs.Erase(0,1);
-                    aArgs.Erase( aArgs.Len()-1,1);
-
-                    aQuotedArgs = '(';
-
-                    sal_uInt16 nCount = aArgs.GetTokenCount(',');
-                    for ( sal_uInt16 n=0; n<nCount; n++ )
-                    {
-                        aQuotedArgs += '\"';
-                        aQuotedArgs += aArgs.GetToken( n, ',' );
-                        aQuotedArgs += '\"';
-                        if ( n<nCount-1 )
-                            aQuotedArgs += ',';
-                    }
-
-                    aQuotedArgs += ')';
-                }
-
                 Any aOldThisComponent;
                 if ( pSh )
                 {
@@ -1844,29 +1816,14 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                     }
                 }
 
-                // add quoted arguments and do the call
-                String aCall( '[' );
-                aCall += pMethod->GetName();
-                aCall += aQuotedArgs;
-                aCall += ']';
-
                 // just to let the shell be alive
                 SfxObjectShellRef rSh = pSh;
 
-                // execute function using its Sbx parent,
-                //SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
-                //rRetval = sbxToUnoValue( pRet );
+                SbxVariableRef retValRef = new SbxVariable;
+                nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef );
+                if ( nErr == ERRCODE_NONE )
+                    rRetval = sbxToUnoValue( retValRef );
 
-                SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
-                if ( pRet )
-                {
-                    USHORT nFlags = pRet->GetFlags();
-                    pRet->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
-                    rRetval = sbxToUnoValue( pRet );
-                    pRet->SetFlags( nFlags );
-                }
-
-                nErr = SbxBase::GetError();
                 if ( ( pBasMgr == pAppMgr ) && pSh )
                 {
                     pAppMgr->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
