@@ -6999,7 +6999,7 @@ else
     LIGHTPROOF_LANG=
     # check whether the langs are requested at all
     for lang in $wanted_lightproof ; do
-    if test -n "`echo $with_lang | grep "$lang"`" ; then
+    if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`" ; then
         LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
     fi
     done
@@ -7173,7 +7173,7 @@ else
     SUNTEMPLATES_LANG=
     # check whether the langs are requested at all
     for lang in $wanted_sun_templates ; do
-    if test -n "`echo $with_lang | grep "$lang"`" ; then
+    if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`" ; then
         SUNTEMPLATES_LANG="$SUNTEMPLATES_LANG $lang"
     fi
     done
