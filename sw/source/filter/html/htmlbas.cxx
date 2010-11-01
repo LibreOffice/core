@@ -271,8 +271,7 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
 
     rtl::OUString aEventName;
 
-    SfxEventConfiguration* pECfg = SFX_APP()->GetEventConfig();
-    pECfg->ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
+    SfxEventConfiguration::ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
                            pDocSh );
 }
 
