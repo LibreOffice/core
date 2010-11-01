@@ -71,7 +71,7 @@
 #include <docufld.hxx>      // PostItFld /-Type
 #include <shellres.hxx>
 #include <viewopt.hxx>
-#include <swprtopt.hxx>     // SwPrtOptions
+#include <printdata.hxx>    // SwPrintData
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>      // fuer RES_POOLPAGE_JAKET
 #include <mdiexp.hxx>       // Ansteuern der Statusleiste
@@ -369,107 +369,6 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
 
 /******************************************************************************/
 
-SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
-{
-    ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
-    SwFEShell* pFESh = (SwFEShell*)this;
-    // Wir bauen uns ein neues Dokument
-    SwDoc *pPrtDoc = new SwDoc;
-    pPrtDoc->acquire();
-    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
-    pPrtDoc->LockExpFlds();
-
-    const SfxPoolItem* pCpyItem;
-    const SfxItemPool& rPool = GetAttrPool();
-    for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
-        if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
-            pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
-
-    // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
-    //                              the PrintDoc - will be replaced!
-    pPrtDoc->ReplaceStyles( *GetDoc() );
-
-    SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
-    if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-    {
-        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
-    }
-
-    Point aSelPoint;
-    if( pFESh->IsTableMode() )
-    {
-        SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
-
-        const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
-        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
-        if( pCntntFrm )
-        {
-            SwRect aCharRect;
-            SwCrsrMoveState aTmpState( MV_NONE );
-            pCntntFrm->GetCharRect( aCharRect, *pShellTblCrsr->Start(), &aTmpState );
-            aSelPoint = Point( aCharRect.Left(), aCharRect.Top() );
-        }
-    }
-    else
-    {
-       aSelPoint = pFirstCrsr->GetSttPos();
-    }
-
-    const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
-    ASSERT( pPage, "no page found!" );
-
-    // get page descriptor - fall back to the first one if pPage could not be found
-    const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
-        pPage->GetPageDesc()->GetName() ) : &pPrtDoc->_GetPageDesc( (sal_uInt16)0 );
-
-    if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
-    {   // Am letzten Absatz die Absatzattribute richten:
-        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
-        SwCntntNode *pLastNd =
-            pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
-        // Hier werden die Absatzattribute des ersten Absatzes uebertragen
-        if( pLastNd && pLastNd->IsTxtNode() )
-            ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
-    }
-
-    // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
-//      if( aDocShellRef.Is() )
-//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
-    // und fuellen es mit dem selektierten Bereich
-    pFESh->Copy( pPrtDoc );
-
-    //Jetzt noch am ersten Absatz die Seitenvorlage setzen
-    {
-        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
-        if( pFESh->IsTableMode() )
-        {
-            SwTableNode* pTNd = pCNd->FindTableNode();
-            if( pTNd )
-                pTNd->GetTable().GetFrmFmt()->SetFmtAttr( SwFmtPageDesc( pPageDesc ) );
-        }
-        else
-        {
-            pCNd->SetAttr( SwFmtPageDesc( pPageDesc ) );
-            if( pFirstCrsr->HasMark() )
-            {
-                SwTxtNode *pTxtNd = pCNd->GetTxtNode();
-                if( pTxtNd )
-                {
-                    SwCntntNode *pFirstNd =
-                        pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
-                    // Hier werden die Absatzattribute des ersten Absatzes uebertragen
-                    if( pFirstNd && pFirstNd->IsTxtNode() )
-                        ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
-                }
-            }
-        }
-    }
-    return pPrtDoc;
-}
-
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
@@ -582,7 +481,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
-    const SwPrtOptions &rPrintData,
+    SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -608,31 +507,14 @@ sal_Bool ViewShell::PrintOrPDFExport(
     //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
     SfxObjectShellRef aDocShellRef;
 
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rPrintData.bPrintSelection parameter will be false.
-    BOOL bSelection = rPrintData.bPrintSelection;
-
-    // PDF export for (multi-)selection has already generated a temporary document
-    // with the selected text. (see XRenderable implementation in unotxdoc.cxx)
-    // Thus we like to go in the 'else' part here in that case.
-    // Is is implemented this way because PDF export calls this Prt function
+    // Print/PDF export for (multi-)selection has already generated a
+    // temporary document with the selected text.
+    // (see XRenderable implementation in unotxdoc.cxx)
+    // It is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
-    // to be created that often here in the 'then' part.
-    if ( bSelection )
-    {
-        pOutDevDoc = CreatePrtDoc( aDocShellRef );
-
-        // eine ViewShell darauf
-        pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pOutDev );
-        pOutDevDoc->SetRefForDocShell( 0 );
-    }
-    else
-    {
-        pOutDevDoc = GetDoc();
-        pShell = new ViewShell( *this, 0, pOutDev );
-    }
+    // to be created that often here.
+    pOutDevDoc = GetDoc();
+    pShell = new ViewShell( *this, 0, pOutDev );
 
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
@@ -682,6 +564,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
+// FIXME disabled because rPrintData.aOffset is always (0,0)
+#if 0
         //  wenn wir einen Umschlag drucken wird ein Offset beachtet
         if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
         {
@@ -691,6 +575,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             aTmp.SetOrigin( aNewOrigin );
             pOutDev->SetMapMode( aTmp );
         }
+#endif
 
         pShell->InitPrt( pOutDev );
 
@@ -704,12 +589,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
     }  //Zus. Scope wg. CurShell!
 
     delete pShell;
-
-    if (bSelection )
-    {
-        if ( !pOutDevDoc->release() )
-            delete pOutDevDoc;
-    }
 
     // restore settings of OutputDevice (should be done always now since the
     // output device is now provided by a call from outside the Writer)

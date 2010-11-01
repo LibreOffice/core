@@ -903,7 +903,7 @@ void SAL_CALL SwXTextView::setRubyList(
 /*-- 29.12.02 15:45:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/ )
+SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc()
 {
     SwWrtShell& rOldSh = m_pView->GetWrtShell();
     SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess()->getPrinter( false );
