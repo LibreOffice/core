@@ -77,9 +77,9 @@ bool isDefaultPos( const ::Point& aPos )
     return (( aPos.X() == SAL_MAX_INT32 ) && ( aPos.Y() == SAL_MAX_INT32 ));
 }
 
-bool isReverseOrderDockingArea( const sal_Int16 nDockArea )
+bool isReverseOrderDockingArea( const sal_Int32 nDockArea )
 {
-    ui::DockingArea eDockArea = (ui::DockingArea)nDockArea;
+    ui::DockingArea eDockArea = static_cast< ui::DockingArea >( nDockArea );
     return (( eDockArea == ui::DockingArea_DOCKINGAREA_BOTTOM ) ||
             ( eDockArea == ui::DockingArea_DOCKINGAREA_RIGHT ));
 }
@@ -97,9 +97,9 @@ bool isHorizontalDockingArea( const ui::DockingArea& nDockingArea )
             ( nDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM ));
 }
 
-bool isHorizontalDockingArea( const sal_Int16 nDockArea )
+bool isHorizontalDockingArea( const sal_Int32 nDockArea )
 {
-  return isHorizontalDockingArea((ui::DockingArea)nDockArea );
+  return isHorizontalDockingArea(static_cast< ui::DockingArea >( nDockArea ));
 }
 
 ::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow )

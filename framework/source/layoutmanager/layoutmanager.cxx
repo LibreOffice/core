@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-//  my own includes
+//      my own includes
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
 #include <panelmanager.hxx>
@@ -47,7 +47,7 @@
 #include <uiconfiguration/globalsettings.hxx>
 #include <toolbarlayoutmanager.hxx>
 
-//  interface includes
+//      interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -71,7 +71,7 @@
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//  other includes
+//      other includes
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
@@ -91,7 +91,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
-//  using namespace
+//      using namespace
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -123,21 +123,21 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_xURLTransformer( xServiceManager->createInstance( SERVICENAME_URLTRANSFORMER ), UNO_QUERY )
         , m_xDisplayAccess( xServiceManager->createInstance( SERVICENAME_DISPLAYACCESS ), UNO_QUERY )
         , m_nLockCount( 0 )
-        , m_bActive( sal_False )
-        , m_bInplaceMenuSet( sal_False )
-        , m_bDockingInProgress( sal_False )
-        , m_bMenuVisible( sal_True )
-        , m_bComponentAttached( sal_False )
-        , m_bDoLayout( sal_False )
-        , m_bVisible( sal_True )
-        , m_bParentWindowVisible( sal_False )
-        , m_bMustDoLayout( sal_True )
-        , m_bAutomaticToolbars( sal_True )
-        , m_bStoreWindowState( sal_False )
+        , m_bActive( false )
+        , m_bInplaceMenuSet( false )
+        , m_bDockingInProgress( false )
+        , m_bMenuVisible( true )
+        , m_bComponentAttached( false )
+        , m_bDoLayout( false )
+        , m_bVisible( true )
+        , m_bParentWindowVisible( false )
+        , m_bMustDoLayout( true )
+        , m_bAutomaticToolbars( true )
+        , m_bStoreWindowState( false )
         , m_bHideCurrentUI( false )
-        , m_bGlobalSettings( sal_False )
+        , m_bGlobalSettings( false )
         , m_bPreserveContentSize( false )
-        , m_bMenuBarCloser( sal_False )
+        , m_bMenuBarCloser( false )
         , m_pInplaceMenuBar( NULL )
         , m_xModuleManager( Reference< XModuleManager >( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         , m_xUIElementFactoryManager( Reference< ui::XUIElementFactory >(
@@ -200,9 +200,9 @@ void LayoutManager::impl_clearUpMenuBar()
 
         SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
         if ( pSysWindow )
-    {
+        {
             MenuBar* pSetMenuBar = 0;
-        if ( m_xInplaceMenuBar.is() )
+            if ( m_xInplaceMenuBar.is() )
                 pSetMenuBar = (MenuBar *)m_pInplaceMenuBar->GetMenuBar();
             else
             {
@@ -215,12 +215,8 @@ void LayoutManager::impl_clearUpMenuBar()
                     {
                         xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
                     }
-                    catch ( beans::UnknownPropertyException )
-                    {
-                    }
-                    catch ( lang::WrappedTargetException )
-                    {
-                    }
+                    catch ( beans::UnknownPropertyException ) {}
+                    catch ( lang::WrappedTargetException ) {}
                 }
 
                 VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
@@ -228,9 +224,9 @@ void LayoutManager::impl_clearUpMenuBar()
                     pSetMenuBar = (MenuBar*)pAwtMenuBar->GetMenu();
             }
 
-        MenuBar* pTopMenuBar = pSysWindow->GetMenuBar();
-        if ( pSetMenuBar == pTopMenuBar )
-            pSysWindow->SetMenuBar( 0 );
+            MenuBar* pTopMenuBar = pSysWindow->GetMenuBar();
+            if ( pSetMenuBar == pTopMenuBar )
+                pSysWindow->SetMenuBar( 0 );
         }
     }
 
@@ -292,9 +288,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             {
                 aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
             }
-            catch( Exception& )
-            {
-            }
+            catch( Exception& ) {}
 
             if ( aModuleIdentifier.getLength() && aOldModuleIdentifier != aModuleIdentifier )
             {
@@ -310,9 +304,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                         // Remove listener to old module ui configuration manager
                         xModuleCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                     }
-                    catch ( Exception& )
-                    {
-                    }
+                    catch ( Exception& ) {}
                 }
 
                 try
@@ -322,9 +314,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     if ( xModuleCfgMgr.is() )
                         xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
-                catch ( Exception& )
-                {
-                }
+                catch ( Exception& ) {}
 
                 try
                 {
@@ -332,12 +322,8 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     if ( xPersistentWindowStateSupplier.is() )
                         xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= xPersistentWindowState;
                 }
-                catch ( NoSuchElementException& )
-                {
-                }
-                catch ( WrappedTargetException& )
-                {
-                }
+                catch ( NoSuchElementException& ) {}
+                catch ( WrappedTargetException& ) {}
             }
 
             xModel = impl_getModelFromFrame( xFrame );
@@ -353,9 +339,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                             // Remove listener to old ui configuration manager
                             xDocCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                         }
-                        catch ( Exception& )
-                        {
-                        }
+                        catch ( Exception& ) {}
                     }
 
                     try
@@ -364,9 +348,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                         if ( xDocCfgMgr.is() )
                             xDocCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                     }
-                    catch ( Exception& )
-                    {
-                    }
+                    catch ( Exception& ) {}
                 }
             }
         }
@@ -380,9 +362,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     xModuleCfgMgr->removeConfigurationListener(
                         Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
-                catch ( Exception& )
-                {
-                }
+                catch ( Exception& ) {}
             }
 
             if ( xDocCfgMgr.is() )
@@ -392,9 +372,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     xDocCfgMgr->removeConfigurationListener(
                         Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
-                catch ( Exception& )
-                {
-                }
+                catch ( Exception& ) {}
             }
 
             // Release references to our configuration managers as we currently don't have
@@ -421,22 +399,22 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    // reset/notify toolbar layout manager
-    if ( pToolbarManager )
+        // reset/notify toolbar layout manager
+        if ( pToolbarManager )
         {
-        if ( bAttached )
-        {
-            pToolbarManager->attach( xFrame, xModCfgMgr, xDokCfgMgr, xPersistentWindowState );
-            uno::Reference< awt::XWindowPeer > xParent( xContainerWindow, UNO_QUERY );
-            pToolbarManager->setParentWindow( xParent );
-            if ( bAutomaticToolbars )
-                pToolbarManager->createStaticToolbars();
-        }
-        else
-        {
-            pToolbarManager->reset();
-            implts_destroyElements();
-        }
+            if ( bAttached )
+            {
+                pToolbarManager->attach( xFrame, xModCfgMgr, xDokCfgMgr, xPersistentWindowState );
+                uno::Reference< awt::XWindowPeer > xParent( xContainerWindow, UNO_QUERY );
+                pToolbarManager->setParentWindow( xParent );
+                if ( bAutomaticToolbars )
+                    pToolbarManager->createStaticToolbars();
+            }
+            else
+            {
+                pToolbarManager->reset();
+                implts_destroyElements();
+            }
         }
     }
 
@@ -515,46 +493,6 @@ UIElement& LayoutManager::impl_findElement( const rtl::OUString& aName )
         return m_aProgressBarElement;
 
     return aEmptyElement;
-}
-
-void LayoutManager::implts_writeNewStateData( const rtl::OUString aName, const Reference< awt::XWindow >& xWindow )
-{
-    awt::Rectangle aPos;
-    awt::Size      aSize;
-    sal_Bool            bVisible( sal_False );
-    sal_Bool            bFloating( sal_True );
-
-    if ( xWindow.is() )
-    {
-        Reference< awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-        if ( xDockWindow.is() )
-            bFloating = xDockWindow->isFloating();
-
-        Reference< awt::XWindow2 > xWindow2( xWindow, UNO_QUERY );
-        if( xWindow2.is() )
-        {
-            aPos     = xWindow2->getPosSize();
-            aSize    = xWindow2->getOutputSize();   // always use output size for consistency
-            bVisible = xWindow2->isVisible();
-        }
-    }
-
-    WriteGuard aWriteLock( m_aLock );
-    UIElement& rUIElement = impl_findElement( aName );
-    if ( rUIElement.m_xUIElement.is() && xWindow.is() )
-    {
-        rUIElement.m_bVisible   = bVisible;
-        rUIElement.m_bFloating  = bFloating;
-        if ( bFloating )
-        {
-            rUIElement.m_aFloatingData.m_aPos  = ::Point( aPos.X, aPos.Y );
-            rUIElement.m_aFloatingData.m_aSize = ::Size( aSize.Width, aSize.Height );
-        }
-    }
-
-    implts_writeWindowStateData( aName, rUIElement );
-
-    aWriteLock.unlock();
 }
 
 sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData )
@@ -692,9 +630,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
 
             return sal_True;
         }
-        catch ( NoSuchElementException& )
-        {
-        }
+        catch ( NoSuchElementException& ) {}
     }
 
     return sal_False;
@@ -723,9 +659,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
             // Non-configurable elements should at least store their dimension/position
             bPersistent = sal_True;
         }
-        catch ( lang::WrappedTargetException )
-        {
-        }
+        catch ( lang::WrappedTargetException ) {}
     }
 
     if ( bPersistent && xPersistentWindowState.is() )
@@ -774,9 +708,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
                 xInsert->insertByName( aName, makeAny( aWindowState ));
             }
         }
-        catch ( Exception& )
-        {
-        }
+        catch ( Exception& ) {}
     }
 
     // Reset flag
@@ -814,12 +746,8 @@ Reference< XUIElement > LayoutManager::implts_createElement( const rtl::OUString
     {
         xUIElement = m_xUIElementFactoryManager->createUIElement( aName, aPropSeq );
     }
-    catch ( NoSuchElementException& )
-    {
-    }
-    catch ( IllegalArgumentException& )
-    {
-    }
+    catch ( NoSuchElementException& ) {}
+    catch ( IllegalArgumentException& ) {}
 
     return xUIElement;
 }
@@ -844,14 +772,13 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     std::vector< Reference< awt::XWindow > > aWinVector;
 
     WriteGuard aWriteLock( m_aLock );
-    bool                      bOld( m_bDoLayout );
     Reference< XUIElement >   xMenuBar( m_xMenuBar, UNO_QUERY );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XComponent >   xInplaceMenuBar( m_xInplaceMenuBar );
     MenuBarManager*           pInplaceMenuBar( m_pInplaceMenuBar );
-    m_bDoLayout = sal_True;
     aWriteLock.unlock();
 
+    bool bMustDoLayout(false);
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -872,36 +799,29 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
                 pSysWindow->SetMenuBar( pMenuBar );
             else
                 pSysWindow->SetMenuBar( 0 );
+            bMustDoLayout = true;
         }
     }
 
     // Hide/show the statusbar according to bSetVisible
     if ( bSetVisible )
-        implts_showStatusBar();
+        bMustDoLayout = !implts_showStatusBar();
     else
-        implts_hideStatusBar();
+        bMustDoLayout = !implts_hideStatusBar();
 
-    if ( !bOld )
+    aWriteLock.lock();
+    uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
+    ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
+    aWriteLock.unlock();
+
+    if ( pToolbarManager )
     {
-        aWriteLock.lock();
-        m_bDoLayout = sal_False;
-        aWriteLock.unlock();
+        pToolbarManager->setVisible( bSetVisible );
+        bMustDoLayout = pToolbarManager->isLayoutDirty();
     }
 
-    if ( bSetVisible )
-    {
-        uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
-        if ( xThis.is() )
-            m_pToolbarManager->setVisible(bSetVisible);
+    if ( bMustDoLayout )
         implts_doLayout_notify( sal_False );
-    }
-    else
-    {
-        aWriteLock.lock();
-        m_aDockingArea = awt::Rectangle();
-        m_bMustDoLayout = sal_True;
-        aWriteLock.unlock();
-    }
 }
 
 void LayoutManager::implts_setCurrentUIVisibility( sal_Bool bShow )
@@ -990,7 +910,7 @@ void LayoutManager::implts_createProgressBar()
     {
         Reference< awt::XWindow > xStatusBarWindow = pWrapper->getStatusBar();
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         Window* pStatusBarWnd = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( !pStatusBarWnd )
         {
@@ -1080,7 +1000,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     if ( xWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         Window* pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
@@ -1168,8 +1088,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-    if ( pWindow && pWindow->IsVisible() &&
-         ( bHideStatusBar || bInternalStatusBar ))
+    if ( pWindow && pWindow->IsVisible() && ( bHideStatusBar || bInternalStatusBar ))
     {
         implts_setOffset( 0 );
         pWindow->Hide();
@@ -1192,7 +1111,7 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
     {
         Reference< awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && !pWindow->IsVisible() )
         {
@@ -1218,7 +1137,7 @@ sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
     {
         Reference< awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->IsVisible() )
         {
@@ -1272,9 +1191,9 @@ throw (uno::RuntimeException)
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
-                pSysWindow->SetMenuBar( pMenuBar );
+                            pSysWindow->SetMenuBar( pMenuBar );
 
-             m_bInplaceMenuSet = sal_True;
+                m_bInplaceMenuSet = sal_True;
             m_xInplaceMenuBar = Reference< XComponent >( (OWeakObject *)m_pInplaceMenuBar, UNO_QUERY );
         }
 
@@ -1295,15 +1214,15 @@ throw (uno::RuntimeException)
     // if ( m_xMenuBar.is() &&
     if ( m_xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
         SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
         if ( pSysWindow )
         {
             if ( pMenuBarWrapper )
-                pSysWindow->SetMenuBar( (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar() );
-            else
-                pSysWindow->SetMenuBar( 0 );
+                                pSysWindow->SetMenuBar( (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar() );
+                        else
+                                pSysWindow->SetMenuBar( 0 );
         }
     }
 
@@ -1402,7 +1321,7 @@ throw ( RuntimeException )
     if ( !xDockingAreaAcceptor.is() )
         m_aAsyncLayoutTimer.Stop();
 
-    // Remove listener from old docking area acceptor
+        // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
     {
         Reference< awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
@@ -1411,7 +1330,7 @@ throw ( RuntimeException )
 
         m_aDockingArea = awt::Rectangle();
         if ( pToolbarManager )
-        pToolbarManager->reset();
+            pToolbarManager->reset();
 
         Window* pContainerWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pContainerWindow )
@@ -1457,7 +1376,7 @@ throw ( RuntimeException )
 
     if ( xDockingAreaAcceptor.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
 
         // Add layout manager as listener to get notifications about toolbar button activties
         Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -1503,18 +1422,13 @@ void LayoutManager::implts_reparentChildWindows()
         {
             xStatusBarWindow = Reference< awt::XWindow >( aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
         }
-        catch ( RuntimeException& )
-        {
-            throw;
-        }
-        catch ( Exception& )
-        {
-        }
+        catch ( RuntimeException& ) { throw; }
+        catch ( Exception& ) {}
     }
 
     if ( xStatusBarWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         Window* pWindow          = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( pWindow && pContainerWindow )
@@ -1534,13 +1448,20 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     long nResult( 1 );
 
-    ReadGuard aReadLock( m_aLock );
-    uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
-    ToolbarLayoutManager*              pToolbarManager( m_pToolbarManager );
-    aReadLock.unlock();
+    if ( pEvent && pEvent->ISA( VclWindowEvent ))
+    {
+        Window* pWindow = static_cast< VclWindowEvent* >(pEvent)->GetWindow();
+        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+        {
+            ReadGuard aReadLock( m_aLock );
+            uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
+            ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
+            aReadLock.unlock();
 
-    if ( pToolbarManager )
-        nResult = pToolbarManager->childWindowEvent( pEvent );
+            if ( pToolbarManager )
+                nResult = pToolbarManager->childWindowEvent( pEvent );
+        }
+    }
 
     return nResult;
 }
@@ -1579,12 +1500,11 @@ throw (RuntimeException)
             bNotify         = m_pToolbarManager->createToolbar( aName );
             bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
-                  aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
             // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
             if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
-            {
+                {
                 m_xMenuBar = implts_createElement( aName );
                 if ( m_xMenuBar.is() )
                 {
@@ -1592,7 +1512,7 @@ throw (RuntimeException)
 
                     SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
                     if ( pSysWindow )
-                {
+                    {
                         Reference< awt::XMenuBar > xMenuBar;
 
                         Reference< XPropertySet > xPropSet( m_xMenuBar, UNO_QUERY );
@@ -1602,27 +1522,23 @@ throw (RuntimeException)
                             {
                                 xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
                             }
-                            catch ( beans::UnknownPropertyException )
-                            {
-                            }
-                            catch ( lang::WrappedTargetException )
-                            {
-                            }
+                            catch ( beans::UnknownPropertyException ) {}
+                            catch ( lang::WrappedTargetException ) {}
                         }
 
                         if ( xMenuBar.is() )
                         {
-                    VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
-                    if ( pAwtMenuBar )
+                            VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
+                            if ( pAwtMenuBar )
                             {
                                 MenuBar* pMenuBar = (MenuBar*)pAwtMenuBar->GetMenu();
                                 if ( pMenuBar )
                                 {
-                    pSysWindow->SetMenuBar( pMenuBar );
+                                    pSysWindow->SetMenuBar( pMenuBar );
                                     pMenuBar->SetDisplayable( m_bMenuVisible );
-                    if ( m_bMenuVisible )
+                                    if ( m_bMenuVisible )
                                         bNotify = sal_True;
-                    implts_updateMenuBarClose();
+                                    implts_updateMenuBarClose();
                                 }
                             }
                         }
@@ -1636,9 +1552,7 @@ throw (RuntimeException)
             implts_createStatusBar( aName );
             bNotify = sal_True;
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
-                  aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
-                  implts_isFrameOrWindowTop(xFrame) )
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) && implts_isFrameOrWindowTop(xFrame) )
         {
             implts_createProgressBar();
             bNotify = sal_True;
@@ -1657,7 +1571,7 @@ throw (RuntimeException)
 
             // The docking window is created by a factory method located in the sfx2 library.
 //            CreateDockingWindow( xFrame, aElementName );
-    }
+        }
     }
 
     if ( bMustBeLayouted )
@@ -1765,8 +1679,8 @@ throw (uno::RuntimeException)
         implts_readStatusBarState( rResourceURL );
         if ( m_aStatusBarElement.m_bVisible && !m_aStatusBarElement.m_bMasterHide )
         {
-        aWriteLock.unlock();
-        createElement( rResourceURL );
+            aWriteLock.unlock();
+            createElement( rResourceURL );
 
             // There are some situation where we are not able to create an element.
             // Therefore we have to check the reference before further action.
@@ -1775,7 +1689,7 @@ throw (uno::RuntimeException)
             if ( xUIElement.is() )
             {
                 // we need VCL here to pass special flags to Show()
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                vos::OGuard     aGuard( Application::GetSolarMutex() );
                 Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
@@ -1796,8 +1710,7 @@ throw (uno::RuntimeException)
         bNotify   = true;
         bDoLayout = true;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) &&
-              m_bParentWindowVisible && m_bVisible )
+    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_bVisible )
     {
         bool bComponentAttached( m_aModuleIdentifier.getLength() > 0 );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager, uno::UNO_QUERY );
@@ -1806,9 +1719,9 @@ throw (uno::RuntimeException)
 
         if ( pToolbarManager && bComponentAttached )
         {
-        bNotify   = pToolbarManager->requestToolbar( rResourceURL );
+                bNotify   = pToolbarManager->requestToolbar( rResourceURL );
             bDoLayout = true;
-    }
+            }
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
     {
@@ -1931,9 +1844,9 @@ throw (RuntimeException)
 
         if ( pToolbarManager )
         {
-        bNotify     = pToolbarManager->showToolbar( aName );
+            bNotify     = pToolbarManager->showToolbar( aName );
             bMustLayout = pToolbarManager->isLayoutDirty();
-    }
+        }
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
     {
@@ -2079,7 +1992,7 @@ throw (RuntimeException)
     {
         bResult = pToolbarManager->dockAllToolbars();
         if ( pToolbarManager->isLayoutDirty() )
-        doLayout();
+            doLayout();
     }
     return bResult;
 }
@@ -2096,10 +2009,10 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-    {
+        {
             bResult = pToolbarManager->floatToolbar( aName );
             if ( pToolbarManager->isLayoutDirty() )
-            doLayout();
+                doLayout();
         }
     }
     return bResult;
@@ -2117,10 +2030,10 @@ throw (uno::RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-    {
+        {
             bResult = pToolbarManager->lockToolbar( aName );
             if ( pToolbarManager->isLayoutDirty() )
-            doLayout();
+                doLayout();
         }
     }
     return bResult;
@@ -2138,10 +2051,10 @@ throw (uno::RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-    {
+        {
             bResult = pToolbarManager->unlockToolbar( aName );
             if ( pToolbarManager->isLayoutDirty() )
-            doLayout();
+                doLayout();
         }
     }
     return bResult;
@@ -2158,10 +2071,10 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-    {
+        {
             pToolbarManager->setToolbarSize( aName, aSize );
             if ( pToolbarManager->isLayoutDirty() )
-            doLayout();
+                doLayout();
         }
     }
 }
@@ -2177,10 +2090,10 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-    {
+        {
             pToolbarManager->setToolbarPos( aName, aPos );
             if ( pToolbarManager->isLayoutDirty() )
-            doLayout();
+                doLayout();
         }
     }
 }
@@ -2196,11 +2109,11 @@ throw (RuntimeException)
         aReadLock.unlock();
 
         if ( pToolbarManager )
-    {
+        {
             pToolbarManager->setToolbarPosSize( aName, aPos, aSize );
             if ( pToolbarManager->isLayoutDirty() )
-            doLayout();
-    }
+                doLayout();
+        }
     }
 }
 
@@ -2402,15 +2315,15 @@ throw (RuntimeException)
     // conform to documentation: unlock with lock count == 0 means force a layout
 
     WriteGuard aWriteLock( m_aLock );
-    if ( bDoLayout )
-        m_aAsyncLayoutTimer.Stop();
-    aWriteLock.unlock();
+        if ( bDoLayout )
+                m_aAsyncLayoutTimer.Stop();
+        aWriteLock.unlock();
 
     Any a( nLockCount );
     implts_notifyListeners( frame::LayoutManagerEvents::UNLOCK, a );
 
     if ( bDoLayout )
-      implts_doLayout_notify( sal_True );
+        implts_doLayout_notify( sal_True );
 }
 
 void SAL_CALL LayoutManager::doLayout()
@@ -2462,15 +2375,13 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     {
         bLayouted = sal_True;
 
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         WriteGuard aWriteGuard( m_aLock );
         m_bDoLayout = sal_True;
         aWriteGuard.unlock();
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-        awt::Rectangle     aDockSpace( implts_calcDockingAreaSizes() );
-        awt::Rectangle     aBorderSpace( aDockSpace );
-        sal_Bool                bGotRequestedBorderSpace( sal_True );
+        awt::Rectangle aDockSpace( implts_calcDockingAreaSizes() );
+        awt::Rectangle aBorderSpace( aDockSpace );
+        sal_Bool       bGotRequestedBorderSpace( sal_True );
 
         // We have to add the height of a possible status bar
         aBorderSpace.Height += implts_getStatusBarSize().Height();
@@ -2545,11 +2456,9 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
 
             xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
 
-            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
             aWriteGuard.lock();
             m_bDoLayout = sal_False;
             aWriteGuard.unlock();
-            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         }
     }
 
@@ -2559,14 +2468,12 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
 sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSize,
                                                       const awt::Point& rComponentPos )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
     Reference< awt::XWindow >               xContainerWindow    = m_xContainerWindow;
     Reference< awt::XTopWindow2 >           xContainerTopWindow = m_xContainerTopWindow;
     Reference< awt::XWindow >               xComponentWindow    = m_xFrame->getComponentWindow();
     Reference< container::XIndexAccess >    xDisplayAccess      = m_xDisplayAccess;
     aReadLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     // calculate the maximum size we have for the container window
     awt::Rectangle aWorkArea;
@@ -2685,7 +2592,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XMenuCloser
+//      XMenuCloser
 //---------------------------------------------------------------------------------------------------------
 void LayoutManager::implts_updateMenuBarClose()
 {
@@ -2696,12 +2603,12 @@ void LayoutManager::implts_updateMenuBarClose()
 
     if ( xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
 
         SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
         if ( pSysWindow )
-    {
-        MenuBar* pMenuBar = pSysWindow->GetMenuBar();
+        {
+            MenuBar* pMenuBar = pSysWindow->GetMenuBar();
             if ( pMenuBar )
             {
                 // TODO remove link on FALSE ?!
@@ -2817,7 +2724,7 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XWindowListener
+//      XWindowListener
 //---------------------------------------------------------------------------------------------------------
 void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
 throw( uno::RuntimeException )
@@ -2940,7 +2847,7 @@ IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XFrameActionListener
+//      XFrameActionListener
 //---------------------------------------------------------------------------------------------------------
 void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException )
@@ -3020,9 +2927,7 @@ throw( RuntimeException )
                 xModuleCfgMgr->removeConfigurationListener(
                     Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
-            {
-            }
+            catch ( Exception& ) {}
         }
 
         if ( m_xDocCfgMgr.is() )
@@ -3033,9 +2938,7 @@ throw( RuntimeException )
                 xDocCfgMgr->removeConfigurationListener(
                     Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
-            {
-            }
+            catch ( Exception& ) {}
         }
 
         m_xDocCfgMgr.clear();
@@ -3043,7 +2946,7 @@ throw( RuntimeException )
         m_xFrame.clear();
         delete m_pGlobalSettings;
         m_pGlobalSettings = 0;
-        m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
+                m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
 
         bDisposeAndClear = sal_True;
     }
@@ -3053,10 +2956,10 @@ throw( RuntimeException )
         uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         if ( pToolbarManager )
-    {
-        uno::Reference< awt::XWindowPeer > aEmptyWindowPeer;
+        {
+            uno::Reference< awt::XWindowPeer > aEmptyWindowPeer;
             pToolbarManager->setParentWindow( aEmptyWindowPeer );
-    }
+        }
         impl_clearUpMenuBar();
         m_xMenuBar.clear();
         if ( m_xInplaceMenuBar.is() )
@@ -3194,7 +3097,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                 }
 
                 // No settings anymore, element must be destroyed
-                if ( xContainerWindow.is() && bNoSettings )
+                    if ( xContainerWindow.is() && bNoSettings )
                 {
                     if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
                     {
@@ -3234,13 +3137,13 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 
         parseResourceURL( Event.ResourceURL, aElementType, aElementName );
         if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
-        {
-            if ( xToolbarManager.is() )
+            {
+                if ( xToolbarManager.is() )
             {
                 xToolbarManager->elementReplaced( Event );
                 bRefreshLayout = pToolbarManager->isLayoutDirty();
             }
-        }
+            }
         else
         {
             Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
@@ -3269,7 +3172,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper
+//      OPropertySetHelper
 //---------------------------------------------------------------------------------------------------------
 sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConvertedValue,
                                                            Any&       aOldValue,

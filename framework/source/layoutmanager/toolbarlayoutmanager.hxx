@@ -252,6 +252,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         bool             implts_insertToolbar( const UIElement& rUIElement );
         void             implts_setToolbar( const UIElement& rUIElement );
         ::Size           implts_getTopBottomDockingAreaSizes();
+        void             implts_getUIElementVectorCopy( UIElementVector& rCopy );
 
         //---------------------------------------------------------------------------------------------------------
         // internal docking methods
