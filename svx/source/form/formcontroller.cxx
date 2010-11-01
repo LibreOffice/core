@@ -873,23 +873,11 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                             Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
                             Reference< XPropertySet > xField( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
 
-                            sal_Int32 nDataType = DataType::OTHER;
-                            OSL_VERIFY( xField->getPropertyValue( FM_PROP_FIELDTYPE ) >>= nDataType );
-                            const bool isTextColumn =   (   ( nDataType == DataType::CHAR )
-                                                        ||  ( nDataType == DataType::VARCHAR )
-                                                        ||  ( nDataType == DataType::LONGVARCHAR )
-                                                        );
-
-                            ::rtl::OUStringBuffer aPredicateValue;
-                            if ( isTextColumn )
-                                aPredicateValue.append( sal_Unicode( '\'' ) );
-                            aPredicateValue.append( condition->second );
-                            if ( isTextColumn )
-                                aPredicateValue.append( sal_Unicode( '\'' ) );
+                            ::rtl::OUString sFilterValue( condition->second );
 
                             ::rtl::OUString sErrorMsg, sCriteria;
                             const ::rtl::Reference< ISQLParseNode > xParseNode =
-                                predicateTree( sErrorMsg, aPredicateValue.makeStringAndClear(), xFormatter, xField );
+                                predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
                             OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
                             if ( xParseNode.is() )
                             {
