@@ -46,7 +46,6 @@
 #include <tblsel.hxx>
 #include <IDocumentMarkAccess.hxx>
 
-
 // einige Forward Deklarationen
 
 class KeyCode;
@@ -74,10 +73,10 @@ class SwCellFrms;
 class SwTOXMark;
 class SwRedline;
 class IBlockCursor;
-class SwCntntNode; //  #i23726#
-// --> OD 2008-06-19 #i90516#
+class SwCntntNode;
+
 class SwPostItField;
-// <--
+
 struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -108,8 +107,8 @@ struct SwContentAtPos
         SW_OUTLINE          = 0x0040,
         SW_TOXMARK          = 0x0080,
         SW_REFMARK          = 0x0100,
-        SW_NUMLABEL         = 0x0200, // #i23726#
-        SW_CONTENT_CHECK    = 0x0400, // #i43742#
+        SW_NUMLABEL         = 0x0200,
+        SW_CONTENT_CHECK    = 0x0400,
         SW_SMARTTAG         = 0x0800,
         SW_FORMCTRL         = 0x1000
 #if OSL_DEBUG_LEVEL > 1
@@ -122,11 +121,11 @@ struct SwContentAtPos
         const SwField* pFld;
         const SfxPoolItem* pAttr;
         const SwRedline* pRedl;
-        SwCntntNode * pNode; // #i23726#
+        SwCntntNode * pNode;
         const sw::mark::IFieldmark* pFldmark;
     } aFnd;
 
-    int nDist; // #i23726#
+    int nDist;
 
     String sStr;
     const SwTxtAttr* pFndTxtAttr;
@@ -181,14 +180,12 @@ private:
     Point   aOldRBPos;          // Right/Bottom von letzter VisArea
                                 // (wird im Invalidate vom Cursor benutzt)
 
-
     // um event. Macro was anhaengt auszufuehren.
     Link aFlyMacroLnk;          // Link will be called, if the Crsr is set
                                 // into a fly. A macro can be then becalled
     Link aChgLnk;               // link will be called by every attribut/
                                 // format changes at cursor position.
     Link aGrfArrivedLnk;        // Link calls to UI if a grafik is arrived
-
 
     SwShellCrsr* pCurCrsr;      // der aktuelle Cursor
     SwShellCrsr* pCrsrStk;      // Stack fuer den Cursor
@@ -220,10 +217,8 @@ private:
     USHORT nBasicActionCnt;     // Actions, die vom Basic geklammert wurden
     CrsrMoveState eMvState;     // Status fuers Crsr-Travelling - GetCrsrOfst
 
-    // --> OD 2008-04-02 #refactorlists#
     String sMarkedListId;
     int nMarkedListLevel;
-    // <--
 
     BOOL bHasFocus : 1;         // Shell ist in einem Window "aktiv"
     BOOL bSVCrsrVis : 1;        // SV-Cursor Un-/Sichtbar
@@ -248,7 +243,6 @@ private:
     BOOL bSetCrsrInReadOnly : 1;// TRUE -> Cursor darf in ReadOnly-Bereiche
     BOOL bOverwriteCrsr : 1;    // TRUE -> show Overwrite Crsr
 
-    // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
     bool mbMacroExecAllowed : 1;
 
     SW_DLLPRIVATE void UpdateCrsr( USHORT eFlags
@@ -257,11 +251,8 @@ private:
 
     SW_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
-    // -> #i27615#
-
     /** Mark a certain list level of a certain list
 
-        OD 2008-04-02 #refactorlists#
         levels of a certain lists are marked now
 
         @param sListId    list Id of the list whose level is marked
@@ -271,7 +262,6 @@ private:
      */
     SW_DLLPRIVATE void MarkListLevel( const String& sListId,
                                       const int nLevel );
-    // <- #i27615#
 
     // private method(s) accessed from public inline method(s) must be exported.
                   BOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
@@ -309,13 +299,9 @@ protected:
     void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
                     const xub_StrLen nOffset = 0 );
 
-    // --> FME 2004-07-30 #i32329# Enhanced table selection
     BOOL _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
-    // <--
 
-    // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
     bool SetInFrontOfLabel( BOOL bNew );
-    // <--
 
     void RefreshBlockCursor();
 
@@ -414,7 +400,6 @@ public:
     //  CRSR_POSCHG: wenn der ob der SPoint vom Layout korrigiert wurde.
     //  CRSR_POSOLD: wenn der Crsr nicht veraendert wurde
     int SetCrsr( const Point &rPt, BOOL bOnlyText = FALSE, bool bBlock = true );
-
 
     /*
      * Benachrichtung, dass der sichtbare Bereich sich geaendert
@@ -627,9 +612,8 @@ public:
     BOOL SelTblRow() { return _SelTblRowOrCol( true  ); }
     BOOL SelTblCol() { return _SelTblRowOrCol( false ); }
     BOOL SelTblBox();
-    // --> FME 2004-07-30 #i32329# Enhanced table selection
+
     BOOL SelTbl();
-    // <--
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     BOOL GotoNextNum();
@@ -801,9 +785,7 @@ public:
                             BOOL bSetCrsr = FALSE,
                             SwRect* pFldRect = 0 );
 
-    // --> OD 2008-06-19 #i90516#
     const SwPostItField* GetPostItFieldAtCursor() const;
-    // <--
 
     // get smart tags at point position
     void GetSmartTagTerm( const Point& rPt,
@@ -859,7 +841,6 @@ public:
     // remove all invalid cursors
     void ClearUpCrsrs();
 
-    // OD 11.02.2003 #100556# - set/get flag to allow/avoid execution of macros
     inline void SetMacroExecAllowed( const bool _bMacroExecAllowed )
     {
         mbMacroExecAllowed = _bMacroExecAllowed;
@@ -869,7 +850,6 @@ public:
         return mbMacroExecAllowed;
     }
 
-    // #111827#
     /**
        Returns textual description of the current selection.
 
@@ -883,7 +863,6 @@ public:
 
     SwRect GetRectOfCurrentChar();
 };
-
 
 // Cursor Inlines:
 inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(

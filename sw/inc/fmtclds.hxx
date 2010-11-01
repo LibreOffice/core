@@ -78,7 +78,6 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
-//  Pen      aPen;          //Pen fuer die Linine zwischen den Spalten
     ULONG   nLineWidth;     //width of the separator line
     Color   aLineColor;     //color of the separator line
 
@@ -122,7 +121,7 @@ public:
     const SwColumns &GetColumns() const { return aColumns; }
           SwColumns &GetColumns()       { return aColumns; }
     USHORT           GetNumCols() const { return aColumns.Count(); }
-//  const Pen&       GetLinePen() const { return aPen; }
+
     ULONG           GetLineWidth() const  { return nLineWidth;}
     const Color&    GetLineColor() const { return aLineColor;}
 
@@ -136,7 +135,6 @@ public:
     //Return die kleinste Breite wenn bMin True ist.
     USHORT GetGutterWidth( BOOL bMin = FALSE ) const;
 
-//  void SetLinePen( const Pen& rNew )  { aPen = rNew; }
     void SetLineWidth(ULONG nLWidth)        { nLineWidth = nLWidth;}
     void SetLineColor(const Color& rCol )   { aLineColor = rCol;}
     void SetLineHeight( BYTE nNew )     { nLineHeight = nNew; }

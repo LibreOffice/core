@@ -61,10 +61,6 @@ class SwList
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
-//        void ContinueList( SwList& rList );
-//        const SwList* GetContinuedList() const;
-//        void ClearContinuation();
-
     private:
         // no copy constructor and no assignment operator
         SwList( const SwList& );

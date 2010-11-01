@@ -57,9 +57,6 @@ class SwFmt;
 class SwFlyFrmFmt;
 
 
-/*-----------------12.02.98 11:21-------------------
-
---------------------------------------------------*/
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper6
 <
@@ -133,7 +130,7 @@ public:
     //XShapeDescriptor
     virtual rtl::OUString SAL_CALL getShapeType(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    //Basisimplementierung
+    //Base implementation
     //XComponent
     virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -164,9 +161,7 @@ public:
     void            SetSelection(SwPaM& rCopySource);
     static SdrObject *GetOrCreateSdrObject( SwFlyFrmFmt *pFmt );
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 typedef cppu::WeakImplHelper3
 <
     ::com::sun::star::text::XTextFrame,
@@ -245,9 +240,7 @@ public:
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 typedef cppu::WeakImplHelper2
 <
     ::com::sun::star::text::XTextContent,
@@ -291,9 +284,7 @@ public:
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 class SwOLENode;
 typedef cppu::WeakImplHelper3
 <
@@ -357,8 +348,7 @@ class SwXOLEListener : public cppu::WeakImplHelper1
     public SwClient
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLEModel;
-//    SfxObjectShell* GetObjShell( const SwFmt& rFmt,
-//                                    SwOLENode** ppNd = 0 ) const;
+
     SwFmt*       GetFmt() const    {  return (SwFmt*)GetRegisteredIn(); }
 public:
     SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);

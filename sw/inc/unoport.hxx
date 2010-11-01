@@ -71,7 +71,6 @@ enum SwTextPortionType
     PORTION_FIELD,
     PORTION_FRAME,
     PORTION_FOOTNOTE,
-// obsolete!    PORTION_CONTROL_CHAR,
     PORTION_REFMARK_START,
     PORTION_REFMARK_END,
     PORTION_TOXMARK_START,
@@ -136,7 +135,6 @@ private:
 
 protected:
 
-    //SfxItemPropertySet& GetPropSet() { return aPropSet; }
 
     void SAL_CALL SetPropertyValues_Impl(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
@@ -146,9 +144,6 @@ protected:
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-//    ::com::sun::star::uno::Any  GetPropertyValue( const SfxItemPropertyMap *pEntry,
-//                                    SwUnoCrsr *pUnoCrsr,
-//                                    SfxItemSet *pSet );
     void        GetPropertyValues( const ::rtl::OUString *pPropertyNames,
                                     ::com::sun::star::uno::Any *pValues,
                                     sal_Int32 nLength );
@@ -186,7 +181,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL getDirectPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException);
 
     //XMultiPropertySet
-//    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -266,9 +260,6 @@ public:
     {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
 };
 
-/* -----------------29.05.98 14:42-------------------
- *
- * --------------------------------------------------*/
 class SwXTextPortionEnumeration
     : public ::cppu::WeakImplHelper3
         < ::com::sun::star::container::XEnumeration

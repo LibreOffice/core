@@ -45,7 +45,6 @@
 #define STR_TEXTCOLL_HEADER     (RC_CHRDLG_BEGIN +  2)
 #define STR_PAGEFMT_HEADER      (RC_CHRDLG_BEGIN +  4)
 #define SW_STR_NONE             (RC_CHRDLG_BEGIN +  5)
-//#define STR_NUMFMT            (RC_CHRDLG_BEGIN +  6)
 
 #define MSG_ILLEGAL_PAGENUM     (RC_CHRDLG_BEGIN +  1)
 

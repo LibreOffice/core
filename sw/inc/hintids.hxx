@@ -33,7 +33,7 @@
 #include "swdllapi.h"
 
 // fuer SwTxtHints ohne Endindex wird folgendes Zeichen eingefuegt:
-//JP 24.05.00: for the new UniCode Version:
+
 #define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
 #define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
 #define CH_TXTATR_TAB           ((sal_Unicode)'\t')
@@ -171,7 +171,6 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
 RES_PARATR_END
 };
 
-// --> OD 2008-02-25 #refactorlists#
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles
 enum RES_PARATR_LIST
@@ -184,7 +183,6 @@ RES_PARATR_LIST_BEGIN = RES_PARATR_END,
     RES_PARATR_LIST_ISCOUNTED,                      // 79
 RES_PARATR_LIST_END
 };
-// <--
 
 enum RES_FRMATR
 {
@@ -224,12 +222,8 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
     RES_FRAMEDIR,                                   // 112
     RES_HEADER_FOOTER_EAT_SPACING,                  // 113
     RES_ROW_SPLIT,                                  // 114
-    // OD 18.09.2003 #i18732# - insert new item and 5 dummies
     RES_FOLLOW_TEXT_FLOW,                           // 115
-// --> collapsing borders FME 2005-05-27 #i29550#
     RES_COLLAPSING_BORDERS,                         // 116
-// <-- collapsing
-    // OD 2004-05-04 #i28701# - use dummy1 for new item
     RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 117
     RES_AUTO_STYLE,                                 // 118
     RES_FRMATR_STYLE_NAME,                          // 119
@@ -325,9 +319,6 @@ RES_MSG_BEGIN = RES_FMT_END,
     RES_HIDDENPARA_PRINT,
     RES_CONDCOLL_CONDCHG,
     RES_VIRTPAGENUM_INFO,
-    // --> OD 2008-02-25 #refactorlists#
-//    RES_GETNUMNODES,
-    // <--
     RES_GETLOWERNUMLEVEL,
     RES_RESET_FMTWRITTEN,
     RES_REMOVE_UNO_OBJECT,
