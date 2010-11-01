@@ -2612,7 +2612,6 @@ script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sSource )
 {
-    SFX_APP()->EnterBasicCall();
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
@@ -2657,12 +2656,10 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         }
 
     }
-    SFX_APP()->LeaveBasicCall();
 }
 
 void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
 {
-    SFX_APP()->EnterBasicCall();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
@@ -2684,7 +2681,6 @@ void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
             xVBAModuleInfo->removeModuleInfo( sModuleName );
 
     }
-    SFX_APP()->LeaveBasicCall();
 }
 
 

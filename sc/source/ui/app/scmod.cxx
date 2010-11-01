@@ -392,9 +392,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 String aMacroName =
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Template.Samples.ShowStyles"));
                 SfxApplication* pApp = SFX_APP();
-                pApp->EnterBasicCall();
                 pApp->GetMacroConfig()->Call( NULL, aMacroName, pApp->GetBasicManager() );
-                pApp->LeaveBasicCall();
             }
             break;
         case SID_EURO_CONVERTER:
@@ -402,9 +400,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 String aMacroName =
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Euro.ConvertRun.Main"));
                 SfxApplication* pApp = SFX_APP();
-                pApp->EnterBasicCall();
                 pApp->GetMacroConfig()->Call( NULL, aMacroName, pApp->GetBasicManager() );
-                pApp->LeaveBasicCall();
             }
             break;
         case SID_AUTOSPELL_CHECK:

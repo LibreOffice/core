@@ -288,8 +288,6 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
 
     BOOL bDone = FALSE;
     BOOL bRet = FALSE;                      // Standard: kein Abbruch
-    SfxApplication* pSfxApp = SFX_APP();
-    pSfxApp->EnterBasicCall();              // Dok-Basic anlegen etc.
 
     //  Wenn das Dok waehrend eines Basic-Calls geladen wurde,
     //  ist das Sbx-Objekt evtl. nicht angelegt (?)
@@ -380,7 +378,6 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             bRet = TRUE;
         bDone = TRUE;
     }
-    pSfxApp->LeaveBasicCall();
 
     if ( !bDone && !pCell )         // Makro nicht gefunden (nur bei Eingabe)
     {
