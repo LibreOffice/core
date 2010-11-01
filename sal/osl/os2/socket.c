@@ -917,12 +917,15 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
          * full qualified name to the unqualified host name */
         if ( !bHostsAreEqual )
         {
+            sal_Char *pTmp;
+
             OSL_TRACE("_osl_getFullQualifiedDomainName: "
                       "suspect FQDN: %s\n", pFullQualifiedName);
-
             pFullQualifiedName[ nLengthOfHostName ] = '\0';
-            pFullQualifiedName = (sal_Char*)realloc ( pFullQualifiedName,
+            pTmp = (sal_Char*)realloc ( pFullQualifiedName,
                                 (nLengthOfHostName + 1) * sizeof( sal_Char ));
+            if (pTmp)
+                pFullQualifiedName = pTmp;
         }
     }
 
