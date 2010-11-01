@@ -59,9 +59,7 @@
 
 #ifdef KDE_HAVE_GLIB
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 0 )
-#if 0 // wait until fixed in Qt
 #define GLIB_EVENT_LOOP_SUPPORT
-#endif
 #endif
 #endif
 
