@@ -3776,11 +3776,7 @@ static Writer& OutRTF_SwFmtBox( Writer& rWrt, const SfxPoolItem& rHt )
 
     static USHORT __READONLY_DATA aBorders[] = {
             BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
-#ifdef __MINGW32__ // for runtime pseudo reloc
-    static const sal_Char* aBorderNames[] = {
-#else
     static const sal_Char* __READONLY_DATA aBorderNames[] = {
-#endif
             OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL, OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };
 
     USHORT nDist = rBox.GetDistance();

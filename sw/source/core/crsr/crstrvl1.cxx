@@ -98,4 +98,8 @@ BOOL SwCrsrShell::SelectWord( const Point* pPt )
     return pCurCrsr->SelectWord( this, pPt );
 }
 
+BOOL SwCrsrShell::ExpandToSentenceBorders()
+{
+    return pCurCrsr->ExpandToSentenceBorders();
+}
 

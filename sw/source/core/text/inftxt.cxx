@@ -1139,7 +1139,6 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, sal_Bool bScript ) const
     }
 }
 
-
 void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const
 {
     SwRect aIntersect;
@@ -1169,7 +1168,6 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
         pOut->Pop();
     }
 }
-
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawBackGround()
  *************************************************************************/

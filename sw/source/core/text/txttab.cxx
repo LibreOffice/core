@@ -172,6 +172,11 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             cDec = pTabStop->GetDecimal();
             eAdj = pTabStop->GetAdjustment();
             nNextPos = pTabStop->GetTabPos();
+            if(!bTabsRelativeToIndent && eAdj == SVX_TAB_ADJUST_DEFAULT && nSearchPos < 0)
+            {
+                //calculate default tab position of default tabs in negative indent
+                nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
+            }
         }
         else
         {
@@ -189,13 +194,12 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             }
             SwTwips nCount = nSearchPos;
 
-            // Bei negativen Werten rundet "/" auf, "%" liefert negative Reste,
-            // bei positiven Werten rundet "/" ab, "%" liefert positvie Reste!
-            if ( nCount < 0 )
-                nCount = 0;
+            //Minimum tab stop width is 1
+            if (nDefTabDist <= 0)
+                nDefTabDist = 1;
 
             nCount /= nDefTabDist;
-            nNextPos = ( nCount + 1 ) * nDefTabDist ;
+            nNextPos = nCount < 0 || (!nCount && nSearchPos <= 0)? nCount * nDefTabDist :( nCount + 1 ) * nDefTabDist ;
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             // <--

@@ -406,6 +406,12 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         //        case CHAR_RLM :
         //        case CHAR_LRM :
                 // <--
+                // --> OD 2010-06-03 #i111750#
+                // - Erasing further control characters from field string in
+                // to avoid loop.
+                case CH_TXTATR_BREAKWORD:
+                case CH_TXTATR_INWORD:
+                // <--
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;

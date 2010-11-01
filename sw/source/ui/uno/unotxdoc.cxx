@@ -82,6 +82,7 @@
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
 #include <unomid.h>
+#include <unotools/printwarningoptions.hxx>
 
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -107,13 +108,14 @@
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
+#include <comphelper/storagehelper.hxx>
+
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
@@ -1807,9 +1809,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             }
             else if (sCategory == C2U ("text") )
             {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.PrintPreviewSettings") ) )
-                    xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
-                else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
             }
             else if (sCategory == C2U ("chart2") )
@@ -2736,10 +2736,21 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
             pWrtShell->SetPDFExportOption( sal_True );
+            bool bOrigStatus = pRenderDocShell->IsEnableSetModified();
+            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+            bool bStateChanged = false;
+            if ( bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+            {
+                pRenderDocShell->EnableSetModified( sal_False );
+                bStateChanged = true;
+            }
+
 
             // --> FME 2005-05-23 #122919# Force field update before PDF export:
             pWrtShell->ViewShell::UpdateFlds(TRUE);
             // <--
+            if( bStateChanged )
+                pRenderDocShell->EnableSetModified( sal_True );
 
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.
@@ -2854,7 +2865,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
-        const USHORT nPage = nRenderer + 1;
+        // --> TL, OD 2010-09-07 #i114210#
+        // determine the correct page number from the renderer index
+        // --> OD 2010-10-01 #i114875
+        // consider brochure print
+        const USHORT nPage = bPrintProspect
+                             ? nRenderer + 1
+                             : m_pRenderData->GetPagesToPrint()[ nRenderer ];
+        // <--
 
         // get paper tray to use ...
         sal_Int32 nPrinterPaperTray = -1;
@@ -3164,16 +3182,13 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     if(!IsValid())
         throw RuntimeException();
     //create a new document - hidden - copy the storage and return it
-    SwDoc* pCopyDoc = pDocShell->GetDoc()->CreateCopy();
-    SfxObjectShell* pShell = new SwDocShell( pCopyDoc, SFX_CREATE_MODE_STANDARD );
-    pShell->DoInitNew();
-
-    uno::Reference< embed::XStorage > xSourceStorage = getDocumentStorage();
+    SfxObjectShell* pShell = pDocShell->GetDoc()->CreateCopy(false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
-    //copy this storage
+    uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
+    uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;
+    storeToStorage( xNewStorage, aTempMediaDescriptor );
     uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
-    uno::Reference< embed::XStorage > xNewStorage = xStorageDoc->getDocumentStorage();
-    xSourceStorage->copyToStorage( xNewStorage );
+    xStorageDoc->loadFromStorage( xNewStorage, aTempMediaDescriptor );
     return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
 }
 /* -----------------------------20.06.00 09:54--------------------------------

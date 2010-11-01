@@ -429,14 +429,17 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
 
         case FN_DROP_REGION:
         {
+            static const char* aHIDs[] =
+            {
+                HID_NAVI_DRAG_HYP,
+                HID_NAVI_DRAG_LINK,
+                HID_NAVI_DRAG_COPY,
+            };
             PopupMenu *pMenu = new PopupMenu;
             for (USHORT i = 0; i <= REGION_MODE_EMBEDDED; i++)
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
-                pMenu->SetHelpId(i + 1, HID_NAVI_DRAG_HYP + i);
-                    /*HID_NAVI_DRAG_HYP
-                    HID_NAVI_DRAG_LINK
-                    HID_NAVI_DRAG_COPY  */
+                pMenu->SetHelpId(i + 1, aHIDs[i]);
             }
             pMenu->CheckItem( nRegionMode + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));

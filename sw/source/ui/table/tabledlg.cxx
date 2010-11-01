@@ -1539,7 +1539,7 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     if ( bState != aPageCollCB.GetSavedValue() ||
          ( bState &&
            aPageCollLB.GetSelectEntryPos() != aPageCollLB.GetSavedValue() )
-           || aPageNoNF.IsEnabled() && aPageNoNF.IsValueModified())
+           || (aPageNoNF.IsEnabled() && aPageNoNF.IsValueModified()) )
     {
         String sPage;
 

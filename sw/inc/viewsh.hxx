@@ -403,9 +403,6 @@ public:
     // compatible behaviour of tabs
     void SetTabCompat( bool bNew );
 
-    //#i24363# tab stops relative to indent
-    void SetTabsRelativeToIndent( bool bNew );
-
     // font metric attribute "External Leading" should be considered
     void SetAddExtLeading( bool bNew );
 

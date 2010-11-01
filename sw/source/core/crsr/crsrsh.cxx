@@ -3305,6 +3305,7 @@ String SwCrsrShell::GetCrsrDescr() const
     return aResult;
 }
 
+<<<<<<< local
 SwRect SwCrsrShell::GetRectOfCurrentChar()
 {
     SwCntntFrm* pFrm = pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), 0, pCurCrsr->GetPoint(), FALSE );
@@ -3318,6 +3319,8 @@ SwRect SwCrsrShell::GetRectOfCurrentChar()
     return aRet;
 }
 
+=======
+>>>>>>> other
 // SMARTTAGS
 
 void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,

@@ -146,6 +146,8 @@ class SwSidebarWin : public Window
         void            SetFollow( bool bIsFollow) { mbIsFollow = bIsFollow; };
         virtual bool    CalcFollow() = 0;
 
+#if 0
+#endif
 
         sal_Int32       GetMetaHeight();
         sal_Int32       GetMinimumSizeWithMeta();
@@ -168,7 +170,7 @@ class SwSidebarWin : public Window
         virtual bool    IsProtected() {return mbReadonly;};
 
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
-        inline const bool IsMouseOverSidebarWin() const { return mbMouseOver; }
+        inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void SetLanguage(const SvxLanguageItem aNewItem);
 

@@ -1398,11 +1398,11 @@ BOOL SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const P
 }
 
 //-----------------------------------------------------------------------------
-BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
+
+static String lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 {
-    BOOL bRet = FALSE;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    String aRes;
+    if (pTxtNd)
     {
         //mask deleted redlines
         String sNodeText(pTxtNd->GetTxt());
@@ -1427,11 +1427,30 @@ BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
                 }
             }
         }
+        aRes = sNodeText;
+    }
+    return aRes;
+}
+
+BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
+{
+    BOOL bRet = FALSE;
+    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    {
+        String sNodeText( lcl_MaskDeletedRedlines( pTxtNd ) );
+
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
         switch ( eMoveType )
         {
-        case END_SENT:
+        case START_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
+            nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
+                                    sNodeText,
+                                    nPtPos, pBreakIt->GetLocale(
+                                            pTxtNd->GetLang( nPtPos ) ));
+            break;
+        case END_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
             nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfSentence(
                                     sNodeText,
                                     nPtPos, pBreakIt->GetLocale(
@@ -1448,12 +1467,6 @@ BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
                     ;
                 break;
             }
-        case START_SENT:
-            nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
-                                    sNodeText,
-                                    nPtPos, pBreakIt->GetLocale(
-                                            pTxtNd->GetLang( nPtPos ) ));
-            break;
         case PREV_SENT:
             nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
@@ -1480,6 +1493,51 @@ BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
     }
     return bRet;
 }
+
+
+BOOL SwCursor::ExpandToSentenceBorders()
+{
+    BOOL bRes = FALSE;
+    const SwTxtNode* pStartNd = Start()->nNode.GetNode().GetTxtNode();
+    const SwTxtNode* pEndNd   = End()->nNode.GetNode().GetTxtNode();
+    if (pStartNd && pEndNd && pBreakIt->GetBreakIter().is())
+    {
+        if (!HasMark())
+            SetMark();
+
+        String sStartText( lcl_MaskDeletedRedlines( pStartNd ) );
+        String sEndText( pStartNd == pEndNd? sStartText : lcl_MaskDeletedRedlines( pEndNd ) );
+
+        SwCrsrSaveState aSave( *this );
+        xub_StrLen nStartPos = Start()->nContent.GetIndex();
+        xub_StrLen nEndPos   = End()->nContent.GetIndex();
+
+        nStartPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
+                                sStartText, nStartPos,
+                                pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
+        nEndPos   = (xub_StrLen)pBreakIt->GetBreakIter()->endOfSentence(
+                                sEndText, nEndPos,
+                                pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
+
+        // it is allowed to place the PaM just behind the last
+        // character in the text thus <= ...Len
+        bool bChanged = false;
+        if (nStartPos <= pStartNd->GetTxt().Len())
+        {
+            GetMark()->nContent = nStartPos;
+            bChanged = true;
+        }
+        if (nEndPos <= pEndNd->GetTxt().Len())
+        {
+            GetPoint()->nContent = nEndPos;
+            bChanged = true;
+        }
+        if (bChanged && !IsSelOvr())
+            bRes = TRUE;
+    }
+    return bRes;
+}
+
 
 BOOL SwTableCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT /*nMode*/,
     BOOL /*bVisualAllowed*/, BOOL /*bSkipHidden*/, BOOL /*bInsertCrsr*/ )

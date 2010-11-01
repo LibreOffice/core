@@ -452,7 +452,7 @@ public:
     inline       SwEditWin &GetEditWin()        { return *pEditWin; }
     inline const SwEditWin &GetEditWin () const { return *pEditWin; }
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     void ScannerEventHdl( const ::com::sun::star::lang::EventObject& rEventObject );
 #endif
 
@@ -581,7 +581,7 @@ public:
     BOOL            HasDrwObj(SdrObject *pSdrObj) const;
     BOOL            HasOnlyObj(SdrObject *pSdrObj, UINT32 eObjInventor) const;
     BOOL            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    Window* pWin=NULL, BOOL bIsNewObj=FALSE);
+                                    Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 

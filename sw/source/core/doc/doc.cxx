@@ -120,6 +120,9 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
+#ifdef FUTURE_VBA
+#include <vbahelper/vbaaccesshelper.hxx>
+#endif
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -1187,7 +1190,7 @@ static void lcl_FormatPostIt(
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#if defined( WIN ) || defined( WNT ) || defined( PM2 )
+#if defined( WNT ) || defined( PM2 )
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
@@ -1704,6 +1707,41 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
+<<<<<<< local
+=======
+
+sal_uInt16 SwDoc::GetPageCount() const
+{
+    return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
+}
+
+const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
+{
+    Size aSize;
+    if ( GetRootFrm() && nPageNum )
+    {
+        const SwPageFrm* pPage = static_cast<const SwPageFrm*>
+                                 (GetRootFrm()->Lower());
+
+        while ( --nPageNum && pPage->GetNext() )
+        {
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
+
+        // switch to next page for an empty page, if empty pages are not skipped
+        // in order to get a sensible page size for an empty page - e.g. for printing.
+        if ( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        {
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
+
+        aSize = pPage->Frm().SSize();
+    }
+    return aSize;
+}
+
+
+>>>>>>> other
 /*************************************************************************
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
@@ -2685,6 +2723,27 @@ void SwDoc::ChkCondColls()
         }
      }
 }
+
+#ifdef FUTURE_VBA
+uno::Reference< script::vba::XVBAEventProcessor >
+SwDoc::GetVbaEventProcessor()
+{
+    if( !mxVbaEvents.is() && pDocShell && ooo::vba::isAlienWordDoc( *pDocShell ) )
+    {
+        try
+        {
+            uno::Reference< frame::XModel > xModel( pDocShell->GetModel(), uno::UNO_SET_THROW );
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[0] <<= xModel;
+            mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBATextEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    return mxVbaEvents;
+}
+#endif
 
 void SwDoc::setExternalData(::sw::tExternalDataType eType,
                             ::sw::tExternalDataPointer pPayload)

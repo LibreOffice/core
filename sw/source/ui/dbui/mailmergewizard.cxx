@@ -260,7 +260,7 @@ void SwMailMergeWizard::UpdateRoadmap()
     //#i97436# if a document has to be loaded then enable output type page only
     m_bDocumentLoad = false;
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
-            static_cast<svt::OWizardPage*>(pCurPage)->commitPage( eValidate );
+        static_cast<svt::OWizardPage*>(pCurPage)->commitPage( ::svt::WizardTypes::eValidate );
 
     for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_OUTPUTPAGE; ++nPage)
     {

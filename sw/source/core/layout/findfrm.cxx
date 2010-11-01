@@ -634,9 +634,11 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     {
         const SwRect& rBoundRect = bExtend ? maPageRects[ nPageIdx++ ] : pPage->Frm();
 
-        if ( !pSize && rBoundRect.IsInside( rPt ) ||
-              pSize && rBoundRect.IsOver( aRect ) )
+        if ( (!pSize && rBoundRect.IsInside(rPt)) ||
+              (pSize && rBoundRect.IsOver(aRect)) )
+        {
             pRet = static_cast<const SwPageFrm*>(pPage);
+        }
 
         pPage = pPage->GetNext();
     }
@@ -1703,8 +1705,8 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                 else
                 {
                     if ( pMasterTable == pTableFrm ||
-                         (  bStart && pMasterTable->IsAnFollow( pTableFrm ) ||
-                           !bStart && pTableFrm->IsAnFollow( pMasterTable ) ) )
+                         (  (bStart && pMasterTable->IsAnFollow(pTableFrm)) ||
+                           (!bStart && pTableFrm->IsAnFollow(pMasterTable)) ) )
                     {
                         pRet = pMasterCell;
                         break;

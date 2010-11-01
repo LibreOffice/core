@@ -42,8 +42,12 @@ SRS1NAME=$(TARGET)
 SRC1FILES =  \
         tbxanchr.src \
         inputwin.src \
-        tblctrl.src \
         workctrl.src
+
+EXCEPTIONSFILES = \
+        $(SLO)$/tblctrl.obj \
+        $(SLO)$/tbxanchr.obj \
+        $(SLO)$/workctrl.obj
 
 SLOFILES =  \
         $(SLO)$/inputwin.obj \

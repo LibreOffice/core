@@ -175,9 +175,9 @@ void SwMailMergeAddressBlockPage::ActivatePage()
 /*-- 27.05.2004 13:59:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool    SwMailMergeAddressBlockPage::commitPage( CommitPageReason _eReason )
+sal_Bool    SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
-    if ( eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
+    if ( ::svt::WizardTypes::eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
         return sal_False;
     return sal_True;
 }
@@ -1097,6 +1097,25 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     uno::Sequence< ::rtl::OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
     Link aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
     Link aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
+
+    static const char* aHIDs[] =
+    {
+         HID_MM_HEADER_0,
+         HID_MM_HEADER_1,
+         HID_MM_HEADER_2,
+         HID_MM_HEADER_3,
+         HID_MM_HEADER_4,
+         HID_MM_HEADER_5,
+         HID_MM_HEADER_6,
+         HID_MM_HEADER_7,
+         HID_MM_HEADER_8,
+         HID_MM_HEADER_9,
+         HID_MM_HEADER_10,
+         HID_MM_HEADER_11,
+         HID_MM_HEADER_12,
+         HID_MM_HEADER_13
+    };
+
     //fill the controls
     for(USHORT i = 0; i < rHeaders.Count(); ++i)
     {
@@ -1106,7 +1125,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         sLabel.Insert(rHeader, 1);
         pNewText->SetText(sLabel);
         ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS, *rResId.GetResMgr()));
-        pNewLB->SetHelpId( HID_MM_HEADER_0 + i );
+        pNewLB->SetHelpId( aHIDs[i] );
         pNewLB->SelectEntryPos(0);
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);

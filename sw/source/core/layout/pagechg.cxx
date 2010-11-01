@@ -1392,12 +1392,21 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     return pPage;
 }
 
-// false = right, true = left
 sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
+<<<<<<< local
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( !pSh || pSh->GetViewOptions()->getBrowseMode() )
         return sw::sidebarwindows::SIDEBAR_NONE;
+=======
+    if ( !GetShell() ||
+         GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    {
+        // --> OD 2010-06-03 #i111964# - provide default sidebar position
+        return sw::sidebarwindows::SIDEBAR_RIGHT;
+        // <--
+    }
+>>>>>>> other
     else
     {
         const bool bLTR = getRootFrm()->IsLeftToRightViewLayout();
@@ -2363,9 +2372,9 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                 static const long nOuterClickDiff = 1000000;
 
                 // adjust borders for these special cases:
-                if ( bFirstColumn && !bRTL || bLastColumn && bRTL )
+                if ( (bFirstColumn && !bRTL) || (bLastColumn && bRTL) )
                     aPageRectWithBorders.SubLeft( nOuterClickDiff );
-                if ( bLastColumn && !bRTL || bFirstColumn && bRTL )
+                if ( (bLastColumn && !bRTL) || (bFirstColumn && bRTL) )
                     aPageRectWithBorders.AddRight( nOuterClickDiff );
                 if ( bFirstRow )
                     aPageRectWithBorders.SubTop( nOuterClickDiff );

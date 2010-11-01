@@ -242,12 +242,13 @@ static const SmTokenTableEntry aTokenTable[] =
     { "ni", TNI, MS_NI, TGRELATION, 0},
     { "nitalic", TNITALIC, '\0', TGFONTATTR, 5},
     { "none", TNONE, '\0', TGLBRACES | TGRBRACES, 0},
+    { "nospace", TNOSPACE, '\0', TGSTANDALONE, 5},
     { "notin", TNOTIN, MS_NOTIN, TGRELATION, 0},
+    { "nroot", TNROOT, MS_SQRT, TGUNOPER, 5},
     { "nsubset", TNSUBSET, MS_NSUBSET, TGRELATION, 0 },
     { "nsupset", TNSUPSET, MS_NSUPSET, TGRELATION, 0 },
     { "nsubseteq", TNSUBSETEQ, MS_NSUBSETEQ, TGRELATION, 0 },
     { "nsupseteq", TNSUPSETEQ, MS_NSUPSETEQ, TGRELATION, 0 },
-    { "nroot", TNROOT, MS_SQRT, TGUNOPER, 5},
     { "odivide", TODIVIDE, MS_ODIVIDE, TGPRODUCT, 0},
     { "odot", TODOT, MS_ODOT, TGPRODUCT, 0},
     { "ominus", TOMINUS, MS_OMINUS, TGSUM, 0},
@@ -731,7 +732,7 @@ void SmParser::NextToken()
                         xub_StrLen nTmpStart = sal::static_int_cast< xub_StrLen >(rnEndPos +
                                                     aTmpRes.LeadingWhiteSpace);
 
-                        // default setting fo the case that no identifier
+                        // default setting for the case that no identifier
                         // i.e. a valid symbol-name is following the '%'
                         // character
                         CurToken.eType      = TTEXT;
@@ -740,14 +741,14 @@ void SmParser::NextToken()
                         CurToken.nLevel     = 5;
                         CurToken.aText      = String();
                         CurToken.nRow       = sal::static_int_cast< xub_StrLen >(Row);
-                        CurToken.nCol       = nTmpStart - ColOff + 1;
+                        CurToken.nCol       = nTmpStart - ColOff;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
 
                             xub_StrLen n = sal::static_int_cast< xub_StrLen >(aTmpRes.EndPos - nTmpStart);
                             CurToken.eType      = TSPECIAL;
-                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart), n );
+                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart-1), n+1 );
 
                             DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );
@@ -1132,6 +1133,16 @@ void SmParser::Line()
 
 void SmParser::Expression()
 {
+    BOOL bUseExtraSpaces = TRUE;
+    SmNode *pNode = NodeStack.Pop();
+    if (pNode)
+    {
+        if (pNode->GetToken().eType == TNOSPACE)
+            bUseExtraSpaces = FALSE;
+        else
+            NodeStack.Push(pNode);  // push the node from above again (now to be used as argument to this current 'nospace' node)
+    }
+
     USHORT       n = 0;
     SmNodeArray  RelationArray;
 
@@ -1147,8 +1158,9 @@ void SmParser::Expression()
         RelationArray[n - 1] = NodeStack.Pop();
     }
 
-    SmStructureNode *pSNode = new SmExpressionNode(CurToken);
+    SmExpressionNode *pSNode = new SmExpressionNode(CurToken);
     pSNode->SetSubNodes(RelationArray);
+    pSNode->SetUseExtraSpaces(bUseExtraSpaces);
     NodeStack.Push(pSNode);
 }
 
@@ -1270,7 +1282,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
         return;
 
     SmSubSupNode *pNode = new SmSubSupNode(CurToken);
-    //! Of course 'CurToken' ist just the first sub-/supscript token.
+    //! Of course 'CurToken' is just the first sub-/supscript token.
     //! It should be of no further interest. The positions of the
     //! sub-/supscripts will be identified by the corresponding subnodes
     //! index in the 'aSubNodes' array (enum value from 'SmSubSup').
@@ -1374,30 +1386,51 @@ void SmParser::Blank()
 void SmParser::Term()
 {
     switch (CurToken.eType)
-    {   case TESCAPE :
+    {
+        case TESCAPE :
             Escape();
             break;
 
+        case TNOSPACE :
         case TLGROUP :
-            NextToken();
-
-            // allow for empty group
-            if (CurToken.eType == TRGROUP)
-            {   SmStructureNode *pSNode = new SmExpressionNode(CurToken);
-                pSNode->SetSubNodes(NULL, NULL);
-                NodeStack.Push(pSNode);
-
+        {
+            bool bNoSpace = CurToken.eType == TNOSPACE;
+            if (bNoSpace)   // push 'no space' node and continue to parse expression
+            {
+                NodeStack.Push(new SmExpressionNode(CurToken));
                 NextToken();
             }
-            else    // go as usual
-            {   Align();
-                if (CurToken.eType != TRGROUP)
-                    Error(PE_RGROUP_EXPECTED);
-                else
-                {   NextToken();
+            if (CurToken.eType != TLGROUP)
+            {
+                NodeStack.Pop();    // get rid of the 'no space' node pushed above
+                Term();
+            }
+            else
+            {
+                NextToken();
+
+                // allow for empty group
+                if (CurToken.eType == TRGROUP)
+                {
+                    if (bNoSpace)   // get rid of the 'no space' node pushed above
+                        NodeStack.Pop();
+                    SmStructureNode *pSNode = new SmExpressionNode(CurToken);
+                    pSNode->SetSubNodes(NULL, NULL);
+                    NodeStack.Push(pSNode);
+
+                    NextToken();
+                }
+                else    // go as usual
+                {
+                    Align();
+                    if (CurToken.eType != TRGROUP)
+                        Error(PE_RGROUP_EXPECTED);
+                    else
+                        NextToken();
                 }
             }
-            break;
+        }
+        break;
 
         case TLEFT :
             Brace();

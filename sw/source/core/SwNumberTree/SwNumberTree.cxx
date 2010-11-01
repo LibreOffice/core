@@ -127,19 +127,6 @@ SwNumberTreeNode * SwNumberTreeNode::GetRoot() const
     return pResult;
 }
 
-SwNumberTreeNode * SwNumberTreeNode::GetFirstChild() const
-{
-    SwNumberTreeNode * pResult = 0;
-
-    tSwNumberTreeChildren::iterator aIt = mChildren.begin();
-
-    if (aIt != mChildren.end() )
-        pResult = *aIt;
-
-    return pResult;
-}
-
-
 void SwNumberTreeNode::ClearObsoletePhantoms()
 {
     tSwNumberTreeChildren::iterator aIt = mChildren.begin();

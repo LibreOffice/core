@@ -81,8 +81,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 18, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 15, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 15 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
@@ -203,6 +203,7 @@ enum SmModelPropertyHandles
     HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS,
     HANDLE_RELATIVE_FONT_HEIGHT_LIMITS,
     HANDLE_IS_TEXT_MODE,
+    HANDLE_GREEK_CHAR_STYLE,
     HANDLE_ALIGNMENT,
     HANDLE_RELATIVE_SPACING,
     HANDLE_RELATIVE_LINE_SPACING,
@@ -273,6 +274,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "Formula"                           ),    HANDLE_FORMULA                             ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       ,         &::getBooleanCppuType(),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "GreekCharStyle" ),                   HANDLE_GREEK_CHAR_STYLE,    &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "LeftMargin"                        ), HANDLE_LEFT_MARGIN                        ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
         { RTL_CONSTASCII_STRINGPARAM( "PrinterName"                    ), HANDLE_PRINTER_NAME                        ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
         { RTL_CONSTASCII_STRINGPARAM( "PrinterSetup"                       ), HANDLE_PRINTER_SETUP                       ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
@@ -593,6 +595,16 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             }
             break;
 
+            case HANDLE_GREEK_CHAR_STYLE                    :
+            {
+                sal_Int16 nVal = 0;
+                *pValues >>= nVal;
+                if (nVal < 0 || nVal > 2)
+                    throw IllegalArgumentException();
+                aFormat.SetGreekCharStyle( nVal );
+            }
+            break;
+
             case HANDLE_ALIGNMENT                          :
             {
                 // SmHorAlign uses the same values as HorizontalAlignment
@@ -822,6 +834,10 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 sal_Bool bVal = aFormat.IsTextmode();
                 (*pValue).setValue(&bVal, ::getBooleanCppuType());
             }
+            break;
+
+            case HANDLE_GREEK_CHAR_STYLE                    :
+                *pValue <<= (sal_Int16)aFormat.GetGreekCharStyle();
             break;
 
             case HANDLE_ALIGNMENT                          :

@@ -390,7 +390,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
 /*-- 11.05.2004 14:47:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool    SwMailMergeGreetingsPage::commitPage( CommitPageReason )
+sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
 

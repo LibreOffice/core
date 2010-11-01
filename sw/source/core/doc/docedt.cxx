@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <unotools/charclass.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
@@ -71,6 +72,8 @@
 #include "editsh.hxx"
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
+
+#include <vector>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -2653,8 +2656,9 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 }
 
 
-void SwDoc::TransliterateText( const SwPaM& rPaM,
-                                utl::TransliterationWrapper& rTrans )
+void SwDoc::TransliterateText(
+    const SwPaM& rPaM,
+    utl::TransliterationWrapper& rTrans )
 {
     SwUndoTransliterate* pUndo;
     if( DoesUndo() )
@@ -2663,15 +2667,17 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
         pUndo = 0;
 
     const SwPosition* pStt = rPaM.Start(),
-                    * pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
-                                                     : rPaM.GetPoint();
-    ULONG nSttNd = pStt->nNode.GetIndex(), nEndNd = pEnd->nNode.GetIndex();
+                       * pEnd = rPaM.End();
+    ULONG nSttNd = pStt->nNode.GetIndex(),
+          nEndNd = pEnd->nNode.GetIndex();
     xub_StrLen nSttCnt = pStt->nContent.GetIndex(),
                nEndCnt = pEnd->nContent.GetIndex();
 
     SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
-    if( pStt == pEnd && pTNd )                  // no region ?
+    if( pStt == pEnd && pTNd )  // no selection?
     {
+        // set current word as 'area of effect'
+
         Boundary aBndry;
         if( pBreakIt->GetBreakIter().is() )
             aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
@@ -2687,21 +2693,24 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
         }
     }
 
-    if( nSttNd != nEndNd )
+    if( nSttNd != nEndNd )  // is more than one text node involved?
     {
+        // iterate over all effected text nodes, the first and the last one
+        // may be incomplete because the selection starts and/or ends there
+
         SwNodeIndex aIdx( pStt->nNode );
         if( nSttCnt )
         {
             aIdx++;
             if( pTNd )
-                pTNd->TransliterateText( rTrans, nSttCnt,
-                                            pTNd->GetTxt().Len(), pUndo );
+                pTNd->TransliterateText( rTrans, nSttCnt, pTNd->GetTxt().Len(), pUndo );
         }
 
         for( ; aIdx.GetIndex() < nEndNd; aIdx++ )
+        {
             if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
-                pTNd->TransliterateText( rTrans, 0, pTNd->GetTxt().Len(),
-                                        pUndo );
+                pTNd->TransliterateText( rTrans, 0, pTNd->GetTxt().Len(), pUndo );
+        }
 
         if( nEndCnt && 0 != ( pTNd = pEnd->nNode.GetNode().GetTxtNode() ))
             pTNd->TransliterateText( rTrans, 0, nEndCnt, pUndo );
@@ -2721,6 +2730,8 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
     }
     SetModified();
 }
+
+
 #define MAX_REDLINE_COUNT   250
 // -----------------------------------------------------------------------------
 void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)

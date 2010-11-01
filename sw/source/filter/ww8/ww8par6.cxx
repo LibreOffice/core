@@ -2265,12 +2265,6 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         + aSizeArray[WW8_BOT]) );
 }
 
-WW8FlySet::WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
-    : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
-{
-    Init(rReader, pPaM);
-}
-
 void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 {
     if (!rReader.mbNewDoc)
@@ -3557,6 +3551,23 @@ bool SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     return true;
 }
 
+USHORT SwWW8ImplReader::CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich)
+{
+    USHORT nResult = 0;
+
+    switch (nCharSet) {
+        case RTL_TEXTENCODING_MS_932:
+            nResult = RES_CHRATR_CJK_FONT;
+            break;
+
+        default:
+            nResult = nWhich;
+            break;
+    }
+
+    return nResult;
+}
+
 bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
     USHORT nWhich)
 {
@@ -3605,6 +3616,8 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
     CharSet eDstCharSet = eSrcCharSet;
 
     SvxFontItem aFont( eFamily, aName, aEmptyStr, ePitch, eDstCharSet, nWhich);
+
+    nWhich = CorrectResIdForCharset(eSrcCharSet, nWhich);
 
     if( bSetEnums )
     {

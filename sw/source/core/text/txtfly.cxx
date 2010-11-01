@@ -2028,10 +2028,10 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                     // <--
                     if( aFly.IsEmpty() || !aFly.IsOver( rRect ) )
                         continue;
-                    if( !bRet ||
+                    if( !bRet || (
                         ( !pCurrFrm->IsRightToLeft() &&
                           ( (aFly.*fnRect->fnGetLeft)() <
-                            (pRect->*fnRect->fnGetLeft)() ) ||
+                            (pRect->*fnRect->fnGetLeft)() ) ) ||
                         ( pCurrFrm->IsRightToLeft() &&
                           ( (aFly.*fnRect->fnGetRight)() >
                             (pRect->*fnRect->fnGetRight)() ) ) ) )

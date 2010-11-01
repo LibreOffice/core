@@ -77,6 +77,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
+#include <swtblfmt.hxx>
 #include <section.hxx>
 #include <pagedesc.hxx>
 #include <swrect.hxx>
@@ -1899,6 +1900,17 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 #endif
 
         AttrOutput().TableInfoCell( pTextNodeInfoInner );
+        if (pTextNodeInfoInner->isFirstInTable())
+        {
+            const SwTable * pTable = pTextNodeInfoInner->getTable();
+            const SwTableFmt * pTabFmt =
+                dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+            if (pTabFmt != NULL)
+            {
+                if (pTabFmt->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)
+                    AttrOutput().PageBreakBefore(true);
+            }
+        }
     }
 
     if ( !bFlyInTable )

@@ -288,7 +288,12 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_CLMRG:
-            aMergeBoxes[ nBoxCnt ] = TRUE;
+            // would crash later on reading \cellx (#i112657#):
+            // the first cell cannot be merged with earlier ones.
+            if (nBoxCnt != 0)
+            {
+                aMergeBoxes[ nBoxCnt ] = TRUE;
+            }
             break;
 
         case RTF_CELLX:

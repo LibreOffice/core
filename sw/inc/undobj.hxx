@@ -27,9 +27,7 @@
 #ifndef SW_UNDOBJ_HXX
 #define SW_UNDOBJ_HXX
 
-// --> OD 2006-11-01 #130889#
 #include <vector>
-// <--
 #include <memory>
 
 #include <boost/shared_ptr.hpp>
@@ -392,7 +390,6 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( const SwPosition&, sal_Unicode cIns );
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
@@ -549,7 +546,6 @@ public:
     ULONG GetEndNode() const        { return nEndNode; }
     ULONG GetDestSttNode() const    { return nDestSttNode; }
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
-    void AddTblMrgFlyHstry( SwHistory& rHstr );
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 
@@ -1106,14 +1102,6 @@ public:
     virtual SwRewriter GetRewriter() const;
 };
 
-
-class SwUndoDelBookmark : public SwUndoBookmark
-{
-public:
-    SwUndoDelBookmark( const ::sw::mark::IMark& );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-};
 
 class SwUndoInsBookmark : public SwUndoBookmark
 {
@@ -1728,7 +1716,7 @@ public:
 struct _UndoTransliterate_Data;
 class SwUndoTransliterate : public SwUndo, public SwUndRng
 {
-    _UndoTransliterate_Data *pData, *pLastData;
+    std::vector< _UndoTransliterate_Data * >    aChanges;
     sal_uInt32 nType;
 
 public:
@@ -1742,7 +1730,7 @@ public:
 
     void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
-    BOOL HasData() const {return 0 != pData; }
+    BOOL HasData() const { return aChanges.size() > 0; }
 };
 
 //--------------------------------------------------------------------

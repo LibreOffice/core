@@ -136,6 +136,7 @@ class SwSpellIter : public SwLinguIter
 
     SpellContentPositions               aLastPositions;
     bool                                bBackToStartOfSentence;
+    bool                                bMoveToEndOfSentence;
 
 
     void    CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
@@ -147,7 +148,7 @@ class SwSpellIter : public SwLinguIter
                        const SpellContentPositions& rDeletedRedlines);
 public:
     SwSpellIter() :
-        bBackToStartOfSentence(false) {}
+        bBackToStartOfSentence(false), bMoveToEndOfSentence(false) {}
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
@@ -157,6 +158,7 @@ public:
     void                                ToSentenceStart();
     const ::svx::SpellPortions          GetLastPortions(){ return aLastPortions;}
     SpellContentPositions               GetLastPositions() {return aLastPositions;}
+    void                                ContinueAfterThisSentence() { bMoveToEndOfSentence = true; }
 };
 
 /*************************************************************************
@@ -692,6 +694,24 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
 }
 
 // --------------------- Methoden der SwEditShell ------------------------
+
+bool SwEditShell::HasLastSentenceGotGrammarChecked() const
+{
+    bool bTextWasGrammarChecked = false;
+    if (pSpellIter)
+    {
+        ::svx::SpellPortions aLastPortions( pSpellIter->GetLastPortions() );
+        for (size_t i = 0;  i < aLastPortions.size() && !bTextWasGrammarChecked;  ++i)
+        {
+            // bIsGrammarError is also true if the text was only checked but no
+            // grammar error was found. (That is if a ProofreadingResult was obtained in
+            // SwDoc::Spell and in turn bIsGrammarError was set in SwSpellIter::CreatePortion)
+            if (aLastPortions[i].bIsGrammarError)
+                bTextWasGrammarChecked = true;
+        }
+    }
+    return bTextWasGrammarChecked;
+}
 
 /*************************************************************************
  *                      SwEditShell::HasConvIter
@@ -1283,10 +1303,27 @@ sal_uInt32 lcl_CountRedlines(
 /*-- 18.09.2003 15:08:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bIsGrammarCheck)
+
+void SwEditShell::MoveContinuationPosToEndOfCheckedSentence()
 {
+    // give hint that continuation position for spell/grammar checking is
+    // at the end of this sentence
+    if (pSpellIter)
+    {
+        pSpellIter->SetCurr( new SwPosition( *pSpellIter->GetCurrX() ) );
+        pSpellIter->ContinueAfterThisSentence();
+    }
+}
+
+
+void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck)
+{
+    // Note: rNewPortions.size() == 0 is valid and happens when the whole
+    // sentence got removed in the dialog
+
     ASSERT(  pSpellIter, "SpellIter missing" );
-    if(pSpellIter)
+    if(pSpellIter &&
+       pSpellIter->GetLastPortions().size() > 0)    // no portions -> no text to be changed
     {
         const SpellPortions& rLastPortions = pSpellIter->GetLastPortions();
         const SpellContentPositions  rLastPositions = pSpellIter->GetLastPositions();
@@ -1297,15 +1334,21 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        if(!rLastPortions.size())
-            return;
-
-        SwPaM *pCrsr = GetCrsr();
         pDoc->StartUndo( UNDO_OVERWRITE, NULL );
         StartAction();
+
+        SwPaM *pCrsr = GetCrsr();
+        // save cursor position (which should be at the end of the current sentence)
+        // for later restoration
+        Push();
+
         sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
         if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
         {
+            DBG_ASSERT( rNewPortions.size() > 0, "rNewPortions should not be empty here" );
+            DBG_ASSERT( rLastPortions.size() > 0, "rLastPortions should not be empty here" );
+            DBG_ASSERT( rLastPositions.size() > 0, "rLastPositions should not be empty here" );
+
             //the simple case: the same number of elements on both sides
             //each changed element has to be applied to the corresponding source element
             svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
@@ -1319,8 +1362,17 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 //jump over redline portions
                 while(aCurrentOldPortion->bIsHidden)
                 {
-                    --aCurrentOldPortion;
-                    --aCurrentOldPosition;
+                    if (aCurrentOldPortion  != rLastPortions.begin() &&
+                        aCurrentOldPosition != rLastPositions.begin())
+                    {
+                        --aCurrentOldPortion;
+                        --aCurrentOldPosition;
+                    }
+                    else
+                    {
+                        DBG_ASSERT( 0, "ApplyChangedSentence: iterator positions broken" );
+                        break;
+                    }
                 }
                 if ( !pCrsr->HasMark() )
                     pCrsr->SetMark();
@@ -1360,6 +1412,8 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         }
         else
         {
+            DBG_ASSERT( rLastPositions.size() > 0, "rLastPositions should not be empty here" );
+
             //select the complete sentence
             SpellContentPositions::const_iterator aCurrentEndPosition = rLastPositions.end();
             --aCurrentEndPosition;
@@ -1391,16 +1445,24 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 //set the cursor to the end of the inserted string
                 *pCrsr->Start() = *pCrsr->End();
                 ++aCurrentNewPortion;
-
             }
         }
-        //set the cursor to the end of the new sentence
+
+        // restore cursor to the end of the sentence
+        // (will work also if the sentence length has changed,
+        // since cursors get updated automatically!)
+        Pop( FALSE );
+
+        // collapse cursor to the end of the modified sentence
         *pCrsr->Start() = *pCrsr->End();
-        if( bIsGrammarCheck)
+        if (bRecheck)
         {
             //in grammar check the current sentence has to be checked again
             GoStartSentence();
         }
+        // set continuation position for spell/grammar checking to the end of this sentence
+        pSpellIter->SetCurr( new SwPosition( *pCrsr->Start() ) );
+
         pDoc->EndUndo( UNDO_OVERWRITE, NULL );
         EndAction();
     }
