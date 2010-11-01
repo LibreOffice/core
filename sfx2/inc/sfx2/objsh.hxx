@@ -363,7 +363,6 @@ public:
 
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                         Window *pParent, const SfxItemSet& );
-    sal_Bool                    IsBasic( const String & rCode, SbxObject * pVCtrl = NULL );
 
     ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
                                     SbxObject* pVCtrl, SbxArray* pArgs = 0, SbxValue* pRet = 0 );

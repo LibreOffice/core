@@ -59,8 +59,6 @@ class SFX2_DLLPUBLIC SfxMacroInfo
 {
 friend class SfxMacroConfig;
 friend class SfxEventConfiguration;
-friend SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo);
-friend SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo);
 
     String*                 pHelpText;
     sal_uInt16                  nRefCnt;
@@ -80,8 +78,6 @@ public:
                     const String& rModuleName, const String& rMethodName);
     ~SfxMacroInfo();
     sal_Bool operator==(const SfxMacroInfo& rOther) const;
-    int Load (SvStream&);
-    int Store (SvStream&);
     String              GetMacroName() const;
     String              GetQualifiedName() const;
     String              GetFullQualifiedName() const;
@@ -127,7 +123,6 @@ public:
 
     static String           RequestHelp( sal_uInt16 nId );
     static sal_Bool             IsMacroSlot( sal_uInt16 nId );
-    static sal_Bool             IsBasic( SbxObject*, const String&, BasicManager* );
     static ErrCode          Call( SbxObject*, const String&, BasicManager*,
                                 SbxArray *pArgs=NULL, SbxValue *pRet=NULL );
 //ASDBG obsolete >= 582
@@ -141,8 +136,6 @@ public:
     SfxMacroInfo*           GetMacroInfo(sal_uInt16 nId) const;
     sal_Bool                    ExecuteMacro(sal_uInt16 nId, const String& rArgs ) const;
     sal_Bool                    ExecuteMacro( SfxObjectShell*, const SvxMacro*, const String& ) const;
-    sal_Bool                    CheckMacro(sal_uInt16 nId) const;
-    sal_Bool                    CheckMacro( SfxObjectShell*, const SvxMacro* ) const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void Release_Impl();

@@ -152,26 +152,6 @@ SbMethod* SfxQueryMacro( BasicManager* pMgr , const String& rMacro )
     return SfxQueryMacro_Impl( pMgr, aMacro, aLibName, aModule );
 }
 
-ErrCode SfxCallMacro( BasicManager* pMgr, const String& rCode,
-                      SbxArray *pArgs, SbxValue *pRet )
-{
-    ErrCode nErr;
-    SfxApplication *pApp = SFX_APP();
-    pApp->EnterBasicCall();
-    SbMethod* pMethod = SfxQueryMacro( pMgr, rCode );
-    if ( pMethod )
-    {
-        if ( pArgs )
-            pMethod->SetParameters( pArgs );
-        nErr = pMethod->Call( pRet );
-    }
-    else
-        nErr = ERRCODE_BASIC_PROC_UNDEFINED;
-
-    pApp->LeaveBasicCall();
-    return nErr;
-}
-
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
@@ -409,83 +389,6 @@ void SfxMacroInfo::SetHelpText( const String& rName )
     if ( !pHelpText )
         pHelpText = new String;
     *pHelpText = rName;
-}
-
-//==========================================================================
-
-SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo)
-{
-    sal_uInt16 nAppBasic, nFileVersion;
-    String aDocName;
-
-    rStream >> nFileVersion;
-    if ( nVersion < nCompatVersion )
-    {
-        // In der 1.Version ohne Versionskennung
-        nAppBasic = nVersion;
-        nFileVersion = 1;
-        rStream.ReadByteString(aDocName,RTL_TEXTENCODING_UTF8);
-        rStream.ReadByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
-        rStream.ReadByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
-        rStream.ReadByteString(rInfo.aMethodName,RTL_TEXTENCODING_UTF8);
-    }
-    else
-    {
-        String aInput;
-        rStream >> nAppBasic;
-        rStream.ReadByteString(aDocName,RTL_TEXTENCODING_UTF8);                 // Vorsicht: kann bei AppName Unsinn sein!
-        rStream.ReadByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
-        rStream.ReadByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
-        rStream.ReadByteString(aInput,RTL_TEXTENCODING_UTF8);
-
-        if ( nFileVersion == nCompatVersion )
-            rInfo.aMethodName = aInput;
-        else
-        {
-            sal_uInt16 nCount = aInput.GetTokenCount('.');
-            rInfo.aMethodName = aInput.GetToken( nCount-1, '.' );
-            if ( nCount > 1 )
-                rInfo.aModuleName = aInput.GetToken( nCount-2, '.' );
-            if ( nCount > 2 )
-                rInfo.aLibName = aInput.GetToken( 0, '.' );
-        }
-    }
-
-    rInfo.bAppBasic = (sal_Bool) nAppBasic;
-    return rStream;
-}
-
-int SfxMacroInfo::Load( SvStream& rStream )
-{
-    rStream >> (*this);
-    nSlotId = SFX_APP()->GetMacroConfig()->GetSlotId(this);
-    return 0;
-}
-
-//==========================================================================
-
-SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo)
-{
-    if ( rInfo.bAppBasic )
-    {
-        rStream << nVersion
-                << (sal_uInt16) rInfo.bAppBasic;
-        rStream.WriteByteString(rInfo.GetBasicName(),RTL_TEXTENCODING_UTF8);
-        rStream.WriteByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
-        rStream.WriteByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
-        rStream.WriteByteString(rInfo.aMethodName,RTL_TEXTENCODING_UTF8);
-    }
-    else
-    {
-        rStream << nVersion
-                << (sal_uInt16) rInfo.bAppBasic;
-        rStream.WriteByteString(SFX_APP()->GetName(),RTL_TEXTENCODING_UTF8);
-        rStream.WriteByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
-        rStream.WriteByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
-        rStream.WriteByteString(rInfo.aMethodName,RTL_TEXTENCODING_UTF8);
-    }
-
-    return rStream;
 }
 
 sal_Bool SfxMacroInfo::Compare( const SvxMacro& rMacro ) const
@@ -757,62 +660,6 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
     return ( nErr == ERRCODE_NONE );
 }
 
-sal_Bool SfxMacroConfig::CheckMacro( SfxObjectShell *pSh, const SvxMacro* pMacro ) const
-{
-    SfxApplication *pApp = SFX_APP();
-
-    // Name des Macros oder Scripts bzw. ScriptCode
-    String aCode( pMacro->GetMacName() );
-    ErrCode nErr = ERRCODE_NONE;
-
-    // BasicManager von Document oder Application
-    pApp->EnterBasicCall();
-    BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
-    BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
-
-    // Da leider der Name zwischendurch h"aufig gewechselt hat ...
-    if( SFX_APP()->GetName() == pMacro->GetLibName() ||
-            pMacro->GetLibName().EqualsAscii("StarDesktop") )
-        pMgr = pAppMgr;
-    else if ( pMgr == pAppMgr )
-        pMgr = NULL;
-
-    if ( !pMgr || !SfxQueryMacro( pMgr, aCode ) )
-        nErr = SbxERR_NO_METHOD;
-    pApp->LeaveBasicCall();
-    return ( nErr == ERRCODE_NONE );
-}
-
-//==========================================================================
-
-sal_Bool SfxMacroConfig::CheckMacro( sal_uInt16 nId ) const
-{
-    const SfxMacroInfo* pInfo = GetMacroInfo( nId );
-    if ( !pInfo )
-        return sal_False;
-
-    // Basic nur initialisieren, wenn default nicht ::com::sun::star::script::JavaScript; dann mu\s
-    // in IsBasic() sowieso das Basic angelegt werden
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-
-    SfxApplication *pApp = SFX_APP();
-    pApp->EnterBasicCall();
-
-    // BasicManager von Document oder Application
-    BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
-    BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
-
-    if( SFX_APP()->GetName() == pInfo->GetBasicName() )
-        pMgr = SFX_APP()->GetBasicManager();
-    else if ( pMgr == pAppMgr )
-        pMgr = NULL;
-
-    String aFull( pInfo->GetQualifiedName() );
-    sal_Bool bIsBasic = pMgr ? IsBasic( 0, aFull, pMgr ) : sal_False;
-    pApp->LeaveBasicCall();
-    return bIsBasic;
-}
-
 //==========================================================================
 
 IMPL_LINK( SfxMacroConfig, CallbackHdl_Impl, SfxMacroConfig*, pConfig )
@@ -827,18 +674,6 @@ IMPL_LINK( SfxMacroConfig, EventHdl_Impl, SfxMacroInfo*, pInfo )
     delete pInfo;
     pImp->nEventId = 0;
     return 0;
-}
-
-sal_Bool SfxMacroConfig::IsBasic(
-    SbxObject* /*pVCtrl*/,
-    const String& rCode,
-    BasicManager* pMgr )
-{
-    sal_Bool bFound;
-    SFX_APP()->EnterBasicCall();
-    bFound = SfxQueryMacro( pMgr, rCode ) != 0;
-    SFX_APP()->LeaveBasicCall();
-    return bFound;
 }
 
 ErrCode SfxMacroConfig::Call(

@@ -34,9 +34,5 @@ class SbMethod;
 
 SbMethod* SfxQueryMacro( BasicManager* pMgr, const String& rMacro );
 
-ErrCode SfxCallMacro( BasicManager* pMgr, const String& rMacro,
-                      SbxArray *pArgs = 0, SbxValue *pRet = 0 );
-
-
 #endif
 

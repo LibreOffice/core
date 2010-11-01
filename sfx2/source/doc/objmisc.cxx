@@ -1651,13 +1651,6 @@ SfxModule* SfxObjectShell::GetModule() const
     return GetFactory().GetModule();
 }
 
-sal_Bool SfxObjectShell::IsBasic(
-    const String & rCode, SbxObject * pVCtrl )
-{
-    if( !rCode.Len() ) return sal_False;
-    return SfxMacroConfig::IsBasic( pVCtrl, rCode, GetBasicManager() );
-}
-
 ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     const String& rBasic, SbxObject* pVCtrl, SbxArray* pArgs,
     SbxValue* pRet )
@@ -1669,12 +1662,10 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
             return ERRCODE_IO_ACCESSDENIED;
     }
 
-    pApp->EnterBasicCall();
     BasicManager *pMgr = GetBasicManager();
     if( pApp->GetName() == rBasic )
         pMgr = pApp->GetBasicManager();
     ErrCode nRet = SfxMacroConfig::Call( pVCtrl, rMacro, pMgr, pArgs, pRet );
-    pApp->LeaveBasicCall();
     return nRet;
 }
 

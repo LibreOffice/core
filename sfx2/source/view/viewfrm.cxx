@@ -2883,8 +2883,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
             }
         }
 
-        pSfxApp->EnterBasicCall();
-
         BasicManager* pBasMgr = 0;
         if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
         {
@@ -3017,19 +3015,11 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
                 }
             }
         }
-
-        pSfxApp->LeaveBasicCall();
     }
     else
     {
         // add code for "session only" macro
     }
-
-    /*
-    FILE* pFile = fopen( "macro.bas", "a" );
-    fprintf( pFile, "%s", ::rtl::OUStringToOString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8).getStr() );
-    fclose ( pFile );
-    */
 }
 
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
