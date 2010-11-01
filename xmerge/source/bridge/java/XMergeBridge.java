@@ -97,7 +97,6 @@ public class XMergeBridge {
 
     /** This inner class provides the component as a concrete implementation
      * of the service description. It implements the needed interfaces.
-     * @implements XTypeProvider
      */
     static public class _XMergeBridge implements
                                                XImportFilter,
