@@ -630,8 +630,8 @@ testcase tFormatPage
     end if
     '/// Check that listbox 'Paper tray' has items
     printlog " Check that listbox 'Paper tray' has items"
-    if Schacht < 1 then
-    warnlog "The text direction listbox is empty"
+    if Schacht.GetItemCount < 1 then
+    warnlog "The paper tray listbox is empty"
     end if
     '/// Increase 'Margins Left'
     printlog " Increase 'Margins Left'"

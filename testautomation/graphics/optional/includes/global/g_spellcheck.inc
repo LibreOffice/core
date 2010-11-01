@@ -56,8 +56,7 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     sleep(1)
 
@@ -84,6 +83,7 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
     else
         printlog " added word is in dictionary: '" + Buch.getSelText + "'"
     end if
+    sleep 2
 
     printlog "Close dialog 'Edit Custom Dictionary'."
     BenutzerwoerterbuchBearbeiten.Close
@@ -97,7 +97,9 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
     ' remove the word again from the dictionary
     delete_word_from_dictionary(sWrongWord,"IgnoreAllList")
 
-endcase 'tiToolsSpellcheckCheck
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
+endcase 'tiToolsSpellcheckCorrect
+
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_Change
 
@@ -122,9 +124,7 @@ testcase tiToolsSpellcheckCheck_Change
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -168,12 +168,11 @@ testcase tiToolsSpellcheckCheck_Change
     
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
-endcase
+endcase 'tiToolsSpellcheckCheck_Change
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_ChangeAll
-
-
 
     Dim sExt as string
     Dim sRightWord as String
@@ -198,9 +197,7 @@ testcase tiToolsSpellcheckCheck_ChangeAll
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -216,14 +213,12 @@ testcase tiToolsSpellcheckCheck_ChangeAll
 
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
-endcase
-
-
-
-
+endcase 'tiToolsSpellcheckCheck_ChangeAll
 
 '-------------------------------------------------------------------------------
+
 function delete_all_added_words(aWords)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -247,7 +242,7 @@ function delete_all_added_words(aWords)
     Kontext "BenutzerwoerterbuchBearbeiten"
     sleep 1
     printlog "Check every book, if it contains the words."
-    iBooks = Buch.getItemCount    
+    iBooks = Buch.getItemCount
     for iBookCounter = 1 to iBooks
         Buch.select(iBookCounter)
         printlog "Items in Booklist: " & WordList.getItemCount
@@ -268,8 +263,10 @@ function delete_all_added_words(aWords)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
     
-end function
+end function 'delete_all_added_words
+
 '-------------------------------------------------------------------------------
+
 function delete_word_from_dictionary(sWord as String, sDictionary as String)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -309,7 +306,9 @@ function delete_word_from_dictionary(sWord as String, sDictionary as String)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
 
-end function
+end function 'delete_word_from_dictionary
+
+'-------------------------------------------------------------------------------
 
 function fSelectWithString(oControl as Object,sText as String)
 
@@ -324,8 +323,9 @@ function fSelectWithString(oControl as Object,sText as String)
         endif
     next
 
-end function
+end function 'fSelectWithString
 
+'-------------------------------------------------------------------------------
 
 function getWordsForLanguage()
 
@@ -374,4 +374,4 @@ function getWordsForLanguage()
 
     getWordsForLanguage = aWords
 
-end function
+end function 'getWordsForLanguage

@@ -938,7 +938,7 @@ testcase tToolsOptionsWriterCompatibility1
 
     printlog "- load previously saved document"
     Call hNewDocument
-    Call hFileOpen (gOfficePath + "user\work\tToolsOptionsWriterCompatibility1.odt")
+    hFileOpen( gOfficePath & "user\work\tToolsOptionsWriterCompatibility1.odt")
 
     Printlog "check state of all checkboxes and uncheck all checkboxes"
     ToolsOptions
@@ -1010,8 +1010,8 @@ testcase tToolsOptionsWriterCompatibility2
     Call hNewDocument
     printlog "open document  ./writer/leve11/input/options/compatibility1.doc"
     printlog "check formatting of current opened document"
-    Call hFileOpen ( gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
+    
 
     Call wTypeKeys ("<Mod1 Home>")
     Call wTypeKeys ("<Down>")
@@ -1097,10 +1097,10 @@ endcase
 '------------------------------------------------------------------------------------------------------------
 testcase tToolsOptionsWriterCompatibility3
 
-DIM iWords_to_right     AS integer 'variable for counting word-steps
-DIM iOptionsCount       AS integer 'variable for counting options on cmopatibility page
-DIM sDocument           AS string  'variable for saving the doc
-DIM sFoundWord          AS string  'variable for word found one line below
+    DIM iWords_to_right     AS integer 'variable for counting word-steps
+    DIM iOptionsCount       AS integer 'variable for counting options on cmopatibility page
+    DIM sDocument           AS string  'variable for saving the doc
+    DIM sFoundWord          AS string  'variable for word found one line below
 
     printlog ">>> Configuration of behavior when a line break is inserted <<<"
     '/// New Writer Doc
@@ -1253,7 +1253,7 @@ DIM sFoundWord          AS string  'variable for word found one line below
     ExtrasOptionenDLG.Cancel
 
     printlog "Reload recently saved document"
-    Call hFileOpen (sDocument)
+    hFileOpen( sDocument)
 
     printlog "Tools-Options-OOo Writer-Compatibility"
     ToolsOptions

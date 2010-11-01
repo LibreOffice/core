@@ -51,8 +51,8 @@ testcase DrawToWriterScrollingText
   printlog "  Jump to beginning of document "
   printlog "  Select Scrolling text "
   printlog "  Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>"
@@ -81,7 +81,7 @@ testcase DrawToWriterScrollingText
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_scrolling_text.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_scrolling_text.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -106,8 +106,8 @@ testcase DrawToWriterGroupedObject
   printlog "  Jump to beginning of document "
   printlog "  Select Grouped Object "
   printlog "  Copy selected Object "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",2
@@ -136,7 +136,7 @@ testcase DrawToWriterGroupedObject
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_grouped_object.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_grouped_object.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -161,8 +161,8 @@ testcase DrawToWriter3D
   printlog "  Jump to beginning of document "
   printlog "  Select cell <A5:C5> "
   printlog "  Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",3
@@ -191,7 +191,7 @@ testcase DrawToWriter3D
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_3d.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_3d.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -216,8 +216,8 @@ testcase DrawToWriterFontwork
   printlog "  Jump to beginning of document "
   printlog "  Select Fontwork "
   printlog "  Copy selected Fontwork "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",4
@@ -246,7 +246,7 @@ testcase DrawToWriterFontwork
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_fontwork.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_fontwork.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -271,8 +271,8 @@ testcase DrawToWriterBullets
   printlog "  Jump to beginning of document "
   printlog "  Select Bullets "
   printlog "  Copy selected Bullets "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",5
@@ -301,7 +301,7 @@ testcase DrawToWriterBullets
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_bullets.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_bullets.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -326,8 +326,8 @@ testcase DrawToWriterDimensionLines
   printlog "  Jump to beginning of document "
   printlog "  Select Dimension Lines "
   printlog "  Copy selected Dimension Lines "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -357,7 +357,7 @@ testcase DrawToWriterDimensionLines
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_dim_lines.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_dim_lines.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -382,8 +382,8 @@ testcase DrawToWriterConnectors
   printlog "  Jump to beginning of document "
   printlog "  Select Connectors "
   printlog "  Copy selected Connectors "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -413,7 +413,7 @@ testcase DrawToWriterConnectors
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_writer_connectors.odt",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_writer_connectors.odt",false)
     printlog "  Reopen saved document "
     Wait 500
     Call hCloseDocument

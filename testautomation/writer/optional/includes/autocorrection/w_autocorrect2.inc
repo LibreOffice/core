@@ -127,8 +127,8 @@ testcase tToolsAutocorrectWordCompletion_2
     '/// delete all entries
     '/// close and reopen dialog, check entries again
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    
     'Delete all entries in the list
     Call fDeleteAllEntries()
 
@@ -196,8 +196,8 @@ testcase tToolsAutocorrectWordCompletion_3
     '/// backwards with <SHIFT-CTRL-Tab>
     '/// endless loop test
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    
     'Delete all entries in the list
     Call fDeleteAllEntries()
 
@@ -287,8 +287,8 @@ testcase tToolsAutocorrectWordCompletion_4
     MaxEintraege.SetText sTestMaxEntries
     TabWortergaenzung.OK
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\advanced\" + sTestFile )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\advanced\" + sTestFile )
+    
     Sleep 4
 
     ToolsAutocorrect
@@ -337,8 +337,8 @@ testcase tToolsAutocorrectWordCompletion_5
     'Test when checkbox is checkec -- default
 
     'Open 1st file
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    
 
     'Delete all entries in the list
     Call fDeleteAllEntries()
@@ -355,8 +355,8 @@ testcase tToolsAutocorrectWordCompletion_5
     Call wTypeKeys sTestWord1
 
     'Open 2nd file
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01-01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01-01.odt" )
+    
 
     Call wTypeKeys sTestWord2
     Call wTypeKeys sTestWord3
@@ -386,8 +386,8 @@ testcase tToolsAutocorrectWordCompletion_5
 
     'Test when checkbox is Checked
     'Open 1st file
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    
 
     'Delete all entries in the list
     fDeleteAllEntries()
@@ -403,8 +403,8 @@ testcase tToolsAutocorrectWordCompletion_5
     Call wTypeKeys sTestWord1
 
     'Open 2nd file
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01-01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01-01.odt" )
+    
 
     Call wTypeKeys sTestWord2
     Call wTypeKeys sTestWord3
@@ -453,8 +453,8 @@ testcase tToolsAutocorrectWordCompletion_6
     '/// and a help tip will appear       <--- no way to test yet
 
     'Show as Tip -- uncheck (default)
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    
 
     Call wTypeKeys sTestWord
     Call wTypeKeys "<Return>"

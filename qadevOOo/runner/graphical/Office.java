@@ -48,6 +48,7 @@ public class Office implements IOffice
         m_sResult = _sResult;
 
         if (_aParam.getReferenceType().toLowerCase().equals("ooo") ||
+            _aParam.getReferenceType().toLowerCase().equals("o3") ||
             _aParam.getReferenceType().toLowerCase().equals("ps") ||
             _aParam.getReferenceType().toLowerCase().equals("pdf"))
         {

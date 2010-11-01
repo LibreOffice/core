@@ -50,8 +50,8 @@ testcase DrawToHTMLScrollingText
   printlog " + Jump to beginning of document "
   printlog " + Select Scrolling text "
   printlog " + Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>"
@@ -80,7 +80,7 @@ testcase DrawToHTMLScrollingText
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_scrolling_text.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_scrolling_text.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -105,8 +105,8 @@ testcase DrawToHTMLGroupedObject
   printlog " + Jump to beginning of document "
   printlog " + Select Grouped Object "
   printlog " + Copy selected Object "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",2
@@ -135,7 +135,7 @@ testcase DrawToHTMLGroupedObject
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_grouped_object.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_grouped_object.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -160,8 +160,8 @@ testcase DrawToHTML3D
   printlog " + Jump to beginning of document "
   printlog " + Select cell <A5:C5> "
   printlog " + Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",3
@@ -190,7 +190,7 @@ testcase DrawToHTML3D
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_3d.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_3d.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -215,8 +215,8 @@ testcase DrawToHTMLFontwork
   printlog " + Jump to beginning of document "
   printlog " + Select Fontwork "
   printlog " + Copy selected Fontwork "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",4
@@ -245,7 +245,7 @@ testcase DrawToHTMLFontwork
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_fontwork.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_fontwork.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -270,8 +270,8 @@ testcase DrawToHTMLBullets
   printlog " + Jump to beginning of document "
   printlog " + Select Bullets "
   printlog " + Copy selected Bullets "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<Tab>",5
@@ -300,7 +300,7 @@ testcase DrawToHTMLBullets
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_bullets.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_bullets.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -325,8 +325,8 @@ testcase DrawToHTMLDimensionLines
   printlog " + Jump to beginning of document "
   printlog " + Select Dimension Lines "
   printlog " + Copy selected Dimension Lines "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -356,7 +356,7 @@ testcase DrawToHTMLDimensionLines
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_dim_lines.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_dim_lines.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument
@@ -381,8 +381,8 @@ testcase DrawToHTMLConnectors
   printlog " + Jump to beginning of document "
   printlog " + Select Connectors "
   printlog " + Copy selected Connectors "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\draw.sxd")
+  
   Kontext "DocumentDraw"
   printlog "  Jump to beginning of document "
   DocumentDraw.TypeKeys "<PageDown>"
@@ -412,7 +412,7 @@ testcase DrawToHTMLConnectors
     Call hCloseDocument
     printlog " + Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\draw_to_html_connectors.html",false)
+    hFileOpen( gOfficepath + "user\work\draw_to_html_connectors.html",false)
     printlog " + Reopen saved document "
     Wait 500
     Call hCloseDocument

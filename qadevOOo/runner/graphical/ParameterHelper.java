@@ -267,7 +267,8 @@ public class ParameterHelper
             // check if MultiServiceFactory is given
             if (getReferenceType().toLowerCase().equals("pdf") ||
                 getReferenceType().toLowerCase().equals("ps") ||
-                getReferenceType().toLowerCase().equals("ooo"))
+                getReferenceType().toLowerCase().equals("ooo") ||
+                getReferenceType().toLowerCase().equals("o3") )
             {
                 if (xMSF == null)
                 {
