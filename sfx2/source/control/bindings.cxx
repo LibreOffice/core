@@ -1118,13 +1118,7 @@ void SfxBindings::Release( SfxControllerItem& rItem )
             delete (*pImp->pCaches)[nPos];
             pImp->pCaches->Remove(nPos, 1);
 #endif
-            if ( SfxMacroConfig::IsMacroSlot( nId ) )
-            {
-                delete (*pImp->pCaches)[nPos];
-                pImp->pCaches->Remove(nPos, 1);
-            }
-            else
-                pImp->bCtrlReleased = sal_True;
+            pImp->bCtrlReleased = sal_True;
         }
     }
 
@@ -1474,7 +1468,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     rFound.Insert( pFound );
 
     USHORT nSlot = pRealSlot->GetSlotId();
-    if ( !SfxMacroConfig::IsMacroSlot( nSlot ) && !(nSlot >= SID_VERB_START && nSlot <= SID_VERB_END) )
+    if ( !(nSlot >= SID_VERB_START && nSlot <= SID_VERB_END) )
     {
         pInterface = pInterface->GetRealInterfaceForSlot( pRealSlot );
         DBG_ASSERT (pInterface,"Slot in angegebener Shell nicht gefunden!");

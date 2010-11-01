@@ -232,8 +232,6 @@ SfxMenuControl::SfxMenuControl(USHORT nSlotId, SfxBindings& rBindings):
 
 SfxMenuControl::~SfxMenuControl()
 {
-    if ( SfxMacroConfig::IsMacroSlot( GetId() ) )
-        SFX_APP()->GetMacroConfig()->ReleaseSlotId(GetId());
     delete pSubMenu;
 }
 

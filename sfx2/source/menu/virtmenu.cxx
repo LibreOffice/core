@@ -481,24 +481,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     SfxMenuControl *pMnuCtrl=0;
                     String aCmd( pSVMenu->GetItemCommand( nSlotId ) );
-                    if ( aCmd.CompareToAscii("slot:", 5) == 0 )
-                    {
-                        SfxMacroConfig* pCfg = SFX_APP()->GetMacroConfig();
-                        if ( pCfg->IsMacroSlot( nSlotId ) )
-                        {
-                            if ( pCfg->GetMacroInfo( nSlotId ) )
-                            {
-                                pCfg->RegisterSlotId( nSlotId );
-                                pSVMenu->SetItemCommand( nSlotId, String() );
-                                aCmd.Erase();
-                            }
-                            else
-                            {
-                                pSVMenu->SetItemCommand( nSlotId, String::CreateFromAscii("macro:///macro.not.founc") );
-                            }
-                        }
-                    }
-
                     if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name

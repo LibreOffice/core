@@ -121,17 +121,11 @@ public:
 
     static SfxMacroConfig*  GetOrCreate();
 
-    static String           RequestHelp( sal_uInt16 nId );
-    static sal_Bool             IsMacroSlot( sal_uInt16 nId );
     static ErrCode          Call( SbxObject*, const String&, BasicManager*,
                                 SbxArray *pArgs=NULL, SbxValue *pRet=NULL );
 //ASDBG obsolete >= 582
 //ASDBG     static void CallStarScript( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine > & rxEngine, const String & rCode,
 //ASDBG     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rSource, void *pArgs, void *pRet );
-    static SbMethod*        GetMethod_Impl( const String&, BasicManager* );
-
-    void                    ReleaseSlotId(sal_uInt16 nId);
-    void                    RegisterSlotId(sal_uInt16 nId);
     SfxMacroInfo*           GetMacroInfo(sal_uInt16 nId) const;
 
 //#if 0 // _SOLAR__PRIVATE

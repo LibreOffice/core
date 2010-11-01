@@ -953,13 +953,6 @@ const SfxPoolItem* SfxShell::ExecuteSlot
         pSlot = GetVerbSlot_Impl(nSlot);
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlot);
-    if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlot ) )
-    {
-        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlot);
-        if ( pInfo )
-            pSlot = pInfo->GetSlot();
-    }
-
     DBG_ASSERT( pSlot, "slot not supported" );
 
     SfxExecFunc pFunc = pSlot->GetExecFnc();
@@ -1028,13 +1021,6 @@ const SfxPoolItem* SfxShell::GetSlotState
         pSlot = GetVerbSlot_Impl(nSlotId);
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlotId);
-    if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlotId ) )
-    {
-        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlotId);
-        if ( pInfo )
-            pSlot = pInfo->GetSlot();
-    }
-
     if ( pSlot )
         // ggf. auf Which-Id mappen
         nSlotId = pSlot->GetWhich( rPool );

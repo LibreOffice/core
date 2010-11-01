@@ -1030,9 +1030,6 @@ void SfxDispatcher::_Execute
         return;
 
     sal_uInt16 nSlot = rSlot.GetSlotId();
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-        SFX_APP()->GetMacroConfig()->RegisterSlotId( nSlot );
-
     if ( (eCallMode & SFX_CALLMODE_ASYNCHRON) ||
          ( !(eCallMode & SFX_CALLMODE_SYNCHRON) &&
            rSlot.IsMode(SFX_SLOT_ASYNCHRON) ) )
@@ -2318,25 +2315,8 @@ sal_Bool SfxDispatcher::_FindServer
         }
     }
 
-    // Makro-Slot?
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-    {
-        const SfxMacroInfo* pInfo = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot);
-        if ( pInfo )
-        {
-            const SfxSlot* pSlot = pInfo->GetSlot();
-            if ( pSlot )
-            {
-                rServer.SetShellLevel(nTotCount-1);
-                rServer.SetSlot( pSlot );
-                return sal_True;
-            }
-        }
-
-        return sal_False;
-    }
     // Verb-Slot?
-    else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
+    if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
         for ( sal_uInt16 nShell = 0;; ++nShell )
         {
@@ -2474,10 +2454,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         nTotCount = nTotCount + pImp->aStack.Count();
     }
 
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-        // Makro-Slot?
-        return sal_True;
-    else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
+    if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
         // Verb-Slot?
         for ( sal_uInt16 nShell = 0;; ++nShell )
@@ -2659,9 +2636,6 @@ const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
         Flush();
 
         sal_uInt16 nSlot = pSlot->GetSlotId();
-        if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-            SFX_APP()->GetMacroConfig()->RegisterSlotId( nSlot );
-
         if ( pSlot->IsMode(SFX_SLOT_ASYNCHRON) )
             //! ignoriert rSvr
         {

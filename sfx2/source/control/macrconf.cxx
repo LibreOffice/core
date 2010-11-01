@@ -366,24 +366,6 @@ String SfxMacroInfo::GetHelpText() const
     return String();
 }
 
-String SfxMacroConfig::RequestHelp( sal_uInt16 nId )
-{
-    SfxMacroInfo *pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo( nId );
-    if ( !pInfo )
-        return String();
-
-    if ( !pInfo->pHelpText )
-    {
-        SbMethod *pMethod =
-            SfxQueryMacro_Impl( pInfo->GetBasicManager(), pInfo->aMethodName,
-                pInfo->aLibName, pInfo->aModuleName );
-        if ( pMethod && pMethod->GetInfo() )
-            pInfo->pHelpText = new String( pMethod->GetInfo()->GetComment() );
-    }
-
-    return pInfo->GetHelpText();
-}
-
 void SfxMacroInfo::SetHelpText( const String& rName )
 {
     if ( !pHelpText )
@@ -416,83 +398,6 @@ SfxMacroConfig::~SfxMacroConfig()
         Application::RemoveUserEvent( pImp->nEventId );
     delete pImp;
 }
-
-//==========================================================================
-
-void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
-{
-    DBG_ASSERT( IsMacroSlot( nId ), "SlotId ist kein Macro!");
-
-    sal_uInt16 nCount = pImp->aArr.Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        SfxMacroInfo *pInfo = (pImp->aArr)[i];
-        if (pInfo->nSlotId == nId)
-        {
-            pInfo->nRefCnt--;
-            if (pInfo->nRefCnt == 0)
-            {
-                // Slot wird nicht mehr referenziert, also holen
-                SfxSlot *pSlot = pInfo->pSlot;
-
-                // Slot aus der Verkettung rausnehmen
-                while (pSlot->pNextSlot != pInfo->pSlot)
-                    pSlot = (SfxSlot*) pSlot->pNextSlot;
-                pSlot->pNextSlot = pInfo->pSlot->pNextSlot;
-
-                // Slot selbst kurz schlie\sen
-                pSlot = pInfo->pSlot;
-                pSlot->pNextSlot = pSlot;
-
-                // MacroInfo aus Array entfernen, damit sie kein Unheil
-                // anrichten kann
-                pImp->aArr.Remove(i);
-
-                // SlotId wieder freigeben
-                sal_uInt16 nIdCount = aIdArray.Count();
-                for (sal_uInt16 n=0; n<nIdCount; n++)
-                {
-                    if (aIdArray[n] == nId)
-                    {
-                        aIdArray.Remove(n);
-                        break;
-                    }
-                }
-
-                // Sofern nicht die Applikation heruntergefahren wird, mu\s
-                // der Slot asynchron gel"oscht werden, falls er in seinem
-                // eigenen Execute abgeschossen wird!
-                if ( !SFX_APP()->Get_Impl()->bInQuit )
-                    pImp->nEventId = Application::PostUserEvent( LINK(this, SfxMacroConfig, EventHdl_Impl), pInfo );
-                else
-                    EventHdl_Impl( pInfo );
-            }
-            return;
-        }
-    }
-
-    DBG_ERROR("Macro-SlotId nicht gefunden!");
-}
-
-//==========================================================================
-
-void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
-{
-    DBG_ASSERT( IsMacroSlot( nId ), "SlotId ist kein Macro!");
-
-    sal_uInt16 nCount = pImp->aArr.Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        if ((pImp->aArr)[i]->nSlotId == nId)
-        {
-            (pImp->aArr)[i]->nRefCnt++;
-            return;
-        }
-    }
-
-    DBG_ERROR("Macro-SlotId nicht gefunden!");
-}
-
 //==========================================================================
 
 SfxMacroInfo* SfxMacroConfig::GetMacroInfo(sal_uInt16 nId) const
@@ -534,12 +439,6 @@ ErrCode SfxMacroConfig::Call(
 
     pApp->LeaveBasicCall();
     return nErr;
-}
-
-
-sal_Bool SfxMacroConfig::IsMacroSlot( sal_uInt16 nId )
-{
-    return ( nId >= SID_MACRO_START && nId <= SID_MACRO_END );
 }
 
 

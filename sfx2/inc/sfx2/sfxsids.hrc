@@ -616,11 +616,9 @@
 #define SID_OBJECTRESIZE                    (SID_SFX_START + 1000)
 #define SID_INSERT_TEXT                     (SID_SFX_START + 1001)
 
-#define SID_MACRO_START                     (SID_SFX_START + 1002)
-#define SID_MACRO_END                       (SID_SFX_START + 1100)
-#define SID_EVENTCONFIG                     (SID_MACRO_END + 1)
-#define SID_VERB_START                      (SID_MACRO_END + 2)
-#define SID_VERB_END                        (SID_MACRO_END + 21)
+#define SID_EVENTCONFIG                     (SID_SFX_START + 1101)
+#define SID_VERB_START                      (SID_SFX_START + 1100)
+#define SID_VERB_END                        (SID_SFX_START + 1121)
 
 #define SID_BROWSER_TASK                    (SID_MACRO_END + 22)
 
