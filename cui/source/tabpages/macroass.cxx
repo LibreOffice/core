@@ -43,10 +43,11 @@
 #include <svtools/svmedit.hxx>
 #include "cfgutil.hxx"
 #include <sfx2/app.hxx>
+#include <sfx2/evntconf.hxx>
 #include <sfx2/objsh.hxx>
 #include "macroass.hrc"
 #include "cuires.hrc"
-#include <sfx2/macrconf.hxx>
+#include <vcl/fixed.hxx>
 #include "headertablistbox.hxx"
 
 using ::com::sun::star::uno::Reference;
