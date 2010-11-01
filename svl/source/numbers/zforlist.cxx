@@ -3446,7 +3446,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
 
 void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >&
         xCurrencies = xLocaleData->getAllCurrencies();
     sal_Int32 nCurrencies = xCurrencies.getLength();
     sal_Int32 j;
