@@ -2628,7 +2628,7 @@ value_exp_commalist:
 		}
 	;
 function_arg:
-		value_exp 
+		result 
 	|	value_exp comparison value_exp
 		{
 			$$ = SQL_NEW_RULE;
