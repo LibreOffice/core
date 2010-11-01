@@ -40,19 +40,19 @@ TARGET=app
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
-            $(SLO)$/AppDetailView.obj		\
             $(SLO)$/AppController.obj		\
             $(SLO)$/AppControllerDnD.obj	\
             $(SLO)$/AppControllerGen.obj	\
             $(SLO)$/AppDetailPageHelper.obj	\
+            $(SLO)$/AppDetailView.obj		\
+            $(SLO)$/AppIconControl.obj		\
             $(SLO)$/AppSwapWindow.obj		\
             $(SLO)$/AppTitleWindow.obj		\
-            $(SLO)$/AppView.obj             \
+            $(SLO)$/AppView.obj			\
             $(SLO)$/subcomponentmanager.obj
             
 
 SLOFILES =\
-            $(SLO)$/AppIconControl.obj		\
             $(EXCEPTIONSFILES)
 
 SRS1NAME=$(TARGET)
