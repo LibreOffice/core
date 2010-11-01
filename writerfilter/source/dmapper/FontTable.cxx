@@ -39,7 +39,7 @@ namespace dmapper
 
 struct FontTable_Impl
 {
-    std::vector< FontEntry > aFontEntries;
+    std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
     FontTable_Impl() {}
 };
@@ -568,7 +568,7 @@ void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_
     m_pImpl->pCurrentEntry.reset(new FontEntry);
     ref->resolve(*this);
     //append it to the table
-    m_pImpl->aFontEntries.push_back( *m_pImpl->pCurrentEntry );
+    m_pImpl->aFontEntries.push_back( m_pImpl->pCurrentEntry );
     m_pImpl->pCurrentEntry.reset();
 }
 /*-- 19.06.2006 12:04:34---------------------------------------------------
@@ -657,12 +657,9 @@ void FontTable::endShape( )
   -----------------------------------------------------------------------*/
 const FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
 {
-    FontEntry::Pointer_t pRet;
-    if(m_pImpl->aFontEntries.size() > nIndex)
-    {
-        pRet.reset(&m_pImpl->aFontEntries[nIndex]);
-    }
-    return pRet;
+    return (m_pImpl->aFontEntries.size() > nIndex)
+        ?   m_pImpl->aFontEntries[nIndex]
+        :   FontEntry::Pointer_t();
 }
 /*-- 21.06.2006 11:21:38---------------------------------------------------
 
