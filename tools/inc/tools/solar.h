@@ -59,7 +59,6 @@ typedef sal_Bool        BOOL;   /* typedef unsigned char   BOOL; */
 typedef sal_uInt8       BYTE;   /* typedef unsigned char   BYTE; */
 typedef sal_uInt16      USHORT; /* typedef unsigned short  USHORT; */
 typedef sal_uIntPtr     ULONG;  /* typedef unsigned long   ULONG; */
-typedef int             FASTBOOL;
 
 #if !defined(VCL_NEED_BASETSD) || defined(__MINGW32__)
 #ifndef _SOLAR_NOUINT
