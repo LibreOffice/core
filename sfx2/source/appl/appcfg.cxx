@@ -985,20 +985,10 @@ BOOL SfxApplication::SaveAll_Impl(BOOL bPrompt, BOOL bAutoSave)
 }
 
 //--------------------------------------------------------------------
-SfxEventConfiguration* SfxApplication::GetEventConfig() const
-{
-    if (!pAppData_Impl->pEventConfig)
-        pAppData_Impl->pEventConfig = new SfxEventConfiguration;
-    return pAppData_Impl->pEventConfig;
-}
-
-//--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
 {
-    //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
-
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;

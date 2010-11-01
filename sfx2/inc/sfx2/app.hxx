@@ -222,7 +222,6 @@ public:
     const String&               GetLastSaveDirectory() const;
     USHORT                      GetFreeIndex();
     void                        ReleaseIndex(USHORT i);
-    SfxEventConfiguration*      GetEventConfig() const;
 
     // Basic/Scripting
     static sal_Bool             IsXScriptURL( const String& rScriptURL );

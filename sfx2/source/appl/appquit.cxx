@@ -149,7 +149,6 @@ void SfxApplication::Deinitialize()
     delete pAppData_Impl->pLabelResMgr;
 
     DELETEX(pAppData_Impl->pSlotPool);
-    DELETEX(pAppData_Impl->pEventConfig);
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
 

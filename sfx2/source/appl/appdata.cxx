@@ -102,7 +102,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
         pAppDispatch(NULL),
         pTemplates( 0 ),
         pPool(0),
-        pEventConfig(0),
         pDisabledSlotList( 0 ),
         pSecureURLs(0),
         pSaveOptions( 0 ),

@@ -73,7 +73,6 @@ class BasicManager;
 class SfxMedium;
 class SfxObjectFactory;
 class SfxDocumentInfoDialog;
-class SfxEventConfigItem_Impl;
 class SfxStyleSheetBasePool;
 class INote;
 class SfxStyleSheetPool;
@@ -783,7 +782,6 @@ public:
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
-    SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
