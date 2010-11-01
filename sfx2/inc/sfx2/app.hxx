@@ -31,6 +31,7 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/solar.h>
+#include <tools/errcode.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
@@ -98,6 +99,8 @@ struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SimpleResMgr;
 class ModalDialog;
+class SbxArray;
+class SbxValue;
 
 namespace sfx2
 {
@@ -227,6 +230,9 @@ public:
     static sal_Bool             IsXScriptURL( const String& rScriptURL );
     static ::rtl::OUString      ChooseScript();
     static void                 MacroOrganizer( INT16 nTabId );
+    static ErrCode              CallBasic( const String&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
+    static ErrCode              CallAppBasic( const String& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
+                                { return CallBasic( i_macroName, SfxApplication::GetOrCreate()->GetBasicManager(), i_args, i_ret ); }
     BasicManager*               GetBasicManager();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetDialogContainer();

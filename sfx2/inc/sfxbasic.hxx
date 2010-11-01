@@ -29,6 +29,7 @@
 
 class BasicManager;
 class SbMethod;
+class String;
 
 //------------------------------------------------------------------
 

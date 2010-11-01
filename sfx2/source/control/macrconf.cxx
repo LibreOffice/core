@@ -28,8 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "sfx2/macrconf.hxx"
-#include "sfx2/app.hxx"
+#include "sfxbasic.hxx"
 
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
@@ -86,31 +85,4 @@ SbMethod* SfxQueryMacro( BasicManager* pMgr , const String& rMacro )
 
     return SfxQueryMacro_Impl( pMgr, aMacro, aLibName, aModule );
 }
-
-//==========================================================================
-
-ErrCode SfxMacroConfig::Call(
-    SbxObject* /*pVCtrl*/,
-    const String& rCode,
-    BasicManager* pMgr,
-    SbxArray *pArgs,
-    SbxValue *pRet )
-{
-    SfxApplication *pApp = SFX_APP();
-    pApp->EnterBasicCall();
-    SbMethod* pMethod = SfxQueryMacro( pMgr, rCode );
-    ErrCode nErr = 0;
-    if( pMethod )
-    {
-        if ( pArgs )
-            pMethod->SetParameters( pArgs );
-        nErr = pMethod->Call( pRet );
-    }
-    else
-        nErr = ERRCODE_BASIC_PROC_UNDEFINED;
-
-    pApp->LeaveBasicCall();
-    return nErr;
-}
-
 

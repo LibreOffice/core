@@ -140,7 +140,6 @@ using namespace ::com::sun::star::container;
 #include <sfx2/ctrlitem.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/module.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/docfac.hxx>
 #include "helper.hxx"
 #include "doc.hrc"
@@ -1652,7 +1651,7 @@ SfxModule* SfxObjectShell::GetModule() const
 }
 
 ErrCode SfxObjectShell::CallBasic( const String& rMacro,
-    const String& rBasic, SbxObject* pVCtrl, SbxArray* pArgs,
+    const String& rBasic, SbxArray* pArgs,
     SbxValue* pRet )
 {
     SfxApplication* pApp = SFX_APP();
@@ -1665,15 +1664,15 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     BasicManager *pMgr = GetBasicManager();
     if( pApp->GetName() == rBasic )
         pMgr = pApp->GetBasicManager();
-    ErrCode nRet = SfxMacroConfig::Call( pVCtrl, rMacro, pMgr, pArgs, pRet );
+    ErrCode nRet = SfxApplication::CallBasic( rMacro, pMgr, pArgs, pRet );
     return nRet;
 }
 
-ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn, SbxObject * pVCtrl )
+ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn )
 {
     ErrCode nErr = ERRCODE_NONE;
     if ( bIsBasicReturn )
-        CallBasic( rCode, String(), pVCtrl );
+        CallBasic( rCode, String() );
     return nErr;
 }
 
@@ -1833,7 +1832,7 @@ ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const St
 #endif
 
     // call the script
-    ErrCode eError = CallBasic( _rMacroName, sMacroLocation, NULL, xMacroArguments, xReturn );
+    ErrCode eError = CallBasic( _rMacroName, sMacroLocation, xMacroArguments, xReturn );
 
     // translate the return value
     lcl_translateBasic2Uno( xReturn, _pReturn );
@@ -1861,7 +1860,7 @@ ErrCode SfxObjectShell::CallScript(
         SbxVariableRef xReturn = pRet ? new SbxVariable : NULL;
 
         // call the script
-        nErr = CallBasic( rCode, String(), NULL, xMacroArguments, xReturn );
+        nErr = CallBasic( rCode, String(), xMacroArguments, xReturn );
 
         // translate the return value
         lcl_translateBasic2Uno( xReturn, pRet );
@@ -1869,7 +1868,7 @@ ErrCode SfxObjectShell::CallScript(
         // did this fail because the method was not found?
         if ( nErr == ERRCODE_BASIC_PROC_UNDEFINED )
         {   // yep-> look in the application BASIC module
-            nErr = CallBasic( rCode, SFX_APP()->GetName(), NULL, xMacroArguments, xReturn );
+            nErr = CallBasic( rCode, SFX_APP()->GetName(), xMacroArguments, xReturn );
         }
     }
     else if( rScriptType.EqualsAscii( "JavaScript" ) )
