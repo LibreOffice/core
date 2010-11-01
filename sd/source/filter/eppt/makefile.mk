@@ -45,7 +45,9 @@ SLOFILES =	$(SLO)$/eppt.obj				\
             $(SLO)$/epptso.obj				\
             $(SLO)$/escherex.obj			\
             $(SLO)$/pptexanimations.obj		\
-            $(SLO)$/pptexsoundcollection.obj
+            $(SLO)$/pptexsoundcollection.obj	\
+            $(SLO)$/pptx-epptbase.obj		\
+            $(SLO)$/pptx-epptooxml.obj
 
 # --- Targets --------------------------------------------------------------
 

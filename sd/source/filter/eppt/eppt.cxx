@@ -64,31 +64,6 @@
 #include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
 
-#define PPT_TRANSITION_TYPE_NONE            0
-#define PPT_TRANSITION_TYPE_RANDOM          1
-#define PPT_TRANSITION_TYPE_BLINDS          2
-#define PPT_TRANSITION_TYPE_CHECKER         3
-#define PPT_TRANSITION_TYPE_COVER           4
-#define PPT_TRANSITION_TYPE_DISSOLVE        5
-#define PPT_TRANSITION_TYPE_FADE            6
-#define PPT_TRANSITION_TYPE_PULL            7
-#define PPT_TRANSITION_TYPE_RANDOM_BARS     8
-#define PPT_TRANSITION_TYPE_STRIPS          9
-#define PPT_TRANSITION_TYPE_WIPE           10
-#define PPT_TRANSITION_TYPE_ZOOM           11
-#define PPT_TRANSITION_TYPE_SPLIT          13
-
-// effects, new in xp
-#define PPT_TRANSITION_TYPE_DIAMOND         17
-#define PPT_TRANSITION_TYPE_PLUS            18
-#define PPT_TRANSITION_TYPE_WEDGE           19
-#define PPT_TRANSITION_TYPE_PUSH            20
-#define PPT_TRANSITION_TYPE_COMB            21
-#define PPT_TRANSITION_TYPE_NEWSFLASH       22
-#define PPT_TRANSITION_TYPE_SMOOTHFADE      23
-#define PPT_TRANSITION_TYPE_WHEEL           26
-#define PPT_TRANSITION_TYPE_CIRCLE          27
-
 using namespace com::sun::star;
 
 static PHLayout pPHLayout[] =

@@ -80,6 +80,8 @@ SHL1STDLIBS+= \
     $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
     $(I18NISOLANGLIB) \
+    $(OOXLIB) \
+    $(SAXLIB) \
     $(COMPHELPERLIB) \
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \

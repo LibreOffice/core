@@ -91,7 +91,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
+#include <epptbase.hxx>
 
 #define EPP_MAINMASTER_PERSIST_KEY      0x80010000
 #define EPP_MAINNOTESMASTER_PERSIST_KEY 0x80020000
@@ -111,45 +111,6 @@ enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 #define EPP_TEXTSTYLE_TITLE             0x00000010
 #define EPP_TEXTSTYLE_BODY              0x00000100
 #define EPP_TEXTSTYLE_TEXT              0x00001000
-
-// PLACEMENT_ID
-#define EPP_LAYOUT_TITLESLIDE             0 /* The slide is a title slide                                                             */
-#define EPP_LAYOUT_TITLEANDBODYSLIDE      1 /* Title and body slide                                                                   */
-#define EPP_LAYOUT_TITLEMASTERSLIDE       2 /* Title master slide                                                                     */
-#define EPP_LAYOUT_MASTERSLIDE            3 /* Master slide layout                                                                    */
-#define EPP_LAYOUT_MASTERNOTES            4 /* Master notes layout                                                                    */
-#define EPP_LAYOUT_NOTESTITLEBODY         5 /* Notes title/body layout                                                                */
-#define EPP_LAYOUT_HANDOUTLAYOUT          6 /* Handout layout, therefore it doesn't have placeholders except header, footer, and date */
-#define EPP_LAYOUT_ONLYTITLE              7 /* Only title placeholder                                                                 */
-#define EPP_LAYOUT_2COLUMNSANDTITLE       8 /* Body of the slide has 2 columns and a title                                            */
-#define EPP_LAYOUT_2ROWSANDTITLE          9 /* Slide's body has 2 rows and a title                                                    */
-#define EPP_LAYOUT_RIGHTCOLUMN2ROWS      10 /* Body contains 2 columns, right column has 2 rows                                       */
-#define EPP_LAYOUT_LEFTCOLUMN2ROWS       11 /* Body contains 2 columns, left column has 2 rows                                        */
-#define EPP_LAYOUT_BOTTOMROW2COLUMNS     12 /* Body contains 2 rows, bottom row has 2 columns                                         */
-#define EPP_LAYOUT_TOPROW2COLUMN         13 /* Body contains 2 rows, top row has 2 columns                                            */
-#define EPP_LAYOUT_4OBJECTS              14 /* 4 objects                                                                              */
-#define EPP_LAYOUT_BIGOBJECT             15 /* Big object                                                                             */
-#define EPP_LAYOUT_BLANCSLIDE            16 /* Blank slide                                                                            */
-#define EPP_LAYOUT_TITLERIGHTBODYLEFT    17 /* Vertical title on the right, body on the left                                          */
-#define EPP_LAYOUT_TITLERIGHT2BODIESLEFT 18 /* Vertical title on the right, body on the left split into 2 rows                        */
-
-class Polygon;
-class PptEscherEx;
-class XStatusIndicatorRef;
-
-struct PHLayout
-{
-    sal_Int32   nLayout;
-    sal_uInt8   nPlaceHolder[ 8 ];
-
-    sal_uInt8   nUsedObjectPlaceHolder;
-    sal_uInt8   nTypeOfTitle;
-    sal_uInt8   nTypeOfOutliner;
-
-    BOOL    bTitlePossible;
-    BOOL    bOutlinerPossible;
-    BOOL    bSecOutlinerPossible;
-};
 
 struct SOParagraph
 {
@@ -189,205 +150,6 @@ struct SOParagraph
         bNumberingIsNumber = sal_True;
     };
 };
-
-// ------------------------------------------------------------------------
-
-class EscherGraphicProvider;
-class PPTExBulletProvider
-{
-    friend struct PPTExParaSheet;
-
-    protected :
-
-        SvMemoryStream          aBuExPictureStream;
-        SvMemoryStream          aBuExOutlineStream;
-        SvMemoryStream          aBuExMasterStream;
-
-        EscherGraphicProvider*  pGraphicProv;
-
-    public :
-
-        sal_uInt16              GetId( const ByteString& rUniqueId, Size& rGraphicSize );
-
-                                PPTExBulletProvider();
-                                ~PPTExBulletProvider();
-};
-
-struct FontCollectionEntry
-{
-        String                  Name;
-        double                  Scaling;
-        sal_Int16               Family;
-        sal_Int16               Pitch;
-        sal_Int16               CharSet;
-
-        String                  Original;
-        sal_Bool                bIsConverted;
-
-        FontCollectionEntry( const String& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
-                            Scaling ( 1.0 ),
-                            Family  ( nFamily ),
-                            Pitch   ( nPitch ),
-                            CharSet ( nCharSet ),
-                            Original( rName )
-                            {
-                                ImplInit( rName );
-                            };
-
-        FontCollectionEntry( const String& rName ) :
-                            Scaling ( 1.0 ),
-                            Original( rName )
-                            {
-                                ImplInit( rName );
-                            };
-        ~FontCollectionEntry();
-
-    private :
-
-        FontCollectionEntry() {};
-
-        void ImplInit( const String& rName );
-};
-
-class VirtualDevice;
-class FontCollection : private List
-{
-        VirtualDevice* pVDev;
-    public :
-                    FontCollection();
-                    ~FontCollection();
-
-        short       GetScriptDirection( const String& rText ) const;
-        sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
-        sal_uInt32  GetCount() const { return List::Count(); };
-        const FontCollectionEntry*                      GetById( sal_uInt32 nId );
-        FontCollectionEntry&    GetLast() { return *(FontCollectionEntry*)List::Last(); };
-};
-
-// ------------------------------------------------------------------------
-
-#define PPTEX_STYLESHEETENTRYS  9
-
-enum PPTExTextAttr
-{
-    ParaAttr_BulletOn,
-    ParaAttr_BuHardFont,
-    ParaAttr_BuHardColor,
-    ParaAttr_BuHardHeight,
-    ParaAttr_BulletChar,
-    ParaAttr_BulletFont,
-    ParaAttr_BulletHeight,
-    ParaAttr_BulletColor,
-    ParaAttr_Adjust,
-    ParaAttr_LineFeed,
-    ParaAttr_UpperDist,
-    ParaAttr_LowerDist,
-    ParaAttr_TextOfs,
-    ParaAttr_BulletOfs,
-    ParaAttr_DefaultTab,
-    ParaAttr_AsianLB_1,
-    ParaAttr_AsianLB_2,
-    ParaAttr_AsianLB_3,
-    ParaAttr_BiDi,
-    CharAttr_Bold,
-    CharAttr_Italic,
-    CharAttr_Underline,
-    CharAttr_Shadow,
-    CharAttr_Strikeout,
-    CharAttr_Embossed,
-    CharAttr_Font,
-    CharAttr_AsianOrComplexFont,
-    CharAttr_Symbol,
-    CharAttr_FontHeight,
-    CharAttr_FontColor,
-    CharAttr_Escapement
-};
-
-struct PPTExCharLevel
-{
-    sal_uInt16      mnFlags;
-    sal_uInt16      mnFont;
-    sal_uInt16      mnAsianOrComplexFont;
-    sal_uInt16      mnFontHeight;
-    sal_uInt16      mnEscapement;
-    sal_uInt32      mnFontColor;
-};
-
-struct PPTExCharSheet
-{
-                PPTExCharLevel  maCharLevel[ 5 ];
-
-                PPTExCharSheet( int nInstance );
-
-                void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                                        FontCollection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
-
-};
-
-struct PPTExParaLevel
-{
-    sal_Bool        mbIsBullet;
-    sal_uInt16      mnBulletChar;
-    sal_uInt16      mnBulletFont;
-    sal_uInt16      mnBulletHeight;
-    sal_uInt32      mnBulletColor;
-
-    sal_uInt16      mnAdjust;
-    sal_uInt16      mnLineFeed;
-    sal_uInt16      mnUpperDist;
-    sal_uInt16      mnLowerDist;
-    sal_uInt16      mnTextOfs;
-    sal_uInt16      mnBulletOfs;
-    sal_uInt16      mnDefaultTab;
-
-    sal_Bool        mbExtendedBulletsUsed;
-    sal_uInt16      mnBulletId;
-    sal_uInt16      mnBulletStart;
-    sal_uInt32      mnMappedNumType;
-    sal_uInt32      mnNumberingType;
-    sal_uInt16      mnAsianSettings;
-    sal_uInt16      mnBiDi;
-};
-
-struct PPTExParaSheet
-{
-                PPTExBulletProvider& rBuProv;
-
-                sal_uInt32  mnInstance;
-
-                PPTExParaLevel  maParaLevel[ 5 ];
-                PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv );
-
-                void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                                        FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
-};
-
-class PPTExStyleSheet
-{
-
-    public :
-
-                PPTExCharSheet*     mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
-                PPTExParaSheet*     mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
-
-                PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider& rBuProv );
-                ~PPTExStyleSheet();
-
-                PPTExParaSheet& GetParaSheet( int nInstance ) { return *mpParaSheet[ nInstance ]; };
-                PPTExCharSheet& GetCharSheet( int nInstance ) { return *mpCharSheet[ nInstance ]; };
-
-                void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                                                FontCollection& rFontCollection, int nInstance, int nLevel );
-                sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
-
-                sal_uInt32      SizeOfTxCFStyleAtom() const;
-                void            WriteTxCFStyleAtom( SvStream& rSt );
-};
-
 
 struct EPPTHyperlink
 {
@@ -431,82 +193,6 @@ struct TextRuleEntry
         pOut ( NULL ){};
 
     ~TextRuleEntry() { delete pOut; };
-};
-
-// ------------------------------------------------------------------------
-
-struct GroupEntry
-{
-        sal_uInt32                  mnCurrentPos;
-        sal_uInt32                  mnCount;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           mXIndexAccess;
-                                GroupEntry( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex )
-                                {
-                                    mXIndexAccess = rIndex;
-                                    mnCount =mXIndexAccess->getCount();
-                                    mnCurrentPos = 0;
-                                };
-                                GroupEntry( sal_uInt32 nCount )
-                                {
-                                    mnCount = nCount;
-                                    mnCurrentPos = 0;
-                                };
-                                ~GroupEntry(){};
-};
-
-// ------------------------------------------------------------------------
-
-class GroupTable
-{
-    protected:
-
-        sal_uInt32              mnIndex;
-        sal_uInt32              mnCurrentGroupEntry;
-        sal_uInt32              mnMaxGroupEntry;
-        sal_uInt32              mnGroupsClosed;
-        GroupEntry**            mpGroupEntry;
-
-        void                    ImplResizeGroupTable( sal_uInt32 nEntrys );
-
-    public:
-
-        sal_uInt32              GetCurrentGroupIndex() const { return mnIndex; };
-        sal_Int32               GetCurrentGroupLevel() const { return mnCurrentGroupEntry - 1; };
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > &
-                                GetCurrentGroupAccess() const { return mpGroupEntry[  mnCurrentGroupEntry - 1 ]->mXIndexAccess; };
-        sal_uInt32              GetGroupsClosed();
-        void                    ResetGroupTable( sal_uInt32 nCount );
-        void                    ClearGroupTable();
-        sal_Bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
-        sal_Bool                GetNextGroupEntry();
-                                GroupTable();
-                                ~GroupTable();
-};
-
-class PropValue
-{
-    protected :
-
-        ::com::sun::star::uno::Any                              mAny;
-
-        ::com::sun::star::uno::Reference
-            < ::com::sun::star::beans::XPropertySet >           mXPropSet;
-
-        sal_Bool    ImplGetPropertyValue( const String& rString );
-        sal_Bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
-                        < ::com::sun::star::beans::XPropertySet > &, const String& );
-
-    public :
-
-        static sal_Bool GetPropertyValue(
-                ::com::sun::star::uno::Any& rAny,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                        const String& rPropertyName,
-                            sal_Bool bTestPropertyAvailability = sal_False );
-
-        static ::com::sun::star::beans::PropertyState GetPropertyState(
-                    const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
-                        const String& rPropertyName );
 };
 
 class PropStateValue : public PropValue
@@ -619,6 +305,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
 
         sal_uInt16                              mnTextAdjust;
         sal_Int16                               mnLineSpacing;
+        sal_Bool                                mbFixedLineSpacing;
         sal_Int16                               mnLineSpacingTop;
         sal_Int16                               mnLineSpacingBottom;
         sal_Bool                                mbForbiddenRules;
