@@ -47,17 +47,9 @@
 
 namespace unocontrols{
 
-#define UNO3_REFERENCE                  ::com::sun::star::uno::Reference
-#define UNO3_XMULTISERVICEFACTORY       ::com::sun::star::lang::XMultiServiceFactory
-#define UNO3_RUNTIMEEXCEPTION           ::com::sun::star::uno::RuntimeException
-#define UNO3_XCONTROLMODEL              ::com::sun::star::awt::XControlModel
-#define UNO3_XPROGRESSBAR               ::com::sun::star::awt::XProgressBar
-#define UNO3_ANY                        ::com::sun::star::uno::Any
-#define UNO3_TYPE                       ::com::sun::star::uno::Type
-#define UNO3_SEQUENCE                   ::com::sun::star::uno::Sequence
-#define UNO3_XGRAPHICS                  ::com::sun::star::awt::XGraphics
-#define UNO3_OUSTRING                   ::rtl::OUString
-#define UNO3_SIZE                       ::com::sun::star::awt::Size
+#define CSS_UNO     ::com::sun::star::uno
+#define CSS_LANG    ::com::sun::star::lang
+#define CSS_AWT     ::com::sun::star::awt
 
 //____________________________________________________________________________________________________________
 //  defines
@@ -65,24 +57,24 @@ namespace unocontrols{
 
 #define SERVICENAME_PROGRESSBAR             "com.sun.star.awt.XProgressBar"
 #define IMPLEMENTATIONNAME_PROGRESSBAR      "stardiv.UnoControls.ProgressBar"
-#define FREESPACE                           4
-#define DEFAULT_HORIZONTAL                  sal_True
-#define DEFAULT_BLOCKDIMENSION              Size(1,1)
-#define DEFAULT_BACKGROUNDCOLOR             TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )    // lightgray
-#define DEFAULT_FOREGROUNDCOLOR             TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )    // blue
-#define DEFAULT_MINRANGE                    INT_MIN
-#define DEFAULT_MAXRANGE                    INT_MAX
-#define DEFAULT_BLOCKVALUE                  1
-#define DEFAULT_VALUE                       DEFAULT_MINRANGE
-#define LINECOLOR_BRIGHT                    TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )    // white
-#define LINECOLOR_SHADOW                    TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )    // black
+#define PROGRESSBAR_FREESPACE               4
+#define PROGRESSBAR_DEFAULT_HORIZONTAL      sal_True
+#define PROGRESSBAR_DEFAULT_BLOCKDIMENSION  Size(1,1)
+#define PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )    // lightgray
+#define PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )    // blue
+#define PROGRESSBAR_DEFAULT_MINRANGE        INT_MIN
+#define PROGRESSBAR_DEFAULT_MAXRANGE        INT_MAX
+#define PROGRESSBAR_DEFAULT_BLOCKVALUE      1
+#define PROGRESSBAR_DEFAULT_VALUE           PROGRESSBAR_DEFAULT_MINRANGE
+#define PROGRESSBAR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )    // white
+#define PROGRESSBAR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )    // black
 
 //____________________________________________________________________________________________________________
 //  classes
 //____________________________________________________________________________________________________________
 
-class ProgressBar   : public UNO3_XCONTROLMODEL
-                    , public UNO3_XPROGRESSBAR
+class ProgressBar   : public CSS_AWT::XControlModel
+                    , public CSS_AWT::XProgressBar
                     , public BaseControl
 {
 
@@ -109,7 +101,7 @@ public:
         @onerror
     */
 
-    ProgressBar( const UNO3_REFERENCE< UNO3_XMULTISERVICEFACTORY >& xFactory );
+    ProgressBar( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -143,7 +135,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
+        throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -194,7 +187,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getTypes() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
+        throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XAggregation
@@ -213,7 +207,8 @@ public:
         @onerror
     */
 
-    UNO3_ANY SAL_CALL queryAggregation( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+    CSS_UNO::Any SAL_CALL queryAggregation( const CSS_UNO::Type& aType )
+        throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
     //  XProgressBar
@@ -232,7 +227,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setForegroundColor( sal_Int32 nColor ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setForegroundColor( sal_Int32 nColor )
+        throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -247,7 +243,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor )
+        throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -262,7 +259,7 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -277,8 +274,10 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setRange( sal_Int32   nMin    ,
-                                    sal_Int32   nMax    ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setRange(
+        sal_Int32   nMin    ,
+        sal_Int32   nMax
+    ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -293,7 +292,7 @@ public:
         @onerror
     */
 
-    virtual sal_Int32 SAL_CALL getValue() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual sal_Int32 SAL_CALL getValue() throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XWindow
@@ -312,11 +311,13 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
-                                        sal_Int32   nY      ,
-                                        sal_Int32   nWidth  ,
-                                        sal_Int32   nHeight ,
-                                        sal_Int16   nFlags  ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setPosSize(
+        sal_Int32   nX      ,
+        sal_Int32   nY      ,
+        sal_Int32   nWidth  ,
+        sal_Int32   nHeight ,
+        sal_Int16   nFlags
+    ) throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XControl
@@ -335,7 +336,9 @@ public:
         @onerror
     */
 
-    virtual sal_Bool SAL_CALL setModel( const UNO3_REFERENCE< UNO3_XCONTROLMODEL >& xModel ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual sal_Bool SAL_CALL setModel(
+        const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel
+    ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -350,7 +353,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_REFERENCE< UNO3_XCONTROLMODEL > SAL_CALL getModel() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
+        throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  BaseControl
@@ -369,7 +373,7 @@ public:
         @onerror
     */
 
-    static const UNO3_SEQUENCE< UNO3_OUSTRING > impl_getStaticSupportedServiceNames();
+    static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
     /**_________________________________________________________________________________________________________
         @short
@@ -384,7 +388,7 @@ public:
         @onerror
     */
 
-    static const UNO3_OUSTRING impl_getStaticImplementationName();
+    static const ::rtl::OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
 //  protected methods
@@ -405,9 +409,11 @@ protected:
         @onerror
     */
 
-    virtual void impl_paint(        sal_Int32                           nX          ,
-                                    sal_Int32                           nY          ,
-                            const   UNO3_REFERENCE< UNO3_XGRAPHICS >&   xGraphics   );
+    virtual void impl_paint(
+        sal_Int32 nX ,
+        sal_Int32 nY ,
+        const CSS_UNO::Reference< CSS_AWT::XGraphics >& xGraphics
+    );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -430,16 +436,21 @@ protected:
 
 private:
 
-    sal_Bool    m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
-    UNO3_SIZE   m_aBlockSize        ;   // width and height of a block      [>=0,0]
-    sal_Int32   m_nForegroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32   m_nBackgroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32   m_nMinRange         ;   // lowest value  =   0%             [long, <_nMaxRange]
-    sal_Int32   m_nMaxRange         ;   // highest value = 100%             [long, >_nMinRange]
-    double      m_nBlockValue       ;   // value for one block              [long, >0]
-    sal_Int32   m_nValue            ;   // value for progress               [long]
+    sal_Bool        m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
+    CSS_AWT::Size   m_aBlockSize        ;   // width and height of a block      [>=0,0]
+    sal_Int32       m_nForegroundColor  ;   //                                  (alpha,r,g,b)
+    sal_Int32       m_nBackgroundColor  ;   //                                  (alpha,r,g,b)
+    sal_Int32       m_nMinRange         ;   // lowest value  =   0%             [long, <_nMaxRange]
+    sal_Int32       m_nMaxRange         ;   // highest value = 100%             [long, >_nMinRange]
+    double          m_nBlockValue       ;   // value for one block              [long, >0]
+    sal_Int32       m_nValue            ;   // value for progress               [long]
 
 };  // class ProgressBar
+
+// The namespace aliases are only used in the header
+#undef CSS_UNO
+#undef CSS_LANG
+#undef CSS_AWT
 
 }   // namespace unocontrols
 

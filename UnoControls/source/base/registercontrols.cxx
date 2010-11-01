@@ -112,7 +112,7 @@ using namespace ::com::sun::star::registry                      ;
             sKeyName    +=  OUString::createFromAscii( "/UNO/SERVICES" );                                               \
                                                                                                                         \
             /* Create new key with new name. */                                                                         \
-             xNewKey = xKey->createKey( sKeyName );                                                                     \
+            xNewKey = xKey->createKey( sKeyName );                                                                      \
                                                                                                                         \
             /* If this new key valid ... */                                                                             \
             if ( xNewKey.is () )                                                                                        \

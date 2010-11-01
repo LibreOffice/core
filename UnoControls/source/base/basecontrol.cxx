@@ -164,14 +164,14 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XPaintListener >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
-                                                          ::getCppuType(( const Reference< XView            >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XWindow      >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XServiceInfo >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XControl     >*)NULL )   ,
-                                                        OComponentHelper::getTypes()
-                                                    );
+            static OTypeCollection aTypeCollection( ::getCppuType(( const Reference< XPaintListener >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XView          >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XWindow        >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XServiceInfo   >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XControl       >*)NULL ) ,
+                                                    OComponentHelper::getTypes()
+                                                  );
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;

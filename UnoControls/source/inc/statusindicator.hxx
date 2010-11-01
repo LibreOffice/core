@@ -54,45 +54,28 @@
 
 namespace unocontrols{
 
-#define UNO3_ANY                                        ::com::sun::star::uno::Any
-#define UNO3_OUSTRING                                   ::rtl::OUString
-#define UNO3_RECTANGLE                                  ::com::sun::star::awt::Rectangle
-#define UNO3_REFERENCE                                  ::com::sun::star::uno::Reference
-#define UNO3_RUNTIMEEXCEPTION                           ::com::sun::star::uno::RuntimeException
-#define UNO3_SEQUENCE                                   ::com::sun::star::uno::Sequence
-#define UNO3_SIZE                                       ::com::sun::star::awt::Size
-#define UNO3_TYPE                                       ::com::sun::star::uno::Type
-#define UNO3_XCONTROLMODEL                              ::com::sun::star::awt::XControlModel
-#define UNO3_XFIXEDTEXT                                 ::com::sun::star::awt::XFixedText
-#define UNO3_XGRAPHICS                                  ::com::sun::star::awt::XGraphics
-#define UNO3_XLAYOUTCONSTRAINS                          ::com::sun::star::awt::XLayoutConstrains
-#define UNO3_XMULTISERVICEFACTORY                       ::com::sun::star::lang::XMultiServiceFactory
-#define UNO3_XPROGRESSBAR                               ::com::sun::star::awt::XProgressBar
-#define UNO3_XSTATUSINDICATOR                           ::com::sun::star::task::XStatusIndicator
-#define UNO3_XTOOLKIT                                   ::com::sun::star::awt::XToolkit
-#define UNO3_XWINDOWPEER                                ::com::sun::star::awt::XWindowPeer
+#define CSS_UNO     ::com::sun::star::uno
+#define CSS_AWT     ::com::sun::star::awt
+#define CSS_LANG    ::com::sun::star::lang
+#define CSS_TASK    ::com::sun::star::task
 
 //____________________________________________________________________________________________________________
 //  defines
 //____________________________________________________________________________________________________________
 
-#define SERVICENAME_STATUSINDICATOR                     "com.sun.star.task.XStatusIndicator"
-#define IMPLEMENTATIONNAME_STATUSINDICATOR              "stardiv.UnoControls.StatusIndicator"
-#undef  FREEBORDER
-#define FREEBORDER                                      5                                                       // border around and between the controls
-#define FIXEDTEXT_SERVICENAME                           "com.sun.star.awt.UnoControlFixedText"
-#define FIXEDTEXT_MODELNAME                             "com.sun.star.awt.UnoControlFixedTextModel"
-#define CONTROLNAME_TEXT                                "Text"                                                  // identifier the control in container
-#define CONTROLNAME_PROGRESSBAR                         "ProgressBar"                                           //              -||-
-#define DEFAULT_TEXT                                    "\0"
-#define BACKGROUNDCOLOR                                 TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lighgray
-#define LINECOLOR_BRIGHT                                TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
-#define LINECOLOR_SHADOW                                TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
-// Overwrite defines from basecontrol.hxx!!!
-#undef  DEFAULT_WIDTH
-#undef  DEFAULT_HEIGHT
-#define DEFAULT_WIDTH                                   300
-#define DEFAULT_HEIGHT                                   25
+#define SERVICENAME_STATUSINDICATOR             "com.sun.star.task.XStatusIndicator"
+#define IMPLEMENTATIONNAME_STATUSINDICATOR      "stardiv.UnoControls.StatusIndicator"
+#define STATUSINDICATOR_FREEBORDER              5                                                       // border around and between the controls
+#define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
+#define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
+#define CONTROLNAME_TEXT                        "Text"                                                  // identifier the control in container
+#define CONTROLNAME_PROGRESSBAR                 "ProgressBar"                                           //              -||-
+#define STATUSINDICATOR_DEFAULT_TEXT            "\0"
+#define STATUSINDICATOR_BACKGROUNDCOLOR         TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lighgray
+#define STATUSINDICATOR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
+#define STATUSINDICATOR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
+#define STATUSINDICATOR_DEFAULT_WIDTH           300
+#define STATUSINDICATOR_DEFAULT_HEIGHT          25
 
 //____________________________________________________________________________________________________________
 //  structs, types
@@ -102,8 +85,8 @@ namespace unocontrols{
 //  class declaration
 //____________________________________________________________________________________________________________
 
-class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
-                        , public UNO3_XSTATUSINDICATOR
+class StatusIndicator   : public CSS_AWT::XLayoutConstrains
+                        , public CSS_TASK::XStatusIndicator
                         , public BaseContainerControl
 {
 
@@ -130,7 +113,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror
         */
 
-        StatusIndicator( const UNO3_REFERENCE< UNO3_XMULTISERVICEFACTORY >& xFactory );
+        StatusIndicator( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
 
         /**_______________________________________________________________________________________________________
             @short
@@ -164,7 +147,8 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
+            throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      increment refcount
@@ -215,7 +199,8 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getTypes() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
+            throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XAggregation
@@ -234,7 +219,8 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual UNO3_ANY SAL_CALL queryAggregation( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_UNO::Any SAL_CALL queryAggregation( const CSS_UNO::Type& aType )
+            throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XStatusIndicator
@@ -253,8 +239,10 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL start(    const   UNO3_OUSTRING&  sText   ,
-                                                sal_Int32       nRange  ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL start(
+            const ::rtl::OUString&  sText   ,
+            sal_Int32 nRange
+        ) throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -269,7 +257,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL end() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL end() throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -284,7 +272,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL reset() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL reset() throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -299,7 +287,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setText( const UNO3_OUSTRING& sText ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setText( const ::rtl::OUString& sText ) throw( CSS_UNO::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -314,7 +302,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XLayoutConstrains
@@ -333,7 +321,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual UNO3_SIZE SAL_CALL getMinimumSize() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_AWT::Size SAL_CALL getMinimumSize() throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -348,7 +336,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual UNO3_SIZE SAL_CALL getPreferredSize() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_AWT::Size SAL_CALL getPreferredSize() throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -363,7 +351,8 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual UNO3_SIZE SAL_CALL calcAdjustedSize( const UNO3_SIZE& aNewSize ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_AWT::Size SAL_CALL calcAdjustedSize( const CSS_AWT::Size& aNewSize )
+            throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XControl
@@ -382,8 +371,10 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual void SAL_CALL createPeer(   const   UNO3_REFERENCE< UNO3_XTOOLKIT >&    xToolkit    ,
-                                            const   UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParent     ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL createPeer(
+            const   CSS_UNO::Reference< CSS_AWT::XToolkit >&    xToolkit    ,
+            const   CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParent
+        ) throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -398,7 +389,8 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual sal_Bool SAL_CALL setModel( const UNO3_REFERENCE< UNO3_XCONTROLMODEL >& xModel ) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL setModel( const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel )
+            throw( CSS_UNO::RuntimeException );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -413,7 +405,8 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual UNO3_REFERENCE< UNO3_XCONTROLMODEL > SAL_CALL getModel() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
+            throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XComponent
@@ -432,7 +425,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        virtual void SAL_CALL dispose() throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XWindow
@@ -455,7 +448,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
                                             sal_Int32   nY      ,
                                             sal_Int32   nWidth  ,
                                             sal_Int32   nHeight ,
-                                            sal_Int16   nFlags  ) throw( UNO3_RUNTIMEEXCEPTION );
+                                            sal_Int16   nFlags  ) throw( CSS_UNO::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  BaseControl
@@ -474,7 +467,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        static const UNO3_SEQUENCE< UNO3_OUSTRING > impl_getStaticSupportedServiceNames();
+        static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -489,7 +482,7 @@ class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
             @onerror    -
         */
 
-        static const UNO3_OUSTRING impl_getStaticImplementationName();
+        static const ::rtl::OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
 //  protected methods
@@ -510,7 +503,9 @@ protected:
             @onerror    -
         */
 
-        virtual UNO3_WINDOWDESCRIPTOR* impl_getWindowDescriptor( const UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParentPeer );
+        virtual CSS_AWT::WindowDescriptor* impl_getWindowDescriptor(
+            const CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParentPeer
+        );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -525,7 +520,11 @@ protected:
             @onerror    -
         */
 
-        virtual void impl_paint ( sal_Int32 nX, sal_Int32 nY, const UNO3_REFERENCE< UNO3_XGRAPHICS > & rGraphics );
+        virtual void impl_paint (
+            sal_Int32 nX,
+            sal_Int32 nY,
+            const CSS_UNO::Reference< CSS_AWT::XGraphics > & rGraphics
+        );
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -540,7 +539,7 @@ protected:
             @onerror    -
         */
 
-        virtual void impl_recalcLayout( const UNO3_WINDOWEVENT& aEvent );
+        virtual void impl_recalcLayout( const CSS_AWT::WindowEvent& aEvent );
 
 //____________________________________________________________________________________________________________
 // debug methods
@@ -561,20 +560,22 @@ private:
         @onerror    -
     */
 
-    #if OSL_DEBUG_LEVEL > 1
-
-    #endif
-
 //____________________________________________________________________________________________________________
 // private variables
 //____________________________________________________________________________________________________________
 
 private:
 
-    UNO3_REFERENCE< UNO3_XFIXEDTEXT >       m_xText         ;
-    UNO3_REFERENCE< UNO3_XPROGRESSBAR >     m_xProgressBar  ;
+    CSS_UNO::Reference< CSS_AWT::XFixedText >       m_xText         ;
+    CSS_UNO::Reference< CSS_AWT::XProgressBar >     m_xProgressBar  ;
 
 };  // class StatusIndicator
+
+// The name space aliases are only used in the header
+#undef CSS_UNO
+#undef CSS_AWT
+#undef CSS_LANG
+#undef CSS_TASK
 
 }   // namespace unocontrols
 

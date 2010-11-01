@@ -67,14 +67,14 @@ namespace unocontrols{
 
 ProgressBar::ProgressBar( const Reference< XMultiServiceFactory >& xFactory )
     : BaseControl           (    xFactory                   )
-    , m_bHorizontal         (    DEFAULT_HORIZONTAL         )
-    , m_aBlockSize          (    DEFAULT_BLOCKDIMENSION     )
-    , m_nForegroundColor    (    DEFAULT_FOREGROUNDCOLOR    )
-    , m_nBackgroundColor    (    DEFAULT_BACKGROUNDCOLOR    )
-    , m_nMinRange           (    DEFAULT_MINRANGE           )
-    , m_nMaxRange           (    DEFAULT_MAXRANGE           )
-    , m_nBlockValue         (    DEFAULT_BLOCKVALUE         )
-    , m_nValue              (    DEFAULT_VALUE              )
+    , m_bHorizontal         (    PROGRESSBAR_DEFAULT_HORIZONTAL         )
+    , m_aBlockSize          (    PROGRESSBAR_DEFAULT_BLOCKDIMENSION     )
+    , m_nForegroundColor    (    PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR    )
+    , m_nBackgroundColor    (    PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR    )
+    , m_nMinRange           (    PROGRESSBAR_DEFAULT_MINRANGE           )
+    , m_nMaxRange           (    PROGRESSBAR_DEFAULT_MAXRANGE           )
+    , m_nBlockValue         (    PROGRESSBAR_DEFAULT_BLOCKVALUE         )
+    , m_nValue              (    PROGRESSBAR_DEFAULT_VALUE              )
 {
 }
 
@@ -153,9 +153,9 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XControlModel  >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XProgressBar >*)NULL )   ,
-                                                        BaseControl::getTypes()
+            static OTypeCollection aTypeCollection  ( ::getCppuType(( const Reference< XControlModel >*) NULL ) ,
+                                                      ::getCppuType(( const Reference< XProgressBar  >*) NULL ) ,
+                                                      BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -174,8 +174,8 @@ Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeEx
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
     Any aReturn ( ::cppu::queryInterface(   aType                                   ,
-                                               static_cast< XControlModel*  > ( this )  ,
-                                               static_cast< XProgressBar*   > ( this )
+                                            static_cast< XControlModel* > ( this )  ,
+                                            static_cast< XProgressBar*  > ( this )
                                         )
                 );
 
@@ -312,7 +312,13 @@ sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException )
 //  XWindow
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressBar::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags ) throw( RuntimeException )
+void SAL_CALL ProgressBar::setPosSize (
+    sal_Int32 nX,
+    sal_Int32 nY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Int16 nFlags
+) throw( RuntimeException )
 {
     // Take old size BEFORE you set the new values at baseclass!
     // You will control changes. At the other way, the values are the same!
@@ -409,9 +415,9 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
             for ( sal_Int16 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
-                nBlockStart +=  FREESPACE   ;
+                nBlockStart +=  PROGRESSBAR_FREESPACE   ;
                 // paint block
-                rGraphics->drawRect (nBlockStart, nY+FREESPACE, m_aBlockSize.Width, m_aBlockSize.Height) ;
+                rGraphics->drawRect (nBlockStart, nY+PROGRESSBAR_FREESPACE, m_aBlockSize.Width, m_aBlockSize.Height) ;
                 // step next free field
                 nBlockStart +=  m_aBlockSize.Width ;
             }
@@ -427,20 +433,20 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
             for ( sal_Int16 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
-                nBlockStart -=  FREESPACE   ;
+                nBlockStart -=  PROGRESSBAR_FREESPACE   ;
                 // paint block
-                rGraphics->drawRect (nX+FREESPACE, nBlockStart, m_aBlockSize.Width, m_aBlockSize.Height) ;
+                rGraphics->drawRect (nX+PROGRESSBAR_FREESPACE, nBlockStart, m_aBlockSize.Width, m_aBlockSize.Height) ;
                 // step next free field
                 nBlockStart -=  m_aBlockSize.Height;
             }
         }
 
         // Paint shadow border around the progressbar
-        rGraphics->setLineColor ( LINECOLOR_SHADOW                          ) ;
+        rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_SHADOW                          ) ;
         rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               ) ;
         rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() ) ;
 
-        rGraphics->setLineColor ( LINECOLOR_BRIGHT                                                              ) ;
+        rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_BRIGHT                                                              ) ;
         rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  ) ;
         rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  ) ;
     }
@@ -463,16 +469,16 @@ void ProgressBar::impl_recalcRange ()
     if( nWindowWidth > nWindowHeight )
     {
         m_bHorizontal = sal_True                            ;
-        fBlockHeight  = (nWindowHeight-(2*FREESPACE))       ;
+        fBlockHeight  = (nWindowHeight-(2*PROGRESSBAR_FREESPACE))       ;
         fBlockWidth   = fBlockHeight                        ;
-        fMaxBlocks    = nWindowWidth/(fBlockWidth+FREESPACE);
+        fMaxBlocks    = nWindowWidth/(fBlockWidth+PROGRESSBAR_FREESPACE);
     }
     else
     {
         m_bHorizontal = sal_False                             ;
-        fBlockWidth   = (nWindowWidth-(2*FREESPACE))          ;
+        fBlockWidth   = (nWindowWidth-(2*PROGRESSBAR_FREESPACE))          ;
         fBlockHeight  = fBlockWidth                           ;
-        fMaxBlocks    = nWindowHeight/(fBlockHeight+FREESPACE);
+        fMaxBlocks    = nWindowHeight/(fBlockHeight+PROGRESSBAR_FREESPACE);
     }
 
     double fRange       = m_nMaxRange-m_nMinRange    ;
@@ -481,79 +487,6 @@ void ProgressBar::impl_recalcRange ()
     m_nBlockValue       = fBlockValue            ;
     m_aBlockSize.Height = (sal_Int32)fBlockHeight;
     m_aBlockSize.Width  = (sal_Int32)fBlockWidth ;
-/*
-        // Calculate count of blocks for actual size
-        // (prevent error "division by zero")
-        if ( nHeight == 0 )
-        {
-            nHeight = 1 ;
-        }
-
-        nMaxBlock    =  nWidth / nHeight    ;
-        nMaxBlock   *=  2                   ;
-
-        // prevent error "division by zero"
-        if ( nMaxBlock == 0 )
-        {
-            nMaxBlock = 1 ;
-        }
-
-        // Calculate new value and new size for ONE block.
-
-        // Do not a calculation like this: "m_nBlockValue=(m_nMaxRange-m_nMinRange)/nMaxBlock"  !
-        // If difference between m_nMaxRange and m_nMinRange to large, it give an overflow and a
-        // following error "division by zero" in method "paint() ... nBlockCount=nDifference/m_nBlockValue ..."
-
-        // Overflow ? => example: _I32_MAX - _I32_MIN = -1 and not _UI32_MAX !!!
-
-        m_nBlockValue       =   ( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
-        m_aBlockSize.Height =   ( nHeight - ( FREESPACE * 2 )                           ) ;
-        m_aBlockSize.Width  =   ( ( nWidth / nMaxBlock ) - FREESPACE                    ) ;
-    }
-    else
-    {
-        // Don't forget to save this state! Used in "ProgressBar::paint()"
-        m_bHorizontal = sal_False ;
-
-        double fBlockWidth  = (nHeight-(2*FREESPACE))       ;
-        double fBlockHeight = fBlockWidth                   ;
-        double fRange       = m_nMaxRange-m_nMinRange       ;
-        double fBlockValue  = fRange/(fBlockWidth+FREESPACE);
-
-        m_nBlockValue       = fBlockValue            ;
-        m_aBlockSize.Height = (sal_Int32)fBlockHeight;
-        m_aBlockSize.Width  = (sal_Int32)fBlockWidth ;
-
-        // Calculate count of blocks for actual size
-        // (prevent error "division by zero")
-        if ( nWidth == 0 )
-        {
-            nWidth = 1 ;
-        }
-
-        nMaxBlock    =  nHeight / nWidth    ;
-        nMaxBlock   *=  2                   ;
-
-        // prevent error "division by zero"
-        if ( nMaxBlock == 0 )
-        {
-            nMaxBlock = 1 ;
-        }
-
-        // Calculate new value and new size for ONE block.
-
-        // Do not a calculation like this: "m_nBlockValue=(m_nMaxRange-m_nMinRange)/nMaxBlock"  !
-        // If difference between m_nMaxRange and m_nMinRange to large, it give an overflow and a
-        // following error "division by zero" in method "paint() ... nBlockCount=nDifference/m_nBlockValue ..."
-
-        // Overflow ? => example: _I32_MAX - _I32_MIN = -1 and not _UI32_MAX !!!
-
-        m_nBlockValue       =   ( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
-        m_aBlockSize.Height =   ( ( nHeight / nMaxBlock ) - FREESPACE                   ) ;
-        m_aBlockSize.Width  =   ( nWidth - ( FREESPACE * 2 )                            ) ;
-
-    }
-*/
 }
 
 }   // namespace unocontrols

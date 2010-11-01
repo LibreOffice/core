@@ -74,12 +74,12 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     ++m_refCount ;
 
     // Create instances for fixedtext, button and progress ...
-    m_xTopic_Top    = Reference< XFixedText >       ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xText_Top     = Reference< XFixedText >       ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xTopic_Bottom = Reference< XFixedText >       ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xText_Bottom  = Reference< XFixedText >       ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xButton       = Reference< XButton >          ( xFactory->createInstance ( OUString::createFromAscii( BUTTON_SERVICENAME      ) ), UNO_QUERY ) ;
-    m_xProgressBar  = Reference< XProgressBar >     ( xFactory->createInstance ( OUString::createFromAscii( SERVICENAME_PROGRESSBAR ) ), UNO_QUERY ) ;
+    m_xTopic_Top    = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
+    m_xText_Top     = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
+    m_xTopic_Bottom = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
+    m_xText_Bottom  = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
+    m_xButton       = Reference< XButton >      ( xFactory->createInstance ( OUString::createFromAscii( BUTTON_SERVICENAME      ) ), UNO_QUERY ) ;
+    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance ( OUString::createFromAscii( SERVICENAME_PROGRESSBAR ) ), UNO_QUERY ) ;
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
     Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY ) ;
@@ -90,11 +90,11 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     Reference< XControl >   xRef_ProgressBar    ( m_xProgressBar  , UNO_QUERY ) ;
 
     // ... set models ...
-    xRef_Topic_Top->setModel        ( Reference< XControlModel >  ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME   ) ), UNO_QUERY ) ) ;
-    xRef_Text_Top->setModel         ( Reference< XControlModel >  ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME   ) ), UNO_QUERY ) ) ;
-    xRef_Topic_Bottom->setModel     ( Reference< XControlModel >  ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME   ) ), UNO_QUERY ) ) ;
-    xRef_Text_Bottom->setModel      ( Reference< XControlModel >  ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME   ) ), UNO_QUERY ) ) ;
-    xRef_Button->setModel           ( Reference< XControlModel >  ( xFactory->createInstance ( OUString::createFromAscii( BUTTON_MODELNAME      ) ), UNO_QUERY ) ) ;
+    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
+    xRef_Text_Top->setModel     ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
+    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
+    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
+    xRef_Button->setModel       ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( BUTTON_MODELNAME    ) ), UNO_QUERY ) ) ;
     // ProgressBar has no model !!!
 
     // ... and add controls to basecontainercontrol!
@@ -112,11 +112,11 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
 
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xButton->setLabel         ( OUString::createFromAscii( DEFAULT_BUTTONLABEL    ) ) ;
-    m_xTopic_Top->setText       ( OUString::createFromAscii( DEFAULT_TOPIC          ) ) ;
-    m_xText_Top->setText        ( OUString::createFromAscii( DEFAULT_TEXT           ) ) ;
-    m_xTopic_Bottom->setText    ( OUString::createFromAscii( DEFAULT_TOPIC          ) ) ;
-    m_xText_Bottom->setText     ( OUString::createFromAscii( DEFAULT_TEXT           ) ) ;
+    m_xButton->setLabel      ( OUString::createFromAscii( DEFAULT_BUTTONLABEL           ) ) ;
+    m_xTopic_Top->setText    ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TOPIC ) ) ;
+    m_xText_Top->setText     ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TEXT  ) ) ;
+    m_xTopic_Bottom->setText ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TOPIC ) ) ;
+    m_xText_Bottom->setText  ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TEXT  ) ) ;
 
     --m_refCount ;
 
@@ -201,11 +201,11 @@ Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XLayoutConstrains  >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XButton          >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XProgressMonitor >*)NULL )   ,
-                                                        BaseContainerControl::getTypes()
-                                                    );
+            static OTypeCollection aTypeCollection ( ::getCppuType(( const Reference< XLayoutConstrains >*)NULL )   ,
+                                                     ::getCppuType(( const Reference< XButton           >*)NULL )   ,
+                                                     ::getCppuType(( const Reference< XProgressMonitor  >*)NULL )   ,
+                                                     BaseContainerControl::getTypes()
+                                                   );
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
         }
@@ -222,10 +222,10 @@ Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType ) throw( Runti
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface(   aType                                       ,
-                                               static_cast< XLayoutConstrains*  > ( this )  ,
-                                               static_cast< XButton*            > ( this )  ,
-                                               static_cast< XProgressMonitor*   > ( this )
+    Any aReturn ( ::cppu::queryInterface( aType ,
+                                          static_cast< XLayoutConstrains* > ( this ) ,
+                                          static_cast< XButton*           > ( this ) ,
+                                          static_cast< XProgressMonitor*  > ( this )
                                         )
                 );
 
@@ -243,7 +243,11 @@ Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType ) throw( Runti
 //  XProgressMonitor
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressMonitor::addText( const OUString& rTopic, const OUString& rText, sal_Bool bbeforeProgress ) throw( RuntimeException )
+void SAL_CALL ProgressMonitor::addText(
+    const OUString& rTopic,
+    const OUString& rText,
+    sal_Bool bbeforeProgress
+) throw( RuntimeException )
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -324,7 +328,11 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
 //  XProgressMonitor
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressMonitor::updateText ( const OUString& rTopic, const OUString& rText, sal_Bool bbeforeProgress ) throw( RuntimeException )
+void SAL_CALL ProgressMonitor::updateText (
+    const OUString& rTopic,
+    const OUString& rText,
+    sal_Bool bbeforeProgress
+) throw( RuntimeException )
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -490,7 +498,7 @@ void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand ) thr
 
 Size SAL_CALL ProgressMonitor::getMinimumSize () throw( RuntimeException )
 {
-    return Size (DEFAULT_WIDTH, DEFAULT_HEIGHT) ;
+    return Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -520,10 +528,10 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
     sal_Int32   nWidth  =   0 ;
     sal_Int32   nHeight =   0 ;
 
-    nWidth   =  3 * FREEBORDER          ;
+    nWidth   =  3 * PROGRESSMONITOR_FREEBORDER          ;
     nWidth  +=  aProgressBarSize.Width  ;
 
-    nHeight  =  6 * FREEBORDER          ;
+    nHeight  =  6 * PROGRESSMONITOR_FREEBORDER          ;
     nHeight +=  aTopicSize_Top.Height   ;
     nHeight +=  aProgressBarSize.Height ;
     nHeight +=  aTopicSize_Bottom.Height;
@@ -531,13 +539,13 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
     nHeight +=  aButtonSize.Height      ;
 
     // norm to minimum
-    if ( nWidth<DEFAULT_WIDTH )
+    if ( nWidth < PROGRESSMONITOR_DEFAULT_WIDTH )
     {
-        nWidth = DEFAULT_WIDTH ;
+        nWidth = PROGRESSMONITOR_DEFAULT_WIDTH ;
     }
-    if ( nHeight<DEFAULT_HEIGHT )
+    if ( nHeight < PROGRESSMONITOR_DEFAULT_HEIGHT )
     {
-        nHeight = DEFAULT_HEIGHT ;
+        nHeight = PROGRESSMONITOR_DEFAULT_HEIGHT ;
     }
 
     // return to caller
@@ -686,19 +694,19 @@ void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< 
         MutexGuard aGuard ( m_aMutex ) ;
 
         // paint shadowed border around the progressmonitor
-        rGraphics->setLineColor ( LINECOLOR_SHADOW                                                              ) ;
+        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW                                                              ) ;
         rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  ) ;
         rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  ) ;
 
-        rGraphics->setLineColor ( LINECOLOR_BRIGHT                          ) ;
+        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT                          ) ;
         rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               ) ;
         rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() ) ;
 
         // Paint 3D-line
-        rGraphics->setLineColor ( LINECOLOR_SHADOW  ) ;
+        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  ) ;
         rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y ) ;
 
-        rGraphics->setLineColor ( LINECOLOR_BRIGHT  ) ;
+        rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT  ) ;
         rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 ) ;
     }
 }
@@ -762,66 +770,66 @@ void ProgressMonitor::impl_recalcLayout ()
 
     // calc position and size of child controls
     // Button has preferred size!
-    nWidth_Button           =   aButtonSize.Width                                               ;
-    nHeight_Button          =   aButtonSize.Height                                              ;
+    nWidth_Button           =   aButtonSize.Width   ;
+    nHeight_Button          =   aButtonSize.Height  ;
 
     // Left column before progressbar has preferred size and fixed position.
     // But "Width" is oriented on left column below progressbar to!!! "max(...)"
-    nX_Topic_Top            =   FREEBORDER                                                      ;
-    nY_Topic_Top            =   FREEBORDER                                                      ;
-    nWidth_Topic_Top        =   Max ( aTopicSize_Top.Width, aTopicSize_Bottom.Width )           ;
-    nHeight_Topic_Top       =   aTopicSize_Top.Height                                           ;
+    nX_Topic_Top            =   PROGRESSMONITOR_FREEBORDER                              ;
+    nY_Topic_Top            =   PROGRESSMONITOR_FREEBORDER                              ;
+    nWidth_Topic_Top        =   Max ( aTopicSize_Top.Width, aTopicSize_Bottom.Width )   ;
+    nHeight_Topic_Top       =   aTopicSize_Top.Height                                   ;
 
     // Right column before progressbar has relativ position to left column ...
     // ... and a size as rest of dialog size!
-    nX_Text_Top             =   nX_Topic_Top+nWidth_Topic_Top+FREEBORDER                        ;
-    nY_Text_Top             =   nY_Topic_Top                                                    ;
-    nWidth_Text_Top         =   Max ( aTextSize_Top.Width, aTextSize_Bottom.Width )             ;
+    nX_Text_Top             =   nX_Topic_Top+nWidth_Topic_Top+PROGRESSMONITOR_FREEBORDER;
+    nY_Text_Top             =   nY_Topic_Top                                            ;
+    nWidth_Text_Top         =   Max ( aTextSize_Top.Width, aTextSize_Bottom.Width )     ;
     // Fix size of this column to minimum!
-    sal_Int32 nSummaryWidth = nWidth_Text_Top+nWidth_Topic_Top+(3*FREEBORDER) ;
-    if ( nSummaryWidth < DEFAULT_WIDTH )
-        nWidth_Text_Top     =   DEFAULT_WIDTH-nWidth_Topic_Top-(3*FREEBORDER);
+    sal_Int32 nSummaryWidth = nWidth_Text_Top+nWidth_Topic_Top+(3*PROGRESSMONITOR_FREEBORDER) ;
+    if ( nSummaryWidth < PROGRESSMONITOR_DEFAULT_WIDTH )
+        nWidth_Text_Top     =   PROGRESSMONITOR_DEFAULT_WIDTH-nWidth_Topic_Top-(3*PROGRESSMONITOR_FREEBORDER);
     // Fix size of column to maximum!
     if ( nSummaryWidth > impl_getWidth() )
-        nWidth_Text_Top     =   impl_getWidth()-nWidth_Topic_Top-(3*FREEBORDER)                 ;
+        nWidth_Text_Top     =   impl_getWidth()-nWidth_Topic_Top-(3*PROGRESSMONITOR_FREEBORDER) ;
     nHeight_Text_Top        =   nHeight_Topic_Top                                               ;
 
     // Position of progressbar is relativ to columns before.
     // Progressbar.Width  = Dialog.Width !!!
     // Progressbar.Height = Button.Height
     nX_ProgressBar          =   nX_Topic_Top                                                    ;
-    nY_ProgressBar          =   nY_Topic_Top+nHeight_Topic_Top+FREEBORDER                       ;
-    nWidth_ProgressBar      =   FREEBORDER+nWidth_Topic_Top+nWidth_Text_Top                     ;
+    nY_ProgressBar          =   nY_Topic_Top+nHeight_Topic_Top+PROGRESSMONITOR_FREEBORDER       ;
+    nWidth_ProgressBar      =   PROGRESSMONITOR_FREEBORDER+nWidth_Topic_Top+nWidth_Text_Top     ;
     nHeight_ProgressBar     =   nHeight_Button                                                  ;
 
     // Oriented by left column before progressbar.
     nX_Topic_Bottom         =   nX_Topic_Top                                                    ;
-    nY_Topic_Bottom         =   nY_ProgressBar+nHeight_ProgressBar+FREEBORDER                   ;
+    nY_Topic_Bottom         =   nY_ProgressBar+nHeight_ProgressBar+PROGRESSMONITOR_FREEBORDER   ;
     nWidth_Topic_Bottom     =   nWidth_Topic_Top                                                ;
     nHeight_Topic_Bottom    =   aTopicSize_Bottom.Height                                        ;
 
     // Oriented by right column before progressbar.
-    nX_Text_Bottom          =   nX_Topic_Bottom+nWidth_Topic_Bottom+FREEBORDER                  ;
+    nX_Text_Bottom          =   nX_Topic_Bottom+nWidth_Topic_Bottom+PROGRESSMONITOR_FREEBORDER  ;
     nY_Text_Bottom          =   nY_Topic_Bottom                                                 ;
     nWidth_Text_Bottom      =   nWidth_Text_Top                                                 ;
     nHeight_Text_Bottom     =   nHeight_Topic_Bottom                                            ;
 
     // Oriented by progressbar.
     nX_3DLine               =   nX_Topic_Top                                                    ;
-    nY_3DLine               =   nY_Topic_Bottom+nHeight_Topic_Bottom+(FREEBORDER/2)             ;
+    nY_3DLine               =   nY_Topic_Bottom+nHeight_Topic_Bottom+(PROGRESSMONITOR_FREEBORDER/2)             ;
     nWidth_3DLine           =   nWidth_ProgressBar                                              ;
     nHeight_3DLine          =   1                                                               ;   // Height for ONE line ! (But we paint two lines!)
 
     // Oriented by progressbar.
     nX_Button               =   nX_ProgressBar+nWidth_ProgressBar-nWidth_Button                 ;
-    nY_Button               =   nY_Topic_Bottom+nHeight_Topic_Bottom+FREEBORDER                 ;
+    nY_Button               =   nY_Topic_Bottom+nHeight_Topic_Bottom+PROGRESSMONITOR_FREEBORDER ;
 
     // Calc offsets to center controls
     sal_Int32   nDx ;
     sal_Int32   nDy ;
 
-    nDx =   ( (2*FREEBORDER)+nWidth_ProgressBar                                                             ) ;
-    nDy =   ( (6*FREEBORDER)+nHeight_Topic_Top+nHeight_ProgressBar+nHeight_Topic_Bottom+2+nHeight_Button    ) ;
+    nDx =   ( (2*PROGRESSMONITOR_FREEBORDER)+nWidth_ProgressBar                                                             ) ;
+    nDy =   ( (6*PROGRESSMONITOR_FREEBORDER)+nHeight_Topic_Top+nHeight_ProgressBar+nHeight_Topic_Bottom+2+nHeight_Button    ) ;
 
     // At this point use original dialog size to center controls!
     nDx =   (impl_getWidth ()/2)-(nDx/2)    ;
@@ -844,26 +852,26 @@ void ProgressMonitor::impl_recalcLayout ()
     Reference< XWindow >  xRef_Button           ( m_xButton         , UNO_QUERY ) ;
     Reference< XWindow >  xRef_ProgressBar      ( m_xProgressBar    , UNO_QUERY ) ;
 
-    xRef_Topic_Top->setPosSize      ( nDx+nX_Topic_Top      , nDy+nY_Topic_Top      , nWidth_Topic_Top      , nHeight_Topic_Top     , 15 ) ;
-    xRef_Text_Top->setPosSize       ( nDx+nX_Text_Top       , nDy+nY_Text_Top       , nWidth_Text_Top       , nHeight_Text_Top      , 15 ) ;
-    xRef_Topic_Bottom->setPosSize   ( nDx+nX_Topic_Bottom   , nDy+nY_Topic_Bottom   , nWidth_Topic_Bottom   , nHeight_Topic_Bottom  , 15 ) ;
-    xRef_Text_Bottom->setPosSize    ( nDx+nX_Text_Bottom    , nDy+nY_Text_Bottom    , nWidth_Text_Bottom    , nHeight_Text_Bottom   , 15 ) ;
-    xRef_Button->setPosSize         ( nDx+nX_Button         , nDy+nY_Button         , nWidth_Button         , nHeight_Button        , 15 ) ;
-    xRef_ProgressBar->setPosSize    ( nDx+nX_ProgressBar    , nDy+nY_ProgressBar    , nWidth_ProgressBar    , nHeight_ProgressBar   , 15 ) ;
+    xRef_Topic_Top->setPosSize    ( nDx+nX_Topic_Top    , nDy+nY_Topic_Top    , nWidth_Topic_Top    , nHeight_Topic_Top    , 15 ) ;
+    xRef_Text_Top->setPosSize     ( nDx+nX_Text_Top     , nDy+nY_Text_Top     , nWidth_Text_Top     , nHeight_Text_Top     , 15 ) ;
+    xRef_Topic_Bottom->setPosSize ( nDx+nX_Topic_Bottom , nDy+nY_Topic_Bottom , nWidth_Topic_Bottom , nHeight_Topic_Bottom , 15 ) ;
+    xRef_Text_Bottom->setPosSize  ( nDx+nX_Text_Bottom  , nDy+nY_Text_Bottom  , nWidth_Text_Bottom  , nHeight_Text_Bottom  , 15 ) ;
+    xRef_Button->setPosSize       ( nDx+nX_Button       , nDy+nY_Button       , nWidth_Button       , nHeight_Button       , 15 ) ;
+    xRef_ProgressBar->setPosSize  ( nDx+nX_ProgressBar  , nDy+nY_ProgressBar  , nWidth_ProgressBar  , nHeight_ProgressBar  , 15 ) ;
 
-    m_a3DLine.X         = nDx+nX_Topic_Top                                          ;
-    m_a3DLine.Y         = nDy+nY_Topic_Bottom+nHeight_Topic_Bottom+(FREEBORDER/2)   ;
-    m_a3DLine.Width     = nWidth_ProgressBar                                        ;
-    m_a3DLine.Height    = nHeight_ProgressBar                                       ;
+    m_a3DLine.X      = nDx+nX_Topic_Top                                         ;
+    m_a3DLine.Y      = nDy+nY_Topic_Bottom+nHeight_Topic_Bottom+(PROGRESSMONITOR_FREEBORDER/2)  ;
+    m_a3DLine.Width  = nWidth_ProgressBar                                       ;
+    m_a3DLine.Height = nHeight_ProgressBar                                      ;
 
     // All childcontrols make an implicit repaint in setPosSize()!
     // Make it also for this 3D-line ...
     Reference< XGraphics >  xGraphics = impl_getGraphicsPeer () ;
 
-    xGraphics->setLineColor ( LINECOLOR_SHADOW  ) ;
+    xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  ) ;
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y ) ;
 
-    xGraphics->setLineColor ( LINECOLOR_BRIGHT  ) ;
+    xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT  ) ;
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 ) ;
 }
 
@@ -881,7 +889,7 @@ void ProgressMonitor::impl_rebuildFixedText ()
     // Rebuild left site of text
     if (m_xTopic_Top.is())
     {
-        OUString        aCollectString  ;
+        OUString aCollectString ;
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
@@ -1033,8 +1041,11 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, s
 #ifdef DBG_UTIL
 
 // addText, updateText
-sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, const OUString& rText, sal_Bool /*bbeforeProgress*/ )
-{
+sal_Bool ProgressMonitor::impl_debug_checkParameter (
+    const OUString& rTopic,
+    const OUString& rText,
+    sal_Bool /*bbeforeProgress*/
+) {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
     if ( rTopic.getLength ()    <   1       ) return sal_False ;    // ""

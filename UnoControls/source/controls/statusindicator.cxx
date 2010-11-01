@@ -87,7 +87,7 @@ StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFact
     xProgressWindow->setVisible( sal_True );
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xText->setText( OUString::createFromAscii( DEFAULT_TEXT ) );
+    m_xText->setText( OUString::createFromAscii( STATUSINDICATOR_DEFAULT_TEXT ) );
 
     --m_refCount ;
 }
@@ -170,9 +170,9 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XLayoutConstrains  >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XStatusIndicator >*)NULL )   ,
-                                                        BaseContainerControl::getTypes()
+            static OTypeCollection aTypeCollection  ( ::getCppuType(( const Reference< XLayoutConstrains    >*)NULL )   ,
+                                                      ::getCppuType(( const Reference< XStatusIndicator >*)NULL )   ,
+                                                      BaseContainerControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -190,9 +190,9 @@ Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( Runti
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface(   aType                                       ,
-                                               static_cast< XLayoutConstrains*  > ( this )  ,
-                                               static_cast< XStatusIndicator*   > ( this )
+    Any aReturn ( ::cppu::queryInterface( aType                                     ,
+                                          static_cast< XLayoutConstrains*   > ( this )  ,
+                                          static_cast< XStatusIndicator*    > ( this )
                                         )
                 );
 
@@ -284,7 +284,7 @@ void SAL_CALL StatusIndicator::reset() throw( RuntimeException )
 
 Size SAL_CALL StatusIndicator::getMinimumSize () throw( RuntimeException )
 {
-    return Size (DEFAULT_WIDTH, DEFAULT_HEIGHT) ;
+    return Size (STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -304,16 +304,16 @@ Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException )
 
     // calc preferred size of status indicator
     sal_Int32 nWidth  = impl_getWidth()                 ;
-    sal_Int32 nHeight = (2*FREEBORDER)+aTextSize.Height ;
+    sal_Int32 nHeight = (2*STATUSINDICATOR_FREEBORDER)+aTextSize.Height ;
 
     // norm to minimum
-    if ( nWidth<DEFAULT_WIDTH )
+    if ( nWidth<STATUSINDICATOR_DEFAULT_WIDTH )
     {
-        nWidth = DEFAULT_WIDTH ;
+        nWidth = STATUSINDICATOR_DEFAULT_WIDTH ;
     }
-    if ( nHeight<DEFAULT_HEIGHT )
+    if ( nHeight<STATUSINDICATOR_DEFAULT_HEIGHT )
     {
-        nHeight = DEFAULT_HEIGHT ;
+        nHeight = STATUSINDICATOR_DEFAULT_HEIGHT ;
     }
 
     // return to caller
@@ -333,7 +333,10 @@ Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ ) thr
 //  XControl
 //____________________________________________________________________________________________________________
 
-void SAL_CALL StatusIndicator::createPeer ( const Reference< XToolkit > & rToolkit, const Reference< XWindowPeer > & rParent    ) throw( RuntimeException )
+void SAL_CALL StatusIndicator::createPeer (
+    const Reference< XToolkit > & rToolkit,
+    const Reference< XWindowPeer > & rParent
+) throw( RuntimeException )
 {
     if( getPeer().is() == sal_False )
     {
@@ -395,7 +398,13 @@ void SAL_CALL StatusIndicator::dispose () throw( RuntimeException )
 //  XWindow
 //____________________________________________________________________________________________________________
 
-void SAL_CALL StatusIndicator::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags ) throw( RuntimeException )
+void SAL_CALL StatusIndicator::setPosSize (
+    sal_Int32 nX,
+    sal_Int32 nY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Int16 nFlags
+) throw( RuntimeException )
 {
     Rectangle   aBasePosSize = getPosSize () ;
     BaseContainerControl::setPosSize (nX, nY, nWidth, nHeight, nFlags) ;
@@ -473,25 +482,25 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< 
         // background = gray
         Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
         if( xPeer.is() == sal_True )
-            xPeer->setBackground( BACKGROUNDCOLOR );
+            xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // FixedText background = gray
         Reference< XControl > xTextControl( m_xText, UNO_QUERY );
         xPeer = xTextControl->getPeer();
         if( xPeer.is() == sal_True )
-            xPeer->setBackground( BACKGROUNDCOLOR );
+            xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // Progress background = gray
         xPeer = Reference< XWindowPeer >( m_xProgressBar, UNO_QUERY );
         if( xPeer.is() == sal_True )
-            xPeer->setBackground( BACKGROUNDCOLOR );
+            xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // paint shadow border
-        rGraphics->setLineColor ( LINECOLOR_BRIGHT                          );
+        rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_BRIGHT                          );
         rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
         rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
 
-        rGraphics->setLineColor ( LINECOLOR_SHADOW                                                              );
+        rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_SHADOW                                                              );
         rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
         rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
     }
@@ -520,24 +529,24 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     Reference< XLayoutConstrains >  xTextLayout     ( m_xText, UNO_QUERY );
     Size                            aTextSize       = xTextLayout->getPreferredSize();
 
-    if( aWindowSize.Width < DEFAULT_WIDTH )
+    if( aWindowSize.Width < STATUSINDICATOR_DEFAULT_WIDTH )
     {
-        aWindowSize.Width = DEFAULT_WIDTH;
+        aWindowSize.Width = STATUSINDICATOR_DEFAULT_WIDTH;
     }
-    if( aWindowSize.Height < DEFAULT_HEIGHT )
+    if( aWindowSize.Height < STATUSINDICATOR_DEFAULT_HEIGHT )
     {
-        aWindowSize.Height = DEFAULT_HEIGHT;
+        aWindowSize.Height = STATUSINDICATOR_DEFAULT_HEIGHT;
     }
 
     // calc position and size of child controls
-    nX_Text             = FREEBORDER                                    ;
-    nY_Text             = FREEBORDER                                    ;
+    nX_Text             = STATUSINDICATOR_FREEBORDER                                    ;
+    nY_Text             = STATUSINDICATOR_FREEBORDER                                    ;
     nWidth_Text         = aTextSize.Width                               ;
     nHeight_Text        = aTextSize.Height                              ;
 
-    nX_ProgressBar      = nX_Text+nWidth_Text+FREEBORDER                ;
+    nX_ProgressBar      = nX_Text+nWidth_Text+STATUSINDICATOR_FREEBORDER                ;
     nY_ProgressBar      = nY_Text                                       ;
-    nWidth_ProgressBar  = aWindowSize.Width-nWidth_Text-(3*FREEBORDER)  ;
+    nWidth_ProgressBar  = aWindowSize.Width-nWidth_Text-(3*STATUSINDICATOR_FREEBORDER)  ;
     nHeight_ProgressBar = nHeight_Text                                  ;
 
     // Set new position and size on all controls
@@ -547,14 +556,6 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     xTextWindow->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 ) ;
     xProgressWindow->setPosSize ( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar   , 15 ) ;
 }
-
-//____________________________________________________________________________________________________________
-//  debug methods
-//____________________________________________________________________________________________________________
-
-#if OSL_DEBUG_LEVEL > 1
-
-#endif  // #if OSL_DEBUG_LEVEL > 1
 
 }   // namespace unocontrols
 

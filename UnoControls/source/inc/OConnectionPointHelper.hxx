@@ -49,21 +49,8 @@
 
 namespace unocontrols{
 
-#define UNO3_ANY                                        ::com::sun::star::uno::Any
-#define UNO3_SEQUENCE                                   ::com::sun::star::uno::Sequence
-#define UNO3_TYPE                                       ::com::sun::star::uno::Type
-#define UNO3_REFERENCE                                  ::com::sun::star::uno::Reference
-#define UNO3_XCONNECTIONPOINTCONTAINER                  ::com::sun::star::lang::XConnectionPointContainer
-#define UNO3_XCONNECTIONPOINT                           ::com::sun::star::lang::XConnectionPoint
-#define UNO3_MUTEX                                      ::osl::Mutex
-#define UNO3_RUNTIMEEXCEPTION                           ::com::sun::star::uno::RuntimeException
-#define UNO3_XINTERFACE                                 ::com::sun::star::uno::XInterface
-#define UNO3_OMULTITYPEINTERFACECONTAINERHELPER         ::cppu::OMultiTypeInterfaceContainerHelper
-#define UNO3_LISTENEREXISTEXCEPTION                     ::com::sun::star::lang::ListenerExistException
-#define UNO3_INVALIDLISTENEREXCEPTION                   ::com::sun::star::lang::InvalidListenerException
-#define UNO3_WEAKREFERENCE                              ::com::sun::star::uno::WeakReference
-#define UNO3_OWEAKOBJECT                                ::cppu::OWeakObject
-#define UNO3_OCONNECTIONPOINTCONTAINERHELPER            OConnectionPointContainerHelper
+#define CSS_UNO     ::com::sun::star::uno
+#define CSS_LANG    ::com::sun::star::lang
 
 //______________________________________________________________________________________________________________
 //  defines
@@ -73,8 +60,8 @@ namespace unocontrols{
 //  class declaration OConnectionPointHelper
 //______________________________________________________________________________________________________________
 
-class OConnectionPointHelper    :   public  UNO3_XCONNECTIONPOINT
-                                ,   public  UNO3_OWEAKOBJECT
+class OConnectionPointHelper    :   public  CSS_LANG::XConnectionPoint
+                                ,   public  ::cppu::OWeakObject
 {
 
 //______________________________________________________________________________________________________________
@@ -100,9 +87,9 @@ public:
         @onerror
     */
 
-    OConnectionPointHelper( UNO3_MUTEX&                             aMutex                      ,
-                            UNO3_OCONNECTIONPOINTCONTAINERHELPER*   pContainerImplementation    ,
-                            UNO3_TYPE                               aType                       );
+    OConnectionPointHelper( ::osl::Mutex&                       aMutex                      ,
+                            OConnectionPointContainerHelper*    pContainerImplementation    ,
+                            CSS_UNO::Type                       aType                       );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -136,7 +123,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Any SAL_CALL queryInterface( const CSS_UNO::Type& aType )
+        throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -187,7 +175,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_TYPE SAL_CALL getConnectionType() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Type SAL_CALL getConnectionType()
+        throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -202,7 +191,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_REFERENCE< UNO3_XCONNECTIONPOINTCONTAINER > SAL_CALL getConnectionPointContainer() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Reference< CSS_LANG::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
+        throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -217,9 +207,13 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL advise( const UNO3_REFERENCE< UNO3_XINTERFACE >& xListener ) throw(   UNO3_LISTENEREXISTEXCEPTION     ,
-                                                                                                UNO3_INVALIDLISTENEREXCEPTION   ,
-                                                                                                UNO3_RUNTIMEEXCEPTION           );
+    virtual void SAL_CALL advise(
+        const CSS_UNO::Reference< CSS_UNO::XInterface >& xListener
+    ) throw (
+        CSS_LANG::ListenerExistException,
+        CSS_LANG::InvalidListenerException ,
+        CSS_UNO::RuntimeException
+    );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -234,7 +228,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL unadvise( const UNO3_REFERENCE< UNO3_XINTERFACE >& xListener ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL unadvise( const CSS_UNO::Reference< CSS_UNO::XInterface >& xListener )
+        throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -249,7 +244,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_SEQUENCE< UNO3_REFERENCE< UNO3_XINTERFACE > > SAL_CALL getConnections() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Sequence< CSS_UNO::Reference< CSS_UNO::XInterface > > SAL_CALL getConnections()
+        throw( CSS_UNO::RuntimeException );
 
 //______________________________________________________________________________________________________________
 //  private methods
@@ -293,14 +289,18 @@ private:
 
 private:
 
-    UNO3_MUTEX&                                             m_aSharedMutex              ;
-    UNO3_WEAKREFERENCE< UNO3_XCONNECTIONPOINTCONTAINER >    m_oContainerWeakReference   ;   // Reference to container-class!. Don't use Reference<...>
+    ::osl::Mutex&                                                   m_aSharedMutex              ;
+    CSS_UNO::WeakReference< CSS_LANG::XConnectionPointContainer >   m_oContainerWeakReference   ;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
-    UNO3_OCONNECTIONPOINTCONTAINERHELPER*                   m_pContainerImplementation  ;
-    UNO3_TYPE                                               m_aInterfaceType            ;
-    UNO3_REFERENCE< UNO3_XINTERFACE >                       m_xLock                     ;
+    OConnectionPointContainerHelper*                                m_pContainerImplementation  ;
+    CSS_UNO::Type                                                   m_aInterfaceType            ;
+    CSS_UNO::Reference< CSS_UNO::XInterface >                       m_xLock                     ;
 
 };  // class OConnectionPointHelper
+
+// The namespace aliases are only used in this header
+#undef CSS_UNO
+#undef CSS_LANG
 
 }   // namespace unocontrols
 

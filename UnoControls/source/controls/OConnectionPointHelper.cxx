@@ -57,10 +57,11 @@ namespace unocontrols{
 //  construct/destruct
 //______________________________________________________________________________________________________________
 
-OConnectionPointHelper::OConnectionPointHelper( Mutex&                              aMutex                      ,
-                                                 OConnectionPointContainerHelper*   pContainerImplementation    ,
-                                                UNO3_TYPE                           aType                       )
-    : m_aSharedMutex                ( aMutex                    )
+OConnectionPointHelper::OConnectionPointHelper(
+    Mutex&                              aMutex                      ,
+    OConnectionPointContainerHelper*    pContainerImplementation    ,
+    Type                                aType
+)   : m_aSharedMutex                ( aMutex                    )
     , m_oContainerWeakReference     ( pContainerImplementation  )
     , m_pContainerImplementation    ( pContainerImplementation  )
     , m_aInterfaceType              ( aType                     )
@@ -82,7 +83,7 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( 
 
     // Ask for my own supported interfaces ...
     Any aReturn ( ::cppu::queryInterface(   aType                                       ,
-                                               static_cast< XConnectionPoint*   > ( this )
+                                            static_cast< XConnectionPoint*  > ( this )
                                         )
                 );
 
