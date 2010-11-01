@@ -52,16 +52,16 @@ published service OfflineBackend
 
     /** provides access to configuration data from a <type>SingleBackend</type>.
 
-      <p>If no backend is provided during initalization or if the context
-        contains an <code>Offline</code> flag that is <TRUE/>, then offline mode
-        is activated. This may fail, if the offline cache has not been filled
+      <p>If no backend is provided during initialization or if the context
+        contains an <code>Offline</code> flag that is <TRUE/>, then off-line mode
+        is activated. This may fail, if the off-line cache has not been filled
         during a previous execution.
       </p>
       <p>Less entities may be available from <type>XBackendEntities</type>,
-      when operating in offline mode than when operating with an online
+      when operating in off-line mode than when operating with an on-line
       <type>SingleBackend</type>.
       </p>
-      <p>If offline mode is not invoked, the implementation behaves
+      <p>If off-line mode is not invoked, the implementation behaves
         like any other <type>BackendAdapter</type>.
       </p>
 

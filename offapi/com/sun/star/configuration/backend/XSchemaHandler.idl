@@ -59,7 +59,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a schema description is started.
 
-        <p> The schema descrption may comprise components templates or both.
+        <p> The schema description may comprise components templates or both.
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException

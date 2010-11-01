@@ -49,12 +49,12 @@ module xml {
 /** represents a configuration schema that is stored in a stream in
     OOR Schema XML format.
 
-    <p> The configuration schema xml from a given stream is parsed and fed to a
+    <p> The configuration schema XML from a given stream is parsed and fed to a
         <type scope="com::sun::star::configuration::backend">XSchemaHandler</type>.
     </p>
 
     @see com::sun::star::configuration::backend::xml::LayerParser
-        Service that parses configuration layer xml.
+        Service that parses configuration layer XML.
 
     @since OOo 1.1.2
 */
@@ -68,7 +68,7 @@ published service SchemaParser
 
     //-------------------------------------------------------------------------
 
-    /** provides access to the source xml stream.
+    /** provides access to the source XML stream.
       */
     interface com::sun::star::io::XActiveDataSink ;
 

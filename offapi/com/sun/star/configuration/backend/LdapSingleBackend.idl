@@ -39,7 +39,7 @@ module com { module sun { module star { module configuration { module backend {
 
 /**
     implements <type>SingleBackend</type> that stores data in an
-    LDAP directoy.
+    LDAP directroy.
 
     @since OOo 1.1.2
 */

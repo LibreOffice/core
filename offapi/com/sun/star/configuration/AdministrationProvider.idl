@@ -149,8 +149,8 @@ published service AdministrationProvider
  the locale set up for the user. But this service by default gets data for all
  locales for which data is present. Locale-dependent values in this case are
  replaced by a <type>SetAccess</type> using the language names as accessors.
- This also allows targetted setting of values for selected locales.
- This behavior can be requested explicitly by specifing a special argument
+ This also allows targeted setting of values for selected locales.
+ This behavior can be requested explicitly by specifying a special argument
  value <code>locale = "*"</code>.
  </p>
 

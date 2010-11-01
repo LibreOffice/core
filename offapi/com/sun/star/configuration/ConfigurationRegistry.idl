@@ -86,7 +86,7 @@ published service ConfigurationRegistry
     /** is used to commit changes to the configuration.
         <p>As specified for the
         <type scope="com::sun::star::configuration">ConfigurationUpdateAccess</type>
-        service, all changes made to an configuration subtree have to be commited
+        service, all changes made to an configuration subtree have to be committed
         before they become persistent.
         To do this for a configuration accessed as a registry, call
         <method scope="com::sun::star::util">XFlushable::flush</method>.

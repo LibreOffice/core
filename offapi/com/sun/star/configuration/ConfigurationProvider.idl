@@ -109,7 +109,7 @@ published service ConfigurationProvider
  accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
  This argument must contain the absolute path to an element of the
  configuration. The view that is selected consists of the named element and
- all its decendants.
+ all its descendants.
  </p>
 
  <p>Other arguments can be used to control the behavior of the view. These
