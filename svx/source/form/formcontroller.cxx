@@ -865,15 +865,13 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                         if ( aFilter.getLength() )
                             aFilter.appendAscii( " OR " );
 
-                        aFilter.appendAscii( "( " );
+                        ::rtl::OUStringBuffer aRowFilter;
                         for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                         {
                             // get the field of the controls map
                             Reference< XControl > xControl( condition->first, UNO_QUERY_THROW );
                             Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
                             Reference< XPropertySet > xField( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
-                            if ( condition != rRow.begin() )
-                                aFilter.appendAscii( " AND " );
 
                             sal_Int32 nDataType = DataType::OTHER;
                             OSL_VERIFY( xField->getPropertyValue( FM_PROP_FIELDTYPE ) >>= nDataType );
@@ -897,10 +895,17 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                             {
                                 // don't use a parse context here, we need it unlocalized
                                 xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
-                                aFilter.append( sCriteria );
+                                if ( condition != rRow.begin() )
+                                    aRowFilter.appendAscii( " AND " );
+                                aRowFilter.append( sCriteria );
                             }
                         }
-                        aFilter.appendAscii( " )" );
+                        if ( aRowFilter.getLength() > 0 )
+                        {
+                            aFilter.appendAscii( "( " );
+                            aFilter.append( aRowFilter.makeStringAndClear() );
+                            aFilter.appendAscii( " )" );
+                        }
                     }
                 }
                 catch( const Exception& )
