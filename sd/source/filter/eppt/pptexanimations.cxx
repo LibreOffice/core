@@ -1708,9 +1708,9 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
             rtl::OUString aAttributeName( xAnimate->getAttributeName() );
             if ( nForceAttributeNames )
             {
-                switch( nForceAttributeNames )
+                if( nForceAttributeNames == 1 )
                 {
-                    case 1 : aAttributeName = rtl::OUString::createFromAscii( "r" ); break;
+                    aAttributeName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "r" ));
                 }
             }
             sal_Int32 nIndex = 0;

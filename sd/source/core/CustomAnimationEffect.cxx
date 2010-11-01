@@ -314,7 +314,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
         {
             // TODO/LATER: Optimize this, don't create a break iterator each time
             Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-            Reference < i18n::XBreakIterator > xBI( xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY );
+            Reference < i18n::XBreakIterator > xBI( xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" )) ), UNO_QUERY );
             DBG_ASSERT( xBI.is(), "sd::CustomAnimationEffect::getNumberOfSubitems(), could not create a 'com.sun.star.i18n.BreakIterator'!" );
 
             if( xBI.is() )

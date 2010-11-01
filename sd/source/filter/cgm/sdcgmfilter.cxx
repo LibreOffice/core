@@ -95,7 +95,7 @@ sal_Bool SdCGMFilter::Import()
 
     if( pLibrary && mxModel.is() )
     {
-        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ImportCGM" ) ) );
+        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ImportCGM" ) ) ) );
         ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         UINT32          nRetValue;
 
@@ -139,7 +139,7 @@ sal_Bool SdCGMFilter::Export()
 
     if( pLibrary && mxModel.is() )
     {
-        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ExportCGM" ) ) );
+        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExportCGM" ) ) ) );
 
         if( FncCGMExport )
         {

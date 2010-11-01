@@ -220,10 +220,10 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
     if( !bAnimate )
     {
         //the appear effect cannot be animated without text
-        if( this->GetPresetId().equals( ::rtl::OUString::createFromAscii("ooo-entrance-appear") ) )
+        if( this->GetPresetId().equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear")) ) )
             return;
         //the random effect may be the appear effect and than has the same problem
-        if( this->GetPresetId().equals( ::rtl::OUString::createFromAscii("ooo-entrance-random") ) )
+        if( this->GetPresetId().equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random")) ) )
         {
             //this case is not 100% correct -> feel free to complete
             //i consider this case as seldom and not that problematic and a simple correct fix is not in sight
@@ -301,11 +301,11 @@ void Ppt97Animation::UpdateCacheData() const
     {
         case 0x0:
             //eRetval = ::com::sun::star::presentation::AnimationEffect_APPEAR;
-            m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-appear");                  // --- appear ---
+            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear"));                  // --- appear ---
         break;
         case 0x01:
             //eRetval = ::com::sun::star::presentation::AnimationEffect_RANDOM;
-            m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-random");                  // --- random ---
+            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random"));                  // --- random ---
         break;
         case 0x02:                                                                                  // --- blinds effect ---
         {
@@ -313,13 +313,13 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRIPES;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-venetian-blinds");
-                    m_aSubType = ::rtl::OUString::createFromAscii("horizontal");                    // horizontal
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-venetian-blinds"));
+                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal"));                    // horizontal
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRIPES;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-venetian-blinds");
-                    m_aSubType = ::rtl::OUString::createFromAscii("vertical");                      // vertical
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-venetian-blinds"));
+                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical"));                      // vertical
                 break;
             }
         }
@@ -330,20 +330,20 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-checkerboard");
-                    m_aSubType = ::rtl::OUString::createFromAscii("across");                        // vertical ???
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-checkerboard"));
+                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("across"));                        // vertical ???
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_CHECKERBOARD;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-checkerboard");
-                    m_aSubType = ::rtl::OUString::createFromAscii("downward");                      // horizontal ???
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-checkerboard"));
+                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("downward"));                      // horizontal ???
                 break;
             }
         }
         break;
         case 0x05:
             //eRetval = ::com::sun::star::presentation::AnimationEffect_DISSOLVE;                   // --- dissolve ----
-            m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-dissolve-in");
+            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-dissolve-in"));
         break;
         case 0x08:                                                                                  // --- (hor/ver) lines ---
         {
@@ -351,13 +351,13 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_LINES;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-random-bars");
-                    m_aSubType = ::rtl::OUString::createFromAscii("vertical");                      // horizontal ???
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random-bars"));
+                    m_aSubType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical"));                      // horizontal ???
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_LINES;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-random-bars");
-                    m_aSubType = rtl::OUString::createFromAscii("horizontal");                      // vertical ???
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-random-bars"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal"));                      // vertical ???
                 break;
             }
         }
@@ -368,23 +368,23 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x4:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERRIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-diagonal-squares");
-                    m_aSubType = rtl::OUString::createFromAscii("left-to-top");                     // to left top
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("left-to-top"));                     // to left top
                 break;
                 case 0x5:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERLEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-diagonal-squares");
-                    m_aSubType = rtl::OUString::createFromAscii("right-to-top");                    // to right top
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("right-to-top"));                    // to right top
                 break;
                 case 0x6:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERRIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-diagonal-squares");
-                    m_aSubType = rtl::OUString::createFromAscii("left-to-bottom");                  // to left bottom
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("left-to-bottom"));                  // to left bottom
                 break;
                 case 0x7:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERLEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-diagonal-squares");
-                    m_aSubType = rtl::OUString::createFromAscii("right-to-bottom");                 // to right bottom
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-diagonal-squares"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("right-to-bottom"));                 // to right bottom
                 break;
             }
         }
@@ -395,23 +395,23 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_RIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-wipe");
-                    m_aSubType = rtl::OUString::createFromAscii("from-right");                      // from right
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));                      // from right
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_BOTTOM;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-wipe");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom");                     // from bottom
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));                     // from bottom
                 break;
                 case 0x2:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-wipe");
-                    m_aSubType = rtl::OUString::createFromAscii("from-left");                       // from left
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));                       // from left
                 break;
                 case 0x3:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_TOP;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-wipe");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top");                        // from top
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-wipe"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));                        // from top
                 break;
             }
         }
@@ -422,13 +422,13 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-box");
-                    m_aSubType = rtl::OUString::createFromAscii("out");                             // from center
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-box"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out"));                             // from center
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-box");
-                    m_aSubType = rtl::OUString::createFromAscii("in");                              // to center
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-box"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in"));                              // to center
                 break;
             }
         }
@@ -439,160 +439,160 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-left");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
 
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
                 break;
                 case 0x2:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-right");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
                 break;
                 case 0x3:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
                 break;
                 case 0x4:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERLEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top-left");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top-left"));
                 break;
                 case 0x5:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top-right");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top-right"));
                 break;
                 case 0x6:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERLEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom-left");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom-left"));
                 break;
                 case 0x7:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom-right");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom-right"));
                 break;
                 case 0x8:                                                                               // -- short text effects --
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-peek-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-left");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
                 break;
                 case 0x9:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-peek-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
                 break;
                 case 0xa:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-peek-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-right");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
                 break;
                 case 0xb:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_TOP;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-peek-in");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-peek-in"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
                 break;
                 case 0xc:                                                                               // -- slow text effects --
                 {
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT;
                     //rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in-slow");
-                    m_aSubType = rtl::OUString::createFromAscii("from-left");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
                 }
                 break;
                 case 0xd:
                 {
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP;
                     //rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in-slow");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
                 }
                 break;
                 case 0xe:
                 {
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT;
                     //rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in-slow");
-                    m_aSubType = rtl::OUString::createFromAscii("from-right");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
                 }
                 break;
                 case 0xf:
                 {
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM;
                     //rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-fly-in-slow");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-fly-in-slow"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
                 }
                 break;
                 case 0x10:                                                                              // --- zoom ---
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-zoom");
-                    m_aSubType = rtl::OUString::createFromAscii("in");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in"));
                 break;
                 case 0x11:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-zoom");
-                    m_aSubType = rtl::OUString::createFromAscii("in-slightly");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in-slightly"));
                 break;
                 case 0x12:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-zoom");
-                    m_aSubType = rtl::OUString::createFromAscii("out");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out"));
                 break;
                 case 0x13:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-zoom");
-                    m_aSubType = rtl::OUString::createFromAscii("out-slightly");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out-slightly"));
                 break;
                 case 0x14:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-zoom");
-                    m_aSubType = rtl::OUString::createFromAscii("in-from-screen-center");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("in-from-screen-center"));
                 break;
                 case 0x15:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-zoom");
-                    m_aSubType = rtl::OUString::createFromAscii("out-from-screen-center");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-zoom"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out-from-screen-center"));
                 break;
                 case 0x16:                                                                              // --- stretch ---
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRETCH;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-stretchy");
-                    m_aSubType = rtl::OUString::createFromAscii("across");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("across"));
                 break;
                 case 0x17:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-stretchy");
-                    m_aSubType = rtl::OUString::createFromAscii("from-left");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-left"));
                 break;
                 case 0x18:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_TOP;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-stretchy");
-                    m_aSubType = rtl::OUString::createFromAscii("from-top");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-top"));
                 break;
                 case 0x19:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_RIGHT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-stretchy");
-                    m_aSubType = rtl::OUString::createFromAscii("from-right");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-right"));
                 break;
                 case 0x1a:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_BOTTOM;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-stretchy");
-                    m_aSubType = rtl::OUString::createFromAscii("from-bottom");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-stretchy"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("from-bottom"));
                 break;
                 case 0x1b:                                                                              // --- rotate ---
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_ROTATE;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-swivel");
-                    m_aSubType = rtl::OUString::createFromAscii("vertical");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-swivel"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical"));
                 break;
                 case 0x1c:                                                                              // --- spirale ---
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT;
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-spiral-in");
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-spiral-in"));
                 break;
             }
         }
@@ -603,30 +603,30 @@ void Ppt97Animation::UpdateCacheData() const
             {
                 case 0x0:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL   ;       // ???
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-split");
-                    m_aSubType = rtl::OUString::createFromAscii("horizontal-out");                      //horizontal open
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal-out"));                      //horizontal open
                 break;
                 case 0x1:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_CLOSE_VERTICAL;         // ???
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-split");
-                    m_aSubType = rtl::OUString::createFromAscii("horizontal-in");                       //horizontal close
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("horizontal-in"));                       //horizontal close
                 break;
                 case 0x2:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;        // ???
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-split");
-                    m_aSubType = rtl::OUString::createFromAscii("vertical-out");                        // vertical open
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical-out"));                        // vertical open
                 break;
                 case 0x3:
                     //eRetval = ::com::sun::star::presentation::AnimationEffect_CLOSE_HORIZONTAL;       // ???
-                    m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-split");
-                    m_aSubType = rtl::OUString::createFromAscii("vertical-in");                         // vertical close
+                    m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-split"));
+                    m_aSubType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vertical-in"));                         // vertical close
                 break;
             }
         }
         break;
         case 0x0e:                                                                                      // --- blink ---
         {
-            m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-flash-once");
+            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-flash-once"));
             switch ( m_aAtom.nFlyDirection )
             {
                 case 0x0: //fast
@@ -646,7 +646,7 @@ void Ppt97Animation::UpdateCacheData() const
         break;
         default:
         {
-            m_aPresetId = ::rtl::OUString::createFromAscii("ooo-entrance-appear");
+            m_aPresetId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo-entrance-appear"));
             DBG_ERROR("no effect mapped");
         }
         break;

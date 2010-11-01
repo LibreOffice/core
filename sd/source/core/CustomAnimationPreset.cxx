@@ -275,7 +275,7 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         // get parser
         Reference< xml::sax::XParser > xParser(
             xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
             UNO_QUERY );
 
         DBG_ASSERT( xParser.is(), "Can't create parser" );
