@@ -112,7 +112,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
         pTemplateCommon( 0 ),
         nDocModalMode(0),
         nAutoTabPageId(0),
-        nBasicCallLevel(0),
         nRescheduleLocks(0),
         nInReschedule(0),
         nAsynchronCalls(0),

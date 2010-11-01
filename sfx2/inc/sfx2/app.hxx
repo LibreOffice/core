@@ -238,7 +238,6 @@ public:
     USHORT                      SaveBasicManager() const;
     USHORT                      SaveBasicAndDialogContainer() const;
     void                        EnterBasicCall();
-    FASTBOOL                    IsInBasicCall() const;
     void                        LeaveBasicCall();
     void                        RegisterBasicConstants( const char *pPrefix,
                                                         const SfxConstant *pConsts,
