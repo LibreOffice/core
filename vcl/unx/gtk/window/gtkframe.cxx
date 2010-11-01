@@ -2145,6 +2145,8 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
 {
+    static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
+
     if( m_pWindow )
     {
         if( bGrab )
@@ -2167,9 +2169,10 @@ void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
             {
                 const int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
 
-                gdk_pointer_grab( m_pWindow->window, bOwnerEvents,
-                                  (GdkEventMask) nMask, NULL, m_pCurrentCursor,
-                                  GDK_CURRENT_TIME );
+                if( !pEnv || !*pEnv )
+                    gdk_pointer_grab( m_pWindow->window, bOwnerEvents,
+                                      (GdkEventMask) nMask, NULL, m_pCurrentCursor,
+                                      GDK_CURRENT_TIME );
             }
             else
             {
@@ -2179,23 +2182,25 @@ void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
                 //
                 // this is of course a bad hack, especially as we cannot
                 // set the right cursor this way
-                XGrabPointer( getDisplay()->GetDisplay(),
-                              GDK_WINDOW_XWINDOW( m_pWindow->window),
-                              bOwnerEvents,
-                              PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
-                              GrabModeAsync,
-                              GrabModeAsync,
-                              None,
-                              None,
-                              CurrentTime
-                              );
+                if( !pEnv || !*pEnv )
+                    XGrabPointer( getDisplay()->GetDisplay(),
+                                  GDK_WINDOW_XWINDOW( m_pWindow->window),
+                                  bOwnerEvents,
+                                  PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+                                  GrabModeAsync,
+                                  GrabModeAsync,
+                                  None,
+                                  None,
+                                  CurrentTime
+                        );
 
             }
         }
         else
         {
             // Two GdkDisplays may be open
-            gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
+            if( !pEnv || !*pEnv )
+                gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
         }
     }
 }
