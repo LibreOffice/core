@@ -105,7 +105,7 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      * <p>This method reads <code>byte</code> data from the InputStream and
      *    extracts font and paragraph data from the file.</p>
      *
-     * @param   is      InputStream containing a Pocket Word data file.
+     * @param   docData         InputStream containing a Pocket Word data file.
      *
      * @throws  IOException     In case of any I/O errors.
      */
