@@ -862,9 +862,6 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                         if ( rRow.empty() )
                             continue;
 
-                        if ( aFilter.getLength() )
-                            aFilter.appendAscii( " OR " );
-
                         ::rtl::OUStringBuffer aRowFilter;
                         for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                         {
@@ -890,6 +887,9 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                         }
                         if ( aRowFilter.getLength() > 0 )
                         {
+                            if ( aFilter.getLength() )
+                                aFilter.appendAscii( " OR " );
+
                             aFilter.appendAscii( "( " );
                             aFilter.append( aRowFilter.makeStringAndClear() );
                             aFilter.appendAscii( " )" );
