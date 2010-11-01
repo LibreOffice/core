@@ -39,6 +39,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 ..\inc\oox\vml\vmldrawing.hxx %_DEST%\inc%_EXT%\oox\vml\vmldrawing.hxx
 ..\inc\oox\vml\vmlshape.hxx %_DEST%\inc%_EXT%\oox\vml\vmlshape.hxx
 ..\inc\oox\export\*.hxx %_DEST%\inc%_EXT%\oox\export\*.hxx
+..\inc\oox\ole\oleobjecthelper.hxx %_DEST%\inc%_EXT%\oox\ole\oleobjecthelper.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 
