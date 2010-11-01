@@ -182,7 +182,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
         if(aTime.GetTime() != 0)
-            sRet = sRet + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( aTime,false );
+            sRet = sRet + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( aTime,false );
     }
     return sRet;
 }

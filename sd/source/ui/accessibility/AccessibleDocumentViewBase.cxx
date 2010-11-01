@@ -281,7 +281,7 @@ Reference<XAccessible> SAL_CALL
             return mxAccessibleOLEObject;
 
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("no child with index ")
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("no child with index ") ))
         + rtl::OUString::valueOf(nIndex),
         NULL);
 }

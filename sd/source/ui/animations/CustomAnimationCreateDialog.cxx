@@ -230,7 +230,7 @@ ImplStlEffectCategorySortHelper::ImplStlEffectCategorySortHelper()
     uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
     if( xFac.is() )
     {
-        mxCollator.set( xFac->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ), uno::UNO_QUERY );
+        mxCollator.set( xFac->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )) ), uno::UNO_QUERY );
 
         if( mxCollator.is() )
         {
