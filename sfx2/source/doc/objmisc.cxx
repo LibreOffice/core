@@ -1668,14 +1668,6 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     return nRet;
 }
 
-ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn )
-{
-    ErrCode nErr = ERRCODE_NONE;
-    if ( bIsBasicReturn )
-        CallBasic( rCode, String() );
-    return nErr;
-}
-
 namespace
 {
     static bool lcl_isScriptAccessAllowed_nothrow( const Reference< XInterface >& _rxScriptContext )

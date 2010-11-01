@@ -365,7 +365,6 @@ public:
 
     ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
                                     SbxArray* pArgs = 0, SbxValue* pRet = 0 );
-    ErrCode                     Call( const String & rCode, sal_Bool bIsBasicReturn );
 
     ErrCode                     CallScript(
         const String & rScriptType, const String & rCode, const void* pArgs = NULL, void* pRet = NULL );
