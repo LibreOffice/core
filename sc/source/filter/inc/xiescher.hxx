@@ -977,7 +977,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual int        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
+    virtual bool        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 };
 
 // ----------------------------------------------------------------------------
