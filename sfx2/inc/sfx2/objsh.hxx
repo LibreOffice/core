@@ -195,12 +195,6 @@ in fremde Objekte integriert werden k"onnen.
 
 ----------------------------------------------------------------------*/
 
-enum SfxTitleQuery
-{
-    SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL
-};
-
-
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
@@ -367,7 +361,6 @@ public:
     sal_uInt16                  GetScriptingSignatureState();
     void                        SignScriptingContent();
 
-    virtual String              QueryTitle( SfxTitleQuery ) const;
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                         Window *pParent, const SfxItemSet& );
     sal_Bool                    IsBasic( const String & rCode, SbxObject * pVCtrl = NULL );

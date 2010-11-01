@@ -1910,51 +1910,6 @@ void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
     pImp->eFlags = eFlags;
 }
 
-/*
-void SfxObjectShell::SetBaseURL( const String& rURL )
-{
-    pImp->aBaseURL = rURL;
-    pImp->bNoBaseURL = FALSE;
-}
-
-const String& SfxObjectShell::GetBaseURLForSaving() const
-{
-    if ( pImp->bNoBaseURL )
-        return String();
-    return GetBaseURL();
-}
-
-const String& SfxObjectShell::GetBaseURL() const
-{
-    if ( pImp->aBaseURL.Len() )
-        return pImp->aBaseURL;
-    return pMedium->GetBaseURL();
-}
-
-void SfxObjectShell::SetEmptyBaseURL()
-{
-    pImp->bNoBaseURL = TRUE;
-}
-*/
-String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
-{
-    String aRet;
-
-    switch( eType )
-    {
-        case SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL:
-        {
-            SfxMedium* pMed = GetMedium();
-            const INetURLObject aObj( pMed->GetName() );
-            aRet = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-            if ( !aRet.Len() )
-                aRet = GetTitle( SFX_TITLE_CAPTION );
-            break;
-        }
-    }
-    return aRet;
-}
-
 void SfxHeaderAttributes_Impl::SetAttributes()
 {
     bAlert = sal_True;
