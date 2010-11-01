@@ -580,7 +580,7 @@ sal_Bool SdrEscherImport::ReadString( String& rStr ) const
     return bRet;
 }
 
-FASTBOOL SdrEscherImport::GetColorFromPalette(USHORT /*nNum*/, Color& /*rColor*/) const
+bool SdrEscherImport::GetColorFromPalette(USHORT /*nNum*/, Color& /*rColor*/) const
 {
     return FALSE;
 }
@@ -2644,7 +2644,7 @@ Size SdrPowerPointImport::GetPageSize() const
     return aRet;
 }
 
-FASTBOOL SdrPowerPointImport::GetColorFromPalette( USHORT nNum, Color& rColor ) const
+bool SdrPowerPointImport::GetColorFromPalette( USHORT nNum, Color& rColor ) const
 {
     if ( nPageColorsNum != nAktPageNum || ePageColorsKind != eAktPageKind )
     {

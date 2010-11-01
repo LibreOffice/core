@@ -454,7 +454,7 @@ public:
 
                         SdrEscherImport( PowerPointImportParam&, const String& rBaseURL );
     virtual             ~SdrEscherImport();
-    virtual FASTBOOL    GetColorFromPalette( USHORT nNum, Color& rColor ) const;
+    virtual bool    GetColorFromPalette( USHORT nNum, Color& rColor ) const;
     virtual BOOL        SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId ) const;
     PptFontEntityAtom*  GetFontEnityAtom( UINT32 nNum ) const;
     CharSet             GetCharSet( UINT32 nNum ) const;
@@ -598,7 +598,7 @@ public:
     USHORT      GetMasterPageIndex( USHORT nPageNum, PptPageKind ePageKind = PPT_SLIDEPAGE ) const;
 
     void        ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = NULL );
-    virtual FASTBOOL    GetColorFromPalette(USHORT nNum, Color& rColor) const;
+    virtual bool    GetColorFromPalette(USHORT nNum, Color& rColor) const;
     virtual BOOL        SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId ) const;
     sal_Unicode         PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const;
