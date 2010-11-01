@@ -220,6 +220,8 @@ void SmGraphicWindow::GetFocus()
     pViewShell->GetEditWindow()->Flush();
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(FALSE);
+    SetIsCursorVisible(TRUE);
+    RepaintViewShellDoc();
 }
 
 void SmGraphicWindow::LoseFocus()
@@ -233,6 +235,16 @@ void SmGraphicWindow::LoseFocus()
         pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
+    if (!IsInlineEditEnabled())
+        return;
+    SetIsCursorVisible(FALSE);
+    RepaintViewShellDoc();
+}
+
+void SmGraphicWindow::RepaintViewShellDoc()
+{
+    SmDocShell &rDoc = *pViewShell->GetDoc();
+    rDoc.Repaint();
 }
 
 void SmGraphicWindow::ShowCursor(BOOL bShow)
@@ -321,7 +333,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
     SetFormulaDrawPos(aPoint);
     if(IsInlineEditEnabled()) {
         //Draw cursor if any...
-        if(pViewShell->GetDoc()->HasCursor())
+        if(pViewShell->GetDoc()->HasCursor() && IsCursorVisible())
             pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
     } else {
     SetIsCursorVisible(FALSE);  // (old) cursor must be drawn again

@@ -86,6 +86,9 @@ protected:
     virtual void StateChanged( StateChangedType eChanged );
     DECL_LINK(MenuSelectHdl, Menu *);
 
+private:
+    void RepaintViewShellDoc();
+
 public:
     SmGraphicWindow(SmViewShell* pShell);
     ~SmGraphicWindow();
