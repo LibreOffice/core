@@ -164,13 +164,11 @@ void _SfxMacroTabPage::EnableButtons()
         String sEventMacro;
         sEventMacro = ((SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
 
-        SfxMacroInfo* pInfo = mpImpl->pMacroLB->GetMacroInfo();
-        String sSelMacro;
-        if ( pInfo )
-            sSelMacro = pInfo->GetMacroName();
-
-        mpImpl->pAssignPB->Enable( pInfo && !mpImpl->bReadOnly && !sSelMacro.EqualsIgnoreCaseAscii( sEventMacro ) );
+        String sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
+        mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.EqualsIgnoreCaseAscii( sEventMacro ) );
     }
+    else
+        mpImpl->pAssignPB->Enable( FALSE );
 }
 
 _SfxMacroTabPage::_SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )
@@ -298,21 +296,13 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     String                  sSel( pImpl->pGroupLB->GetGroup() );
     pImpl->pGroupLB->GroupSelected();
-    SfxMacroInfo*   pMacro = pImpl->pMacroLB->GetMacroInfo();
+    const String sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
     String          aLabelText;
-    if( pMacro )
-    {
+    if( sScriptURI.Len() > 0 )
         aLabelText = pImpl->maStaticMacroLBLabel;
-        aLabelText += pMacro->GetModuleName();
-    }
-    else
-    {
-        // Wenn dort ein Macro drin ist, wurde es selektiert und der
-        // AssignButton schon in SelectMacro richtig enabled
-        pImpl->pAssignPB->Enable( FALSE );
-    }
-
     pImpl->pFT_MacroLBLabel->SetText( aLabelText );
+
+    pThis->EnableButtons();
     return 0;
 }
 
@@ -344,34 +334,25 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     SvxMacro *pRemoveMacro = pThis->aTbl.Remove( nEvent );
     delete pRemoveMacro;
 
-    String sNew;
+    String sScriptURI;
     if( bAssEnabled )
     {
-        String sGroup;
-        String sMacro;
-        String aEntryText( sNew );
-
-        SfxMacroInfo* pMacro = pImpl->pMacroLB->GetMacroInfo();
-        sMacro = pMacro->GetQualifiedName();
-        sGroup = pImpl->pGroupLB->GetGroup();
-        sNew = pMacro->GetMacroName();
-
-        if( sMacro.CompareToAscii( "vnd.sun.star.script:", 20 ) == COMPARE_EQUAL )
+        sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
+        if( sScriptURI.CompareToAscii( "vnd.sun.star.script:", 20 ) == COMPARE_EQUAL )
         {
-            OSL_TRACE("ASSIGN_DELETE: Its a script");
             pThis->aTbl.Insert(
-                nEvent, new SvxMacro( sMacro, String::CreateFromAscii( SVX_MACRO_LANGUAGE_SF ) ) );
+                nEvent, new SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_SF ) ) );
         }
         else
         {
-            OSL_TRACE("ASSIGN_DELETE: Its a basic macro");
+            OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead??! (out of interest: tell fs, please!)" );
             pThis->aTbl.Insert(
-                nEvent, new SvxMacro( sMacro, String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
+                nEvent, new SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
         }
     }
 
     pImpl->pEventLB->SetUpdateMode( FALSE );
-    pE->ReplaceItem( new SvLBoxString( pE, 0, sNew ), LB_MACROS_ITEMPOS );
+    pE->ReplaceItem( new SvLBoxString( pE, 0, sScriptURI ), LB_MACROS_ITEMPOS );
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );

@@ -50,7 +50,6 @@ class SfxSlotPool;
 class SfxStringItem;
 class SfxFontItem;
 class SfxMacroInfoItem;
-class SfxMacroInfo;
 struct SfxStyleInfo_Impl;
 struct SfxStylesInfo_Impl;
 
@@ -104,14 +103,18 @@ struct SfxStylesInfo_Impl
 struct SfxGroupInfo_Impl
 {
     USHORT      nKind;
-    USHORT      nOrd;
+    USHORT      nUniqueID;
     void*       pObject;
     BOOL        bWasOpened;
     String      sCommand;
     String      sLabel;
 
                 SfxGroupInfo_Impl( USHORT n, USHORT nr, void* pObj = 0 ) :
-                    nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(FALSE) {}
+                    nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(FALSE) {}
+};
+
+struct CuiMacroInfo
+{
 };
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
@@ -137,7 +140,7 @@ public:
     String        GetHelpText( SvLBoxEntry *pEntry );
     String        GetCurCommand();
     String        GetCurLabel();
-    SfxMacroInfo* GetMacroInfo();
+    String        GetSelectedScriptURI();
     void          FunctionSelected();
     void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };

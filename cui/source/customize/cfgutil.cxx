@@ -352,9 +352,8 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
 
         if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
         {
-            SfxMacroInfo *pInfo = (SfxMacroInfo*) pData->pObject;
-            SFX_APP()->GetMacroConfig()->ReleaseSlotId( pInfo->GetSlotId() );
-            delete pInfo;
+            String* pScriptURI = (String*)pData->pObject;
+            delete pScriptURI;
         }
 
         if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
@@ -374,20 +373,16 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     Clear();
 }
 
-SfxMacroInfo* SfxConfigFunctionListBox_Impl::GetMacroInfo()
-/*  Beschreibung
-    Gibt die MacroInfo des selektierten Entry zur"uck ( sofern vorhanden ).
-*/
+String SfxConfigFunctionListBox_Impl::GetSelectedScriptURI()
 {
     SvLBoxEntry *pEntry = FirstSelected();
     if ( pEntry )
     {
         SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
         if ( pData && ( pData->nKind == SFX_CFGFUNCTION_SCRIPT ) )
-            return (SfxMacroInfo*) pData->pObject;
+            return *(String*)pData->pObject;
     }
-
-    return 0;
+    return String();
 }
 
 String SfxConfigFunctionListBox_Impl::GetCurCommand()
@@ -1007,7 +1002,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
     {
         case SFX_CFGGROUP_FUNCTION :
         {
-            USHORT                                                          nGroup    = pInfo->nOrd;
+            USHORT                                                          nGroup    = pInfo->nUniqueID;
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
             sal_Int32                                                       c         = lCommands.getLength();
@@ -1056,13 +1051,8 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                     xPropSet->getPropertyValue( String::CreateFromAscii( "URI" ) );
                                 value >>= uri;
 
-                                SfxMacroInfo* aInfo = new SfxMacroInfo( (String)uri );
-                                aInfo->SetHelpText( uri );
-                                SFX_APP()->GetMacroConfig()->GetSlotId( aInfo );
-
-                                SfxGroupInfo_Impl* pGrpInfo =
-                                    new SfxGroupInfo_Impl(SFX_CFGFUNCTION_SCRIPT,
-                                        aInfo->GetSlotId(), aInfo);
+                                String* pScriptURI = new String( uri );
+                                SfxGroupInfo_Impl* pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGFUNCTION_SCRIPT, 0, pScriptURI );
 
                                 Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =

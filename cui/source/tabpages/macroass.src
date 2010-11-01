@@ -78,7 +78,7 @@ TabPage RID_SVXPAGE_EVENTASSIGN
         Pos = MAP_APPFONT ( COL2 , ROW7  ) ;
         Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT + HEIGHT_EXTRA7 ) ;
         WordBreak = TRUE;
-        Text [ en-US ] = "~Existing macros in:\n" ;
+        Text [ en-US ] = "~Existing macros\n" ;
     };
     Control LB_MACROS
     {
