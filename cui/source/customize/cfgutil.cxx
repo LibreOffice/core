@@ -486,42 +486,11 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
 SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
-        , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ), pStylesInfo(0)
+        , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), pStylesInfo(0)
 {
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage, BMP_COLOR_NORMAL );
     SetNodeBitmaps( pImp->m_collapsedImage_hc, pImp->m_expandedImage_hc, BMP_COLOR_HIGHCONTRAST );
-
-    // Check configuration to see whether only Basic macros,
-    // only Scripting Framework scripts, or both should be listed
-    Any value;
-    sal_Bool tmp = false;
-
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-        ::rtl::OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
-
-    value >>= tmp;
-
-    if (tmp == sal_True) {
-        bShowBasic = TRUE;
-    }
-    else {
-        bShowBasic = FALSE;
-    }
-
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-        ::rtl::OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
-
-    value >>= tmp;
-
-    if (tmp == sal_True) {
-        bShowSF = TRUE;
-    }
-    else {
-        bShowSF = FALSE;
-    }
 }
 
 
@@ -798,213 +767,144 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         }
     }
 */
-    SfxApplication *pSfxApp = SFX_APP();
-    if ( bShowBasic )
+    OSL_TRACE("** ** About to initialise SF Scripts");
+    // Add Scripting Framework entries
+    Reference< browse::XBrowseNode > rootNode;
+    Reference< XComponentContext > xCtx;
+    try
     {
-        // Basics einsammeln
-        pSfxApp->EnterBasicCall();
-        String aMacroName(' ');
-        aMacroName += pImp->m_sDlgMacros;
-
-        // Zuerst AppBasic
-        BasicManager *pAppBasicMgr = pSfxApp->GetBasicManager();
-        BOOL bInsert = TRUE;
-        /*
-        if ( pArr )
-        {
-            bInsert = FALSE;
-            for ( USHORT n=0; n<pArr->Count(); n++ )
-            {
-                if ( *(*pArr)[n] == pSfxApp->GetName() )
-                {
-                    bInsert = TRUE;
-                    break;
-                }
-            }
-        }
-        */
-
-        if ( bInsert )
-        {
-            pAppBasicMgr->SetName( pSfxApp->GetName() );
-            if ( pAppBasicMgr->GetLibCount() )
-            {
-                // Nur einf"ugen, wenn Bibliotheken vorhanden
-                String aAppBasTitle( pImp->m_aHumanAppName );
-                aAppBasTitle += aMacroName;
-                SvLBoxEntry *pEntry = InsertEntry( aAppBasTitle, 0 );
-                SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_BASICMGR, 0, pAppBasicMgr );
-    //          aArr.Insert( pInfo, aArr.Count() );
-                pEntry->SetUserData( pInfo );
-                pEntry->EnableChildsOnDemand( TRUE );
-    //          Expand( pEntry );
-            }
-        }
-
-        Reference< XModel > xDoc( lcl_getScriptableDocument_nothrow( m_xFrame ) );
-        if ( xDoc.is() )
-        {
-            BasicManager* pBasicMgr = ::basic::BasicManagerRepository::getDocumentBasicManager( xDoc );
-            if ( pBasicMgr != pAppBasicMgr && pBasicMgr->GetLibCount() )
-            {
-                String sDocTitle( ::comphelper::DocumentInfo::getDocumentTitle( xDoc ) );
-                pBasicMgr->SetName( sDocTitle );
-
-                // Nur einf"ugen, wenn eigenes Basic mit Bibliotheken
-                SvLBoxEntry *pEntry = InsertEntry( sDocTitle.Append( aMacroName ), NULL );
-                xDoc->acquire();
-                SfxGroupInfo_Impl *pInfo =
-                    new SfxGroupInfo_Impl( SFX_CFGGROUP_DOCBASICMGR, 0, xDoc.get() );
-                pEntry->SetUserData( pInfo );
-                pEntry->EnableChildsOnDemand( TRUE );
-            }
-        }
-
-        pSfxApp->LeaveBasicCall();
+        Reference < beans::XPropertySet > xProps(
+            ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+        Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
+            ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+        rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+        //rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
+    }
+    catch( Exception& e )
+    {
+        OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
+            ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        // TODO exception handling
     }
 
-    OSL_TRACE("** ** About to initialise SF Scripts");
-    if ( bShowSF )
+
+    if ( rootNode.is() )
     {
-        OSL_TRACE("** ** bShowSF");
-        // Add Scripting Framework entries
-        Reference< browse::XBrowseNode > rootNode;
-        Reference< XComponentContext > xCtx;
-        try
+        if ( nMode )
         {
-            Reference < beans::XPropertySet > xProps(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
-            Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
-            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
-            //rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
+                //We call acquire on the XBrowseNode so that it does not
+                //get autodestructed and become invalid when accessed later.
+            rootNode->acquire();
+
+            SfxGroupInfo_Impl *pInfo =
+                new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
+                    static_cast<void *>(rootNode.get()));
+
+            String aTitle(pImp->m_sDlgMacros);
+            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            pNewEntry->SetUserData( pInfo );
+            pNewEntry->EnableChildsOnDemand( TRUE );
+            aArr.Insert( pInfo, aArr.Count() );
         }
-        catch( Exception& e )
+        else
         {
-            OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
-                ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            // TODO exception handling
-        }
+             //We are only showing scripts not slot APIs so skip
+             //Root node and show location nodes
+            try {
+                if ( rootNode->hasChildNodes() )
+                {
+                    Sequence< Reference< browse::XBrowseNode > > children =
+                        rootNode->getChildNodes();
+                    BOOL bIsRootNode = FALSE;
 
-
-        if ( rootNode.is() )
-        {
-            if ( nMode )
-            {
-                    //We call acquire on the XBrowseNode so that it does not
-                    //get autodestructed and become invalid when accessed later.
-                rootNode->acquire();
-
-                SfxGroupInfo_Impl *pInfo =
-                    new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
-                        static_cast<void *>(rootNode.get()));
-
-                String aTitle(pImp->m_sDlgMacros);
-                SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
-                pNewEntry->SetUserData( pInfo );
-                pNewEntry->EnableChildsOnDemand( TRUE );
-                aArr.Insert( pInfo, aArr.Count() );
-            }
-            else
-            {
-                 //We are only showing scripts not slot APIs so skip
-                 //Root node and show location nodes
-                try {
-                    if ( rootNode->hasChildNodes() )
+                    ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
+                    ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
+                    if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
                     {
-                        Sequence< Reference< browse::XBrowseNode > > children =
-                            rootNode->getChildNodes();
-                        BOOL bIsRootNode = FALSE;
+                        bIsRootNode = TRUE;
+                    }
 
-                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
-                        {
-                            bIsRootNode = TRUE;
-                        }
+                    //To mimic current starbasic behaviour we
+                    //need to make sure that only the current document
+                    //is displayed in the config tree. Tests below
+                    //set the bDisplay flag to FALSE if the current
+                    //node is a first level child of the Root and is NOT
+                    //either the current document, user or share
+                    ::rtl::OUString currentDocTitle;
+                    Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
+                    if ( xDocument.is() )
+                    {
+                        currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
+                    }
 
-                        //To mimic current starbasic behaviour we
-                        //need to make sure that only the current document
-                        //is displayed in the config tree. Tests below
-                        //set the bDisplay flag to FALSE if the current
-                        //node is a first level child of the Root and is NOT
-                        //either the current document, user or share
-                        ::rtl::OUString currentDocTitle;
-                        Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
-                        if ( xDocument.is() )
+                    for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+                    {
+                        Reference< browse::XBrowseNode >& theChild = children[n];
+                        BOOL bDisplay = TRUE;
+                        ::rtl::OUString uiName = theChild->getName();
+                        if ( bIsRootNode )
                         {
-                            currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
-                        }
-
-                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
-                        {
-                            Reference< browse::XBrowseNode >& theChild = children[n];
-                            BOOL bDisplay = TRUE;
-                            ::rtl::OUString uiName = theChild->getName();
-                            if ( bIsRootNode )
+                            if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
+                                theChild->getName().equals( currentDocTitle ) ) ) )
                             {
-                                if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
-                                    theChild->getName().equals( currentDocTitle ) ) ) )
+                                bDisplay=FALSE;
+                            }
+                            else
+                            {
+                                if ( uiName.equals( user ) )
                                 {
-                                    bDisplay=FALSE;
+                                    uiName = pImp->m_sMyMacros;
                                 }
-                                else
+                                else if ( uiName.equals( share ) )
                                 {
-                                    if ( uiName.equals( user ) )
-                                    {
-                                        uiName = pImp->m_sMyMacros;
-                                    }
-                                    else if ( uiName.equals( share ) )
-                                    {
-                                        uiName = pImp->m_sProdMacros;
-                                    }
+                                    uiName = pImp->m_sProdMacros;
                                 }
                             }
-                            if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
-                            {
+                        }
+                        if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
+                        {
 
 //                                  We call acquire on the XBrowseNode so that it does not
 //                                  get autodestructed and become invalid when accessed later.
-                                theChild->acquire();
+                            theChild->acquire();
 
-                                SfxGroupInfo_Impl* pInfo =
-                                    new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
-                                        0, static_cast<void *>( theChild.get()));
+                            SfxGroupInfo_Impl* pInfo =
+                                new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                    0, static_cast<void *>( theChild.get()));
 
-                                Image aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_NORMAL );
-                                SvLBoxEntry* pNewEntry =
-                                    InsertEntry( uiName, NULL);
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                            Image aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_NORMAL );
+                            SvLBoxEntry* pNewEntry =
+                                InsertEntry( uiName, NULL);
+                            SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
+                            SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                            SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
-                                pNewEntry->SetUserData( pInfo );
-                                aArr.Insert( pInfo, aArr.Count() );
+                            pNewEntry->SetUserData( pInfo );
+                            aArr.Insert( pInfo, aArr.Count() );
 
-                                if ( children[n]->hasChildNodes() )
+                            if ( children[n]->hasChildNodes() )
+                            {
+                                Sequence< Reference< browse::XBrowseNode > > grandchildren =
+                                    children[n]->getChildNodes();
+
+                                for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
                                 {
-                                    Sequence< Reference< browse::XBrowseNode > > grandchildren =
-                                        children[n]->getChildNodes();
-
-                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
+                                    if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                     {
-                                        if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
-                                        {
-                                            pNewEntry->EnableChildsOnDemand( TRUE );
-                                            m = grandchildren.getLength();
-                                        }
+                                        pNewEntry->EnableChildsOnDemand( TRUE );
+                                        m = grandchildren.getLength();
                                     }
                                 }
                             }
                         }
                     }
                 }
-                catch (RuntimeException&) {
-                    // do nothing, the entry will not be displayed in the UI
-                }
+            }
+            catch (RuntimeException&) {
+                // do nothing, the entry will not be displayed in the UI
             }
         }
     }

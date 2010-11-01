@@ -156,8 +156,6 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;
-    BOOL                            bShowSF; // show Scripting Framework scripts
-    BOOL                            bShowBasic; // show Basic scripts
 
     ::rtl::OUString m_sModuleLongName;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
