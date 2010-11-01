@@ -641,7 +641,7 @@ AC_ARG_WITH(commons-logging-jar,
 ])
 
 AC_ARG_WITH(servlet-api-jar,
-[  --servlet-api-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-servlet-api-jar=JARFILE   Specify path to jarfile manually ],
 [ SERVLETAPI_JAR="$withval"
 ])
 
