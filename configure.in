@@ -1037,9 +1037,6 @@ AC_ARG_WITH(os-version,
                           Usage: --with-os-version=<OSVERSION>
 ],,)
 
-AC_ARG_WITH(unzip-home,
-[  --with-unzip-home       Deprecated: use --with-zip-home instead],,)
-
 AC_ARG_WITH(zip-home,
 [  --with-zip-home         If you use a non standard zip, for example windows
                           please supply the path for zip
@@ -5881,12 +5878,6 @@ fi
 ASM_HOME="$with_asm_home"
 AC_SUBST(ASM_HOME)
 
-dnl ===================================================================
-dnl testing handle deprecated unzip switch
-dnl ===================================================================
-if test -z "$with_zip_home"; then
-    with_zip_home="$with_unzip_home"
-fi
 dnl ===================================================================
 dnl Zip will be found where you tell me to find it
 dnl ===================================================================
