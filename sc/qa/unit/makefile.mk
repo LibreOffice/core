@@ -113,6 +113,8 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
 STAR_RESOURCEPATH:=$(PWD)/$(BIN):$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
+.IF "$(OS)" == "LINUX"
+
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
@@ -123,3 +125,13 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/t
         -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
         -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
         -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
+
+.ELSE
+
+test .PHONY: $(SHL1TARGETN)
+    @echo ----------------------------------------------------------
+    @echo - WARNING!!, test disabled on your platform
+    @echo - Please test manually, and enable if it works
+    @echo ----------------------------------------------------------
+
+.ENDIF
