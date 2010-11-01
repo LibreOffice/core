@@ -1440,9 +1440,6 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
         const SfxPoolItem* pFontItem=0;
         if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, TRUE, &pFontItem ) )
             m_pFontItem = PTR_CAST( SfxStringItem, pFontItem );
-
-        if ( m_pStringItem )
-            pGroupLBox->AddAndSelect( m_pStringItem, m_pFontItem );
     }
 }
 

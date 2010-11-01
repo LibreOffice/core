@@ -95,17 +95,11 @@ struct SfxStylesInfo_Impl
         static ::rtl::OUString generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle);
 };
 
-#define SFX_CFGGROUP_FUNCTION 1
-#define SFX_CFGGROUP_BASICMGR 2
-#define SFX_CFGGROUP_DOCBASICMGR 3
-#define SFX_CFGGROUP_BASICLIB 4
-#define SFX_CFGGROUP_BASICMOD 5
-#define SFX_CFGFUNCTION_MACRO 6
-#define SFX_CFGFUNCTION_SLOT  7
-#define SFX_CFGGROUP_SCRIPTCONTAINER  8
-#define SFX_CFGFUNCTION_SCRIPT 9
-#define SFX_CFGGROUP_STYLES  10
-#define SFX_CFGGROUP_SPECIALCHARACTERS  11
+#define SFX_CFGGROUP_FUNCTION           1
+#define SFX_CFGFUNCTION_SLOT            2
+#define SFX_CFGGROUP_SCRIPTCONTAINER    3
+#define SFX_CFGFUNCTION_SCRIPT          4
+#define SFX_CFGGROUP_STYLES             5
 
 struct SfxGroupInfo_Impl
 {
@@ -196,11 +190,8 @@ public:
     void                Open( SvLBoxEntry*, BOOL );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
-    void                AddAndSelect( const SfxStringItem*, const SfxStringItem* );
     void                SelectMacro( const String&, const String& );
     String              GetGroup();
-    BasicManager*       GetBasicManager( const SvLBoxEntry& _rEntry );
-    void                SetScriptType();
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
