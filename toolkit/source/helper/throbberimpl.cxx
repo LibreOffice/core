@@ -41,7 +41,6 @@ namespace toolkit
     Throbber_Impl::Throbber_Impl( uno::Reference< VCLXWindow > xParent,
                                   sal_Int32 nStepTime,
                                   sal_Bool bRepeat )
-        :mrMutex( Application::GetSolarMutex() )
     {
         mxParent = xParent;
         mbRepeat = bRepeat;
@@ -60,7 +59,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::start() throw ( uno::RuntimeException )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         mnCurStep = 0;
         maWaitTimer.Start();
@@ -69,7 +68,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::stop() throw ( uno::RuntimeException )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         maWaitTimer.Stop();
     }
@@ -78,7 +77,7 @@ namespace toolkit
     void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         maImageList = rImageList;
 
@@ -116,7 +115,7 @@ namespace toolkit
     // -----------------------------------------------------------------------
     IMPL_LINK( Throbber_Impl, TimeOutHdl, Throbber_Impl*, EMPTYARG )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
 

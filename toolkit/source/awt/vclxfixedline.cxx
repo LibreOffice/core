@@ -33,6 +33,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -63,7 +64,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXFixedLine, VCLXWindow );
 void SAL_CALL VCLXFixedLine::dispose() throw(RuntimeException)
 {
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -80,23 +81,14 @@ void SAL_CALL VCLXFixedLine::dispose() throw(RuntimeException)
 
 void VCLXFixedLine::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-    ::osl::ClearableSolarGuard aGuard( GetMutex() );
-/*
-    switch ( _rVclWindowEvent.GetId() )
-    {
-        default:
-            aGuard.clear();
-*/
-            VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
-/*
-            break;
-    }
-*/
+    SolarMutexGuard aGuard;
+
+    VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
 }
 
 void SAL_CALL VCLXFixedLine::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -113,7 +105,7 @@ void SAL_CALL VCLXFixedLine::setProperty( const ::rtl::OUString& PropertyName, c
 
 Any SAL_CALL VCLXFixedLine::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Any aReturn;
     if ( GetWindow() )

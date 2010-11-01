@@ -44,7 +44,6 @@ namespace toolkit
     class Throbber_Impl
     {
     private:
-        osl::SolarMutex&    mrMutex;    // Reference to SolarMutex
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > maImageList;
         ::com::sun::star::uno::Reference< VCLXWindow > mxParent;
 
@@ -55,8 +54,6 @@ namespace toolkit
         AutoTimer   maWaitTimer;
 
         DECL_LINK( TimeOutHdl, Throbber_Impl* );
-
-        osl::SolarMutex&    GetMutex() { return mrMutex; }
 
     public:
              Throbber_Impl( ::com::sun::star::uno::Reference< VCLXWindow > xParent,

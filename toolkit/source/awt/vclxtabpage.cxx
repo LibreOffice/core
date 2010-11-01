@@ -33,6 +33,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/svapp.hxx>
 
 #if !defined (__GNUC__)
 #define __PRETTY_FUNCTION__ __FUNCTION__
@@ -66,7 +67,7 @@ VCLXTabPage::~VCLXTabPage()
 void SAL_CALL VCLXTabPage::dispose() throw(uno::RuntimeException)
 {
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -135,7 +136,7 @@ void SAL_CALL VCLXTabPage::allocateArea( awt::Rectangle const& area )
 awt::Size SAL_CALL VCLXTabPage::getMinimumSize()
     throw(uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     return Bin::getMinimumSize();
 }

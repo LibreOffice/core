@@ -37,6 +37,7 @@
 #include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/svapp.hxx>
 
 //........................................................................
 namespace toolkit
@@ -108,7 +109,7 @@ namespace toolkit
     void SAL_CALL XThrobber::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
         throw( uno::RuntimeException )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         if ( GetWindow() )
         {
@@ -120,7 +121,7 @@ namespace toolkit
     uno::Any SAL_CALL XThrobber::getProperty( const ::rtl::OUString& PropertyName )
         throw( uno::RuntimeException )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         uno::Any aReturn;
 
@@ -135,7 +136,7 @@ namespace toolkit
     void SAL_CALL XThrobber::InitImageList()
         throw( uno::RuntimeException )
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
         sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
 

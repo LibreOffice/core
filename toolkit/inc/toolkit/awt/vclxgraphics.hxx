@@ -61,7 +61,6 @@ class VCLXGraphics :    public ::com::sun::star::awt::XGraphics,
                         public ::cppu::OWeakObject
 {
 private:
-    osl::SolarMutex&    mrMutex;    // Reference to SolarMutex
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice; // nur um bei getDevice() immer das gleiche zurueckzugeben
 
     OutputDevice*   mpOutputDevice;
@@ -72,9 +71,6 @@ private:
     Color           maFillColor;
     RasterOp        meRasterOp;
     Region*         mpClipRegion;
-
-protected:
-    osl::SolarMutex&    GetMutex() { return mrMutex; }
 
 public:
                     VCLXGraphics();

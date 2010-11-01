@@ -57,7 +57,7 @@ namespace toolkit
     class WindowStyleSettings : public WindowStyleSettings_Base
     {
     public:
-        WindowStyleSettings( ::osl::SolarMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
+        WindowStyleSettings( ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
         ~WindowStyleSettings();
 
         void dispose();

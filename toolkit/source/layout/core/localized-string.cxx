@@ -30,6 +30,7 @@
 
 #include <toolkit/helper/property.hxx>
 #include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
 
 namespace layoutimpl
 {
@@ -61,7 +62,7 @@ uno::Any LocalizedString::queryInterface( uno::Type const& rType )
 void LocalizedString::setText( OUString const& s )
     throw(uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( Window *w = GetWindow() )
         return w->SetText( s );
@@ -70,7 +71,7 @@ void LocalizedString::setText( OUString const& s )
 OUString LocalizedString::getText()
     throw(uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( Window *w = GetWindow() )
         return w->GetText();

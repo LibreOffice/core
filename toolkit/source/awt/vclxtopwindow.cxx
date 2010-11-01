@@ -93,7 +93,7 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
 
 ::com::sun::star::uno::Any VCLXTopWindow_Base::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;
@@ -134,21 +134,21 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
 
 void VCLXTopWindow_Base::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     GetTopWindowListenersImpl().addInterface( rxListener );
 }
 
 void VCLXTopWindow_Base::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     GetTopWindowListenersImpl().removeInterface( rxListener );
 }
 
 void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindowImpl();
     if ( pWindow )
@@ -161,7 +161,7 @@ void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     SystemWindow* pWindow = (SystemWindow*) GetWindowImpl();
     if ( pWindow )
@@ -180,7 +180,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 //--------------------------------------------------------------------
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
@@ -192,7 +192,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 //--------------------------------------------------------------------
 void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
@@ -204,7 +204,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
 //--------------------------------------------------------------------
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
@@ -216,7 +216,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
 //--------------------------------------------------------------------
 void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
@@ -228,7 +228,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
 //--------------------------------------------------------------------
 ::sal_Int32 SAL_CALL VCLXTopWindow_Base::getDisplay() throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     const SystemWindow* pWindow = dynamic_cast< const SystemWindow* >( GetWindowImpl() );
     if ( !pWindow )
@@ -240,7 +240,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
 //--------------------------------------------------------------------
 void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (RuntimeException, IndexOutOfBoundsException)
 {
-    ::osl::SolarGuard aGuard( GetMutexImpl() );
+    SolarMutexGuard aGuard;
 
     if ( ( _display < 0 ) || ( _display >= (sal_Int32)Application::GetScreenCount() ) )
         throw IndexOutOfBoundsException();
@@ -268,11 +268,6 @@ VCLXTopWindow::VCLXTopWindow(bool bWHWND)
 
 VCLXTopWindow::~VCLXTopWindow()
 {
-}
-
-osl::SolarMutex& VCLXTopWindow::GetMutexImpl()
-{
-    return VCLXContainer::GetMutex();
 }
 
 Window* VCLXTopWindow::GetWindowImpl()

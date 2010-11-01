@@ -34,6 +34,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -100,7 +101,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXTabControl, VCLXWindow, VCLXTabControl_Bas
 void SAL_CALL VCLXTabControl::dispose( ) throw(uno::RuntimeException)
 {
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -220,7 +221,7 @@ uno::Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
 // TODO: draw tab border here
 void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TabControl *pTabControl = getTabControl();
     TabPage *pTabPage = pTabControl->GetTabPage( sal::static_int_cast< USHORT >(  getActiveTabID() ) );
@@ -447,7 +448,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
 
 void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-    ::osl::ClearableSolarGuard aGuard( GetMutex() );
+    SolarMutexClearableGuard aGuard;
     TabControl* pTabControl = static_cast< TabControl* >( GetWindow() );
     if ( !pTabControl )
         return;
