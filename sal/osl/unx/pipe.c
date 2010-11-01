@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,10 @@
  *
  ************************************************************************/
 
-
 #include "system.h"
 
 #include <osl/pipe.h>
 #include <osl/diagnose.h>
-/*#include <osl/signal.h>*/
 #include <osl/thread.h>
 #include <osl/interlck.h>
 
@@ -44,9 +43,6 @@
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
-
-/*#define DEBUG_OSL_PIPE*/
-/*#define TRACE_OSL_PIPE*/
 
 
 /*****************************************************************************/
@@ -590,3 +586,4 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

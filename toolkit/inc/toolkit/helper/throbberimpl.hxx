@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <vcl/timer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //........................................................................
 namespace toolkit
@@ -43,7 +44,7 @@ namespace toolkit
     class Throbber_Impl
     {
     private:
-        NAMESPACE_VOS(IMutex)&  mrMutex;    // Reference to SolarMutex
+        osl::SolarMutex&    mrMutex;    // Reference to SolarMutex
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > maImageList;
         ::com::sun::star::uno::Reference< VCLXWindow > mxParent;
 
@@ -55,7 +56,7 @@ namespace toolkit
 
         DECL_LINK( TimeOutHdl, Throbber_Impl* );
 
-        NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
+        osl::SolarMutex&    GetMutex() { return mrMutex; }
 
     public:
              Throbber_Impl( ::com::sun::star::uno::Reference< VCLXWindow > xParent,
@@ -82,3 +83,4 @@ namespace toolkit
 
 #endif //_TOOLKIT_HELPER_THROBBERIMPL_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

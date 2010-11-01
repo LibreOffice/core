@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,3 +59,5 @@ typedef SwPosFlyFrm* SwPosFlyFrmPtr;
 SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40, SW_DLLPUBLIC )
 
 #endif // _FLYPOS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

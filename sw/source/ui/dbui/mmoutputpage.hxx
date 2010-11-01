@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,9 +50,7 @@ namespace com{ namespace sun{ namespace star{
         class XMailMessage;
     }
 }}}
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeOutputPage : public svt::OWizardPage
 {
     SwBoldFixedInfo m_aHeaderFI;
@@ -144,9 +143,7 @@ public:
         ~SwMailMergeOutputPage();
 
 };
-/*-- 21.05.2004 12:48:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 struct SwMailDescriptor
 {
     ::rtl::OUString                             sEMail;
@@ -238,3 +235,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

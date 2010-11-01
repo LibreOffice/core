@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "ConversionHelper.hxx"
 #include "GraphicHelpers.hxx"
 
@@ -221,3 +222,5 @@ sal_Int32 WrapHandler::getWrapMode( )
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

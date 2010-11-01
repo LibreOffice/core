@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <map>
 #include <algorithm>
@@ -2027,3 +2028,5 @@ USHORT DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLi
 }
 
 #endif // DBG_UTIL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,7 +58,7 @@
 published service StandaloneDocumentInfo
 {
     //-------------------------------------------------------------------------
-    /** use it to specify ressource or target of document info data
+    /** use it to specify resource or target of document info data
 
         <p>
         Must be the first action on this service. Otherwise all properties will be void.

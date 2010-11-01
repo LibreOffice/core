@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XDesktop.hdl>
 #include <com/sun/star/frame/XController.hdl>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "svgfilter.hxx"
 
@@ -76,7 +77,7 @@ SVGFilter::~SVGFilter()
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
     sal_Int16   nCurrentPageNumber = -1;
     sal_Bool    bRet;
@@ -231,3 +232,5 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 COMPHELPER_SERVICEDECL_EXPORTS1(svgFilter)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

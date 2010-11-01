@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ namespace dlgprov
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect,
              bool bProviderMode,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener );
+             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener ,const rtl::OUString& sDialogLibName );
         virtual ~DialogEventsAttacherImpl();
 
         // XScriptEventsAttacher
@@ -160,3 +161,5 @@ namespace dlgprov
 //.........................................................................
 
 #endif // SCRIPTING_DLGEVT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

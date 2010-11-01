@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
  * This file contains methods for the WW8 output
@@ -149,7 +149,7 @@ using namespace nsSwDocInfoSubType;
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
 */
 
-#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(CSET) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -1826,11 +1826,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
                   eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ))
                 bHandleBookmark = true;
 
-#if 0
-            if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
-                eFldType == ww::eFORMTEXT)
-                bHandleBookmark = true;
-#endif
         }
 
         if ( bHandleBookmark )
@@ -4390,25 +4385,6 @@ void WW8AttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol
         m_rWW8Export.pO->Insert( 138, m_rWW8Export.pO->Count(  ) );
     m_rWW8Export.pO->Insert( bEven ? 1 : 0, m_rWW8Export.pO->Count(  ) );
 
-#if 0
-    // FIXME what's the use of this code
-    if ( bEven )
-    {
-        USHORT nSpace = rColumns[0]->GetRight() + rColumns[1]->GetLeft();
-        for ( n = 2; n < nCols; n++ )
-        {
-            short nDiff = nSpace - ( rColumns[n - 1]->GetRight()
-                                         + rColumns[n]->GetLeft() );
-            if (nDiff > 10 || nDiff < -10)
-            {
-                // Toleranz: 10 tw
-                bEven = false;
-                break;
-            }
-        }
-    }
-#endif
-
     if ( !bEven )
     {
         for ( USHORT n = 0; n < nCols; ++n )
@@ -5319,4 +5295,4 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, BOOL bDeep
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

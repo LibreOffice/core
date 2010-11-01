@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,6 +135,8 @@ public:
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
     BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                IsInlineEditEnabled();
+    void                StartCursorMove();
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -145,3 +148,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

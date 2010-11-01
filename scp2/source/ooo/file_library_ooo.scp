@@ -978,6 +978,8 @@ STD_UNO_LIB_FILE(gid_File_Lib_Msworks,msworks)
 
 STD_UNO_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
+STD_UNO_LIB_FILE(gid_File_Lib_Wlwp,lwpft)
+
 STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
 #ifdef WNT
@@ -1414,6 +1416,9 @@ File gid_File_Lib_Spell
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Spl, spl)
+#if defined ENABLE_UNIX_QUICKSTARTER
+STD_UNO_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
+#endif
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
@@ -1562,17 +1567,6 @@ File gid_File_Lib_Vcl
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
-File gid_File_Lib_Vos
-    TXT_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT3(libvos3,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(vos3,COMID,.dll));
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
 // STD_UNO_LIB_FILE( gid_File_Lib_Wrp, wrp)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Xcr, xcr)
@@ -1713,6 +1707,18 @@ File gid_File_Lib_Migrationoo2
     Name = STRING(CONCAT2(migrationoo2.uno,UNXSUFFIX));
   #else
     Name = "migrationoo2.uno.dll";
+  #endif
+End
+
+File gid_File_Lib_Migrationoo3
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(migrationoo3.uno,UNXSUFFIX));
+  #else
+    Name = "migrationoo3.uno.dll";
   #endif
 End
 

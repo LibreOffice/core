@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/historyoptions.hxx>
@@ -58,9 +59,6 @@
 
 #include <rtl/logfile.hxx>
 #include <vcl/edit.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/unoctitm.hxx>
 #include "app.hrc"
@@ -115,7 +113,7 @@ void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( 
 
 void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !SFX_APP()->QueryExit_Impl() )
         throw TerminationVetoException();
 }
@@ -129,8 +127,9 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+    SolarMutexGuard aGuard;
+    utl::ConfigManager::GetConfigManager().StoreConfigItems();
+
     SfxApplication* pApp = SFX_APP();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
@@ -204,7 +203,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !bDetermineFunction )
     {
         bDetermineFunction = true;
@@ -230,7 +229,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 //====================================================================
 
-FASTBOOL SfxApplication::Initialize_Impl()
+bool SfxApplication::Initialize_Impl()
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 
@@ -306,10 +305,12 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // Set special characters callback on vcl edit control
         Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
     }
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

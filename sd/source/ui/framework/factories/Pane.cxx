@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 #include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <cppcanvas/vclfactory.hxx>
@@ -199,7 +200,7 @@ const Sequence<sal_Int8>& Pane::getUnoTunnelId (void)
     static Sequence<sal_Int8>* pSequence = NULL;
     if (pSequence == NULL)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
         if (pSequence == NULL)
         {
             static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
@@ -265,3 +266,5 @@ void Pane::ThrowIfDisposed (void) const
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

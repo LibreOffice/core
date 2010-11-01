@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,21 +101,18 @@
 #include <PostItMgr.hxx>
 #include <comcore.hrc>      // STR-ResId's
 
-// #i11176#
 #include <unoframe.hxx>
-// OD 2004-05-24 #i28701#
+
 #include <sortedobjs.hxx>
 
-// --> OD 2004-07-26 #i32089#
 #include <vector>
-// <--
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 #define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
 
-/* #109161# */
+
 static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 {
     bool bResult = false;
@@ -134,11 +132,7 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 |*      entsprechende Formate-Array gestellt.
 |*      Wenn bereits ein passendes Format existiert, so wird dies
 |*      zurueckgeliefert.
-|*  Ersterstellung      MA 22. Sep. 92
-|*  Letzte Aenderung    JP 08.05.98
-|*
 |*************************************************************************/
-
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
@@ -222,6 +216,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     }
     return pFmt;
 }
+
 /*************************************************************************
 |*
 |*  SwDoc::DelLayoutFmt()
@@ -232,7 +227,6 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 |*  Letzte Aenderung    MA 05. Feb. 93
 |*
 |*************************************************************************/
-
 void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 {
     //Verkettung von Rahmen muss ggf. zusammengefuehrt werden.
@@ -392,7 +386,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 |*  Letzte Aenderung    MA 17. Jul. 96
 |*
 |*************************************************************************/
-
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                 const SwFmtAnchor& rNewAnchor,
                                 bool bSetTxtFlyAtt, bool bMakeFrms )
@@ -576,7 +569,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
         uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj*)pObj)->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
-        OUString sName( rtl::OUString::createFromAscii("Name") );
+        OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )
@@ -922,9 +915,8 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
     return pFmt;
 }
 
-
-    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-    // angemeldet sein.
+// Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
+// angemeldet sein.
 SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                              SdrObject& rDrawObj,
                              const SfxItemSet* pFlyAttrSet,
@@ -1034,7 +1026,6 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 |*  Letzte Aenderung    MD 23. Feb. 95
 |*
 |*************************************************************************/
-
 /*sal_Bool TstFlyRange( const SwPaM* pPam, sal_uInt32 nFlyPos )
 {
     sal_Bool bOk = sal_False;
@@ -1046,6 +1037,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     return bOk;
 }
 */
+
 /* -----------------------------04.04.00 10:55--------------------------------
     paragraph frames - o.k. if the PaM includes the paragraph from the beginning
                        to the beginning of the next paragraph at least
@@ -1085,7 +1077,6 @@ sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
     } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
     return bOk;
 }
-
 
 void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                            const SwPaM* pCmpRange, sal_Bool bDrawAlso ) const
@@ -1194,7 +1185,6 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
    Otherwise the new set will not be changed.
 */
-
 void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWhich )
 {
     const SfxPoolItem *pOldItem = NULL, *pNewItem = NULL;
@@ -1223,7 +1213,6 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
     }
 
 }
-
 
 SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
             const String& rNumberingSeparator,
@@ -1548,7 +1537,6 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 |*  Letzte Aenderung    MIB 7. Dez. 98
 |*
 |*************************************************************************/
-
 SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                                      const String& rSeparator,
                                      const String& rNumberSeparator,
@@ -1818,7 +1806,6 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 |*  IDocumentTimerAccess-methods
 |*
 |*************************************************************************/
-
 void SwDoc::StartIdling()
 {
     mbStartIdleTimer = sal_True;
@@ -1845,7 +1832,6 @@ void SwDoc::UnblockIdling()
         aIdleTimer.Start();
 }
 
-
 /*************************************************************************
 |*
 |*  SwDoc::DoIdleJobs()
@@ -1854,7 +1840,6 @@ void SwDoc::UnblockIdling()
 |*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
-
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 {
 #ifdef TIMELOG
@@ -2295,3 +2280,5 @@ void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; }
 SwLayouter* SwDoc::GetLayouter() { return pLayouter; }
 const SwLayouter* SwDoc::GetLayouter() const { return pLayouter; }
 void SwDoc::SetLayouter( SwLayouter* pNew ) { pLayouter = pNew; }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

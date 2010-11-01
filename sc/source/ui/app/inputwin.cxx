@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -757,11 +758,11 @@ ScTextWnd::ScTextWnd( Window* pParent )
 
 __EXPORT ScTextWnd::~ScTextWnd()
 {
-    delete pEditView;
-    delete pEditEngine;
     while (!maAccTextDatas.empty()) {
         maAccTextDatas.back()->Dispose();
     }
+    delete pEditView;
+    delete pEditEngine;
 }
 
 void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
@@ -1808,3 +1809,4 @@ void ScPosWnd::ReleaseFocus_Impl()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

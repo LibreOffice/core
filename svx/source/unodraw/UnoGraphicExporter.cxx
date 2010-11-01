@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -84,7 +85,6 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::vos;
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -999,7 +999,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( NULL == mpUnoPage )
         return sal_False;
@@ -1090,7 +1090,7 @@ void SAL_CALL GraphicExporter::cancel()
 void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xComponent )
     throw(IllegalArgumentException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     mxShapes = NULL;
     mpUnoPage = NULL;
@@ -1282,3 +1282,4 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
     return aGraphic;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

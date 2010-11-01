@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,10 +65,6 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  KeyInput fuer ShortName - Edits ohne Spaces
-------------------------------------------------------------------------*/
-
 NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
     : Edit(pParent, rResId),
     sForbiddenChars(String::CreateFromAscii(" "))
@@ -90,9 +87,7 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
     if(bCallParent)
         Edit::KeyInput(rEvt);
 }
-/* -----------------------------11.02.00 15:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 void NoSpaceEdit::Modify()
 {
     Selection aSel = GetSelection();
@@ -112,15 +107,11 @@ void NoSpaceEdit::Modify()
     if(GetModifyHdl().IsSet())
         GetModifyHdl().Call(this);
 }
-/* -----------------25.06.2003 15:57-----------------
 
- --------------------------------------------------*/
 ReturnActionEdit::~ReturnActionEdit()
 {
 }
-/* -----------------25.06.2003 15:58-----------------
 
- --------------------------------------------------*/
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 {
     const KeyCode aKeyCode = rEvt.GetKeyCode();
@@ -135,4 +126,4 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
         Edit::KeyInput(rEvt);
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

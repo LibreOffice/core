@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,14 +57,14 @@
 
 #include <itemholder2.hxx>
 
-
+#include <sal/macros.h>
 // -----------
 // - statics -
 // -----------
 
 static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
-#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
+#define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
 // -----------
 // - Defines -
@@ -854,3 +855,5 @@ SvtPrintFileOptions::~SvtPrintFileOptions()
         pPrintFileOptionsDataContainer = NULL;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

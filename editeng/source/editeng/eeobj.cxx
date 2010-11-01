@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/itempool.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 using namespace ::com::sun::star;
 
@@ -110,3 +111,5 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
 
     return bSupported;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

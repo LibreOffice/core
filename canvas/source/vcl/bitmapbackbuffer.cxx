@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "bitmapbackbuffer.hxx"
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>
@@ -54,7 +55,7 @@ namespace vclcanvas
     {
         // make sure solar mutex is held on deletion (other methods
         // are supposed to be called with already locked solar mutex)
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( mpVDev )
             delete mpVDev;
@@ -163,3 +164,4 @@ namespace vclcanvas
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

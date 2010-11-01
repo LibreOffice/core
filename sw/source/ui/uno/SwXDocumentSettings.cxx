@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <SwXPrintPreviewSettings.hxx>
@@ -260,7 +261,7 @@ void SwXDocumentSettings::release ()
 uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< uno::Type > aBaseTypes( 5 );
     uno::Type* pBaseTypes = aBaseTypes.getArray();
@@ -279,7 +280,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -1092,3 +1093,4 @@ Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

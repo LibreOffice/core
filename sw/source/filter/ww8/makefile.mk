@@ -60,6 +60,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/wrtww8.obj \
         $(SLO)$/docxattributeoutput.obj \
         $(SLO)$/docxexportfilter.obj \
+        $(SLO)$/docxexport.obj \
         $(SLO)$/ww8atr.obj \
         $(SLO)$/ww8par.obj \
         $(SLO)$/ww8par6.obj \
@@ -69,6 +70,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/WW8TableInfo.obj \
         $(SLO)$/WW8FFData.obj \
         $(SLO)$/WW8Sttbf.obj \
+        $(SLO)$/ww8toolbar.obj \
         $(SLO)$/WW8FibData.obj \
         $(SLO)$/rtfexportfilter.obj \
         $(SLO)$/rtfimportfilter.obj \
@@ -106,6 +108,7 @@ SLOFILES =	\
         $(SLO)$/WW8TableInfo.obj \
         $(SLO)$/WW8FFData.obj \
         $(SLO)$/WW8Sttbf.obj \
+        $(SLO)$/ww8toolbar.obj \
         $(SLO)$/WW8FibData.obj \
         $(SLO)$/rtfexportfilter.obj \
         $(SLO)$/rtfimportfilter.obj \

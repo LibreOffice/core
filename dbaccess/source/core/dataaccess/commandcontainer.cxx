@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,16 +44,14 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OCommandContainer
 //==========================================================================
 DBG_NAME(OCommandContainer)
-//--------------------------------------------------------------------------
+
 OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
                                      ,const Reference< XInterface >&    _xParentContainer
                                      ,const TContentPtr& _pImpl
@@ -63,15 +62,15 @@ OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::X
 {
     DBG_CTOR(OCommandContainer, NULL);
 }
-//--------------------------------------------------------------------------
+
 OCommandContainer::~OCommandContainer()
 {
     DBG_DTOR(OCommandContainer, NULL);
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
 IMPLEMENT_TYPEPROVIDER2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
-//--------------------------------------------------------------------------
+
 Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _rName)
 {
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
@@ -83,25 +82,20 @@ Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _r
     return new OCommandDefinition( *this, _rName, m_aContext.getLegacyServiceFactory(), pElementContent );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
 {
     return createInstance( );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
 {
     return m_aContext.createComponent( (::rtl::OUString)( m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION ) );
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString OCommandContainer::determineContentType() const
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" ) );
 }
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

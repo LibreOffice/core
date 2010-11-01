@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -346,32 +347,11 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-#if 0 // DR
-            if (IsNoteEdit())
-            {
-                pView->CaptionTextDirection( rReq.GetSlot());     // process Notes before we end the text edit.
-                ExecuteGlobal( rReq );
-                pViewData->GetDispatcher().Execute(pViewData->GetView()->GetDrawFuncPtr()->GetSlotID(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            }
-            else
-#endif
-            {
-                pView->ScEndTextEdit(); // end text edit before switching direction
-                ExecuteGlobal( rReq );
-                // restore consistent state between shells and functions:
-                pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            }
-            break;
-
-#if 0
-        // Hyphenation is handled above - text edit is ended
-        case SID_ENABLE_HYPHENATION:
-            // force loading of hyphenator (object is skipped in repaint)
-            ((ScDrawLayer*)pView->GetModel())->UseHyphenator();
-            pOutliner->SetHyphenator( LinguMgr::GetHyphenator() );
+            pView->ScEndTextEdit(); // end text edit before switching direction
             ExecuteGlobal( rReq );
+            // restore consistent state between shells and functions:
+            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             break;
-#endif
 
         case SID_THES:
             {
@@ -1093,3 +1073,4 @@ void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

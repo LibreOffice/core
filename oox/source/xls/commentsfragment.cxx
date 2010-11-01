@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,9 +62,21 @@ ContextHandlerRef OoxCommentsFragment::onCreateContext( sal_Int32 nElement, cons
         case XLS_TOKEN( commentList ):
             if( nElement == XLS_TOKEN( comment ) ) { importComment( rAttribs ); return this; }
         break;
+        case XLS_TOKEN( commentPr ):
+            if( nElement == XLS_TOKEN( anchor ) )
+                return this;
+            break;
+        case XLS_TOKEN( anchor ):
+            if( nElement == XDR_TOKEN( from ) || nElement == XDR_TOKEN( to ) )
+                return this;
+            break;
+        case XDR_TOKEN( from ):
+        case XDR_TOKEN( to ):
+            return this;
         case XLS_TOKEN( comment ):
             if( (nElement == XLS_TOKEN( text )) && mxComment.get() )
                 return new OoxRichStringContext( *this, mxComment->createText() );
+            if( nElement == XLS_TOKEN( commentPr ) ) { mxComment->importCommentPr( rAttribs ); return this; }
         break;
     }
     return 0;
@@ -71,11 +84,20 @@ ContextHandlerRef OoxCommentsFragment::onCreateContext( sal_Int32 nElement, cons
 
 void OoxCommentsFragment::onEndElement( const OUString& rChars )
 {
+    bool bFrom = false;
+    if( getPreviousElement() == XDR_TOKEN( from ) )
+        bFrom = true;
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( author ):
             getComments().appendAuthor( rChars );
-        break;
+            break;
+        case XDR_TOKEN( col ):
+        case XDR_TOKEN( colOff ):
+        case XDR_TOKEN( row ):
+        case XDR_TOKEN( rowOff ):
+            mxComment->importAnchor( bFrom, getCurrentElement(), rChars );
+            break;
         case XLS_TOKEN( comment ):
             mxComment.reset();
         break;
@@ -151,3 +173,4 @@ void OoxCommentsFragment::importComment( RecordInputStream& rStrm )
 } // namespace xls
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

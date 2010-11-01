@@ -40,7 +40,6 @@ PROJECT=datefunc
 TARGET=$(BINOUT)\datefunc.dll
 
 CPPFLAGS = \
-    -I$(RUNTIME)\vos\inc		\
     -I$(RUNTIME)\sal\inc		\
     -I$(RUNTIME)\cppu\inc		\
     -I$(RUNTIME)\cppuhelper\inc	\

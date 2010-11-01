@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ class SAL_NO_VTABLE WeakComponentImplHelperBase
     , public ::com::sun::star::lang::XComponent
 {
 protected:
-    /** boradcast helper for disposing events
+    /** broadcast helper for disposing events
     */
     ::cppu::OBroadcastHelper rBHelper;
 
@@ -174,3 +175,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

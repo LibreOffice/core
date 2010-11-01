@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,8 +47,8 @@ namespace dbaccess
     using namespace ::com::sun::star::script;
     using namespace ::cppu;
     using namespace ::osl;
-    // -----------------------------------------------------------------------------
-    OPrivateColumns::OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+
+    OPrivateColumns::OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
@@ -58,8 +59,7 @@ namespace dbaccess
     {
     }
 
-    // -------------------------------------------------------------------------
-    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
+    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
         ::std::vector< ::rtl::OUString > aNames; aNames.reserve( _rColumns->get().size() );
@@ -77,7 +77,6 @@ namespace dbaccess
         return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, sal_False );
     }
 
-    // -------------------------------------------------------------------------
     void SAL_CALL OPrivateColumns::disposing(void)
     {
         m_aColumns = NULL;
@@ -86,10 +85,10 @@ namespace dbaccess
             // So we're not allowed to dispose our elements.
         OPrivateColumns_Base::disposing();
     }
-    // -------------------------------------------------------------------------
+
     connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
-        if ( m_aColumns.isValid() )
+        if ( m_aColumns.is() )
         {
             ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->get().begin(),m_aColumns->get().end(),_rName,isCaseSensitive());
             if(aIter == m_aColumns->get().end())
@@ -102,7 +101,7 @@ namespace dbaccess
         }
         return NULL;
     }
-    // -------------------------------------------------------------------------
+
     connectivity::sdbcx::ObjectType OPrivateTables::createObject(const ::rtl::OUString& _rName)
     {
         if ( !m_aTables.empty() )
@@ -114,5 +113,6 @@ namespace dbaccess
         }
         return NULL;
     }
-    // -----------------------------------------------------------------------------
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,6 +89,7 @@ public:
     virtual void            Activate( BOOL bMDI );
     virtual void            Deactivate( BOOL bMDI );
     virtual BOOL            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual sal_Bool        ImportFrom( SfxMedium &rMedium );
     virtual BOOL            ConvertFrom( SfxMedium &rMedium );
     virtual BOOL            Save();
     virtual BOOL            SaveAsOwnFormat( SfxMedium& rMedium );
@@ -239,3 +241,5 @@ SV_IMPL_REF (DrawDocShell)
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

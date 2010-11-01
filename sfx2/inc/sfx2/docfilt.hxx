@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,6 +71,7 @@
 #define SFX_FILTER_PASSWORDTOMODIFY  0x02000000L
 
 #define SFX_FILTER_PREFERED          0x10000000L
+#define SFX_FILTER_STARTPRESENTATION 0x20000000L
 
 #define SFX_FILTER_VERSION_NONE      0
 #define SFX_FILTER_NOTINSTALLED      SFX_FILTER_MUSTINSTALL | SFX_FILTER_CONSULTSERVICE
@@ -154,3 +156,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

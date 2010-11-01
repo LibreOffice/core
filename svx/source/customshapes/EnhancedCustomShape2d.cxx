@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1734,6 +1735,22 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
     if(aNewB2DPolyPolygon.count())
     {
+        if( !bLineGeometryNeededOnly )
+        {
+            // hack aNewB2DPolyPolygon to fill logic rect - this is
+            // needed to produce gradient fills that look like mso
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
+            aNewB2DPolygon.setClosed(true);
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
+                                                    aLogicRect.GetHeight()));
+            aNewB2DPolygon.setClosed(true);
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+        }
+
         // #i37011#
         bool bForceCreateTwoObjects(false);
 
@@ -2167,3 +2184,4 @@ SdrObject* EnhancedCustomShape2d::CreateLineGeometry()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

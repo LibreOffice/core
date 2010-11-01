@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -419,7 +420,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 
                     xWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
 
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
                         pWindow->Show( TRUE );
@@ -972,3 +973,5 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

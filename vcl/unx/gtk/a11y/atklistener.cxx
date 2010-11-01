@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
 
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -535,3 +542,5 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

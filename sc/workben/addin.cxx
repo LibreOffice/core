@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <usr/factoryhlp.hxx>
 #include <usr/macros.hxx>
 #include <usr/reflserv.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
@@ -593,3 +594,4 @@ sal_Bool SAL_CALL ScTestAddIn::supportsService( const ::rtl::OUString& ServiceNa
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

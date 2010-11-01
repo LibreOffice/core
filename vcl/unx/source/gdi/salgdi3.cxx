@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1498,10 +1499,6 @@ ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
     // TODO: get ImplFontCharMap directly from fonts
     if( !mpServerFont[0] )
-#if 0 // RIP XLFD fonts
-    if( mXFont[0] )
-        // TODO?: nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
-#endif
         return NULL;
 
     CmapResult aCmapResult;
@@ -2278,3 +2275,4 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFon
 
 // ===========================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

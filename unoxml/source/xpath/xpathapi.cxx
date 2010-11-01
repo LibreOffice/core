@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -352,7 +353,7 @@ namespace XPath
             throw XPathException();
         }
         xmlXPathFreeContext(xpathCtx);
-        Reference< XXPathObject > aObj(new CXPathObject(xpathObj));
+        Reference< XXPathObject > aObj(new CXPathObject(xpathObj, contextNode));
         return aObj;
     }
 
@@ -398,3 +399,5 @@ namespace XPath
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

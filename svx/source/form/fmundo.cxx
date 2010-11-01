@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
@@ -62,7 +64,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/event.hxx>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
@@ -595,8 +597,8 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             FM_PROP_TEXT, FM_PROP_STATE, FM_PROP_DATE, FM_PROP_TIME,
             FM_PROP_VALUE, FM_PROP_SELECT_SEQ, FM_PROP_EFFECTIVE_VALUE
         };
-        sal_Int32 nDefaultValueProps = sizeof(pDefaultValueProperties)/sizeof(pDefaultValueProperties[0]);
-        OSL_ENSURE(sizeof(aValueProperties)/sizeof(aValueProperties[0]) == nDefaultValueProps,
+        sal_Int32 nDefaultValueProps = SAL_N_ELEMENTS(pDefaultValueProperties);
+        OSL_ENSURE(SAL_N_ELEMENTS(aValueProperties) == nDefaultValueProps,
             "FmXUndoEnvironment::propertyChange: inconsistence!");
         for (sal_Int32 i=0; i<nDefaultValueProps; ++i)
         {
@@ -752,7 +754,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             // TODO: this is a potential race condition: two threads here could in theory
             // add their undo actions out-of-order
 
-            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
         }
     }
@@ -774,7 +776,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::elementInserted" );
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // neues Object zum lauschen
@@ -800,7 +802,7 @@ void FmXUndoEnvironment::implSetModified()
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::elementReplaced" );
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XInterface >  xIface;
@@ -818,7 +820,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::elementRemoved" );
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XInterface >  xIface( evt.Element, UNO_QUERY );
@@ -1344,3 +1346,5 @@ String FmUndoModelReplaceAction::GetComment() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::GetComment" );
     return SVX_RES(RID_STR_UNDO_MODEL_REPLACE);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

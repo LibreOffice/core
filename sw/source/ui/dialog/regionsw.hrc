@@ -84,12 +84,11 @@
 #define FL_FTN                 53
 #define IL_BITMAPS              54
 #define ILH_BITMAPS             55
-// --> FME 2004-06-22 #114856# edit in readonly sections
+// #114856# edit in readonly sections
 #define FL_PROPERTIES           56
 #define CB_EDIT_IN_READONLY     57
-// <--
 
-/* Globale Resourcen */
+/* global resources */
 #define STR_REG_DUPLICATE       (RC_REGIONSW_BEGIN+6)
 #define STR_INFO_DUPLICATE      (RC_REGIONSW_BEGIN+7)
 

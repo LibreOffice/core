@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,7 @@
 #include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
 #include "defaultobjectnamecheck.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
 
 //........................................................................
@@ -314,7 +315,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 // -----------------------------------------------------------------------------
 void OApplicationController::deleteEntries()
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getContainer() )
@@ -344,7 +345,7 @@ void OApplicationController::deleteEntries()
 // -----------------------------------------------------------------------------
 const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( !m_xDataSourceConnection.is() )
@@ -460,7 +461,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
 // -----------------------------------------------------------------------------
 void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames) const
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     OSL_ENSURE(getContainer(),"View isn't valid! -> GPF");
@@ -493,7 +494,7 @@ TransferableHelper* OApplicationController::copyObject()
 {
     try
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
 
         ElementType eType = getContainer()->getElementType();
@@ -776,7 +777,7 @@ sal_Bool OApplicationController::isTableFormat()  const
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     m_nAsyncDrop = 0;
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
 
@@ -814,3 +815,4 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

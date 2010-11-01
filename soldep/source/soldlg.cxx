@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -265,3 +266,4 @@ ByteString SolFindProjectDlg::GetProject()
 {
     return ByteString(maCombobox.GetText(),RTL_TEXTENCODING_UTF8);
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

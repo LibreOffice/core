@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,9 @@
 #include <tools/gen.hxx>
 #include <limits.h>
 
-/* -----------------03.03.2004 16:31-----------------
-    struct to determine min/max values for fly frame positioning in Writer
- --------------------------------------------------*/
+/*
+  struct to determine min/max values for fly frame positioning in Writer
+ */
 struct SvxSwFrameValidation
 {
     sal_Int16           nAnchorType; //com::sun::star::text::TextContentAnchorType
@@ -61,7 +62,7 @@ struct SvxSwFrameValidation
     sal_Int32 nMinHeight;
     sal_Int32 nMaxHeight;
 
-    Size    aPercentSize;   // Size fuer 100%-Wert
+    Size    aPercentSize;   // Size for 100% value
 
     SvxSwFrameValidation() :
         bAutoHeight(false),
@@ -85,3 +86,4 @@ struct SvxSwFrameValidation
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

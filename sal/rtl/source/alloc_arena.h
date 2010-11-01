@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,3 +136,5 @@ extern rtl_arena_type * gp_default_arena;
 #endif
 
 #endif /* INCLUDED_RTL_ALLOC_ARENA_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

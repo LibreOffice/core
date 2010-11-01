@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,8 +57,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 #endif
-#include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/process.h>
+#include <osl/mutex.hxx>
 
 #include "Xproto.h"
 #include <saldisp.hxx>
@@ -66,7 +67,6 @@
 #include <salframe.h>
 #include <osl/signal.h>
 #include <osl/thread.h>
-#include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
@@ -400,16 +400,16 @@ void SalXLib::Init()
     Display *pDisp = NULL;
 
     // is there a -display command line parameter?
-    vos::OExtCommandLine aCommandLine;
-    sal_uInt32 nParams = aCommandLine.getCommandArgCount();
+
+    sal_uInt32 nParams = osl_getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
     for (USHORT i=0; i<nParams; i++)
     {
-        aCommandLine.getCommandArg(i, aParam);
+        osl_getCommandArg(i, &aParam.pData);
         if (aParam.equalsAscii("-display"))
         {
-            aCommandLine.getCommandArg(i+1, aParam);
+            osl_getCommandArg(i+1, &aParam.pData);
             aDisplay = rtl::OUStringToOString(
                    aParam, osl_getThreadTextEncoding());
 
@@ -421,10 +421,8 @@ void SalXLib::Init()
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */
-                const char envpre[] = "DISPLAY=";
-                char *envstr = new char[sizeof(envpre)+aDisplay.getLength()];
-                snprintf(envstr, sizeof(envpre)+aDisplay.getLength(), "DISPLAY=%s", aDisplay.getStr());
-                putenv(envstr);
+                 rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+                 osl_setEnvironment(envVar.pData, aParam.pData);
             }
             break;
         }
@@ -865,3 +863,5 @@ rtl::OString X11SalData::getFrameResName( SalExtStyle nStyle )
 
     return aBuf.makeStringAndClear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -322,7 +323,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             // handle the request
             try
             {
-                ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+                SolarMutexGuard aSolarGuard;
                 // release the mutex when calling the handler, it may need to lock the SolarMutex
                 xHandler->handle(xRequest);
             }
@@ -1217,3 +1218,4 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

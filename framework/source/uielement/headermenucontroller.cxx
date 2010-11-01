@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -107,7 +108,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -269,3 +270,5 @@ void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::u
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -406,7 +407,7 @@ static const char * aEidToPropName[] =
 
 static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
-    DBG_ASSERT( (unsigned int) eEntryId < sizeof(aEidToPropName) / sizeof(aEidToPropName[0]), "index out of range" );
+    DBG_ASSERT( (unsigned int) eEntryId < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
     return String::CreateFromAscii( aEidToPropName[ (int) eEntryId ] );
 }
 
@@ -1172,7 +1173,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.documentfoundation.org/dictionary/" ) ) );
+            RTL_CONSTASCII_STRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
@@ -1777,7 +1778,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
 
                 AddDicBoxEntry( xNewDic, (USHORT) nLen );
             }
-            delete aDlg; //add by CHINA001
+            delete aDlg;
         }
     }
     else if (&aLinguDicsEditPB == pBtn)
@@ -2070,7 +2071,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.documentfoundation.org/dictionary/" ) ) );
+            RTL_CONSTASCII_STRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
     else
@@ -2552,3 +2553,4 @@ IMPL_LINK( SvxEditModulesDlg, OpenURLHdl_Impl, svt::FixedHyperlink *, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

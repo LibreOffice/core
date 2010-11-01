@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
-
-#ifndef GCC
-#endif
 
 // wg. pTopFrames
 #include "appdata.hxx"
@@ -984,3 +982,4 @@ const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Ref
     return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, i_rSet );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

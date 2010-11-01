@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -179,7 +180,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 rSh.DontExpandFmt();
         break;
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong  dispatcher");
             return;
     }
 }
@@ -279,7 +280,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong  dispatcher");
             return;
     }
 }
@@ -325,7 +326,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     case FN_SET_LINE_SPACE_2:   lcl_SetLineSpace(200,aSet);     break;
 
     default:
-        DBG_ERROR("SwTextShell::ExecParaAttr falscher Dispatcher");
+        OSL_ENSURE(false, "SwTextShell::ExecParaAttr wrong Dispatcher");
         return;
     }
     SwWrtShell& rWrtSh = GetShell();
@@ -489,7 +490,7 @@ SET_LINESPACE:
         break;
 
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong  dispatcher");
             return;
     }
     SwWrtShell& rWrtSh = GetShell();
@@ -546,11 +547,11 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                                            HINT_END, HINT_END, 0);
                 rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
                     rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();
@@ -592,7 +593,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong  dispatcher");
             return;
     }
 }
@@ -833,3 +834,4 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

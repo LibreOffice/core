@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,21 +69,11 @@
 #include <unomid.h>
 
 #include <IDocumentOutlineNodes.hxx>
-// --> OD 2008-04-14 #outlinelevel#
 #include <app.hrc>
-// <--
 
 using namespace ::com::sun::star;
 
-/* -----------------------------31.01.01 10:23--------------------------------
-
- ---------------------------------------------------------------------------*/
-
 DBG_NAME(outlinehdl)
-
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 class SwNumNamesDlg: public ModalDialog
 {
@@ -108,8 +99,6 @@ public:
 /*------------------------------------------------------------------------
  Beschreibung:  selektierten Eintrag merken
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 {
     aFormEdit.SetText(pBox->GetSelectEntry());
@@ -123,8 +112,6 @@ IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
  Parameter:     Liste der vom Benutzer vergebenen Namen;
                 nicht vom Benutzer benannte Positionen sind 0.
 ------------------------------------------------------------------------*/
-
-
 void SwNumNamesDlg::SetUserNames(const String *pList[])
 {
     USHORT nSelect = 0;
@@ -141,32 +128,26 @@ void SwNumNamesDlg::SetUserNames(const String *pList[])
     aFormBox.SelectEntryPos(nSelect);
     SelectHdl(&aFormBox);
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  OK-Button freischalten, wenn Text im Edit steht.
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
     aOKBtn.Enable(0 != pBox->GetText().Len());
     return 0;
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
+
 /*------------------------------------------------------------------------
  Beschreibung:  DoubleClickHdl
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK_INLINE_START( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
 {
     EndDialog(RET_OK);
     return 0;
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
-
-/*--------------------------------------------------
-
---------------------------------------------------*/
 
 SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     : ModalDialog(pParent, SW_RES(DLG_NUM_NAMES)),
@@ -184,16 +165,8 @@ SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     SelectHdl(&aFormBox);
 }
 
-/*--------------------------------------------------
-
---------------------------------------------------*/
-
 __EXPORT SwNumNamesDlg::~SwNumNamesDlg() {}
 
-
-/* -----------------08.07.98 08:46-------------------
- *
- * --------------------------------------------------*/
 USHORT lcl_BitToLevel(USHORT nActLevel)
 {
     USHORT nTmp = nActLevel;
@@ -203,9 +176,6 @@ USHORT lcl_BitToLevel(USHORT nActLevel)
     return nTmpLevel;
 }
 
-/* -----------------07.07.98 14:13-------------------
- *
- * --------------------------------------------------*/
 USHORT SwOutlineTabDialog::nNumLevel = 1;
 SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet,
@@ -265,17 +235,11 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     }
 }
 
-/* -----------------07.07.98 14:13-------------------
- *
- * --------------------------------------------------*/
 SwOutlineTabDialog::~SwOutlineTabDialog()
 {
     delete pNumRule;
 }
 
-/* -----------------07.07.98 14:13-------------------
- *
- * --------------------------------------------------*/
 void    SwOutlineTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
 {
     switch ( nPageId )
@@ -289,9 +253,7 @@ void    SwOutlineTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
         break;
     }
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineTabDialog, CancelHdl, Button *, EMPTYARG )
 {
     if (!bModified)
@@ -299,9 +261,7 @@ IMPL_LINK( SwOutlineTabDialog, CancelHdl, Button *, EMPTYARG )
     EndDialog(RET_CANCEL);
     return 0;
 }
-/* -----------------08.07.98 12:14-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
 {
     //PopupMenu auffuellen
@@ -316,9 +276,6 @@ IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
     return 0;
 }
 
-/* -----------------08.07.98 12:14-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
 {
     BYTE nLevelNo = 0;
@@ -379,9 +336,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
 
     return 0;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 USHORT  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
 {
     for(USHORT i = 0; i < MAXLEVEL; ++i)
@@ -392,9 +347,7 @@ USHORT  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
     return MAXLEVEL;//NO_NUMBERING; //#outline level,zhaojianwei
 
 }
-/* -----------------07.07.98 16:30-------------------
- *
- * --------------------------------------------------*/
+
 short SwOutlineTabDialog::Ok()
 {
     SfxTabDialog::Ok();
@@ -522,9 +475,6 @@ short SwOutlineTabDialog::Ok()
     return RET_OK;
 }
 
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_OUTLINE_NUM), rSet),
     aLevelLB(       this, SW_RES(LB_LEVEL   )),
@@ -567,9 +517,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aCharFmtLB.SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFmtHdl));
 
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 void    SwOutlineSettingsTabPage::Update()
 {
         // falls eine Vorlage fuer diese Ebene bereits selektiert wurde,
@@ -683,9 +631,6 @@ void    SwOutlineSettingsTabPage::Update()
     SetModified();
 }
 
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox *, pBox )
 {
     nActLevel = 0;
@@ -706,9 +651,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox *, pBox )
     Update();
     return 0;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
 {
     USHORT nMask = 1;
@@ -726,9 +669,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
     SetModified();
     return 0;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
 {
     BYTE i;
@@ -779,9 +720,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, EMPTYARG )
     return 0;
 }
 
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBox )
 {
     USHORT nMask = 1;
@@ -800,9 +738,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBo
     SetModified();
     return 0;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, EMPTYARG )
 {
     USHORT nMask = 1;
@@ -820,9 +756,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, EMPTYARG )
     SetModified();
     return 0;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
 {
     USHORT nMask = 1;
@@ -839,9 +773,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
     SetModified();
     return 0;
 }
-/* -----------------21.09.98 12:21-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwOutlineSettingsTabPage, CharFmtHdl, ListBox *, EMPTYARG )
 {
 //  bAutomaticCharStyles = FALSE;
@@ -888,15 +820,11 @@ IMPL_LINK( SwOutlineSettingsTabPage, CharFmtHdl, ListBox *, EMPTYARG )
     }
     return RET_OK;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
 {
 }
-/* -----------------07.07.98 16:27-------------------
- *
- * --------------------------------------------------*/
+
 void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {
     pSh = pShell;
@@ -957,9 +885,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
                         pSh->GetView().GetDocShell());
     Update();
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
 {
     nActLevel = SwOutlineTabDialog::GetActNumLevel();
@@ -969,39 +895,29 @@ void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
         aLevelLB.SelectEntryPos(MAXLEVEL);
     LevelHdl(&aLevelLB);
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 int     SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
 {
     SwOutlineTabDialog::SetActNumLevel(nActLevel);
     return LEAVE_PAGE;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 BOOL    SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
 {
     return TRUE;
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 void    SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage(rSet);
 }
-/* -----------------07.07.98 14:19-------------------
- *
- * --------------------------------------------------*/
+
 SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwOutlineSettingsTabPage(pParent, rAttrSet);
 }
-/* -----------------07.11.2002 15:13-----------------
- *
- * --------------------------------------------------*/
+
 void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
 {
     BOOL bIsNull = aStartEdit.GetValue() == 0;
@@ -1012,9 +928,7 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
     if(bIsNull && bNoZeroAllowed)
         aStartEdit.GetModifyHdl().Call(&aStartEdit);
 }
-/*-----------------09.12.97 11:54-------------------
 
---------------------------------------------------*/
 USHORT lcl_DrawBullet(VirtualDevice* pVDev,
             const SwNumFmt& rFmt, USHORT nXStart,
             USHORT nYStart, const Size& rSize)
@@ -1032,9 +946,7 @@ USHORT lcl_DrawBullet(VirtualDevice* pVDev,
     pVDev->SetFont(aTmpFont);
     return nRet;
 }
-/*-----------------09.12.97 11:49-------------------
 
---------------------------------------------------*/
 USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, USHORT nXStart,
                         USHORT nYStart, USHORT nDivision)
 {
@@ -1056,6 +968,7 @@ USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, USHORT nXStar
     return nRet;
 
 }
+
 /*-----------------02.12.97 10:34-------------------
     Vorschau der Numerierung painten
 --------------------------------------------------*/
@@ -1296,7 +1209,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 pVDev->SetFont(aStdFont);
 
                 // Changed as per BugID 79541 Branding/Configuration
-                uno::Any MyAny = ::utl::ConfigManager::GetConfigManager()->
+                uno::Any MyAny = ::utl::ConfigManager::GetConfigManager().
                         GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 ::rtl::OUString aProductName;
 
@@ -1317,11 +1230,8 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 
 }
 
-/*-----------------02.12.97 10:34-------------------
-
---------------------------------------------------*/
 NumberingPreview::~NumberingPreview()
 {
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

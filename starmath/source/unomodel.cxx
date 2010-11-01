@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
@@ -59,8 +60,6 @@
 #include <config.hxx>
 #include <smdll.hxx>
 
-using namespace ::vos;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::std;
 using namespace ::comphelper;
@@ -72,6 +71,8 @@ using namespace ::com::sun::star::formula;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::script;
 
+
+using rtl::OUString;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
@@ -350,7 +351,7 @@ void SAL_CALL SmModel::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 4);
@@ -412,7 +413,7 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 
 ::rtl::OUString SmModel::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.math.FormulaDocument"));
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -430,7 +431,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::Ru
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -442,7 +443,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
@@ -931,7 +932,7 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
         const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 1;
 }
 
@@ -964,7 +965,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1001,7 +1002,7 @@ void SAL_CALL SmModel::render(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1098,7 +1099,7 @@ void SAL_CALL SmModel::render(
 void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
         throw( lang::NoSupportException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );
     uno::Reference< lang::XUnoTunnel > xParentTunnel( xParent, uno::UNO_QUERY );
     if ( xParentTunnel.is() )
@@ -1111,3 +1112,4 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

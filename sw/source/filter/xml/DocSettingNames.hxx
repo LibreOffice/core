@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 const char* aNmArr[] = {
     "ForbiddenCharacters" ,
     "IsKernAsianPunctuation" ,
@@ -24,3 +25,5 @@ const char* aNmArr[] = {
     "UpdateFromTemplate",
     "PrintEmptyPages",
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

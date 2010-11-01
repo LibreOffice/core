@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -818,76 +819,6 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         default:
             break;
     }
-#if 0
-
-
-        // Metrics of the scroll bar
-        case CTRL_SCROLLBAR:
-            //pWidget = pWidgetPainter->scrollBar( rControlRegion,
-                //( part == PART_BUTTON_LEFT || part == PART_BUTTON_RIGHT ),
-                //ImplControlValue() );
-            //aStyleOption.initFrom( pWidget );
-
-            switch ( part )
-            {
-            case PART_BUTTON_LEFT:
-            case PART_BUTTON_UP:
-                qRect = kapp->style()->subControlRect(
-                    QStyle::CC_ScrollBar, &aStyleOption, QStyle::SC_ScrollBarSubLine );
-
-                // Workaround for Platinum style scroll bars. It makes the
-                // left/up button invisible.
-                if ( part == PART_BUTTON_LEFT )
-                {
-                    if ( qRect.left() > kapp->style()->subControlRect(
-                        QStyle::CC_ScrollBar, &aStyleOption,
-                        QStyle::SC_ScrollBarSubPage ).left() )
-                    {
-                        qRect.setLeft( 0 );
-                        qRect.setRight( 0 );
-                    }
-                }
-                else
-                {
-                    if ( qRect.top() > kapp->style()->subControlRect(
-                        QStyle::CC_ScrollBar, &aStyleOption,
-                        QStyle::SC_ScrollBarSubPage ).top() )
-                    {
-                        qRect.setTop( 0 );
-                        qRect.setBottom( 0 );
-                    }
-                }
-
-                qRect.translate( qBoundingRect.left(), qBoundingRect.top() );
-
-                bReturn = TRUE;
-                break;
-
-            case PART_BUTTON_RIGHT:
-            case PART_BUTTON_DOWN:
-                qRect = kapp->style()->subControlRect(
-                    QStyle::CC_ScrollBar, &aStyleOption, QStyle::SC_ScrollBarAddLine );
-
-                // Workaround for Platinum and 3 button style scroll bars.
-                // It makes the right/down button bigger.
-                if ( part == PART_BUTTON_RIGHT )
-                    qRect.setLeft( kapp->style()->subControlRect(
-                        QStyle::CC_ScrollBar, &aStyleOption,
-                        QStyle::SC_ScrollBarAddPage ).right() + 1 );
-                else
-                    qRect.setTop( kapp->style()->subControlRect(
-                        QStyle::CC_ScrollBar, &aStyleOption,
-                        QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
-
-                qRect.translate( qBoundingRect.left(), qBoundingRect.top() );
-
-                bReturn = TRUE;
-                break;
-            }
-            break;
-    }
-#endif
-
     if (retVal)
     {
         // Bounding region
@@ -903,3 +834,5 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
     return retVal;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

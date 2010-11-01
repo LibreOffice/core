@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#if defined(SOLARIS)
+#if defined(SOLARIS) || defined(AIX)
 #include <sal/alloca.h>
 #include <osl/module.h>
 #endif
@@ -612,10 +613,12 @@ fd
   if( ! pDisplay->IsDisplay() )
       return 0;
 
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  return pDisplay->IsEvent();
+  int result;
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  result = pDisplay->IsEvent();
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
+  return result;
 }
 static int DisplayQueue( int
 #ifdef DBG_UTIL
@@ -625,11 +628,14 @@ fd
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  return XEventsQueued( pDisplay->GetDisplay(),
+  int result;
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  result =  XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
+
+  return result;
 }
 static int DisplayYield( int
 #ifdef DBG_UTIL
@@ -639,10 +645,10 @@ fd
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
   pDisplay->Yield();
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
   return TRUE;
 }
 
@@ -2345,7 +2351,7 @@ void SalX11Display::Yield()
 
     XEvent aEvent;
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
-                NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
+                osl::Thread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );
@@ -2682,7 +2688,7 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
-void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
 {
     // see if any frame buffers are at the same coordinates
     // this can happen with weird configuration e.g. on
@@ -2696,11 +2702,13 @@ void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, l
             if( m_aXineramaScreens[n].GetWidth() < i_nWidth ||
                 m_aXineramaScreens[n].GetHeight() < i_nHeight )
             {
+                m_aXineramaScreenIndexMap[i] = n;
                 m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
             }
             return;
         }
     }
+    m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
     m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
 }
 
@@ -2727,8 +2735,9 @@ void SalDisplay::InitXinerama()
         {
             m_bXinerama = true;
             m_aXineramaScreens = std::vector<Rectangle>();
+            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
             for( int i = 0; i < nFramebuffers; i++ )
-                addXineramaScreenUnique( pFramebuffers[i].x,
+                addXineramaScreenUnique( i, pFramebuffers[i].x,
                                          pFramebuffers[i].y,
                                          pFramebuffers[i].width,
                                          pFramebuffers[i].height );
@@ -2744,9 +2753,10 @@ if( XineramaIsActive( pDisp_ ) )
         if( nFramebuffers > 1 )
         {
             m_aXineramaScreens = std::vector<Rectangle>();
+            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
             for( int i = 0; i < nFramebuffers; i++ )
             {
-                addXineramaScreenUnique( pScreens[i].x_org,
+                addXineramaScreenUnique( i, pScreens[i].x_org,
                                          pScreens[i].y_org,
                                          pScreens[i].width,
                                          pScreens[i].height );
@@ -3530,3 +3540,4 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                          +  ((b+8)/17) ];
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

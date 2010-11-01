@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1351,3 +1352,5 @@ void SAL_CALL DocumentHolder::deactivated(  ) throw (::com::sun::star::uno::Runt
     // deactivation is too unspecific to be useful; usually we only trigger code from activation
     // so UIDeactivation is actively triggered by the container
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

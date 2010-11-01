@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -333,7 +334,13 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
         new SwEndNode( aEndIdx, *pSttNd );
 
         pPrvBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
-        pLine->GetTabBoxes().C40_INSERT( SwTableBox, pPrvBox, nInsPos + n );
+
+        SwTableBoxes & rTabBoxes = pLine->GetTabBoxes();
+        USHORT nRealInsPos = nInsPos + n;
+        if (nRealInsPos > rTabBoxes.Count())
+            nRealInsPos = rTabBoxes.Count();
+
+        rTabBoxes.C40_INSERT( SwTableBox, pPrvBox, nRealInsPos );
 
         //if( NO_NUMBERING == pTxtColl->GetOutlineLevel()//#outline level,zhaojianwei
         if( ! pTxtColl->IsAssignedToListLevelOfOutlineStyle()//<-end,zhaojianwei
@@ -4729,3 +4736,4 @@ lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

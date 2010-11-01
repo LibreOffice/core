@@ -1,5 +1,5 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-//#include <multimap>
 #include <map>
 #include <vector>
 
@@ -49,3 +49,5 @@ public:
         sal_Bool bCapture);
 };
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

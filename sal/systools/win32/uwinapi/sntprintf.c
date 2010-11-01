@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #define _SNPRINTF_DLLIMPORT __declspec( dllexport )
 
 #include <stdarg.h>
@@ -116,3 +117,5 @@ _SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _
 
     return retval;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

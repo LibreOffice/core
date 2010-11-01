@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,10 +43,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OBookmarkContainer -    base class of collections of database definition
@@ -168,15 +167,13 @@ protected:
 
 };
 
-//--------------------------------------------------------------------------
 inline  sal_Bool OBookmarkContainer::checkExistence(const ::rtl::OUString& _rName)
 {
     return m_aBookmarks.find(_rName) != m_aBookmarks.end();
 }
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_CORE_BOOKMARKCONTAINER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

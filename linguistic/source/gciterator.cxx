@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,7 @@
  ************************************************************************/
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -137,7 +139,7 @@ static sal_Unicode aWhiteSpaces[] =
     0xfffb    /* INTERLINEAR ANNOTATION TERMINATOR */
 };
 
-static int nWhiteSpaces = sizeof( aWhiteSpaces ) / sizeof( aWhiteSpaces[0] );
+static int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
 
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
 {
@@ -1357,3 +1359,4 @@ sal_Bool SAL_CALL GrammarCheckingIterator_writeInfo(
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

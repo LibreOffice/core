@@ -81,7 +81,7 @@ ALLTAR : $(BIN)$/python.sh
 $(BIN)$/python.sh : python.sh
     -rm -f $@
     cat $? > $@
-    sed 's/%%PYVERSION%%/$(PYVERSION)/g' < $@ > $@.new
+    sed 's/%%PYVERSION%%/$(PYVERSION)/g' < $@ | sed 's/%%OOO_LIBRARY_PATH_VAR%%/$(OOO_LIBRARY_PATH_VAR)/g'  > $@.new
     mv $@.new $@
     chmod +x $@
 .ENDIF
@@ -93,7 +93,7 @@ $(OUT)$/inc$/pyversion.hxx: pyversion.inc
 
 $(BIN)$/$(PYDIRNAME).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "AIX"
     cd $(DESTROOT) && find . -name '*$(DLLPOST)' | xargs strip
 .ENDIF
 .ENDIF
@@ -110,7 +110,7 @@ $(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
     -$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "AIX"
     strip $@
 .ENDIF
     chmod +x $@

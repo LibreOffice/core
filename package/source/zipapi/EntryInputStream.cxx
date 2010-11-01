@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
                                     const ZipEntry & rNewEntry,
-                                    const vos::ORef < EncryptionData > &xEncryptData,
+                                    const rtl::Reference < EncryptionData > &xEncryptData,
                                     sal_Bool bGetRawStream)
 : xStream( xNewInput )
 , xSeek( xNewInput, UNO_QUERY )
@@ -199,3 +200,5 @@ sal_Int64 SAL_CALL EntryInputStream::getLength(  )
 {
     return nUncompressedSize;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

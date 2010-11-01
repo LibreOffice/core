@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,10 +78,6 @@
 
 #include <IDocumentRedlineAccess.hxx>
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SFX_IMPL_MODELESSDIALOG( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
 SV_IMPL_PTRARR(SwRedlineDataParentArr, SwRedlineDataParentPtr)
@@ -90,10 +87,6 @@ SV_IMPL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr)
 
 static USHORT nSortMode = 0xffff;
 static BOOL   bSortDir = TRUE;
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
                                             USHORT nId,
@@ -109,7 +102,6 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
 /*--------------------------------------------------------------------
     Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-
 BOOL SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 {
     BOOL bRet;
@@ -119,10 +111,6 @@ BOOL SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 
     return bRet;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg( SfxBindings* _pBindings,
                                                         SwChildWinWrapper* pChild,
@@ -134,10 +122,6 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg( SfxBindings* _pBindings,
 
     FreeResource();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwModelessRedlineAcceptDlg::Activate()
 {
@@ -169,10 +153,6 @@ void SwModelessRedlineAcceptDlg::Activate()
     pImplDlg->Activate();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo *pInfo)
 {
     String aStr;
@@ -182,19 +162,11 @@ void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo *pInfo)
     SfxModelessDialog::Initialize(pInfo);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwModelessRedlineAcceptDlg::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxModelessDialog::FillInfo(rInfo);
     pImplDlg->FillInfo(rInfo.aExtraString);
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModelessRedlineAcceptDlg::Resize()
 {
@@ -202,18 +174,10 @@ void SwModelessRedlineAcceptDlg::Resize()
     SfxModelessDialog::Resize();
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
     delete pImplDlg;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     pParentDlg      (pParent),
@@ -301,17 +265,9 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     aSelectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, GotoHdl));
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 {
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwRedlineAcceptDlg::Init(USHORT nStart)
 {
@@ -338,10 +294,6 @@ void SwRedlineAcceptDlg::Init(USHORT nStart)
     if( pSelEntry )
         pTable->MakeVisible( pSelEntry, sal_True ); //#i70937#, force the scroll
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwRedlineAcceptDlg::InitAuthors()
 {
@@ -412,10 +364,6 @@ void SwRedlineAcceptDlg::InitAuthors()
                                 !bOnlyFormatedRedlines );
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 String SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
                                         DateTime &rDateTime, USHORT nStack)
 {
@@ -435,10 +383,6 @@ String SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
     return sEntry;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, USHORT nStack)
 {
     switch( rRedln.GetType(nStack) )
@@ -453,10 +397,6 @@ const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, USHORT 
 
     return aEmptyStr;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwRedlineAcceptDlg::Resize()
 {
@@ -473,7 +413,6 @@ void SwRedlineAcceptDlg::Resize()
 /*--------------------------------------------------------------------
     Beschreibung: Nach Aktivierung neu initialisieren
  --------------------------------------------------------------------*/
-
 void SwRedlineAcceptDlg::Activate()
 {
     // prevent update if flag is set (#102547#)
@@ -579,10 +518,6 @@ void SwRedlineAcceptDlg::Activate()
     InitAuthors();
 }
 
-/* -----------------05.06.98 13:06-------------------
- *
- * --------------------------------------------------*/
-
 USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
 {
     if (!nStart)
@@ -655,10 +590,6 @@ USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
     Init(nStart);   // Alle Eintraege bis zum Ende abgleichen
     return USHRT_MAX;
 }
-
-/* -----------------05.06.98 13:57-------------------
- *
- * --------------------------------------------------*/
 
 void SwRedlineAcceptDlg::InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt)
 {
@@ -739,10 +670,6 @@ void SwRedlineAcceptDlg::InsertChilds(SwRedlineDataParent *pParent, const SwRedl
     }
 }
 
-/* -----------------05.06.98 15:20-------------------
- *
- * --------------------------------------------------*/
-
 void SwRedlineAcceptDlg::RemoveParents(USHORT nStart, USHORT nEnd)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
@@ -817,10 +744,6 @@ void SwRedlineAcceptDlg::RemoveParents(USHORT nStart, USHORT nEnd)
     aRedlineParents.DeleteAndDestroy( nStart, nEnd - nStart + 1);
 }
 
-/* -----------------05.06.98 15:20-------------------
- *
- * --------------------------------------------------*/
-
 void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
 {
     SwView *pView   = ::GetActiveView();
@@ -884,10 +807,6 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
     }
 }
 
-/* -----------------05.06.98 13:06-------------------
- *
- * --------------------------------------------------*/
-
 void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
@@ -898,7 +817,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
     ListBoxEntries_t aRedlines;
 
     // don't activate
-    DBG_ASSERT( bInhibitActivate == false,
+    OSL_ENSURE( bInhibitActivate == false,
                 "recursive call of CallAcceptReject?");
     bInhibitActivate = true;
 
@@ -985,10 +904,6 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
     pTPView->EnableUndo();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwRedlineAcceptDlg::GetRedlinePos( const SvLBoxEntry& rEntry ) const
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
@@ -996,19 +911,11 @@ USHORT SwRedlineAcceptDlg::GetRedlinePos( const SvLBoxEntry& rEntry ) const
                                     rEntry.GetUserData())->pData)->pData );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineAcceptDlg, AcceptHdl, void*, EMPTYARG)
 {
     CallAcceptReject( TRUE, TRUE );
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwRedlineAcceptDlg, AcceptAllHdl, void*, EMPTYARG )
 {
@@ -1016,29 +923,17 @@ IMPL_LINK( SwRedlineAcceptDlg, AcceptAllHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineAcceptDlg, RejectHdl, void*, EMPTYARG )
 {
     CallAcceptReject( TRUE, FALSE );
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineAcceptDlg, RejectAllHdl, void*, EMPTYARG )
 {
     CallAcceptReject( FALSE, FALSE );
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwRedlineAcceptDlg, UndoHdl, void*, EMPTYARG )
 {
@@ -1051,10 +946,6 @@ IMPL_LINK( SwRedlineAcceptDlg, UndoHdl, void*, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwRedlineAcceptDlg, FilterChangedHdl, void*, EMPTYARG )
 {
@@ -1070,10 +961,6 @@ IMPL_LINK( SwRedlineAcceptDlg, FilterChangedHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineAcceptDlg, DeselectHdl, void*, EMPTYARG )
 {
     // Flackern der Buttons vermeiden:
@@ -1082,10 +969,6 @@ IMPL_LINK( SwRedlineAcceptDlg, DeselectHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineAcceptDlg, SelectHdl, void*, EMPTYARG )
 {
     aDeselectTimer.Stop();
@@ -1093,10 +976,6 @@ IMPL_LINK( SwRedlineAcceptDlg, SelectHdl, void*, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
 {
@@ -1172,10 +1051,6 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 {
     const CommandEvent aCEvt(pTable->GetCommandEvent());
@@ -1245,16 +1120,16 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
                         /* enable again once we have redline comments in the margin
                         sComment = rRedline.GetComment();
-                        if ( sComment == String(::rtl::OUString::createFromAscii("")) )
+                        if ( !sComment.Len() )
                             GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
                         const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
                         */
 
                         sComment = rRedline.GetComment();
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "Dialogdiet fail!");
+                        OSL_ENSURE(pFact, "Dialogdiet fail!");
                         ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                        DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
+                        OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                         SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
 
                         aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
@@ -1265,7 +1140,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                                     SID_ATTR_POSTIT_DATE ));
 
                         AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, FALSE );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         pDlg->HideAuthor();
 
@@ -1342,10 +1217,6 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
 {
     if (rExtraData.Len())
@@ -1383,10 +1254,6 @@ void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
 {
     rExtraData.AppendAscii("AcceptChgDat:(");
@@ -1402,3 +1269,5 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
     }
     rExtraData += ')';
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

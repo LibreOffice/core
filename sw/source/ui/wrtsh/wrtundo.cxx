@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,7 +155,7 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
             sList += *rIdNm.GetUndoStr();
         else
         {
-            ASSERT( !this, "no Undo/Redo Test set" );
+            OSL_ENSURE( !this, "no Undo/Redo Test set" );
         }
         sList += '\n';
     }
@@ -178,3 +179,4 @@ String SwWrtShell::GetRepeatString() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

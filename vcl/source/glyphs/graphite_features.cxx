@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@ using namespace grutils;
 const char GrFeatureParser::FEAT_PREFIX = ':';
 const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
-const std::string GrFeatureParser::ISO_LANG("lang");
 
 GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string lang)
     : mnNumSettings(0), mbErrors(false)
@@ -73,7 +73,7 @@ GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string features, co
             break;
         }
         // check for a lang=xxx specification
-        if (features.compare(pos, nEquals - pos, ISO_LANG) == 0)
+        if (features.compare(pos, nEquals - pos, "lang") == 0)
         {
             pos = nEquals + 1;
             nFeatEnd = features.find(FEAT_SEPARATOR, pos);
@@ -284,3 +284,5 @@ sal_Int32 GrFeatureParser::hashCode() const
     }
     return hash;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

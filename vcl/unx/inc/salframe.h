@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,6 +130,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 
     String          m_aTitle;
 
+    rtl::OUString   m_sWMClass;
+
     SystemChildData maSystemChildData;
 
     SalI18N_InputContext *mpInputContext;
@@ -171,6 +174,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 
     void            setXEmbedInfo();
     void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
+
+    void            updateWMClass();
 public:
     X11SalFrame( SalFrame* pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
@@ -261,6 +266,7 @@ public:
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
 
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
@@ -288,3 +294,4 @@ inline XLIB_Window X11SalFrame::GetDrawable() const
 
 #endif // _SV_SALFRAME_H
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

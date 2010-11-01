@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -203,6 +204,10 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
     if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) ||
         rContentType.equalsAscii( "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" ) )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML" );
+
+    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ) ||
+        rContentType.equalsAscii( "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" ) )
+        return CREATE_OUSTRING( "MS PowerPoint 2007 XML AutoPlay" );
 
     if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ) ||
         rContentType.equalsAscii( "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" ) )
@@ -655,3 +660,4 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 } // namespace core
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

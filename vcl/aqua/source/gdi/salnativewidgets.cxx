@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -341,10 +342,6 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
             break;
 
         case CTRL_TOOLTIP: // ** TO DO
-            #if 0
-            if( nPart == PART_ENTIRE_CONTROL ) // we don't currently support the tooltip
-                return true;
-            #endif
             break;
 
         case CTRL_MENU_POPUP:
@@ -1527,3 +1524,5 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
     return toReturn;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,8 @@ public:
     virtual void SAL_CALL setProtectedForForms( ::sal_Bool _protectedforforms ) throw (css::uno::RuntimeException);
 
     // Methods
-    virtual css::uno::Any SAL_CALL Headers(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Footers(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL PageSetup(  ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
@@ -57,3 +58,5 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_SECTION_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

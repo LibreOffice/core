@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@ void SwBreakDlg::Apply()
     }
 }
 
-
 IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 {
     CheckEnable();
@@ -112,9 +112,9 @@ IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
 {
     if(aPageNumBox.IsChecked()) {
-            // wenn unterschiedliche Seitenvorlagen, testen auf Gueltigkeit
+        // In case of differing page descriptions, test validity
         const USHORT nPos = aPageCollBox.GetSelectEntryPos();
-            // auf Position 0 steht 'Ohne'.
+        // auf Position 0 steht 'Ohne'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
@@ -122,7 +122,7 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
-        ASSERT(pPageDesc, Seitenvorlage nicht gefunden.);
+        OSL_ENSURE(pPageDesc, "Page description not found.");
         const USHORT nUserPage = USHORT(aPageNumEdit.GetValue());
         BOOL bOk = TRUE;
         switch(pPageDesc->GetUseOn())
@@ -177,7 +177,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageNumEdit.SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 
 
-    // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
+    // Insert page description to Listbox
     const USHORT nCount = rSh.GetPageDescCnt();
     USHORT i;
 
@@ -200,7 +200,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageNumEdit.SetText( aEmptyStr );
     FreeResource();
 }
-
 
 void SwBreakDlg::CheckEnable()
 {
@@ -238,3 +237,5 @@ void SwBreakDlg::CheckEnable()
 SwBreakDlg::~SwBreakDlg()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

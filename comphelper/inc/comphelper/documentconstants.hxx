@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,3 +112,4 @@
 #define ODFVER_012_TEXT ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ODFVER_012_TEXT_ASCII ) )
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -205,7 +206,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             ExecuteTextAttrDlg( rReq );
             break;
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         case SID_DRAW_HLINK_EDIT:
             if ( pSingleSelectedObj )
                 pViewData->GetDispatcher().Execute( SID_HYPERLINK_DIALOG );
@@ -233,7 +233,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     ScGlobal::OpenURL( pInfo->GetHlink(), String::EmptyString() );
             }
             break;
-#endif
 
         case SID_ATTR_TRANSFORM:
             {
@@ -473,7 +472,6 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
     delete( pDlg );
 }
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
 void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk )
 {
     if ( pObj )
@@ -483,5 +481,5 @@ void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk
         lcl_setModified( GetObjectShell() );
     }
 }
-#endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

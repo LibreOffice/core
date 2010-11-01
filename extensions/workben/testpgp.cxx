@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #ifndef _RTL_WSTRING_
 #include <rtl/wstring>
 #endif
-#include <vos/macros.hxx>
 
 #include <usr/smartservices.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL DataSource_Impl::readBytes (
         throw IOException();
 
     sal_Int32 k = m_buffer.getLength() - m_position;
-    k = VOS_BOUND(k, 0, nBytesToRead);
+    k = SAL_BOUND(k, 0, nBytesToRead);
     if (k > 0)
     {
         rData.realloc(k);
@@ -553,7 +553,7 @@ BOOL install (
     String aModule ("module://");
     char   pBuffer[1024];
 
-    NAMESPACE_VOS(ORealDynamicLoader)::computeModuleName (
+    vos:ORealDynamicLoader::computeModuleName (
         prefix, pBuffer, sizeof(pBuffer));
     aModule += pBuffer;
 
@@ -571,7 +571,7 @@ BOOL uninstall (
     String aModule ("module://");
     char   pBuffer[1024];
 
-    NAMESPACE_VOS(ORealDynamicLoader)::computeModuleName (
+    vos::ORealDynamicLoader::computeModuleName (
         prefix, pBuffer, sizeof(pBuffer));
     aModule += pBuffer;
 
@@ -755,8 +755,7 @@ int SAL_CALL main (int argc, char **argv)
                     S2U("mhu@rabbit")
                 };
 
-                sal_Int32 nRecipients =
-                    sizeof(aRecipients) / sizeof(aRecipients[0]);
+                sal_Int32 nRecipients = SAL_N_ELEMENTS(aRecipients);
 
                 if (nOptions & OPTION_SIGN)
                 {
@@ -840,3 +839,4 @@ int SAL_CALL main (int argc, char **argv)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

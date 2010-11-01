@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -339,3 +340,5 @@
 #define layctrl_0c  SEG_SEGCLASS(UNUSED_SEG002,UNUSED_CODE)
 #define layctrl_0f  SEG_SEGCLASS(UNUSED_SEG002,UNUSED_CODE)
 #define layctrl_10  SEG_SEGCLASS(UNUSED_SEG002,UNUSED_CODE)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

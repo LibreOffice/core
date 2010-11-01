@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
 #define __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
 
@@ -84,3 +85,5 @@
 #define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
 
 #endif // __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

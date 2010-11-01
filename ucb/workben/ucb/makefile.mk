@@ -69,7 +69,6 @@ COMPHELPERLIB=icomphelp2.lib
 
 APP1STDLIBS=\
     $(SALLIB) \
-    $(VOSLIB) \
     $(CPPULIB) \
     $(CPPUHELPERLIB) \
     $(COMPHELPERLIB) \

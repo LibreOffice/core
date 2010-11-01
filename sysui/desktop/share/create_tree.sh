@@ -98,8 +98,10 @@ cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
-ln -sf /usr/bin/${PREFIX} ${DESTDIR}/usr/bin/libreoffice
-ln -sf /usr/bin/${PREFIX}-printeradmin ${DESTDIR}/usr/bin/libreoffice-printeradmin
+if test "${PREFIX}" != libreoffice ; then
+    ln -sf /usr/bin/${PREFIX} ${DESTDIR}/usr/bin/libreoffice
+    ln -sf /usr/bin/${PREFIX}-printeradmin ${DESTDIR}/usr/bin/libreoffice-printeradmin
+fi
 
 mkdir -p ${DESTDIR}/usr/share/mime/packages
 cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/libreoffice.xml

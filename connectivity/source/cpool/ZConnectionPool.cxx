@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
     OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
     calculateTimeOuts();
 
-    m_xInvalidator = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
+    m_xInvalidator = new OPoolTimer(this,::salhelper::TTimeValue(m_nTimeOut,0));
     m_xInvalidator->start();
 }
 // -----------------------------------------------------------------------------
@@ -330,3 +331,5 @@ void OConnectionPool::calculateTimeOuts()
     m_nALiveCount   = m_nALiveCount / m_nTimeOut;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,8 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 /** === end UNO includes === **/
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     //====================================================================
     //= ObjectNameApproval
@@ -84,8 +83,8 @@ namespace dbaccess
 
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_OBJECTNAMEAPPROVAL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

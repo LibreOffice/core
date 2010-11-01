@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* SectionStyle: Stores (and writes) section-based information (e.g.: a column
  * change needs a new section) that is needed at the head of an OO document.
  *
@@ -50,3 +51,5 @@ private:
     WPXPropertyListVector mColumns;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

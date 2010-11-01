@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -186,7 +187,7 @@ void SwTableBox::setDummyFlag( bool bDummy )
     pImpl->setDummyFlag( bDummy );
 }
 
-//JP 15.09.98: Bug 55741 - Tabs beibehalten (vorne und hinten)
+//JP 15.09.98: Bug 55741 - Keep tabs (front and rear)
 String& lcl_TabToBlankAtSttEnd( String& rTxt )
 {
     sal_Unicode c;
@@ -267,8 +268,6 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
 |*
 |*  SwTable::SwTable()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 05. May. 93
 |*
 |*************************************************************************/
 SwTable::SwTable( SwTableFmt* pFmt )
@@ -280,7 +279,7 @@ SwTable::SwTable( SwTableFmt* pFmt )
     bModifyLocked( FALSE ),
     bNewModel( TRUE )
 {
-    // default Wert aus den Optionen setzen
+    // default value set in the options
     eTblChgMode = (TblChgMode)GetTblChgDefaultMode();
 }
 
@@ -307,7 +306,7 @@ SwTable::~SwTable()
     if( refObj.Is() )
     {
         SwDoc* pDoc = GetFrmFmt()->GetDoc();
-        if( !pDoc->IsInDtor() )         // dann aus der Liste entfernen
+        if( !pDoc->IsInDtor() )         // then remove from the list
             pDoc->GetLinkManager().RemoveServer( &refObj );
 
         refObj->Closed();
@@ -336,8 +335,6 @@ SwTable::~SwTable()
 |*
 |*  SwTable::Modify()
 |*
-|*  Ersterstellung      JP ??
-|*  Letzte Aenderung    MA 06. May. 93
 |*
 |*************************************************************************/
 inline void FmtInArr( SvPtrarr& rFmtArr, SwFmt* pBoxFmt )
@@ -457,8 +454,6 @@ void SwTable::AdjustWidths( const long nOld, const long nNew )
 |*
 |*  SwTable::GetTabCols()
 |*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
 void lcl_RefreshHidden( SwTabCols &rToFill, USHORT nPos )
@@ -475,7 +470,7 @@ void lcl_RefreshHidden( SwTabCols &rToFill, USHORT nPos )
 
 void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                    const SwFrmFmt *pTabFmt, const BOOL bHidden,
-                   const FASTBOOL bRefreshHidden )
+                   const bool bRefreshHidden )
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
     const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
@@ -578,7 +573,7 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
 }
 
 void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
-                        const SwFrmFmt *pTabFmt, FASTBOOL bRefreshHidden )
+                        const SwFrmFmt *pTabFmt, bool bRefreshHidden )
 {
     if ( pBox->GetTabLines().Count() )
     {
@@ -620,7 +615,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
     //Array aktualisiert.
     if ( bRefreshHidden )
     {
-        //Korrekturen entfernen
+        // remove corrections
         USHORT i;
         for ( i = 0; i < rToFill.Count(); ++i )
         {
@@ -711,8 +706,6 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
 |*
 |*  SwTable::SetTabCols()
 |*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 26. Aug. 98
 |*
 |*************************************************************************/
 //Struktur zur Parameteruebergabe
@@ -1407,8 +1400,6 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*  const SwTableBox* SwTable::GetTblBox( const Strn?ng& rName ) const
 |*      gebe den Pointer auf die benannte Box zurueck.
 |*
-|*  Ersterstellung      JP 30. Jun. 93
-|*  Letzte Aenderung    JP 30. Jun. 93
 |*
 |*************************************************************************/
 
@@ -1595,8 +1586,6 @@ BOOL SwTable::IsTblComplex() const
 |*
 |*  SwTableLine::SwTableLine()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 09. Mar. 93
 |*
 |*************************************************************************/
 SwTableLine::SwTableLine( SwTableLineFmt *pFmt, USHORT nBoxes,
@@ -1621,8 +1610,6 @@ SwTableLine::~SwTableLine()
 |*
 |*  SwTableLine::ClaimFrmFmt(), ChgFrmFmt()
 |*
-|*  Ersterstellung      MA 03. May. 93
-|*  Letzte Aenderung    MA 07. Feb. 96
 |*
 |*************************************************************************/
 SwFrmFmt* SwTableLine::ClaimFrmFmt()
@@ -1748,8 +1735,6 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 |*
 |*  SwTableBox::SwTableBox()
 |*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 04. May. 93
 |*
 |*************************************************************************/
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, USHORT nLines, SwTableLine *pUp )
@@ -1853,8 +1838,6 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
 |*
 |*  SwTableBox::ClaimFrmFmt(), ChgFrmFmt()
 |*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 07. Feb. 96
 |*
 |*************************************************************************/
 SwFrmFmt* SwTableBox::ClaimFrmFmt()
@@ -1940,8 +1923,6 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 |*      gebe den Namen dieser Box zurueck. Dieser wird dynamisch bestimmt
 |*      und ergibt sich aus der Position in den Lines/Boxen/Tabelle
 |*
-|*  Ersterstellung      JP 30. Jun. 93
-|*  Letzte Aenderung    JP 30. Jun. 93
 |*
 |*************************************************************************/
 void lcl_GetTblBoxColStr( USHORT nCol, String& rNm )
@@ -2883,3 +2864,5 @@ const SwTableBox * SwTableCellInfo::getTableBox() const
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

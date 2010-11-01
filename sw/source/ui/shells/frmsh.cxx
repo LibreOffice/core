@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Prototypen ------------------------------------------------------------
-
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
 const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
 {
@@ -114,8 +114,6 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_FRM_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
 }
-
-
 
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
@@ -240,10 +238,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -252,10 +250,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -265,7 +263,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             try
             {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -290,7 +288,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -454,7 +452,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
@@ -464,7 +462,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                                                         DLG_FRM_STD,
                                                         FALSE,
                                                         nDefPage);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() )
                 {
@@ -536,7 +534,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sPrevName);
-                                DBG_ASSERT(pPrevFmt, "No frame found!");
+                                OSL_ENSURE(pPrevFmt, "No frame found!");
                                 if(pPrevFmt)
                                 {
                                     rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
@@ -570,7 +568,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sNextName);
-                                DBG_ASSERT(pNextFmt, "No frame found!");
+                                OSL_ENSURE(pNextFmt, "No frame found!");
                                 if(pNextFmt)
                                 {
                                     rSh.Chain(*(SwFrmFmt*)
@@ -633,7 +631,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
         // <--
         default:
-            ASSERT( !this, "falscher Dispatcher" );
+            OSL_ENSURE( !this, "wrong dispatcher" );
             return;
     }
     // Vorlagen-AutoUpdate
@@ -649,11 +647,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     }
 
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwFrameShell::GetState(SfxItemSet& rSet)
 {
@@ -710,8 +703,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_HORZ_RIGHT:
                 case FN_FRAME_ALIGN_HORZ_LEFT:
                     if ( (eFrmType & FRMTYPE_FLY_INCNT) ||
-                            bProtect ||
-                            (nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER)&& bHtmlMode )
+                         bProtect ||
+                         ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
+                          bHtmlMode ))
                         rSet.DisableItem( nWhich );
                 break;
                 case FN_FRAME_ALIGN_VERT_ROW_TOP:
@@ -721,7 +715,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
                 case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
                     if ( !(eFrmType & FRMTYPE_FLY_INCNT) || bProtect
-                            || bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich )
+                         || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
                         rSet.DisableItem( nWhich );
                 break;
 
@@ -732,7 +726,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT)
+                    if ( bProtect || (bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT))
                         rSet.DisableItem( nWhich );
                     else
                     {
@@ -893,8 +887,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor fuer FrameShell
  --------------------------------------------------------------------*/
-
-
 SwFrameShell::SwFrameShell(SwView &_rView) :
     SwBaseShell( _rView )
 {
@@ -912,12 +904,6 @@ SwFrameShell::~SwFrameShell()
        it. */
     SwTransferable::ClearSelection( GetShell(), (ViewShell *) this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 {
@@ -1094,8 +1080,6 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
 }
 
-
-
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
@@ -1109,8 +1093,6 @@ void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBo
 
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
-
-
 
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
@@ -1146,3 +1128,5 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     if ((nSel & nsSelectionType::SEL_GRF) || (nSel & nsSelectionType::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

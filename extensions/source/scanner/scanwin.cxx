@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,8 @@
 #include <math.h>
 #include <tools/svwin.h>
 #include <tools/stream.hxx>
-#include <vos/mutex.hxx>
-#include <vos/module.hxx>
+#include <osl/mutex.hxx>
+#include <osl/module.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/sysdata.hxx>
@@ -109,7 +110,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     TW_IDENTITY                                 aSrcIdent;
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
-    NAMESPACE_VOS( OModule )*                   pMod;
+    osl::Module*                                pMod;
     ULONG                                       nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;
@@ -292,7 +293,7 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if( 1 == nCurState )
     {
-        pMod = new ::vos::OModule( ::rtl::OUString() );
+        pMod = new ::osl::Module( ::rtl::OUString() );
 
         if( pMod->load( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( TWAIN_LIBNAME ) ) ) )
         {
@@ -993,7 +994,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 
 SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 {
-    vos::OGuard             aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     SEQ( ScannerContext )   aRet( 1 );
 
     aRet.getArray()[0].ScannerName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) );
@@ -1007,7 +1008,7 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     throw( ScannerException )
 {
-    vos::OGuard                         aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
@@ -1023,7 +1024,7 @@ BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
 void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const uno::Reference< lang::XEventListener >& rxListener )
     throw( ScannerException )
 {
-    vos::OGuard                         aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
@@ -1038,7 +1039,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
 ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
     throw( ScannerException )
 {
-    vos::OGuard                         aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
@@ -1052,6 +1053,8 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
 uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
     throw( ScannerException )
 {
-    vos::OGuard aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     return uno::Reference< awt::XBitmap >( this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,12 +60,12 @@ SHL1USE_EXPORTS=name
 SHL1STDLIBS= \
         $(TOOLSLIB)		\
         $(I18NISOLANGLIB) \
-        $(VOSLIB)		\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)\
         $(COMPHELPERLIB)\
         $(SVLLIB)		\
         $(SALLIB)		\
+        $(SALHELPERLIB)		\
         $(UNOTOOLSLIB)	\
         $(BASEGFXLIB)
 

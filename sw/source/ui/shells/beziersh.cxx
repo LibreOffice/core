@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,6 @@
 
 #include <unomid.h>
 
-
 SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAW_POPUPMENU));
@@ -62,11 +62,6 @@ SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 }
 
 TYPEINIT1(SwBezierShell,SwBaseShell)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwBezierShell::SwBezierShell(SwView &_rView):
     SwBaseShell( _rView )
@@ -78,11 +73,6 @@ SwBezierShell::SwBezierShell(SwView &_rView):
     SdrView*    pSdrView = pSh->GetDrawView();
     pSdrView->SetEliminatePolyPointLimitAngle(1500L);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBezierShell::Execute(SfxRequest &rReq)
 {
@@ -239,11 +229,6 @@ void SwBezierShell::Execute(SfxRequest &rReq)
         pSdrView->GetModel()->SetChanged(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwBezierShell::GetState(SfxItemSet &rSet)
 {
     SdrView* pSdrView = GetShell().GetDrawView();
@@ -352,5 +337,4 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
     }
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,11 +107,9 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 1, aParameters, 1, pExceptions );
             typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
             typelib_typedescription_release( (typelib_TypeDescription*)pMethod );
-#if ! defined CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++reinterpret_cast< typelib_TypeDescription * >( pTD )->
                 nStaticRefCount;
-#endif
             s_type_XCurrentContext = pTD;
         }
     }
@@ -297,3 +296,5 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,8 +99,8 @@ uno::Any SAL_CALL TypeDescriptionEnumerationImpl::nextElement()
         return xEnum->nextElement();
 
     throw container::NoSuchElementException(
-        rtl::OUString::createFromAscii(
-            "No further elements in enumeration!" ),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("No further elements in enumeration!") ),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 
@@ -121,8 +122,8 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
         return xEnum->nextTypeDescription();
 
     throw container::NoSuchElementException(
-        rtl::OUString::createFromAscii(
-            "No further elements in enumeration!" ),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("No further elements in enumeration!") ),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 
@@ -185,3 +186,4 @@ TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration()
 
 } // namespace stoc_tdmgr
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

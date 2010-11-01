@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@
 #include <tools/shl.hxx>
 #include <svl/srchitem.hxx>
 
-// --> FME 2005-01-04 #i35572#
 #include <numrule.hxx>
-// <--
 #include <fmtornt.hxx>
 #include "wrtsh.hxx"
 #include "swmodule.hxx"
@@ -152,11 +151,10 @@ void SwListShell::Execute(SfxRequest &rReq)
     USHORT nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
-    // --> FME 2005-01-04 #i35572#
+    // #i35572#
     const SwNumRule* pCurRule = rSh.GetCurNumRule();
-    ASSERT( pCurRule, "SwListShell::Execute without NumRule" )
+    OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" );
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
-    // <--
 
     switch (nSlot)
     {
@@ -242,7 +240,7 @@ void SwListShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -293,3 +291,4 @@ SwListShell::SwListShell(SwView &_rView) :
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

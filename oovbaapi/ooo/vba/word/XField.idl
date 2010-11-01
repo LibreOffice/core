@@ -36,6 +36,8 @@ module ooo { module vba { module word {
 interface XField
 {
     interface ::ooo::vba::XHelperInterface;
+
+    boolean Update();
 };
 
 }; }; };

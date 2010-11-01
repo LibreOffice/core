@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include <vector>
 #include <map>
+#include <hash_map>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <vcl/graph.hxx>
@@ -92,7 +94,7 @@ public:
     /** Returns the Excel object type from OBJ record. */
     inline sal_uInt16   GetObjType() const { return mnObjType; }
     /** Returns the name of this object, may generate a default name. */
-    String              GetObjName() const;
+    virtual String              GetObjName() const;
     /** Returns associated macro name, if set, otherwise zero length string. */
     inline const String& GetMacroName() const { return maMacroName; }
 
@@ -172,7 +174,7 @@ protected:
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
     /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
     virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
-
+    SCTAB               GetTab() const { return mnTab; }
 private:
     /** Reads the contents of a BIFF3 OBJ record. */
     void                ImplReadObj3( XclImpStream& rStrm );
@@ -186,6 +188,7 @@ private:
 private:
     XclObjAnchor        maAnchor;       /// The position of the object in its parent.
     sal_uInt16          mnObjId;        /// The object identifier (unique per drawing).
+    SCTAB               mnTab;          /// Location of object
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
     sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
@@ -502,6 +505,10 @@ protected:
     /** Derived classes will set additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
 
+    void ApplySheetLinkProps() const;
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        mxShape;        /// The UNO wrapper of the control shape.
+    ScfRef< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
 private:
     /** Reads a list of cell ranges from a formula at the current stream position. */
     void                ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm );
@@ -510,9 +517,6 @@ private:
 
 private:
     const XclImpRoot&   mrRoot;         /// Not derived from XclImpRoot to allow multiple inheritance.
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        mxShape;        /// The UNO wrapper of the control shape.
-    ScfRef< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
     ScfRef< ScRange >   mxSrcRange;     /// Source data range in the Calc document.
     XclCtrlBindMode     meBindMode;     /// Value binding mode.
 };
@@ -614,6 +618,7 @@ protected:
     virtual XclTbxEventType DoGetEventType() const;
 
 protected:
+    void ApplyGrouping( XclImpOptionButtonObj& rLeader, sal_Int32 nRefVal );
     sal_uInt16          mnNextInGroup;      /// Next option button in a group.
     sal_uInt16          mnFirstInGroup;     /// 1 = Button is the first in a group.
 };
@@ -862,7 +867,8 @@ class XclImpPictureObj : public XclImpRectObj, public XclImpControlHelper
 {
 public:
     explicit            XclImpPictureObj( const XclImpRoot& rRoot );
-
+    /** Returns the ObjectName - can use non-obvious lookup for override in the associated vba document module stream**/
+    virtual String              GetObjName() const;
     /** Returns the graphic imported from the IMGDATA record. */
     inline const Graphic& GetGraphic() const { return maGraphic; }
     /** Returns the visible area of the imported graphic. */
@@ -971,7 +977,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
+    virtual int        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -1207,6 +1213,8 @@ private:
 /** Stores all drawing and OLE objects and additional data related to these objects. */
 class XclImpObjectManager : protected XclImpRoot
 {
+typedef std::hash_map< sal_Int32, String >  CntrlObjIdToName;
+typedef std::map< String, CntrlObjIdToName > CodeNameToCntrlObjIdInfo;
 public:
     explicit            XclImpObjectManager( const XclImpRoot& rRoot );
     virtual             ~XclImpObjectManager();
@@ -1223,9 +1231,41 @@ public:
     String              GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
+    void SetOleNameOverrideInfo( const CodeNameToCntrlObjIdInfo& rOverrideInfo ) {  maOleCtrlNameOverride = rOverrideInfo; }
+    String GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
+    // ------------------------------------------------------------------------
+private:
+
+    CodeNameToCntrlObjIdInfo maOleCtrlNameOverride;
+
+    /** Reads and returns a bitmap from WMF/PICT format. */
+    static void         ReadWmf( Graphic& rGraphic, XclImpStream& rStrm );
+    /** Reads and returns a bitmap from BMP format. */
+    static void         ReadBmp( Graphic& rGraphic, XclImpStream& rStrm );
+
+    /** Reads contents of an DFF record and append data to internal DFF stream. */
+    void                ReadDffRecord( XclImpStream& rStrm );
+    /** Reads a BIFF8 OBJ record following an MSODRAWING record. */
+    void                ReadObj8( XclImpStream& rStrm );
+    /** Reads the TXO record and following CONTINUE records containing string and formatting. */
+    void                ReadTxo( XclImpStream& rStrm );
+
+    /** Reads a BIFF3-BIFF5 NOTE record. */
+    void                ReadNote3( XclImpStream& rStrm );
+    /** Reads a BIFF8 NOTE record. */
+    void                ReadNote8( XclImpStream& rStrm );
+
+    /** Returns the size of the progress bar shown while processing all objects. */
+    sal_Size            GetProgressSize() const;
 
     // ------------------------------------------------------------------------
 private:
+    typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
+    typedef ::std::map< XclObjId, XclImpDrawObjRef >    XclImpObjMapById;
+    typedef ScfRef< XclImpObjTextData >                 XclImpObjTextRef;
+    typedef ::std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
+    typedef ::std::vector< XclObjId >                   XclObjIdVec;
+
     typedef ::std::map< sal_uInt16, String >            DefObjNameMap;
     typedef ScfRef< XclImpSheetDrawing >                XclImpSheetDrawingRef;
     typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
@@ -1271,3 +1311,4 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclImpDffPropSet& rPropSet );
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

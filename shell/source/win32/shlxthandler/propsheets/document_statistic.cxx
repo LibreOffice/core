@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -168,3 +169,5 @@ void draw_impress_math_document_statistic_reader::fill_description_section(
 
     group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

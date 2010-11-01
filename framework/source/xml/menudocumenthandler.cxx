@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,11 @@
 #include "precompiled_framework.hxx"
 
 #include <stdio.h>
+#include <sal/macros.h>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <xml/menudocumenthandler.hxx>
 #include <xml/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
-
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -48,16 +43,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/attributelist.hxx>
 
-//_________________________________________________________________________________________________________________
-//  defines
-//_________________________________________________________________________________________________________________
 
 #define XMLNS_MENU                  "http://openoffice.org/2001/menu"
 #define XMLNS_PREFIX                "menu:"
@@ -139,7 +128,7 @@ MenuStyleItem MenuItemStyles[ ] = {
 };
 
 
-sal_Int32 nMenuStyleItemEntries = sizeof( MenuItemStyles ) / sizeof( MenuItemStyles[ 0 ] );
+sal_Int32 nMenuStyleItemEntries = SAL_N_ELEMENTS( MenuItemStyles );
 
 static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
                                    ::rtl::OUString&                       rCommandURL,
@@ -1020,3 +1009,4 @@ void OWriteMenuDocumentHandler::WriteMenuSeparator()
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

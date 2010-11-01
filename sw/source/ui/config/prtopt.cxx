@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <unotools/configmgr.hxx>
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -78,9 +79,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------06.09.00 16:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Print") :  C2U("Office.Writer/Print"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -95,7 +94,7 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -139,15 +138,11 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
 
     bPrintDraw = bPrintGraphic;
 }
-/* -----------------------------06.09.00 16:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwPrintOptions::~SwPrintOptions()
 {
 }
-/* -----------------------------06.09.00 16:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 
 void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
@@ -196,3 +191,4 @@ void    SwPrintOptions::Commit()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

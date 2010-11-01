@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,33 +163,4 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     return bRet;
 }
 
-/*
-SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage* , const String& rLanguage )
-{
-    SvStringsDtor* pNew = new SvStringsDtor;
-
-    SfxApplication* pSfxApp = SFX_APP();
-    if ( !rLanguage.EqualsAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT) )
-    {
-        pSfxApp->EnterBasicCall();
-
-        String* pNewEntry = new String( pSfxApp->GetName() );
-        pNew->Insert( pNewEntry, pNew->Count() );
-
-        TypeId aType( TYPE( SwDocShell ));
-        SfxObjectShell* pDoc = SfxObjectShell::GetFirst( &aType );
-        while( pDoc )
-        {
-            pNewEntry = new String( pDoc->GetTitle() );
-            pNew->Insert( pNewEntry, pNew->Count() );
-            pDoc = SfxObjectShell::GetNext( *pDoc, &aType );
-        }
-        pSfxApp->LeaveBasicCall();
-    }
-
-    return pNew;
-}
-*/
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

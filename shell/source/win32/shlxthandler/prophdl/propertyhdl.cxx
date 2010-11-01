@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 
 #include <propkey.h>
 #include <propvarutil.h>
+#include <sal/macros.h>
 
 #include <malloc.h>
 #include <strsafe.h>
@@ -67,7 +69,7 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
     { PKEY_Comment,        L"OpenOffice.org",          L"Comments" },
 };
 
-size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
+size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
 //----------------------------
 //
@@ -461,3 +463,5 @@ BOOL WINAPI DllMain( HINSTANCE hInst, ULONG /*ul_reason_for_call*/, LPVOID /*lpR
     g_hModule = hInst;
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

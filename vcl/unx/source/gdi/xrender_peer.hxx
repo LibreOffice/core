@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -277,16 +278,6 @@ inline void XRenderPeer::FreeGlyph( GlyphSet aGS, Glyph nGlyphId ) const
     // #108209# disabled because of crash potential,
     // the glyph leak is not too bad because they will
     // be cleaned up when the glyphset is released
-#if 0 // TODO: reenable when it works without problems
-    if( mnRenderVersion >= 0x05 )
-    {
-#ifdef XRENDER_LINK
-        XRenderFreeGlyphs( mpDisplay, aGS, &nGlyphId, 1 );
-#else
-        (*mpXRenderFreeGlyphs)( mpDisplay, aGS, &nGlyphId, 1 );
-#endif
-    }
-#endif
 }
 
 inline void XRenderPeer::CompositeString32( Picture aSrc, Picture aDst,
@@ -385,3 +376,5 @@ inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTranspar
 //=====================================================================
 
 #endif // _SV_XRENDER_PEER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

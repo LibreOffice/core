@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1145,12 +1146,6 @@ void MyApp::Main()
     MenuBar aMBMain( ResId( MENU_MAIN, *xManager.get() ) );
 
     // Check for command line params
-#if 0
-    for ( int i = 0; i < GetCommandLineParamCount(); ++i )
-    {
-        String aPara = GetCommandLineParam( i );
-    }
-#endif
 
      String aRootURL = GetCommandLineParam( 0 );
      if ( aRootURL.Len() == 0 )
@@ -1196,3 +1191,4 @@ void MyApp::Main()
 
 MyApp aMyApp;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

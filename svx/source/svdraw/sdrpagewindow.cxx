@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -462,3 +463,5 @@ void SdrPageWindow::SetDesignMode( bool _bDesignMode ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

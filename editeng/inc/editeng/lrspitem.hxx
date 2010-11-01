@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,8 +100,8 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
     virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
     virtual USHORT           GetVersion( USHORT nFileVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     // Die "Layout-Schnittstelle":
     inline void   SetLeft ( const long nL, const USHORT nProp = 100 );
@@ -177,3 +178,4 @@ inline void SvxLRSpaceItem::SetTxtLeft( const long nL, const USHORT nProp )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

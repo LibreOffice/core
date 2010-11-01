@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,8 +65,6 @@ public:
     void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
 };
 
-/*******************************************************************/
-
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 {
     void* pMisc;
@@ -80,8 +79,6 @@ public:
     void    SetValue(void * pPtr)   { pMisc= pPtr; }
     void*   GetValue() const        { return pMisc; }
 };
-
-/*******************************************************************/
 
 class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
 {
@@ -102,9 +99,6 @@ public:
           SwNumRule* GetNumRule()               { return pRule; }
 };
 
-/* -----------------17.06.98 17:40-------------------
- *
- * --------------------------------------------------*/
 class SwBackgroundDestinationItem : public SfxUInt16Item
 {
 public:
@@ -114,3 +108,5 @@ public:
 };
 
 #endif // _UIITEMS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

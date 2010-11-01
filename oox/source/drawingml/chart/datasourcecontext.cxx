@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,17 @@ void DoubleSequenceContext::onEndElement( const OUString& rChars )
         break;
         case C_TOKEN( v ):
             if( mnPtIndex >= 0 )
-                mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
+            {
+                /* Import categories as String even though it could
+                 * be values.
+                 * TODO: NumberFormat conversion, remove the check then.
+                 */
+                if( isPreviousElement( C_TOKEN( cat ), 4 ) ||
+                    isPreviousElement( C_TOKEN( xVal ), 4 ) )
+                    mrModel.maData[ mnPtIndex ] <<= rChars;
+                else
+                    mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
+            }
         break;
     }
 }
@@ -229,3 +240,4 @@ ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const 
 } // namespace drawingml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

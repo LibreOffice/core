@@ -59,10 +59,10 @@ module com { module sun { module star { module document {
         <br>
         Example: "com.company.devision.DetectService"
         <br>
-        Note that this realy means the implementation name of the service.
+        Note that this really means the implementation name of the service.
         Because it's not possible otherwise to distinguish between more then one
         registered detect services in same office installation! But it's possible for
-        the generic type detection to create an uno service by his implementation name too.
+        the generic type detection to create an UNO service by his implementation name too.
         </li>
         <li>
         A list of <strong>Types</strong> able to be recognized by this service -
@@ -80,7 +80,7 @@ published service ExtendedTypeDetection
     /** makes the deep detection
 
         <p>
-        Generic type detection searchs for a registered DetectService for an
+        Generic type detection searches for a registered DetectService for an
         already flat detected type. If any could be found it will be created and
         used by calling methods of this interface. It gets a <type>MediaDescriptor</type>
         which contains information about the document which should be detected and must return
@@ -89,9 +89,9 @@ published service ExtendedTypeDetection
             <li>or <NULL/> if format is unknown nor supported.</li>
         </ul>
         May be that given descriptor already includes the opened document stream as parameter
-        <member>MediaDescriptor::InputStream</member>. Then this one should be used everytime.
+        <member>MediaDescriptor::InputStream</member>. Then this one should be used every time.
         If it's not included in descriptor the value of <member>MediaDescriptor::URL</member>
-        must be used to open requested ressource by this service.
+        must be used to open requested resource by this service.
         <br>
         Note: The stream should be added to the descriptor if it wasn't a part of them before.
         So further steps on the whole detection process can use it and will perform her work.

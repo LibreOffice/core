@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -509,24 +510,29 @@ namespace
 
         std::vector<lang_and_family>::const_iterator aEnd = families.end();
         bool alreadyclosematch = false;
-        for (std::vector<lang_and_family>::const_iterator aIter = families.begin(); aIter != aEnd; ++aIter)
+        for( std::vector<lang_and_family>::const_iterator aIter = families.begin(); aIter != aEnd; ++aIter )
         {
             const char *pLang = (const char*)aIter->first;
-            if( rtl_str_compare(pLang,sFullMatch.getStr() ) == 0)
+            if( rtl_str_compare( pLang, sFullMatch.getStr() ) == 0)
             {
-                //perfect match
+                // both language and country match
                 candidate = aIter->second;
                 break;
             }
-            else if( (rtl_str_compare(pLang,sLangMatch.getStr()) == 0) && (!alreadyclosematch))
+            else if( alreadyclosematch )
             {
-                //fairly close
+                // override candidate only if there is a perfect match
+                continue;
+            }
+            else if( rtl_str_compare( pLang, sLangMatch.getStr()) == 0)
+            {
+                // just the language matches
                 candidate = aIter->second;
                 alreadyclosematch = true;
             }
-            else if( (rtl_str_compare(pLang,"en") == 0) && (!alreadyclosematch) )
+            else if( rtl_str_compare( pLang, "en") == 0)
             {
-                //english name
+                // fallback to the english family name
                 candidate = aIter->second;
             }
         }
@@ -780,14 +786,6 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
                 // set family name
                 if( pUpdate->m_nFamilyName != nFamilyName )
                 {
-#if 0 // fontconfig prefers nameid=16 for the family name which is all fine
-      // but Writer suffers from #i79878#
-      // the only reasonable workaround for now is to use the classic nameid=1
-                    pUpdate->m_aAliases.remove( pUpdate->m_nFamilyName );
-                    pUpdate->m_aAliases.push_back( pUpdate->m_nFamilyName );
-                    pUpdate->m_aAliases.remove( nFamilyName );
-                    pUpdate->m_nFamilyName = nFamilyName;
-#endif
                 }
                 if( eWeightRes == FcResultMatch )
                     pUpdate->m_eWeight = convertWeight(weight);
@@ -1250,3 +1248,4 @@ rtl::OUString PrintFontManager::Substitute( const rtl::OUString&,
 
 #endif // ENABLE_FONTCONFIG
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,6 @@
 
 #include <com/sun/star/script/XEngine.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-
-#ifndef GCC
-#endif
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -866,3 +864,4 @@ sal_Bool SfxMacroConfig::IsMacroSlot( sal_uInt16 nId )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -149,6 +149,7 @@
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
 #define RID_STR_ENABLE_VISIBLE              ( RID_FORMBROWSER_START + 122 )
 #define RID_STR_WHEEL_BEHAVIOR              ( RID_FORMBROWSER_START + 123 )
+#define RID_STR_GROUP_NAME                  ( RID_FORMBROWSER_START + 124 )
     // FREE
     // FREE
     // FREE

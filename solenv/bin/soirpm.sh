@@ -28,5 +28,5 @@
 LIBRPMBUILD=$(find ${COMPATH} -name 'librpmbuild-4.1*' -print)
 # echo $(dirname $LIBRPMBUILD)
 LD_LIBRARY_PATH=$(dirname ${LIBRPMBUILD}) ${BUILD_TOOLS?}/rpm "$@"
-# LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${COMPATH?}/lib \
+# LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${COMPATH?}/lib \
 # ${BUILD_TOOLS?}/rpm "$@"

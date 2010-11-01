@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -686,13 +687,6 @@ ULONG INetRFC822Message::SetHeaderField (
                         check = "ailer";
                         nIdx = INETMSG_RFC822_X_MAILER;
                         break;
-
-#if 0  /* NYI */
-                    case 'p':
-                        check = "riority";
-                        eOkState = INETMSG_RFC822_X_PRIORITY;
-                        break;
-#endif /* NYI */
 
                     default:
                         eState = INETMSG_RFC822_JUNK;
@@ -1649,3 +1643,4 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

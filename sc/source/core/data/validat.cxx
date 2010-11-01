@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -296,16 +297,6 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
 //  pDocSh->GetSbxObject();
 
     //  keine Sicherheitsabfrage mehr vorneweg (nur CheckMacroWarn), das passiert im CallBasic
-
-#if 0
-    // Makro-Name liegt in folgender Form vor:
-    // "Macroname.Modulname.Libname.Dokumentname" oder
-    // "Macroname.Modulname.Libname.Applikationsname"
-    String aMacroName = aErrorTitle.GetToken(0, '.');
-    String aModulName = aErrorTitle.GetToken(1, '.');
-    String aLibName   = aErrorTitle.GetToken(2, '.');
-    String aDocName   = aErrorTitle.GetToken(3, '.');
-#endif
 
     //  Funktion ueber den einfachen Namen suchen,
     //  dann aBasicStr, aMacroStr fuer SfxObjectShell::CallBasic zusammenbauen
@@ -994,3 +985,4 @@ BOOL ScValidationDataList::operator==( const ScValidationDataList& r ) const
     return bEqual;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

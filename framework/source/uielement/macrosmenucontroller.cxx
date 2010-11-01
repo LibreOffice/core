@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -87,7 +88,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pVCLPopupMenu )
@@ -233,3 +234,5 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

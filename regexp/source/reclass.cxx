@@ -2944,4 +2944,4 @@ Regexpr::set_list_bit(sal_Unicode c, sal_Unicode *b)
   }
 }
 
-/* vim: set ts=8 sw=2 noexpandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

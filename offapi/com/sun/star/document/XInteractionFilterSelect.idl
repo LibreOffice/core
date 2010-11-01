@@ -44,7 +44,7 @@ module com { module sun { module star { module document {
     a possible <type scope="com::sun::star::task">InteractionHandler</type> will be used.
     (it's a a part of used <type>MediaDescriptor</type>)
     A <type>NoSuchFilterRequest</type> will be used then to start right interaction on that to
-    get a decision wich filter should be used for given URL. A possible continiuation
+    get a decision which filter should be used for given URL. A possible continuation
     of that can be this XInteractionFilterSelect. It will transport the decision back to
     generic filter detection and force using of it. Of course it's possible to abort
     the loading process by use another continuation <type scope="com::sun::star::task">XInteractionAbort</type>.

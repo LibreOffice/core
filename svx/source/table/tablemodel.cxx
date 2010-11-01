@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <boost/bind.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "cell.hxx"
 #include "cellcursor.hxx"
@@ -53,7 +54,6 @@
 
 using ::rtl::OUString;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::lang;
@@ -315,7 +315,7 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 
 Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return createCursorByRange( Reference< XCellRange >( this ) );
 }
 
@@ -323,7 +323,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeExcep
 
 Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& Range ) throw (IllegalArgumentException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     ICellRange* pRange = dynamic_cast< ICellRange* >( Range.get() );
     if( (pRange == 0) || (pRange->getTable().get() != this) )
@@ -337,7 +337,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Referen
 
 sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return getRowCountImpl();
 }
 
@@ -345,7 +345,7 @@ sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
 
 sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return getColumnCountImpl();
 }
 
@@ -355,7 +355,7 @@ sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
 
 void TableModel::dispose() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     TableModelBase::dispose();
 }
 
@@ -379,7 +379,7 @@ void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >
 
 sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return mbModified;
 }
 
@@ -388,7 +388,7 @@ sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
 void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoException, RuntimeException)
 {
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aGuard;
         mbModified = bModified;
     }
     if( bModified )
@@ -417,7 +417,7 @@ void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener
 
 Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( !mxTableColumns.is() )
         mxTableColumns.set( new TableColumns( this ) );
@@ -428,7 +428,7 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeExcep
 
 Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( !mxTableRows.is() )
         mxTableRows.set( new TableRows( this ) );
@@ -441,7 +441,7 @@ Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
 
 Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw ( IndexOutOfBoundsException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     CellRef xCell( getCell( nColumn, nRow ) );
     if( xCell.is() )
@@ -454,7 +454,7 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
 
 Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (nLeft >= 0) && (nTop >= 0) && (nRight >= nLeft) && (nBottom >= nTop) && (nRight < getColumnCountImpl()) && (nBottom < getRowCountImpl() ) )
     {
@@ -592,14 +592,14 @@ void TableModel::disposing()
 
 void TableModel::lockBroadcasts() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     ++mnNotifyLock;
 }
 // -----------------------------------------------------------------------------
 
 void TableModel::unlockBroadcasts() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     --mnNotifyLock;
     if( mnNotifyLock <= 0 )
     {
@@ -1256,3 +1256,5 @@ void TableModel::updateColumns()
 // -----------------------------------------------------------------------------
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

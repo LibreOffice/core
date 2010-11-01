@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -567,3 +568,4 @@ inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uIn
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

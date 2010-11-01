@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -196,7 +197,7 @@ uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     throw( uno::RuntimeException )
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 >    aId;
 
     if( aId.getLength() == 0 )
@@ -212,7 +213,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
 
 ::comphelper::PropertySetInfo* GraphicRendererVCL::createPropertySetInfo()
 {
-    vos::OGuard                     aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
     static ::comphelper::PropertyMapEntry aEntries[] =
@@ -238,7 +239,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
            lang::IllegalArgumentException,
               lang::WrappedTargetException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     while( *ppEntries )
     {
@@ -290,7 +291,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
 void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     while( *ppEntries )
     {
@@ -343,3 +344,5 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

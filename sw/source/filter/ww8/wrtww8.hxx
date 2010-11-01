@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WRTWW8_HXX
 #define _WRTWW8_HXX
@@ -784,6 +784,9 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& ) = 0;
 
+    virtual void OutputLinkedOLE( const rtl::OUString& ) = 0;
+
+
     /// Output SwSectionNode
     virtual void OutputSectionNode( const SwSectionNode& );
 
@@ -1013,10 +1016,6 @@ public:
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() );
     void WriteChar( sal_Unicode c );
-#if 0
-    USHORT StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
-        SwTwips &rPageSize);
-#endif
 
     void OutSwString(const String&, xub_StrLen nStt, xub_StrLen nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);
@@ -1122,6 +1121,8 @@ protected:
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
+
+    virtual void OutputLinkedOLE( const rtl::OUString& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
@@ -1370,6 +1371,7 @@ public:
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const = 0;
 };
 
+/// Used to export formatted text associated to drawings.
 class MSWord_SdrAttrIter : public MSWordAttrIter
 {
 private:
@@ -1554,4 +1556,4 @@ struct WW8_PdAttrDesc
 
 #endif  //  _WRTWW8_HXX
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@
 #include "docuno.hxx"
 #include "textuno.hxx"
 #include "chartlis.hxx"
-#include "unoguard.hxx"
 #include "scitems.hxx"
 #include "docpool.hxx"
 #include "userdat.hxx"
@@ -3204,7 +3204,34 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         }
     }
     if (!bIsChart)
+    {
+        // #i66550 HLINK_FOR_SHAPES
+        rtl::OUString sHlink;
+        uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+        if ( xProps.is() )
+            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_HYPERLINK ) ) ) >>= sHlink;
+
+        std::auto_ptr< SvXMLElementExport > pDrawA;
+        // enlose shapes with <draw:a> element only if sHlink contains something
+        if ( sHlink.getLength() > 0 )
+        {
+            // need to get delete the attributes that are pre-loaded
+            // for the shape export ( otherwise they will become
+            // attributes of the draw:a element ) This *shouldn't*
+            // affect performance adversely as there are only a
+            // couple of attributes involved
+            uno::Reference< xml::sax::XAttributeList > xSaveAttribs( new  SvXMLAttributeList( GetAttrList() ) );
+            ClearAttrList();
+            // Add Hlink
+            AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sHlink);
+            pDrawA.reset( new SvXMLElementExport( *this, XML_NAMESPACE_DRAW, XML_A, sal_False, sal_False ) );
+            // Attribute list has been cleared by previous operation
+            // re-add pre-loaded attributes
+            AddAttributeList( xSaveAttribs );
+        }
         GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
+    }
     IncrementProgressBar(sal_False);
 }
 
@@ -4431,7 +4458,7 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     SvXMLExport::setSourceDocument( xComponent );
 
     pDoc = ScXMLConverter::GetScDocument( GetModel() );
@@ -4461,7 +4488,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDoc)
         pDoc->DisableIdle(TRUE);
     sal_Bool bReturn(SvXMLExport::filter(aDescriptor));
@@ -4473,7 +4500,7 @@ sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::
 void SAL_CALL ScXMLExport::cancel()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDoc)
         pDoc->DisableIdle(FALSE);
     SvXMLExport::cancel();
@@ -4483,7 +4510,7 @@ void SAL_CALL ScXMLExport::cancel()
 void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     SvXMLExport::initialize(aArguments);
 }
 
@@ -4491,7 +4518,7 @@ void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::
 ::rtl::OUString SAL_CALL ScXMLExport::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     sal_uInt16 nFlags = getExportFlags();
     if (nFlags & EXPORT_OASIS)
@@ -4539,14 +4566,14 @@ void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::
 sal_Bool SAL_CALL ScXMLExport::supportsService( const ::rtl::OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return SvXMLExport::supportsService( ServiceName );
 }
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ScXMLExport::getSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return SvXMLExport::getSupportedServiceNames();
 }
 
@@ -4554,7 +4581,7 @@ sal_Bool SAL_CALL ScXMLExport::supportsService( const ::rtl::OUString& ServiceNa
 sal_Int64 SAL_CALL ScXMLExport::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return SvXMLExport::getSomething(aIdentifier);
 }
 
@@ -4565,3 +4592,4 @@ void ScXMLExport::DisposingModel()
     xCurrentTable = 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

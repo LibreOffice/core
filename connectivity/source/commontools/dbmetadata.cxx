@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,6 +52,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sal/macros.h>
 
 #include <boost/optional.hpp>
 
@@ -353,7 +355,7 @@ namespace dbtools
             {
                 const ::rtl::OUString url = m_pImpl->xConnectionMetaData->getURL();
                 char pMySQL[] = "sdbc:mysql";
-                bSupport = url.matchAsciiL(pMySQL,(sizeof(pMySQL)/sizeof(pMySQL[0]))-1);
+                bSupport = url.matchAsciiL(pMySQL,(SAL_N_ELEMENTS(pMySQL))-1);
             }
         }
         catch( const Exception& )
@@ -446,3 +448,4 @@ namespace dbtools
 } // namespace dbtools
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

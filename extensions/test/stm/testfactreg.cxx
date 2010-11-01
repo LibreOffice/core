@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 
 
 #ifndef _VOS_NO_NAMESPACE
-using namespace vos;
 using namespace usr;
 #endif
 
@@ -170,3 +170,4 @@ Sequence<BYTE> createIntSeq( INT32 i )
     return createSeq( pcCount );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

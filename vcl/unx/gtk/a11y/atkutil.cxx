@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -37,7 +44,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 // <--
 #include <cppuhelper/implbase1.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include <vcl/svapp.hxx>
@@ -70,7 +77,7 @@ extern "C" {
 static gint
 atk_wrapper_focus_idle_handler (gpointer data)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     focus_notify_handler = 0;
 
@@ -799,3 +806,4 @@ ooo_atk_util_get_type (void)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

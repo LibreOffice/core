@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -256,7 +257,7 @@ static SwWrtShell* lcl_GetShell()
     SwView* pView;
     if ( 0 != (pView = ::GetActiveView()) )
         return pView->GetWrtShellPtr();
-    DBG_ERROR("no current shell found!");
+    OSL_ENSURE(false, "no current shell found!");
     return 0;
 }
 
@@ -453,14 +454,14 @@ USHORT SwFldMgr::GetGroup(BOOL bHtmlMode, USHORT nTypeId, USHORT nSubType) const
 
 USHORT SwFldMgr::GetTypeId(USHORT nPos)
 {
-    ASSERT(nPos < ::GetPackCount(), "unzulaessige Pos");
+    OSL_ENSURE(nPos < ::GetPackCount(), "forbidden Pos");
     return aSwFlds[ nPos ].nTypeId;
 }
 
 
 const String& SwFldMgr::GetTypeStr(USHORT nPos)
 {
-    ASSERT(nPos < ::GetPackCount(), "unzulaessige TypeId");
+    OSL_ENSURE(nPos < ::GetPackCount(), "forbidden TypeId");
 
     USHORT nFldWh = aSwFlds[ nPos ].nTypeId;
 
@@ -618,7 +619,7 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
 
 USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) const
 {
-    ASSERT(nTypeId < TYP_END, "unzulaessige TypeId");
+    OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
     {
         const USHORT nPos = GetPos(nTypeId);
@@ -676,7 +677,7 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
 String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
 {
     String aRet;
-    ASSERT(nTypeId < TYP_END, "unzulaessige TypeId");
+    OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
 
     const USHORT nPos = GetPos(nTypeId);
 
@@ -1376,11 +1377,11 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         }
         break;
         default:
-        {   ASSERT(!this, "Falscher Feldtyp");
+        {   OSL_ENSURE(!this, "wrong field type");
             return FALSE;
         }
     }
-    ASSERT(pFld, "Feld nicht vorhanden");
+    OSL_ENSURE(pFld, "field not available");
 
 
      //the auto language flag has to be set prior to the language!
@@ -1425,7 +1426,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
                             SwField * _pTmpFld) // #111840#
 {
     // Format aendern
-    ASSERT(pCurFld, "kein Feld an der CursorPos");
+    OSL_ENSURE(pCurFld, "no field at CursorPos");
 
     bool bDelete = false;
     SwField *pTmpFld;       // mb: fixed memory leak
@@ -1675,10 +1676,6 @@ void SwFieldType::_GetFldName()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL SwFldMgr::ChooseMacro(const String&)
 {
     BOOL bRet = FALSE;
@@ -1709,8 +1706,8 @@ void SwFldMgr::SetMacroPath(const String& rPath)
 
     Reference< uri::XUriReferenceFactory >
         xFactory( xSMgr->createInstance(
-            ::rtl::OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.uri.UriReferenceFactory" )) ), UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -1723,10 +1720,6 @@ void SwFldMgr::SetMacroPath(const String& rPath)
         }
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 ULONG SwFldMgr::GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter* pFormatter, double* pVal)
 {
@@ -1774,20 +1767,19 @@ ULONG SwFldMgr::GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter
     return pFormatter->GetStandardFormat(nDefFormat, GetCurrLanguage());
 }
 
-/* -----------------------------01.03.01 16:46--------------------------------
-
- ---------------------------------------------------------------------------*/
 Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
 {
     if(!xNumberingInfo.is())
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         Reference < XInterface > xI = xMSF->createInstance(
-            ::rtl::OUString::createFromAscii(
-                            "com.sun.star.text.DefaultNumberingProvider" ));
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.text.DefaultNumberingProvider" )));
         Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
         OSL_ENSURE(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
         ((SwFldMgr*)this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
     }
     return xNumberingInfo;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

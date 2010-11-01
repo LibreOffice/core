@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -158,10 +159,10 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
 //  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     BOOL bRet = RET_CANCEL == pDlg->Execute();
@@ -178,10 +179,10 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
 BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     USHORT nRet = pDlg->Execute();
@@ -239,15 +240,8 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     return bResult;
 }
 
-BOOL SwWrtShell::UpdateField( sw::mark::IFieldmark &fieldBM )
-{
-    return SwEditShell::UpdateField(fieldBM);
-}
-
-
-
-    // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
-    // Fuehre die vor definierten Aktionen aus.
+// handler for click on the field given as parameter.
+// the cursor is positioned on the field.
 
 
 void SwWrtShell::ClickToField( const SwField& rFld )
@@ -389,7 +383,7 @@ BOOL SwWrtShell::ClickToINetGrf( const Point& rDocPt, USHORT nFilter )
 void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
               const String *pTargetFrameName )
 {
-    ASSERT( rURL.Len() && pVSh, "was soll hier geladen werden?" );
+    OSL_ENSURE( rURL.Len() && pVSh, "what should be loaded here?" );
     if( !rURL.Len() || !pVSh )
         return ;
 
@@ -404,7 +398,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
         return;
 
     SwDocShell* pDShell = pSh->GetView().GetDocShell();
-    DBG_ASSERT( pDShell, "No DocShell?!");
+    OSL_ENSURE( pDShell, "No DocShell?!");
     String sTargetFrame;
     if( pTargetFrameName && pTargetFrameName->Len() )
         sTargetFrame = *pTargetFrameName;
@@ -496,3 +490,4 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,6 +70,8 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::beans::UnknownPropertyException;
 using ::com::sun::star::beans::PropertyVetoException;
 
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -592,7 +595,7 @@ typedef pair<const OUString*, const Any* > PropertyPair;
 typedef vector<PropertyPair> PropertyPairs;
 
 struct PropertyPairLessFunctor :
-    public binary_function<PropertyPair, PropertyPair, bool>
+    public std::binary_function<PropertyPair, PropertyPair, bool>
 {
     bool operator()( const PropertyPair& a, const PropertyPair& b ) const
     {
@@ -782,3 +785,5 @@ void SvXMLImportPropertyMapper::finished(
     if( mxNextMapper.is() )
         mxNextMapper->finished( rProperties, nStartIndex, nEndIndex );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

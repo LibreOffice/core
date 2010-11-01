@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,6 @@
 #include <svtools/itemdel.hxx>
 
 #include <comphelper/processfactory.hxx>
-
-#ifndef GCC
-#endif
 
 #include <svl/smplhint.hxx>
 
@@ -469,7 +467,7 @@ void SfxRequest::RemoveItem( USHORT nID )
 const SfxPoolItem* SfxRequest::GetArg
 (
     USHORT          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    FASTBOOL        bDeep,      // FALSE: nicht in Parent-ItemSets suchen
+    bool            bDeep,      // FALSE: nicht in Parent-ItemSets suchen
     TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
 )   const
 {
@@ -572,7 +570,7 @@ void SfxRequest::Done
                                     erfragt wurden, ggf. 0 falls keine
                                     Parameter gesetzt wurden */
 
-    FASTBOOL            bKeep   /*  TRUE (default)
+    bool                bKeep   /*  TRUE (default)
                                     'rSet' wird gepeichert und ist "uber
                                     GetArgs() abfragbar
 
@@ -902,7 +900,7 @@ BOOL SfxRequest::IsAPI() const
 //--------------------------------------------------------------------
 
 
-FASTBOOL SfxRequest::IsRecording() const
+bool SfxRequest::IsRecording() const
 
 /*  [Beschreibung]
 
@@ -974,3 +972,5 @@ void SfxRequest::ReleaseArgs()
     DELETEZ( pArgs );
     DELETEZ( pImp->pInternalArgs );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

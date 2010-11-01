@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,3 +124,5 @@ OUStringToGChar(const rtl::OUString& rString )
 #define OUStringToConstGChar( string ) rtl::OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr()
 
 #endif /* __ATK_WRAPPER_HXX__ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

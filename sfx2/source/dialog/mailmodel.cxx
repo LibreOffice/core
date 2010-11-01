@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -844,7 +845,13 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
                     Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
 
-                    xSimpleMailMessage->setSubject( maSubject );
+                    if ( xSimpleMailMessage->getSubject().getLength() == 0 ) {
+                        OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
+                        OUString subject( baseName );
+                        if ( maAttachedDocuments.size() > 1 )
+                            subject += OUString::createFromAscii( ", ..." );
+                        xSimpleMailMessage->setSubject( subject );
+                    }
                     xSimpleMailMessage->setAttachement( aAttachmentSeq );
 
                     sal_Bool bSend( sal_False );
@@ -864,7 +871,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     {
                         css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 
-                        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
                         ErrorBox aBox( pParentWindow, SfxResId( RID_ERRBOX_MAIL_CONFIG ));
@@ -954,3 +961,5 @@ BOOL CreateFromAddress_Impl( String& rFrom )
         rFrom.Erase();
     return ( rFrom.Len() > 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,10 +59,11 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+
 #define _SVX_OPTINET2_CXX
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 #include <cuires.hrc>
 #include "optinet2.hrc"
 #include "helpid.hrc"
@@ -86,6 +88,7 @@
 #include <osl/nlsupport.h>
 #endif
 #include <sal/types.h>
+#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -108,7 +111,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 using ::rtl::OUString;
 
-//CHINA001 copy from multipat.hxx begin
+
 // define ----------------------------------------------------------------
 
 // different delimiter for Unix (:) and Windows (;)
@@ -118,7 +121,7 @@ using ::rtl::OUString;
 #else
 #define CLASSPATH_DELIMITER ';'
 #endif
-//CHINA001 copy from multipat.hxx end
+
 // static ----------------------------------------------------------------
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -910,7 +913,7 @@ void SvxSearchTabPage::InitControls_Impl()
     long nLabelTextWidth = 0;
     Window* pLabels[] = { &aSearchNameFT, &aSearchFT, &aURLFT, &aPostFixFT, &aSeparatorFT, &aCaseFT };
     Window** pLabel = pLabels;
-    const sal_Int32 nLabelCount = sizeof( pLabels ) / sizeof( pLabels[0] );
+    const sal_Int32 nLabelCount = SAL_N_ELEMENTS( pLabels );
     for ( ; i < nLabelCount; ++i, ++pLabel )
     {
         long nTemp = (*pLabel)->GetCtrlTextWidth( (*pLabel)->GetText() );
@@ -934,7 +937,7 @@ void SvxSearchTabPage::InitControls_Impl()
     Window* pEdits[] = { &aSearchNameED, &aAndRB, &aOrRB,
         &aExactRB, &aURLED, &aPostFixED, &aSeparatorED, &aCaseED };
     Window** pEdit = pEdits;
-    const sal_Int32 nCCount = sizeof( pEdits ) / sizeof( pEdits[ 0 ] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pEdits );
     for ( i = 0; i < nCCount; ++i, ++pEdit )
     {
         Point aNewPos = (*pEdit)->GetPosPixel();
@@ -1539,7 +1542,7 @@ void SvxSecurityTabPage::InitControls()
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
                            &maShowConnectionsPB, &maMacroSecPB };
     Window** pButton = pButtons;
-    const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
+    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
     for ( ; i < nBCount; ++i, ++pButton )
     {
         long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
@@ -1579,7 +1582,7 @@ void SvxSecurityTabPage::InitControls()
         Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
                                 &maMasterPasswordFI, &maMacroSecFI };
         Window** pControl = pControls;
-        const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[ 0 ] );
+        const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
         for ( i = 0; i < nCCount; ++i, ++pControl )
         {
             Size aNewSize = (*pControl)->GetSizePixel();
@@ -2122,3 +2125,5 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
 }
 
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

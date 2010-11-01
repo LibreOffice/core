@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
@@ -110,7 +112,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -863,7 +865,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         // (Solche Paints passieren zum Beispiel, wenn man einfach nur eine andere Applikation ueber das Office legt und wieder
         // zurueckschaltet).
         // Deshalb die Benutzung des SolarMutex, der sichert das ab.
-        ::vos::IMutex& rSolarSafety = Application::GetSolarMutex();
+        ::osl::SolarMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL , sal_True, sal_False);
@@ -1138,7 +1140,7 @@ PopupMenu* FmXFormShell::GetConversionMenu()
     PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
     ImageList aImageList( SVX_RES( bIsHiContrastMode ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL) );
-    for ( size_t i = 0; i < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
     {
         // das entsprechende Image dran
         pNewMenu->SetItemImage(nConvertSlots[i], aImageList.GetImage(nCreateSlots[i]));
@@ -1151,7 +1153,7 @@ PopupMenu* FmXFormShell::GetConversionMenu()
 bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::isControlConversionSlot" );
-    for ( size_t i = 0; i < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
         if (nConvertSlots[i] == nSlotId)
             return true;
     return false;
@@ -1189,7 +1191,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
     OSL_ENSURE( isSolelySelected( _rxObject ),
         "FmXFormShell::executeControlConversionSlot: hmm ... shouldn't this parameter be redundant?" );
 
-    for ( size_t lookupSlot = 0; lookupSlot < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++lookupSlot )
+    for ( size_t lookupSlot = 0; lookupSlot < SAL_N_ELEMENTS( nConvertSlots ); ++lookupSlot )
     {
         if (nConvertSlots[lookupSlot] == _nSlotId)
         {
@@ -1246,7 +1248,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                 }
 
                 // replace the mdoel within the parent container
-                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);   //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);
                 if (xIndexParent.is())
                 {
                     // the form container works with FormComponents
@@ -1255,7 +1257,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     Any aNewModel(makeAny(xComponent));
                     try
                     {
-                        //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+
                         sal_Int32 nIndex = getElementPos(xParent, xOldModel);
                         if (nIndex>=0 && nIndex<xParent->getCount())
                             xIndexParent->replaceByIndex(nIndex, aNewModel);
@@ -1405,10 +1407,10 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
        )
         return false;   // those types cannot be converted
 
-    DBG_ASSERT(sizeof(nConvertSlots)/sizeof(nConvertSlots[0]) == sizeof(nObjectTypes)/sizeof(nObjectTypes[0]),
+    DBG_ASSERT(SAL_N_ELEMENTS(nConvertSlots) == SAL_N_ELEMENTS(nObjectTypes),
         "FmXFormShell::canConvertCurrentSelectionToControl: nConvertSlots & nObjectTypes must have the same size !");
 
-    for ( size_t i = 0; i < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
         if (nConvertSlots[i] == nConversionSlot)
             return nObjectTypes[i] != nObjectType;
 
@@ -2167,7 +2169,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         impl_updateCurrentForm( xNewCurrentForm );
 
     // ensure some slots are updated
-    for ( size_t i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( SelObjectSlotMap ); ++i )
         InvalidateSlot( SelObjectSlotMap[i], sal_False);
 
     return true;
@@ -2210,7 +2212,7 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
         pPage->GetImpl().setCurForm( m_xCurrentForm );
 
     // ensure the UI which depends on the current form is up-to-date
-    for ( size_t i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( DlgSlotMap ); ++i )
         InvalidateSlot( DlgSlotMap[i], sal_False );
 }
 
@@ -4336,3 +4338,5 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
 }
 
 //==============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

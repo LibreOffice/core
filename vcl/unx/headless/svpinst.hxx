@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,10 @@
 #include <vcl/salinst.hxx>
 #include <vcl/salwtype.hxx>
 #include <vcl/saltimer.hxx>
-#include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <vcl/solarmutex.hxx>
+
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <list>
 
@@ -46,11 +49,11 @@
 // SalYieldMutex
 // -------------------------------------------------------------------------
 
-class SvpSalYieldMutex : public NAMESPACE_VOS(OMutex)
+class SvpSalYieldMutex : public ::vcl::SolarMutexObject
 {
 protected:
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    oslThreadIdentifier mnThreadId;
 
 public:
                                                 SvpSalYieldMutex();
@@ -60,7 +63,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // ---------------
@@ -173,7 +176,7 @@ public:
     virtual SalBitmap*      CreateSalBitmap();
 
     // YieldMutex
-    virtual vos::IMutex*    GetYieldMutex();
+    virtual osl::SolarMutex* GetYieldMutex();
     virtual ULONG           ReleaseYieldMutex();
     virtual void            AcquireYieldMutex( ULONG nCount );
 
@@ -198,3 +201,5 @@ public:
 };
 
 #endif // _SV_SALINST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "services.hxx"
 #include <comphelper/container.hxx>
 #include <comphelper/listenernotification.hxx>
@@ -212,7 +213,7 @@ namespace frm
         Reference< XInterface > xModelsParent;
         FormButtonType eButtonType = FormButtonType_PUSH;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             // Parent holen
             Reference<XFormComponent>  xComp(getModel(), UNO_QUERY);
@@ -260,7 +261,7 @@ namespace frm
 
             case FormButtonType_URL:
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 Reference< XModel >  xModel = getXModel(xModelsParent);
                 if (!xModel.is())
@@ -927,3 +928,4 @@ namespace frm
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

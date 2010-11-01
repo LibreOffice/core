@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,9 +50,6 @@ const int nMaxCols = 99;
 class SwColMgr;
 class SwWrtShell;
 class SwColumnPage;
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwColumnDlg : public SfxModalDialog
 {
@@ -89,9 +87,6 @@ public:
     SwWrtShell&     GetWrtShell()   { return rWrtShell; }
 };
 
-/*-----------------07.03.97 08.26-------------------
-
---------------------------------------------------*/
 class ColumnValueSet : public ValueSet
 {
     public:
@@ -211,3 +206,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,6 +64,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/macros.h>
 
 using namespace ::svxform;
 using namespace ::com::sun::star::container;
@@ -444,7 +446,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
@@ -465,7 +467,7 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::awt::XControlModel >& rModel) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (!UnoControl::setModel(rModel))
         return sal_False;
@@ -677,7 +679,7 @@ void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XSelectionSupplier > xPeer(getPeer(), UNO_QUERY);
     return xPeer->select(_rSelection);
 }
@@ -685,7 +687,7 @@ sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (Illega
 //------------------------------------------------------------------------------
 Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XSelectionSupplier > xPeer(getPeer(), UNO_QUERY);
     return xPeer->getSelection();
 }
@@ -752,7 +754,7 @@ void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_bInDraw = sal_True;
     UnoControl::draw(x, y);
     m_bInDraw = sal_False;
@@ -765,7 +767,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 
     // --- <mutex_lock> ---
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Reference< XRowSetSupplier >  xGrid(getPeer(), UNO_QUERY);
 
@@ -941,7 +943,7 @@ void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( Ru
     Reference< XGridControl > xGrid( getPeer(), UNO_QUERY );
     if ( xGrid.is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         xGrid->setCurrentColumnPosition( nPos );
     }
 }
@@ -1467,7 +1469,7 @@ void FmXGridPeer::CellModified()
 //------------------------------------------------------------------------------
 void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         // want to do a lot of VCL stuff here ...
         // this should not be (deadlock) critical, as by definition, every component should release
         // any own mutexes before notifying
@@ -1695,7 +1697,7 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
     Property aPropDesc;
     const ::rtl::OUString* pProps = aPropsListenedTo;
-    const ::rtl::OUString* pPropsEnd = pProps + sizeof( aPropsListenedTo ) / sizeof( aPropsListenedTo[ 0 ] );
+    const ::rtl::OUString* pPropsEnd = pProps + SAL_N_ELEMENTS( aPropsListenedTo );
     for (; pProps != pPropsEnd; ++pProps)
     {
         if ( xInfo->hasPropertyByName( *pProps ) )
@@ -1718,7 +1720,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
-    for (sal_uInt16 i=0; i<sizeof(aPropsListenedTo)/sizeof(aPropsListenedTo[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(aPropsListenedTo); ++i)
         if (xInfo->hasPropertyByName(aPropsListenedTo[i]))
             xCol->removePropertyChangeListener(aPropsListenedTo[i], this);
 }
@@ -1726,7 +1728,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 //------------------------------------------------------------------------------
 void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmGridControl* pGrid = static_cast< FmGridControl* >( GetWindow() );
 
@@ -1809,7 +1811,7 @@ sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException )
 //------------------------------------------------------------------------------
 void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     // Handle Column beruecksichtigen
@@ -1843,7 +1845,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
 //------------------------------------------------------------------------------
 void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
 
@@ -1899,7 +1901,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
 //------------------------------------------------------------------------------
 void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmGridControl* pGrid    = (FmGridControl*) GetWindow();
 
@@ -1917,7 +1919,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeExcept
 //------------------------------------------------------------------------------
 void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& Value) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
 
@@ -2350,7 +2352,7 @@ void FmXGridPeer::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeExcepti
 //------------------------------------------------------------------------------
 void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     if (pGrid)
@@ -2737,13 +2739,13 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException )
         FmGridControl* pGrid = (FmGridControl*)GetWindow();
         if (!pGrid)
             return;
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pGrid->resetCurrentRow();
     }
     // if the cursor fired a reset event we seem to be on the insert row
     else if (m_xCursor == rEvent.Source)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         FmGridControl* pGrid = (FmGridControl*) GetWindow();
         if (pGrid && pGrid->IsOpen())
             pGrid->positioned(rEvent);
@@ -2764,7 +2766,7 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
             DbGridControl::NavigationBar::RECORD_NEW,
             SID_FM_RECORD_UNDO
         };
-        aSupported.realloc(sizeof(nSupported)/sizeof(nSupported[0]));
+        aSupported.realloc(SAL_N_ELEMENTS(nSupported));
         sal_uInt16* pSupported = aSupported.getArray();
         for (sal_uInt16 i=0; i<aSupported.getLength(); ++i, ++pSupported)
             *pSupported = nSupported[i];
@@ -2786,7 +2788,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
             FMURL_RECORD_MOVETONEW,
             FMURL_RECORD_UNDO
         };
-        aSupported.realloc(sizeof(sSupported)/sizeof(sSupported[0]));
+        aSupported.realloc(SAL_N_ELEMENTS(sSupported));
         ::com::sun::star::util::URL* pSupported = aSupported.getArray();
         sal_uInt16 i;
 
@@ -2963,3 +2965,4 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
     return 0;   // not handled
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

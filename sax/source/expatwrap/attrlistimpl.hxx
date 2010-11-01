@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define _SAX_ATTRLISTIMPL_HXX
 
 #include "sal/config.h"
-//#include "sax/saxdllapi.h"
 
 #include <cppuhelper/implbase2.hxx>
 
@@ -83,3 +83,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

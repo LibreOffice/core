@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -609,7 +610,7 @@ class SfxItemSet;
 class SvXMLNumFmtHelper;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
-class ScUnoGuard;
+class SolarMutexGuard;
 
 struct tScMyCellRange
 {
@@ -767,7 +768,7 @@ class ScXMLImport: public SvXMLImport
     ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
-    ScUnoGuard*             pScUnoGuard;
+    SolarMutexGuard*        pSolarMutexGuard;
 
     std::vector<rtl::OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
@@ -1055,3 +1056,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

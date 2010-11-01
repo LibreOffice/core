@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,14 +101,12 @@ class ScTokenArray;
 
 // constants and data types internal to compiler
 
-#if 0
 /*
     OpCode   eOp;           // OpCode
     formula::StackVar eType;         // type of data
     USHORT   nRefCnt;       // reference count
     BOOL     bRaw;          // not cloned yet and trimmed to real size
  */
-#endif
 
 #define SC_TOKEN_FIX_MEMBERS    \
     OpCode   eOp;               \
@@ -537,3 +536,5 @@ private:
 SC_DLLPUBLIC String GetScCompilerNativeSymbol( OpCode eOp ); //CHINA001
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

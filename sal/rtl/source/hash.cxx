@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include "hash.h"
 #include "strimp.h"
 #include <osl/diagnose.h>
+#include <sal/macros.h>
 
 struct StringHashTableImpl {
     sal_uInt32    nEntries;
@@ -67,8 +69,8 @@ getNextSize (sal_uInt32 nSize)
                                           65521, 131071,262139, 524287, 1048573,
                                           2097143, 4194301, 8388593, 16777213,
                                           33554393, 67108859, 134217689 };
-    #define NUM_PRIMES (sizeof (nPrimes)/ sizeof (nPrimes[0]))
-    for (sal_uInt32 i = 0; i < NUM_PRIMES; i++)
+
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(nPrimes); i++)
     {
         if (nPrimes[i] > nSize)
             return nPrimes[i];
@@ -237,3 +239,5 @@ rtl_str_hash_remove (rtl_uString       *pString)
     }
     // FIXME: Should we down-size ?
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

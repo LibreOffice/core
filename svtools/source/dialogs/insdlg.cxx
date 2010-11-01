@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <unotools/configmgr.hxx>
 #include <sot/clsids.hxx>
 #include <sot/stg.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -314,7 +316,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     String aUIName;
     USHORT nResId = 0;
 
-    for( sal_uInt32 i = 0, nCount = sizeof( aSotResourcePairs ) / sizeof( aSotResourcePairs[ 0 ] ); ( i < nCount ) && !nResId; i++ )
+    for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !nResId; i++ )
     {
         if( aSotResourcePairs[ i ].mnSotId == nId )
             nResId = aSotResourcePairs[ i ].mnResId;
@@ -387,3 +389,4 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

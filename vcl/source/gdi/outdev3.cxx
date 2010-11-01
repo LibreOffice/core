@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1503,7 +1504,8 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
     pNewData->maMapNames = String();
 
     bool bKeepNewData = false;
-    for( xub_StrLen nMapNameIndex = 0; nMapNameIndex != STRING_NOTFOUND; )
+    xub_StrLen nMapNameIndex = 0;
+    while( true )
     {
         String aSearchName = pNewData->maName;
         GetEnglishSearchFontName( aSearchName );
@@ -1521,9 +1523,9 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
 
         bKeepNewData = pFoundData->AddFontFace( pNewData );
 
-        // add font alias if available
+        // add (another) font alias if available
         // a font alias should never win against an original font with similar quality
-        if( aMapNames.Len() >= nMapNameIndex )
+        if( aMapNames.Len() <= nMapNameIndex )
             break;
         if( bKeepNewData ) // try to recycle obsoleted object
             pNewData = pNewData->CreateAlias();
@@ -8033,3 +8035,5 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1152,6 +1153,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( pDoc )
         {
             const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
+            ScOptionsUtil::KeyBindingType eKeyOld = rOldOpt.GetKeyBindingType();
+            ScOptionsUtil::KeyBindingType eKeyNew = rNewOpt.GetKeyBindingType();
+            if (eKeyOld != eKeyNew)
+                pDocSh->ResetKeyBindings(eKeyNew);
 
             bRepaint = ( bRepaint || ( rOldOpt != rNewOpt )   );
             bCalcAll =   bRepaint &&
@@ -2109,6 +2114,13 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
                 pRet = (*ScTpFormulaOptionsCreate)(pParent, rSet);
         }
         break;
+        case SID_SC_TP_COMPATIBILITY:
+        {
+            ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_COMPATIBILITY);
+            if (ScTpCompatOptionsCreate)
+                pRet = (*ScTpCompatOptionsCreate)(pParent, rSet);
+        }
+        break;
         case SID_SC_TP_CHANGES:
                                 {
                                             ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );
@@ -2274,3 +2286,4 @@ Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
     return NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

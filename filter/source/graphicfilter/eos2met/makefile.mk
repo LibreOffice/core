@@ -46,8 +46,11 @@ SRS1NAME=$(TARGET)
 SRC1FILES= 	dlgeos2.src	\
             eos2mstr.src
 .IF "$(L10N_framework)"==""
-SLOFILES =  $(SLO)$/eos2met.obj	\
+SLOFILES = $(EXCEPTIONSFILES)
+EXCEPTIONSFILES= \
+            $(SLO)$/eos2met.obj \
             $(SLO)$/dlgeos2.obj
+
 .ENDIF
 # ==========================================================================
 

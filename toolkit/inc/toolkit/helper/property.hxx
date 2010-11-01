@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -195,6 +196,7 @@ namespace rtl {
 #define BASEPROPERTY_GRID_SELECTIONMODE             144
 #define BASEPROPERTY_ENABLEVISIBLE                  145  // sal_Bool
 #define BASEPROPERTY_REFERENCE_DEVICE               146
+
 #define BASEPROPERTY_HIGHCONTRASTMODE               147
 #define BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND       148
 #define BASEPROPERTY_GRID_HEADER_BACKGROUND         149
@@ -202,6 +204,7 @@ namespace rtl {
 #define BASEPROPERTY_GRID_ROW_BACKGROUND            151
 #define BASEPROPERTY_MULTISELECTION_SIMPLEMODE      152
 #define BASEPROPERTY_ITEM_SEPARATOR_POS             153
+#define BASEPROPERTY_GROUPNAME                      154  // ::rtl::OUString
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
@@ -246,3 +249,4 @@ sal_Bool                            CompareProperties( const ::com::sun::star::u
 #endif // _TOOLKIT_HELPER_PROPERTY_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

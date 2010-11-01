@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <vcl/fixed.hxx>
 
 #include <memory>
+#include <sal/macros.h>
 
 #define LID_RECORD_LABEL    1000
 #define LID_RECORD_FILLER   1001
@@ -294,7 +296,7 @@ namespace frm
             { FormFeature::RemoveFilterAndSort,     false, false },
         };
 
-        size_t nSupportedFeatures = sizeof( aSupportedFeatures ) / sizeof( aSupportedFeatures[0] );
+        size_t nSupportedFeatures = SAL_N_ELEMENTS( aSupportedFeatures );
         FeatureDescription* pSupportedFeatures = aSupportedFeatures;
         FeatureDescription* pSupportedFeaturesEnd = aSupportedFeatures + nSupportedFeatures;
         for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
@@ -734,3 +736,5 @@ namespace frm
 //.........................................................................
 }   // namespace frm
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

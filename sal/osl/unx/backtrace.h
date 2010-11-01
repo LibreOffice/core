@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 
-#if defined (SOLARIS) || (FREEBSD)
+#if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD)
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,7 +40,7 @@ int backtrace( void **buffer, int max_frames );
 void backtrace_symbols_fd( void **buffer, int size, int fd );
 
 /* no frame.h on FreeBSD */
-#if defined FREEBSD
+#if defined (FREEBSD) || defined (NETBSD)
 struct frame {
     long    arg0[8];
     long    arg1[6];
@@ -97,3 +98,5 @@ void backtrace_symbols_fd( void **buffer, int size, int fd );
 #endif
 
 #endif /* defined MACOSX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

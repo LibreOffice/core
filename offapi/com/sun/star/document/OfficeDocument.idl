@@ -108,7 +108,7 @@ published service OfficeDocument
 
         <p>
         With this interface it's possible too, to reset the modify state.
-        That can be neccessary to prevent code against problem during closing
+        That can be necessary to prevent code against problem during closing
         of the document without saving any changes.
         </p>
      */
@@ -132,7 +132,7 @@ published service OfficeDocument
     /** offers a way to print a component
 
         <p>
-        It's possible to specify wich printer should be used and of course
+        It's possible to specify which printer should be used and of course
         print the document on it.
         </p>
      */
@@ -193,7 +193,7 @@ published service OfficeDocument
     [optional] interface XDocumentPropertiesSupplier;
 
     //-------------------------------------------------------------------------
-    /** controls the focus behaviour of the form controls in the document
+    /** controls the focus behavior of the form controls in the document
 
         <p>
         If this flag is set to <TRUE/>, any view belonging to the document

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -4547,15 +4548,15 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, BOOL bRight )
     }
 }
 
-vos::ORef<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable( BOOL bGetInternal ) const
+rtl::Reference<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable( BOOL bGetInternal ) const
 {
-    vos::ORef<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
-    if ( !xF.isValid() && bGetInternal )
+    rtl::Reference<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
+    if ( !xF.is() && bGetInternal )
         xF = EE_DLL()->GetGlobalData()->GetForbiddenCharsTable();
     return xF;
 }
 
-void ImpEditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void ImpEditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     EE_DLL()->GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }
@@ -4658,3 +4659,5 @@ IMPL_LINK( ImpEditEngine, DocModified, void*, EMPTYARG )
     aModifyHdl.Call( NULL /*GetEditEnginePtr()*/ ); // NULL, because also used for Outliner
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

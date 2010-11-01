@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotxdoc.hxx>    // for initXForms()
 
 #include <xmloff/xmlmetai.hxx>
@@ -422,8 +423,8 @@ SvXMLImportContext *SwXMLImport::CreateContext(
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), UNO_QUERY_THROW);
@@ -583,7 +584,7 @@ void SwXMLImport::startDocument( void )
         return;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
 
     Reference< XPropertySet > xImportInfo( getImportInfo() );
@@ -796,7 +797,7 @@ void SwXMLImport::endDocument( void )
         return;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( pGraphicResolver )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
@@ -1081,7 +1082,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         return;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
@@ -1168,7 +1169,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aConfigProps)
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
     if( !xFac.is() )
@@ -1743,3 +1744,5 @@ void SwXMLImport::initXForms()
 
     bInititedXForms = sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

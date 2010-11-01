@@ -180,7 +180,6 @@ Menu RID_INSERT_FIELD_CTRL
             HelpID = FN_INSERT_FLD_TIME ;
             Text [ en-US ] = "Time" ;
         };
-         //#ifndef MN_SW_WEB
         MenuItem
         {
             Identifier = FN_INSERT_FLD_PGNUMBER ;
@@ -205,7 +204,6 @@ Menu RID_INSERT_FIELD_CTRL
             HelpID = FN_INSERT_FLD_TITLE ;
             Text [ en-US ] = "Title" ;
         };
-         //#endif
         MenuItem
         {
             Identifier = FN_INSERT_FLD_AUTHOR ;
@@ -356,31 +354,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     Text [ en-US ] = "Navigation" ;
 };
-/*
-Noch ein paar Reserven
-            ToolBoxItem
-            {
-                                Identifier = NID_NEXT;
-                Text = "Vorwärts" ;
-                        };
-            ToolBoxItem
-            {
-                                Identifier = NID_PREV;
-                Text = "Rückwärts" ;
-                        };
-            ToolBoxItem
-            {
-                                Identifier = NID_CTRL;
-                Text = "Control" ;
-                        };
-            ToolBoxItem
-            {
-                                Identifier = NID_DRW;
-                Text = "Zeichenobjekt" ;
-                        };
-
-
-*/
 /***************************************************************
     Strings fuer die Quickhelp der View-PgUp/Down-Buttons
 ***************************************************************/
@@ -434,7 +407,6 @@ String STR_IMGBTN_GRF_DOWN
 };
 String STR_IMGBTN_OLE_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nächstes OLE-Objekt : Nächstes OLE object */
     /* ### ACHTUNG: Neuer Text in Resource? Nächstes OLE-Objekt : Nõchstes OLE-Objekt */
     Text [ en-US ] = "Next OLE object" ;
 };

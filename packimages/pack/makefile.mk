@@ -37,9 +37,11 @@ RSCCUSTOMIMG*=$(PRJ)
 IMAGES := $(COMMONBIN)$/images.zip
 SORTED_LIST=$(RES)$/img$/sorted.lst
 # Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
+# (Tango fallbacks to Industrial for the missing icons)
 CUSTOM_IMAGE_SETS=hicontrast crystal oxygen tango classic
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
-CUSTOM_PREFERRED_FALLBACK*=-c $(SOLARSRC)$/ooo_custom_images$/tango
+CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
+CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
 
 CRYSTAL_TARBALL=$(SOLARSRC)$/external_images$/ooo_crystal_images-1.tar.gz
 OXYGEN_TARBALL=$(SOLARSRC)$/external_images$/ooo_oxygen_images-2009-06-17.tar.gz
@@ -63,7 +65,7 @@ $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
     $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(SOLARCOMMONRESDIR)$/img -s $(SORTED_LIST) -l $(RES)$/img -o $@
 
 images_% : $(RES)$/img$/commandimagelist.ilst
-    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
+    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
 
 # make sure to have one to keep packing happy
 $(COMMONBIN)$/images_brand.zip:

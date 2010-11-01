@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,17 @@
 /** */ //for docpp
 namespace cppu
 {
+
+namespace detail {
+
+    union element_alias
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > *pAsSequence;
+        ::com::sun::star::uno::XInterface * pAsInterface;
+        element_alias() : pAsInterface(0) {}
+    };
+
+}
 
 //===================================================================
 class OInterfaceContainerHelper;
@@ -95,7 +107,9 @@ public:
 private:
     OInterfaceContainerHelper & rCont;
     sal_Bool                    bIsList;
-    void *                      pData;
+
+    detail::element_alias aData;
+
     sal_Int32                   nRemain;
 
     OInterfaceIteratorHelper( const OInterfaceIteratorHelper & ) SAL_THROW( () );
@@ -222,14 +236,14 @@ public:
 private:
 friend class OInterfaceIteratorHelper;
     /**
-      bIsList == TRUE -> pData of type Sequence< XInterfaceSequence >,
-      otherwise pData == of type (XEventListener *)
+      bIsList == TRUE -> aData.pAsSequence of type Sequence< XInterfaceSequence >,
+      otherwise aData.pAsInterface == of type (XEventListener *)
      */
-    void *                  pData;
+    detail::element_alias   aData;
     ::osl::Mutex &          rMutex;
     /** TRUE -> used by an iterator. */
     sal_Bool                bInUse;
-    /** TRUE -> pData is of type Sequence< XInterfaceSequence >. */
+    /** TRUE -> aData.pAsSequence is of type Sequence< XInterfaceSequence >. */
     sal_Bool                bIsList;
 
     OInterfaceContainerHelper( const OInterfaceContainerHelper & ) SAL_THROW( () );
@@ -602,3 +616,4 @@ typedef OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper , OMultiTypeInte
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

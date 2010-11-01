@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"
@@ -234,3 +233,4 @@ void SfxDocumentTemplateDlg::NewTemplate(const String &rPath)
         aRegionLb.GetSelectEntryPos(), GetTemplateName(), rPath);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

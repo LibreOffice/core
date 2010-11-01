@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,10 @@
 #define DBAUI_CONNECTIONLINEDATA_HXX
 
 #include "QEnumTypes.hxx"
-#include <vos/refernce.hxx>
 #include <vector>
 
-#include <vos/ref.hxx>
-
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include "RefFunctor.hxx"
 #include <rtl/ustring.hxx>
 
@@ -52,7 +52,7 @@ namespace dbaui
         the class OConnectionLineData contains the data of a connection
         e.g. the source and the destanation field
     **/
-    class OConnectionLineData : public ::vos::OReference
+    class OConnectionLineData : public ::salhelper::SimpleReferenceObject
     {
         ::rtl::OUString m_aSourceFieldName;
         ::rtl::OUString m_aDestFieldName;
@@ -94,8 +94,9 @@ namespace dbaui
 
     //-------------------------------------------------------------------------
     //------------------------------------------------------------------
-    typedef ::vos::ORef< OConnectionLineData >      OConnectionLineDataRef;
+    typedef ::rtl::Reference< OConnectionLineData >     OConnectionLineDataRef;
     typedef ::std::vector< OConnectionLineDataRef > OConnectionLineDataVec;
 }
 #endif // DBAUI_CONNECTIONLINEDATA_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

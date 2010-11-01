@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,7 +108,7 @@ class LocaleNode
 {
     OUString aName;
     OUString aValue;
-    Attr * xAttribs;
+    Attr aAttribs;
     LocaleNode * parent;
     LocaleNode* * children;
     sal_Int32 nChildren;
@@ -123,7 +124,7 @@ public:
     inline void setValue(const OUString &oValue) { aValue += oValue; };
     inline const OUString& getName() const { return aName; };
     inline const OUString& getValue() const { return aValue; };
-    inline const Attr* getAttr() const { return xAttribs; };
+    inline const Attr& getAttr() const { return aAttribs; };
     inline sal_Int32 getNumberOfChildren () const { return nChildren; };
     inline  LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx] ; };
     const LocaleNode * findNode ( const sal_Char *name) const;
@@ -257,3 +258,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

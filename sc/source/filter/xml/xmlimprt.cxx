@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svl/zforlist.hxx>
+#include <sal/macros.h>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -58,7 +60,6 @@
 #include "nameuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
-#include "unoguard.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 
 #include "patattr.hxx"
@@ -106,6 +107,8 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
 using ::rtl::OUString;
+
+using rtl::OUString;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
@@ -1740,7 +1743,7 @@ ScXMLImport::ScXMLImport(
     pMyLabelRanges(NULL),
     pValidations(NULL),
     pDetectiveOpArray(NULL),
-    pScUnoGuard(NULL),
+    pSolarMutexGuard(NULL),
     pNumberFormatAttributesExportHelper(NULL),
     pStyleNumberFormats(NULL),
     sPrevStyleName(),
@@ -1781,7 +1784,7 @@ ScXMLImport::ScXMLImport(
         { XML_CURRENCY,     util::NumberFormat::CURRENCY },
         { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
     };
-    size_t n = sizeof(aCellTypePairs)/sizeof(aCellTypePairs[0]);
+    size_t n = SAL_N_ELEMENTS(aCellTypePairs);
     for (size_t i = 0; i < n; ++i)
     {
         aCellTypeMap.insert(
@@ -1871,8 +1874,8 @@ ScXMLImport::~ScXMLImport() throw()
     if (pStylesImportHelper)
         delete pStylesImportHelper;
 
-    if (pScUnoGuard)
-        delete pScUnoGuard;
+    if (pSolarMutexGuard)
+        delete pSolarMutexGuard;
 
     if (pMyNamedExpressions)
         delete pMyNamedExpressions;
@@ -2912,7 +2915,7 @@ void ScXMLImport::DisposingModel()
 void ScXMLImport::LockSolarMutex()
 {
     // #i62677# When called from DocShell/Wrapper, the SolarMutex is already locked,
-    // so there's no need to allocate (and later delete) the ScUnoGuard.
+    // so there's no need to allocate (and later delete) the SolarMutexGuard.
     if (bFromWrapper)
     {
         DBG_TESTSOLARMUTEX();
@@ -2921,8 +2924,8 @@ void ScXMLImport::LockSolarMutex()
 
     if (nSolarMutexLocked == 0)
     {
-        DBG_ASSERT(!pScUnoGuard, "Solar Mutex is locked");
-        pScUnoGuard = new ScUnoGuard();
+        DBG_ASSERT(!pSolarMutexGuard, "Solar Mutex is locked");
+        pSolarMutexGuard = new SolarMutexGuard();
     }
     ++nSolarMutexLocked;
 }
@@ -2935,9 +2938,9 @@ void ScXMLImport::UnlockSolarMutex()
         nSolarMutexLocked--;
         if (nSolarMutexLocked == 0)
         {
-            DBG_ASSERT(pScUnoGuard, "Solar Mutex is always unlocked");
-            delete pScUnoGuard;
-            pScUnoGuard = NULL;
+            DBG_ASSERT(pSolarMutexGuard, "Solar Mutex is always unlocked");
+            delete pSolarMutexGuard;
+            pSolarMutexGuard = NULL;
         }
     }
 }
@@ -3068,3 +3071,4 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
     reGrammar = eDefaultGrammar;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

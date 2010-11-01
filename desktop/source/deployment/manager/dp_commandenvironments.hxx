@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 #if ! defined INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 #define INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 
-
 #include "cppuhelper/compbase3.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/Type.hxx"
 
-
 namespace css = ::com::sun::star;
 
 namespace dp_manager {
-
-
 
 /**
    This command environment is to be used when an extension is temporarily
@@ -134,6 +131,29 @@ public:
 
 };
 
+/* For use in XExtensionManager::addExtension in the call to
+   XPackage::checkPrerequisites
+   It prevents all user interactions. The license is always accepted.
+   It remembers if there was a platform or a dependency exception in
+   the member m_bException. if there was any other exception then m_bUnknownException
+   is set.
+
+ */
+class SilentCheckPrerequisitesCommandEnv : public BaseCommandEnv
+{
+public:
+    SilentCheckPrerequisitesCommandEnv();
+    // XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (css::uno::RuntimeException);
+
+    // Set to true if a PlatformException or a DependencyException were handled.
+    css::uno::Any m_Exception;
+    // Set to true if an unknown exception was handled.
+    css::uno::Any m_UnknownException;
+};
+
 // class NoExceptionCommandEnv : public BaseCommandEnv
 // {
 //     css::uno::Type m_type;
@@ -152,8 +172,6 @@ public:
 
 }
 
-
-
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

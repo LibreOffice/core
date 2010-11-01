@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 
 /*************************************************************************
 |*
-|* 3D-Tab-Dialog
+|* 3D TabDialog
 |*
 \************************************************************************/
 
@@ -56,7 +57,7 @@ public:
 
 /*************************************************************************
 |*
-|* 3D-SingleTab-Dialog
+|* 3D SingleTabDialog
 |*
 \************************************************************************/
 class Svx3DSingleTabDialog : public SfxSingleTabDialog
@@ -71,3 +72,4 @@ public:
 
 #endif // _SVX_LIGHT3D_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -410,7 +411,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbSelColor      = FALSE;
     mbSelTextColor  = FALSE;
     mbMirrored      = FALSE;
-    mbHasInsertTab  = (nWinStyle & WB_INSERTTAB);
 
     if ( nWinStyle & WB_3DTAB )
         mnOffY++;
@@ -723,6 +723,8 @@ void TabBar::ImplInitControls()
         DELETEZ( mpFirstBtn );
         DELETEZ( mpLastBtn );
     }
+
+    mbHasInsertTab  = (mnWinStyle & WB_INSERTTAB);
 }
 
 // -----------------------------------------------------------------------
@@ -2943,3 +2945,5 @@ Rectangle TabBar::GetPageArea() const
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

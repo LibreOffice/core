@@ -37,7 +37,7 @@ DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = test_pathutils
 SHL1OBJS = $(SLO)$/test_pathutils.obj $(SLO)$/pathutils.obj
-SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB) $(TESTSHL2LIB)
+SHL1STDLIBS = $(TOOLSLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
@@ -45,8 +45,4 @@ DEF1NAME = $(SHL1TARGET)
 SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
-
-ALLTAR: test
-
-test .PHONY: $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN) -forward $(BIN)$/$(TARGET).rdb
+.INCLUDE: _cppunit.mk

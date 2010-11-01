@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2033,6 +2034,10 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
                         SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
     }
+}
+
+void WinSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
 }
 
 // -----------------------------------------------------------------------
@@ -6495,3 +6500,4 @@ BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall )
 
 // -----------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

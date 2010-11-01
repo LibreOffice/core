@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,6 @@
 #include "swslots.hxx"
 #include <PostItMgr.hxx>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -103,7 +103,6 @@ using ::rtl::OUString;
 #include <IDocumentSettingAccess.hxx>
 
 #include <unomid.h>
-
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
@@ -136,24 +135,16 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 
 TYPEINIT1(SwView,SfxViewShell)
 
-/*-----------------13.12.97 11:06-------------------
-
---------------------------------------------------*/
 ShellModes  SwView::GetShellMode()
 {
     return pViewImpl->GetShellMode();
 }
 
-/*-----------------13.12.97 11:28-------------------
-
---------------------------------------------------*/
 view::XSelectionSupplier* SwView::GetUNOObject()
 {
     return pViewImpl->GetUNOObject();
 }
-/* -----------------------------06.05.2002 13:18------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
@@ -162,39 +153,29 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
         pWrtShell->ShowCrsr();
 
 }
-/*-- 26.05.2004 09:14:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
                 sal_uInt16 nRestart, sal_Bool bIsSource)
 {
     pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
     UIFeatureChanged();
 }
-/*-- 26.05.2004 09:14:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeConfigItem*  SwView::GetMailMergeConfigItem()
 {
     return pViewImpl->GetMailMergeConfigItem();
 }
-/*-- 26.05.2004 09:14:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_uInt16 SwView::GetMailMergeRestartPage() const
 {
     return pViewImpl->GetMailMergeRestartPage();
 }
-/*-- 03.09.2004 11:56:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwView::IsMailMergeSourceView() const
 {
     return pViewImpl->IsMailMergeSourceView();
 }
-/*-- 12.04.2006 11:51:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
@@ -513,7 +494,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(sal_False, Falsche Request-Methode);
+            OSL_ENSURE(sal_False, "wrong request method");
             return;
     }
 
@@ -560,3 +541,5 @@ IMPL_LINK( SwView, HtmlOptionsHdl, void*, EMPTYARG )
     GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

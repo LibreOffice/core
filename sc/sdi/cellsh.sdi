@@ -60,6 +60,7 @@ interface CellSelection
     SID_SBA_BRW_INSERT      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SELECT_DB           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SORT                [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_DATA_FORM           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     FID_FILTER_OK           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_AUTO_FILTER         [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_AUTOFILTER_HIDE     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]

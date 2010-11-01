@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <EffectMigration.hxx>
 #include <anminfo.hxx>
 
-using namespace ::vos;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
@@ -1342,3 +1342,4 @@ sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
     return GetSoundFile( pShape ).getLength() != 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

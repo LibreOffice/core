@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 #pragma implementation "mzstring.h"
 #endif
 
-//#include "stdafx.h"       //
 #include "mzstring.h"
 
 #ifndef WIN32
@@ -51,7 +51,6 @@
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
-//# include <crtdbg.h>
 #endif                                            /* WIN32 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -312,3 +311,5 @@ bool MzString::resize(int len)
 {
     return allocate(len);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

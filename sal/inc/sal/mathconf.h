@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,3 +146,5 @@ union sal_math_Double
 #endif /* __cplusplus */
 
 #endif /* INCLUDED_SAL_MATHCONF_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

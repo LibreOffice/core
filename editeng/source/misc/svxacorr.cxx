@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -220,7 +221,6 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
 {
     static int bIsInit = 0;
     static TransliterationWrapper aWrp( GetProcessFact(),
-                ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
                 ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
                 ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
     if( !bIsInit )
@@ -1118,7 +1118,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
     return true;
 }
 
-//The method below is renamed from _GetQuote to GetQuote by BerryJia for Bug95846 Time:2002-8-13 15:50
+
 sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
                                         LanguageType eLang ) const
 {
@@ -2838,3 +2838,5 @@ BOOL SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

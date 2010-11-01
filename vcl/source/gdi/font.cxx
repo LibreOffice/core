@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include "vcl/impfont.hxx"
 #include "vcl/outfont.hxx"
 #include "unotools/fontcfg.hxx"
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -1033,7 +1035,7 @@ namespace
                     aEnt.string = pOpen+1;
                     aEnt.string_len = (pClose-pOpen)-1;
                     aEnt.weight = WEIGHT_NORMAL;
-                    const int nEnt = sizeof( weight_table ) / sizeof( weight_table[0] );
+                    const int nEnt = SAL_N_ELEMENTS( weight_table );
                     WeightSearchEntry* pFound = std::lower_bound( weight_table, weight_table+nEnt, aEnt );
                     if( pFound != (weight_table+nEnt) )
                         o_rResult.SetWeight( pFound->weight );
@@ -1114,3 +1116,5 @@ FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 BOOL Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 BOOL Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

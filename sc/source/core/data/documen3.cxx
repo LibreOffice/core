@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,6 @@
 #include "sc.hrc"           // SID_LINK
 #include "hints.hxx"
 #include "dpobject.hxx"
-#include "unoguard.hxx"
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
@@ -770,7 +770,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
             //  This check is done after calling EndListening, so a later BroadcastUno call
             //  won't touch this object.
 
-            vos::IMutex& rSolarMutex = Application::GetSolarMutex();
+            osl::SolarMutex& rSolarMutex = Application::GetSolarMutex();
             if ( rSolarMutex.tryToAcquire() )
             {
                 //  BroadcastUno is always called with the SolarMutex locked, so if it
@@ -783,7 +783,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
                 //  let the thread that called BroadcastUno continue
                 while ( bInUnoBroadcast )
                 {
-                    vos::OThread::yield();
+                    osl::Thread::yield();
                 }
             }
         }
@@ -1904,7 +1904,7 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     eLanguage = eLatin;
     eCjkLanguage = eCjk;
     eCtlLanguage = eCtl;
-    if ( xPoolHelper.isValid() )
+    if ( xPoolHelper.is() )
     {
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
         pPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
@@ -2160,3 +2160,5 @@ void ScDocument::GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist 
     }
 }
 // End Comments
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

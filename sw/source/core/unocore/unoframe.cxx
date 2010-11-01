@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,6 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoevent.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
@@ -103,7 +103,7 @@
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/printer.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -153,33 +153,26 @@ public:
     virtual sal_Bool                AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound) = 0;
 
 };
-/* -----------------------------12.06.01 15:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
 {
 }
-/* -----------------------------12.06.01 15:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BaseFrameProperties_Impl::SetProperty(USHORT nWID, BYTE nMemberId, const uno::Any& rVal)
 {
     aAnyMap.SetValue( nWID, nMemberId, rVal );
 }
-/* -----------------------------12.06.01 15:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool BaseFrameProperties_Impl::GetProperty(USHORT nWID, BYTE nMemberId, const uno::Any*& rpAny)
 {
     return aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
+
 //void BaseFrameProperties_Impl::GetProperty( const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any & rAny )
 //{
 //  rAny = rxPropertySet->getPropertyValue( rPropertyName );
 //}
-/* -----------------29.06.98 09:55-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, sal_Bool& rSizeFound)
 {
     sal_Bool bRet = sal_True;
@@ -527,9 +520,6 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
 
     return bRet;
 }
-/* -----------------22.06.98 09:17-------------------
- *
- * --------------------------------------------------*/
 
 class SwFrameProperties_Impl : public BaseFrameProperties_Impl
 {
@@ -542,16 +532,12 @@ public:
 
     virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
-/* -----------------22.06.98 09:17-------------------
- *
- * --------------------------------------------------*/
+
 SwFrameProperties_Impl::SwFrameProperties_Impl():
     BaseFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME)*/ )
 {
 }
-/* -----------------22.06.98 11:27-------------------
- *
- * --------------------------------------------------*/
+
 inline void lcl_FillCol ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, const :: uno::Any *pAny)
 {
     if ( pAny )
@@ -561,6 +547,7 @@ inline void lcl_FillCol ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, con
         rToSet.Put(aCol);
     }
 }
+
 sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItemSet&, sal_Bool& rSizeFound)
 {
     //Properties fuer alle Frames
@@ -600,6 +587,7 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, 
     }
     return bRet;
 }
+
 /****************************************************************************
     Grafik-Descriptor
 ****************************************************************************/
@@ -611,17 +599,12 @@ public:
 
     virtual sal_Bool                AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
-/* -----------------27.06.98 14:53-------------------
- *
- * --------------------------------------------------*/
+
 SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
     BaseFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC)*/ )
 {
 }
 
-/* -----------------27.06.98 14:40-------------------
- *
- * --------------------------------------------------*/
 inline void lcl_FillMirror ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, const ::uno::Any *pHEvenMirror, const ::uno::Any *pHOddMirror, const ::uno::Any *pVMirror, sal_Bool &rRet )
 {
     if(pHEvenMirror || pHOddMirror || pVMirror )
@@ -708,9 +691,6 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
 
     return bRet;
 }
-/* -----------------4/1/2003 13:54-------------------
-
- --------------------------------------------------*/
 
 class SwOLEProperties_Impl : public SwFrameProperties_Impl
 {
@@ -721,9 +701,6 @@ public:
 
     virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
-/* -----------------4/1/2003 15:32-------------------
-
- --------------------------------------------------*/
 
 sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
         SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound)
@@ -739,17 +716,12 @@ sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
 /******************************************************************
  *  SwXFrame
  ******************************************************************/
-/* -----------------------------10.03.00 18:02--------------------------------
-
- ---------------------------------------------------------------------------*/
 const :: uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SwXFrame::getSomething( const :: uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException)
 {
@@ -761,30 +733,21 @@ sal_Int64 SAL_CALL SwXFrame::getSomething( const :: uno::Sequence< sal_Int8 >& r
     }
     return 0;
 }
-/*-----------------24.03.98 14:49-------------------
-
---------------------------------------------------*/
 
 TYPEINIT1(SwXFrame, SwClient);
-/* -----------------------------06.04.00 14:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXFrame");
 }
-/* -----------------------------06.04.00 14:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
 {
     return !rServiceName.compareToAscii("com.sun.star.text.BaseFrame")||
                 !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
                     !rServiceName.compareToAscii("com.sun.star.document.LinkTarget");
 }
-/* -----------------------------06.04.00 14:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(3);
@@ -794,7 +757,6 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::R
     pArray[2] = C2U("com.sun.star.document.LinkTarget");
     return aRet;
 }
-
 
 /*-- 14.01.99 11:31:52---------------------------------------------------
     Dieser CTor legt den Frame als Descriptor an
@@ -850,9 +812,6 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     }
 }
 
-/*-- 11.12.98 15:05:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const :: SfxItemPropertySet* pSet) :
     SwClient( &rFrmFmt ),
     aLstnrCntnr( (container::XNamed*)this),
@@ -865,23 +824,16 @@ SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const :: SfxItemPropertyS
 {
 
 }
-/*-- 11.12.98 15:05:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXFrame::~SwXFrame()
 {
     delete m_pCopySource;
     delete pProps;
 }
-/*-- 11.12.98 15:05:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-/*-- 11.12.98 15:05:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 OUString SwXFrame::getName(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String sRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -892,12 +844,10 @@ OUString SwXFrame::getName(void) throw( uno::RuntimeException )
         throw uno::RuntimeException();
     return sRet;
 }
-/*-- 11.12.98 15:05:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::setName(const :: OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     String sTmpName(rName);
     if(pFmt)
@@ -913,9 +863,7 @@ void SwXFrame::setName(const :: OUString& rName) throw( uno::RuntimeException )
     else
         throw uno::RuntimeException();
 }
-/*-- 11.12.98 15:05:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySetInfo >  xRef;
@@ -944,9 +892,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) th
     }
     return xRef;
 }
-/*-- 15.05.06 12:21:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::SetSelection(SwPaM& rCopySource)
 {
     if(m_pCopySource)
@@ -955,9 +901,6 @@ void SwXFrame::SetSelection(SwPaM& rCopySource)
     m_pCopySource->SetMark();
     *m_pCopySource->GetMark() = *rCopySource.End();
 }
-/*-- 11.12.98 15:05:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
 {
@@ -1007,7 +950,7 @@ SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
 void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::Any& aValue)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     const :: SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
 
@@ -1470,13 +1413,11 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
     else
         throw uno::RuntimeException();
 }
-/*-- 11.12.98 15:05:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aAny;
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
@@ -1733,63 +1674,51 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         throw uno::RuntimeException();
     return aAny;
 }
-/*-- 11.12.98 15:05:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::addPropertyChangeListener(const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 11.12.98 15:05:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 11.12.98 15:05:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::addVetoableChangeListener(const OUString& /*PropertyName*/,
                                 const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 11.12.98 15:05:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 12.09.00 14:04:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< OUString > aPropertyNames(1);
     OUString* pNames = aPropertyNames.getArray();
     pNames[0] = rPropertyName;
     uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aPropertyNames);
     return aStates.getConstArray()[0];
 }
-/*-- 12.09.00 14:04:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
     const uno::Sequence< OUString >& aPropertyNames )
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
     beans::PropertyState* pStates = aStates.getArray();
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -1848,13 +1777,11 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
         throw uno::RuntimeException();
     return aStates;
 }
-/*-- 12.09.00 14:04:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -1947,13 +1874,11 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         throw uno::RuntimeException();
 
 }
-/*-- 12.09.00 14:04:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -1975,26 +1900,20 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         throw uno::RuntimeException();
     return aRet;
 }
-/* -----------------22.04.99 14:59-------------------
- *
- * --------------------------------------------------*/
+
 void SwXFrame::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     if(!GetRegisteredIn())
         throw uno::RuntimeException();
     aLstnrCntnr.AddListener(aListener);
 }
-/* -----------------22.04.99 14:59-------------------
- *
- * --------------------------------------------------*/
+
 void SwXFrame::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
         throw uno::RuntimeException();
 }
-/*-- 11.12.98 15:05:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
@@ -2007,12 +1926,9 @@ void    SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
-/*-- 11.12.98 15:23:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwXFrame::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     if ( pFmt )
     {
@@ -2038,12 +1954,10 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
     }
 
 }
-/*-- 11.12.98 16:02:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2062,9 +1976,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::Runtim
         throw uno::RuntimeException();
     return aRef;
 }
-/* -----------------14.01.99 12:02-------------------
- *
- * --------------------------------------------------*/
+
 void SwXFrame::ResetDescriptor()
 {
     bIsDescriptor = sal_False;
@@ -2072,13 +1984,11 @@ void SwXFrame::ResetDescriptor()
     mxStyleFamily.clear();
     DELETEZ(pProps);
 }
-/* -----------------18.02.99 13:34-------------------
- *
- * --------------------------------------------------*/
+
 void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
             throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsDescriptor())
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
@@ -2296,7 +2206,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     if( !aClassName.MakeId( aCLSID ) )
                     {
                         lang::IllegalArgumentException aExcept;
-                        aExcept.Message = OUString::createFromAscii("CLSID invalid");
+                        aExcept.Message = OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID invalid"));
                         throw aExcept;
                     }
 
@@ -2406,9 +2316,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     //setzt das Flag zurueck und loescht den Descriptor-Pointer
     ResetDescriptor();
 }
-/* -----------------------------04.04.01 14:27--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
@@ -2443,96 +2351,72 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
             throw lang::IllegalArgumentException();
     }
 }
-/*-- 22.04.99 08:03:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
     aRuntime.Message = C2U("position cannot be determined with this method");
     throw aRuntime;
 }
-/*-- 22.04.99 08:03:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
     aRuntime.Message = C2U("position cannot be changed with this method");
     throw aRuntime;
 }
-/*-- 22.04.99 08:03:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 awt::Size SwXFrame::getSize(void) throw( uno::RuntimeException )
 {
     const ::uno::Any aVal = getPropertyValue(C2U("Size"));
     awt::Size* pRet =  (awt::Size*)aVal.getValue();
     return *pRet;
 }
-/*-- 22.04.99 08:03:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXFrame::setSize(const awt::Size& aSize)
     throw( beans::PropertyVetoException, uno::RuntimeException )
 {
     const ::uno::Any aVal(&aSize, ::getCppuType(static_cast<const awt::Size*>(0)));
     setPropertyValue(C2U("Size"), aVal);
 }
-/*-- 22.04.99 08:03:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException )
 {
     return C2U("FrameShape");
 }
 
-
 /******************************************************************
  *  SwXTextFrame
  ******************************************************************/
-/*-- 14.01.99 11:27:51---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
     SwXText(0, CURSOR_FRAME),
     SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME), _pDoc )
 {
 }
-/*-- 11.12.98 15:23:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextFrame::SwXTextFrame(SwFrmFmt& rFmt) :
     SwXText(rFmt.GetDoc(), CURSOR_FRAME),
     SwXFrame(rFmt, FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME))
 {
 
 }
-/*-- 11.12.98 15:23:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextFrame::~SwXTextFrame()
 {
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextFrame::acquire(  )throw()
 {
     SwXFrame::acquire();
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextFrame::release(  )throw()
 {
     SwXFrame::release();
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 ::uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException)
 {
@@ -2543,9 +2427,7 @@ void SAL_CALL SwXTextFrame::release(  )throw()
         aRet = SwXTextFrameBaseClass::queryInterface(aType);
     return aRet;
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTextFrameTypes = SwXTextFrameBaseClass::getTypes();
@@ -2570,12 +2452,10 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::Runtim
 
     return aTextFrameTypes;
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2585,16 +2465,12 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(u
     }
     return aId;
 }
-/*-- 11.12.98 15:23:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XText >  SwXTextFrame::getText(void) throw( uno::RuntimeException )
 {
     return this;
 }
-/*-- 11.12.98 15:23:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const SwStartNode *SwXTextFrame::GetStartNode() const
 {
     const SwStartNode *pSttNd = 0;
@@ -2615,12 +2491,10 @@ SwXTextFrame::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
-/*-- 11.12.98 15:23:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2664,12 +2538,10 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
         throw uno::RuntimeException();
     return aRef;
 }
-/*-- 11.12.98 15:23:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     SwUnoInternalPaM aPam(*GetDoc());
@@ -2693,12 +2565,10 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
         throw uno::RuntimeException();
     return aRef;
 }
-/*-- 11.12.98 15:23:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2716,77 +2586,57 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     }
     return aRef;
 }
-/*-- 11.12.98 15:23:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type  SwXTextFrame::getElementType(void) throw( uno::RuntimeException )
 {
     return ::getCppuType(static_cast<uno::Reference<text::XTextRange>*>(0));
 }
-/*-- 11.12.98 15:23:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextFrame::hasElements(void) throw( uno::RuntimeException )
 {
     return sal_True;
 }
-/*-- 11.12.98 15:23:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SwXFrame::attach(xTextRange);
 }
-/*-- 11.12.98 15:23:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange >  SwXTextFrame::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
-/*-- 11.12.98 15:23:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextFrame::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
-/*-- 11.12.98 15:23:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextFrame::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     SwXFrame::addEventListener(aListener);
 }
-/*-- 11.12.98 15:23:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextFrame::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     SwXFrame::removeEventListener(aListener);
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 OUString SwXTextFrame::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXTextFrame");
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.Text")||
             COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextFrame")||
                     SwXFrame::supportsService(rServiceName);
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
@@ -2796,16 +2646,12 @@ uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( un
     pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.Text");
     return aRet;
 }
-/* -----------------------------20.06.00 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void * SAL_CALL SwXTextFrame::operator new( size_t t) throw()
 {
     return SwXTextFrameBaseClass::operator new( t);
 }
-/* -----------------------------20.06.00 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextFrame::operator delete( void * p) throw()
 {
     SwXTextFrameBaseClass::operator delete(p);
@@ -2816,9 +2662,7 @@ uno::Reference<container::XNameReplace > SAL_CALL SwXTextFrame::getEvents()
 {
     return new SwFrameEventDescriptor( *this );
 }
-/* -----------------------------10.01.01 13:27--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException)
 {
@@ -2828,13 +2672,11 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
 
     return nRet;
 }
-/* -----------------------------19.03.2002 16:43------------------------------
 
- ---------------------------------------------------------------------------*/
 ::uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::uno::Any aRet;
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
             rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
@@ -2847,48 +2689,36 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
         aRet = SwXFrame::getPropertyValue(rPropertyName);
     return aRet;
 }
+
 /******************************************************************
  *  SwXTextGraphicObject
  ******************************************************************/
-/*-- 14.01.99 11:27:51---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextGraphicObject::SwXTextGraphicObject( SwDoc *pDoc ) :
     SwXFrame(FLYCNTTYPE_GRF, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC), pDoc)
 {
 }
-/*-- 11.12.98 16:02:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextGraphicObject::SwXTextGraphicObject(SwFrmFmt& rFmt) :
     SwXFrame(rFmt, FLYCNTTYPE_GRF, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC))
 {
 
 }
-/*-- 11.12.98 16:02:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextGraphicObject::~SwXTextGraphicObject()
 {
 
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextGraphicObject::acquire(  )throw()
 {
     SwXFrame::acquire();
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextGraphicObject::release(  )throw()
 {
     SwXFrame::release();
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 ::uno::Any SAL_CALL SwXTextGraphicObject::queryInterface( const uno::Type& aType )
     throw(uno::RuntimeException)
 {
@@ -2897,9 +2727,7 @@ void SAL_CALL SwXTextGraphicObject::release(  )throw()
         aRet = SwXTextGraphicObjectBaseClass::queryInterface(aType);
     return aRet;
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL
     SwXTextGraphicObject::getTypes(  ) throw(uno::RuntimeException)
 {
@@ -2919,12 +2747,10 @@ uno::Sequence< uno::Type > SAL_CALL
 
     return aGraphicTypes;
 }
-/* -----------------------------15.03.00 16:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2934,63 +2760,47 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  )
     }
     return aId;
 }
-/*-- 11.12.98 16:02:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SwXFrame::attach(xTextRange);
 }
-/*-- 11.12.98 16:02:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange >  SwXTextGraphicObject::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
-/*-- 11.12.98 16:02:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextGraphicObject::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
-/*-- 11.12.98 16:02:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextGraphicObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener)
                                                     throw( uno::RuntimeException )
 {
     SwXFrame::addEventListener(aListener);
 }
-/*-- 11.12.98 16:02:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextGraphicObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener)
                                                     throw( uno::RuntimeException )
 {
     SwXFrame::removeEventListener(aListener);
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 OUString SwXTextGraphicObject::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXTextGraphicObject");
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextGraphicObject") ||
                     SwXFrame::supportsService(rServiceName);
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
         throw( uno::RuntimeException )
 {
@@ -3000,23 +2810,17 @@ uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
     pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextGraphicObject");
     return aRet;
 }
-/* -----------------------------20.06.00 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void * SAL_CALL SwXTextGraphicObject::operator new( size_t t) throw()
 {
     return SwXTextGraphicObjectBaseClass::operator new(t);
 }
-/* -----------------------------20.06.00 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextGraphicObject::operator delete( void * p) throw()
 {
     SwXTextGraphicObjectBaseClass::operator delete(p);
 }
-/* -----------------------------15.12.00 12:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<container::XNameReplace> SAL_CALL
     SwXTextGraphicObject::getEvents()
         throw(uno::RuntimeException)
@@ -3024,51 +2828,32 @@ uno::Reference<container::XNameReplace> SAL_CALL
     return new SwFrameEventDescriptor( *this );
 }
 
-/******************************************************************
- *
- ******************************************************************/
-/*-- 11.12.98 16:16:53---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc ) :
     SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
 {
 }
-/*-- 11.12.98 16:16:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextEmbeddedObject::SwXTextEmbeddedObject(SwFrmFmt& rFmt) :
     SwXFrame(rFmt, FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT))
 {
 
 }
-/*-- 11.12.98 16:16:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextEmbeddedObject::~SwXTextEmbeddedObject()
 {
 
 }
-/*-- 11.12.98 16:16:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-/* -----------------------------15.03.00 16:32--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextEmbeddedObject::acquire()throw()
 {
     SwXFrame::acquire();
 }
-/* -----------------------------15.03.00 16:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextEmbeddedObject::release()throw()
 {
     SwXFrame::release();
 }
-/* -----------------------------15.03.00 16:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 ::uno::Any SAL_CALL SwXTextEmbeddedObject::queryInterface( const uno::Type& aType )
     throw( uno::RuntimeException)
 {
@@ -3077,9 +2862,7 @@ void SAL_CALL SwXTextEmbeddedObject::release()throw()
         aRet = SwXTextEmbeddedObjectBaseClass::queryInterface(aType);
     return aRet;
 }
-/* -----------------------------15.03.00 16:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTextEmbeddedTypes = SwXTextEmbeddedObjectBaseClass::getTypes();
@@ -3099,12 +2882,10 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(un
 
     return aTextEmbeddedTypes;
 }
-/* -----------------------------15.03.00 16:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -3114,46 +2895,33 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  
     }
     return aId;
 }
-/*-- 11.12.98 16:16:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SwXFrame::attach(xTextRange);
 }
-/*-- 11.12.98 16:16:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange >  SwXTextEmbeddedObject::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
-/*-- 11.12.98 16:16:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextEmbeddedObject::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
-/*-- 11.12.98 16:16:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextEmbeddedObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     SwXFrame::addEventListener(aListener);
 }
-/*-- 11.12.98 16:16:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     SwXFrame::removeEventListener(aListener);
 }
-/*-- 11.12.98 16:16:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) throw( uno::RuntimeException )
 {
@@ -3195,11 +2963,6 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
     }
     return xRet;
 }
-
-/* --18.05.2006 16:39---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-
 
 uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExtendedControlOverEmbeddedObject()
         throw( uno::RuntimeException )
@@ -3294,25 +3057,18 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
     return uno::Reference< graphic::XGraphic >();
 }
 
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
 OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeException )
 
 {
     return C2U("SwXTextEmbeddedObject");
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return  COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextEmbeddedObject")||
                     SwXFrame::supportsService(rServiceName);
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames(void)
         throw( uno::RuntimeException )
 {
@@ -3322,23 +3078,17 @@ uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames(void)
     pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextEmbeddedObject");
     return aRet;
 }
-/* -----------------------------20.06.00 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void * SAL_CALL SwXTextEmbeddedObject::operator new( size_t t) throw()
 {
     return SwXTextEmbeddedObjectBaseClass::operator new(t);
 }
-/* -----------------------------20.06.00 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextEmbeddedObject::operator delete( void * p) throw()
 {
     SwXTextEmbeddedObjectBaseClass::operator delete(p);
 }
-/* -----------------------------15.12.00 12:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<container::XNameReplace> SAL_CALL
     SwXTextEmbeddedObject::getEvents()
         throw(uno::RuntimeException)
@@ -3346,29 +3096,21 @@ uno::Reference<container::XNameReplace> SAL_CALL
     return new SwFrameEventDescriptor( *this );
 }
 
-
-/******************************************************************
- *
- ******************************************************************/
 TYPEINIT1(SwXOLEListener, SwClient);
-/* -----------------------------18.01.2002 09:59------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXOLEListener::SwXOLEListener( SwFmt& rOLEFmt, uno::Reference< XModel > xOLE) :
     SwClient(&rOLEFmt),
     xOLEModel(xOLE)
 {
 }
-/* -----------------------------18.01.2002 09:59------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXOLEListener::~SwXOLEListener()
 {}
 
 void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
                                         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwOLENode* pNd = 0;
     SwFmt* pFmt = GetFmt();
@@ -3397,13 +3139,10 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
     pNd->GetDoc()->SetOLEObjModified();
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwXOLEListener::disposing( const lang::EventObject& rEvent )
                         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< util::XModifyListener >  xListener( this );
 
@@ -3421,9 +3160,7 @@ void SwXOLEListener::disposing( const lang::EventObject& rEvent )
         DBG_ERROR("OLE Listener couldn't be removed");
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXOLEListener::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     ClientModify(this, pOld, pNew);
@@ -3431,3 +3168,4 @@ void SwXOLEListener::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         xOLEModel = 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

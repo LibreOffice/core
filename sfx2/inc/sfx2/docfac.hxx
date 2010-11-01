@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <tools/rtti.hxx>
 
 // SFX_IMPL_MODULE_LIB
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <rtl/ustring.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -108,11 +109,9 @@ public:
 
     SfxModule*      GetModule() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModule_Impl( SfxModule* );
     SAL_DLLPRIVATE static void UpdateFilterContainers_Impl();
     SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const;
-//#endif
 
 private:
     // Kopieren verboten
@@ -139,3 +138,4 @@ public:                                                                     \
                                 }
 #endif // #ifndef _SFX_OBJFAC_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

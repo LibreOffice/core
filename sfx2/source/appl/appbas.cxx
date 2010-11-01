@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
 #include <svl/srchitem.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 
 #define SFX_TYPEMAP
 #define Selection
@@ -293,7 +294,7 @@ StarBASIC* SfxApplication::GetBasic()
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxApplication::IsInBasicCall() const
+bool SfxApplication::IsInBasicCall() const
 {
     return 0 != pAppData_Impl->nBasicCallLevel;
 }
@@ -588,3 +589,4 @@ void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

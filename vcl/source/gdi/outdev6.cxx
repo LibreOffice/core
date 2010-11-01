@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -208,17 +209,8 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
         if( bDrawnOk )
         {
-#if 0
-            // MetaB2DPolyPolygonAction is not implemented yet:
-            // according to AW adding it is very dangerous since there is a lot
-            // of code that uses the metafile actions directly and unless every
-            // place that does this knows about the new action we need to fallback
-            if( mpMetaFile )
-                mpMetaFile->AddAction( new MetaB2DPolyPolygonAction( rB2DPolyPoly ) );
-#else
             if( mpMetaFile )
                 mpMetaFile->AddAction( new MetaTransparentAction( PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
-#endif
             return;
         }
     }
@@ -1243,3 +1235,5 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
     return bDrawn;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

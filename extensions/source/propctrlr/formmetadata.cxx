@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,6 +135,7 @@ namespace pcr
         DEF_INFO_3( LABEL,             LABEL,              LABEL,             FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( CONTROLLABEL,      LABELCONTROL,       CONTROLLABEL,      FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( WRITING_MODE,      WRITING_MODE,       WRITING_MODE,      FORM_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_3( GROUP_NAME,        GROUP_NAME,         GROUP_NAME,        FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( TEXT,              TEXT,               TEXT,              DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( MAXTEXTLEN,        MAXTEXTLEN,         MAXTEXTLEN,        FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( EDITMASK,          EDITMASK,           EDITMASK,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
@@ -700,3 +702,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

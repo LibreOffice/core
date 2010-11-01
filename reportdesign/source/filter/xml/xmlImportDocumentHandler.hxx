@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,6 +86,7 @@ private:
     virtual ~ImportDocumentHandler();
 
     ::osl::Mutex                                                                        m_aMutex;
+    bool                                                                                m_bImportedChart;
     ::std::vector< ::rtl::OUString>                                                     m_aMasterFields;
     ::std::vector< ::rtl::OUString>                                                     m_aDetailFields;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >           m_aArguments;
@@ -102,3 +104,5 @@ private:
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 #endif // RPT_IMPORTDOCUMENTHANDLER_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

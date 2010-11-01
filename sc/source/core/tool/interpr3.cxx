@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3338,22 +3339,7 @@ void ScInterpreter::ScPercentrank()
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2 ) )
         return;
-#if 0
-/*                          wird nicht unterstuetzt
-    double fPrec;
-    if (nParamCount == 3)
-    {
-        fPrec = ::rtl::math::approxFloor(GetDouble());
-        if (fPrec < 1.0)
-        {
-            PushIllegalArgument();
-            return;
-        }
-    }
-    else
-        fPrec = 3.0;
-*/
-#endif
+
     double fNum = GetDouble();
     vector<double> aSortArray;
     GetSortArray(1, aSortArray);
@@ -4242,3 +4228,4 @@ void ScInterpreter::ScForecast()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

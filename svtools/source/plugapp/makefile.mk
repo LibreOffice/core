@@ -38,6 +38,9 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
+	$(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
     $(SLO)$/ttprops.obj 
 
 

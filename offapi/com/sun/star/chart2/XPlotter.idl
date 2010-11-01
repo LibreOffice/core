@@ -35,13 +35,13 @@ module com {  module sun {  module star {  module chart2 {
 
 //=============================================================================
 
-/** The main task of a Plotter is to create grafic objects which have a certain
-    logic place within a coordinate system. For example the bars of a barchart
-    are such grafic objects. The created grafic objects need to be of type
+/** The main task of a Plotter is to create graphic objects which have a certain
+    logic place within a coordinate system. For example the bars of a bar chart
+    are such graphic objects. The created graphic objects need to be of type
     com::sun::star::drawing::Shape.
 
     <p>
-    Within the chart application we differentiatebetween two 'types' of shapes
+    Within the chart application we differentiate between two 'types' of shapes
     which can be created by a Plotter.
     The first type are shapes which are completely defined by coordinates
     in the logic coordinate system and will be positioned within this logic
@@ -77,8 +77,8 @@ interface XPlotter : ::com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Each Plotter implicit uses a certain type of logic coordinate
         system for interpreting data as coordinates.
-        For example a bar-chart uses a cartesian coordinate system for
-        interpreting x- and y-values from a spreadsheet as cartesian
+        For example a bar-chart uses a Cartesian coordinate system for
+        interpreting x- and y-values from a spreadsheet as Cartesian
         coordinates. In contrast the pie chart assumes a polar coordinate
         system.
         The type of this implicit used source coordinate system has to be

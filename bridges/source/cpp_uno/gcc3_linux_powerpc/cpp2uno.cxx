@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "share.hxx"
-// #include <stdio.h>
 
 
 using namespace ::com::sun::star::uno;
@@ -48,7 +48,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
 static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
@@ -793,3 +792,4 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

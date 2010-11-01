@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2146,13 +2147,13 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
     pImpEditEngine->SetHyphenator( xHyph );
 }
 
-void EditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void EditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetForbiddenCharsTable( xForbiddenChars );
 }
 
-vos::ORef<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() const
+rtl::Reference<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetForbiddenCharsTable( FALSE );
@@ -2482,10 +2483,12 @@ void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, U
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar,
-    const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
-    bool bEndOfLine, bool bEndOfParagraph,
-    const Color& rOverlineColor, const Color& rTextLineColor)
+void __EXPORT EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
+                                      const String& /*rChar*/, const SvxFont& /*rFont*/,
+                                      USHORT /*nPara*/, xub_StrLen /*nIndex*/,
+                                      BYTE /*nRightToLeft*/, bool /*bEndOfLine*/,
+                                      bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
+                                      const Color& /*rTextLineColor*/)
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
@@ -2958,3 +2961,5 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
 
     return *this;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

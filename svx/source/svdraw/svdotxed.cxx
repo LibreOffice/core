@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,11 +53,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrTextObj::HasTextEdit() const
+bool SdrTextObj::HasTextEdit() const
 {
     // lt. Anweisung von MB duerfen gelinkte Textobjekte nun doch
     // geaendert werden (kein automatisches Reload)
-    return TRUE;
+    return true;
 }
 
 sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
@@ -73,8 +74,8 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.Init( nOutlinerMode );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
-    FASTBOOL bFitToSize(IsFitToSize());
-    FASTBOOL bContourFrame=IsContourTextFrame();
+    bool bFitToSize(IsFitToSize());
+    bool bContourFrame=IsContourTextFrame();
     ImpSetTextEditParams();
 
     if (!bContourFrame) {
@@ -152,7 +153,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
 {
-    FASTBOOL bFitToSize(IsFitToSize());
+    bool bFitToSize(IsFitToSize());
     Size aPaperMin,aPaperMax;
     Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
@@ -330,15 +331,15 @@ USHORT SdrTextObj::GetOutlinerViewAnchorMode() const
 void SdrTextObj::ImpSetTextEditParams() const
 {
     if (pEdtOutl!=NULL) {
-        FASTBOOL bUpdMerk=pEdtOutl->GetUpdateMode();
+        bool bUpdMerk=pEdtOutl->GetUpdateMode();
         if (bUpdMerk) pEdtOutl->SetUpdateMode(FALSE);
         Size aPaperMin;
         Size aPaperMax;
         Rectangle aEditArea;
         TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
         //SdrFitToSizeType eFit=GetFitToSize();
-        //FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-        FASTBOOL bContourFrame=IsContourTextFrame();
+        //bool bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        bool bContourFrame=IsContourTextFrame();
         //EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
         //ULONG nViewAnz=pEdtOutl->GetViewCount();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);
@@ -353,3 +354,4 @@ void SdrTextObj::ImpSetTextEditParams() const
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

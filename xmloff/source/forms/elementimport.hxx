@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -261,7 +262,7 @@ namespace xmloff
         virtual void doRegisterXFormsSubmission( const ::rtl::OUString& );
 
     protected:
-        //added by BerryJia for fixing bug102407 2002-11-5
+
         // OElementImport overridables
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         createElement();
@@ -750,3 +751,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

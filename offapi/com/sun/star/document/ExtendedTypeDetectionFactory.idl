@@ -64,15 +64,15 @@ published service ExtendedTypeDetectionFactory
     /** factory interface to create and initialize extended type detection components.
 
         <p>
-        A detection component must be specified by it's uno implementation name and will be crated then.
-        Every new created component can be intialized with it's own configuration data
+        A detection component must be specified by it's UNO implementation name and will be crated then.
+        Every new created component can be initialized with it's own configuration data
         and may given optional arguments of the corresponding createInstanceWithArguments() request. To do so the
         service must support the optional interface <type scope="com::sun::star::lang">XInitialization</type>.
         The arguments parameter will have the following structure:
         <ul>
             <li>sequence< Any >[0] contains a sequence< <type scope="com::sun::star::beans">PropertyValue</type> >,
                 which represent the configuration data set of this detector component. The used properties are the same, as
-                they are available at the container interface of this factoyr service. (see below)</li>
+                they are available at the container interface of this factory service. (see below)</li>
             <li>Every following item of the argument list sequence< Any >[1..n] contains the copied argument of the
                 corresponding createInstanceWithArguments() call. That means: Item 0 or the original list was copied as
                 item 1 of the destination list ... etc.
@@ -88,7 +88,7 @@ published service ExtendedTypeDetectionFactory
         Every container item is specified as a set of properties and will be
         represented by a sequence< <type scope="com::sun::star::beans">PropertyValue</type> > structure.
         Follow properties are supported:
-        (But note: not all of them must be present everytimes!)
+        (But note: not all of them must be present every time!)
         </p>
         <table border=1>
             <tr>
@@ -99,8 +99,8 @@ published service ExtendedTypeDetectionFactory
             <tr>
                 <td><em>Name</em></td>
                 <td>[string]</td>
-                <td>It means the uno implementation name of the detector component.
-                    Note: It means the realy the implementation instead of the uno service name.
+                <td>It means the UNO implementation name of the detector component.
+                    Note: It means the really the implementation instead of the UNO service name.
                     Because it's not possible to distinguish between more then one components; if all of them
                     uses a generic service identifier!</td>
             </tr>
@@ -135,12 +135,12 @@ published service ExtendedTypeDetectionFactory
 
         <p>
         Because the complexness of such configuration set can be very high,
-        it seams not very usefull to update the undelying configuration layer
-        on every container change request immediatly. Another strategy can be to
+        it seams not very useful to update the underlying configuration layer
+        on every container change request immediately. Another strategy can be to
         make all changes (adding/changing/removing of items) and call flush at the end.
         That will validate the whole container and reject inconsistent data sets.
         Only in case all made changes was correct, they will be written back to the
-        configuration. Further this interface provides the possibelity, that interested
+        configuration. Further this interface provides the possibility, that interested
         changes listener can be registered too.
         </p>
      */

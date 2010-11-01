@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,9 +146,12 @@ namespace xmloff { namespace token {
         XML_NP_OFFICE_EXT,
         XML_N_OFFICE_EXT,
 
+        // jonp: 2008-09-24 Excel Interop
+        XML_NP_FORMX,
+        XML_N_FORMX,
+
         XML_NP_TABLE_EXT,
         XML_N_TABLE_EXT,
-
 
         XML_NP_DRAW_EXT,
         XML_N_DRAW_EXT,
@@ -3151,3 +3155,5 @@ namespace xmloff { namespace token {
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

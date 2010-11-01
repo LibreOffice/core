@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,16 +70,6 @@ typedef struct
     rtl_uString* ustrPath;           /* holds native directory path */
     DIR*         pDirStruct;
 } oslDirectoryImpl;
-
-#if 0
-/* FIXME: reintroducing this may save some extra bytes per Item */
-typedef struct
-{
-    rtl_uString* ustrFileName;       /* holds native file name */
-    rtl_uString* ustrDirPath;        /* holds native dir path */
-    sal_uInt32   RefCount;
-} oslDirectoryItemImpl;
-#endif
 
 DirectoryItem_Impl::DirectoryItem_Impl(
     rtl_uString * ustrFilePath, unsigned char DType)
@@ -1062,3 +1053,4 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,8 @@
 namespace cppu_threadpool {
 
     class JobQueue;
+    class ThreadAdmin;
+    typedef boost::shared_ptr<ThreadAdmin> ThreadAdminHolder;
 
     //-----------------------------------------
     // private thread class for the threadpool
@@ -61,6 +64,7 @@ namespace cppu_threadpool {
 
     private:
         oslThread m_thread;
+        ThreadAdminHolder m_aThreadAdmin;
         JobQueue *m_pQueue;
         ::rtl::ByteSequence m_aThreadId;
         sal_Bool m_bAsynchron;
@@ -71,7 +75,7 @@ namespace cppu_threadpool {
     {
     public:
         ~ThreadAdmin ();
-        static ThreadAdmin *getInstance();
+        static ThreadAdminHolder &getInstance();
         void add( ORequestThread * );
         void remove( ORequestThread * );
         void join();
@@ -86,3 +90,4 @@ namespace cppu_threadpool {
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

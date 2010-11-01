@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@
 #include <vcl/print.hxx>
 #include <svtools/ctrltool.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -165,7 +166,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         Printer*        pInfoPrinter = 0;
         rtl::OUString   aPrinterName;
 
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         // try to retrieve printer name of document
         aPrinterName = retrievePrinterName( m_xFrame );
@@ -304,7 +305,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 
         if ( m_xPopupMenu.is() )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             setCurHeight( long( m_aFontHeight.Height * 10), m_xPopupMenu );
         }
     }
@@ -353,3 +354,5 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
     svt::PopupMenuControllerBase::updatePopupMenu();
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx> //Any2Bool
 #include <svl/smplhint.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <itemholder2.hxx>
 
@@ -363,7 +364,7 @@ sal_Bool ColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
  ---------------------------------------------------------------------------*/
 void ColorConfig_Impl::SettingsChanged()
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     ImplUpdateApplicationSettings();
 
@@ -684,3 +685,5 @@ void EditableColorConfig::EnableBroadcast()
 // -----------------------------------------------------------------------------
 
 }//namespace svtools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

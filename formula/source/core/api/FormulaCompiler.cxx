@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +26,7 @@
  *
  ************************************************************************/
 #include "precompiled_formula.hxx"
+#include <sal/macros.h>
 #include "formula/FormulaCompiler.hxx"
 #include "formula/errorcodes.hxx"
 #include "formula/token.hxx"
@@ -345,7 +347,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
             { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }
         };
-        const size_t nCount = sizeof(aMap)/sizeof(aMap[0]);
+        const size_t nCount = SAL_N_ELEMENTS(aMap);
         // Preallocate vector elements.
         if (aVec.size() < nCount)
         {
@@ -385,7 +387,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_CLOSE,
                 SC_OPCODE_SEP,
             };
-            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, sizeof(aOpCodes)/sizeof(aOpCodes[0]) );
+            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::ARRAY_SEPARATORS) != 0)
         {
@@ -395,7 +397,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_ARRAY_ROW_SEP,
                 SC_OPCODE_ARRAY_COL_SEP
             };
-            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, sizeof(aOpCodes)/sizeof(aOpCodes[0]) );
+            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::UNARY_OPERATORS) != 0)
         {
@@ -451,7 +453,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_NOT,
                 SC_OPCODE_NEG
             };
-            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, sizeof(aOpCodes)/sizeof(aOpCodes[0]) );
+            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
             // functions with 2 or more parameters.
             for (USHORT nOp = SC_OPCODE_START_2_PAR; nOp < SC_OPCODE_STOP_2_PAR && nOp < mnSymbols; ++nOp)
             {
@@ -642,23 +644,6 @@ const String& FormulaCompiler::GetNativeSymbol( OpCode eOp )
 // -----------------------------------------------------------------------------
 void FormulaCompiler::InitSymbolsNative() const
 {
-#if 0 // No point in keeping this since you can now do this from the UI.
-    if (mxSymbolsNative.get())
-        return;
-    //! Experimental!
-    //  Use English function names and separators instead of native in UI.
-    static const sal_Char aEnvVarName[] = "OOO_CALC_USE_ENGLISH_FORMULAS";
-    const char* pEnv = getenv( aEnvVarName);
-    if (pEnv && (*pEnv == 'Y' || *pEnv == 'y' || *pEnv == '1') )
-    {
-        fprintf( stderr, "%s=%s => UI uses English function names and separators in formulas.\n",
-                aEnvVarName, pEnv);
-        InitSymbolsEnglish();
-        mxSymbolsNative = mxSymbolsEnglish;
-        return;
-    }
-#endif
-
     lcl_fillNativeSymbols(mxSymbolsNative);
 }
 // -----------------------------------------------------------------------------
@@ -739,6 +724,30 @@ OpCode FormulaCompiler::GetEnglishOpCode( const String& rName ) const
     formula::OpCodeHashMap::const_iterator iLook( xMap->getHashMap()->find( rName ) );
     bool bFound = (iLook != xMap->getHashMap()->end());
     return bFound ? (*iLook).second : OpCode(ocNone);
+}
+
+bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
+{
+    switch (eOp)
+    {
+        // no parameters:
+        case ocRandom:
+        case ocGetActDate:
+        case ocGetActTime:
+        // one parameter:
+        case ocFormula:
+        case ocInfo:
+        // more than one parameters:
+            // ocIndirect/ocIndirectXL otherwise would have to do
+            // StopListening and StartListening on a reference for every
+            // interpreted value.
+        case ocIndirect:
+        case ocIndirectXL:
+            // ocOffset results in indirect references.
+        case ocOffset:
+            return true;
+    }
+    return false;
 }
 
 // Remove quotes, escaped quotes are unescaped.
@@ -973,44 +982,32 @@ void FormulaCompiler::Factor()
     {
         if( nNumFmt == NUMBERFORMAT_UNDEFINED )
             nNumFmt = lcl_GetRetFormat( eOp );
-        // Functions that have to be always recalculated
-        switch( eOp )
+
+        if ( IsOpCodeVolatile(eOp) )
+            pArr->SetRecalcModeAlways();
+        else
         {
-            // no parameters:
-            case ocRandom:
-            case ocGetActDate:
-            case ocGetActTime:
-            // one parameter:
-            case ocFormula:
-            case ocInfo:
-            // more than one parameters:
-                // ocIndirect/ocIndirectXL otherwise would have to do
-                // StopListening and StartListening on a reference for every
-                // interpreted value.
-            case ocIndirect:
-            case ocIndirectXL:
-                // ocOffset results in indirect references.
-            case ocOffset:
-                pArr->SetRecalcModeAlways();
-            break;
-                // Functions recalculated on every document load.
-                // Don't use SetRecalcModeOnLoad() which would override
-                // ModeAlways.
-            case ocConvert :
-                pArr->AddRecalcMode( RECALCMODE_ONLOAD );
-            break;
-                // If the referred cell is moved the value changes.
-            case ocColumn :
-            case ocRow :
-                // ocCell needs recalc on move for some possible type values.
-            case ocCell :
-                pArr->SetRecalcModeOnRefMove();
-            break;
-            case ocHyperLink :
-                pArr->SetHyperLink(TRUE);
-            break;
-            default:
-                ;   // nothing
+            switch( eOp )
+            {
+                    // Functions recalculated on every document load.
+                    // Don't use SetRecalcModeOnLoad() which would override
+                    // ModeAlways.
+                case ocConvert :
+                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
+                break;
+                    // If the referred cell is moved the value changes.
+                case ocColumn :
+                case ocRow :
+                    // ocCell needs recalc on move for some possible type values.
+                case ocCell :
+                    pArr->SetRecalcModeOnRefMove();
+                break;
+                case ocHyperLink :
+                    pArr->SetHyperLink(TRUE);
+                break;
+                default:
+                    ;   // nothing
+            }
         }
         if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         {
@@ -1919,3 +1916,5 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, BOOL bTemp )
 // =============================================================================
 } // formula
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

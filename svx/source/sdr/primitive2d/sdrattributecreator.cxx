@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -526,7 +527,6 @@ namespace drawinglayer
                     }
                 }
 
-                const SdrFitToSizeType eFit(rTextObj.GetFitToSize());
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
                 // #i107346#
@@ -1027,3 +1027,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

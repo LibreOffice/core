@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/dialmgr.hxx>
 
+#include <sal/macros.h>
+
+#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "docrecovery.hxx"
 #include "docrecovery.hrc"
@@ -96,7 +99,7 @@ void TabDialog4Recovery::addTabPage(IExtendedTabPage* pPage)
 //===============================================
 short TabDialog4Recovery::Execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aLock;
 
     Show();
     m_pActualPage = m_lTabPages.begin();
@@ -804,7 +807,7 @@ IMPL_LINK( SaveDialog, OKButtonHdl, void*, EMPTYARG )
 //===============================================
 short SaveDialog::execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aLock;
 
     // wait for user input "OK"
     m_nResult = DLG_RET_UNKNOWN;
@@ -855,7 +858,7 @@ SaveProgressDialog::~SaveProgressDialog()
 //===============================================
 short SaveProgressDialog::Execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aLock;
 
     m_pCore->setProgressHandler(m_xProgress);
     m_pCore->setUpdateListener(this);
@@ -1118,7 +1121,7 @@ RecoveryDialog::~RecoveryDialog()
 //===============================================
 short RecoveryDialog::execute()
 {
-    ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aSolarLock;
 
     switch(m_eRecoveryState)
     {
@@ -1655,7 +1658,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         short ErrorRepWelcomeDialog::execute()
         {
-            ::vos::OGuard aLock(Application::GetSolarMutex());
+            ::SolarMutexGuard aLock;
             Show();
             m_nResult = DLG_RET_UNKNOWN;
             while(m_nResult == DLG_RET_UNKNOWN)
@@ -1765,7 +1768,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         short ErrorRepSendDialog::execute()
         {
-            ::vos::OGuard aLock(Application::GetSolarMutex());
+            ::SolarMutexGuard aLock;
             Show();
             m_nResult = DLG_RET_UNKNOWN;
             while(m_nResult == DLG_RET_UNKNOWN)
@@ -1862,7 +1865,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 }
 
                 // loop through all the other windows and adjust their size
-                for ( ; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+                for ( ; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
                 {
                     Size aSize = (*pCurrent)->GetSizePixel();
                     aSize.Width() -= nDelta;
@@ -1933,7 +1936,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 &maProxyServerEd, &maProxyPortFT, &maProxyPortEd, &maDescriptionFT
             };
             Window** pCurrent = pWins;
-            for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
             {
                 Point aPos = (*pCurrent)->GetPosPixel();
                 aPos.Y() -= nDelta;
@@ -2176,3 +2179,4 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     }   // namespace DocRecovery
 }   // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

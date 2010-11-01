@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -769,7 +770,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
-            FASTBOOL bOneLayer = TRUE;
+            bool bOneLayer = TRUE;
 
             // Use the first ten selected shapes as a (hopefully
             // representative) sample of all shapes of the current page.
@@ -855,3 +856,5 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sal/macros.h>
 
 #ifndef SIGNULL
 #define SIGNULL 0
@@ -67,9 +69,6 @@ static inline bool IsValidHandle( HANDLE handle )
     return INVALID_HANDLE_VALUE != handle && NULL != handle;
 }
 
-
-#define elementsof( a ) (sizeof(a) / sizeof( (a)[0] ))
-
 /////////////////////////////////////////////////////////////////////////////
 // Retrieves function adress in another process
 /////////////////////////////////////////////////////////////////////////////
@@ -90,7 +89,7 @@ FARPROC WINAPI GetProcAddressEx( HANDLE hProcess, HMODULE hModule, LPCSTR lpProc
             FARPROC lpfnRemoteProcAddress = NULL;
             TCHAR   szBaseName[MAX_PATH];
 
-            if ( GetModuleBaseName( GetCurrentProcess(), hModule, szBaseName, elementsof(szBaseName) ) )
+            if ( GetModuleBaseName( GetCurrentProcess(), hModule, szBaseName, SAL_N_ELEMENTS(szBaseName) ) )
             {
                 HMODULE ahModules[MAX_MODULES];
                 DWORD   cbNeeded = 0;
@@ -104,7 +103,7 @@ FARPROC WINAPI GetProcAddressEx( HANDLE hProcess, HMODULE hModule, LPCSTR lpProc
                         TCHAR   szRemoteBaseName[MAX_PATH];
 
                         if ( GetModuleBaseName(
-                            hProcess, ahModules[n], szRemoteBaseName, elementsof(szRemoteBaseName) ) &&
+                            hProcess, ahModules[n], szRemoteBaseName, SAL_N_ELEMENTS(szRemoteBaseName) ) &&
                             0 == lstrcmpi( szRemoteBaseName, szBaseName )
                             )
                         {
@@ -256,7 +255,7 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
         SIG_ENTRY( KILL )
     };
 
-    const int NumSupportedSignals = elementsof(SupportedSignals);
+    const int NumSupportedSignals = SAL_N_ELEMENTS(SupportedSignals);
 
     DWORD   dwMaxProcesses = *lpdwNumProcesses;
     int     argc = __argc;
@@ -401,7 +400,7 @@ void OutputSystemMessage( DWORD dwErrorCode )
 int _tmain()
 {
     DWORD   dwProcessIds[1024];
-    DWORD   nProcesses = elementsof(dwProcessIds);
+    DWORD   nProcesses = SAL_N_ELEMENTS(dwProcessIds);
     int     sig = SIGTERM;
 
 
@@ -441,3 +440,4 @@ int _tmain()
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

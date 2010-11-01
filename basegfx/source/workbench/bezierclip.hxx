@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,3 +92,5 @@ template <typename NumType> bool tolLessEqual( NumType n1, NumType n2 ) { return
 template <typename NumType> bool tolGreaterEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1>n2; }
 
 #endif /* BASEGFX_BEZIERCLIP_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

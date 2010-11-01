@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -235,7 +236,6 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 
 #endif
 
-
 struct CR_SetLineHeight
 {
     SwSelBoxes aBoxes;
@@ -293,8 +293,6 @@ SV_IMPL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm )
 
 void lcl_DelCpyTabFrmFmts( _CpyTabFrm& rArr );
 
-// ---------------------------------------------------------------
-
 struct _CpyPara
 {
     boost::shared_ptr< std::vector< std::vector< ULONG > > > pWidths;
@@ -337,7 +335,6 @@ struct _CpyPara
         {}
     void SetBoxWidth( SwTableBox* pBox );
 };
-
 
 BOOL lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
 {
@@ -492,8 +489,6 @@ BOOL lcl_CopyRow( const _FndLine*& rpFndLine, void* pPara )
     return TRUE;
 }
 
-//-----------------------------------------------------------
-
 void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, USHORT nCpyCnt,
                 BOOL bBehind )
 {
@@ -536,7 +531,6 @@ SwRowFrm* GetRowFrm( SwTableLine& rLine )
             return (SwRowFrm*)pFrm;
     return 0;
 }
-
 
 BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 {
@@ -727,7 +721,6 @@ BOOL _FndBoxAppendRowLine( const SwTableLine*& rpLine, void* pPara )
     return TRUE;
 }
 
-
 BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
 {
     SwTableNode* pTblNd = (SwTableNode*)aSortCntBoxes[0]->GetSttNd()->FindTableNode();
@@ -786,7 +779,6 @@ BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
 
     return TRUE;
 }
-
 
 void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
                             BOOL bFirst, SwShareBoxFmts& rShareFmts );
@@ -1088,7 +1080,6 @@ void lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
     }
 }
 
-
 BOOL SwTable::DeleteSel(
     SwDoc*     pDoc
     ,
@@ -1163,9 +1154,6 @@ BOOL SwTable::DeleteSel(
 
     return TRUE;
 }
-
-
-// ---------------------------------------------------------------
 
 BOOL SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
                         BOOL bSameHeight )
@@ -1421,8 +1409,6 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
     return TRUE;
 }
 
-// ---------------------------------------------------------------
-
 /*
     ----------------------- >> MERGE << ------------------------
      Algorithmus:
@@ -1437,7 +1423,6 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
 
     ----------------------- >> MERGE << ------------------------
 */
-
 void lcl_CpyLines( USHORT nStt, USHORT nEnd,
                                 SwTableLines& rLines,
                                 SwTableBox* pInsBox,
@@ -1484,8 +1469,6 @@ void lcl_CalcWidth( SwTableBox* pBox )
     pFmt->ResetFmtAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
 }
 
-
-
 struct _InsULPara
 {
     SwTableNode* pTblNd;
@@ -1514,7 +1497,6 @@ struct _InsULPara
     void SetLower( SwTableLine* pLine=0 )
         { bUL_LR = TRUE;    bUL = FALSE; if( pLine ) pInsLine = pLine; }
 };
-
 
 BOOL lcl_Merge_MoveBox( const _FndBox*& rpFndBox, void* pPara )
 {
@@ -1757,7 +1739,6 @@ BOOL lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
     return TRUE;
 }
 
-
 BOOL SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
 {
@@ -1867,8 +1848,6 @@ BOOL SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     return TRUE;
 }
-
-// ---------------------------------------------------------------
 
 void lcl_CheckRowSpan( SwTable &rTbl )
 {
@@ -2376,10 +2355,6 @@ BOOL SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     return TRUE;
 }
 
-
-
-// ---------------------------------------------------------------
-
 // suche ab dieser Line nach der naechsten Box mit Inhalt
 SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
                      const SwTableBox* pSrchBox, BOOL bOvrTblLns ) const
@@ -2503,7 +2478,6 @@ SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTbl,
                                         bOvrTblLns );
 }
 
-
 BOOL lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* )
 {
     // in der HeadLine sind die Absaetze mit BedingtenVorlage anzupassen
@@ -2520,8 +2494,6 @@ BOOL lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* )
     ((SwTableLine*)rpLine)->GetTabBoxes().ForEach( &lcl_BoxSetHeadCondColl, 0 );
     return TRUE;
 }
-
-/*  */
 
 SwTwips lcl_GetDistance( SwTableBox* pBox, BOOL bLeft )
 {
@@ -2740,8 +2712,6 @@ BOOL lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     }
     return TRUE;
 }
-
-/**/
 
 BOOL lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             SwTwips nDist, BOOL bCheck )
@@ -3027,7 +2997,6 @@ BOOL lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     return TRUE;
 }
 
-
 // das Ergebnis des Positions Vergleiches
 //  POS_BEFORE,             // Box liegt davor
 //  POS_BEHIND,             // Box liegt dahinter
@@ -3036,7 +3005,6 @@ BOOL lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 //  POS_EQUAL,              // Box und Start/End sind gleich
 //  POS_OVERLAP_BEFORE,     // Box ueberlappt den Start
 //  POS_OVERLAP_BEHIND      // Box ueberlappt das Ende
-
 SwComparePosition _CheckBoxInRange( USHORT nStt, USHORT nEnd,
                                     USHORT nBoxStt, USHORT nBoxEnd )
 {
@@ -3481,8 +3449,6 @@ BOOL lcl_DelOtherBox( SwTableLine* , CR_SetBoxWidth& , SwTwips , BOOL )
 {
     return TRUE;
 }
-
-/**/
 
 void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
 {
@@ -4071,7 +4037,6 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
 
     return bRet;
 }
-/*  */
 
 _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst )
@@ -4568,8 +4533,6 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
     return bRet;
 }
 
-/*  */
-
 SwFrmFmt* SwShareBoxFmt::GetFormat( long nWidth ) const
 {
     SwFrmFmt *pRet = 0, *pTmp;
@@ -4659,6 +4622,7 @@ void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew )
         pEntry->AddFormat( rNew );
     }
 }
+
 void SwShareBoxFmts::ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn,
                                     SwFrmFmt& rFmt )
 {
@@ -4766,4 +4730,4 @@ BOOL SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, USHORT* pPos ) const
     return FALSE;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

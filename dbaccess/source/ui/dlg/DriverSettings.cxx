@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,3 +115,5 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
             _out_rDetailsIds.push_back(pProps->first);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

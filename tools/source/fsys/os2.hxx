@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@ inline BOOL DRIVE_EXISTS( char c )
 }
 
 #include <time.h>
-//#include <datetime.hxx>
 
 inline Time MsDos2Time( FTIME* aTime )
 {
@@ -91,3 +91,4 @@ Date MsDos2Date( const time_t *pTimeT );
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

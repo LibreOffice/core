@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,6 @@ namespace starutil      = ::com::sun::star::util;
 
 sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
 {
-    //  Dir* pDir = m_pTable->getConnection()->getDir();
-    //  String aPath = pDir->GetName();
-    //  aPath += _rName.getStr();
     ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
     sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;
@@ -135,3 +133,4 @@ void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElement
 // -------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

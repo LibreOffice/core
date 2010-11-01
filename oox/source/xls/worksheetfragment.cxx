@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -575,8 +576,8 @@ void OoxWorksheetFragment::importBrk( const AttributeList& rAttribs, bool bRowBr
 {
     PageBreakModel aModel;
     aModel.mnColRow = rAttribs.getInteger( XML_id, 0 );
-    aModel.mnMin    = rAttribs.getInteger( XML_id, 0 );
-    aModel.mnMax    = rAttribs.getInteger( XML_id, 0 );
+    aModel.mnMin    = rAttribs.getInteger( XML_min, aModel.mnColRow );
+    aModel.mnMax    = rAttribs.getInteger( XML_max, aModel.mnColRow );
     aModel.mbManual = rAttribs.getBool( XML_man, false );
     setPageBreak( aModel, bRowBreak );
 }
@@ -1200,3 +1201,4 @@ void BiffWorksheetFragment::importStandardWidth()
 } // namespace xls
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

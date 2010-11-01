@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
             throw uno::RuntimeException();
 
         uno::Reference< io::XOutputStream > xTempOut(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
                 uno::UNO_QUERY );
 
         if ( xTempOut.is() )
@@ -265,3 +266,4 @@ sal_Int64 SAL_CALL OSeekableInputWrapper::getLength()
 
 }   // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

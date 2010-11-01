@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -532,9 +533,9 @@ SdrModel* SdDrawDocument::AllocModel() const
 |*
 \************************************************************************/
 
-SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
-    return new SdPage(*this, NULL, (BOOL)bMasterPage);
+    return new SdPage(*this, NULL, bMasterPage);
 }
 
 /*************************************************************************
@@ -1073,3 +1074,5 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAutho
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

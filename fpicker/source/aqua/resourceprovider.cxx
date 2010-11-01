@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -170,7 +171,7 @@ public:
         String   aResString;
         OUString aResOUString;
 
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         try
         {
@@ -234,3 +235,5 @@ NSString* CResourceProvider::getResString( sal_Int32 aId )
 
     return result;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

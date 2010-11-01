@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,6 +73,7 @@ class ExcRecord : public XclExpRecord
 {
 public:
     virtual void            Save( XclExpStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 
     virtual UINT16          GetNum() const = 0;
     virtual sal_Size        GetLen() const = 0;
@@ -285,6 +287,8 @@ public:
     virtual UINT16          GetNum( void ) const;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
+private:
+    BOOL                    bDateCompatibility;
 };
 
 
@@ -471,6 +475,7 @@ private:
     XclExpFiltermode*   pFilterMode;
     XclExpAutofilterinfo* pFilterInfo;
     ScRange                 maRef;
+    bool mbAutoFilter;
 };
 
 // ----------------------------------------------------------------------------
@@ -504,3 +509,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

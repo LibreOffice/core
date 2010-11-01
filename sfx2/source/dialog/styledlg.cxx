@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>
@@ -172,3 +171,4 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

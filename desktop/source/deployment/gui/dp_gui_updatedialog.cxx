@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@
 #include "vcl/image.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "comphelper/processfactory.hxx"
 
@@ -260,9 +261,7 @@ private:
     virtual ~Thread();
 
     virtual void execute();
-#if 0
-    void handleGeneralError(css::uno::Any const & exception) const;
-#endif
+
     void handleSpecificError(
         css::uno::Reference< css::deployment::XPackage > const & package,
         css::uno::Any const & exception) const;
@@ -329,7 +328,7 @@ UpdateDialog::Thread::Thread(
 void UpdateDialog::Thread::stop() {
     css::uno::Reference< css::task::XAbortChannel > abort;
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         abort = m_abort;
         m_stop = true;
     }
@@ -359,7 +358,7 @@ UpdateDialog::Thread::~Thread()
 void UpdateDialog::Thread::execute()
 {
     {
-        vos::OGuard g( Application::GetSolarMutex() );
+        SolarMutexGuard g;
         if ( m_stop ) {
             return;
         }
@@ -446,26 +445,12 @@ void UpdateDialog::Thread::execute()
     }
 
 
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.checkingDone();
     }
 }
-#if 0
-void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
-    const
-{
-    rtl::OUString message;
-    css::uno::Exception e;
-    if (exception >>= e) {
-        message = e.Message;
-    }
-    vos::OGuard g(Application::GetSolarMutex());
-    if (!m_stop) {
-        m_dialog.addGeneralError(message);
-    }
-}
-#endif
+
 //Parameter package can be null
 void UpdateDialog::Thread::handleSpecificError(
     css::uno::Reference< css::deployment::XPackage > const & package,
@@ -478,7 +463,7 @@ void UpdateDialog::Thread::handleSpecificError(
     if (exception >>= e) {
         data.message = e.Message;
     }
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.addSpecificError(data);
     }
@@ -491,7 +476,7 @@ void UpdateDialog::Thread::handleSpecificError(
     rtl::OUStringBuffer b(data.aInstalledPackage->getDisplayName());
     b.append(static_cast< sal_Unicode >(' '));
     {
-        vos::OGuard g( Application::GetSolarMutex() );
+        SolarMutexGuard g;
         if(!m_stop)
             b.append(m_dialog.m_version);
     }
@@ -505,7 +490,7 @@ void UpdateDialog::Thread::handleSpecificError(
     {
         b.append(static_cast< sal_Unicode >(' '));
         {
-            vos::OGuard g( Application::GetSolarMutex() );
+            SolarMutexGuard g;
             if(!m_stop)
                 b.append(m_dialog.m_browserbased);
         }
@@ -553,13 +538,13 @@ bool UpdateDialog::Thread::update(
     bool ret = false;
     if (du.unsatisfiedDependencies.getLength() == 0)
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (!m_stop) {
             m_dialog.addEnabledUpdate(getUpdateDisplayString(data), data);
         }
         ret = !m_stop;
     } else {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (!m_stop) {
                 m_dialog.addDisabledUpdate(du);
         }
@@ -771,18 +756,7 @@ void UpdateDialog::addDisabledUpdate(UpdateDialog::DisabledUpdate const & data)
         SvLBoxButtonKind_disabledCheckbox);
         // position overflow is rather harmless
 }
-#if 0
-void UpdateDialog::addGeneralError(rtl::OUString const & message) {
-    std::vector< rtl::OUString >::size_type n = m_generalErrors.size();
-    m_generalErrors.push_back(message);
-    addAdditional(
-        m_error,
-        sal::static_int_cast< USHORT >(
-            m_enabledUpdates.size() + m_disabledUpdates.size() + n),
-        UpdateDialog::Index::newGeneralError(n), SvLBoxButtonKind_staticImage);
-        // position overflow is rather harmless
-}
-#endif
+
 void UpdateDialog::addSpecificError(UpdateDialog::SpecificError const & data) {
     std::vector< UpdateDialog::SpecificError >::size_type n =
         m_specificErrors.size();
@@ -1244,15 +1218,6 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
 //        OSL_ASSERT(isReadOnly(i->aInstalledPackage) == sal_False);
-#if 0
-        // TODO: check!
-        OSL_ASSERT(m_extensionManagerDialog.get());
-        if (RET_CANCEL == m_extensionManagerDialog->continueUpdateForSharedExtension(
-            this, i->aPackageManager))
-        {
-            EndDialog(RET_CANCEL);
-        }
-#endif
     }
 
 
@@ -1299,3 +1264,5 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
 
     return 1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

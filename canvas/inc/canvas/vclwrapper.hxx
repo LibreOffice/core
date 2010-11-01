@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define INCLUDED_CANVAS_VCLWRAPPER_HXX
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 
@@ -118,7 +119,7 @@ namespace canvas
             {
                 // This here is the whole purpose of the template:
                 // protecting object deletion with the solar mutex
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 if( mpWrappee )
                     delete mpWrappee;
@@ -147,3 +148,5 @@ namespace canvas
 }
 
 #endif /* INCLUDED_CANVAS_VCLWRAPPER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

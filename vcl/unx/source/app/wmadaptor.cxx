@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <osl/thread.h>
 #include <rtl/locale.h>
 #include <osl/process.h>
+#include <sal/macros.h>
 
 #include <tools/prex.h>
 #include <X11/X.h>
@@ -492,7 +494,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
                         bsearch( &aSearch,
                                  aProtocolTab,
-                                 sizeof( aProtocolTab )/sizeof( aProtocolTab[0] ),
+                                 SAL_N_ELEMENTS( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
                                  compareProtocol );
                     if( pMatch )
@@ -748,7 +750,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
                         bsearch( &aSearch,
                                  aProtocolTab,
-                                 sizeof( aProtocolTab )/sizeof( aProtocolTab[0] ),
+                                 SAL_N_ELEMENTS( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
                                  compareProtocol );
                     if( pMatch )
@@ -1005,7 +1007,7 @@ bool GnomeWMAdaptor::isValid() const
 void WMAdaptor::initAtoms()
 {
     // get basic atoms
-    for( unsigned int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAtomTab ); i++ )
         m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
     m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
@@ -2511,3 +2513,5 @@ void WMAdaptor::answerPing( X11SalFrame* i_pFrame, XClientMessageEvent* i_pEvent
         XFlush( m_pDisplay );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

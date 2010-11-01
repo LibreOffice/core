@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/lstner.hxx>
@@ -61,7 +62,6 @@
 
 using ::rtl::OUString;
 using namespace ::osl;
-using namespace ::vos;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
@@ -938,7 +938,7 @@ CellEditSource::CellEditSource( CellEditSourceImpl* pImpl )
 //------------------------------------------------------------------------
 CellEditSource::~CellEditSource()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     mpImpl->release();
 }
 
@@ -1054,3 +1054,5 @@ void CellEditSource::ChangeModel( SdrModel* pNewModel )
 //------------------------------------------------------------------------
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

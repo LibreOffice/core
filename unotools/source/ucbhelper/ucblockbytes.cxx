@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
 
+#include <sal/macros.h>
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/condition.hxx>
@@ -1316,14 +1318,14 @@ UcbLockBytes::~UcbLockBytes()
 
 Reference < XInputStream > UcbLockBytes::getInputStream()
 {
-    vos::OClearableGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     m_bDontClose = sal_True;
     return m_xInputStream;
 }
 
 Reference < XStream > UcbLockBytes::getStream()
 {
-    vos::OClearableGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     Reference < XStream > xStream( m_xSeekable, UNO_QUERY );
     if ( xStream.is() )
         m_bDontClose = sal_True;
@@ -1334,7 +1336,7 @@ Reference < XStream > UcbLockBytes::getStream()
 
 sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 {
-    vos::OClearableGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     if ( aStream.is() )
     {
         m_xOutputStream = aStream->getOutputStream();
@@ -1356,7 +1358,7 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
 
     try
     {
-        vos::OClearableGuard aGuard( m_aMutex );
+        osl::MutexGuard aGuard( m_aMutex );
 
         if ( !m_bDontClose && m_xInputStream.is() )
             m_xInputStream->closeInput();
@@ -1383,7 +1385,6 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
         }
 
         bRet = m_xInputStream.is();
-        // aGuard.clear();
     }
     catch( Exception& )
     {}
@@ -1465,7 +1466,7 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
     Sequence<sal_Int8> aData;
     sal_Int32          nSize;
 
-    nCount = VOS_MIN(nCount, 0x7FFFFFFF);
+    nCount = SAL_MIN(nCount, 0x7FFFFFFF);
     try
     {
         if ( !m_bTerminated && !IsSynchronMode() )
@@ -1740,3 +1741,5 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

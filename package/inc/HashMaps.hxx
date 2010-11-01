@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #define _HASHMAPS_HXX
 
 #include <ZipEntry.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <hash_map>
 
 struct eqFunc
@@ -51,7 +52,7 @@ typedef std::hash_map < rtl::OUString,
                         eqFunc > FolderHash;
 
 typedef std::hash_map < rtl::OUString,
-                        vos::ORef < com::sun::star::packages::ContentInfo >,
+                        rtl::Reference < com::sun::star::packages::ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 
@@ -61,3 +62,5 @@ typedef std::hash_map < rtl::OUString,
                         eqFunc > EntryHash;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

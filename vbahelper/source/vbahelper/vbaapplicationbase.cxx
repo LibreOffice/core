@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,7 @@
  ************************************************************************/
 
 #include "vbahelper/vbaapplicationbase.hxx"
+#include <sal/macros.h>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -200,6 +202,8 @@ void SAL_CALL
 VbaApplicationBase::setScreenUpdating(sal_Bool bUpdate) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    if( bUpdate != xModel->hasControllersLocked() )
+        return;
     if (bUpdate)
         xModel->unlockControllers();
     else
@@ -293,7 +297,7 @@ VbaApplicationBase::getVersion() throw (uno::RuntimeException)
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(OFFICEVERSION));
 }
 
-void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const uno::Any& varg1, const uno::Any& varg2, const uno::Any& varg3, const uno::Any& varg4, const uno::Any& varg5, const uno::Any& varg6, const uno::Any& varg7, const uno::Any& varg8, const uno::Any& varg9, const uno::Any& varg10, const uno::Any& varg11, const uno::Any& varg12, const uno::Any& varg13, const uno::Any& varg14, const uno::Any& varg15, const uno::Any& varg16, const uno::Any& varg17, const uno::Any& varg18, const uno::Any& varg19, const uno::Any& varg20, const uno::Any& varg21, const uno::Any& varg22, const uno::Any& varg23, const uno::Any& varg24, const uno::Any& varg25, const uno::Any& varg26, const uno::Any& varg27, const uno::Any& varg28, const uno::Any& varg29, const uno::Any& varg30 ) throw (uno::RuntimeException)
+uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const uno::Any& varg1, const uno::Any& varg2, const uno::Any& varg3, const uno::Any& varg4, const uno::Any& varg5, const uno::Any& varg6, const uno::Any& varg7, const uno::Any& varg8, const uno::Any& varg9, const uno::Any& varg10, const uno::Any& varg11, const uno::Any& varg12, const uno::Any& varg13, const uno::Any& varg14, const uno::Any& varg15, const uno::Any& varg16, const uno::Any& varg17, const uno::Any& varg18, const uno::Any& varg19, const uno::Any& varg20, const uno::Any& varg21, const uno::Any& varg22, const uno::Any& varg23, const uno::Any& varg24, const uno::Any& varg25, const uno::Any& varg26, const uno::Any& varg27, const uno::Any& varg28, const uno::Any& varg29, const uno::Any& varg30 ) throw (uno::RuntimeException)
 {
     ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii("/");
     ::rtl::OUString sMacroSeparator = ::rtl::OUString::createFromAscii("!");
@@ -342,13 +346,14 @@ void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const u
     }
 
 
-    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( aMacroDocumentModel ), sMacro_only_Name );
+    // search the global tempalte
+    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( aMacroDocumentModel ), sMacro_only_Name, sal_True );
     if( aMacroInfo.IsResolved() )
     {
         // handle the arguments
         const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
 
-        int nArg = sizeof( aArgsPtrArray ) / sizeof( aArgsPtrArray[0] );
+        int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
         uno::Sequence< uno::Any > aArgs( nArg );
 
         const uno::Any** pArg = aArgsPtrArray;
@@ -370,6 +375,8 @@ void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const u
         uno::Any aRet;
         uno::Any aDummyCaller;
         executeMacro( aMacroInfo.MacroDocContext(), aMacroInfo.ResolvedMacro(), aArgs, aRet, aDummyCaller );
+
+        return aRet;
     }
     else
     {
@@ -496,3 +503,4 @@ void VbaApplicationBase::Quit() throw (uno::RuntimeException)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -261,25 +262,10 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     return eRet;
 }
 
-static FltError lcl_ExportExcel2007Xml( SfxMedium& rMedium, ScDocument *pDocument,
-        SvStream* pMedStrm, CharSet eNach )
-{
-    SotStorageRef xRootStrg = (SotStorage*) 0;
-
-    XclExpRootData aExpData( EXC_BIFF8, rMedium, xRootStrg, *pDocument, eNach );
-    aExpData.meOutput = EXC_OUTPUT_XML_2007;
-
-    ExportXml2007 aFilter( aExpData, *pMedStrm );
-
-    FltError eRet = aFilter.Write();
-
-    return eRet;
-}
-
 FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     ExportFormatExcel eFormat, CharSet eNach )
 {
-    if( eFormat != ExpBiff5 && eFormat != ExpBiff8 && eFormat != Exp2007Xml )
+    if( eFormat != ExpBiff5 && eFormat != ExpBiff8 )
         return eERR_NI;
 
     // check the passed Calc document
@@ -294,11 +280,10 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
     FltError eRet = eERR_UNKN_BIFF;
     if( eFormat == ExpBiff5 || eFormat == ExpBiff8 )
         eRet = lcl_ExportExcelBiff( rMedium, pDocument, pMedStrm, eFormat == ExpBiff8, eNach );
-    else if( eFormat == Exp2007Xml )
-        eRet = lcl_ExportExcel2007Xml( rMedium, pDocument, pMedStrm, eNach );
 
     return eRet;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SOActionsApproval.h: Definition of the SOActionsApproval class
 //
 //////////////////////////////////////////////////////////////////////
@@ -79,3 +80,4 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODOCUMENTEVENTLISTENER)
 
 #endif // __SODOCUMENTEVENTLISTENER_H_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@ namespace cppu_threadpool {
         m_cndWait( osl_createCondition() )
     {
         osl_resetCondition( m_cndWait );
+        m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
 
     JobQueue::~JobQueue()
@@ -68,7 +70,7 @@ namespace cppu_threadpool {
         {
             // synchronize with the dispose calls
             MutexGuard guard( m_mutex );
-            if( DisposedCallerAdmin::getInstance()->isDisposed( nDisposeId ) )
+            if( m_DisposedCallerAdmin->isDisposed( nDisposeId ) )
             {
                 return 0;
             }
@@ -189,3 +191,5 @@ namespace cppu_threadpool {
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

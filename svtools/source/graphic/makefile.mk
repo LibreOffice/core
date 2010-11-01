@@ -42,23 +42,26 @@ LINKFLAGS=$(LINKFLAGS) /PACKC:32768
 # --- Files --------------------------------------------------------
 
 SLOFILES=							\
+            $(SLO)$/descriptor.obj	\
+            $(SLO)$/graphic.obj		\
+            $(SLO)$/graphicunofactory.obj	\
             $(SLO)$/grfattr.obj		\
+            $(SLO)$/grfcache.obj	\
             $(SLO)$/grfmgr.obj		\
             $(SLO)$/grfmgr2.obj		\
-            $(SLO)$/grfcache.obj	\
-            $(SLO)$/descriptor.obj	\
             $(SLO)$/provider.obj	\
-            $(SLO)$/graphic.obj		\
             $(SLO)$/renderer.obj	\
-            $(SLO)$/graphicunofactory.obj	\
             $(SLO)$/transformer.obj
 
 EXCEPTIONSFILES=					\
             $(SLO)$/descriptor.obj	\
-            $(SLO)$/provider.obj	\
             $(SLO)$/graphic.obj		\
-            $(SLO)$/renderer.obj	\
             $(SLO)$/graphicunofactory.obj	\
+            $(SLO)$/grfcache.obj	\
+            $(SLO)$/grfmgr.obj		\
+            $(SLO)$/grfmgr2.obj		\
+            $(SLO)$/provider.obj	\
+            $(SLO)$/renderer.obj	\
             $(SLO)$/transformer.obj
 
 # --- Target -------------------------------------------------------

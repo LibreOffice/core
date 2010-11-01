@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@ friend struct SfxRequest_Impl;
     SfxRequest_Impl*    pImp;
 
     //---------------------------------------------------------------------
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
                                      com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
@@ -69,7 +69,6 @@ public:
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
 
-//#endif
     //---------------------------------------------------------------------
 
 public:
@@ -96,7 +95,7 @@ public:
     static const SfxPoolItem* GetItem( const SfxItemSet*, USHORT nSlotId,
                                        bool bDeep = false,
                                        TypeId aType = 0 );
-    const SfxPoolItem*  GetArg( USHORT nSlotId, FASTBOOL bDeep = FALSE, TypeId aType = 0 ) const;
+    const SfxPoolItem*  GetArg( USHORT nSlotId, bool bDeep = false, TypeId aType = 0 ) const;
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
@@ -105,7 +104,7 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static BOOL         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
     USHORT              GetCallMode() const;
-    FASTBOOL            IsRecording() const;
+    bool                IsRecording() const;
     void                AllowRecording( BOOL );
     BOOL                AllowsRecording() const;
     BOOL                IsAPI() const;
@@ -119,7 +118,7 @@ public:
     void                Ignore();
     void                Cancel();
     BOOL                IsCancelled() const;
-    void                Done(const SfxItemSet &, FASTBOOL bKeep = TRUE );
+    void                Done(const SfxItemSet &, bool bKeep = true );
 
     void                ForgetAllArgs();
 
@@ -137,3 +136,5 @@ private:
         SfxRequest::GetItem( pArgs, nSlotId, bDeep, TYPE(ItemType) )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

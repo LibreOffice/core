@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // RegistryException.cpp: Implementierung der Klasse RegistryException.
 //
 //////////////////////////////////////////////////////////////////////
@@ -109,3 +110,5 @@ RegistryInvalidOperationException::RegistryInvalidOperationException(long ErrorC
     RegistryException(ErrorCode)
 {
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

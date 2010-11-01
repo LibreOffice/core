@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sot/storinfo.hxx>
@@ -174,7 +175,7 @@ SdFilterDetect::~SdFilterDetect()
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxApplication* pApp = SFX_APP();
@@ -354,10 +355,12 @@ SdFilterDetect::~SdFilterDetect()
                                 String aFileName(aMedium.GetName());
                                 aFileName.ToUpperAscii();
 
-                                if( aFileName.SearchAscii( ".POT" ) == STRING_NOTFOUND )
-                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
-                                else
+                                if( aFileName.SearchAscii( ".POT" ) != STRING_NOTFOUND )
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97Template );
+                                else if( aFileName.SearchAscii( ".PPS" ) != STRING_NOTFOUND )
+                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97AutoPlay );
+                                else
+                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
                             }
                         }
                         else
@@ -544,3 +547,4 @@ UNOREFERENCE< UNOXINTERFACE > SAL_CALL SdFilterDetect::impl_createInstance( cons
     return UNOREFERENCE< UNOXINTERFACE >( *new SdFilterDetect( xServiceManager ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

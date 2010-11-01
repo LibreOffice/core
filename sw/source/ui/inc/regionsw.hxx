@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@
 #include <svx/paraprev.hxx>
 #include <editeng/lrspitem.hxx>
 
-
 class SwWrtShell;
 class EditRegionDlg;
 
@@ -64,7 +64,6 @@ namespace sfx2
 /*************************************************************************
     Dialog "Bereiche bearbeiten"
 *************************************************************************/
-
 class SectRepr;
 typedef SectRepr* SectReprPtr;
 SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0, 4 )
@@ -156,13 +155,10 @@ public:
     void    SelectSection(const String& rSectionName);
 
 };
+
 /*************************************************************************
     Dialog "Bereich einfuegen"
 *************************************************************************/
-
-/* -----------------21.05.99 11:05-------------------
- *
- * --------------------------------------------------*/
 class SwInsertSectionTabPage : public SfxTabPage
 {
     FixedLine       aNameFL;
@@ -272,9 +268,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
-/* -----------------13.06.2003 09:51-----------------
 
- --------------------------------------------------*/
 class SwSectionIndentTabPage : public SfxTabPage
 {
     FixedLine           aIndentFL;
@@ -299,9 +293,6 @@ public:
     void    SetWrtShell(SwWrtShell& rSh);
 };
 
-/* -----------------21.05.99 13:07-------------------
- *
- * --------------------------------------------------*/
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
     SwWrtShell&     rWrtSh;
@@ -318,9 +309,6 @@ public:
     SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
-/* -----------------21.05.99 13:07-------------------
- *
- * --------------------------------------------------*/
 class SwSectionPropertyTabDialog : public SfxTabDialog
 {
     SwWrtShell& rWrtSh;
@@ -333,4 +321,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

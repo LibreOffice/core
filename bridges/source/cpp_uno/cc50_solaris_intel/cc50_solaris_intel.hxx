@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,3 +72,4 @@ void cc50_solaris_intel_fillUnoException(
     uno_Any*, uno_Mapping * pCpp2Uno );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

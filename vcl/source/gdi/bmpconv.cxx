@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/impbmpconv.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -149,7 +150,7 @@ Any SAL_CALL BmpConverter::invoke(
         Sequence< sal_Int8 > aDIB = xBM->getDIB();
 
         // call into vcl not thread safe
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;
@@ -211,3 +212,5 @@ Sequence< sal_Int8 > SAL_CALL BmpTransporter::getMaskDIB() throw()
 {
     return Sequence< sal_Int8 >();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

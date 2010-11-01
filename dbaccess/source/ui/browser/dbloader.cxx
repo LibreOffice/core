@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +60,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/macros.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -216,7 +218,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     Reference< XController2 > xController;
 
     const ::rtl::OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aImplementations ); ++i )
     {
         if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
         {
@@ -301,7 +303,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
 
         // init controller
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);
@@ -356,3 +358,4 @@ void DBContentLoader::cancel(void) throw()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,7 +207,7 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext
 sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount (void)
     throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     // Usually a box has a text field and a list of items as its children.
@@ -230,7 +231,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount (void)
 Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32 i)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if (i<0 || i>=getAccessibleChildCount())
@@ -310,7 +311,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
     sal_Bool bNotify = sal_False;
 
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if (nIndex<0 || nIndex>=getAccessibleActionCount())
@@ -372,3 +373,4 @@ void SAL_CALL VCLXAccessibleBox::disposing (void)
     VCLXAccessibleComponent::disposing();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

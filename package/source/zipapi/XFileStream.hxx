@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <Inflater.hxx>
 #include <ZipEntry.hxx>
 
@@ -54,7 +55,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > mxTempOut;
     com::sun::star::uno::Sequence < sal_Int8 > maBuffer, maCompBuffer;
     ZipEntry maEntry;
-    vos::ORef < EncryptionData > mxData;
+    rtl::Reference < EncryptionData > mxData;
     rtlCipher maCipher;
     Inflater maInflater;
     sal_Bool mbRawStream, mbFinished;
@@ -65,7 +66,7 @@ public:
     XFileStream( ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
-                 const vos::ORef < EncryptionData > &rData,
+                 const rtl::Reference < EncryptionData > &rData,
                  sal_Bool bRawStream,
                  sal_Bool bIsEncrypted );
     virtual ~XFileStream();
@@ -90,3 +91,5 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

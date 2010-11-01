@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-// includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/historyoptions_const.hxx>
@@ -194,8 +189,12 @@ SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 //*****************************************************************************************************************
 sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
 {
-    sal_uInt32                                       nSize = 0  ;
     css::uno::Reference< css::beans::XPropertySet >  xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
+
+    if (!xListAccess.is())
+        return 0;
+
+    sal_uInt32 nSize = 0  ;
 
     try
     {
@@ -729,3 +728,5 @@ Mutex& SvtHistoryOptions::GetOwnStaticMutex()
     // Return new created or already existing mutex object.
     return *pMutex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

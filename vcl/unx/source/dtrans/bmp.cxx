@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <bmp.hxx>
 
 #include <X11_selection.hxx>
+#include <sal/macros.h>
 
 using namespace x11;
 using namespace com::sun::star::uno;
@@ -423,7 +425,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay ) :
         { "StaticGray", "GrayScale", "StaticColor", "PseudoColor", "TrueColor", "DirectColor" };
     fprintf( stderr, "PixmapHolder visual: id = 0x%lx, class = %s (%d), depth=%d; color map = 0x%lx\n",
              m_aInfo.visualid,
-             (m_aInfo.c_class >= 0 && unsigned(m_aInfo.c_class) < sizeof(pClasses)/sizeof(pClasses[0])) ? pClasses[m_aInfo.c_class] : "<unknown>",
+             (m_aInfo.c_class >= 0 && unsigned(m_aInfo.c_class) < SAL_N_ELEMENTS(pClasses)) ? pClasses[m_aInfo.c_class] : "<unknown>",
              m_aInfo.c_class,
              m_aInfo.depth,
              m_aColormap  );
@@ -737,3 +739,5 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
 
     return m_aPixmap;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

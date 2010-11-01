@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,3 +73,5 @@ static const sal_uInt16 thaiCT[128] = {     // Thai character type
 } } } }
 
 #endif // _I18N_WTT_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

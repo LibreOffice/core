@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,12 +158,6 @@ namespace rptui
         */
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 
-#if 0
-        /** checks if alignment is possible in the current section
-        */
-        sal_Bool isAlignPossible() const;
-#endif
-
         /** All objects will be marked.
         */
         void            SelectAll(const sal_uInt16 _nObjectType);
@@ -296,3 +291,4 @@ namespace rptui
 //==================================================================
 #endif // RPTUI_DESIGNVIEW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

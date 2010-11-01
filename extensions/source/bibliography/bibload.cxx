@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -286,7 +287,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
 {
     //!
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );
@@ -309,7 +310,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     //!
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
@@ -801,3 +802,4 @@ void BibliographyLoader::removeVetoableChangeListener(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,23 +30,29 @@
 #define _SAL_MACROS_H_
 
 #ifndef SAL_MAX
-#   define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
+#    define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
+
 #ifndef SAL_MIN
-#   define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
+#    define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
 #ifndef SAL_FIELDOFFSET
-#   define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
+#    define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
+#endif
+
+#ifndef SAL_N_ELEMENTS
+#    define SAL_N_ELEMENTS(arr)     (sizeof (arr) / sizeof ((arr)[0]))
 #endif
 
 #ifndef SAL_BOUND
-#   define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
+#    define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
 #endif
 
-#ifndef SAL_SWAP
-#   define SAL_SWAP(a,b)           ((a) ^= (b) ^= (a) ^= (b))
+#ifndef SAL_ABS
+#    define SAL_ABS(a)              (((a) < 0) ? (-(a)) : (a))
 #endif
 
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

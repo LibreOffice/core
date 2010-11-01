@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <stdio.h>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
-//#include <osl/thread.h>
+
 using namespace rtl;
 
 #include <xrender_peer.hxx>
@@ -165,16 +166,10 @@ void XRenderPeer::InitRenderLib()
         int,int,unsigned int,unsigned int))pFunc;
 
     pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCompositeTrapezoids" );
-#if 0 // not having trapezoid support is supported
-    if( !pFunc ) return;
-#endif
     mpXRenderCompositeTrapezoids = (void(*)(Display*,int,Picture,Picture,
         const XRenderPictFormat*,int,int,const XTrapezoid*,int))pFunc;
 
     pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderAddTraps" );
-#if 0 // not having trapezoid support is supported
-    if( !pFunc ) return;
-#endif
     mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const _XTrap*,int))pFunc;
 
 #endif // XRENDER_LINK
@@ -244,3 +239,5 @@ sal_uInt32 XRenderPeer::InitRenderText()
 }
 
 // ---------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

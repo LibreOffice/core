@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// INCLUDE ---------------------------------------------------------------
-
-
 #include <sot/formats.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -53,7 +51,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <helpid.h>
@@ -71,9 +69,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 
-/* -----------------------------17.07.01 13:10--------------------------------
-
- ---------------------------------------------------------------------------*/
 struct SwConnectionData
 {
     ::rtl::OUString                sSourceName;
@@ -83,9 +78,7 @@ struct SwConnectionData
 typedef SwConnectionData* SwConnectionDataPtr;
 SV_DECL_PTRARR_DEL( SwConnectionArr, SwConnectionDataPtr, 32, 32 )
 SV_IMPL_PTRARR( SwConnectionArr, SwConnectionDataPtr )
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
 {
     Reference< XNameAccess > xDBContext;
@@ -108,9 +101,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     Reference< XNameAccess >    GetContext() {return xDBContext;}
     Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
 };
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDBTreeList_Impl::~SwDBTreeList_Impl()
 {
     Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
@@ -125,19 +116,15 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
         m_refCount--;
     }
 }
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (RuntimeException)
 {
     // information not needed
 }
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::rtl::OUString sSource;
     rEvent.Accessor >>= sSource;
     for(USHORT i = 0; i < aConnections.Count(); i++)
@@ -145,32 +132,22 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
         SwConnectionDataPtr pPtr = aConnections[i];
         if(pPtr->sSourceName == sSource)
         {
-//            SwConnectionDataPtr pPtr = aConnections[i];
-//            Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
-//            if(xComp.is())
-//                xComp->dispose();
             aConnections.DeleteAndDestroy(i);
             break;
         }
     }
 }
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException)
 {
     xDBContext = 0;
 }
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException)
 {
     elementRemoved(rEvent);
 }
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwDBTreeList_Impl::HasContext()
 {
     if(!xDBContext.is())
@@ -185,13 +162,11 @@ BOOL SwDBTreeList_Impl::HasContext()
             if(xContainer.is())
                 xContainer->addContainerListener( this );
         }
-        DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+        OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
     }
     return xDBContext.is();
 }
-/* -----------------------------17.07.01 13:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rSourceName)
 {
     Reference<XConnection>  xRet;
@@ -213,9 +188,7 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rS
     }
     return xRet;
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
+
 SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
                         SwWrtShell* pSh,
                         const String& rDefDBName, const BOOL bShowCol):
@@ -234,18 +207,10 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
         InitTreeList();
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 SwDBTreeList::~SwDBTreeList()
 {
     delete pImpl;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 void SwDBTreeList::InitTreeList()
 {
@@ -285,9 +250,7 @@ void SwDBTreeList::InitTreeList()
 
     bInitialized = TRUE;
 }
-/*-- 27.05.2004 09:19:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwDBTreeList::AddDataSource(const String& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
@@ -297,9 +260,6 @@ void    SwDBTreeList::AddDataSource(const String& rSource)
     SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
     SvTreeListBox::Select(pEntry);
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwDBTreeList::ShowColumns(BOOL bShowCol)
 {
@@ -333,10 +293,6 @@ void SwDBTreeList::ShowColumns(BOOL bShowCol)
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
 {
     if (!pParent->HasChilds())
@@ -360,7 +316,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        DBG_ASSERT(xTbls->hasByName(sTableName), "table not available anymore?");
+                        OSL_ENSURE(xTbls->hasByName(sTableName), "table not available anymore?");
                         try
                         {
                             Any aTable = xTbls->getByName(sTableName);
@@ -378,7 +334,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                        DBG_ASSERT(xQueries->hasByName(sTableName), "table not available anymore?");
+                        OSL_ENSURE(xQueries->hasByName(sTableName), "table not available anymore?");
                         try
                         {
                             Any aQuery = xQueries->getByName(sTableName);
@@ -411,7 +367,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
             {
             }
         }
-        else    // Tabellennamen
+        else    // table names
         {
             try
             {
@@ -470,23 +426,15 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
 {
     SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
-        return COMPARE_GREATER; // Spaltennamen nicht sortieren
+        return COMPARE_GREATER; // don't sort column names
 
     return DefaultCompare(pData);   // Sonst Basisklasse rufen
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable)
 {
@@ -498,7 +446,7 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* p
         if (GetParent(GetParent(pEntry)))
         {
             rColumnName = GetEntryText(pEntry);
-            pEntry = GetParent(pEntry); // Spaltenname war selektiert
+            pEntry = GetParent(pEntry); // column name was selected
         }
         sDBName = GetEntryText(GetParent(pEntry));
         if(pbIsTable)
@@ -513,8 +461,6 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* p
 /*------------------------------------------------------------------------
  Beschreibung:  Format: Datenbank.Tabelle
 ------------------------------------------------------------------------*/
-
-
 void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
 {
     SvLBoxEntry* pParent;
@@ -557,10 +503,6 @@ void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
     String sTableName, sColumnName;
@@ -596,19 +538,16 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 sal_Int8 SwDBTreeList::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
-/*-- 07.10.2003 13:28:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
 {
     pImpl->SetWrtShell(rSh);
     if (IsVisible() && !bInitialized)
         InitTreeList();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

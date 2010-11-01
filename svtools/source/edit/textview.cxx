@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 using namespace ::com::sun::star;
@@ -2088,7 +2089,7 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
 {
     if ( mpImpl->mbClickedInSelection )
     {
-        vos::OGuard aVclGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aVclGuard;
 
         DBG_ASSERT( mpImpl->maSelection.HasRange(), "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
@@ -2141,7 +2142,7 @@ void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourc
 
 void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     BOOL bChanges = FALSE;
     if ( !mpImpl->mbReadOnly && mpImpl->mpDDInfo )
@@ -2257,13 +2258,13 @@ void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetD
 
 void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
     ImpHideDDCursor();
 }
 
 void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( !mpImpl->mpDDInfo )
         mpImpl->mpDDInfo = new TextDDInfo;
@@ -2460,3 +2461,4 @@ BOOL                TextView::IsInsertMode() const
 void                TextView::SupportProtectAttribute(sal_Bool bSupport)
 { mpImpl->mbSupportProtectAttribute = bSupport;}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

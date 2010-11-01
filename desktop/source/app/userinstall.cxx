@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,8 @@
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/diagnose.h>
-#include <vos/security.hxx>
-#include <vos/ref.hxx>
-#include <vos/process.hxx>
+#include <osl/security.hxx>
+#include <rtl/ref.hxx>
 
 #include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
@@ -63,7 +63,8 @@
 
 #include "app.hxx"
 
-using namespace rtl;
+using rtl::OString;
+using rtl::OUString;
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::container;
@@ -295,3 +296,4 @@ namespace desktop {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,17 +46,16 @@ SRC1FILES = \
         stbctrls.src
 
 SLOFILES=	\
-        $(SLO)$/insctrl.obj	\
-        $(SLO)$/zoomctrl.obj	\
-        $(SLO)$/pszctrl.obj	\
-        $(SLO)$/selctrl.obj	\
-        $(SLO)$/modctrl.obj \
-                $(SLO)$/xmlsecctrl.obj \
-                $(SLO)$/zoomsliderctrl.obj
+        $(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES= \
-    $(SLO)$/modctrl.obj \
-    $(SLO)$/zoomsliderctrl.obj
+        $(SLO)$/insctrl.obj	\
+        $(SLO)$/modctrl.obj	\
+        $(SLO)$/pszctrl.obj	\
+        $(SLO)$/selctrl.obj	\
+        $(SLO)$/xmlsecctrl.obj	\
+        $(SLO)$/zoomctrl.obj	\
+        $(SLO)$/zoomsliderctrl.obj
 
 HXX1TARGET=stbctrls
 HXX1EXT=   hxx
@@ -67,8 +66,8 @@ HXX1DEPN=\
         $(INC)$/pszctrl.hxx	\
         $(INC)$/selctrl.hxx	\
         $(INC)$/modctrl.hxx \
-                $(INC)$/xmlsecctrl.hxx \
-                $(INC)$/zoomsliderctrl.hxx \
+        $(INC)$/xmlsecctrl.hxx \
+        $(INC)$/zoomsliderctrl.hxx \
 
 # --- Targets -------------------------------------------------------
 

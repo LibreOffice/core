@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,14 +46,14 @@
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <rtl/textench.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/configitem.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "mailmodelapi.hxx"
@@ -148,8 +149,8 @@ namespace
 
 }
 
-// class OThread
-class OMailSendThreadImpl : public ::vos::OThread
+// class osl::Thread
+class OMailSendThreadImpl : public ::osl::Thread
 {
     public:
         OMailSendThreadImpl(
@@ -198,7 +199,7 @@ void SAL_CALL OMailSendThreadImpl::run()
 
     if ( m_bSend == sal_False )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Reference< ::com::sun::star::awt::XWindow > xParentWindow = m_xCurrentFrame->getContainerWindow();
         Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
@@ -691,3 +692,5 @@ SfxMailModel::SendMailResult SfxMailModel::Send( )
 
     return eResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

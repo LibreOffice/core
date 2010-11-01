@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,7 @@ protected:
     SfxItemSet*     pBBSet;
     BOOL            bDisableQueryBox;
     BOOL            bEnableBackgroundSelector;
-    FASTBOOL        bInReset;
+    bool            bInReset;
 
     void            InitHandler();
     DECL_LINK( TurnOnHdl, CheckBox*);
@@ -128,3 +129,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

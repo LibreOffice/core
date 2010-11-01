@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -307,7 +308,7 @@ DebugTraceScope::DebugTraceScope (const sal_Char* sFormat, ...)
     va_start(args, sFormat);
 
     msMessage[mnBufferSize-1] = 0;
-    _vsnprintf(msMessage, mnBufferSize-1, sFormat, args);
+    snprintf(msMessage, mnBufferSize-1, sFormat, args);
     TRACE_BEGIN("[ %s", msMessage);
     va_end(args);
 }
@@ -322,3 +323,5 @@ DebugTraceScope::~DebugTraceScope (void)
 } }
 
 #endif // OSL_DEBUG_LEVEL > 1
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

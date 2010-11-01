@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
+#include <sal/macros.h>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/debug.hxx>
@@ -835,7 +837,7 @@ static const sal_uInt32 the_aDigitZeroes [] =
 
 BOOL HasDigits( const OUString &rText )
 {
-    static const int nNumDigitZeroes = sizeof(the_aDigitZeroes) / sizeof(the_aDigitZeroes[0]);
+    static const int nNumDigitZeroes = SAL_N_ELEMENTS(the_aDigitZeroes);
     const sal_Int32 nLen = rText.getLength();
 
     sal_Int32 i = 0;
@@ -1007,3 +1009,4 @@ void SAL_CALL
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

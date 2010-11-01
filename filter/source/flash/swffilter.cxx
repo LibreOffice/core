@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,6 @@
 
 #include "swfexporter.hxx"
 
-//#include <stdlib.h>
-//#include <windows.h>
 #include <string.h>
 
 using namespace ::com::sun::star::uno;
@@ -524,3 +523,5 @@ sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceNa
 // -----------------------------------------------------------------------------
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

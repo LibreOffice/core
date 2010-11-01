@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -930,6 +931,16 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
                 pDoc, cur->children, 1);
             rtl::OUString sRequire = xmlRequire;
             nRequirements = sRequire.toInt64(16);
+#ifdef MACOSX
+            //javaldx is not used anymore in the mac build. In case the Java
+            //corresponding to the saved settings does not exist anymore the
+            //javavm services will look for an existing Java after creation of
+            //the JVM failed. See stoc/source/javavm/javavm.cxx. Only if
+            //nRequirements does not have the flag JFW_REQUIRE_NEEDRESTART the
+            //jvm of the new selected JRE will be started. Old settings (before
+            //OOo 3.3) still contain the flag which can be safely ignored.
+            nRequirements &= ~JFW_REQUIRE_NEEDRESTART;
+#endif
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "vendorData") == 0)
         {
@@ -1229,3 +1240,5 @@ const std::vector<rtl::OUString> & MergedSettings::getJRELocations() const
     return m_JRELocations;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

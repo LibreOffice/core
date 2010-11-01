@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <deque>
 
@@ -411,43 +406,6 @@ void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTemp
     Commit();
 }
 
-#if 0
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
-                                                const   OUString&   sFilter     ,
-                                                const   OUString&   sTempName   )
-{
-    tIMPL_RecoveryEntry aEntry( sURL, sFilter, sTempName );
-    m_aRecoveryList.push_front( aEntry );
-    SetModified();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions_Impl::PopRecoveryItem(  OUString&   sURL        ,
-                                                OUString&   sFilter     ,
-                                                OUString&   sTempName   )
-{
-    tIMPL_RecoveryEntry aEntry = m_aRecoveryList.front();
-    m_aRecoveryList.pop_front();
-    SetModified();  // Don't forget it - we delete an entry here!
-    sURL        = aEntry.sURL       ;
-    sFilter     = aEntry.sFilter    ;
-    sTempName   = aEntry.sTempName  ;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::IsRecoveryListEmpty() const
-{
-    return ( m_aRecoveryList.empty() );
-}
-#endif
-
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -626,3 +584,5 @@ Mutex& SvtInternalOptions::GetOwnStaticMutex()
     // Return new created or already existing mutex object.
     return *pMutex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

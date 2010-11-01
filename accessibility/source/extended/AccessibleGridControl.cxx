@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,7 +117,7 @@ void SAL_CALL AccessibleGridControl::disposing()
 sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return m_aTable.GetAccessibleControlCount();
@@ -127,7 +128,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
@@ -179,7 +180,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -210,7 +211,7 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 void SAL_CALL AccessibleGridControl::grabFocus()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
         m_aTable.GrabFocus();
@@ -370,3 +371,5 @@ bool AccessibleGridControlAccess::isContextAlive() const
 // ============================================================================
 
 }   // namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

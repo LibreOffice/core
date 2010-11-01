@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -194,7 +195,7 @@ start:
         case SbxBYREF | SbxBOOL:
             nRes = *p->pInteger; break;
 
-        // ab hier muss getestet werden
+        // from here had to be tested
         case SbxBYREF | SbxLONG:
             aTmp.nLong = *p->pLong; goto ref;
         case SbxBYREF | SbxULONG:
@@ -232,7 +233,7 @@ void ImpPutInteger( SbxValues* p, INT16 n )
 start:
     switch( +p->eType )
     {
-        // hier muss getestet werden
+        // here had to be tested
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -248,7 +249,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // ab hier nicht mehr
+        // frome here no longer
         case SbxINTEGER:
         case SbxBOOL:
             p->nInteger = n; break;
@@ -961,3 +962,4 @@ start:
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

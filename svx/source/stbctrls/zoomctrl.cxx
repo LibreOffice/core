@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <svx/dialogs.hrc>
 
 #include "zoomctrl.hxx"
-//CHINA001 #include "zoom.hxx"
 #include <svx/zoomitem.hxx>
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
@@ -217,3 +217,4 @@ ULONG SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

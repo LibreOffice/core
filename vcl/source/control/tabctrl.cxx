@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,27 +87,6 @@ struct ImplTabCtrlData
     ListBox*                        mpListBox;
     Size                            maMinSize;
 };
-
-// -----------------------------------------------------------------------
-
-#if 0
-// not used
-#define TABCOLORCOUNT   10
-
-static ColorData aImplTabColorAry[TABCOLORCOUNT] =
-{
-    RGB_COLORDATA(  80, 216, 248 ),
-    RGB_COLORDATA( 128, 216, 168 ),
-    RGB_COLORDATA( 128, 144, 248 ),
-    RGB_COLORDATA( 208, 180, 168 ),
-    RGB_COLORDATA( 248, 252, 168 ),
-    RGB_COLORDATA( 168, 144, 168 ),
-    RGB_COLORDATA( 248, 144,  80 ),
-    RGB_COLORDATA( 248, 216,  80 ),
-    RGB_COLORDATA( 248, 180, 168 ),
-    RGB_COLORDATA( 248, 216, 168 )
-};
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -2354,3 +2334,4 @@ void TabControl::SetMinimumSizePixel( const Size& i_rSize )
 // -----------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

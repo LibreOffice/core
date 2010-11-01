@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include "DrawViewWrapper.hxx"
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/unoshtxt.hxx>
@@ -86,7 +87,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
         return;
 
     // /-- solar
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     if( m_pTextHelper )
         delete m_pTextHelper;
@@ -120,7 +121,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
     if( m_pTextHelper )
     {
         // /-- solar
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         return m_pTextHelper->GetChildCount();
         // \-- solar
     }
@@ -134,7 +135,7 @@ Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( ::sa
     if( m_pTextHelper )
     {
         // /-- solar
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         return m_pTextHelper->GetChild( i );
         // \-- solar
     }
@@ -201,3 +202,5 @@ lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
 
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

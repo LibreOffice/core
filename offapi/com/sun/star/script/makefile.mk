@@ -48,6 +48,7 @@ IDLFILES=\
     XLibraryContainerExport.idl\
     XPersistentLibraryContainer.idl\
     XStorageBasedLibraryContainer.idl\
+	XLibraryQueryExecutable.idl \
     ModuleSizeExceededRequest.idl\
     ModuleInfo.idl\
     ModuleType.idl

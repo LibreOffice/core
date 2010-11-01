@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1346,8 +1347,10 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
 
         Rectangle aBoundingRgn( aPoint, Size( mnWidth, mnHeight ) );
         Rectangle aContentRgn( aCtrlRegion );
-        if(pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
-            nState, aControlValue, rtl::OUString(), aBoundingRgn, aContentRgn ))
+        if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
+            pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
+                                          nState, aControlValue, rtl::OUString(),
+                                          aBoundingRgn, aContentRgn ))
         {
             aCtrlRegion=aContentRgn;
         }
@@ -2377,3 +2380,5 @@ Rectangle ImplBorderWindow::GetMenuRect() const
 {
     return mpBorderView->GetMenuRect();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

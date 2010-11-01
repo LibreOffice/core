@@ -404,6 +404,7 @@
                     <menu:menuitem menu:id=".uno:DataFilterHideAutoFilter"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:DataForm"/>
             <menu:menuitem menu:id=".uno:DataSubTotals"/>
             <menu:menuitem menu:id=".uno:Validation"/>
             <menu:menuseparator/>

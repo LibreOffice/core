@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <tools/shl.hxx>
-#include "svx/ofaitem.hxx"  // add CHINA001
-#include <sfx2/request.hxx> // add CHINA001
+#include "svx/ofaitem.hxx"
+#include <sfx2/request.hxx>
 #include <svx/dialogs.hrc>
 
 #define _SVX_CONNECT_CXX
@@ -553,7 +554,7 @@ void SvxConnectionPage::FillTypeLB()
         }
     }
 }
-void SvxConnectionPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxConnectionPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
     if (pOfaPtrItem)
@@ -562,3 +563,4 @@ void SvxConnectionPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     Construct();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

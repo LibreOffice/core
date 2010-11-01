@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -492,7 +493,7 @@ void SwSidebarWin::SetPosAndSize()
             }
             break;
             default:
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
             break;
         }
@@ -1257,7 +1258,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
     {
         SidebarWinAccessible* pAcc =
                         static_cast<SidebarWinAccessible*>( GetWindowPeer() );
-        ASSERT( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
+        OSL_ENSURE( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
                 "<SwSidebarWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
         pAcc->ChangeSidebarItem( mrSidebarItem );
     }
@@ -1391,3 +1392,5 @@ bool SwRedComment::IsProtected()
     return SwSidebarWin::IsProtected() || pRedline->Start()->nNode.GetNode().GetTxtNode()->IsInProtectSect();
 }
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

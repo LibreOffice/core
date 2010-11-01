@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #include "inettbc.hxx"
 
-#ifndef GCC
-#endif
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -41,8 +40,8 @@
 #include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/unohlp.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <svl/itemset.hxx>
@@ -293,3 +292,4 @@ void SfxURLToolBoxControl_Impl::StateChanged
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

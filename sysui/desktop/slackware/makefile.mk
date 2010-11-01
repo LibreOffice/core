@@ -92,7 +92,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
 
 $(MISC)/$(TARGET)/empty.tar :
     @$(MKDIRHIER) $(@:d)/empty
-    @tar -C $(MISC)/$(TARGET)/empty --owner=root --group=root --same-owner -cf $@ .
+    @$(GNUTAR) -C $(MISC)/$(TARGET)/empty --owner=root --group=root --same-owner -cf $@ .
 
 
 # --- packaging ---------------------------------------------------
@@ -104,7 +104,7 @@ $(MENUFILES) : $(MISC)/$(TARGET)/empty.tar
     -$(RM) -r $(MISC)$/$(@:b)
     dmake $(MISC)$/$(@:b)$/usr/share/applications $(MISC)$/$(@:b)$/install$/slack-desc $(MISC)$/$(@:b)$/install$/doinst.sh
     @$(COPY) $(MISC)/$(TARGET)$/empty.tar $@.tmp
-    @tar -C $(MISC)/$(@:b) --owner=root --group=root --same-owner --exclude application.flag -rf $@.tmp install usr opt
+    @$(GNUTAR) -C $(MISC)/$(@:b) --owner=root --group=root --same-owner --exclude application.flag -rf $@.tmp install usr opt
     @gzip < $@.tmp > $@
     @$(RM) $@.tmp
     $(RM) -r $(MISC)$/$(@:b)

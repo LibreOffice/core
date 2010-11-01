@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
+#include <hash_map>
 
 class SbUnoObject: public SbxObject
 {
@@ -319,6 +321,27 @@ public:
     virtual void Clear();
 };
 
+typedef std::hash_map< ::rtl::OUString, ::com::sun::star::uno::Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
+
+typedef std::vector< rtl::OUString > VBAConstantsVector;
+
+class VBAConstantHelper
+{
+private:
+
+    VBAConstantsVector aConstCache;
+    VBAConstantsHash aConstHash;
+    bool isInited;
+    VBAConstantHelper():isInited( false ) {}
+    VBAConstantHelper(const VBAConstantHelper&);
+    void init();
+public:
+    static VBAConstantHelper& instance();
+    SbxVariable* getVBAConstant( const String& rName );
+    bool isVBAConstantType( const String& rName );
+};
+
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

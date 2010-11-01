@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,6 +78,7 @@
 #include <dialmgr.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/saveopt.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -214,8 +216,8 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
     aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
     aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
-    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) )
-
+    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) ),
+    aExperimentalCB     ( this, CUI_RES( CB_EXPERIMENTAL ) )
 {
     FreeResource();
 
@@ -233,26 +235,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #ifdef WNT
     aFileDlgCB.SetToggleHdl( LINK( this, OfaMiscTabPage, OnFileDlgToggled ) );
 #else
-    {
-        aODMADlgCB.Hide();
-        // rearrange the following controls
-        Point aNewPos = aDocStatusFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aODMADlgCB.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
-    }
+    aODMADlgCB.Hide();
 #endif
 
     if ( !aFileDlgCB.IsVisible() )
@@ -264,10 +247,10 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB
         };
         Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
         {
             aNewPos = (*pCurrent)->GetPosPixel();
@@ -281,23 +264,23 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         aFileDlgCB.Disable();
     }
 
-    if ( aPrintDlgCB.IsVisible() )
+    if ( !aPrintDlgCB.IsVisible() )
     {
         // rearrange the following controls
         Point aNewPos = aDocStatusFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aFileDlgFL.GetPosPixel().Y();
+        long nDelta = aNewPos.Y() - aPrintDlgFL.GetPosPixel().Y();
 
         Window* pWins[] =
         {
             &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT
+            &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB
         };
         Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
         {
             aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() += nDelta;
+            aNewPos.Y() -= nDelta;
             (*pCurrent)->SetPosPixel( aNewPos );
         }
     }
@@ -427,6 +410,13 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
+    if ( aExperimentalCB.IsChecked() != aExperimentalCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetExperimentalMode( aExperimentalCB.IsChecked() );
+        bModified = TRUE;
+    }
+
     const SfxUInt16Item* pUInt16Item =
         PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
     USHORT nNum = (USHORT)aYearValueField.GetText().ToInt32();
@@ -470,6 +460,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aPrintDlgCB.SaveValue();
     aSaveAlwaysCB.Check( aMiscOpt.IsSaveAlwaysAllowed() );
     aSaveAlwaysCB.SaveValue();
+    aExperimentalCB.Check( aMiscOpt.IsExperimentalMode() );
+    aExperimentalCB.SaveValue();
 
     aODMADlgCB.Check( aMiscOpt.TryODMADialog() );
     aODMADlgCB.SaveValue();
@@ -802,7 +794,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     DELETEZ( pFontAntiAliasing );
 
     Point aPos;
-    for ( sal_Int32 i = 0; i < sizeof( pMiscOptions ) / sizeof( pMiscOptions[0] ); ++i )
+    for ( sal_Int32 i = 0; i < SAL_N_ELEMENTS( pMiscOptions ); ++i )
     {
         aPos = pMiscOptions[i]->GetPosPixel( );
         aPos.Y() -= nMoveUp;
@@ -1510,9 +1502,18 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     pLangConfig->aLanguageOptions.BlockBroadcasts( TRUE );
     pLangConfig->aLinguConfig.BlockBroadcasts( TRUE );
 
-    if(aCTLSupportCB.IsChecked() &&
-            (aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked()) ||
-            (aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos()))
+    /*
+     * Sequence checking only matters when CTL support is enabled.
+     *
+     * So we only need to check for sequence checking if
+     * a) previously it was unchecked and is now checked or
+     * b) it was already checked but the CTL language has changed
+     */
+    if (
+         aCTLSupportCB.IsChecked() &&
+         (aCTLSupportCB.GetSavedValue() != STATE_CHECK ||
+         aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos())
+       )
     {
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = aComplexLanguageLB.GetSelectLanguage();
@@ -1977,3 +1978,4 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

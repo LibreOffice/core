@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1740,7 +1741,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     if ( !bHideLink )
          {
     aMoreTemplatesLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://templates.documentfoundation.org/" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://templates.libreoffice.org/" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
     }
     else
@@ -2019,3 +2020,4 @@ void SvtDocumentTemplateDialog::SelectTemplateFolder()
     pImpl->pWin->SelectFolder(ICON_POS_TEMPLATES);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

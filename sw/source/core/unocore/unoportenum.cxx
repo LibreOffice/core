@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@
 #include <unoidx.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <set>
 
@@ -82,7 +83,6 @@ static void lcl_CreatePortions(
     SwUnoCrsr* pUnoCrsr,
     FrameDependSortList_t & i_rFrames,
     const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos );
-
 
 namespace
 {
@@ -193,21 +193,15 @@ namespace
     }
 }
 
-
 /******************************************************************
  *  SwXTextPortionEnumeration
  ******************************************************************/
-/* -----------------------------13.03.00 12:15--------------------------------
-
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(
         const uno::Sequence< sal_Int8 >& rId )
 throw(uno::RuntimeException)
@@ -220,26 +214,20 @@ throw(uno::RuntimeException)
     }
     return 0;
 }
-/* -----------------------------06.04.00 16:39--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXTextPortionEnumeration::getImplementationName()
 throw( RuntimeException )
 {
     return C2U("SwXTextPortionEnumeration");
 }
-/* -----------------------------06.04.00 16:39--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool
 SwXTextPortionEnumeration::supportsService(const OUString& rServiceName)
 throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextPortionEnumeration") == rServiceName;
 }
-/* -----------------------------06.04.00 16:39--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()
 throw( RuntimeException )
 {
@@ -249,9 +237,6 @@ throw( RuntimeException )
     return aRet;
 }
 
-/*-- 27.01.99 10:44:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         SwPaM& rParaCrsr,
         uno::Reference< XText > const & xParentText,
@@ -283,34 +268,27 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     pUnoCrsr->Add(this);
 }
 
-/*-- 27.01.99 10:44:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwUnoCrsr* pUnoCrsr = GetCursor();
     delete pUnoCrsr;
 }
-/*-- 27.01.99 10:44:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextPortionEnumeration::hasMoreElements()
 throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return (m_Portions.size() > 0) ? sal_True : sal_False;
 }
-/*-- 27.01.99 10:44:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXTextPortionEnumeration::nextElement()
 throw( container::NoSuchElementException, lang::WrappedTargetException,
        uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_Portions.size())
         throw container::NoSuchElementException();
@@ -320,8 +298,6 @@ throw( container::NoSuchElementException, lang::WrappedTargetException,
     m_Portions.pop_front();
     return any;
 }
-
-//======================================================================
 
 typedef ::std::deque< xub_StrLen > FieldMarks_t;
 
@@ -376,7 +352,7 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
     {
@@ -390,7 +366,7 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_END);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
     }
     else if (CH_TXT_ATR_FORMELEMENT == Char)
     {
@@ -404,7 +380,7 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START_END);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(true, pFieldmark, pDoc));
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
     }
     else
     {
@@ -413,9 +389,6 @@ lcl_ExportFieldMark(
     return xRef;
 }
 
-/* -----------------------------31.08.00 14:28--------------------------------
-
- ---------------------------------------------------------------------------*/
 static Reference<XTextRange>
 lcl_CreateRefMarkPortion(
     Reference<XText> const& xParent,
@@ -446,7 +419,6 @@ lcl_CreateRefMarkPortion(
     return pPortion;
 }
 
-//-----------------------------------------------------------------------------
 static void
 lcl_InsertRubyPortion(
     TextRangeList_t & rPortions,
@@ -460,7 +432,6 @@ lcl_InsertRubyPortion(
     pPortion->SetCollapsed(rAttr.GetEnd() ? false : true);
 }
 
-//-----------------------------------------------------------------------------
 static Reference<XTextRange>
 lcl_CreateTOXMarkPortion(
     Reference<XText> const& xParent,
@@ -490,7 +461,6 @@ lcl_CreateTOXMarkPortion(
     return pPortion;
 }
 
-//-----------------------------------------------------------------------------
 static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
     uno::Reference<text::XText> const& xParent,
@@ -517,7 +487,6 @@ lcl_CreateMetaPortion(
     return pPortion;
 }
 
-//-----------------------------------------------------------------------------
 static void
 lcl_ExportBookmark(
     TextRangeList_t & rPortions,
@@ -585,11 +554,6 @@ lcl_ExportSoftPageBreak(
     }
 }
 
-
-/* -----------------------------18.12.00 14:51--------------------------------
-
- ---------------------------------------------------------------------------*/
-//-----------------------------------------------------------------------------
 #define REDLINE_PORTION_START_REMOVE 0//removed redlines are visible
 #define REDLINE_PORTION_END_REMOVE   1//removed redlines are visible
 #define REDLINE_PORTION_REMOVE       2//removed redlines are NOT visible
@@ -634,7 +598,6 @@ struct RedlineCompareStruct
 typedef std::multiset < SwXRedlinePortion_ImplSharedPtr, RedlineCompareStruct >
 SwXRedlinePortion_ImplList;
 
-//-----------------------------------------------------------------------------
 static Reference<XTextRange>
 lcl_ExportHints(
     PortionStack_t & rPortionStack,
@@ -885,7 +848,6 @@ lcl_ExportHints(
     return xRef;
 }
 
-//-----------------------------------------------------------------------------
 void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
     const xub_StrLen nCurrentIndex,
     const sal_Int32 nNextFrameIndex, const sal_Int32 nNextPortionIndex,
@@ -926,7 +888,6 @@ void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
     }
 }
 
-//-----------------------------------------------------------------------------
 static void
 lcl_FillRedlineArray(SwDoc const & rDoc, SwUnoCrsr const & rUnoCrsr,
         SwXRedlinePortion_ImplList& rRedArr )
@@ -954,7 +915,6 @@ lcl_FillRedlineArray(SwDoc const & rDoc, SwUnoCrsr const & rUnoCrsr,
     }
 }
 
-//-----------------------------------------------------------------------------
 static void
 lcl_FillSoftPageBreakArray(
         SwUnoCrsr const & rUnoCrsr, SwSoftPageBreakList& rBreakArr )
@@ -965,9 +925,6 @@ lcl_FillSoftPageBreakArray(
         pTxtNode->fillSoftPageBreakList( rBreakArr );
 }
 
-/* -----------------------------19.12.00 12:25--------------------------------
-
- ---------------------------------------------------------------------------*/
 static void
 lcl_ExportRedline(
     TextRangeList_t & rPortions,
@@ -999,9 +956,6 @@ lcl_ExportRedline(
     }
 }
 
-/* -----------------------------19.12.00 13:09--------------------------------
-
- ---------------------------------------------------------------------------*/
 static void
 lcl_ExportBkmAndRedline(
     TextRangeList_t & rPortions,
@@ -1022,7 +976,6 @@ lcl_ExportBkmAndRedline(
         lcl_ExportSoftPageBreak(rPortions, xParent, pUnoCrsr, rBreakArr, nIndex);
 }
 
-//-----------------------------------------------------------------------------
 static sal_Int32
 lcl_ExportFrames(
     TextRangeList_t & rPortions,
@@ -1049,7 +1002,6 @@ lcl_ExportFrames(
     return i_rFrames.size() ? i_rFrames.front().nIndex : -1;
 }
 
-//-----------------------------------------------------------------------------
 static sal_Int32
 lcl_GetNextIndex(
     SwXBookmarkPortion_ImplList const & rBkmArr,
@@ -1077,7 +1029,6 @@ lcl_GetNextIndex(
     return nRet;
 };
 
-//-----------------------------------------------------------------------------
 static void
 lcl_CreatePortions(
         TextRangeList_t & i_rPortions,
@@ -1216,11 +1167,9 @@ lcl_CreatePortions(
             "CreatePortions: stack error" );
 }
 
-/*-- 27.01.99 10:44:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void    SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

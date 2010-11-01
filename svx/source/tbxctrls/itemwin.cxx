@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -612,18 +613,18 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
             pSh->KeyInput( *pKEvt );
         else
         {
-            FASTBOOL bHandled = FALSE;
+            bool bHandled = false;
 
             switch ( rKey.GetCode() )
             {
                 case KEY_RETURN:
                     Reformat();
-                    bHandled = TRUE;
+                    bHandled = true;
                     break;
 
                 case KEY_ESCAPE:
                     SetText( aCurTxt );
-                    bHandled = TRUE;
+                    bHandled = true;
                     break;
             }
 
@@ -823,3 +824,5 @@ void SvxFillAttrBox::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
 class FontList;
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 
@@ -121,10 +122,7 @@ private:
 
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
-
-//#if 0 // _SOLAR__PRIVATE
     EDITENG_DLLPRIVATE BOOL             PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
-//#endif
 
 protected:
 
@@ -372,8 +370,8 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
@@ -492,3 +490,5 @@ public:
 };
 
 #endif // _MyEDITENG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

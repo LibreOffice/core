@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,11 +76,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
- --------------------------------------------------------------------*/
-
-
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
                      const String* pStr, BOOL bIsDrwTxtDlg) :
     SfxTabDialog(pParent, SW_RES(DLG_CHAR), &rCoreSet, pStr != 0),
@@ -87,8 +83,6 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     bIsDrwTxtMode(bIsDrwTxtDlg)
 {
     FreeResource();
-
-    // bspFonr fuer beide Bsp-TabPages
 
     if(pStr)
     {
@@ -99,7 +93,7 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
         SetText(aTmp);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
     AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
     AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
@@ -117,10 +111,6 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     else if(!aCJKOptions.IsDoubleLinesEnabled())
         RemoveTabPage( TP_CHAR_TWOLN );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwCharDlg::~SwCharDlg()
 {
@@ -129,8 +119,6 @@ SwCharDlg::~SwCharDlg()
 /*--------------------------------------------------------------------
     Beschreibung:   FontList setzen
  --------------------------------------------------------------------*/
-
-
 
 void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
@@ -167,10 +155,6 @@ void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
     }
 }
-
-/*-----------------14.08.96 11.28-------------------
-
---------------------------------------------------*/
 
 SwCharURLPage::SwCharURLPage(   Window* pParent,
                                 const SfxItemSet& rCoreSet ) :
@@ -240,22 +224,12 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
         }
     }
     delete pList;
-
-
 }
-
-/*-----------------15.08.96 09.04-------------------
-
---------------------------------------------------*/
 
 SwCharURLPage::~SwCharURLPage()
 {
     delete pINetItem;
 }
-
-/*-----------------14.08.96 11.31-------------------
-
---------------------------------------------------*/
 
 void SwCharURLPage::Reset(const SfxItemSet& rSet)
 {
@@ -294,10 +268,6 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
         aTextED.Enable( FALSE );
     }
 }
-
-/*-----------------14.08.96 11.32-------------------
-
---------------------------------------------------*/
 
 BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
@@ -348,20 +318,11 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     return bModified;
 }
 
-
-/*-----------------14.08.96 11.30-------------------
-
---------------------------------------------------*/
-
 SfxTabPage* SwCharURLPage::Create(  Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwCharURLPage( pParent, rAttrSet ) );
 }
-
-/*-----------------14.08.96 15.00-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
 {
@@ -373,9 +334,6 @@ IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
     }
     return 0;
 }
-/*-----------------14.08.96 15.00-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 {
@@ -385,3 +343,4 @@ IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

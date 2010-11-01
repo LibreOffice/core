@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_basctl.hxx"
 
 #include "unomodel.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/docfac.hxx>
@@ -38,7 +39,6 @@
 #include <iderdll.hxx>
 #include <basdoc.hxx>
 
-using namespace ::vos;
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::std;
@@ -69,13 +69,13 @@ uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType ) throw(uno:
 
 void SAL_CALL SIDEModel::acquire() throw()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OWeakObject::acquire();
 }
 
 void SAL_CALL SIDEModel::release() throw()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OWeakObject::release();
 }
 
@@ -120,9 +120,10 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static(void)
 uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     BasicIDEDLL::Init();
     SfxObjectShell* pShell = new BasicDocShell();
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

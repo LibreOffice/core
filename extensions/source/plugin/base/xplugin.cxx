@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -38,7 +44,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <osl/file.hxx>
 
 #ifdef UNX
@@ -57,7 +63,7 @@ using namespace com::sun::star::plugin;
 using namespace rtl;
 using namespace osl;
 
-class PluginDisposer : public vos::OTimer
+class PluginDisposer : public salhelper::Timer
 {
 private:
     XPlugin_Impl*       m_pPlugin;
@@ -65,8 +71,8 @@ private:
     virtual void SAL_CALL onShot();
 public:
     PluginDisposer( XPlugin_Impl* pPlugin ) :
-        OTimer( vos::TTimeValue( 2, 0 ),
-                vos::TTimeValue( 2, 0 ) ),
+        salhelper::Timer( salhelper::TTimeValue( 2, 0 ),
+                          salhelper::TTimeValue( 2, 0 ) ),
         m_pPlugin( pPlugin )
         { start(); }
     ~PluginDisposer() {}
@@ -1153,3 +1159,4 @@ PluginStreamType PluginOutputStream::getStreamType()
     return OutputStream;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

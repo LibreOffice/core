@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,33 +162,19 @@ SwCondCollItem::SwCondCollItem(USHORT _nWhich ) :
 {
 
 }
-/****************************************************************************
-
-****************************************************************************/
-
 
 SwCondCollItem::~SwCondCollItem()
 {
 }
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwCondCollItem(*this);
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rItem), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rItem), "different types" );
     BOOL bReturn = TRUE;
     for(USHORT i = 0; i < COND_COMMAND_COUNT; i++)
         if(sStyles[i] != ((SwCondCollItem&)rItem).sStyles[i])
@@ -199,20 +186,10 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     return bReturn;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 const String&   SwCondCollItem::GetStyle(USHORT nPos) const
 {
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
 }
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 void SwCondCollItem::SetStyle(const String* pStyle, USHORT nPos)
 {
@@ -220,17 +197,9 @@ void SwCondCollItem::SetStyle(const String* pStyle, USHORT nPos)
         sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;
 }
 
-
-/****************************************************************************
-
-****************************************************************************/
-
-
 const CommandStruct* SwCondCollItem::GetCmds()
 {
     return aCmds;
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

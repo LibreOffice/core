@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,6 +81,10 @@ const sal_Int32 PROPID_CREATED          = 12;
 const sal_Int32 PROPID_LASTSAVED        = 13;
 const sal_Int32 PROPID_THUMBNAIL        = 17;
 
+// some Builtin properties
+const sal_Int32 PROPID_CATEGORY         = 0x2;
+const sal_Int32 PROPID_COMPANY          = 0xf;
+const sal_Int32 PROPID_MANAGER          = 0xe;
 // predefined codepages
 const sal_uInt16 CODEPAGE_UNKNOWN       = 0;
 const sal_uInt16 CODEPAGE_UNICODE       = 1200;
@@ -402,3 +407,5 @@ private:
 };
 
 //};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

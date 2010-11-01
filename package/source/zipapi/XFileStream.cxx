@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ using ::rtl::OUString;
 XFileStream::XFileStream( ZipEntry & rEntry,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
-                           const vos::ORef < EncryptionData > &rData,
+                           const rtl::Reference < EncryptionData > &rData,
                            sal_Bool bNewRawStream,
                            sal_Bool bIsEncrypted )
 : maEntry ( rEntry )
@@ -225,3 +226,5 @@ sal_Int64 SAL_CALL XFileStream::getLength(  )
 {
     return mnZipSize;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

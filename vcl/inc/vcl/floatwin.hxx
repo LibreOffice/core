@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,6 @@ private:
     BOOL            mbInCleanUp;
     Link            maPopupModeEndHdl;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
     DECL_DLLPRIVATE_LINK(  ImplEndPopupModeHdl, void* );
 
@@ -123,7 +123,6 @@ public:
     SAL_DLLPRIVATE void             ImplEndPopupMode( USHORT nFlags = 0, ULONG nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE BOOL             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
-//#endif
 
 public:
                     FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
@@ -160,3 +159,5 @@ public:
 };
 
 #endif // _SV_FLOATWIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

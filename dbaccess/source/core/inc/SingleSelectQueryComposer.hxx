@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,7 +157,7 @@ namespace dbaccess
                     getStructuredCondition( TGetParseNode& _aGetFunctor );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
-                    setCurrentColumns( EColumnType _eType, const ::vos::ORef< ::connectivity::OSQLColumns >& _rCols );
+                    setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
         inline bool implSetFilter(::rtl::OUString _sFilter) { setFilter(_sFilter); return true;}
@@ -251,3 +252,5 @@ namespace dbaccess
     };
 }
 #endif // DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

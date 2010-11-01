@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,12 +40,16 @@ class SwWordCountDialog : public SfxModalDialog
     FixedInfo       aCurrentWordFI;
     FixedText       aCurrentCharacterFT;
     FixedInfo       aCurrentCharacterFI;
+    FixedText       aCurrentCharacterExcludingSpacesFT;
+    FixedInfo       aCurrentCharacterExcludingSpacesFI;
 
     FixedLine       aDocFL;
     FixedText       aDocWordFT;
     FixedInfo       aDocWordFI;
     FixedText       aDocCharacterFT;
     FixedInfo       aDocCharacterFI;
+    FixedText       aDocCharacterExcludingSpacesFT;
+    FixedInfo       aDocCharacterExcludingSpacesFI;
 
     FixedLine       aBottomFL;
 
@@ -61,3 +66,5 @@ public:
 #include <layout/layout-post.hxx>
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

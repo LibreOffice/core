@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,10 +56,10 @@
 #include "numfmt.hxx"
 #include <svx/numfmtsh.hxx>
 #include <dialmgr.hxx>
-#include <sfx2/request.hxx> //CHINA001
-#include <sfx2/app.hxx> //CHINA001
+#include <sfx2/request.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
-#include "svx/flagsdef.hxx" //CHINA001
+#include "svx/flagsdef.hxx"
 
 #define NUMKEY_UNDEFINED SAL_MAX_UINT32
 
@@ -1939,7 +1940,7 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, B
         aLbLanguage.SelectEntryPos(nPos);
 }
 
-void SvxNumberFormatTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxNumberFormatTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pNumberInfoItem,SvxNumberInfoItem,SID_ATTR_NUMBERFORMAT_INFO,sal_False);
     SFX_ITEMSET_ARG (&aSet,pLinkItem,SfxLinkItem,SID_LINK_TYPE,sal_False);
@@ -1948,3 +1949,5 @@ void SvxNumberFormatTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pLinkItem)
         SetOkHdl(pLinkItem->GetValue());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

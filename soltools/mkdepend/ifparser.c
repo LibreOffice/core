@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * $XConsortium: ifparser.c,v 1.8 95/06/03 00:01:41 gildea Exp $
  *
@@ -458,3 +459,4 @@ ParseIfExpression (g, cp, valp)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

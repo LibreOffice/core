@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -416,27 +417,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                             UNO_QUERY );
                 if ( xInfo.is() )
                 {
-#if 0
-    // Convenient...
 
-                    sal_Int32 nCount = m_pImpl->m_aProps.getLength();
-                    Property* pProps = m_pImpl->m_aProps.getArray();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
-                    {
-                        Property& rProp = pProps[ n ];
-
-                        try
-                        {
-                            Property aProp
-                                = xInfo->getPropertyByName( rProp.Name );
-                            rProp.Type = aProp.Type;
-                        }
-                        catch ( UnknownPropertyException& )
-                        {
-                            // getPropertyByName
-                        }
-                    }
-#else
     // Less (remote) calls...
 
                     Sequence< Property > aProps = xInfo->getProperties();
@@ -460,7 +441,6 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                             }
                         }
                     }
-#endif
                 }
             }
             catch ( RuntimeException& )
@@ -600,3 +580,5 @@ OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
 }
 
 } // namespace ucbhelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

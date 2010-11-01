@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#ifdef AIX
+#    undef _THREAD_SAFE
+#endif
 
 #include "HelpCompiler.hxx"
 
@@ -287,18 +292,6 @@ private:
     void addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
-#if 0
-    /**
-     * @param outputFile
-     * @param module
-     * @param lang
-     * @param hid
-     * @param helpFiles
-     * @param additionalFiles
-     */
-
-    private HelpURLStreamHandlerFactory urlHandler = null;
-#endif
 };
 
 namespace URLEncoder
@@ -569,13 +562,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         std::string documentTitle = streamTable.document_title;
         if (documentTitle.empty())
             documentTitle = "<notitle>";
-
-#if 0
-        std::cout << "for " << xhpFileName << " documentBaseId is " << documentBaseId << "\n";
-        std::cout << "for " << xhpFileName << " documentPath is " << documentPath << "\n";
-        std::cout << "for " << xhpFileName << " documentJarfile is " << documentJarfile << "\n";
-        std::cout << "for " << xhpFileName << " documentPath is " << documentTitle << "\n";
-#endif
 
         const std::string& fileB = documentPath;
         const std::string& jarfileB = documentJarfile;
@@ -998,8 +984,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
 
-    if (!bExtensionMode && idxCaptionStylesheet.empty()
-        || !extsource.empty() && idxCaptionStylesheet.empty())
+    if ( (!bExtensionMode && idxCaptionStylesheet.empty())
+        || (!extsource.empty() && idxCaptionStylesheet.empty()) )
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
@@ -1022,8 +1008,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         idxCaptionStylesheet = fs::path( aStdStr_IdxCaptionPathFileURL );
     }
 
-    if (!bExtensionMode && idxContentStylesheet.empty()
-        || !extsource.empty() && idxContentStylesheet.empty())
+    if ( (!bExtensionMode && idxContentStylesheet.empty())
+        || (!extsource.empty() && idxContentStylesheet.empty()) )
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
@@ -1155,30 +1141,19 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 {
     bool bSuccess = true;
 
-    sal_Int32 argc = nXhpFileCount + 3;
-    const char** argv = new const char*[argc];
-    argv[0] = "";
-    argv[1] = "-mod";
+    std::vector<std::string> args;
+    args.reserve(nXhpFileCount + 2);
+    args.push_back(std::string("-mod"));
     rtl::OString aOExtensionName = rtl::OUStringToOString( aExtensionName, fs::getThreadTextEncoding() );
-    argv[2] = aOExtensionName.getStr();
+    args.push_back(std::string(aOExtensionName.getStr()));
 
     for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
     {
         rtl::OUString aXhpFile = pXhpFiles[iXhp];
 
         rtl::OString aOXhpFile = rtl::OUStringToOString( aXhpFile, fs::getThreadTextEncoding() );
-        char* pArgStr = new char[aOXhpFile.getLength() + 1];
-        strcpy( pArgStr, aOXhpFile.getStr() );
-        argv[iXhp + 3] = pArgStr;
+        args.push_back(std::string(aOXhpFile.getStr()));
     }
-
-    std::vector<std::string> args;
-    for( sal_Int32 i = 1; i < argc; ++i )
-        args.push_back(std::string( argv[i]) );
-
-    for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
-        delete[] argv[iXhp + 3];
-    delete[] argv;
 
     rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
     const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
@@ -1250,5 +1225,5 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 }
 
 // vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

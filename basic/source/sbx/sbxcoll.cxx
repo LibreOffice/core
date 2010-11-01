@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ SbxCollection::SbxCollection( const XubString& rClass )
         nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemove ) );
     }
     Initialize();
-    // Fuer Zugriffe auf sich selbst
+    // For Access on itself
     StartListening( GetBroadcaster(), TRUE );
 }
 
@@ -159,7 +160,7 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
     SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
 }
 
-// Default: Argument ist Objekt
+// Default: argument is object
 
 void SbxCollection::CollAdd( SbxArray* pPar_ )
 {
@@ -175,7 +176,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
     }
 }
 
-// Default: Index ab 1 oder der Objektname
+// Default: index from 1 or object name
 
 void SbxCollection::CollItem( SbxArray* pPar_ )
 {
@@ -199,7 +200,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
     }
 }
 
-// Default: Index ab 1
+// Default: index from 1
 
 void SbxCollection::CollRemove( SbxArray* pPar_ )
 {
@@ -250,7 +251,7 @@ SbxStdCollection& SbxStdCollection::operator=( const SbxStdCollection& r )
 SbxStdCollection::~SbxStdCollection()
 {}
 
-// Default: Fehler, wenn falsches Objekt
+// Default: Error, if wrong object
 
 void SbxStdCollection::Insert( SbxVariable* p )
 {
@@ -299,3 +300,4 @@ BOOL SbxStdCollection::StoreData( SvStream& rStrm ) const
     return bRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

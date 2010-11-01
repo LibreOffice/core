@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,3 +105,4 @@ void DAVSessionFactory::releaseElement( DAVSession * pElement ) SAL_THROW(())
         m_aMap.erase( pElement->m_aContainerIt );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

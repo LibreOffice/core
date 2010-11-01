@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -158,3 +159,5 @@ void test_Entry_Impl( ::osl::Module& oMod, ::rtl::TestResult* oRes ) {
 } // </function_test_Entry_Impl>
 
 } // </namespace_tstutl>
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

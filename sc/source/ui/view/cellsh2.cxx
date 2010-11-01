@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -331,6 +332,20 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_SBA_BRW_INSERT:
             {
                 DBG_ERROR( "Deprecated Slot" );
+            }
+            break;
+
+        case SID_DATA_FORM:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg( pTabViewShell->GetDialogParent(),RID_SCDLG_DATAFORM, pTabViewShell);
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+
+                pDlg->Execute();
+
+                rReq.Done();
             }
             break;
 
@@ -854,33 +869,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pNewDPObject )
                         pNewDPObject->SetOutRange( aDestPos );
-
-#if 0
-                    ScDBData*   pDBData = pTabViewShell->GetDBData();
-                    String      aErrMsg;
-
-                    pDBData->GetArea( nTab, nCol1, nRow1, nCol2, nRow2 );
-
-                    bAreaOk = TRUE;
-                    if ( nRow2-nRow1 < 1 )
-                    {
-                        // "mindestens eine Datenzeile"
-                        pTabViewShell->ErrorMessage(STR_PIVOT_INVALID_DBAREA);
-                        bAreaOk = FALSE;
-                    }
-                    else if (!pDBData->HasHeader())
-                    {
-                        if ( MessBox( pTabViewShell->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                                ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // Koepfe aus erster Zeile?
-                            ).Execute() == RET_YES )
-                        {
-                            pDBData->SetHeader( TRUE );     //! Undo ??
-                        }
-                        else
-                            bAreaOk = FALSE;
-                    }
-#endif
                 }
 
                 pTabViewShell->SetDialogDPObject( pNewDPObject );   // is copied
@@ -1401,3 +1389,4 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

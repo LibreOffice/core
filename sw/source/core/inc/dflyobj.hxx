@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,7 @@ public:
     void SetRect() const;
 
     // ist eine URL an einer Grafik gesetzt, dann ist das ein Makro-Object
-    virtual FASTBOOL HasMacro() const;
+    virtual bool       HasMacro() const;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;
 
@@ -138,3 +139,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

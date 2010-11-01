@@ -88,17 +88,23 @@ FILE *fil;
       /* Reading the internal rule table.  Set rule_ind to zero after the
        * last entry so that ReadEnvironment() works as expected every time. */
 
-      while( (p = Rule_tab[ rule_ind++ ]) != NIL(char) )
+      while( (p = Rule_tab[ rule_ind++ ]) != NIL(char) ) {
      /* The last test in this if *p != '~', handles the environment
       * passing conventions used by MKS to pass arguments.  We want to
       * skip those environment entries. Also CYGWIN likes to export '!'
-      * prefixed environment variables that cause severe pain, axe them too */
-     if( !Readenv || (Readenv && (strchr(p,'=') != NIL(char)) && *p!='~' && *p!='!')){
+      * prefixed environment variables that cause severe pain, axe them too.
+      * And finally it is possible to do "env 'GGG HHH'='some value' bash"
+      * which causes that there are env variables with spaces in the name
+      * defined which causes dmake to malfunction too */
+     char *equal = strchr(p,'=');
+     char *space = strchr(p,' ');
+     if( !Readenv || (Readenv && (equal != NIL(char)) && (space == NIL(char) || space > equal) && *p!='~' && *p!='!')){
         strcpy( buf, p );
 
         DB_PRINT( "io", ("Returning [%s]", buf) );
         DB_RETURN( FALSE );
      }
+      }
 
       rule_ind = 0;
 

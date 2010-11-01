@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ IMPLEMENT_SERVICE_INFO(MacabPreparedStatement, "com.sun.star.sdbc.drivers.MacabP
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQLException)
 {
-    if ( !m_aParameterRow.isValid() )
+    if ( !m_aParameterRow.is() )
         m_aParameterRow = new OValueVector();
 
     if (nParams < 1)
@@ -58,10 +59,10 @@ void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(S
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::setMacabFields() const throw(SQLException)
 {
-    ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
 
     xColumns = m_aSQLIterator.getSelectColumns();
-    if (!xColumns.isValid())
+    if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceString(
@@ -113,7 +114,7 @@ void MacabPreparedStatement::disposing()
 {
     MacabPreparedStatement_BASE::disposing();
 
-    if (m_aParameterRow.isValid())
+    if (m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
@@ -405,3 +406,5 @@ void MacabPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
             MacabCommonStatement::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

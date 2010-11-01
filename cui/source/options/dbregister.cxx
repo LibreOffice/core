@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -452,7 +453,7 @@ String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
 
             // old path is an URL?
             INetURLObject aObj( _sLocation );
-            FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+            bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
             Sequence< ::rtl::OUString > aFiles = xFilePicker->getFiles();
             INetURLObject aNewObj( aFiles[0] );
             aNewObj.removeFinalSlash();
@@ -522,3 +523,4 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

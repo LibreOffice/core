@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@
 #include <unotools/streamwrap.hxx>
 // for SolarMutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 // for OutlinerView
@@ -282,7 +283,7 @@ void ChartController::executeDispatch_NewArrangement()
 
 void ChartController::executeDispatch_ScaleText()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     // using assignment for broken gcc 3.3
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_SCALE_TEXT ))),
@@ -543,7 +544,7 @@ void ChartController::executeDispatch_Copy()
         {
             Reference< datatransfer::XTransferable > xTransferable;
             {
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarGuard;
                 SdrObject* pSelectedObj = 0;
                 if ( m_pDrawModelWrapper )
                 {
@@ -829,7 +830,7 @@ bool ChartController::executeDispatch_Delete()
         //remove additional shape
         impl_ClearSelection();
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             if ( m_pDrawViewWrapper )
             {
                 m_pDrawViewWrapper->DeleteMarked();
@@ -917,3 +918,5 @@ void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

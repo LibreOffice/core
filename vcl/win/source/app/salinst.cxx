@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <excpt.h>
 #endif
 #include <osl/file.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <wincomp.hxx>
 #include <salids.hrc>
@@ -53,6 +54,7 @@
 #include <vcl/timer.hxx>
 #include <wincomp.hxx>  // CS_DROPSHADOW
 #include <tools/solarmutex.hxx>
+#include <vcl/solarmutex.hxx>
 
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
@@ -103,7 +105,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 // =======================================================================
 
-class SalYieldMutex : public vos::OMutex
+class SalYieldMutex : public vcl::SolarMutexObject
 {
 public: // for ImplSalYield()
     WinSalInstance*             mpInstData;
@@ -133,7 +135,7 @@ SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
 
 void SAL_CALL SalYieldMutex::acquire()
 {
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount++;
     mnThreadId = GetCurrentThreadId();
 }
@@ -144,7 +146,7 @@ void SAL_CALL SalYieldMutex::release()
 {
     DWORD nThreadId = GetCurrentThreadId();
     if ( mnThreadId != nThreadId )
-        OMutex::release();
+        SolarMutexObject::release();
     else
     {
         SalData* pSalData = GetSalData();
@@ -161,13 +163,13 @@ void SAL_CALL SalYieldMutex::release()
                     ImplPostMessage( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
                 mnThreadId = 0;
                 mnCount--;
-                OMutex::release();
+                SolarMutexObject::release();
                 mpInstData->mpSalWaitMutex->release();
             }
             else
             {
                 mnCount--;
-                OMutex::release();
+                SolarMutexObject::release();
             }
         }
         else
@@ -175,7 +177,7 @@ void SAL_CALL SalYieldMutex::release()
             if ( mnCount == 1 )
                 mnThreadId = 0;
             mnCount--;
-            OMutex::release();
+            SolarMutexObject::release();
         }
     }
 }
@@ -184,7 +186,7 @@ void SAL_CALL SalYieldMutex::release()
 
 sal_Bool SAL_CALL SalYieldMutex::tryToAcquire()
 {
-    if( OMutex::tryToAcquire() )
+    if( SolarMutexObject::tryToAcquire() )
     {
         mnCount++;
         mnThreadId = GetCurrentThreadId();
@@ -659,7 +661,7 @@ WinSalInstance::WinSalInstance()
 {
     mhComWnd                 = 0;
     mpSalYieldMutex          = new SalYieldMutex( this );
-    mpSalWaitMutex           = new vos::OMutex;
+    mpSalWaitMutex           = new osl::Mutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
@@ -678,7 +680,7 @@ WinSalInstance::~WinSalInstance()
 
 // -----------------------------------------------------------------------
 
-vos::IMutex* WinSalInstance::GetYieldMutex()
+osl::SolarMutex* WinSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
@@ -1174,3 +1176,5 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
     return UnhandledExceptionFilter( pExceptionInfo );
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

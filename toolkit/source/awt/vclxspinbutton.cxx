@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ namespace toolkit
     void SAL_CALL VCLXSpinButton::dispose( ) throw(RuntimeException)
     {
         {
-            ::vos::OGuard aGuard( GetMutex() );
+            ::osl::SolarGuard aGuard( GetMutex() );
 
             EventObject aDisposeEvent;
             aDisposeEvent.Source = *this;
@@ -122,9 +123,9 @@ namespace toolkit
         typedef long (SpinButton::*GetSpinButtonValue) (void) const;
 
         //................................................................
-        void lcl_setSpinButtonValue( ::vos::IMutex& _rMutex, Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
+        void lcl_setSpinButtonValue( ::osl::SolarMutex& _rMutex, Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
         {
-            ::vos::OGuard aGuard( _rMutex );
+            ::osl::SolarGuard aGuard( _rMutex );
 
             SpinButton* pSpinButton = static_cast< SpinButton* >( _pWindow );
             if ( pSpinButton )
@@ -132,9 +133,9 @@ namespace toolkit
         }
 
         //................................................................
-        sal_Int32 lcl_getSpinButtonValue( ::vos::IMutex& _rMutex, const Window* _pWindow, GetSpinButtonValue _pGetter )
+        sal_Int32 lcl_getSpinButtonValue( ::osl::SolarMutex& _rMutex, const Window* _pWindow, GetSpinButtonValue _pGetter )
         {
-            ::vos::OGuard aGuard( _rMutex );
+            ::osl::SolarGuard aGuard( _rMutex );
 
             sal_Int32 nValue = 0;
 
@@ -154,7 +155,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         setMinimum( minValue );
         setMaximum( maxValue );
@@ -206,7 +207,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException)
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         lcl_modifyStyle( GetWindow(), WB_HSCROLL, orientation == ScrollBarOrientation::HORIZONTAL );
     }
@@ -222,7 +223,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void VCLXSpinButton::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
-        ::vos::OClearableGuard aGuard( GetMutex() );
+        ::osl::ClearableSolarGuard aGuard( GetMutex() );
         Reference< XSpinValue > xKeepAlive( this );
         SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
         if ( !pSpinButton )
@@ -254,7 +255,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setProperty( const ::rtl::OUString& PropertyName, const Any& Value ) throw(RuntimeException)
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         sal_Int32 nValue = 0;
         sal_Bool  bIsLongValue = ( Value >>= nValue );
@@ -304,7 +305,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     Any SAL_CALL VCLXSpinButton::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         Any aReturn;
 
@@ -353,3 +354,5 @@ namespace toolkit
 //........................................................................
 }   // namespace toolkit
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

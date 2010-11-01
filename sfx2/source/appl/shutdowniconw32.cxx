@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+#include <sal/macros.h>
 
 #ifdef WNT
 
@@ -250,7 +252,7 @@ static HMENU createSystrayMenu( )
     OUString aEmpty;
 
     // insert the menu entries for launching the applications
-    for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( aMenuItems ); ++i )
     {
         if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
             // the complete application is not even installed
@@ -975,3 +977,4 @@ void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
 #endif // WNT
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

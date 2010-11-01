@@ -43,7 +43,9 @@ all:
 
 TARFILE_NAME=curl-7.19.7
 TARFILE_MD5=ecb2e37e45c9933e2a963cabe03670ab
-PATCH_FILES=curl-7.19.7.patch
+PATCH_FILES=\
+    curl-7.19.7.patch \
+    curl-aix.patch
 
 .IF "$(GUI)"=="WNT"
     PATCH_FILES+=curl-7.19.7_win.patch
@@ -72,6 +74,10 @@ curl_LDFLAGS+=-Wl,-z,noexecstack
 .IF "$(OS)$(CPU)"=="SOLARISU"
 curl_CFLAGS+:=$(ARCH_FLAGS)
 curl_LDFLAGS+:=$(ARCH_FLAGS)
+.ENDIF
+
+.IF "$(OS)"=="AIX"
+curl_LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
 .ENDIF
 
 CONFIGURE_DIR=.$/

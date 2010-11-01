@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -630,3 +631,5 @@ com::sun::star::uno::Reference< XInterface > SAL_CALL ProviderImpl_create(
     return com::sun::star::uno::Reference< XInterface >( *new stoc_rdbtdp::ProviderImpl( xContext ) );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

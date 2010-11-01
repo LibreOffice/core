@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,6 +78,7 @@ class CommandLineArgs
         enum StringParam // must be zero based!
         {
             CMD_STRINGPARAM_PORTAL,
+            CMD_STRINGPARAM_SPLASHPIPE,
             CMD_STRINGPARAM_ACCEPT,
             CMD_STRINGPARAM_UNACCEPT,
             CMD_STRINGPARAM_USERDIR,
@@ -127,6 +129,8 @@ class CommandLineArgs
 
         // generic methods to access parameter
         void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
+
+        const rtl::OUString&    GetStringParam( StringParam eParam ) const;
 
         // Access to bool parameters
         sal_Bool                IsMinimized() const;
@@ -218,3 +222,5 @@ class CommandLineArgs
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

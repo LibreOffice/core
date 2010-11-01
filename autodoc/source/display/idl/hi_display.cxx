@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,16 +162,6 @@ HtmlDisplay_Idl::Create_FilesInProjectTree()
 void
 HtmlDisplay_Idl::Create_PackageList()
 {
-#if 0
-    Cout() << "\nCreate package list ..." << std::flush;
-
-    pCurPageEnv->CurPosition() = pCurPageEnv->OutputTree().Root();
-
-    // KORR
-    // ...
-
-    Cout() << " done." << Endl();
-#endif // 0
 }
 
 void
@@ -205,3 +196,5 @@ HtmlDisplay_Idl::Create_CssFile()
     aCssFile.write("\n\n\n");
     aCssFile.write(pCurPageEnv->Layout().CssStylesExplanation());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

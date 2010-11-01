@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalAquaPicker.hxx"
 #include <tools/urlobj.hxx>
@@ -75,7 +76,7 @@ SalAquaPicker::~SalAquaPicker()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
@@ -94,7 +95,7 @@ void SAL_CALL SalAquaPicker::implInitialize()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (m_pDialog != nil) {
         return;
@@ -158,7 +159,7 @@ int SalAquaPicker::run()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
@@ -218,7 +219,7 @@ int SalAquaPicker::runandwaitforresult()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     int status = this->run();
 
@@ -231,7 +232,7 @@ void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDire
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "directory", aDirectory);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (aDirectory != m_sDisplayDirectory) {
         m_sDisplayDirectory = aDirectory;
@@ -252,7 +253,7 @@ void SAL_CALL SalAquaPicker::implsetTitle( const rtl::OUString& aTitle ) throw( 
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (m_pDialog != nil) {
         [m_pDialog setTitle:[NSString stringWithOUString:aTitle]];
@@ -261,3 +262,4 @@ void SAL_CALL SalAquaPicker::implsetTitle( const rtl::OUString& aTitle ) throw( 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -893,7 +894,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             if(pFact)
             {
                 AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
                 delete pDlg;
@@ -1099,7 +1100,7 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
             if (eStatus != xRow->GetStatus())
             {
                 xRow->SetStatus(eStatus);
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 RowModified(GetCurrentPos());
             }
         }
@@ -1838,7 +1839,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
 //------------------------------------------------------------------------------
 sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         // need to lock the SolarMutex so that no paint call disturbs us ...
 
     if ( !m_pSeekCursor )
@@ -2142,3 +2143,4 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

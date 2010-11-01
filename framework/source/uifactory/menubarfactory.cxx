@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -200,9 +201,11 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
         aPropSeq[4] <<= aPropValue;
     }
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInitialization > xInit( _xMenuBar, UNO_QUERY );
     xInit->initialize( aPropSeq );
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

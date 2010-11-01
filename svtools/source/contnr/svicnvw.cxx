@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,6 @@
 #include <svtools/svicnvw.hxx>
 #include <svimpicn.hxx>
 #include <svtools/svlbitm.hxx>
-
-#ifndef GCC
-#endif
 
 #define ICNVW_BLOCK_ENTRYINS    0x0001
 
@@ -831,3 +829,4 @@ void SvIconView::ShowFocusRect( const SvLBoxEntry* pEntry )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,3 +45,4 @@ EXTERN_C void WINAPI ResolveThunk_GetUserDomainA( FARPROC *lppfn, LPCSTR lpLibFi
 
 DEFINE_CUSTOM_THUNK( kernel32, GetUserDomainA, DWORD, WINAPI, GetUserDomainA, ( LPSTR lpBuffer, DWORD nSize ) );
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

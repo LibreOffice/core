@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/button.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace uui
@@ -243,3 +244,5 @@ String FilterDialog::impl_buildUIFileName( const String& sName )
 }
 
 }   // namespace uui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -464,6 +465,7 @@
 
 
 #include "osl/conditn.h"
+#include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/doublecheckedlocking.h"
 #include "osl/file.hxx"
@@ -473,6 +475,7 @@
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
 #include "osl/nlsupport.h"
+#include "osl/pipe.hxx"
 #include "osl/process.h"
 #include "osl/security.hxx"
 #include "osl/thread.h"
@@ -487,6 +490,7 @@
 #include "rtl/math.hxx"
 #include "rtl/memory.h"
 #include "rtl/process.h"
+#include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -497,6 +501,7 @@
 #include "rtl/uuid.h"
 
 #include "salhelper/simplereferenceobject.hxx"
+#include "salhelper/timer.hxx"
 
 #include "sane/sane.h"
 
@@ -535,18 +540,12 @@
 
 #include "vcl/fldunit.hxx"
 
-#include "vos/conditn.hxx"
-#include "vos/diagnose.hxx"
-#include "vos/macros.hxx"
-#include "vos/module.hxx"
-#include "vos/mutex.hxx"
-#include "vos/pipe.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
-#include "vos/thread.hxx"
-#include "vos/timer.hxx"
+#include "osl/module.hxx"
+#include "osl/mutex.hxx"
 
 #include "xmloff/nmspmap.hxx"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

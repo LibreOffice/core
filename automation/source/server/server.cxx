@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,12 +41,11 @@
 #include <vcl/wrkwin.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <osl/socket.hxx>
 
 #include <vcl/dialog.hxx>
 #include <tools/stream.hxx>
 #include <tools/config.hxx>
-
-#include <vos/socket.hxx>
 
 #if 1
 #include <svtools/ttprops.hxx>
@@ -971,3 +971,4 @@ extern "C" void DestroyEventLogger()
     MacroRecorder::GetMacroRecorder()->SetActionLog( FALSE );   // Will delete MacroRecorder if necessary
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

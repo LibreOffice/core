@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -393,7 +394,7 @@ void lclLinkLeftEnd_Single(
                 // don't overdraw vertical borders with equal width
                 lclGetBehindEnd( rLFromT ) :
                 // take leftmost start of both secondary lines (#46488#)
-                rResult.mnOffs1 = std::min( lclGetSecnBeg( rLFromT ), lclGetSecnBeg( rLFromB ) );
+                std::min( lclGetSecnBeg( rLFromT ), lclGetSecnBeg( rLFromB ) );
 
         // single border with equal width coming from left
         else if( !rLFromL.Secn() && (rLFromL.Prim() == rBorder.Prim()) )
@@ -611,44 +612,6 @@ void lclLinkVerFrameBorder(
 }
 
 // ============================================================================
-
-#if 0
-//  Not used anymore, but not deleted for possible future usage.
-
-/** Returns the relative Y offset of the intercept point of 2 diagonal borders.
-
-    @param nTLBROffs
-        Width offset (sub units) across the top-left to bottom-right frame border.
-    @param fTLBRAngle
-        Inner angle between horizontal and top-left to bottom-right frame border.
-    @param nBLTROffs
-        Width offset (sub units) across the bottom-left to top-right frame border.
-    @param fBLTRAngle
-        Inner angle between horizontal and bottom-left to top-right frame border.
-    @return
-        Offset (sub units) relative to the Y position of the centered intercept
-        point of both diagonal frame borders.
- */
-long lclGetDiagDiagOffset( long nTLBROffs, double fTLBRAngle, long nBLTROffs, double fBLTRAngle )
-{
-    double fASin = sin( fTLBRAngle );
-    double fACos = cos( fTLBRAngle );
-    double fAX = -nTLBROffs * fASin;
-    double fAY = nTLBROffs * fACos;
-    double fRAX = fACos;
-    double fRAY = fASin;
-
-    double fBSin = sin( fBLTRAngle );
-    double fBCos = cos( fBLTRAngle );
-    double fBX = nBLTROffs * fBSin;
-    double fBY = nBLTROffs * fBCos;
-    double fRBX = fBCos;
-    double fRBY = -fBSin;
-
-    double fKA = (fRBX * (fBY - fAY) - fRBY * (fBX - fAX)) / (fRBX * fRAY - fRAX * fRBY);
-    return lclD2L( fAY + fKA * fRAY );
-}
-#endif
 
 // ----------------------------------------------------------------------------
 // Linking of diagonal frame borders.
@@ -1470,3 +1433,4 @@ void DrawDiagFrameBorders(
 } // namespace frame
 } // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -96,7 +96,6 @@ SHL1STDLIBS= \
              $(UCBHELPERLIB) \
              $(CPPUHELPERLIB) \
              $(CPPULIB) \
-             $(VOSLIB) \
              $(SALLIB) \
              $(ICUUCLIB)
 
@@ -152,8 +151,8 @@ SHL2STDLIBS= \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\
             $(CPPULIB) \
-            $(VOSLIB) \
             $(SALLIB) \
+            $(SALHELPERLIB) \
             $(ICUUCLIB)
 
 .IF "$(GUI)"=="WNT"

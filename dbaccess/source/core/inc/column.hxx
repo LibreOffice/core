@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,6 @@ namespace dbaccess
                                                 ::com::sun::star::container::XNamed
                                             >   OColumnBase;
 
-    //------------------------------------------------------------
     class OColumn   :public comphelper::OBaseMutex
                     ,public OColumnBase
                     ,public ::comphelper::OPropertyContainer
@@ -163,7 +163,7 @@ namespace dbaccess
     class OContainerMediator;
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
     typedef connectivity::OColumnsHelper OColumns_BASE;
-    //------------------------------------------------------------
+
     class OColumns : public OColumns_BASE
                     ,public TXChild
     {
@@ -256,3 +256,4 @@ namespace dbaccess
 }
 #endif // _DBA_COREAPI_COLUMN_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

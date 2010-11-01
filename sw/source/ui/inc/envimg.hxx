@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,11 +33,9 @@
 #include "swdllapi.h"
 
 // MakeSender -----------------------------------------------------------------
-
 SW_DLLPUBLIC String MakeSender();
 
 // enum -----------------------------------------------------------------------
-
 enum SwEnvAlign
 {
     ENV_HOR_LEFT = 0,
@@ -48,7 +47,6 @@ enum SwEnvAlign
 };
 
 // class SwEnvItem ------------------------------------------------------------
-
 class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
@@ -96,5 +94,7 @@ public:
     virtual void            Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
+
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

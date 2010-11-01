@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( !xMgr.is() )
         return FALSE;
-    uno::Reference<uno::XInterface> xInstance = xMgr->createInstance( OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+    uno::Reference<uno::XInterface> xInstance = xMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
     uno::Reference<container::XNameAccess> xDBContext(xInstance, uno::UNO_QUERY) ;
     if(!xDBContext.is())
         return FALSE;
@@ -97,3 +98,4 @@ BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,8 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
+#include <sal/macros.h>
 
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -165,7 +167,7 @@ namespace basctl
             { "OnModeChanged",  &DocumentEventListener::onDocumentModeChanged }
         };
 
-        for ( size_t i=0; i < sizeof( aEvents ) / sizeof( aEvents[0] ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS( aEvents ); ++i )
         {
             if ( !_rEvent.EventName.equalsAscii( aEvents[i].pEventName ) )
                 continue;
@@ -175,7 +177,7 @@ namespace basctl
                 // the listener implementations usually require the SolarMutex, so lock it here.
                 // But ensure the proper order of locking the solar and the own mutex
                 aGuard.clear();
-                ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarGuard;
                 ::osl::MutexGuard aGuard2( m_aMutex );
 
                 if ( impl_isDisposed_nothrow() )
@@ -191,7 +193,7 @@ namespace basctl
     //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier_Impl::disposing( const csslang::EventObject& /*Event*/ ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !impl_isDisposed_nothrow() )
@@ -274,3 +276,5 @@ namespace basctl
 //........................................................................
 } // namespace basctl
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

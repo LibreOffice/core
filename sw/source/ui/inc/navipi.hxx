@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,8 @@ class SwView;
 class SwNavigationConfig;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
-
-//-----------------------------------------------------------------------
 class SwNavigationPI;
+
 class SwNavHelpToolBox : public SwHelpToolBox
 {
     virtual void    MouseButtonDown(const MouseEvent &rEvt);
@@ -57,7 +57,6 @@ class SwNavHelpToolBox : public SwHelpToolBox
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
-
 
 // CLASS -----------------------------------------------------------------
 class SwNavigationPI : public Window,
@@ -194,3 +193,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

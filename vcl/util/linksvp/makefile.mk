@@ -54,7 +54,6 @@ SHL1STDLIBS=\
             $(BASEBMPLIB)\
             $(BASEGFXLIB)\
             $(TOOLSLIB)         \
-            $(VOSLIB)           \
             $(SALLIB)
 .ENDIF # GUIBASE unx
 

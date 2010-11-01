@@ -210,7 +210,7 @@ published interface XDocumentProperties
         specified time after the document is loaded into a desktop frame.
         <p>
         An empty URL is valid and describes a case where the document shall be
-        reloaded from its original loction after some time described by the
+        reloaded from its original location after some time described by the
         attribute <member>AutoloadSecs</member>.
         An empty <atom>string</atom> together with an
         <member>AutoloadSecs</member> value of 0
@@ -292,7 +292,7 @@ published interface XDocumentProperties
     //-------------------------------------------------------------------------
     /** resets all attributes that could identify the user.
         <p>
-        Clears the document properties, such that it apperars the document
+        Clears the document properties, such that it appears the document
         has just been created.
         This is a convenience method which resets several attributes at once,
         as follows:

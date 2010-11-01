@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 class DocxExport;
 
 class SwGrfNode;
+class SdrObject;
 
 namespace docx { class FootnotesList; }
 namespace oox { namespace drawingml { class DrawingML; } }
@@ -301,6 +303,7 @@ private:
 
     /// Output graphic fly frames.
     void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
+    void WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize );
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
@@ -613,4 +616,4 @@ public:
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

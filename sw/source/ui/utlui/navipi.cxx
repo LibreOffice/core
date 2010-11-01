@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1242,7 +1243,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
         {
             aContentTree.Clear();
             pContentView = PTR_CAST(SwView, pFrame->GetViewShell());
-            DBG_ASSERT(pContentView, "keine SwView");
+            OSL_ENSURE(pContentView, "no SwView");
             if(pContentView)
                 pContentWrtShell = pContentView->GetWrtShellPtr();
             else
@@ -1533,3 +1534,4 @@ void SwNavigationPI::InitImageList()
                                     rImgLst.GetImage(nDropId));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //-----------------------------------------------
 // namespace
@@ -427,7 +428,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // is visible too.
     impl_showProgress();
 
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( pWindow )
     {
@@ -648,3 +649,5 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

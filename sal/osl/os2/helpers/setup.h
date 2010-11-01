@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,14 +58,6 @@
 
         typedef unsigned short APIRET16;
         typedef unsigned long  APIRET32;
-
-#if 0
-//YD do not use with gcc 3.3.5
-        #define _System
-        #define APIENTRY
-            // with VAC++, this defines _System linkage, which
-            // EMX doesn't have, or does it?!?
-#endif // 0
 
     #endif
 
@@ -145,3 +138,4 @@
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

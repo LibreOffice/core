@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -693,3 +694,5 @@ inline UniString UniString::GetQuotedToken( xub_StrLen nToken, const UniString& 
 }
 
 #endif // _STRING_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

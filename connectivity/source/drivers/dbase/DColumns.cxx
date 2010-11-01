@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,7 @@ sdbcx::ObjectType ODbaseColumns::createObject(const ::rtl::OUString& _rName)
 
     ODbaseTable* pTable = (ODbaseTable*)m_pTable;
 
-    //  Reference< XFastPropertySet> xCol(pTable->getColumns()[_rName],UNO_QUERY);
-    ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
 
     sdbcx::ObjectType xRet;
@@ -89,3 +89,4 @@ void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElement
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

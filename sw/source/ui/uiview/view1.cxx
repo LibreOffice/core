@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,12 +53,6 @@
 #include <sfx2/viewfrm.hxx>
 
 extern int bDocSzUpdated;
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwView::Activate(BOOL bMDIActivate)
 {
@@ -129,11 +124,6 @@ void SwView::Activate(BOOL bMDIActivate)
     SfxViewShell::Activate(bMDIActivate);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwView::Deactivate(BOOL bMDIActivate)
 {
     extern BOOL bFlushCharBuffer ;
@@ -151,17 +141,10 @@ void SwView::Deactivate(BOOL bMDIActivate)
     SfxViewShell::Deactivate(bMDIActivate);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::MarginChanged()
 {
     GetWrtShell().SetBrowseBorder( GetMargin() );
 }
-
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
 
 void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
 {
@@ -207,3 +190,5 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
             rSet.DisableItem( SID_FORMATPAINTBRUSH );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

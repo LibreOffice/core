@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _SD_ANIMATIONS_HXX_
 #define _SD_ANIMATIONS_HXX_
 
@@ -28,3 +29,5 @@ SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode& rNode);
 } // namespace sd;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

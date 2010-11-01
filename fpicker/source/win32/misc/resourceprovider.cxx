@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/simplerm.hxx>
@@ -120,7 +121,7 @@ public:
 
     CResourceProvider_Impl( )
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         com::sun::star::lang::Locale aLoc( Application::GetSettings().GetUILocale() );
         m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( fps_office ), aLoc );
@@ -190,3 +191,5 @@ OUString CResourceProvider::getResString( sal_Int16 aId )
 {
    return m_pImpl->getResString( aId );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

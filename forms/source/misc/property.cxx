@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ sal_Int32 PropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
 
     PropertyAssignment aCompareName(_rName, -1);
 
-    ::std::pair<PropertyMapIterator,PropertyMapIterator> aPair = equal_range(
+    ::std::pair<PropertyMapIterator,PropertyMapIterator> aPair = ::std::equal_range(
         s_AllKnownProperties.begin(),
         s_AllKnownProperties.end(),
         aCompareName,
@@ -254,3 +255,4 @@ void PropertyInfoService::initialize()
 }
 //... namespace frm .......................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

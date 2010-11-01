@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -188,7 +189,7 @@ public:
     inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const String& rKeyword );
     sal_Bool            HasKeyword() const;
-    sal_Bool            HasKeywordIgnoreCase(); //added by BerryJia for fixing Bug98251, 2002-12-11
+    sal_Bool            HasKeywordIgnoreCase();
     void                OpenKeyword();
 
     inline void         SelectExecutableEntry() { aIndexCB.SelectExecutableEntry(); }
@@ -612,3 +613,4 @@ public:
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

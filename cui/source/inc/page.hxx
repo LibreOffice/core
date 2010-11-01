@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -166,7 +167,7 @@ class SvxPageDescPage : public SfxTabPage
 
     Size                aMaxSize;
     BOOL                bLandscape;
-    FASTBOOL            bBorderModified;
+    bool                bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;
     Paper               ePaperEnd;
@@ -178,7 +179,7 @@ class SvxPageDescPage : public SfxTabPage
     DECL_LINK(          LayoutHdl_Impl, ListBox* );
     DECL_LINK(          PaperBinHdl_Impl, ListBox* );
     DECL_LINK(          SwapOrientation_Impl, RadioButton* );
-    void                SwapFirstValues_Impl( FASTBOOL bSet );
+    void                SwapFirstValues_Impl( bool bSet );
     DECL_LINK(          BorderModify_Impl, MetricField* );
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
     DECL_LINK(          CenterHdl_Impl, CheckBox* );
@@ -236,3 +237,4 @@ public:
 
 #endif // #ifndef _SVX_PAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

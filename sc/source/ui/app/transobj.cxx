@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <sot/storage.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -193,7 +194,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
 ScTransferObj::~ScTransferObj()
 {
-    Application::GetSolarMutex().acquire();
+    SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pCellClipboard == this )
@@ -213,7 +214,6 @@ ScTransferObj::~ScTransferObj()
 
     aDrawPersistRef.Clear();                    // after the model
 
-    Application::GetSolarMutex().release();
 }
 
 // static
@@ -866,3 +866,4 @@ sal_Int64 SAL_CALL ScTransferObj::getSomething( const com::sun::star::uno::Seque
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

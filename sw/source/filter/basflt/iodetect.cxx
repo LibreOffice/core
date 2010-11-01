@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,7 +149,7 @@ BOOL SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
     try
     {
         ULONG nStgFmtId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( ::rtl::OUString::createFromAscii("content.xml") );
+        bRet = rStg->isStreamElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")) );
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }
@@ -590,3 +591,5 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, ULONG nLen)
     const sal_Char* pNm = bAuto ? FILTER_TEXT : FILTER_TEXT_DLG;
     return SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(pNm), 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

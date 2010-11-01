@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_toolkit.hxx"
 
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "sal/config.h"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
@@ -124,7 +125,8 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
 {
     if ( Application::IsInMain() )
     {
-        osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
+
         CallbackData* pCallbackData = new CallbackData( xCallback, aData );
         Application::PostUserEvent( STATIC_LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
     }
@@ -197,3 +199,5 @@ sal_Bool SAL_CALL comp_AsyncCallback_component_writeInfo(
 {
     return ::cppu::component_writeInfoHelper(serviceManager, registryKey, entries);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

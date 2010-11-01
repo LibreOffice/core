@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@
 
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_DB ), rCoreSet ),
@@ -83,10 +81,6 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aAddDBPB.SetClickHdl(LINK(this, SwFldDBPage, AddDBHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 __EXPORT SwFldDBPage::~SwFldDBPage()
 {
 }
@@ -94,7 +88,6 @@ __EXPORT SwFldDBPage::~SwFldDBPage()
 /*--------------------------------------------------------------------
     Beschreibung: TabPage initialisieren
  --------------------------------------------------------------------*/
-
 void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
@@ -198,10 +191,6 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
 {
     String sTableName, sColumnName;
@@ -271,28 +260,16 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* __EXPORT SwFldDBPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDBPage( pParent, rAttrSet ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFldDBPage::GetGroup()
 {
     return GRP_DB;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 {
@@ -419,10 +396,6 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 {
     aNewFormatRB.Check();
@@ -430,10 +403,6 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 
     return 0;
 }
-
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 
 void SwFldDBPage::CheckInsert()
 {
@@ -463,10 +432,6 @@ void SwFldDBPage::CheckInsert()
 
     EnableInsert(bInsert);
 }
-
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 {
@@ -509,9 +474,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     }
     return 0;
 }
-/*-- 27.05.2004 09:14:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
@@ -525,16 +488,12 @@ IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: Modify
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDBPage, ModifyHdl, Edit *, EMPTYARG )
 {
     CheckInsert();
     return 0;
 }
 
-/* -----------------12.01.99 11:21-------------------
- *
- * --------------------------------------------------*/
 void    SwFldDBPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
@@ -549,9 +508,7 @@ void    SwFldDBPage::FillUserData()
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
-/* -----------------12.12.2002 11:33-----------------
- *
- * --------------------------------------------------*/
+
 void SwFldDBPage::ActivateMailMergeAddress()
 {
     ULONG nData = TYP_DBFLD;
@@ -560,10 +517,10 @@ void SwFldDBPage::ActivateMailMergeAddress()
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     aDatabaseTLB.Select(rData.sDataSource, rData.sCommand, aEmptyStr);
 }
-/*-- 07.10.2003 13:59:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFldDBPage::SetWrtShell(SwWrtShell& rSh)
 {
     aDatabaseTLB.SetWrtShell(rSh);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

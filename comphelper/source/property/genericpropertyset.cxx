@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/stl_types.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
@@ -299,3 +300,4 @@ Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
     return (XPropertySet*)new GenericPropertySet( pInfo );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

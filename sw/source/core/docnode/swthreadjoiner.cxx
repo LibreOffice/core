@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
         mpThreadJoiner =
             uno::Reference< util::XJobManager >(
                 ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.util.JobManager" ) ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.JobManager")) ),
                 uno::UNO_QUERY );
     }
 
@@ -59,3 +60,5 @@ void SwThreadJoiner::ReleaseThreadJoiner()
 {
     mpThreadJoiner.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

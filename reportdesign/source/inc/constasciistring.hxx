@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _RPTSHARED_CONSTASCIISTRING_HXX_
 #define _RPTSHARED_CONSTASCIISTRING_HXX_
 
@@ -59,3 +60,5 @@ inline ConstAsciiString::operator const ::rtl::OUString& () const
 
 
 #endif // _RPTSHARED_CONSTASCIISTRING_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

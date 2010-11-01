@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,21 +43,14 @@ namespace comphelper
     class ComponentContext;
 }
 
-//.........................................................................
 namespace dbaccess
 {
-//.........................................................................
 
-    // -----------------------------------------------------------------------------
     void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,sal_Bool _bModified);
 
-    // -----------------------------------------------------------------------------
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         getDataSource( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDependentObject );
 
-    // -----------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------
     /** retrieves a to-be-displayed string for a given caught exception;
     */
     ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const ::com::sun::star::uno::Any& _rError );
@@ -82,7 +76,7 @@ namespace dbaccess
     }
 
 }   // namespace dbaccess
-//.........................................................................
 
 #endif // DBACORE_SDBCORETOOLS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

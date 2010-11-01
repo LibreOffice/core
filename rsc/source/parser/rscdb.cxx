@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <tools/rc.h>
 #include <tools/isofallback.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/macros.h>
 
 // Programmabhaengige Includes.
 #include <rsctree.hxx>
@@ -835,7 +837,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
     unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
-    fwrite( aUTF8BOM, sizeof(unsigned char), sizeof(aUTF8BOM)/sizeof(aUTF8BOM[0]), fOutput );
+    fwrite( aUTF8BOM, sizeof(unsigned char), SAL_N_ELEMENTS(aUTF8BOM), fOutput );
     if( bName )
     {
         WriteInc( fOutput, nFileKey );
@@ -1112,3 +1114,5 @@ sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
     aIdTranslator[ nKey ] = nFilePos;
     return nPMId++;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -197,3 +198,5 @@ HtmlEnvironment_Idl::CurPageCe_AsFile(const char * i_sEnding) const
         slCe() << "/" << sCe << i_sEnding;
     return String(slCe().c_str());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

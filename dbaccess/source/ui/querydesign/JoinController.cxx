@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@
 #include "adtabdlg.hxx"
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "UITools.hxx"
 
 #include <boost/optional.hpp>
@@ -362,7 +363,7 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
@@ -469,3 +470,5 @@ TTableWindowData::value_type OJoinController::createTableWindowData(const ::rtl:
 // .............................................................................
 }   // namespace dbaui
 // .............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

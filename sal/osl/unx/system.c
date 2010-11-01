@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* struct passwd differs on some platforms */
-#if defined NETBSD
+#if defined NETBSD && (__NetBSD_Version__ < 299001000)
 struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int size )
 {
       struct passwd* res;
@@ -485,6 +486,7 @@ pid_t getpid(void)
 #ifdef NO_PTHREAD_SEMAPHORES
 int sem_init(sem_t* sem, int pshared, unsigned int value)
 {
+    (void)pshared;
     pthread_mutex_init(&sem->mutex, PTHREAD_MUTEXATTR_DEFAULT);
     pthread_cond_init(&sem->increased, PTHREAD_CONDATTR_DEFAULT);
 
@@ -597,3 +599,5 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

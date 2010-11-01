@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@
 #include <ndtxt.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <undobj.hxx>
-#include <pagedesc.hxx> //DTor
+#include <pagedesc.hxx>         //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
@@ -119,9 +120,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#ifdef FUTURE_VBA
 #include <vbahelper/vbaaccesshelper.hxx>
-#endif
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -133,7 +132,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
 // Verzeichnisse
@@ -141,8 +139,7 @@ SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // FeldTypen
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
-/** IInterface
-*/
+/* IInterface */
 sal_Int32 SwDoc::acquire()
 {
     OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
@@ -161,8 +158,7 @@ sal_Int32 SwDoc::getReferenceCount() const
     return mReferenceCount;
 }
 
-/** IDocumentSettingAccess
-*/
+/* IDocumentSettingAccess */
 bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
 {
     switch (id)
@@ -257,7 +253,6 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                     pOutlineRule->Validate();
                     // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
-                    // <--
                 }
             }
             break;
@@ -303,57 +298,67 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
-        // <--
+
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
-    case PROTECT_FORM:
-        mbProtectForm = value;
-        break;
+
+        case PROTECT_FORM:
+            mbProtectForm = value;
+            break;
 
         case USE_OLD_PRINTER_METRICS:
             mbOldPrinterMetrics = value;
             break;
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
-        break;
+            break;
         // --> OD 2008-06-05 #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
-        break;
-        // <--
-    case INVERT_BORDER_SPACING:
-        mbInvertBorderSpacing = value;
-    break;
+            break;
+
+        case INVERT_BORDER_SPACING:
+            mbInvertBorderSpacing = value;
+            break;
+
         case COLLAPSE_EMPTY_CELL_PARA:
             mbCollapseEmptyCellPara = value;
-         break;
+            break;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:
             mbBrowseMode = value;
             break;
+
         case HTML_MODE:
             mbHTMLMode = value;
             break;
+
         case GLOBAL_DOCUMENT:
             mbIsGlobalDoc = value;
             break;
+
         case GLOBAL_DOCUMENT_SAVE_LINKS:
             mbGlblDocSaveLinks = value;
             break;
+
         case LABEL_DOCUMENT:
             mbIsLabelDoc = value;
             break;
+
         case PURGE_OLE:
             mbPurgeOLE = value;
             break;
+
         case KERN_ASIAN_PUNCTUATION:
             mbKernAsianPunctuation = value;
             break;
+
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
             break;
+
         default:
             ASSERT(false, "Invalid setting id");
     }
@@ -363,7 +368,7 @@ const i18n::ForbiddenCharacters*
     SwDoc::getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const
 {
     const i18n::ForbiddenCharacters* pRet = 0;
-    if( xForbiddenCharsTable.isValid() )
+    if( xForbiddenCharsTable.is() )
         pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, FALSE );
     if( bLocaleData && !pRet && pBreakIt )
         pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
@@ -373,7 +378,7 @@ const i18n::ForbiddenCharacters*
 void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
                                    /*[in]*/ const i18n::ForbiddenCharacters& rFChars )
 {
-    if( !xForbiddenCharsTable.isValid() )
+    if( !xForbiddenCharsTable.is() )
     {
         uno::Reference<
             lang::XMultiServiceFactory > xMSF =
@@ -397,9 +402,9 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
     SetModified();
 }
 
-vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
+rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
 {
-    if( !xForbiddenCharsTable.isValid() )
+    if( !xForbiddenCharsTable.is() )
     {
         uno::Reference<
             lang::XMultiServiceFactory > xMSF =
@@ -409,7 +414,7 @@ vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
     return xForbiddenCharsTable;
 }
 
-const vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
+const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
 {
     return xForbiddenCharsTable;
 }
@@ -467,8 +472,7 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
     }
 }
 
-/** IDocumentDeviceAccess
-*/
+/* IDocumentDeviceAccess */
 SfxPrinter* SwDoc::getPrinter(/*[in]*/ bool bCreate ) const
 {
     SfxPrinter* pRet = 0;
@@ -649,8 +653,7 @@ void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
     *pPrtData = rPrtData;
 }
 
-/** Implementations the next Interface here
-*/
+/* Implementations the next Interface here */
 
 /*
  * Dokumenteditieren (Doc-SS) zum Fuellen des Dokuments
@@ -673,7 +676,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         return false;
 
     {
-        // Bug 26675:   DataChanged vorm loeschen verschicken, dann bekommt
+        // BUG 26675:   DataChanged vorm loeschen verschicken, dann bekommt
         //          man noch mit, welche Objecte sich im Bereich befinden.
         //          Danach koennen sie vor/hinter der Position befinden.
         SwDataChanged aTmp( this, rPos, 0 );
@@ -977,6 +980,7 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                             pDfltGrfFmtColl ),
                             pFlyAttrSet, pGrfAttrSet, pFrmFmt );
 }
+
 SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
                             const SfxItemSet* pFlyAttrSet,
                             const SfxItemSet* pGrfAttrSet,
@@ -1036,7 +1040,6 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
 |*                SwDoc::GetFldType()
 |*    Beschreibung: liefert den am Doc eingerichteten Feldtypen zurueck
 *************************************************************************/
-
 SwFieldType *SwDoc::GetSysFldType( const USHORT eWhich ) const
 {
     for( USHORT i = 0; i < INIT_FLDTYPES; ++i )
@@ -1044,10 +1047,10 @@ SwFieldType *SwDoc::GetSysFldType( const USHORT eWhich ) const
             return (*pFldTypes)[i];
     return 0;
 }
+
 /*************************************************************************
  *             void SetDocStat( const SwDocStat& rStat );
  *************************************************************************/
-
 void SwDoc::SetDocStat( const SwDocStat& rStat )
 {
     *pDocStat = rStat;
@@ -1057,9 +1060,6 @@ const SwDocStat& SwDoc::GetDocStat() const
 {
     return *pDocStat;
 }
-
-/*************************************************************************/
-
 
 struct _PostItFld : public _SetGetExpFld
 {
@@ -1075,7 +1075,6 @@ struct _PostItFld : public _SetGetExpFld
         return (SwPostItField*) GetFld()->GetFld().GetFld();
     }
 };
-
 
 USHORT _PostItFld::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
@@ -1108,7 +1107,6 @@ USHORT _PostItFld::GetPageNo(
     }
     return 0;
 }
-
 
 bool lcl_GetPostIts(
     IDocumentFieldsAccess* pIDFA,
@@ -1146,7 +1144,6 @@ bool lcl_GetPostIts(
 
     return bHasPostIts;
 }
-
 
 static void lcl_FormatPostIt(
     IDocumentContentOperations* pIDCO,
@@ -1200,7 +1197,6 @@ static void lcl_FormatPostIt(
     pIDCO->InsertString( aPam, aStr );
 }
 
-
 // provide the paper tray to use according to the page style in use,
 // but do that only if the respective item is NOT just the default item
 static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
@@ -1216,7 +1212,6 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 
     return nRes;
 }
-
 
 void SwDoc::CalculatePagesForPrinting(
     /* out */ SwRenderData &rData,
@@ -1381,7 +1376,6 @@ void SwDoc::CalculatePagesForPrinting(
             aPageRange, rData.GetPagesToPrint(),
             1, nDocPageCount, 0, &rData.GetValidPagesSet() );
 }
-
 
 void SwDoc::UpdatePagesForPrintingWithPostItData(
     /* out */ SwRenderData &rData,
@@ -1566,7 +1560,6 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     }
 }
 
-
 void SwDoc::CalculatePagePairsForProspectPrinting(
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
@@ -1713,7 +1706,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
-
 sal_uInt16 SwDoc::GetPageCount() const
 {
     return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
@@ -1744,11 +1736,9 @@ const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
     return aSize;
 }
 
-
 /*************************************************************************
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
-
 void SwDoc::UpdateDocStat( SwDocStat& rStat )
 {
     if( rStat.bModified )
@@ -1795,22 +1785,22 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
 
         com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
         sal_Int32 n=0;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("TableCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nTbl;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ImageCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nGrf;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ObjectCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nOLE;
         if ( rStat.nPage )
         {
-            aStat[n].Name = ::rtl::OUString::createFromAscii("PageCount");
+            aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount"));
             aStat[n++].Value <<= (sal_Int32)rStat.nPage;
         }
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ParagraphCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nPara;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("WordCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nWord;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("CharacterCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
@@ -1837,9 +1827,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
     }
 }
 
-
 // Dokument - Info
-
 void SwDoc::DocInfoChgd( )
 {
     GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
@@ -1847,7 +1835,7 @@ void SwDoc::DocInfoChgd( )
     SetModified();
 }
 
-    // returne zum Namen die im Doc gesetzte Referenz
+// returne zum Namen die im Doc gesetzte Referenz
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
@@ -1866,7 +1854,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
     return 0;
 }
 
-    // returne die RefMark per Index - fuer Uno
+// returne die RefMark per Index - fuer Uno
 const SwFmtRefMark* SwDoc::GetRefMark( USHORT nIndex ) const
 {
     const SfxPoolItem* pItem;
@@ -1890,10 +1878,10 @@ const SwFmtRefMark* SwDoc::GetRefMark( USHORT nIndex ) const
    return pRet;
 }
 
-    // returne die Namen aller im Doc gesetzten Referenzen
-    //JP 24.06.96: Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine
-    //              RefMark gesetzt ist
-    // OS 25.06.96: ab jetzt wird immer die Anzahl der Referenzen returnt
+// returne die Namen aller im Doc gesetzten Referenzen
+//JP 24.06.96: Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine
+//              RefMark gesetzt ist
+// OS 25.06.96: ab jetzt wird immer die Anzahl der Referenzen returnt
 USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
 {
     const SfxPoolItem* pItem;
@@ -2009,7 +1997,6 @@ void SwDoc::ResetModified()
     }
 }
 
-
 void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
                     const String& rFltName, const Graphic* pGraphic,
                     const GraphicObject* pGrafObj )
@@ -2082,7 +2069,6 @@ BOOL lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
     return TRUE;
 }
 
-
 /*************************************************************************
  *      SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong )
  *
@@ -2093,7 +2079,6 @@ BOOL lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
  * Mit bOnlyWrong kann man dann steuern, ob nur die Bereiche mit falschen
  * Woertern oder die kompletten Bereiche neu ueberprueft werden muessen.
  ************************************************************************/
-
 void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong, BOOL bSmartTags )
 {
     ASSERT( GetRootFrm(), "SpellAgain: Where's my RootFrm?" );
@@ -2232,8 +2217,8 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
     }
 }
 
-    // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
-    // versteckte Bereiche, versteckte Absaetze
+// loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
+// versteckte Bereiche, versteckte Absaetze
 BOOL SwDoc::RemoveInvisibleContent()
 {
     BOOL bRet = FALSE;
@@ -2404,9 +2389,7 @@ BOOL SwDoc::RemoveInvisibleContent()
     EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
-/*-- 11.06.2004 08:34:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BOOL SwDoc::ConvertFieldsToText()
 {
     BOOL bRet = FALSE;
@@ -2517,7 +2500,7 @@ bool SwDoc::LinksUpdated() const
     return mbLinksUpdated;
 }
 
-    // embedded alle lokalen Links (Bereiche/Grafiken)
+// embedded alle lokalen Links (Bereiche/Grafiken)
 bool SwDoc::EmbedAllLinks()
 {
     BOOL bRet = FALSE;
@@ -2568,10 +2551,6 @@ bool SwDoc::EmbedAllLinks()
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL SwDoc::IsInsTblFormatNum() const
 {
     return SW_MOD()->IsInsTblFormatNum(get(IDocumentSettingAccess::HTML_MODE));
@@ -2582,16 +2561,12 @@ BOOL SwDoc::IsInsTblChangeNumFormat() const
     return SW_MOD()->IsInsTblChangeNumFormat(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL SwDoc::IsInsTblAlignNum() const
 {
     return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-        // setze das InsertDB als Tabelle Undo auf:
+// setze das InsertDB als Tabelle Undo auf:
 void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
 {
     if( bIsTable )
@@ -2738,7 +2713,6 @@ void SwDoc::ChkCondColls()
      }
 }
 
-#ifdef FUTURE_VBA
 uno::Reference< script::vba::XVBAEventProcessor >
 SwDoc::GetVbaEventProcessor()
 {
@@ -2757,7 +2731,6 @@ SwDoc::GetVbaEventProcessor()
     }
     return mxVbaEvents;
 }
-#endif
 
 void SwDoc::setExternalData(::sw::tExternalDataType eType,
                             ::sw::tExternalDataPointer pPayload)
@@ -2769,3 +2742,5 @@ void SwDoc::setExternalData(::sw::tExternalDataType eType,
 {
     return m_externalData[eType];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

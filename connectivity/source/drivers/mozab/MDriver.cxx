@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "MDriver.hxx"
 #include "MConnection.hxx"
 #include "connectivity/dbexception.hxx"
@@ -258,7 +260,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         { LDAP,             "ldap" }
     };
 
-    for ( size_t i=0; i < sizeof( aSchemeMap ) / sizeof( aSchemeMap[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aSchemeMap ); ++i )
     {
         if ( aAddrbookScheme.compareToAscii( aSchemeMap[i].pScheme ) == 0 )
             return aSchemeMap[i].eType;
@@ -327,3 +329,5 @@ bool MozabDriver::ensureInit()
     return true;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

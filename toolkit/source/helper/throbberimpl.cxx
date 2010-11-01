@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::start() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         mnCurStep = 0;
         maWaitTimer.Start();
@@ -68,7 +69,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::stop() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         maWaitTimer.Stop();
     }
@@ -77,7 +78,7 @@ namespace toolkit
     void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         maImageList = rImageList;
 
@@ -115,7 +116,7 @@ namespace toolkit
     // -----------------------------------------------------------------------
     IMPL_LINK( Throbber_Impl, TimeOutHdl, Throbber_Impl*, EMPTYARG )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
 
@@ -136,3 +137,4 @@ namespace toolkit
 } // namespacetoolkit
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

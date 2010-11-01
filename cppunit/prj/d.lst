@@ -24,6 +24,9 @@ symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.1.dylib %_DEST%\lib%_EXT%\libcppunit.
 ..\%__SRC%\lib\libcppunit-1.12.so.1 %_DEST%\lib%_EXT%\libcppunit-1.12.so.1
 symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.so.1 %_DEST%\lib%_EXT%\libcppunit.so
 
+..\%__SRC%\lib\libcppunit-1.12.a %_DEST%\lib%_EXT%\libcppunit-1.12.a
+symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.a %_DEST%\lib%_EXT%\libcppunit.a
+
 ..\%__SRC%\bin\DllPlugInTester %_DEST%\bin%_EXT%\DllPlugInTester
 ..\%__SRC%\bin\DllPlugInTester.exe %_DEST%\bin%_EXT%\DllPlugInTester.exe
 ..\%__SRC%\bin\DllPlugInTester_dll.exe %_DEST%\bin%_EXT%\DllPlugInTester_dll.exe

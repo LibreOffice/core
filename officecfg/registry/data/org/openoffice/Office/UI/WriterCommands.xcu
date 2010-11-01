@@ -832,6 +832,11 @@
                     <value xml:lang="en-US">~Page...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TitlePageDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Title Page...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:FormatColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Co~lumns...</value>

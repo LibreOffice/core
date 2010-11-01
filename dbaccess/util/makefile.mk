@@ -127,10 +127,10 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)		\
         $(CPPULIB)				\
         $(SO2LIB)				\
-        $(VOSLIB)				\
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(EDITENGLIB)
-        
+
 .IF "$(GUI)"=="OS2"
 SHL2STDLIBS+=	$(LB)$/i$(TARGET).lib
 SHL2DEPN=$(LB)$/i$(TARGET).lib

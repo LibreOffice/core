@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -430,11 +431,6 @@ void printMethods(std::ostream & o,
           << codemaker::convertString(reader.getFieldName(i)).getStr()
           << "()";
 
-        #if 0
-        // DEBUG
-        sal_uInt16 mc = reader.getMethodCount();
-        RTMethodMode mm = reader.getMethodFlags(method);
-        #endif
         OUString mn = reader.getMethodName(method);
         OUString fn = reader.getFieldName(i);
 
@@ -874,3 +870,4 @@ void generateDocumentation(std::ostream & o,
 } }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

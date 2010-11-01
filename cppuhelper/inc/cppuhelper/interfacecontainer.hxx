@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,7 +158,6 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
-            //ppListenerContainers = new (ListenerContainer*)[nSize];
 
             typename InterfaceMap::iterator iter = m_pMap->begin();
             typename InterfaceMap::iterator end = m_pMap->end();
@@ -201,3 +201,4 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

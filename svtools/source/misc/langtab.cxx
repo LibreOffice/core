@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 
-//#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 
 #include <i18npool/lang.h>
@@ -206,3 +204,4 @@ LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
 
 //------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

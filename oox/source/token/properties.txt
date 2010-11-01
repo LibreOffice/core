@@ -40,6 +40,7 @@ CellProtection
 CellStyle
 CenterHorizontally
 CenterVertically
+Change
 CharCaseMap
 CharColor
 CharContoured
@@ -115,6 +116,7 @@ DialogLibraries
 DisplayLabels
 DrillDownOnDoubleClick
 Dropdown
+Duration
 EchoChar
 EnableVisible
 Enabled
@@ -265,6 +267,7 @@ MirroredY
 MissingValueTreatment
 Model
 ModifyPasswordHash
+MoveProtect
 MultiLine
 MultiPageValue
 MultiSelection
@@ -382,6 +385,7 @@ ShowPositiveError
 ShowZeroValues
 ShrinkToFit
 Size
+SizeProtect
 SortInfo
 Sound
 SoundOn

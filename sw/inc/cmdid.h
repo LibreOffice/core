@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -532,6 +533,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SET_FRM_OPTIONS          (FN_FORMAT + 86)/* Rahmenoptionen -- " -- */
 
 #define FN_SET_PAGE_STYLE           (FN_FORMAT + 93)  /* Anwenden Seitenv. */
+
+#define FN_FORMAT_TITLEPAGE_DLG     (FN_FORMAT + 98)  /* Title Page */
 
 
 #define FN_TABLE_REP                (FN_FORMAT + 99)  /* TableRepresentation */
@@ -1308,3 +1311,5 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define MAC_EVENT_IMAGE_ERROR       0x0b            //
 
 #endif /* INCLUDED_SW_CMDID_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

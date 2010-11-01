@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // MfcControlPpg.cpp : Implementation of the CMfcControlPropPage property page class.
 
 #include "stdafx.h"
@@ -74,3 +75,5 @@ void CMfcControlPropPage::DoDataExchange(CDataExchange* pDX)
 
 /////////////////////////////////////////////////////////////////////////////
 // CMfcControlPropPage message handlers
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

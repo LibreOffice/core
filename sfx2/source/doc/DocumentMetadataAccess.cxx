@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,17 +175,6 @@ uno::Reference<rdf::XURI> createBaseURI(
 //    if ( pkgURI.getLength() && ::utl::UCBContentHelper::IsFolder(pkgURI) )
     if (true) {
         xBaseURI.set( xPkgURI, uno::UNO_SET_THROW );
-#if 0
-    } else {
-        const uno::Reference<uri::XVndSunStarPkgUrlReferenceFactory>
-            xPkgUriFactory( xServiceFactory->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"),
-                i_xContext),
-            uno::UNO_QUERY_THROW);
-        xBaseURI.set( xPkgUriFactory->createVndSunStarPkgUrlReference(xPkgURI),
-            uno::UNO_SET_THROW );
-#endif
     }
     ::rtl::OUStringBuffer buf;
     if (!xBaseURI->getUriReference().endsWithAsciiL("/", 1))
@@ -1430,3 +1420,4 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
 } // namespace sfx2
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

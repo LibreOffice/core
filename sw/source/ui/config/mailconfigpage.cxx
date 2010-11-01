@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::mail;
 using namespace ::com::sun::star::beans;
 using ::rtl::OUString;
-/*-- 06.05.2004 12:04:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwTestAccountSettingsDialog : public SfxModalDialog
 {
     FixedInfo           m_aInfoFI;
@@ -97,9 +96,7 @@ public:
     SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
     ~SwTestAccountSettingsDialog();
 };
-/*-- 19.08.2004 14:27:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwAuthenticationSettingsDialog : public SfxModalDialog
 {
     CheckBox        m_aAuthenticationCB;
@@ -144,9 +141,6 @@ public:
     ~SwAuthenticationSettingsDialog();
 };
 
-/*-- 06.05.2004 10:59:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_MAILCONFIG), rSet),
 #ifdef MSC
@@ -179,23 +173,17 @@ SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     m_aServerAuthenticationPB.SetClickHdl(LINK(this, SwMailConfigPage, AuthenticationHdl));
     m_aTestPB.SetClickHdl(LINK(this, SwMailConfigPage, TestHdl));
 }
-/*-- 06.05.2004 10:59:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailConfigPage::~SwMailConfigPage()
 {
     delete m_pConfigItem;
 }
-/*-- 06.05.2004 10:59:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
 {
     return new SwMailConfigPage(pParent, rAttrSet);
 }
-/*-- 06.05.2004 10:59:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BOOL SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     if(m_aDisplayNameED.GetText() != m_aDisplayNameED.GetSavedValue())
@@ -218,9 +206,7 @@ BOOL SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
     m_pConfigItem->Commit();
     return sal_True;
 }
-/*-- 06.05.2004 10:59:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )
 {
     m_aDisplayNameED.SetText(m_pConfigItem->GetMailDisplayName());
@@ -243,9 +229,7 @@ void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )
     m_aPortNF       .SaveValue();
     m_aSecureCB     .SaveValue();
 }
-/*-- 06.05.2004 10:59:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
 {
     sal_Bool bEnable = pBox->IsChecked();
@@ -253,26 +237,20 @@ IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
     m_aReplyToED.Enable(bEnable);
     return 0;
 }
-/*-- 06.05.2004 10:59:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailConfigPage, AuthenticationHdl, PushButton*, EMPTYARG)
 {
     SwAuthenticationSettingsDialog aDlg(this, *m_pConfigItem);
     aDlg.Execute();
     return 0;
 }
-/*-- 06.05.2004 10:59:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, EMPTYARG)
 {
     SwTestAccountSettingsDialog(this).Execute();
     return 0;
 }
-/*-- 06.05.2004 12:11:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_TESTACCOUNTSETTINGS)),
 #ifdef MSC
@@ -336,23 +314,17 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 
     Application::PostUserEvent( STATIC_LINK( this, SwTestAccountSettingsDialog, TestHdl ), this );
 }
-/*-- 06.05.2004 12:11:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
 {
 }
-/*-- 06.05.2004 12:15:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTestAccountSettingsDialog, StopHdl, PushButton*, EMPTYARG)
 {
     m_bStop = true;
     return 0;
 }
-/*-- 07.06.2004 12:44:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_STATIC_LINK(SwTestAccountSettingsDialog, TestHdl, void*, EMPTYARG)
 {
     pThis->EnterWait();
@@ -360,9 +332,7 @@ IMPL_STATIC_LINK(SwTestAccountSettingsDialog, TestHdl, void*, EMPTYARG)
     pThis->LeaveWait();
     return 0;
 }
-/*-- 07.06.2004 12:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTestAccountSettingsDialog::Test()
 {
     uno::Reference<XMultiServiceFactory> rMgr = ::comphelper::getProcessServiceFactory();
@@ -404,7 +374,7 @@ void SwTestAccountSettingsDialog::Test()
                         new SwConnectionContext(
                             m_pParent->m_pConfigItem->GetInServerName(),
                             m_pParent->m_pConfigItem->GetInServerPort(),
-                            ::rtl::OUString::createFromAscii( "Insecure" ));
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
                 xInMailService->connect(xConnectionContext, xAuthenticator);
             }
             if(m_bStop)
@@ -445,7 +415,7 @@ void SwTestAccountSettingsDialog::Test()
         }
         catch(uno::Exception&)
         {
-            DBG_ERROR("exception caught");
+            OSL_ENSURE(false, "exception caught");
         }
     }
 
@@ -471,24 +441,18 @@ void SwTestAccountSettingsDialog::Test()
         m_eErrorsED.SetText( m_sErrorServer );
     }
 }
-/*-- 18.08.2004 12:18:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet ) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {
     // TabPage erzeugen
     SetTabPage(SwMailConfigPage::Create( this, rSet ));
 }
-/*-- 18.08.2004 12:18:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailConfigDlg::~SwMailConfigDlg()
 {
 }
-/*-- 19.08.2004 14:33:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SERVERAUTHENTICATION)),
@@ -551,15 +515,11 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
 
     CheckBoxHdl_Impl( &m_aAuthenticationCB );
 }
-/*-- 19.08.2004 14:33:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAuthenticationSettingsDialog::~SwAuthenticationSettingsDialog()
 {
 }
-/*-- 19.08.2004 14:33:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwAuthenticationSettingsDialog, OKHdl_Impl, OKButton*, EMPTYARG)
 {
     rConfigItem.SetAuthentication( m_aAuthenticationCB.IsChecked() );
@@ -575,9 +535,7 @@ IMPL_LINK( SwAuthenticationSettingsDialog, OKHdl_Impl, OKButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/*-- 19.08.2004 14:33:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
 {
     sal_Bool bChecked = pBox->IsChecked();
@@ -587,9 +545,7 @@ IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, CheckBox*, pBox)
 
     return 0;
 }
-/*-- 19.08.2004 14:33:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, RadioButton*, EMPTYARG)
 {
     sal_Bool bSeparate = m_aSeparateAuthenticationRB.IsChecked();
@@ -618,3 +574,5 @@ IMPL_LINK( SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, RadioButton*, EM
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

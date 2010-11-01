@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,10 +37,8 @@
 
 #include <vector>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     // ===================================================================
     // = OPropertyForward
@@ -77,8 +76,8 @@ namespace dbaccess
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDefinition() const { return m_xDest; }
     };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
+
 #endif // DBA_PROPERTYSETFORWARD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

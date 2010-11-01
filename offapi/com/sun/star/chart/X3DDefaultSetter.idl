@@ -38,7 +38,7 @@
 
 //=============================================================================
 
-/** makes it easy to set suiteable defaults for illumination and rotation for 3D charts
+/** makes it easy to set suitable defaults for illumination and rotation for 3D charts
 
     @see Dim3DDiagram
  */
@@ -48,12 +48,12 @@ published interface X3DDefaultSetter : com::sun::star::uno::XInterface
     */
     void set3DSettingsToDefault();
 
-    /** sets a suiteable default for the rotation of the current 3D chart.
+    /** sets a suitable default for the rotation of the current 3D chart.
     The result may depend on the current chart type.
     */
     void setDefaultRotation();
 
-    /** set suiteable defaults for the illumination of the current 3D chart.
+    /** set suitable defaults for the illumination of the current 3D chart.
     The result may dependent on other 3D settings as rotation or shade mode. It may depend on the current chart type also.
     */
     void setDefaultIllumination();

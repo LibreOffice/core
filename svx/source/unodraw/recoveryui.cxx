@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 {
     // Internaly we use VCL ... every call into vcl based code must
     // be guarded by locking the global solar mutex.
-    ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+    ::SolarMutexGuard aSolarLock;
 
     css::uno::Any aRet;
     RecoveryUI::EJob eJob = impl_classifyJob(aURL);
@@ -397,3 +398,5 @@ void RecoveryUI::impl_showAllRecoveredDocs()
 }
 
 } // namespace svx
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

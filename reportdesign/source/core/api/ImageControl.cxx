@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,7 +117,7 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
             , PROPERTY_CHARLOCALECOMPLEX
 
     };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 DBG_NAME( rpt_OImageControl )
@@ -499,3 +500,4 @@ void SAL_CALL OImageControl::setPreserveIRI( ::sal_Bool _preserveiri ) throw (un
 } // namespace reportdesign
 // =============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -985,7 +986,7 @@ void convertToString::test() {
     static sal_Unicode const utf16[] = { 0x0041, 0x00E4, 0x0061 };
     rtl::OString s;
     CPPUNIT_ASSERT(
-        rtl::OUString(utf16, sizeof utf16 / sizeof utf16[0]).convertToString(
+        rtl::OUString(utf16, SAL_N_ELEMENTS(utf16)).convertToString(
             &s, RTL_TEXTENCODING_UTF7,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)));
@@ -1278,3 +1279,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

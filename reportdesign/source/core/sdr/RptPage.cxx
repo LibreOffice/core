@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ TYPEINIT1( OReportPage, SdrPage );
 DBG_NAME( rpt_OReportPage )
 OReportPage::OReportPage( OReportModel& _rModel
                          ,const uno::Reference< report::XSection >& _xSection
-                         ,FASTBOOL bMasterPage )
+                         ,bool bMasterPage )
     :SdrPage( _rModel, bMasterPage )
     ,rModel(_rModel)
     ,m_xSection(_xSection)
@@ -249,3 +250,5 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRe
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

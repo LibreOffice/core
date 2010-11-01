@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,6 +73,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
+            pDoc->InvalidatePageBreaks( nTab );                 // user print area (selection) may be different
+
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
             nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
@@ -194,3 +197,4 @@ long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

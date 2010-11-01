@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,7 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
@@ -3926,7 +3927,7 @@ void SAL_CALL FormController::removeParameterListener(const Reference< XDatabase
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent& aEvent) throw( RuntimeException )
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
@@ -4315,3 +4316,5 @@ void SAL_CALL FormController::columnChanged( const EventObject& /*_event*/ ) thr
 }
 
 }   // namespace svxform
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

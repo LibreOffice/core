@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>
@@ -69,7 +70,6 @@ using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -992,7 +992,7 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(Run
 
 OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return GetApiName();
 }
@@ -1001,7 +1001,7 @@ OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 
 void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     if( IsUserDefined() )
     {
@@ -1019,7 +1019,7 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeExcep
 
 sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return IsUserDefined() ? sal_True : sal_False;
 }
@@ -1028,7 +1028,7 @@ sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException)
 
 sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return IsUsed() ? sal_True : sal_False;
 }
@@ -1037,7 +1037,7 @@ sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException)
 
 OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( GetParent().Len() )
@@ -1053,7 +1053,7 @@ OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
 
 void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw(NoSuchElementException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( IsUserDefined() )
@@ -1098,7 +1098,7 @@ Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo() throw(RuntimeEx
 
 void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
@@ -1179,7 +1179,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
 Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1281,7 +1281,7 @@ void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , cons
 
 PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1362,7 +1362,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
 Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1382,7 +1382,7 @@ Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequen
 
 void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1408,7 +1408,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
 
 Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1446,3 +1446,4 @@ const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUStr
     return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -15,12 +15,10 @@
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
-    <project-build-dependency>  vos         </project-build-dependency>
 
     <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
     <runtime-module-dependency> cppu1       </runtime-module-dependency>
     <runtime-module-dependency> sal1        </runtime-module-dependency>
-    <runtime-module-dependency> vos         </runtime-module-dependency>
 
     <type>  com.sun.star.registry.XRegistryKey          </type>
     <type>  com.sun.star.util.XCancellable              </type>

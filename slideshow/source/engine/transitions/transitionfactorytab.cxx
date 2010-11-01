@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2015,6 +2016,20 @@ static const TransitionInfo lcl_transitionInfo[] =
         true,                   // 'out' by parameter sweep inversion
         false                   // scale isotrophically to target size
     },
+    // this is the cut through black fade (does not fade, but does a
+    // hard cut)
+    {
+        animations::TransitionType::BARWIPE,
+        animations::TransitionSubType::FADEOVERCOLOR,
+        TransitionInfo::TRANSITION_SPECIAL,
+        // TODO(F2): Setup parameters
+        0.0,                    // no rotation
+        1.0,                    // no scaling
+        1.0,                    // no scaling
+        TransitionInfo::REVERSEMETHOD_IGNORE,
+        true,                   // 'out' by parameter sweep inversion
+        false                   // scale isotrophically to target size
+    },
 
     {
         // mapped to RandomWipe:
@@ -2130,3 +2145,5 @@ const TransitionInfo* TransitionFactory::getRandomTransitionInfo()
 
 } // namespace internal
 } // namespace presentation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -265,6 +266,8 @@ public:
     // move the frame to a new screen
     virtual void                SetScreenNumber( unsigned int nScreen ) = 0;
 
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID) = 0;
+
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion() = 0;
@@ -296,3 +299,5 @@ public:
 #endif // __cplusplus
 
 #endif // _SV_SALFRAME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

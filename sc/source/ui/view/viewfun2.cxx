@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,6 +52,11 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
+
+#include <basic/sbstar.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+using namespace com::sun::star;
 
 #include "viewfunc.hxx"
 
@@ -2200,6 +2206,8 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
     WaitObject aWait( GetFrameWin() );
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
+    if ( bVbaEnabled )
+        bRecord = FALSE;
 
     while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
         --nNewTab;
@@ -2306,6 +2314,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
+
 
         SfxApplication* pSfxApp = SFX_APP();                                // Navigator
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
@@ -2451,8 +2460,8 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     {
         SCTAB nSrcTab = pSrcTabs[i];
         SCTAB nDestTab1=nTab+i;
-        ULONG nErrVal = pDoc->TransferTab( pSrcDoc, nSrcTab, nDestTab1,
-            FALSE );        // no insert
+        ULONG nErrVal = pDocSh->TransferTab( *pSrcShell, nSrcTab, nDestTab1,
+            FALSE, FALSE );     // no insert
 
         switch (nErrVal)
         {
@@ -2470,25 +2479,6 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
                 break;
         }
 
-        // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
-        if ( !bError )
-            pDoc->TransferDrawPage( pSrcDoc, nSrcTab, nDestTab1 );
-
-        if(!bError &&pSrcDoc->IsScenario(nSrcTab))
-        {
-            String aComment;
-            Color  aColor;
-            USHORT nFlags;
-
-            pSrcDoc->GetScenarioData(nSrcTab, aComment,aColor, nFlags);
-            pDoc->SetScenario( nDestTab1,TRUE);
-            pDoc->SetScenarioData( nTab+i,aComment,aColor,nFlags);
-            BOOL bActive = pSrcDoc->IsActiveScenario(nSrcTab );
-            pDoc->SetActiveScenario( nDestTab1, bActive );
-            BOOL bVisible=pSrcDoc->IsVisible(nSrcTab);
-            pDoc->SetVisible(nDestTab1,bVisible );
-
-        }
     }
 
     if (bLink)
@@ -2672,33 +2662,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             nDestTab1 = nDestTab;
             for(USHORT i=0;i<TheTabs.Count();i++)
             {
-                nErrVal = pDestDoc->TransferTab( pDoc, TheTabs[i], nDestTab1,
-                    FALSE );        // no insert
-
-                // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
-                if ( nErrVal > 0 )
-                    pDestDoc->TransferDrawPage( pDoc, TheTabs[i], nDestTab1 );
-
-                if(nErrVal>0 && pDoc->IsScenario(TheTabs[i]))
-                {
-                    String aComment;
-                    Color  aColor;
-                    USHORT nFlags;
-
-                    pDoc->GetScenarioData(TheTabs[i], aComment,aColor, nFlags);
-                    pDestDoc->SetScenario(nDestTab1,TRUE);
-                    pDestDoc->SetScenarioData(nDestTab1,aComment,aColor,nFlags);
-                    BOOL bActive = pDoc->IsActiveScenario(TheTabs[i]);
-                    pDestDoc->SetActiveScenario(nDestTab1, bActive );
-
-                    BOOL bVisible=pDoc->IsVisible(TheTabs[i]);
-                    pDestDoc->SetVisible(nDestTab1,bVisible );
-
-                }
-
-                if ( nErrVal > 0 && pDoc->IsTabProtected( TheTabs[i] ) )
-                    pDestDoc->SetTabProtection(nDestTab1, pDoc->GetTabProtection(TheTabs[i]));
-
+                nErrVal = pDestShell->TransferTab( *pDocShell, static_cast<SCTAB>(TheTabs[i]), static_cast<SCTAB>(nDestTab1), FALSE, FALSE );
                 nDestTab1++;
             }
         }
@@ -3192,3 +3156,4 @@ void ScViewFunc::SetValidation( const ScValidationData& rNew )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

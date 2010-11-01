@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <com/sun/star/util/XCloseable.hpp>
 
@@ -567,21 +567,6 @@ namespace sw
             return aRet;
         }
 
-#if 0
-        Frames GetFramesBetweenNodes(const Frames &rFrames,
-            const SwNode &rStart, const SwNode &rEnd)
-        {
-            Frames aRet;
-            ULONG nEnd = rEnd.GetIndex();
-            for (ULONG nI = rStart.GetIndex(); nI < nEnd; ++nI)
-            {
-                my_copy_if(rFrames.begin(), rFrames.end(),
-                    std::back_inserter(aRet), anchoredto(nI));
-            }
-            return aRet;
-
-        }
-#endif
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
         {
             Frames aRet;
@@ -856,4 +841,5 @@ namespace sw
 */
     }
 }
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

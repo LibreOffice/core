@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,6 @@ namespace
         return static_cast<float>(x + 32) / 64.0;
     }
     typedef std::hash_map<long,bool> SilfMap;
-    SilfMap sSilfMap;
 }
 extern FT_Error (*pFTEmbolden)(FT_GlyphSlot);
 extern FT_Error (*pFTOblique)(FT_GlyphSlot);
@@ -183,6 +183,7 @@ void GraphiteFontAdaptor::UniqueCacheInfo(ext_std::wstring & face_name_out, bool
 
 bool GraphiteFontAdaptor::IsGraphiteEnabledFont(ServerFont & font) throw()
 {
+    static SilfMap sSilfMap;
     // NOTE: this assumes that the same FTFace pointer won't be reused,
     // so FtFontInfo::ReleaseFaceFT must only be called at shutdown.
     FreetypeServerFont & aFtFont = dynamic_cast<FreetypeServerFont &>(font);
@@ -334,3 +335,5 @@ void GraphiteFontAdaptor::getGlyphMetrics(gr::gid16 nGlyphId, gr::Rect & aBoundi
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

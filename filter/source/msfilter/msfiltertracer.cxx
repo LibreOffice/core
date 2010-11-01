@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -249,3 +250,4 @@ void MSFilterTracer::SetProperty( const ::rtl::OUString& rPropName, const uno::A
     mpCfgItem->WriteAny( rPropName, rProperty );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

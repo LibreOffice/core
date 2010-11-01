@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <float.h>
-// #include <math.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>
@@ -4591,3 +4591,4 @@ USHORT SvNumberformat::ImpGetNumForStringElementCount( USHORT nNumFor ) const
     return nCnt;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

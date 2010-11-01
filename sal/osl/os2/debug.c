@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2090,14 +2091,12 @@ VOID dbgPrintStack(FILE *LogFile,           // in: text log file to write to
         if (!fExceptionAddress)
         {
             LastEbp = Ebp;
-#if 0
-            Ebp = (PUSHORT) MAKEULONG(Bp, Sp);
-#else // Inserted by Kim Rasmussen 26/06 1996 to allow big stacks
+
             if (f32bit)
                 Ebp = (PUSHORT) *(PULONG) LastEbp;
             else
                 Ebp = (PUSHORT) MAKEULONG((*Ebp), Sp);
-#endif
+
             if (f32bit)
             {
                 dbgPrintVariables(LogFile, (ULONG) Ebp);
@@ -2150,3 +2149,5 @@ CHAR doshQueryBootDrive(VOID)
 
     return (cBootDrive);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

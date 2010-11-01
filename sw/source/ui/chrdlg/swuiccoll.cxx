@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #include "cmdid.h"
 #include <tools/list.hxx>
 #include "swmodule.hxx"
@@ -64,16 +63,11 @@ static USHORT __FAR_DATA aPageRg[] = {
     0
 };
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
+// Warning! This table is indicated directly in code (0, 1, ...)
 static long nTabs[] =
     {   2, // Number of Tabs
         0, 100
     };
-
-/****************************************************************************
-Page: Ctor
-****************************************************************************/
-
 
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
@@ -99,7 +93,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     FreeResource();
     SetExchangeSupport();
 
-    // Handler installieren
+    // Install handlers
     aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
     aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     aStyleLB.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
@@ -237,21 +231,10 @@ void __EXPORT SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 USHORT* __EXPORT SwCondCollPage::GetRanges()
 {
     return aPageRg;
 }
-
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 {
@@ -269,11 +252,6 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
     return 0;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
     SvLBoxEntry* pE = aTbLinks.FirstSelected();
@@ -281,7 +259,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
     {
-        ASSERT( pE, "wo kommt der leere Eintrag her?" );
+        OSL_ENSURE( pE, "where's the empty entry from?" );
         return 0;
     }
 
@@ -303,11 +281,6 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
     return 0;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
 {
     if(pBox == &aFilterLB)
@@ -318,6 +291,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
+
         while( pBase )
         {
             if(!pFmt || pBase->GetName() != pFmt->GetName())
@@ -345,13 +319,10 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 void SwCondCollPage::SetCollection( SwFmt* pFormat, BOOL bNew )
 {
     pFmt = pFormat;
     bNewTemplate = bNew;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

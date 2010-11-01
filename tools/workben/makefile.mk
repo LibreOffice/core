@@ -53,9 +53,9 @@ APP1LIBS = $(LB)$/itools.lib
 APP2TARGET = urltest
 APP2OBJS = $(OBJ)$/urltest.obj
 .IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
-APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
+APP2STDLIBS = $(TOOLSLIB)  $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ELSE
-APP2STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
+APP2STDLIBS = $(LB)$/itools.lib  $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ENDIF
 
 APP3TARGET = inetmimetest
@@ -73,17 +73,17 @@ APP3STDLIBS = $(SALLIB) $(TOOLSLIB)
 # APP4TARGET = demostor
 # APP4OBJS = $(OBJ)$/demostor.obj
 # .IF "$(GUI)" == "UNX"
-# APP4STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
+# APP4STDLIBS = $(TOOLSLIB)  $(SALLIB)
 # .ELSE
-# APP4STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB)
+# APP4STDLIBS = $(LB)$/itools.lib  $(SALLIB)
 # .ENDIF
 
 # APP5TARGET = fstest
 # APP5OBJS = $(OBJ)$/fstest.obj
 # .IF "$(GUI)" == "UNX"
-# APP5STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
+# APP5STDLIBS = $(TOOLSLIB)  $(SALLIB)
 # .ELSE
-# APP5STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB)
+# APP5STDLIBS = $(LB)$/itools.lib  $(SALLIB)
 # .ENDIF
 
 .INCLUDE: target.mk

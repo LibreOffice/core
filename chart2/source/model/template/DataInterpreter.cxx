@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -235,7 +236,7 @@ sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
 namespace
 {
 
-struct lcl_LabeledSequenceEquals : public unary_function< Reference< data::XLabeledDataSequence >, bool >
+struct lcl_LabeledSequenceEquals : public std::unary_function< Reference< data::XLabeledDataSequence >, bool >
 {
     lcl_LabeledSequenceEquals( const Reference< data::XLabeledDataSequence > & xLSeqToCmp ) :
             m_bHasLabels ( false ),
@@ -459,3 +460,5 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

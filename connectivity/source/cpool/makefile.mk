@@ -61,9 +61,9 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(DBTOOLSLIB)				\
-    $(SALLIB)
+    $(SALLIB)                                   \
+    $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

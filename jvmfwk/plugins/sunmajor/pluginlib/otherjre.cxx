@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll"
 #elif UNX
 #ifdef MACOSX
-        "/../../../JavaVM"
+        "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
 #else
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
@@ -95,8 +96,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 #ifdef UNX
     static char const * ar[] = {
 #ifdef MACOSX
-        "/../Libraries",
-        "/lib"
+        //mac version does not have a ld library path anymore
 #else
         "/bin",
         "/jre/bin",
@@ -129,3 +129,5 @@ int OtherInfo::compareVersions(const rtl::OUString& /*sSecond*/) const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

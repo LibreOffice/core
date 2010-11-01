@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "zoomlist.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
 
@@ -468,7 +469,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 
                 if( !!aScanBmp )
                 {
-                    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    const SolarMutexGuard aGuard;
                     SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
                     Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
                     const MapMode       aMap100( MAP_100TH_MM );
@@ -548,3 +549,5 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

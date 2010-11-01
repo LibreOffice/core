@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,7 @@
 #include "osl/file.hxx"
 
 #include "rtl/ustrbuf.hxx"
+#include <sal/macros.h>
 
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/configitem.hxx"
@@ -454,7 +456,7 @@ void SpaPrinterController::printPage( int ) const
             { NULL, RID_TXT_TESTPAGE_TIME }
         };
 
-    for( unsigned int i = 0; i < sizeof(aResIds)/sizeof(aResIds[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(aResIds); i++ )
     {
         if( aResIds[i].pDirect )
             aToken = String::CreateFromAscii( aResIds[i].pDirect );
@@ -753,3 +755,4 @@ void PADialog::UpdateDevice()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

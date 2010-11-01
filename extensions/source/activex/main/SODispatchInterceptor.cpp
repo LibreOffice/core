@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SODispatchInterceptor.cpp : Implementation of CHelpApp and DLL registration.
 
 #include "stdio.h"
@@ -220,3 +221,4 @@ STDMETHODIMP SODispatchInterceptor::getInterceptedURLs( SAFEARRAY FAR* FAR* pVal
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

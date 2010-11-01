@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,7 +207,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
 {
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
             ::dp_gui::TheExtensionManager::get( m_xComponentContext,
                                                 m_parent ? *m_parent : Reference<awt::XWindow>(),
@@ -234,7 +235,7 @@ void ServiceImpl::startExecuteModal(
         }
         catch (Exception & exc) {
             if (bAppUp) {
-                const vos::OGuard guard( Application::GetSolarMutex() );
+                const SolarMutexGuard guard;
                 std::auto_ptr<ErrorBox> box(
                     new ErrorBox( Application::GetActiveTopWindow(),
                                   WB_OK, exc.Message ) );
@@ -278,7 +279,7 @@ void ServiceImpl::startExecuteModal(
     }
 
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > myExtMgr(
             ::dp_gui::TheExtensionManager::get(
                 m_xComponentContext,
@@ -374,3 +375,5 @@ void * SAL_CALL component_getFactory(
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

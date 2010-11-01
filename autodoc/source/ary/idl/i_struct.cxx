@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,3 +162,5 @@ xref::Get_AsDataTypes( Dyn_CeIterator &    o_result,
 
 }   //  namespace   idl
 }   //  namespace   ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

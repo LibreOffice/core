@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1586,23 +1587,6 @@ BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
         lType = OD_QUEUED;
     }
 
-#if 0 // YD FIXME
-    // Set comment (AppName nur bis zum 1. Space-Zeichen nehmen)
-    const xub_Unicode*  pComment = rAppName;
-    USHORT          nCommentLen = 0;
-    memset( maCommentBuf, 0, sizeof( maCommentBuf ) );
-    while ( (nCommentLen < 32) &&
-            (((*pComment >= 'a') && (*pComment <= 'z')) ||
-             ((*pComment >= 'A') && (*pComment <= 'Z')) ||
-             ((*pComment >= '0') && (*pComment <= '9')) ||
-             (*pComment == '-')))
-    {
-        maCommentBuf[nCommentLen] = (char)(*pComment);
-        nCommentLen++;
-        pComment++;
-    }
-    aDevOpenStruc.pszComment = (PSZ)maCommentBuf;
-#endif
     ByteString jobName( rJobName, gsl_getSystemTextEncoding());
     aDevOpenStruc.pszComment = (PSZ)jobName.GetBuffer();
 
@@ -1831,3 +1815,4 @@ int Os2SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

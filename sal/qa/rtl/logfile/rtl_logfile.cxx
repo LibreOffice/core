@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx
 
-
-// -----------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,13 +44,9 @@
 #include <rtl/logfile.hxx>
 #include <testshl/simpleheader.hxx>
 
-// #include <osl/module.hxx>
 #include <osl/file.hxx>
 #if ( defined WNT )                     // Windows
 #include <tools/prewin.h>
-// #define UNICODE
-// #define WIN32_LEAN_AND_MEAN
-// #include <windows.h>
 #include <tchar.h>
 #include <tools/postwin.h>
 #endif
@@ -256,3 +251,4 @@ GlobalObject theGlobalObject;
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

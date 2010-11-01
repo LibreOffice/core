@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,11 @@
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/storagehelper.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::packages;
@@ -80,7 +80,7 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 }
 
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
-                        vos::ORef < EncryptionData > &xEncryptData,
+                        rtl::Reference < EncryptionData > &xEncryptData,
                         sal_Bool bEncrypt)
     throw(IOException, RuntimeException)
 {
@@ -105,7 +105,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
         aDigest = rtl_digest_createSHA1();
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
-        pCurrentEncryptData = xEncryptData.getBodyPtr();
+        pCurrentEncryptData = xEncryptData.get();
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.GetPosition()) - nLOCLength;
@@ -133,7 +133,6 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
-                        //VOS_DEBUG_ONLY("Invalid entry compressed size");
                         // Different compression strategies make the merit of this
                         // test somewhat dubious
                         pEntry->nCompressedSize = aDeflater.getTotalOut();
@@ -427,3 +426,4 @@ void ZipOutputStream::dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate)
 }
 */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

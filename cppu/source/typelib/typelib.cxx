@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,8 +70,15 @@ using namespace osl;
  */
 struct AlignSize_Impl
 {
-    sal_Int16   nInt16;
-    double      dDouble;
+    sal_Int16 nInt16;
+#ifdef AIX
+    //double: doubleword aligned if -qalign=natural/-malign=natural
+    //which isn't the default ABI. Otherwise word aligned, While a long long int
+    //is always doubleword aligned, so use that instead.
+    sal_Int64 dDouble;
+#else
+    double dDouble;
+#endif
 };
 
 #ifdef SAL_W32
@@ -264,17 +272,9 @@ inline void TypeDescriptor_Init_Impl::callChain(
     }
 }
 
-// never called
-#if defined(CPPU_LEAK_STATIC_DATA) && defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-static void dumb_sunpro5_must_have_dtor_stl_hashmap_code_if_compiled_with_minus_g() SAL_THROW( () )
-{
-    delete (WeakMap_Impl *)0xbeef1e;
-}
-#endif
 //__________________________________________________________________________________________________
 TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 {
-#ifndef CPPU_LEAK_STATIC_DATA
     if( pCache )
     {
         TypeDescriptionList_Impl::const_iterator aIt = pCache->begin();
@@ -303,7 +303,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         for( i = 0; i < nSize; i++ )
         {
             typelib_TypeDescriptionReference * pTDR = ppTDR[i];
-            sal_Int32 nStaticCounts = pTDR->nStaticRefCount;
             OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
             pTDR->nRefCount -= pTDR->nStaticRefCount;
 
@@ -355,9 +354,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 #endif
     delete pCallbacks;
     pCallbacks = 0;
-#endif // CPPU_LEAK_STATIC_DATA
 
-    // todo: maybe into leak block
     if( pMutex )
     {
         delete pMutex;
@@ -1952,7 +1949,13 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( float ));
                 break;
             case typelib_TypeClass_DOUBLE:
+#ifdef AIX
+                //See previous AIX ifdef comment for an explanation
+                nSize = (sal_Int32)(sizeof(double));
+                rMaxIntegralTypeSize = (sal_Int32)(sizeof(void*));
+#else
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( double ));
+#endif
                 break;
             case typelib_TypeClass_BYTE:
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int8 ));
@@ -2199,7 +2202,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
         {
             // Check for derived interface member type:
             sal_Int32 i1 = name.lastIndexOf(
-                rtl::OUString::createFromAscii(":@"));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":@")));
             if (i1 >= 0) {
                 sal_Int32 i2 = i1 + RTL_CONSTASCII_LENGTH(":@");
                 sal_Int32 i3 = name.indexOf(',', i2);
@@ -2669,3 +2672,5 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
 {
     return complete(ppTypeDescr, true);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

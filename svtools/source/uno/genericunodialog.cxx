@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::comphelper;
@@ -94,7 +95,7 @@ OGenericUnoDialog::~OGenericUnoDialog()
 {
     if ( m_pDialog )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_pDialog )
             destroyDialog();
@@ -241,7 +242,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
 sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 {
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Dialog* pDialogToExecute = NULL;
     // create the dialog, if neccessary
@@ -371,3 +372,4 @@ IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
 }   // namespace svt
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -351,3 +352,5 @@ SW_DLLPUBLIC long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentS
                           const SwAttrSet &rSet,
                           const OutputDevice &rOut, sal_Int16 nScript);
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

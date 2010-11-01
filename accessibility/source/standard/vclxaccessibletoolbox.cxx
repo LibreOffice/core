@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -880,3 +881,5 @@ void VCLXAccessibleToolBox::deselectAccessibleChild( sal_Int32 nChildIndex ) thr
     clearAccessibleSelection(); // a toolbox can only have (n)one selected child
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

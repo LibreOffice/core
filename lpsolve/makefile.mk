@@ -42,7 +42,9 @@ TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 .IF "$(GUI)"=="WNT"
 PATCH_FILES=lp_solve_5.5-windows.patch
 .ELSE
-PATCH_FILES=lp_solve_5.5.patch
+PATCH_FILES=\
+    lp_solve_5.5.patch \
+    lp_solve-aix.patch
 ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2
 .ENDIF
 
@@ -76,6 +78,8 @@ OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
 .ELSE
 .IF "$(COMNAME)"=="sunpro5"
 BUILD_ACTION=sh ccc.solaris
+.ELIF "$(OS)$(COM)"=="AIXGCC"
+BUILD_ACTION=lpsolve_LDFLAGS="$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)" sh ccc.aix.gcc
 .ELSE
 BUILD_ACTION=sh ccc
 .ENDIF

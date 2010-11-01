@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@
 #endif
 #include <tools/stream.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
@@ -134,13 +135,13 @@ BOOL bInRedirection = TRUE;
 #else
 BOOL bInRedirection = FALSE;
 #endif
-static NAMESPACE_VOS( OMutex )* pRedirectMutex = 0;
+static osl::Mutex* pRedirectMutex = 0;
 
 //------------------------------------------------------------------------
 void FSysRedirector::Register( FSysRedirector *pRedirector )
 {
         if ( pRedirector )
-                pRedirectMutex = new NAMESPACE_VOS( OMutex );
+            pRedirectMutex = new osl::Mutex;
         else
                 DELETEZ( pRedirectMutex );
         _pRedirector = pRedirector;
@@ -163,7 +164,7 @@ void FSysRedirector::DoRedirect( String &rPath )
         // Redirection is acessible only by one thread per time
         // dont move the guard behind the bInRedirection check!!!
         // think of nested calls (when called from callback)
-        NAMESPACE_VOS( OGuard ) aGuard( pRedirectMutex );
+        osl::MutexGuard aGuard( pRedirectMutex );
 
         // if already in redirection, dont redirect
         if ( bInRedirection )
@@ -1038,8 +1039,8 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize )
 BOOL DirEntry::Exists( FSysAccess nAccess ) const
 {
 #ifndef BOOTSTRAP
-    static NAMESPACE_VOS(OMutex) aLocalMutex;
-    NAMESPACE_VOS(OGuard) aGuard( aLocalMutex );
+    static osl::Mutex aLocalMutex;
+    osl::MutexGuard aGuard( aLocalMutex );
 #endif
         if ( !IsValid() )
                 return FALSE;
@@ -2498,22 +2499,6 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 
         // Auf Novell-Servern (wegen der rottigen Clients) nur 7bit ASCII
 
-        // HRO: #69627# Weg mit dem Scheiss. Wenn es Client gibt, die so einen
-        // BUG haben, dann muss halt der Client ersetzt werden, aber doch nicht das
-        // Office kastrieren !!!
-
-#if 0
-        if ( FSYS_STYLE_NWFS == GetPathStyle( ImpGetTopPtr()->GetName() ) )
-        {
-                for ( USHORT n = aLongName.Len(); n; --n )
-                {
-                        short nChar = aLongName(n-1);
-                        if ( nChar < 32 || nChar >= 127 )
-                                aLongName.Erase( n-1, 1 );
-                }
-        }
-#endif
-
         // bei FSYS_KIND_ALL den alten Namen merken und abh"angen (rename)
         ByteString aOldName;
         if ( FSYS_KIND_ALL == eKind )
@@ -3209,3 +3194,4 @@ void FSysTest()
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

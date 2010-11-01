@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1205,7 +1206,7 @@ void SdDrawDocument::DisposeLoadedModels()
 |*
 \************************************************************************/
 
-FASTBOOL SdDrawDocument::IsReadOnly() const
+bool SdDrawDocument::IsReadOnly() const
 {
     return FALSE;
 }
@@ -2034,8 +2035,8 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 void SdDrawDocument::Merge(SdrModel& rSourceModel,
                USHORT nFirstPageNum, USHORT nLastPageNum,
                USHORT nDestPos,
-               FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
-               FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
+               bool bMergeMasterPages, bool bAllMasterPages,
+               bool bUndo, bool bTreadSourceAsConst)
 {
     sal_uInt16 nMasterPageCount = GetMasterPageCount();
     SdrModel::Merge( rSourceModel, nFirstPageNum, nLastPageNum, nDestPos, bMergeMasterPages, bAllMasterPages, bUndo, bTreadSourceAsConst );
@@ -2053,3 +2054,5 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

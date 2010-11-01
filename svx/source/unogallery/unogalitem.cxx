@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemprop.hxx>
@@ -207,7 +208,7 @@ uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const vos::OGuard                   aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 >    aId;
 
     if( aId.getLength() == 0 )
@@ -224,7 +225,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
 sal_Int8 SAL_CALL GalleryItem::getType()
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_Int8            nRet = gallery::GalleryItemType::EMPTY;
 
     if( isValid() )
@@ -253,7 +254,7 @@ sal_Int8 SAL_CALL GalleryItem::getType()
 
 ::comphelper::PropertySetInfo* GalleryItem::createPropertySetInfo()
 {
-    vos::OGuard                     aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
     static ::comphelper::PropertyMapEntry aEntries[] =
@@ -293,7 +294,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
            lang::IllegalArgumentException,
            lang::WrappedTargetException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     while( *ppEntries )
     {
@@ -338,7 +339,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     while( *ppEntries )
     {
@@ -479,3 +480,5 @@ GalleryDrawingModel::~GalleryDrawingModel()
 UNO3_GETIMPLEMENTATION_IMPL( GalleryDrawingModel );
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

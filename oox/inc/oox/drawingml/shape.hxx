@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,6 +117,9 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
+    void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
+    void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
+
     void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
     void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
@@ -182,6 +186,12 @@ protected:
                             ShapeIdMap* pShapeMap );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
+    com::sun::star::awt::Size   maChSize;                 // only used for group shapes
+    com::sun::star::awt::Point  maChPosition;             // only used for group shapes
+    com::sun::star::awt::Size   maAbsoluteSize;           // only used for group shapes
+    com::sun::star::awt::Point  maAbsolutePosition;       // only used for group shapes
+    sal_Bool                    mbIsChild;
+
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
     FillPropertiesPtr           mpFillPropertiesPtr;
@@ -189,6 +199,7 @@ protected:
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
     table::TablePropertiesPtr   mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;
+    PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
@@ -216,3 +227,5 @@ private:
 } }
 
 #endif  //  OOX_DRAWINGML_SHAPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

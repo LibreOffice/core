@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -272,7 +273,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
     // get parser
     Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
         UNO_QUERY );
     OSL_ENSURE( xParser.is(), "Can't create parser" );
     if ( !xParser.is() )
@@ -2680,8 +2681,8 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
         {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                     uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
@@ -3023,3 +3024,4 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 ////////////////////////////////////////////////////////////
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

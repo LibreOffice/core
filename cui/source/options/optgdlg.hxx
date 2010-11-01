@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,6 +72,8 @@ private:
     FixedText           aToYearFT;
 
     String              aStrDateInfo;
+
+    CheckBox            aExperimentalCB;
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
@@ -220,3 +223,4 @@ public:
 #endif // #ifndef _OFA_OPTGDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

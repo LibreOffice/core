@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <vcl/svdata.hxx>
 #include <vcl/salatype.hxx>
 #include <vcl/saldatabasic.hxx>
+#include <vcl/solarmutex.hxx>
 #include <sal/types.h>
 
 // plugin factory function
@@ -294,7 +296,7 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
     return new SvpSalBitmap();
 }
 
-vos::IMutex* SvpSalInstance::GetYieldMutex()
+osl::SolarMutex* SvpSalInstance::GetYieldMutex()
 {
     return &m_aYieldMutex;
 }
@@ -302,7 +304,7 @@ vos::IMutex* SvpSalInstance::GetYieldMutex()
 ULONG SvpSalInstance::ReleaseYieldMutex()
 {
     if ( m_aYieldMutex.GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         osl::Thread::getCurrentIdentifier() )
     {
         ULONG nCount = m_aYieldMutex.GetAcquireCount();
         ULONG n = nCount;
@@ -463,27 +465,27 @@ SvpSalYieldMutex::SvpSalYieldMutex()
 
 void SvpSalYieldMutex::acquire()
 {
-    OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    SolarMutexObject::acquire();
+    mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SvpSalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SvpSalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }
@@ -535,3 +537,4 @@ void SvpSalTimer::Start( ULONG nMS )
     m_pInstance->StartTimer( nMS );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,6 +39,7 @@ interface XLabel: com::sun::star::uno::XInterface
 {
     [attribute] string Caption;
     [attribute] any Value;
+    [attribute] string Accelerator;
 };
 
 //=============================================================================

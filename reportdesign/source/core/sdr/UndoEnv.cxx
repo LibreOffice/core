@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #include <vcl/svapp.hxx>
 #include <dbaccess/singledoccontroller.hxx>
 #include <svx/unoshape.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace rptui
 {
@@ -221,6 +222,7 @@ void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeE
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEvent ) throw(uno::RuntimeException)
 {
+
     ::osl::ClearableMutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( IsLocked() )
@@ -282,7 +284,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     // TODO: this is a potential race condition: two threads here could in theory
     // add their undo actions out-of-order
 
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ORptUndoPropertyAction* pUndo = NULL;
     try
     {
@@ -327,7 +329,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     // neues Object zum lauschen
@@ -388,7 +390,7 @@ void OXUndoEnvironment::implSetModified()
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     Reference< XInterface >  xIface(evt.ReplacedElement,uno::UNO_QUERY);
@@ -404,7 +406,7 @@ void SAL_CALL OXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     Reference< uno::XInterface >  xIface( evt.Element, UNO_QUERY );
@@ -627,3 +629,5 @@ sal_Bool OXUndoEnvironment::IsUndoMode() const
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

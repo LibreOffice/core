@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -199,11 +200,6 @@ private:
     const rtl::OUString                         msStartShape;
     const rtl::OUString                         msEndShape;
     const rtl::OUString                         msOnClick;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    const rtl::OUString                         msOnAction;
-    const rtl::OUString                         msAction;
-    const rtl::OUString                         msURL;
-#endif
     const rtl::OUString                         msEventType;
     const rtl::OUString                         msPresentation;
     const rtl::OUString                         msMacroName;
@@ -340,3 +336,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,6 @@
 #
 #*************************************************************************
 
-
 # Default ISO code used when no languages specified
 # This language will be always included!
 defaultlangiso=en-US
@@ -33,15 +32,13 @@ defaultlangiso=en-US
 # Complete list of all supported ISO codes
 completelangiso=af \
 ar \
-as-IN \
+as \
 be-BY \
 bo \
 bg \
 br \
 brx \
 bn \
-bn-BD \
-bn-IN \
 bs \
 ca \
 cs \
@@ -65,7 +62,6 @@ ga \
 gd \
 gl \
 gu \
-gu-IN \
 he \
 hi \
 hr \
@@ -91,8 +87,8 @@ mk \
 mn \
 mni \
 ms \
-ml-IN \
-mr-IN \
+ml \
+mr \
 my \
 ne \
 nb \
@@ -102,7 +98,7 @@ nr \
 ns \
 om \
 oc \
-or-IN \
+or \
 pap \
 pa-IN \
 pl \
@@ -117,6 +113,7 @@ sa-IN \
 si \
 sc \
 sd \
+sq \
 sk \
 sl \
 sh \
@@ -124,18 +121,17 @@ sr \
 ss \
 st \
 sv \
-sw \
 sw-TZ \
-te-IN \
-ti-ER \
-ta-IN \
+te \
+ti \
+ta \
 th \
 tn \
 tr \
 ts \
 tg \
 ug \
-ur-IN \
+ur \
 uk \
 uz \
 ve \

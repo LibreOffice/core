@@ -43,7 +43,7 @@
 
 //=============================================================================
 
-/** controls a popup menu.
+/** controls a pop-up menu.
  */
 published interface XPopupMenu: XMenu
 {
@@ -80,8 +80,8 @@ published interface XPopupMenu: XMenu
 
     //-------------------------------------------------------------------------
 
-    /** executes the popup menu and returns the selected item
-        or <code>0</code>, if cancelled.
+    /** executes the pop-up menu and returns the selected item
+        or <code>0</code>, if canceled.
      */
     short execute( [in] XWindowPeer Parent,
              [in] Rectangle Area,

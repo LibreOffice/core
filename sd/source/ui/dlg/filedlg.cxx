@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@
 #include <vcl/msgbox.hxx>
 #include <sal/types.h>
 #include <tools/urlobj.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -99,7 +100,7 @@ public:
 // ------------------------------------------------------------------------
 void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     switch( aEvent.ElementId )
     {
@@ -191,7 +192,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 // ------------------------------------------------------------------------
 IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (
         mxPlayer.is() && mxPlayer->isPlaying() &&
@@ -366,3 +367,5 @@ void SdOpenSoundFileDialog::SetPath( const String& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

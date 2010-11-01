@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,6 @@ private:
     BOOL            mbVisible;          // Ist Cursor sichtbar
     unsigned char   mnDirection;        // indicates direction
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
@@ -72,7 +72,6 @@ public:
     SAL_DLLPRIVATE void         ImplShow( BOOL bDrawDirect = TRUE );
     SAL_DLLPRIVATE void         ImplHide();
     SAL_DLLPRIVATE void         ImplNew();
-//#endif
 
 public:
                     Cursor();
@@ -117,3 +116,5 @@ public:
 };
 
 #endif  // _SV_CURSOR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

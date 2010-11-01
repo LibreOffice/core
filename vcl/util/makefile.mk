@@ -176,7 +176,6 @@ SHL1STDLIBS+=\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
-            $(VOSLIB)           \
             $(SALLIB)			\
             $(BASEGFXLIB)		\
             $(ICUUCLIB)			\
@@ -301,7 +300,6 @@ SHL2STDLIBS=\
             $(I18NPAPERLIB)     \
             $(I18NISOLANGLIB)     \
             $(TOOLSLIB)         \
-            $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(UNOTOOLSLIB) \
             $(COMPHELPERLIB)	\
@@ -381,7 +379,6 @@ SHL4STDLIBS+=\
             $(TOOLSLIB)         \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
-            $(VOSLIB)           \
             $(SALLIB)           \
             $(X11LINK_DYNAMIC)
 
@@ -405,12 +402,10 @@ SHL5IMPLIB=ikde_plug_
 SHL5LIBS=$(LIB5TARGET)
 SHL5DEPN=$(SHL2TARGETN)
 # libs for KDE plugin
-SHL5LINKFLAGS+=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=\
         $(VCLLIB)       \
         $(TOOLSLIB)     \
-        $(VOSLIB)       \
         $(SALLIB)       \
         $(X11LINK_DYNAMIC)
 
@@ -419,6 +414,8 @@ SHL5STDLIBS+=\
 SHL5STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 .ENDIF
+
+SHL5STDLIBS+=$(KDE_LIBS)
 
 .ENDIF # "$(ENABLE_KDE)" != ""
 
@@ -434,13 +431,11 @@ SHL6IMPLIB=ikde4_plug_
 SHL6LIBS=$(LIB6TARGET)
 SHL6DEPN=$(SHL2TARGETN)
 # libs for KDE4 plugin
-SHL6LINKFLAGS+=$(KDE4_LIBS)
 SHL6STDLIBS+=-l$(SHL2TARGET)
 SHL6STDLIBS+=\
         $(VCLLIB)       \
         $(PSPLIB)	\
         $(TOOLSLIB)     \
-        $(VOSLIB)       \
         $(SALLIB)   \
         $(X11LINK_DYNAMIC)
 
@@ -449,6 +444,8 @@ SHL6STDLIBS+=\
 SHL6STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 .ENDIF
+
+SHL6STDLIBS+=$(KDE4_LIBS) $(KDE_GLIB_LIBS)
 
 .ENDIF # "$(ENABLE_KDE4)" != ""
 

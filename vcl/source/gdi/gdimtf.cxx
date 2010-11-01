@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vos/macros.hxx>
 #include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -956,12 +956,12 @@ BOOL GDIMetaFile::Mirror( ULONG nMirrorFlags )
     BOOL        bRet;
 
     if( nMirrorFlags & MTF_MIRROR_HORZ )
-        nMoveX = VOS_ABS( aOldPrefSize.Width() ) - 1, fScaleX = -1.0;
+        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1, fScaleX = -1.0;
     else
         nMoveX = 0, fScaleX = 1.0;
 
     if( nMirrorFlags & MTF_MIRROR_VERT )
-        nMoveY = VOS_ABS( aOldPrefSize.Height() ) - 1, fScaleY = -1.0;
+        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1, fScaleY = -1.0;
     else
         nMoveY = 0, fScaleY = 1.0;
 
@@ -3252,3 +3252,5 @@ MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererSe
         &aMem[0],
         aMem.size());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

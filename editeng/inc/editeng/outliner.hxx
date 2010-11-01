@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 #include <com/sun/star/uno/Reference.h>
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
@@ -395,11 +396,7 @@ bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( String &rStatusVa
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
 
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST(ViewList,OutlinerView*)
-//#else
-//typedef List ViewList;
-//#endif
 
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {
@@ -983,8 +980,8 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     // Depricated
     void            SetDefaultLanguage( LanguageType eLang );
@@ -1066,3 +1063,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

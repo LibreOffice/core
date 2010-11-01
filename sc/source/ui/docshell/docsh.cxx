@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,12 +66,16 @@
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -138,6 +143,9 @@
 #include <boost/shared_ptr.hpp>
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::boost::shared_ptr;
@@ -171,7 +179,6 @@ static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
 static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
 static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterEx07Xml[]   = "MS Excel 2007 XML";
 static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
@@ -2090,8 +2097,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
              aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
-             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp) ||
-             aFltName.EqualsAscii(pFilterEx07Xml))
+             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
     {
         WaitObject aWait( GetActiveDialogParent() );
 
@@ -2133,8 +2139,6 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             ExportFormatExcel eFormat = ExpBiff5;
             if( aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp ) )
                 eFormat = ExpBiff8;
-            if( aFltName.EqualsAscii( pFilterEx07Xml ) )
-                eFormat = Exp2007Xml;
             FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )
@@ -2795,6 +2799,109 @@ ScSheetSaveData* ScDocShell::GetSheetSaveData()
     return pSheetSaveData;
 }
 
+namespace {
+
+void removeKeysIfExists(Reference<ui::XAcceleratorConfiguration>& xScAccel, const vector<const awt::KeyEvent*>& rKeys)
+{
+    vector<const awt::KeyEvent*>::const_iterator itr = rKeys.begin(), itrEnd = rKeys.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        const awt::KeyEvent* p = *itr;
+        if (!p)
+            continue;
+
+        try
+        {
+            xScAccel->removeKeyEvent(*p);
+        }
+        catch (const container::NoSuchElementException&) {}
+    }
+}
+
+}
+
+void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
+{
+    using namespace ::com::sun::star::ui;
+
+    Reference<XMultiServiceFactory> xServiceManager = ::comphelper::getProcessServiceFactory();
+    if (!xServiceManager.is())
+        return;
+
+    Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
+        xServiceManager->createInstance(
+            OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")), UNO_QUERY);
+
+    if (!xModuleCfgSupplier.is())
+        return;
+
+    // Grab the Calc configuration.
+    Reference<XUIConfigurationManager> xConfigMgr =
+        xModuleCfgSupplier->getUIConfigurationManager(
+            OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument"));
+
+    if (!xConfigMgr.is())
+        return;
+
+    // shortcut manager
+    Reference<XAcceleratorConfiguration> xScAccel(
+        xConfigMgr->getShortCutManager(), UNO_QUERY);
+
+    if (!xScAccel.is())
+        return;
+
+    vector<const awt::KeyEvent*> aKeys;
+    aKeys.reserve(4);
+
+    // Backsapce key
+    awt::KeyEvent aBackspace;
+    aBackspace.KeyCode = awt::Key::BACKSPACE;
+    aBackspace.Modifiers = 0;
+    aKeys.push_back(&aBackspace);
+
+    // Delete key
+    awt::KeyEvent aDelete;
+    aDelete.KeyCode = awt::Key::DELETE;
+    aDelete.Modifiers = 0;
+    aKeys.push_back(&aDelete);
+
+    // Ctrl-D
+    awt::KeyEvent aCtrlD;
+    aCtrlD.KeyCode = awt::Key::D;
+    aCtrlD.Modifiers = awt::KeyModifier::MOD1;
+    aKeys.push_back(&aCtrlD);
+
+    // Ctrl-Shift-D
+    awt::KeyEvent aCtrlShiftD;
+    aCtrlShiftD.KeyCode = awt::Key::D;
+    aCtrlShiftD.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
+    aKeys.push_back(&aCtrlShiftD);
+
+    // Remove all involved keys first, because swapping commands don't work
+    // well without doing this.
+    removeKeysIfExists(xScAccel, aKeys);
+    xScAccel->store();
+
+    switch (eType)
+    {
+        case ScOptionsUtil::KEY_DEFAULT:
+            xScAccel->setKeyEvent(aDelete, OUString::createFromAscii(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aBackspace, OUString::createFromAscii(".uno:Delete"));
+            xScAccel->setKeyEvent(aCtrlD, OUString::createFromAscii(".uno:FillDown"));
+            xScAccel->setKeyEvent(aCtrlShiftD, OUString::createFromAscii(".uno:DataSelect"));
+        break;
+        case ScOptionsUtil::KEY_OOO_LEGACY:
+            xScAccel->setKeyEvent(aDelete, OUString::createFromAscii(".uno:Delete"));
+            xScAccel->setKeyEvent(aBackspace, OUString::createFromAscii(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aCtrlD, OUString::createFromAscii(".uno:DataSelect"));
+        break;
+        default:
+            ;
+    }
+
+    xScAccel->store();
+}
+
 void ScDocShell::UseSheetSaveEntries()
 {
     if (pSheetSaveData)
@@ -2970,3 +3077,5 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
 }
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

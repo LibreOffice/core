@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -224,3 +225,5 @@ OUString CResourceProvider::getResString( sal_Int32 aId )
 {
    return m_pImpl->getResString( aId ).replace('~', '_');
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

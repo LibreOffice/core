@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -308,6 +309,9 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 
+#include "salhelper/timer.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+
 #include "sys/types.h"
 
 #include "tools/diagnose_ex.h"
@@ -323,12 +327,11 @@
 #include "unotools/processfactory.hxx"
 #include "unotools/sharedunocomponent.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/ref.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
-#include "vos/timer.hxx"
+#include "osl/mutex.hxx"
+#include "osl/process.h"
+
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,8 @@
 
 #include <IMark.hxx>
 #include <hints.hxx>
+
+#include <xmloff/odffields.hxx>
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
@@ -828,19 +831,31 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
     const SwDoc *pDoc = GetDoc();
     sw::mark::IMark* pA = NULL;
     sw::mark::IMark* pB = NULL;
+    bool bUnhandledMark = false;
     if ( pDoc )
     {
         const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
         pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
         pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+
+        sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
+        if ( pFieldmark )
+            bUnhandledMark = pFieldmark->GetFieldname( ).equalsAscii( ODF_UNHANDLED );
     }
 
     if (!bRet)
     {
-        bRet = ( pA != pB );
-        bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
-        if ( bProtectForm )
-            bRet |= ( pA == NULL || pB == NULL );
+        // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
+        if ( ( pA == pB ) && bUnhandledMark )
+            bRet = TRUE;
+        else
+        {
+            // Form protection case
+            bRet = ( pA != pB );
+            bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+            if ( bProtectForm )
+                bRet |= ( pA == NULL || pB == NULL );
+        }
     }
     else
     {
@@ -1250,3 +1265,5 @@ BOOL SwPaM::LessThan(const SwPaM & a, const SwPaM & b)
 {
     return (*a.Start() < *b.Start()) || (*a.Start() == *b.Start() && *a.End() < *b.End());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

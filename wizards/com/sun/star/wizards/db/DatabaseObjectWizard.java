@@ -57,7 +57,8 @@ public abstract class DatabaseObjectWizard extends WizardDialog
     {
         try
         {
-            m_docUI.loadComponent( i_type, i_name, i_forEditing );
+            if ( m_docUI != null )
+                m_docUI.loadComponent( i_type, i_name, i_forEditing );
         }
         catch ( IllegalArgumentException ex )
         {

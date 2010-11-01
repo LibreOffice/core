@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_svtools.hxx"
 #include <tools/debug.hxx>
 #include <vcl/print.hxx>
-
-#ifndef GCC
-#endif
 
 #include <svtools/svtdata.hxx>
 #include "prnsetup.hrc"
@@ -399,3 +397,5 @@ short PrinterSetupDialog::Execute()
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

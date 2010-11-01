@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,6 @@ class SfxPrinter;
 class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
-
-/*-----------------31.08.96 10.09-------------------
-
---------------------------------------------------*/
 
 class SwContentOptPage : public SfxTabPage
 {
@@ -100,8 +97,6 @@ public:
 /*-------- OS 27.01.95 -----------------------------------
  TabPage Druckereinstellungen Zusaetze
 --------------------------------------------------------- */
-
-
 class SwAddPrinterTabPage : public SfxTabPage
 {
     FixedLine       aFL1;
@@ -161,10 +156,6 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
-
-/*-----------------03.09.96 11.50-------------------
-
---------------------------------------------------*/
 
 class SwStdFontTabPage : public SfxTabPage
 {
@@ -250,10 +241,6 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
-/*-----------------18.01.97 12.10-------------------
-
---------------------------------------------------*/
-
 class SwTableOptionsTabPage : public SfxTabPage
 {
     FixedLine   aTableFL;
@@ -312,6 +299,7 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
+
 /*-----------------31.10.97 17:55-------------------
  TabPage fuer ShadowCrsr
 --------------------------------------------------*/
@@ -357,7 +345,6 @@ public:
 /*-----------------------------------------------------------------------
     Beschreibung: Markierungsvorschau
  -----------------------------------------------------------------------*/
-
 class SwMarkPreview : public Window
 {
     Color           m_aBgCol;           // background
@@ -395,7 +382,6 @@ public:
 /*-----------------------------------------------------------------------
     Beschreibung: Redlining-Optionen
  -----------------------------------------------------------------------*/
-
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
     FixedLine           aInsertFL;
@@ -453,7 +439,7 @@ public:
  TabPage Testeinstellungen fuer SW
 --------------------------------------------------------- */
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 class SwTestTabPage : public SfxTabPage
 {
@@ -487,6 +473,7 @@ private:
 
 };
 #endif //PRODUCT
+
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

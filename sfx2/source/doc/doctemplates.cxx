@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "doctemplates.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
@@ -303,7 +304,7 @@ public:
 
 //=============================================================================
 
-class Updater_Impl : public ::vos::OThread
+class Updater_Impl : public ::osl::Thread
 {
 private:
     SfxDocTplService_Impl   *mpDocTemplates;
@@ -470,7 +471,7 @@ void SfxDocTplService_Impl::init_Impl()
         if ( bNeedsUpdate )
         {
             aGuard.clear();
-            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexClearableGuard aSolarGuard;
 
             WaitWindow_Impl* pWin = new WaitWindow_Impl();
 
@@ -480,7 +481,7 @@ void SfxDocTplService_Impl::init_Impl()
             update( sal_True );
 
             anotherGuard.clear();
-            ::vos::OGuard aSecondSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSecondSolarGuard;
 
             delete pWin;
         }
@@ -540,7 +541,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
 // -----------------------------------------------------------------------
 void SfxDocTplService_Impl::readFolderList()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
     ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
@@ -1150,7 +1151,8 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
 
     if ( mpUpdater )
     {
-        mpUpdater->kill();
+        mpUpdater->terminate();
+        mpUpdater->join();
         delete mpUpdater;
     }
 }
@@ -2894,3 +2896,4 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( rtl::OUString & rURL )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

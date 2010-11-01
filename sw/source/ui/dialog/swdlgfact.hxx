@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 #ifndef _SW_DLGFACT_HXX
 #define _SW_DLGFACT_HXX
 
-// include ---------------------------------------------------------------
 #include "swabstdlg.hxx"
 
 class SwSaveLabelDlg;
@@ -514,6 +514,7 @@ public:
                                                 SwField* pField, BOOL bNextButton = FALSE ); //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
                                                 Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE); //add for SwInsFootNoteDlg
+   virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, BOOL bCol = FALSE ); //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
@@ -584,3 +585,4 @@ struct SwDialogsResMgr
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

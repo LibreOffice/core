@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -245,15 +246,6 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // TODO: use a cached value for bDisableAsianKern from upper layers
-#if 0
-    if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
-    {
-        TEXTMETRICA aTextMetricA;
-        if( ::GetTextMetricsA( mhDC, &aTextMetricA )
-        && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) )
-            rArgs.mnFlags &= ~SAL_LAYOUT_KERNING_ASIAN;
-    }
-#endif
 
     // layout text
     int i, j;
@@ -1054,3 +1046,4 @@ ImplFontEntry* ImplOs2FontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 
 // =======================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,11 +162,6 @@ public:
         cursor position.
     */
     void IgnoreCurrentPageChanges (bool bIgnore);
-
-#if 0
-    sal_Int32 GetPageNumberWidthPixel();
-#endif
-
     void InvalidateSlideNumberArea();
 
     /** creates and inserts an empty slide for the given paragraph. */
@@ -262,3 +258,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

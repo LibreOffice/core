@@ -83,7 +83,6 @@ APP1OBJS=	$(OBJFILES)
 APP1STDLIBS= \
             $(CPPUHELPERLIB)\
             $(CPPULIB)		\
-            $(VOSLIB)		\
             $(SALLIB)
 
 .ENDIF # testpgp
@@ -98,7 +97,6 @@ OBJFILES=	$(OBJ)$/testcomponent.obj
 APP2TARGET = testcomponent
 APP2OBJS   = $(OBJ)$/testcomponent.obj
 APP2STDLIBS = \
-              $(VOSLIB) \
               $(TOOLSLIB)	\
               $(SALLIB)
 
@@ -113,8 +111,8 @@ OBJFILES=	$(OBJ)$/pythontest.obj
 
 #APP4TARGET=	pythontest
 #APP4OBJS=	$(OBJ)$/pythontest.obj 
-#APP4STDLIBS=$(TOOLSLIB)		\
-#			$(VOSLIB)
+#APP4STDLIBS=$(TOOLSLIB)
+#
 
 .ENDIF # phytontest
 
@@ -127,8 +125,7 @@ OBJFILES=	$(OBJ)$/pythonautotest.obj
 
 #APP5TARGET= pythonautotest
 #APP5OBJS = $(OBJ)$/pythonautotest.obj
-#APP5STDLIBS=$(TOOLSLIB)		\
-#			$(VOSLIB)
+#APP5STDLIBS=$(TOOLSLIB)
 
 .ENDIF # phytonautotest
 
@@ -162,7 +159,6 @@ OBJFILES=	$(OBJ)$/testframecontrol.obj
 APP3TARGET=	testframecontrol
 APP3OBJS=	$(OBJ)$/testframecontrol.obj
 APP3STDLIBS=$(TOOLSLIB)		\
-            $(VOSLIB)		\
             $(SVTOOLLIB)	\
             $(VCLLIB)
 

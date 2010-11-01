@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,8 +48,8 @@ const sal_Unicode Locale::SEPERATOR_CV_LINUX = (sal_Unicode)'.';
 const Locale Locale::X_DEFAULT()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("default"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")));
     return aLocale;
 }
 
@@ -56,7 +57,7 @@ const Locale Locale::X_DEFAULT()
 const Locale Locale::EN()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("en"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -65,8 +66,8 @@ const Locale Locale::EN()
 const Locale Locale::EN_US()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("en"),
-                    ::rtl::OUString::createFromAscii("US"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")));
     return aLocale;
 }
 
@@ -74,8 +75,8 @@ const Locale Locale::EN_US()
 const Locale Locale::DE_DE()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("de"),
-                    ::rtl::OUString::createFromAscii("DE"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE")));
     return aLocale;
 }
 
@@ -83,8 +84,8 @@ const Locale Locale::DE_DE()
 const Locale Locale::DE_CH()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("de"),
-                    ::rtl::OUString::createFromAscii("CH"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CH")));
     return aLocale;
 }
 
@@ -92,8 +93,8 @@ const Locale Locale::DE_CH()
 const Locale Locale::DE_AT()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("de"),
-                    ::rtl::OUString::createFromAscii("AT"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AT")));
     return aLocale;
 }
 
@@ -101,7 +102,7 @@ const Locale Locale::DE_AT()
 const Locale Locale::AR()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ar"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ar")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -110,7 +111,7 @@ const Locale Locale::AR()
 const Locale Locale::CA()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ca"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ca")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -119,7 +120,7 @@ const Locale Locale::CA()
 const Locale Locale::CS()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("cs"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cs")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -128,7 +129,7 @@ const Locale Locale::CS()
 const Locale Locale::DA()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("da"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("da")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -137,7 +138,7 @@ const Locale Locale::DA()
 const Locale Locale::EL()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("el"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("el")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -146,7 +147,7 @@ const Locale Locale::EL()
 const Locale Locale::ES()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("es"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("es")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -155,7 +156,7 @@ const Locale Locale::ES()
 const Locale Locale::FI()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("fi"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fi")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -164,7 +165,7 @@ const Locale Locale::FI()
 const Locale Locale::FR()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("fr"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fr")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -173,7 +174,7 @@ const Locale Locale::FR()
 const Locale Locale::HE()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("he"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("he")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -182,8 +183,8 @@ const Locale Locale::HE()
 const Locale Locale::HI_IN()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("hi"),
-                    ::rtl::OUString::createFromAscii("IN"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hi")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN")));
     return aLocale;
 }
 
@@ -191,7 +192,7 @@ const Locale Locale::HI_IN()
 const Locale Locale::HU()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("hu"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hu")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -200,7 +201,7 @@ const Locale Locale::HU()
 const Locale Locale::IT()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("it"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("it")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -209,7 +210,7 @@ const Locale Locale::IT()
 const Locale Locale::JA()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ja"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ja")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -218,7 +219,7 @@ const Locale Locale::JA()
 const Locale Locale::KO()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ko"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ko")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -227,7 +228,7 @@ const Locale Locale::KO()
 const Locale Locale::NL()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("nl"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nl")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -236,7 +237,7 @@ const Locale Locale::NL()
 const Locale Locale::PL()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("pl"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pl")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -245,7 +246,7 @@ const Locale Locale::PL()
 const Locale Locale::PT()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("pt"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pt")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -254,8 +255,8 @@ const Locale Locale::PT()
 const Locale Locale::PT_BR()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("pt"),
-                    ::rtl::OUString::createFromAscii("BR"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pt")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BR")));
     return aLocale;
 }
 
@@ -263,7 +264,7 @@ const Locale Locale::PT_BR()
 const Locale Locale::RU()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ru"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ru")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -272,7 +273,7 @@ const Locale Locale::RU()
 const Locale Locale::SK()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("sk"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sk")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -281,7 +282,7 @@ const Locale Locale::SK()
 const Locale Locale::SL()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("sl"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sl")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -290,7 +291,7 @@ const Locale Locale::SL()
 const Locale Locale::SV()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("sv"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sv")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -299,7 +300,7 @@ const Locale Locale::SV()
 const Locale Locale::TH()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("th"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("th")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -308,7 +309,7 @@ const Locale Locale::TH()
 const Locale Locale::TR()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("tr"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tr")),
                     ::rtl::OUString());
     return aLocale;
 }
@@ -317,8 +318,8 @@ const Locale Locale::TR()
 const Locale Locale::X_COMMENT()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("comment"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("comment")));
     return aLocale;
 }
 
@@ -326,8 +327,8 @@ const Locale Locale::X_COMMENT()
 const Locale Locale::X_TRANSLATE()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("translate"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("translate")));
     return aLocale;
 }
 
@@ -335,8 +336,8 @@ const Locale Locale::X_TRANSLATE()
 const Locale Locale::X_NOTRANSLATE()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("notranslate"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("notranslate")));
     return aLocale;
 }
 
@@ -344,8 +345,8 @@ const Locale Locale::X_NOTRANSLATE()
 const Locale Locale::ZH_CN()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("zh"),
-                    ::rtl::OUString::createFromAscii("CN"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("zh")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CN")));
     return aLocale;
 }
 
@@ -353,8 +354,8 @@ const Locale Locale::ZH_CN()
 const Locale Locale::ZH_TW()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("zh"),
-                    ::rtl::OUString::createFromAscii("TW"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("zh")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TW")));
     return aLocale;
 }
 
@@ -681,3 +682,4 @@ sal_Bool Locale::operator!=(const Locale& aComparable) const
 
 } // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

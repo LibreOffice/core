@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -386,10 +387,10 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
 Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = ::rtl::OUString::createFromAscii( "com.sun.star.chart.ChartArea" );
-    aServices[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.LineProperties" );
-    aServices[ 2 ] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.FillProperties" );
-    aServices[ 3 ] = ::rtl::OUString::createFromAscii( "com.sun.star.xml.UserDefinedAttributeSupplier" );
+    aServices[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartArea"));
+    aServices[ 1 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineProperties"));
+    aServices[ 2 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.FillProperties"));
+    aServices[ 3 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.UserDefinedAttributeSupplier"));
 
     return aServices;
 }
@@ -399,3 +400,5 @@ APPHELPER_XSERVICEINFO_IMPL( UpDownBarWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

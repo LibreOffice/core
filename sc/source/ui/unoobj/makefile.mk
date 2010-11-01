@@ -35,9 +35,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -74,7 +72,6 @@ SLO1FILES =  \
         $(SLO)$/targuno.obj \
         $(SLO)$/convuno.obj \
         $(SLO)$/editsrc.obj \
-        $(SLO)$/unoguard.obj \
         $(SLO)$/confuno.obj \
         $(SLO)$/filtuno.obj \
         $(SLO)$/unodoc.obj \

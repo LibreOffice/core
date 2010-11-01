@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,3 +138,5 @@ sal_Bool StructTypeDescription::isPublished() throw (css::uno::RuntimeException)
 {
     return m_base->isPublished();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

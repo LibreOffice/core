@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,8 @@
 #include "vcl/salatype.hxx"
 #include "vcl/helper.hxx"
 #include <tools/solarmutex.hxx>
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
+#include <sal/macros.h>
 
 // -------------------------------------------------------------------------
 //
@@ -65,27 +67,27 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::acquire()
 {
-    OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    SolarMutexObject::acquire();
+    mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
         return True;
     }
@@ -220,7 +222,7 @@ bool X11SalInstance::AnyInput(USHORT nType)
     return bRet;
 }
 
-vos::IMutex* X11SalInstance::GetYieldMutex()
+osl::SolarMutex* X11SalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
@@ -231,7 +233,7 @@ ULONG X11SalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         osl::Thread::getCurrentIdentifier() )
     {
         ULONG nCount = pYieldMutex->GetAcquireCount();
         ULONG n = nCount;
@@ -300,7 +302,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
     };
     ::std::list< ByteString > aLines;
 
-    for( unsigned int i = 0; i < sizeof(pCommands)/sizeof(pCommands[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCommands); i++ )
     {
         FILE* pPipe = popen( pCommands[i], "r" );
         aLines.clear();
@@ -431,3 +433,5 @@ void X11SalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, cons
     if (add_to_recently_used_file_list)
         add_to_recently_used_file_list(rFileUrl, rMimeType);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

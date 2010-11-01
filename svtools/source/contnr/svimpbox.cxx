@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2187,15 +2188,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
         if( ButtonDownCheckCtrl(rMEvt, pEntry, nY) == TRUE)
             return;
         // Inplace-Editing?
-#if 0
-        if( rMEvt.IsMod2() && pView->IsInplaceEditingEnabled() )
-        {
-            SvLBoxItem* pItem = pView->GetItem( pEntry, aPos.X() );
-            if( pItem )
-                pView->EditingRequest( pEntry, pItem, aPos );
-            return;
-        }
-#endif
     }
     if ( aSelEng.GetSelectionMode() != NO_SELECTION )
         aSelEng.SelMouseButtonDown( rMEvt );
@@ -3634,3 +3626,4 @@ bool SvImpLBox::IsSelectable( const SvLBoxEntry* pEntry )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -545,3 +546,5 @@ Reference< XInterface > SAL_CALL ODMAFilePicker::impl_createInstance(
     Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
     return Reference< XInterface >( *new ODMAFilePicker( xServiceManager ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

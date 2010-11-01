@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,13 +65,6 @@ namespace utl {
 namespace accessibility {
 
 // ============================================================================
-
-/** Aquire the solar mutex. */
-class TCSolarGuard : public ::vos::OGuard
-{
-public:
-    inline TCSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-};
 
 // ============================================================================
 
@@ -416,12 +410,12 @@ private:
 
 typedef ::osl::MutexGuard OslMutexGuard;
 
-class TC_SolarMethodGuard : public TCSolarGuard, public OslMutexGuard
+class TC_SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
 {
 public:
     inline TC_SolarMethodGuard( AccessibleGridControlBase& _rOwner, bool _bEnsureAlive = true )
-        :TCSolarGuard( )
-        ,OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
+        : SolarMutexGuard(),
+        OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
     {
         if ( _bEnsureAlive )
             _rOwner.ensureIsAlive( AccessibleGridControlBase::TC_AccessControl() );
@@ -465,3 +459,4 @@ inline void AccessibleGridControlBase::implSetDescription(
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLBASE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

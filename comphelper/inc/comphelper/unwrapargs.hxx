@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,3 +149,4 @@ BOOST_PP_REPEAT(COMPHELPER_UNWRAPARGS_MAX_ARGS, COMPHELPER_UNWRAPARGS_make, ~)
 
 #endif //  ! defined(COMPHELPER_UNWRAPARGS_HXX_INCLUDED)
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

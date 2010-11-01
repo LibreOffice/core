@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ void SwView::ExecColl(SfxRequest &rReq)
     {
         case FN_SET_PAGE:
         {
-            DBG_ASSERT(!this, "Not implemented");
+            OSL_ENSURE(!this, "Not implemented");
         }
         break;
         case FN_SET_PAGE_STYLE:
@@ -89,10 +90,11 @@ void SwView::ExecColl(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(FALSE, falscher CommandProcessor fuer Dispatch);
+            OSL_ENSURE(false, "wrong CommandProcessor for Dispatch");
             return;
     }
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

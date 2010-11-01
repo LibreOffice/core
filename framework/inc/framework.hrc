@@ -35,9 +35,9 @@
 #define RID_GROUPS_OFFSET           32000
 #define RID_GROUPS_END              32767
 
-#define RID_FWK_DIALOG_START        (RID_FWK_START + 2048)
+#define RID_FWK_DIALOG_START_CORRECT        (RID_FWK_START + 2048)
 
-#define DLG_FILTER_SELECT           (RID_FWK_DIALOG_START + 0)
+#define DLG_FILTER_SELECT           (RID_FWK_DIALOG_START_CORRECT + 0)
 
 #define STR_FILTER_DOWNLOAD         (RID_FWK_START+0)
 #define STR_FILTER_CHOOSER          (RID_FWK_START+1)
@@ -45,7 +45,7 @@
 #define STR_FILTER_ZIPPED           (RID_FWK_START+3)
 
 // ResIds for BackingWindow
-#define DLG_BACKING                         (RID_FWK_DIALOG_START+100)
+#define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)
 #define STR_BACKING_WELCOME                 1
 #define STR_BACKING_WELCOMEPRODUCT          2
 #define STR_BACKING_CREATE                  3
@@ -78,7 +78,7 @@
 #define BMP_BACKING_OPENTEMPLATE            17
 
 // Ids of TabWindow
-#define WIN_TABWINDOW                       (RID_FWK_DIALOG_START+101)
+#define WIN_TABWINDOW                       (RID_FWK_DIALOG_START_CORRECT+101)
 #define TC_TABCONTROL                        1
 
 #endif

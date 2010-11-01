@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -274,8 +275,9 @@ UcbStore::createPropertySetRegistry( const OUString& )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_xTheRegistry.is() )
-            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xSMgr, *this );
+            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xSMgr, getInitArgs() );
     }
+
     return m_pImpl->m_xTheRegistry;
 }
 
@@ -294,22 +296,6 @@ void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
 }
 
 //=========================================================================
-//
-// New methods.
-//
-//=========================================================================
-
-void UcbStore::removeRegistry()
-{
-    if ( m_pImpl->m_xTheRegistry.is() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        if ( m_pImpl->m_xTheRegistry.is() )
-            m_pImpl->m_xTheRegistry = 0;
-    }
-}
-
-//=========================================================================
 const Sequence< Any >& UcbStore::getInitArgs() const
 {
     return m_pImpl->m_aInitArgs;
@@ -323,7 +309,7 @@ const Sequence< Any >& UcbStore::getInitArgs() const
 
 struct PropertySetRegistry_Impl
 {
-    UcbStore*                         m_pCreator;
+    const Sequence< Any >             m_aInitArgs;
     PropertySetMap_Impl               m_aPropSets;
     Reference< XMultiServiceFactory > m_xConfigProvider;
     Reference< XInterface >           m_xRootReadAccess;
@@ -332,18 +318,11 @@ struct PropertySetRegistry_Impl
     sal_Bool                          m_bTriedToGetRootReadAccess;  // #82494#
     sal_Bool                          m_bTriedToGetRootWriteAccess; // #82494#
 
-    PropertySetRegistry_Impl( UcbStore& rCreator )
-    : m_pCreator( &rCreator ),
+    PropertySetRegistry_Impl( const Sequence< Any > &rInitArgs )
+        : m_aInitArgs( rInitArgs ),
       m_bTriedToGetRootReadAccess( sal_False ),
       m_bTriedToGetRootWriteAccess( sal_False )
     {
-        m_pCreator->acquire();
-    }
-
-    ~PropertySetRegistry_Impl()
-    {
-        m_pCreator->removeRegistry();
-        m_pCreator->release();
     }
 };
 
@@ -359,9 +338,9 @@ struct PropertySetRegistry_Impl
 
 PropertySetRegistry::PropertySetRegistry(
                         const Reference< XMultiServiceFactory >& rXSMgr,
-                        UcbStore& rCreator )
+                        const Sequence< Any > &rInitArgs )
 : m_xSMgr( rXSMgr ),
-  m_pImpl( new PropertySetRegistry_Impl( rCreator ) )
+  m_pImpl( new PropertySetRegistry_Impl( rInitArgs ) )
 {
 }
 
@@ -1094,8 +1073,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_xConfigProvider.is() )
         {
-            const Sequence< Any >& rInitArgs
-                = m_pImpl->m_pCreator->getInitArgs();
+            const Sequence< Any >& rInitArgs = m_pImpl->m_aInitArgs;
 
             if ( rInitArgs.getLength() > 0 )
             {
@@ -2791,3 +2769,4 @@ sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

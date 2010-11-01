@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__30a2652a_Ddf7_45e7_Aca6_3eab26fc8a4e_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -265,6 +267,7 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Versionind
     Value = "opendocument.WriterDocument.1";
 End
 
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -273,12 +276,16 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6
     REG_VALUE_LNG(SO60_TEXT)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterDocument.6\CLSID";
     Value = "{30A2652A-DDF7-45e7-ACA6-3EAB26FC8A4E}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -761,12 +768,16 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1
     REG_VALUE_LNG(OO_WRITER)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "opendocument.WriterDocument.1\CLSID";
     Value = "{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -245,6 +246,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 
     if ( pProfile == 0 )
     {
+        closeFileImpl(pFile, Flags);
         return 0;
     }
 
@@ -2219,3 +2221,5 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 #endif
     return (sal_True);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

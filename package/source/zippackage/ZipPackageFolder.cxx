@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <ZipPackageFolderEnumeration.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/digest.h>
 #include <ContentInfo.hxx>
@@ -43,6 +44,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <EncryptedDataHeader.hxx>
 #include <rtl/random.h>
+#include <rtl/instance.hxx>
 #include <memory>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -54,12 +56,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace cppu;
-using namespace rtl;
 using namespace std;
 using namespace ::com::sun::star;
-using vos::ORef;
 
-Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
+using rtl::OUString;
+
+namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
                                      sal_Int32 nFormat,
@@ -80,10 +82,9 @@ ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xF
     aEntry.nCompressedSize  = 0;
     aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
-    if ( !aImplementationId.getLength() )
-        {
-        aImplementationId = getImplementationId();
-        }
+    Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
+    if ( !rCachedImplId.getLength() )
+        rCachedImplId = getImplementationId();
 }
 
 
@@ -185,6 +186,11 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.sPath             = rSource.sPath;
     rDest.nPathLen          = rSource.nPathLen;
     rDest.nExtraLen         = rSource.nExtraLen;
+}
+
+const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_getImplementationId()
+{
+    return lcl_CachedImplId::get();
 }
 
     // XNameContainer
@@ -329,18 +335,18 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
         try
         {
-            vos::ORef < EncryptionData > aEmptyEncr;
+            rtl::Reference < EncryptionData > aEmptyEncr;
             rZipOut.putNextEntry ( *pTempEntry, aEmptyEncr, sal_False );
             rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )
         {
-            VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+            OSL_ENSURE( 0, "Error writing ZipOutputStream" );
             bWritingFailed = sal_True;
         }
         catch ( IOException& )
         {
-            VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+            OSL_ENSURE( 0, "Error writing ZipOutputStream" );
             bWritingFailed = sal_True;
         }
     }
@@ -431,7 +437,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 if ( !xStream.is() )
                 {
-                    VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                    OSL_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
                     bWritingFailed = sal_True;
                     continue;
                 }
@@ -484,14 +490,14 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         }
                         else
                         {
-                            VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
+                            OSL_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
                             continue;
                         }
                     }
                 }
                 catch ( Exception& )
                 {
-                    VOS_ENSURE( 0, "The stream provided to the package component has problems!" );
+                    OSL_ENSURE( 0, "The stream provided to the package component has problems!" );
                     bWritingFailed = sal_True;
                     continue;
                 }
@@ -554,7 +560,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( !xStream.is() )
                     {
                         // Make sure that we actually _got_ a new one !
-                        VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                        OSL_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
                         continue;
                     }
                 }
@@ -582,12 +588,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
                 catch ( ZipException& )
                 {
-                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
                 catch ( IOException& )
                 {
-                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
             }
@@ -609,7 +615,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( !xStream.is() )
                     {
                         // Make sure that we actually _got_ a new one !
-                        VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                        OSL_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
                         continue;
                     }
                 }
@@ -639,12 +645,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
                 catch ( ZipException& )
                 {
-                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
                 catch ( IOException& )
                 {
-                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
 
@@ -723,7 +729,7 @@ void ZipPackageFolder::releaseUpwardRef( void )
     }
     clearParent();
 
-    VOS_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
+    OSL_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
 #endif
 }
 
@@ -809,3 +815,5 @@ sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceNa
 {
     return rServiceName == getSupportedServiceNames()[0];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

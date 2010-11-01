@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -239,7 +240,6 @@ private:
         SvStringsISortDtor*     pFormatText;
         DoubleStringTable       aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
-        CollatorWrapper*        pCompareCaseClass;
         CharClass*              pCharClass;
         LanguageType            eLang;
 
@@ -516,3 +516,4 @@ public:
 
 #endif //
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

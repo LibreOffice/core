@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,9 +104,6 @@ namespace
     };
 }
 
-static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
-static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
-
 static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& xWindowStateMgr, const ::rtl::OUString& rResourceURL, WindowState& rWindowState )
 {
     bool bResult = false;
@@ -190,6 +188,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                           uno::UNO_QUERY );
             }
 
+            static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
+
             uno::Reference< frame::XModuleManager > xModuleManager( m_xModuleManager );
             if ( !xModuleManager.is() )
             {
@@ -199,6 +199,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                                     uno::UNO_QUERY );
                 m_xModuleManager = xModuleManager;
             }
+
+            static uno::WeakReference< container::XNameAccess > m_xWindowStateConfiguration;
 
             uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
             if ( !xWindowStateConfiguration.is() )
@@ -247,7 +249,8 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 SfxChildWindow*  SfxDockingWrapper::CreateImpl(
 Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
 {
-    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo); return pWin;
+    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo);
+    return pWin;
 }
 
 sal_uInt16 SfxDockingWrapper::GetChildWindowId ()
@@ -389,7 +392,7 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
 */
 void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     USHORT nID = USHORT(rDockingWindowName.toInt32());
 
     // Check the range of the provided ID otherwise nothing will happen
@@ -415,7 +418,7 @@ void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rF
 */
 bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     USHORT nID = USHORT(rDockingWindowName.toInt32());
 
@@ -1992,3 +1995,4 @@ IMPL_LINK( SfxDockingWindow, TimerHdl, Timer*, EMPTYARG)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

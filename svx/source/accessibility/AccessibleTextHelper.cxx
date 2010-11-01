@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <memory>
 #include <algorithm>
 #include <deque>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -293,7 +294,7 @@ namespace accessibility
     {
         DBG_DTOR( AccessibleTextHelper_Impl, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1742,7 +1743,7 @@ namespace accessibility
     AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
         mpImpl( new AccessibleTextHelper_Impl() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SetEditSource( pEditSource );
     }
@@ -1963,7 +1964,7 @@ namespace accessibility
         // As Dispose calls ShutdownEditSource, which in turn
         // deregisters as listener on the edit source, have to lock
         // here
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1978,7 +1979,7 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper::IsSelected() const
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1996,7 +1997,7 @@ namespace accessibility
     // XAccessibleContext
     sal_Int32 AccessibleTextHelper::GetChildCount() SAL_THROW((uno::RuntimeException))
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -2013,7 +2014,7 @@ namespace accessibility
 
     uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -2057,7 +2058,7 @@ namespace accessibility
     // XAccessibleComponent
     uno::Reference< XAccessible > AccessibleTextHelper::GetAt( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException))
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -2075,3 +2076,5 @@ namespace accessibility
 } // end of namespace accessibility
 
 //------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

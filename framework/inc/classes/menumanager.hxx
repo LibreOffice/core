@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,14 +83,6 @@ class MenuManager : public ThreadHelpBase           ,
             Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
-#if 0
-        MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            REFERENCE< XFRAME >& rFrame,
-            AddonMenu*          pAddonMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
-#endif
 
         virtual ~MenuManager();
 
@@ -166,3 +159,5 @@ class MenuManager : public ThreadHelpBase           ,
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

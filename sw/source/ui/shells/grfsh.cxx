@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -226,12 +227,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_GRF,
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, FALSE, DLG_FRM_GRF);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if( pDlg->Execute() )
             {
                 rSh.StartAllAction();
@@ -358,7 +359,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -502,7 +503,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
         }
         if( aGrfSet.Count() )
             GetShell().SetAttr( aGrfSet );
@@ -703,3 +704,4 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

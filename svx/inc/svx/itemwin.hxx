@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
 protected:
     virtual void    Modify();
     virtual void    Down();
-    virtual void    Up();       // Nur zur Sicherheit
+    virtual void    Up();       // just to be sure
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -195,3 +196,4 @@ private:
 
 #endif // #ifndef _SVX_ITEMWIN_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

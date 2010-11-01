@@ -152,7 +152,7 @@ published service UnoControlNumericFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies whether the mouse should show repeating behaviour, i.e.
+    /** specifies whether the mouse should show repeating behavior, i.e.
         repeatedly trigger an action when keeping pressed.
 
         @since OOo 2.0.0

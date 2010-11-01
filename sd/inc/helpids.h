@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -279,3 +280,4 @@
 #define HID_SD_TABLE_DESIGN                                 (HID_SD_START + 200)
 #define HID_SD_ANNOTATIONS                                  (HID_SD_START + 201)
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

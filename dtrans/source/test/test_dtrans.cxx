@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,10 +54,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-//#include <memory>
-
-//#include <process.h>
 
 //------------------------------------------------------------------------
 // my defines
@@ -270,19 +267,6 @@ Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& aFlavor )
     {
         anyData = makeAny( m_Data );
     } */
-#if 0
-    else if ( aFlavor == m_seqDFlv[0] )
-    {
-        OString aStr( m_Data.getStr( ), m_Data.getLength( ), 1252 );
-        Sequence< sal_Int8 > sOfChars( aStr.getLength( ) );
-        sal_Int32 lenStr = aStr.getLength( );
-
-        for ( sal_Int32 i = 0; i < lenStr; ++i )
-            sOfChars[i] = aStr[i];
-
-        anyData = makeAny( sOfChars );
-    }
-#endif
 
     return anyData;
 }
@@ -510,3 +494,4 @@ int SAL_CALL main( int argc, const char* argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

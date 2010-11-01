@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <rtl/unload.h>
 
 #include <tools/presys.h>
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #undef _DEBUG
@@ -752,3 +753,5 @@ sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUI
 
 
 } // end namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

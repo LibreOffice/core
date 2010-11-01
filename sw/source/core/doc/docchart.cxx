@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unochart.hxx>
@@ -224,7 +225,7 @@ SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
 {
     // since there must be only one instance of this object per document
     // we need a mutex here
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (bCreate && !aChartDataProviderImplRef.get())
     {
@@ -275,3 +276,4 @@ SwChartLockController_Helper & SwDoc::GetChartControllerHelper()
     return *pChartControllerHelper;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

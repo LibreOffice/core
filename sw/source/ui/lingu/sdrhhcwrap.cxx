@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
     if (pTextObj)
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-        ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+        OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -131,7 +132,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
     if ( pTextObj )
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-        ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+        OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -203,7 +204,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-                    ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+                    OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
                     bNextDoc = sal_True;
@@ -229,3 +230,4 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #include <stdlib.h>
 #include <tools/rcid.h>
-#ifndef GCC
-#endif
 #include <tools/stream.hxx>
 
 #include <sfx2/module.hxx>
@@ -683,3 +682,4 @@ const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealS
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

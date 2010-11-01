@@ -82,7 +82,7 @@ Dim iThisMonth as Integer
 	DlgCalModel = DlgCalendar.Model
     LoadLanguage(sCurLangLocale)
 	CalInitGlobalVariablesDate()
-	BitmapDir = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
+	BitmapDir = GetOfficeSubPath(&quot;Template&quot;,&quot;../wizard/bitmap&quot;)
 	DlgCalModel.imgCountry.ImageURL = BitmapDir &amp; sBitmapFilename
 	CalChoosenLand = -2
 	CalLoadOwnData()

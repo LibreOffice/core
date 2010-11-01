@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -232,6 +233,9 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 #define SCA_VALID_ROW       0x0100
 #define SCA_VALID_COL       0x0200
 #define SCA_VALID_TAB       0x0400
+// SCA_BITS is a convience for
+// (SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE)
+#define SCA_BITS            0x070F
 // somewhat cheesy kludge to force the display of the document name even for
 // local references.  Requires TAB_3D to be valid
 #define SCA_FORCE_DOC       0x0800
@@ -823,3 +827,4 @@ bool AlphaToCol( SCCOL& rCol, const String& rStr);
 
 #endif // SC_ADDRESS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

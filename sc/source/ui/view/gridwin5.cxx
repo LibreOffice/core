@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -343,14 +344,12 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                                     if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                                         pObj = pHit;
                             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
                             ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
                             if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
                             {
                                 aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                                 aHelpText = pInfo->GetHlink();
                             }
-#endif
                         }
                     }
                 }
@@ -437,3 +436,5 @@ com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
 
     return xAccessible;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

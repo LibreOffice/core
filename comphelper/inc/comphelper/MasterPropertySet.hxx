@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,7 @@
 #include <comphelper/PropertyInfoHash.hxx>
 #include "comphelper/comphelperdllapi.h"
 #include <map>
-namespace vos
-{
-    class IMutex;
-}
+
 namespace comphelper
 {
     class MasterPropertySetInfo;
@@ -71,7 +69,7 @@ namespace comphelper
     {
     protected:
         MasterPropertySetInfo *mpInfo;
-        vos::IMutex *mpMutex;
+        osl::SolarMutex* mpMutex;
         sal_uInt8 mnLastId;
         SlaveMap maSlaveMap;
         ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySetInfo > mxInfo;
@@ -105,7 +103,7 @@ namespace comphelper
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     public:
-        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, ::vos::IMutex *pMutex = NULL )
+        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, ::osl::SolarMutex* pMutex = NULL )
             throw();
         virtual ~MasterPropertySet()
             throw();
@@ -153,3 +151,4 @@ namespace comphelper
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

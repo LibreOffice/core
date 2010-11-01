@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -336,3 +337,5 @@ DdeHotLink::DdeHotLink( DdeConnection& rConnection, const String& rString, long 
 DdeLink( rConnection, rString, l )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

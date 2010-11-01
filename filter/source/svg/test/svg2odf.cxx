@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *    OpenOffice.org - a multi-platform office productivity suite
@@ -122,3 +123,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                             svgi::createSerializer(new OutputWrap(aDstURL)));
     return aReader.parseAndConvert() ? 0 : 1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,9 @@ ADDITIONAL_FILES= \
 .IF "$(GUI)$(COM)"=="WNTGCC"
 PATCH_FILES=db-4.7.25-mingw.patch
 .ELSE
-PATCH_FILES=db-4.7.25.patch
+PATCH_FILES=\
+    db-4.7.25.patch \
+    db-aix.patch
 .ENDIF
 
 # clean compiler flags

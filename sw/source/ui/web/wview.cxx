@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,7 +184,7 @@ void SwWebView::SelectShell()
                     break;
             }
             pSfxShell = rDispatcher.GetShell( --i );
-            ASSERT( pSfxShell, "My Shell ist lost in space" );
+            OSL_ENSURE( pSfxShell, "My Shell ist lost in space" );
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
@@ -335,3 +336,4 @@ void SwWebView::SelectShell()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

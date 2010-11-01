@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 #include "vcl/salgtype.hxx"
-#include "vos/thread.hxx"
+#include "osl/thread.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salnativewidgets.hxx"
 #include "vcl/salctrlhandle.hxx"
@@ -492,3 +493,5 @@ public:
 };
 
 #endif // _SV_SALGDI_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

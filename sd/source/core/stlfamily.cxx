@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svl/style.hxx>
@@ -50,7 +51,6 @@
 #include <map>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -244,7 +244,7 @@ void SAL_CALL SdStyleFamily::setName( const ::rtl::OUString& ) throw (RuntimeExc
 
 Any SAL_CALL SdStyleFamily::getByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return Any( Reference< XStyle >( static_cast<SfxUnoStyleSheet*>(GetSheetByName( rName )) ) );
 }
@@ -253,7 +253,7 @@ Any SAL_CALL SdStyleFamily::getByName( const OUString& rName ) throw(NoSuchEleme
 
 Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -300,7 +300,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
 
 sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( aName.getLength() )
@@ -339,7 +339,7 @@ Type SAL_CALL SdStyleFamily::getElementType() throw(RuntimeException)
 
 sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
@@ -366,7 +366,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
 
 sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     sal_Int32 nCount = 0;
@@ -392,7 +392,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
 
 Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( Index >= 0 )
@@ -434,7 +434,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
 
 void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if(rName.getLength() == 0)
@@ -452,7 +452,7 @@ void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rEl
 
 void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     SdStyleSheet* pStyle = GetSheetByName( rName );
@@ -469,7 +469,7 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchE
 
 void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     SdStyleSheet* pOldStyle = GetSheetByName( rName );
@@ -485,7 +485,7 @@ void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aE
 
 Reference< XInterface > SAL_CALL SdStyleFamily::createInstance() throw(Exception, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
@@ -556,7 +556,7 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
 {
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ))
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         OUString sDisplayName;
         switch( mnFamily )
         {
@@ -601,3 +601,4 @@ void SdStyleFamily::removeVetoableChangeListener( const OUString& , const Refere
     OSL_ENSURE( 0, "###unexpected!" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

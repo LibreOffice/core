@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,8 @@
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <tools/string.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -139,7 +141,7 @@ class OSharedConnectionManager;
 //============================================================
 /** a class which provides an IMutex interface to an OSL-based mutex
 */
-class VosMutexFacade : public ::vos::IMutex
+class VosMutexFacade : public ::osl::SolarMutex
 {
 public:
     /** beware of life time: the mutex you pass here must live as least as long
@@ -639,3 +641,4 @@ public:
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

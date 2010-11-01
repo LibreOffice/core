@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,12 +52,8 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-/*---------------------------------------------------------------------------
-    Beschreibung:
- ----------------------------------------------------------------------------*/
 
 void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt)
 {
@@ -90,7 +87,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
             uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-            ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+            OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
             if( !xControlModel.is() )
                 return;
 
@@ -138,4 +135,4 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
     rSh.EndAction();
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

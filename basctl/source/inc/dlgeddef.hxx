@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,3 +82,5 @@ const UINT32 DlgInventor = UINT32('D')*0x00000001+
 
 
 #endif // _BASCTL_DLGEDDEF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

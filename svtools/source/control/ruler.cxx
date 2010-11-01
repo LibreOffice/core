@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -474,8 +475,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     BOOL    bNoTicks = FALSE;
 
     //Amelia
-    long    nTickUnit ;
-    long    nTick2 ;
+    long    nTickUnit = 0;
+    long    nTick2 = 0;
     if ( mnUnitIndex == RULER_UNIT_CHAR )
     {
         if ( mnCharWidth == 0 )
@@ -3235,3 +3236,5 @@ void Ruler::DrawTicks()
     mbFormat = TRUE;
     ImplDraw();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

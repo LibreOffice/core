@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -306,7 +307,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
 #ifdef UNX
 umask(old_mode);
 #endif
-            if ( err == FileBase::E_None )
+            if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
                 _rImpl.aName = aTmp;
                 aFile.close();
@@ -491,3 +492,5 @@ String TempFile::GetTempNameBaseDirectory()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

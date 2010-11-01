@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,8 @@
 #include "swdllapi.h"
 
 // class SwLabItem ----------------------------------------------------------
-
 class SwLabCfgItem;
+
 class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
 {
 
@@ -111,7 +112,6 @@ public:
 };
 
 // class SwLabCfgItem -------------------------------------------------------
-
 class SwLabCfgItem : public utl::ConfigItem
 {
     SwLabItem   aItem;
@@ -129,3 +129,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

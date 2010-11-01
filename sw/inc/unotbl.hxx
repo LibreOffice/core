@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -337,7 +338,7 @@ public:
     SwXTextTable(SwFrmFmt& rFrmFmt);
 
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -421,8 +422,6 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-
-    static SwXTextTable* GetImplementation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xRef );
 };
 
 /* -----------------27.04.98 16:41-------------------
@@ -623,3 +622,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

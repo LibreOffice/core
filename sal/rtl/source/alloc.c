@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* xBSD */
     return (sal_Size)(getpagesize());
 }
-#elif defined(LINUX) || defined(SOLARIS)
+#elif defined(LINUX) || defined(SOLARIS) || defined(AIX)
 static sal_Size __rtl_memory_vmpagesize (void)
 {
     /* POSIX */
@@ -87,7 +88,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* other */
     return (sal_Size)(0x2000);
 }
-#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS */
+#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS || AIX */
 
 #ifndef PROT_HEAP
 #define PROT_HEAP (PROT_READ | PROT_WRITE | PROT_EXEC)
@@ -284,6 +285,38 @@ static sal_Size __rtl_memory_vmpagesize (void)
 #define RTL_MEMORY_FREE(p, n) (void)(free(p))
 
 #endif /* SAL_OS2 */
+
+/*===========================================================================
+ *
+ * Determine allocation mode (debug/release) by examining unix
+ * environment variable "G_SLICE"
+ *
+ *=========================================================================*/
+
+#include <stdlib.h>   /* getenv */
+#include <stdio.h>    /* stderr */
+
+typedef
+   enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET }
+   AllocMode;
+
+static AllocMode alloc_mode = AMode_UNSET;
+
+static void determine_alloc_mode ( void )
+{
+   /* This shouldn't happen, but still ... */
+   if (alloc_mode != AMode_UNSET)
+      return;
+
+   if (getenv("G_SLICE") != NULL) {
+      alloc_mode = AMode_SYSTEM;
+      fprintf(stderr, "OOo: Using system memory allocator.\n");
+      fprintf(stderr, "OOo: This is for debugging only.  To disable,\n");
+      fprintf(stderr, "OOo: unset the environment variable G_SLICE.\n");
+   } else {
+      alloc_mode = AMode_CUSTOM;
+   }
+}
 
 /*===========================================================================
  *
@@ -1233,8 +1266,8 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
 /*
  * rtl_reallocateMemory.
  */
-#ifndef FORCE_SYSALLOC
-void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+static
+void* SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     memory_type * memory;
     if (!(!p || !n))
@@ -1390,18 +1423,33 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
     }
     return (p);
 }
-#else  /* FORCE_SYSALLOC */
-void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+
+static
+void* SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     return realloc(p, (sal_Size)(n));
 }
-#endif /* FORCE_SYSALLOC */
+
+void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+{
+   while (1) {
+      if (alloc_mode == AMode_CUSTOM) {
+         return rtl_reallocateMemory_CUSTOM(p,n);
+      }
+      if (alloc_mode == AMode_SYSTEM) {
+         return rtl_reallocateMemory_SYSTEM(p,n);
+      }
+      determine_alloc_mode();
+   }
+}
+
+
 
 /*
  * rtl_allocateMemory.
  */
-#ifndef FORCE_SYSALLOC
-void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
+static
+void* SAL_CALL rtl_allocateMemory_CUSTOM (sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = 0;
     if (n > 0)
@@ -1423,18 +1471,33 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
     }
     return (p);
 }
-#else  /* FORCE_SYSALLOC */
-void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
+
+static
+void* SAL_CALL rtl_allocateMemory_SYSTEM (sal_Size n) SAL_THROW_EXTERN_C()
 {
     return malloc((sal_Size)(n));
 }
-#endif /* FORCE_SYSALLOC */
+
+void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
+{
+   while (1) {
+      if (alloc_mode == AMode_CUSTOM) {
+         return rtl_allocateMemory_CUSTOM(n);
+      }
+      if (alloc_mode == AMode_SYSTEM) {
+         return rtl_allocateMemory_SYSTEM(n);
+      }
+      determine_alloc_mode();
+   }
+}
+
+
 
 /*
  * rtl_freeMemory.
  */
-#ifndef FORCE_SYSALLOC
-void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
+static
+void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
 {
     if (p)
     {
@@ -1455,18 +1518,34 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
         RTL_MEMORY_LEAVE();
     }
 }
-#else  /* FORCE_SYSALLOC */
-void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
+
+static
+void SAL_CALL rtl_freeMemory_SYSTEM (void * p) SAL_THROW_EXTERN_C()
 {
     free(p);
 }
-#endif /* FORCE_SYSALLOC */
+
+void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
+{
+   while (1) {
+      if (alloc_mode == AMode_CUSTOM) {
+         rtl_freeMemory_CUSTOM(p);
+     return;
+      }
+      if (alloc_mode == AMode_SYSTEM) {
+         rtl_freeMemory_SYSTEM(p);
+     return;
+      }
+      determine_alloc_mode();
+   }
+}
+
 
 /*
  * rtl_allocateZeroMemory.
  */
-#ifndef FORCE_SYSALLOC
-void* SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
+static
+void* SAL_CALL rtl_allocateZeroMemory_CUSTOM (sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = 0;
     if (n > 0)
@@ -1489,18 +1568,32 @@ void* SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
     }
     return (p);
 }
-#else  /* FORCE_SYSALLOC */
-void* SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
+
+static
+void* SAL_CALL rtl_allocateZeroMemory_SYSTEM (sal_Size n) SAL_THROW_EXTERN_C()
 {
     return calloc((sal_Size)(n), 1);
 }
-#endif /* FORCE_SYSALLOC */
+
+void* SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
+{
+   while (1) {
+      if (alloc_mode == AMode_CUSTOM) {
+         return rtl_allocateZeroMemory_CUSTOM(n);
+      }
+      if (alloc_mode == AMode_SYSTEM) {
+         return rtl_allocateZeroMemory_SYSTEM(n);
+      }
+      determine_alloc_mode();
+   }
+}
+
 
 /*
  * rtl_freeZeroMemory.
  */
-#ifndef FORCE_SYSALLOC
-void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+static
+void SAL_CALL rtl_freeZeroMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     (void) n; /* unused */
     if (p)
@@ -1523,8 +1616,9 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
         RTL_MEMORY_LEAVE();
     }
 }
-#else  /* FORCE_SYSALLOC */
-void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+
+static
+void SAL_CALL rtl_freeZeroMemory_SYSTEM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (p)
     {
@@ -1532,10 +1626,26 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
         free(p);
     }
 }
-#endif /* FORCE_SYSALLOC */
+
+void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+{
+   while (1) {
+      if (alloc_mode == AMode_CUSTOM) {
+         rtl_freeZeroMemory_CUSTOM(p,n);
+     return;
+      }
+      if (alloc_mode == AMode_SYSTEM) {
+         rtl_freeZeroMemory_SYSTEM(p,n);
+     return;
+      }
+      determine_alloc_mode();
+   }
+}
 
 /*===========================================================================
  *
  * The End.
  *
  *=========================================================================*/
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

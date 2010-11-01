@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,7 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if (!getPeer().is())
         {
@@ -335,7 +336,7 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL ONavigationBarPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw( RuntimeException )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );
         if ( !pNavBar )
@@ -416,7 +417,7 @@ namespace frm
     //------------------------------------------------------------------
     Any SAL_CALL ONavigationBarPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( RuntimeException )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Any aReturn;
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );
@@ -562,3 +563,5 @@ namespace frm
 //.........................................................................
 }   // namespace frm
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

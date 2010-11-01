@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
@@ -362,11 +362,13 @@ class FieldEntry
     private:
         ::rtl::OUString msBookmarkName;
         ::rtl::OUString msMarkType;
+        ::rtl::OUString msMarkCode;
         ::sw::mark::IFieldmark::parameter_map_t maParams;
 
     public:
         sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
+        ULONG mnObjLocFc;
         FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
         FieldEntry(const FieldEntry &rOther) throw();
         FieldEntry &operator=(const FieldEntry &rOther) throw();
@@ -377,8 +379,10 @@ class FieldEntry
 
         ::rtl::OUString GetBookmarkName();
         ::rtl::OUString GetBookmarkType();
+        ::rtl::OUString GetBookmarkCode();
         void SetBookmarkName(::rtl::OUString bookmarkName);
         void SetBookmarkType(::rtl::OUString bookmarkType);
+        void SetBookmarkCode(::rtl::OUString bookmarkCode);
         ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
@@ -533,15 +537,6 @@ private:
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
-#if 0
-    //#i3029# we are no longer importing editboxes as uno textboxes, using
-    //input fields instead for superior layout.
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
-        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
-        com::sun::star::uno::Reference <
-        com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz);
-#endif
 };
 
 class SwMSConvertControls: public SvxMSConvertOCXControls
@@ -1178,12 +1173,9 @@ private:
     //border which has been previously set to a value and for which becoming
     //empty is valid. Set bCheBtwn to work with paragraphs that have a special
     //between paragraphs border
-#if 0
-    // #i20672# we can't properly support between lines so best to ignore
+
+    // Note #i20672# we can't properly support between lines so best to ignore
     // them for now
-    bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        BYTE nSetBorders=0xFF, bool bChkBtwn = false) const;
-#endif
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
         BYTE nSetBorders=0xFF) const;
     void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
@@ -1417,7 +1409,7 @@ private:
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const;
     // <--
-
+    bool ReadGlobalTemplateSettings( const rtl::OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);
@@ -1638,4 +1630,4 @@ bool RTLDrawingsHack(long &rLeft, long nWidth,
     SwTwips nPageRight, SwTwips nPageSize);
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

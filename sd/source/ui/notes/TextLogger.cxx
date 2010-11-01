@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "TextLogger.hxx"
 
 #include "EditWindow.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd { namespace notes {
@@ -42,7 +43,7 @@ TextLogger& TextLogger::Instance (void)
 {
     if (spInstance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (spInstance == NULL)
             spInstance = new TextLogger ();
     }
@@ -127,3 +128,5 @@ IMPL_LINK(TextLogger, WindowEventHandler, VclWindowEvent*, pEvent)
 
 
 } } // end of namespace ::sd::notes
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

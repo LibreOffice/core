@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,7 +248,7 @@
 
 #define DFF_msofbtSelection         0xF119 //                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0
 
-// Werte fuer den ULONG im DFF_PST_TextHeaderAtom
+// Values for the ULONG in DFF_PST_TextHeaderAtom
 enum DFF_TextHeader {
     DFFTH_TITLE,
     DFFTH_BODY,
@@ -578,7 +579,7 @@ enum DFF_TextHeader {
 #define DFF_PBit_Print              0x00000001
 
 //---------------------------------------------------------------------------
-//  Dreh- und Angelpunkt: der Shape-Typ
+// linchpin: the shape type
 //---------------------------------------------------------------------------
 typedef enum
    {
@@ -790,10 +791,10 @@ typedef enum
    mso_sptNil = mso_sptMax
  } MSO_SPT;
 
-// verschiedene enums aus der OfficeDraw-Doku, Appendix D - Anfang
+// different enums from the OfficeDraw documentation, Appendix D - beginning
 //
-// beachte: in Abweichung von der MS-Doku beginnen alle
-// mit "mso_" statt mit "mso"
+// note: in opposite to the MS documentation, they all
+// start with "mso_" instead of "mso"
 //
 enum MSO_ShapePath {
    mso_shapeLines,        // A line of straight segments
@@ -1219,3 +1220,5 @@ void  *m_pvBits;              // raster bits of the blip.
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

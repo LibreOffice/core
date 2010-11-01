@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ namespace rptui
 
         };
 
-        const size_t nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );
+        const size_t nFactories = SAL_N_ELEMENTS( aFactories );
         Sequence< Any > aReturn( nFactories );
         Any* pReturn = aReturn.getArray();
         for ( size_t i = 0; i < nFactories; ++i )
@@ -237,7 +238,7 @@ namespace rptui
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
         };
 
-        const size_t nCategories = sizeof( aCategories ) / sizeof( aCategories[0] );
+        const size_t nCategories = SAL_N_ELEMENTS( aCategories );
         Sequence< PropertyCategoryDescriptor > aReturn( nCategories );
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )
@@ -275,3 +276,4 @@ namespace rptui
 } // namespace rptui
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

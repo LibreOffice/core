@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -212,7 +213,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
         LogHelper::logIt(ex);
     }
 
-    Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    Any aAny = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
     ::rtl::OUString aLocale;
     if ( aAny >>= aLocale )
         m_aLocale = aLocale;
@@ -1295,3 +1296,5 @@ sal_Bool SvtUserOptions::IsTokenReadonly( USHORT nToken ) const
     ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetToken( nToken );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

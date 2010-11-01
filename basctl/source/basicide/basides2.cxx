@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -328,10 +329,10 @@ void __EXPORT BasicIDEShell::Move()
         ((ModulWindow*)pCurWin)->FrameWindowMoved();
 }
 
-void __EXPORT BasicIDEShell::ShowCursor( FASTBOOL bOn )
+void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->ShowCursor( (BOOL)bOn );
+        ((ModulWindow*)pCurWin)->ShowCursor( bOn );
 }
 
 // Hack for #101048
@@ -349,3 +350,4 @@ void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
         CheckWindows();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,18 +30,18 @@
 #include "precompiled_fpicker.hxx"
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
 int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId)
 {
     int nAcquireCount = 0;
-    vos::IMutex& rSolarMutex = Application::GetSolarMutex();
-    vos::OThread::TThreadIdentifier nMainThreadId = Application::GetMainThreadIdentifier();
+    osl::SolarMutex& rSolarMutex = Application::GetSolarMutex();
+    oslThreadIdentifier nMainThreadId = Application::GetMainThreadIdentifier();
 
     if ( nMainThreadId == nThreadId )
     {
-        ::vos::IMutex& rMutex = Application::GetSolarMutex();
+        ::osl::SolarMutex& rMutex = Application::GetSolarMutex();
         if ( rMutex.tryToAcquire() )
             nAcquireCount = Application::ReleaseSolarMutex() - 1;
     }
@@ -53,3 +54,5 @@ void AcquireSolarMutex(int nAcquireCount)
     if ( nAcquireCount )
         Application::AcquireSolarMutex( nAcquireCount );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

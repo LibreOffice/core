@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,10 +74,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDialog = pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION );
-            DBG_ASSERT(pDialog, "Dialogdiet fail!");
+            OSL_ENSURE(pDialog, "Dialogdiet fail!");
             if ( pDialog )
             {
                 pDialog->Execute();
@@ -87,10 +88,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         pMDI, *pWrtShell, TRUE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             pDlg->SetHelpId(FN_EDIT_FOOTNOTE);
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
@@ -239,3 +240,4 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

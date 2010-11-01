@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -176,7 +177,7 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( aDepend.GetRegisteredIn() )
         const_cast < SwModify *>( aDepend.GetRegisteredIn() )->Remove( &aDepend );
@@ -188,7 +189,7 @@ void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -204,7 +205,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -273,3 +274,5 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
 {
     return getSize().Width;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -159,14 +159,6 @@ TabPage TP_DOCINFOSECURITY
     };
 };
 
-String RID_SFX_PROTECT_RECORDS
-{
-    Text [ en-US ] = "Protect Records" ;
-};
-String RID_SFX_UNPROTECT_RECORDS
-{
-    Text [ en-US ] = "Unprotect Records" ;
-};
 String RID_SFX_INCORRECT_PASSWORD
 {
     Text [ en-US ] = "Incorrect password" ;

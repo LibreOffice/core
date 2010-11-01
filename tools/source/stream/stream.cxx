@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,15 @@ inline static void SwapLongUInt( unsigned int& r )
 #ifdef UNX
 inline static void SwapFloat( float& r )
     {
-        *((sal_uInt32*)(void*)&r) = SWAPLONG( *((sal_uInt32*)(void*)&r) );
+        union
+        {
+            float f;
+            sal_uInt32 c;
+        } s;
+
+        s.f = r;
+        s.c = SWAPLONG( s.c );
+        r = s.f;
     }
 inline static void SwapDouble( double& r )
     {
@@ -105,12 +114,19 @@ inline static void SwapDouble( double& r )
         }
         else
         {
-          sal_uInt32* c = (sal_uInt32*)(void*)&r;
-          c[0] ^= c[1]; // zwei 32-Bit-Werte in situ vertauschen
-          c[1] ^= c[0];
-          c[0] ^= c[1];
-          c[0] = SWAPLONG(c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
-          c[1] = SWAPLONG(c[1]);
+            union
+            {
+                double d;
+                sal_uInt32 c[2];
+            } s;
+
+            s.d = r;
+            s.c[0] ^= s.c[1]; // zwei 32-Bit-Werte in situ vertauschen
+            s.c[1] ^= s.c[0];
+            s.c[0] ^= s.c[1];
+            s.c[0] = SWAPLONG(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
+            s.c[1] = SWAPLONG(s.c[1]);
+            r = s.d;
         }
     }
 #endif
@@ -2839,3 +2855,5 @@ TYPEINIT0 ( SvDataCopyStream )
 void SvDataCopyStream::Assign( const SvDataCopyStream& )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

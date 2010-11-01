@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <rtl/logfile.hxx>
 
@@ -947,7 +948,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ) )
                     {
                         // Security check for local files depending on the extension
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window *pWindow = SFX_APP()->GetTopWindow();
 
                         String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
@@ -971,7 +972,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             }
             else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window *pWindow = SFX_APP()->GetTopWindow();
 
                 String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
@@ -1009,13 +1010,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         }
                         catch ( ::com::sun::star::lang::IllegalArgumentException& )
                         {
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
+                            SolarMutexGuard aGuard;
                             Window *pWindow = SFX_APP()->GetTopWindow();
                             ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                         }
                         catch ( ::com::sun::star::system::SystemShellExecuteException& )
                         {
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
+                            SolarMutexGuard aGuard;
                             Window *pWindow = SFX_APP()->GetTopWindow();
                             ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                         }
@@ -1092,7 +1093,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 }
                                 catch ( ::com::sun::star::lang::IllegalArgumentException& )
                                 {
-                                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                                    SolarMutexGuard aGuard;
                                     Window *pWindow = SFX_APP()->GetTopWindow();
                                     ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                                 }
@@ -1100,7 +1101,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 {
                                     if ( !pFilter )
                                     {
-                                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                                        SolarMutexGuard aGuard;
                                         Window *pWindow = SFX_APP()->GetTopWindow();
                                         ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                                     }
@@ -1353,3 +1354,5 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         delete pLinkItem;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

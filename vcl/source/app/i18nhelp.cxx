@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -185,3 +186,5 @@ String vcl::I18nHelper::GetNum( long nNumber, USHORT nDecimals, BOOL bUseThousan
 {
     return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

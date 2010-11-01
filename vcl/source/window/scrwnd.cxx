@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-// #include <math.h>
 #include <limits.h>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
@@ -410,3 +410,5 @@ IMPL_LINK( ImplWheelWindow, ImplScrollHdl, Timer*, EMPTYARG )
 
     return 0L;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

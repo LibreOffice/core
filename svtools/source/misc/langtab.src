@@ -323,6 +323,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Yoruba" ; LANGUAGE_YORUBA ; > ;
         < "Rusyn (Ukraine)" ; LANGUAGE_USER_RUSYN_UKRAINE ; > ;
         < "Rusyn (Slovakia)" ; LANGUAGE_USER_RUSYN_SLOVAKIA ; > ;
+        < "Kabyle Latin" ; LANGUAGE_TAMAZIGHT_LATIN ; > ;
     };
 };
 

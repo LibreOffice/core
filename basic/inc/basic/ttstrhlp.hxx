@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,3 +73,4 @@ UniString GEN_RES_STR3( ULONG nResId, const UniString &Text1, const UniString &T
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

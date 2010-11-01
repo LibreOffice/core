@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #if defined UNX && defined ALPHA
 #include <fstream.hxx>
 #endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -2167,3 +2168,4 @@ int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
     return nRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -756,3 +757,5 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
 
 } // vba
 } // ooo
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

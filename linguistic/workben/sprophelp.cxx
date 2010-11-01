@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include "misc.hxx"
 
 #include "sprophelp.hxx"
@@ -192,7 +194,7 @@ static const char *aSP[] =
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet ) :
-    PropertyChgHelper   ( rxSource, rxPropSet, aSP, sizeof(aSP) / sizeof(aSP[0]) )
+    PropertyChgHelper   ( rxSource, rxPropSet, aSP, SAL_N_ELEMENTS(aSP))
 {
     SetDefault();
     INT32 nLen = GetPropNames().getLength();
@@ -370,3 +372,4 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
 
 ///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

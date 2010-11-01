@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -850,27 +851,6 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
     //     XPropertyContainer interface should be replaced by
     //     XCommandProcessor commands!
     uno::Reference< ucb::XCommandEnvironment > xEnv;
-
-#if 0
-    // @@@ REMOVEABLE z.Z. nicht richtig an der PropSetInfo gesetzt!!!
-    try
-    {
-        beans::Property aProp
-            = getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
-                ->getPropertyByName( Name );
-
-        if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVEABLE ) )
-        {
-            // Not removeable!
-            throw beans::NotRemoveableException();
-        }
-    }
-    catch ( beans::UnknownPropertyException const & )
-    {
-        //OSL_ENSURE( sal_False, "removeProperty - Unknown property!" );
-        throw;
-    }
-#endif
 
     //////////////////////////////////////////////////////////////////////
     // Try to remove property from server.
@@ -3245,3 +3225,5 @@ const Content::ResourceType & Content::getResourceType(
 {
     return getResourceType( xEnv, m_xResAccess );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

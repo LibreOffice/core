@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-
-#ifndef GCC
-#endif
-
-//------------------------------------------------------------------
-
-//#include "Svitems.hxx"
-
 #include "property.hxx"
-/*
-#include "property.hrc"
-#include "Scresid.hxx"
-*/
+
 #define FRAME_OFFSET 4
 
 
@@ -1558,3 +1548,4 @@ IMPL_LINK( ScPropertyDlg, SelectHdl, SvBasicPropertyDataControl*,pProCtr)
 */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

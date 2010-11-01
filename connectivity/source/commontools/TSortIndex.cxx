@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,11 +86,11 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
 };
 
 // -----------------------------------------------------------------------------
-::vos::ORef<OKeySet> OSortIndex::CreateKeySet()
+::rtl::Reference<OKeySet> OSortIndex::CreateKeySet()
 {
     Freeze();
 
-    ::vos::ORef<OKeySet> pKeySet = new OKeySet();
+    ::rtl::Reference<OKeySet> pKeySet = new OKeySet();
     pKeySet->get().reserve(m_aKeyValues.size());
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
@@ -176,3 +177,4 @@ OKeyValue* OKeyValue::createKeyValue(sal_Int32 _nVal)
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

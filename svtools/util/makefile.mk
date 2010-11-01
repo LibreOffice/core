@@ -120,8 +120,8 @@ SHL1STDLIBS+= \
         $(COMPHELPERLIB)	\
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
-        $(VOSLIB)			\
         $(SALLIB)			\
+        $(SALHELPERLIB)			\
         $(ICUUCLIB)		\
         $(JVMFWKLIB) \
         $(BASEGFXLIB)
@@ -169,7 +169,6 @@ APP2STDLIBS+= -lsvl$(DLLPOSTFIX)
 
 APP2STDLIBS+=	$(VCLLIB)		\
                 $(TOOLSLIB)		\
-                $(VOSLIB) 		\
                 $(SALLIB)
 
 # --- Targets ------------------------------------------------------

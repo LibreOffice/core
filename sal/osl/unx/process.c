@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #endif
 
 
-#ifdef FREEBSD
+#if defined(FREEBSD) || defined(NETBSD)
 #include <machine/param.h>
 #endif
 
@@ -70,7 +71,7 @@
 #define MAX_ARGS        255
 #define MAX_ENVS        255
 
-#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD)
+#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
 
@@ -475,7 +476,7 @@ static void ChildStatusProc(void *pData)
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)\n", errno, strerror(errno));
-#if defined(LINUX) || defined (FREEBSD)
+#if defined(LINUX) || defined (FREEBSD) || defined(NETBSD)
             unsetenv("HOME");
 #else
             putenv("HOME=");
@@ -1534,3 +1535,5 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
     return osl_joinProcessWithTimeout(Process, NULL);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

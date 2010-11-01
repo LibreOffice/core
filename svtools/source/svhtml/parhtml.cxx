@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1904,9 +1905,9 @@ int HTMLParser::FilterListing( int nToken )
     return nToken;
 }
 
-FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
-                                   BOOL bSwitchToUCS2,
-                                   rtl_TextEncoding eEnc )
+bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
+                               BOOL bSwitchToUCS2,
+                               rtl_TextEncoding eEnc )
 {
     // Einer der folgenden regulaeren Ausdrucke muss sich auf den String
     // anwenden lassen, damit das Dok ein HTML-Dokument ist.
@@ -2367,3 +2368,4 @@ BOOL HTMLParser::SetEncodingByHTTPHeader(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

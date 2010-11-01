@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_editeng.hxx"
 
+#include <sal/macros.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -74,6 +76,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -147,7 +150,7 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        INT32   nCount = SAL_N_ELEMENTS(aLangList);
         for (INT32 i = 0;  i < nCount;  i++)
         {
             INT16 nTmpLang = aLangList[i];
@@ -1654,3 +1657,5 @@ Selection EditView::GetSurroundingTextSelection() const
         return Selection( aSelection.nStartPos, aSelection.nEndPos );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
@@ -294,7 +295,7 @@ Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBo
 //------------------------------------------------------------------------
 void SAL_CALL FmXPageViewWinRec::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Reference< XWindow >  xWindow( _Control, UNO_QUERY );
     if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
@@ -1956,3 +1957,5 @@ DocumentType FmXFormView::impl_getDocumentType() const
         return GetFormShell()->GetImpl()->getDocumentType();
     return eUnknownDocumentType;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,3 +69,5 @@ class ImageWrapper : public ThreadHelpBase                          ,   // Struc
 }
 
 #endif // __FRAMEWORK_CLASSES_IMAGEWRAPPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

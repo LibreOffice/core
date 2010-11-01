@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -476,11 +477,6 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             aRet.SetPrefSize( maPhysSize );
         }
 
-#if 0
-        // TODO: make sure nobody depends on the stream being after the IEND chunks
-        // => let them do ReadChunks before
-        ReadRemainingChunks();
-#endif
     }
 
     return aRet;
@@ -1577,3 +1573,5 @@ void PNGReader::SetIgnoreGammaChunk( sal_Bool b )
 
 
 } // namespace vcl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

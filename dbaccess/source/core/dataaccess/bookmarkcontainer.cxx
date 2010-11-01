@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,16 +50,14 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OBookmarkContainer
 //==========================================================================
 DBG_NAME(OBookmarkContainer)
-//--------------------------------------------------------------------------
+
 OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
     :m_rParent(_rParent)
     ,m_aContainerListeners(_rMutex)
@@ -67,7 +66,6 @@ OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
     DBG_CTOR(OBookmarkContainer, NULL);
 }
 
-//--------------------------------------------------------------------------
 void OBookmarkContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
@@ -81,32 +79,27 @@ void OBookmarkContainer::dispose()
     m_aBookmarks.clear();
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::acquire(  ) throw()
 {
     m_rParent.acquire();
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::release(  ) throw()
 {
     m_rParent.release();
 }
 
-//--------------------------------------------------------------------------
 OBookmarkContainer::~OBookmarkContainer()
 {
     DBG_DTOR(OBookmarkContainer, NULL);
 }
 
 // XServiceInfo
-//--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.OBookmarkContainer");
 }
 
-//--------------------------------------------------------------------------
 sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -114,7 +107,6 @@ sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _r
     return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aReturn(1);
@@ -123,7 +115,6 @@ Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getSupportedServiceName
 }
 
 // XNameContainer
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -153,7 +144,6 @@ void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, c
     }
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ::rtl::OUString sOldBookmark;
@@ -186,7 +176,6 @@ void SAL_CALL OBookmarkContainer::removeByName( const ::rtl::OUString& _rName ) 
 }
 
 // XNameReplace
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ClearableMutexGuard aGuard(m_rMutex);
@@ -222,7 +211,6 @@ void SAL_CALL OBookmarkContainer::replaceByName( const ::rtl::OUString& _rName, 
     }
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -230,7 +218,6 @@ void SAL_CALL OBookmarkContainer::addContainerListener( const Reference< XContai
         m_aContainerListeners.addInterface(_rxListener);
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -239,7 +226,6 @@ void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XCon
 }
 
 // XElementAccess
-//--------------------------------------------------------------------------
 Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -247,7 +233,6 @@ Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException)
     return ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
 }
 
-//--------------------------------------------------------------------------
 sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -256,7 +241,6 @@ sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
 }
 
 // XEnumerationAccess
-//--------------------------------------------------------------------------
 Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -264,7 +248,6 @@ Reference< XEnumeration > SAL_CALL OBookmarkContainer::createEnumeration(  ) thr
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
 }
 
-//--------------------------------------------------------------------------
 // XIndexAccess
 sal_Int32 SAL_CALL OBookmarkContainer::getCount(  ) throw(RuntimeException)
 {
@@ -273,7 +256,6 @@ sal_Int32 SAL_CALL OBookmarkContainer::getCount(  ) throw(RuntimeException)
     return m_aBookmarks.size();
 }
 
-//--------------------------------------------------------------------------
 Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -285,7 +267,6 @@ Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutO
     return makeAny(m_aBookmarksIndexed[_nIndex]->second);
 }
 
-//--------------------------------------------------------------------------
 Any SAL_CALL OBookmarkContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -297,7 +278,6 @@ Any SAL_CALL OBookmarkContainer::getByName( const ::rtl::OUString& _rName ) thro
     return makeAny(m_aBookmarks[_rName]);
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -317,7 +297,6 @@ Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) thr
     return aNames;
 }
 
-//--------------------------------------------------------------------------
 sal_Bool SAL_CALL OBookmarkContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -326,7 +305,6 @@ sal_Bool SAL_CALL OBookmarkContainer::hasByName( const ::rtl::OUString& _rName )
     return checkExistence(_rName);
 }
 
-//--------------------------------------------------------------------------
 void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 {
     MutexGuard aGuard(m_rMutex);
@@ -359,7 +337,6 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
     m_aBookmarks.erase(aMapPos);
 }
 
-//--------------------------------------------------------------------------
 void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::OUString& _rDocumentLocation)
 {
     MutexGuard aGuard(m_rMutex);
@@ -368,7 +345,6 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
     m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
 }
 
-//--------------------------------------------------------------------------
 void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl::OUString& _rNewLink)
 {
     MutexGuard aGuard(m_rMutex);
@@ -377,23 +353,19 @@ void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl:
     m_aBookmarks[_rName] = _rNewLink;
 }
 
-//--------------------------------------------------------------------------
 void OBookmarkContainer::checkValid(sal_Bool /*_bIntendWriteAccess*/) const throw (RuntimeException, DisposedException)
 {
 }
 
-//--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OBookmarkContainer::getParent(  ) throw (RuntimeException)
 {
     return m_rParent;
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException)
 {
     throw NoSupportException();
 }
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

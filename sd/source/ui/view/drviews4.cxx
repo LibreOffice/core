@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -432,7 +433,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
-        FASTBOOL bIsSetPageOrg = mpDrawView->IsSetPageOrg();
+        bool bIsSetPageOrg = mpDrawView->IsSetPageOrg();
 
         if (mbIsRulerDrag)
         {
@@ -1001,3 +1002,5 @@ void DrawViewShell::ShowSnapLineContextMenu (
 #endif
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

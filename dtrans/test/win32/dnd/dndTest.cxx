@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,7 @@ CComModule _Module;
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/process.h>
 #include <cppuhelper/servicefactory.hxx>
-//#include "transferable.hxx"
 #include "sourcelistener.hxx"
-
 
 #include "atlwindow.hxx"
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -208,3 +207,5 @@ DWORD WINAPI MTAFunc( void* threadData)
     CoUninitialize();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

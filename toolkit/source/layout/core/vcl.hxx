@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,3 +47,5 @@ DECLARE_CLOSING_DIALOG (ModelessDialog);
 #undef DECLARE_CLOSING_DIALOG
 
 #endif /* LAYOUT_CORE_VCL_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

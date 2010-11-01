@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -819,17 +820,6 @@ void SfxObjectShell::SetTitle
         return;
 
     SfxApplication *pSfxApp = SFX_APP();
-#if 0
-    // wird 'unbenannt#' als Titel gesetzt
-    String aNoName(SfxResId(STR_NONAME));
-    if ( rTitle.Match(aNoName) <= aNoName.Len() )
-    {
-        // er ist es selbst => ignorieren
-        pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
-        pImp->bIsNamedVisible=0;
-    }
-#endif
-
     // ggf. die unbenannt-Nummer freigeben
     if ( pImp->bIsNamedVisible && USHRT_MAX != pImp->nVisualDocumentNumber )
     {
@@ -1700,7 +1690,7 @@ namespace
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const ::rtl::OUString& _rScriptURL,
-    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError )
+    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const ::com::sun::star::uno::Any* pCaller )
 {
     OSL_TRACE( "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
@@ -1731,7 +1721,16 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 
         // obtain the script, and execute it
         Reference< provider::XScript > xScript( xScriptProvider->getScript( _rScriptURL ), UNO_QUERY_THROW );
-
+        if ( pCaller && pCaller->hasValue() )
+        {
+            Reference< beans::XPropertySet > xProps( xScript, uno::UNO_QUERY );
+            if ( xProps.is() )
+            {
+                Sequence< uno::Any > aArgs( 1 );
+                aArgs[ 0 ] = *pCaller;
+                xProps->setPropertyValue( rtl::OUString::createFromAscii("Caller"), uno::makeAny( aArgs ) );
+            }
+        }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
     }
     catch ( const uno::Exception& )
@@ -1764,10 +1763,10 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
             aParams,
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam
-        , bool bRaiseError )
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
+            aOutParam, bool bRaiseError, const ::com::sun::star::uno::Any* pCaller )
 {
-    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError );
+    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError, pCaller );
 }
 
 //-------------------------------------------------------------------------
@@ -1813,7 +1812,7 @@ ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const St
     const void* _pArguments, void* _pReturn )
 {
     OSL_TRACE("in CallSBS");
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // the arguments for the call
     SbxArrayRef xMacroArguments = lcl_translateUno2Basic( _pArguments );
@@ -1849,7 +1848,7 @@ ErrCode SfxObjectShell::CallScript(
     void *pRet
 )
 {
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ErrCode nErr = ERRCODE_NONE;
     if( rScriptType.EqualsAscii( "StarBasic" ) )
     {
@@ -2578,3 +2577,4 @@ void SfxObjectShell::StoreLog()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

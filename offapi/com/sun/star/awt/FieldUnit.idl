@@ -35,7 +35,7 @@
 
 /** specifies attributes for the MetricField map units.
 
-    <p><b>IMPORTANT:</b> These constands have to be disjunct with
+    <p><b>IMPORTANT:</b> These constants have to be disjunct with
     constants in <type>util/MeasureUnit</type>.</p>
  */
 constants FieldUnit

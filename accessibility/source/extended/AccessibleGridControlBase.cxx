@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -163,7 +164,7 @@ Reference< XAccessibleStateSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleStateSet()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
@@ -219,7 +220,7 @@ awt::Size SAL_CALL AccessibleGridControlBase::getSize()
 sal_Bool SAL_CALL AccessibleGridControlBase::isShowing()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return implIsShowing();
@@ -363,7 +364,7 @@ void AccessibleGridControlBase::ensureIsAlive() const
 Rectangle AccessibleGridControlBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBox();
@@ -377,7 +378,7 @@ Rectangle AccessibleGridControlBase::getBoundingBox()
 Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBoxOnScreen();
@@ -461,7 +462,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint
 //// -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -486,7 +487,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     sal_Int32 nColor = 0;
@@ -533,3 +534,4 @@ GridControlAccessibleElement::~GridControlAccessibleElement( )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

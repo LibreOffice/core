@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
         { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L,  IMG_FORMFOLDER_TREE_LHC     },
         { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L,IMG_REPORTFOLDER_TREE_LHC   }
     };
-    for ( size_t i=0; i < sizeof(aCategories)/sizeof(aCategories[0]); ++i)
+    for ( size_t i=0; i < SAL_N_ELEMENTS(aCategories); ++i)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
             String( ModuleRes( aCategories[i].nLabelResId ) ),
@@ -117,3 +118,5 @@ sal_Int8 OApplicationIconControl::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     return DND_ACTION_NONE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

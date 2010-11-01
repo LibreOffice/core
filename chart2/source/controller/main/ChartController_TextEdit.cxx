@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -191,7 +192,7 @@ bool ChartController::EndTextEdit()
 
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( m_pDrawViewWrapper && !m_pDrawViewWrapper->IsTextEdit() )
         this->StartTextEdit();
@@ -267,3 +268,5 @@ uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

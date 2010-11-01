@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@ namespace grutils
         static const char FEAT_PREFIX;
         static const char FEAT_SEPARATOR;
         static const char FEAT_ID_VALUE_SEPARATOR;
-        static const std::string ISO_LANG;
         GrFeatureParser(gr::Font & font, const std::string features, const std::string lang);
         GrFeatureParser(gr::Font & font, const std::string lang);
         GrFeatureParser(const GrFeatureParser & copy);
@@ -73,3 +73,5 @@ namespace grutils
         unsigned char label[5];
     };
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

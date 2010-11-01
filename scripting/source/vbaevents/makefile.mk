@@ -69,6 +69,7 @@ SHL1STDLIBS= \
         $(BASICLIB) \
         $(COMPHELPERLIB) \
         $(SFXLIB) \
+        $(MSFILTERLIB) \
                 $(CPPULIB) \
                 $(TOOLSLIB) \
                 $(SALLIB)

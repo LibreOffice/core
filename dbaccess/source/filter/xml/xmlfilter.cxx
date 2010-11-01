@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -408,7 +409,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window*     pFocusWindow = Application::GetFocusWindow();
         xWindow = VCLUnoHelper::GetInterface( pFocusWindow );
         if( pFocusWindow )
@@ -421,7 +422,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 
     if ( xWindow.is() )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window* pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pFocusWindow )
             pFocusWindow->LeaveWait();
@@ -917,3 +918,5 @@ void ODBFilter::setPropertyInfo()
 // -----------------------------------------------------------------------------
 }// dbaxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

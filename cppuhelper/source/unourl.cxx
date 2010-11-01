@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -296,3 +297,5 @@ rtl::OUString const & UnoUrl::getObjectName() const
 {
     return m_xImpl->m_aObjectName;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

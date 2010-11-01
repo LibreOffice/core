@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,6 +61,18 @@ void lclConvertDoubleToBoolean( uno::Any& rAny )
     }
 }
 
+void lclConvertBooleanToDouble( uno::Any& rAny )
+{
+    sal_Bool bValue( sal_False );
+    if ( rAny >>= bValue )
+    {
+        if ( bValue )
+           rAny <<= double( 1.0 );
+        else
+           rAny <<= double( 0.0 );
+    }
+}
+
 } // namespace
 
 ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
@@ -84,9 +97,57 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
         uno::Any* pArrayEnd = pArray + aParamTemp.getLength();
         for( ; pArray < pArrayEnd; ++pArray )
         {
-            uno::Reference< excel::XRange > myRange( *pArray, uno::UNO_QUERY );
-            if( myRange.is() )
-                *pArray = myRange->getCellRange();
+            switch( pArray->getValueType().getTypeClass()  )
+            {
+                case uno::TypeClass_BOOLEAN:
+                    lclConvertBooleanToDouble( *pArray );
+                    break;
+                case uno::TypeClass_INTERFACE:
+                {
+                    uno::Reference< excel::XRange > myRange( *pArray, uno::UNO_QUERY );
+                    if( myRange.is() )
+                        *pArray = myRange->getCellRange();
+                }
+                    break;
+                case uno::TypeClass_SEQUENCE:
+                {
+                    // the sheet.FunctionAccess service doesn't deal with Sequences, only Sequences of Sequence
+                    uno::Type aType = pArray->getValueType();
+                    if ( aType.equals( getCppuType( (uno::Sequence<sal_Int16>*)0 ) ) )
+                    {
+                        uno::Sequence< uno::Sequence< sal_Int16 > >  aTmp(1);
+                        (*pArray) >>= aTmp[ 0 ];
+                        (*pArray) <<= aTmp;
+                    }
+                    else if ( aType.equals( getCppuType( (uno::Sequence<sal_Int32>*)0 ) ) )
+                    {
+                        uno::Sequence< uno::Sequence< sal_Int32 > > aTmp(1);
+                        (*pArray) >>= aTmp[ 0 ];
+                        (*pArray) <<= aTmp;
+                    }
+                    else if ( aType.equals( getCppuType( (uno::Sequence<double>*)0 ) ) )
+                    {
+                        uno::Sequence< uno::Sequence< double > > aTmp(1);
+                        (*pArray) >>= aTmp[ 0 ];
+                        (*pArray) <<= aTmp;
+                    }
+                    else if ( aType.equals( getCppuType( (uno::Sequence<rtl::OUString>*)0 ) ) )
+                    {
+                        uno::Sequence< uno::Sequence< rtl::OUString > > aTmp(1);
+                        (*pArray) >>= aTmp[ 0 ];
+                        (*pArray) <<= aTmp;
+                    }
+                    else if ( aType.equals( getCppuType( (uno::Sequence<uno::Any>*)0 ) ) )
+                    {
+                        uno::Sequence< uno::Sequence<uno::Any > > aTmp(1);
+                        (*pArray) >>= aTmp[ 0 ];
+                        (*pArray) <<= aTmp;
+                    }
+                }
+                    break;
+                default:
+                    break;
+            }
             OSL_TRACE("Param[%d] is %s", (int)(pArray - aParamTemp.getConstArray()), rtl::OUStringToOString( comphelper::anyToString( *pArray ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -257,3 +318,5 @@ ScVbaWSFunction::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

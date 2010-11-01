@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,13 +55,8 @@
      inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
 */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
-
 #include <testshl/simpleheader.hxx>
 
-//#include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
 #include <osl/conditn.hxx>
 
@@ -1504,3 +1500,5 @@ namespace osl_StreamSocket
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,6 @@ SHL1STDLIBS= \
         $(CPPULIB)				\
         $(VCLLIB)				\
         $(TKLIB)				\
-        $(VOSLIB)				\
         $(SALLIB)
 
 .IF "$(GUI)"=="OS2"

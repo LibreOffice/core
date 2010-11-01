@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,8 +86,6 @@
 
 #include <dialog.hrc>
 
-
-
 //!!! new: insert table
 /*
 #include <svx/htmlmode.hxx>
@@ -113,18 +112,13 @@
 
 using namespace ::com::sun::star;
 
-//-----------------------------------------------------------------------------
-
 SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TAB_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TABLE_TOOLBOX));
 }
 
-
 TYPEINIT1(SwTableShell,SwBaseShell)
-
-/************************************************************************/
 
 const USHORT __FAR_DATA aUITableAttrRange[] =
 {
@@ -164,9 +158,6 @@ static void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
     aSet.Put( rItem );
     rSh.SetTblAttr( aSet );
 }
-
-/************************************************************************/
-
 
 static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 {
@@ -294,9 +285,6 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put(SwPtrItem(FN_TABLE_REP, pRep));
     return pRep;
 }
-
-/************************************************************************/
-
 
 void ItemSetToTableParam( const SfxItemSet& rSet,
                                 SwWrtShell &rSh )
@@ -475,9 +463,6 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     rSh.EndAllAction();
 }
 
-/************************************************************************/
-
-
 static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
@@ -491,7 +476,6 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
 
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
-
 
 void SwTableShell::Execute(SfxRequest &rReq)
 {
@@ -550,7 +534,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     aBox.SetDistance( Max(rCoreBox.GetDistance(),(USHORT)MIN_BORDER_DIST)  );
             }
             else
-                {ASSERT( !this, "Wo ist das Box-Item?" )}
+                OSL_ENSURE( !this, "where is BoxItem?" );
 
             //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
@@ -641,10 +625,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( bUseDialog )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh, DLG_FORMAT_TABLE );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);
@@ -718,12 +702,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(),aCoreSet,
                     pView->GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_DLG_SWNUMFMTDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if (RET_OK == pDlg->Execute())
                 {
@@ -813,7 +797,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         aInfoBox.Execute();
                         break;
                     }
-                    default: ASSERT( !this, "unbekannter Returnwert MergeTab.");
+                    default: OSL_ENSURE( !this, "unknown return value MergeTab.");
                 }
         break;
         case FN_TABLE_ADJUST_CELLS:
@@ -866,10 +850,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_AUTOFORMAT:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh , DLG_AUTOFMT_TABLE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
@@ -877,17 +861,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_SET_ROW_HEIGHT:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
         break;
         case FN_NUMBER_BULLETS:
         case FN_NUM_BULLET_ON:
-            ASSERT( !this, "Funktion darf zur Zeit nicht gerufen werden." );
+            OSL_ENSURE( !this, "function may not be called now." );
         break;
 
         case FN_TABLE_INSERT_COL:
@@ -1035,10 +1019,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstractSplitTableDialog* pDlg = pFact->CreateSplitTblDialog( GetView().GetWindow(), rSh );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, pDlg->GetSplitMode() ) );
                 delete pDlg;
@@ -1055,9 +1039,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if( bPrev && bNext )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
                 VclAbstractDialog* pDlg = pFact->CreateSwVclDialog( DLG_MERGE_TABLE, GetView().GetWindow(), bPrev );
-                DBG_ASSERT(pDlg, "dialogdiet pDlg fail!");
+                OSL_ENSURE(pDlg, "dialogdiet pDlg fail!");
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = FALSE;
                 delete pDlg;
@@ -1228,15 +1212,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT( !this, "falscher Dispatcher" );
+            OSL_ENSURE( !this, "wrong Dispatcher" );
             return;
     }
     if(bCallDone)
         rReq.Done();
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTableShell::GetState(SfxItemSet &rSet)
 {
@@ -1419,20 +1400,12 @@ void SwTableShell::GetState(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwTableShell::SwTableShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
     SetName(String::CreateFromAscii("Table"));
     SetHelpId(SW_TABSHELL);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
 {
@@ -1444,10 +1417,6 @@ void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
     GetShell().GetTabBorders( aCoreSet );
     rSet.Put( aCoreSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTableShell::ExecTableStyle(SfxRequest& rReq)
 {
@@ -1502,7 +1471,6 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
             }
         }
 }
-
 
 void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
 {
@@ -1571,7 +1539,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
         break;
 
     default:
-        ASSERT(FALSE, falscher Dispatcher);
+        OSL_ENSURE(false, "wrong dispatcher");
         return;
     }
 
@@ -1587,3 +1555,4 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

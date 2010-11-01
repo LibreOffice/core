@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,3 +47,5 @@ comm_ULONG SvCommStream::Write( const void* pData, comm_ULONG nSize ) { return p
 
 comm_BOOL SvCommStream::IsEof() const { return pStream->IsEof(); }
 comm_ULONG SvCommStream::SeekRel( long nPos ) { return pStream->SeekRel( nPos ); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

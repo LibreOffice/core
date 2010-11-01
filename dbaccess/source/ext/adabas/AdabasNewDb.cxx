@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #include "AdabasNewDb.hxx"
 #include "AdabasNewDb.hrc"
 
-#include <vos/process.hxx>
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
 #include <sfx2/passwd.hxx>
@@ -59,7 +59,6 @@
 using namespace adabasui;
 using namespace ucbhelper;
 using namespace utl;
-using namespace vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -217,8 +216,6 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
         m_ET_CONUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
         m_ET_DOMAIN_USR.Enable(FALSE);
 
-        //  m_ET_SYSUSR.setUpperCase();
-        //  m_ET_CONUSR.setUpperCase();
     }
 
 
@@ -250,7 +247,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
     m_NF_DATADEVSPACE_SIZE.SetDecimalDigits(0);
     m_NF_CACHE_SIZE.SetDecimalDigits(0);
 
-    m_ET_DATABASENAME.SetMaxTextLen( 8 ); //98292
+    m_ET_DATABASENAME.SetMaxTextLen( 8 );
 
     m_PB_CONPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
     m_PB_SYSPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
@@ -749,3 +746,5 @@ sal_Bool OAdabasNewDbDlg::fillEnvironmentVariable(const ::rtl::OUString& _sVaria
     return bError;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ start:
             nRes = *p->pUShort; break;
         case SbxBYREF | SbxSINGLE:
             nRes = *p->pSingle; break;
-        // ab hier muss getestet werden
+        // from here had to be tested
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
@@ -226,7 +227,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // keine Tests ab hier
+        // from here no tests
         case SbxSINGLE:
             p->nSingle = n; break;
         case SbxDATE:
@@ -357,3 +358,4 @@ start:
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

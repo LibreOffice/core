@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/svdobj.hxx>
 // header for class OGuard
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 
@@ -49,7 +50,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 // ::com::sun::star::util::XModifyListener
 void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if( mpObj )
     {
         mpObj->SetChanged();
@@ -70,3 +71,4 @@ void SvxUnoShapeModifyListener::invalidate() throw()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/PColumn.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace dbaccess
 {
@@ -48,11 +49,11 @@ namespace dbaccess
     using namespace ::com::sun::star::script;
     using namespace ::cppu;
     using namespace ::osl;
-    // -----------------------------------------------------------------------------
+
     typedef connectivity::sdbcx::OCollection OPrivateColumns_Base;
     class OPrivateColumns : public OPrivateColumns_Base
     {
-        ::vos::ORef< ::connectivity::OSQLColumns>   m_aColumns;
+        ::rtl::Reference< ::connectivity::OSQLColumns>  m_aColumns;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
@@ -61,7 +62,7 @@ namespace dbaccess
             return NULL;
         }
     public:
-        OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+        OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
@@ -72,7 +73,7 @@ namespace dbaccess
         /** creates a columns instance as above, but taking the names from the columns itself
         */
         static OPrivateColumns* createWithIntrinsicNames(
-            const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
+            const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
             sal_Bool _bCase,
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex
@@ -116,3 +117,5 @@ namespace dbaccess
     };
 }
 #endif // DBA_HELPERCOLLECTIONS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

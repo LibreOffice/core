@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -236,10 +237,8 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wintypes.hxx>
-#include <vos/macros.hxx>
-#include <vos/object.hxx>
-#include <vos/types.hxx>
 #include <wchar.h>
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

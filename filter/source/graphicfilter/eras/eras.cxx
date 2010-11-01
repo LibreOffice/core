@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -286,8 +287,6 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
 
     return aRASWriter.WriteRAS( rGraphic, rStream, pFilterConfigItem );
 }
-#ifndef GCC
-#endif
 
 // ---------------
 // - Win16 trash -
@@ -315,3 +314,5 @@ extern "C" int CALLBACK WEP( int )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

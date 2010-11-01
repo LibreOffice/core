@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 
 //........................................................................
@@ -133,7 +134,7 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
     {
-        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
         OSL_ENSURE(Reference< XConnection >(_rSource.Source, UNO_QUERY).get() == m_xConnection.get(),
@@ -347,3 +348,4 @@ DBG_NAME(DirectSQLDialog)
 }   // namespace dbaui
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

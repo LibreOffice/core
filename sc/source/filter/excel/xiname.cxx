@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,8 @@
 #include "excform.hxx"
 // for filter manager
 #include "excimp8.hxx"
-
+#include "scextopt.hxx"
+#include "document.hxx"
 // ============================================================================
 // *** Implementation ***
 // ============================================================================
@@ -45,6 +47,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mpScData( 0 ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
+    mbFunction( false ),
     mbVBName( false )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
@@ -93,7 +96,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 2) *** convert sheet index and name *** --------------------------------
 
-    // Visual Basic procedure
+    // functions and VBA
+    mbFunction = ::get_flag( nFlags, EXC_NAME_FUNC );
     mbVBName = ::get_flag( nFlags, EXC_NAME_VB );
 
     // get built-in name, or convert characters invalid in Calc
@@ -127,6 +131,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         maScName = maXclName;
         ScfTools::ConvertToScDefinedName( maScName );
     }
+    rtl::OUString aRealOrigName = maScName;
 
     // add index for local names
     if( nXclTab != EXC_NAME_GLOBAL )
@@ -212,13 +217,32 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // 4) *** create a defined name in the Calc document *** ------------------
 
     // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
-    if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbVBName )
+    if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
         rRangeNames.Insert( pData );        // takes ownership of pData
+        if( nXclTab != EXC_NAME_GLOBAL )
+        {
+            if (GetBiff() == EXC_BIFF8)
+            {
+                ScRange aRange;
+                // discard deleted ranges ( for the moment at least )
+                if ( pData->IsValidReference( aRange ) )
+                {
+                    ScExtTabSettings& rTabSett = GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
+                    // create a mapping between the unmodified localname to
+                    // the name in the global name container for named ranges
+                    OSL_TRACE(" mapping local name to global name for tab %d which exists? %s", nXclTab, GetDoc().HasTable( mnScTab ) ? "true" : "false" );
+                    SCTAB nTab( static_cast< SCTAB >( mnScTab ) );
+                    NameToNameMap* pMap = GetDoc().GetLocalNameMap( nTab );
+                    if ( pMap )
+                       (*pMap)[ aRealOrigName ] = maScName;
+                }
+            }
+        }
         mpScData = pData;                   // cache for later use
     }
 }
@@ -262,3 +286,4 @@ const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

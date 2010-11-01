@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,8 +96,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
 
-
-
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRWTXT_POPUPMENU));
@@ -105,12 +104,6 @@ SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 }
 
 TYPEINIT1(SwDrawTextShell,SfxShell)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::Init()
 {
@@ -140,11 +133,6 @@ void SwDrawTextShell::Init()
     pOLV->ShowCursor();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SfxShell(&rV),
     rView(rV)
@@ -158,12 +146,6 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SetName(String::CreateFromAscii("ObjectText"));
     SetHelpId(SW_DRWTXTSHELL);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 __EXPORT SwDrawTextShell::~SwDrawTextShell()
 {
@@ -188,11 +170,9 @@ SwWrtShell& SwDrawTextShell::GetShell()
     return rView.GetWrtShell();
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -205,15 +185,11 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-
 /*************************************************************************
 |*
 |* Attribute setzen
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
     Rectangle aNullRect;
@@ -227,22 +203,10 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 BOOL SwDrawTextShell::IsTextEdit()
 {
     return pSdrView->IsTextEdit();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
@@ -262,12 +226,6 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
     pVFrame->GetBindings().Invalidate(SID_FONTWORK);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 {
     const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -279,9 +237,6 @@ void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 |* SfxRequests fuer FontWork bearbeiten
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -331,9 +286,6 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 |* Statuswerte fuer FontWork zurueckgeben
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -373,12 +325,6 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -408,7 +354,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -418,7 +364,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
@@ -467,14 +413,11 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, "unexpected slot-id");
+            OSL_ENSURE(!this, "unexpected slot-id");
         }
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -583,7 +526,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, "unexpected slot-id");
+            OSL_ENSURE(!this, "unexpected slot-id");
             return;
     }
 
@@ -596,9 +539,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
     if( IsTextEdit() )
@@ -644,9 +584,6 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 {
     if ( !IsTextEdit() )
@@ -743,7 +680,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
             break;
 
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
         }
 
         if( nMode )
@@ -757,7 +694,6 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 /*--------------------------------------------------------------------
     Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -890,9 +826,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         rReq.Done();
     }
 }
-/*-- 22.10.2003 14:26:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
@@ -902,5 +836,4 @@ SfxUndoManager* SwDrawTextShell::GetUndoManager()
     return &pOutliner->GetUndoManager();
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

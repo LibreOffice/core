@@ -6,5 +6,5 @@
   <inst:buildid></inst:buildid>
   <inst:os></inst:os>
   <inst:arch></inst:arch>
-  <inst:update type="text/html" src="http://update.services.openoffice.org/ooo/snapshot.html" />
+  <inst:update type="text/html" src="http://update.libreoffice.org/ooo/snapshot.html" />
 </inst:description>

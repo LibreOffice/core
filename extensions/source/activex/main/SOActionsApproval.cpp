@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SOActionsApproval.cpp : Implementation of CHelpApp and DLL registration.
 
 #include "stdafx2.h"
@@ -27,3 +28,4 @@ STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

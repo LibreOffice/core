@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1184,32 +1185,6 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     EndAllAction();
 }
 
-void SwEditShell::TransliterateText( const String& rModuleName )
-{
-    utl::TransliterationWrapper aTrans(::comphelper::getProcessServiceFactory(), 0 );
-    aTrans.loadModuleByImplName( rModuleName, LANGUAGE_SYSTEM );
-    StartAllAction();
-    SET_CURR_SHELL( this );
-
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )
-    {
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
-        FOREACHPAM_START( this )
-
-        if( PCURCRSR->HasMark() )
-            GetDoc()->TransliterateText( *PCURCRSR, aTrans );
-
-        FOREACHPAM_END()
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
-    }
-    else
-        GetDoc()->TransliterateText( *pCrsr, aTrans );
-
-    EndAllAction();
-}
-
-
 void SwEditShell::CountWords( SwDocStat& rStat ) const
 {
     FOREACHPAM_START( this )
@@ -1220,3 +1195,4 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
     FOREACHPAM_END()
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

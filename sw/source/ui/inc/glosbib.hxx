@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,15 +49,14 @@ class FEdit : public Edit
 
     virtual void KeyInput( const KeyEvent& rKEvent );
 };
-/* -----------------------------08.02.00 15:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct GlosBibUserData
 {
     String sPath;
     String sGroupName;
     String sGroupTitle;
 };
+
 class SwGlossaryGroupTLB : public SvTabListBox
 {
 public:
@@ -110,6 +110,6 @@ public:
     const String&       GetCreatedGroupName() const {return sCreatedGroup;}
 };
 
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

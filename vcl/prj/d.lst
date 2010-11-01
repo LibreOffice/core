@@ -99,6 +99,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\settings.hxx %_DEST%\inc%_EXT%\vcl\settings.hxx
 ..\inc\vcl\slider.hxx %_DEST%\inc%_EXT%\vcl\slider.hxx
 ..\inc\vcl\sndstyle.hxx %_DEST%\inc%_EXT%\vcl\sndstyle.hxx
+..\inc\vcl\solarmutex.hxx %_DEST%\inc%_EXT%\vcl\solarmutex.hxx
 ..\inc\vcl\sound.hxx %_DEST%\inc%_EXT%\vcl\sound.hxx
 ..\inc\vcl\spin.h %_DEST%\inc%_EXT%\vcl\spin.h
 ..\inc\vcl\spin.hxx %_DEST%\inc%_EXT%\vcl\spin.hxx

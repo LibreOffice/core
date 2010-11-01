@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,8 +60,8 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <sdrpaintwindow.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <rtl/logfile.hxx>
 //............................................................................
 namespace svxform
@@ -2320,3 +2321,4 @@ namespace svxform
 //............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

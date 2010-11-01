@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -450,12 +451,12 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-        JFW_TRACE2(OString("[Java framework] line:\" ")
-               + aLine + OString(" \".\n"));
+//         JFW_TRACE2(OString("[Java framework] line:\" ")
+//                + aLine + OString(" \".\n"));
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
-        JFW_TRACE2(OString("[Java framework] line:\" ")
+        JFW_TRACE2(OString("[Java framework]:\" ")
                + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
         sLine = sLine.trim();
         if (sLine.getLength() == 0)
@@ -509,7 +510,7 @@ bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
     } while (nIndex >= 0);
 
     *out = buff.makeStringAndClear();
-    JFW_TRACE2(*out);
+//    JFW_TRACE2(*out);
     return true;
 }
 
@@ -1265,3 +1266,5 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 #endif // ifdef SOLARIS
 #endif // ifdef UNX
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

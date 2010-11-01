@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,13 +55,8 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
-
 #include <testshl/simpleheader.hxx>
 
-//#include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
 
 using namespace osl;
@@ -143,16 +139,6 @@ namespace osl_SocketAddr
 
         void ctors_copy_no_001()
         {
-#if 0
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
-            oslSocketAddr psaOSLSocketAddr = saSocketAddr.getHandle( );
-
-            ::osl::SocketAddr saSocketAddrCopy( psaOSLSocketAddr, SAL_NO_COPY );
-            saSocketAddrCopy.setPort( IP_PORT_HTTP2 );
-
-            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr no copy constructor function: do a no copy constructor on a given SocketAddr instance, modify the new instance's port, check the original one.",
-                                    saSocketAddr.getPort( ) == IP_PORT_HTTP2 );
-#endif
             ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
             CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
 
@@ -893,3 +879,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr, "os
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

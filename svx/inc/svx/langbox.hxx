@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,10 +106,6 @@ namespace layout
 class SvxLanguageBoxImpl;
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
-    /*DECL_GET_IMPL( SvxLanguageBox );
-    DECL_CONSTRUCTORS( SvxLanguageBox, ListBox, WB_BORDER );
-    DECL_GET_WINDOW (SvxLanguageBox);*/
-
 public:
     SvxLanguageBox( Context*, const char*, BOOL bCheck = FALSE );
     ~SvxLanguageBox ();
@@ -126,3 +123,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

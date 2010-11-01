@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,6 @@
 
 #ifdef WIN
 #include <svwin.h>
-#endif
-
-#ifndef GCC
-#endif
-
-#ifdef WIN
 
 // Statische DLL-Verwaltungs-Variablen
 static HINSTANCE hDLLInst = 0;
@@ -67,3 +62,4 @@ extern "C" int CALLBACK WEP( int )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

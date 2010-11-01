@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -201,12 +202,12 @@ public:
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();
-    const ScDocOptions&     GetDocOptions   ();
+SC_DLLPUBLIC    const ScDocOptions&     GetDocOptions   ();
 SC_DLLPUBLIC    const ScAppOptions&     GetAppOptions   ();
     const ScInputOptions&   GetInputOptions ();
 SC_DLLPUBLIC    const ScPrintOptions&   GetPrintOptions ();
     void                    SetViewOptions  ( const ScViewOptions& rOpt );
-    void                    SetDocOptions   ( const ScDocOptions& rOpt );
+SC_DLLPUBLIC    void                    SetDocOptions   ( const ScDocOptions& rOpt );
 SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
@@ -294,3 +295,4 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,9 +62,6 @@
 
 #define RENAME_TOKEN_DELIM      (sal_Unicode)1
 
-/*-----------------09.06.97 13:05-------------------
-
---------------------------------------------------*/
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
                         const SvStrings* pPathArr,
                         SwGlossaryHdl *pHdl) :
@@ -147,9 +145,6 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aGroupTLB.GetModel()->Resort();
 }
 
-/*-----------------09.06.97 13:05-------------------
-
---------------------------------------------------*/
 SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
 {
 
@@ -170,10 +165,6 @@ SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
     }
 
 }
-
-/*-----------------09.06.97 13:11-------------------
-
---------------------------------------------------*/
 
 void __EXPORT SwGlossaryGroupDlg::Apply()
 {
@@ -245,9 +236,7 @@ void __EXPORT SwGlossaryGroupDlg::Apply()
         }
     }
 }
-/*-----------------09.06.97 13:12-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 {
     aNewPB.Enable(FALSE);
@@ -273,16 +262,13 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
     return 0;
 }
 
-/*-----------------09.06.97 13:22-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
 {
     String sGroup(aNameED.GetText());
 //  sGroup.ToLower();
     sGroup += GLOS_DELIM;
     sGroup += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
-    DBG_ASSERT(!pGlosHdl->FindGroupName(sGroup), "Gruppe bereits vorhanden!");
+    OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     if(!pInsertedArr)
         pInsertedArr = new SvStrings;
     pInsertedArr->Insert(new String(sGroup), pInsertedArr->Count());
@@ -302,9 +288,7 @@ IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
 
     return 0;
 }
-/*-----------------09.06.97 13:22-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
 {
     SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
@@ -370,9 +354,6 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     return 0;
 }
 
-/* -----------------23.11.98 12:26-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
@@ -385,7 +366,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 
     sNewName += GLOS_DELIM;
     sNewName += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
-    DBG_ASSERT(!pGlosHdl->FindGroupName(sNewName), "Gruppe bereits vorhanden!");
+    OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // befindet sich der umzubenennende Name unter den
     // den neuen - dann austauschen
@@ -432,9 +413,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     aGroupTLB.GetModel()->Resort();
     return 0;
 }
-/*-----------------09.06.97 13:42-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     String sEntry(aNameED.GetText());
@@ -496,10 +475,6 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 BOOL SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
 {
     BOOL bDel = (!pGlosHdl->IsReadOnly(&rGroup));
@@ -525,9 +500,6 @@ BOOL SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
     return bDel;
 }
 
-/*-----------------18.07.97 19:06-------------------
-
---------------------------------------------------*/
 void FEdit::KeyInput( const KeyEvent& rKEvent )
 {
     KeyCode aCode = rKEvent.GetKeyCode();
@@ -537,9 +509,7 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
         SVT_SEARCHPATH_DELIMITER != rKEvent.GetCharCode() )
         Edit::KeyInput( rKEvent );
 }
-/* -----------------------------08.02.00 15:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
@@ -570,3 +540,5 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

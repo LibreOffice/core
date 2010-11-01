@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2667,7 +2668,7 @@ void SwDrawVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SwDrawVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SwDrawVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     rRefObj.NbcShear(rRef - GetOffset(), nWink, tn, bVShear);
     SetRectsDirty();
@@ -2712,7 +2713,7 @@ void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
 }
 
-void SwDrawVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SwDrawVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     if(nWink)
     {
@@ -2803,7 +2804,7 @@ void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 }
 
 // #108784#
-FASTBOOL SwDrawVirtObj::HasTextEdit() const
+bool SwDrawVirtObj::HasTextEdit() const
 {
     return rRefObj.HasTextEdit();
 }
@@ -2842,3 +2843,4 @@ SdrObject* SwDrawVirtObj::getFullDragClone() const
 
 // eof
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

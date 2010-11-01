@@ -57,7 +57,7 @@ module com {  module sun {  module star {  module chart {
 
     <p>The
        <type scope="::com::sun::star::accessibility">XAccessibleExtendedComponent</type>
-       is suported by all chart elements.</p>
+       is supported by all chart elements.</p>
 
     @since OOo 1.1.2
 */

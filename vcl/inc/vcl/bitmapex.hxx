@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,12 +64,9 @@ private:
 
 public:
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
-
-//#endif // PRIVATE
 
 public:
 
@@ -395,6 +393,9 @@ public:
 
     friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
     friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
+    static BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
 };
 
 #endif // _SV_BITMAPEX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

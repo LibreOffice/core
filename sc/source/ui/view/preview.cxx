@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,13 +175,6 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
             pDrawView->SetPrintPreview( TRUE );
             pDrawView->ShowSdrPage(pPage);
         }
-#if 0
-        else if ( !pDrawView->GetSdrPageView())     // angezeigte Page umstellen
-        {
-            pDrawView->HideSdrPage();
-            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        }
-#endif
     }
     else if ( pDrawView )
     {
@@ -1611,3 +1605,5 @@ void ScPreview::DrawInvert( long nDragPos, USHORT nFlags )
     }
 }
 //Issue51656 Add resizeable margin on page preview from maoyg
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -978,3 +979,5 @@ sal_Bool rtl_convertStringToUString(
     rtl_string2UString_status(target, source, length, encoding, flags, &info);
     return (sal_Bool) ((info & RTL_TEXTTOUNICODE_INFO_ERROR) == 0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

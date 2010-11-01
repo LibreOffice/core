@@ -32,9 +32,7 @@ TARGET=drawfunc
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -75,6 +73,7 @@ SLOFILES =  \
         $(SLO)$/mediash.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/fusel.obj \
         $(SLO)$/fuins2.obj \
         $(SLO)$/graphsh.obj	\
         $(SLO)$/mediash.obj

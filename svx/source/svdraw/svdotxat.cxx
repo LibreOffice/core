@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,18 +76,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const
+bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
 {
     if (bTextFrame && pModel!=NULL && !rR.IsEmpty())
     {
-        FASTBOOL bFitToSize(IsFitToSize());
-        FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
-        FASTBOOL bHgtGrow=bHgt && IsAutoGrowHeight();
+        bool bFitToSize(IsFitToSize());
+        bool bWdtGrow=bWdt && IsAutoGrowWidth();
+        bool bHgtGrow=bHgt && IsAutoGrowHeight();
         SdrTextAniKind eAniKind=GetTextAniKind();
         SdrTextAniDirection eAniDir=GetTextAniDirection();
-        FASTBOOL bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
-        FASTBOOL bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
-        FASTBOOL bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
+        bool bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
+        bool bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
+        bool bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
         if (!bFitToSize && (bWdtGrow || bHgtGrow))
         {
             Rectangle aR0(rR);
@@ -209,9 +210,9 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
     return FALSE;
 }
 
-FASTBOOL SdrTextObj::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
-    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
     if (bRet) {
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
@@ -224,10 +225,10 @@ FASTBOOL SdrTextObj::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bW
     return bRet;
 }
 
-FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     Rectangle aNeuRect(aRect);
-    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         // #110094#-14 SendRepaintBroadcast();
@@ -459,3 +460,5 @@ bool SdrTextObj::HasText() const
 
     return bHasText;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

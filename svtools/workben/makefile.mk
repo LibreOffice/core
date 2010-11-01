@@ -48,7 +48,6 @@ APP1STDLIBS=	$(SVTOOLLIB)		\
                 $(COMPHELPERLIB) 	\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(CPPUHELPERLIB)	\
                 $(CPPULIB)
 

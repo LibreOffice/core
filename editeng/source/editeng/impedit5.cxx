@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -898,7 +899,7 @@ ImplIMEInfos::~ImplIMEInfos()
 void ImplIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
 {
     nLen = nL;
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = new USHORT[ nL ];
     memcpy( pAttribs, pA, nL*sizeof(USHORT) );
 }
@@ -909,3 +910,5 @@ void ImplIMEInfos::DestroyAttribs()
     pAttribs = NULL;
     nLen = 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

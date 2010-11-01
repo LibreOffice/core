@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,7 +111,6 @@ friend class SfxTabDialogController;
     BOOL                bItemsReset;
     BOOL                bFmt;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( OkHdl, Button * );
@@ -119,7 +119,6 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK( UserHdl, Button * );
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
     SAL_DLLPRIVATE void Init_Impl(BOOL, const String *);
-//#endif
 
 protected:
     virtual short               Ok();
@@ -226,10 +225,8 @@ public:
     void                SetApplyHandler(const Link& _rHdl);
     Link                GetApplyHandler() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Start_Impl();
     SAL_DLLPRIVATE BOOL OK_Impl() { return PrepareLeaveCurrentPage(); }
-//#endif
 };
 
 END_NAMESPACE_LAYOUT_SFX_TABDIALOG
@@ -316,3 +313,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

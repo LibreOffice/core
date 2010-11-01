@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
     m_aFace.SetTransparent(TRUE);
     m_aFace.SetAlign(ALIGN_BASELINE);
 
-    m_cChar   = cChar;
+    m_cChar         = cChar;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
     m_bDocSymbol    = FALSE;
@@ -330,3 +331,4 @@ void SmSymbolManager::Save()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

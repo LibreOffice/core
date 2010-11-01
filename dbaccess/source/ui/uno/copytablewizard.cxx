@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -746,7 +747,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     const ::rtl::OUString aSettings[] = {
         PROPERTY_FILTER, PROPERTY_ORDER, PROPERTY_HAVING_CLAUSE, PROPERTY_GROUP_BY
     };
-    for ( size_t i=0; i < sizeof( aSettings ) / sizeof( aSettings[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aSettings ); ++i )
     {
         if ( lcl_hasNonEmptyStringValue_throw( _rxSourceDescriptor, xPSI, aSettings[i] ) )
         {
@@ -1625,3 +1626,5 @@ extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::CopyTableWizard > aAutoRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

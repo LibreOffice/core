@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 #include <boost/utility.hpp>
 #include <osl/diagnose.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sw {
@@ -123,7 +124,7 @@ namespace sw {
 
             ~UnoImplPtr()
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 delete m_p; // #i105557#: call dtor with locked solar mutex
                 m_p = 0;
             }
@@ -172,3 +173,4 @@ namespace sw {
 
 #endif // SW_UNOBASECLASS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

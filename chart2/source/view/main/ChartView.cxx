@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@
 #include <svx/unoshape.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 
 #include <time.h>
@@ -199,7 +200,7 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
     if( !m_pDrawModelWrapper.get() )
     {
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
@@ -213,7 +214,7 @@ ChartView::~ChartView()
     if( m_pDrawModelWrapper.get() )
     {
         EndListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bAllDups*/ );
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
@@ -621,7 +622,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               const uno::Reference< frame::XModel >& xChartModel )
 {
     //------------ get model series from model
-    sal_Int32 nDiagramIndex = 0;//todo if more than one diagam is supported
+    sal_Int32 nDiagramIndex = 0;//todo if more than one diagram is supported
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is())
         return;
@@ -699,7 +700,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             if(pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
 
-            //------------ add series to plotter and thus prepare him for providing minimum and maximum values
+            //------------ add series to plotter and thus prepare him(it) for providing minimum and maximum values
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
@@ -860,7 +861,7 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
 
 void SeriesPlotterContainer::setNumberFormatsFromAxes()
 {
-    //set numberfarmats to plotter to enable them to display the data labels in the numberfromat of teh axis
+    //set numberformats to plotter to enable them to display the data labels in the numberformat of the axis
 
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
@@ -1688,7 +1689,7 @@ SdrPage* ChartView::getSdrPage()
 
 uno::Reference< drawing::XShape > ChartView::getShapeForCID( const rtl::OUString& rObjectCID )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     SdrObject* pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, this->getSdrPage() );
     if( pObj )
         return uno::Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY);
@@ -1714,7 +1715,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
         ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             SvxShape* pRoot = SvxShape::getImplementation( xShape );
             if( pRoot )
             {
@@ -1851,7 +1852,7 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
 
                             if( nDimensionIndex == 1 )
                             {
-                                //only take those series into accoutn that are attached to this axis
+                                //only take those series into account that are attached to this axis
                                 sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
                                 if( nAttachedAxisIndex != nAxisIndex )
                                     continue;
@@ -2603,7 +2604,7 @@ void ChartView::createShapes()
     if( m_pDrawModelWrapper )
     {
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         // #i12587# support for shapes in chart
         m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
         m_pDrawModelWrapper->clearMainDrawPage();
@@ -2626,7 +2627,7 @@ void ChartView::createShapes()
     }
 
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
 
         //------------ apply fill properties to page
         // todo: it would be nicer to just pass the page m_xDrawPage and format it,
@@ -2768,7 +2769,7 @@ void ChartView::createShapes()
     // #i12587# support for shapes in chart
     if ( m_pDrawModelWrapper )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper->getSdrModel().EnableUndo( TRUE );
     }
 
@@ -2812,7 +2813,7 @@ void ChartView::impl_updateView()
             //prepare draw model
             {
                 // /--
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+                SolarMutexGuard aSolarGuard;
                 m_pDrawModelWrapper->lockControllers();
                 // \--
             }
@@ -2849,7 +2850,7 @@ void ChartView::impl_updateView()
 
         {
             // /--
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->unlockControllers();
             // \--
         }
@@ -3185,3 +3186,5 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

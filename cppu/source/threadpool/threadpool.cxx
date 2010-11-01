@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <rtl/instance.hxx>
 
 #include <uno/threadpool.h>
 
@@ -44,19 +46,17 @@ using namespace ::osl;
 
 namespace cppu_threadpool
 {
-    DisposedCallerAdmin *DisposedCallerAdmin::getInstance()
+    struct theDisposedCallerAdmin :
+        public rtl::StaticWithInit< DisposedCallerAdminHolder, theDisposedCallerAdmin >
     {
-        static DisposedCallerAdmin *pDisposedCallerAdmin = 0;
-        if( ! pDisposedCallerAdmin )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pDisposedCallerAdmin )
-            {
-                static DisposedCallerAdmin admin;
-                pDisposedCallerAdmin = &admin;
-            }
+        DisposedCallerAdminHolder operator () () {
+            return DisposedCallerAdminHolder(new DisposedCallerAdmin());
         }
-        return pDisposedCallerAdmin;
+    };
+
+    DisposedCallerAdminHolder DisposedCallerAdmin::getInstance()
+    {
+        return theDisposedCallerAdmin::get();
     }
 
     DisposedCallerAdmin::~DisposedCallerAdmin()
@@ -107,6 +107,21 @@ namespace cppu_threadpool
 
 
     //-------------------------------------------------------------------------------
+
+    struct theThreadPool :
+        public rtl::StaticWithInit< ThreadPoolHolder, theThreadPool >
+    {
+        ThreadPoolHolder operator () () {
+            ThreadPoolHolder aRet(new ThreadPool());
+            return aRet;
+        }
+    };
+
+    ThreadPool::ThreadPool()
+    {
+        m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
+    }
+
     ThreadPool::~ThreadPool()
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -116,19 +131,9 @@ namespace cppu_threadpool
         }
 #endif
     }
-    ThreadPool *ThreadPool::getInstance()
+    ThreadPoolHolder ThreadPool::getInstance()
     {
-        static ThreadPool *pThreadPool = 0;
-        if( ! pThreadPool )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pThreadPool )
-            {
-                static ThreadPool pool;
-                pThreadPool = &pool;
-            }
-        }
-        return pThreadPool;
+        return theThreadPool::get();
     }
 
 
@@ -136,7 +141,7 @@ namespace cppu_threadpool
     {
         if( nDisposeId )
         {
-            DisposedCallerAdmin::getInstance()->dispose( nDisposeId );
+            m_DisposedCallerAdmin->dispose( nDisposeId );
 
             MutexGuard guard( m_mutex );
             for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
@@ -171,7 +176,7 @@ namespace cppu_threadpool
 
     void ThreadPool::stopDisposing( sal_Int64 nDisposeId )
     {
-        DisposedCallerAdmin::getInstance()->stopDisposing( nDisposeId );
+        m_DisposedCallerAdmin->stopDisposing( nDisposeId );
     }
 
     /******************
@@ -400,7 +405,7 @@ struct uno_ThreadPool_Hash
 
 
 
-typedef ::std::hash_set< uno_ThreadPool, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
+typedef ::std::hash_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
 
 static ThreadpoolHashSet *g_pThreadpoolHashSet;
 
@@ -420,7 +425,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
 
     // Just ensure that the handle is unique in the process (via heap)
     uno_ThreadPool h = new struct _uno_ThreadPool;
-    g_pThreadpoolHashSet->insert( h );
+    g_pThreadpoolHashSet->insert( ThreadpoolHashSet::value_type(h, ThreadPool::getInstance()) );
     return h;
 }
 
@@ -500,3 +505,5 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

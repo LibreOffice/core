@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 // for ressource strings STR_UNDO and STR_REDO
@@ -113,7 +114,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
     {
         // why is it necessary to lock the solar mutex here?
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
             m_xUndoManager->undo( m_xModel );
         else
@@ -145,3 +146,5 @@ void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& /* Source
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,6 +91,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/macros.h>
 
 #include <map>
 
@@ -178,7 +180,7 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        INT32   nCount = SAL_N_ELEMENTS(aLangList);
         for (INT32 i = 0;  i < nCount;  i++)
         {
             INT16 nTmpLang = aLangList[i];
@@ -308,7 +310,7 @@ void SwSpellPopup::fillLangPopupMenu(
             aEntryTxt != sAsterix &&
             aEntryTxt != sEmpty)
         {
-            DBG_ASSERT( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
+            OSL_ENSURE( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
                     "nItemId outside of expected range!" );
             pPopupMenu->InsertItem( nItemId, aEntryTxt, MIB_RADIOCHECK );
             if (aEntryTxt == aCurLang)
@@ -353,7 +355,7 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
                 uno::Reference< container::XNameAccess > xUICommandLabels;
@@ -396,7 +398,7 @@ pSh( pWrtSh ),
 xSpellAlt(xAlt),
 bGrammarResults(false)
 {
-    DBG_ASSERT(xSpellAlt.is(), "no spelling alternatives available");
+    OSL_ENSURE(xSpellAlt.is(), "no spelling alternatives available");
 
 //    CreateAutoMnemonics();
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -568,7 +570,7 @@ bGrammarResults(false)
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING_DLG, rImg );
 
@@ -701,7 +703,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING_DLG, rImg );
 
@@ -736,7 +738,7 @@ void SwSpellPopup::Execute( USHORT nId )
     {
         sal_Int32 nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
                 nId - MN_SUGGESTION_START : nId - MN_AUTOCORR_START;
-        DBG_ASSERT( 0 <= nAltIdx && nAltIdx < aSuggestions.getLength(), "index out of range" );
+        OSL_ENSURE( 0 <= nAltIdx && nAltIdx < aSuggestions.getLength(), "index out of range" );
         if (0 <= nAltIdx && nAltIdx < aSuggestions.getLength() && (bGrammarResults || xSpellAlt.is()))
         {
             sal_Bool bOldIns = pSh->IsInsMode();
@@ -823,7 +825,7 @@ void SwSpellPopup::Execute( USHORT nId )
     else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
     {
             OUString aWord( xSpellAlt->getWord() );
-//            DBG_ASSERT( nDicIdx < aDics.getLength(), "dictionary index out of range" );
+//            OSL_ENSURE( nDicIdx < aDics.getLength(), "dictionary index out of range" );
 
             PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
             String aDicName ( pMenu->GetItemText(nId) );
@@ -915,25 +917,9 @@ void SwSpellPopup::Execute( USHORT nId )
             lcl_CharDialog( *pSh, true, nId, 0, 0 );
             pSh->Pop( FALSE );  // restore cursor
         }
-#if 0
-        else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
-        {
-            //Set Language_None as the default language
-            SwLangHelper::SetLanguage_None( *pSh, false, aCoreSet );
-        }
-        else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries)
-        {
-            // open the dialog "Tools/Options/Language Settings - Language"
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if (pFact)
-            {
-                VclAbstractDialog* pDlg = pFact->CreateVclDialog( pSh->GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
-                pDlg->Execute();
-                delete pDlg;
-            }
-        }
-#endif
     }
 
     pSh->EnterStdMode();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

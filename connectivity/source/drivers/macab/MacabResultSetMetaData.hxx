@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <connectivity/dbexception.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -62,7 +63,7 @@ namespace connectivity
                 { return this; }
 
             void setMacabFields(
-                const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
+                const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
             inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                 { return m_aMacabFields[columnIndex - 1]; }
 
@@ -92,3 +93,5 @@ namespace connectivity
 }
 
 #endif // _CONNECTIVITY_MACAB_RESULTSETMETADATA_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

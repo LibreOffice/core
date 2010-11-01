@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -277,3 +278,4 @@ Japanese (JIS 0212)                             RTL_TEXTENCODING_JISX_0212
 
 #endif /* _RTL_TEXTENC_H */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,9 +33,7 @@ TARGET=ui
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
 
 # --- Files --------------------------------------------------------
 
@@ -53,6 +51,7 @@ SRC1FILES = \
     dbnamdlg.src \
     subtdlg.src  \
     miscdlgs.src \
+    datafdlg.src \
     autofmt.src  \
     solvrdlg.src \
     optsolver.src \

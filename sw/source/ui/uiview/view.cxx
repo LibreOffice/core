@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,18 +155,10 @@ SearchAttrItemList* SwView::pReplList   = 0;
 
 DBG_NAME(viewhdl)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 inline SfxDispatcher &SwView::GetDispatcher()
 {
     return *GetViewFrame()->GetDispatcher();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwView::ImpSetVerb( int nSelType )
 {
@@ -194,7 +187,6 @@ void SwView::ImpSetVerb( int nSelType )
     Description:
     called by the SwEditWin when it gets the focus
  --------------------------------------------------------------------*/
-
 void SwView::GotFocus() const
 {
     // if we got the focus, and the form shell *is* on the top of the dispatcher
@@ -225,7 +217,6 @@ void SwView::GotFocus() const
     a request to put the form shell on the top of the dispatcher
     stack
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwView, FormControlActivated, FmFormShell*, EMPTYARG )
 {
     // if a form control has been activated, and the form shell is not on the top
@@ -486,8 +477,6 @@ void SwView::SelectShell()
 //Da wir aber keine Stati mehr liefern koennen und wollen locken wir
 //stattdessen den Dispatcher.
 
-
-
 extern "C"
 {
     int lcl_CmpIds( const void *pFirst, const void *pSecond)
@@ -495,8 +484,6 @@ extern "C"
         return (*(sal_uInt16*)pFirst) - (*(sal_uInt16*)pSecond);
     }
 }
-
-
 
 IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
 {
@@ -562,8 +549,6 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
 
     return 0;
 }
-
-
 
 IMPL_LINK( SwView, TimeoutHdl, Timer *, EMPTYARG )
 {
@@ -739,7 +724,6 @@ void SwView::_CheckReadonlySelection()
     }
 }
 
-
 SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
 
@@ -815,7 +799,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     BOOL bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_False );
-    ASSERT( pDocSh, "View ohne DocShell." );
+    OSL_ENSURE( pDocSh, "view without DocShell." );
     SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != pWebDShell);
@@ -1086,7 +1070,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
    uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
-            OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")), frame::FrameSearchFlag::CHILDREN);
     if(xBeamerFrame.is())
     {
         SwDBData aData = pWrtShell->GetDBData();
@@ -1114,11 +1098,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwView::~SwView()
 {
@@ -1171,8 +1150,6 @@ SwView::~SwView()
 /*--------------------------------------------------------------------
     Beschreibung:   DocShell rausgrabbeln ueber das FrameWindow
  --------------------------------------------------------------------*/
-
-
 SwDocShell* SwView::GetDocShell()
 {
     SfxObjectShell* pDocShell = GetViewFrame()->GetObjectShell();
@@ -1182,8 +1159,6 @@ SwDocShell* SwView::GetDocShell()
 /*--------------------------------------------------------------------
     Beschreibung:   CursorPos merken
  --------------------------------------------------------------------*/
-
-
 void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
 {
     //Das Browse-Flag wird vom Sfx durchgereicht, wenn Dokumente gebrowsed
@@ -1212,6 +1187,7 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
     rUserData += ';';
     rUserData += FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? '0' : '1';
 }
+
 /*--------------------------------------------------------------------
     Beschreibung: CursorPos setzen
  --------------------------------------------------------------------*/
@@ -1225,11 +1201,10 @@ bool lcl_IsOwnDocument( SwView& rView )
     String Created = xDocProps->getAuthor();
     String Changed = xDocProps->getModifiedBy();
     String FullName = SW_MOD()->GetUserOptions().GetFullName();
-    return FullName.Len() &&
-            (Changed.Len() && Changed == FullName ) ||
+    return (FullName.Len() &&
+            (Changed.Len() && Changed == FullName )) ||
             (!Changed.Len() && Created.Len() && Created == FullName );
 }
-
 
 void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 {
@@ -1555,6 +1530,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         }
     }
 }
+
 #define NUM_VIEW_SETTINGS 12
 void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
@@ -1626,9 +1602,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 }
 #undef NUM_VIEW_SETTINGS
 
-
-
-void SwView::ShowCursor( FASTBOOL bOn )
+void SwView::ShowCursor( bool bOn )
 {
     //JP 10.10.2001: Bug 90461 - don't scroll the cursor into the visible area
     BOOL bUnlockView = !pWrtShell->IsViewLocked();
@@ -1642,8 +1616,6 @@ void SwView::ShowCursor( FASTBOOL bOn )
     if( bUnlockView )
         pWrtShell->LockView( FALSE );
 }
-
-
 
 ErrCode SwView::DoVerb( long nVerb )
 {
@@ -1666,18 +1638,11 @@ sal_Bool SwView::HasSelection( sal_Bool  bText ) const
                  : GetWrtShell().HasSelection();
 }
 
-/*-----------------09/16/97 09:50am-----------------
-
---------------------------------------------------*/
-
 String SwView::GetSelectionText( sal_Bool bCompleteWrds )
 {
     return GetSelectionTextParam( bCompleteWrds, sal_True );
 }
 
-/*-----------------09/16/97 09:50am-----------------
-
---------------------------------------------------*/
 String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
                                        sal_Bool bEraseTrail )
 {
@@ -1691,24 +1656,12 @@ String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
     return sReturn;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SwGlossaryHdl* SwView::GetGlosHdl()
 {
     if(!pGlosHdl)
         pGlosHdl = new SwGlossaryHdl(GetViewFrame(), pWrtShell);
     return pGlosHdl;
 }
-
-/*-----------------05.09.96 15.50-------------------
-
---------------------------------------------------*/
-
-
 
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -1801,9 +1754,6 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SfxViewShell::Notify(rBC, rHint);
 }
 
-/*-----------------02.12.96 12:36-------------------
-
---------------------------------------------------*/
 #if defined WIN || defined WNT || defined UNX
 
 void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
@@ -1836,11 +1786,6 @@ void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
 }
 #endif
 
-/*-----------------04.03.97 15:07-------------------
-
---------------------------------------------------*/
-
-
 void    SwView::StopShellTimer()
 {
     if(aTimer.IsActive())
@@ -1856,9 +1801,6 @@ void    SwView::StopShellTimer()
     }
 }
 
-/*-----------------09/03/97 04:12pm-----------------
-
---------------------------------------------------*/
 sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     SfxViewFrame* pVFrame = GetViewFrame();
@@ -1876,10 +1818,8 @@ sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     return SfxViewShell::PrepareClose( bUI, bForBrowsing );
 }
 
-
-
-    // status methods for clipboard.
-    // Status changes now notified from the clipboard.
+// status methods for clipboard.
+// Status changes now notified from the clipboard.
 BOOL SwView::IsPasteAllowed()
 {
     USHORT nPasteDestination = SwTransferable::GetSotDestination( *pWrtShell );
@@ -1929,9 +1869,7 @@ BOOL SwView::IsPasteSpecialAllowed()
     }
     return bPasteSpecialState;
 }
-/* -----------------------------12.07.01 13:25--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::NotifyDBChanged()
 {
     GetViewImpl()->GetUNOObject_Impl()->NotifyDBChanged();
@@ -1940,17 +1878,11 @@ void SwView::NotifyDBChanged()
 /*--------------------------------------------------------------------
     Beschreibung:   Drucken
  --------------------------------------------------------------------*/
-
-/* -----------------------------28.10.02 13:25--------------------------------
-
- ---------------------------------------------------------------------------*/
 SfxObjectShellRef & SwView::GetTmpSelectionDoc()
 {
     return GetViewImpl()->GetTmpSelectionDoc();
 }
-/* -----------------------------31.10.02 13:25--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
 {
     SfxObjectShellRef &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
@@ -1962,15 +1894,11 @@ SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
     }
     return rxTmpDoc;
 }
-/* -----------------3/31/2003 12:39PM----------------
 
- --------------------------------------------------*/
 void SwView::AddTransferable(SwTransferable& rTransferable)
 {
     GetViewImpl()->AddTransferable(rTransferable);
 }
-
-/* --------------------------------------------------*/
 
 void SwPrtOptions::MakeOptions( BOOL bWeb )
 {
@@ -1986,3 +1914,4 @@ void SwPrtOptions::MakeOptions( BOOL bWeb )
     aMulti.Select( 0, FALSE );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

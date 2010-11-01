@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,8 @@ class VCL_DLLPUBLIC TaskPaneList
     Window *FindNextFloat( Window *pWindow, BOOL bForward = TRUE );
     Window *FindNextSplitter( Window *pWindow, BOOL bForward = TRUE );
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     BOOL IsInList( Window *pWindow );
-//#endif
 
 public:
     TaskPaneList();
@@ -55,3 +54,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

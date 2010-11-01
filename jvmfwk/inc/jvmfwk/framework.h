@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -830,6 +831,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     JFW_E_NONE the function ran successfully.</br>
     JFW_E_ERROR an error occurred during execution.</br>
     JFW_E_INVALID_ARG pInfo contains invalid data</br>
+    JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
  */
 javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 
@@ -865,3 +867,5 @@ void SAL_CALL jfw_unlock();
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

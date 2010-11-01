@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,37 +85,6 @@ ULONG ScRTFExport::Write()
 {
     rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
     rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << sNewLine;
-
-#if 0
-// das ist noch nicht ausgegoren
-/*
-    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*      pStyleSheet = NULL;
-    DBG_ASSERT( pStylePool, "StylePool not found! :-(" );
-    pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
-    pStyleSheet = pStylePool->Find( STRING_STANDARD, SFX_STYLE_FAMILY_PARA );
-    DBG_ASSERT( pStyleSheet, "ParaStyle not found! :-(" );
-    const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
-
-    // fonttbl
-    String aFontFamilyName(
-        ((const SvxFontItem&)(rSetPara.Get( ATTR_FONT ))).GetFamilyName() );
-    rStrm << OOO_STRING_SVTOOLS_RTF_DEFF << '0'
-        << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL
-        << '{' << OOO_STRING_SVTOOLS_RTF_F << '0' << OOO_STRING_SVTOOLS_RTF_FNIL << ' ' << aFontFamilyName.GetStr() << ";}"
-        << '}' << sNewLine;
-
-    // hier kaeme die colortbl
-
-    // stylesheet
-    UINT32 nFontHeight =
-        ((const SvxFontHeightItem&)(rSetPara.Get( ATTR_FONT_HEIGHT ))).GetHeight();
-    rStrm << '{' << OOO_STRING_SVTOOLS_RTF_STYLESHEET
-        << '{' << OOO_STRING_SVTOOLS_RTF_FS << String( UINT32(nFontHeight / TWIPS_PER_POINT) ).GetStr()
-            << ' ' << pStyleSheet->GetName().GetStr() << ";}"
-        << '}' << sNewLine;
-*/
-#endif
 
     // Daten
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
@@ -304,3 +274,4 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

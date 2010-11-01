@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,8 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
+#include <sal/macros.h>
 
 /****************************************************************************
  * @@@ TODO @@@
@@ -580,7 +580,7 @@ typedef struct _HashEntry
 } HashEntry;
 
 static HashEntry* HashTable[31];
-static int HashSize = sizeof(HashTable) / sizeof(HashTable[0]);
+static int HashSize = SAL_N_ELEMENTS(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 
@@ -1033,3 +1033,5 @@ rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
 
     return oldThreadEncoding;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

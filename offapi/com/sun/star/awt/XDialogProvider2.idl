@@ -115,7 +115,7 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
         <p>The arguments accepted so far are
         <ul><li><em>ParentWindow</em> - must be a component supporting the <type>XWindowPeer</type> interface,
-                or a component supporting the <type>XControl</type> interfac, so an <code>XWindowPeer</code> can be
+                or a component supporting the <type>XControl</type> interface, so an <code>XWindowPeer</code> can be
                 obtained from it. The given window will be used as parent window for the to-be-created dialog.</li>
             <li><em>EventHandler</em> - specifies a component handling events in the dialog. See
                 <member>createDialogWithHandler</member> for a detailed specification of dialog event handling.</li>

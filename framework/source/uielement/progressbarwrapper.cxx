@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -176,7 +177,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -206,7 +207,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -259,7 +260,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() && bSetValue )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -361,3 +362,5 @@ throw (uno::RuntimeException)
 }
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

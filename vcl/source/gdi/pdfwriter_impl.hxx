@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 #include "rtl/digest.h"
 #include "com/sun/star/util/XURLTransformer.hpp"
 #include "com/sun/star/lang/Locale.hpp"
+#include <sal/macros.h>
 
 #include <vcl/sallayout.hxx>
 #include "pdffontcache.hxx"
@@ -291,7 +293,7 @@ public:
         GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
         {
             rtl_zeroMemory( m_aBufferedUnicodes, sizeof( m_aBufferedUnicodes ) );
-            m_nMaxUnicodes = sizeof(m_aBufferedUnicodes)/sizeof(m_aBufferedUnicodes[0]);
+            m_nMaxUnicodes = SAL_N_ELEMENTS(m_aBufferedUnicodes);
         }
         ~GlyphEmit()
         {
@@ -1373,3 +1375,4 @@ public:
 #endif //_VCL_PDFEXPORT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,7 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.h>
 #include <osl/diagnose.h>
+#include <sal/macros.h>
 
 #ifndef _FILE_URL_H_
 #include "file_url.h"
@@ -87,7 +89,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
  ******************************************************************/
 
 static const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-static const int  COUNT_OF_LETTERS = sizeof(LETTERS)/sizeof(LETTERS[0]) - 1;
+static const int  COUNT_OF_LETTERS = SAL_N_ELEMENTS(LETTERS) - 1;
 
 #define RAND_NAME_LENGTH 6
 
@@ -357,3 +359,5 @@ oslFileError SAL_CALL osl_createTempFile(
 
     return osl_error;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

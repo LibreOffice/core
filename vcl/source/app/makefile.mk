@@ -43,6 +43,7 @@ CDEFS+=-DDLLPOSTFIX=$(DLLPOSTFIX)
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/dbggui.obj		\
+            $(SLO)$/brand.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/idlemgr.obj 	\
             $(SLO)$/settings.obj	\
@@ -59,6 +60,7 @@ SLOFILES=	$(SLO)$/dbggui.obj		\
             $(SLO)$/vclevent.obj	\
             $(SLO)$/i18nhelp.obj	\
             $(SLO)$/salvtables.obj	\
+            $(SLO)$/solarmutex.obj      \
             $(SLO)$/session.obj
 
 # --- Targets ------------------------------------------------------

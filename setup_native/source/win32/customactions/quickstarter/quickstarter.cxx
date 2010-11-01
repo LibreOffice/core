@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "quickstarter.hxx"
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
@@ -219,3 +220,4 @@ std::string GetProcessImagePath( DWORD dwProcessId )
     return (LONG)GetVersion() < 0 ? GetProcessImagePath_9x( dwProcessId ) : GetProcessImagePath_NT( dwProcessId );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

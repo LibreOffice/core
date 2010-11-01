@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,6 +123,27 @@ ScVbaShapeRange::IncrementTop( double Increment ) throw (uno::RuntimeException)
     {
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         xShape->IncrementTop( Increment );
+    }
+}
+
+rtl::OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
+{
+    sal_Int32 nLen = getCount();
+    for ( sal_Int32 index = 1; index <= nLen; ++index )
+    {
+        uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+        return xShape->getName( );
+    }
+    throw uno::RuntimeException();
+}
+
+void SAL_CALL ScVbaShapeRange::setName( const rtl::OUString& _name ) throw (uno::RuntimeException)
+{
+    sal_Int32 nLen = getCount();
+    for ( sal_Int32 index = 1; index <= nLen; ++index )
+    {
+        uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+        xShape->setName( _name );
     }
 }
 
@@ -337,6 +359,16 @@ uno::Any SAL_CALL ScVbaShapeRange::WrapFormat(  ) throw (css::uno::RuntimeExcept
     throw uno::RuntimeException();
 }
 
+void SAL_CALL ScVbaShapeRange::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException)
+{
+    sal_Int32 nLen = getCount();
+    for ( sal_Int32 index = 1; index <= nLen; ++index )
+    {
+        uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
+        xShape->ZOrder( ZOrderCmd );
+    }
+}
+
 uno::Type SAL_CALL
 ScVbaShapeRange::getElementType() throw (uno::RuntimeException)
 {
@@ -377,3 +409,5 @@ ScVbaShapeRange::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

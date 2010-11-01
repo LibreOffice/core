@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 
-#include <vos/process.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/instance.hxx>
 
@@ -361,3 +361,4 @@ String SvtDefaultOptions::GetDefaultPath( USHORT nId ) const
     return pImp->GetDefaultPath( nId );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

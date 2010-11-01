@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include "internal/utilities.hxx"
 #include "internal/config.hxx"
 
+#include <sal/macros.h>
 #include <malloc.h>
 
 //----------------------------
@@ -52,7 +54,7 @@ namespace /* private */
         {{PSGUID_SUMMARYINFORMATION, PIDSI_PAGECOUNT},VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Pagecount", L"Pagecount"}
     };
 
-    size_t ColumnInfoTableSize = sizeof(ColumnInfoTable)/sizeof(ColumnInfoTable[0]);
+    size_t ColumnInfoTableSize = SAL_N_ELEMENTS(ColumnInfoTable);
 }
 
 //----------------------------
@@ -229,3 +231,5 @@ bool CColumnInfo::IsOOFileExtension(wchar_t* Extension) const
 
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

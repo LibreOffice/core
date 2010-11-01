@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -942,11 +943,7 @@
 #include "vcl/unohelp2.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/wintypes.hxx"
-#include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
-#include "vos/thread.hxx"
-#include "vos/xception.hxx"
+#include "osl/mutex.hxx"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"
@@ -963,3 +960,5 @@
 //---MARKER---
 #endif
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

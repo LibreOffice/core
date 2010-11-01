@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -692,3 +693,4 @@ IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return GetDoc(); }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

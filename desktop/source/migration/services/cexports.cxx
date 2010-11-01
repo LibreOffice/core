@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,11 +49,14 @@ extern "C"
         migration::WordbookMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
-//     {
-//         migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
-//         migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-//         0, 0
-//     },
+    // Extension migration was disabled by Oracle / OpenOffice.org
+#if 0
+    {
+         migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
+         migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+         0, 0
+    },
+#endif
     { 0, 0, 0, 0, 0, 0 }
 };
 
@@ -78,3 +82,5 @@ void * SAL_CALL component_getFactory(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

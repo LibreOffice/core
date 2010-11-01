@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #include <svtools/svtools.hrc>
 #include "imagemgr.hrc"
 #include <svtools/svtdata.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // globals *******************************************************************
 
@@ -494,7 +495,7 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
     String aRet;
     if ( nResId )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         aRet = String( SvtResId( nResId ) );
     }
     return aRet;
@@ -772,7 +773,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             sDescription = sExtension;
             sDescription += '-';
         }
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         sDescription += String( SvtResId( nResId ) );
     }
 
@@ -877,3 +878,4 @@ String SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo
     return sDescription;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

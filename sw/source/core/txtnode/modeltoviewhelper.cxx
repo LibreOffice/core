@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,3 +119,5 @@ ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nVie
 }
 
 } // namespace ModelToViewStringConverter end
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "adabas/BUser.hxx"
 #include "adabas/BGroups.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -162,7 +164,7 @@ void OAdabasUser::getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int3
                     { "SEL", Privilege::SELECT },
                     { "REF", Privilege::REFERENCE }
                 };
-                for ( size_t i = 0; i < sizeof( privileges ) / sizeof( privileges[0] ); ++i )
+                for ( size_t i = 0; i < SAL_N_ELEMENTS( privileges ); ++i )
                 {
                     sal_Int32 nIndex = sPrivs.indexOf( ::rtl::OUString::createFromAscii( privileges[i].pAsciiName ) );
                     if ( nIndex == -1 )
@@ -330,3 +332,4 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

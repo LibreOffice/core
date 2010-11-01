@@ -54,33 +54,37 @@ public class BookSettings implements OfficeConstants {
     private Vector  worksheetSettings   = new Vector();
 
     /**
-     * Default Constructor for a <code>BookSettings</code>
+     * Constructor for a <code>BookSettings</code>. Reads document settings
+     * from xml and inits SheetSettings variables.
      *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param root The root XML node to read from.
      */
     public BookSettings(Node root) {
         readNode(root);
     }
 
     /**
-     * Default Constructor for a <code>BookSettings</code>
+     * Constructor for a <code>BookSettings</code>
      *
-     * @param worksheetSettings if it's a row the height, a column the width
+     * @param worksheetSettings If it's a row the height, a column the width
      */
     public BookSettings(Vector worksheetSettings) {
         this.worksheetSettings = worksheetSettings;
     }
 
     /**
+     * Set the flag indicating whether we have row/column headers.
      *
+     * @param hasColumnRowHeaders Flag to enable or disable headers.
      */
     public void setColumnRowHeaders(boolean hasColumnRowHeaders) {
         this.hasColumnRowHeaders = hasColumnRowHeaders;
     }
 
     /**
+     * Get the flag indicating whether we have row/column headers.
      *
+     * @return Flag indicating whether we have row/column headers.
      */
     public boolean hasColumnRowHeaders() {
         return hasColumnRowHeaders;
@@ -114,7 +118,6 @@ public class BookSettings implements OfficeConstants {
 
         this.activeSheet = activeSheet;
     }
-
 
     /**
      * Adds an XML entry for a particular setting

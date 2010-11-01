@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -450,7 +451,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
     {
-#if defined(WNT) || defined(OS2) || defined(QUARTZ)
+#if defined(ENABLE_QUICKSTART_APPLET)
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
 #endif
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );
@@ -525,6 +526,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpmath" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
+        return sal_True;
+    }
+    else if ( aArgStr.Copy(0, 13).EqualsIgnoreCaseAscii( "-splash-pipe=" ))
+    {
+        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, aArgStr.Copy( 13 ) );
         return sal_True;
     }
     #ifdef MACOSX
@@ -678,6 +684,14 @@ void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
 
     OSL_ASSERT( ( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT ) );
     m_aBoolParams[eParam] = bNewValue;
+}
+
+const rtl::OUString& CommandLineArgs::GetStringParam( StringParam eParam ) const
+{
+       osl::MutexGuard  aMutexGuard( m_aMutex );
+
+       OSL_ASSERT( ( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT ) );
+       return m_aStrParams[eParam];
 }
 
 sal_Bool CommandLineArgs::IsMinimized() const
@@ -981,8 +995,11 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
     return m_eArgumentCount == NONE ||
+           ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_SPLASHPIPE ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
 }
 
 } // namespace desktop
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

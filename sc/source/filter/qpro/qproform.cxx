@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_sc.hxx"
 
 #include <sal/config.h>
+#include <sal/macros.h>
 #include "qpro.hxx"
 
 #include "qproform.hxx"
@@ -556,7 +558,7 @@ static const struct
     { ocNoName, FT_NotImpl }   // gives properties of DOS menus
 };
 
-const int nIndexCount = sizeof( aFuncMap ) / sizeof( aFuncMap[ 0 ] );
+const int nIndexCount = SAL_N_ELEMENTS(aFuncMap);
 
 DefTokenId QProToSc::IndexToToken( sal_uInt16 nIndex )
 {
@@ -743,3 +745,5 @@ const sal_Char* QProToSc::getString( sal_uInt8 nIndex )
     }
     return pExtString;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

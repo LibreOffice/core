@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -572,3 +573,5 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
     return uno::Reference< sdbc::XRow >( xRow.get() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

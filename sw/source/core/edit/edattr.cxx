@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -644,3 +645,5 @@ USHORT SwEditShell::GetScalingOfSelectedText() const
         nScaleWidth = 100;              // default are no scaling -> 100%
     return nScaleWidth;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

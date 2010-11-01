@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sot/storage.hxx>
-//#include <sfx2/docfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::rtl;
@@ -196,3 +196,4 @@ uno::Sequence< OUString > WriterFilterDetection::getSupportedServiceNames(  ) th
     return WriterFilterDetection_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

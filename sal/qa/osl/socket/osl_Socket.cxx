@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -766,16 +767,7 @@ namespace osl_SocketAddr
 
         void ctors_copy_no_001()
         {
-#if 0
-            ::osl::SocketAddr saSocketAddr( aHostName1, IP_PORT_HTTP1 );
-            oslSocketAddr psaOSLSocketAddr = saSocketAddr.getHandle( );
 
-            ::osl::SocketAddr saSocketAddrCopy( psaOSLSocketAddr, SAL_NO_COPY );
-            saSocketAddrCopy.setPort( IP_PORT_HTTP2 );
-
-            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr no copy constructor function: do a no copy constructor on a given SocketAddr instance, modify the new instance's port, check the original one.",
-                                    saSocketAddr.getPort( ) == IP_PORT_HTTP2 );
-#endif
             ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( aHostName1, IP_PORT_HTTP1 );
             CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
 
@@ -3365,47 +3357,6 @@ namespace osl_AcceptorSocket
 
     }; // class ctors
 
-#if 0
-    class operator_assign : public CppUnit::TestFixture
-    {
-    public:
-
-        void assign_001()
-        {
-#if defined(LINUX)
-            ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            ::osl::AcceptorSocket asSocketAssign( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            asSocket.setOption( osl_Socket_OptionReuseAddr, 1);
-            ::osl::SocketAddr saSocketAddr( aHostIp1, IP_PORT_MYPORT4 );
-            asSocket.bind( saSocketAddr );
-
-            AcceptorThread myAcceptorThread( asSocketAssign, aHostIp1 );
-            myAcceptorThread.create();
-
-            thread_sleep( 1 );
-            //when accepting, assign another socket to the socket, the thread will not be closed, so is blocking
-            asSocketAssign = asSocket;
-
-            t_print("#asSocketAssign port number is %d\n", asSocketAssign.getLocalPort() );
-
-            asSocketAssign.shutdown();
-            myAcceptorThread.join();
-
-            CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
-                                myAcceptorThread.isOK() == sal_True );
-
-
-#endif /* LINUX */
-        }
-
-
-        CPPUNIT_TEST_SUITE( operator_assign  );
-        CPPUNIT_TEST( assign_001 );
-        CPPUNIT_TEST_SUITE_END();
-
-    }; // class operator_assign
-#endif
-
     /** testing the method:
         inline sal_Bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
         inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection);
@@ -3719,3 +3670,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

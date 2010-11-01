@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -203,7 +204,7 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
             {
                 uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-                ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                 if( !xControlModel.is() )
                     return bRet;
 
@@ -243,3 +244,5 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

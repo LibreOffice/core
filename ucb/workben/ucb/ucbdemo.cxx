@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,7 @@
 
 #include <stack>
 #include <rtl/ustrbuf.hxx>
-#include <vos/mutex.hxx>
-#include <vos/process.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/ucb/ContentAction.hpp>
@@ -79,6 +79,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <srcharg.hxx>
+#include <osl/security.hxx>
 
 using ucbhelper::getLocalFileURL;
 using ucbhelper::getSystemPathFromFileURL;
@@ -158,7 +159,7 @@ void MessagePrinter::print( const sal_Char* pText )
 //-------------------------------------------------------------------------
 void MessagePrinter::print( const UniString& rText )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( m_pOutEdit )
     {
@@ -432,27 +433,17 @@ sal_Bool Ucb::init()
         try
         {
             rtl::OUString aPipe;
-            vos::OSecurity().getUserIdent(aPipe);
+            osl::Security().getUserIdent(aPipe);
             uno::Sequence< uno::Any > aArgs(4);
             aArgs[0] <<= m_aConfigurationKey1;
             aArgs[1] <<= m_aConfigurationKey2;
             aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
             aArgs[3] <<= aPipe;
-#if 0
-            m_xProv
-                = uno::Reference< XContentProvider >(
-                      m_xFac->
-                          createInstanceWithArguments(
-                              rtl::OUString::createFromAscii(
-                                  "com.sun.star.ucb."
-                                      "UniversalContentBroker"),
-                              aArgs),
-                         uno::UNO_QUERY);
-#else
+
             ::ucbhelper::ContentBroker::initialize( m_xFac, aArgs );
             m_xProv
                 = ::ucbhelper::ContentBroker::get()->getContentProviderInterface();
-#endif
+
         }
         catch (uno::Exception const &) {}
 
@@ -1310,36 +1301,6 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
                                 m_rUCB.getContentProvider(), uno::UNO_QUERY );
     if ( xCommandProcessor.is() )
     {
-
-#if 0
-        ucb::Command aCommand(
-            rtl::OUString::createFromAscii( "getCommandInfo" ), -1, Any() );
-        uno::Reference< ucb::XCommandInfo > xInfo;
-        xCommandProcessor->execute(
-            aCommand, 0, uno::Reference< ucb::XCommandEnvironment >() )
-                >>= xInfo;
-        if ( xInfo.is() )
-        {
-            ucb::CommandInfo aInfo
-                = xInfo->getCommandInfoByName(
-                    rtl::OUString::createFromAscii( "globalTransfer" ) );
-
-            uno::Sequence< ucb::CommandInfo > aCommands
-                = xInfo->getCommands();
-            const ucb::CommandInfo* pCommands = aCommands.getConstArray();
-
-            String aText( UniString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Commands:\n" ) ) );
-            sal_uInt32 nCount = aCommands.getLength();
-            for ( sal_uInt32 n = 0; n < nCount; ++n )
-            {
-                aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "    " ) );
-                aText += String( pCommands[ n ].Name );
-                aText += '\n';
-            }
-            print( aText );
-        }
-#endif
         ucb::GlobalTransferCommandArgument aArg(
                             bMove ? ucb::TransferCommandOperation_MOVE
                                   : ucb::TransferCommandOperation_COPY,
@@ -2139,7 +2100,7 @@ void MyWin::print( const sal_Char* pText )
 //-------------------------------------------------------------------------
 void MyWin::print( const UniString& rText )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( m_pOutEdit )
     {
@@ -2160,7 +2121,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
     {
         case MYWIN_ITEMID_CLEAR:
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             m_pOutEdit->Clear();
             m_pOutEdit->Show();
@@ -2595,3 +2556,4 @@ void MyApp::Main()
         xComponent->dispose();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

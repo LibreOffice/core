@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include "conflictsdlg.hrc"
 #include "scresid.hxx"
 #include "viewdata.hxx"
-#include "tabview.hxx"
+#include "dbfunc.hxx"
 
 
 //=============================================================================
@@ -624,7 +625,7 @@ IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
         return 0;
     }
 
-    ScTabView* pTabView = reinterpret_cast< ScTabView* >( mpViewData->GetView() );
+    ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
     BOOL bContMark = FALSE;
     SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();
@@ -856,3 +857,5 @@ void ScConflictsDlg::UpdateView()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

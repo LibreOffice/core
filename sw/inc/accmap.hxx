@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <vos/ref.hxx>
-#include <vos/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <osl/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <tools/debug.hxx>
@@ -87,8 +88,8 @@ typedef sal_uInt16 tAccessibleStates;
 class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
                         public accessibility::IAccessibleParent
 {
-    mutable ::vos::OMutex maMutex;
-    ::vos::OMutex maEventMutex;
+    mutable ::osl::Mutex maMutex;
+    ::osl::Mutex maEventMutex;
     SwAccessibleContextMap_Impl *mpFrmMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
     SwShapeList_Impl *mpShapes;
@@ -156,7 +157,7 @@ public:
                             const SwPageFrm* _pSelectedPageFrm,
                             const Size&      _rPrevwWinSize );
 
-    ::vos::ORef < SwAccessibleContext > GetContextImpl(
+    ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
     ::com::sun::star::uno::Reference<
@@ -164,7 +165,7 @@ public:
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
 
-    ::vos::ORef < ::accessibility::AccessibleShape > GetContextImpl(
+    ::rtl::Reference < ::accessibility::AccessibleShape > GetContextImpl(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
@@ -220,7 +221,7 @@ public:
     void InvalidateFocus();
 
     void SetCursorContext(
-        const ::vos::ORef < SwAccessibleContext >& rCursorContext );
+        const ::rtl::Reference < SwAccessibleContext >& rCursorContext );
 
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
@@ -327,3 +328,5 @@ private:
                      MapMode&     _orMapMode ) const;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

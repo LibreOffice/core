@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1443,17 +1444,14 @@ void XPolygon::Rotate20()
     long     nPntCnt = pImpXPolygon->nPoints;
     long     nIndex0 = 0;
 
-    for (long nPoints = 1;
-              nPoints < nPntCnt;
-              nPoints ++)
+    for (long nPoints = 1; nPoints < nPntCnt; ++nPoints)
     {
-        Point &rPnt = pImpXPolygon->pPointAry[nPoints];
+        const Point &rPnt = pImpXPolygon->pPointAry[nPoints];
 
-        if ((rPnt.X () < fMinX) || (fMinX == rPnt.X ()) &&
-                                   (fMinY >= rPnt.Y ()))
+        if ( (rPnt.X() < fMinX) || (fMinX == rPnt.X() && fMinY >= rPnt.Y()) )
         {
-            fMinX   = rPnt.X ();
-            fMinY   = rPnt.Y ();
+            fMinX   = rPnt.X();
+            fMinY   = rPnt.Y();
             nIndex0 = nPoints;
         }
     }
@@ -2133,3 +2131,5 @@ XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

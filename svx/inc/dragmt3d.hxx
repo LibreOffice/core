@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ class E3dScene;
 
 /*************************************************************************
 |*
-|* Parameter fuer Interaktion eines 3D-Objektes
+|* Parameters for the interaction of a 3D object
 |*
 \************************************************************************/
 class E3dDragMethodUnit
@@ -67,7 +68,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung von SdrDragMethod fuer 3D-Objekte
+|* Derivative of SdrDragMethod for 3D objects
 |*
 \************************************************************************/
 
@@ -104,7 +105,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung von SdrDragMethod zum Drehen von 3D-Objekten
+|* Derivative of SdrDragMethod for spinning 3D objects
 |*
 \************************************************************************/
 
@@ -127,7 +128,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung von SdrDragMethod zum Verschieben von 3D-Subobjekten
+|* Derivative of SdrDragMethod for moving 3D sub-objects
 |*
 \************************************************************************/
 
@@ -151,3 +152,5 @@ public:
 
 
 #endif          // _E3D_DRAGMT3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

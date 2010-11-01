@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define RECT_HXX
 
 #include <new>
-
 
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
@@ -255,6 +255,6 @@ inline Rectangle SmRect::AsRectangle() const
     return Rectangle(Point(GetItalicLeft(), GetTop()), GetItalicSize());
 }
 
-
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,6 +57,7 @@ interface XApplication : com::sun::star::uno::XInterface
     any Documents( [in] any aIndex );
     any Addins( [in] any aIndex );
     any Dialogs( [in] any aIndex );
+    any ListGalleries( [in] any aIndex );
     float CentimetersToPoints([in] float Centimeters );
 };
 

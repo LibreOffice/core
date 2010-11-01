@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -486,7 +487,7 @@ UnoTreeListBoxImpl& TreeControlPeer::getTreeListBoxOrThrow() const throw (Runtim
 
 void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect, bool bSetSelection ) throw( RuntimeException, IllegalArgumentException )
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -548,7 +549,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
 
 sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     ChangeNodesSelection( rSelection, true, true );
     return sal_True;
 }
@@ -557,7 +558,7 @@ sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection ) throw (Illega
 
 Any SAL_CALL TreeControlPeer::getSelection() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -624,7 +625,7 @@ void SAL_CALL TreeControlPeer::removeSelection( const Any& rSelection ) throw (I
 
 void SAL_CALL TreeControlPeer::clearSelection() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     getTreeListBoxOrThrow().SelectAll( FALSE );
 }
 
@@ -632,7 +633,7 @@ void SAL_CALL TreeControlPeer::clearSelection() throw (RuntimeException)
 
 sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     return getTreeListBoxOrThrow().GetSelectionCount();
 }
 
@@ -678,7 +679,7 @@ Any SAL_CALL TreeSelectionEnumeration::nextElement() throw (NoSuchElementExcepti
 
 Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -702,7 +703,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
 
 Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumeration() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -728,7 +729,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
 
 OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     return msDefaultExpandedGraphicURL;
 }
 
@@ -736,7 +737,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::
 
 void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const ::rtl::OUString& sDefaultExpandedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     if( msDefaultExpandedGraphicURL != sDefaultExpandedGraphicURL )
     {
         if( sDefaultExpandedGraphicURL.getLength() )
@@ -766,7 +767,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const ::rtl::OUStri
 
 OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     return msDefaultCollapsedGraphicURL;
 }
 
@@ -774,7 +775,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com:
 
 void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const ::rtl::OUString& sDefaultCollapsedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     if( msDefaultCollapsedGraphicURL != sDefaultCollapsedGraphicURL )
     {
         if( sDefaultCollapsedGraphicURL.getLength() )
@@ -804,7 +805,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const ::rtl::OUStr
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
@@ -815,7 +816,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >&
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     return !isNodeExpanded( xNode );
 }
 
@@ -823,7 +824,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeCollapsed( const Reference< XTreeNode >
 
 void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
@@ -835,7 +836,7 @@ void SAL_CALL TreeControlPeer::makeNodeVisible( const Reference< XTreeNode >& xN
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
@@ -846,7 +847,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& 
 
 void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
@@ -858,7 +859,7 @@ void SAL_CALL TreeControlPeer::expandNode( const Reference< XTreeNode >& xNode )
 
 void SAL_CALL TreeControlPeer::collapseNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
@@ -884,7 +885,7 @@ void SAL_CALL TreeControlPeer::removeTreeExpansionListener( const Reference< XTr
 
 Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -902,7 +903,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x
 
 Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -920,7 +921,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
 
 awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode >& i_Node ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( i_Node, true );
@@ -933,7 +934,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
 
 sal_Bool SAL_CALL TreeControlPeer::isEditing(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     return rTree.IsEditingActive() ? sal_True : sal_False;
@@ -943,7 +944,7 @@ sal_Bool SAL_CALL TreeControlPeer::isEditing(  ) throw (RuntimeException)
 
 sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     if( rTree.IsEditingActive() )
@@ -961,7 +962,7 @@ sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException)
 
 void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     rTree.EndEditing(FALSE);
@@ -971,7 +972,7 @@ void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException)
 
 void SAL_CALL TreeControlPeer::startEditingAtNode( const Reference< XTreeNode >& xNode ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
@@ -1041,7 +1042,7 @@ bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const XubString& 
 
 void SAL_CALL TreeControlPeer::treeNodesChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if( mnEditLock != 0 )
         return;
@@ -1051,7 +1052,7 @@ void SAL_CALL TreeControlPeer::treeNodesChanged( const ::com::sun::star::awt::tr
 
 void SAL_CALL TreeControlPeer::treeNodesInserted( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if( mnEditLock != 0 )
         return;
@@ -1061,7 +1062,7 @@ void SAL_CALL TreeControlPeer::treeNodesInserted( const ::com::sun::star::awt::t
 
 void SAL_CALL TreeControlPeer::treeNodesRemoved( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if( mnEditLock != 0 )
         return;
@@ -1071,7 +1072,7 @@ void SAL_CALL TreeControlPeer::treeNodesRemoved( const ::com::sun::star::awt::tr
 
 void SAL_CALL TreeControlPeer::treeStructureChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if( mnEditLock != 0 )
         return;
@@ -1241,7 +1242,7 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
 void SAL_CALL TreeControlPeer::disposing( const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException)
 {
     // model is disposed, so we clear our tree
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     rTree.Clear();
     mxDataModel.clear();
@@ -1281,7 +1282,7 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 
 ::com::sun::star::awt::Size TreeControlPeer::getMinimumSize() throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::awt::Size aSz;
 /* todo
@@ -1299,7 +1300,7 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 
 ::com::sun::star::awt::Size TreeControlPeer::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::awt::Size aSz = rNewSize;
 /* todo
@@ -1316,7 +1317,7 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 
 void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -1419,7 +1420,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
 
 Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     const sal_uInt16 nPropId = GetPropertyId( PropertyName );
     if( (nPropId >= BASEPROPERTY_TREE_START) && (nPropId <= BASEPROPERTY_TREE_END) )
@@ -1763,3 +1764,5 @@ UnoTreeListEntry::~UnoTreeListEntry()
     if( mpPeer )
         mpPeer->removeEntry( this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <vcl/edit.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <hash_map>
 
@@ -185,7 +186,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    ::SolarMutexGuard aGuard;
     if ( pController )
         pController->getFrame()->removeFrameActionListener( this );
 }
@@ -440,7 +441,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 {
     if ( !bDisposing )
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        ::SolarMutexGuard aGuard;
         Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
@@ -975,3 +976,4 @@ void BibFrameController_Impl::deactivate()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

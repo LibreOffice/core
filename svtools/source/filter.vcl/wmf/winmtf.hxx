@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
+#include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/lineinfo.hxx>
@@ -304,35 +306,26 @@ struct LOGFONTW
 void WinMtfAssertHandler( const sal_Char*, sal_uInt32 nFlags = WIN_MTF_ASSERT_MIFE );
 #endif
 
-enum WinMtfClipPathType{ EMPTY, RECTANGLE, COMPLEX };
-
 class WinMtfClipPath
 {
-        PolyPolygon         aPolyPoly;
-        WinMtfClipPathType  eType;
-        sal_Int32           nDepth;
+    basegfx::tools::B2DClipState maClip;
 
-        void        ImpUpdateType();
+public :
+    WinMtfClipPath(): maClip() {};
 
-    public :
+    void        setClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
+    void        intersectClipRect( const Rectangle& rRect );
+    void        excludeClipRect( const Rectangle& rRect );
+    void        moveClipRegion( const Size& rSize );
 
-        sal_Bool    bNeedsUpdate;
+    bool isEmpty() const { return maClip.isCleared(); }
 
-                    WinMtfClipPath(): eType(EMPTY), nDepth( 0 ), bNeedsUpdate( sal_False ){};
+    basegfx::B2DPolyPolygon getClipPath() const;
 
-        void        SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
-        void        IntersectClipRect( const Rectangle& rRect );
-        void        ExcludeClipRect( const Rectangle& rRect );
-        void        MoveClipRegion( const Size& rSize );
-
-        WinMtfClipPathType GetType() const { return eType; };
-        const PolyPolygon& GetClipPath() const { return aPolyPoly; };
-
-        sal_Bool operator==( const WinMtfClipPath& rPath )
-        {
-            return  ( rPath.eType == eType ) &&
-                    ( rPath.aPolyPoly == aPolyPoly );
-        };
+    bool operator==( const WinMtfClipPath& rPath ) const
+    {
+        return maClip == rPath.maClip;
+    };
 };
 
 class WinMtfPathObj : public PolyPolygon
@@ -578,6 +571,8 @@ class WinMtfOutput
         sal_uInt32          mnRop;
         sal_Bool            mbNopMode;
         sal_Bool            mbFillStyleSelected;
+        sal_Bool            mbClipNeedsUpdate;
+        sal_Bool            mbComplexClip;
 
         std::vector< SaveStructPtr > vSaveStack;
 
@@ -794,3 +789,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

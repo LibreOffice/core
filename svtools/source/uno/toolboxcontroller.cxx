@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <imgdef.hxx>
 #include <svtools/miscopt.hxx>
@@ -137,13 +138,13 @@ ToolboxController::~ToolboxController()
 
 Reference< XFrame > ToolboxController::getFrameInterface() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xFrame;
 }
 
 Reference< XMultiServiceFactory > ToolboxController::getServiceManager() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xServiceManager;
 }
 
@@ -152,7 +153,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     Reference< XLayoutManager > xLayoutManager;
     Reference< XPropertySet > xPropSet;
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         xPropSet = Reference< XPropertySet >( m_xFrame, UNO_QUERY );
     }
 
@@ -210,7 +211,7 @@ throw ( Exception, RuntimeException )
     bool bInitialized( true );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -220,7 +221,7 @@ throw ( Exception, RuntimeException )
 
     if ( !bInitialized )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
         //shizhoubo add
         m_bSupportVisiable = sal_False;
@@ -262,7 +263,7 @@ void SAL_CALL ToolboxController::update()
 throw ( RuntimeException )
 {
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
     }
@@ -278,7 +279,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
     }
@@ -286,7 +287,7 @@ throw (::com::sun::star::uno::RuntimeException)
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
@@ -331,7 +332,7 @@ throw ( RuntimeException )
 {
     Reference< XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -366,7 +367,7 @@ throw (::com::sun::star::uno::RuntimeException)
     ::rtl::OUString                     aCommandURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -435,7 +436,7 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
     com::sun::star::util::URL    aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
         // Already in the list of status listener. Do nothing.
@@ -496,7 +497,7 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
 
 void ToolboxController::removeStatusListener( const rtl::OUString& aCommandURL )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
     if ( pIter != m_aListenerMap.end() )
@@ -527,7 +528,7 @@ void ToolboxController::bindListener()
     Reference< XStatusListener > xStatusListener;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -616,7 +617,7 @@ void ToolboxController::bindListener()
 
 void ToolboxController::unbindListener()
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
         return;
@@ -655,7 +656,7 @@ void ToolboxController::unbindListener()
 
 sal_Bool ToolboxController::isBound() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
         return sal_False;
@@ -679,7 +680,7 @@ sal_Bool ToolboxController::isHighContrast() const
     Reference< XWindow > xWindow = m_pImpl->m_xParentWindow;
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
             bHighContrast = ( ((ToolBox *)pWindow)->GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -700,7 +701,7 @@ void ToolboxController::updateStatus( const rtl::OUString aCommandURL )
     com::sun::star::util::URL aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -882,3 +883,5 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 //end
 
 } // svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

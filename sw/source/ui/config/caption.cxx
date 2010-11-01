@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include "numrule.hxx"
 #include "caption.hxx"
@@ -37,15 +38,11 @@
 #define VERSION_01      1
 #define CAPTION_VERSION VERSION_01
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
     bUseCaption(FALSE),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
-    sNumberSeparator( ::rtl::OUString::createFromAscii(". ") ),
+    sNumberSeparator(RTL_CONSTASCII_USTRINGPARAM((". "))),
     nPos(1),
     nLevel(0),
     sSeparator( String::CreateFromAscii( ": " ) ),
@@ -56,26 +53,14 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
         aOleId = *pOleId;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 InsCaptionOpt::InsCaptionOpt(const InsCaptionOpt& rOpt)
 {
     *this = rOpt;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 InsCaptionOpt::~InsCaptionOpt()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
 {
@@ -96,10 +81,6 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     return *this;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
@@ -107,76 +88,7 @@ BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
                                     // werden koennen, auf nichts weiteres vergleichen
 
 
-/*           &&
-            sCategory == rOpt.sCategory &&
-            nNumType == rOpt.nNumType &&
-            sCaption == rOpt.sCaption &&
-            nPos == rOpt.nPos &&
-            nLevel == rOpt.nLevel &&
-            cSeparator == rOpt.cSeparator);*/
 }
 
-/*************************************************************************
-|*
-|*    InsCaptionOpt::operator>>()
-|*
-|*    Beschreibung      Stream-Leseoperator
-|*
-*************************************************************************/
 
-/*SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
-{
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    UINT16 nVal;
-    BYTE   cVal;
-    BYTE   nVersion;
-
-    rIStream >> nVersion;
-    rIStream >> cVal;               rCapOpt.UseCaption() = cVal != 0;
-    rIStream >> nVal;               rCapOpt.eObjType = (SwCapObjType)nVal;
-    rIStream >> rCapOpt.aOleId;
-
-    rIStream.ReadByteString( rCapOpt.sCategory, eEncoding );
-    rIStream >> nVal;               rCapOpt.nNumType = nVal;
-    rIStream.ReadByteString( rCapOpt.sCaption, eEncoding );
-    rIStream >> nVal;               rCapOpt.nPos = nVal;
-    rIStream >> nVal;               rCapOpt.nLevel = nVal;
-
-    rIStream >> cVal;
-    rCapOpt.sSeparator = UniString(
-        ByteString(static_cast< char >(cVal)) , eEncoding).GetChar(0);
-
-    return rIStream;
-}
-*/
-/*************************************************************************
-|*
-|*    InsCaptionOpt::operator<<()
-|*
-|*    Beschreibung      Stream-Schreiboperator
-|*
-*************************************************************************/
-
-/*SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
-{
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rOStream    << (BYTE)CAPTION_VERSION
-                << (BYTE)rCapOpt.UseCaption()
-                << (UINT16)rCapOpt.eObjType
-                << rCapOpt.aOleId;
-
-    rOStream.WriteByteString( rCapOpt.sCategory, eEncoding );
-
-    rOStream    << (UINT16)rCapOpt.nNumType;
-
-    rOStream.WriteByteString( rCapOpt.sCaption, eEncoding );
-
-    BYTE cSep = ByteString(rCapOpt.sSeparator, eEncoding).GetChar(0);
-    rOStream    << (UINT16)rCapOpt.nPos
-                << (UINT16)rCapOpt.nLevel
-                << cSep;
-
-    return rOStream;
-}
-*/
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

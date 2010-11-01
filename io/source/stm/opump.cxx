@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -279,7 +280,7 @@ void Pump::run()
             if( ! rInput.is() )
             {
                 NotConnectedException exception(
-                    OUString::createFromAscii( "no input stream set" ) , Reference<XInterface>((OWeakObject*)this) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("no input stream set")) , Reference<XInterface>((OWeakObject*)this) );
                 throw exception;
             }
             Sequence< sal_Int8 > aData;
@@ -288,7 +289,7 @@ void Pump::run()
                 if( ! rOutput.is() )
                 {
                     NotConnectedException exception(
-                        OUString::createFromAscii( "no output stream set" ) , Reference<XInterface>( (OWeakObject*)this) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("no output stream set")) , Reference<XInterface>( (OWeakObject*)this) );
                     throw exception;
                 }
                 rOutput->writeBytes( aData );
@@ -502,3 +503,4 @@ Sequence<OUString> OPumpImpl_getSupportedServiceNames(void)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

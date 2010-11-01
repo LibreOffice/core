@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -309,6 +310,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define SYSTEM_UNXSOGI      32
 #define SYSTEM_UNXMACXI     33
 #define SYSTEM_OS2GCCI      34
+#define SYSTEM_UNXBSDX      35
 #define SYSTEM_WNTGCCI      99
 
 #if defined WNT
@@ -338,6 +340,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "ci.so"
 #elif defined NETBSD && defined X86
   #define __DLLEXTENSION "bi.so"
+#elif defined NETBSD && defined X86_64
+  #define __DLLEXTENSION "bx.so"
 #elif defined NETBSD && defined ARM32
   #define __DLLEXTENSION "ba.so"
 #elif defined NETBSD && defined SPARC
@@ -438,3 +442,5 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #endif
 
 #endif  /* _SOLAR_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

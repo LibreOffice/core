@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,6 +162,7 @@ namespace pcr
     #define PROPERTY_ID_ALLOWADDITIONS       20
     #define PROPERTY_ID_ALLOWEDITS           21
     #define PROPERTY_ID_ALLOWDELETIONS       22
+    #define PROPERTY_ID_GROUP_NAME           23
     #define PROPERTY_ID_NAVIGATION           24
     #define PROPERTY_ID_CYCLE                25
     #define PROPERTY_ID_HIDDEN_VALUE         26
@@ -346,3 +348,4 @@ namespace pcr
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

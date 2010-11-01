@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //Implementierung der Klasse RegistrationContextInformation.
 
 #include <assert.h>
@@ -349,3 +350,4 @@ void RegistrationContextInformation::ExtractOpenOfficeExecNameFromPath()
     m_OOExecName = m_OOExecPath.substr(idx + 1);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

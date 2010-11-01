@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,19 @@
 #include <ManifestWriter.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <ZipPackage.hxx>
 
 #include <zipfileaccess.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::packages::manifest;
+
+using rtl::OUString;
 
 static sal_Bool writeInfo( void * pRegistryKey,
                            const OUString & rImplementationName,
@@ -150,3 +152,4 @@ extern "C" void * SAL_CALL component_getFactory(
     return pRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

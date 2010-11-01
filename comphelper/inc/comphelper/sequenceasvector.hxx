@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
             ::com::sun::star::uno::Sequence< TElementType > lSource;
             if (!(aSource >>= lSource))
                 throw ::com::sun::star::beans::IllegalTypeException(
-                        ::rtl::OUString::createFromAscii("SequenceAsVector operator<<(Any) was called with an unsupported Any type."),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SequenceAsVector operator<<(Any) was called with an unsupported Any type.")),
                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
 
             (*this) << lSource;
@@ -243,3 +244,4 @@ class SequenceAsVector : public ::std::vector< TElementType >
 
 #endif // _COMPHELPER_SEQUENCEASVECTOR_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

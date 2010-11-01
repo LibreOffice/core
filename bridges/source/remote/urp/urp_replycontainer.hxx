@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,3 +74,5 @@ namespace bridges_urp
         Id2ClientJobStackMap m_map;
     };
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

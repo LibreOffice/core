@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
 
-
+    rtl::OUString msDialogLibName;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const ::rtl::OUString& sURL );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > createDialogControl(
@@ -91,7 +92,7 @@ namespace dlgprov
         void attachControlEvents( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxControlContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
-            bool bDialogProviderMode );
+            bool bDialogProviderMode, const rtl::OUString& );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
     // helper methods
@@ -155,3 +156,5 @@ namespace dlgprov
 //.........................................................................
 
 #endif // SCRIPTING_DLGPROV_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

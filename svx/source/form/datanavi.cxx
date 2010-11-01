@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "datanavi.hxx"
 #include "fmservs.hxx"
 
@@ -2924,7 +2926,7 @@ namespace svxform
                 &m_aCalculateBtn
             };
             Window** pCurrent = pWinsForHide;
-            for ( ; i < sizeof( pWinsForHide ) / sizeof( pWinsForHide[ 0 ] ); ++i, ++pCurrent )
+            for ( ; i < SAL_N_ELEMENTS( pWinsForHide ); ++i, ++pCurrent )
                 (*pCurrent)->Hide();
 
             Window* pWinsForMove[] =
@@ -2932,7 +2934,7 @@ namespace svxform
                 &m_aButtonsFL, &m_aOKBtn, &m_aEscBtn, &m_aHelpBtn
             };
             pCurrent = pWinsForMove;
-            for ( i = 0; i < sizeof( pWinsForMove ) / sizeof( pWinsForMove[ 0 ] ); ++i, ++pCurrent )
+            for ( i = 0; i < SAL_N_ELEMENTS( pWinsForMove ); ++i, ++pCurrent )
             {
                 Point aNewPos = (*pCurrent)->GetPosPixel();
                 aNewPos.Y() -= nDelta;
@@ -3730,3 +3732,4 @@ namespace svxform
 //............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

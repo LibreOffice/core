@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,11 +127,11 @@ SfxMacroStatement::SfxMacroStatement
         return;
 /*
     // Objekt-Typ bestimmen
-    FASTBOOL bIsApp = rShell.ISA(SfxApplication);
-    FASTBOOL bIsDoc = rShell.ISA(SfxObjectShell);
-    FASTBOOL bIsWin = !bIsApp && !bIsDoc &&
+    bool bIsApp = rShell.ISA(SfxApplication);
+    bool bIsDoc = rShell.ISA(SfxObjectShell);
+    bool bIsWin = !bIsApp && !bIsDoc &&
                       ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) );
-    FASTBOOL bIsSel = !bIsApp && !bIsDoc && !bIsWin;
+    bool bIsSel = !bIsApp && !bIsDoc && !bIsWin;
 
     // Objekt nicht schon im Slot-Namen enthalten?
     if ( bIsSel || rSlot.pName[0] == '.' )
@@ -387,7 +388,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 }
 
                 // nicht druckbare Zeichen werden als chr$(...) geschrieben
-                FASTBOOL bPrevReplaced = FALSE;
+                bool bPrevReplaced = false;
                 for ( USHORT n = 0; n < aRecordable.Len(); ++n )
                 {
                     sal_Unicode cChar = aRecordable.GetChar(n);
@@ -411,10 +412,10 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                             aRecordable.Insert( aReplacement, n + 1 );
                             n = n + aReplacement.Len();
                         }
-                        bPrevReplaced = TRUE;
+                        bPrevReplaced = true;
                     }
                     else
-                        bPrevReplaced = FALSE;
+                        bPrevReplaced = false;
 
                     // Argument in Anf"uhrungszeichen
                     aArg = '"';
@@ -706,3 +707,4 @@ String SfxMacro::GenerateSource() const
     return aSource;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -226,9 +226,9 @@ interface TableDraw
     SID_FONTWORK_CHARACTER_SPACING_DIALOG   [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
 
 // ISSUE66550_HLINK_FOR_SHAPES
-//    SID_DRAW_HLINK_EDIT             [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
-//    SID_DRAW_HLINK_DELETE           [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
-//    SID_OPEN_HYPERLINK              [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_DRAW_HLINK_EDIT             [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_DRAW_HLINK_DELETE           [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OPEN_HYPERLINK              [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
 }
 
 

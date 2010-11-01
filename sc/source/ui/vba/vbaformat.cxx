@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,7 +121,7 @@ ScVbaFormat<Ifc1>::getVerticalAlignment(  ) throw (script::BasicErrorException, 
     {
         if (!isAmbiguous( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) )
         {
-            sal_Int32 aAPIAlignment;
+            sal_Int32 aAPIAlignment = table::CellVertJustify2::STANDARD;
             mxPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) >>= aAPIAlignment;
             switch( aAPIAlignment )
             {
@@ -841,3 +842,4 @@ template class ScVbaFormat< excel::XStyle >;
 template class ScVbaFormat< excel::XRange >;
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

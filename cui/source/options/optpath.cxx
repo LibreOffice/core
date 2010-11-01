@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -508,7 +509,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 
     // old path is an URL?
     INetURLObject aObj( sWritable );
-    FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+    bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
     rtl::OUString aPathStr( _rFolder );
     INetURLObject aNewObj( aPathStr );
     aNewObj.removeFinalSlash();
@@ -516,7 +517,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     // then the new path also an URL else system path
     String sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
-    FASTBOOL bChanged =
+    bool bChanged =
 #ifdef UNX
 // Unix is case sensitive
         ( sNewPathStr != sWritable );
@@ -860,3 +861,4 @@ void SvxPathTabPage::SetPathList(
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 // for RET_OK
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace ::com::sun::star;
@@ -63,7 +64,7 @@ void ChartController::executeDispatch_EditData()
 
         {
             // /--
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             // using assignment for broken gcc 3.3
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
                 ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHART_DATA ))),
@@ -78,3 +79,5 @@ void ChartController::executeDispatch_EditData()
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

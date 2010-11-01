@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,8 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
 #include <svl/stritem.hxx>
+
+#include <sal/macros.h>
 
 #include "cuires.hrc"
 #include "acccfg.hrc"
@@ -585,7 +588,7 @@ static USHORT __FAR_DATA KEYCODE_ARRAY[] =
     KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
 };
 
-static USHORT KEYCODE_ARRAY_SIZE = (sizeof(KEYCODE_ARRAY) / sizeof(KEYCODE_ARRAY[0]));
+static USHORT KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
 //-----------------------------------------------
 // seems to be needed to layout the list box, which shows all
@@ -1710,3 +1713,5 @@ SvxShortcutAssignDlg::~SvxShortcutAssignDlg()
 
 
 // .uno:InsertSymbol?Symbols:string=bla
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

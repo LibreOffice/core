@@ -50,7 +50,7 @@ service GridProperties
      */
     service ::com::sun::star::drawing::LineProperties;
 
-    /** Determines, whether the grid should be redered by the view.
+    /** Determines, whether the grid should be rendered by the view.
      */
     [property] boolean Show;
 };

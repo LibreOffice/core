@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -151,9 +152,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 
 };
-/* -----------------27.11.2002 12:05-----------------
- *
- * --------------------------------------------------*/
+
 class SwMailMergeCreateFromDlg : public ModalDialog
 {
     FixedLine       aCreateFromFL;
@@ -169,9 +168,7 @@ public:
 
     BOOL    IsThisDocument() const {return aThisDocRB.IsChecked();}
 };
-/* -----------------04.02.2003 13:41-----------------
- *
- * --------------------------------------------------*/
+
 class SwMailMergeFieldConnectionsDlg : public ModalDialog
 {
     FixedLine       aConnectionsFL;
@@ -192,3 +189,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

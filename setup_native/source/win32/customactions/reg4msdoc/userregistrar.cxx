@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // UserRegistrar.cpp: Implementierung der Klasse UserRegistrar.
 //
 //////////////////////////////////////////////////////////////////////
@@ -134,3 +135,5 @@ void UserRegistrar::DeleteHtmFileAssociationKeys() const
     // deleting a key and so destroying existing associations
     // See MSDN: "Merged View of HKEY_CLASSES_ROOT"
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

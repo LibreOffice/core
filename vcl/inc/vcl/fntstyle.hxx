@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,3 +52,5 @@ typedef BYTE FontKerning;
 #define KERNING_ASIAN               ((FontKerning)0x02)
 
 #endif  // _VCL_FNTSTYLE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

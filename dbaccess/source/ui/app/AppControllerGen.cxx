@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,7 +80,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //........................................................................
 namespace dbaui
@@ -215,7 +216,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
 {
     try
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
         WaitObject aWO(getView());
 
@@ -305,7 +306,7 @@ void OApplicationController::openDirectSQLDialog()
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( evt.PropertyName == PROPERTY_USER )
     {
@@ -392,7 +393,7 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     SQLExceptionInfo aError;
@@ -431,7 +432,7 @@ beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::ide
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->closeSubComponents();
 }
@@ -516,7 +517,7 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_In
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
     const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( _ObjectType, _ObjectName );
@@ -541,7 +542,7 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_
 // -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< ::rtl::OUString >() );
@@ -571,7 +572,7 @@ void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Refer
 // -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( m_xDataSource.is() && !isDataSourceReadOnly() )
@@ -595,20 +596,6 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     InvalidateFeature(SID_DB_APP_VIEW_DOCINFO_PREVIEW);
     InvalidateFeature(SID_DB_APP_VIEW_DOC_PREVIEW);
 }
-// -----------------------------------------------------------------------------
-//void OApplicationController::updateTitle()
-//{
-//  ::rtl::OUString sName = getStrippedDatabaseName();
-//
-//  String sTitle = String(ModuleRes(STR_APP_TITLE));
-//  sName = sName + sTitle;
-//#ifdef DBG_UTIL
-//    ::rtl::OUString aDefault;
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
-//    sName += utl::Bootstrap::getBuildIdData( aDefault );
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
-//#endif
-//}
 // -----------------------------------------------------------------------------
 void OApplicationController::askToReconnect()
 {
@@ -676,7 +663,8 @@ void OApplicationController::onDocumentOpened( const ::rtl::OUString& _rName, co
 
     try
     {
-        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _rxDefinition.is() ? _rxDefinition : _xDocument );
+        OSL_ENSURE( _xDocument.is(), "OApplicationController::onDocumentOpened: is there any *valid* scenario where this fails?" );
+        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _xDocument.is() ? _xDocument : _rxDefinition );
 
         if ( _rxDefinition.is() )
         {
@@ -853,3 +841,5 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
 //........................................................................
 }   // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

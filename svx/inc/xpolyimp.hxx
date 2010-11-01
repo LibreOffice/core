@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,15 +32,6 @@
 #include <tools/gen.hxx>
 #include <svx/xpoly.hxx>
 
-/*************************************************************************
-|*
-|*    class ImpXPolygon
-|*
-|*    Beschreibung
-|*    Ersterstellung       08.11.94
-|*    Letzte Aenderung Joe 26.09.95
-|*
-*************************************************************************/
 class ImpXPolygon
 {
 public:
@@ -73,16 +65,6 @@ public:
     void Remove( USHORT nPos, USHORT nCount );
 };
 
-
-/*************************************************************************
-|*
-|*    class ImpXPolyPolygon
-|*
-|*    Beschreibung
-|*    Ersterstellung          08.11.94
-|*    Letzte Aenderung  Joe 26-09-1995
-|*
-*************************************************************************/
 DECLARE_LIST( XPolygonList, XPolygon* )
 
 class ImpXPolyPolygon
@@ -104,3 +86,5 @@ public:
 
 
 #endif      // _XPOLYIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

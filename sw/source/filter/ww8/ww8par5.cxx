@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,14 +28,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 
 #include <ctype.h>              // tolower
 #include <stdio.h>              // sscanf()
 
 #include <sal/types.h>
 #include <tools/solar.h>
+
+#include <comphelper/storagehelper.hxx>
+#include <sot/storinfo.hxx>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XStream.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <svl/urihelper.hxx>
@@ -87,6 +93,7 @@
 #include "writerhelper.hxx"
 #include "fields.hxx"
 #include <unotools/fltrcfg.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <algorithm> // #i24377#
 
@@ -226,19 +233,28 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
     while( (nLen > n) && (aData.GetChar( n ) == ' ') )
         ++n;
 
+    if ( aData.GetChar( n ) == 0x13 )
+    {
+        // Skip the nested field code since it's not supported
+        while ( ( nLen > n ) && ( aData.GetChar( n ) != 0x14 ) )
+            n++;
+    }
+
     if( nLen == n )
         return STRING_NOTFOUND;     // String End reached!
 
     if(     (aData.GetChar( n ) == '"')     // Anfuehrungszeichen vor Para?
         ||  (aData.GetChar( n ) == 0x201c)
-        ||  (aData.GetChar( n ) == 132) )
+        ||  (aData.GetChar( n ) == 132)
+        ||  (aData.GetChar( n ) == 0x14) )
     {
         n++;                        // Anfuehrungszeichen ueberlesen
         n2 = n;                     // ab hier nach Ende suchen
         while(     (nLen > n2)
                 && (aData.GetChar( n2 ) != '"')
                 && (aData.GetChar( n2 ) != 0x201d)
-                && (aData.GetChar( n2 ) != 147) )
+                && (aData.GetChar( n2 ) != 147)
+                && (aData.GetChar( n2 ) != 0x15) )
             n2++;                   // Ende d. Paras suchen
     }
     else                        // keine Anfuehrungszeichen
@@ -725,6 +741,72 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 *pPaM->GetPoint() = maFieldStack.back().maStartPos;
                 break;
             default:
+                rtl::OUString aCode = maFieldStack.back().GetBookmarkCode();
+                if ( aCode.getLength() > 0 )
+                {
+                    // Unhandled field with stored code
+                    SwPosition aEndPos = *pPaM->GetPoint();
+                    SwPaM aFldPam(
+                            maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(),
+                            aEndPos.nNode, aEndPos.nContent.GetIndex());
+
+                    IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+
+                    IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
+                                aFldPam,
+                                maFieldStack.back().GetBookmarkName(),
+                                rtl::OUString::createFromAscii( ODF_UNHANDLED ) );
+                    if ( pFieldmark )
+                    {
+                        const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
+                        pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
+                        rtl::OUString sFieldId = rtl::OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
+                        pFieldmark->GetParameters()->insert(
+                                std::pair< rtl::OUString, uno::Any > (
+                                    rtl::OUString::createFromAscii( ODF_ID_PARAM ),
+                                    uno::makeAny( sFieldId ) ) );
+                        pFieldmark->GetParameters()->insert(
+                                std::pair< rtl::OUString, uno::Any > (
+                                    rtl::OUString::createFromAscii( ODF_CODE_PARAM ),
+                                    uno::makeAny( aCode ) ) );
+
+                        if ( maFieldStack.back().mnObjLocFc > 0 )
+                        {
+                            // Store the OLE object as an internal link
+                            String sOleId = '_';
+                            sOleId += String::CreateFromInt32( maFieldStack.back().mnObjLocFc );
+
+                            SvStorageRef xSrc0 = pStg->OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool));
+                            SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
+
+                            // Store it now!
+                            uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();
+                            uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
+                            SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
+
+                            if ( xObjDst.Is() )
+                            {
+                                xSrc1->CopyTo( xObjDst );
+
+                                if ( !xObjDst->GetError() )
+                                    xObjDst->Commit();
+                            }
+
+                            uno::Reference< embed::XTransactedObject > xTransact( xOleStg, uno::UNO_QUERY );
+                            if ( xTransact.is() )
+                                xTransact->commit();
+
+                            // Store the OLE Id as a parameter
+                            pFieldmark->GetParameters()->insert(
+                                    std::pair< rtl::OUString, uno::Any >(
+                                        rtl::OUString::createFromAscii( ODF_OLE_PARAM ),
+                                        uno::makeAny( rtl::OUString( sOleId ) ) ) );
+                        }
+
+                    }
+                }
+
                 break;
         }
         maFieldStack.pop_back();
@@ -756,12 +838,12 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
 }
 
 FieldEntry::FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw()
-    : maStartPos(rPos), mnFieldId(nFieldId)
+    : maStartPos(rPos), mnFieldId(nFieldId), mnObjLocFc(0)
 {
 }
 
 FieldEntry::FieldEntry(const FieldEntry &rOther) throw()
-    : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId)
+    : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId), mnObjLocFc(rOther.mnObjLocFc)
 {
 }
 
@@ -788,6 +870,11 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     return msMarkType;
 }
 
+::rtl::OUString FieldEntry::GetBookmarkCode()
+{
+    return msMarkCode;
+}
+
 void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
 {
     msBookmarkName=bookmarkName;
@@ -796,6 +883,11 @@ void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
 void FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
 {
     msMarkType=bookmarkType;
+}
+
+void FieldEntry::SetBookmarkCode(::rtl::OUString bookmarkCode)
+{
+    msMarkCode = bookmarkCode;
 }
 
 
@@ -814,7 +906,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     static FNReadField aWW8FieldTab[eMax+1] =
     {
         0,
-        0,
+        &SwWW8ImplReader::Read_F_Input,
         0,
         &SwWW8ImplReader::Read_F_Ref,               // 3
         0,
@@ -871,7 +963,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         0,
 
 
-        0,      // 56: VERKNUePFUNG     // fehlt noch !!!!!!!!!!!!!!!!!!!!!!!
+        0,                                          // 56
 
 
         &SwWW8ImplReader::Read_F_Symbol,            // 57
@@ -941,6 +1033,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     ASSERT(bOk, "WW8: Bad Field!\n");
     if (aF.nId == 33) aF.bCodeNest=false; //#124716#: do not recurse into nested page fields
+    bool bCodeNest = aF.bCodeNest;
+    if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and loose the inner data
 
     maFieldStack.push_back(FieldEntry(*pPaM->GetPoint(), aF.nId));
 
@@ -970,7 +1064,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         return aF.nLen;
 
     // keine Routine vorhanden
-    if (bNested || !aWW8FieldTab[aF.nId] || aF.bCodeNest)
+    if (bNested || !aWW8FieldTab[aF.nId] || bCodeNest)
     {
         if( nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
@@ -989,19 +1083,37 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if ( STRING_NOTFOUND == nSpacePos )
             nSpacePos = aStr.Len( );
         xub_StrLen nSearchPos = STRING_NOTFOUND;
-        if ( ( ( nSearchPos = aStr.Search('.') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ||
-             ( ( nSearchPos = aStr.Search('/') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) )
+        if ( !( aStr.EqualsAscii( "=", 1, 1 ) ) && (
+                ( ( nSearchPos = aStr.Search('.') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ||
+                ( ( nSearchPos = aStr.Search('/') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ) )
             return aF.nLen;
         else
+        {
+            // Link fields aren't supported, but they are bound to an OLE object
+            // that needs to be roundtripped
+            if ( aF.nId == 56 )
+                bEmbeddObj = true;
+            // Field not supported: store the field code for later use
+            maFieldStack.back().SetBookmarkCode( aStr );
             return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
                                             // wird wie Haupttext eingelesen
+        }
     }
     else
     {                                   // Lies Feld
         long nOldPos = pStrm->Tell();
         String aStr;
-        aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs()+
-            aF.nSCode, aF.nLCode, eTextCharSet );
+        if ( aF.nId == 6 && aF.bCodeNest )
+        {
+            // TODO Extract the whole code string using the nested codes
+            aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs() +
+                aF.nSCode, aF.nSRes - aF.nSCode - 1, eTextCharSet );
+        }
+        else
+        {
+            aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs()+
+                aF.nSCode, aF.nLCode, eTextCharSet );
+        }
 
         // --> OD 2005-07-25 #i51312# - graphics inside field code not supported
         // by Writer. Thus, delete character 0x01, which stands for such a graphic.
@@ -1197,9 +1309,12 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
     if( !aDef.Len() )
         aDef = GetFieldResult( pF );
 
-    SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-                        aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
-    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+    if ( pF->nId != 0x01 ) // 0x01 fields have no result
+    {
+        SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
+                            aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+    }
 
     return FLD_OK;
 }
@@ -2052,7 +2167,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             */
             SwGetRefField aFld(
                 (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
+                sBkmName,REF_BOOKMARK,0,REF_CONTENT);
             pReffingStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
             pReffingStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
         }
@@ -2138,7 +2253,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_REF");
+    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_REF"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_PAGEREF));
     maFieldStack.back().AddParam(rtl::OUString(), sName);
@@ -2236,7 +2351,7 @@ bool CanUseRemoteLink(const String &rGrfName)
             ucb::XCommandEnvironment >() );
         rtl::OUString   aTitle;
 
-        aCnt.getPropertyValue(rtl::OUString::createFromAscii("Title" ))
+        aCnt.getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")))
             >>= aTitle;
         bUseRemote = (aTitle.getLength() > 0);
     }
@@ -2849,10 +2964,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_TOC");
+    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_TOC"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_TOC));
-//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif
@@ -3377,10 +3492,10 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName=::rtl::OUString::createFromAscii("_HYPERLINK");
+    ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_HYPERLINK"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_HYPERLINK));
-//     maFieldStack.back().AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
+//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif
@@ -3628,4 +3743,4 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     pStrm->Seek( nOldPos );
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

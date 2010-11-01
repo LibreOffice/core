@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,6 +52,10 @@ namespace oox {
     namespace drawingml { class DrawingML; }
     namespace vml { class VMLExport; }
 }
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+} } }
 
 /// The class that does all the actual DOCX export-related work.
 class DocxExport : public MSWordExportBase
@@ -128,6 +133,9 @@ public:
 
     virtual ULONG ReplaceCr( BYTE nChar );
 
+    /// Returns the relationd id
+    rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
+
 protected:
     /// Format-dependant part of the actual export.
     virtual void ExportDocument_Impl();
@@ -146,6 +154,9 @@ protected:
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
+
+    virtual void OutputLinkedOLE( const rtl::OUString& );
+
 
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
@@ -201,4 +212,5 @@ private:
 };
 
 #endif // _DOCXEXPORT_HXX_
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

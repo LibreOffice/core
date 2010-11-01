@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1536,20 +1537,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         // linear combination will not decompose to the same start values again, but to a
         // new combination. Thus it makes no sense to check if the wanted shear is reached
         // or not. Taking out.
-#if 0
-        long nTempAngle=GetMarkedObjShear();
-        if (nTempAngle!=0 && nTempAngle!=nNewShearAngle && !bShearVert) {
-            // noch eine 2. Iteration zur Kompensation der Rundungsfehler
-            double nOld=tan((double)nTempAngle*nPi180);
-            double nNew=tan((double)nNewShearAngle*nPi180);
-            nNew-=nOld;
-            nNew=atan(nNew)/nPi180;
-            nTempAngle=Round(nNew);
-            if (nTempAngle!=0) {
-                ShearMarkedObj(aRef,nTempAngle,bShearVert);
-            }
-        }
-#endif
     }
 
     // Position aendern
@@ -1782,3 +1769,4 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
         EndUndo();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

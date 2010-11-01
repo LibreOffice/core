@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,8 +40,8 @@
 #include <tools/postsys.h>
 
 
-#include <vos/diagnose.hxx>
-#include <vos/refernce.hxx>
+#include <osl/diagnose.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/MethodConcept.hpp>
@@ -65,7 +66,6 @@
 #include "unoobjw.hxx"
 #include "servprov.hxx"
 
-using namespace vos;
 using namespace std;
 using namespace rtl;
 using namespace osl;
@@ -1686,3 +1686,5 @@ const VARTYPE getVarType( const Any& value)
 
 
 } // end namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

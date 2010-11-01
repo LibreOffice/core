@@ -69,7 +69,8 @@ SHL1STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(DBTOOLSLIB)               \
-    $(SALLIB)
+    $(SALLIB)                   \
+    $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB= i$(TARGET)
@@ -110,8 +111,8 @@ SHL2LINKFLAGS+=$(KAB_LIB)
 SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
-    $(VOSLIB)                   \
     $(SALLIB)                   \
+    $(SALHELPERLIB)                   \
     $(DBTOOLSLIB)               \
     $(COMPHELPERLIB)
 

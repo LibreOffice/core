@@ -55,6 +55,9 @@ TARFILE_ROOTDIR=commons-lang-2.3-src
                 
 OUT2CLASS=dist$/commons-lang-2.3.jar
 
+ANT_OPTS+="-Dfile.encoding=ISO-8859-1"
+.EXPORT : ANT_OPTS
+
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME

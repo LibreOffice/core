@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,8 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::rtl::OUString;
+
+using rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -488,3 +491,5 @@ void ScXMLDDECellContext::EndElement()
     for(sal_Int32 i = 0; i < nCells; ++i)
         pDDELink->AddCellToRow(aCell);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

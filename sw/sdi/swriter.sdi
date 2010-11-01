@@ -6329,6 +6329,31 @@ SfxVoidItem PageDialog FN_FORMAT_PAGE_DLG
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem TitlePageDialog FN_FORMAT_TITLEPAGE_DLG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem PageDown FN_PAGEDOWN
 ()
 [

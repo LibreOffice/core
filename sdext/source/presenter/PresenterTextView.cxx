@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -380,10 +381,12 @@ void PresenterTextView::MoveCaret (
                             // the previous or the start of the next paragraph.
                             pParagraph = GetParagraph(nParagraphIndex);
                             if (pParagraph)
+                            {
                                 if (nDistance<0)
                                     nCharacterIndex = pParagraph->GetCharacterCount();
                                 else
                                     nCharacterIndex = 0;
+                            }
                         }
                     }
                     else
@@ -1593,3 +1596,5 @@ bool PresenterTextParagraph::Line::IsEmpty (void) const
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

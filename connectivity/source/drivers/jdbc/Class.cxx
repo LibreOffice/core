@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,3 +72,4 @@ jobject java_lang_Class::newInstanceObject()
     return callObjectMethod(t.pEnv,"newInstance","()Ljava/lang/Object;", mID);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1016,3 +1017,4 @@ void LockedEmbedDocument_Impl::ExecuteMethod( sal_Int16 nId )
 #pragma warning(disable: 4505)
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

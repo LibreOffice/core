@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -375,3 +376,5 @@ void SAL_CALL XSecParser::initialize(
 {
     aArguments[0] >>= m_xNextHandler;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

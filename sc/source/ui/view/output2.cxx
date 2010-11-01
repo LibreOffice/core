@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@
 #include <math.h>
 
 //! Autofilter-Breite mit column.cxx zusammenfassen
-#define DROPDOWN_BITMAP_SIZE        17
+#define DROPDOWN_BITMAP_SIZE        18
 
 #define DRAWTEXT_MAX    32767
 
@@ -1306,7 +1307,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
              ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & SC_MF_AUTO ) &&
              ( !bBreak || pRefDevice == pFmtDevice ) )
         {
-            long nFilter = Min( nMergeSizeY, (long) DROPDOWN_BITMAP_SIZE );
+            // filter drop-down width is now independent from row height
+            const long nFilter = DROPDOWN_BITMAP_SIZE;
             BOOL bFit = ( nNeeded + nFilter <= nMergeSizeX );
             if ( bFit || bCellIsValue )
             {
@@ -1329,17 +1331,6 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
     rParam.maAlignRect.Justify();
     rParam.maClipRect.Justify();
-
-#if 0
-    //! Test !!!
-    pDev->Push();
-    pDev->SetLineColor();
-    pDev->SetFillColor( COL_LIGHTGREEN );
-    pDev->DrawRect( pDev->PixelToLogic(rParam.maClipRect) );
-    pDev->DrawRect( rParam.maClipRect );    // print preview
-    pDev->Pop();
-    //! Test !!!
-#endif
 }
 
 void ScOutputData::DrawStrings( BOOL bPixelToLogic )
@@ -2401,11 +2392,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-#if 0
-        Size aOnePixel = pDev->PixelToLogic(Size(1,1));
-        long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
-#endif
         nInitPosX += nMirrorW - 1;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -2933,20 +2919,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                                 }
 
-#if 0
-                                long nClipStartY = nStartY;
-                                if (nArrY==0 || bVisChanged)
-                                {
-                                    if ( nClipStartY < nRowPosY )
-                                    {
-                                        long nDif = nRowPosY - nClipStartY;
-                                        bClip = TRUE;
-                                        nClipStartY = nRowPosY;
-                                        aClipSize.Height() -= nDif;
-                                    }
-                                }
-#endif
-
                                 Rectangle aLogicClip;
                                 if (bClip || bSimClip)
                                 {
@@ -3223,11 +3195,6 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-#if 0
-        Size aOnePixel = pDev->PixelToLogic(Size(1,1));
-        long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
-#endif
         nInitPosX += nMirrorW - 1;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -3731,20 +3698,11 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                             eOrient!=SVX_ORIENTATION_STACKED &&
                                             pInfo && pInfo->bAutoFilter)
                                     {
-                                        if (pRowInfo[nArrY].nHeight < DROPDOWN_BITMAP_SIZE)
-                                        {
-                                            if (bPixelToLogic)
-                                                nAvailWidth -= pRefDevice->PixelToLogic(Size(0,pRowInfo[nArrY].nHeight)).Height();
-                                            else
-                                                nAvailWidth -= pRowInfo[nArrY].nHeight;
-                                        }
+                                        // filter drop-down width is now independent from row height
+                                        if (bPixelToLogic)
+                                            nAvailWidth -= pRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
                                         else
-                                        {
-                                            if (bPixelToLogic)
-                                                nAvailWidth -= pRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
-                                            else
-                                                nAvailWidth -= DROPDOWN_BITMAP_SIZE;
-                                        }
+                                            nAvailWidth -= DROPDOWN_BITMAP_SIZE;
                                         long nComp = nEngineWidth;
                                         if (nAvailWidth<nComp) nAvailWidth=nComp;
                                     }
@@ -3917,3 +3875,4 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

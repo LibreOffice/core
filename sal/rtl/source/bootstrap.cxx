@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -272,7 +273,7 @@ static OUString & getIniFileName_Impl()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-            progExt = OUString::createFromAscii(".exe");
+            progExt = OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
@@ -1057,3 +1058,5 @@ rtl::OUString expandMacros(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

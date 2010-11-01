@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1247,7 +1248,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(size_t i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
+    for(size_t i=0; i < SAL_N_ELEMENTS(pActions);++i)
     {
         aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
     }
@@ -1435,3 +1436,4 @@ void OPreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,9 +57,6 @@ using ::rtl::OUString;
 #endif
 #define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
 
-/* -----------------08.07.99 15:15-------------------
-
- --------------------------------------------------*/
 void SwVisitingCardPage::InitFrameControl()
 {
     Link aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
@@ -126,9 +124,7 @@ void SwVisitingCardPage::InitFrameControl()
         }
     }
 }
-/* -----------------01.10.99 13:19-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
 {
     SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
@@ -161,9 +157,7 @@ IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
     }
     return 0;
 }
-/* -----------------22.07.99 11:06-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
 {
     if(_xAutoText.is())
@@ -190,9 +184,6 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
     return 0;
 }
 
-/* -----------------01.10.99 11:59-------------------
-
- --------------------------------------------------*/
 void SwVisitingCardPage::UpdateFields()
 {
     uno::Reference< frame::XModel >  xModel;
@@ -201,9 +192,7 @@ void SwVisitingCardPage::UpdateFields()
         SwLabDlg::UpdateFieldInformation(xModel, aLabItem);
     }
 }
-/* -----------------01.10.99 15:16-------------------
 
- --------------------------------------------------*/
 void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, const SwLabItem& rItem)
 {
     uno::Reference< text::XTextFieldsSupplier >  xFlds(xModel, uno::UNO_QUERY);
@@ -279,3 +268,4 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     xRefresh->refresh();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

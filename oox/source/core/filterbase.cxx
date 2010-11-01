@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 #include "oox/core/filterbase.hxx"
 #include <set>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -63,6 +65,7 @@ using ::com::sun::star::io::XStream;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::container::XNameAccess;
 using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
@@ -146,6 +149,7 @@ struct FilterBaseImpl
     MediaDescriptor     maMediaDesc;
     OUString            maFileUrl;
     StorageRef          mxStorage;
+    OoxmlVersion        meVersion;
 
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
@@ -173,6 +177,7 @@ struct FilterBaseImpl
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
     meDirection( FILTERDIRECTION_UNKNOWN ),
+    meVersion( ECMA_DIALECT ),
     mxGlobalFactory( rxGlobalFactory )
 {
     OSL_ENSURE( mxGlobalFactory.is(), "FilterBaseImpl::FilterBaseImpl - missing service factory" );
@@ -234,6 +239,11 @@ bool FilterBase::isImportFilter() const
 bool FilterBase::isExportFilter() const
 {
     return mxImpl->meDirection == FILTERDIRECTION_EXPORT;
+}
+
+OoxmlVersion FilterBase::getVersion( )
+{
+    return mxImpl->meVersion;
 }
 
 // ----------------------------------------------------------------------------
@@ -558,6 +568,25 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME(), Reference< XFrame >() );
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
     mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
+
+    // Check for ISO OOXML
+    OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( CREATE_OUSTRING( "FilterName" ), OUString() );
+    try
+    {
+        Reference< XNameAccess > xFilters( getGlobalFactory()->createInstance(
+                    CREATE_OUSTRING( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY_THROW );
+        Any aValues = xFilters->getByName( sFilterName );
+        Sequence<PropertyValue > aPropSeq;
+        aValues >>= aPropSeq;
+        SequenceAsHashMap aProps( aPropSeq );
+
+        sal_Int32 nVersion = aProps.getUnpackedValueOrDefault( CREATE_OUSTRING( "FileFormatVersion" ), sal_Int32( 0 ) );
+        mxImpl->meVersion = OoxmlVersion( nVersion );
+    }
+    catch ( Exception& )
+    {
+        // Not ISO OOXML
+    }
 }
 
 GraphicHelper* FilterBase::implCreateGraphicHelper() const
@@ -570,3 +599,5 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
 
 } // namespace core
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

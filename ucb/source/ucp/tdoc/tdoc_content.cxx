@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,13 +146,6 @@ Content* Content::create(
         OSL_ENSURE( sal_False, "Content::create - unsupported content type!" );
         return 0;
     }
-
-#if 0
-    // Fail, if content does exist.
-    if ( Content::hasData( pProvider,
-                           Uri( Identifier->getContentIdentifier() ) ) )
-        return 0;
-#endif
 
     return new Content( rxSMgr, pProvider, Identifier, Info );
 }
@@ -3133,3 +3127,5 @@ bool ContentProperties::isContentCreator() const
 {
     return ( getType() == FOLDER ) || ( getType() == DOCUMENT );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

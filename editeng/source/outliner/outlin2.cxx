@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -533,13 +534,13 @@ Reference< XSpellChecker1 > Outliner::GetSpeller()
     return pEditEngine->GetSpeller();
 }
 
-void Outliner::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void Outliner::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetForbiddenCharsTable( xForbiddenChars );
 }
 
-vos::ORef<SvxForbiddenCharactersTable> Outliner::GetForbiddenCharsTable() const
+rtl::Reference<SvxForbiddenCharactersTable> Outliner::GetForbiddenCharsTable() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetForbiddenCharsTable();
@@ -811,3 +812,5 @@ void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPorti
 {
     pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

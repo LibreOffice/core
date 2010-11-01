@@ -186,7 +186,6 @@
         ITEM_FORMAT_PARA_DLG\
     };
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
 #define MN_EDITLNK \
     MenuItem\
     {\
@@ -202,7 +201,6 @@
         HelpID = SID_DRAW_HLINK_DELETE ; \
         Text [ en-US ] = "~Remove Hyperlink" ; \
     };
-#endif
 
 #define MN_DRWTXTATTR \
     MenuItem\
@@ -1297,14 +1295,12 @@ Menu RID_POPUP_DRAW
         MenuItem { Separator = TRUE ; };
          //------------------------------
         ITEM_GROUP_MENU
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
-#endif
     };
 };
 
@@ -1374,14 +1370,12 @@ Menu RID_POPUP_GRAPHIC
         MenuItem { Separator = TRUE ; };
          //------------------------------
         ITEM_GROUP_MENU
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
-#endif
     };
 };
 

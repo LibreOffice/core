@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
@@ -62,7 +63,6 @@
 using namespace rtl;
 using namespace utl;
 using namespace osl;
-using namespace vos;
 using namespace comphelper;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -96,7 +96,7 @@ GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
 
 void SAL_CALL GlobalEventListenerImpl::notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     if( (Event.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnFocus") ) == 0) ||
         (Event.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnUnload") ) == 0) )
     {
@@ -777,3 +777,5 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
     return xRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

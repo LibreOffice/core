@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -864,7 +865,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             // one implementation found -> try to activate
             aLocation = xLocationKey->getAsciiValue();
 
-            // search protocol delemitter
+            // search protocol delimiter
             sal_Int32 nPos = aLocation.indexOf(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
             if( nPos != -1 )
@@ -1084,8 +1085,6 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
-//  return new OFactoryUnloadableComponentHelper(
-//      rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
 }
 
 // global function
@@ -1136,3 +1135,4 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFa
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

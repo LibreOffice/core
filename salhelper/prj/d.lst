@@ -9,6 +9,7 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\inc\salhelper\refobj.hxx %_DEST%\inc%_EXT%\salhelper\refobj.hxx
 ..\inc\salhelper\simplereferenceobject.hxx %_DEST%\inc%_EXT%\salhelper\simplereferenceobject.hxx
 ..\inc\salhelper\singletonref.hxx %_DEST%\inc%_EXT%\salhelper\singletonref.hxx
+..\inc\salhelper\timer.hxx %_DEST%\inc%_EXT%\salhelper\timer.hxx
 
 ..\%__SRC%\bin\salhelp*.dll %_DEST%\bin%_EXT%\salhelp*.dll
 ..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib%_EXT%\*

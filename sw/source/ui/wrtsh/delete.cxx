@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -387,8 +388,8 @@ long SwWrtShell::DelRight()
             LeaveSelFrmMode();
             UnSelectFrm();
             // --> OD 2006-07-06 #134369#
-            ASSERT( !IsFrmSelected(),
-                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" )
+            OSL_ENSURE( !IsFrmSelected(),
+                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
             // <--
             // --> OD 2006-07-10 #134369#
             // leave draw mode, if necessary.
@@ -564,3 +565,4 @@ long SwWrtShell::DelPrvWord()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

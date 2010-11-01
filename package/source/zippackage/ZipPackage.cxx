@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,6 +70,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
@@ -978,14 +980,14 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 
     try
     {
-        vos::ORef < EncryptionData > xEmpty;
+        rtl::Reference < EncryptionData > xEmpty;
         aZipOut.putNextEntry( *pEntry, xEmpty );
         aZipOut.write( aType, 0, nBufferLength );
         aZipOut.closeEntry();
     }
     catch ( ::com::sun::star::io::IOException & r )
     {
-        VOS_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
+        OSL_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Error adding mimetype to the ZipOutputStream!" ) ),
                 static_cast < OWeakObject * > ( this ),
@@ -1023,14 +1025,14 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
         pBuffer->realloc( nBufferLength );
 
         // the manifest.xml is never encrypted - so pass an empty reference
-        vos::ORef < EncryptionData > xEmpty;
+                rtl::Reference < EncryptionData > xEmpty;
         aZipOut.putNextEntry( *pEntry, xEmpty );
         aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
         aZipOut.closeEntry();
     }
     else
     {
-        VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+                OSL_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
         IOException aException;
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Couldn't get a ManifestWriter!" ) ),
@@ -1086,7 +1088,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequ
     pBuffer->realloc( nBufferLength );
 
     // there is no encryption in this format currently
-    vos::ORef < EncryptionData > xEmpty;
+            rtl::Reference < EncryptionData > xEmpty;
     aZipOut.putNextEntry( *pEntry, xEmpty );
     aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
     aZipOut.closeEntry();
@@ -1607,21 +1609,14 @@ uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::
                                            static_getSupportedServiceNames());
 }
 
+namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
 // XUnoTunnel
 Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
     throw (RuntimeException)
 {
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    ::cppu::OImplementationId &rId = lcl_ImplId::get();
+    return rId.getImplementationId();
 }
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdentifier )
@@ -1717,3 +1712,5 @@ void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*Proper
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

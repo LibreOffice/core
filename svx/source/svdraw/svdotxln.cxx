@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,7 @@ void ImpSdrObjTextLink::Closed()
 void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
                                 const ::com::sun::star::uno::Any & /*rValue */)
 {
-    FASTBOOL bForceReload=FALSE;
+    bool bForceReload = false;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
     sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
     if( pLinkManager )
@@ -119,7 +120,7 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
                 pData->aFileName = aFile;
                 pData->aFilterName = aFilter;
                 pSdrObj->SetChanged();
-                bForceReload = TRUE;
+                bForceReload = true;
             }
         }
     }
@@ -208,10 +209,10 @@ void SdrTextObj::ReleaseTextLink()
     }
 }
 
-FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
+bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 {
     ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
-    FASTBOOL                    bRet = TRUE;
+    bool                        bRet = true;
 
     if( pData )
     {
@@ -260,7 +261,7 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
     return bRet;
 }
 
-FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
+bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
     BOOL            bRet = FALSE;
@@ -348,3 +349,4 @@ void SdrTextObj::ImpLinkAbmeldung()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

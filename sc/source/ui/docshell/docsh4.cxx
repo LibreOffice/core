@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2127,6 +2128,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 }
             }
 
+#if 0
             if ( n+1 < nCollateCopies &&
                  (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
                  ( nPrinted % 2 ) == 1 )
@@ -2137,11 +2139,10 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 // (same as in Writer ViewShell::Prt)
 
                 // FIXME: needs to be adapted to XRenderable interface
-                #if 0
                 pPrinter->StartPage();
                 pPrinter->EndPage();
-                #endif
             }
+#endif
         }
     }
 
@@ -2713,3 +2714,5 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     }
     return xModel;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

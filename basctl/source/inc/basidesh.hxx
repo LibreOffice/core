@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -151,7 +152,7 @@ protected:
     virtual void        Deactivate(BOOL bMDI);
 
     virtual void        Move();
-    virtual void        ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void        ShowCursor( bool bOn = true );
 
     void                CreateModulWindowLayout();
     void                DestroyModulWindowLayout();
@@ -234,3 +235,5 @@ public:
 };
 
 #endif // _BASIDESH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

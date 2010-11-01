@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #include "mediaevent_impl.hxx"
 #include "mediawindow_impl.hxx"
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 
@@ -73,7 +74,7 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -93,7 +94,7 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt:
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -112,7 +113,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -133,7 +134,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -154,7 +155,7 @@ void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -167,7 +168,7 @@ void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt:
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -180,7 +181,7 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const ::com::sun::star::awt
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -195,7 +196,7 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -221,3 +222,4 @@ void SAL_CALL MediaEventListenersImpl::focusLost( const ::com::sun::star::awt::F
 } // namespace priv
 } // namespace avemdia
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

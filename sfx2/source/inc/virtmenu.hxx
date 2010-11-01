@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ private:
 
 private:
     void            Construct_Impl();
-    FASTBOOL        Bind_Impl( Menu *pMenu );
+    bool            Bind_Impl( Menu *pMenu );
     inline SfxMenuCtrlArr_Impl& GetAppCtrl_Impl()
     {
         return pAppCtrl? *pAppCtrl: *(pAppCtrl = new SfxMenuCtrlArr_Impl) ;
@@ -157,3 +158,5 @@ inline USHORT SfxVirtualMenu::GetItemId( USHORT nPos ) const
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

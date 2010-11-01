@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,6 +75,7 @@
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>     // IsNumberFormat
@@ -1184,7 +1186,7 @@ bool lcl_ParseFunction( const String& rList, xub_StrLen nStartPos, xub_StrLen& r
     {
         aFuncStr.EraseLeadingAndTrailingChars( ' ' );
 
-        const sal_Int32 nFuncCount = sizeof(aFunctions) / sizeof(aFunctions[0]);
+        const sal_Int32 nFuncCount = SAL_N_ELEMENTS(aFunctions);
         for ( sal_Int32 nFunc=0; nFunc<nFuncCount && !bFound; nFunc++ )
         {
             if ( aFuncStr.EqualsIgnoreCaseAscii( aFunctions[nFunc].pName ) )
@@ -2640,3 +2642,4 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

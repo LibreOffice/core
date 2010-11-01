@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,3 +85,5 @@ void DependencyDialog::Resize() {
              (m_list.GetSizePixel().Width() - m_ok.GetSizePixel().Width()) / 2),
             m_list.GetPosPixel().Y() + m_list.GetSizePixel().Height() + n));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

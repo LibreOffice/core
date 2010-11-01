@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1287,7 +1288,7 @@ void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'open' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'open' method is not specified for a nested registry")),
             Reference< XInterface >() );
 }
 
@@ -1333,7 +1334,7 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'destroy' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'destroy' method is not specified for a nested registry")),
             Reference< XInterface >() );
 }
 
@@ -1417,3 +1418,4 @@ Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XC
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

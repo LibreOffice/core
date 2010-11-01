@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define SC_POOLHELP_HXX
 
 #include <rtl/ref.hxx>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/link.hxx>
 #include "docoptio.hxx"
 
@@ -40,7 +41,7 @@ class SvNumberFormatter;
 class SfxItemPool;
 
 
-class ScPoolHelper : public vos::OReference
+class ScPoolHelper : public salhelper::SimpleReferenceObject
 {
 private:
     ScDocOptions        aOpt;
@@ -72,3 +73,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

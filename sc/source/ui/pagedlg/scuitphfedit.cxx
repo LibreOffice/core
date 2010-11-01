@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -997,3 +998,5 @@ USHORT* __EXPORT ScLeftFooterEditPage::GetRanges()
 
 SfxTabPage* __EXPORT ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

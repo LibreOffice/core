@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,6 +51,7 @@ public:
     inline SCTAB        GetScTab() const { return mnScTab; }
     inline const ScRangeData* GetScRangeData() const { return mpScData; }
     inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
+    inline bool         IsFunction() const { return mbFunction; }
     inline bool         IsVBName() const { return mbVBName; }
 
 private:
@@ -58,7 +60,8 @@ private:
     const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
     sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
     SCTAB               mnScTab;        /// Calc sheet index of local names.
-    bool                mbVBName;       /// true = Visual Basic procedure.
+    bool                mbFunction;     /// true = Name refers to a function (add-in or VBA).
+    bool                mbVBName;       /// true = Visual Basic procedure or function.
 };
 
 // ----------------------------------------------------------------------------
@@ -96,3 +99,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

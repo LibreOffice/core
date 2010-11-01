@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,7 @@
 
 
 /*
-[Beschreibung]
-Dieses Item dient als Transport-Medium fuer einen Number-Formatter.
+This item is used as a transport medium for a number formatter
 */
 
 class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
@@ -98,3 +98,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

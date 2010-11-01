@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,13 +65,9 @@ typedef List DdeTopics;
 typedef List DdeItems;
 #endif
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
 DECLARE_LIST( DdeFormats, long )
-//#else
-//typedef List DdeTransactions;
-//typedef List DdeFormats;
-//#endif
+
 
 #ifndef STRING_LIST
 #define STRING_LIST
@@ -89,9 +86,8 @@ class SVL_DLLPUBLIC DdeData
     friend class    DdeTransaction;
     DdeDataImp*     pImp;
 
-//#if 0 // _SOLAR__PRIVATE
     SVL_DLLPRIVATE void            Lock();
-//#endif
+
     void            SetFormat( ULONG nFmt );
 
 public:
@@ -138,9 +134,7 @@ class DdeTopicList
 {
     StringList      aTopics;
 
-//#if 0 // _SOLAR__PRIVATE
                     DECL_LINK( Data, DdeData* );
-//#endif
 public:
                     DdeTopicList( const String& );
                     ~DdeTopicList();
@@ -478,3 +472,5 @@ inline long DdeTransaction::GetError()
     return rDde.GetError();
 }
 #endif // _SVDDE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

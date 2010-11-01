@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,8 @@
 
 #include "tokenuno.hxx"
 
+#include <sal/macros.h>
+
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
@@ -37,11 +40,11 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svl/itemprop.hxx>
+#include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"
 #include "convuno.hxx"
 #include "unonames.hxx"
-#include "unoguard.hxx"
 #include "token.hxx"
 #include "compiler.hxx"
 #include "tokenarray.hxx"
@@ -105,7 +108,7 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
         formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
     };
-    static const sal_Int16 nConvMapCount = sizeof(aConvMap)/sizeof(aConvMap[0]);
+    static const sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
 
     // If mxOpCodeMap is not empty it overrides mbEnglish, and vice versa. We
     // don't need to initialize things twice.
@@ -135,7 +138,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
         const rtl::OUString& aFormula, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aRet;
 
     if (mpDocShell)
@@ -161,7 +164,7 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
         const uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     rtl::OUString aRet;
 
     if (mpDocShell)
@@ -188,7 +191,7 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( lcl_GetFormulaParserMap() ));
     return aRef;
 }
@@ -199,7 +202,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
     if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
     {
@@ -257,7 +260,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     String aString(aPropertyName);
     if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
@@ -465,3 +468,4 @@ ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::Form
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

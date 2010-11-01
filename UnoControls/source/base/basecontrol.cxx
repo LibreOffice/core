@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -163,14 +164,14 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XPaintListener >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
-                                                          ::getCppuType(( const Reference< XView            >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XWindow      >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XServiceInfo >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XControl     >*)NULL )   ,
-                                                        OComponentHelper::getTypes()
-                                                    );
+            static OTypeCollection aTypeCollection( ::getCppuType(( const Reference< XPaintListener >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XView          >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XWindow        >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XServiceInfo   >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XControl       >*)NULL ) ,
+                                                    OComponentHelper::getTypes()
+                                                  );
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -1017,3 +1018,5 @@ OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
 }
 
 } // namespace unocontrols
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

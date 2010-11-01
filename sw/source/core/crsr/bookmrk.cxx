@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,15 +83,17 @@ namespace
         SwTxtNode const * const pStartTxtNode = io_pDoc->GetNodes()[rStart.nNode]->GetTxtNode();
         SwTxtNode const * const pEndTxtNode = io_pDoc->GetNodes()[rEnd.nNode]->GetTxtNode();
         const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
-        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
+        xub_StrLen nEndPos = rEnd.nContent.GetIndex() == 0 ? 0 : rEnd.nContent.GetIndex() - 1;
+        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
         io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
-        if(ch_start != aStartMark)
+        if( ( ch_start != aStartMark ) && ( rStart != rEnd ) )
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
+            rStart.nContent--;
         }
-        if ( aEndMark && ( ch_end != aEndMark ) && ( rStart != rEnd ) )
+        if ( aEndMark && ( ch_end != aEndMark ) )
         {
             io_pDoc->InsertString(aEndPaM, aEndMark);
         }
@@ -178,13 +181,13 @@ namespace sw { namespace mark
         : MarkBase(rPaM, our_sNamePrefix)
     { }
 
-    const ::rtl::OUString NavigatorReminder::our_sNamePrefix = ::rtl::OUString::createFromAscii("__NavigatorReminder__");
+    const ::rtl::OUString NavigatorReminder::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__NavigatorReminder__"));
 
     UnoMark::UnoMark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
     { }
 
-    const ::rtl::OUString UnoMark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__UnoMark__");
+    const ::rtl::OUString UnoMark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__UnoMark__"));
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
@@ -196,7 +199,7 @@ namespace sw { namespace mark
         m_aRefObj = pObj;
     }
 
-    const ::rtl::OUString DdeBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__DdeLink__");
+    const ::rtl::OUString DdeBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__DdeLink__"));
 
     void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
     {
@@ -306,7 +309,7 @@ namespace sw { namespace mark
         aPaM.InvalidatePaM();
     }
 
-    const ::rtl::OUString Fieldmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__Fieldmark__");
+    const ::rtl::OUString Fieldmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__Fieldmark__"));
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
@@ -323,7 +326,7 @@ namespace sw { namespace mark
 
     void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc)
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FORMELEMENT, CH_TXT_ATR_FIELDEND);
+        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
 
         // For some reason the end mark is moved from 1 by the Insert: we don't
         // want this for checkboxes
@@ -343,4 +346,19 @@ namespace sw { namespace mark
         return bResult;
     }
 
+    rtl::OUString CheckboxFieldmark::toString( ) const
+    {
+        rtl::OUStringBuffer buf;
+        buf.appendAscii( "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " );
+        buf.append( m_aName ).appendAscii( ", " );
+        buf.append( GetFieldname() ).appendAscii( ", [ " );
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ], [" );
+        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ] ) " );
+
+        return buf.makeStringAndClear( );
+    }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

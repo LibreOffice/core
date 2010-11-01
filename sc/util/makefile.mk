@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -86,8 +86,8 @@ SHL1STDLIBS=       \
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)	\
     $(TKLIB)		\
-    $(VOSLIB)		\
     $(SALLIB)		\
+    $(SALHELPERLIB)		\
     $(TOOLSLIB)	\
     $(I18NISOLANGLIB) \
     $(UNOTOOLSLIB) \
@@ -96,7 +96,7 @@ SHL1STDLIBS=       \
     $(AVMEDIALIB) \
     $(FORLIB) \
     $(FORUILIB)
-    
+
 SHL1LIBS=$(LIB3TARGET) $(LIB4TARGET)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -192,7 +192,6 @@ SHL6STDLIBS= \
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
     $(TKLIB)		\
-    $(VOSLIB)		\
     $(SALLIB)		\
     $(TOOLSLIB)	\
     $(UNOTOOLSLIB) \
@@ -273,6 +272,7 @@ LIB8OBJFILES = \
         $(SLO)$/filldlg.obj			\
         $(SLO)$/delcodlg.obj		\
         $(SLO)$/delcldlg.obj		\
+        $(SLO)$/datafdlg.obj		\
         $(SLO)$/dapitype.obj	\
         $(SLO)$/dapidata.obj	\
         $(SLO)$/crdlg.obj			\
@@ -316,7 +316,8 @@ SHL9STDLIBS= \
         $(VCLLIB) \
         $(TKLIB) \
         $(MSFILTERLIB)		\
-        $(FORLIB)
+        $(FORLIB) \
+        $(UNOTOOLSLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
 SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
@@ -328,7 +329,7 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
 .ENDIF
 
 .ENDIF
- 
+
 
 # --- Targets -------------------------------------------------------------
 

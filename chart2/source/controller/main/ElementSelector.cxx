@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include "Strings.hrc"
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -307,7 +308,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
 {
     if( m_apSelectorListBox.get() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if( rEvent.FeatureURL.Path.equalsAscii( "ChartElementSelector" ) )
         {
             Reference< frame::XController > xChartController;
@@ -342,3 +343,5 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
 //..........................................................................
 } // chart2
 //..........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

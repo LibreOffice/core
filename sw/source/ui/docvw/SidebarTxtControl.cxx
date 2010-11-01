@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -426,3 +427,4 @@ css::uno::Reference< css::accessibility::XAccessible > SidebarTxtControl::Create
 
 } } // end of namespace sw::sidebarwindows
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

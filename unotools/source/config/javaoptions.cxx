@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
 
 #include <unotools/javaoptions.hxx>
 #include <com/sun/star/uno/Any.h>
@@ -365,3 +364,5 @@ sal_Bool SvtJavaOptions::IsReadOnly( EOption eOption ) const
     }
     return bRO;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <osl/thread.h>
 #include <tools/debug.hxx>
 #include <tools/solarmutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // static DWORD        hDdeInst  = NULL;
 // static short        nInstance = 0;
@@ -471,3 +472,5 @@ long DdeConnection::GetError()
 {
     return pImp->nStatus;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

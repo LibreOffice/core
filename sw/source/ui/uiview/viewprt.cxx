@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,12 +92,9 @@
 
 using namespace ::com::sun::star;
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Drucker an Sfx uebergeben
  --------------------------------------------------------------------*/
-
-
 SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 {
     const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
@@ -113,7 +111,6 @@ SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 /*--------------------------------------------------------------------
     Beschreibung:   Druckerwechsel weitermelden
  --------------------------------------------------------------------*/
-
 void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
@@ -133,7 +130,6 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
             pOpt->SetFaxName(pAddPrinterAttr->GetFax());
     }
 }
-
 
 USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 {
@@ -174,7 +170,6 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 /*--------------------------------------------------------------------
     Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
  --------------------------------------------------------------------*/
-
 SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
@@ -184,7 +179,6 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
 /*--------------------------------------------------------------------
     Beschreibung:   Druckerdialog
  --------------------------------------------------------------------*/
-
 PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 {
     PrintDialog *pDlg = new PrintDialog( pParent, false );
@@ -205,10 +199,6 @@ PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
     return pDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
 {
     // AMA: Hier sollte vielleicht die virtuelle Seitennummer angezeigt werden,
@@ -220,7 +210,6 @@ PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
 /*--------------------------------------------------------------------
     Beschreibung:   Print-Dispatcher
  --------------------------------------------------------------------*/
-
 void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -306,7 +295,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
             return;
         }
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -315,30 +304,30 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
     Beschreibung:   Page Drucker/Zusaetze erzeugen fuer SwView und
                     SwPagePreview
  --------------------------------------------------------------------*/
-
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, BOOL bPreview )
 {
-    SfxTabPage* pPage = NULL;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT( pFac, "No Print Dialog" );
-    if ( pFact )
-    {
-        ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTPRINT_PAGE );
-        pPage = (*fnCreatePage)( pParent, rOptions );
-    }
+    OSL_ENSURE(pFact, "No Print Dialog");
+    if (!pFact)
+        return NULL;
 
-    DBG_ASSERT( pPage, "No page" );
-    if ( pPage )
-    {
-        SfxAllItemSet aSet(*(rOptions.GetPool()));
-        aSet.Put (SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
-        aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
-        pPage->PageCreated(aSet);
-    }
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(TP_OPTPRINT_PAGE);
+    OSL_ENSURE(pFact, "No Page Creator");
+    if (!fnCreatePage)
+        return NULL;
+
+    SfxTabPage* pPage = (*fnCreatePage)(pParent, rOptions);
+    OSL_ENSURE(pPage, "No page");
+    if (!pPage)
+        return NULL;
+
+    SfxAllItemSet aSet(*(rOptions.GetPool()));
+    aSet.Put(SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
+    aSet.Put(SfxBoolItem(SID_FAX_LIST, sal_True));
+    pPage->PageCreated(aSet);
     return pPage;
 }
-
 
 void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
 {
@@ -376,3 +365,5 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

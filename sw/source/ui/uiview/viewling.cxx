@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,8 +115,6 @@ using namespace ::com::sun::star::smarttags;
 /*--------------------------------------------------------------------
     Beschreibung:   Lingu-Dispatcher
  --------------------------------------------------------------------*/
-
-
 void SwView::ExecLingu(SfxRequest &rReq)
 {
     switch(rReq.GetSlot())
@@ -140,7 +139,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                 {
                     Reference< ui::dialogs::XExecutableDialog > xDialog(
                             xMCF->createInstanceWithContext(
-                                rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                                 , xContext), UNO_QUERY);
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
@@ -150,7 +149,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
                         PropertyValue aParam;
-                        aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                        aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                         aParam.Value <<= makeAny(xDialogParentWindow);
                         pArray[0] <<= makeAny(aParam);
                         xInit->initialize( aSeq );
@@ -210,7 +209,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             {
                                 SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
                                 // check for unexpected error case
-                                DBG_ASSERT( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
+                                OSL_ENSURE( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
                                     "text missing: corrupted node?" );
                                 if (!pTxtNode || pTxtNode->GetTxt().Len() < nPointIndex)
                                     nPointIndex = 0;
@@ -233,7 +232,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
             HyphenateDocument();
             break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong Dispatcher");
             return;
     }
 }
@@ -241,7 +240,6 @@ void SwView::ExecLingu(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Description: start language specific text conversion
  --------------------------------------------------------------------*/
-
 void SwView::StartTextConversion(
         LanguageType nSourceLang,
         LanguageType nTargetLang,
@@ -287,7 +285,6 @@ void SwView::StartTextConversion(
 /*--------------------------------------------------------------------
      spellcheck and text conversion related stuff
  --------------------------------------------------------------------*/
-
 void SwView::SpellStart( SvxSpellArea eWhich,
         sal_Bool bStartDone, sal_Bool bEndDone,
         SwConversionArgs *pConvArgs )
@@ -342,7 +339,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             }
             break;
         default:
-            ASSERT( !this, "SpellStart with unknown Area" );
+            OSL_ENSURE( !this, "SpellStart with unknown Area" );
     }
     pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
 }
@@ -350,8 +347,6 @@ void SwView::SpellStart( SvxSpellArea eWhich,
 /*--------------------------------------------------------------------
     Beschreibung: Fehlermeldung beim Spelling
  --------------------------------------------------------------------*/
-
-
 // Der uebergebene Pointer nLang ist selbst der Wert
 IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
 {
@@ -415,15 +410,12 @@ IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
 /*--------------------------------------------------------------------
      Beschreibung: Spelling beenden und Cursor wiederherstellen
  --------------------------------------------------------------------*/
-
-
 void SwView::SpellEnd( SwConversionArgs *pConvArgs )
 {
     pWrtShell->SpellEnd( pConvArgs );
     if( pWrtShell->IsExtMode() )
         pWrtShell->SetMark();
 }
-
 
 void SwView::HyphStart( SvxSpellArea eWhich )
 {
@@ -442,15 +434,13 @@ void SwView::HyphStart( SvxSpellArea eWhich )
             pWrtShell->HyphStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND );
             break;
         default:
-            ASSERT( !this, "HyphStart with unknown Area" );
+            OSL_ENSURE( !this, "HyphStart with unknown Area" );
     }
 }
 
 /*--------------------------------------------------------------------
      Beschreibung: Interaktive Trennung
  --------------------------------------------------------------------*/
-
-
 void SwView::HyphenateDocument()
 {
     // do not hyphenate if interactive hyphenationg is active elsewhere
@@ -523,9 +513,6 @@ void SwView::HyphenateDocument()
     }
 }
 
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
-
 bool SwView::IsValidSelectionForThesaurus() const
 {
     // must not be a multi-selection, and if it is a selection it needs
@@ -536,12 +523,10 @@ bool SwView::IsValidSelectionForThesaurus() const
     return !bMultiSel && (!bSelection || pWrtShell->IsSelOnePara() );
 }
 
-
 String SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
     return bSelection ? pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
 }
-
 
 void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bSelection )
 {
@@ -586,12 +571,9 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
     pWrtShell->SetInsMode( bOldIns );
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Thesaurus starten
  --------------------------------------------------------------------*/
-
-
 void SwView::StartThesaurus()
 {
     if (!IsValidSelectionForThesaurus())
@@ -648,7 +630,6 @@ void SwView::StartThesaurus()
 /*--------------------------------------------------------------------
     Beschreibung:   Online-Vorschlaege anbieten
  *--------------------------------------------------------------------*/
-
 //!! Start of extra code for context menu modifying extensions
 struct ExecuteInfo
 {
@@ -734,7 +715,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
                 else
                 {
-                    DBG_ERROR( "text node expected but not found" );
+                    OSL_ENSURE(false, "text node expected but not found" );
                 }
 
                 bRet = sal_True;
@@ -833,7 +814,6 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
    This function shows the popup menu for smarttag
    actions.
 */
-
 sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
 {
     sal_Bool bRet = sal_False;
@@ -864,13 +844,11 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
     return bRet;
 }
 
-
-
 class SwFieldPopup : public PopupMenu
 {
 public:
     SwFieldPopup()  {
-    InsertItem(1, ::rtl::OUString::createFromAscii("Hello"));
+    InsertItem(1, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello")));
     }
 };
 
@@ -931,7 +909,7 @@ public:
     aListBox.SetSizePixel(lbSize);
     aListBox.SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
     aListBox.Show();
-    aText.SetText(rtl::OUString::createFromAscii("Cancel"));
+    aText.SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cancel")));
     Size tSize=aText.GetOptimalSize(WINDOWSIZE_PREFERRED);
     aText.SetSizePixel(Size(lbSize.Width(), tSize.Height()));
     aText.SetPosPixel(Point(0, lbSize.Height()));
@@ -977,7 +955,6 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
     }
 }
 
-
 BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
 {
     sal_Bool bRet = sal_False;
@@ -1003,3 +980,4 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

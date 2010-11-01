@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <sal/macros.h>
 
 // -----------------------------------------------------------------------
 #define HTMLCFG_UNKNOWN_TAGS            0x01
@@ -110,7 +112,7 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
             "Export/Encoding",                      // 14
             "Import/NumbersEnglishUS"               // 15
         };
-        const int nCount = sizeof(aPropNames) / sizeof(aPropNames[0]);
+        const int nCount = SAL_N_ELEMENTS(aPropNames);
         aNames.realloc(nCount);
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -521,3 +523,5 @@ void SvxHtmlOptions::SetNumbersEnglishUS(BOOL bSet)
         pImp->nFlags &= ~HTMLCFG_NUMBERS_ENGLISH_US;
     SetModified();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

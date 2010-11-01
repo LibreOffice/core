@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
@@ -337,19 +338,19 @@ private:
     ByteString aMyName;
 
     TCPIO* pTCPIO;
-    NAMESPACE_VOS(OStreamSocket) *pStreamSocket;
+    osl::StreamSocket* pStreamSocket;
 
 protected:
-    SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     virtual ~SimpleCommunicationLinkViaSocket();
 
-    NAMESPACE_VOS(OStreamSocket)* GetStreamSocket() { return pStreamSocket; }
-    void SetStreamSocket( NAMESPACE_VOS(OStreamSocket)* pSocket );
+    osl::StreamSocket* GetStreamSocket() { return pStreamSocket; }
+    void SetStreamSocket( osl::StreamSocket* pSocket );
 
     SvStream *pReceiveStream;
     BOOL DoReceiveDataStream();             /// Recieve DataPacket from Socket
     virtual BOOL SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL);
-    void SetFinalRecieveTimeout();
+    bool IsReceiveReady();
     BOOL bIsRequestShutdownPending;
     virtual void WaitForShutdown()=0;
     void SetNewPacketAsCurrent();
@@ -358,7 +359,7 @@ protected:
 class SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
 {
 public:
-    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     ~SimpleCommunicationLinkViaSocketWithReceiveCallbacks();
     virtual BOOL ReceiveDataStream();
 protected:
@@ -371,7 +372,7 @@ class CommonSocketFunctions
 public:
     BOOL DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, ULONG nPort );
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS )=0;
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS )=0;
 };
 
 class SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
@@ -387,7 +388,9 @@ private:
     ByteString aHostToTalk;
     ULONG nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

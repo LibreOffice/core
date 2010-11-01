@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,8 +61,6 @@ struct SalItemParams;
 class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
-
-namespace vos { class IMutex; }
 
 // ---------------
 // - SalInstance -
@@ -130,7 +129,7 @@ public:
     virtual SalBitmap*          CreateSalBitmap() = 0;
 
     // YieldMutex
-    virtual vos::IMutex*        GetYieldMutex() = 0;
+    virtual osl::SolarMutex*    GetYieldMutex() = 0;
     virtual ULONG               ReleaseYieldMutex() = 0;
     virtual void                AcquireYieldMutex( ULONG nCount ) = 0;
 
@@ -214,3 +213,5 @@ void DeInitSalMain();
 VCL_DLLPUBLIC BOOL SVMain();
 
 #endif // _SV_SALINST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

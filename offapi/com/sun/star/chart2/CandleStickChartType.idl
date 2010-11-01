@@ -48,7 +48,7 @@ service CandleStickChartType
     service ChartType;
 
     /** If this property is <TRUE/>, the candlesticks are shown as
-        japanese candlesticks.  This implies that the property
+        Japanese candlesticks.  This implies that the property
         <member>ShowFirst</member> is also <TRUE/>.
 
         <p>Japanese candlesticks show the first and last value as
@@ -63,7 +63,7 @@ service CandleStickChartType
      */
     [maybedefault, property] boolean Japanese;
 
-    /** If the candlestick chart shows japanese candlesticks, that is
+    /** If the candlestick chart shows Japanese candlesticks, that is
         the property <member>Japanese</member> is <TRUE/>, the
         property set given here contains the formatting attributes of
         the white boxes, i.e. the boxes shown for rising values.</p>
@@ -76,7 +76,7 @@ service CandleStickChartType
      */
     [maybevoid, property] com::sun::star::beans::XPropertySet WhiteDay;
 
-    /** If the candlestick chart shows japanese candlesticks, that is
+    /** If the candlestick chart shows Japanese candlesticks, that is
         the property <member>Japanese</member> is <TRUE/>, the
         property set given here contains the formatting attributes of
         the black boxes, i.e. the boxes shown for falling values.</p>
@@ -93,8 +93,8 @@ service CandleStickChartType
         the opening course in a stock chart) is shown in the chart.
         This also makes the role "values-first" mandatory.
 
-        <p>This property is only evaluated for non-japanese
-        candlestick charts, as japanese candlesticks always require to
+        <p>This property is only evaluated for non-Japanese
+        candlestick charts, as Japanese candlesticks always require to
         show the first value.</p>
 
         <p>Default is <FALSE/>.</p>

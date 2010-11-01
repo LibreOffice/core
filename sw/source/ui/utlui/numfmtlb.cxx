@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,10 +87,6 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
     Init(nFormatType, bUsrFmts);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
                                     const ResId& rResId, short nFormatType,
                                     ULONG nDefFmt, BOOL bUsrFmts ) :
@@ -105,10 +102,6 @@ NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
 {
     Init(nFormatType, bUsrFmts);
 }
-
-/* -----------------15.06.98 11:29-------------------
- *
- * --------------------------------------------------*/
 
 void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
 {
@@ -131,18 +124,11 @@ void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
     SetSelectHdl(LINK(this, NumFormatListBox, SelectHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 NumFormatListBox::~NumFormatListBox()
 {
     if (pOwnFormatter)
         delete pOwnFormatter;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwView* NumFormatListBox::GetView()
 {
@@ -150,10 +136,6 @@ SwView* NumFormatListBox::GetView()
         return pVw;
     return ::GetActiveView();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
@@ -167,7 +149,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         else
         {
             SwView *pView = GetView();
-            DBG_ASSERT(pView, "no view found");
+            OSL_ENSURE(pView, "no view found");
             if(!pView)
                 return;
             SwWrtShell &rSh = pView->GetWrtShell();
@@ -237,7 +219,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             break;
 
         default:
-            DBG_ERROR("what a format?");
+            OSL_ENSURE(false, "what a format?");
             break;
         }
 
@@ -298,10 +280,6 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
 {
     if (nDefFmt == ULONG_MAX)
@@ -316,7 +294,7 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     else
     {
         SwView *pView = GetView();
-        DBG_ASSERT(pView, "no view found");
+        OSL_ENSURE(pView, "no view found");
         if(!pView)
             return;
         SwWrtShell &rSh = pView->GetWrtShell();
@@ -391,20 +369,12 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     nDefFormat = GetFormat();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 ULONG NumFormatListBox::GetFormat() const
 {
     USHORT nPos = GetSelectEntryPos();
 
     return (ULONG)GetEntryData(nPos);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 {
@@ -441,12 +411,12 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
         if (RET_OK == pDlg->Execute())
         {
@@ -486,10 +456,6 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
     }
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 double NumFormatListBox::GetDefValue(const short nFormatType) const
 {
@@ -537,13 +503,10 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
     return fDefValue;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void NumFormatListBox::Clear()
 {
     ListBox::Clear();
     nCurrFormatType = -1;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

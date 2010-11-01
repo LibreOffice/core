@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,3 +118,5 @@ void SpellDialogChildWindow::SetGrammarChecking(bool )
     DBG_ERROR("Grammar checking should have been overloaded - if available");
 }
 } // end of namespace ::svx
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bootstrp/sstring.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>
@@ -1598,3 +1599,4 @@ BOOL StarFile::NeedsUpdate()
     return FALSE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,8 +85,8 @@ std::auto_ptr< SvStream > wrapStream(
     OSL_ASSERT(stream.is());
     std::auto_ptr< SvStream > s(new SvMemoryStream);
     for (;;) {
-        css::uno::Sequence< sal_Int8 > data;
-        sal_Int32 const size = 30000;
+        sal_Int32 const size = 2048;
+        css::uno::Sequence< sal_Int8 > data(size);
         sal_Int32 n = stream->readBytes(data, size);
         s->Write(data.getConstArray(), n);
         if (n < size) {
@@ -350,3 +351,5 @@ bool ImplImageTree::find(
     }
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

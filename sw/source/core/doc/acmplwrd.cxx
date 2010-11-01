@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,9 +50,7 @@
 #include <docsh.hxx>
 
 #include <vector>
-/* -----------------------------05.08.2002 12:43------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwAutoCompleteClient : public SwClient
 {
     SwAutoCompleteWord* pAutoCompleteWord;
@@ -72,9 +71,7 @@ public:
     static ULONG GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
 };
-/* -----------------------------05.08.2002 12:48------------------------------
 
- ---------------------------------------------------------------------------*/
 typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
 
 class SwAutoCompleteWord_Impl
@@ -88,9 +85,6 @@ public:
     void RemoveDocument(const SwDoc& rDoc);
 };
 
-/* -----------------------------05.08.2002 14:11------------------------------
-
- ---------------------------------------------------------------------------*/
 typedef const SwDoc* SwDocPtr;
 typedef std::vector<SwDocPtr> SwDocPtrVector;
 class SwAutoCompleteString : public String
@@ -114,9 +108,7 @@ class SwAutoCompleteString : public String
     ULONG SwAutoCompleteClient::nSwAutoCompleteClientCount = 0;
     ULONG SwAutoCompleteString::nSwAutoCompleteStringCount = 0;
 #endif
-/* -----------------------------06.08.2002 08:57------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc) :
         pAutoCompleteWord(&rToTell),
         pDoc(&rSwDoc)
@@ -126,9 +118,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
     ++nSwAutoCompleteClientCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:07------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
     SwClient(),
     pAutoCompleteWord(rClient.pAutoCompleteWord),
@@ -139,18 +129,14 @@ SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) 
     ++nSwAutoCompleteClientCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:10------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::~SwAutoCompleteClient()
 {
 #ifdef DBG_UTIL
     --nSwAutoCompleteClientCount;
 #endif
 }
-/* -----------------06.03.2003 15:30-----------------
 
- --------------------------------------------------*/
 SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient& rClient)
 {
     pAutoCompleteWord = rClient.pAutoCompleteWord;
@@ -161,9 +147,7 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
         pRegisteredIn->Remove(this);
     return *this;
 }
-/* -----------------------------05.08.2002 12:49------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
 {
     switch( pOld ? pOld->Which() : 0 )
@@ -177,9 +161,7 @@ void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
 
     }
 }
-/* -----------------------------05.08.2002 13:03------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
@@ -190,9 +172,7 @@ void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
     }
     aClientVector.push_back(SwAutoCompleteClient(rAutoCompleteWord, rDoc));
 }
-/* -----------------------------05.08.2002 14:33------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
@@ -205,9 +185,7 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
         }
     }
 }
-/* -----------------------------06.08.2002 08:54------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteString::SwAutoCompleteString(const String& rStr, xub_StrLen nPos, xub_StrLen nLen) :
             String( rStr, nPos, nLen )
 {
@@ -215,18 +193,14 @@ SwAutoCompleteString::SwAutoCompleteString(const String& rStr, xub_StrLen nPos, 
     ++nSwAutoCompleteStringCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:22------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteString::~SwAutoCompleteString()
 {
 #ifdef DBG_UTIL
     --nSwAutoCompleteStringCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:17------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
@@ -238,9 +212,7 @@ void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
     SwDocPtr pNew = &rDoc;
     aSourceDocs.push_back(pNew);
 }
-/* -----------------------------05.08.2002 14:36------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
@@ -254,9 +226,7 @@ sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
     }
     return sal_False;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteWord::SwAutoCompleteWord( USHORT nWords, USHORT nMWrdLen )
     : aWordLst( 0, 255 ), aLRULst( 0, 255 ),
     pImpl(new SwAutoCompleteWord_Impl(*this)),
@@ -448,9 +418,7 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
         aWordLst.Remove( nMyPos, nMyLen - nMyPos );
     }
 }
-/* -----------------------------05.08.2002 12:54------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
 {
     pImpl->RemoveDocument(rDoc);
@@ -471,3 +439,4 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -695,3 +696,5 @@ void SAL_CALL CFileOpenDialog::centerPositionToParent() const
         NULL, x, y, 0, 0,
         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

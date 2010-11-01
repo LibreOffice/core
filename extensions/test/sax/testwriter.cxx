@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@
 
 using namespace std;
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 #define BUILD_ERROR(expr, Message)\
@@ -768,3 +768,5 @@ void OSaxWriterTest::testPerformance(const  XExtendedDocumentHandlerRef &r )
 
     printf( "Performance writing : %g s\n" , fEnd - fStart );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

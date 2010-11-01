@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,6 @@ class SbiInstance
     BOOL            bCompatibility; // Flag: TRUE = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
-
 public:
     SbiRuntime*  pRun;              // Call-Stack
     SbiInstance* pNext;             // Instanzen-Chain
@@ -285,7 +285,9 @@ class SbiRuntime
     SbxArrayRef   refExprStk;       // expression stack
     SbxArrayRef   refCaseStk;       // CASE expression stack
     SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
+    SbxVariableRef   refRedim;   // Array saved to use for REDIM
     SbxVariableRef xDummyVar;       // Ersatz fuer nicht gefundene Variablen
+    SbxVariable* mpExtCaller;       // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
     SbiArgvStack*  pArgvStk;        // ARGV-Stack
     SbiGosubStack* pGosubStk;       // GOSUB stack
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
@@ -455,6 +457,7 @@ public:
     SbMethod* GetCaller();
     SbxArray* GetLocals();
     SbxArray* GetParams();
+    SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 
     SbxBase* FindElementExtern( const String& rName );
     static bool isVBAEnabled();
@@ -521,3 +524,4 @@ bool IsBaseIndexOne();
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

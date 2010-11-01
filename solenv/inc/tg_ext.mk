@@ -163,9 +163,10 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.jar
 
 #do unpack
 $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
-    $(IFEXIST) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR) $(THEN) $(RENAME:s/+//) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme $(FI)
+    $(IFEXIST) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR).exists $(THEN) $(RENAME:s/+//) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme $(FI)
     $(COMMAND_ECHO)-rm -rf $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme
     @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+    @$(TOUCH) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR).exists # $(IFEXIST) only works with files
     $(COMMAND_ECHO)cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
     @cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)

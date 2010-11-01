@@ -40,6 +40,32 @@
     <prop oor:name="IsHideEmptyParagraphs" >
      <value>true</value>
     </prop>
+    <node oor:name="DataSource">
+      <prop oor:name="DataSourceName" oor:type="xs:string">
+        <value>EvolutionLocal</value>
+      </prop>
+      <prop oor:name="DataTableName" oor:type="xs:string">
+        <value>Personal</value>
+      </prop>
+    </node>
+    <node oor:name="AddressDataAssignments">
+      <node oor:name="_0" oor:op="replace">
+        <prop oor:name="DBColumnAssignments" oor:type="oor:string-list">
+          <value oor:separator=",">title,full_name,family_name,org,addr_line1,addr_line2,city,state,zip,country,home_phone,business_phone,email_1,</value>
+        </prop>
+        <node oor:name="DataSource">
+          <prop oor:name="DataCommandType" oor:type="xs:short">
+            <value>0</value>
+          </prop>
+          <prop oor:name="DataSourceName" oor:type="xs:string">
+            <value>EvolutionLocal</value>
+          </prop>
+          <prop oor:name="DataTableName" oor:type="xs:string">
+            <value>Personal</value>
+          </prop>
+        </node>
+      </node>
+    </node>
     <prop oor:name="EMailSupported">
      <value>true</value>
     </prop>

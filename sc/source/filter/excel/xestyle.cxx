@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -981,7 +982,7 @@ void XclExpFont::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_font, FSEND );
-    rStrm.WriteFontData( maData, XML_name );
+    XclXmlUtils::WriteFontData( rStyleSheet, maData, XML_name );
     // OOXTODO: XML_scheme; //scheme/@val values: "major", "minor", "none"
     rStyleSheet->endElement( XML_font );
 }
@@ -1352,14 +1353,6 @@ bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, bool bStyle )
     return ScfTools::CheckItem( rItemSet, ATTR_PROTECTION, bStyle );
 }
 
-#if 0
-void XclExpCellProt::FillToXF2( sal_uInt8& rnNumFmt ) const
-{
-    ::set_flag( rnNumFmt, EXC_XF2_LOCKED, mbLocked );
-    ::set_flag( rnNumFmt, EXC_XF2_HIDDEN, mbHidden );
-}
-#endif
-
 void XclExpCellProt::FillToXF3( sal_uInt16& rnProt ) const
 {
     ::set_flag( rnProt, EXC_XF_LOCKED, mbLocked );
@@ -1468,26 +1461,6 @@ bool XclExpCellAlign::FillFromItemSet(
 
     return bUsed;
 }
-
-#if 0
-void XclExpCellAlign::FillToXF2( sal_uInt8& rnFlags ) const
-{
-    ::insert_value( rnFlags, mnHorAlign, 0, 3 );
-}
-
-void XclExpCellAlign::FillToXF3( sal_uInt16& rnAlign ) const
-{
-    ::insert_value( rnAlign, mnHorAlign, 0, 3 );
-    ::set_flag( rnAlign, EXC_XF_LINEBREAK, mbLineBreak );
-}
-
-void XclExpCellAlign::FillToXF4( sal_uInt16& rnAlign ) const
-{
-    FillToXF3( rnAlign );
-    ::insert_value( rnAlign, mnVerAlign, 4, 2 );
-    ::insert_value( rnAlign, mnOrient, 6, 2 );
-}
-#endif
 
 void XclExpCellAlign::FillToXF5( sal_uInt16& rnAlign ) const
 {
@@ -1683,27 +1656,6 @@ void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
     mnDiagColor   = rPalette.GetColorIndex( mnDiagColorId );
 }
 
-#if 0
-void XclExpCellBorder::FillToXF2( sal_uInt8& rnFlags ) const
-{
-    ::set_flag( rnFlags, EXC_XF2_LEFTLINE,   mnLeftLine   != EXC_LINE_NONE );
-    ::set_flag( rnFlags, EXC_XF2_RIGHTLINE,  mnRightLine  != EXC_LINE_NONE );
-    ::set_flag( rnFlags, EXC_XF2_TOPLINE,    mnTopLine    != EXC_LINE_NONE );
-    ::set_flag( rnFlags, EXC_XF2_BOTTOMLINE, mnBottomLine != EXC_LINE_NONE );
-}
-
-void XclExpCellBorder::FillToXF3( sal_uInt32& rnBorder ) const
-{
-    ::insert_value( rnBorder, mnTopLine,      0, 3 );
-    ::insert_value( rnBorder, mnLeftLine,     8, 3 );
-    ::insert_value( rnBorder, mnBottomLine,  16, 3 );
-    ::insert_value( rnBorder, mnRightLine,   24, 3 );
-    ::insert_value( rnBorder, mnTopColor,     3, 5 );
-    ::insert_value( rnBorder, mnLeftColor,   11, 5 );
-    ::insert_value( rnBorder, mnBottomColor, 19, 5 );
-    ::insert_value( rnBorder, mnRightColor,  27, 5 );
-}
-#endif
 
 void XclExpCellBorder::FillToXF5( sal_uInt32& rnBorder, sal_uInt32& rnArea ) const
 {
@@ -1833,20 +1785,6 @@ void XclExpCellArea::SetFinalColors( const XclExpPalette& rPalette )
 {
     rPalette.GetMixedColors( mnForeColor, mnBackColor, mnPattern, mnForeColorId, mnBackColorId );
 }
-
-#if 0
-void XclExpCellArea::FillToXF2( sal_uInt8& rnFlags ) const
-{
-    ::set_flag( rnFlags, EXC_XF2_BACKGROUND, mnPattern != EXC_PATT_NONE );
-}
-
-void XclExpCellArea::FillToXF3( sal_uInt16& rnArea ) const
-{
-    ::insert_value( rnArea, mnPattern,    0, 6 );
-    ::insert_value( rnArea, mnForeColor,  6, 5 );
-    ::insert_value( rnArea, mnBackColor, 11, 5 );
-}
-#endif
 
 void XclExpCellArea::FillToXF5( sal_uInt32& rnArea ) const
 {
@@ -2241,7 +2179,10 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
             XML_name,           sName.getStr(),
             XML_xfId,           OString::valueOf( nXFId ).getStr(),
-            XML_builtinId,      OString::valueOf( (sal_Int32) mnStyleId ).getStr(),
+/* mso-excel 2007 complains when it finds builtinId >= 55, it is not
+ * bothered by multiple 54 values. */
+#define CELL_STYLE_MAX_BUILTIN_ID 55
+                                             XML_builtinId, OString::valueOf( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
             XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
@@ -2901,3 +2842,4 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

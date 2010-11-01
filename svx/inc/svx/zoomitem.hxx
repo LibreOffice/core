@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ public:
 
     void                    SetValueSet( USHORT nValues ) { nValueSet = nValues; }
     USHORT                  GetValueSet() const { return nValueSet; }
-    FASTBOOL                IsValueAllowed( USHORT nValue ) const
+    bool                    IsValueAllowed( USHORT nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }
@@ -87,3 +88,5 @@ public:
 #define SVX_ZOOM_ENABLE_ALL         0x701F
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

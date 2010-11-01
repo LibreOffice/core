@@ -31,14 +31,9 @@
 
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/uno/XInterface.idl>
-//#include <com/sun/star/lang/CascadeTransliterator.idl>
 
-//=============================================================================
 
 module com { module sun { module star { module util {
-
-//=============================================================================
-
 
 published enum SearchAlgorithms {
     ABSOLUTE,       // "normal" a kind of Boyer-Moore

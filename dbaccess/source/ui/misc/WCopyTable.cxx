@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,7 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
     const ::rtl::OUString aCopyProperties[] = {
         PROPERTY_FONT, PROPERTY_ROW_HEIGHT, PROPERTY_TEXTCOLOR,PROPERTY_TEXTLINECOLOR,PROPERTY_TEXTEMPHASIS,PROPERTY_TEXTRELIEF
     };
-    for ( size_t i=0; i < sizeof( aCopyProperties ) / sizeof( aCopyProperties[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aCopyProperties ); ++i )
     {
         if ( m_xObjectPSI->hasPropertyByName( aCopyProperties[i] ) )
             _rxObject->setPropertyValue( aCopyProperties[i], m_xObject->getPropertyValue( aCopyProperties[i] ) );
@@ -194,7 +195,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         sStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE 0=1"));
 
 
-        for ( i=0; i < sizeof( aProperties ) / sizeof( aProperties[0] ); ++i )
+        for ( i=0; i < SAL_N_ELEMENTS( aProperties ); ++i )
         {
             if ( m_xObjectPSI->hasPropertyByName( aProperties[i].first ) )
             {
@@ -1690,3 +1691,4 @@ void OCopyTableWizard::showError(const Any& _aError)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

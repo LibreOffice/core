@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -280,13 +281,6 @@ void ScTabViewShell::SetActive()
     // Die Sfx-View moechte sich gerne selbst aktivieren, weil dabei noch
     // magische Dinge geschehen (z.B. stuerzt sonst evtl. der Gestalter ab)
     ActiveGrabFocus();
-
-#if 0
-    SfxViewFrame* pFrame = GetViewFrame();
-    pFrame->GetFrame().Appear();
-
-    SFX_APP()->SetViewFrame( pFrame );          // immer erst Appear, dann SetViewFrame (#29290#)
-#endif
 }
 
 USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
@@ -491,31 +485,6 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     pDoc->SnapVisArea( aLogicRect );
 
     rRect.SetSize( pWin->LogicToPixel( aLogicRect.GetSize() ) );
-
-#if 0
-    //  auf ganze Zellen anpassen (in Pixeln)
-
-    ScViewData* pViewData = ((ScTabViewShell*)this)->GetViewData();
-    Size aSize = rRect.GetSize();
-
-    ScSplitPos ePos = pViewData->GetActivePart();
-    Window* pWin = ((ScTabViewShell*)this)->GetActiveWin();
-
-    Point aTest( aSize.Width(), aSize.Height() );
-    SCsCOL nPosX;
-    SCsROW nPosY;
-    pViewData->GetPosFromPixel( aTest.X(), aTest.Y(), ePos, nPosX, nPosY );
-    BOOL bLeft;
-    BOOL bTop;
-    pViewData->GetMouseQuadrant( aTest, ePos, nPosX, nPosY, bLeft, bTop );
-    if (!bLeft)
-        ++nPosX;
-    if (!bTop)
-        ++nPosY;
-    aTest = pViewData->GetScrPos( (SCCOL)nPosX, (SCROW)nPosY, ePos, TRUE );
-
-    rRect.SetSize(Size(aTest.X(),aTest.Y()));
-#endif
 }
 
 //------------------------------------------------------------------
@@ -533,7 +502,7 @@ void __EXPORT ScTabViewShell::Move()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ShowCursor(FASTBOOL /* bOn */)
+void __EXPORT ScTabViewShell::ShowCursor(bool /* bOn */)
 {
 /*!!!   ShowCursor wird nicht paarweise wie im gridwin gerufen.
         Der CursorLockCount am Gridwin muss hier direkt auf 0 gesetzt werden
@@ -1599,7 +1568,7 @@ BOOL ScTabViewShell::SfxKeyInput(const KeyEvent& rKeyEvent)
     return sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKeyEvent ));
 }
 
-FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 {
 //  return SfxViewShell::KeyInput( rKeyEvent );
     return TabKeyInput( rKeyEvent );
@@ -1762,6 +1731,13 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
+                // Get the customized initial tab count, we only can set the count by VBA API currently.
+                const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+                SCTAB nNewTabCount = rAppOpt.GetTabCountInNewSpreadsheet();
+                if ( nNewTabCount >= 1 && nNewTabCount <= MAXTAB )
+                {
+                    nInitTabCount = nNewTabCount;
+                }
                 for (SCTAB i=1; i<nInitTabCount; i++)
                     pDoc->MakeTable(i,false);
             }
@@ -2049,3 +2025,4 @@ void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

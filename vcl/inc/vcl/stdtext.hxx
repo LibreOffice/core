@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,3 +52,5 @@ XubString VCL_DLLPUBLIC GetStandardText( USHORT nStdText );
 void VCL_DLLPUBLIC ShowServiceNotAvailableError( Window* pParent, const XubString& rServiceName, BOOL bError );
 
 #endif  // _VCL_STDTEXT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

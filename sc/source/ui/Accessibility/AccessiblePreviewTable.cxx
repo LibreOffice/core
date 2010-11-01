@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include "AccessiblePreviewHeaderCell.hxx"
 #include "AccessibilityHints.hxx"
 #include "prevwsh.hxx"
-#include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "prevloc.hxx"
 #include "attrib.hxx"
@@ -47,6 +47,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -80,7 +81,7 @@ ScAccessiblePreviewTable::~ScAccessiblePreviewTable()
 
 void SAL_CALL ScAccessiblePreviewTable::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
@@ -144,7 +145,7 @@ void SAL_CALL ScAccessiblePreviewTable::release()
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount() throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -157,7 +158,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount() throw (uno:
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount() throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -172,7 +173,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // is not supported or specified so not implemented
-/*  ScUnoGuard aGuard;
+/*  SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -196,7 +197,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
     else
         throw lang::IndexOutOfBoundsException();*/
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     FillTableInfo();
     if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
         throw lang::IndexOutOfBoundsException();
@@ -208,7 +209,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // is not supported or specified so not implemented
-/*  ScUnoGuard aGuard;
+/*  SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -232,7 +233,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
     else
         throw lang::IndexOutOfBoundsException();*/
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     FillTableInfo();
     if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
         throw lang::IndexOutOfBoundsException();
@@ -243,7 +244,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -277,7 +278,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -337,7 +338,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 n
 {
     //  in the page preview, there is no selection
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     FillTableInfo();
     if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
         throw lang::IndexOutOfBoundsException();
@@ -350,7 +351,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int3
 {
     //  in the page preview, there is no selection
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     FillTableInfo();
     if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
         throw lang::IndexOutOfBoundsException();
@@ -361,7 +362,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int3
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -413,7 +414,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     //  in the page preview, there is no selection
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -431,7 +432,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -451,7 +452,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow,
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int32 nChildIndex )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -470,7 +471,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int32 nChildI
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int32 nChildIndex )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -494,7 +495,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
     uno::Reference<XAccessible> xRet;
     if (containsPoint(aPoint))
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
 
         FillTableInfo();
@@ -539,7 +540,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
 
 void SAL_CALL ScAccessiblePreviewTable::grabFocus() throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {
@@ -553,7 +554,7 @@ void SAL_CALL ScAccessiblePreviewTable::grabFocus() throw (uno::RuntimeException
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount() throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -567,7 +568,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount() throw (un
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleChild( sal_Int32 nIndex )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -600,7 +601,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndexInParent() throw 
 uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAccessibleStateSet()
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -765,3 +766,4 @@ void ScAccessiblePreviewTable::FillTableInfo() const
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

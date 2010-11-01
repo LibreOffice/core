@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -773,7 +774,7 @@ void SwWrtShell::LeaveSelFrmMode()
 IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
 {
     const SwFrmFmt *pFmt = pFlyFmt ? (SwFrmFmt*)pFlyFmt : GetFlyFrmFmt();
-    ASSERT(pFmt, kein FrameFormat.);
+    OSL_ENSURE(pFmt, "no frame format");
     const SvxMacroItem &rFmtMac = pFmt->GetMacro();
 
     if(rFmtMac.HasMacro(SW_EVENT_OBJECT_SELECT))
@@ -1070,3 +1071,4 @@ BOOL SwWrtShell::SelectNextPrevHyperlink( BOOL bNext )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

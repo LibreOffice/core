@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cmdevt.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/logfile.hxx>
 
@@ -105,15 +106,15 @@ void WindowCommandDispatch::impl_startListening()
         return;
 
     // SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+    {
+        SolarMutexGuard aSolarLock;
 
-    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-    if ( ! pWindow)
-        return;
+        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        if ( ! pWindow)
+            return;
 
-    pWindow->AddEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
-
-    aSolarLock.clear();
+        pWindow->AddEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
+    }
     // <- SYNCHRONIZED
 }
 
@@ -189,3 +190,5 @@ void WindowCommandDispatch::impl_dispatchCommand(const ::rtl::OUString& sCommand
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,12 +93,12 @@ public:
 };
 
 enum ScIterFunc {
-    ifSUM,                              // Aufsummieren
-    ifSUMSQ,                            // Quadratsummen
-    ifPRODUCT,                          // Multiplizieren
-    ifAVERAGE,                          // Durchschnitt
-    ifCOUNT,                            // Anzahl Werte
-    ifCOUNT2,                           // Anzahl Werte (nichtleer)
+    ifSUM,                              // Add up
+    ifSUMSQ,                            // Sums of squares
+    ifPRODUCT,                          // Product
+    ifAVERAGE,                          // Average
+    ifCOUNT,                            // Count Values
+    ifCOUNT2,                           // Count Values (not empty)
     ifMIN,                              // Minimum
     ifMAX                               // Maximum
 };
@@ -135,6 +136,15 @@ public:
     static inline double div( const double& fNumerator, const double& fDenominator );
 
     ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
+
+    enum VolatileType {
+        VOLATILE,
+        VOLATILE_MACRO,
+        NOT_VOLATILE
+    };
+
+    VolatileType GetVolatileType() const;
+
 private:
     static ScTokenStack*    pGlobalStack;
     static BOOL             bGlobalStackInUse;
@@ -168,6 +178,8 @@ private:
     BYTE        cPar;                   // current count of parameters
     BOOL        bCalcAsShown;           // precision as shown
     BOOL        bMatrixFormula;         // formula cell is a matrix formula
+
+    VolatileType meVolaileType;
 
 //---------------------------------Funktionen in interpre.cxx---------
 // nMust <= nAct <= nMax ? ok : PushError
@@ -314,6 +326,7 @@ inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPus
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
+void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULONG& rRetIndexExpr);
 //void PushByte(BYTE nVal);
 void PushDouble(double nVal);
 void PushInt( int nVal );
@@ -915,3 +928,5 @@ inline double ScInterpreter::div( const double& fNumerator, const double& fDenom
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@ OUString Desktop::GetLicensePath()
     // determine the filename of the license to show
     OUString  aLangString;
     ::com::sun::star::lang::Locale aLocale;
-    OString aMgrName = OString("dkt");
+    rtl::OString aMgrName = rtl::OString("dkt");
 
     AllSettings aSettings(Application::GetSettings());
     aLocale = aSettings.GetUILocale();
@@ -316,3 +317,4 @@ void Desktop::SetRestartState()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

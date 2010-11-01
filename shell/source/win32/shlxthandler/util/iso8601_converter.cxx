@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,3 +181,4 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

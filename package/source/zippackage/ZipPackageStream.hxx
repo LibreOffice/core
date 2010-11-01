@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <ZipPackageEntry.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <EncryptionData.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <mutexholder.hxx>
@@ -51,13 +52,12 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
     ::com::sun::star::packages::XDataSinkEncrSupport
 >
 {
-    static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ZipPackage          &rZipPackage;
     sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
-    vos::ORef < EncryptionData > xEncryptionData;
+    rtl::Reference < EncryptionData > xEncryptionData;
 
     sal_uInt8   m_nStreamMode;
     sal_uInt32  m_nMagicalHackPos;
@@ -81,7 +81,7 @@ public:
     sal_Bool IsFromManifest() const { return m_bFromManifest; }
     void SetFromManifest( sal_Bool bValue ) { m_bFromManifest = bValue; }
 
-    vos::ORef < EncryptionData > & getEncryptionData ()
+    rtl::Reference < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
     const com::sun::star::uno::Sequence < sal_Int8 >& getKey () const
     { return xEncryptionData->aKey;}
@@ -105,10 +105,10 @@ public:
     void SetToBeEncrypted (sal_Bool bNewValue)
     {
         bToBeEncrypted  = bNewValue;
-        if ( bToBeEncrypted && xEncryptionData.isEmpty())
+        if ( bToBeEncrypted && !xEncryptionData.is())
             xEncryptionData = new EncryptionData;
-        else if ( !bToBeEncrypted && !xEncryptionData.isEmpty() )
-            xEncryptionData.unbind();
+        else if ( !bToBeEncrypted && xEncryptionData.is() )
+            xEncryptionData.clear();
     }
     void SetPackageMember (sal_Bool bNewValue);
     void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
@@ -142,10 +142,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
         throw(::com::sun::star::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId()
-    {
-        return aImplementationId;
-    }
+    static const ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId();
 
     // XActiveDataSink
     virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
@@ -195,3 +192,5 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

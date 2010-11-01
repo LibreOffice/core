@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include <tools/diagnose_ex.h>
 #include "vbapagesetup.hxx"
+#include "vbaheadersfooters.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -50,14 +52,20 @@ void SAL_CALL SwVbaSection::setProtectedForForms( ::sal_Bool /*_protectedforform
 {
 }
 
-uno::Any SAL_CALL SwVbaSection::Headers(  ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSection::Headers( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    return uno::Any();
+    uno::Reference< XCollection > xCol( new SwVbaHeadersFooters( this, mxContext, mxModel, mxPageProps, sal_True ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
 }
 
-uno::Any SAL_CALL SwVbaSection::Footers(  ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaSection::Footers( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    return uno::Any();
+    uno::Reference< XCollection > xCol( new SwVbaHeadersFooters( this, mxContext, mxModel, mxPageProps, sal_False ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
 }
 
 uno::Any SAL_CALL
@@ -85,3 +93,4 @@ SwVbaSection::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

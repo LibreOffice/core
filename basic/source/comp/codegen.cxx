@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -163,8 +164,6 @@ void SbiCodeGen::Save()
         rMod.bIsProxyModule = false;
     }
 
-    if( pParser->bText )
-        p->SetFlag( SBIMG_COMPARETEXT );
     // GlobalCode-Flag
     if( pParser->HasGlobalCode() )
         p->SetFlag( SBIMG_INITCODE );
@@ -244,6 +243,8 @@ void SbiCodeGen::Save()
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
                     SbProcedureProperty* pProcedureProperty = NULL;
+                                        OSL_TRACE("*** getProcedureProperty for thing %s",
+                        rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
                     pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
@@ -537,3 +538,5 @@ PCodeBuffConvertor<T,S>::convert()
 
 template class PCodeBuffConvertor< UINT16, UINT32 >;
 template class PCodeBuffConvertor< UINT32, UINT16 >;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

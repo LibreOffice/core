@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -939,7 +940,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
-            ASSERT( pEntry,
+            OSL_ENSURE( pEntry,
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
@@ -959,7 +960,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         else if ( nTypeId == REFFLDFLAG_NUMITEM )
         {
             SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
-            ASSERT( pEntry,
+            OSL_ENSURE( pEntry,
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
@@ -1063,3 +1064,4 @@ void    SwFldRefPage::FillUserData()
     SetUserData(sData);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

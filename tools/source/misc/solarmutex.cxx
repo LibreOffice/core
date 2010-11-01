@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,14 +32,14 @@
 
 namespace tools
 {
-    static ::vos::IMutex* pSolarMutex = 0;
+    static ::osl::SolarMutex* pSolarMutex = 0;
 
-    ::vos::IMutex* SolarMutex::GetSolarMutex()
+    ::osl::SolarMutex* SolarMutex::GetSolarMutex()
     {
         return pSolarMutex;
     }
 
-    void SolarMutex::SetSolarMutex( ::vos::IMutex* pMutex )
+    void SolarMutex::SetSolarMutex( ::osl::SolarMutex* pMutex )
     {
         pSolarMutex = pMutex;
     }
@@ -58,3 +59,5 @@ namespace tools
             pSolarMutex->release();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

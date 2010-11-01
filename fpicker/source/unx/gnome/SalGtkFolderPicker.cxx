@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
@@ -42,7 +49,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalGtkFolderPicker.hxx"
 
@@ -82,7 +89,8 @@ namespace
 // constructor
 //-----------------------------------------------------------------------------------------
 SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    m_xServiceMgr( xServiceMgr )
+    SalGtkPicker(xServiceMgr),
+    m_xServiceMgr(xServiceMgr)
 {
     CResourceProvider aResProvider;
 
@@ -241,3 +249,5 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFolderPicker::getSupportedServiceNam
 {
     return FolderPicker_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/menuoptions.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "dbu_reghelper.hxx"
 #include "UITools.hxx"
 
@@ -111,7 +112,7 @@ namespace dbaui
     void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         ToolboxController::initialize(_rArguments);
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
         if ( m_aCommandURL.equalsAscii(".uno:DBNewForm") )
@@ -157,7 +158,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
         TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
         if ( aFind != m_aStates.end() )
@@ -239,7 +240,7 @@ namespace dbaui
     Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
     {
         // execute the menu
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
         ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
@@ -279,3 +280,4 @@ namespace dbaui
 //..........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

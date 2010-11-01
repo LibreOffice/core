@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _PIPEIMPL_H_
 #define _PIPEIMPL_H_
 
@@ -80,3 +81,5 @@ EXPORT_PIPE_API BOOL WINAPI CloseSimplePipe( HANDLE hPipe );
 #endif
 
 #endif  // _PIPEIMPL_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

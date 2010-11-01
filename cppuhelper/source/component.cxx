@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -211,7 +212,7 @@ void OComponentHelper::dispose()
     }
     else
     {
-        // in a multithreaded environment, it can't be avoided,
+        // in a multithreaded environment, it can't be avoided
         // that dispose is called twice.
         // However this condition is traced, because it MAY indicate an error.
         OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
@@ -246,3 +247,4 @@ void OComponentHelper::removeEventListener(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -282,7 +283,7 @@ void SalAbort( const XubString& rErrorText )
     if( !rErrorText.Len() )
         std::fprintf( stderr, "Application Error" );
     else
-        std::fprintf( stderr, ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+        std::fprintf( stderr, "%s", ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
     abort();
 }
 
@@ -300,3 +301,5 @@ SalData::SalData() :
 SalData::~SalData()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

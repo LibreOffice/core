@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -242,3 +243,4 @@ WIN_BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int nc
 // Konfl�kt mit den Tools-Pair vermeiden
 #undef Pair
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

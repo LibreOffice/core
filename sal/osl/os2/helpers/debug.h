@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -325,17 +326,6 @@
        USHORT   type;                      // Type index
        BYTE     name_len;                  // Length of name (wich follows)
     };
-
-    #if 0
-    // Linenumbers header
-    struct linhead_rec
-    {
-       BYTE     id;                        // 0x95 for flat mem, 32 bit progs
-       USHORT   length;                    // Record length
-       USHORT   base_group;                // Base group
-       USHORT   base_segment;              // Base segment
-    };
-    #endif
 
     // First linenumber record
     struct linfirst_rec
@@ -1777,3 +1767,5 @@
     #endif /* __EXE386__ */
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

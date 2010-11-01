@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1131,7 +1132,7 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
-    FASTBOOL bSet = ( pSet != NULL );
+    bool bSet = ( pSet != NULL );
 
     pSet = pInSet;
 
@@ -1433,3 +1434,5 @@ void IconChoiceDialog::CreateIconTextAutoMnemonics( void )
 {
     maIconCtrl.CreateAutoMnemonics();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

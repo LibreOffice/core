@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,3 +163,5 @@ EXTERN_C void WINAPI ResolveThunk_GetProcessId( FARPROC *lppfn, LPCSTR lpLibFile
 
 
 DEFINE_CUSTOM_THUNK( kernel32, GetProcessId, DWORD, WINAPI, GetProcessId, ( HANDLE hProcess ) );
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

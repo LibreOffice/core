@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,11 +67,7 @@ int main( int argc, char* argv[])
     DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
     // make sure we load DLL from our path only, so multiple instances/versions
     // can be loaded.
-#if 0
-    // YD this feature is not compatible with innowin b20,
-    // java cannot load with this flag enabled
-    DosSetExtLIBPATH( (PCSZ)"T", LIBPATHSTRICT);
-#endif
+
 
     // adjust exe name
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
@@ -120,3 +117,5 @@ int main( int argc, char* argv[])
 
     exit( result.codeResult);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include "dbu_uno.hrc"
 #include "paramdialog.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "CollectionView.hxx"
 #include "UITools.hxx"
 
@@ -136,7 +137,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
@@ -180,7 +181,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
@@ -254,7 +255,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
@@ -385,3 +386,4 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

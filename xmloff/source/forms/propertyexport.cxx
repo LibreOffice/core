@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,7 +144,7 @@ namespace xmloff
                     aExportType = aValue.getValueType();
 
                 // the type attribute
-                // modified by BerryJia for Bug102407
+
                 bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
                 if ( bIsEmptyValue )
                 {
@@ -168,7 +169,7 @@ namespace xmloff
 
                 if( !bIsSequence && !bIsEmptyValue )
                 {   // the simple case
-                    //add by BerryJia for Bug102407
+
                     sValue = implConvertAny(aValue);
                     AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
                 }
@@ -727,3 +728,4 @@ namespace xmloff
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

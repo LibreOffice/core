@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,3 +78,5 @@ struct ImplJobSetup
 // Papierformat berechnet, wenn dieses ungleich PAPER_USER ist
 
 #endif  // _SV_JOBSET_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

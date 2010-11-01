@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -195,8 +196,12 @@ class SwUnoCollection
 #define SW_SERVICE_TYPE_FIELDMARK                       107
 #define SW_SERVICE_TYPE_FORMFIELDMARK                   108
 #define SW_SERVICE_TYPE_META                            109
+#define SW_SERVICE_VBAOBJECTPROVIDER                    110
+#define SW_SERVICE_VBACODENAMEPROVIDER                  111
+#define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
+#define SW_SERVICE_VBAGLOBALS                           113
 
-#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_META
+#define SW_SERVICE_LAST                 SW_SERVICE_VBAGLOBALS
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
@@ -579,3 +584,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

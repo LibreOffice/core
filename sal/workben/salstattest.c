@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include <systools/win32/shell9x.h>
 #include <systools/win32/kernel9x.h>
 
-//#include <windows.h>
-//#include <shlobj.h>
-
 int _cdecl main( int argc, char * argv[] )
 {
     BROWSEINFOW bi;
@@ -54,3 +52,4 @@ int _cdecl main( int argc, char * argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

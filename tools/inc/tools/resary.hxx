@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,12 +41,10 @@ struct ImplResStringItem
     XubString   maStr;
     long        mnValue;
 
-//#if 0 // _SOLAR__PRIVATE
 #ifdef _TOOLS_RESARY_CXX
                 ImplResStringItem( const XubString& rStr ) :
                     maStr( rStr ) {}
 #endif
-//#endif
 };
 
 // ------------------
@@ -91,3 +90,5 @@ class TOOLS_DLLPUBLIC ResStringArray
 };
 
 #endif  // _TOOLS_RESARY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

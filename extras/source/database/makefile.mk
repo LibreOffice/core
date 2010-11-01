@@ -37,8 +37,8 @@ TARGET=databasegeneral
 
 ZIP1TARGET      = $(DATABASE_USER_TARGET)
 
-ZIP1LIST        = biblio.odb
-
+ZIP1LIST        = biblio.odb \
+          evolocal.odb
 ZIP2TARGET      = $(DATABASE_USER_BIBLIO_TARGET)
 
 ZIP2LIST        = biblio.dbf biblio.dbt

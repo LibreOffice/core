@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-
-#ifndef GCC
-#endif
 
 #include <unotools/saveopt.hxx>
 #include "rtl/instance.hxx"
@@ -1000,3 +998,4 @@ sal_Bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
     return pImp->pSaveOpt->IsReadOnly(eOption);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

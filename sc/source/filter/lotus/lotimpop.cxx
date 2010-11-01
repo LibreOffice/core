@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "lotimpop.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "attrib.hxx"
 #include "document.hxx"
@@ -48,7 +49,7 @@
 #include "lotattr.hxx"
 
 
-static NAMESPACE_VOS( OMutex )      aLotImpSemaphore;
+static osl::Mutex aLotImpSemaphore;
 
 
 ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
@@ -471,3 +472,4 @@ void ImportLotus::_Row( const UINT16 nRecLen )
     }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

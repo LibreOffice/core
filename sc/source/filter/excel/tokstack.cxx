@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -331,9 +332,6 @@ void TokenPool::GetElement( const UINT16 nId )
                 pScToken->AddDouble( pP_Dbl[ pElement[ nId ] ] );
                 break;
             case T_Err:
-#if 0   // erAck
-                pScToken->AddError( pP_Err[ pElement[ nId ] ] );
-#endif
                 break;
             case T_RefC:
                 pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (UINT16) nId ] ] );
@@ -446,9 +444,6 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     pScToken->AddDouble( pP_Dbl[ pElement[ *pAkt ] ] );
                     break;
                 case T_Err:
-#if 0   // erAck
-                    pScToken->AddError( pP_Err[ pElement[ *pAkt ] ] );
-#endif
                     break;
                 case T_RefC:
                     pScToken->AddSingleReference( *ppP_RefTr[ pElement[ *pAkt ] ] );
@@ -853,3 +848,4 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
     return NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

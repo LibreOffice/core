@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -482,8 +483,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "12" );
 #elif defined LINUX && defined PPC
     abGP.Append( "13" );
-#elif defined NETBSD
-    abGP.Append( "14" );
+#elif defined NETBSD && defined INTEL
+    abGP.Append( "14" );  // NetBSD/i386
 #elif defined LINUX && defined X86_64
     abGP.Append( "15" );  // Linux x86-64
 #elif defined LINUX && defined SPARC
@@ -502,6 +503,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "22" );  // Linux PA-RISC
 #elif defined LINUX && defined AXP
     abGP.Append( "23" );  // Linux ALPHA
+#elif defined NETBSD && defined X86_64
+    abGP.Append( "24" );  // NetBSD/amd64
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
@@ -4248,3 +4251,4 @@ String TTFormat::ms2s( ULONG nMilliSeconds )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,9 +64,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
-#include <vos/security.hxx>
+#include <osl/mutex.hxx>
+#include <osl/security.hxx>
+#include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
@@ -155,35 +156,35 @@ String DecodeSpaces_Impl( const String& rSource );
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->FileSelectionChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->DirectoryChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return mpAntiImpl->HelpRequested( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->ControlStateChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->DialogSizeChanged();
 }
 
@@ -192,7 +193,7 @@ void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeExceptio
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->DialogClosed( _rEvent );
     postExecute( _rEvent.DialogResult );
 }
@@ -315,7 +316,7 @@ void FileDialogHelper_Impl::handleDialogSizeChanged()
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     dispose();
 }
 
@@ -1156,10 +1157,10 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 
 #define nMagic -1
 
-class PickerThread_Impl : public ::vos::OThread
+class PickerThread_Impl : public ::osl::Thread
 {
     uno::Reference < XFilePicker > mxPicker;
-    ::vos::OMutex           maMutex;
+    ::osl::Mutex            maMutex;
     virtual void SAL_CALL   run();
     sal_Int16               mnRet;
 public:
@@ -1167,10 +1168,10 @@ public:
                             : mxPicker( rPicker ), mnRet(nMagic) {}
 
     sal_Int16               GetReturnValue()
-                            { ::vos::OGuard aGuard( maMutex ); return mnRet; }
+                            { ::osl::MutexGuard aGuard( maMutex ); return mnRet; }
 
     void                    SetReturnValue( sal_Int16 aRetValue )
-                            { ::vos::OGuard aGuard( maMutex ); mnRet = aRetValue; }
+                            { ::osl::MutexGuard aGuard( maMutex ); mnRet = aRetValue; }
 };
 
 void SAL_CALL PickerThread_Impl::run()
@@ -2720,7 +2721,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
         if ( sFolder.getLength() == 0 )
         {
             // _rPath is not a valid path -> fallback to home directory
-            NAMESPACE_VOS( OSecurity ) aSecurity;
+            osl::Security aSecurity;
             aSecurity.getHomeDir( sFolder );
         }
         mpImp->displayFolder( sFolder );
@@ -2874,3 +2875,4 @@ String DecodeSpaces_Impl( const String& rSource )
 
 }   // end of namespace sfx2
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

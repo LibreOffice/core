@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,9 +88,7 @@ public:
     ResMgr*                 GetResMgr() const { return pResMgr; }
     void                    SetPopupMenu( USHORT nId, PopupMenu *pMenu );
 
-//#if 0 // _SOLAR__PRIVATE
     void            Construct_Impl( Menu* pMenu, BOOL bWithHelp );
-//#endif
 };
 
 //--------------------------------------------------------------------
@@ -144,3 +143,4 @@ public:
 
 #endif // #ifndef _SFXMNUMGR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

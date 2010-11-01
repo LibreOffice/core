@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,9 @@ class SdrObject;
 class SdrMarkList;
 
 // SdrObjListIter methods:
-// IM_FLAT              : Flach ueber die Liste
-// IM_DEEPWITHGROUPS    : Mit rekursivem Abstieg, Next() liefert auch Gruppenobjekte
-// IM_DEEPNOGROUPS      : Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
+// IM_FLAT              : Flat over the list
+// IM_DEEPWITHGROUPS    : With recursive descent parser, Next() also returns group objects
+// IM_DEEPNOGROUPS      : With recursive descent parser, Next() returns no group objects
 enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
 
 class SVX_DLLPUBLIC SdrObjListIter
@@ -79,3 +80,4 @@ public:
 
 #endif //_SVDITER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

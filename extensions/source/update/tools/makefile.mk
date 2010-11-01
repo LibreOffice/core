@@ -52,9 +52,9 @@ APP1STDLIBS = $(TOOLSLIB)
 #APP2TARGET = urltest
 #APP2OBJS = $(OBJ)$/urltest.obj
 #.IF "$(GUI)" == "UNX"
-#APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
+#APP2STDLIBS = $(TOOLSLIB)  $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 #.ELSE
-#APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
+#APP2STDLIBS = $(LB)$/itools.lib isal.lib icppu.lib icppuhelper.lib
 #.ENDIF
 
 # APP3TARGET = tldem

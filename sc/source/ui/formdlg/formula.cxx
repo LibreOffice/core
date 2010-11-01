@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -405,6 +406,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 //  virtuelle Methoden von ScAnyRefDlg:
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
+    pEdit->SetSelection(Selection(0, SELECTION_MAX));
     ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
     m_aHelper.RefInputStart( aPair.second, aPair.first);
     RefInputStartAfter( aPair.second, aPair.first );
@@ -452,10 +454,19 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
         else
         {
+            // We can't use ScRange::Format here because in R1C1 mode we need
+            // to display the reference position relative to the cursor
+            // position.
             ScTokenArray aArray;
             ScComplexRefData aRefData;
             aRefData.InitRangeRel(rRef, aCursorPos);
-            aArray.AddDoubleReference(aRefData);
+            bool bSingle = aRefData.Ref1 == aRefData.Ref2;
+            if (aCursorPos.Tab() != rRef.aStart.Tab())
+                aRefData.Ref1.SetFlag3D(true);
+            if (bSingle)
+                aArray.AddSingleReference(aRefData.Ref1);
+            else
+                aArray.AddDoubleReference(aRefData);
             ScCompiler aComp(pDoc, aCursorPos, aArray);
             aComp.SetGrammar(pDoc->GetGrammar());
             ::rtl::OUStringBuffer aBuf;
@@ -670,3 +681,4 @@ table::CellAddress ScFormulaDlg::getReferencePosition() const
     return pArray;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

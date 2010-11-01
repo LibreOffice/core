@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <bootstrp/listmacr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 
 #define XML_EXT "xlist"
@@ -380,7 +381,7 @@ private:
     ByteString      aStarName; // no idee what this should be
 
 protected:
-    NAMESPACE_VOS( OMutex ) aMutex;
+    osl::Mutex      aMutex;
 
     USHORT          nStarMode;
     SolarFileList   aFileList;
@@ -481,3 +482,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

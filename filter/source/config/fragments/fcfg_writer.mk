@@ -20,6 +20,7 @@ T4_WRITER = \
     writer_WordPerfect_Document \
     writer_MS_Works_Document \
     writer_T602_Document \
+    writer_LotusWordPro_Document \
     writer_Text \
     writer_Text_encoded \
     writer_MIZI_Hwp_97 \
@@ -29,7 +30,9 @@ T4_WRITER = \
     writer8 \
     writer_MS_Word_2003_XML \
     writer_MS_Word_2007_XML \
-    writer_MS_Word_2007_XML_Template
+    writer_MS_Word_2007_XML_Template \
+    writer_OOXML \
+    writer_OOXML_Template
 
 # -----------------------------------------------
 # count = 39
@@ -51,6 +54,7 @@ F4_WRITER = \
     WordPerfect \
     MS_Works \
     T602Document \
+    LotusWordPro \
     Text \
     Text__encoded_ \
     writer_MIZI_Hwp_97 \
@@ -60,7 +64,9 @@ F4_WRITER = \
     writer8_template \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
-    MS_Word_2007_XML_Template
+    MS_Word_2007_XML_Template \
+    OOXML_Text \
+    OOXML_Text_Template
 
 # -----------------------------------------------
 # count = 14
@@ -76,7 +82,9 @@ F4_UI_WRITER = \
     writer8_template_ui \
     MS_Word_2003_XML_ui \
     MS_Word_2007_XML_ui \
-    MS_Word_2007_XML_Template_ui
+    MS_Word_2007_XML_Template_ui \
+    OOXML_Text_ui \
+    OOXML_Text_Template_ui
 
 # -----------------------------------------------
 # count = 0

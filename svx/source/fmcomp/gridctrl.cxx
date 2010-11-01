@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "fmhelp.hrc"
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
@@ -777,7 +779,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
         case STATE_CHANGE_MIRRORING:
         {
             BOOL bIsRTLEnabled = IsRTLEnabled();
-            for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( pWindows ); ++i )
                 pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
         break;
@@ -791,7 +793,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             if ( IsControlFont() )
                 aFont.Merge( GetControlFont() );
 
-            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
             {
                 pWindows[i]->SetZoom(aZoom);
                 pWindows[i]->SetZoomedPointFont(aFont);
@@ -2270,7 +2272,7 @@ void DbGridControl::forceROController(sal_Bool bForce)
 void DbGridControl::AdjustDataSource(sal_Bool bFull)
 {
     TRACE_RANGE("DbGridControl::AdjustDataSource");
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // wird die aktuelle Zeile gerade neu bestimmt,
     // wird kein abgleich vorgenommen
 
@@ -2802,7 +2804,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
 void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
     TRACE_RANGE("DbGridControl::DataSourcePropertyChanged");
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     // prop "IsModified" changed ?
     // during update don't care about the modified state
     if (!IsUpdating() && evt.PropertyName.compareTo(FM_PROP_ISMODIFIED) == COMPARE_EQUAL)
@@ -3626,7 +3628,7 @@ void DbGridControl::implAdjustInSolarThread(BOOL _bRows)
 {
     TRACE_RANGE("DbGridControl::implAdjustInSolarThread");
     ::osl::MutexGuard aGuard(m_aAdjustSafety);
-    if (::vos::OThread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
+    if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
     {
         m_nAsynAdjustEvent = PostUserEvent(LINK(this, DbGridControl, OnAsyncAdjust), reinterpret_cast< void* >( _bRows ));
         m_bPendingAdjustRows = _bRows;
@@ -3789,7 +3791,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
             return;
         }
         // here we got the solar mutex, transfer it to a guard for safety reasons
-        ::vos::OGuard aPaintSafety(Application::GetSolarMutex());
+        SolarMutexGuard aPaintSafety;
         Application::GetSolarMutex().release();
 
         // and finally do the update ...
@@ -3883,3 +3885,4 @@ Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, s
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

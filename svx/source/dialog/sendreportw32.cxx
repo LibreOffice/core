@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <tchar.h>
 #include <stdio.h>
 #include <systools/win32/uwinapi.h>
+#include <sal/macros.h>
 
 // need to undef min and max macros from MS headers here to make
 // the std::min and std::max from stl visible again
@@ -198,7 +200,7 @@ namespace svx{
             TCHAR   szTempPath[MAX_PATH];
             TCHAR   szFileName[MAX_PATH];
 
-            GetTempPath( elementsof(szTempPath), szTempPath );
+            GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath );
             GetTempFileName( szTempPath, TEXT("DSC"), 0, szFileName );
 
             FILE *fp = _tfopen( szFileName, _T("wb") );
@@ -225,7 +227,7 @@ namespace svx{
                 ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
                 StartupInfo.cb = sizeof(StartupInfo.cb);
 
-                sntprintf( szBuffer, elementsof(szBuffer),
+                sntprintf( szBuffer, SAL_N_ELEMENTS(szBuffer),
                     _T("%s -noui -load -send"),
                     szPath );
 
@@ -258,3 +260,5 @@ namespace svx{
 
     }   // namespace DocRecovery
 }   // namespace svx
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

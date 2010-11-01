@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -130,7 +131,7 @@ namespace vclcanvas
 
     void SAL_CALL CanvasCustomSprite::disposing()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // forward to parent
         CanvasCustomSpriteBaseT::disposing();
@@ -161,7 +162,7 @@ namespace vclcanvas
     void CanvasCustomSprite::redraw( OutputDevice& rOutDev,
                                      bool          bBufferedUpdate ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         redraw( rOutDev, maSpriteHelper.getPosPixel(), bBufferedUpdate );
     }
@@ -170,7 +171,7 @@ namespace vclcanvas
                                      const ::basegfx::B2DPoint& rOrigOutputPos,
                                      bool                       bBufferedUpdate ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         maSpriteHelper.redraw( rOutDev,
                                rOrigOutputPos,
@@ -187,7 +188,7 @@ namespace vclcanvas
                                       const ::Size&                 rSz,
                                       const GraphicAttr&            rAttr ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         mbSurfaceDirty = true;
 
@@ -195,3 +196,5 @@ namespace vclcanvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

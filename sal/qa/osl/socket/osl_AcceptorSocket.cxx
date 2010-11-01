@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,47 +158,6 @@ namespace osl_AcceptorSocket
 
     }; // class ctors
 
-#if 0  /* OBSOLETE */
-    class operator_assign : public CppUnit::TestFixture
-    {
-    public:
-
-        void assign_001()
-        {
-#if defined(LINUX)
-            ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            ::osl::AcceptorSocket asSocketAssign( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            asSocket.setOption( osl_Socket_OptionReuseAddr, 1);
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT4 );
-            asSocket.bind( saSocketAddr );
-
-            AcceptorThread myAcceptorThread( asSocketAssign, rtl::OUString::createFromAscii("127.0.0.1") );
-            myAcceptorThread.create();
-
-            thread_sleep( 1 );
-            //when accepting, assign another socket to the socket, the thread will not be closed, so is blocking
-            asSocketAssign = asSocket;
-
-            t_print("#asSocketAssign port number is %d\n", asSocketAssign.getLocalPort() );
-
-            asSocketAssign.shutdown();
-            myAcceptorThread.join();
-
-            CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
-                                myAcceptorThread.isOK() == sal_True );
-
-
-#endif /* LINUX */
-        }
-
-
-        CPPUNIT_TEST_SUITE( operator_assign  );
-        CPPUNIT_TEST( assign_001 );
-        CPPUNIT_TEST_SUITE_END();
-
-    }; // class operator_assign
-#endif /* OBSOLETE */
-
     /** testing the method:
         inline sal_Bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
         inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection);
@@ -300,3 +260,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_Ac
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

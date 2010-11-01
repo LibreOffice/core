@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -208,7 +209,7 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
         // ignore the initial namespaces
         if ( maInitialPrefixes.find( aIter->first ) == maInitialPrefixes.end() )
         {
-            const NameSpaceEntry& rEntry = aIter->second.getBody();
+            const NameSpaceEntry& rEntry = *(aIter->second);
             maLoadedNamespaces.push_back( ScLoadedNamespaceEntry( rEntry.sPrefix, rEntry.sName, rEntry.nKey ) );
         }
         ++aIter;
@@ -281,3 +282,4 @@ void ScSheetSaveData::SetInSupportedSave( bool bSet )
     mbInSupportedSave = bSet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

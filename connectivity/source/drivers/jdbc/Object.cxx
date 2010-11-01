@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include "java/tools.hxx"
 #include "java/sql/SQLException.hxx"
-#include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "java/LocalRef.hxx"
@@ -425,3 +425,4 @@ jclass java_lang_Object::findMyClass(const char* _pClassName)
     return globClass;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

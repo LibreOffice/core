@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,10 +36,10 @@
 #include    <tools/postwin.h>
 #endif
 #include <tools/errcode.hxx>
-#include <vos/process.hxx>
 #include <basic/sbxcore.hxx>
 #include <tools/string.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 
 #include <basic/ttstrhlp.hxx>
 
@@ -50,29 +51,46 @@
 #include <basic/process.hxx>
 
 Process::Process()
-: pArgumentList( NULL )
-, pEnvList( NULL )
-, pProcess( NULL )
+: m_nArgumentCount( 0 )
+, m_pArgumentList( NULL )
+, m_nEnvCount( 0 )
+, m_pEnvList( NULL )
+, m_aProcessName()
+, m_pProcess( NULL )
 , bWasGPF( FALSE )
 , bHasBeenStarted( FALSE )
 {
 }
 
+#define FREE_USTRING_LIST( count, list ) \
+    if ( count && list ) \
+    { \
+        for ( unsigned int i = 0; i < count; ++i ) \
+        { \
+            rtl_uString_release( list[i] ); \
+            list[i] = NULL; \
+        } \
+        delete[] list; \
+    } \
+    count = 0; \
+    list = NULL;
+
 Process::~Process()
 {
-//    delete pArgumentList;
-//    delete pEnvList;
-    delete pProcess;
+    FREE_USTRING_LIST( m_nArgumentCount, m_pArgumentList );
+    FREE_USTRING_LIST( m_nEnvCount, m_pEnvList );
+    if ( m_pProcess )
+        osl_freeProcessHandle( m_pProcess );
 }
 
 
 BOOL Process::ImplIsRunning()
 {
-    if ( pProcess && bHasBeenStarted )
+    if ( m_pProcess && bHasBeenStarted )
     {
-        NAMESPACE_VOS(OProcess::TProcessInfo) aProcessInfo;
-        pProcess->getInfo( NAMESPACE_VOS(OProcess::TData_ExitCode), &aProcessInfo );
-        if ( !(aProcessInfo.Fields & NAMESPACE_VOS(OProcess::TData_ExitCode)) )
+        oslProcessInfo aProcessInfo;
+        osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
+        if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
             return TRUE;
         else
             return FALSE;
@@ -83,11 +101,11 @@ BOOL Process::ImplIsRunning()
 
 long Process::ImplGetExitCode()
 {
-    if ( pProcess )
+    if ( m_pProcess )
     {
-        NAMESPACE_VOS(OProcess::TProcessInfo) aProcessInfo;
-        pProcess->getInfo( NAMESPACE_VOS(OProcess::TData_ExitCode), &aProcessInfo );
-        if ( !(aProcessInfo.Fields & NAMESPACE_VOS(OProcess::TData_ExitCode)) )
+        oslProcessInfo aProcessInfo;
+        osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
+        if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
             SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
         return aProcessInfo.Code;
     }
@@ -101,13 +119,14 @@ long Process::ImplGetExitCode()
 
 void Process::SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv )
 { // Set image file of executable
-    if ( pProcess && ImplIsRunning() )
+    if ( m_pProcess && ImplIsRunning() )
         SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
     else
     {
-        delete pArgumentList; pArgumentList = NULL;
-        delete pEnvList; pEnvList = NULL;
-        delete pProcess; pProcess = NULL;
+        FREE_USTRING_LIST( m_nArgumentCount, m_pArgumentList );
+        FREE_USTRING_LIST( m_nEnvCount, m_pEnvList );
+        osl_freeProcessHandle( m_pProcess );
+        m_pProcess = NULL;
 
         xub_StrLen i, nCount = aAppParams.GetQuotedTokenCount( CUniString("\"\"" ), ' ' );
         ::rtl::OUString *pParamList = new ::rtl::OUString[nCount];
@@ -122,42 +141,45 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
                 nParamCount++;
             }
         }
-        pArgumentList = new NAMESPACE_VOS(OArgumentList)( pParamList, nCount );
+        m_nArgumentCount = nParamCount;
+        m_pArgumentList = new rtl_uString*[m_nArgumentCount];
+        for ( i = 0 ; i < m_nArgumentCount ; i++ )
+        {
+            m_pArgumentList[i] = NULL;
+            rtl_uString_assign( &(m_pArgumentList[i]), pParamList[i].pData );
+        }
+        delete [] pParamList;
 
-
-        ::rtl::OUString *pEnvArray = NULL;
         if ( pEnv )
         {
-            pEnvArray = new ::rtl::OUString[pEnv->size()];
+            m_pEnvList = new rtl_uString*[pEnv->size()];
 
-            xub_StrLen nEnvCount = 0;
+            m_nEnvCount = 0;
             Environment::const_iterator aIter = pEnv->begin();
             while ( aIter != pEnv->end() )
             {
                 ::rtl::OUString aTemp = ::rtl::OUString( (*aIter).first );
                 aTemp += ::rtl::OUString::createFromAscii( "=" );
                 aTemp += ::rtl::OUString( (*aIter).second );
-                pEnvArray[nEnvCount] = aTemp;
-                nEnvCount++;
+                m_pEnvList[m_nEnvCount] = NULL;
+                rtl_uString_assign( &(m_pEnvList[m_nEnvCount]), aTemp.pData );
+                m_nEnvCount++;
                 aIter++;
             }
-            pEnvList = new NAMESPACE_VOS(OEnvironment)( pEnvArray, nEnvCount );
         }
 
         ::rtl::OUString aNormalizedAppPath;
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
-        pProcess = new NAMESPACE_VOS(OProcess)( aNormalizedAppPath );
+        m_aProcessName = aNormalizedAppPath;;
         bHasBeenStarted = FALSE;
 
-        delete [] pParamList;
-        delete [] pEnvArray;
     }
 }
 
 BOOL Process::Start()
 { // Start program
     BOOL bSuccess=FALSE;
-    if ( pProcess && !ImplIsRunning() )
+    if ( m_pProcess && !ImplIsRunning() )
     {
         bWasGPF = FALSE;
 #ifdef WNT
@@ -166,23 +188,19 @@ BOOL Process::Start()
         try
         {
 #endif
-            if ( pEnvList )
-            {
-                bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
-                            ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
-                            *pArgumentList,
-                            *pEnvList ) == NAMESPACE_VOS(OProcess)::E_None;
-            }
-            else
-            {
-                bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
-                            ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
-                            /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
-                            *pArgumentList ) == NAMESPACE_VOS(OProcess)::E_None;
-            }
+            bSuccess = osl_executeProcess(
+                    m_aProcessName.pData,
+                    m_pArgumentList,
+                    m_nArgumentCount,
+                    osl_Process_SEARCHPATH
+                    /*| osl_Process_DETACHED*/
+                    /*| osl_Process_WAIT*/,
+                    NULL,
+                    NULL,
+                    m_pEnvList,
+                    m_nEnvCount,
+                    &m_pProcess ) == osl_Process_E_None;
+
 #ifdef WNT
         }
         catch( ... )
@@ -221,7 +239,8 @@ BOOL Process::WasGPF()
 BOOL Process::Terminate()
 {
     if ( ImplIsRunning() )
-        return pProcess->terminate() == vos::OProcess::E_None;
+        return osl_terminateProcess(m_pProcess) == osl_Process_E_None;
     return TRUE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

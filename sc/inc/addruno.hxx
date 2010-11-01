@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ private:
     sal_Int32               nRefSheet;
     sal_Bool                bIsRange;
 
-    sal_Bool                ParseUIString( const String& rUIString );
+    sal_Bool                ParseUIString( const String& rUIString, ::formula::FormulaGrammar::AddressConvention eConv = ::formula::FormulaGrammar::CONV_OOO );
 
 public:
 
@@ -108,3 +109,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

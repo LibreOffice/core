@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <sal/macros.h>
 #include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -114,7 +116,7 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
     aFTWarning.SetPosSizePixel( aFTWarning.GetPosPixel(), aNewWarningSize );
 
     Window* pControls[] = { &aFixedLine1, &aOKBtn, &aCancelBtn, &aHelpBtn };
-    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
     for ( int i = 0; i < nCCount; ++i )
     {
         Point aNewPos =(*pControls[i]).GetPosPixel();
@@ -122,3 +124,5 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
         pControls[i]->SetPosSizePixel( aNewPos, pControls[i]->GetSizePixel() );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

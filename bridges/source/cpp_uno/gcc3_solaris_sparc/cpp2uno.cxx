@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -562,3 +563,5 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
       {
         //TODO: IZ 25819  flush the instruction cache (there probably is OS support for this)
     }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

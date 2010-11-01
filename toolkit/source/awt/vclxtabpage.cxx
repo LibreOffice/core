@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ VCLXTabPage::~VCLXTabPage()
 void SAL_CALL VCLXTabPage::dispose() throw(uno::RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -108,20 +109,6 @@ void SAL_CALL VCLXTabPage::allocateArea( awt::Rectangle const& area )
     OSL_TRACE ("%s: window: %d, %d", __FUNCTION__, windowSize.Width(), windowSize.Height() );
 #endif
 
-#if 0
-    if (requestedSize.Width > parentSize.Width ()
-        || requestedSize.Height > parentSize.Height ())
-    {
-#ifndef __SUNPRO_CC
-        OSL_TRACE ("%s: ***setting parent: %d, %d", __FUNCTION__, requestedSize.Width, requestedSize.Height );
-#endif
-        parent->SetSizePixel ( Size (requestedSize.Width, requestedSize.Height) );
-
-        if (Window *grand_parent = parent->GetParent ())
-            grand_parent->SetSizePixel ( Size (requestedSize.Width, requestedSize.Height) );
-    }
-#endif
-
     if ( !bRealized )
     {
         setPosSize( area.X, area.Y, requestedSize.Width, requestedSize.Height, awt::PosSize::SIZE );
@@ -148,9 +135,11 @@ void SAL_CALL VCLXTabPage::allocateArea( awt::Rectangle const& area )
 awt::Size SAL_CALL VCLXTabPage::getMinimumSize()
     throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     return Bin::getMinimumSize();
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

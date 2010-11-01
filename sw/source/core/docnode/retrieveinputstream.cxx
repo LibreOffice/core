@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ SwAsyncRetrieveInputStreamThread::~SwAsyncRetrieveInputStreamThread()
 void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 1 );
-    xProps[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+    xProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
     xProps[0].Value <<= ::rtl::OUString( mrLinkedURL );
     comphelper::MediaDescriptor aMedium( xProps );
 
@@ -82,3 +83,5 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
                                                               xInputStream,
                                                               aMedium.isStreamReadOnly() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

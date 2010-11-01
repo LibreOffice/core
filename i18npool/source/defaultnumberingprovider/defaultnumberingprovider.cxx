@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,7 @@
 #define S_CYR_B "\xD0\xB1"
 
 #include <math.h>
+#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/i18n/XTransliteration.hpp>
@@ -259,35 +261,6 @@ OUString toRoman( sal_Int32 n )
 }
 
 // not used:
-#if 0
-
-static
-const char* expected_name( int i, int last )
-{
-     if(0);
-     else if( i==0    ) return "Prefix";
-     else if( i==1    ) return "NumberingType";
-     else if( i==2    ) return "Suffix";
-     else if( i==last ) return "Value";
-     else { OSL_ASSERT(0); return ""; }
-}
-static
-const char* expected_type( int i, int last )
-{
-     if(0);
-     else if( i==0    ) return "OUString";
-     else if( i==1    ) return "sal_Int16";
-     else if( i==2    ) return "OUString";
-     else if( i==last ) return "sal_Int32";
-     else { OSL_ASSERT(0); return ""; }
-}
-static
-void failedToConvert( int i, int last )
-{
-     throw IllegalArgumentException();
-}
-
-#endif
 
 static
 void lcl_formatChars( sal_Unicode table[], int tableSize, int n, OUString& s )
@@ -586,79 +559,67 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
          case CHARS_CYRILLIC_UPPER_LETTER_BG:
               lcl_formatChars2( table_CyrillicUpperLetter_bg,
                       table_CyrillicLowerLetter_bg,
-                      sizeof(table_CyrillicLowerLetter_bg) /
-                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>Aa, 30=>Ab, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_BG:
               lcl_formatChars( table_CyrillicLowerLetter_bg,
-                      sizeof(table_CyrillicLowerLetter_bg) /
-                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>aa, 30=>ab, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_N_BG:
               lcl_formatChars3( table_CyrillicUpperLetter_bg,
                       table_CyrillicLowerLetter_bg,
-                      sizeof(table_CyrillicLowerLetter_bg) /
-                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>Aa, 30=>Bb, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_N_BG:
               lcl_formatChars1( table_CyrillicLowerLetter_bg,
-                      sizeof(table_CyrillicLowerLetter_bg) /
-                      sizeof(table_CyrillicLowerLetter_bg[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_bg), number-1,
                       result); // 1=>a, 2=>b, ..., 28=>z, 29=>aa, 30=>bb, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_RU:
               lcl_formatChars2( table_CyrillicUpperLetter_ru,
                       table_CyrillicLowerLetter_ru,
-                      sizeof(table_CyrillicLowerLetter_ru) /
-                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Ab, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_RU:
               lcl_formatChars( table_CyrillicLowerLetter_ru,
-                      sizeof(table_CyrillicLowerLetter_ru) /
-                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>ab, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_N_RU:
               lcl_formatChars3( table_CyrillicUpperLetter_ru,
                       table_CyrillicLowerLetter_ru,
-                      sizeof(table_CyrillicLowerLetter_ru) /
-                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Bb, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_N_RU:
               lcl_formatChars1( table_CyrillicLowerLetter_ru,
-                      sizeof(table_CyrillicLowerLetter_ru) /
-                      sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_ru), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_SR:
               lcl_formatChars2( table_CyrillicUpperLetter_sr,
                       table_CyrillicLowerLetter_sr,
-                      sizeof(table_CyrillicLowerLetter_sr) /
-                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Ab, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_SR:
               lcl_formatChars( table_CyrillicLowerLetter_sr,
-                      sizeof(table_CyrillicLowerLetter_sr) /
-                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>ab, ...
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_N_SR:
               lcl_formatChars3( table_CyrillicUpperLetter_sr,
                       table_CyrillicLowerLetter_sr,
-                      sizeof(table_CyrillicLowerLetter_sr) /
-                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>Aa, 29=>Bb, ...
               break;
          case CHARS_CYRILLIC_LOWER_LETTER_N_SR:
               lcl_formatChars1( table_CyrillicLowerLetter_sr,
-                      sizeof(table_CyrillicLowerLetter_sr) /
-                      sizeof(table_CyrillicLowerLetter_sr[0]), number-1,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
           case CHARS_PERSIAN:
@@ -897,3 +858,5 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

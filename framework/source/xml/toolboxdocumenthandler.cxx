@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,28 +31,18 @@
 
 #include <stdio.h>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <macros/debug.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-
 #include <sal/config.h>
+#include <sal/macros.h>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -134,7 +125,7 @@ ToolboxStyleItem Styles[ ] = {
     { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
-sal_Int32 nStyleItemEntries = sizeof( Styles ) / sizeof( Styles[ 0 ] );
+sal_Int32 nStyleItemEntries = SAL_N_ELEMENTS( Styles );
 
 struct ToolBarEntryProperty
 {
@@ -899,3 +890,4 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxSeparator() throw
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,15 +68,15 @@ module com { module sun { module star { module document {
     This service may be represented by a
     <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
     Such descriptors will be passed to different functions, included into possible
-    load/save proccesses. Every member of such process can use this descriptor
+    load/save processes. Every member of such process can use this descriptor
     and may change it if to actualize the informations about the document.
     So this descriptor should be used as an in/out parameter.
     </p>
 
     <p>
     Note:<br>
-    It's not allowed to hold member of this descriptor by references longer the they
-    will be used (especialy a possible stream). It's allowed to use it directly
+    It's not allowed to hold member of this descriptor by references longer than they
+    will be used (especially a possible stream). It's allowed to use it directly
     or by copying it only.
     </p>
 
@@ -85,7 +85,7 @@ module com { module sun { module star { module document {
 published service MediaDescriptor
 {
     //-------------------------------------------------------------------------
-    /** May be set by filters or detection services if user has choosen to
+    /** May be set by filters or detection services if user has chosen to
         abort loading/saving, e.g. while entering a password.
      */
     [optional,property] boolean Aborted;
@@ -139,7 +139,7 @@ published service MediaDescriptor
         <p>
         This is a parameter that can be used for any properties specific
         for a special component type. Format of that depends from real
-        type of adressed component.
+        type of addressed component.
         </p>
 
         <p>
@@ -256,7 +256,7 @@ published service MediaDescriptor
         If no stream is provided, the loader will create a stream by itself using
         the other properties. It is not allowed to keep a reference to this
         InputStream after loading the component, and it would be useless, because
-        in general an InputStream is usable for readong only once, except when it
+        in general an InputStream is usable for reading only once, except when it
         also implements the <type scope="com::sun::star::io">XSeekable</type> interface.
         </p>
      */
@@ -269,7 +269,7 @@ published service MediaDescriptor
         Object implementing the <type scope="com::sun::star::task">InteractionHandler</type>
         service that is used to handle exceptional situations where proceeding with the task
         is impossible without additional information or impossible at all.
-        The implemented api provides a default implementation for it that can handle many situations.
+        The implemented API provides a default implementation for it that can handle many situations.
         If no InteractionHandler is set, a suitable exception is thrown.
         It is not allowed to keep a reference to this object, even not in the loaded
         or stored components' copy of the MediaDescriptor provided by its arguments attribute.
@@ -362,10 +362,10 @@ published service MediaDescriptor
     [optional,property] boolean Overwrite;
 
     //-------------------------------------------------------------------------
-    /** pasword for loading storing documents
+    /** password for loading storing documents
 
         <p>
-        It caontains a password for loading or storing a component (if necessary).
+        It contains a password for loading or storing a component (if necessary).
         If no password is specified, loading of a password protected document
         will fail, storing will be done without encryption.
         </p>
@@ -436,13 +436,13 @@ published service MediaDescriptor
     /** name of document referrer
 
         <p>
-        A URL describing the environment of the request; f.e. a referrer may be a
+        A URL describing the environment of the request; e.g. a referrer may be a
         URL of a document, if a hyperlink inside this document is clicked to load
         another document. The referrer may be evaluated by the addressed UCB content
         or the loaded document. Without a referrer the processing of URLs that
-        needs security checks will be denied, f.e. "macro:" URLs.
+        needs security checks will be denied, e.g. "macro:" URLs.
         <br>
-        Don't be confused about the wrong spelling; is kept for compatibility reasons.
+        Don't be confused about the wrong spelling; it is kept for compatibility reasons.
         </p>
      */
     [optional,property] string Referer;
@@ -531,7 +531,6 @@ published service MediaDescriptor
 
         <p>
         The location of the component in URL syntax. It must be the full qualified URL and
-        must include f.e. an optional <member>MediaDescriptor::JumpMark</member> too.
         </p>
      */
     [optional,property] string URL;

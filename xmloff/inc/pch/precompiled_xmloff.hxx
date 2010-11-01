@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -470,11 +471,13 @@
 #include "unotools/fontcvt.hxx"
 #include "tools/mapunit.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
+#include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "xmloff/dllapi.h"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

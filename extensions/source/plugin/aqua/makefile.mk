@@ -62,7 +62,6 @@ SLOFILES=\
 #APP1OBJS=$(OBJFILES)
 #APP1STDLIBS=\
 #	$(TOOLSLIB) 				\
-#	$(VOSLIB)					\
 #	$(SALLIB)
 
 #APP1DEF=	$(MISC)$/$(TARGET).def

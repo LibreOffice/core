@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,10 +36,11 @@
     #endif
 #include "windows.h"
 #ifndef __MINGW32__
-//#include "stdafx.h"
 #include "crtdbg.h"
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
 #endif
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

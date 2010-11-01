@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
@@ -126,7 +127,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
@@ -161,7 +162,7 @@ void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // We can select only one. So iterate over the children to find
     // the first we can select, and select it.
@@ -193,7 +194,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
 sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int32 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
@@ -245,7 +246,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Since the index is relative to the selected children, and since
     // there can be at most one selected frame child, the index must
@@ -301,22 +302,22 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {
-        ::vos::ORef < SwAccessibleContext > xChildImpl(
+        ::rtl::Reference < SwAccessibleContext > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
                 sal_True ) );
-        if( xChildImpl.isValid() )
+        if( xChildImpl.is() )
         {
             xChildImpl->SetParent( &rContext );
-            xChild = xChildImpl.getBodyPtr();
+            xChild = xChildImpl.get();
         }
     }
     else if ( aChild.GetDrawObject() )
     {
-        ::vos::ORef < ::accessibility::AccessibleShape > xChildImpl(
+        ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
                                           &rContext, sal_True )  );
-        if( xChildImpl.isValid() )
-            xChild = xChildImpl.getBodyPtr();
+        if( xChildImpl.is() )
+            xChild = xChildImpl.get();
     }
     return xChild;
 }
@@ -332,3 +333,5 @@ void SwAccessibleSelectionHelper::deselectAccessibleChild(
         nChildIndex >= rContext.GetChildCount( *(rContext.GetMap()) ) )
         throwIndexOutOfBoundsException();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

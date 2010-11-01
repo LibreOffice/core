@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* WordPerfectImportFilter: Sets up the filter, and calls DocumentCollector
  * to do the actual filtering
  *
@@ -285,3 +286,5 @@ Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(
 {
     return WordPerfectImportFilter_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

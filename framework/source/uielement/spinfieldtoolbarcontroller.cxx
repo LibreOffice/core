@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/urlobj.hxx>
@@ -234,7 +235,7 @@ SpinfieldToolbarController::~SpinfieldToolbarController()
 void SAL_CALL SpinfieldToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pSpinfieldControl;
@@ -569,3 +570,4 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

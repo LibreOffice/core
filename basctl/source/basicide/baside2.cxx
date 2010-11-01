@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1754,3 +1755,5 @@ Image ModulWindowLayout::getImage(USHORT nId, bool bHighContrastMode) const
     return (bHighContrastMode ? m_aImagesHighContrast : m_aImagesNormal).
         GetImage(nId);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

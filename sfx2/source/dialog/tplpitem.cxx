@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-
-#ifndef GCC
-#endif
 
 #include "tplpitem.hxx"
 #include <com/sun/star/frame/status/Template.hpp>
@@ -121,3 +119,4 @@ BYTE SfxTemplateItem::GetFlagCount() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

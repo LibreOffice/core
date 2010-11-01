@@ -39,7 +39,10 @@ SOLARINC+=-I../../inc
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/jpegc.obj \
-            $(SLO)$/jpeg.obj
+SLOFILES=	$(EXCEPTIONSFILES) \
+		$(SLO)$/jpegc.obj
+
+EXCEPTIONSFILES= \
+		$(SLO)$/jpeg.obj
 
 .INCLUDE :  target.mk

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -899,7 +900,7 @@ DBG_NAME(OFinalDBPageSetup)
         Point aPos(m_aFTFinalHeader.GetPosPixel());
         Size aStart(m_aFTFinalHeader.GetSizePixel());
         aPos.Y() += aStart.Height() + nUnrelatedHeight;
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=0; i < nCount; ++i)
         {
             aPos.X() = pWindows[i].first->GetPosPixel().X();
@@ -981,3 +982,5 @@ DBG_NAME(OFinalDBPageSetup)
 }
 // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

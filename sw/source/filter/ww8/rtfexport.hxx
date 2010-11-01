@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,6 +143,8 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
+    virtual void OutputLinkedOLE(const rtl::OUString&);
+
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
 public:
@@ -173,13 +176,13 @@ public:
     rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
     rtl::OString OutHex(ULONG nHex, BYTE nLen);
     void OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage );
-    void OutContent( const SwNode& rNode );
 
     USHORT GetColor( const Color& rColor ) const;
     void InsColor( const Color& rCol );
     void InsColorLine( const SvxBoxItem& rBox );
     void OutColorTable();
     USHORT GetRedline( const String& rAuthor );
+    const String* GetRedline( USHORT nId );
 
     void InsStyle( USHORT nId, const rtl::OString& rStyle );
     rtl::OString* GetStyle( USHORT nId );
@@ -208,4 +211,5 @@ private:
 };
 
 #endif // _RTFEXPORT_HXX_
-/* vi:set shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

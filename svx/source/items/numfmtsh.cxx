@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1604,9 +1605,6 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bF
         aStr += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[i]->GetLanguage()));
 
         pStr = new XubString(aStr);
-#if 0
-        fprintf( stderr, "currency entry: %s\n", ByteString( *pStr, RTL_TEXTENCODING_UTF8).GetBuffer());
-#endif
         for(j=nStart;j<rList.Count();j++)
         {
             const StringPtr pTestStr=rList[j];
@@ -1867,3 +1865,4 @@ sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,co
     return bFlag;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

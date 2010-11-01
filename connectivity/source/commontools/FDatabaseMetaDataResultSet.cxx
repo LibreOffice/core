@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -462,7 +463,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, Ru
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
 
-    if(m_aRowsIter == m_aRows.end() || !(*m_aRowsIter)[m_nColPos].isValid())
+    if(m_aRowsIter == m_aRows.end() || !(*m_aRowsIter)[m_nColPos].is())
         return sal_True;
 
     return (*m_aRowsIter)[m_nColPos]->getValue().isNull();
@@ -641,7 +642,7 @@ const ORowSetValue& ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex)
     checkIndex(columnIndex );
     m_nColPos = columnIndex;
 
-    if(m_aRowsIter != m_aRows.end() && (*m_aRowsIter)[columnIndex].isValid())
+    if(m_aRowsIter != m_aRows.end() && (*m_aRowsIter)[columnIndex].is())
         return *(*m_aRowsIter)[columnIndex];
     return m_aEmptyValue;
 }
@@ -911,3 +912,5 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* implNam
 }
 
 }   // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

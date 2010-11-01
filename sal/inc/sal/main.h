@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,9 @@
 #define _SAL_MAIN_H_
 
 #include <sal/types.h>
+#if defined(AIX)
+#   include <unistd.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,7 +61,6 @@ int SAL_CALL main(int argc, char ** argv) \
     return ret; \
 }
 
-
 /* Definition macros for CRT entries */
 
 #ifdef SAL_W32
@@ -68,14 +71,6 @@ int SAL_CALL main(int argc, char ** argv) \
 #endif
 
 /* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
-
-#if 0
-
-#ifndef _WINDOWS_
-#include <windows.h>
-#endif
-
-#else /* Simulated what windows.h does */
 
 #ifndef WINAPI
 #   define WINAPI   __stdcall
@@ -93,7 +88,7 @@ int SAL_CALL main(int argc, char ** argv) \
 DECLARE_HANDLE(HINSTANCE);
 #endif
 
-#endif
+
 
 #define SAL_WIN_WinMain \
 int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nshow ) \
@@ -150,3 +145,4 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 
 #endif  /* _SAL_MAIN_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

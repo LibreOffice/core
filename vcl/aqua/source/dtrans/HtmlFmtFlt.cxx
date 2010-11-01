@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "HtmlFmtFlt.hxx"
 
 #include <rtl/string.h>
@@ -145,3 +146,5 @@ bool isHTMLFormat(const Sequence<sal_Int8>& aHtmlSequence)
                                                    reinterpret_cast<const sal_Char*>(aHtmlSequence.getConstArray()),
                                                    HtmlFormatStartLen) == 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

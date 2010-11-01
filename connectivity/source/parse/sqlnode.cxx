@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_connectivity.hxx"
 
 
+#include <sal/macros.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <internalnode.hxx>
@@ -1427,7 +1429,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::other_like_predicate_part_2, "other_like_predicate_part_2" },
             { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" }
         };
-        size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
+        size_t nRuleMapCount = SAL_N_ELEMENTS( aRuleDescriptions );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
 
         for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )
@@ -2824,3 +2826,5 @@ void OSQLParseNodesContainer::clearAndDelete()
     }
 }
 }   // namespace connectivity
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

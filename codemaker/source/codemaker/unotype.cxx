@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,3 +102,5 @@ rtl::OString codemaker::UnoType::decompose(
     OSL_ASSERT(k == len - 1 && type[k] == '>');
     return type.copy(i, j - i);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

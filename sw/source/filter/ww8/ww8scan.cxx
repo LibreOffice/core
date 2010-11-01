@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include "ww8scan.hxx"
-
 
 #include <functional>
 #include <algorithm>
 
 #include <string.h>         // memset()
 #include <rtl/tencinfo.h>
+#include <sal/macros.h>
 
 #ifdef DUMP
 
@@ -256,7 +256,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
         {164, 4, L_FIX}, // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -439,7 +439,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {207, 0, L_VAR}  // rtl property ?
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -778,7 +778,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x246D, 1, L_FIX}
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -5153,15 +5153,16 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
         case MAN_HDFT:
             nOffset = ccpText + ccpFtn;
             break;
-/*
- * A subdocument of this kind probably exists in some defunct version
- * of MSWord, but now ccpMcr is always 0
- */
-#if 0
+        /*
+         A subdocument of this kind (MAN_MACRO) probably exists in some defunct
+         version of MSWord, but now ccpMcr is always 0. If some example that
+         uses this comes to light, this is the likely calculation required
+
         case MAN_MACRO:
             nOffset = ccpText + ccpFtn + ccpHdr;
             break;
-#endif
+
+        */
         case MAN_AND:
             nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr;
             break;
@@ -7194,8 +7195,16 @@ void WW8DopTypography::ReadFromMem(BYTE *&pData)
     for (i=0; i < nMaxLeading; ++i)
         rgxchLPunct[i] = Get_Short(pData);
 
-    rgxchFPunct[cchFollowingPunct]=0;
-    rgxchLPunct[cchLeadingPunct]=0;
+    if (cchFollowingPunct >= 0 && cchFollowingPunct < nMaxFollowing)
+        rgxchFPunct[cchFollowingPunct]=0;
+    else
+        rgxchFPunct[nMaxFollowing - 1]=0;
+
+    if (cchLeadingPunct >= 0 && cchLeadingPunct < nMaxLeading)
+        rgxchLPunct[cchLeadingPunct]=0;
+    else
+        rgxchLPunct[nMaxLeading - 1]=0;
+
 }
 
 void WW8DopTypography::WriteToMem(BYTE *&pData) const
@@ -7369,4 +7378,4 @@ SEPr::SEPr() :
     memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

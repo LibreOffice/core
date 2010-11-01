@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * $XConsortium: ifparser.h,v 1.1 92/08/22 13:05:39 rws Exp $
  *
@@ -73,3 +74,4 @@ typedef struct _if_parser {
 
 const char *ParseIfExpression (/* IfParser *, const char *, int * */);
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

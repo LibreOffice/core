@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -499,3 +500,5 @@ xub_StrLen SwExtend::Next( xub_StrLen nNext )
     }
     return nNext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

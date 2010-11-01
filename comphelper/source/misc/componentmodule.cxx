@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -158,7 +159,7 @@ namespace comphelper
         {
             ::rtl::OUString sMainKeyName( sRootKey );
             sMainKeyName += component->sImplementationName;
-            sMainKeyName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+            sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
             try
             {
@@ -175,7 +176,7 @@ namespace comphelper
 
                     ::rtl::OUString sSingletonKeyName( sRootKey );
                     sSingletonKeyName += component->sImplementationName;
-                    sSingletonKeyName += ::rtl::OUString::createFromAscii( "/UNO/SINGLETONS/" );
+                    sSingletonKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS/"));
                     sSingletonKeyName += component->sSingletonName;
 
                     xNewKey = _rxRootKey->createKey( sSingletonKeyName );
@@ -235,3 +236,5 @@ namespace comphelper
 //........................................................................
 } // namespace comphelper
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

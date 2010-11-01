@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@
 #include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <map>
 #include <set>
@@ -130,7 +131,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) t
 // XStatusListener
 void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
@@ -226,7 +227,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if (!m_bShowMenu)
@@ -370,3 +371,4 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

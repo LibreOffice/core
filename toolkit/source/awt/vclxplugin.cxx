@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ VCLXPlugin::~VCLXPlugin()
 void SAL_CALL VCLXPlugin::dispose() throw(uno::RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -71,10 +72,12 @@ void VCLXPlugin::SetPlugin( ::Control *p )
 awt::Size SAL_CALL VCLXPlugin::getMinimumSize()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OClearableGuard aGuard( GetMutex() );
+    ::osl::ClearableSolarGuard aGuard( GetMutex() );
     if ( mpPlugin )
         return AWTSize( mpPlugin->GetSizePixel() );
     return awt::Size();
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

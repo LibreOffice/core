@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -689,7 +690,7 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
 
 // Basic macro names ----------------------------------------------------------
 
-const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Standard." ) );
+const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) );
 const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ) );
 
 OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
@@ -714,7 +715,10 @@ String XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
     sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
     if( (nMacroNameLen > 0) && rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroPrefix, 0 ) &&
             rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroSuffix, nSbMacroUrlLen - maSbMacroSuffix.getLength() ) )
-        return rSbMacroUrl.copy( maSbMacroPrefix.getLength(), nMacroNameLen );
+    {
+        sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', maSbMacroPrefix.getLength() ) + 1;
+        return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - maSbMacroSuffix.getLength() );
+    }
     return String::EmptyString();
 }
 
@@ -734,3 +738,5 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

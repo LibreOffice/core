@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,7 @@
  ************************************************************************/
 
 #include "rtl/alloc.h"
+#include <sal/macros.h>
 
 #ifndef INCLUDED_STRING_H
 #include <string.h>
@@ -72,7 +74,7 @@ static const sal_Size g_alloc_sizes[] =
 };
 
 #define RTL_MEMORY_CACHED_LIMIT 4 * 4096
-#define RTL_MEMORY_CACHED_SIZES (sizeof(g_alloc_sizes) / sizeof(g_alloc_sizes[0]))
+#define RTL_MEMORY_CACHED_SIZES (SAL_N_ELEMENTS(g_alloc_sizes))
 
 static rtl_cache_type * g_alloc_caches[RTL_MEMORY_CACHED_SIZES] =
 {
@@ -157,7 +159,7 @@ rtl_memory_init (void)
   Delegated the call to "rtl_memory_fini" into a dummy C++ object,
   see memory_fini.cxx .
 */
-#if defined(__GNUC__) && !defined(MACOSX)
+#if defined(__GNUC__) && !defined(MACOSX) && !defined(AIX)
 static void rtl_memory_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_memory_fini)
@@ -355,3 +357,5 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 }
 
 /* ================================================================= */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

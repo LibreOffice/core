@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,3 +89,5 @@ void KabTables::disposing(void)
 m_xMetaData.clear();
     OCollection::disposing();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

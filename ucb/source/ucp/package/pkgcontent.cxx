@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -233,13 +234,7 @@ Content* Content::create(
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
 
-#if 0
-    // Fail, if content does exist.
-    if ( hasData( pProvider, aURI, xPackage ) )
-        return 0;
-#else
     xPackage = pProvider->createPackage( aURI.getPackage(), aURI.getParam() );
-#endif
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );
@@ -3010,3 +3005,5 @@ uno::Reference< container::XEnumeration > Content::getIterator()
 
     return xIter;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

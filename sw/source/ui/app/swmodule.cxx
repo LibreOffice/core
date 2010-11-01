@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,8 +155,6 @@ TYPEINIT1( SwModule, SfxModule );
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-//************************************************************************
-
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
@@ -217,9 +216,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     // at the view options.
     GetColorConfig();
 }
-
-//************************************************************************
-
 uno::Reference< scanner::XScannerManager >
 SwModule::GetScannerManager()
 {
@@ -232,8 +228,8 @@ SwModule::GetScannerManager()
             m_xScannerManager =
                 uno::Reference< scanner::XScannerManager >(
                     xMgr->createInstance(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.scanner.ScannerManager" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.scanner.ScannerManager")) ),
                     uno::UNO_QUERY );
         }
     }
@@ -249,14 +245,12 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
         {
             m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
                     xMgr->createInstance(
-                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing"))),
                         uno::UNO_QUERY );
         }
     }
     return m_xLanguageGuesser;
 }
-
-//************************************************************************
 
 SwModule::~SwModule()
 {
@@ -266,15 +260,11 @@ SwModule::~SwModule()
     EndListening( *SFX_APP() );
 }
 
-//************************************************************************
-
 void SwModule::CreateLngSvcEvtListener()
 {
     if (!xLngSvcEvtListener.is())
         xLngSvcEvtListener = new SwLinguServiceEventListener;
 }
-
-//************************************************************************
 
 void SwDLL::RegisterFactories()
 {
@@ -291,9 +281,6 @@ void SwDLL::RegisterFactories()
         SwPagePreView::RegisterFactory  ( 7 );
     }
 }
-
-//************************************************************************
-
 
 void SwDLL::RegisterInterfaces()
 {
@@ -331,8 +318,6 @@ void SwDLL::RegisterInterfaces()
     SwMediaShell::RegisterInterface(pMod);
     SwAnnotationShell::RegisterInterface(pMod);
 }
-
-//************************************************************************
 
 void SwDLL::RegisterControls()
 {
@@ -454,7 +439,7 @@ void SwDLL::RegisterControls()
 
 void    SwModule::InitAttrPool()
 {
-    DBG_ASSERT(!pAttrPool, "Pool ist schon da!");
+    OSL_ENSURE(!pAttrPool, "Pool already exists!");
     pAttrPool = new SwAttrPool(0);
     SetPool(pAttrPool);
 }
@@ -466,3 +451,4 @@ void    SwModule::RemoveAttrPool()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

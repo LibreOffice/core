@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #define FLT_DATE_SAVE       5
 
 
-//  Struct fuer Datums-Sortierung
+//  Struct for sorting data
 
 class SVX_DLLPUBLIC RedlinData
 {
@@ -72,7 +73,7 @@ public:
         virtual     ~SvxRedlinEntry();
 };
 
-// Klasse fuer die Darstellung von schriftabhaengigen Strings
+// Class for the representation of Strings depending on the font
 class SvLBoxColorString : public SvLBoxString
 {
 private:
@@ -143,7 +144,7 @@ public:
     BOOL            IsValidCalcEntry(const String& ,RedlinData *pUserData);
     BOOL            IsValidWriterEntry(const String& ,RedlinData *pUserData);
 
-    // keine NULL-Ptr. ueberpruefung {
+    // no NULL-pointer checking {
     BOOL            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
     BOOL            IsValidEntry(const String* pAuthor,const DateTime *pDateTime);
     BOOL            IsValidComment(const String* pComment);
@@ -246,13 +247,13 @@ public:
     String          GetComment()const;
 
 
-    // Methoden fuer Calc {
+    // Methods for Calc {
     void            SetRange(const String& rString);
     String          GetRange() const;
     void            HideRange(BOOL bHide=TRUE);
     void            DisableRange(BOOL bFlag=TRUE);
     void            SetFocusToRange();
-    // } Methoden fuer Calc
+    // } Methods for Calc
 
     void            HideClocks(BOOL bHide=TRUE);
     void            DisableRef(BOOL bFlag);
@@ -289,7 +290,7 @@ public:
     const Link&     GetModifyCommentHdl() const { return aModifyComLink; }
 
 
-    // Methoden fuer Calc {
+    // Methods for Calc {
     void            SetModifyRangeHdl( const Link& rLink ) { aModifyRefLink = rLink; }
     const Link&     GetModifyRangeHdl() const { return aModifyRefLink; }
 
@@ -299,7 +300,7 @@ public:
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
 
-    // } Methoden fuer Calc
+    // } Methods for Calc
 };
 
 
@@ -425,3 +426,4 @@ public:
 
 #endif // _SVX_CTREDLIN_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

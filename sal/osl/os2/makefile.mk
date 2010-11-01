@@ -82,7 +82,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
-            $(OBJ)$/libutil.obj  \
             $(OBJ)$/semaphor.obj \
             $(OBJ)$/interlck.obj \
             $(OBJ)$/nlsupport.obj\

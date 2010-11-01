@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include "sdmod.hxx"
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -62,7 +63,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNam
 uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SdDLL::Init();
 
@@ -91,7 +92,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServi
 uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SdDLL::Init();
 
@@ -102,3 +103,4 @@ uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

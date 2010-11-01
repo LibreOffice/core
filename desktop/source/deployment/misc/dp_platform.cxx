@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,11 +63,14 @@
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
+#define PLATFORM_NETBSD_X86         "netbsd_x86"
+#define PLATFORM_NETBSD_X86_64      "netbsd_x86_64"
 #define PLATFORM_MACOSX_X86         "macosx_x86"
 #define PLATFORM_MACOSX_PPC         "macosx_powerpc"
 #define PLATFORM_OS2_X86            "os2_x86"
 
 
+#define PLATFORM_AIX_POWERPC        "aix_powerpc"
 
 
 
@@ -171,16 +175,22 @@ namespace
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86_64)))
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("X86_64"));
+        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86)))
+            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86_64)))
+            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("X86_64"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_X86)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_PPC)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("PowerPC"));
         else if (token.equals(OUSTR(PLATFORM_OS2_X86)))
             ret = checkOSandCPU(OUSTR("OS2"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_AIX_POWERPC)))
+            ret = checkOSandCPU(OUSTR("AIX"), OUSTR("PowerPC"));
         else
         {
             OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "
-            "Check the platform element in the descripion.xml");
+            "Check the platform element in the description.xml");
             ret = false;
         }
         return ret;
@@ -230,3 +240,4 @@ bool hasValidPlatform( css::uno::Sequence<OUString> const & platformStrings)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

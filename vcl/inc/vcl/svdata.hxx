@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/shl.hxx>
@@ -109,8 +110,6 @@ class SalI18NImeStatus;
 class DockingManager;
 class VclEventListeners2;
 
-namespace vos { class OMutex; }
-namespace vos { class OCondition; }
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
@@ -174,7 +173,7 @@ struct ImplSVAppData
      */
     ImeStatusWindowMode meShowImeStatusWindow;
 
-                            DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
+    DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
 
 };
 
@@ -316,6 +315,10 @@ struct ImplSVNWFData
                                                           // window background before drawing the native
                                                           // checkbox
     bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
+    bool                    mbCanDrawWidgetAnySize;       // set to true currently on gtk
+                                                          // signals that widgets can be drawn in any size and
+                                                          // brdwin.cxx ImplSmallBorderWindowView::DrawWindow
+                                                          // should not do GetNativeControlRegion
 };
 
 
@@ -352,7 +355,7 @@ struct ImplSVData
     DockingManager*         mpDockingManager;
     BOOL                    mbIsTestTool;
 
-    vos::OThread::TThreadIdentifier                     mnMainThreadId;
+    oslThreadIdentifier                     mnMainThreadId;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::awt::XDisplayConnection >     mxDisplayConnection;
 
@@ -449,3 +452,5 @@ struct ImplSVEvent
 };
 
 #endif  // _SV_SVDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

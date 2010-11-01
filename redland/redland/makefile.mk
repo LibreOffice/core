@@ -56,7 +56,8 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.ooo_build \
-    $(TARFILE_NAME).patch.win32
+    $(TARFILE_NAME).patch.win32 \
+    redland-aix.patch
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
@@ -103,6 +104,10 @@ CFLAGS=-m64
 # NB: SOLARDIR before SYSBASE, because linux SYSBASE contains obsolete libcrypto
 CPPFLAGS+:=-I$(PWD)$/$(INCCOM) -I$(SOLARINCDIR)$/external
 LDFLAGS+:=-L$(PWD)$/$(LB) -L$(SOLARLIBDIR)
+
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
 
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SYSBASE)$/usr$/include

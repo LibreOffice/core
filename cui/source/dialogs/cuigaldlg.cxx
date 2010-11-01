@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <algorithm>
 #include <ucbhelper/content.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -136,7 +137,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                BOOL bRecursive )
 {
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         mpProgress->SetDirectory( rStartURL );
         mpProgress->Sync();
@@ -191,7 +192,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                          String(aFoundURL.GetExtension().toAsciiLowerCase()) )
                             != rFormats.end() )
                         {
-                            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                            SolarMutexGuard aGuard;
 
                             mpBrowser->aFoundList.Insert(
                                 new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) ),
@@ -304,7 +305,7 @@ void SAL_CALL TakeThread::run()
     GalleryProgress*    pStatusProgress;
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pStatusProgress = new GalleryProgress;
         nEntries = mpBrowser->bTakeAll ? mpBrowser->aLbxFound.GetEntryCount() : mpBrowser->aLbxFound.GetSelectEntryCount();
         pThm->LockBroadcaster();
@@ -322,7 +323,7 @@ void SAL_CALL TakeThread::run()
         mrTakenList.Insert( (void*) (ULONG)nPos, LIST_APPEND );
 
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             mpProgress->SetFile( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
             pStatusProgress->Update( i, nEntries - 1 );
@@ -332,7 +333,7 @@ void SAL_CALL TakeThread::run()
     }
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         pThm->UnlockBroadcaster();
         delete pStatusProgress;
@@ -705,7 +706,8 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aFtMSShowContent.SetText( aOutStr );
 
     // get locale wrapper (singleton)
-    const LocaleDataWrapper&    aLocaleData = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
     // ChangeDate/Time
     aAccess = aLocaleData.getDate( pData->aThemeChangeDate );
@@ -1267,3 +1269,4 @@ IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, ::com::sun::star::ui::dial
     return 0L;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

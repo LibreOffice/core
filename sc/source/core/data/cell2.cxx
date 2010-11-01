@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <deque>
 
 #include <boost/bind.hpp>
-
+#include <sal/macros.h>
 #include <vcl/mapmod.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
@@ -152,7 +153,7 @@ void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
         { ATTR_FONT_WEIGHT, EE_CHAR_WEIGHT },
         { ATTR_FONT_COLOR,  EE_CHAR_COLOR }
     };
-    USHORT nMapCount = sizeof(AttrTypeMap) / sizeof(AttrTypeMap[0]);
+    USHORT nMapCount = SAL_N_ELEMENTS(AttrTypeMap);
 
     const SfxItemSet& rSet = rAttr.GetItemSet();
     const SfxPoolItem* pItem;
@@ -1712,3 +1713,4 @@ void ScFormulaCell::CompileColRowNameFormula()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

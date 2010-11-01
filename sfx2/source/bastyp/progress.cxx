@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -733,7 +734,7 @@ void SfxProgress::LeaveLock()
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxProgress::StatusBarManagerGone_Impl
+bool SfxProgress::StatusBarManagerGone_Impl
 (
     SfxStatusBarManager *   // dieser <SfxStatusBarManager> wird zerst"ort
 )
@@ -749,3 +750,4 @@ FASTBOOL SfxProgress::StatusBarManagerGone_Impl
     return TRUE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

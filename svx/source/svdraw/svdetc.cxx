@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <vcl/svapp.hxx> //add CHINA001
+#include <vcl/svapp.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
@@ -321,7 +322,7 @@ void UShortCont::Sort()
 
 class ImpClipMerk {
     Region aClip;
-    FASTBOOL   bClip;
+    bool   bClip;
 public:
     ImpClipMerk(const OutputDevice& rOut): aClip(rOut.GetClipRegion()),bClip(rOut.IsClipRegion()) {}
     void Restore(OutputDevice& rOut)
@@ -385,7 +386,7 @@ public:
     const Color& GetLineColor() const { return aLineColor; }
 };
 
-ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, USHORT nNewMode, FASTBOOL bAutoMerk):
+ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, USHORT nNewMode, bool bAutoMerk):
     pFarbMerk(NULL),
     pClipMerk(NULL),
     pLineColorMerk(NULL),
@@ -498,17 +499,17 @@ void SdrLinkList::RemoveLink(const Link& rLink)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #98988# Re-implement GetDraftFillColor(...)
 
-FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
+bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
     XFillStyle eFill=((XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE)).GetValue();
-    FASTBOOL bRetval(FALSE);
+    bool bRetval = false;
 
     switch(eFill)
     {
         case XFILL_SOLID:
         {
             rCol = ((XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetColorValue();
-            bRetval = TRUE;
+            bRetval = true;
 
             break;
         }
@@ -526,7 +527,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
             rCol = Color(aAverageColor);
-            bRetval = TRUE;
+            bRetval = true;
 
             break;
         }
@@ -536,7 +537,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             Color aCol2(rGrad.GetEndColor());
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
             rCol = Color(aAverageColor);
-            bRetval = TRUE;
+            bRetval = true;
 
             break;
         }
@@ -580,7 +581,7 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
                 rCol = Color(UINT8(nRt), UINT8(nGn), UINT8(nBl));
 
-                bRetval = TRUE;
+                bRetval = true;
             }
 
             if(pAccess)
@@ -1116,3 +1117,5 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

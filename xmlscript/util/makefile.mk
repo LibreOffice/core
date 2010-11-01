@@ -54,6 +54,7 @@ SHL1LIBS= \
         $(LIB1TARGET)
 
 SHL1STDLIBS= \
+        $(COMPHELPERLIB)                \
         $(CPPUHELPERLIB)		\
         $(CPPULIB) 			\
         $(SALLIB)

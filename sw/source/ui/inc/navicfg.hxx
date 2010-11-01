@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _NAVICFG_HXX
 
 #include <unotools/configitem.hxx>
-/* -----------------------------08.09.00 16:27--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwNavigationConfig : public utl::ConfigItem
 {
     sal_Int32   nRootType;      //RootType
@@ -115,5 +114,7 @@ public:
                         }
                     }
 };
+
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

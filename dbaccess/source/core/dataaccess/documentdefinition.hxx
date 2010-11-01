@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -344,9 +345,7 @@ private:
     */
     sal_Bool objectSupportsEmbeddedScripts() const;
 
-    //-------------------------------------------------------------------------
     //- commands
-    //-------------------------------------------------------------------------
 
     void onCommandGetDocumentProperties( ::com::sun::star::uno::Any& _rProps );
     void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
@@ -380,9 +379,8 @@ private:
     void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

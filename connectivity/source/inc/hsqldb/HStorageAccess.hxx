@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,3 +42,5 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring
 void write_to_storage_stream( JNIEnv* env, jobject obj_this, jstring name, jstring key, jint v, ::connectivity::hsqldb::DataLogFile* logger = NULL );
 
 #endif // CONNECTIVITY_HSQLDB_STORAGEACCESS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

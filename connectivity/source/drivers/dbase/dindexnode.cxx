@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,8 +94,6 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
 ONDXPage::~ONDXPage()
 {
     delete[] ppNodes;
-    //  delete aParent;
-    //  delete aChild;
 }
 //------------------------------------------------------------------
 void ONDXPage::QueryDelete()
@@ -256,7 +255,6 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         else
         {
             aInnerNode = (*this)[nCount - 1];
-            //aInnerNode = aSplitNode;
 
             // Knoten zeigt auf neue Seite
             aInnerNode.SetChild(aNewPage);
@@ -422,35 +420,6 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
         }
         if (HasParent() && !(*aParent)[nParentNodePos].HasChild())
             aParent->Delete(nParentNodePos);
-/*
-        // letzte Element auf Vaterseite
-        // -> zusammenlegen mit vorletzter Seite
-        if (nParentNodePos == (aParent->Count() - 1))
-        {
-            if (!nParentNodePos)
-            // zusammenlegen mit linken nachbarn
-                Merge(nParentNodePos,aParent->GetChild(&rIndex));
-            else
-                Merge(nParentNodePos,(*aParent)[nParentNodePos-1].GetChild(&rIndex,aParent));
-        }
-        // sonst Seite mit naechster Seite zusammenlegen
-        else if(nParentNodePos != NODE_NOTFOUND)
-        {
-            // zusammenlegen mit rechten nachbarn
-            Merge(nParentNodePos + 1,((*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent)));
-            nParentNodePos++;
-        }
-        else // Sonderbehandlung
-        {
-            // Page ist aChild Page vom Parent => erste Page aus ppNodes an aChild anhaengen
-            Merge(0,(*aParent)[0].GetChild(&rIndex,aParent));
-            nParentNodePos = 0;
-        }
-
-        if (HasParent() && !(*aParent)[nParentNodePos].HasChild())
-            aParent->Delete(nParentNodePos);
-*/
-
     }
     else if (IsRoot())
         // Sicherstellen das die Position der Wurzel festgehalten wird
@@ -723,7 +692,6 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
         aBuf.ReleaseBufferAccess();
         aBuf.EraseTrailingChars();
 
-        //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
         aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
@@ -790,7 +758,6 @@ BOOL ONDXKey::IsText(sal_Int32 eType)
 //------------------------------------------------------------------
 StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
 {
-    //  DBG_ASSERT(is(), "Falscher Indexzugriff");
     StringCompare eResult;
 
     if (getValue().isNull())
@@ -890,7 +857,6 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
     rStream >> nValue >> rPage.aChild;
     rPage.nCount = USHORT(nValue);
 
-//  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
     for (USHORT i = 0; i < rPage.nCount; i++)
         rPage[i].Read(rStream, rPage.GetIndex());
     return rStream;
@@ -1054,3 +1020,4 @@ void ONDXPage::Remove(USHORT nPos)
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

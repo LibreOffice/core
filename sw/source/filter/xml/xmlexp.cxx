@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>
@@ -199,7 +200,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         return ERR_SWG_WRITE_ERROR;
 
     // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     {
         Reference<XPropertySet> rInfoSet = getExportInfo();
@@ -993,3 +994,5 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
     ExportListChange( aPrevNumInfo, aNextNumInfo );
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

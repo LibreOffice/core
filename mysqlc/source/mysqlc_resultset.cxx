@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -240,18 +241,6 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False;
-#if 0
-    OUString str = getString(column);
-    switch (str[0]) {
-        case '1':
-        case 't':
-        case 'T':
-        case 'y':
-        case 'Y':
-            return sal_True;
-    }
-    return sal_False;
-#endif
 }
 /* }}} */
 
@@ -1524,3 +1513,5 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
  * vim600: noet sw=4 ts=4 fdm=marker
  * vim<600: noet sw=4 ts=4
  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

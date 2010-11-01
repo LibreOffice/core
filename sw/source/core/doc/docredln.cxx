@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -304,10 +305,6 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-#if 0
-// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
-    SwRedline aCopy( *pNewRedl );
-#endif
     bool bError = true;
     _CHECK_REDLINE( this )
 
@@ -3881,3 +3878,5 @@ bool SwDoc::IsInRedlines(const SwNode & rNode) const
 
     return aPam.ContainsPosition(aPos) ? sal_True : sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

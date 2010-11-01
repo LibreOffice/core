@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,10 +44,6 @@ class SwFldMgr;
 class SvLBoxEntry;
 class SwWrtShell;
 
-/*-----------------31.08.96 10.09-------------------
-
---------------------------------------------------*/
-
 class SwLoadOptPage : public SfxTabPage
 {
 private:
@@ -87,18 +84,12 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 class SwCaptionOptDlg : public SfxSingleTabDialog
 {
 public:
      SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet);
     ~SwCaptionOptDlg();
 };
-/* -----------------23.10.98 13:19-------------------
- *
- * --------------------------------------------------*/
 
 class CaptionComboBox : public SwComboBox
 {
@@ -110,10 +101,6 @@ public:
         : SwComboBox(pParent, rResId)
     {}
 };
-
-/*-----------------31.08.96 10.09-------------------
-
---------------------------------------------------*/
 
 class SwCaptionPreview : public Window
 {
@@ -209,4 +196,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

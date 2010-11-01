@@ -74,8 +74,8 @@ struct RelativePosition
         will be placed at the coordinates given within Primary and Secondary.</p>
 
         <p>For example if Anchor is TOP_LEFT the top left corner of an object will
-        be placed at the given coorediantes. If Anchor is RIGHT the right middle corner of the object will
-        be placed at the given coorediantes.</p>
+        be placed at the given coordinates. If Anchor is RIGHT the right middle corner of the object will
+        be placed at the given coordinates.</p>
      */
     ::com::sun::star::drawing::Alignment Anchor;
 };

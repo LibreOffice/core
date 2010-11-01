@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -215,18 +216,6 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
-// @@@ Todo #i29340#: activate!
-#if 0
-    void
-    handleNameClashResolveRequest(
-        com::sun::star::ucb::NameClashResolveRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-                    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-#endif
-
     bool
     handleMasterPasswordRequest(
         com::sun::star::uno::Reference<
@@ -377,3 +366,5 @@ private:
 */
 
 #endif // UUI_IAHNDL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

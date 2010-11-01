@@ -68,7 +68,7 @@
 
     <p>
     Contrary to the service <type>StandaloneDocumentInfo</type> the document - which
-    contains such informations - must be loaded completly. As a result of that this
+    contains such informations - must be loaded completely. As a result of that this
     DocumengInfo service is available on an open document via the interface
     <type>XDocumentInfoSupplier</type> only.
     </p>
@@ -92,7 +92,7 @@ published service DocumentInfo
     interface XDocumentInfo;
 
     //-------------------------------------------------------------------------
-    /** neccessary to support normal properties
+    /** necessary to support normal properties
      */
     interface com::sun::star::beans::XPropertySet;
 
@@ -113,7 +113,7 @@ published service DocumentInfo
     [optional] interface com::sun::star::beans::XPropertyContainer;
 
     //-------------------------------------------------------------------------
-    /** contains the intial author of the document
+    /** contains the initial author of the document
      */
     [property] string Author;
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <svtools/svmedit.hxx>
 
 class SwMailMergeWizard;
-/*-- 17.05.2004 14:51:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwGreetingsHandler
 {
     friend class SwMailBodyDialog;
@@ -75,9 +74,7 @@ class SwGreetingsHandler
     void    Contains(sal_Bool bContainsGreeting);
     virtual void    UpdatePreview();
 };
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeGreetingsPage : public svt::OWizardPage,
                                     public SwGreetingsHandler
 {
@@ -126,9 +123,7 @@ public:
         ~SwMailMergeGreetingsPage();
 
 };
-/*-- 17.05.2004 14:45:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
 {
     CheckBox            m_aGreetingLineCB;
@@ -172,3 +167,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

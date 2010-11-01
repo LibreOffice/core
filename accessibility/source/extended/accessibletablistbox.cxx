@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,15 +38,6 @@
 namespace accessibility
 {
 //........................................................................
-
-    // class TLBSolarGuard ---------------------------------------------------------
-
-    /** Aquire the solar mutex. */
-    class TLBSolarGuard : public ::vos::OGuard
-    {
-    public:
-        inline TLBSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-    };
 
     // class AccessibleTabListBox -----------------------------------------------------
 
@@ -116,7 +108,7 @@ namespace accessibility
     AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw ( IndexOutOfBoundsException, RuntimeException )
     {
-        TLBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
         ensureIsAlive();
 
@@ -142,3 +134,4 @@ namespace accessibility
 }// namespace accessibility
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -163,3 +164,5 @@ void XMLFootnoteSeparatorExport::exportXML(
     SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
                              XML_FOOTNOTE_SEP, sal_True, sal_True);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

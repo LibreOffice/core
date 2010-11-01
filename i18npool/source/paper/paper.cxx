@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
 #include <sal/config.h>
+#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <comphelper/processfactory.hxx>
@@ -156,7 +158,7 @@ static PageDesc aDinTab[] =
     { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL }
 };
 
-static const size_t nTabSize = sizeof(aDinTab) / sizeof(aDinTab[0]);
+static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
 #define MAXSLOPPY 11
 
@@ -287,7 +289,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 bool bHalve = false;
 
-                size_t nExtraTabSize = sizeof(aCustoms) / sizeof(aCustoms[0]);
+                size_t nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
                 for (size_t i = 0; i < nExtraTabSize; ++i)
                 {
                     if (rtl_str_compareIgnoreAsciiCase(aCustoms[i].pName, aPaper.getStr()) == 0)
@@ -507,4 +509,4 @@ PaperInfo PaperInfo::getDefaultPaperForLocale(
     return eType;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

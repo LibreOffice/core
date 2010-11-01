@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <tools/rcid.h>
 #include <tools/config.hxx>
 #include <tools/stream.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>
@@ -54,7 +53,7 @@
 #include "filefmt.hxx"
 #include "sb.hrc"
 #include <basrid.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
 #include <hash_map>
@@ -62,8 +61,6 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 using namespace ::com::sun::star::script;
-
-// #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
 SV_IMPL_VARARR(SbTextPortions,SbTextPortion)
 
@@ -76,9 +73,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
-const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
-
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
@@ -87,7 +81,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
         {
             Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
-                        if ( xDocFac.is() )
+            if ( xDocFac.is() )
             {
                 try
                 {
@@ -99,6 +93,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
             }
         }
+        const String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
     }
     return pVBAGlobals;
@@ -107,6 +102,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
 //  i#i68894#
 SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
 {
+    const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
     if( rName == aThisComponent )
         return NULL;
     // rename to init globals
@@ -611,93 +607,7 @@ SbClassModuleObject::~SbClassModuleObject()
 void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    bool bDone = false;
-
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
-    if( pHint )
-    {
-        SbxVariable* pVar = pHint->GetVar();
-        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
-        if( pProcProperty )
-        {
-            bDone = true;
-
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
-            {
-                String aProcName;
-                aProcName.AppendAscii( "Property Get " );
-                aProcName += pProcProperty->GetName();
-
-                SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
-                if( pMeth )
-                {
-                    SbxValues aVals;
-                    aVals.eType = SbxVARIANT;
-
-                    SbxArray* pArg = pVar->GetParameters();
-                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
-                    if( nVarParCount > 1 )
-                    {
-                        SbxArrayRef xMethParameters = new SbxArray;
-                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
-                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
-                        {
-                            SbxVariable* pPar = pArg->Get( i );
-                            xMethParameters->Put( pPar, i );
-                        }
-
-                        pMeth->SetParameters( xMethParameters );
-                        pMeth->Get( aVals );
-                        pMeth->SetParameters( NULL );
-                    }
-                    else
-                    {
-                        pMeth->Get( aVals );
-                    }
-
-                    pVar->Put( aVals );
-                }
-            }
-            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
-            {
-                SbxVariable* pMeth = NULL;
-
-                bool bSet = pProcProperty->isSet();
-                if( bSet )
-                {
-                    pProcProperty->setSet( false );
-
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Set " );
-                    aProcName += pProcProperty->GetName();
-                    pMeth = Find( aProcName, SbxCLASS_METHOD );
-                }
-                if( !pMeth )    // Let
-                {
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Let " );
-                    aProcName += pProcProperty->GetName();
-                    pMeth = Find( aProcName, SbxCLASS_METHOD );
-                }
-
-                if( pMeth )
-                {
-                    // Setup parameters
-                    SbxArrayRef xArray = new SbxArray;
-                    xArray->Put( pMeth, 0 );    // Method as parameter 0
-                    xArray->Put( pVar, 1 );
-                    pMeth->SetParameters( xArray );
-
-                    SbxValues aVals;
-                    pMeth->Get( aVals );
-                    pMeth->SetParameters( NULL );
-                }
-            }
-        }
-    }
-
-    if( !bDone )
-        SbModule::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    SbModule::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
 }
 
 SbxVariable* SbClassModuleObject::Find( const XubString& rName, SbxClassType t )
@@ -1217,7 +1127,6 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
             INT32 nType = p->GetModuleType();
             if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
                 continue;
-
             // otherwise check if the element is available
             // unset GBLSEARCH-Flag (due to Rekursion)
             USHORT nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
@@ -1551,7 +1460,7 @@ BOOL runsInSetup( void )
 
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     if( bStaticSuppressSfxResource )
     {
@@ -1595,7 +1504,7 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 BOOL StarBASIC::CError
     ( SbError code, const String& rMsg, USHORT l, USHORT c1, USHORT c2 )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // compiler error during runtime -> stop programm
     if( IsRunning() )
@@ -1637,7 +1546,7 @@ BOOL StarBASIC::RTError
 
 BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, USHORT c2 )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     SbError c = code;
     if( (c & ERRCODE_CLASS_MASK) == ERRCODE_CLASS_COMPILER )
@@ -2107,3 +2016,4 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
         SetError( SbERR_BAD_ARGUMENT );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

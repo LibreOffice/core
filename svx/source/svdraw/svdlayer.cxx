@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,7 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
 // SdrLayer
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrLayer::SetStandardLayer(FASTBOOL bStd)
+void SdrLayer::SetStandardLayer(bool bStd)
 {
     nType=(UINT16)bStd;
     if (bStd) {
@@ -291,7 +292,7 @@ bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
     if (pParent!=rCmpLayerAdmin.pParent ||
         aLayer.Count()!=rCmpLayerAdmin.aLayer.Count() ||
         aLSets.Count()!=rCmpLayerAdmin.aLSets.Count()) return FALSE;
-    FASTBOOL bOk=TRUE;
+    bool bOk = true;
     USHORT nAnz=GetLayerCount();
     USHORT i=0;
     while (bOk && i<nAnz) {
@@ -383,7 +384,7 @@ USHORT SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
     return USHORT(nRet);
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInherited*/) const
+const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, bool /*bInherited*/) const
 {
     UINT16 i(0);
     const SdrLayer* pLay = NULL;
@@ -404,7 +405,7 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInhe
     return pLay;
 }
 
-SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, FASTBOOL bInherited) const
+SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, bool bInherited) const
 {
     SdrLayerID nRet=SDRLAYER_NOTFOUND;
     const SdrLayer* pLay=GetLayer(rName,bInherited);
@@ -456,3 +457,4 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     return i;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

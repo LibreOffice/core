@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,23 +35,16 @@
 #include <svx/unoprov.hxx>
 #include <doc.hxx>
 
-/* -----------------------------13.03.01 14:16--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwSvxUnoDrawPool::SwSvxUnoDrawPool( SwDoc* pDoc ) throw() :
     SvxUnoDrawPool(pDoc->GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER),
     m_pDoc(pDoc)
 {
 }
-/* -----------------------------13.03.01 14:16--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw()
 {
 }
-/* -----------------------------13.03.01 14:16--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool /*bReadOnly*/ ) throw()
 {
     if(m_pDoc)
@@ -68,5 +62,4 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool /*bReadOnly*/ ) throw()
     return 0;
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

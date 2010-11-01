@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlFileFormat.hpp>
+#include <ooo/vba/excel/XApplication.hpp>  //liuchen 2009-12-16
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -125,7 +127,7 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorExce
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaWorkbook::FileFormat(  ) throw (::script::BasicErrorException, ::uno::RuntimeException)
+ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
 {
         sal_Int32 aFileFormat = 0;
         rtl::OUString aFilterName;
@@ -183,6 +185,24 @@ ScVbaWorkbook::FileFormat(  ) throw (::script::BasicErrorException, ::uno::Runti
         }
 
         return aFileFormat;
+}
+
+//VBA by minz@cn.ibm.com. Convert Excel fileformat to OO file filter
+::rtl::OUString ScVbaWorkbook::convertFileFormat(sal_Int32 aFileFormat)
+{
+    rtl::OUString aFilterName;
+
+    switch(aFileFormat)
+    {
+        case excel::XlFileFormat::xlCSV:
+                aFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text - txt - csv (StarCalc)" ) );
+                break;
+        case excel::XlFileFormat::xlExcel9795:
+                aFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MS Excel 97" ) );
+                break;
+    }
+
+    return aFilterName;
 }
 
 void
@@ -264,6 +284,12 @@ ScVbaWorkbook::Activate() throw (uno::RuntimeException)
     VbaDocumentBase::Activate();
 }
 
+void
+ScVbaWorkbook::Protect( const uno::Any &aPassword ) throw (uno::RuntimeException)
+{
+    VbaDocumentBase::Protect( aPassword );
+}
+
 ::sal_Bool
 ScVbaWorkbook::getProtectStructure() throw (uno::RuntimeException)
 {
@@ -297,6 +323,50 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
     storeProps[0].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MS Excel 97" ) );
     xStor->storeToURL( aURL, storeProps );
+}
+
+//VBA by minz@cn.ibm.com. Add Workbook.SaveAs.
+void
+ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat, const uno::Any& /*CreateBackup*/ ) throw ( uno::RuntimeException)
+{
+    rtl::OUString aURL;
+    osl::FileBase::getFileURLFromSystemPath( FileName, aURL );
+    //liuchen 2009-12-16 if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
+    INetURLObject aFileNameURL( aURL );
+    aURL = aFileNameURL.GetMainURL( INetURLObject::NO_DECODE );
+    if ( aURL.getLength() == 0 )
+    {
+        uno::Reference< excel::XApplication > xApplication ( Application(),uno::UNO_QUERY_THROW );
+        rtl::OUString aPathStr = xApplication->getDefaultFilePath();
+        rtl::OUString aPathURLStr;
+        osl::FileBase::getFileURLFromSystemPath( aPathStr, aPathURLStr );
+        INetURLObject aPathURL( aPathURLStr );
+        aPathURL.Append( FileName );
+        aURL = aPathURL.GetMainURL( INetURLObject::NO_DECODE );
+    }
+    //liuchen 2009-12-16
+    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+
+    sal_Int32 aFileFormat = excel::XlFileFormat::xlExcel9795;
+    FileFormat >>= aFileFormat;
+
+    if (  FileName.indexOf('.') == -1 )
+    {
+        if ( aFileFormat == excel::XlFileFormat::xlExcel9795 )
+        {
+            aURL = aURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".xls" ) );
+        }
+        else if ( aFileFormat == excel::XlFileFormat::xlCSV )
+        {
+            aURL = aURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".csv" ) );
+        }
+    }
+
+    uno::Sequence<  beans::PropertyValue > storeProps(1);
+    storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+    storeProps[0].Value <<= convertFileFormat(aFileFormat);
+
+    xStor->storeAsURL( aURL, storeProps );
 }
 
 css::uno::Any SAL_CALL
@@ -361,3 +431,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ScVbaWorkbook",
     "ooo.vba.excel.Workbook" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

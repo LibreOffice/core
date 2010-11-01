@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sd.hxx"
 #include <slideshowviewimpl.hxx>
 #include <slideshowimpl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -319,7 +320,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 {
     // paint background in black
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // fill the bounds rectangle in black
     // ----------------------------------
@@ -343,7 +344,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
 
@@ -683,3 +684,5 @@ void SlideShowView::init()
 }
 
 } // namespace ::sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

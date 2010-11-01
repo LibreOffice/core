@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,9 +69,9 @@
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
-#include <svl/slstitm.hxx> //CHINA001
-#include <svl/aeitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svl/slstitm.hxx>
+#include <svl/aeitem.hxx>
+#include <sfx2/request.hxx>
 // configuration helper =======================================================
 
 /** Helper to get a configuration setting.
@@ -561,7 +562,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
 
-    FASTBOOL bOrientationSupport =
+    bool bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
 #ifdef OS2
     // unter OS/2 wird bei HasSupport() immer TRUE returned
@@ -1154,7 +1155,7 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
+void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
     MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
     Orientation eOri = ORIENTATION_PORTRAIT;
@@ -1756,7 +1757,7 @@ bool SvxPageDescPage::IsMarginOutOfRange()
     return bRet;
 }
 
-void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxPageDescPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,sal_False);
@@ -1769,3 +1770,5 @@ void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pCollectListItem)
         SetCollectionList(pCollectListItem->GetList());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

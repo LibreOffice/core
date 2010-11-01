@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,7 +157,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
 uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
     throw (uno::RuntimeException)
 {
-    return uno::Type();
+    return getCppuType(static_cast<uno::Sequence<beans::PropertyValue>*>(0));
 }
 
 ::sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
@@ -202,3 +203,5 @@ void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xN
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

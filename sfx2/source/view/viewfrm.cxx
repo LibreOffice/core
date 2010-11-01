@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,6 +49,7 @@
 #include <svl/undo.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -106,9 +108,6 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexContainer;
 namespace css = ::com::sun::star;
-
-#ifndef GCC
-#endif
 
 // wg. ViewFrame::Current
 #include "appdata.hxx"
@@ -3036,7 +3035,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    FASTBOOL bDone = FALSE;
+    bool bDone = false;
     switch ( rReq.GetSlot() )
     {
         case SID_STOP_RECORDING :
@@ -3244,8 +3243,10 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_RECORDMACRO :
                 {
+                    SvtMiscOptions aMiscOptions;
                     const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if (  strcmp(pName,"swriter") && strcmp(pName,"scalc") )
+                    if ( !aMiscOptions.IsExperimentalMode() ||
+                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
                         break;
@@ -3267,8 +3268,10 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_STOP_RECORDING :
                 {
+                    SvtMiscOptions aMiscOptions;
                     const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if (  strcmp(pName,"swriter") && strcmp(pName,"scalc") )
+                    if ( !aMiscOptions.IsExperimentalMode() ||
+                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
                         break;
@@ -3575,7 +3578,7 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 // ---------------------------------------------------------------------------------------------------------------------
 void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // look up the SfxFrame for the given XFrame
     SfxFrame* pFrame = NULL;
@@ -3605,3 +3608,5 @@ void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
     ENSURE_OR_RETURN_VOID( pPanelAccess, "SfxViewFrame::ActivateToolPanel_Impl: task pane child window does not implement a required interface!" );
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,3 +110,5 @@ ChapterCollator::getSupportedServiceNames() throw( RuntimeException )
     aRet[0] = OUString::createFromAscii(cChapCollator);
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

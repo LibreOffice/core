@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <svx/xtable.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "drawdoc.hxx"
@@ -70,7 +71,6 @@ using namespace ::comphelper;
 using namespace ::osl;
 using ::rtl::OUString;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -235,7 +235,7 @@ DocumentSettings::~DocumentSettings() throw()
 
 void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
@@ -880,7 +880,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
 void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
@@ -1240,3 +1240,4 @@ Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
     return aSeq;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

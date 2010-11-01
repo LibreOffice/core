@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,7 +184,7 @@ start:
 
         case SbxBYREF | SbxCHAR:
             nRes = *p->pChar; break;
-        // ab hier wird getestet
+        // from here on will be tested
         case SbxBYREF | SbxBYTE:
             aTmp.nByte = *p->pByte; goto ref;
         case SbxBYREF | SbxINTEGER:
@@ -252,7 +253,7 @@ start:
             ImpCreateDecimal( p )->setChar( n );
             break;
 
-        // ab hier wird getestet
+        // from here on will be tested
         case SbxBYTE:
             aTmp.pByte = &p->nByte; goto direct;
         case SbxULONG:
@@ -317,3 +318,4 @@ start:
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

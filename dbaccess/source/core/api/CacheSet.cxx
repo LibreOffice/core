@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ using namespace ::com::sun::star::io;
 using namespace ::osl;
 
 DBG_NAME(OCacheSet)
-// -------------------------------------------------------------------------
+
 OCacheSet::OCacheSet()
             :m_bInserted(sal_False)
             ,m_bUpdated(sal_False)
@@ -79,7 +80,7 @@ OCacheSet::OCacheSet()
     DBG_CTOR(OCacheSet,NULL);
 
 }
-// -------------------------------------------------------------------------
+
 ::rtl::OUString OCacheSet::getIdentifierQuoteString() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getIdentifierQuoteString" );
@@ -89,7 +90,7 @@ OCacheSet::OCacheSet()
         sQuote = xMeta->getIdentifierQuoteString();
     return sQuote;
 }
-// -------------------------------------------------------------------------
+
 void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
@@ -126,7 +127,7 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rt
         }
     }
 }
-// -------------------------------------------------------------------------
+
 OCacheSet::~OCacheSet()
 {
     try
@@ -147,7 +148,7 @@ OCacheSet::~OCacheSet()
 
     DBG_DTOR(OCacheSet,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillTableName" );
@@ -163,7 +164,7 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
                         ,::dbtools::eInDataManipulation);
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::insertRow" );
@@ -172,9 +173,9 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     fillTableName(xSet);
 
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString::createFromAscii(" ( "));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( ")));
     // set values and column names
-    ::rtl::OUStringBuffer aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
+    ::rtl::OUStringBuffer aValues = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
     static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
     ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
@@ -208,24 +209,9 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
         m_bInserted = xPrep->executeUpdate() > 0;
     }
 
-//  ::rtl::OUString aCountSql = ::rtl::OUString::createFromAscii("SELECT COUNT(*) FROM ");
-//  aCountSql += m_aComposedTableName;
-//  try
-//  {
-//      Reference< XStatement > xStmt(m_xConnection->createStatement());
-//      Reference<XResultSet> xRes(xStmt->executeQuery(aCountSql));
-//      if(xRes.is() && xRes->next())
-//      {
-//          Reference<XRow> xRow(xRes,UNO_QUERY);
-//      }
-//  }
-//  catch(SQLException&)
-//  {
-//  }
-
     // TODO set the bookmark in the insert row
 }
-// -------------------------------------------------------------------------
+
 void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
                                         ,::rtl::OUStringBuffer& _sCondition
@@ -262,8 +248,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     ::rtl::OUString aColumnName;
 
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
@@ -311,16 +297,16 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::updateRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("UPDATE ");
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE "));
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString::createFromAscii(" SET "));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SET ")));
     // list all cloumns that should be set
 
     ::rtl::OUStringBuffer aCondition;
@@ -331,7 +317,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
         aSql.append(aCondition.makeStringAndClear());
     }
     else
@@ -359,20 +345,20 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
 
      m_bUpdated = xPrep->executeUpdate() > 0;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::deleteRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("DELETE FROM ");
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE FROM "));
     aSql.append(m_aComposedTableName);
-    aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
 
     // list all cloumns that should be set
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
     // use keys and indexes for excat postioning
     // first the keys
@@ -418,7 +404,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 
     m_bDeleted = xPrep->executeUpdate() > 0;
 }
-// -------------------------------------------------------------------------
+
 void OCacheSet::setParameter(sal_Int32 nPos
                              ,const Reference< XParameters >& _xParameter
                              ,const ORowSetValue& _rValue
@@ -429,7 +415,7 @@ void OCacheSet::setParameter(sal_Int32 nPos
     sal_Int32 nType = ( _nType != DataType::OTHER ) ? _nType : _rValue.getTypeKind();
     ::dbtools::setObjectWithInfo(_xParameter,nPos,_rValue,nType,_nScale);
 }
-// -------------------------------------------------------------------------
+
 void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillValueRow" );
@@ -447,127 +433,127 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         aIter->fill(i,m_aColumnTypes[i-1],m_aNullable[i-1],this);
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::wasNull" );
     return m_xDriverRow->wasNull();
 }
-// -------------------------------------------------------------------------
+
 ::rtl::OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getString" );
     return m_xDriverRow->getString(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getBoolean" );
     return m_xDriverRow->getBoolean(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int8 SAL_CALL OCacheSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getByte" );
     return m_xDriverRow->getByte(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL OCacheSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getShort" );
     return m_xDriverRow->getShort(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCacheSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getInt" );
     return m_xDriverRow->getInt(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OCacheSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getLong" );
     return m_xDriverRow->getLong(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 float SAL_CALL OCacheSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getFloat" );
     return m_xDriverRow->getFloat(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 double SAL_CALL OCacheSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getDouble" );
     return m_xDriverRow->getDouble(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL OCacheSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getBytes" );
     return m_xDriverRow->getBytes(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getDate" );
     return m_xDriverRow->getDate(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getTime" );
     return m_xDriverRow->getTime(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getTimestamp" );
     return m_xDriverRow->getTimestamp(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getBinaryStream" );
     return m_xDriverRow->getBinaryStream(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getCharacterStream" );
     return m_xDriverRow->getCharacterStream(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getObject" );
     return m_xDriverRow->getObject(columnIndex,typeMap);
 }
-// -------------------------------------------------------------------------
+
 Reference< XRef > SAL_CALL OCacheSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getRef" );
     return m_xDriverRow->getRef(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Reference< XBlob > SAL_CALL OCacheSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getBlob" );
     return m_xDriverRow->getBlob(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Reference< XClob > SAL_CALL OCacheSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getClob" );
     return m_xDriverRow->getClob(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getArray" );
     return m_xDriverRow->getArray(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 // XResultSet
 sal_Bool SAL_CALL OCacheSet::next(  ) throw(SQLException, RuntimeException)
 {
@@ -575,143 +561,142 @@ sal_Bool SAL_CALL OCacheSet::next(  ) throw(SQLException, RuntimeException)
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return m_xDriverSet->next();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::isBeforeFirst" );
     return m_xDriverSet->isBeforeFirst();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::isAfterLast" );
     return m_xDriverSet->isAfterLast();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::isFirst" );
     return m_xDriverSet->isFirst();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::isLast" );
     return m_xDriverSet->isLast();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCacheSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::beforeFirst" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_xDriverSet->beforeFirst();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCacheSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::afterLast" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_xDriverSet->afterLast();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::first(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::first" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return m_xDriverSet->first();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::last(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::last" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return m_xDriverSet->last();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OCacheSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getRow" );
     return m_xDriverSet->getRow();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::absolute" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return m_xDriverSet->absolute(row);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::relative" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return m_xDriverSet->relative(rows);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::previous" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return m_xDriverSet->previous();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCacheSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::refreshRow" );
     m_xDriverSet->refreshRow();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::rowUpdated" );
     return m_xDriverSet->rowUpdated();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::rowInserted" );
     return m_xDriverSet->rowInserted();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCacheSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::rowDeleted" );
     return m_xDriverSet->rowDeleted();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getStatement" );
     return m_xDriverSet->getStatement();
 }
-// -----------------------------------------------------------------------------
+
 bool OCacheSet::isResultSetChanged() const
 {
     return false;
 }
-// -----------------------------------------------------------------------------
+
 void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
 {
     OSL_ENSURE(0,"Illegal call!");
 }
-// -----------------------------------------------------------------------------
+
 void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)
 {
     o_aChangedColumns.push_back(i_nColumnIndex);
 }
-// -----------------------------------------------------------------------------
+
 bool OCacheSet::columnValuesUpdated(ORowSetValueVector::Vector& /*io_aCachedRow*/,const ORowSetValueVector::Vector& /*io_aRow*/)
 {
     return false;
 }
-// -----------------------------------------------------------------------------
+
 bool OCacheSet::updateColumnValues(const ORowSetValueVector::Vector& /*io_aCachedRow*/,ORowSetValueVector::Vector& /*io_aRow*/,const ::std::vector<sal_Int32>& /*i_aChangedColumns*/)
 {
     return true;
 }
-// -----------------------------------------------------------------------------
+
 void OCacheSet::fillMissingValues(ORowSetValueVector::Vector& /*io_aRow*/) const
 {
 }
-// -----------------------------------------------------------------------------
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

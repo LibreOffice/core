@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <vcl/print.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/jobset.hxx>
+#include <sal/macros.h>
 #include <tools/urlobj.hxx>
 
 #include "printdlg.hrc"
@@ -337,7 +339,7 @@ void PrintDialog::ImplInitControls()
                                 &maFlSepButtonLine, &maBtnOptions, &maBtnOK,
                                 &maBtnCancel, &maBtnHelp };
         Window** pCtrl = pControls;
-        const sal_Int32 nCount = sizeof( pControls ) / sizeof( pControls[0] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pControls );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCtrl )
         {
             if ( NULL == *pCtrl )
@@ -790,3 +792,4 @@ void PrintDialog::DisableHelp()
     maBtnHelp.Disable();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

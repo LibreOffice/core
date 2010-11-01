@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* WriterProperties: A grab bag of writer-specific properties which we use
  * define here for later use.
  *
@@ -34,3 +35,5 @@
 #define IMP_DEFAULT_FONT_PITCH "variable"
 #define IMP_DEFAULT_FONT_COLOR (new RGBSColor(0x00,0x00,0x00,0x64))
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

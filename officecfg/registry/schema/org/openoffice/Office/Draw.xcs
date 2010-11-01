@@ -384,7 +384,7 @@
 					<desc>Indicates whether to show big (true) or small (false) handles.</desc>
 					<label>Big Handles</label>
 				</info>
-				<value>false</value>
+                <value>true</value>
 			</prop>
 			<prop oor:name="ModifyWithAttributes" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->

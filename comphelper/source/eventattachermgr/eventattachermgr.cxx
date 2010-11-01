@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,7 @@
 #include <wchar.h>
 #endif
 #include <osl/mutex.hxx>
-#include <vos/diagnose.hxx>
-#include <vos/macros.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -93,32 +93,6 @@ struct AttacherIndex_Impl
     bool    operator<( const AttacherIndex_Impl & ) const;
     bool    operator==( const AttacherIndex_Impl & ) const;
 };
-
-#if 0
-bool AttachedObject_Impl::operator<( const AttachedObject_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return FALSE;
-    return this < &r;
-}
-
-bool AttachedObject_Impl::operator==( const AttachedObject_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return this == &r;
-}
-
-bool AttacherIndex_Impl::operator<( const AttacherIndex_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return this < &r;
-}
-bool AttacherIndex_Impl::operator==( const AttacherIndex_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return this == &r;
-}
-#endif
 
 //-----------------------------------------------------------------------------
 class ImplEventAttacherManager
@@ -1014,7 +988,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
         if( nRealLen > nLen || nVersion == 1 )
         {
-            VOS_ENSHURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
+            OSL_ENSURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
         {
@@ -1032,3 +1006,4 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
 } // namesapce comphelper
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

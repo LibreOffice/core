@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,7 +111,6 @@
 #include <usr/sequ.hxx>
 #include <uno/types.h>
 #include <uno/macros.h>
-#include <vos/xception.hxx>
 #include <osl/mutex.h>
 #include <tools/shl.hxx>
 #include <sfx2/module.hxx>
@@ -118,12 +118,9 @@
 #include <usr/uno.hxx>
 #include <usr/xiface.hxx>
 #include <usr/ustring.hxx>
-#include <vos/refernce.hxx>
-#include <vos/types.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <osl/types.h>
 #include <osl/interlck.h>
-#include <vos/object.hxx>
-#include <vos/macros.hxx>
 #include <smdll.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <chaos/cntids.hrc>
@@ -143,9 +140,8 @@
 #include <svl/poolitem.hxx>
 #include <svtools/args.hxx>
 #include <smmod.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <osl/thread.h>
-#include <vos/runnable.hxx>
 #include <vcl/apptypes.hxx>
 #include <tools/dynary.hxx>
 #include <vcl/metric.hxx>
@@ -455,3 +451,5 @@
 #include <action.hxx>
 #include <sfx2/filedlg.hxx>
 #include <sfx2/iodlg.hxx>
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

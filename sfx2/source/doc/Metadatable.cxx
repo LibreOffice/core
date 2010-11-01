@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx> // solarmutex
 
 #include <rtl/random.h>
@@ -1471,19 +1472,6 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             {
                 OSL_ENSURE(false, "neither RegDoc nor RegClp cannot happen");
             }
-#if 0
-                {
-                    //FIXME: do we need this at all???
-                    XmlIdRegistryDocument & rRegDoc(
-                        dynamic_cast<XmlIdRegistryDocument&>( rReg ) );
-                    {
-                        if (rRegDoc.TryRegisterMetadatable(*this, SourceRef))
-                        {
-                            this->m_pReg = &rRegDoc;
-                        }
-                    }
-                }
-#endif
         }
     }
     catch (uno::Exception &)
@@ -1600,7 +1588,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 ::rtl::OUString SAL_CALL MetadatableMixin::getLocalName()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     beans::StringPair mdref( getMetadataReference() );
     if (!mdref.Second.getLength())
     {
@@ -1617,7 +1605,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 ::rtl::OUString SAL_CALL MetadatableMixin::getNamespace()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     const uno::Reference< frame::XModel > xModel( GetModel() );
     const uno::Reference< rdf::XURI > xDMA( xModel, uno::UNO_QUERY_THROW );
     return xDMA->getStringValue();
@@ -1628,7 +1616,7 @@ beans::StringPair SAL_CALL
 MetadatableMixin::getMetadataReference()
 throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
@@ -1646,7 +1634,7 @@ MetadatableMixin::setMetadataReference(
     const beans::StringPair & i_rReference)
 throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
@@ -1662,7 +1650,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 void SAL_CALL MetadatableMixin::ensureMetadataReference()
 throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
@@ -1701,3 +1689,4 @@ static void dump(sfx2::XmlIdList_t * pList)
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 
 #ifdef  SAL_UNX
 #include <unistd.h>
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || defined(AIX)
 #include <sys/wait.h>
 #else
 #include <wait.h>
@@ -416,3 +417,5 @@ sal_Int32 compileFile(const OString * pathname)
 
     return nErrors;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

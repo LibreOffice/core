@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <osl/time.h>
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 
 #include <smart/com/sun/star/io/XOutputStream.hxx>
 #include <smart/com/sun/star/xml/sax/SAXParseException.hxx>
@@ -51,7 +52,6 @@
 #include "factory.hxx"
 
 using namespace rtl;
-using namespace vos;
 using namespace usr;
 
 
@@ -907,3 +907,4 @@ UNO_INTERFACE(XInterface) EXTERN_SERVICE_CALLTYPE exService_getFactory
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

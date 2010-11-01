@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
     // needed as long as we use the SolarMutex
 #include <comphelper/streamsection.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -692,7 +693,7 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star
     // the only "clean" solution for me.
     // FS - 69603 - 02.11.99
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OEditBaseModel::loaded(rEvent);
 }
 
@@ -1255,3 +1256,5 @@ void OFormattedModel::resetNoBroadcast()
 //.........................................................................
 }
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

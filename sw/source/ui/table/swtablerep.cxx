@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ void DbgTColumn(TColumn* pTColumn, USHORT nCount)
         String sMsg(i);
         sMsg += pTColumn[i].bVisible ? " v " : " h ";
         sMsg += pTColumn[i].nWidth;
-        DBG_ERROR(sMsg)
+        OSL_ENSURE(false, sMsg)
     }
 }
 #endif
@@ -227,3 +228,5 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         rTabCols.SetRight(rTabCols.GetRightMax());
     return bSingleLine;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

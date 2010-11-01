@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@ bool X11SalSystem::IsMultiDisplay()
 unsigned int X11SalSystem::GetDefaultDisplayNumber()
 {
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
-    return pSalDisp->GetDefaultScreenNumber();
+    return pSalDisp->IsXinerama() ? pSalDisp->GetDefaultMonitorNumber() : pSalDisp->GetDefaultScreenNumber();
 }
 
 Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
@@ -223,3 +224,5 @@ int X11SalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
 
     return nResult != -1 ? nButtonIds[ nResult ] : 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ namespace stoc_connector {
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
-        m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
+        m_sDescription += OUString(RTL_CONSTASCII_USTRINGPARAM(",uniqueValue="));
         m_sDescription += OUString::valueOf(
             sal::static_int_cast< sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(&m_pipe)),
@@ -116,3 +117,4 @@ namespace stoc_connector {
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

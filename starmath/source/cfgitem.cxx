@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 
 #include <vcl/svapp.hxx>
-
+#include <sal/macros.h>
 #include "cfgitem.hxx"
 
 #include "starmath.hrc"
@@ -184,14 +185,14 @@ static Sequence< OUString > lcl_GetPropertyNames(
 
 static Sequence< OUString > GetFormatPropertyNames()
 {
-    USHORT nCnt = sizeof(aFormatPropNames) / sizeof(aFormatPropNames[0]);
+    USHORT nCnt = SAL_N_ELEMENTS(aFormatPropNames);
     return lcl_GetPropertyNames( aFormatPropNames, nCnt );
 }
 
 
 static Sequence< OUString > GetOtherPropertyNames()
 {
-    USHORT nCnt = sizeof(aMathPropNames) / sizeof(aMathPropNames[0]);
+    USHORT nCnt = SAL_N_ELEMENTS(aMathPropNames);
     return lcl_GetPropertyNames( aMathPropNames, nCnt );
 }
 
@@ -1275,3 +1276,4 @@ void SmMathConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >&
 
 /////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

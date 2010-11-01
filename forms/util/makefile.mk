@@ -65,7 +65,6 @@ SHL1STDLIBS= \
         $(SVLLIB)	\
         $(TKLIB) \
         $(SFX2LIB) \
-        $(VOSLIB) \
         $(UNOTOOLSLIB) \
         $(COMPHELPERLIB) \
         $(DBTOOLSLIB) \

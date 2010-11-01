@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,3 +157,5 @@ Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     return 0;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

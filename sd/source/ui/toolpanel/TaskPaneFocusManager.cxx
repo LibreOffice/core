@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "TaskPaneFocusManager.hxx"
 
 #include <vcl/window.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <hash_map>
@@ -77,7 +78,7 @@ FocusManager& FocusManager::Instance (void)
 {
     if (spInstance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (spInstance == NULL)
             spInstance = new FocusManager ();
     }
@@ -323,3 +324,5 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
 
 
 } } // end of namespace ::sd::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

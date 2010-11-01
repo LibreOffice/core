@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -564,7 +565,7 @@ String SessionManagerClient::getExecName()
     osl_getExecutableFile( &aExec.pData );
     osl_getSystemPathFromFileURL( aExec.pData, &aSysExec.pData );
 
-    int nPos = aSysExec.indexOf( rtl::OUString::createFromAscii( ".bin" ) );
+    int nPos = aSysExec.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".bin")) );
     if( nPos != -1 )
         aSysExec = aSysExec.copy( 0, nPos );
     return aSysExec;
@@ -798,3 +799,5 @@ void ICEConnectionObserver::ICEWatchProc(
     SMprintf( "Display connection is %d\n", ConnectionNumber( GetX11SalData()->GetDisplay()->GetDisplay() ) );
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -521,3 +522,5 @@ void SfxViewFrame::Deactivate( sal_Bool bMDI )
         pImp->bActive = sal_False;
 //(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
-#ifndef GCC
-#endif
 
 #include "arrdecl.hxx"
 #include <sfx2/hintpost.hxx>
@@ -100,11 +98,5 @@ void SfxHintPoster::SetEventHdl( const GenLink& rLink )
 
 
 #define LOG( x )
-#if 0
-#define LOG( x )                                                \
-{                                                               \
-    SvFileStream aStrm( "f:\\temp\\log", STREAM_READWRITE );    \
-    aStrm.Seek( STREAM_SEEK_TO_END );                           \
-    aStrm << x.GetStr() << '\n';                                \
-}
-#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

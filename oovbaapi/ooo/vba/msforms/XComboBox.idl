@@ -47,6 +47,7 @@ interface XComboBox: ::com::sun::star::uno::XInterface
     void AddItem( [in] any pvargItem, [in] any pvargIndex );
     void removeItem( [in] any index );
     void Clear();
+    any List( [in] any pvargIndex, [in] any pvarColumn );
 };
 
 //=============================================================================

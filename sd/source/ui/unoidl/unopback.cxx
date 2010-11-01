@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
@@ -48,7 +49,6 @@
 #include "unokywds.hxx"
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star;
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
@@ -226,7 +226,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdUnoPageBackground::getPrope
 void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
 
@@ -283,7 +283,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
 uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aAny;
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
@@ -342,7 +342,7 @@ void SAL_CALL SdUnoPageBackground::removeVetoableChangeListener( const OUString&
 beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
@@ -389,7 +389,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
 uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nCount = aPropertyName.getLength();
     const OUString* pNames = aPropertyName.getConstArray();
@@ -406,7 +406,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyS
 void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(PropertyName);
 
@@ -430,7 +430,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
 uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry(aPropertyName);
     if( pEntry == NULL || mpSet == NULL )
@@ -461,3 +461,4 @@ const SfxItemPropertySimpleEntry* SdUnoPageBackground::getPropertyMapEntry( cons
     return mpPropSet->getPropertyMap()->getByName(rPropertyName);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

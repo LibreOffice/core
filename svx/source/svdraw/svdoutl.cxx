@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
-    FASTBOOL bOk = FALSE;
+    bool bOk = false;
     XubString aRet;
 
     if(mpTextObj.is())
@@ -130,3 +131,5 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
     else
         return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

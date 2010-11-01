@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <vector>
 #include <hash_map>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -80,3 +81,5 @@ public:
     {}
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException);
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

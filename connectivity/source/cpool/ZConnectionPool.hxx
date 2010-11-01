@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
-#include <vos/timer.hxx>
-#include <vos/ref.hxx>
+#include <salhelper/timer.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/digest.h>
 
 namespace connectivity
@@ -47,12 +48,12 @@ namespace connectivity
     //==========================================================================
     /// OPoolTimer - Invalidates the connection pool
     //==========================================================================
-    class OPoolTimer : public ::vos::OTimer
+    class OPoolTimer : public ::salhelper::Timer
     {
         OConnectionPool* m_pPool;
     public:
-        OPoolTimer(OConnectionPool* _pPool,const ::vos::TTimeValue& _Time)
-            : ::vos::OTimer(_Time)
+        OPoolTimer(OConnectionPool* _pPool,const ::salhelper::TTimeValue& _Time)
+            : ::salhelper::Timer(_Time)
             ,m_pPool(_pPool)
         {}
     protected:
@@ -116,7 +117,7 @@ namespace connectivity
         TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
 
         ::osl::Mutex            m_aMutex;
-        ::vos::ORef<OPoolTimer> m_xInvalidator;         // invalidates the conntection pool when shot
+        ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the conntection pool when shot
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xDriverNode;  // config node entry
@@ -153,3 +154,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

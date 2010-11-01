@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <stdlib.h>
 #include <svl/itemiter.hxx>
 #include <rtl/tencinfo.h>
@@ -2209,7 +2209,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
         Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn, RES_UL_SPACE));
 
     //we no longer need to hack around the header/footer problems
-    Put(SwFmtSurround(pFS->eSurround));
+    SwFmtSurround aSurround(pFS->eSurround);
+    if ( pFS->eSurround == SURROUND_IDEAL )
+        aSurround.SetAnchorOnly( TRUE );
+    Put( aSurround );
 
     short aSizeArray[5]={0};
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
@@ -2824,7 +2827,14 @@ void SwWW8ImplReader::Read_Obj(USHORT , const BYTE* pData, short nLen)
         bObj = 0 != *pData;
 
         if( bObj && nPicLocFc && bEmbeddObj )
-            nObjLocFc = nPicLocFc;
+        {
+            if ( maFieldStack.back().mnFieldId == 56 ) {
+                // For LINK fields, store the nObjLocFc value in the field entry
+                maFieldStack.back().mnObjLocFc = nPicLocFc;
+            } else {
+                nObjLocFc = nPicLocFc;
+            }
+        }
     }
 }
 
@@ -4669,7 +4679,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
         nUseBack = COL_WHITE;
 
 
-    if( nIndex >= sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] ) )
+    if( nIndex >= SAL_N_ELEMENTS(eMSGrayScale))
         nIndex = 0;
 
     ULONG nWW8BrushStyle = eMSGrayScale[nIndex];
@@ -5234,7 +5244,7 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
          {99, 0}                                     //"sprmPicBrcRight",
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 }
 
@@ -5596,7 +5606,7 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
         {207, 0},                                    //dunno
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 }
 
@@ -6183,7 +6193,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x246D, &SwWW8ImplReader::Read_DontAddEqual}//undocumented, para
     };
 
-    static wwSprmDispatcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 }
 
@@ -6248,4 +6258,4 @@ short SwWW8ImplReader::ImportSprm(const BYTE* pPos,USHORT nId)
     return nL;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

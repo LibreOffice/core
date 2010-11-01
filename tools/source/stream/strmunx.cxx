@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.h> // osl_getThreadTextEncoding
 
 // class FileBase
@@ -60,7 +61,7 @@ DECLARE_LIST( InternalStreamLockList, InternalStreamLock* )
 namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
 
 #ifndef BOOTSTRAP
-namespace { struct LockMutex : public rtl::Static< NAMESPACE_VOS(OMutex), LockMutex > {}; }
+namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
 #endif
 
 class InternalStreamLock
@@ -111,7 +112,7 @@ InternalStreamLock::~InternalStreamLock()
 sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
-    NAMESPACE_VOS( OGuard ) aGuard( LockMutex::get() );
+    osl::MutexGuard aGuard( LockMutex::get() );
 #endif
     ByteString aFileName(pStream->GetFileName(), osl_getThreadTextEncoding());
     struct stat aStat;
@@ -161,7 +162,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
-    NAMESPACE_VOS( OGuard ) aGuard( LockMutex::get() );
+    osl::MutexGuard aGuard( LockMutex::get() );
 #endif
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
@@ -209,7 +210,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
-#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX) || defined(__FreeBSD_kernel__)
+#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX) || defined(__FreeBSD_kernel__) || defined ( AIX )
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },
@@ -918,3 +919,4 @@ void SvFileStream::SetSize (sal_Size nSize)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

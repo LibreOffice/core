@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 
 class StarBASIC;
 class FmFormModel;
-class FmFormPageImpl;   // haelt die Liste aller Forms
+class FmFormPageImpl;   // contains a list of all forms
 
 FORWARD_DECLARE_INTERFACE(container,XNameContainer)
 
@@ -52,7 +53,7 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
 public:
     TYPEINFO();
 
-    FmFormPage(FmFormModel& rModel,StarBASIC*, FASTBOOL bMasterPage=sal_False);
+    FmFormPage(FmFormModel& rModel,StarBASIC*, bool bMasterPage=sal_False);
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 
@@ -66,7 +67,7 @@ public:
 
     virtual SdrObject* RemoveObject(ULONG nObjNum);
 
-    // Zugriff auf alle Formulare
+    // access to all forms
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
 
 #ifndef SVX_LIGHT
@@ -85,3 +86,4 @@ public:
 
 #endif          // _SVX_FMPAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

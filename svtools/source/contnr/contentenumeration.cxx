@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>
 
@@ -311,7 +312,7 @@ namespace svt
 
                             if ( pData->mbIsFolder )
                             {
-                                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                                SolarMutexGuard aGuard;
                                 ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
                                                                 pData->mbIsRemoveable, pData->mbIsFloppy,
                                                                 pData->mbIsCompactDisc );
@@ -462,3 +463,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

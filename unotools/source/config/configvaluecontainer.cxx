@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -387,7 +388,7 @@ namespace utl
 
     void OConfigurationValueContainer::read( )
     {
-        for_each(
+        std::for_each(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             UpdateFromConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
@@ -400,7 +401,7 @@ namespace utl
     void OConfigurationValueContainer::write( sal_Bool _bCommit )
     {
         // collect the current values in the exchange locations
-        for_each(
+        std::for_each(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             UpdateToConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
@@ -454,3 +455,4 @@ namespace utl
 }   // namespace utl
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

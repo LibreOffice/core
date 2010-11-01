@@ -60,7 +60,7 @@ published service HeaderFooterSettings
      */
     [optional, property] boolean IsPrintDate;
 
-    /** enables or disables the printinge of the current time in the
+    /** enables or disables the printing of the current time in the
         header or footer
      */
     [optional, property] boolean IsPrintTime;

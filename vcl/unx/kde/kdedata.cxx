@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,12 +50,11 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/module.h>
+#include <osl/mutex.hxx>
 
 #include <tools/debug.hxx>
 #include "i18n_im.hxx"
 #include "i18n_xkb.hxx"
-#include <vos/process.hxx>
-#include <vos/mutex.hxx>
 
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.
@@ -136,17 +136,16 @@ void KDEXLib::Init()
 
     m_nFakeCmdLineArgs = 1;
     USHORT nIdx;
-    vos::OExtCommandLine aCommandLine;
-    int nParams = aCommandLine.getCommandArgCount();
+    int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;
 
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
-        aCommandLine.getCommandArg( nIdx, aParam );
+        osl_getCommandArg( nIdx, &aParam.pData );
         if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
         {
-            aCommandLine.getCommandArg( nIdx + 1, aParam );
+            osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
             m_nFakeCmdLineArgs = 3;
@@ -270,3 +269,5 @@ extern "C" {
         return pInstance;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

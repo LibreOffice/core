@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,3 +50,5 @@ com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocumentBuilder> getDo
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

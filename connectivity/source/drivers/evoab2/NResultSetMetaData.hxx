@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include "NConnection.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/connection/XConnection.hpp>
 namespace connectivity
 {
@@ -51,7 +52,7 @@ namespace connectivity
             virtual ~OEvoabResultSetMetaData();
         public:
           OEvoabResultSetMetaData(const ::rtl::OUString& _aTableName);
-          void setEvoabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
+          void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
           inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                         { return m_aEvoabFields[columnIndex - 1]; }
           inline sal_Int32 getFieldSize() const
@@ -86,3 +87,5 @@ namespace connectivity
 }
 
 #endif // CONNECTIVITY_SRESULSETMETADATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

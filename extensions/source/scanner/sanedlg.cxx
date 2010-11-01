@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <sanedlg.hrc>
 #include <grid.hxx>
 #include <math.h>
+#include <sal/macros.h>
 
 #define USE_SAVE_STATE
 #undef  SAVE_ALL_STATES
@@ -131,6 +133,7 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
 
 SaneDlg::~SaneDlg()
 {
+    mrSane.SetReloadOptionsHdl( maOldLink );
 }
 
 short SaneDlg::Execute()
@@ -394,7 +397,7 @@ void SaneDlg::InitFields()
         {
             BOOL bIsSpecial = FALSE;
             for( size_t n = 0; !bIsSpecial &&
-                     n < sizeof(ppSpecialOptions)/sizeof(ppSpecialOptions[0]); n++ )
+                     n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
             {
                 if( aOption.EqualsAscii( ppSpecialOptions[n] ) )
                     bIsSpecial=TRUE;
@@ -477,14 +480,12 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         double fRes = (double)maReslBox.GetValue();
         SetAdjustedNumericalValue( "resolution", fRes );
-        mrSane.SetReloadOptionsHdl( maOldLink );
         UpdateScanArea( TRUE );
         SaveState();
         EndDialog( mrSane.IsOpen() ? 1 : 0 );
     }
     else if( pButton == &maCancelButton )
     {
-        mrSane.SetReloadOptionsHdl( maOldLink );
         mrSane.Close();
         EndDialog( 0 );
     }
@@ -687,9 +688,9 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
 
 IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, /*pSane*/ )
 {
-     mnCurrentOption = -1;
-     mnCurrentElement = 0;
-     DisableOption();
+    mnCurrentOption = -1;
+    mnCurrentElement = 0;
+    DisableOption();
     // #92024# preserve preview rect, should only be set
     // initially or in AcquirePreview
     Rectangle aPreviewRect = maPreviewRect;
@@ -1313,9 +1314,7 @@ void SaneDlg::SaveState()
         "br-x",
         "br-y"
     };
-    for( size_t i = 0;
-         i < (sizeof(pSaveOptions)/sizeof(pSaveOptions[0]));
-         i++ )
+    for( size_t i = 0; i < SAL_N_ELEMENTS(pSaveOptions); i++ )
     {
         ByteString aOption = pSaveOptions[i];
         int nOption = mrSane.GetOptionByName( pSaveOptions[i] );
@@ -1428,3 +1427,5 @@ BOOL SaneDlg::SetAdjustedNumericalValue(
 
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

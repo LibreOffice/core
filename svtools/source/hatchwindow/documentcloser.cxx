@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <tools/link.hxx>
@@ -89,7 +90,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
         if ( pMTRequest->m_xFrame.is() )
         {
             // this is the main thread, the solar mutex must be locked
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             try
             {
@@ -293,3 +294,4 @@ uno::Reference< uno::XInterface > SAL_CALL ODocumentCloser::impl_staticCreateSel
     return static_cast< cppu::OWeakObject * >( new ODocumentCloser( xContext ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

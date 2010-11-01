@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,53 +29,12 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 #define _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #ifndef _VECTOR_
 #include <vector>
 #endif
 
-#if 0
-namespace connectivity
-{
-    namespace dbase
-    {
-        //==================================================================
-        // Index Seitenverweis
-        //==================================================================
-        //  SV_DECL_REF(ONDXPage); // Basisklasse da weitere Informationen gehalten werden muessen
-
-        class ONDXPage;
-        typedef vos::ORef<ONDXPage>         ONDXPagePtr_BASE;
-
-        class ONDXPagePtr : public ONDXPagePtr_BASE //ONDXPageRef
-        {
-            friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
-            friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
-
-            UINT32  nPagePos;       // Position in der Indexdatei
-
-        public:
-            ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
-            ONDXPagePtr(const ONDXPagePtr& rRef);
-            ONDXPagePtr(ONDXPage* pRefPage);
-
-            ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
-            ONDXPagePtr& operator=(ONDXPage* pPageRef);
-
-            UINT32 GetPagePos() const {return nPagePos;}
-            BOOL HasPage() const {return nPagePos != 0;}
-            sal_Bool Is() const { return isValid(); }
-            void Clear()
-            {
-                unbind();
-            }
-        };
-
-        SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
-        SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
-    }
-}
-#endif
 #endif // _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

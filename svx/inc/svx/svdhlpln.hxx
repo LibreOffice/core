@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ public:
     const Point&    GetPos() const                    { return aPos; }
 
     Pointer         GetPointer() const;
-    FASTBOOL        IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
+    bool            IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
     // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
 
@@ -103,3 +104,4 @@ public:
 
 #endif //_SVDHLPLN_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

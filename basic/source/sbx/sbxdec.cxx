@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -557,7 +558,7 @@ start:
         case SbxBYREF | SbxUSHORT:
             pnDecRes->setUShort( *p->pUShort ); break;
 
-        // ab hier muss getestet werden
+        // from here on had to be tested
         case SbxBYREF | SbxSINGLE:
             aTmp.nSingle = *p->pSingle; goto ref;
         case SbxBYREF | SbxDATE:
@@ -597,7 +598,7 @@ void ImpPutDecimal( SbxValues* p, SbxDecimal* pDec )
 start:
     switch( +p->eType )
     {
-        // hier muss getestet werden
+        // here had to be tested
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -622,7 +623,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // ab hier nicht mehr
+        // from here on no longer
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
         {
@@ -795,3 +796,4 @@ start:
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

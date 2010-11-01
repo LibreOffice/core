@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -394,7 +395,9 @@
 #include "vcl/timer.hxx"
 #include "vcl/wintypes.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/thread.hxx"
+#include "osl/mutex.hxx"
+#include "osl/thread.hxx"
 //---MARKER---
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

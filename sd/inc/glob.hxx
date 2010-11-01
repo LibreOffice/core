@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,3 +98,4 @@ const UINT32 SdUDInventor=UINT32('S')*0x00000001+
 #endif // _SD_GLOB_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

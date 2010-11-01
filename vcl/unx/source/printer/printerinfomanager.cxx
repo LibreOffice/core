@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,7 @@
 #include "i18npool/paper.hxx"
 
 #include "rtl/strbuf.hxx"
+#include <sal/macros.h>
 
 #include "osl/thread.hxx"
 #include "osl/mutex.hxx"
@@ -1369,7 +1371,7 @@ void SystemQueueInfo::run()
     std::list< rtl::OString > aLines;
 
     /* Discover which command we can use to get a list of all printer queues */
-    for( unsigned int i = 0; i < sizeof(aParms)/sizeof(aParms[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(aParms); i++ )
     {
         aLines.clear();
         rtl::OStringBuffer aCmdLine( 128 );
@@ -1402,3 +1404,4 @@ void SystemQueueInfo::run()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

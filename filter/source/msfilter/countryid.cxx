@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include "filter/msfilter/countryid.hxx"
 
 #include <algorithm>
+#include <sal/macros.h>
 
 // ----------------------------------------------------------------------------
 
@@ -257,7 +259,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK_LATIN,                   false   }
 };
 
-const CountryEntry * const pEnd = pTable + sizeof( pTable ) / sizeof( pTable[ 0 ] );
+const CountryEntry * const pEnd = pTable + SAL_N_ELEMENTS( pTable );
 
 // ----------------------------------------------------------------------------
 
@@ -340,3 +342,4 @@ LanguageType ConvertCountryToLanguage( CountryId eCountry )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

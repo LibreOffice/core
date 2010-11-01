@@ -1,5 +1,5 @@
---- misc/nss-3.12.6/mozilla/security/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/security/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
+--- misc/nss-3.12.8/mozilla/security/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
++++ misc/build/nss-3.12.8/mozilla/security/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
 @@ -104,6 +104,9 @@
  ifeq ($(OS_TARGET),WIN95)
  NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95

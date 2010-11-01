@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -325,7 +326,7 @@ USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
         case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
         case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
-        default: ASSERT( !this, "new ObjectType?" );
+        default: OSL_ENSURE( !this, "new ObjectType?" );
         }
     }
     if ( !nDropDestination )
@@ -518,3 +519,4 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

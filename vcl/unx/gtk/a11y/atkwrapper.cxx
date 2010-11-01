@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,12 +128,7 @@ static AtkRelationType mapRelationType( sal_Int16 nRelation )
         default:
             break;
     }
-#if 0
-  ATK_RELATION_NODE_CHILD_OF,
-  ATK_RELATION_EMBEDS,
-  ATK_RELATION_EMBEDDED_BY,
-  ATK_RELATION_POPUP_FOR,
-#endif
+
     return type;
 }
 
@@ -515,6 +511,8 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
 /*****************************************************************************/
 
 #if 0
+
+#include <sal/macros.h>
 struct {
     sal_Int16       value;
     const sal_Char* name;
@@ -555,7 +553,7 @@ struct {
 static void printStates(const uno::Sequence<sal_Int16>& rStates)
 {
     sal_Int32 n = rStates.getLength();
-    size_t nTypes = sizeof(aStateTypeTable)/sizeof(aStateTypeTable[0]);
+    size_t nTypes = SAL_N_ELEMENTS(aStateTypeTable);
     for (sal_Int32 i = 0; i < n; ++i)
     {
         for (size_t j = 0; j < nTypes; ++j)
@@ -951,3 +949,5 @@ void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
     RELEASE( wrapper->mpTextAttributes )
     RELEASE( wrapper->mpValue )
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

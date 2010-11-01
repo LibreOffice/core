@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,7 @@
 #include <osl/diagnose.h>
 #include "file_error_transl.h"
 #include <osl/time.h>
+#include <sal/macros.h>
 
 #include "file_url.h"
 
@@ -129,12 +131,10 @@ extern "C" oslFileHandle osl_createFileHandleFromFD( int fd );
         //{  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    }    /* 1816 */
     };
 
-    #define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
     //#####################################################
     oslFileError MapError(APIRET dwError)
     {
-        for (int i = 0; i < ELEMENTS_OF_ARRAY(errtable); ++i )
+        for (int i = 0; i < SAL_N_ELEMENTS(errtable); ++i )
         {
             if (dwError == errtable[i].oscode)
                 return static_cast<oslFileError>(errtable[i].errnocode);
@@ -480,14 +480,6 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
     case DIRECTORYTYPE_LOCALROOT:
         err = osl_File_E_None;
         break;
-#if 0
-    case DIRECTORYTYPE_NETROOT:
-        {
-            DWORD err = WNetCloseEnum(pDirImpl->hDirectory);
-            eError = (err == NO_ERROR) ? osl_File_E_None : MapError(err);
-        }
-        break;
-#endif
     default:
         OSL_ENSURE( 0, "Invalid directory type" );
         break;
@@ -2575,209 +2567,6 @@ static oslFileError osl_psz_setFileTime( const sal_Char* pszFilePath,
 }
 
 
-/*****************************************
- * osl_psz_removeFile
- ****************************************/
-#if 0
-static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
-{
-    int nRet=0;
-    struct stat aStat;
-
-    nRet = stat(pszPath,&aStat);
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
-    }
-
-    if ( S_ISDIR(aStat.st_mode) )
-    {
-        return osl_File_E_ISDIR;
-    }
-
-    nRet = unlink(pszPath);
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
-    }
-
-    return osl_File_E_None;
-}
-#endif
-
-/*****************************************
- * osl_psz_createDirectory
- ****************************************/
-#if 0
-static oslFileError osl_psz_createDirectory( const sal_Char* pszPath )
-{
-    int nRet=0;
-    int mode = S_IRWXU | S_IRWXG | S_IRWXO;
-
-    nRet = mkdir(pszPath,mode);
-
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
-    }
-
-    return osl_File_E_None;
-}
-#endif
-/*****************************************
- * osl_psz_removeDirectory
- ****************************************/
-#if 0
-static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
-{
-    int nRet=0;
-
-    nRet = rmdir(pszPath);
-
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
-    }
-
-    return osl_File_E_None;
-}
-#endif
-/*****************************************
- * oslDoMoveFile
- ****************************************/
-#if 0
-static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszDestPath)
-{
-    oslFileError tErr=osl_File_E_invalidError;
-
-    tErr = osl_psz_moveFile(pszPath,pszDestPath);
-    if ( tErr == osl_File_E_None )
-    {
-        return tErr;
-    }
-
-    if ( tErr != osl_File_E_XDEV )
-    {
-        return tErr;
-    }
-
-    tErr=osl_psz_copyFile(pszPath,pszDestPath);
-
-    if ( tErr != osl_File_E_None )
-    {
-        oslFileError tErrRemove;
-        tErrRemove=osl_psz_removeFile(pszDestPath);
-        return tErr;
-    }
-
-    tErr=osl_psz_removeFile(pszPath);
-
-    return tErr;
-}
-#endif
-/*****************************************
- * osl_psz_moveFile
- ****************************************/
-#if 0
-static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath)
-{
-
-    int nRet = 0;
-
-    nRet = rename(pszPath,pszDestPath);
-
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
-    }
-
-    return osl_File_E_None;
-}
-#endif
-/*****************************************
- * osl_psz_copyFile
- ****************************************/
-#if 0
-static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* pszDestPath )
-{
-    time_t nAcTime=0;
-    time_t nModTime=0;
-    uid_t nUID=0;
-    gid_t nGID=0;
-    int nRet=0;
-    mode_t nMode=0;
-    struct stat aFileStat;
-    oslFileError tErr=osl_File_E_invalidError;
-    size_t nSourceSize=0;
-    int DestFileExists=1;
-
-    /* mfe: does the source file really exists? */
-    nRet = lstat(pszPath,&aFileStat);
-
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
-    }
-
-    /* mfe: we do only copy files here! */
-    if ( S_ISDIR(aFileStat.st_mode) )
-    {
-        return osl_File_E_ISDIR;
-    }
-
-    nSourceSize=(size_t)aFileStat.st_size;
-    nMode=aFileStat.st_mode;
-    nAcTime=aFileStat.st_atime;
-    nModTime=aFileStat.st_mtime;
-    nUID=aFileStat.st_uid;
-    nGID=aFileStat.st_gid;
-
-    nRet = stat(pszDestPath,&aFileStat);
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-
-        if ( nRet == ENOENT )
-        {
-            DestFileExists=0;
-        }
-/*        return oslTranslateFileError(nRet);*/
-    }
-
-    /* mfe: the destination file must not be a directory! */
-    if ( nRet == 0 && S_ISDIR(aFileStat.st_mode) )
-    {
-        return osl_File_E_ISDIR;
-    }
-    else
-    {
-        /* mfe: file does not exists or is no dir */
-    }
-
-    tErr = oslDoCopy(pszPath,pszDestPath,nMode,nSourceSize,DestFileExists);
-
-    if ( tErr != osl_File_E_None )
-    {
-        return tErr;
-    }
-
-    /*
-     *   mfe: ignore return code
-     *        since only  the success of the copy is
-     *        important
-     */
-    oslChangeFileModes(pszDestPath,nMode,nAcTime,nModTime,nUID,nGID);
-
-    return tErr;
-}
-#endif
-
 /******************************************************************************
  *
  *                  Utility Functions
@@ -3119,3 +2908,5 @@ static void osl_printFloppyHandle(oslVolumeDeviceHandleImpl* pItem)
 #endif
 
 #endif /* OS2 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

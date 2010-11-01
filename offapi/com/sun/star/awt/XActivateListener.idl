@@ -53,7 +53,7 @@ published interface XActivateListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a window is activated.
 
-        <p>A window is avtivated if a child or itself got the focus.</p>
+        <p>A window is activated if a child or itself got the focus.</p>
 
         @see XFocusListener::focusGained
      */
@@ -61,9 +61,9 @@ published interface XActivateListener: com::sun::star::lang::XEventListener
 
     //-------------------------------------------------------------------------
 
-    /** is invoked when a window is de-activated.
+    /** is invoked when a window is deactivated.
 
-        <p>A window is deavtivated if a child or itself lost the focus.</p>
+        <p>A window is deactivated if a child or itself lost the focus.</p>
 
         @see XFocusListener::focusLost
      */

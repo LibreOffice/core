@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,6 +168,8 @@ public:
                                 double fStart, double fStep, double fMax,
                                 BOOL bRecord, BOOL bApi );
                     // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
+    SC_DLLPUBLIC    BOOL            FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, ULONG nCount, double fStep, double fMax, BOOL bRecord, BOOL bApi );
+
     BOOL            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
                                 FillDir eDir, ULONG nCount, BOOL bRecord, BOOL bApi );
 
@@ -193,3 +196,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

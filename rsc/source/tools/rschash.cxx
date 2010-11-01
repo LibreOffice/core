@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,3 +67,5 @@ const OString& AtomContainer::getString( Atom nAtom )
         m_aIDToString.find( nAtom );
     return (it != m_aIDToString.end()) ? it->second : m_aIDToString[0];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

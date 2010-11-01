@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 
 #include <algorithm>
 #include <functional>
@@ -120,10 +118,10 @@ public:
             {
                 if (!bBroken)
                 {
-                    sError = rtl::OUString::createFromAscii(
+                    sError = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "WW8: Duplicate in list, almost certainly don't want that!\n"
                         "(You will not see this message again unless you restart)\n"
-                        "Extra entries are...\n");
+                        "Extra entries are...\n"));
                     bBroken=true;
                 }
 
@@ -348,7 +346,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {200, 4, L_FIX}  // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -684,7 +682,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x245C, 1, L_FIX}  // undocumented, para autoafter
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -6664,4 +6662,4 @@ SEPr::SEPr() :
     memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

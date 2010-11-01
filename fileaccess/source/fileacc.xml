@@ -50,13 +50,11 @@
     <project-build-dependency> ucbhelper        </project-build-dependency>
     <project-build-dependency> tools            </project-build-dependency>
     <project-build-dependency> cppu             </project-build-dependency>
-    <project-build-dependency> vos              </project-build-dependency>
     <project-build-dependency> sal              </project-build-dependency>
 
     <runtime-module-dependency> cppuhelper$(COM) </runtime-module-dependency>
     <runtime-module-dependency> ucbhelper1MSC    </runtime-module-dependency>
     <runtime-module-dependency> cppu3            </runtime-module-dependency>
-    <runtime-module-dependency> vos2$(COM)       </runtime-module-dependency>
     <runtime-module-dependency> sal3             </runtime-module-dependency>
     <runtime-module-dependency> tl               </runtime-module-dependency>
 </module-description>

@@ -553,7 +553,6 @@
     <project-build-dependency>vcl</project-build-dependency>
     <project-build-dependency>svtool</project-build-dependency>
     <project-build-dependency>sfx2</project-build-dependency>
-    <project-build-dependency>vos</project-build-dependency>
     <project-build-dependency>unotools</project-build-dependency>
     <project-build-dependency>toolkit</project-build-dependency>
     <runtime-module-dependency>sal</runtime-module-dependency>
@@ -565,7 +564,6 @@
     <runtime-module-dependency>vcl</runtime-module-dependency>
     <runtime-module-dependency>svtool</runtime-module-dependency>
     <runtime-module-dependency>sfx2</runtime-module-dependency>
-    <runtime-module-dependency>vos</runtime-module-dependency>
     <runtime-module-dependency>unotools</runtime-module-dependency>
     <runtime-module-dependency>toolkit</runtime-module-dependency>
 </module-description>

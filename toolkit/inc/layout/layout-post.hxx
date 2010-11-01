@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,8 +75,10 @@
 #undef RadioButton
 #undef ResetButton
 #undef RetryButton
-#undef SfxTabPage
 #undef SfxTabDialog
+#undef SfxTabPage
+#undef SvxFontListBox
+#undef SvxLanguageBox
 #undef SpinField
 #undef TabDialog
 #undef TabControl
@@ -100,3 +103,5 @@
 #endif /* ENABLE_LAYOUT */
 
 #endif /* _LAYOUT_POST_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

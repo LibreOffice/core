@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
@@ -1080,7 +1081,7 @@ void ORptFilter::endDocument( void )
         return;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // Clear the shape import to sort the shapes  (and not in the
     // destructor that might be called after the import has finished
     // for Java filters.
@@ -1135,3 +1136,5 @@ sal_Bool ORptFilter::isOldFormat() const
 // -----------------------------------------------------------------------------
 }// rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

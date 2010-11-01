@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,10 +51,6 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     SwFldPage( pWindow, SW_RES( TP_FLD_DOK ), rCoreSet ),
 
@@ -89,17 +86,9 @@ SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aNumFormatLB.SetShowLanguageControl(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 __EXPORT SwFldDokPage::~SwFldDokPage()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
 {
@@ -202,10 +191,6 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
         aDateOffsetED.SaveValue();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 {
@@ -461,19 +446,11 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDokPage::AddSubType(USHORT nTypeId)
 {
     USHORT nPos = aSelectionLB.InsertEntry(SwFieldType::GetTypeStr(nTypeId));
     aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDokPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
@@ -508,10 +485,6 @@ IMPL_LINK( SwFldDokPage, SubTypeHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 USHORT SwFldDokPage::FillFormatLB(USHORT nTypeId)
 {
@@ -548,10 +521,6 @@ USHORT SwFldDokPage::FillFormatLB(USHORT nTypeId)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
 {
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
@@ -583,10 +552,6 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
 {
@@ -682,28 +647,17 @@ BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* __EXPORT SwFldDokPage::Create(  Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokPage( pParent, rAttrSet ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFldDokPage::GetGroup()
 {
     return GRP_DOC;
 }
 
-/* -----------------12.01.99 10:09-------------------
- *
- * --------------------------------------------------*/
 void    SwFldDokPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
@@ -718,4 +672,4 @@ void    SwFldDokPage::FillUserData()
     SetUserData(sData);
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

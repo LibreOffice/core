@@ -57,7 +57,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.win32 \
-
+    raptor-aix.patch
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
@@ -108,6 +108,10 @@ CFLAGS=-m64
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external
 LDFLAGS+:=-L$(SOLARLIBDIR)
 
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
+
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SYSBASE)$/usr$/include
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
@@ -140,6 +144,9 @@ OUT2INC+=src$/raptor.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libraptor.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib
+OUT2BIN+=src/raptor-config
+.ELIF "$(OS)"=="AIX"
+OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

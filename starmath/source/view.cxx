@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,7 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <svx/dialogs.hrc>
@@ -65,6 +67,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
+#include <fstream>
 
 #include "unomodel.hxx"
 #include "view.hxx"
@@ -74,15 +77,15 @@
 #include "starmath.hrc"
 #include "toolbox.hxx"
 #include "mathmlimport.hxx"
-
+#include "cursor.hxx"
 
 #define MINWIDTH        200
 #define MINHEIGHT       200
 #define MINSPLIT        40
-#define SPLITTERWIDTH   2
+#define SPLITTERWIDTH       2
 
-#define MINZOOM 25
-#define MAXZOOM 800
+#define MINZOOM         25
+#define MAXZOOM         800
 
 #define SmViewShell
 #include "smslots.hxx"
@@ -97,8 +100,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0),
     pAccessible(0),
     pViewShell(pShell),
-    nZoom(100),
-    bIsCursorVisible(FALSE)
+    nZoom(100)
 {
     // docking windows are usually hidden (often already done in the
     // resource) and will be shown by the sfx framework.
@@ -155,25 +157,31 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 {
     ScrollableWindow::MouseButtonDown(rMEvt);
 
+    GrabFocus();
+
     //
     // set formula-cursor and selection of edit window according to the
     // position clicked at
     //
-    OSL_ENSURE(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
-    if ( rMEvt.IsLeft() && pViewShell->GetEditWindow() )
+    DBG_ASSERT(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
+    if ( rMEvt.IsLeft() )
     {
-        const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
-        //! kann NULL sein! ZB wenn bereits beim laden des Dokuments (bevor der
-        //! Parser angeworfen wurde) ins Fenster geklickt wird.
-        if (!pTree)
-            return;
-
         // get click position relativ to formula
         Point  aPos (PixelToLogic(rMEvt.GetPosPixel())
                      - GetFormulaDrawPos());
 
-        // if it was clicked inside the formula then get the appropriate node
+        const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
+        if (!pTree)
+            return;
+
+        if (IsInlineEditEnabled()) {
+            // if it was clicked inside the formula then get the appropriate node
+            if (pTree->OrientedDist(aPos) <= 0)
+                pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
+            return;
+        }
         const SmNode *pNode = 0;
+        // if it was clicked inside the formula then get the appropriate node
         if (pTree->OrientedDist(aPos) <= 0)
             pNode = pTree->FindRectClosestTo(aPos);
 
@@ -181,21 +189,6 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
         {   SmEditWindow  *pEdit = pViewShell->GetEditWindow();
             const SmToken  aToken (pNode->GetToken());
 
-#ifdef notnow
-            // include introducing symbols of special char and text
-            // (ie '%' and '"')
-            USHORT  nExtra = (aToken.eType == TSPECIAL  ||  aToken.eType == TTEXT) ? 1 : 0;
-
-            // set selection to the beginning of the token
-            ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1 - nExtra);
-
-            if (rMEvt.GetClicks() != 1)
-            {   // select whole token
-                // for text include terminating symbol (ie '"')
-                aSel.nEndPos += aToken.aText.Len() + nExtra
-                                + (aToken.eType == TTEXT ? 1 : 0);
-            }
-#endif
             // set selection to the beginning of the token
             ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1);
 
@@ -212,8 +205,18 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     }
 }
 
+bool SmGraphicWindow::IsInlineEditEnabled() const
+{
+    return pViewShell->GetEditWindow()->IsInlineEditEnabled();
+}
+
 void SmGraphicWindow::GetFocus()
 {
+    if (!IsInlineEditEnabled())
+        return;
+    pViewShell->GetEditWindow()->Flush();
+    //Let view shell know what insertions should be done in visual editor
+    pViewShell->SetInsertIntoEditWindow(FALSE);
 }
 
 void SmGraphicWindow::LoseFocus()
@@ -232,6 +235,9 @@ void SmGraphicWindow::LoseFocus()
 void SmGraphicWindow::ShowCursor(BOOL bShow)
     // shows or hides the formula-cursor depending on 'bShow' is TRUE or not
 {
+    if (IsInlineEditEnabled())
+        return;
+
     BOOL  bInvert = bShow != IsCursorVisible();
 
     if (bInvert)
@@ -243,6 +249,9 @@ void SmGraphicWindow::ShowCursor(BOOL bShow)
 
 void SmGraphicWindow::SetCursor(const SmNode *pNode)
 {
+    if (IsInlineEditEnabled())
+        return;
+
     const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
 
     // get appropriate rectangle
@@ -260,6 +269,9 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
 {
+    if (IsInlineEditEnabled())
+        return;
+
     SmModule *pp = SM_MOD();
 
     if (IsCursorVisible())
@@ -277,6 +289,9 @@ const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
     // rectangle. If not the formula-cursor will be hidden.
     // In any case the search result is being returned.
 {
+    if (IsInlineEditEnabled())
+        return NULL;
+
     // find visible node with token at nRow, nCol
     const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree(),
                  *pNode = 0;
@@ -291,7 +306,6 @@ const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
     return pNode;
 }
 
-
 void SmGraphicWindow::Paint(const Rectangle&)
 {
     OSL_ENSURE(pViewShell, "Sm : NULL pointer");
@@ -299,10 +313,14 @@ void SmGraphicWindow::Paint(const Rectangle&)
     SmDocShell &rDoc = *pViewShell->GetDoc();
     Point aPoint;
 
-    rDoc.Draw(*this, aPoint);   //! modifies aPoint to be the topleft
+    rDoc.DrawFormula(*this, aPoint, TRUE);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
     SetFormulaDrawPos(aPoint);
-
+    if(IsInlineEditEnabled()) {
+        //Draw cursor if any...
+        if(pViewShell->GetDoc()->HasCursor())
+            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
+    } else {
     SetIsCursorVisible(FALSE);  // (old) cursor must be drawn again
 
     const SmEditWindow *pEdit = pViewShell->GetEditWindow();
@@ -318,6 +336,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
         if (pFound && pp->GetConfig()->IsShowFormulaCursor())
             ShowCursor(TRUE);
     }
+    }
 }
 
 
@@ -329,11 +348,118 @@ void SmGraphicWindow::SetTotalSize ()
         ScrollableWindow::SetTotalSize( aTmp );
 }
 
-
 void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    if (! (GetView() && GetView()->KeyInput(rKEvt)) )
-        ScrollableWindow::KeyInput(rKEvt);
+    if (!IsInlineEditEnabled()) {
+        if (! (GetView() && GetView()->KeyInput(rKEvt)) )
+            ScrollableWindow::KeyInput(rKEvt);
+        return;
+    }
+    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    SmCursor& rCursor = pViewShell->GetDoc()->GetCursor();
+    switch(nCode)
+    {
+        case KEY_LEFT:
+        {
+            rCursor.Move(this, MoveLeft, !rKEvt.GetKeyCode().IsShift());
+        }break;
+        case KEY_RIGHT:
+        {
+            rCursor.Move(this, MoveRight, !rKEvt.GetKeyCode().IsShift());
+        }break;
+        case KEY_UP:
+        {
+            rCursor.Move(this, MoveUp, !rKEvt.GetKeyCode().IsShift());
+        }break;
+        case KEY_DOWN:
+        {
+            rCursor.Move(this, MoveDown, !rKEvt.GetKeyCode().IsShift());
+        }break;
+        case KEY_RETURN:
+        {
+            if(!rKEvt.GetKeyCode().IsShift())
+                rCursor.InsertRow();
+#ifdef DEBUG_ENABLE_DUMPASDOT
+            else {
+                SmNode *pTree = (SmNode*)pViewShell->GetDoc()->GetFormulaTree();
+                std::fstream file("/tmp/smath-dump.gv", std::fstream::out);
+                String label(pViewShell->GetDoc()->GetText());
+                pTree->DumpAsDot(file, &label);
+                file.close();
+            }
+#endif /* DEBUG_ENABLE_DUMPASDOT */
+        }break;
+        case KEY_DELETE:
+        case KEY_BACKSPACE:
+        {
+            if(!rCursor.HasSelection()){
+                rCursor.Move(this, nCode == KEY_DELETE ? MoveRight : MoveLeft, false);
+                if(rCursor.HasComplexSelection()) break;
+            }
+            rCursor.Delete();
+        }break;
+        case KEY_ADD:
+            rCursor.InsertElement(PlusElement);
+            break;
+        case KEY_SUBTRACT:
+            if(rKEvt.GetKeyCode().IsShift())
+                rCursor.InsertSubSup(RSUB);
+            else
+                rCursor.InsertElement(MinusElement);
+            break;
+        case KEY_MULTIPLY:
+            rCursor.InsertElement(CDotElement);
+            break;
+        case KEY_DIVIDE:
+            rCursor.InsertFraction();
+            break;
+        case KEY_LESS:
+            rCursor.InsertElement(LessThanElement);
+            break;
+        case KEY_GREATER:
+            rCursor.InsertElement(GreaterThanElement);
+            break;
+        case KEY_EQUAL:
+            rCursor.InsertElement(EqualElement);
+            break;
+        case KEY_COPY:
+            rCursor.Copy();
+            break;
+        case KEY_CUT:
+            rCursor.Cut();
+            break;
+        case KEY_PASTE:
+            rCursor.Paste();
+            break;
+        default:
+        {
+            sal_Unicode code = rKEvt.GetCharCode();
+            if(code == ' ') {
+                rCursor.InsertElement(BlankElement);
+            }else if(code == 'c' && rKEvt.GetKeyCode().IsMod1()) {
+                rCursor.Copy();
+            }else if(code == 'x' && rKEvt.GetKeyCode().IsMod1()) {
+                rCursor.Cut();
+            }else if(code == 'v' && rKEvt.GetKeyCode().IsMod1()) {
+                rCursor.Paste();
+            }else if(code == '^') {
+                rCursor.InsertSubSup(RSUP);
+            }else if(code == '(') {
+                rCursor.InsertBrackets(RoundBrackets);
+            }else if(code == '[') {
+                rCursor.InsertBrackets(SquareBrackets);
+            }else if(code == '{') {
+                rCursor.InsertBrackets(CurlyBrackets);
+            }else if(code == '!') {
+                rCursor.InsertElement(FactorialElement);
+            }else{
+                if(code != 0){
+                    rCursor.InsertText(code);
+                }else if (! (GetView() && GetView()->KeyInput(rKEvt)) )
+                    ScrollableWindow::KeyInput(rKEvt);
+            }
+        }
+    }
 }
 
 
@@ -701,6 +827,7 @@ struct SmViewShell_Impl
 {
     sfx2::DocumentInserter* pDocInserter;
     SfxRequest*             pRequest;
+    SvtMiscOptions          aOpts;
 
     SmViewShell_Impl() :
           pDocInserter( NULL )
@@ -1132,7 +1259,7 @@ void SmViewShell::Impl_Print(
 
     rOutDev.SetMapMode(OutputMapMode);
     rOutDev.SetClipRegion(Region(aOutRect));
-    GetDoc()->Draw(rOutDev, aPos);
+    GetDoc()->DrawFormula(rOutDev, aPos, FALSE);
     rOutDev.SetClipRegion();
 
     rOutDev.Pop();
@@ -1366,7 +1493,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 bVal = !pp->GetConfig()->IsShowFormulaCursor();
 
             pp->GetConfig()->SetShowFormulaCursor(bVal);
-            GetGraphicWindow().ShowCursor(bVal);
+            if (!IsInlineEditEnabled())
+                GetGraphicWindow().ShowCursor(bVal);
             break;
         }
         case SID_DRAW:
@@ -1511,17 +1639,24 @@ void SmViewShell::Execute(SfxRequest& rReq)
             const SfxInt16Item& rItem =
                 (const SfxInt16Item&)rReq.GetArgs()->Get(SID_INSERTCOMMAND);
 
-            if (pWin)
+            if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertCommand(rItem.GetValue());
+            if (IsInlineEditEnabled() && (GetDoc() && !bInsertIntoEditWindow)) {
+                GetDoc()->GetCursor().InsertCommand(rItem.GetValue());
+                GetGraphicWindow().GrabFocus();
+            }
             break;
         }
 
-        case SID_INSERTTEXT:
+        case SID_INSERTSYMBOL:
         {
             const SfxStringItem& rItem =
-                    (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTTEXT);
-            if (pWin)
+                (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTSYMBOL);
+
+            if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertText(rItem.GetValue());
+            if (IsInlineEditEnabled() && (GetDoc() && !bInsertIntoEditWindow))
+                GetDoc()->GetCursor().InsertSpecial(rItem.GetValue());
             break;
         }
 
@@ -1861,3 +1996,9 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
     }
 }
 
+bool SmViewShell::IsInlineEditEnabled() const
+{
+    return pImpl->aOpts.IsExperimentalMode();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

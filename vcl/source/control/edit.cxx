@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/window.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -72,6 +73,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
+#include <sal/macros.h>
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
@@ -507,7 +509,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -1171,7 +1173,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -1295,7 +1297,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
-    if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+    if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
     {
         pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
         pDX = pDXBuffer;
@@ -2937,7 +2939,7 @@ void Edit::DeletePopupMenu( PopupMenu* pMenu )
 // ::com::sun::star::datatransfer::dnd::XDragGestureListener
 void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( !IsTracking() && maSelection.Len() &&
          !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == FALSE) ) // Kein Mehrfach D&D
@@ -2975,7 +2977,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
 // ::com::sun::star::datatransfer::dnd::XDragSourceListener
 void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( rDSDE.DropSuccess && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
     {
@@ -3001,7 +3003,7 @@ void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDro
 // ::com::sun::star::datatransfer::dnd::XDropTargetListener
 void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     BOOL bChanges = FALSE;
     if ( !mbReadOnly && mpDDInfo )
@@ -3061,14 +3063,14 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
 
 void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     ImplHideDDCursor();
 }
 
 void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
 
@@ -3130,3 +3132,5 @@ Selection Edit::GetSurroundingTextSelection() const
 {
   return GetSelection();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

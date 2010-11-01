@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,3 +49,5 @@
      ((low) - SAL_RTL_FIRST_LOW_SURROGATE) + 0x10000)
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

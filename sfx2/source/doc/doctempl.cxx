@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,8 @@
 
 #include <limits.h>
 #include <com/sun/star/uno/Any.h>
-#include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
@@ -931,21 +932,6 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
     {
         DBG_ERRORFILE( "Don't know, what to do!" );
         return sal_False;
-#if 0
-    // Verschieben einer Vorlage innerhalb eines Bereiches
-    // --> nur Verwaltungsdaten aktualisieren
-    if ( bMove && nTargetRegion == nSourceRegion )
-    {
-        if(nTargetIdx == USHRT_MAX)
-            nTargetIdx = 0;
-        const SfxTemplateDirEntryPtr pEntry = rTargetDir[nSourceIdx];
-        rTargetDir.Insert(pEntry, nTargetIdx);
-        if(nTargetIdx < nSourceIdx)
-            ++nSourceIdx;
-        rTargetDir.Remove(nSourceIdx);
-        return SaveDir(rTargetDir);
-    }
-#endif
     }
 
     RegionData_Impl *pSourceRgn = pImp->GetRegion( nSourceRegion );
@@ -2731,3 +2717,4 @@ sal_Bool getTextProperty_Impl( Content& rContent,
     return bGotProperty;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ AccStatisticsObject::AccStatisticsObject( const AccessibleElementInfo& rAccInfo 
 //    OSL_ASSERT( pModel );
 
     // /-- solar
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 /*    switch( eType )
     {
         case MEAN_VAL_LINE:
@@ -79,3 +80,5 @@ OUString SAL_CALL AccStatisticsObject::getImplementationName()
 }
 
 }  // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

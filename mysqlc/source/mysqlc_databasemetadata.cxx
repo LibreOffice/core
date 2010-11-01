@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -61,6 +62,7 @@ using mysqlc_sdbc_driver::getStringFromAny;
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 #include <postextstl.h>
+#include <sal/macros.h>
 
 static ext_std::string wild("%");
 
@@ -2105,7 +2107,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                 "ALTER", "DELETE", "DROP", "INDEX", "INSERT", "LOCK TABLES", "SELECT", "UPDATE"
             };
             Any userName; userName <<= getUserName();
-            for (size_t i = 0; i < sizeof( allPrivileges ) / sizeof( allPrivileges[0]); ++i) {
+            for (size_t i = 0; i < SAL_N_ELEMENTS( allPrivileges ); ++i) {
                 std::vector< Any > aRow;
                 aRow.push_back(makeAny( sal_Int32( i ) ));
                 aRow.push_back(catalog);                                                          // TABLE_CAT
@@ -2215,3 +2217,4 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs(
  * vim<600: noet sw=4 ts=4
  */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

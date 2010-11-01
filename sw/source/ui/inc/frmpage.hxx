@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <prcntfld.hxx>
 #include <globals.hrc>
 
-
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
 struct FrmMap;
@@ -50,7 +50,6 @@ struct SwPosition;
 /*--------------------------------------------------------------------
      Beschreibung:  Rahmendialog
  --------------------------------------------------------------------*/
-
 class SwFrmPage: public SfxTabPage
 {
     // Size
@@ -240,7 +239,6 @@ public:
     virtual int  DeactivatePage(SfxItemSet *pSet);
 };
 
-
 class SwFrmURLPage : public SfxTabPage
 {
     //Hyperlink
@@ -274,10 +272,6 @@ public:
     virtual BOOL FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 };
-
-/*-----------------13.11.96 12.59-------------------
-
---------------------------------------------------*/
 
 class SwFrmAddPage : public SfxTabPage
 {
@@ -332,3 +326,5 @@ public:
 };
 
 #endif // _FRMPAGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

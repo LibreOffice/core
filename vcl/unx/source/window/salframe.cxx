@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <X11/keysym.h>
 #include "FWS.hxx"
 #include <X11/extensions/shape.h>
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
 #include <X11/extensions/dpms.h>
 #endif
 #include <tools/postx.h>
@@ -69,6 +70,7 @@
 #include "tools/debug.hxx"
 
 #include "sal/alloca.h"
+#include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <algorithm>
@@ -179,7 +181,7 @@ void X11SalFrame::setXEmbedInfo()
                          32,
                          PropModeReplace,
                          reinterpret_cast<unsigned char*>(aInfo),
-                         sizeof(aInfo)/sizeof(aInfo[0]) );
+                         SAL_N_ELEMENTS(aInfo) );
     }
 }
 
@@ -540,11 +542,11 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
-        XClassHint* pClass = XAllocClassHint();
-        pClass->res_name  = const_cast<char*>(X11SalData::getFrameResName());
-        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
-        XFree( pClass );
+        // force wm class hint
+        mnExtStyle = ~0;
+        if (mpParent)
+            m_sWMClass = mpParent->m_sWMClass;
+        SetExtendedFrameStyle( 0 );
 
         XSizeHints* pHints = XAllocSizeHints();
         pHints->flags       = PWinGravity | PPosition;
@@ -847,13 +849,7 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     if( nStyle != mnExtStyle && ! IsChildWindow() )
     {
         mnExtStyle = nStyle;
-
-        XClassHint* pClass = XAllocClassHint();
-        rtl::OString aResHint = X11SalData::getFrameResName( mnExtStyle );
-        pClass->res_name  = const_cast<char*>(aResHint.getStr());
-        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
-        XFree( pClass );
+        updateWMClass();
     }
 }
 
@@ -2190,6 +2186,33 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
+void X11SalFrame::SetApplicationID( const rtl::OUString &rWMClass )
+{
+    if( rWMClass != m_sWMClass && ! IsChildWindow() )
+    {
+        m_sWMClass = rWMClass;
+        updateWMClass();
+        std::list< X11SalFrame* >::const_iterator it;
+        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+            (*it)->SetApplicationID(rWMClass);
+    }
+}
+
+void X11SalFrame::updateWMClass()
+{
+    XClassHint* pClass = XAllocClassHint();
+    rtl::OString aResName = X11SalData::getFrameResName( mnExtStyle );
+    pClass->res_name  = const_cast<char*>(aResName.getStr());
+
+    rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
+
+    pClass->res_class = const_cast<char*>(pResClass);
+    XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
+    XFree( pClass );
+}
+
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
@@ -2360,7 +2383,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
     // needs static here to save DPMS settings
     int dummy;
     static bool DPMSExtensionAvailable =
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
         (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
     static XLIB_BOOL DPMSEnabled = false;
 #else
@@ -2395,7 +2418,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
         // get the DPMS state right before the start
         if (DPMSExtensionAvailable)
         {
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             CARD16 state; // card16 is defined in Xdm.h
             DPMSInfo(   GetXDisplay(),
                         &state,
@@ -2414,7 +2437,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                                  prefer_blanking,
                                  allow_exposures );
             }
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             if( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -2439,7 +2462,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                              allow_exposures );
                 nScreenSaversTimeout_ = 0;
             }
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             if ( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -4408,3 +4431,4 @@ void X11SalFrame::EndSetClipRegion()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

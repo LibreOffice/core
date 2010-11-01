@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 #ifndef _ACCHYPERLINK_HXX
 #define _ACCHYPERLINK_HXX
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <fmtinfmt.hxx>
 
@@ -41,7 +42,7 @@ class SwAccessibleHyperlink :
     friend class SwAccessibleParagraph;
     friend class SwAccessibleHyperTextData;
     sal_uInt16 nHintPos;
-    ::vos::ORef< SwAccessibleParagraph > xPara;
+    ::rtl::Reference< SwAccessibleParagraph > xPara;
     sal_Int32 nStartIdx;
     sal_Int32 nEndIdx;
 
@@ -89,3 +90,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

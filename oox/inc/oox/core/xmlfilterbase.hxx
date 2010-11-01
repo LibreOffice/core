@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -198,6 +199,8 @@ public:
      */
     XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
+    void importDocumentProperties() throw();
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
@@ -223,3 +226,4 @@ typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

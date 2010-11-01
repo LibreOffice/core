@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,6 @@
 
 #include <unomid.h>
 
-
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
 {
@@ -81,10 +81,6 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     FreeResource();
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
     AcceptAll(FALSE);   // Alles uebriggebliebene ablehnen
@@ -93,27 +89,15 @@ SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
     delete pImplDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwModalRedlineAcceptDlg::Activate()
 {
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModalRedlineAcceptDlg::Resize()
 {
     pImplDlg->Resize();
     SfxModalDialog::Resize();
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
 {
@@ -131,3 +115,5 @@ void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
 
     pImplDlg->CallAcceptReject( FALSE, bAccept );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

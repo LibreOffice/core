@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,7 @@
 class Menu;
 class MenuBar;
 class VclSimpleEvent;
+class PopupMenu;
 
 DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* )
 
@@ -181,6 +183,9 @@ class TOOLKIT_DLLPUBLIC VCLXPopupMenu : public VCLXMenu
 {
 public:
         VCLXPopupMenu();
+        VCLXPopupMenu( PopupMenu* pPopMenu );
 };
 
 #endif // _TOOLKIT_AWT_VCLXMENU_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

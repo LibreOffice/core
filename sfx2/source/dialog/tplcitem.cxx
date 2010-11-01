@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,6 @@
 
 #include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/templdlg.hxx>
 #include <sfx2/bindings.hxx>
@@ -82,7 +80,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
         {
-            FASTBOOL bAvailable = SFX_ITEM_AVAILABLE == eState;
+            bool bAvailable = SFX_ITEM_AVAILABLE == eState;
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {
@@ -186,3 +184,4 @@ IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

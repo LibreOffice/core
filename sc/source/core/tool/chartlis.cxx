@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -734,3 +735,4 @@ void ScChartListenerCollection::EndListeningHiddenRange( ScChartHiddenRangeListe
     maHiddenListeners.remove_if(MatchListener(pListener));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -431,7 +432,7 @@ void SbiImage::AddString( const String& r )
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
                 delete[] pStrings;
                 pStrings = p;
-                nStringSize = sal::static_int_cast< UINT16 >(nNewLen);
+                nStringSize = sal::static_int_cast< UINT32 >(nNewLen);
             }
             else
                 bError = TRUE;
@@ -540,3 +541,5 @@ BOOL SbiImage::ExceedsLegacyLimits()
         return TRUE;
     return FALSE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

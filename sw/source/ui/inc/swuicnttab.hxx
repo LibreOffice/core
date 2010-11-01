@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,15 +58,14 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-//-----------------------------------------------------------------------------
 struct SwIndexSections_Impl
 {
     com::sun::star::uno::Reference< com::sun::star::text::XTextSection >    xContainerSection;
     com::sun::star::uno::Reference< com::sun::star::text::XDocumentIndex >    xDocumentIndex;
 };
 
-//-----------------------------------------------------------------------------
 class SwOneExampleFrame;
+
 struct SwIndexSections_Impl;
 
 class SwMultiTOXTabDialog : public SfxTabDialog
@@ -128,9 +128,7 @@ public:
 
     static BOOL IsNoNum(SwWrtShell& rSh, const String& rName);
 };
-/* -----------------14.07.99 12:17-------------------
 
- --------------------------------------------------*/
 class IndexEntryRessource;
 class IndexEntrySupplierWrapper;
 
@@ -255,9 +253,6 @@ public:
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
     void                SetWrtShell(SwWrtShell& rSh);
 };
-/* -----------------16.06.99 08:33-------------------
-
- --------------------------------------------------*/
 
 DECLARE_LIST(TOXControlList, Control*)
 
@@ -332,10 +327,9 @@ public:
     virtual void        Resize();
     virtual void        GetFocus();
 };
-/* -----------------------------23.12.99 14:16--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwTOXEntryTabPage;
+
 class SwIdxTreeListBox : public SvTreeListBox
 {
     SwTOXEntryTabPage* pParent;
@@ -345,9 +339,6 @@ public:
     SwIdxTreeListBox(SwTOXEntryTabPage* pPar, const ResId& rResId);
 };
 
-/* -----------------16.06.99 12:49-------------------
-
- --------------------------------------------------*/
 class SwTOXEntryTabPage : public SfxTabPage
 {
     FixedText           aLevelFT;
@@ -477,9 +468,7 @@ public:
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
 };
-/* -----------------05.07.99 13:00-------------------
 
- --------------------------------------------------*/
 class SwTOXStylesTabPage : public SfxTabPage
 {
     FixedText       aLevelFT2;
@@ -527,3 +516,4 @@ public:
 
 #endif // _SWUI_CNTTAB_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

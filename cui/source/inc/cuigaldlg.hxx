@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _CUI_GALDLG_HXX_
 #define _CUI_GALDLG_HXX_
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
@@ -71,7 +72,7 @@ struct FilterEntry
 // - SearchThread -
 // ----------------
 
-class SearchThread : public ::vos::OThread
+class SearchThread : public ::osl::Thread
 {
 private:
 
@@ -128,7 +129,7 @@ public:
 // - TakeThread -
 // --------------
 
-class TakeThread : public ::vos::OThread
+class TakeThread : public ::osl::Thread
 {
 private:
 
@@ -370,3 +371,5 @@ public:
 };
 
 #endif // _CUI_GALDLG_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

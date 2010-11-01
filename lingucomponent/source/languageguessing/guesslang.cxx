@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,8 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <osl/thread.h>
+
+#include <sal/macros.h>
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -171,7 +174,7 @@ void LangGuess_Impl::EnsureInitialized()
             {"sa", ""}, {"ta", ""}, {"th", ""},
             {"qu", ""}, {"yi", ""}
         };
-        sal_Int32 nNum = sizeof(aDisable) / sizeof(aDisable[0]);
+        sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
         Sequence< Locale > aDisableSeq( nNum );
         Locale *pDisableSeq = aDisableSeq.getArray();
         for (sal_Int32 i = 0;  i < nNum;  ++i)
@@ -479,3 +482,4 @@ void * SAL_CALL component_getFactory(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

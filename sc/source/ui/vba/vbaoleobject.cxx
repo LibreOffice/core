@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
 uno::Reference< uno::XInterface > SAL_CALL
 ScVbaOLEObject::getObject() throw (uno::RuntimeException)
 {
-    return uno::Reference< uno::XInterface >( m_xControlShape, uno::UNO_QUERY_THROW );
+    return uno::Reference< uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
 }
 
 sal_Bool SAL_CALL
@@ -162,3 +163,5 @@ ScVbaOLEObject::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

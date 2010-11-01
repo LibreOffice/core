@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,9 +108,7 @@ private:
     SAL_DLLPRIVATE void      ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE BOOL      ImplIsItemUpdate();
-//    #if 0 // _SOLAR__PRIVATE
     using OutputDevice::ImplDrawText;
-//    #endif
     SAL_DLLPRIVATE void      ImplDrawText( BOOL bOffScreen, long nOldTextWidth );
     SAL_DLLPRIVATE void      ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL bDrawFrame );
     SAL_DLLPRIVATE void      ImplDrawProgress( BOOL bPaint,
@@ -224,3 +223,5 @@ public:
 };
 
 #endif  // _SV_STATUS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1308,7 +1309,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     };
     const uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
     const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
-    for (size_t i = 0; i < sizeof(pIncludeProperties)/sizeof(pIncludeProperties[0]) ;++i )
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pIncludeProperties) ;++i )
     {
         const beans::Property* pIter = aSeq.getConstArray();
         const beans::Property* pEnd  = pIter + aSeq.getLength();
@@ -1328,7 +1329,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
             }
             aNewProps.push_back(*pFind);
         }
-    } // for (size_t i = 0; i < sizeof(pIncludeProperties)/sizeof(pIncludeProperties[0]) ;++i )
+    } // for (size_t i = 0; i < SAL_N_ELEMENTS(pIncludeProperties) ;++i )
 
     // special property for shapes
 //    if ( uno::Reference< report::XShape>(m_xReportComponent,uno::UNO_QUERY).is() )
@@ -2244,3 +2245,4 @@ void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& 
 } // namespace rptui
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

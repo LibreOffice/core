@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,12 +62,19 @@ public:
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     sal_Bool isReferenced() const { return mbReferenced; };
     void setReferenced( sal_Bool bReferenced ){ mbReferenced = bReferenced; };
+    void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
 
     static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes );
     static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes );
     static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes );
+
+protected:
+
+    oox::drawingml::ShapePtr mpPlaceholder;
 };
 
 } }
 
 #endif  //  OOX_PPT_PRESENTATION_PPTSHAPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

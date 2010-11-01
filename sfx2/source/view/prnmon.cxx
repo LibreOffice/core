@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,6 @@
 
 #include <unotools/printwarningoptions.hxx>
 #include <svl/eitem.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/prnmon.hxx>
 #include <sfx2/viewsh.hxx>
@@ -266,18 +264,11 @@ BOOL SfxPrintMonitor_Impl::Close()
 
 //--------------------------------------------------------------------
 
-SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
+SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, bool bShow )
 :   SfxProgress( pViewSh->GetViewFrame()->GetObjectShell(),
                  String(SfxResId(STR_PRINTING)), 1, FALSE ),
     pImp( new SfxPrintProgress_Impl( pViewSh, pViewSh->GetPrinter() ) )
 {
-    #if 0
-    pImp->pPrinter->SetEndPrintHdl( LINK( this, SfxPrintProgress, EndPrintNotify ) );
-    pImp->pPrinter->SetErrorHdl( LINK( this, SfxPrintProgress, PrintErrorNotify ) );
-    pImp->pPrinter->SetStartPrintHdl( LINK( this, SfxPrintProgress, StartPrintNotify ) );
-    pImp->bCallbacks = TRUE;
-    #endif
-
     SfxObjectShell* pDoc = pViewSh->GetObjectShell();
     SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, FALSE );
     if ( pItem && pItem->GetValue() )
@@ -493,3 +484,5 @@ BOOL SfxPrintProgress::IsAborted() const
 {
     return pImp->bAborted;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

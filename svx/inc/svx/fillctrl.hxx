@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ class ListBox;
 
 /*************************************************************************
 |*
-|* Klassen fuer Flaechenattribute (Controls und Controller)
+|* Class for surface attributes (controls and controller)
 |*
 \************************************************************************/
 
@@ -91,11 +92,9 @@ private:
     Size            aLogicalAttrSize;
     Timer           aDelayTimer;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( DelayHdl, Timer * );
     DECL_LINK( SelectFillTypeHdl, ListBox * );
     DECL_LINK( SelectFillAttrHdl, ListBox * );
-//#endif
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     FillControl( Window* pParent, WinBits nStyle = 0 );
@@ -106,3 +105,4 @@ public:
 
 #endif      // _FILLCTRL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 
 #include "fusel.hxx"
-#include <vos/process.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
@@ -1492,3 +1492,5 @@ SdrObject* FuSelection::pickObject (const Point& rTestPoint)
     return pObject;
 }
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

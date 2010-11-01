@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <rtl/ustring.hxx>
@@ -43,7 +45,6 @@
 #include <vcl/gdimtf.hxx>
 
 #include "oleprops.hxx"
-
 // ============================================================================
 
 // stream names
@@ -168,6 +169,28 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
                 } catch ( uno::Exception& ) {
                     //ignore
                 }
+            }
+        }
+    }
+
+    uno::Reference< document::XCompatWriterDocProperties > xWriterProps( i_xDocProps, uno::UNO_QUERY );
+    if ( xWriterProps.is() )
+    {
+        SfxOleSectionRef xBuiltin = aDocSet.GetSection( SECTION_BUILTIN );
+        if ( xBuiltin.get() )
+        {
+            try
+            {
+                String aStrValue;
+                if ( xBuiltin->GetStringValue( aStrValue, PROPID_MANAGER ) )
+                    xWriterProps->setManager( aStrValue );
+                if ( xBuiltin->GetStringValue( aStrValue, PROPID_CATEGORY ) )
+                    xWriterProps->setCategory( aStrValue );
+                if ( xBuiltin->GetStringValue( aStrValue, PROPID_COMPANY ) )
+                    xWriterProps->setCompany( aStrValue );
+            }
+            catch ( uno::Exception& )
+            {
             }
         }
     }
@@ -307,3 +330,4 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
 
 } // namespace sfx2
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

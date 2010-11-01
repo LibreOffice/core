@@ -125,7 +125,7 @@ interface XAccessibleTextMarkup
 
         @return
             If character index is in range [0..number of characters in the text-1],
-            a seguence of <type>TextSegment</type>s of the text markups at
+            a sequence of <type>TextSegment</type>s of the text markups at
             given character index of the given text markup type are returned.
             The sequence is empty, if no such text markup is found.
     */

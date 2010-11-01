@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ extern SbxError ImpScan
     ( const ::rtl::OUString& rSrc, double& nVal, SbxDataType& rType, USHORT* pLen,
       BOOL bAllowIntntl=FALSE, BOOL bOnlyIntntl=FALSE );
 
-// mit erweiterter Auswertung (International, "TRUE"/"FALSE")
+// with advanced evaluation (International, "TRUE"/"FALSE")
 extern BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 
 // SBXINT.CXX
@@ -149,3 +150,5 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr);
 ::rtl::OUString ByteArrayToString(SbxArray* pArr);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

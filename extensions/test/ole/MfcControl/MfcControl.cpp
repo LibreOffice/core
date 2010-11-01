@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // MfcControl.cpp : Implementation of CMfcControlApp and DLL registration.
 
 #include "stdafx.h"
@@ -77,3 +78,5 @@ STDAPI DllUnregisterServer(void)
 
     return NOERROR;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

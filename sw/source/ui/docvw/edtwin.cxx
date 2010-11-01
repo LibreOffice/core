@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -130,7 +131,7 @@
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx> // #i23726#
 #include "formatclipboard.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <IMark.hxx>
@@ -140,6 +141,7 @@
 #include <PostItMgr.hxx>
 
 //JP 11.10.2001: enable test code for bug fix 91313
+//TODO: This one could most probably be removed
 #if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
 #endif
@@ -191,15 +193,51 @@ class SwAnchorMarker
     SdrHdl* pHdl;
     Point aHdlPos;
     Point aLastPos;
+    // --> OD 2010-09-16 #i114522#
+    bool bTopRightHandle;
+    // <--
 public:
-    SwAnchorMarker( SdrHdl* pH ) :
-        pHdl( pH ), aHdlPos( pH->GetPos() ), aLastPos( pH->GetPos() ) {}
+    SwAnchorMarker( SdrHdl* pH )
+        : pHdl( pH )
+        , aHdlPos( pH->GetPos() )
+        , aLastPos( pH->GetPos() )
+        // --> OD 2010-09-16 #i114522#
+        , bTopRightHandle( pH->GetKind() == HDL_ANCHOR_TR )
+        // <--
+    {}
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
     const Point& GetPos() { return pHdl->GetPos(); }
     const Point& GetHdlPos() { return aHdlPos; }
-    void ChgHdl( SdrHdl* pNew ) { pHdl = pNew; }
+    void ChgHdl( SdrHdl* pNew )
+    {
+        pHdl = pNew;
+        // --> OD 2010-09-16 #i114522#
+        if ( pHdl )
+        {
+            bTopRightHandle = (pHdl->GetKind() == HDL_ANCHOR_TR);
+        }
+        // <--
+    }
+    // --> OD 2010-09-16 #i114522#
+    const Point GetPosForHitTest( const OutputDevice& rOut )
+    {
+        Point aHitTestPos( GetPos() );
+        aHitTestPos = rOut.LogicToPixel( aHitTestPos );
+        if ( bTopRightHandle )
+        {
+            aHitTestPos += Point( -1, 1 );
+        }
+        else
+        {
+            aHitTestPos += Point( 1, 1 );
+        }
+        aHitTestPos = rOut.PixelToLogic( aHitTestPos );
+
+        return aHitTestPos;
+    }
+    // <--
 };
 
 struct QuickHelpData
@@ -812,7 +850,7 @@ void SwEditWin::FlushInBuffer()
             // as well, we now expand the selection accordingly.
             SwPaM &rCrsr = *rSh.GetCrsr();
             xub_StrLen nCrsrStartPos = rCrsr.Start()->nContent.GetIndex();
-            DBG_ASSERT( nCrsrStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
+            OSL_ENSURE( nCrsrStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
             if (nExpandSelection && nCrsrStartPos >= nExpandSelection)
             {
                 if (!rCrsr.HasMark())
@@ -1001,7 +1039,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             case MOVE_DOWN_SMALL: if( aTmp.Height() < aSnap.Height() + MINFLY ) break;
                     nDown = aSnap.Height(); // kein break
             case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown ); break;
-            default: ASSERT( TRUE, "ChangeFly: Unknown direction." );
+            default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
         }
         BOOL bSet = FALSE;
         if ((FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
@@ -1492,7 +1530,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         case KS_CheckKey:
             eKeyState = KS_KeyToView;       // default weiter zur View
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // JP 19.01.99: zum Umschalten des Cursor Verhaltens in ReadOnly
             //              Bereichen
@@ -3607,7 +3645,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 // So the pAnchorMarker has to find the right SdrHdl, if it's
                 // the old one, it will find it with position aOld, if this one
                 // is destroyed, it will find a new one at position GetHdlPos().
-                Point aOld = pAnchorMarker->GetPos();
+                // --> OD 2010-09-16 #i114522#
+//                const Point aOld = pAnchorMarker->GetPos();
+                const Point aOld = pAnchorMarker->GetPosForHitTest( *(rSh.GetOut()) );
+                // <--
                 Point aNew = rSh.FindAnchorPos( aDocPt );
                 SdrHdl* pHdl;
                 if( (0!=( pHdl = pSdrView->PickHandle( aOld ) )||
@@ -4210,7 +4251,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             }
                             else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
                             {
-                                ASSERT( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
+                                OSL_ENSURE( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
                                 if ( aCntntAtPos.aFnd.pFldmark != NULL)
                                 {
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
@@ -4800,8 +4841,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         Menu* pMenu = 0;
-                        ::rtl::OUString sMenuName =
-                            ::rtl::OUString::createFromAscii( "private:resource/ReadonlyContextMenu");
+                        ::rtl::OUString sMenuName(RTL_CONSTASCII_USTRINGPARAM("private:resource/ReadonlyContextMenu"));
                         if( GetView().TryContextMenuInterception( *pROPopup, sMenuName, pMenu, aEvent ) )
                         {
                             if ( pMenu )
@@ -4900,9 +4940,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                                     }
                                     break;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     default:
-                        ASSERT( !this, "unknown speech command." );
+                        OSL_ENSURE( !this, "unknown speech command." );
 #endif
                 }
                 if ( nSlotId )
@@ -5168,9 +5208,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         default:
-            ASSERT( !this, "unknown command." );
+            OSL_ENSURE( !this, "unknown command." );
 #endif
     }
     if (bCallBase)
@@ -5492,10 +5532,10 @@ void SwEditWin::SetChainMode( BOOL bOn )
 
 uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
+    SolarMutexGuard aGuard;   // this should have
                                                         // happend already!!!
     SwWrtShell *pSh = rView.GetWrtShellPtr();
-    ASSERT( pSh, "no writer shell, no accessible object" );
+    OSL_ENSURE( pSh, "no writer shell, no accessible object" );
     uno::Reference<
         ::com::sun::star::accessibility::XAccessible > xAcc;
     if( pSh )
@@ -5750,3 +5790,5 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         return Selection( nPos - nStartPos, nPos - nStartPos );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -220,6 +221,8 @@ public:
     void            SetCompileForFAP( BOOL bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
+    static bool IsOpCodeVolatile( OpCode eOp );
+
     static BOOL DeQuote( String& rStr );
 
     static const String&    GetNativeSymbol( OpCode eOp );
@@ -385,3 +388,4 @@ private:
 #endif // FORMULA_COMPILER_HXX_INCLUDED
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

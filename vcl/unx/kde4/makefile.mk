@@ -57,16 +57,21 @@ dummy:
 
 .IF "$(ENABLE_KDE4)" != ""
 
-CFLAGS+=$(KDE4_CFLAGS)
+CFLAGS+=$(KDE4_CFLAGS) $(KDE_GLIB_CFLAGS)
 
 .IF "$(ENABLE_RANDR)" != ""
 CDEFS+=-DUSE_RANDR
+.ENDIF
+
+.IF "$(KDE_HAVE_GLIB)" != ""
+CDEFS+=-DKDE_HAVE_GLIB
 .ENDIF
 
 SLOFILES=\
     $(SLO)$/main.obj \
     $(SLO)$/VCLKDEApplication.obj \
     $(SLO)$/KDEXLib.obj \
+    $(SLO)$/KDEXLib.moc.obj \
     $(SLO)$/KDESalDisplay.obj \
     $(SLO)$/KDESalFrame.obj \
     $(SLO)$/KDESalGraphics.obj \
@@ -86,3 +91,6 @@ dummy:
 .INCLUDE :  target.mk
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
+
+$(MISC)$/KDEXLib.moc.cxx : KDEXLib.hxx
+    $(MOC4) $< -o $@

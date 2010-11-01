@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -652,3 +653,5 @@ ResultSetBase::getMetaData(
               m_xMSF, m_sProperty );
     return uno::Reference< sdbc::XResultSetMetaData >( p );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

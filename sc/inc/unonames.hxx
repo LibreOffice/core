@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -186,6 +187,10 @@
 #define SC_UNONAME_ANCHOR           "Anchor"
 #define SC_UNONAME_HORIPOS          "HoriOrientPosition"
 #define SC_UNONAME_VERTPOS          "VertOrientPosition"
+//     #i66550 HLINK_FOR_SHAPES
+#define SC_UNONAME_HYPERLINK        "Hyperlink"
+#define SC_UNONAME_MOVEPROTECT      "MoveProtect"
+#define SC_UNONAME_SIZEPROTECT      "SizeProtect"
 
 //  other cell properties
 #define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
@@ -531,6 +536,7 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+#define SC_UNO_FILTERED_RANGE_SELECTION       "FilteredRangeSelection"
 
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
@@ -613,6 +619,7 @@
 #define SC_UNONAME_ADDRESS          "Address"
 #define SC_UNONAME_UIREPR           "UserInterfaceRepresentation"
 #define SC_UNONAME_PERSREPR         "PersistentRepresentation"
+#define SC_UNONAME_XL_A1_REPR       "XL_A1_Representation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
 // --> PB 2004-08-23 #i33095# Security Options
@@ -646,3 +653,4 @@
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

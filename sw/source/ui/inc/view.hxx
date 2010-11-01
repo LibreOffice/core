@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,7 +136,6 @@ enum ShellModes
 /*--------------------------------------------------------------------
     Beschreibung:   Anwendung einer Vorlage
  --------------------------------------------------------------------*/
-
 struct SwApplyTemplate
 {
     union
@@ -162,11 +162,9 @@ struct SwApplyTemplate
     }
 };
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Sicht auf ein Dokument
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwView: public SfxViewShell
 {
     //Messehack (MA,MBA)
@@ -422,7 +420,7 @@ public:
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
     virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
-    virtual void            ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void            ShowCursor( bool bOn = TRUE );
     virtual ErrCode         DoVerb( long nVerb );
 
     virtual USHORT          SetPrinter( SfxPrinter* pNew,
@@ -673,7 +671,6 @@ public:
 };
 
 // ----------------- inline Methoden ----------------------
-
 inline long SwView::GetXScroll() const
 {
     return aVisArea.GetWidth() * nScrollX / 100L;
@@ -689,11 +686,10 @@ inline const SwDocShell *SwView::GetDocShell() const
     return ((SwView*)this)->GetDocShell();
 }
 
-//***********************************************************
-
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                     const SfxItemSet &rOptions,
                                     BOOL bPreview);
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

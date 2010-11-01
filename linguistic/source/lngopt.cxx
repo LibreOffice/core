@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include "lngopt.hxx"
 #include "lngprops.hxx"
 #include "misc.hxx"
@@ -64,7 +66,7 @@ using namespace com::sun::star::registry;
 
 // static member intialization
 SvtLinguOptions *   LinguOptions::pData = NULL;
-vos::ORefCount      LinguOptions::aRefCount;
+oslInterlockedCount LinguOptions::nRefCount;
 
 
 LinguOptions::LinguOptions()
@@ -76,14 +78,14 @@ LinguOptions::LinguOptions()
         aLinguCfg.GetOptions( *pData );
     }
 
-    ++aRefCount;
+    osl_incrementInterlockedCount( &nRefCount );
 }
 
 
 LinguOptions::LinguOptions(const LinguOptions & /*rOpt*/)
 {
     DBG_ASSERT( pData, "lng : data missing" );
-    ++aRefCount;
+    osl_incrementInterlockedCount( &nRefCount );
 }
 
 
@@ -91,7 +93,7 @@ LinguOptions::~LinguOptions()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (--aRefCount == 0)
+    if ( osl_decrementInterlockedCount( &nRefCount ) == 0 )
     {
         delete pData;   pData  = NULL;
     }
@@ -297,7 +299,7 @@ OUString LinguOptions::GetName( INT32 nWID )
 
     OUString aRes;
 
-    INT32 nLen = sizeof( aWID_Name ) / sizeof( aWID_Name[0] );
+    INT32 nLen = SAL_N_ELEMENTS( aWID_Name );
     if (0 <= nWID  &&  nWID < nLen
         && aWID_Name[ nWID ].nWID == nWID)
     {
@@ -709,3 +711,4 @@ void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
 
 ///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

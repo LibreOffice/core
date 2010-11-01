@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,12 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
 #include <osl/mutex.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
@@ -339,14 +340,14 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     }
 
     mxSFI = Reference< XSimpleFileAccess >( mxMSF->createInstance
-        ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+        ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ), UNO_QUERY );
     if( !mxSFI.is() )
     {
         OSL_ENSURE( 0, "### couln't create SimpleFileAccess component\n" );
     }
 
     mxStringSubstitution = Reference< XStringSubstitution >( mxMSF->createInstance
-        ( OUString::createFromAscii( "com.sun.star.util.PathSubstitution" ) ), UNO_QUERY );
+        ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution")) ), UNO_QUERY );
     if( !mxStringSubstitution.is() )
     {
         OSL_ENSURE( 0, "### couln't create PathSubstitution component\n" );
@@ -531,14 +532,14 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
                                const OUString& rInfoFileName, bool bUser )
 {
     if( bUser )
-        rStr = OUString::createFromAscii( "$(USER)/basic/" );
+        rStr = OUString(RTL_CONSTASCII_USTRINGPARAM("$(USER)/basic/"));
     else
-        rStr = OUString::createFromAscii( "$(INST)/share/basic/" );
+        rStr = OUString(RTL_CONSTASCII_USTRINGPARAM("$(INST)/share/basic/"));
 
     rStr += rLibName;
-    rStr += OUString::createFromAscii( "/" );
+    rStr += OUString(sal_Unicode('/'));
     rStr += rInfoFileName;
-    rStr += OUString::createFromAscii( ".xlb/" );
+    rStr += OUString(RTL_CONSTASCII_USTRINGPARAM(".xlb/"));
 }
 
 sal_Bool SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
@@ -1074,10 +1075,10 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 mxSFI->move( aFolderUserBasic, aPrevFolder );
                 mxSFI->move( aFolderTmp, aFolderUserBasic );
 
-                OUString aUserSearchStr   = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" );
-                OUString aSharedSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" );
-                OUString aBundledSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$BUNDLED_EXTENSIONS" );
-                OUString aInstSearchStr   = OUString::createFromAscii( "$(INST)" );
+                OUString aUserSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"));
+                OUString aSharedSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"));
+                OUString aBundledSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$BUNDLED_EXTENSIONS"));
+                OUString aInstSearchStr(RTL_CONSTASCII_USTRINGPARAM("$(INST)"));
 
                 Sequence< OUString > aNames = pPrevCont->getElementNames();
                 const OUString* pNames = aNames.getConstArray();
@@ -1225,9 +1226,9 @@ void SfxLibraryContainer::implScanExtensions( void )
         // Add index file to URL
         OUString aIndexFileURL = aLibURL;
         if( nReduceCopy == 0 )
-            aIndexFileURL += OUString::createFromAscii( "/" );
+            aIndexFileURL += OUString(sal_Unicode('/'));
         aIndexFileURL += maInfoFileName;
-        aIndexFileURL += OUString::createFromAscii( ".xlb" );
+        aIndexFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM(".xlb"));
 
         // Create link
         const bool bReadOnly = false;
@@ -1696,9 +1697,6 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     }
     catch( Exception& )
     {
-        // throw WrappedTargetException( OUString::createFromAscii( "parsing error!\n" ),
-        //                              Reference< XInterface >(),
-        //                              makeAny( e ) );
         OSL_ENSURE( 0, "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
         ULONG nErrorCode = ERRCODE_IO_GENERAL;
@@ -2181,9 +2179,9 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     maNameContainer.insertByName( Name, aElement );
     maModifiable.setModified( sal_True );
 
-    OUString aUserSearchStr   = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" );
-    OUString aSharedSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" );
-    OUString aBundledSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$BUNDLED_EXTENSIONS" );
+    OUString aUserSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"));
+    OUString aSharedSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"));
+    OUString aBundledSearchStr(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$BUNDLED_EXTENSIONS"));
     if( StorageURL.indexOf( aUserSearchStr ) != -1 )
     {
         pNewLib->mbExtension = sal_True;
@@ -2708,7 +2706,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     if( Handler.is() )
     {
         xToUseSFI = Reference< XSimpleFileAccess >( mxMSF->createInstance
-            ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ), UNO_QUERY );
         if( xToUseSFI.is() )
             xToUseSFI->setInteractionHandler( Handler );
     }
@@ -3109,8 +3107,8 @@ void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerLi
 //============================================================================
 // Implementation class ScriptExtensionIterator
 
-static rtl::OUString aBasicLibMediaType( rtl::OUString::createFromAscii( "application/vnd.sun.star.basic-library" ) );
-static rtl::OUString aDialogLibMediaType( rtl::OUString::createFromAscii( "application/vnd.sun.star.dialog-library" ) );
+static rtl::OUString aBasicLibMediaType(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.basic-library"));
+static rtl::OUString aDialogLibMediaType(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.dialog-library"));
 
 ScriptExtensionIterator::ScriptExtensionIterator( void )
     : m_eState( USER_EXTENSIONS )
@@ -3134,7 +3132,7 @@ ScriptExtensionIterator::ScriptExtensionIterator( void )
     if( !m_xContext.is() )
     {
         throw RuntimeException(
-            ::rtl::OUString::createFromAscii( "ScriptExtensionIterator::init(), no XComponentContext" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptExtensionIterator::init(), no XComponentContext")),
             Reference< XInterface >() );
     }
 }
@@ -3179,7 +3177,7 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
                 break;
             }
             case END_REACHED:
-                VOS_ENSURE( false, "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -3351,7 +3349,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
             Reference< XExtensionManager > xManager =
                 ExtensionManager::get( m_xContext );
             m_aUserPackagesSeq = xManager->getDeployedExtensions
-                (rtl::OUString::createFromAscii("user"),
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
         catch( com::sun::star::uno::DeploymentException& )
@@ -3374,7 +3372,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
         {
             const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage ];
-            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
+            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3405,7 +3403,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
             Reference< XExtensionManager > xSharedManager =
                 ExtensionManager::get( m_xContext );
             m_aSharedPackagesSeq = xSharedManager->getDeployedExtensions
-                (rtl::OUString::createFromAscii("shared"),
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
         catch( com::sun::star::uno::DeploymentException& )
@@ -3427,7 +3425,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
         {
             const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage ];
-            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
+            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3458,7 +3456,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
             Reference< XExtensionManager > xManager =
                 ExtensionManager::get( m_xContext );
             m_aBundledPackagesSeq = xManager->getDeployedExtensions
-                (rtl::OUString::createFromAscii("bundled"),
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
         catch( com::sun::star::uno::DeploymentException& )
@@ -3480,7 +3478,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
         {
             const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage ];
-            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextBundledScriptPackage(): Invalid package" );
+            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextBundledScriptPackage(): Invalid package" );
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3500,3 +3498,5 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
 }
 
 }   // namespace basic
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

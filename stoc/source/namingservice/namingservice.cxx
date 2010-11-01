@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ public:
     throw(::com::sun::star::uno::RuntimeException);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static()
     {
-        OUString aStr( OUString::createFromAscii( SERVICENAME ) );
+        OUString aStr( OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME)) );
         return Sequence< OUString >( &aStr, 1 );
     }
 
@@ -248,3 +249,5 @@ void * SAL_CALL component_getFactory(
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

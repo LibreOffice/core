@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@ class SwWrtShell;
 /*--------------------------------------------------------------------
    Beschreibung: SingleTabDialog
  --------------------------------------------------------------------*/
-
 class SwLineNumberingDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
@@ -60,7 +60,6 @@ public:
 /*--------------------------------------------------------------------
    Beschreibung: TabPage
  --------------------------------------------------------------------*/
-
 class SwLineNumberingPage : public SfxTabPage
 {
     CheckBox        aNumberingOnCB;
@@ -105,4 +104,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

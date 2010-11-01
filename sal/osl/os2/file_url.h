@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,8 +51,6 @@
 const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
 const sal_Unicode UNICHAR_COLON = ((sal_Unicode)':');
 const sal_Unicode UNICHAR_DOT   = ((sal_Unicode)'.');
-
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
 
 #if OSL_DEBUG_LEVEL > 0
 #define OSL_ENSURE_FILE( cond, msg, file ) ( (cond) ?  (void)0 : _osl_warnFile( msg, file ) )
@@ -181,3 +180,4 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
 
 #endif /* #define _FILE_URL_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

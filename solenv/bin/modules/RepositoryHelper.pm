@@ -131,7 +131,7 @@ sub search_via_build_lst {
             };
         };
         $previous_dir = $rep_root_candidate;
-        $rep_root_candidate = File::Basename::dirname(Cwd::realpath($rep_root_candidate));
+        $rep_root_candidate = File::Basename::dirname($rep_root_candidate);
         return 0 if (!$rep_root_candidate);
     }
     while (chdir "$rep_root_candidate");

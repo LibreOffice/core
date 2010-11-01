@@ -58,7 +58,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(TOOLSLIB) 		\
                 $(SVTOOLLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(VCLLIB)			\
                 $(SVXLIB)			\

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1064,16 +1065,14 @@ BOOL SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
         pCurHighlightFrame = 0; // Neues painten des Frames erzwingen
         bHighlightFramePressed = FALSE;
         SetEntryHighlightFrame( pEntry, TRUE );
-#if 0
-        CallSelectHandler( pCurHighlightFrame );
-#else
+
         pHdlEntry = pCurHighlightFrame;
         pView->ClickIcon();
 
         // set focus on Icon
         SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
         SetCursor_Impl( pOldCursor, pHdlEntry, FALSE, FALSE, TRUE );
-#endif
+
         pHdlEntry = 0;
     }
     return bHandled;
@@ -1305,23 +1304,6 @@ BOOL SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                 }
             }
             break;
-
-// wird vom VCL-Tracking gesteuert
-#if 0
-        case KEY_ESCAPE:
-            if( pView->IsTracking() )
-            {
-                HideSelectionRect();
-                //SelectAll( FALSE );
-                SetNoSelection();
-                ClearSelectedRectList();
-                nFlags &= ~F_TRACKING;
-            }
-            else
-                bKeyUsed = FALSE;
-            break;
-#endif
-
 
         case KEY_F2:
             if( !bMod1 && !bShift )
@@ -4669,3 +4651,4 @@ void SvxIconChoiceCtrl_Impl::CallEventListeners( ULONG nEvent, void* pData )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

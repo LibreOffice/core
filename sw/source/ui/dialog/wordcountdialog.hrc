@@ -26,18 +26,22 @@
  ************************************************************************/
 #ifndef SW_WORDCOUNTDIALOG_HRC
 #define SW_WORDCOUNTDIALOG_HRC
-#define FL_CURRENT                  1
-#define FT_CURRENTWORD              2
-#define FI_CURRENTWORD              3
-#define FT_CURRENTCHARACTER         4
-#define FI_CURRENTCHARACTER         5
-#define FL_DOC                      6
-#define FT_DOCWORD                  7
-#define FI_DOCWORD                  8
-#define FT_DOCCHARACTER             9
-#define FI_DOCCHARACTER             10
-#define FL_BOTTOM                   11
-#define PB_OK                       12
-#define PB_HELP                     13
+#define FL_CURRENT                                1
+#define FT_CURRENTWORD                            2
+#define FI_CURRENTWORD                            3
+#define FT_CURRENTCHARACTER                       4
+#define FI_CURRENTCHARACTER                       5
+#define FT_CURRENTCHARACTEREXCLUDINGSPACES        6
+#define FI_CURRENTCHARACTEREXCLUDINGSPACES        7
+#define FL_DOC                                    8
+#define FT_DOCWORD                                9
+#define FI_DOCWORD                               10
+#define FT_DOCCHARACTER                          11
+#define FI_DOCCHARACTER                          12
+#define FT_DOCCHARACTEREXCLUDINGSPACES           13
+#define FI_DOCCHARACTEREXCLUDINGSPACES           14
+#define FL_BOTTOM                                15
+#define PB_OK                                    16
+#define PB_HELP                                  17
 
 #endif

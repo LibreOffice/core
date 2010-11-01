@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include "svsys.h"
 #include "vcl/salinst.hxx"
 #include "vcl/salwtype.hxx"
-#include "vos/signal.hxx"
+#include "osl/signal.h"
 #include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/unqid.hxx"
@@ -70,8 +71,8 @@
 #include "vcl/impimagetree.hxx"
 #include "vcl/xconnection.hxx"
 
-#include "vos/process.hxx"
 #include "osl/file.hxx"
+#include "osl/process.h"
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
@@ -97,22 +98,14 @@ using namespace ::com::sun::star::lang;
 
 // =======================================================================
 
-class ImplVCLExceptionHandler : public ::vos::OSignalHandler
+oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
-public:
-    virtual ::vos::OSignalHandler::TSignalAction SAL_CALL signal( ::vos::OSignalHandler::TSignalInfo* pInfo );
-};
-
-// -----------------------------------------------------------------------
-
-::vos::OSignalHandler::TSignalAction SAL_CALL ImplVCLExceptionHandler::signal( ::vos::OSignalHandler::TSignalInfo* pInfo )
-{
-    static BOOL bIn = FALSE;
+    static bool bIn = false;
 
     // Wenn wir nocheinmal abstuerzen, verabschieden wir uns gleich
     if ( !bIn )
     {
-        USHORT nVCLException = 0;
+        sal_uInt16 nVCLException = 0;
 
         // UAE
         if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
@@ -138,27 +131,28 @@ public:
 
         if ( nVCLException )
         {
-            bIn = TRUE;
+            bIn = true;
 
-            ::vos::OGuard aLock(&Application::GetSolarMutex());
+            SolarMutexGuard aLock;
 
             // Timer nicht mehr anhalten, da ansonsten die UAE-Box
             // auch nicht mehr gepaintet wird
             ImplSVData* pSVData = ImplGetSVData();
             if ( pSVData->mpApp )
             {
-                USHORT nOldMode = Application::GetSystemWindowMode();
+                sal_uInt16 nOldMode = Application::GetSystemWindowMode();
                 Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
                 pSVData->mpApp->Exception( nVCLException );
                 Application::SetSystemWindowMode( nOldMode );
             }
-            bIn = FALSE;
+            bIn = false;
 
-            return vos::OSignalHandler::TAction_CallNextHandler;
+            return osl_Signal_ActCallNextHdl;
         }
     }
 
-    return vos::OSignalHandler::TAction_CallNextHandler;
+    return osl_Signal_ActCallNextHdl;
+
 }
 
 // =======================================================================
@@ -227,7 +221,7 @@ BOOL SVMain()
 // before SVInit is called
 static Application *        pOwnSvApp = NULL;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
-ImplVCLExceptionHandler *   pExceptionHandler = NULL;
+oslSignalHandler   pExceptionHandler = NULL;
 
 class Application_Impl : public Application
 {
@@ -293,11 +287,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken
-    pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
-
-    vos::OStartupInfo   aStartInfo;
-    rtl::OUString       aExeFileName;
-
+    pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
     // Sal initialisieren
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
@@ -318,7 +308,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Den AppFileName gleich holen und absolut machen, bevor das
     // WorkingDirectory sich aendert...
-    aStartInfo.getExecutableFile( aExeFileName );
+    rtl::OUString aExeFileName;
+    osl_getExecutableFile( &aExeFileName.pData );
 
     // convert path to native file format
     rtl::OUString aNativeFileName;
@@ -331,7 +322,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
-    pExceptionHandler = new ImplVCLExceptionHandler();
+    pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
     // Debug-Daten initialisieren
     DBGGUI_INIT();
@@ -376,7 +367,7 @@ void DeInitVCL()
 
     ImplImageTreeSingletonRef()->shutDown();
 
-    delete pExceptionHandler;
+    osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = NULL;
 
     // Debug Daten zuruecksetzen
@@ -636,3 +627,5 @@ void JoinMainLoopThread()
 #endif
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

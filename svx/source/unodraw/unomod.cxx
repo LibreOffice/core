@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/list.hxx>
 #include <svl/itemprop.hxx>
@@ -66,7 +67,6 @@
 
 using namespace ::rtl;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::com::sun::star;
 
 //-////////////////////////////////////////////////////////////////////
@@ -347,7 +347,7 @@ sal_Bool SAL_CALL SvxUnoDrawingModel::hasControllersLocked(  )
 uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
 
@@ -361,7 +361,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages(
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( const OUString& aServiceSpecifier )
     throw(uno::Exception, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
     {
@@ -600,7 +600,7 @@ SvxUnoDrawPagesAccess::~SvxUnoDrawPagesAccess() throw()
 sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     sal_Int32 nCount = 0;
 
@@ -613,7 +613,7 @@ sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
 uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     uno::Any aAny;
 
@@ -665,7 +665,7 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
 uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     uno::Reference< drawing::XDrawPage > xDrawPage;
 
@@ -688,7 +688,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
 void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPage >& xPage )
         throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     sal_uInt16 nPageCount = mrModel.mpDoc->GetPageCount();
     if( nPageCount > 1 )
@@ -753,3 +753,5 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 ///////////////////////////////////////////////////////////////////////
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

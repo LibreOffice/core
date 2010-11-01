@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
-    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
         pWindows[i]->Show();
 }
 // -----------------------------------------------------------------------------
@@ -166,7 +167,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
-    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
     {
         Font aFont = pWindows[i]->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
@@ -178,3 +179,5 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 // .............................................................
 } // namespace dbaui
 // .............................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

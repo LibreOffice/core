@@ -28,7 +28,6 @@ static const int EOF=0;
 %+
 //class istream;
 %*
-//#include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS

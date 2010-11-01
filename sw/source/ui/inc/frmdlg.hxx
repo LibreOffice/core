@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@ class SwWrtShell;
 /*--------------------------------------------------------------------
    Beschreibung:    Rahmendialog
  --------------------------------------------------------------------*/
-
 class SwFrmDlg : public SfxTabDialog
 {
     BOOL                m_bFormat;
@@ -62,5 +62,6 @@ public:
     inline SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };
 
-
 #endif // _FRMDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

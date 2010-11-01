@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <com/sun/star/util/DateTime.hpp>
@@ -309,10 +310,10 @@ namespace connectivity
         }
 
         sal_Bool    isBound() const                     { return m_bBound;      }
-        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? true : false; }
+        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? 1 : 0; }
 
         sal_Bool    isModified() const                  { return m_bModified;   }
-        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? true : false;   }
+        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? 1 : 0;  }
 
         sal_Bool    isSigned() const                    { return m_bSigned; }
         void        setSigned(sal_Bool _bMod=sal_True);
@@ -373,7 +374,7 @@ namespace connectivity
     };
 
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
-    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::vos::OReference
+    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::salhelper::SimpleReferenceObject
     {
         ORowSetValue    m_aValue;   // my own value
     public:
@@ -393,7 +394,7 @@ namespace connectivity
         inline void setModified(sal_Bool _bModified)                { m_aValue.setModified(_bModified); }
 
     };
-    typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
+    typedef ::rtl::Reference<ORowSetValueDecorator> ORowSetValueDecoratorRef;
 
     // -------------------------------------------------------------------------
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
@@ -454,14 +455,15 @@ namespace connectivity
         sal_Int32 getParameterIndex(sal_Int32 _nId) const { return m_nParameterIndexes[_nId]; }
     };
 
-    typedef ::vos::ORef< OAssignValues > ORefAssignValues;
+    typedef ::rtl::Reference< OAssignValues > ORefAssignValues;
 
 
 
-    typedef ::vos::ORef< OValueVector >                 OValueRow;
-    typedef ::vos::ORef< OValueRefVector >              OValueRefRow;
+    typedef ::rtl::Reference< OValueVector >                    OValueRow;
+    typedef ::rtl::Reference< OValueRefVector >             OValueRefRow;
 }
 
 #endif // #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

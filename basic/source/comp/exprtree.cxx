@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -373,8 +374,12 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         // Typ SbxOBJECT sein
         if( pDef->GetType() != SbxOBJECT && pDef->GetType() != SbxVARIANT )
         {
-            pParser->Error( SbERR_BAD_DECLARATION, aSym );
-            bError = TRUE;
+            // defer error until runtime if in vba mode
+            if ( !pParser->IsVBASupportOn() )
+                        {
+                pParser->Error( SbERR_BAD_DECLARATION, aSym );
+                bError = TRUE;
+            }
         }
         if( !bError )
             pNd->aVar.pNext = ObjTerm( *pDef );
@@ -580,7 +585,11 @@ SbiExprNode* SbiExpression::Unary()
             eTok = NEG;
         case NOT:
             pParser->Next();
-            pNd = new SbiExprNode( pParser, Unary(), eTok, NULL );
+            // process something like "Do While Not "foo"="" "
+            if( pParser->IsVBASupportOn() )
+                pNd = new SbiExprNode( pParser, Like(), eTok, NULL );
+            else
+                pNd = new SbiExprNode( pParser, Unary(), eTok, NULL );
             break;
         case PLUS:
             pParser->Next();
@@ -736,7 +745,7 @@ SbiExprNode* SbiExpression::Like()
             pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
         }
         // Mehrere Operatoren hintereinander gehen nicht
-        if( nCount > 1 )
+        if( nCount > 1 && !pParser->IsVBASupportOn() )
         {
             pParser->Error( SbERR_SYNTAX );
             bError = TRUE;
@@ -1134,3 +1143,4 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
     else pParser->Next();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

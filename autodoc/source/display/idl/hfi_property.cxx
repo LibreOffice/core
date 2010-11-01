@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -449,3 +450,5 @@ HF_IdlCommentedRelationElement::write_Description( const client & i_ce ) const
 {
     produce_LinkDoc( Env(), i_ce, CurOut(), m_relation, doctype_complete );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

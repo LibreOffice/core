@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 class SwWriterApp;
 class SwModule;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;
@@ -49,7 +50,6 @@ class SwDocEditDialog;
 
 SfxPrinter* GetPrt( ViewShell* );
 void        SetPrt( SfxPrinter* );
-
 
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Dokumentanzeige
@@ -87,6 +87,7 @@ public:
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
+
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, Elementeseite
 --------------------------------------------------------- */
@@ -127,10 +128,10 @@ public:
     void                    FillViewOptions( SwViewOption& rVOpt) const;
 
 };
+
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Drucker/Zusaetze
 --------------------------------------------------------- */
-
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;
@@ -175,11 +176,9 @@ public:
 
 };
 
-
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------------- */
-
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
     BYTE eMode;
@@ -204,7 +203,8 @@ public:
     void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
+
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Testeinstellungen
 --------------------------------------------------------- */
@@ -239,4 +239,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

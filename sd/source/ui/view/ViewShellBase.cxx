@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -487,7 +488,6 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     if( GetViewFrame() )
                     {
-                        GetDocument()->SetStartWithPresentation( false );
                         GetViewFrame()->GetDispatcher()->Execute(
                             SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
                     }
@@ -1785,3 +1785,5 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 } // end of anonymouse namespace
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

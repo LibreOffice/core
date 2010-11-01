@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -199,3 +200,5 @@ FastAttributeList * FastSerializerHelper::createAttrList()
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

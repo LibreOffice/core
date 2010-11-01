@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <accmap.hxx>
 #include <fesh.hxx>
 #include <viewopt.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -370,7 +371,7 @@ void SwAccessibleParagraph::GetStates(
         Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
             rStateSet.AddState( AccessibleStateType::FOCUSED );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 }
@@ -404,7 +405,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
     sal_Bool bNewIsHeading = IsHeading();
     sal_Bool bOldIsHeading;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOldIsHeading = bIsHeading;
         if( bIsHeading != bNewIsHeading )
             bIsHeading = bNewIsHeading;
@@ -416,7 +417,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
         ::rtl::OUString sNewDesc( GetDescription() );
         ::rtl::OUString sOldDesc;
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             sOldDesc = sDesc;
             if( sDesc != sNewDesc )
                 sDesc = sNewDesc;
@@ -441,7 +442,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     sal_Int32 nNew = GetCaretPos();
     sal_Int32 nOld;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         nOld = nOldCaretPos;
         nOldCaretPos = nNew;
     }
@@ -449,7 +450,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -480,7 +481,7 @@ void SwAccessibleParagraph::_InvalidateFocus()
     {
         sal_Int32 nPos;
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             nPos = nOldCaretPos;
         }
         ASSERT( nPos != -1, "focus object should be selected" );
@@ -507,7 +508,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTxtFrm ) )
     // <--
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     bIsHeading = IsHeading();
     // --> OD 2004-09-27 #117970# - set an empty accessibility name for paragraphs
@@ -520,7 +521,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     delete pPortionData;
     delete pHyperTextData;
@@ -531,7 +532,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 
 sal_Bool SwAccessibleParagraph::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return nOldCaretPos != -1;
 }
 
@@ -833,11 +834,11 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
 ::rtl::OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    vos::OGuard aGuard2( aMutex );
+    osl::MutexGuard aGuard2( aMutex );
     if( !sDesc.getLength() )
         sDesc = GetDescription();
 
@@ -847,7 +848,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
 lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
         throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
     if( !pTxtFrm )
@@ -870,7 +871,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
     throw ( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
     utl::AccessibleRelationSetHelper* pHelper = new utl::AccessibleRelationSetHelper();
@@ -907,7 +908,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
 void SAL_CALL SwAccessibleParagraph::grabFocus()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
@@ -1120,7 +1121,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -1139,19 +1140,19 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     sal_Int32 nRet = GetCaretPos();
     {
-        vos::OGuard aOldCaretPosGuard( aMutex );
+        osl::MutexGuard aOldCaretPosGuard( aMutex );
         ASSERT( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
     }
     if( -1 != nRet )
     {
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -1161,7 +1162,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1194,7 +1195,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
 sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1218,7 +1219,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     const ::rtl::OUString& rText = GetString();
@@ -1463,14 +1464,14 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
         throw ( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     tAccParaPropValMap aDefAttrSeq;
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
     // --> OD 2010-03-08 #i92233#
-    static rtl::OUString sMMToPixelRatio( rtl::OUString::createFromAscii( "MMToPixelRatio" ) );
+    static rtl::OUString sMMToPixelRatio(RTL_CONSTASCII_USTRINGPARAM("MMToPixelRatio"));
     bool bProvideMMToPixelRatio( false );
     {
         if ( aRequestedAttributes.getLength() == 0 )
@@ -1644,7 +1645,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
         throw ( lang::IndexOutOfBoundsException,
                 uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     {
@@ -1677,7 +1678,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1740,7 +1741,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 sal_Int32 SwAccessibleParagraph::getCharacterCount()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1750,7 +1751,7 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
 sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
@@ -1827,7 +1828,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 ::rtl::OUString SwAccessibleParagraph::getSelectedText()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1841,7 +1842,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 sal_Int32 SwAccessibleParagraph::getSelectionStart()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1853,7 +1854,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionStart()
 sal_Int32 SwAccessibleParagraph::getSelectionEnd()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1865,7 +1866,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1901,7 +1902,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 ::rtl::OUString SwAccessibleParagraph::getText()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1912,7 +1913,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1929,7 +1930,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
 /*accessibility::*/TextSegment SwAccessibleParagraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -1965,7 +1966,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
 /*accessibility::*/TextSegment SwAccessibleParagraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -2009,7 +2010,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
 /*accessibility::*/TextSegment SwAccessibleParagraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
@@ -2051,7 +2052,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // select and copy (through dispatch mechanism)
     setSelection( nStartIndex, nEndIndex );
@@ -2068,7 +2069,7 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( !IsEditableState() )
         return sal_False;
@@ -2083,7 +2084,7 @@ sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( !IsEditableState() )
         return sal_False;
@@ -2111,7 +2112,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
     const ::rtl::OUString& sReplacement )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
 
@@ -2173,7 +2174,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     const uno::Sequence<PropertyValue>& rAttributeSet )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
 
     const ::rtl::OUString& rText = GetString();
@@ -2356,7 +2357,7 @@ const SwTxtAttr *SwHyperlinkIter_Impl::next()
 sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
@@ -2378,7 +2379,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     SwAccessibleParagraph::getHyperLink( sal_Int32 nLinkIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     uno::Reference< XAccessibleHyperlink > xRet;
@@ -2433,7 +2434,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     // parameter checking
@@ -2675,3 +2676,5 @@ void SwAccessibleParagraph::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     SwClient::Modify( pOld, pNew );
 }
 // <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

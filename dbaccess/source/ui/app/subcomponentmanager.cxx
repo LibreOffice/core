@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -42,7 +43,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <hash_map>
 #include <algorithm>
@@ -463,7 +464,7 @@ namespace dbaui
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SubComponentManager::closeSubComponents()
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
         try
@@ -610,3 +611,5 @@ namespace dbaui
 //......................................................................................................................
 } // namespace dbaui
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

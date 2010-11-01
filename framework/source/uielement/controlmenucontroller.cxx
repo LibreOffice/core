@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+#include <sal/macros.h>
 #include <uielement/controlmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -61,7 +63,7 @@
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // Copied from svx
 // Function-Id's
@@ -239,7 +241,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     if ( pResMgr->IsAvailable( aResId ))
     {
         ImageList aImageList( aResId );
-      for ( sal_uInt32 i=0; i < sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i )
+      for ( sal_uInt32 i=0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )
         {
             // das entsprechende Image dran
             if ( m_bShowMenuImages )
@@ -258,7 +260,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -290,7 +292,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     osl::ResettableMutexGuard aLock( m_aMutex );
 
     USHORT nMenuId = 0;
-    for (sal_uInt32 i=0; i < sizeof(aCommands)/sizeof(aCommands[0]); ++i)
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
         {
@@ -303,7 +305,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     {
         VCLXPopupMenu*  pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
 
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
@@ -356,7 +358,7 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
 
     if ( m_xPopupMenu.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -416,7 +418,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
 
-        for (sal_uInt32 i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
+        for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
         {
             aTargetURL.Complete = rtl::OUString::createFromAscii( aCommands[i] );
             m_xURLTransformer->parseStrict( aTargetURL );
@@ -441,3 +443,5 @@ void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArgumen
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,3 +69,4 @@ void VCL_DLLPUBLIC NotifyAccessibleStateEventGlobally( const ::com::sun::star::a
 
 #endif  // _VCL_UNOHELP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

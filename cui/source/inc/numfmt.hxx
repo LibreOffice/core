@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,8 +88,11 @@ class SvxNumberFormatTabPage : public SfxTabPage
 public:
     ~SvxNumberFormatTabPage();
 
-#undef SfxTabPage
-#define SfxTabPage ::SfxTabPage
+#if ENABLE_LAYOUT
+#  undef SfxTabPage
+#  define SfxTabPage ::SfxTabPage
+#endif
+
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
     static USHORT*          GetRanges();
@@ -186,3 +190,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

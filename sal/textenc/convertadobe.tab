@@ -30,6 +30,7 @@
 #include "tenchelp.h"
 
 #include "rtl/tencinfo.h"
+#include <sal/macros.h>
 
 namespace {
 
@@ -103,8 +104,7 @@ adobeStandardEncodingConverterData = {
       0x0141, 0x00D8, 0x0152, 0x00BA, 0xffff, 0xffff, 0xffff, 0xffff,
       0xffff, 0x00E6, 0xffff, 0xffff, 0xffff, 0x0131, 0xffff, 0xffff, // 0xF0
       0x0142, 0x00F8, 0x0153, 0x00DF, 0xffff, 0xffff, 0xffff, 0xffff },
-    (sizeof unicodeToAdobeStandardEncoding
-     / sizeof unicodeToAdobeStandardEncoding[0]),
+    SAL_N_ELEMENTS(unicodeToAdobeStandardEncoding),
     unicodeToAdobeStandardEncoding };
 
 // RTL_TEXTENCODING_ADOBE_SYMBOL is based on
@@ -225,8 +225,7 @@ adobeSymbolEncodingConverterData = {
       0x239D, 0x23A1, 0x23A2, 0x23A3, 0x23A7, 0x23A8, 0x23A9, 0x23AA,
       0xffff, 0x232A, 0x222B, 0x2320, 0x23AE, 0x2321, 0x239E, 0x239F, // 0xF0
       0x23A0, 0x23A4, 0x23A5, 0x23A6, 0x23AB, 0x23AC, 0x23AD, 0xffff },
-    (sizeof unicodeToAdobeSymbolEncoding
-     / sizeof unicodeToAdobeSymbolEncoding[0]),
+    SAL_N_ELEMENTS( unicodeToAdobeSymbolEncoding ),
     unicodeToAdobeSymbolEncoding };
 
 // RTL_TEXTENCODING_ADOBE_DINGBATS is based on

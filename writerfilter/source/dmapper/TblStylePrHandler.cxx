@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <TblStylePrHandler.hxx>
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
@@ -85,3 +86,5 @@ void TblStylePrHandler::resolveSprmProps(Sprm & rSprm)
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

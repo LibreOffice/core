@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,12 +45,11 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 #include <stdio.h>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -156,18 +156,17 @@ public:
 void MyApp::Main()
 {
     OUString aRegistry;
-    OStartupInfo aInfo;
 
-    for( sal_Int32 n = 0, nmax = aInfo.getCommandArgCount(); n < nmax; n++ )
+    for( sal_Int32 n = 0, nmax = osl_getCommandArgCount(); n < nmax; n++ )
     {
         OUString aArg;
 
-        aInfo.getCommandArg( n, aArg );
+        osl_getCommandArg( n, &aArg.pData );
 
         if( aArg.compareTo( OUString::createFromAscii( "-r" ), 2 ) == 0 )
         {
             if ( n + 1 < nmax )
-                aInfo.getCommandArg( ++n, aRegistry );
+                osl_getCommandArg( ++n, &aRegistry.pData );
         }
     }
 
@@ -445,3 +444,4 @@ sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

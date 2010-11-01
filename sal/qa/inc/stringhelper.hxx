@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef STRINGHELPER_HXX
 #define STRINGHELPER_HXX
 
@@ -14,3 +15,5 @@ inline void operator <<= (rtl::OUString& _rUnicodeString, rtl::OString const & _
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

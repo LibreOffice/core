@@ -489,7 +489,7 @@
 !       }
 !   }
 ! }
---- 1,329 ----
+--- 1,325 ----
 ! /*
 !  File:       Vetters.cpp
 !  
@@ -575,11 +575,7 @@
 ! using namespace std;
 ! 
 ! #ifndef WIN32
-! #ifdef sun
 ! #include <errno.h>
-! #else
-! #include <sys/errno.h>
-! #endif
 ! #else
 ! #include <string.h>
 ! #define stat _stat

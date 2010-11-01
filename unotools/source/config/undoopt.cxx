@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -199,3 +200,5 @@ sal_Int32 SvtUndoOptions::GetUndoCount() const
 {
     return pImp->GetUndoCount();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

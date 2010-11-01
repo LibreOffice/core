@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -805,8 +806,10 @@ enum SwPropNameIds
 /* 0737 */  UNO_NAME_DESCRIPTION,
 // <--
 /* 0738 */  UNO_NAME_META,       // #i91565#
-/* 0739 */  UNO_NAME_NESTED_TEXT_CONTENT, // #i109601#
-/* 0740 */  SW_PROPNAME_END
+/* 0739 */  UNO_NAME_IS_TEMPLATE,
+/* 0740 */  UNO_NAME_VBA_DOCOBJ,
+/* 0741 */  UNO_NAME_NESTED_TEXT_CONTENT, // #i109601#
+/* 0742 */  SW_PROPNAME_END
 };
 
 
@@ -839,3 +842,5 @@ SW_DLLPUBLIC const SwPropNameLen& SwGetPropName( USHORT nId );
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

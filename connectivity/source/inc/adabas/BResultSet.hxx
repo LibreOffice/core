@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,9 @@ namespace connectivity
     {
         class OAdabasResultSet :    public  ::connectivity::odbc::OResultSet
         {
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         public:
-            OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt,const ::vos::ORef<OSQLColumns>& _rSelectColumns)
+            OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt,const ::rtl::Reference<OSQLColumns>& _rSelectColumns)
              : ::connectivity::odbc::OResultSet( _pStatementHandle,pStmt)
              ,m_aSelectColumns(_rSelectColumns)
             {}
@@ -58,3 +59,4 @@ namespace connectivity
 
 #endif // CONNECTIVITY_ADABAS_RESULTSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

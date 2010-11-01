@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -236,7 +237,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
     }
 
-    FASTBOOL bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(FALSE);
+    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(FALSE);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -1349,22 +1350,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // #i102735# discussed with CL: removed for performance reasons
-    #if 0
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_SOUND ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_VIDEO ) )
-    {
-        ///////////////////////////////////////////////////////////////////////
-        // Menuoption : Insert->Object->Sound and Insert->Object->Video
-        //              diable, if there isn't installed any appropriate plugin
-        //
-        if (!SvxPluginFileDlg::IsAvailable (SID_INSERT_SOUND))
-            rSet.DisableItem (SID_INSERT_SOUND);
-        if (!SvxPluginFileDlg::IsAvailable (SID_INSERT_VIDEO))
-            rSet.DisableItem (SID_INSERT_VIDEO);
-    }
-    #endif
-
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile
     //             disable, if there only Bitmap or Metafiles marked
@@ -1735,3 +1720,5 @@ void DrawViewShell::Execute (SfxRequest& rReq)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

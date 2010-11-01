@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -229,25 +230,6 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     }
     return bRet;
 }
-
-BOOL SwEditShell::UpdateField( sw::mark::IFieldmark &fieldBM)
-{
-//    SwDocShell* pDocSh = pDoc->GetDocShell();
-    //@TODO implement me...; add undo etc...
-    if ( pDoc && fieldBM.IsExpanded( ) ) {
-        SwPosition aSttPos = fieldBM.GetMarkStart( );
-        aSttPos.nContent++;
-
-        SwPosition aEndPos = fieldBM.GetMarkEnd( );
-        aEndPos.nContent--;
-
-        SwPaM aPaM( aSttPos, aEndPos );
-        pDoc->DeleteRange(aPaM);
-        pDoc->InsertString(aPaM, String::CreateFromAscii("Implement me ;-)") );
-    }
-    return TRUE;
-}
-
 
 /*--------------------------------------------------------------------
      Beschreibung: Aktuelles Verzeichnis vor oder in dem der Cursor
@@ -496,3 +478,4 @@ void SwEditShell::ApplyAutoMark()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

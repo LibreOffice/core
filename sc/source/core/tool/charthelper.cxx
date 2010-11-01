@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -294,3 +295,5 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     if( xModel.is() )
         xModel->unlockControllers();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -61,6 +62,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -619,7 +621,7 @@ namespace ucb { namespace ucp { namespace ext
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             )
         };
-        return Sequence< Property >( aProperties, sizeof( aProperties ) / sizeof( aProperties[0] ) );
+        return Sequence< Property >( aProperties, SAL_N_ELEMENTS( aProperties ));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -670,3 +672,5 @@ namespace ucb { namespace ucp { namespace ext
 //......................................................................................................................
 } } }   // namespace ucp::ext
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

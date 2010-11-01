@@ -45,7 +45,7 @@ CFLAGS += -DLEAK_STATIC_DATA
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
-CFLAGSCXX += -fno-omit-frame-pointer
+CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 
 NOOPTFILES= \
     $(SLO)$/uno2cpp.obj

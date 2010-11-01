@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::X
 uno::Sequence< ::rtl::OUString > lcl_getFormattedFieldOptionals()
 {
     ::rtl::OUString pProps[] = { PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------
@@ -381,3 +382,5 @@ void SAL_CALL OFormattedField::setSize( const awt::Size& aSize ) throw (beans::P
 // =============================================================================
 } // namespace reportdesign
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ void SwAccessiblePage::GetStates(
     if( IsSelected() )
     {
         ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
         Window *pWin = GetWindow();
@@ -84,7 +85,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     sal_Bool bOldSelected;
 
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOldSelected = bIsSelected;
         bIsSelected = bNewSelected;
     }
@@ -93,7 +94,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -113,7 +114,7 @@ void SwAccessiblePage::_InvalidateFocus()
         sal_Bool bSelected;
 
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
         ASSERT( bSelected, "focus object should be selected" );
@@ -132,7 +133,7 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
     DBG_ASSERT( pInitMap != NULL, "need map" );
     DBG_ASSERT( pFrame->IsPageFrm(), "need page frame" );
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sPage = OUString::valueOf(
         static_cast<sal_Int32>(
@@ -146,7 +147,7 @@ SwAccessiblePage::~SwAccessiblePage()
 
 sal_Bool SwAccessiblePage::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
 
@@ -177,7 +178,7 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -196,3 +197,5 @@ OUString SwAccessiblePage::getAccessibleDescription( )
     OUString sArg( GetFormattedPageNumber() );
     return GetResource( STR_ACCESS_PAGE_DESC, &sArg );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

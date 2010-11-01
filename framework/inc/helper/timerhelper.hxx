@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define __FRAMEWORK_HELPER_TIMERHELPER_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <osl/mutex.hxx>
 
 //........................................................................
@@ -51,3 +52,4 @@ namespace framework
 
 #endif // _FRAMEWORK_HELPER_TIMERHELPER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

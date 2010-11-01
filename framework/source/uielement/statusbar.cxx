@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ FrameworkStatusBar::~FrameworkStatusBar()
 
 void FrameworkStatusBar::SetStatusBarManager( StatusBarManager* pStatusBarManager )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     m_pMgr = pStatusBarManager;
 }
 
@@ -111,3 +112,5 @@ void FrameworkStatusBar::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

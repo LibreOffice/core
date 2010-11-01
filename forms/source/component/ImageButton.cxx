@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/basicio.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
 
@@ -230,7 +231,7 @@ Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (Ru
 //------------------------------------------------------------------------------
 void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     if (e.Buttons != awt::MouseButton::LEFT)
         return;
@@ -271,3 +272,4 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) thr
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

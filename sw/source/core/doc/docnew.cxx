@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,6 @@
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
@@ -140,7 +140,6 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 /*
  * global functions...
  */
-
  uno::Reference< linguistic2::XProofreadingIterator > SwDoc::GetGCIterator() const
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
@@ -150,7 +149,7 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
         {
             try
             {
-                rtl::OUString aServiceName( rtl::OUString::createFromAscii("com.sun.star.linguistic2.ProofreadingIterator") );
+                rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ProofreadingIterator"));
                 m_xGCIterator = uno::Reference< linguistic2::XProofreadingIterator >
                     ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
             }
@@ -199,9 +198,6 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * interne Funktionen
  */
-
-
-
 BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 {
     SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)rpFmt->GetCntnt();
@@ -216,7 +212,6 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 /*
  * exportierte Methoden
  */
-
 SwDoc::SwDoc() :
     aNodes( this ),
     aUndoNodes( this ),
@@ -472,8 +467,6 @@ SwDoc::SwDoc() :
  * Dieser darf also keinesfalls durch delete geloescht
  * werden!!!!!!!!!!
  */
-
-
 SwDoc::~SwDoc()
 {
     // --> OD 2007-03-16 #i73788#
@@ -705,8 +698,6 @@ SwDoc::~SwDoc()
     SfxItemPool::Free(mpAttrPool);
 }
 
-//---------------------------------------------------
-
 VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
@@ -726,8 +717,6 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
     const_cast<SwDoc*>(this)->setVirtualDevice( pNewVir, true, true );
     return *pVirDev;
 }
-
-//---------------------------------------------------
 
 SfxPrinter& SwDoc::CreatePrinter_() const
 {
@@ -750,7 +739,6 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     const_cast<SwDoc*>(this)->setPrinter( pNewPrt, true, true );
     return *pPrt;
 }
-//---------------------------------------------------
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
@@ -770,12 +758,8 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     }
 }
 
-
 // Convenience-Methode, um uebermaessige Includes von docsh.hxx
 // zu vermeiden
-
-
-
 uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( pDocShell )
@@ -785,13 +769,10 @@ uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
     return NULL;
 }
 
-
-
 SfxObjectShell* SwDoc::GetPersist() const
 {
     return pDocShell ? pDocShell : pLinkMgr->GetPersist();
 }
-
 
 void SwDoc::ClearDoc()
 {
@@ -893,7 +874,7 @@ void SwDoc::ClearDoc()
     else
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
 
-    xForbiddenCharsTable.unbind();
+    xForbiddenCharsTable.clear();
 
     pFldTypes->DeleteAndDestroy( INIT_FLDTYPES,
                                 pFldTypes->Count() - INIT_FLDTYPES );
@@ -925,9 +906,7 @@ void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
         DELETEZ( pPgPViewPrtData );
     SetModified();
 }
-/* -----------------------------06.01.00 14:03--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwModify*   SwDoc::GetUnoCallBack() const
 {
     return pUnoCallBack;
@@ -937,7 +916,6 @@ SwModify*   SwDoc::GetUnoCallBack() const
  * SwDoc:
  *  Reading and writing of the layout cache.
  *--------------------------------------------------*/
-
 void SwDoc::ReadLayoutCache( SvStream& rStream )
 {
     if( !pLayoutCache )
@@ -1029,13 +1007,13 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
                     if ( mbApplyWorkaroundForB6375613 )
                     {
                         xDocInfo->addProperty(
-                            rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")),
                             beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::REMOVABLE,
                             uno::makeAny( false ) );
                     }
                     else
                     {
-                        xDocInfo->removeProperty( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied") );
+                        xDocInfo->removeProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")) );
                     }
                 }
                 catch( uno::Exception& )
@@ -1083,9 +1061,6 @@ void SwDoc::InitTOXTypes()
    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 }
 
-/*-- 08.05.2009 10:07:57---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
@@ -1160,6 +1135,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     pRet->SetRefForDocShell( 0 );
     return xRetShell;
 }
+
 /*-- 08.05.2009 10:52:40---------------------------------------------------
     copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
   -----------------------------------------------------------------------*/
@@ -1235,3 +1211,5 @@ void SwDoc::Paste( const SwDoc& rSource )
     UnlockExpFlds();
     UpdateFlds(NULL, false);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

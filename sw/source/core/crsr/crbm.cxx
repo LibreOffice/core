@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -258,3 +259,5 @@ bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

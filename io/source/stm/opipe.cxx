@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,7 +135,7 @@ private:
 
     oslCondition m_conditionBytesAvail;
     Mutex     m_mutexAccess;
-    IFIFO       *m_pFIFO;
+    I_FIFO      *m_pFIFO;
 };
 
 
@@ -346,13 +347,13 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
         }
         m_nBytesToSkip = 0;
     }
-    catch ( IFIFO_OutOfBoundsException & )
+    catch ( I_FIFO_OutOfBoundsException & )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
             *this );
     }
-    catch ( IFIFO_OutOfMemoryException & )
+    catch ( I_FIFO_OutOfMemoryException & )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
@@ -490,3 +491,4 @@ Sequence<OUString> OPipeImpl_getSupportedServiceNames(void)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

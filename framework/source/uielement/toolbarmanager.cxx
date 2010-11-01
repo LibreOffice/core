@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -498,7 +499,7 @@ void ToolBarManager::UpdateControllers()
         if ( xLayoutManager.is() && xDockable.is() )
         {
             ::com::sun::star::awt::Point aPoint;
-            aPoint.X = aPoint.Y = LONG_MAX;
+            aPoint.X = aPoint.Y = SAL_MAX_INT32;
             xLayoutManager->dockWindow( m_aResourceName, DockingArea_DOCKINGAREA_DEFAULT, aPoint );
             xLayoutManager->lockWindow( m_aResourceName );
         }
@@ -2365,3 +2366,4 @@ bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OU
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

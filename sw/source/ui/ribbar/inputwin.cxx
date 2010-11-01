@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -189,7 +190,7 @@ void SwInputWindow::ShowWin()
         pView->GetHLineal().SetActive( FALSE );
         pView->GetVLineal().SetActive( FALSE );
 
-        DBG_ASSERT(pWrtShell, "Keine WrtShell!");
+        OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in Tabelle
         bIsTable = pWrtShell->IsCrsrInTbl() ? TRUE : FALSE;
 
@@ -210,7 +211,7 @@ void SwInputWindow::ShowWin()
             aPos.SetText(SW_RESSTR(STR_TBL_FORMULA));
 
         // Aktuelles Feld bearbeiten
-        ASSERT(pMgr == 0, FieldManager nicht geloescht.);
+        OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
         pMgr = new SwFldMgr;
 
         // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
@@ -567,7 +568,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         aStr += cClose;
         SetText(aStr);
         USHORT nPos = aStr.Search( cClose );
-        ASSERT(nPos < aStr.Len(), Delimiter nicht gefunden.);
+        OSL_ENSURE(nPos < aStr.Len(), "delimiter not found");
         ++nPos;
         SetSelection( Selection( nPos, nPos ));
     }
@@ -683,3 +684,4 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

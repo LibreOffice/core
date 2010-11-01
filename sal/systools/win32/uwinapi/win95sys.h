@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #pragma once
 
 //Kernel32 objects
@@ -346,3 +347,4 @@ DWORD   LastTlsSetValueEIP[64]; // 200h (parallel to TlsArray, contains EIP
                 //  where TLS value was last set from)
 } THREAD_DATABASE, *PTHREAD_DATABASE;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

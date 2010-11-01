@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,3 +96,5 @@ Date::Date( const ResId& rResId ) : nDate(0)
     if ( 0x04 & nObjMask )
         SetDay( (USHORT)pResMgr->ReadShort() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

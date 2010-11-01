@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2717,8 +2718,8 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
         // the interface for this method should not have been exposed if we do not
         // support binding to external data
-
-    if ( !impl_approveValueBinding_nolock( _rxBinding ) )
+    // allow reset
+    if ( _rxBinding.is() && !impl_approveValueBinding_nolock( _rxBinding ) )
     {
         throw IncompatibleTypesException(
             FRM_RES_STRING( RID_STR_INCOMPATIBLE_TYPES ),
@@ -3080,3 +3081,4 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
 }
 //... namespace frm .......................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

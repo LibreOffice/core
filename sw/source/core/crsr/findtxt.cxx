@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -432,7 +433,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     bool bRemoveSoftHyphens = true;
     if ( bRegSearch )
     {
-        const rtl::OUString a00AD( rtl::OUString::createFromAscii( "\\x00AD" ) );
+        const rtl::OUString a00AD(RTL_CONSTASCII_USTRINGPARAM("\\x00AD"));
         if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
              bRemoveSoftHyphens = false;
     }
@@ -705,3 +706,4 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -749,8 +750,6 @@ BOOL SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     return TRUE;
 }
 
-// ---------------------------------------------------------------
-
 // kopiere die Tabelle in diese.
 //  Kopiere alle Boxen einer Line in entsprechenden Boxen. Der alte Inhalt
 //  wird dabei geloescht.
@@ -758,8 +757,6 @@ BOOL SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 //  Box einer "GrundLine".
 //  Ist auch keine Line mehr vorhanden, -> auch in die letzte Box
 //  einer "GrundLine"
-
-
 BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
                         SwUndoTblCpyTbl* pUndo )
 {
@@ -839,7 +836,6 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     aFndBox.MakeFrms( pTblNd->GetTable() );     // erzeuge die Frames neu
     return TRUE;
 }
-
 
 BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
@@ -1062,8 +1058,6 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     return TRUE;
 }
 
-
-
 BOOL _FndCntntBox( const SwTableBox*& rpBox, void* pPara )
 {
     SwTableBox* pBox = (SwTableBox*)rpBox;
@@ -1074,13 +1068,11 @@ BOOL _FndCntntBox( const SwTableBox*& rpBox, void* pPara )
     return TRUE;
 }
 
-
 BOOL _FndCntntLine( const SwTableLine*& rpLine, void* pPara )
 {
     ((SwTableLine*)rpLine)->GetTabBoxes().ForEach( &_FndCntntBox, pPara );
     return TRUE;
 }
-
 
 // suche alle Inhaltstragenden-Boxen dieser Box
 SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
@@ -1097,4 +1089,4 @@ SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
     return rBoxes;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

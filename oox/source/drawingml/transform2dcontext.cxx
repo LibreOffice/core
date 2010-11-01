@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,11 +65,12 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
     case NMSP_DRAWINGML|XML_ext:        // horz/vert size
         mrShape.setSize( Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
         break;
-/* todo: what to do?
     case NMSP_DRAWINGML|XML_chOff:  // horz/vert translation of children
-    case NMSP_DRAWINGML|XML_chExt:  // horz/vert size of children
+        mrShape.setChildPosition( Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
         break;
-*/
+    case NMSP_DRAWINGML|XML_chExt:  // horz/vert size of children
+        mrShape.setChildSize( Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
+        break;
     }
 
     return 0;
@@ -79,3 +81,4 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
 } // namespace drawingml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

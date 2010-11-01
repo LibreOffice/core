@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,9 +194,6 @@ void SAL_CALL OOXMLFastDocumentHandler::startDocument()
 void SAL_CALL OOXMLFastDocumentHandler::endDocument()
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    OOXMLFastContextHandler::dumpOpenContexts();
-#endif
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
@@ -231,3 +229,5 @@ void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

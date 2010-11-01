@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <frmfmt.hxx>
@@ -90,7 +91,7 @@ void SwAccessibleFrameBase::GetStates(
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
         ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
         Window *pWin = GetWindow();
@@ -136,7 +137,7 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrm ),
     bIsSelected( sal_False )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
@@ -152,7 +153,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     sal_Bool bOldSelected;
 
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOldSelected = bIsSelected;
         bIsSelected = bNewSelected;
     }
@@ -161,7 +162,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -195,7 +196,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
         sal_Bool bSelected;
 
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
         ASSERT( bSelected, "focus object should be selected" );
@@ -207,7 +208,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
 
 sal_Bool SwAccessibleFrameBase::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
 
@@ -268,10 +269,12 @@ void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
         pRegisteredIn->Remove( this );
 
     SwAccessibleContext::Dispose( bRecursive );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

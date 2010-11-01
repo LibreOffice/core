@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,11 @@
 #include <i18npool/lang.h>
 #include <sortopt.hxx>
 
-
 SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Sortier-Schluessel
  --------------------------------------------------------------------*/
-
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
     nColumnId( 0 ),
@@ -55,7 +54,6 @@ SwSortKey::SwSortKey(USHORT nId, const String& rSrtType, SwSortOrder eOrder) :
 {
 }
 
-
 SwSortKey::SwSortKey(const SwSortKey& rOld) :
     sSortType( rOld.sSortType ),
     eSortOrder( rOld.eSortOrder ),
@@ -67,8 +65,6 @@ SwSortKey::SwSortKey(const SwSortKey& rOld) :
 /*--------------------------------------------------------------------
     Beschreibung: Sortieroptionen fuers Sortieren
  --------------------------------------------------------------------*/
-
-
 SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
     cDeli( 9 ),
@@ -77,7 +73,6 @@ SwSortOptions::SwSortOptions()
     bIgnoreCase( FALSE )
 {
 }
-
 
 SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     eDirection( rOpt.eDirection ),
@@ -93,11 +88,9 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     }
 }
 
-
 SwSortOptions::~SwSortOptions()
 {
     aKeys.DeleteAndDestroy(0, aKeys.Count());
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

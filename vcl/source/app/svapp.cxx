@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #include "vcl/salinst.hxx"
 #include "vcl/salframe.hxx"
 #include "vcl/salsys.hxx"
-#include "vos/process.hxx"
-#include "vos/mutex.hxx"
 #include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/time.hxx"
@@ -66,7 +65,8 @@
 
 #include "osl/module.h"
 #include "osl/file.hxx"
-
+#include "osl/mutex.hxx"
+#include "osl/process.h"
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
 #include "rtl/instance.hxx"
@@ -140,7 +140,6 @@ namespace
 }
 
 
-// #include <usr/refl.hxx>
 class Reflection;
 
 
@@ -313,6 +312,11 @@ void Application::Init()
 }
 
 // -----------------------------------------------------------------------
+void Application::InitFinished()
+{
+}
+
+// -----------------------------------------------------------------------
 
 void Application::DeInit()
 {
@@ -320,20 +324,18 @@ void Application::DeInit()
 
 // -----------------------------------------------------------------------
 
-USHORT Application::GetCommandLineParamCount()
+sal_uInt16 Application::GetCommandLineParamCount()
 {
-    vos::OStartupInfo aStartInfo;
-    return (USHORT)aStartInfo.getCommandArgCount();
+    return (sal_uInt16)osl_getCommandArgCount();
 }
 
 // -----------------------------------------------------------------------
 
 XubString Application::GetCommandLineParam( USHORT nParam )
 {
-    vos::OStartupInfo   aStartInfo;
-    rtl::OUString       aParam;
-    aStartInfo.getCommandArg( nParam, aParam );
-    return XubString( aParam );
+    rtl::OUString aParam;
+    osl_getCommandArg( nParam, &aParam.pData );
+    return aParam;
 }
 
 // -----------------------------------------------------------------------
@@ -352,10 +354,8 @@ const XubString& Application::GetAppFileName()
     static String aAppFileName;
     if( !aAppFileName.Len() )
     {
-        vos::OStartupInfo   aStartInfo;
-        ::rtl::OUString     aExeFileName;
-
-        aStartInfo.getExecutableFile( aExeFileName );
+        rtl::OUString aExeFileName;
+        osl_getExecutableFile( &aExeFileName.pData );
 
         // convert path to native file format
         rtl::OUString aNativeFileName;
@@ -522,7 +522,7 @@ void Application::Quit()
 
 // -----------------------------------------------------------------------
 
-vos::IMutex& Application::GetSolarMutex()
+osl::SolarMutex& Application::GetSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return *(pSVData->mpDefInst->GetYieldMutex());
@@ -530,7 +530,7 @@ vos::IMutex& Application::GetSolarMutex()
 
 // -----------------------------------------------------------------------
 
-vos::OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
+oslThreadIdentifier Application::GetMainThreadIdentifier()
 {
     return ImplGetSVData()->mnMainThreadId;
 }
@@ -918,7 +918,7 @@ BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
 
 ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ULONG               nEventId = 0;
 
     if( pWin && pKeyEvent )
@@ -945,7 +945,7 @@ ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent
 
 ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ULONG               nEventId = 0;
 
     if( pWin && pMouseEvent )
@@ -980,7 +980,7 @@ ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMous
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
     ULONG               nEvent;
@@ -1043,7 +1043,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 
 void Application::RemoveMouseAndKeyEvents( Window* pWin )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     // remove all events for specific window, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1067,7 +1067,7 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 
 BOOL Application::IsProcessedMouseOrKeyEvent( ULONG nEventId )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     // find event
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -2083,3 +2083,5 @@ void Application::SetPropertyHandler( PropertyHandler* p )
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

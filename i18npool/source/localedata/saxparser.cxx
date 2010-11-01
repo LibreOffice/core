@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include "LocaleNode.hxx"
 
@@ -156,6 +157,7 @@ public:
     ~TestDocumentHandler(  )
     {
         of.closeOutput();
+        delete rootNode;
     }
 
 
@@ -226,24 +228,24 @@ public: // ExtendedDocumentHandler
 
         LocaleNode * l =  LocaleNode::createNode (aName, xAttribs);
         if (!currentNode.empty() ) {
-            LocaleNode * ln = (LocaleNode *) currentNode . top();
+            LocaleNode * ln = (LocaleNode *) currentNode.top();
             ln->addChild(l);
         } else {
             rootNode = l;
         }
-        currentNode . push (l);
+        currentNode.push (l);
     }
 
 
     virtual void SAL_CALL endElement(const OUString& /*aName*/) throw (SAXException,RuntimeException)
     {
-        currentNode . pop();
+        currentNode.pop();
     }
 
     virtual void SAL_CALL characters(const OUString& aChars) throw (SAXException,RuntimeException)
     {
 
-        LocaleNode * l = currentNode . top();
+        LocaleNode * l = currentNode.top();
         l->setValue (aChars);
         ::rtl::OUString str(aChars);
         sal_Unicode nonBreakSPace[2]= {0xa, 0x0};
@@ -426,3 +428,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     return nError;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

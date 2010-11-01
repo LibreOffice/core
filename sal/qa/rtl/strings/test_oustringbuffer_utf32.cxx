@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -128,3 +129,5 @@ void test::oustringbuffer::Utf32::insertUtf32() {
     CPPUNIT_ASSERT_MESSAGE(
         message.getStr(), res2 == rtl::OUString(str3, str3Len));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include "classes/fwlresid.hxx"
 #include <tools/string.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <rtl/strbuf.hxx>
@@ -47,7 +48,7 @@ ResMgr* FwlResId::GetResManager()
         rtl::OStringBuffer aBuf( 32 );
         aBuf.append( "fwe" );
 
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
     }
 
@@ -63,3 +64,4 @@ FwlResId::FwlResId( USHORT nId ) :
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

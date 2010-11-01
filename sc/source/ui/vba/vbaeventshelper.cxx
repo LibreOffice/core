@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -372,7 +373,15 @@ void ScVbaEventsListener::processWindowResizeMacro()
 {
     OSL_TRACE( "**** Attempt to FIRE MACRO **** " );
     if( !mbDisposed )
-        mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+    {
+        try
+        {
+            mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 }
 
 // ============================================================================
@@ -751,3 +760,5 @@ extern sdecl::ServiceDecl const serviceDecl(
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

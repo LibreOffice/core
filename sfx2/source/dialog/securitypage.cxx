@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,8 +130,6 @@ static short lcl_GetPassword(
 {
     bool bRes = false;
     SfxPasswordDialog aPasswdDlg( pParent );
-    const String aTitle( SfxResId( bProtect ? RID_SFX_PROTECT_RECORDS : RID_SFX_UNPROTECT_RECORDS ) );
-    aPasswdDlg.SetText( aTitle );
     aPasswdDlg.SetMinLen( 1 );
     if (bProtect)
         aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
@@ -551,3 +550,4 @@ void SfxSecurityPage::Reset( const SfxItemSet & rItemSet )
 //////////////////////////////////////////////////////////////////////
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -825,17 +826,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // INet Session neu aufsetzen
     if ( bResetSession )
     {
-        // no more sj2
-        #if 0
-        try
-        {
-            SjApplet2::settingsChanged();
-        }
-        catch ( ... )
-        {
-            DBG_ERRORFILE( "SjApplet2::settingsChanged() throws an exception" );
-        }
-        #endif
     }
 
     // geaenderte Daten speichern
@@ -1015,7 +1005,7 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
+void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
     //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
@@ -1050,3 +1040,4 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
 
 IMPL_OBJHINT( SfxStringHint, String )
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

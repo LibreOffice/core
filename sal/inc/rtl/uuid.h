@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -198,6 +199,8 @@ void SAL_CALL rtl_createNamedUuid(
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #elif MACOSX
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
+#elif AIX
+#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #else
 #error "System time resolution must be calculated!"
 #endif
@@ -207,3 +210,5 @@ void SAL_CALL rtl_createNamedUuid(
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

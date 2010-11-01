@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@
 #include "osl/conditn.hxx"
 #include "tools/rcid.h" // RSC_STRING
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/diagnose_ex.h"
 #include "comphelper/documentconstants.hxx" // ODFVER_012_TEXT
 #include "svtools/sfxecode.hxx" // ERRCODE_SFX_*
@@ -867,16 +868,6 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleCertificateValidationRequest( rRequest ) )
                 return true;
 
-// @@@ Todo #i29340#: activate!
-#if 0
-            ucb::NameClashResolveRequest aNameClashResolveRequest;
-            if (aAnyRequest >>= aNameClashResolveRequest)
-            {
-                handleNameClashResolveRequest(aNameClashResolveRequest,
-                                              rRequest->getContinuations());
-                return true;
-            }
-#endif
             if ( handleMasterPasswordRequest( rRequest ) )
                 return true;
 
@@ -1161,7 +1152,7 @@ executeMessageBox(
     WinBits nButtonMask )
     SAL_THROW((uno::RuntimeException))
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
 
@@ -1188,108 +1179,7 @@ executeMessageBox(
     return aResult;
 }
 
-// @@@ Todo #i29340#: activate!
-#if 0
-enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
-
-NameClashResolveDialogResult
-executeNameClashResolveDialog(
-    Window * /*pParent*/,
-    rtl::OUString const & /*rTargetFolderURL*/,
-    rtl::OUString const & /*rClashingName*/,
-    rtl::OUString & /*rProposedNewName*/)
-{
-    // @@@ Todo DV: execute overwrite-rename dialog, deliver result
-    OSL_ENSURE( false,
-                "executeNameClashResolveDialog not yet implemented!" );
-    return ABORT;
-}
-
-NameClashResolveDialogResult
-executeSimpleNameClashResolveDialog(
-    Window * /*pParent*/,
-    rtl::OUString const & /*rTargetFolderURL*/,
-    rtl::OUString const & /*rClashingName*/,
-    rtl::OUString & /*rProposedNewName*/)
-{
-    // @@@ Todo DV: execute rename-only dialog, deliver result
-    OSL_ENSURE( false,
-                "executeSimpleNameClashResolveDialog not yet implemented!" );
-    return ABORT;
-}
-#endif
 } // namespace
-
-// @@@ Todo #i29340#: activate!
-#if 0
-void
-UUIInteractionHelper::handleNameClashResolveRequest(
-    ucb::NameClashResolveRequest const & rRequest,
-    uno::Sequence< uno::Reference<
-        task::XInteractionContinuation > > const & rContinuations)
-  SAL_THROW((uno::RuntimeException))
-{
-    OSL_ENSURE(
-        rRequest.TargetFolderURL.getLength() > 0,
-        "NameClashResolveRequest must not contain empty TargetFolderURL" );
-
-    OSL_ENSURE(
-        rRequest.ClashingName.getLength() > 0,
-        "NameClashResolveRequest must not contain empty ClashingName" );
-
-    uno::Reference< task::XInteractionAbort > xAbort;
-    uno::Reference< ucb::XInteractionSupplyName > xSupplyName;
-    uno::Reference< ucb::XInteractionReplaceExistingData > xReplaceExistingData;
-    getContinuations(
-        rContinuations, &xAbort, &xSupplyName, &xReplaceExistingData);
-
-    OSL_ENSURE( xAbort.is(),
-        "NameClashResolveRequest must contain Abort continuation" );
-
-    OSL_ENSURE( xSupplyName.is(),
-        "NameClashResolveRequest must contain SupplyName continuation" );
-
-    NameClashResolveDialogResult eResult = ABORT;
-    rtl::OUString aProposedNewName( rRequest.ProposedNewName );
-    if ( xReplaceExistingData.is() )
-        eResult = executeNameClashResolveDialog(
-            getParentProperty(),
-            rRequest.TargetFolderURL,
-            rRequest.ClashingName,
-            aProposedNewName);
-    else
-        eResult = executeSimpleNameClashResolveDialog(
-            getParentProperty(),
-            rRequest.TargetFolderURL,
-            rRequest.ClashingName,
-            aProposedNewName);
-
-    switch ( eResult )
-    {
-    case ABORT:
-        xAbort->select();
-        break;
-
-    case RENAME:
-        xSupplyName->setName( aProposedNewName );
-        xSupplyName->select();
-        break;
-
-    case OVERWRITE:
-        OSL_ENSURE(
-            xReplaceExistingData.is(),
-            "Invalid NameClashResolveDialogResult: OVERWRITE - "
-            "No ReplaceExistingData continuation available!" );
-        xReplaceExistingData->select();
-        break;
-
-    default:
-        OSL_ENSURE( false, "Unknown NameClashResolveDialogResult value. "
-                           "Interaction Request not handled!" );
-        break;
-    }
-}
-#endif
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(
@@ -1338,7 +1228,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             {
                 uno::Any aProductNameAny =
                     ::utl::ConfigManager::GetConfigManager()
-                        ->GetDirectConfigProperty(
+                        .GetDirectConfigProperty(
                            ::utl::ConfigManager::PRODUCTNAME );
                 aProductNameAny >>= aTitle;
             }
@@ -1520,7 +1410,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     ::rtl::OUString aMessage;
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
@@ -1552,10 +1442,10 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         return;
 
     uno::Any aProductNameAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTNAME );
     uno::Any aProductVersionAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTVERSION );
     ::rtl::OUString aProductName, aProductVersion;
     if ( !( aProductNameAny >>= aProductName ) )
@@ -1613,3 +1503,5 @@ ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     m_pResMgr->PopContext();
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

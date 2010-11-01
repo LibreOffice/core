@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
@@ -38,13 +45,14 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalGtkPicker.hxx"
 #include <tools/urlobj.hxx>
@@ -202,6 +210,46 @@ gint RunDialog::run()
     return nStatus;
 }
 
+static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr)
+{
+    static bool bSet = false;
+    if (bSet)
+        return;
+
+    OUString sUILocale;
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
+          uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+              UNO_QUERY_THROW );
+
+        Sequence< Any > theArgs(1);
+        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
+
+        uno::Reference< container::XNameAccess > xNameAccess =
+          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
+              UNO_QUERY_THROW );
+
+        if (xNameAccess.is())
+            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
+    } catch (...) {}
+
+    if (sUILocale.getLength())
+    {
+        sUILocale = sUILocale.replace('-', '_');
+        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("LANGUAGE"));
+        osl_setEnvironment(envVar.pData, sUILocale.pData);
+    }
+    bSet = true;
+}
+
+SalGtkPicker::SalGtkPicker(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr) : m_pDialog(0)
+{
+    lcl_setGTKLanguage(xServiceMgr);
+}
+
 SalGtkPicker::~SalGtkPicker()
 {
     if (m_pDialog)
@@ -251,3 +299,5 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
     GdkThreadLock aLock;
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,8 +115,9 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
             Size aSize( pBorder->GetOutputSizePixel() );    // the size of the border window, i.e., the whole control
             Rectangle aBound, aContent;
             Rectangle aNatRgn( aPt, aSize );
-            if( pBorder->GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
-                    aNatRgn, 0, rSpinbuttonValue, rtl::OUString(), aBound, aContent) )
+            if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
+                pBorder->GetNativeControlRegion( CTRL_SPINBOX, PART_ENTIRE_CONTROL,
+                                                 aNatRgn, 0, rSpinbuttonValue, rtl::OUString(), aBound, aContent) )
             {
                 aSize = aContent.GetSize();
             }
@@ -1089,3 +1091,5 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pDev->SetSettings( aOldSettings );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

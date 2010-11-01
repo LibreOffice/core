@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1510,62 +1511,6 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bo
         const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
         aRealMousePos.Y() -= nSectionHeight;
     }
-#if 0
-#if OSL_DEBUG_LEVEL > 0
-    // TEST TEST TEST TEST
-    // Ich versuche gerade rauszubekommen, ob ich ein Object bewege oder nur resize.
-    // TEST TEST TEST TEST
-
-    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
-    {
-        OReportSection& rReportSection = (*aIter)->getReportSection();
-        OSectionView& rView = rReportSection.getSectionView();
-        if ( rView.AreObjectsMarked() )
-        {
-            rView.SortMarkedObjects();
-            const sal_uInt32 nCount = rView.GetMarkedObjectCount();
-            for (sal_uInt32 i=0; i < nCount; ++i)
-            {
-                const SdrMark* pM = rView.GetSdrMarkByIndex(i);
-                SdrObject* pObj = pM->GetMarkedSdrObj();
-                (void)pObj;
-
-                int dummy = 0;
-                (void)dummy;
-            }
-        }
-
-        /*
-        OReportSection& rReportSection = (*aIter)->getReportSection();
-        OSectionView& rView = rReportSection.getSectionView();
-        const SdrHdlList& rHdlList = rView.GetHdlList();
-        SdrHdl* pHdl2 = rHdlList.GetFocusHdl();
-
-        if ( pHdl2 != 0 )
-        {
-            SdrHdlKind eKind = pHdl->GetKind();
-            int dummy = 0;
-            switch(eKind)
-            {
-            case    HDL_UPLFT:      // Oben links
-            case    HDL_UPPER:      // Oben
-            case    HDL_UPRGT:      // Oben rechts
-            case    HDL_LEFT:       // Links
-            case    HDL_RIGHT:      // Rechts
-            case    HDL_LWLFT:      // Unten links
-            case    HDL_LOWER:      // Unten
-            case    HDL_LWRGT:      // Unten rechts
-                dummy = 1;
-                break;
-            default:
-                dummy = 0;
-            }
-        }
-        */
-    }
-    // TEST TEST TEST TEST
-#endif
-#endif
 }
 // -----------------------------------------------------------------------------
 BOOL OViewsWindow::IsAction() const
@@ -1709,7 +1654,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
 
                     if ( rView.IsDragObj() )
                     {
-                        const FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                        const bool bWasNoSnap = rDragStat.IsNoSnap();
                         const BOOL bWasSnapEnabled = rView.IsSnapEnabled();
 
                         // switch snapping off
@@ -1867,3 +1812,5 @@ void OViewsWindow::fillControlModelSelection(::std::vector< uno::Reference< uno:
 //==============================================================================
 } // rptui
 //==============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

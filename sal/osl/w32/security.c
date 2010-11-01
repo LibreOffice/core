@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <systools/win32/uwinapi.h>
+#include <sal/macros.h>
 #include "secimpl.h"
 
 /*****************************************************************************/
@@ -353,7 +355,17 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                    pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
+                {
+                    UCHAR* pTmp = realloc(pInfoBuffer, nInfoBuffer);
+                    if (pTmp)
+                        pInfoBuffer = pTmp;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = NULL;
+                        break;
+                    }
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -756,7 +768,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                                    &hRegKey) == ERROR_SUCCESS)
                     {
                         LONG lRet;
-                        DWORD lSize = elementsof(PathA);
+                        DWORD lSize = SAL_N_ELEMENTS(PathA);
                         DWORD Type = REG_SZ;
 
                         switch (nFolder)
@@ -911,7 +923,17 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                    pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
+                {
+                    UCHAR* pTmp = realloc(pInfoBuffer, nInfoBuffer);
+                    if (pTmp)
+                        pInfoBuffer = pTmp;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = NULL;
+                        break;
+                    }
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -989,3 +1011,4 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

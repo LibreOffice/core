@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,7 +224,7 @@ namespace frm
             return;
         }
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if (!getPeer().is())
         {
@@ -374,7 +375,7 @@ namespace frm
     void ORichTextPeer::dispose( ) throw(RuntimeException)
     {
         {
-            ::vos::OGuard aGuard( GetMutex() );
+            ::osl::SolarGuard aGuard( GetMutex() );
             RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
 
             if ( pRichTextControl )
@@ -399,7 +400,7 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
         if ( !pControl )
@@ -762,3 +763,4 @@ namespace frm
 }   // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

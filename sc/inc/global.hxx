@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -225,6 +226,7 @@ const USHORT IDF_HARDATTR   = 0x0020;   /// Hard cell attributes.
 const USHORT IDF_STYLES     = 0x0040;   /// Cell styles.
 const USHORT IDF_OBJECTS    = 0x0080;   /// Drawing objects.
 const USHORT IDF_EDITATTR   = 0x0100;   /// Rich-text attributes.
+const USHORT IDF_SPECIAL_BOOLEAN = 0x1000;
 const USHORT IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const USHORT IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
 const USHORT IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
@@ -890,3 +892,5 @@ extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
 extern const LocaleDataWrapper* GetScGlobalpLocaleData();
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

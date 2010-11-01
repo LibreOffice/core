@@ -50,7 +50,7 @@ module chart2
 
 service DataPointProperties
 {
-    /** to give acces to the properties required by this service.
+    /** to give access to the properties required by this service.
     */
     service ::com::sun::star::beans::PropertySet;
 
@@ -196,7 +196,7 @@ service DataPointProperties
     [property] short FillBitmapOffsetY;
 
     /** Every second line of tiles is moved the given percent of the
-        witdh of the bitmap.
+        width of the bitmap.
     */
     [property] short FillBitmapPositionOffsetX;
 
@@ -253,7 +253,7 @@ service DataPointProperties
      */
     [optional, property] double                       Offset;
 
-    /** describes the geometry of a 3 dimensional datapoint.
+    /** describes the geometry of a 3 dimensional data point.
         Number is one of constant group <type>DataPointGeometry3D</type>.
         <p>This is especially used for 3D bar-charts.</p>
         <p>CUBOID==0 CYLINDER==1 CONE==2 PYRAMID==3 CUBOID==else</p>

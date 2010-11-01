@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
@@ -193,7 +194,7 @@ ComboboxToolbarController::~ComboboxToolbarController()
 void SAL_CALL ComboboxToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pComboBox;
@@ -255,19 +256,30 @@ void ComboboxToolbarController::LoseFocus()
 
 long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    switch ( rNEvt.GetType() )
     {
-        const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-        const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-        if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
-        {
-            // Call execute only with non-empty text
-            if ( m_pComboBox->GetText().Len() > 0 )
-                execute( rKeyCode.GetModifier() );
-            return 1;
-        }
+        case EVENT_KEYINPUT :
+            {
+                const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+                const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+                if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
+                {
+                    // Call execute only with non-empty text
+                    if ( m_pComboBox->GetText().Len() > 0 )
+                        execute( rKeyCode.GetModifier() );
+                    return 1;
+                }
+            }
+            break;
+        case EVENT_GETFOCUS :
+            notifyFocusGet();
+            break;
+        case EVENT_LOSEFOCUS :
+            notifyFocusLost();
+            break;
+        default :
+            break;
     }
-
     return 0;
 }
 
@@ -430,3 +442,4 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

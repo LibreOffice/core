@@ -68,7 +68,7 @@ published interface XScrollBar: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** sets the scroll value, visible area and maximum scroll value
-        of the scoll bar.
+        of the scroll bar.
      */
     [oneway] void setValues( [in] long nValue,
              [in] long nVisible,

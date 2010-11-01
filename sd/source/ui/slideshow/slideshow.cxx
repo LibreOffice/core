@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,11 +33,13 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/serviceinfohelper.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -67,7 +70,7 @@ using ::rtl::OUString;
 using ::com::sun::star::awt::XWindow;
 using namespace ::sd;
 using namespace ::cppu;
-using namespace ::vos;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
@@ -292,7 +295,7 @@ Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(Runt
 
 Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
     return xInfo;
  }
@@ -301,7 +304,7 @@ Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(Run
 
 void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ThrowIfDisposed();
 
     sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
@@ -574,7 +577,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
 Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ThrowIfDisposed();
 
     const sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
@@ -676,7 +679,7 @@ void SAL_CALL SlideShow::start() throw(RuntimeException)
 
 void SAL_CALL SlideShow::end() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // The mbIsInStartup flag should have been reset during the start of the
     // slide show.  Reset it here just in case that something has horribly
@@ -774,6 +777,28 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     if( pDrawViewShell )
                         pDrawViewShell->SwitchPage( (USHORT)xController->getRestoreSlide() );
                 }
+
+                if( pViewShell->GetDoc()->IsStartWithPresentation() )
+                {
+                    pViewShell->GetDoc()->SetStartWithPresentation( false );
+
+                    Reference<frame::XDispatchProvider> xProvider(pViewShell->GetViewShellBase().GetController()->getFrame(),
+                                                                  UNO_QUERY);
+                    if( xProvider.is() )
+                    {
+                        util::URL aURL;
+                        aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseFrame");
+
+                        uno::Reference< frame::XDispatch > xDispatch(
+                            xProvider->queryDispatch(
+                                aURL, ::rtl::OUString(), 0));
+                        if( xDispatch.is() )
+                        {
+                            xDispatch->dispatch(aURL,
+                                                uno::Sequence< beans::PropertyValue >());
+                        }
+                    }
+                }
             }
         }
         mpCurrentViewShellBase = 0;
@@ -796,7 +821,7 @@ void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException)
 
 void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rArguments ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ThrowIfDisposed();
 
     // Stop a running show before starting a new one.
@@ -846,7 +871,7 @@ void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rA
 
 ::sal_Bool SAL_CALL SlideShow::isRunning(  ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return mxController.is() && mxController->isRunning();
 }
 
@@ -866,7 +891,7 @@ Reference< XSlideShowController > SAL_CALL SlideShow::getController(  ) throw (R
 
 void SAL_CALL SlideShow::disposing (void)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mnInPlaceConfigEvent )
     {
@@ -1263,3 +1288,4 @@ Reference< XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument 
 
 // ---------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

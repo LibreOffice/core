@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <editeng/AccessibleContextBase.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vector>
 #include <memory>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -575,3 +576,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

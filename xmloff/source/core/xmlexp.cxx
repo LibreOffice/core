@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@
 #include "XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectExportFilter.hxx"
 #include "XMLBasicExportFilter.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
@@ -409,6 +410,7 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_FORMX), GetXMLToken(XML_N_FORMX), XML_NAMESPACE_FORMX );
     }
     // RDFa: needed for content and header/footer styles
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
@@ -1246,19 +1248,6 @@ void SvXMLExport::ImplExportAutoStyles( sal_Bool )
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
                                   XML_AUTOMATIC_STYLES, sal_True, sal_True );
 
-#if 0
-        AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, XML_STYLES_HREF );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE,
-                         pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                               GetXMLToken(XML_STYLESHEET)) );
-        {
-            // <style:use-styles>
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                      XML_USE_STYLES, sal_True, sal_True );
-        }
-#endif
         _ExportAutoStyles();
     }
 }
@@ -1273,19 +1262,6 @@ void SvXMLExport::ImplExportMasterStyles( sal_Bool )
         _ExportMasterStyles();
     }
 
-#if 0
-    AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-    AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, XML_AUTO_STYLES_HREF );
-    AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-    AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE,
-                  pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                                GetXMLToken(XML_STYLESHEET) ) );
-    {
-        // <style:use-styles>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                  XML_USE_STYLES, sal_True, sal_True );
-    }
-#endif
 }
 
 void SvXMLExport::ImplExportContent()
@@ -2453,8 +2429,8 @@ void SvXMLExport::SetError(
     const Reference<XLocator>& rLocator )
 {
     // allow multi-threaded access to the cancel() method
-    static ::vos::OMutex aMutex;
-    ::vos::OGuard aGuard(aMutex);
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
 
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
@@ -2763,3 +2739,4 @@ SvXMLElementExport::~SvXMLElementExport()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

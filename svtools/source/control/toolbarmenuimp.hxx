@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
@@ -254,7 +255,7 @@ public:
 
 private:
     EventListenerVector    mxEventListeners;
-    ::vos::OMutex          maMutex;
+    ::osl::Mutex           maMutex;
     ToolbarMenuEntry*      mpParent;
 
     /** Tell all listeners that the object is dying.  This callback is
@@ -312,3 +313,5 @@ struct ToolbarMenu_Impl
 };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

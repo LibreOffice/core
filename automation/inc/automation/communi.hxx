@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #define _COMMUNI_HXX
 
 #include <svl/svarray.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/timer.hxx>
 #include <automation/simplecm.hxx>
 
@@ -76,10 +77,10 @@ public:
     CommunicationManagerClient( BOOL bUseMultiChannel = FALSE );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public NAMESPACE_VOS(OThread)
+class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
 {
 public:
-    CommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     virtual ~CommunicationLinkViaSocket();
 
     virtual BOOL IsCommunicationError();
@@ -101,8 +102,8 @@ protected:
     virtual BOOL ShutdownCommunication();
     ULONG nConnectionClosedEventId;
     ULONG nDataReceivedEventId;
-    NAMESPACE_VOS(OMutex) aMConnectionClosed;   // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
-    NAMESPACE_VOS(OMutex) aMDataReceived;       // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMConnectionClosed;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMDataReceived;      // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
@@ -133,7 +134,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public NAMESPACE_VOS(OThread)
+class CommunicationManagerServerAcceptThread: public osl::Thread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, ULONG nPort, USHORT nMaxCon = CM_UNLIMITED_CONNECTIONS );
@@ -145,11 +146,11 @@ protected:
 
 private:
     CommunicationManagerServerViaSocket* pMyServer;
-    NAMESPACE_VOS(OAcceptorSocket) *pAcceptorSocket;
+    osl::AcceptorSocket* pAcceptorSocket;
     ULONG nPortToListen;
     USHORT nMaxConnections;
     ULONG nAddConnectionEventId;
-    NAMESPACE_VOS(OMutex) aMAddConnection;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMAddConnection; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 
@@ -174,7 +175,9 @@ private:
     ByteString aHostToTalk;
     ULONG nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

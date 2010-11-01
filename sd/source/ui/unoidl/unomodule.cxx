@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -57,7 +58,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdUnoModule_getSupportedServiceNames() t
 uno::Reference< uno::XInterface > SAL_CALL SdUnoModule_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return uno::Reference< uno::XInterface >( static_cast< cppu::OWeakObject* >( new SdUnoModule( rSMgr ) ) );
 }
 
@@ -69,7 +70,7 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const ::com::sun::star::uti
     // asynchronous ...
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis(static_cast< ::com::sun::star::frame::XNotifyingDispatch* >(this));
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SdDLL::Init();
     const SfxSlot* pSlot = SD_MOD()->GetInterface()->GetSlot( aURL.Complete );
 
@@ -125,7 +126,7 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SdUnoModule::queryDispatches( const 
 // XDispatchProvider
 REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, const OUSTRING&, sal_Int32 ) throw( RUNTIMEEXCEPTION )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SdDLL::Init();
     const SfxSlot* pSlot = SD_MOD()->GetInterface()->GetSlot( aURL.Complete );
 
@@ -161,3 +162,4 @@ sal_Bool SAL_CALL SdUnoModule::supportsService( const ::rtl::OUString& sServiceN
     return SdUnoModule_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

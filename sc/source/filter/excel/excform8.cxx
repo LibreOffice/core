@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -347,9 +348,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x1C: // Error Value                           [314 266]
             {
                 aIn >> nByte;
-#if 0   // erAck
-                aPool.StoreError( XclTools::GetScErrorCode( nByte ) );
-#else
+
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -365,7 +364,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool << eOc;
                 if( eOc != ocStop )
                     aPool << ocOpen << ocClose;
-#endif
                 aPool >> aStack;
             }
                 break;
@@ -1595,3 +1593,4 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

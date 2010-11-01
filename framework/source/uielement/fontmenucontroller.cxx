@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/mnemonic.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -103,7 +104,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     VCLXPopupMenu*          pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*              pVCLPopupMenu = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -256,3 +257,4 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

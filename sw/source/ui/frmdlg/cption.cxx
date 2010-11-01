@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -340,8 +341,6 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 
-
-
 IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -460,7 +459,7 @@ void SwCaptionDialog::CheckButtonWidth()
             &aOKButton, &aCancelButton, &aHelpButton, &aAutoCaptionButton, &aOptionButton
         };
         Button** pCurrent = pBtns;
-        for ( sal_uInt32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
+        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS(pBtns); ++i, ++pCurrent )
         {
             aNewSize = (*pCurrent)->GetSizePixel();
             aNewSize.Width() += nDelta;
@@ -477,8 +476,6 @@ SwCaptionDialog::~SwCaptionDialog()
 {
     delete pMgr;
 }
-/*  */
-
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                             const String& rSeqFldType )
@@ -560,9 +557,6 @@ void SwSequenceOptionDialog::Apply()
         rSh.UpdateExpFlds();
 }
 
-/*-- 24.08.2004 16:13:53---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 String  SwSequenceOptionDialog::GetCharacterStyle() const
 {
     String sRet;
@@ -571,9 +565,6 @@ String  SwSequenceOptionDialog::GetCharacterStyle() const
     return sRet;
 }
 
-/*-- 24.08.2004 16:14:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
 {
     aLbCharStyle.SelectEntryPos(0);
@@ -607,6 +598,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
         nHandled = ComboBox::PreNotify( rNEvt );
     return nHandled;
 }
+
 /*-- 01.11.2007 10:45:51---------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
@@ -616,6 +608,7 @@ void lcl_MoveH( Window& rWin, sal_Int32 nMove )
     aPos.Y() += nMove;
     rWin.SetPosPixel(aPos);
 }
+
 void SwCaptionDialog::ApplyCaptionOrder()
 {
     //have the settings changed?
@@ -644,3 +637,5 @@ void SwCaptionDialog::ApplyCaptionOrder()
         SetSizePixel( aDlgSize );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

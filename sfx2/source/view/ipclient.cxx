@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -216,7 +217,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
@@ -353,7 +354,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -1161,3 +1162,5 @@ BOOL SfxInPlaceClient::IsUIActive()
 {
     return m_pImp->m_bUIActive;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

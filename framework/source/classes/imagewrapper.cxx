@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
 // XBitmap
 com::sun::star::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     BitmapEx    aBitmapEx( m_aImage.GetBitmapEx() );
     Size        aBitmapSize( aBitmapEx.GetSizePixel() );
@@ -79,7 +80,7 @@ com::sun::star::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeExcept
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvMemoryStream aMem;
     aMem << m_aImage.GetBitmapEx().GetBitmap();
@@ -88,7 +89,7 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException )
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     BitmapEx    aBmpEx( m_aImage.GetBitmapEx() );
 
     if ( aBmpEx.IsAlpha() )
@@ -118,3 +119,4 @@ sal_Int64 SAL_CALL ImageWrapper::getSomething( const Sequence< sal_Int8 >& aIden
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

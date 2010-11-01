@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <osl/module.h>
-#include <vos/process.hxx>
+#include <osl/security.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
@@ -82,7 +83,6 @@
 #define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
 using namespace rtl;
-using namespace vos;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -107,7 +107,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     }
 
     rtl::OUString aPipe;
-    vos::OSecurity().getUserIdent(aPipe);
+    osl::Security().getUserIdent(aPipe);
 
     rtl::OUStringBuffer aPortal;
     if (rPortalConnect.getLength() != 0)
@@ -150,28 +150,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                 {
                     Reference<XContentProviderManager> xCPM =
                         cb->getContentProviderManagerInterface();
-#if 0
-                    try
-                    {
 
-                        Reference<XContentProviderFactory> xCPF(
-                            xServiceFactory->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.ucb.ContentProviderProxyFactory")),
-                            UNO_QUERY);
-                        if(xCPF.is())
-                            xCPM->registerContentProvider(
-                                xCPF->createContentProvider(
-                                    rtl::OUString::createFromAscii(
-                                        "com.sun.star.ucb.GnomeVFSContentProvider"
-                                    )
-                                ),
-                                rtl::OUString::createFromAscii(".*"),
-                                false);
-                    } catch (...)
-                    {
-                    }
-#else
 
             // Workaround for P1 #124597#.  Instanciate GNOME-VFS-UCP in the thread that initialized
              // GNOME in order to avoid a deadlock that may occure in case UCP gets initialized from
@@ -194,7 +173,6 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                     {
                     }
                 }
-#endif
             }
         } catch (RuntimeException e) {
         }
@@ -482,3 +460,5 @@ void Desktop::RemoveTemporaryDirectory()
 }
 
 } // namespace desktop
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,11 +73,11 @@ int main( int argc, char* argv[] )
     long nWinId = atol( pArgs->getOption( "winid" ) );
     pArgs->clear();
 
-    ModalityFilter qModalityFilter( nWinId );
+    KDEModalityFilter qModalityFilter( nWinId );
 
-    FileDialog aFileDialog( NULL, QString(), NULL, "kdefiledialog" );
+    KDEFileDialog aFileDialog( NULL, QString(), NULL, "kdefiledialog" );
 
-    CommandThread qCommandThread( &aFileDialog );
+    KDECommandThread qCommandThread( &aFileDialog );
     qCommandThread.start();
 
     kApplication.exec();
@@ -87,3 +88,5 @@ int main( int argc, char* argv[] )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

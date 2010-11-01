@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -720,14 +721,6 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
 #ifdef ENABLE_GRAPHITE
         else if (pGrLayout)
         {
-        #if 0 // HACK: disabled for now due to #i114460#, see #desc12 there
-              // TODO: get rid of glyph->string mapping altogether for printing
-          // TODO: fix GraphiteServerFontLayout's returned aCharPosAry
-          // TODO: fix PrinterGfx's caching?
-            pText = pGrLayout->getTextPtr();
-            nMinCharPos = pGrLayout->getMinCharPos();
-            nMaxCharPos = pGrLayout->getMaxCharPos();
-    #endif
         }
 #endif
     }
@@ -1503,3 +1496,5 @@ bool PspGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

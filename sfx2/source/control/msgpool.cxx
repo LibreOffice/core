@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 #include "precompiled_sfx2.hxx"
 #include <tools/stream.hxx>
 #include <rsc/rscsfx.hxx>
-#ifndef GCC
-#endif
 
 // wg. pSlotPool
 #include "appdata.hxx"
@@ -150,26 +149,6 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
             else
                 _pGroups->Append(pDef->GetGroupId());
         }
-#if 0
-        const TypeId &rTypeId = pDef->GetType()->Type();
-        if ( /*rTypeId != TYPE(SfxVoidItem) &&*/ rTypeId != 0 )
-        {
-            USHORT nPos;
-            for ( nPos = 0; nPos < _pTypes->Count(); ++nPos )
-            {
-                if ( _pTypes->GetObject(nPos)->nId == pDef->GetSlotId() )
-                {
-                    DBG_ASSERT( rTypeId == _pTypes->GetObject(nPos)->nType,
-                                "same slot id with unequal item types" );
-                }
-                else if ( _pTypes->GetObject(nPos)->nId > pDef->GetSlotId() )
-                    break;
-            }
-            if ( nPos >= _pTypes->Count() ||
-                 _pTypes->GetObject(nPos)->nId > pDef->GetSlotId() )
-                _pTypes->Append( new SfxSlotType_Impl( pDef->GetSlotId(), rTypeId ) );
-        }
-#endif
     }
 }
 
@@ -420,3 +399,4 @@ SfxSlotPool& SfxSlotPool::GetSlotPool( SfxViewFrame *pFrame )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

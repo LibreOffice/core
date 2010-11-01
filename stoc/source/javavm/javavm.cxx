@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -542,7 +543,7 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 #endif
 
     if (!strcmp(TIMEZONE, p))
-        pjvm->pushProp(rtl::OUString::createFromAscii("user.timezone=ECT"));
+        pjvm->pushProp(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user.timezone=ECT")));
 }
 
 void initVMConfiguration(
@@ -1807,3 +1808,5 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
             RTL_CONSTASCII_USTRINGPARAM("JNI exception occurred")),
         static_cast< cppu::OWeakObject * >(this));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

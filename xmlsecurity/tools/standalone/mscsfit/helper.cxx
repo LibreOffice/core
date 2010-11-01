@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "helper.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
@@ -218,3 +219,4 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
     return xUsedServiceManager ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

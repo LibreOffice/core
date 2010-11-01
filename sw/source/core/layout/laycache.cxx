@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -735,7 +736,7 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
                                         uno::UNO_QUERY );
             try
             {
-                xDocInfo->setPropertyValue( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"), uno::makeAny( true ) );
+                xDocInfo->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")), uno::makeAny( true ) );
             }
             catch( uno::Exception& )
             {
@@ -1389,3 +1390,5 @@ void SwLayCacheIoImpl::CloseFlagRec()
             pStream->Seek( nFlagRecEnd );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

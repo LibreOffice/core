@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* TextRunStyle: Stores (and writes) paragraph/span-style-based information
  * (e.g.: a paragraph might be bold) that is needed at the head of an OO
  * document.
@@ -165,3 +166,5 @@ void SpanStyle::write(DocumentHandler *pHandler) const
     pHandler->endElement("style:properties");
     pHandler->endElement("style:style");
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

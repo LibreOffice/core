@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -188,6 +189,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SW_DLLPRIVATE ULONG GetParaNumberOfWords() const;
     SW_DLLPRIVATE void SetParaNumberOfChars( ULONG nTmpChars ) const;
     SW_DLLPRIVATE ULONG GetParaNumberOfChars() const;
+    SW_DLLPRIVATE void SetParaNumberOfCharsExcludingSpaces( ULONG nTmpChars ) const;
+    SW_DLLPRIVATE ULONG GetParaNumberOfCharsExcludingSpaces() const;
     SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
     /** create number for this text node, if not already existing
@@ -917,3 +920,5 @@ SwTxtNode::CutText(SwTxtNode * const pDest, const SwIndex & rDestStart,
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

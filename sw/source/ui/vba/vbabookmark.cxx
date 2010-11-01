@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,12 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include "vbarange.hxx"
+#include "wordvbahelper.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -65,8 +69,8 @@ void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )
 void SAL_CALL SwVbaBookmark::Select() throw ( uno::RuntimeException )
 {
     checkVality();
-    uno::Reference< text::XTextViewCursorSupplier > xViewCursorSupplier( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xViewCursorSupplier->getViewCursor()->gotoRange( mxBookmark->getAnchor(),sal_False );
+    uno::Reference< view::XSelectionSupplier > xSelectSupp( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    xSelectSupp->select( uno::makeAny( mxBookmark ) );
 }
 
 rtl::OUString SAL_CALL SwVbaBookmark::getName() throw ( uno::RuntimeException )
@@ -107,3 +111,4 @@ SwVbaBookmark::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

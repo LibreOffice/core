@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,9 +156,6 @@
 #include <tools/shl.hxx>
 #include <tools/pstm.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <vos/types.hxx>
-#include <vos/object.hxx>
-#include <vos/macros.hxx>
 #include <tools/unqid.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <uno/sequence2.h>
@@ -220,9 +218,8 @@
 #include <com/sun/star/container/NoSuchElementException.hdl>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/thread.hxx>
-#include <vos/runnable.hxx>
-#include <vos/refernce.hxx>
+#include <osl/thread.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/apptypes.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
@@ -315,3 +312,4 @@
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

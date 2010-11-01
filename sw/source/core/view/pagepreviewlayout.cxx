@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1322,12 +1323,6 @@ sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
     return nCol;
 }
 
-Size SwPagePreviewLayout::GetMaxPageSize() const
-{
-    ASSERT( PreviewLayoutValid(), "PagePreviewLayout not valid" );
-    return maMaxPageSize;
-}
-
 Size SwPagePreviewLayout::GetPrevwDocSize() const
 {
     ASSERT( PreviewLayoutValid(), "PagePreviewLayout not valid" );
@@ -1404,3 +1399,5 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
 
     return pRet->GetPhyPageNum();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -240,7 +241,7 @@ ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
 {
     AutoDeleter<ConfigItem_Impl> aNewImpl(pImpl);
 
-    pImpl->pManager = ConfigManager::GetConfigManager();
+    pImpl->pManager = &ConfigManager::GetConfigManager();
     pImpl->nMode = nSetMode;
     if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
         pImpl->pManager->AddConfigItem(*this);
@@ -1420,3 +1421,4 @@ void ConfigItem::UnlockTree()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

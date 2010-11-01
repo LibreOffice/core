@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,13 +55,11 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 //-----------------------------------------------------------------------------
-const char* cConfigBaseURL = "/org.openoffice.";
-//const char* cConfigBaseURL = "/com.sun.star.";
-const char* cAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
+const char* pConfigBaseURL = "/org.openoffice.";
+const char* pAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
 namespace
 {
@@ -151,7 +150,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
             {
                 xConfigurationProvider = Reference< XMultiServiceFactory >
                     (xMSF->createInstance(
-                        C2U("com.sun.star.configuration.ConfigurationProvider")),
+                        UNISTRING("com.sun.star.configuration.ConfigurationProvider")),
                      UNO_QUERY);
             }
 #ifdef DBG_UTIL
@@ -253,17 +252,17 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
     }
     OSL_ENSURE(bFound, "AcquireTree: ConfigItem unknown!");
 #endif
-    OUString sPath = C2U(cConfigBaseURL);
+    OUString sPath(OUString::createFromAscii(pConfigBaseURL));
     sPath += rCfgItem.GetSubTreeName();
     Sequence< Any > aArgs(2);
     Any* pArgs = aArgs.getArray();
     PropertyValue aPath;
-    aPath.Name = C2U("nodepath");
+    aPath.Name = UNISTRING("nodepath");
     aPath.Value <<= sPath;
     pArgs[0] <<= aPath;
     sal_Bool bLazy = 0 != (rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE);
     PropertyValue aUpdate;
-    aUpdate.Name = C2U("lazywrite");
+    aUpdate.Name = UNISTRING("lazywrite");
     aUpdate.Value.setValue(&bLazy, ::getBooleanCppuType());
     pArgs[1] <<= aUpdate;
 
@@ -276,8 +275,8 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
         aArgs.realloc(nCount+1);
 
         PropertyValue aAllLocale;
-        aAllLocale.Name  =   C2U("locale");
-        aAllLocale.Value <<= C2U("*"     );
+        aAllLocale.Name  =   UNISTRING("locale");
+        aAllLocale.Value <<= UNISTRING("*"     );
         aArgs[nCount]    <<= aAllLocale;
     }
 
@@ -288,7 +287,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
         try
         {
             xIFace = xCfgProvider->createInstanceWithArguments(
-                    C2U(cAccessSrvc),
+                    OUString::createFromAscii(pAccessSrvc),
                     aArgs);
         }
         catch(Exception& rEx)
@@ -352,35 +351,21 @@ void ConfigManager::StoreConfigItems()
         }
     }
 }
-ConfigManager*   ConfigManager::pConfigManager = 0;
 /* -----------------------------07.09.00 11:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-ConfigManager*  ConfigManager::GetConfigManager()
-{
-    if(!pConfigManager)
-    {
-        pConfigManager = new ConfigManager();
-    }
-    return pConfigManager;
-}
-/* -----------------------------07.09.00 11:06--------------------------------
+struct theConfigManager : public rtl::Static<ConfigManager, theConfigManager> {};
 
- ---------------------------------------------------------------------------*/
-void    ConfigManager::RemoveConfigManager()
+ConfigManager& ConfigManager::GetConfigManager()
 {
-    if(pConfigManager)
-    {
-        delete pConfigManager;
-        pConfigManager = 0;
-    }
+    return theConfigManager::get();
 }
 /* -----------------------------08.09.00 13:22--------------------------------
 
  ---------------------------------------------------------------------------*/
 rtl::OUString ConfigManager::GetConfigBaseURL()
 {
-    return C2U(cConfigBaseURL);
+    return OUString::createFromAscii(pConfigBaseURL);
 }
 /* -----------------------------25.09.00 16:34--------------------------------
 
@@ -492,10 +477,10 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         }
     }
 
-    OUString sPath = C2U(cConfigBaseURL);
+    OUString sPath = OUString::createFromAscii(pConfigBaseURL);
     switch(eProp)
     {
-        case LOCALE:                        sPath += C2U("Setup/L10N"); break;
+        case LOCALE:                        sPath += UNISTRING("Setup/L10N"); break;
 
         case PRODUCTNAME:
         case PRODUCTVERSION:
@@ -504,25 +489,25 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case PRODUCTXMLFILEFORMATVERSION:
         case OPENSOURCECONTEXT:
         case OOOVENDOR:
-        case ABOUTBOXPRODUCTVERSION:        sPath += C2U("Setup/Product"); break;
+        case ABOUTBOXPRODUCTVERSION:        sPath += UNISTRING("Setup/Product"); break;
 
-        case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
+        case DEFAULTCURRENCY:               sPath += UNISTRING("Setup/L10N"); break;
 
         case WRITERCOMPATIBILITYVERSIONOOO11:
-            sPath += C2U("Office.Compatibility/WriterCompatibilityVersion"); break;
+            sPath += UNISTRING("Office.Compatibility/WriterCompatibilityVersion"); break;
         default:
             break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
-    Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager()->GetConfigurationProvider();
+    Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager().GetConfigurationProvider();
     if(!xCfgProvider.is())
         return aRet;
     Reference< XInterface > xIFace;
     try
     {
         xIFace = xCfgProvider->createInstanceWithArguments(
-                C2U(cAccessSrvc),
+                OUString::createFromAscii(pAccessSrvc),
                 aArgs);
 
     }
@@ -533,17 +518,17 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case LOCALE:                            sProperty = C2U("ooLocale"); break;
-            case PRODUCTNAME:                       sProperty = C2U("ooName"); break;
-            case PRODUCTVERSION:                    sProperty = C2U("ooSetupVersion"); break;
-            case ABOUTBOXPRODUCTVERSION:            sProperty = C2U("ooSetupVersionAboutBox"); break;
-            case OOOVENDOR:                         sProperty = C2U("ooVendor"); break;
-            case PRODUCTEXTENSION:                  sProperty = C2U("ooSetupExtension"); break;
-            case PRODUCTXMLFILEFORMATNAME:          sProperty = C2U("ooXMLFileFormatName"); break;
-            case PRODUCTXMLFILEFORMATVERSION:       sProperty = C2U("ooXMLFileFormatVersion"); break;
-            case OPENSOURCECONTEXT:                 sProperty = C2U("ooOpenSourceContext"); break;
-            case DEFAULTCURRENCY:                   sProperty = C2U("ooSetupCurrency"); break;
-            case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = C2U("OOo11"); break;
+            case LOCALE:                            sProperty = UNISTRING("ooLocale"); break;
+            case PRODUCTNAME:                       sProperty = UNISTRING("ooName"); break;
+            case PRODUCTVERSION:                    sProperty = UNISTRING("ooSetupVersion"); break;
+            case ABOUTBOXPRODUCTVERSION:            sProperty = UNISTRING("ooSetupVersionAboutBox"); break;
+            case OOOVENDOR:                         sProperty = UNISTRING("ooVendor"); break;
+            case PRODUCTEXTENSION:                  sProperty = UNISTRING("ooSetupExtension"); break;
+            case PRODUCTXMLFILEFORMATNAME:          sProperty = UNISTRING("ooXMLFileFormatName"); break;
+            case PRODUCTXMLFILEFORMATVERSION:       sProperty = UNISTRING("ooXMLFileFormatVersion"); break;
+            case OPENSOURCECONTEXT:                 sProperty = UNISTRING("ooOpenSourceContext"); break;
+            case DEFAULTCURRENCY:                   sProperty = UNISTRING("ooSetupCurrency"); break;
+            case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = UNISTRING("OOo11"); break;
             default:
                 break;
         }
@@ -655,7 +640,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
         try
         {
             xIFace = xCfgProvider->createInstanceWithArguments(
-                    C2U(cAccessSrvc),
+                    OUString::createFromAscii(pAccessSrvc),
                     aArgs);
         }
 #ifdef DBG_UTIL
@@ -678,7 +663,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
  ---------------------------------------------------------------------------*/
 Any ConfigManager::GetLocalProperty(const OUString& rProperty)
 {
-    OUString sPath = C2U(cConfigBaseURL);
+    OUString sPath(OUString::createFromAscii(pConfigBaseURL));
     sPath += rProperty;
 
     OUString sNode, sProperty;
@@ -710,7 +695,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
  ---------------------------------------------------------------------------*/
 void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValue)
 {
-    OUString sPath = C2U(cConfigBaseURL);
+    OUString sPath(OUString::createFromAscii(pConfigBaseURL));
     sPath += rProperty;
 
     OUString sNode, sProperty;
@@ -745,3 +730,4 @@ sal_Bool    ConfigManager::IsLocalConfigProvider()
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

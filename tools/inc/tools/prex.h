@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@
 extern "C" {
 #endif
 
-#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) // should really check for xfree86 or for X11R6.1 and higher
+#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) || defined(NETBSD) // should really check for xfree86 or for X11R6.1 and higher
 #define __XKeyboardExtension__ 1
 #else
 #define __XKeyboardExtension__ 0
@@ -76,3 +77,4 @@ typedef unsigned long Pixel;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

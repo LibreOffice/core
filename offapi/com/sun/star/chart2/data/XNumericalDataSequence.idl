@@ -40,7 +40,7 @@ module chart2
 module data
 {
 
-/** allows acces to a one-dimensional sequence of double precision
+/** allows access to a one-dimensional sequence of double precision
     floating-point numbers.
  */
 interface XNumericalDataSequence : ::com::sun::star::uno::XInterface

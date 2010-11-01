@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "vcl/window.hxx"
 
-#ifndef _SV_SALGTYPE_HXX
-//#include <salgtype.hxx>
-#endif
-
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
 class Os2SalSystem : public SalSystem
@@ -77,23 +74,6 @@ Os2SalSystem::~Os2SalSystem()
 }
 
 // -----------------------------------------------------------------------
-#if 0
-bool Os2SalSystem::GetSalSystemDisplayInfo( DisplayInfo& rInfo )
-{
-    HDC hDC;
-    if( hDC = WinQueryWindowDC(HWND_DESKTOP) )
-    {
-        LONG bitCount;
-        DevQueryCaps(hDC, CAPS_COLOR_BITCOUNT, CAPS_COLOR_BITCOUNT, &bitCount);
-        rInfo.nWidth    = WinQuerySysValue( HWND_DESKTOP, SV_CXSCREEN );
-        rInfo.nHeight   = WinQuerySysValue( HWND_DESKTOP, SV_CYSCREEN );
-        rInfo.nDepth    = bitCount;
-        return true;
-    }
-    else
-        return false;
-}
-#endif
 
 unsigned int Os2SalSystem::GetDisplayScreenCount()
 {
@@ -180,3 +160,5 @@ rtl::OUString Os2SalSystem::GetScreenName( unsigned int nScreen )
    aBuf.append( sal_Int32(nScreen) );
    return aBuf.makeStringAndClear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

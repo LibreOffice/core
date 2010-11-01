@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@ using namespace ::com::sun::star::sdb;
 //------------------------------------------------------------------
 OIndexIterator::~OIndexIterator()
 {
-    //  m_pIndex->UnLock();
     m_pIndex->release();
 }
 
@@ -59,11 +59,7 @@ ULONG OIndexIterator::Next()
 //------------------------------------------------------------------
 ULONG OIndexIterator::Find(BOOL bFirst)
 {
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
-
     ULONG nRes = STRING_NOTFOUND;
-//  if (!m_pIndex->IsOpen())
-//      return nRes;
 
     if (bFirst)
     {
@@ -149,7 +145,6 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 ULONG OIndexIterator::GetCompare(BOOL bFirst)
 {
     ONDXKey* pKey = NULL;
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
     sal_Int32 ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
 
     if (bFirst)
@@ -219,7 +214,6 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
 //------------------------------------------------------------------
 ULONG OIndexIterator::GetLike(BOOL bFirst)
 {
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         ONDXPage* pPage = m_aRoot;
@@ -240,7 +234,6 @@ ULONG OIndexIterator::GetLike(BOOL bFirst)
 //------------------------------------------------------------------
 ULONG OIndexIterator::GetNull(BOOL bFirst)
 {
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         ONDXPage* pPage = m_aRoot;
@@ -264,7 +257,6 @@ ULONG OIndexIterator::GetNull(BOOL bFirst)
 ULONG OIndexIterator::GetNotNull(BOOL bFirst)
 {
     ONDXKey* pKey;
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         // erst alle NULL werte abklappern
@@ -283,7 +275,6 @@ ULONG OIndexIterator::GetNotNull(BOOL bFirst)
 //------------------------------------------------------------------
 ONDXKey* OIndexIterator::GetNextKey()
 {
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))
     {
         ONDXPage* pPage = m_aCurLeaf;
@@ -313,3 +304,4 @@ ONDXKey* OIndexIterator::GetNextKey()
     return m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

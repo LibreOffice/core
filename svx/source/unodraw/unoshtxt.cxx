@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,11 +55,10 @@
 #include <editeng/unotext.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sdrpaintwindow.hxx>
 
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::rtl;
 
 using ::com::sun::star::uno::XInterface;
@@ -1053,7 +1053,7 @@ SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
 //------------------------------------------------------------------------
 SvxTextEditSource::~SvxTextEditSource()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     mpImpl->release();
 }
@@ -1147,3 +1147,5 @@ void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
 {
     mpImpl->ChangeModel( pNewModel );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

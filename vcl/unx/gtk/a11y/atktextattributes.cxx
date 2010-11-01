@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1092,7 +1093,7 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
             if( ret )
             {
                 gchar * old_tab_str = ret;
-                ret = g_strconcat(old_tab_str, " ", tab_str, NULL /* terminated */);
+                ret = g_strconcat(old_tab_str, " ", tab_str, (const char*)NULL);
                 g_free( old_tab_str );
             }
             else
@@ -1454,3 +1455,4 @@ attribute_set_map_to_property_values(
     return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

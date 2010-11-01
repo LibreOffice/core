@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,10 +68,6 @@
 #include <IDocumentRedlineAccess.hxx>
 
 using namespace ::com::sun::star;
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwView::GetState(SfxItemSet &rSet)
 {
@@ -435,11 +432,6 @@ void SwView::GetState(SfxItemSet &rSet)
     }
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::GetDrawState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -505,10 +497,6 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
 {
     sal_Bool bRet = sal_False;
@@ -520,3 +508,4 @@ sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

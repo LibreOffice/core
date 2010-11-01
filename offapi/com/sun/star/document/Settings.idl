@@ -69,7 +69,7 @@ published service Settings
 
         @return the
             <type scope="com::sun::star::i18n">XForbiddenCharacters</type>
-            interface to allow retreival and modification of the
+            interface to allow retrieval and modification of the
             forbidden characters set.
     */
     [optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;

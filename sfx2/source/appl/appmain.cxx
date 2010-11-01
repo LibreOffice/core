@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <svl/itempool.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/helpopt.hxx>
-#include <vos/process.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -205,3 +205,5 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
     }
     return *pAppData_Impl->pMatcher;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

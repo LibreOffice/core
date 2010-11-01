@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,11 +99,11 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
 }
 
 // -------------------------------------------------------------------------
-::vos::ORef< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
+::rtl::Reference< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
     const Reference< XDatabaseMetaData >& _rxDBMetaData,const Reference< XNameAccess>& i_xQueryColumns )
 {
     sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
-    ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
+    ::rtl::Reference< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
 
     StringMap aColumnMap;
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
@@ -245,3 +246,5 @@ void OOrderColumn::construct()
     return aSupported;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

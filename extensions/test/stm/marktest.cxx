@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,9 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 #include <usr/weak.hxx>      // OWeakObject
 
-#include <vos/conditn.hxx>
-#include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <string.h>
 
@@ -51,7 +52,6 @@
 
 
 #ifndef _VOS_NO_NAMESPACE
-using namespace vos;
 using namespace usr;
 #endif
 
@@ -681,3 +681,5 @@ UString     OMarkableInputStreamTest_getImplementationName() THROWS( () )
 {
     return L"test.com.sun.star.extensions.stm.MarkableInputStream";
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

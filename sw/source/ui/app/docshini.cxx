@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <hintids.hxx>
 
@@ -117,7 +117,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
 
     sal_Bool bRet = SfxObjectShell::InitNew( xStor );
-    ASSERT( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
+    OSL_ENSURE( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
@@ -154,7 +154,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         SubInitNew();
 
-        // fuer alle
+        // for all
 
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
         SfxPrinter* pPrt = pDoc->getPrinter( false );
@@ -498,7 +498,7 @@ void SwDocShell::UpdateFontList()
     if(!bInUpdateFontList)
     {
         bInUpdateFontList = true;
-        ASSERT(pDoc, "Kein Doc keine FontList");
+        OSL_ENSURE(pDoc, "No Doc no FontList");
         if( pDoc )
         {
             delete pFontList;
@@ -567,7 +567,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 
         // Das Laden
         // fuer MD
-            ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+            OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
             mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
             {
@@ -629,15 +629,15 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                             pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                     }
                 }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 else
-                    ASSERT( !this, "ohne Sw3Reader geht nichts" );
+                    OSL_ENSURE( !this, "it won't do without Sw3Reader" );
 #endif
             }
             break;
 
         default:
-            ASSERT( !this, "Load: new CreateMode?" );
+            OSL_ENSURE( !this, "Load: new CreateMode?" );
 
         }
 
@@ -660,11 +660,6 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::LoadFrom" );
@@ -684,7 +679,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             // Das Laden
             SwWait aWait( *this, sal_True );
             {
-                ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+                OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
                 mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
@@ -697,7 +692,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         }
         else
         {
-            DBG_ERROR("Code removed!");
+            OSL_ENSURE(false, "Code removed!");
         }
 
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -713,7 +708,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 
 void SwDocShell::SubInitNew()
 {
-    ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+    OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
     mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
     InitDraw();
@@ -732,8 +727,8 @@ void SwDocShell::SubInitNew()
         0, 0, 0  };
     if(!bWeb)
     {
-        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 3 ] = RES_PARATR_TABSTOP;
-        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 2 ] = RES_PARATR_HYPHENZONE;
+        nRange[ (SAL_N_ELEMENTS(nRange)) - 3 ] = RES_PARATR_TABSTOP;
+        nRange[ (SAL_N_ELEMENTS(nRange)) - 2 ] = RES_PARATR_HYPHENZONE;
     }
     SfxItemSet aDfltSet( pDoc->GetAttrPool(), nRange );
 
@@ -784,3 +779,4 @@ IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

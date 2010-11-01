@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,6 @@
 #include <basic/sbx.hxx>
 
 #include <unotools/undoopt.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
@@ -853,7 +851,7 @@ ResMgr* SfxShell::GetResMgr() const
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
+bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 
 /*  [Beschreibung]
 
@@ -1296,3 +1294,4 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

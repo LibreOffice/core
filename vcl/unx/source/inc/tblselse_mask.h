@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #define tblselse_mask_width 16
 #define tblselse_mask_height 16
 static char tblselse_mask_bits[] = {
@@ -5,3 +6,4 @@ static char tblselse_mask_bits[] = {
    0xf8, 0x03, 0xf0, 0xc7, 0xe0, 0xef, 0xc0, 0xff, 0x80, 0xff, 0x00, 0xff,
    0x00, 0xfe, 0x00, 0xff, 0x80, 0xff, 0x80, 0xff };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

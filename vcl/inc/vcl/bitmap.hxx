@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -257,7 +258,6 @@ private:
     MapMode                 maPrefMapMode;
     Size                    maPrefSize;
 
-//#if 0 // _SOLAR__PRIVATE
 
 public:
 
@@ -267,9 +267,9 @@ public:
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
 
-    SAL_DLLPRIVATE static BOOL          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset );
+    SAL_DLLPRIVATE static BOOL          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset, BOOL bMSOFormat=FALSE );
     SAL_DLLPRIVATE static BOOL          ImplReadDIBFileHeader( SvStream& rIStm, ULONG& rOffset );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown );
+    SAL_DLLPRIVATE static BOOL          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, BOOL bMSOFormat = FALSE );
     SAL_DLLPRIVATE static BOOL          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, BOOL bQuad );
     SAL_DLLPRIVATE static BOOL          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
     SAL_DLLPRIVATE BOOL                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompressed ) const;
@@ -307,8 +307,6 @@ public:
     SAL_DLLPRIVATE BOOL                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE BOOL                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE BOOL                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
-
-//#endif // PRIVATE
 
 public:
 
@@ -764,7 +762,7 @@ public:
 
 public:
 
-    BOOL                    Read( SvStream& rIStm, BOOL bFileHeader = TRUE );
+    BOOL                    Read( SvStream& rIStm, BOOL bFileHeader = TRUE, BOOL bMSOFormat = FALSE );
     BOOL                    Write( SvStream& rOStm, BOOL bCompressed = TRUE, BOOL bFileHeader = TRUE ) const;
 
     friend VCL_DLLPUBLIC SvStream&        operator>>( SvStream& rIStm, Bitmap& rBitmap );
@@ -852,3 +850,5 @@ inline ULONG Bitmap::GetSizeBytes() const
 }
 
 #endif // _SV_BITMAP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by so_activex.rc
@@ -24,3 +25,4 @@
 #endif
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <rtl/uri.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
@@ -133,7 +134,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     bool bInitialized( true );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -143,7 +144,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 
     if ( !bInitialized )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
 
         PropertyValue aPropValue;
@@ -168,7 +169,7 @@ void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::R
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
 
@@ -198,7 +199,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::update()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         throw DisposedException();
 }
@@ -210,7 +211,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 {
     uno::Reference< uno::XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -239,7 +240,7 @@ throw (::com::sun::star::uno::RuntimeException)
     ::com::sun::star::util::URL             aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -293,7 +294,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::click()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -331,3 +332,4 @@ throw (::com::sun::star::uno::RuntimeException)
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

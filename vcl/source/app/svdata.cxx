@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <vcl/salinst.hxx>
 #include <vcl/salframe.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -107,7 +108,6 @@ void ImplInitSVData()
 
     // init global instance data
     memset( pImplSVData, 0, sizeof( ImplSVData ) );
-    pImplSVData->maHelpData.mbAutoHelpId = sal_True;
     pImplSVData->maHelpData.mbAutoHelpId = sal_True;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 
@@ -531,3 +531,4 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
     AllSettings::LocaleSettingsChanged( nHint );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

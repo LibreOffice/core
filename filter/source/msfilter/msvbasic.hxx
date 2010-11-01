@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _MSVBASIC_HXX
 #define _MSVBASIC_HXX
 
@@ -36,6 +35,8 @@
 #include <tools/dynary.hxx>
 #include <vector>
 #include <map>
+#include <com/sun/star/script/ModuleType.hpp>
+using namespace ::com::sun::star::script::ModuleType;
 
 /* class VBA:
  * The VBA class provides a set of methods to handle Visual Basic For
@@ -86,8 +87,14 @@ public:
     //
     // #117718# member map of module names to types of module
     ModType GetModuleType( const UniString& rModuleName );
-    std::vector<String> maReferences;
+    rtl::OUString& ProjectName() { return msProjectName; }
+    void SetProjectName( const rtl::OUString& rPName ) { msProjectName = rPName; }
+    const std::vector<rtl::OUString>& ProjectReferences() { return maPrjReferences; }
+    void AddProjectReference( const rtl::OUString& rProject ) { maPrjReferences.push_back( rProject); }
+    SvStorage* GetStorage() { return xStor; }
 private:
+    std::vector<rtl::OUString> maReferences;
+    std::vector<rtl::OUString> maPrjReferences;
     struct VBAOffset_Impl
     {
         String sName;
@@ -113,8 +120,9 @@ private:
     int ReadVBAProject(const SvStorageRef &rxVBAStorage);
     int DecompressVBA(int index, SvStorageStreamRef &rxVBAStream);
     sal_uInt8 ReadPString(SvStorageStreamRef &xVBAProject, bool bIsUnicode);
+    rtl::OUString msProjectName;
 };
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,22 +26,15 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_SECURITY_CONST_H_
 #define _OSL_SECURITY_CONST_H_
 
 #if ( defined WNT )                     // Windows
-//#define UNICODE
 #include <tools/prewin.h>
-// #include <windows.h>
 #include <io.h>
 #include <tools/postwin.h>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -55,7 +49,6 @@
 #endif
 
 #include <testshl/simpleheader.hxx>
-// LLA: #include <testshl2/cmdlinebits.hxx>
 
 
 #define BUFSIZE 1024
@@ -78,3 +71,5 @@ OSLTEST_DECLARE_USTRING( NullURL,  "" );
 sal_Bool isAdmin = sal_False;
 
 #endif /* _OSL_SECURITY_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

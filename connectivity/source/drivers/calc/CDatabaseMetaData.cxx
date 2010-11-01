@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -315,28 +316,6 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
                     return sal_True;                // hidden
         }
 
-#if 0
-        //  test if whole sheet is empty
-
-        Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
-        Reference<XCellRangesQuery> xQuery( xSheet, UNO_QUERY );
-        if ( xAddr.is() && xQuery.is() )
-        {
-            CellRangeAddress aTotalRange = xAddr->getRangeAddress();
-            // queryIntersection to get a ranges object
-            Reference<XSheetCellRanges> xRanges = xQuery->queryIntersection( aTotalRange );
-            if (xRanges.is())
-            {
-                Reference<XEnumerationAccess> xCells = xRanges->getCells();
-                if (xCells.is())
-                {
-                    if ( !xCells->hasElements() )
-                        return sal_True;            // empty
-                }
-            }
-        }
-#endif
-
         //  use the same data area as in OCalcTable to test for empty table
 
         Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
@@ -488,3 +467,4 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

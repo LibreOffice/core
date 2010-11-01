@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,16 +83,12 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     if(pWebColorConfig)
         pWebColorConfig->Load();
 }
-/* -----------------------------13.02.01 09:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwMasterUsrPref::~SwMasterUsrPref()
 {
     delete pWebColorConfig;
 }
-/*-- 28.09.00 09:55:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -127,9 +124,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
     }
     return aNames;
 }
-/*-- 28.09.00 09:55:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwContentViewConfig::SwContentViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content")),
     rParent(rPar),
@@ -138,22 +133,16 @@ SwContentViewConfig::SwContentViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
     Load();
     EnableNotification( GetPropertyNames() );
 }
-/*-- 28.09.00 09:55:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwContentViewConfig::~SwContentViewConfig()
 {
 }
-/*-- 09.02.07 09:55:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwContentViewConfig::Notify( const Sequence< OUString > & /*rPropertyNames*/ )
 {
     Load();
 }
-/*-- 28.09.00 09:55:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwContentViewConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -191,15 +180,13 @@ void SwContentViewConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 28.09.00 09:55:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwContentViewConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -239,9 +226,7 @@ void SwContentViewConfig::Load()
         }
     }
 }
-/*-- 28.09.00 09:55:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -276,9 +261,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
     }
     return aNames;
 }
-/*-- 28.09.00 09:55:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwLayoutViewConfig::SwLayoutViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Layout") :  C2U("Office.Writer/Layout"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -286,15 +269,11 @@ SwLayoutViewConfig::SwLayoutViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
     bWeb(bIsWeb)
 {
 }
-/*-- 28.09.00 09:55:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwLayoutViewConfig::~SwLayoutViewConfig()
 {
 }
-/*-- 28.09.00 09:55:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwLayoutViewConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -341,15 +320,13 @@ void SwLayoutViewConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 28.09.00 09:55:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwLayoutViewConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -431,9 +408,6 @@ void SwLayoutViewConfig::Load()
 
 void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/* -----------------------------19.01.01 13:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<OUString> SwGridConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -455,9 +429,7 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwGridConfig::SwGridConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -465,15 +437,11 @@ SwGridConfig::SwGridConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
     bWeb(bIsWeb)
 {
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwGridConfig::~SwGridConfig()
 {
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwGridConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -499,15 +467,13 @@ void SwGridConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwGridConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         Size aSnap(rParent.GetSnapSize());
@@ -537,9 +503,6 @@ void SwGridConfig::Load()
 
 void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/* -----------------------------19.01.01 13:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<OUString> SwCursorConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -555,24 +518,18 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
         pNames[i] = C2U(aPropNames[i]);
     return aNames;
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
     ConfigItem(C2U("Office.Writer/Cursor"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar)
 {
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwCursorConfig::~SwCursorConfig()
 {
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwCursorConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -594,15 +551,13 @@ void SwCursorConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/* -----------------------------19.01.01 13:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwCursorConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
 
@@ -630,9 +585,6 @@ void SwCursorConfig::Load()
 
 void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/*-- 28.09.00 09:55:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     ConfigItem(C2U("Office.WriterWeb/Background"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -641,15 +593,11 @@ SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
 {
     aPropNames.getArray()[0] = C2U("Color");
 }
-/*-- 28.09.00 09:55:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwWebColorConfig::~SwWebColorConfig()
 {
 }
-/*-- 28.09.00 09:55:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwWebColorConfig::Commit()
 {
     Sequence<Any> aValues(aPropNames.getLength());
@@ -666,14 +614,11 @@ void SwWebColorConfig::Commit()
 
 void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/*-- 28.09.00 09:55:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwWebColorConfig::Load()
 {
     Sequence<Any> aValues = GetProperties(aPropNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aPropNames.getLength())
     {
         for(int nProp = 0; nProp < aPropNames.getLength(); nProp++)
@@ -693,3 +638,4 @@ void SwWebColorConfig::Load()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

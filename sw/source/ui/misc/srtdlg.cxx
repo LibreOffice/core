@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-
 void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
     void* pDel;
@@ -98,8 +98,6 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
      Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
                     feststellen
  --------------------------------------------------------------------*/
-
-
 BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
@@ -127,7 +125,6 @@ BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 /*--------------------------------------------------------------------
      Beschreibung: Init-Liste
  --------------------------------------------------------------------*/
-
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
@@ -372,9 +369,6 @@ void SwSortDlg::Apply()
         InfoBox( this->GetParent(), SW_RES(MSG_SRTERR)).Execute();
 }
 
-/* -----------------30.09.98 10:03-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
     BOOL bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
@@ -403,7 +397,6 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
     }
     return 0;
 }
-
 
 IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 {
@@ -483,8 +476,4 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     return 0;
 }
 
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

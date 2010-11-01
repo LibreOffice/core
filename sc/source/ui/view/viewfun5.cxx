@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -325,12 +326,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             {
                 // Do CSV dialog if more than one line.
                 sal_Int32 nDelim = aStr.indexOf('\n');
-#if 0
-                ::rtl::OString tmpStr = OUStringToOString( aStr,
-                        RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "String is '%s' (%d) [%d]\n", tmpStr.getStr(),
-                        tmpStr.getLength(), nDelim);
-#endif
                 if (nDelim >= 0 && nDelim != aStr.getLength () - 1)
                 {
                     ScImportStringStream aStrm( aStr);
@@ -539,10 +534,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         uno::Reference < io::XInputStream > xStm;
         if( aDataHelper.GetInputStream( nFormatId, xStm ) )
         {
-#if 0
-            SotStorage aDest( "d:\\test.xls" ); // to see the file
-            pStor->CopyTo( &aDest );
-#endif
             ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
             pInsDoc->ResetClip( pDoc, nSrcTab );
@@ -614,15 +605,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 String aFile = aFileList.GetFile( i );
 
                 PasteFile( aPos, aFile, bLink );
-#if 0
-                SfxStringItem aNameItem( FID_INSERT_FILE, aFile );
-                SfxPointItem aPosItem( FN_PARAM_1, aPos );
-                SfxDispatcher* pDisp =
-                    GetViewData()->GetViewShell()->GetViewFrame()->GetDispatcher();
-                if (pDisp)
-                    pDisp->Execute( FID_INSERT_FILE, SFX_CALLMODE_ASYNCHRON,
-                                        &aNameItem, &aPosItem, (void*)0 );
-#endif
 
                 aPos.X() += 400;
                 aPos.Y() += 400;
@@ -747,3 +729,4 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

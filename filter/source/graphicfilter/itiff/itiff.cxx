@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -309,6 +310,8 @@ void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
         case 0x0102:   // Bits Per Sample
             nBitsPerSample = ReadIntData();
             OOODEBUG("BitsPerSample",nBitsPerSample);
+            if ( nBitsPerSample >= 32 ) // 32 bit and larger samples are not supported
+                bStatus = FALSE;
             break;
 
         case 0x0103:   // Compression
@@ -461,7 +464,7 @@ void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
         case 0x0140: { // Color Map
             USHORT nVal;
             ULONG i;
-            nNumColors= ( 1 << nBitsPerSample );
+            nNumColors= ( 1UL << nBitsPerSample );
             if ( nDataType == 3 && nNumColors <= 256)
             {
                 pColorMap = new ULONG[ 256 ];
@@ -486,6 +489,13 @@ void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
             else
                 bStatus = FALSE;
             OOODEBUG("ColorMap (Anzahl Farben:)", nNumColors);
+            break;
+        }
+
+        case 0x0153: { // SampleFormat
+            ULONG nSampleFormat = ReadIntData();
+            if ( nSampleFormat == 3 ) // IEEE floating point samples are not supported yet
+                bStatus = FALSE;
             break;
         }
     }
@@ -1036,7 +1046,7 @@ void TIFFReader::MakePalCol( void )
             pColorMap = new ULONG[ 256 ];
         if ( nPhotometricInterpretation <= 1 )
         {
-            nNumColors = 1 << nBitsPerSample;
+            nNumColors = 1UL << nBitsPerSample;
             if ( nNumColors > 256 )
                 nNumColors = 256;
             pAcc->SetPaletteEntryCount( (USHORT)nNumColors );
@@ -1237,7 +1247,10 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             if ( bStatus )
             {
                 if ( nMaxSampleValue == 0 )
-                    nMaxSampleValue = ( 1 << nBitsPerSample ) - 1;
+                    nMaxSampleValue = ( 1UL << nBitsPerSample ) - 1;
+
+                if ( nMaxSampleValue <= nMinSampleValue )
+                    bStatus = FALSE;
 
                 if ( nPhotometricInterpretation == 2 || nPhotometricInterpretation == 5 || nPhotometricInterpretation == 6 )
                     nDstBitsPerPixel = 24;
@@ -1362,8 +1375,6 @@ extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGra
 }
 
 //============================= fuer Windows ==================================
-#ifndef GCC
-#endif
 
 #ifdef WIN
 
@@ -1389,3 +1400,4 @@ extern "C" int CALLBACK WEP( int )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

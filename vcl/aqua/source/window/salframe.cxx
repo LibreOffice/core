@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -610,12 +611,6 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
                      SAL_FRAMESTATE_MASK_Y                 |
                      SAL_FRAMESTATE_MASK_WIDTH             |
                      SAL_FRAMESTATE_MASK_HEIGHT            |
-                     #if 0
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_X       |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_Y       |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH   |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT  |
-                     #endif
                      SAL_FRAMESTATE_MASK_STATE;
 
     NSRect aStateRect = [mpWindow frame];
@@ -667,6 +662,10 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
             }
         }
     }
+}
+
+void AquaSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
 }
 
 // -----------------------------------------------------------------------
@@ -1645,3 +1644,4 @@ void AquaSalFrame::EndSetClipRegion()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,11 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/process.hxx>
 #include <tools/debug.hxx>
 #include "NDebug.hxx"
 #include <comphelper/sequence.hxx>
 
 using namespace connectivity::evoab;
-using namespace vos;
 using namespace dbtools;
 
 //------------------------------------------------------------------------------
@@ -290,3 +289,5 @@ void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::c
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

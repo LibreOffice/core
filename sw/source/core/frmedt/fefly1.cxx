@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1775,7 +1776,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         if( xModel.is() )
         {
             uno::Any aVal;
-            OUString sName = OUString::createFromAscii("ButtonType");
+            OUString sName(RTL_CONSTASCII_USTRINGPARAM("ButtonType"));
             uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
 
             uno::Reference< beans::XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();
@@ -2154,3 +2155,5 @@ void SwFEShell::SetObjDescription( const String& rDescription )
     }
 }
 // <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

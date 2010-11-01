@@ -50,7 +50,6 @@ APP1STDLIBS=	$(CPPULIB)							\
                 $(COMPHELPERLIB)					\
                 $(UNOTOOLSLIB) 						\
                 $(SALLIB)							\
-                $(VOSLIB)							\
                 $(TOOLSLIB) 						\
                 $(VCLLIB)
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #include "cmdid.h"
 #include "swtypes.hxx"
 #include "hintids.hxx"
@@ -48,9 +47,9 @@
 #include <fmtline.hxx>
 #include <numpara.hxx>
 #include <numpara.hrc>
-// --> OD 2008-04-14 #outlinelevel#
+
 #include <app.hrc>
-// <--
+
 
 // Globals ******************************************************************
 
@@ -58,9 +57,7 @@ static USHORT __FAR_DATA aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
     0
 };
-/*-----------------31.01.98 08:34-------------------
 
---------------------------------------------------*/
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                                                 const SfxItemSet& rAttr ) :
     SfxTabPage(pParent, SW_RES(TP_NUMPARA), rAttr),
@@ -78,9 +75,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aRestartParaCountCB     ( this, SW_RES( CB_RESTART_PARACOUNT ) ),
     aRestartFT              ( this, SW_RES( FT_RESTART_NO        ) ),
     aRestartNF              ( this, SW_RES( NF_RESTART_PARA      ) ),
-    // --> OD 2008-04-14 #outlinelevel#
     msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
-    // <--
     bModified(FALSE),
     bCurNumrule(FALSE)
 {
@@ -110,36 +105,24 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aRestartParaCountCB.SetClickHdl(
                     LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
 }
-/*-----------------31.01.98 08:34-------------------
 
---------------------------------------------------*/
 SwParagraphNumTabPage::~SwParagraphNumTabPage()
 {
 }
 
-/*-----------------31.01.98 08:38-------------------
-
---------------------------------------------------*/
 SfxTabPage* SwParagraphNumTabPage::Create(  Window* pParent,
                                 const SfxItemSet& rSet )
 {
     return new SwParagraphNumTabPage(pParent, rSet);
 }
 
-/*-----------------31.01.98 08:38-------------------
-
---------------------------------------------------*/
 USHORT* SwParagraphNumTabPage::GetRanges()
 {
     return aPageRg;
 }
 
-/*-----------------31.01.98 08:38-------------------
-
---------------------------------------------------*/
 BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    //<-#outline level, added by zhaojianwei
     if( aOutlineLvLB.GetSelectEntryPos() != aOutlineLvLB.GetSavedValue())
     {
         USHORT aOutlineLv = aOutlineLvLB.GetSelectEntryPos();
@@ -150,7 +133,7 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         delete pOutlineLv;
         bModified = TRUE;
     }
-    //<-end
+
     if( aNumberStyleLB.GetSelectEntryPos() != aNumberStyleLB.GetSavedValue())
     {
         String aStyle;
@@ -189,9 +172,6 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-/*-----------------31.01.98 08:38-------------------
-
---------------------------------------------------*/
 void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 {
     BOOL bHasNumberStyle = FALSE;
@@ -219,7 +199,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         if(!aStyle.Len())
             aStyle = aNumberStyleLB.GetEntry(0);
 
-        if( aStyle.EqualsAscii("Outline"))// == String::CreateFromAscii("Outline")) //maybe need modify,zhaojianwei
+        if( aStyle.EqualsAscii("Outline"))
         {
             aNumberStyleLB.InsertEntry( msOutlineNumbering );
             aNumberStyleLB.SelectEntry( msOutlineNumbering );
@@ -293,23 +273,18 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     bModified = FALSE;
 }
 
-/*-----------------31.01.98 08:38-------------------
-
---------------------------------------------------*/
 void SwParagraphNumTabPage::DisableOutline()
 {
     aOutlineLvFT.Disable();
     aOutlineLvLB.Disable();
 }
+
 void SwParagraphNumTabPage::DisableNumbering()
 {
     aNumberStyleFT.Disable();
     aNumberStyleLB.Disable();
 }
 
-/*-----------------31.01.98 08:38-------------------
-
---------------------------------------------------*/
 void SwParagraphNumTabPage::EnableNewStart()
 {
     aNewStartCB.Show();
@@ -317,9 +292,6 @@ void SwParagraphNumTabPage::EnableNewStart()
     aNewStartNF.Show();
 }
 
-/*-----------------31.01.98 08:56-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, EMPTYARG )
 {
     BOOL bEnable = aNewStartCB.IsChecked();
@@ -328,9 +300,6 @@ IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
-/*-----------------05.02.98 10:01-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwParagraphNumTabPage, LineCountHdl_Impl, CheckBox* , EMPTYARG)
 {
     aRestartParaCountCB.Enable(aCountParaCB.IsChecked());
@@ -343,15 +312,8 @@ IMPL_LINK( SwParagraphNumTabPage, LineCountHdl_Impl, CheckBox* , EMPTYARG)
     return 0;
 }
 
-/*-----------------05.02.98 13:39-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
 {
-//  String dd=aNumberStyleLB.GetSavedValue();
-//  if( msOutlineNumbering == dd)
-    {
-    }
     BOOL bEnable = bCurNumrule || pBox->GetSelectEntryPos() > 0;
     aNewStartCB.Enable(bEnable);
     NewStartHdl_Impl(&aNewStartCB);
@@ -360,3 +322,4 @@ IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

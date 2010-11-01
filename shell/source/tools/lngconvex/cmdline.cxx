@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -173,3 +174,5 @@ bool CommandLine::is_arg_name(const std::string& Argument) const
 {
     return (0 == Argument.compare(0, m_argprefix.length(), m_argprefix));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

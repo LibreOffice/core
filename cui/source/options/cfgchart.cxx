@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -322,3 +323,5 @@ void SvxChartColorTableItem::ReplaceColorByIndex( size_t _nIndex, const XColorEn
 {
     m_aColorTable.replace( _nIndex, _rEntry );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

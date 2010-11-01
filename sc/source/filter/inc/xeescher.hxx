@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,9 @@
 #include <filter/msfilter/escherex.hxx>
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include "svx/sdtaitm.hxx"
+
 
 namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
@@ -168,6 +172,7 @@ public:
 
     /** Writes the BITMAP record. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     Graphic             maGraphic;      /// The VCL graphic.
@@ -207,6 +212,34 @@ private:
     sal_uInt16          mnEntryCount;   /// Number of entries in source range.
 };
 
+class XclMacroHelper : public XclExpControlHelper
+{
+protected:
+    XclTokenArrayRef    mxMacroLink;    /// Token array containing a link to an attached macro.
+
+public:
+    explicit            XclMacroHelper( const XclExpRoot& rRoot );
+    virtual             ~XclMacroHelper();
+    /** Writes an ftMacro subrecord containing a macro link, or nothing, if no macro present. */
+    void                WriteMacroSubRec( XclExpStream& rStrm  );
+    /** Sets the name of a macro for object of passed type
+        @return  true = The passed event descriptor was valid, macro name has been found. */
+    bool                SetMacroLink( const ::com::sun::star::script::ScriptEventDescriptor& rEvent,  const XclTbxEventType& nEventType );
+
+    /** Sets the name of a macro
+        @return  true = The passed macro name has been found. */
+    bool                SetMacroLink( const String& rMacro );
+};
+
+class XclExpShapeObj : public XclObjAny, public XclMacroHelper
+{
+public:
+    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual             ~XclExpShapeObj();
+private:
+    virtual void        WriteSubRecs( XclExpStream& rStrm );
+};
+
 // ----------------------------------------------------------------------------
 
 #if EXC_EXP_OCX_CTRL
@@ -234,7 +267,7 @@ private:
 #else
 
 /** Represents an OBJ record for an TBX form control. */
-class XclExpTbxControlObj : public XclObj, public XclExpControlHelper
+class XclExpTbxControlObj : public XclObj, public XclMacroHelper
 {
 public:
     explicit            XclExpTbxControlObj(
@@ -249,8 +282,6 @@ public:
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm );
 
-    /** Writes an ftMacro subrecord containing a macro link, or nothing, if no macro present. */
-    void                WriteMacroSubRec( XclExpStream& rStrm );
     /** Writes a subrecord containing a cell link, or nothing, if no link present. */
     void                WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId );
     /** Writes the ftSbs sub structure containing scrollbar data. */
@@ -258,7 +289,6 @@ private:
 
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    XclTokenArrayRef    mxMacroLink;    /// Token array containing a link to an attached macro.
     XclTbxEventType     meEventType;    /// Type of supported macro event.
     sal_Int32           mnHeight;       /// Height of the control.
     sal_uInt16          mnState;        /// Checked/unchecked state.
@@ -285,6 +315,8 @@ class XclExpChart;
 class XclExpChartObj : public XclObj, protected XclExpRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > XShapeRef;
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
@@ -293,10 +325,15 @@ public:
 
     /** Writes the OBJ record and the entire chart substream. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm );
+    void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
 private:
     typedef ScfRef< XclExpChart > XclExpChartRef;
     XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
+    XShapeRef mxShape;
+    XChartDocRef mxChartDoc;
 };
 
 // ============================================================================
@@ -339,9 +376,20 @@ private:
     XclExpString        maAuthor;       /// Name of the author.
     String              maOrigNoteText; /// Original main text of the note.
     ByteString          maNoteText;     /// Main text of the note (<=BIFF7).
+    XclExpStringRef     mpNoteContents; /// Text and formatting data (OOXML)
     ScAddress           maScPos;        /// Calc cell address of the note.
     sal_uInt16          mnObjId;        /// Escher object ID (BIFF8).
     bool                mbVisible;      /// true = permanently visible.
+    SdrTextHorzAdjust   meTHA;          /// text horizontal adjust
+    SdrTextVertAdjust   meTVA;          /// text vertical adjust
+    bool                mbAutoScale;    /// Auto scale text
+    bool                mbLocked;       /// Position & Size locked
+    bool                mbAutoFill;     /// Auto Fill Style
+    bool                mbAutoLine;     /// Auto Line Style
+    bool                mbColHidden;    /// Column containing the comment is hidden
+    bool                mbRowHidden;    /// Row containing the comment is hidden
+    Rectangle           maCommentFrom;  /// From and From Offset
+    Rectangle           maCommentTo;    /// To and To Offsets
 };
 
 // ============================================================================
@@ -433,3 +481,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

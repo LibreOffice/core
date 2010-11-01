@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,11 +136,8 @@ private:
     BYTE*               pMap;
     const ULONG         nBits;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE void ImplCreateBuffers( const ULONG nMax );
-
-//#endif // __PRIVATE
 
 public:
 
@@ -159,3 +157,5 @@ inline USHORT InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
 }
 
 #endif // _SV_OCTREE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

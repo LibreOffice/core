@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,6 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/salgtype.hxx>
 
-#ifndef GCC
-#endif
 #include <tools/multisel.hxx>
 #include <algorithm>
 
@@ -612,13 +611,6 @@ void BrowseBox::Resize()
     ULONG nSBSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
         nSBSize = (ULONG)(nSBSize * (double)GetZoom());
-
-    long nSize = pDataWin->GetPosPixel().Y();
-    if( !getDataWindow()->bNoHScroll )
-        nSize += aHScroll.GetSizePixel().Height();
-
-    if ( GetOutputSizePixel().Height() < nSize )
-        return;
 
     DoHideCursor( "Resize" );
     USHORT nOldVisibleRows =
@@ -2182,3 +2174,4 @@ Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId,sal_uInt16 _nColId,
 
 // ------------------------------------------------------------------------- EOF
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

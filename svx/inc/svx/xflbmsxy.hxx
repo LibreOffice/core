@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual bool HasMetrics() const;
 };
 
 /*************************************************************************
@@ -82,7 +83,9 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual bool HasMetrics() const;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

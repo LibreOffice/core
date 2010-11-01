@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <classes/fwkresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
@@ -88,7 +89,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 {
     const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
 
@@ -192,3 +193,5 @@ void SAL_CALL SimpleTextStatusbarController::doubleClick() throw (::com::sun::st
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

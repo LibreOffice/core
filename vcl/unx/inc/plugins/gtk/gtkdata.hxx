@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,6 +74,8 @@ public:
     virtual long Dispatch( XEvent *pEvent );
     virtual void initScreen( int nScreen ) const;
 
+    virtual int GetDefaultMonitorNumber() const;
+
     static GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                            GdkEvent* event,
                                            gpointer data );
@@ -87,3 +90,5 @@ public:
 
 
 #endif // _VCL_GTKDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

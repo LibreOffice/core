@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,10 @@
 #include "document.hxx"
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
+#include "optutil.hxx"
 
 #include <hash_map>
+#include <cppuhelper/implbase1.hxx>
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -300,6 +303,10 @@ public:
                                     ScMarkData& rMark, BOOL bRecord = TRUE );
     void            ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags );
+    ULONG TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+                                SCTAB nDestPos, BOOL bInsertNew,
+                                BOOL bNotifyAndPaint );
+
     BOOL            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRecord );
 
     void            DoRecalc( BOOL bApi );
@@ -425,6 +432,8 @@ public:
     //-->Added by PengYunQuan for Validity Cell Range Picker
     ScSheetSaveData* GetSheetSaveData();
 
+    void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
+
     // passwword protection for Calc (derived from SfxObjectShell)
     // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
     virtual bool    IsChangeRecording() const;
@@ -471,3 +480,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

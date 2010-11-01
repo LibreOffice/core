@@ -51,7 +51,7 @@ module com { module sun { module star { module document {
  */
 interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
 {
-    /** is called whenever a document event occured
+    /** is called whenever a document event occurred
     */
     void documentEventOccured( [in] DocumentEvent Event );
 };

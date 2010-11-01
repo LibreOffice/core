@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,7 +80,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;
@@ -122,3 +123,4 @@ IMPL_XTYPEPROVIDER_END
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

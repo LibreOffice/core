@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1564,16 +1565,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos + ( nLineCount * mnCols ));
                     else
                     {
-#if 0
-                        if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
-                        {
-                            Window* pParent = GetParent();
-                            pParent->GrabFocus();
-                            pParent->KeyInput( rKEvt );
-                            break;
-                        }
-                        else
-#endif
                         {
                             if ( mpNoneItem )
                             {
@@ -2752,3 +2743,4 @@ const Link& ValueSet::GetHighlightHdl() const
 
 // -----------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

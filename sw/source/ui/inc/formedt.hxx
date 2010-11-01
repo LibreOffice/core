@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@ class SwForm;
 /*--------------------------------------------------------------------
      Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
  --------------------------------------------------------------------*/
-
 class SwIdxFormDlg : public SvxStandardDialog
 {
     DECL_LINK( EntryHdl, Button * );
@@ -98,3 +98,5 @@ inline const SwForm& SwIdxFormDlg::GetTOXForm()
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

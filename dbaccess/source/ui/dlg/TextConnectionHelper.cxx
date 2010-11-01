@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,7 +153,7 @@ DBG_NAME(OTextConnectionHelper)
             { 0, NULL }
         };
 
-        for ( size_t section=0; section < sizeof( aSections ) / sizeof( aSections[0] ) - 1; ++section )
+        for ( size_t section=0; section < SAL_N_ELEMENTS( aSections ) - 1; ++section )
         {
             if ( ( m_nAvailableSections & aSections[section].nFlag ) != 0 )
             {
@@ -545,3 +546,5 @@ DBG_NAME(OTextConnectionHelper)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

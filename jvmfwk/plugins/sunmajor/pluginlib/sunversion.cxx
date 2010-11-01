@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -418,10 +419,12 @@ SelfTest::SelfTest()
             break;
     }
     if (bRet)
-        JFW_TRACE2("[Java framework] sunjavaplugin: Testing class SunVersion succeeded.");
+        JFW_TRACE2("[Java framework] sunjavaplugin: Testing class SunVersion succeeded.\n");
     else
-        OSL_ENSURE(bRet, "[Java framework] sunjavaplugin: SunVersion self test failed");
+        OSL_ENSURE(bRet, "[Java framework] sunjavaplugin: SunVersion self test failed.\n");
 }
 #endif
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

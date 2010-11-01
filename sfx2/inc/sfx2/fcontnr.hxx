@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,14 +116,12 @@ public:
     const SfxFilter*    GetFilter4FilterName( const String& rName, SfxFilterFlags nMust = 0, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4UIName( const String& rName, SfxFilterFlags nMust = 0, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void ReadFilters_Impl( BOOL bUpdate=FALSE );
     SAL_DLLPRIVATE static void ReadSingleFilter_Impl( const ::rtl::OUString& rName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xTypeCFG,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
                             BOOL bUpdate );
     SAL_DLLPRIVATE static const SfxFilter* GetDefaultFilter_Impl( const String& );
-//#endif
 };
 
 class SfxFilterMatcher_Impl;
@@ -136,10 +135,8 @@ public:
                         SfxFilterMatcher();
                         ~SfxFilterMatcher();
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static BOOL IsFilterInstalled_Impl( const SfxFilter* pFilter );
     DECL_DLLPRIVATE_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String* );
-//#endif
 
     sal_uInt32               GuessFilterIgnoringContent( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     sal_uInt32               GuessFilter( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
@@ -164,9 +161,7 @@ class SFX2_DLLPUBLIC SfxFilterMatcherIter
     USHORT nCurrent;
     const SfxFilterMatcher_Impl *pMatch;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE const SfxFilter* Find_Impl();
-//#endif
 
 public:
     SfxFilterMatcherIter( const SfxFilterMatcher* pMatchP, SfxFilterFlags nMask = 0, SfxFilterFlags nNotMask = SFX_FILTER_NOTINSTALLED );
@@ -176,3 +171,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

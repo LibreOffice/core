@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,8 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -590,9 +593,9 @@ void DrawingML::WriteStretch()
 }
 
 void DrawingML::WriteTransformation( const Rectangle& rRect,
-        sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+        sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
 {
-    mpFS->startElementNS( XML_a, XML_xfrm,
+    mpFS->startElementNS( nXmlNamespace, XML_xfrm,
                           XML_flipH, bFlipH ? "1" : NULL,
                           XML_flipV, bFlipV ? "1" : NULL,
                           XML_rot, nRotation ? I32S( nRotation ) : NULL,
@@ -601,20 +604,20 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
     mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( rRect.Left() ) ), XML_y, IS( MM100toEMU( rRect.Top() ) ), FSEND );
     mpFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( MM100toEMU( rRect.GetWidth() ) ), XML_cy, IS( MM100toEMU( rRect.GetHeight() ) ), FSEND );
 
-    mpFS->endElementNS( XML_a, XML_xfrm );
+    mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
 {
     DBG(printf( "write shape transformation\n" ));
 
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
-    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), bFlipH, bFlipV, nRotation );
+    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, nRotation );
 }
 
-void DrawingML::WriteRunProperties( Reference< XTextRange > rRun )
+void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIsField )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
@@ -779,10 +782,33 @@ void DrawingML::WriteRunProperties( Reference< XTextRange > rRun )
                                FSEND );
     }
 
+    if( bIsField ) {
+        Reference< XTextField > rXTextField;
+        GET( rXTextField, TextField );
+        if( rXTextField.is() )
+            rXPropSet.set( rXTextField, UNO_QUERY );
+    }
+
+    // field properties starts here
+    if( GETA( URL ) ) {
+    OUString sURL;
+
+    mAny >>= sURL;
+    if( sURL.getLength() ) {
+        OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                              US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+                              sURL, US( "External" ) );
+
+        mpFS->singleElementNS( XML_a, XML_hlinkClick,
+                   FSNS( XML_r,XML_id ), USS( sRelId ),
+                   FSEND );
+    }
+    }
+
     mpFS->endElementNS( XML_a, XML_rPr );
 }
 
-const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun )
+const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField )
 {
     const char* sType = NULL;
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
@@ -797,6 +823,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() ) {
+        bIsField = sal_True;
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
                 String aFieldKind( rXTextField->getPresentation( TRUE ) );
@@ -804,6 +831,10 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
                 if( aFieldKind == S( "Page" ) ) {
                     return "slidenum";
                 }
+        // else if( aFieldKind == S( "URL" ) ) {
+        // do not return here
+        // and make URL field text run with hyperlink property later
+        // }
             }
         }
     }
@@ -849,13 +880,13 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
 void DrawingML::WriteRun( Reference< XTextRange > rRun )
 {
     const char* sFieldType;
-    bool bIsField = false;
+    sal_Bool bIsField = sal_False;
     OUString sText = rRun->getString();
 
     if( sText.getLength() < 1)
         return;
 
-    if( ( sFieldType = GetFieldType( rRun ) ) ) {
+    if( ( sFieldType = GetFieldType( rRun, bIsField ) ) ) {
         OStringBuffer sUUID(39);
 
         GetUUID( sUUID );
@@ -863,17 +894,17 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
                               XML_id, sUUID.getStr(),
                               XML_type, sFieldType,
                               FSEND );
-        bIsField = true;
     } else
         mpFS->startElementNS( XML_a, XML_r, FSEND );
 
-    WriteRunProperties( rRun );
+    Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
+    WriteRunProperties( xPropSet, bIsField );
 
     mpFS->startElementNS( XML_a, XML_t, FSEND );
     mpFS->writeEscaped( sText );
     mpFS->endElementNS( XML_a, XML_t );
 
-    if( bIsField )
+    if( sFieldType )
         mpFS->endElementNS( XML_a, XML_fld );
     else
         mpFS->endElementNS( XML_a, XML_r );
@@ -1393,5 +1424,66 @@ sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star
     return sNumStr.GetChar( 0 );
 }
 
+sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
+    const OUString& sFullStream,
+    const OUString& sRelativeStream,
+    const Reference< XOutputStream >& xParentRelation,
+    const char* sContentType,
+    const char* sRelationshipType,
+    ::rtl::OUString* pRelationshipId )
+{
+    OUString sRelationshipId;
+    if (xParentRelation.is())
+        sRelationshipId = GetFB()->addRelation( xParentRelation, OUString::createFromAscii( sRelationshipType), sRelativeStream );
+    else
+        sRelationshipId = GetFB()->addRelation( OUString::createFromAscii( sRelationshipType ), sRelativeStream );
+
+    if( pRelationshipId )
+        *pRelationshipId = sRelationshipId;
+
+    sax_fastparser::FSHelperPtr p = GetFB()->openFragmentStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
+
+    return p;
+}
+
+void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
+{
+    if ( !GetProperty( xPropSet, S( "FillStyle" ) ) )
+        return;
+    FillStyle aFillStyle( FillStyle_NONE );
+    xPropSet->getPropertyValue( S( "FillStyle" ) ) >>= aFillStyle;
+
+    if( aFillStyle == FillStyle_BITMAP )
+    {
+        //DBG(printf ("FillStyle_BITMAP properties\n"));
+        //DBG(dump_pset(rXPropSet));
+    }
+
+    if( aFillStyle == FillStyle_NONE ||
+        aFillStyle == FillStyle_HATCH )
+        return;
+
+    switch( aFillStyle )
+    {
+    case ::com::sun::star::drawing::FillStyle_SOLID :
+        WriteSolidFill( xPropSet );
+        break;
+    case ::com::sun::star::drawing::FillStyle_GRADIENT :
+        WriteGradientFill( xPropSet );
+        break;
+    case ::com::sun::star::drawing::FillStyle_BITMAP :
+        WriteBlipFill( xPropSet, S( "FillBitmapURL" ) );
+        break;
+    default:
+        ;
+    }
+
+    return;
+}
+
+
+
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

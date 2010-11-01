@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,9 +92,7 @@ private:
     USHORT              nMouseSensitivity;
     USHORT              nLockedMods;
     USHORT              nFlags;
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( ImpWatchDog, Timer * );
-//#endif
 
     inline BOOL         ShouldDeselect( BOOL bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
@@ -251,3 +250,4 @@ inline void SelectionEngine::SetAnchor( BOOL bAnchor )
 
 #endif  // _SV_SELENG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

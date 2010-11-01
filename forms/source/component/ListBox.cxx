@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -647,6 +648,8 @@ namespace frm
         DBG_ASSERT( m_eListSourceType != ListSourceType_VALUELIST, "OListBoxModel::loadData: cannot load value list from DB!" );
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::loadData: cannot load from DB when I have an external list source!" );
 
+        const sal_Int16 nNULLPosBackup( m_nNULLPos );
+        const sal_Int32 nBoundColumnTypeBackup( m_nBoundColumnType );
         m_nNULLPos = -1;
         m_nBoundColumnType = DataType::SQLNULL;
 
@@ -782,6 +785,8 @@ namespace frm
                     // if none of the settings of the row set changed, compared to the last
                     // invocation of loadData, then don't re-fill the list. Instead, assume
                     // the list entries are the same.
+                    m_nNULLPos = nNULLPosBackup;
+                    m_nBoundColumnType = nBoundColumnTypeBackup;
                     return;
                 }
                 xListCursor.reset( m_aListRowSet.execute() );
@@ -1555,6 +1560,8 @@ namespace frm
     void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent) throw(RuntimeException)
     {
         // forward this to our listeners
+        Reference< XChild > xChild( getModel(), UNO_QUERY );
+        if ( xChild.is() && xChild->getParent().is() )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( m_aItemListeners.getLength() )
@@ -1567,6 +1574,8 @@ namespace frm
                 m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ), this );
             }
         }
+        else
+            m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, _rEvent );
 
         // and do the handling for the ChangeListeners
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1844,3 +1853,4 @@ namespace frm
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

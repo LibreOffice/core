@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ public:
                 USHORT  );
     virtual ~SvxGrfCrop();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Create(SvStream &, USHORT nVer) const;
     virtual SvStream&           Store(SvStream &, USHORT nIVer) const;
@@ -78,3 +79,5 @@ public:
 
 
 #endif  // _GRFATR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

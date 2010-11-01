@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -671,6 +672,7 @@
 #include "rtl/logfile.hxx"
 #include "rtl/math.hxx"
 #include "rtl/memory.h"
+#include "rlt/ref.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
@@ -679,6 +681,7 @@
 #include "sal/config.h"
 #include "sal/main.h"
 #include "sal/types.h"
+#include <salhelper/simplereferenceobject.hxx>
 #include "svl/srchdefs.hxx"
 #include "sot/clsids.hxx"
 #include "sot/exchange.hxx"
@@ -875,11 +878,6 @@
 #include "vcl/unohelp2.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/wintypes.hxx"
-#include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
-#include "vos/thread.hxx"
-#include "vos/xception.hxx"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"
@@ -895,3 +893,4 @@
 //---MARKER---
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

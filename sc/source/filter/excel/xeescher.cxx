@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,10 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <set>
 #include <rtl/ustrbuf.h>
@@ -63,8 +68,27 @@
 #include "xelink.hxx"
 #include "xename.hxx"
 #include "xestyle.hxx"
+#include "userdat.hxx"
+#include "drwlayer.hxx"
+#include "svx/unoapi.hxx"
+#include "svx/algitem.hxx"
+#include "scitems.hxx"
+#include <editeng/justifyitem.hxx>
+#include "svx/sdtaitm.hxx"
+#include "attrib.hxx"
+#include "document.hxx"
+#include <svx/svdattr.hxx>
+#include "svx/sdr/properties/properties.hxx"
+#include "detfunc.hxx"
+#include "svx/xflclit.hxx"
+#include "svx/xlnstwit.hxx"
+#include "svx/xlnstit.hxx"
+#include "svx/sxmspitm.hxx"
 
 #include <oox/core/tokens.hxx>
+#include <oox/export/drawingml.hxx>
+#include <oox/export/chartexport.hxx>
+#include <oox/export/utils.hxx>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -86,6 +110,108 @@ using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::container::XNamed;
+using ::oox::drawingml::DrawingML;
+using ::oox::drawingml::ChartExport;
+
+#define  HMM2XL(x)        ((x)/26.5)+0.5
+
+// Static Function Helpers
+static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
+{
+    switch( eAdjust )
+    {
+        case SDRTEXTHORZADJUST_CENTER:
+            return "center";
+        case SDRTEXTHORZADJUST_RIGHT:
+            return "right";
+        case SDRTEXTHORZADJUST_BLOCK:
+            return "justify";
+        case SDRTEXTHORZADJUST_LEFT:
+        default:
+            return "left";
+    }
+    return "unknown";
+}
+
+static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
+{
+    switch( eAdjust )
+    {
+        case SDRTEXTVERTADJUST_CENTER:
+            return "center";
+        case SDRTEXTVERTADJUST_BOTTOM:
+            return "bottom";
+        case SDRTEXTVERTADJUST_BLOCK:
+            return "justify";
+        case SDRTEXTVERTADJUST_TOP:
+        default:
+            return "top";
+    }
+    return "unknown";
+}
+
+static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
+{
+    rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Left() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_col ) );
+    rComments->startElement( FSNS( XML_xdr, XML_colOff ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Top() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_colOff ) );
+    rComments->startElement( FSNS( XML_xdr, XML_row ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Right() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_row ) );
+    rComments->startElement( FSNS( XML_xdr, XML_rowOff ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Bottom() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
+}
+
+static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT32 nTab, Rectangle &aFrom, Rectangle &aTo )
+{
+    bool bTo = false;
+    INT32 nCol = 0, nRow = 0;
+    INT32 nColOff = 0, nRowOff= 0;
+
+    while(1)
+    {
+        Rectangle r = rRoot.GetDocPtr()->GetMMRect( nCol,nRow,nCol,nRow,nTab );
+        if( !bTo )
+        {
+            if( r.Left() <= aRect.Left() )
+            {
+                nCol++;
+                nColOff = aRect.Left() - r.Left();
+            }
+            if( r.Top() <= aRect.Top() )
+            {
+                nRow++;
+                nRowOff = aRect.Top() - r.Top();
+            }
+            if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
+            {
+                aFrom = Rectangle( nCol-1, HMM2XL( nColOff ),
+                                   nRow-1, HMM2XL( nRowOff ) );
+                bTo=true;
+            }
+        }
+        if( bTo )
+        {
+            if( r.Right() < aRect.Right() )
+                nCol++;
+            if( r.Bottom() < aRect.Bottom() )
+                nRow++;
+            if( r.Right() >= aRect.Right() && r.Bottom() >= aRect.Bottom() )
+            {
+                aTo = Rectangle( nCol, HMM2XL( aRect.Right() - r.Left() ),
+                                 nRow, HMM2XL( aRect.Bottom() - r.Top() ));
+                break;
+            }
+        }
+    }
+    return;
+}
 
 // Escher client anchor =======================================================
 
@@ -294,6 +420,17 @@ void XclExpImgData::Save( XclExpStream& rStrm )
     }
 }
 
+void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetCurrentStream();
+
+    DrawingML aDML( pWorksheet, &rStrm, DrawingML::DOCUMENT_XLSX );
+    OUString rId = aDML.WriteImage( maGraphic );
+    pWorksheet->singleElement( XML_picture,
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
+            FSEND );
+}
+
 // ============================================================================
 
 XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
@@ -484,9 +621,9 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 
 #else
 
-XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
-    XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN, true ),
-    XclExpControlHelper( rObjMgr.GetRoot() ),
+XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > xShape , const Rectangle* pChildAnchor ) :
+    XclObj( rRoot, EXC_OBJTYPE_UNKNOWN, true ),
+    XclMacroHelper( rRoot ),
     mnHeight( 0 ),
     mnState( 0 ),
     mnLineCount( 0 ),
@@ -735,6 +872,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rObjMgr, Referenc
 
 bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
 {
+    return XclMacroHelper::SetMacroLink( rEvent, meEventType );
+/*
     String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, meEventType );
     if( aMacroName.Len() )
     {
@@ -744,6 +883,7 @@ bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
         return true;
     }
     return false;
+*/
 }
 
 void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
@@ -841,7 +981,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
             }
             else if( mnObjType == EXC_OBJTYPE_DROPDOWN )
             {
-                rStrm << sal_uInt16( 0 ) << mnLineCount;
+                rStrm << sal_uInt16( 0 ) << mnLineCount << sal_uInt16( 0 ) << sal_uInt16( 0 );
             }
 
             rStrm.EndRecord();
@@ -882,12 +1022,6 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
     }
 }
 
-void XclExpTbxControlObj::WriteMacroSubRec( XclExpStream& rStrm )
-{
-    if( mxMacroLink.is() )
-        WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
-}
-
 void XclExpTbxControlObj::WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId )
 {
     if( const XclTokenArray* pCellLink = GetCellLinkTokArr() )
@@ -920,7 +1054,7 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
-    XclExpRoot( rObjMgr.GetRoot() )
+    XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape )
 {
     // create the MSODRAWING record contents for the chart object
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -954,6 +1088,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     ScfPropertySet aShapeProp( xShape );
     Reference< XModel > xModel;
     aShapeProp.GetProperty( xModel, CREATE_OUSTRING( "Model" ) );
+    mxChartDoc.set( xModel,UNO_QUERY );
     ::com::sun::star::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, CREATE_OUSTRING( "BoundRect" ) );
     Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
@@ -972,6 +1107,118 @@ void XclExpChartObj::Save( XclExpStream& rStrm )
     mxChart->Save( rStrm );
 }
 
+void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
+{
+    OSL_TRACE("XclExpChartObj::SaveXml -- Entry point to export chart");
+    sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
+
+    // FIXME: two cell? it seems the two cell anchor is incorrect.
+    pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
+            XML_editAs, "oneCell",
+            FSEND );
+    Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
+    if (xPropSet.is())
+    {
+        XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
+        Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
+        ChartExport aChartExport( XML_xdr, pDrawing, xModel, &rStrm, DrawingML::DOCUMENT_XLSX );
+        static sal_Int32 nChartCount = 0;
+        nChartCount++;
+        aChartExport.WriteChartObj( mxShape, nChartCount );
+        // TODO: get the correcto chart number
+        //WriteChartObj( pDrawing, rStrm );
+    }
+
+    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData),
+            // OOXTODO: XML_fLocksWithSheet
+            // OOXTODO: XML_fPrintsWithSheet
+            FSEND );
+    pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
+}
+
+void XclExpChartObj::WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm )
+{
+    pDrawing->startElement(  FSNS( XML_xdr, XML_graphicFrame ), FSEND );
+
+    pDrawing->startElement(  FSNS( XML_xdr, XML_nvGraphicFramePr ), FSEND );
+
+    // TODO: get the correct chart name chart id
+    OUString sName = CREATE_OUSTRING("Object 1");
+    Reference< XNamed > xNamed( mxShape, UNO_QUERY );
+    if (xNamed.is())
+    {
+        sName = xNamed->getName();
+    }
+    sal_Int32 nID = rStrm.GetUniqueId();
+
+    pDrawing->singleElement( FSNS( XML_xdr, XML_cNvPr ),
+                          XML_id,     I32S( nID ),
+                          XML_name,   USS( sName ),
+                          FSEND );
+
+    pDrawing->singleElement( FSNS( XML_xdr, XML_cNvGraphicFramePr ),
+                          FSEND );
+
+    pDrawing->endElement( FSNS( XML_xdr, XML_nvGraphicFramePr ) );
+
+    // visual chart properties
+    //pDrawing->startElement( FSNS( XML_xdr, XML_xfrm ), FSEND );
+    WriteShapeTransformation( pDrawing, mxShape );
+    //pDrawing->endElement( FSNS( XML_xdr, XML_xfrm ) );
+
+    // writer chart object
+    pDrawing->startElement( FSNS( XML_a, XML_graphic ), FSEND );
+    pDrawing->startElement( FSNS( XML_a, XML_graphicData ),
+                       XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                       FSEND );
+    OUString sId;
+    // TODO:
+    static sal_Int32 nChartCount = 0;
+    nChartCount++;
+    sax_fastparser::FSHelperPtr pChart = rStrm.CreateOutputStream(
+            XclXmlUtils::GetStreamName( "xl/", "charts/chart", nChartCount ),
+            XclXmlUtils::GetStreamName( "../", "charts/chart", nChartCount ),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+            &sId );
+
+    pDrawing->singleElement(  FSNS( XML_c, XML_chart ),
+            FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_r, XML_id ), XclXmlUtils::ToOString( sId ).getStr(),
+            FSEND );
+
+    rStrm.PushStream( pChart );
+    Reference< XModel > xModel( mxChartDoc, UNO_QUERY );
+    ChartExport aChartExport( XML_xdr, pChart, xModel, &rStrm, DrawingML::DOCUMENT_XLSX );
+    aChartExport.ExportContent();
+
+    rStrm.PopStream();
+
+    pDrawing->endElement( FSNS( XML_a, XML_graphicData ) );
+    pDrawing->endElement( FSNS( XML_a, XML_graphic ) );
+    pDrawing->endElement( FSNS( XML_xdr, XML_graphicFrame ) );
+
+}
+
+void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+{
+    ::com::sun::star::awt::Point aPos = rXShape->getPosition();
+    ::com::sun::star::awt::Size aSize = rXShape->getSize();
+
+    pFS->startElementNS( XML_xdr, XML_xfrm,
+                          XML_flipH, bFlipH ? "1" : NULL,
+                          XML_flipV, bFlipV ? "1" : NULL,
+                          XML_rot, nRotation ? I32S( nRotation ) : NULL,
+                          FSEND );
+
+    pFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( aPos.X ) ), XML_y, IS( MM100toEMU( aPos.Y ) ), FSEND );
+    pFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( MM100toEMU( aSize.Width ) ), XML_cy, IS( MM100toEMU( aSize.Height ) ), FSEND );
+
+    pFS->endElementNS( XML_xdr, XML_xfrm );
+}
+
 // ============================================================================
 
 XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
@@ -984,7 +1231,12 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     // get the main note text
     String aNoteText;
     if( pScNote )
+    {
         aNoteText = pScNote->GetText();
+        const EditTextObject *pEditObj = pScNote->GetEditTextObject();
+        if( pEditObj )
+            mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
+    }
     // append additional text
     ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
     maOrigNoteText = aNoteText;
@@ -1001,8 +1253,31 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
             // TODO: additional text
             if( pScNote )
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
+                {
+                    lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible ) );
+                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos, maCommentFrom, maCommentTo ) );
+
+                    SfxItemSet aItemSet = pCaption->GetMergedItemSet();
+                    meTVA       = pCaption->GetTextVerticalAdjust();
+                    meTHA       = pCaption->GetTextHorizontalAdjust();
+                    mbAutoScale = pCaption->GetFitToSize()?true:false;
+                    mbLocked    = pCaption->IsMoveProtect() | pCaption->IsResizeProtect();
+
+                    // AutoFill style would change if Postit.cxx object creation values are changed
+                    OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());
+                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, ULONG) == XFILL_SOLID);
+#if 0
+                    // TODO: Get AutoLine bool
+                    aCol = OUString(((XLineStartItem &)GETITEM(aItemSet, XLineStartItem, XATTR_LINESTART)).GetValue());
+                    mbAutoLine = !aCol.getLength() &&
+                                 (GETITEMVALUE(aItemSet, XLineStartWidthItem, XATTR_LINESTARTWIDTH, ULONG) == 200) &&
+                                 (GETITEMBOOL(aItemSet, XATTR_LINESTARTCENTER) == FALSE);
+#endif
+                    mbAutoLine  = true;
+                    mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
+                    mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
+                }
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }
@@ -1086,11 +1361,115 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
             FSEND );
     rComments->startElement( XML_text, FSEND );
     // OOXTODO: phoneticPr, rPh, r
+#if 0
     rComments->startElement( XML_t, FSEND );
     rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
     rComments->endElement ( XML_t );
+#else
+    if( mpNoteContents.is() )
+        mpNoteContents->WriteXml( rStrm );
+#endif
     rComments->endElement( XML_text );
+
+/*
+   Export of commentPr is disabled, since the current (Oct 2010)
+   version of MSO 2010 doesn't yet support commentPr
+ */
+#ifdef XLSX_OOXML_FUTURE
+    if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
+    {
+        rComments->startElement( XML_commentPr,
+                XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
+                XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
+                // XML_autoLine,       XclXmlUtils::ToPsz( mbAutoLine ),
+                XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden ),
+                // XML_defaultSize,    "true",
+                XML_locked,         XclXmlUtils::ToPsz( mbLocked ),
+                XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden ),
+                XML_textHAlign,     ToHorizAlign( meTHA ),
+                XML_textVAlign,     ToVertAlign( meTVA ) ,
+                FSEND );
+        rComments->startElement( XML_anchor,
+                XML_moveWithCells, "false",
+                XML_sizeWithCells, "false",
+                FSEND );
+        rComments->startElement( FSNS( XML_xdr, XML_from ), FSEND );
+        lcl_WriteAnchorVertex( rComments, maCommentFrom );
+        rComments->endElement( FSNS( XML_xdr, XML_from ) );
+        rComments->startElement( FSNS( XML_xdr, XML_to ), FSEND );
+        lcl_WriteAnchorVertex( rComments, maCommentTo );
+        rComments->endElement( FSNS( XML_xdr, XML_to ) );
+        rComments->endElement( XML_anchor );
+        rComments->endElement( XML_commentPr );
+    }
+#endif
     rComments->endElement( XML_comment );
+}
+
+// ============================================================================
+
+XclMacroHelper::XclMacroHelper( const XclExpRoot& rRoot ) :
+    XclExpControlHelper( rRoot )
+{
+}
+
+XclMacroHelper::~XclMacroHelper()
+{
+}
+
+void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
+{
+    if( mxMacroLink.is() )
+        WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
+}
+
+bool
+XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxEventType& nEventType )
+{
+    String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType, GetDocShell() );
+    if( aMacroName.Len() )
+    {
+        return SetMacroLink( aMacroName );
+    }
+    return false;
+}
+
+bool
+XclMacroHelper::SetMacroLink( const String& rMacroName )
+{
+    OSL_TRACE("SetMacroLink( macroname:=%s )", rtl::OUStringToOString( rMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    if( rMacroName.Len() )
+    {
+        sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
+        sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rMacroName, true, false );
+        mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
+        return true;
+    }
+    return false;
+}
+
+XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) :
+    XclObjAny( rRoot, xShape ),
+    XclMacroHelper( rRoot )
+{
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+    {
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pSdrObj );
+        if ( pInfo && pInfo->GetMacro().getLength() )
+// FIXME ooo330-m2: XclControlHelper::GetXclMacroName was removed in upstream sources; they started to call XclTools::GetXclMacroName instead; is this enough? it has only one parameter
+//            SetMacroLink( XclControlHelper::GetXclMacroName( pInfo->GetMacro(), rRoot.GetDocShell() ) );
+            SetMacroLink( XclTools::GetXclMacroName( pInfo->GetMacro() ) );
+    }
+}
+
+XclExpShapeObj::~XclExpShapeObj()
+{
+}
+
+void XclExpShapeObj::WriteSubRecs( XclExpStream& rStrm )
+{
+    XclObjAny::WriteSubRecs( rStrm );
+    WriteMacroSubRec( rStrm );
 }
 
 // ============================================================================
@@ -1104,7 +1483,7 @@ struct OUStringLess : public std::binary_function<OUString, OUString, bool>
 {
     bool operator()(const OUString& x, const OUString& y) const
     {
-        return x.compareTo( y ) <= 0;
+        return x.compareTo( y ) < 0;
     }
 };
 
@@ -1123,6 +1502,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     rComments->startElement( XML_comments,
             XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
             FSEND );
     rComments->startElement( XML_authors, FSEND );
 
@@ -1282,3 +1662,4 @@ XclExpDffAnchorBase* XclExpEmbeddedObjectManager::CreateDffAnchor() const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

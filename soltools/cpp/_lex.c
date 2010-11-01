@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -686,3 +687,5 @@ void
     cursource = s->next;
     dofree(s);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

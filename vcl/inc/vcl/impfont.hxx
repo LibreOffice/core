@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,3 +242,4 @@ bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
 #endif // _SV_IMPFONT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

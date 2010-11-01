@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-/// @HTML
 #include <msfilter.hxx>
 #   include "writerwordglue.hxx"
 #include <doc.hxx>
@@ -168,7 +167,7 @@ namespace myImplHelpers
             RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL
         };
 
-        const size_t nArrSize = (sizeof(aArr) / sizeof(aArr[0]));
+        const size_t nArrSize = (SAL_N_ELEMENTS(aArr));
         ASSERT(nArrSize == 75, "Style Array has false size");
 
         SwTxtFmtColl* pRet = 0;
@@ -1044,4 +1043,4 @@ namespace sw
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

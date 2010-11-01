@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -219,7 +220,12 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             aSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
             aSeq[1].Value <<= ::rtl::OUString( pExpFilter->GetName() );
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
+        try
+        {
             xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+        }
+        catch( uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
+
             SotStorageRef xOLEStor = new SotStorage( pStream, TRUE );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
@@ -362,3 +368,4 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

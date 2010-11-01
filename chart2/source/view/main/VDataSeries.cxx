@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -298,7 +299,7 @@ void VDataSeries::doSortByXValues()
 {
     if( m_aValues_X.is() && m_aValues_X.Doubles.getLength() )
     {
-        //prepare a vector vor sorting
+        //prepare a vector for sorting
         std::vector< ::std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of athe point
         double fNan;
         ::rtl::math::setNan( & fNan );
@@ -314,7 +315,7 @@ void VDataSeries::doSortByXValues()
         //do sort
         std::sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
 
-        //fill the sorted points back to the mambers
+        //fill the sorted points back to the members
         m_aValues_X.Doubles.realloc( m_nPointCount );
         m_aValues_Y.Doubles.realloc( m_nPointCount );
 
@@ -983,3 +984,5 @@ sal_Int32 VDataSeries::getMissingValueTreatment() const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

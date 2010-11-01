@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,6 @@
 #include <basic/ttstrhlp.hxx>
 #include <basic/dispdefs.hxx>
 #include <basic/sbuno.hxx>
-#include <vos/socket.hxx>
 #include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
@@ -6756,3 +6756,5 @@ protected:
 #define FINISH_SAME
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

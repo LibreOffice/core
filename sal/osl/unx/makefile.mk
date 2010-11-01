@@ -118,7 +118,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
 SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
@@ -130,15 +130,6 @@ APP1STDLIBS+=-lC
 .ENDIF
 
 .IF "$(OS)" == "LINUX"
-.IF "$(PAM)" == "NO"
-CFLAGS+=-DNOPAM
-.IF "$(NEW_SHADOW_API)" == "YES"
-CFLAGS+=-DNEW_SHADOW_API
-.ENDIF
-.ENDIF
-.IF "$(PAM_LINK)" == "YES"
-CFLAGS+=-DPAM_LINK
-.ENDIF
 .IF "$(CRYPT_LINK)" == "YES"
 CFLAGS+=-DCRYPT_LINK
 .ENDIF

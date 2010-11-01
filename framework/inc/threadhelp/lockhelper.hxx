@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,6 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
-
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -116,7 +115,7 @@ class LockHelper : public  IMutex
         //-------------------------------------------------------------------------------------------------------------
         //  ctor/dtor
         //-------------------------------------------------------------------------------------------------------------
-                 LockHelper( ::vos::IMutex* pSolarMutex = NULL );
+                 LockHelper( ::osl::SolarMutex* pSolarMutex = NULL );
         virtual ~LockHelper(                                   );
 
         //-------------------------------------------------------------------------------------------------------------
@@ -137,7 +136,7 @@ class LockHelper : public  IMutex
         //-------------------------------------------------------------------------------------------------------------
         //  something else
         //-------------------------------------------------------------------------------------------------------------
-        static LockHelper&  getGlobalLock       ( ::vos::IMutex* pSolarMutex = NULL );
+        static LockHelper&  getGlobalLock       ( ::osl::SolarMutex* pSolarMutex = NULL );
         ::osl::Mutex&       getShareableOslMutex(                                   );
 
     //-------------------------------------------------------------------------------------------------------------
@@ -169,7 +168,7 @@ class LockHelper : public  IMutex
 
         mutable FairRWLock*     m_pFairRWLock           ;
         mutable ::osl::Mutex*   m_pOwnMutex             ;
-        mutable ::vos::IMutex*  m_pSolarMutex           ;
+        mutable ::osl::SolarMutex*  m_pSolarMutex       ;
         mutable ::osl::Mutex*   m_pShareableOslMutex    ;
         mutable sal_Bool        m_bDummySolarMutex      ;
 };
@@ -177,3 +176,5 @@ class LockHelper : public  IMutex
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_THREADHELP_LOCKHELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

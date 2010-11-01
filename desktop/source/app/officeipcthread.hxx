@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,22 +31,19 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <vos/pipe.hxx>
-#include <vos/security.hxx>
-#include <vos/thread.hxx>
-#include <vos/signal.hxx>
+#include <osl/pipe.hxx>
+#include <osl/security.hxx>
+#include <osl/signal.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/conditn.hxx>
+#include <osl/thread.hxx>
 #include "boost/optional.hpp"
 
 namespace desktop
 {
 
-class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
-{
-    virtual TSignalAction SAL_CALL signal(TSignalInfo *pInfo);
-};
+oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo);
 
 // A request for the current office
 // that was given by command line or by IPC pipe communication.
@@ -72,14 +70,14 @@ struct ProcessDocumentsRequest
 };
 
 class DispatchWatcher;
-class OfficeIPCThread : public vos::OThread
+class OfficeIPCThread : public osl::Thread
 {
   private:
     static OfficeIPCThread*     pGlobalOfficeIPCThread;
     static ::osl::Mutex*        pOfficeIPCThreadMutex;
 
-    vos::OPipe                  maPipe;
-    vos::OStreamPipe            maStreamPipe;
+    osl::Pipe                   maPipe;
+    osl::StreamPipe             maStreamPipe;
     rtl::OUString               maPipeIdent;
     bool                        mbDowning;
     bool                        mbRequestsEnabled;
@@ -165,3 +163,5 @@ class OfficeIPCThreadController : public ::cppu::WeakImplHelper2<
 }
 
 #endif // _DESKTOP_OFFICEIPCTHREAD_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

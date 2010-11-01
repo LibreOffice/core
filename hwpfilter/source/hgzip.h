@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,3 +113,5 @@ int     gz_read     ( gz_stream *file, voidp  buf, unsigned len );
  */
 int     gz_flush    ( gz_stream *file, int flush );
 #endif                                            /* _HWPGZIP_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

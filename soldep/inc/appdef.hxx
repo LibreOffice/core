@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -159,3 +160,5 @@ const char* GetEnv( const char *pVar, const char *pDefault );
 #define ISERVER_DEF_DEPEND_LIST "r:\\b_server\\config\\depend.lst"
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

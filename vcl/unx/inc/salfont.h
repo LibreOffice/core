@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,3 +179,4 @@ DECLARE_LIST( SalFontStructList, SalFontStruct* )
 
 #endif // _SV_SALFONT_H
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

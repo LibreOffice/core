@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 
 #include <libxml/tree.h>
@@ -81,3 +82,5 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs);
 xmlXPathFunction xforms_lookupFunc(void *ctxt, const xmlChar *name, const xmlChar *ns_uri);
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

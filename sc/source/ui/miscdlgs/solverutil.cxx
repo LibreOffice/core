@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
     try
     {
-        xPropset->getPropertyValue(rtl::OUString::createFromAscii("DefaultContext")) >>= xCtx;
+        xPropset->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xCtx;
     }
     catch ( uno::Exception & )
     {
@@ -105,7 +106,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     if ( xCtx.is() && xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( rtl::OUString::createFromAscii(SCSOLVER_SERVICE) );
+                        xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
         if ( xEnum.is() )
         {
             while ( xEnum->hasMoreElements() )
@@ -151,7 +152,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
     uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
     try
     {
-        xPropset->getPropertyValue(rtl::OUString::createFromAscii("DefaultContext")) >>= xCtx;
+        xPropset->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xCtx;
     }
     catch ( uno::Exception & )
     {
@@ -161,7 +162,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
     if ( xCtx.is() && xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( rtl::OUString::createFromAscii(SCSOLVER_SERVICE) );
+                        xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
         if ( xEnum.is() )
         {
             while ( xEnum->hasMoreElements() && !xSolver.is() )
@@ -227,3 +228,4 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const rtl::OUStri
     return aDefaults;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

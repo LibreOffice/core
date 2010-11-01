@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -598,12 +599,12 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
     else
         mbRTL = pWrtShell->IsTableRightToLeft();
 
-    DBG_ASSERT( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
+    OSL_ENSURE( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
         m_xBreak = uno::Reference< i18n::XBreakIterator >(
             m_xMSF->createInstance (
-                rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),
             uno::UNO_QUERY);
     }
     pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
@@ -1045,3 +1046,5 @@ void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

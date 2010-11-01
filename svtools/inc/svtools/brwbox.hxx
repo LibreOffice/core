@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -309,7 +310,6 @@ class SVT_DLLPUBLIC BrowseBox
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
 private:
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
     SVT_DLLPRIVATE void            ToggleSelection( BOOL bForce = FALSE );
@@ -875,3 +875,4 @@ inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

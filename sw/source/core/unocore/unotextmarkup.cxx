@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <unotextmarkup.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
@@ -58,7 +59,7 @@ SwXTextMarkup::~SwXTextMarkup()
 
 uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfoContainer() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< container::XStringKeyMap > xProp = new SwXStringKeyMap;
     return xProp;
@@ -72,7 +73,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // paragraph already dead or modified?
     if ( !mpTxtNode || nLength <= 0 )
@@ -331,7 +332,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     const uno::Sequence< text::TextMarkupDescriptor > &rMarkups )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // paragraph already dead or modified?
     if ( !mpTxtNode )
@@ -429,7 +430,7 @@ void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
         pRegisteredIn->Remove( this );
     // <--
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     mpTxtNode = 0;
 }
 
@@ -484,3 +485,4 @@ uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex) throw (un
     return uno::Any();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

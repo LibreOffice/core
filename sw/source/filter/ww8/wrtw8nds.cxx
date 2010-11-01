@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <vector>
 #include <list>
@@ -116,9 +116,9 @@ using namespace sw::types;
 using namespace sw::mark;
 using namespace nsFieldFlags;
 
-
 static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
+
     if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
         return String::CreateFromAscii(" FORMTEXT ");
     } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
@@ -1818,12 +1818,49 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), lcl_getFieldCode( pFieldmark ), WRITEFIELD_START | WRITEFIELD_CMD_START );
+                ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                String sCode = lcl_getFieldCode( pFieldmark );
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                {
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sFieldId;
+                        it->second >>= sFieldId;
+                        eFieldId = (ww::eField)sFieldId.toInt32();
+                    }
+
+                    it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_CODE_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sOUCode;
+                        it->second >>= sOUCode;
+                        sCode = sOUCode;
+                    }
+                }
+                OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
                 if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) )
                     WriteFormData( *pFieldmark );
                 else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) )
                     WriteHyperlinkData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
+
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                {
+                    // Check for the presence of a linked OLE object
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_OLE_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sOleId;
+                        uno::Any aValue = it->second;
+                        aValue >>= sOleId;
+                        if ( sOleId.getLength( ) > 0 )
+                            OutputLinkedOLE( sOleId );
+                    }
+                }
             }
             else if ( ch == CH_TXT_ATR_FIELDEND )
             {
@@ -1831,7 +1868,20 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                {
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sFieldId;
+                        it->second >>= sFieldId;
+                        eFieldId = (ww::eField)sFieldId.toInt32();
+                    }
+                }
+
+                OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
@@ -2296,108 +2346,6 @@ void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeIn
         aIt++;
     }
 }
-
-#if 0
-/*  */
-
-USHORT WW8Export::StartTableFromFrmFmt( WW8Bytes &rAt, const SwFrmFmt *pFmt )
-{
-    // Tell the undocumented table hack that everything between here and
-    // the last table position is nontable text
-    if ( WW8_CP nPos = Fc2Cp( Strm().Tell() ) )
-        pMagicTable->Append(nPos,0);
-
-    // sprmPDxaFromText10
-    if( bWrtWW8 )
-    {
-        static BYTE __READONLY_DATA  aTabLineAttr[] = {
-                0, 0,               // Sty # 0
-                0x16, 0x24, 1,      // sprmPFInTable
-                0x17, 0x24, 1 };    // sprmPFTtp
-        rAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), rAt.Count() );
-    }
-    else
-    {
-        static BYTE __READONLY_DATA  aTabLineAttr[] = {
-                0, 0,               // Sty # 0
-                24, 1,              // sprmPFInTable
-                25, 1 };            // sprmPFTtp
-        rAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), rAt.Count() );
-    }
-
-    ASSERT( pFmt, "No pFmt!" );
-    if ( pFmt )
-    {
-        const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
-        const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-        if (
-            (text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() ||
-             text::RelOrientation::FRAME == rHori.GetRelationOrient())
-            &&
-            (text::RelOrientation::PRINT_AREA == rVert.GetRelationOrient() ||
-             text::RelOrientation::FRAME == rVert.GetRelationOrient())
-           )
-        {
-            sal_Int16 eHOri = rHori.GetHoriOrient();
-            switch (eHOri)
-            {
-                case text::HoriOrientation::CENTER:
-                case text::HoriOrientation::RIGHT:
-                    if( bWrtWW8 )
-                        SwWW8Writer::InsUInt16( rAt, NS_sprm::LN_TJc );
-                    else
-                        rAt.Insert( 182, rAt.Count() );
-                    SwWW8Writer::InsUInt16( rAt, (text::HoriOrientation::RIGHT == eHOri ? 2 : 1 ));
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    return rAt.Count();
-}
-
-//See #i19484# for why we need this
-static bool CellContainsProblematicGraphic( const SwWriteTableCell *pCell,
-    const MSWordExportBase &rExport )
-{
-    const SwNode *pStart = pCell ? pCell->GetBox()->GetSttNd() : 0;
-    const SwNode *pEnd = pStart ? pStart->EndOfSectionNode() : 0;
-    ASSERT( pStart && pEnd, "No start or end?" );
-    if ( !pStart || !pEnd )
-        return false;
-
-    bool bHasGraphic = false;
-
-    sw::Frames aFrames( GetFramesBetweenNodes( rExport.maFrames, *pStart, *pEnd ) );
-    sw::FrameIter aEnd = aFrames.end();
-    for ( sw::FrameIter aIter = aFrames.begin(); aIter != aEnd; ++aIter )
-    {
-        const SwFrmFmt &rEntry = aIter->GetFrmFmt();
-        if ( rEntry.GetSurround().GetSurround() == SURROUND_THROUGHT )
-        {
-            bHasGraphic = true;
-            break;
-        }
-    }
-    return bHasGraphic;
-}
-
-static bool RowContainsProblematicGraphic( const SwWriteTableCellPtr *pRow,
-    USHORT nCols, const MSWordExportBase &rExport )
-{
-    bool bHasGraphic = false;
-    for ( USHORT nI = 0; nI < nCols; ++nI )
-    {
-        if ( CellContainsProblematicGraphic( pRow[nI], rExport ) )
-        {
-            bHasGraphic = true;
-            break;
-        }
-    }
-    return bHasGraphic;
-}
-#endif
 //---------------------------------------------------------------------------
 //       Tabellen
 //---------------------------------------------------------------------------
@@ -2791,4 +2739,4 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

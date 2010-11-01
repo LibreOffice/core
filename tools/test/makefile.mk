@@ -46,7 +46,6 @@ SHL1OBJS=  \
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)	 \
                 $(TOOLSLIB)	 \
-                                $(TESTSHL2LIB)    \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)

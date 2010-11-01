@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,6 @@
 #include <svtools/helpopt.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-#ifndef GCC
-#endif
 
 // wg. nAutoPageID
 #include "appdata.hxx"
@@ -2019,7 +2017,7 @@ void SfxDispatcher::FlushImpl()
         {
             // tats"aechlich poppen
             SfxShell* pPopped = 0;
-            FASTBOOL bFound = sal_False;
+            bool bFound = false;
             do
             {
                 DBG_ASSERT( pImp->aStack.Count(), "popping from empty stack" );
@@ -2400,12 +2398,12 @@ sal_Bool SfxDispatcher::_FindServer
         if ( pSlot )
         {
             // Slot geh"ort zum Container?
-            FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
+            bool bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+            bool bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell geh"ort zum Server?
             // AppDispatcher oder IPFrame-Dispatcher
-            FASTBOOL bIsServerShell = !pImp->pFrame || bIsInPlace;
+            bool bIsServerShell = !pImp->pFrame || bIsInPlace;
 
             // Nat"urlich sind ServerShell-Slots auch ausf"uhrbar, wenn sie auf
             // einem Container-Dispatcher ohne IPClient ausgef"uhrt werden sollen.
@@ -2417,7 +2415,7 @@ sal_Bool SfxDispatcher::_FindServer
 
             // Shell geh"ort zum Container?
             // AppDispatcher oder kein IPFrameDispatcher
-            FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
+            bool bIsContainerShell = !pImp->pFrame || !bIsInPlace;
             // Shell und Slot passen zusammen
             if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
                     ( !bIsContainerSlot && bIsServerShell ) ) )
@@ -2518,12 +2516,12 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         if ( pSlot )
         {
             // Slot geh"ort zum Container?
-            FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
+            bool bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+            bool bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell geh"ort zum Server?
             // AppDispatcher oder IPFrame-Dispatcher
-            FASTBOOL bIsServerShell = !pImp->pFrame || bIsInPlace;
+            bool bIsServerShell = !pImp->pFrame || bIsInPlace;
 
             // Nat"urlich sind ServerShell-Slots auch ausf"uhrbar, wenn sie auf
             // einem Container-Dispatcher ohne IPClient ausgef"uhrt werden sollen.
@@ -2535,7 +2533,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
 
             // Shell geh"ort zum Container?
             // AppDispatcher oder kein IPFrameDispatcher
-            FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
+            bool bIsContainerShell = !pImp->pFrame || !bIsInPlace;
 
             // Shell und Slot passen zusammen
             if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
@@ -3175,3 +3173,5 @@ SfxModule* SfxDispatcher::GetModule() const
             return (SfxModule*) pSh;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

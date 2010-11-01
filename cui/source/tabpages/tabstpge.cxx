@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,8 @@
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/request.hxx> //CHINA001
-#include <svl/intitem.hxx> //add CHINA001
+#include <sfx2/request.hxx>
+#include <svl/intitem.hxx>
 
 // class TabWin_Impl -----------------------------------------------------
 
@@ -734,11 +735,12 @@ IMPL_LINK( SvxTabulatorTabPage, ModifyHdl_Impl, MetricBox *, EMPTYARG )
     aDelBtn.Disable();
     return 0;
 }
-//add CHINA001 Begin
-void        SvxTabulatorTabPage::PageCreated(SfxAllItemSet aSet)
+
+void SvxTabulatorTabPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pControlItem,SfxUInt16Item,SID_SVXTABULATORTABPAGE_CONTROLFLAGS,sal_False);
     if (pControlItem)
         DisableControls(pControlItem->GetValue());
 }
-//end of CHINA001
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

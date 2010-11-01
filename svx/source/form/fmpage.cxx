@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+#include <sal/macros.h>
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <svx/fmpage.hxx>
@@ -77,7 +79,7 @@ using com::sun::star::container::XNameContainer;
 TYPEINIT1(FmFormPage, SdrPage);
 
 //------------------------------------------------------------------
-FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMasterPage)
+FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
 #ifndef SVX_LIGHT
            ,m_pImpl( new FmFormPageImpl( *this ) )
@@ -229,7 +231,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                     INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
                     INET_PROT_VIM, INET_PROT_LDAP
                 };
-            for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
+            for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(s_aQuickHelpSupported); ++i)
                 if (s_aQuickHelpSupported[i] == aProtocol)
                 {
                     aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
@@ -268,3 +270,5 @@ SdrObject* FmFormPage::RemoveObject(ULONG nObjNum)
 #endif
     return pObj;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

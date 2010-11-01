@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>     // SvUShorts
 #include <rtl/ustring.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/childwin.hxx>
@@ -333,7 +334,7 @@ public:
     void                    SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
                                     SfxInterface *pIFace, const String* pName=0 );
     Window*                 GetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId );
-    FASTBOOL                KnowsObjectBar_Impl( USHORT nPos ) const;
+    bool                    KnowsObjectBar_Impl( USHORT nPos ) const;
     BOOL                    IsVisible_Impl();
     void                    MakeVisible_Impl( BOOL );
     void                    SetObjectBarVisibility_Impl( USHORT nVis );
@@ -387,3 +388,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

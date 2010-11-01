@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -305,7 +306,7 @@ namespace sw { namespace mark
     MarkManager::MarkManager(SwDoc& rDoc)
         : m_pDoc(&rDoc)
     { }
-
+#if OSL_DEBUG_LEVEL > 1
     void MarkManager::dumpFieldmarks( ) const
     {
         const_iterator_t pIt = m_vFieldmarks.begin();
@@ -316,7 +317,7 @@ namespace sw { namespace mark
                 ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
-
+#endif
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const ::rtl::OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
@@ -419,6 +420,7 @@ namespace sw { namespace mark
         OSL_TRACE("Fieldmarks");
         lcl_DebugMarks(m_vFieldmarks);
 #endif
+
         return pMark.get();
     }
 
@@ -810,6 +812,7 @@ namespace sw { namespace mark
 
     IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos) const
         { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos)); }
+
 
     ::rtl::OUString MarkManager::getUniqueMarkName(const ::rtl::OUString& rName) const
     {
@@ -1745,3 +1748,5 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

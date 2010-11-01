@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,14 +181,10 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     m_aOptionsLB.SetSizePixel( aNewSz );
 }
 
-// -----------------------------------------------------------------------
-
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
     delete m_pImpl;
 }
-
-// -----------------------------------------------------------------------
 
 void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
 {
@@ -213,8 +210,6 @@ void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
         rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATVERSION"), sFormatVersion );
     }
 }
-
-// -----------------------------------------------------------------------
 
 ULONG convertBools2Ulong_Impl
 (
@@ -269,8 +264,6 @@ ULONG convertBools2Ulong_Impl
 
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 {
@@ -404,8 +397,6 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
-
 IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
 {
     USHORT nPos = m_aFormattingLB.GetSelectEntryPos();
@@ -414,8 +405,6 @@ IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
 
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
 {
@@ -447,7 +436,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                         case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
                         default:
                         {
-                            DBG_ERRORFILE( "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
+                            OSL_ENSURE(false, "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
                         }
                     }
                 }
@@ -461,12 +450,10 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
 {
     ULONG nCount = m_aOptionsLB.GetEntryCount();
-    DBG_ASSERT( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
+    OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
     for ( USHORT i = 0; i < nCount; ++i )
     {
         BOOL bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
@@ -474,8 +461,6 @@ void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
         nOptions = nOptions >> 1;
     }
 }
-
-// -----------------------------------------------------------------------
 
 ULONG SwCompatibilityOptPage::GetDocumentOptions() const
 {
@@ -499,8 +484,6 @@ ULONG SwCompatibilityOptPage::GetDocumentOptions() const
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 void SwCompatibilityOptPage::WriteOptions()
 {
     m_aConfigItem.Clear();
@@ -515,14 +498,10 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bExpandWordSpace );
 }
 
-// -----------------------------------------------------------------------
-
 SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SwCompatibilityOptPage( pParent, rAttrSet );
 }
-
-// -----------------------------------------------------------------------
 
 BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 {
@@ -531,7 +510,7 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
     {
         ULONG nSavedOptions = m_nSavedOptions;
         ULONG nCount = m_aOptionsLB.GetEntryCount();
-        DBG_ASSERT( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
+        OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
         bool bSetParaSpaceMax = false;
 
@@ -613,8 +592,6 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
-
 void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
 {
     m_aOptionsLB.SelectEntryPos( 0 );
@@ -624,3 +601,4 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
     m_nSavedOptions = nOptions;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

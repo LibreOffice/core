@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -275,7 +276,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") )),
         UNO_QUERY );
     OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if (!xSaxWriter.is())
@@ -620,7 +621,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
         // make use of a default namespace
         ResetNamespaceMap();    // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)
-        _GetNamespaceMap().Add( OUString::createFromAscii(""), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        _GetNamespaceMap().Add( OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
 
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH_IDX),
                 GetNamespaceMap().GetNameByKey( XML_NAMESPACE_MATH_IDX));
@@ -1499,3 +1500,4 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
 
 ////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

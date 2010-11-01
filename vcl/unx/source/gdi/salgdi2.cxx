@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,21 +49,6 @@
 
 // -=-= debugging =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if 0
-
-static void sal_PrintImage( char *s, XImage*p )
-{
-    fprintf( stderr, "%s %d %d %d\n", s, p->depth, p->width, p->height );
-    int nW = Min( 64, p->width*p->bits_per_pixel >> 3 );
-    for( int i = 0; i < Min( 16, p->height ); i++ )
-    {
-        for( int j = 0; j < nW; j++ )
-            fprintf( stderr, "%02X", (UINT8)p->data[i*p->bytes_per_line+j] );
-        fprintf( stderr, "\n" );
-    }
-}
-
-#endif // DBG_UTIL
 
 // -----------------------------------------------------------------------------
 
@@ -1147,3 +1133,4 @@ bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

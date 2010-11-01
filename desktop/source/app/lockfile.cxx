@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,8 @@
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
+#else
+#include <unistd.h>
 #endif
 #include <sal/types.h>
 #include <osl/file.hxx>
@@ -50,25 +53,38 @@ using namespace ::rtl;
 using namespace ::utl;
 
 
-namespace desktop {
+static rtl::OString impl_getHostname()
+{
+    rtl::OString aHost;
+#ifdef WNT
+    /*
+       prevent windows from connecting to the net to get it's own
+       hostname by using the netbios name
+       */
+    sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
+    char* szHost = new char[sz];
+    if (GetComputerName(szHost, (LPDWORD)&sz))
+        aHost = OString(szHost);
+    else
+        aHost = OString("UNKNOWN");
+    delete[] szHost;
+#else
+    /* Don't do dns lookup on Linux either */
+    sal_Char pHostName[1024];
 
-    // initialize static members...
-    // lock suffix
-    const OUString Lockfile::Suffix()
-        { return OUString::createFromAscii( "/.lock" ); }
-    // values for datafile
-    const ByteString Lockfile::Group()
-        { return ByteString( "Lockdata" ); }
-    const ByteString Lockfile::Userkey()
-        { return ByteString( "User" ); }
-    const ByteString Lockfile::Hostkey()
-        { return ByteString( "Host" ); }
-    const ByteString Lockfile::Stampkey()
-        { return ByteString( "Stamp" ); }
-    const ByteString Lockfile::Timekey()
-        { return ByteString( "Time" ); }
-    const ByteString Lockfile::IPCkey()
-        { return ByteString( "IPCServer" ); }
+    if ( gethostname( pHostName, sizeof( pHostName ) - 1 ) == 0 )
+    {
+        pHostName[sizeof( pHostName ) - 1] = '\0';
+        aHost = OString( pHostName );
+    }
+    else
+        aHost = OString("UNKNOWN");
+#endif
+
+    return aHost;
+}
+
+namespace desktop {
 
     Lockfile::Lockfile( bool bIPCserver )
     :m_bIPCserver(bIPCserver)
@@ -78,7 +94,7 @@ namespace desktop {
         // build the file-url to use for the lock
         OUString aUserPath;
         utl::Bootstrap::locateUserInstallation( aUserPath );
-        m_aLockname = aUserPath + Suffix();
+        m_aLockname = aUserPath + LOCKFILE_SUFFIX;
 
         // generate ID
         const int nIdBytes = 16;
@@ -148,32 +164,16 @@ namespace desktop {
         // to assume that it is a stale lockfile which can be overwritten
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
-        aConfig.SetGroup(Group());
-        ByteString aIPCserver  = aConfig.ReadKey( IPCkey() );
+        aConfig.SetGroup(LOCKFILE_GROUP);
+        ByteString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
         if (! aIPCserver.EqualsIgnoreCaseAscii( "true" ))
             return false;
 
-        ByteString aHost  = aConfig.ReadKey( Hostkey() );
-        ByteString aUser  = aConfig.ReadKey( Userkey() );
+        ByteString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
+        ByteString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
+
         // lockfile from same host?
-        ByteString myHost;
-#ifdef WNT
-        /*
-          prevent windows from connecting to the net to get it's own
-          hostname by using the netbios name
-        */
-        sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
-        char* szHost = new char[sz];
-        if (GetComputerName(szHost, (LPDWORD)&sz))
-            myHost = OString(szHost);
-        else
-            myHost = OString("UNKNOWN");
-        delete[] szHost;
-#else
-        oslSocketResult sRes;
-        myHost  = OUStringToOString(
-            SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
-#endif
+        ByteString myHost( impl_getHostname() );
         if (aHost == myHost) {
             // lockfile by same UID
             OUString myUserName;
@@ -190,27 +190,10 @@ namespace desktop {
     {
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
-        aConfig.SetGroup(Group());
+        aConfig.SetGroup(LOCKFILE_GROUP);
 
         // get information
-        ByteString aHost;
-#ifdef WNT
-        /*
-          prevent windows from connecting to the net to get it's own
-          hostname by using the netbios name
-        */
-        sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
-        char* szHost = new char[sz];
-        if (GetComputerName(szHost, (LPDWORD)&sz))
-            aHost = OString(szHost);
-        else
-            aHost = OString("UNKNOWN");
-        delete[] szHost;
-#else
-        oslSocketResult sRes;
-        aHost  = OUStringToOString(
-            SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
-#endif
+        ByteString aHost( impl_getHostname() );
         OUString aUserName;
         Security aSecurity;
         aSecurity.getUserName( aUserName );
@@ -219,12 +202,12 @@ namespace desktop {
         ByteString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 
         // write information
-        aConfig.WriteKey( Userkey(),  aUser );
-        aConfig.WriteKey( Hostkey(),  aHost );
-        aConfig.WriteKey( Stampkey(), aStamp );
-        aConfig.WriteKey( Timekey(),  aTime );
+        aConfig.WriteKey( LOCKFILE_USERKEY,  aUser );
+        aConfig.WriteKey( LOCKFILE_HOSTKEY,  aHost );
+        aConfig.WriteKey( LOCKFILE_STAMPKEY, aStamp );
+        aConfig.WriteKey( LOCKFILE_TIMEKEY,  aTime );
         aConfig.WriteKey(
-            IPCkey(),
+            LOCKFILE_IPCKEY,
             m_bIPCserver ? ByteString("true") : ByteString("false") );
         aConfig.Flush( );
     }
@@ -254,3 +237,4 @@ namespace desktop {
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,6 +1,6 @@
 
 
-<modaldialog sizeable="true" height="108" help-id="HID_DLG_WORDCOUNT" moveable="true" output-size="true" id="DLG_WORDCOUNT" sv-look="true" text="Word Count" width="170" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+<modaldialog sizeable="true" height="132" help-id="HID_DLG_WORDCOUNT" moveable="true" output-size="true" id="DLG_WORDCOUNT" sv-look="true" text="Word Count" width="170" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
     <vbox>
         <fixedline height="8" id="FL_CURRENT" text="Current selection" width="158" x="6" y="3"/>
         <hbox>
@@ -11,19 +11,27 @@
             <fixedtext height="8" id="FT_CURRENTCHARACTER" label="Characters:" width="80" x="12" y="26"/>
             <fixedtext height="8" id="FI_CURRENTCHARACTER" right="true" width="50" x="111" y="26"/>
         </hbox>
-        <fixedline height="8" id="FL_DOC" text="Whole document" width="158" x="6" y="40"/>
         <hbox>
-            <fixedtext height="8" id="FT_DOCWORD" label="Words:" width="80" x="12" y="51"/>
-            <fixedtext height="8" id="FI_DOCWORD" right="true" width="50" x="111" y="51"/>
+            <fixedtext height="8" id="FT_CURRENTCHARACTEREXCLUDINGSPACES" label="Characters excluding spaces:" width="80" x="12" y="38"/>
+            <fixedtext height="8" id="FI_CURRENTCHARACTEREXCLUDINGSPACES" right="true" width="50" x="111" y="38"/>
+        </hbox>
+        <fixedline height="8" id="FL_DOC" text="Whole document" width="158" x="6" y="52"/>
+        <hbox>
+            <fixedtext height="8" id="FT_DOCWORD" label="Words:" width="80" x="12" y="63"/>
+            <fixedtext height="8" id="FI_DOCWORD" right="true" width="50" x="111" y="63"/>
         </hbox>
         <hbox>
-            <fixedtext height="8" id="FT_DOCCHARACTER" label="Characters:" width="80" x="12" y="63"/>
-            <fixedtext height="8" id="FI_DOCCHARACTER" right="true" width="50" x="111" y="63"/>
+            <fixedtext height="8" id="FT_DOCCHARACTER" label="Characters:" width="80" x="12" y="75"/>
+            <fixedtext height="8" id="FI_DOCCHARACTER" right="true" width="50" x="111" y="75"/>
         </hbox>
-        <fixedline height="8" id="FL_BOTTOM" width="158" x="6" y="77"/>
         <hbox>
-            <okbutton defbutton="true" height="14" id="PB_OK" width="50" x="61" y="88"/>
-            <helpbutton height="14" id="PB_HELP" width="50" x="114" y="88"/>
+            <fixedtext height="8" id="FT_DOCCHARACTEREXCLUDINGSPACES" label="Characters excluding spaces:" width="80" x="12" y="87"/>
+            <fixedtext height="8" id="FI_DOCCHARACTEREXCLUDINGSPACES" right="true" width="50" x="111" y="87"/>
+        </hbox>
+        <fixedline height="8" id="FL_BOTTOM" width="158" x="6" y="101"/>
+        <hbox>
+            <okbutton defbutton="true" height="14" id="PB_OK" width="50" x="61" y="112"/>
+            <helpbutton height="14" id="PB_HELP" width="50" x="114" y="112"/>
         </hbox>
     </vbox>
 </modaldialog>

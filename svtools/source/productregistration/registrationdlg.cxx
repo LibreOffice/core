@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "registrationdlg.hxx"
-
-#if 0 /* @@@ */
-#include <svtools/svtdata.hxx>
-#include <svtools/svtools.hrc>
-#endif /* @@@ */
 
 #include "registrationdlg.hrc"
 #include <vcl/msgbox.hxx>
@@ -165,3 +161,4 @@ namespace svt
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

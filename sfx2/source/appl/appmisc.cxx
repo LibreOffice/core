@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 #include "precompiled_sfx2.hxx"
 #include <vcl/status.hxx>
 #include <vcl/msgbox.hxx>
-#include <vos/process.hxx>
-#include <vos/xception.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -46,9 +45,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <tools/config.hxx>
 #include <tools/rcid.h>
-#include <vos/mutex.hxx>
-#ifndef GCC
-#endif
+#include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 
@@ -88,7 +85,6 @@
 #include <sfx2/objface.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -166,7 +162,7 @@ void SfxApplication::InitializeDisplayName_Impl()
     String aTitle = Application::GetDisplayName();
     if ( !aTitle.Len() )
     {
-        OClearableGuard aGuard( OMutex::getGlobalMutex() );
+        osl::ClearableMutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // create version string
 /*!!! (pb) don't show a version number at the moment
@@ -329,3 +325,4 @@ SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl
 //SfxOptions&  SfxApplication::GetOptions() { return *pAppData_Impl->pOptions; }
 //const SfxOptions& SfxApplication::GetOptions() const { return *pAppData_Impl->pOptions; }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

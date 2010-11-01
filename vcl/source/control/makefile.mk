@@ -44,8 +44,8 @@ CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/button.obj		\
-            $(SLO)$/ctrl.obj		\
             $(SLO)$/combobox.obj	\
+            $(SLO)$/ctrl.obj		\
             $(SLO)$/edit.obj		\
             $(SLO)$/field.obj		\
             $(SLO)$/field2.obj		\
@@ -56,20 +56,34 @@ SLOFILES=	$(SLO)$/button.obj		\
             $(SLO)$/imgctrl.obj 	\
             $(SLO)$/longcurr.obj	\
             $(SLO)$/lstbox.obj		\
-            $(SLO)$/morebtn.obj 	\
             $(SLO)$/menubtn.obj 	\
+            $(SLO)$/morebtn.obj 	\
             $(SLO)$/scrbar.obj		\
             $(SLO)$/slider.obj		\
-            $(SLO)$/spinfld.obj 	\
             $(SLO)$/spinbtn.obj 	\
+            $(SLO)$/spinfld.obj 	\
             $(SLO)$/tabctrl.obj
 
 EXCEPTIONSFILES=					\
             $(SLO)$/button.obj		\
+            $(SLO)$/combobox.obj	\
             $(SLO)$/ctrl.obj		\
             $(SLO)$/edit.obj		\
+            $(SLO)$/field.obj		\
             $(SLO)$/field2.obj		\
+            $(SLO)$/fixbrd.obj		\
+            $(SLO)$/fixed.obj		\
+            $(SLO)$/group.obj		\
             $(SLO)$/ilstbox.obj		\
+            $(SLO)$/imgctrl.obj 	\
+            $(SLO)$/longcurr.obj	\
+            $(SLO)$/lstbox.obj		\
+            $(SLO)$/menubtn.obj 	\
+            $(SLO)$/morebtn.obj 	\
+            $(SLO)$/scrbar.obj		\
+            $(SLO)$/slider.obj		\
+            $(SLO)$/spinbtn.obj 	\
+            $(SLO)$/spinfld.obj 	\
             $(SLO)$/tabctrl.obj
 
 # --- Targets ------------------------------------------------------

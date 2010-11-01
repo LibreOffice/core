@@ -50,7 +50,6 @@ APP1TARGET= $(TARGET)
 APP1STDLIBS =		\
     $(VCLLIB)		\
     $(TOOLSLIB)		\
-    $(VOSLIB) 		\
     $(SALLIB)
 
 APP1OBJS=   $(OBJ)$/bmp.obj			\
@@ -66,7 +65,6 @@ APP2OBJS	=   $(OBJ)$/bmpsum.obj
 
 APP2STDLIBS	=	$(VCLLIB)		\
                 $(TOOLSLIB)		\
-                $(VOSLIB) 		\
                 $(SALLIB)
 
 # --- Targets ------------------------------------------------------

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -406,7 +407,7 @@ public:
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     void            SetDirty();
-    inline void     SetDirtyVar() { bDirty = TRUE; }
+    void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
     inline void     ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }
@@ -558,3 +559,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

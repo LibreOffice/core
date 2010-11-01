@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #pragma once
 
 #ifdef _UWINAPI_
@@ -46,11 +47,6 @@ EXTERN_C WINBASEAPI LPWSTR WINAPI lstrrchrW( LPCWSTR lpString, WCHAR c );
 #define lstrrchr    lstrrchrA
 #define lstrchr     lstrchrA
 #endif
-
-// macro that calculates the count of elements of a static array
-
-#define bufsizeof(buf)  (sizeof(buf) / sizeof((buf)[0]))
-
 
 #define IsValidHandle(Handle)   ((DWORD)(Handle) + 1 > 1)
 
@@ -135,3 +131,4 @@ EXTERN_C _declspec( naked ) rettype calltype func params \
     _asm    jmp [module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk;
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

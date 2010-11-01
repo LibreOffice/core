@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -502,7 +503,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 pStackData = aStack.GetStackData();
             }
             else {
-                ByteString sError( "Missplaced close tag: " );
+                ByteString sError( "Misplaced close tag: " );
                 ByteString sInFile(" in file ");
                 sError += sToken;
                 sError += sInFile;
@@ -870,3 +871,5 @@ void CfgMerge::WorkOnRessourceEnd()
     bGerman = FALSE;
     bEnglish = FALSE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

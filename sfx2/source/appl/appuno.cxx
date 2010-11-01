@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,9 +104,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-
-#ifndef GCC
-#endif
 
 #include "sfxtypes.hxx"
 #include <sfx2/sfxuno.hxx>
@@ -1655,7 +1653,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener )
               throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nPropertyCount = lArgs.getLength();
     ::rtl::OUString aReferer;
@@ -1700,7 +1698,7 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
                                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs )
               throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nPropertyCount = lArgs.getLength();
     ::rtl::OUString aReferer;
@@ -1978,7 +1976,7 @@ throw( RuntimeException )
 Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     std::list< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
@@ -2013,7 +2011,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     std::list< ::com::sun::star::frame::DispatchInformation > aCmdList;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
 
     if ( pAppSlotPool )
@@ -2159,17 +2157,6 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
 
-    #if 0
-    // AppletObject
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += ::sfx2::AppletObject::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
-    #endif
-
     // IFrameObject
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += ::sfx2::IFrameObject::impl_getStaticImplementationName();
@@ -2294,6 +2281,16 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentProperties") );
 
+
+    // writer compatable document properties
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += comp_CompatWriterDocProps::_getImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.writer.DocumentProperties") );
+
     return sal_True;
 }
 
@@ -2335,13 +2332,6 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
-        #if 0
-        if ( ::sfx2::AppletObject::impl_getStaticImplementationName().equals(
-                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
-        {
-            xFactory = ::sfx2::AppletObject::impl_createFactory();
-        }
-        #endif
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
@@ -2353,6 +2343,16 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
             ::comp_SfxDocumentMetaData::_getImplementationName(),
             ::comp_SfxDocumentMetaData::_getSupportedServiceNames());
         }
+        if ( ::comp_CompatWriterDocProps::_getImplementationName().equals(
+                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = ::cppu::createSingleComponentFactory(
+            ::comp_CompatWriterDocProps::_create,
+            ::comp_CompatWriterDocProps::_getImplementationName(),
+            ::comp_CompatWriterDocProps::_getSupportedServiceNames());
+        }
+
+        // Factory is valid - service was found.
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
@@ -2522,3 +2522,4 @@ void SAL_CALL NotifyBrokenPackage::release(  ) throw ()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

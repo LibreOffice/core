@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -263,9 +264,7 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     }
     FreeResource();
 }
-/* -----------------16.09.99 12:28-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
@@ -279,9 +278,7 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
     }
     return *pAuthFieldNameList->GetObject( static_cast< USHORT >(eType) );
 }
-/* -----------------16.09.99 12:29-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
@@ -297,3 +294,4 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

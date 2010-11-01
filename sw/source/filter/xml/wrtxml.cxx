@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -368,8 +369,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
             uno::UNO_QUERY_THROW);
-        const ::rtl::OUString VersionProp(
-            ::rtl::OUString::createFromAscii("Version"));
+        const ::rtl::OUString VersionProp(RTL_CONSTASCII_USTRINGPARAM("Version"));
         try
         {
             ::rtl::OUString Version;
@@ -699,3 +699,5 @@ void GetXMLWriter( const String& /*rName*/, const String& rBaseURL, WriterRef& x
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

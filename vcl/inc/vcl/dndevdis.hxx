@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,7 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper3<
     ::osl::Mutex m_aMutex;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aDataFlavorList;
 
+    Window* findTopLevelWindow(Point location);
     /*
      * fire the events on the dnd listener container of the specified window
      */
@@ -110,3 +112,5 @@ public:
 //==================================================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

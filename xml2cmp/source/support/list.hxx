@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,7 @@ template <class XX>
 void
 List<XX>::checkSize(unsigned newLength)
 {
-   // neuen Platzbedarf pruefen:
+   // test new size requirement:
    unsigned newSpace = space();
    if (newLength > newSpace)
    {
@@ -183,7 +184,7 @@ List<XX>::checkSize(unsigned newLength)
       }
    }
 
-   // Veraenderung ?:
+   // change?
    if (newSpace != space())
       alloc(newSpace,true);
 }
@@ -246,3 +247,4 @@ DynamicList<XY>::remove( unsigned           pos )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

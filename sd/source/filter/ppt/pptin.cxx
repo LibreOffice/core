@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1621,7 +1622,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                             if ( nDirection == 0 )
                                                 pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt
                                             else if ( nDirection == 1 )
-                                                pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt ueber Schwarz
+                                            {
+                                                pPage->setTransitionType( animations::TransitionType::BARWIPE );
+                                                pPage->setTransitionSubtype( animations::TransitionSubType::FADEOVERCOLOR );
+                                                pPage->setTransitionFadeColor( 0 );
+                                            }
                                         }
                                         else
                                             pPage->setTransitionType( 0 );
@@ -1775,12 +1780,8 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     break;
                                     case PPT_TRANSITION_TYPE_NEWSFLASH :
                                     {
-                                        pPage->setTransitionType( animations::TransitionType::FOURBOXWIPE );
-                                        pPage->setTransitionSubtype( animations::TransitionSubType::CORNERSOUT );
-/*
                                         pPage->setTransitionType( animations::TransitionType::ZOOM );
                                         pPage->setTransitionSubtype( animations::TransitionSubType::ROTATEIN );
-*/
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_SMOOTHFADE :
@@ -2760,3 +2761,5 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT( const ::rtl::OUStri
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

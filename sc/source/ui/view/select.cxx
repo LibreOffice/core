@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -422,25 +423,8 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                                             nEndX,nEndY,nTab ) );
             pViewData->GetView()->UpdateShrinkOverlay();
 
-#if 0
-            if ( bOldDelMark )
-            {
-                ScUpdateRect aRect( aDelRange.aStart.Col(), aDelRange.aStart.Row(),
-                                    aDelRange.aEnd.Col(), aDelRange.aEnd.Row() );
-                aRect.SetNew( nDelStartX,nDelStartY, nEndX,nEndY );
-                SCCOL nPaintStartX;
-                SCROW nPaintStartY;
-                SCCOL nPaintEndX;
-                SCROW nPaintEndY;
-                if (aRect.GetDiff( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY ))
-                    pViewData->GetView()->
-                        PaintArea( nPaintStartX, nPaintStartY,
-                                    nPaintEndX, nPaintEndY, SC_UPDATE_MARKS );
-            }
-            else
-#endif
-                pViewData->GetView()->
-                    PaintArea( nStartX,nDelStartY, nEndX,nEndY, SC_UPDATE_MARKS );
+            pViewData->GetView()->
+                PaintArea( nStartX,nDelStartY, nEndX,nEndY, SC_UPDATE_MARKS );
 
             nPosX = nEndX;      // roten Rahmen um ganzen Bereich lassen
             nPosY = nEndY;
@@ -458,12 +442,6 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             {
                 pViewData->ResetDelMark();
                 pViewData->GetView()->UpdateShrinkOverlay();
-
-#if 0
-                pViewData->GetView()->
-                    PaintArea( aDelRange.aStart.Col(), aDelRange.aStart.Row(),
-                               aDelRange.aEnd.Col(), aDelRange.aEnd.Row(), SC_UPDATE_MARKS );
-#endif
             }
 
             BOOL bNegX = ( nPosX < (SCsCOL) nStartX );
@@ -890,3 +868,4 @@ ScHeaderSelectionEngine::ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunct
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

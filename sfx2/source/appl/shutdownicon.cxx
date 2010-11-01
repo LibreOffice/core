@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <shutdownicon.hxx>
 #include <app.hrc>
 #include <sfx2/app.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -76,7 +77,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sfx2;
 
@@ -295,7 +295,7 @@ void ShutdownIcon::FileOpen()
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aGuard;
         EnterModalMode();
         getInstance()->StartFileDialog();
     }
@@ -348,7 +348,7 @@ void ShutdownIcon::FromTemplate()
 #include <tools/rcid.h>
 OUString ShutdownIcon::GetResString( int id )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( ! m_pResMgr )
         m_pResMgr = SfxResId::GetResMgr();
@@ -365,7 +365,7 @@ OUString ShutdownIcon::GetResString( int id )
 
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
 }
@@ -374,7 +374,7 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 
 void ShutdownIcon::StartFileDialog()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     bool bDirty = ( m_bSystemDialogs != static_cast<bool>(SvtMiscOptions().UseSystemFileDialog()) );
 
@@ -568,8 +568,8 @@ void ShutdownIcon::terminateDesktop()
         return;
 
     // always remove ourselves as listener
-    xDesktop->removeTerminateListener( pInst );
     pInst->m_bListenForTermination = true;
+    xDesktop->removeTerminateListener( pInst );
 
     // terminate desktop only if no tasks exist
     Reference< XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
@@ -618,7 +618,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
 void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
 {
     // access resource system and sfx only protected by solarmutex
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ResMgr *pResMgr = SfxResId::GetResMgr();
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -770,12 +770,20 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 // ---------------------------------------------------------------------------
 
 #if defined (ENABLE_QUICKSTART_APPLET) && defined (UNX)
-static OUString getDotAutostart( bool bCreate = false )
+/**
+* Return the XDG autostart directory.
+* http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
+* Available in Unix and with Quickstart enabled.
+* @param bCreate Create the directory if it does not exist yet.
+* @return OUString containing the autostart directory path.
+*/
+static OUString getAutostartDir( bool bCreate = false )
 {
     OUString aShortcut;
     const char *pConfigHome;
     if( (pConfigHome = getenv("XDG_CONFIG_HOME") ) )
-        aShortcut = OStringToOUString( OString( pConfigHome ), RTL_TEXTENCODING_UTF8 );
+        aShortcut = OStringToOUString( OString( pConfigHome ),
+                                       RTL_TEXTENCODING_UTF8 );
     else
     {
         OUString aHomeURL;
@@ -804,7 +812,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     ResMgr* pMgr = SfxResId::GetResMgr();
     if( pMgr )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aGuard;
         UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
         aShortcutName = OUString( aRes );
     }
@@ -815,7 +823,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
 #else // UNX
-    OUString aShortcut = getDotAutostart();
+    OUString aShortcut = getAutostartDir();
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/qstart.desktop" ) );
 #endif // UNX
     return aShortcut;
@@ -856,7 +864,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #ifdef WNT
         EnableAutostartW32( aShortcut );
 #else // UNX
-        getDotAutostart( true );
+        getAutostartDir( true );
 
         OUString aPath( RTL_CONSTASCII_USTRINGPARAM("${BRAND_BASE_DIR}/share/xdg/qstart.desktop" ) );
         Bootstrap::expandMacros( aPath );
@@ -870,8 +878,9 @@ void ShutdownIcon::SetAutostart( bool bActivate )
                                                   osl_getThreadTextEncoding() );
         if ((0 != symlink(aDesktopFileUnx, aShortcutUnx)) && (errno == EEXIST))
         {
-        unlink(aShortcutUnx);
-        symlink(aDesktopFileUnx, aShortcutUnx);
+            unlink(aShortcutUnx);
+            int ret = symlink(aDesktopFileUnx, aShortcutUnx);
+            (void)ret; //deliberately ignore return value, it's non-critical if it fails
         }
 
         ShutdownIcon *pIcon = ShutdownIcon::createInstance();
@@ -952,3 +961,5 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
 
     return aValue;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

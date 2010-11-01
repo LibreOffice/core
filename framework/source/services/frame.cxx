@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2303,7 +2304,7 @@ aEvent
         // Deactivation is always done implicitely by activation of another frame.
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aSolarGuard;
 //       CheckMenuCloser_Impl();
         Window* pFocusWindow = Application::GetFocusWindow();
         if  (
@@ -2909,17 +2910,18 @@ void Frame::implts_setIconOnWindow()
         //    Don't forget SolarMutex! We use vcl directly :-(
         //    Check window pointer for right WorkWindow class too!!!
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-        Window* pWindow = (VCLUnoHelper::GetWindow( xContainerWindow ));
-        if(
-            ( pWindow            != NULL              ) &&
-            ( pWindow->GetType() == WINDOW_WORKWINDOW )
-        )
         {
-            WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
-            pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+            SolarMutexGuard aSolarGuard;
+            Window* pWindow = (VCLUnoHelper::GetWindow( xContainerWindow ));
+            if(
+                ( pWindow            != NULL              ) &&
+                ( pWindow->GetType() == WINDOW_WORKWINDOW )
+                )
+            {
+                WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+                pWorkWindow->SetIcon( (sal_uInt16)nIcon );
+            }
         }
-        aSolarGuard.clear();
         /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     }
 }
@@ -3303,3 +3305,5 @@ sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 #endif  // #ifdef ENABLE_ASSERTIONS
 
 }   // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

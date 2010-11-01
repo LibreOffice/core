@@ -242,6 +242,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Formula" ;       SID_SC_TP_FORMULA ;> ;
             < "Sort Lists" ;        SID_SC_TP_USERLISTS         ;> ;
             < "Changes" ;       SID_SC_TP_CHANGES           ;> ;
+            < "Compatibility" ; SID_SC_TP_COMPATIBILITY ;> ;
             < "Grid" ;          SID_SC_TP_GRID              ;> ;
             < "Print" ;         RID_SC_TP_PRINT             ;> ;
         };

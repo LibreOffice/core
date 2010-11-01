@@ -9,7 +9,7 @@ module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-/** Enables height-for-width layout negociations, which allows for label wrapping
+/** Enables height-for-width layout negotiations, which allows for label wrapping
     and flow containers. Can be implemented by either a container or an ordinary widget;
     whether its parent will honor it is another story, so keep implementing
     getMinimumSize().

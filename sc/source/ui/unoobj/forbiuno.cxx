@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,14 +40,14 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-vos::ORef<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
+rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
-    vos::ORef<SvxForbiddenCharactersTable> xRet;
+    rtl::Reference<SvxForbiddenCharactersTable> xRet;
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
         xRet = pDoc->GetForbiddenCharacters();
-        if ( !xRet.isValid() )
+        if ( !xRet.is() )
         {
             //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
             //  so changes can be stored.
@@ -91,3 +92,4 @@ void ScForbiddenCharsObj::onChange()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

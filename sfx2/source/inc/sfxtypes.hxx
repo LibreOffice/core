@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) ( delete pPtr, pPtr = 0 )
@@ -187,3 +188,4 @@ public:
 #endif // #ifndef _SFX_SFXTYPES_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

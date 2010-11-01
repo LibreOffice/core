@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,9 +74,6 @@ using namespace ::com::sun::star;
 
 #include <svl/eitem.hxx>
 
-/* -----------------22.10.98 15:12-------------------
- *
- * --------------------------------------------------*/
 SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, SW_RES( TP_OPTLOAD_PAGE ), rSet ),
@@ -120,7 +118,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             case FUNIT_PICA:
             case FUNIT_INCH:
             {
-                // nur diese Metriken benutzen
+                // use only these metrics
                 USHORT nPos = aMetricLB.InsertEntry( sMetric );
                 aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
             }
@@ -145,27 +143,15 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
         }
 }
 
-/*-----------------18.01.97 12.43-------------------
-
---------------------------------------------------*/
-
 SwLoadOptPage::~SwLoadOptPage()
 {
 }
-
-/*-----------------18.01.97 12.43-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* __EXPORT SwLoadOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwLoadOptPage(pParent, rAttrSet );
 }
-
-/*-----------------18.01.97 12.42-------------------
-
---------------------------------------------------*/
 
 BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -244,9 +230,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 
     return bRet;
 }
-/*-----------------18.01.97 12.42-------------------
 
---------------------------------------------------*/
 void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(FALSE);
@@ -327,10 +311,10 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     }
     aUseCharUnit.SaveValue();
 }
+
 /*-----------------13.01.97 14.44-------------------
     Metric des Deftabstops umschalten
 --------------------------------------------------*/
-
 IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
 {
     const USHORT nMPos = aMetricLB.GetSelectEntryPos();
@@ -350,9 +334,6 @@ IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
 
     return 0;
 }
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 IMPL_LINK(SwLoadOptPage, CaptionHdl, PushButton*, EMPTYARG)
 {
@@ -362,28 +343,16 @@ IMPL_LINK(SwLoadOptPage, CaptionHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {
-    // TabPage erzeugen
+    // create TabPage
     SetTabPage((SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwCaptionOptDlg::~SwCaptionOptDlg()
 {
 }
-
-/* -----------------22.10.98 15:12-------------------
- *
- * --------------------------------------------------*/
 
 SwCaptionPreview::SwCaptionPreview( Window* pParent, const ResId& rResId )
     : Window( pParent, rResId )
@@ -416,7 +385,6 @@ void SwCaptionPreview::Paint( const Rectangle& rRect )
     DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
     DrawText( Point( 4, 6 ), maText );
 }
-
 
 SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTCAPTION_PAGE), rSet),
@@ -539,29 +507,17 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     aCheckLB.SetDeselectHdl( LINK(this, SwCaptionOptPage, SaveEntryHdl) );
 }
 
-/*-----------------18.01.97 12.43-------------------
-
---------------------------------------------------*/
-
 SwCaptionOptPage::~SwCaptionOptPage()
 {
     DelUserData();
     delete pMgr;
 }
 
-/*-----------------18.01.97 12.43-------------------
-
---------------------------------------------------*/
-
 SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwCaptionOptPage(pParent, rAttrSet );
 }
-
-/*-----------------18.01.97 12.42-------------------
-
---------------------------------------------------*/
 
 BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 {
@@ -587,10 +543,6 @@ BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 
     return bRet;
 }
-
-/*-----------------18.01.97 12.42-------------------
-
---------------------------------------------------*/
 
 void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 {
@@ -624,7 +576,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
         aAny = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
         if ( !( aAny >>= sTemp ) )
         {
-            DBG_ERRORFILE( "Couldn't get PRODUCTVERSION variable" );
+            OSL_ENSURE(false, "Couldn't get PRODUCTVERSION variable" );
         }
         else
         {
@@ -634,7 +586,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     }
     else
     {
-        DBG_ERRORFILE( "Couldn't get PRODUCTNAME variable" );
+        OSL_ENSURE(false, "Couldn't get PRODUCTNAME variable" );
     }
 
     SvObjectServerList aObjS;
@@ -658,10 +610,6 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     ModifyHdl();
 }
 
-/*-----------------18.01.97 12.42-------------------
-
---------------------------------------------------*/
-
 void SwCaptionOptPage::SetOptions(const USHORT nPos,
         const SwCapObjType eObjType, const SvGlobalName *pOleId)
 {
@@ -677,10 +625,6 @@ void SwCaptionOptPage::SetOptions(const USHORT nPos,
         aCheckLB.SetEntryData(nPos, new InsCaptionOpt(eObjType, pOleId));
 }
 
-/*-----------------18.01.97 12.42-------------------
-
---------------------------------------------------*/
-
 void SwCaptionOptPage::DelUserData()
 {
     SvLBoxEntry* pEntry = aCheckLB.First();
@@ -692,10 +636,6 @@ void SwCaptionOptPage::DelUserData()
         pEntry = aCheckLB.Next(pEntry);
     }
 }
-
-/* -----------------26.10.98 11:06-------------------
- *
- * --------------------------------------------------*/
 
 IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
 {
@@ -822,23 +762,15 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
     return 0;
 }
 
-/* -----------------26.10.98 11:06-------------------
- *
- * --------------------------------------------------*/
-
 IMPL_LINK( SwCaptionOptPage, SaveEntryHdl, SvxCheckListBox *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = aCheckLB.GetHdlEntry();
 
-    if (pEntry)     // Alles speichern
+    if (pEntry) // save all
         SaveEntry(pEntry);
 
     return 0;
 }
-
-/* -----------------05.11.98 16:23-------------------
- *
- * --------------------------------------------------*/
 
 void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
 {
@@ -872,19 +804,10 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
     }
 }
 
-/* -----------------26.10.98 11:06-------------------
- *
- * --------------------------------------------------*/
-
 IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
 {
     String sFldTypeName = aCategoryBox.GetText();
-/*
-    SwFieldType* pType = sFldTypeName.Len() ? pMgr->GetFldType(RES_SETEXPFLD, sFldTypeName) : 0;
 
-    ((SfxSingleTabDialog*)GetParent())->GetOKButton()->Enable( (!pType || ((SwSetExpFieldType*)pType)->GetType() == GSE_SEQ)
-                                    && sFldTypeName.Len() != 0 );
-*/
     SfxSingleTabDialog *pDlg = (SfxSingleTabDialog *)GetParent();
     PushButton *pBtn = pDlg->GetOKButton();
     if (pBtn)
@@ -900,19 +823,13 @@ IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-/* -----------------26.10.98 10:58-------------------
- *
- * --------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
 {
     DrawSample();
     return 0;
 }
 IMPL_LINK_INLINE_END( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
-/*-- 02.11.2007 10:00:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 {
     DrawSample();
@@ -921,9 +838,6 @@ IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
     aNumberingSeparatorED.Enable( nPos == 1 );
     return 0;
 }
-/* -----------------26.10.98 10:58-------------------
- *
- * --------------------------------------------------*/
 
 void SwCaptionOptPage::DrawSample()
 {
@@ -941,7 +855,7 @@ void SwCaptionOptPage::DrawSample()
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
-                // Kategorie
+                // category
                 aStr += aCategoryBox.GetText();
                 aStr += ' ';
             }
@@ -989,10 +903,7 @@ void SwCaptionOptPage::DrawSample()
     aPreview.SetPreviewText( aStr );
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  ComboBox ohne Spaces
-------------------------------------------------------------------------*/
-
+// Description: ComboBox without Spaces
 void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
 {
     if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )
@@ -1001,3 +912,4 @@ void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

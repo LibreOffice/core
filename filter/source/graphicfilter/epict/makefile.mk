@@ -49,6 +49,8 @@ SRC1FILES =	dlgepct.src	\
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/epict.obj \
             $(SLO)$/dlgepct.obj
+EXCEPTIONSFILES =  $(SLO)$/epict.obj \
+            $(SLO)$/dlgepct.obj
 .ENDIF
 # ==========================================================================
 

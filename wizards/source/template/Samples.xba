@@ -86,7 +86,7 @@ Dim MaxIndex as Integer
 			DialogModel = StylesDialog.Model
 			TemplateDir = GetPathSettings(&quot;Template&quot;, False, 0)
 			StylesDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/styles/&quot;)
-			sQueryPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap/&quot;)
+			sQueryPath = GetOfficeSubPath(&quot;Template&quot;, &quot;../wizard/bitmap/&quot;)
 			DialogModel.Title = GetResText(STYLES)
 			DialogModel.cmdCancel.Label = GetResText(STYLES+2)
 			DialogModel.cmdOk.Label = GetResText(STYLES+3)

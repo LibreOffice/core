@@ -45,41 +45,41 @@ SRC1FILES=\
         filectrl.src
 
 EXCEPTIONSFILES=\
-        $(SLO)$/svxbox.obj \
+        $(SLO)$/asynclink.obj \
+        $(SLO)$/calendar.obj \
+        $(SLO)$/ctrlbox.obj \
+        $(SLO)$/ctrltool.obj \
+        $(SLO)$/filectrl.obj \
         $(SLO)$/filectrl2.obj \
-        $(SLO)$/roadmap.obj \
-        $(SLO)$/scriptedtext.obj\
+        $(SLO)$/fileurlbox.obj \
+        $(SLO)$/fixedhyper.obj \
         $(SLO)$/fmtfield.obj \
+        $(SLO)$/headbar.obj \
+        $(SLO)$/hyperlabel.obj \
         $(SLO)$/inettbc.obj \
-        $(SLO)$/valueacc.obj \
+        $(SLO)$/prgsbar.obj \
+        $(SLO)$/roadmap.obj \
+        $(SLO)$/ruler.obj \
+        $(SLO)$/scriptedtext.obj \
+        $(SLO)$/scrwin.obj \
+        $(SLO)$/stdctrl.obj \
+        $(SLO)$/stdmenu.obj \
+        $(SLO)$/svxbox.obj \
+        $(SLO)$/tabbar.obj \
+        $(SLO)$/taskbar.obj \
+        $(SLO)$/taskbox.obj \
+        $(SLO)$/taskmisc.obj \
+        $(SLO)$/taskstat.obj \
         $(SLO)$/toolbarmenu.obj \
-        $(SLO)$/toolbarmenuacc.obj
+        $(SLO)$/toolbarmenuacc.obj \
+        $(SLO)$/urlcontrol.obj \
+        $(SLO)$/valueacc.obj \
+        $(SLO)$/valueset.obj
 
 SLOFILES=\
       $(EXCEPTIONSFILES) \
-        $(SLO)$/asynclink.obj \
-        $(SLO)$/urlcontrol.obj \
-        $(SLO)$/fileurlbox.obj \
-        $(SLO)$/ctrltool.obj  \
-        $(SLO)$/ctrlbox.obj  \
-        $(SLO)$/stdctrl.obj  \
-        $(SLO)$/stdmenu.obj  \
-        $(SLO)$/valueset.obj \
-        $(SLO)$/tabbar.obj       \
-        $(SLO)$/headbar.obj  \
-        $(SLO)$/prgsbar.obj  \
-        $(SLO)$/ruler.obj        \
-        $(SLO)$/taskbar.obj  \
-        $(SLO)$/taskbox.obj  \
-        $(SLO)$/taskstat.obj \
-        $(SLO)$/taskmisc.obj \
-        $(SLO)$/calendar.obj \
-        $(SLO)$/filectrl.obj \
-        $(SLO)$/scrwin.obj       \
         $(SLO)$/collatorres.obj \
-        $(SLO)$/indexentryres.obj \
-        $(SLO)$/hyperlabel.obj  \
-        $(SLO)$/fixedhyper.obj
+        $(SLO)$/indexentryres.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -949,7 +950,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    //added by BerryJia for fixing bug102407 2002-11-5
+
     Reference< XPropertySet > OControlImport::createElement()
     {
         const Reference<XPropertySet> xPropSet = OElementImport::createElement();
@@ -2036,3 +2037,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

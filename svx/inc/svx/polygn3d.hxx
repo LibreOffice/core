@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
 {
 private:
-    // Parameter
+    // parameters
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;
     basegfx::B2DPolyPolygon aPolyTexture2D;
@@ -87,3 +88,5 @@ public:
 };
 
 #endif          // _E3D_POLYGON3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

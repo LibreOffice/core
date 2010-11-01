@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -74,7 +75,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > PanelTabBarPeer::CreateAccessibleContext()
     {
-        ::vos::OGuard aSolarGuard( GetMutex() );
+        ::osl::SolarGuard aSolarGuard( GetMutex() );
         if ( m_pTabBar == NULL )
             throw DisposedException( ::rtl::OUString(), *this );
 
@@ -90,7 +91,7 @@ namespace svt
     void SAL_CALL PanelTabBarPeer::dispose() throw(RuntimeException)
     {
         {
-            ::vos::OGuard aSolarGuard( GetMutex() );
+            ::osl::SolarGuard aSolarGuard( GetMutex() );
             m_pTabBar = NULL;
         }
         VCLXWindow::dispose();
@@ -99,3 +100,5 @@ namespace svt
 //........................................................................
 } // namespace svt
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,10 +94,6 @@
 #include <toolkit/unohlp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
-#include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
-using namespace vos;
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -4972,3 +4969,4 @@ UINT32 EscherEx::GetColor( const Color& rSOColor, BOOL bSwap )
 
 // ---------------------------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

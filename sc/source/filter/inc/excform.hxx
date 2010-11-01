@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,10 +73,6 @@ public:
     const ScTokenArray* GetBoolErr( XclBoolError );
     BOOL                GetShrFmla( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen );
 
-#if 0
-                            // return = TRUE -> String-Record folgt!
-    static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
-#endif
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 
     static inline BOOL  IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );
@@ -158,3 +155,5 @@ inline BOOL ExcelToSc8::IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

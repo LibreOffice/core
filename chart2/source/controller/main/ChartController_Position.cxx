@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //.............................................................................
 namespace chart
@@ -150,7 +151,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         SdrView* pSdrView = m_pDrawViewWrapper;
         bool bResizePossible = m_aSelection.isResizeableObjectSelected();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT( pFact, "No dialog factory" );
         pDlg = pFact->CreateSchTransformTabDialog(
@@ -189,3 +190,5 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

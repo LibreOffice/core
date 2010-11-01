@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef VBA_FONT_HXX
 #define VBA_FONT_HXX
 
@@ -29,3 +30,5 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

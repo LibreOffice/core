@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -522,17 +523,6 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             if( nCharPos >= 0 )
             {
                 sal_UCS4 aChar = rArgs.mpStr[ nCharPos ];
-#if 0 // TODO: enable if some unicodes>0xFFFF should need glyph flags!=0
-                if( (aChar >= 0xD800) && (aChar <= 0xDFFF) )
-                {
-                    if( cChar >= 0xDC00 ) // this part of a surrogate pair was already processed
-                        continue;
-                    // calculate unicode scalar value of surrogate pair
-                    aChar = 0x10000 + ((aChar - 0xD800) << 10);
-                    sal_UCS4 aLow = rArgs.mpStr[ nCharPos+1 ];
-                    aChar += aLow & 0x03FF;
-                }
-#endif
                 nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
 
                 // #i99367# HACK: try to detect all diacritics
@@ -642,3 +632,4 @@ ServerFontLayoutEngine* FreetypeServerFont::GetLayoutEngine()
 
 // =======================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

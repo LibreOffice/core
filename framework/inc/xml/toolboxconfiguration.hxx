@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 
@@ -34,3 +35,5 @@ class ToolBoxConfiguration
 } // namespace framework
 
 #endif // __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 #ifndef _DBAUI_DBADMIN_HXX_
 #define _DBAUI_DBADMIN_HXX_
 
+#include <sal/macros.h>
 #include <sfx2/tabdlg.hxx>
 #include "dsntypes.hxx"
 #include "IItemSetHelper.hxx"
@@ -134,3 +136,4 @@ private:
 
 #endif // _DBAUI_DBADMIN_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

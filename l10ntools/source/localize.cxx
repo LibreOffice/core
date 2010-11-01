@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,6 +75,10 @@ const char *NegativeList[] = {
     "officecfg/data/org/openoffice/Office/SFX.xcd",
     "officecfg/data/org/openoffice/Office/Accelerators.xcu",
     "hidother.src",
+    "dictionaries/da_DK/help/da/help.tree",
+    "dictionaries/da_DK/help/da/org.openoffice.da.hunspell.dictionaries/page1.xph",
+    "dictionaries/hu_HU/help/hu/help.tree",
+    "dictionaries/hu_HU/help/hu/org.openoffice.hu.hunspell.dictionaries/page1.xph",
     "NULL"
 };
 
@@ -968,3 +973,4 @@ int _cdecl main( int argc, char *argv[] )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,22 +165,6 @@ DEFINE_INIT_SERVICE                 (   License,
                                     )
 
 
-#if 0
-IMPL_STATIC_LINK_NOINSTANCE( License, Terminate, void*, EMPTYARG )
-{
-    /*
-    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< XDesktop > xDesktop(xFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
-    if (xDesktop.is())
-        xDesktop->terminate();
-    */
-    /*
-    _exit(0);
-    */
-    return 0;
-}
-#endif
 
 static DateTime _oslDateTimeToDateTime(const oslDateTime& aDateTime)
 {
@@ -629,3 +614,4 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 }       //  namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

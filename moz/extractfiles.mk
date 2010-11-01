@@ -342,7 +342,7 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     echo >& $(NULLDEV)
 
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="MACOSX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
     cd $(RUNTIME_DIR) && strip *$(DLLPOST)
     cd $(RUNTIME_DIR)$/components && strip *$(DLLPOST)
 .ENDIF

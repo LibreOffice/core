@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <svl/itemprop.hxx>
 #include "misc.hxx"
 #include "defs.hxx"
-#include <vos/refernce.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -68,7 +68,7 @@ namespace com { namespace sun { namespace star {
 class LinguOptions
 {
     static SvtLinguOptions     *pData;
-    static vos::ORefCount       aRefCount;  // number of objects of this class
+    static oslInterlockedCount  nRefCount;  // number of objects of this class
 
     //! uses default assignment-operator
 
@@ -184,3 +184,4 @@ inline ::rtl::OUString LinguProps::getImplementationName_Static() throw()
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

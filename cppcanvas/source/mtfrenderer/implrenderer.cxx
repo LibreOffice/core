@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/sequence.hxx>
@@ -2019,8 +2020,8 @@ namespace cppcanvas
                                     ::vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
                                     ::vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                                     ::basegfx::B2DPoint(1,1) ),
-                                static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound(),
-                                static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ));
+                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound() ) / rRect.GetWidth(),
+                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ) / rRect.GetHeight() ) );
                         aPoly.transform( getState( rStates ).mapModeTransform );
 
                         createFillAndStroke( aPoly,
@@ -3194,3 +3195,5 @@ namespace cppcanvas
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

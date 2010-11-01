@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -628,7 +629,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->attribute("isTextAppend", xTextAppend.is());
-    dmapper_logger->attribute("isIgnor", m_TableManager.isIgnore());
+    dmapper_logger->attribute("isIgnor", getTableManager().isIgnore());
 #endif
 
     if(xTextAppend.is() && ! getTableManager( ).isIgnore())
@@ -3770,3 +3771,5 @@ SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

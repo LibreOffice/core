@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <cuires.hrc>
 #include <dialmgr.hxx>
 #include <vcl/decoview.hxx>
+#include <sal/macros.h>
 
 #include "hangulhanjadlg.hrc"
 
@@ -252,7 +254,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         {
             this, &aAuditBox, &aStatusText
         };
-        for ( sal_uInt32 i = 0; i < sizeof( pResize ) / sizeof( pResize[0] ); ++i )
+        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pResize ); ++i )
         {
             aSize = pResize[i]->GetSizePixel( );
             pResize[i]->SetSizePixel( Size( aSize.Width() + _nX, aSize.Height() + _nY ) );
@@ -265,7 +267,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         {
             &aStatusText, &aHelpBtn, &aCancelBtn
         };
-        for ( sal_uInt32 i = 0; i < sizeof( pMoveDown ) / sizeof( pMoveDown[0] ); ++i )
+        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pMoveDown ); ++i )
         {
             aPos = pMoveDown[i]->GetPosPixel();
             aPos.Y() += _nY;
@@ -279,7 +281,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         {
             &aIgnoreBtn, &aIgnoreAllBtn, &aChangeBtn, &aChangeAllBtn, &aOptionsBtn, &aHelpBtn, &aCancelBtn
         };
-        for ( sal_uInt32 i = 0; i < sizeof( pMoveRight ) / sizeof( pMoveRight[0] ); ++i )
+        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pMoveRight ); ++i )
         {
             aPos = pMoveRight[i]->GetPosPixel();
             aPos.X() += _nX;
@@ -287,3 +289,5 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

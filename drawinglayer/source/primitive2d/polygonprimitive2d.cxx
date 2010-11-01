@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -508,10 +509,11 @@ namespace drawinglayer
         {
             // copy local polygon, it may be changed
             basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
+            aLocalPolygon.removeDoublePoints();
             basegfx::B2DPolyPolygon aArrowA;
             basegfx::B2DPolyPolygon aArrowB;
 
-            if(!aLocalPolygon.isClosed())
+            if(!aLocalPolygon.isClosed() && aLocalPolygon.count() > 1)
             {
                 // apply arrows
                 const double fPolyLength(basegfx::tools::getLength(aLocalPolygon));
@@ -636,3 +638,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <filedlg.hxx>
 #include <filedlg2.hrc>
 #include <vcl/msgbox.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <com/sun/star/i18n/XCollator.hpp>
 
 #include <svtools/stdctrl.hxx>
@@ -345,7 +346,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
     if ( pBtn == pHomeBtn )
     {
         ::rtl::OUString aHomeDir;
-        NAMESPACE_VOS( OSecurity ) aSecurity;
+        osl::Security aSecurity;
         if ( aSecurity.getHomeDir( aHomeDir ) )
         {
             DirEntry aFile ( aHomeDir );
@@ -1358,3 +1359,4 @@ void ImpSvFileDlg::CreateDialog( PathDialog* pSvDlg, WinBits nStyle, RESOURCE_TY
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

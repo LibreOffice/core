@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <ctype.h>
 #include <hash_map>
@@ -2226,7 +2227,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     ::rtl::OUString aTargetName;
     Reference< XModel >  xModel;
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // starform->Forms
 
         Reference<XChild>  xParent(m_xParent, UNO_QUERY);
@@ -2261,7 +2262,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     {
         ::rtl::OUString aData;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             aData = GetDataURLEncoded( Control, MouseEvt );
         }
 
@@ -2308,7 +2309,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             ::rtl::OUString aContentType;
             Sequence<sal_Int8> aData;
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 aData = GetDataMultiPartEncoded(Control, MouseEvt, aContentType);
             }
             if (!aData.getLength())
@@ -2333,7 +2334,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     {
         ::rtl::OUString aData;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             aData = GetDataTextEncoded( Reference<XControl> (), MouseEvt );
         }
 
@@ -4160,3 +4161,4 @@ void SAL_CALL ODatabaseForm::setName(const ::rtl::OUString& aName) throw( Runtim
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

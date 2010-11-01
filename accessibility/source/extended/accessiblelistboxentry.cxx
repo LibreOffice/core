@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,16 +65,6 @@ namespace
 //........................................................................
 namespace accessibility
 {
-    //........................................................................
-    // class ALBSolarGuard ---------------------------------------------------------
-
-    /** Aquire the solar mutex. */
-    class ALBSolarGuard : public ::vos::OGuard
-    {
-    public:
-        inline ALBSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-    };
-
     // class AccessibleListBoxEntry -----------------------------------------------------
 
     using namespace ::com::sun::star::accessibility;
@@ -174,7 +165,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Rectangle AccessibleListBoxEntry::GetBoundingBox() throw ( lang::DisposedException )
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -183,7 +174,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen() throw ( lang::DisposedException )
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -251,7 +242,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     void SAL_CALL AccessibleListBoxEntry::disposing()
     {
-        ALBSolarGuard();
+        SolarMutexGuard();
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Reference< XAccessible > xKeepAlive( this );
@@ -323,7 +314,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -337,7 +328,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -387,7 +378,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -467,7 +458,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Locale SAL_CALL AccessibleListBoxEntry::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         return implGetLocale();
@@ -482,7 +473,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -525,7 +516,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Int32 AccessibleListBoxEntry::getForeground(    ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         sal_Int32 nColor = 0;
@@ -542,7 +533,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Int32 AccessibleListBoxEntry::getBackground(  ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         sal_Int32 nColor = 0;
@@ -562,7 +553,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -587,7 +578,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -608,7 +599,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -669,7 +660,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         sal_Bool bRet = sal_False;
@@ -691,7 +682,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         checkActionIndex_Impl( nIndex );
@@ -715,7 +706,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -730,7 +721,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -745,7 +736,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -765,7 +756,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -785,7 +776,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -808,7 +799,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -841,7 +832,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
@@ -859,7 +850,7 @@ namespace accessibility
     }
     sal_Bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -870,14 +861,14 @@ namespace accessibility
     }
     sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getCharacter( nIndex );
     }
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -890,7 +881,7 @@ namespace accessibility
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getCharacterCount(  );
@@ -898,28 +889,28 @@ namespace accessibility
 
     ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getSelectedText(  );
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionStart(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getSelectionStart(  );
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getSelectionEnd(  );
     }
     sal_Bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -930,35 +921,35 @@ namespace accessibility
     }
     ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getText(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getText(  );
     }
     ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
     }
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
     }
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
     }
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ALBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
@@ -968,3 +959,4 @@ namespace accessibility
 }// namespace accessibility
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

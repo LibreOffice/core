@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,7 +145,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());
-        FASTBOOL bScaleUnitChanged=aNewUnit!=aOldUnit;
+        bool bScaleUnitChanged=aNewUnit!=aOldUnit;
         // und nun dem OutlinerParaObject einen neuen Pool verpassen
         // !!! Hier muss noch DefTab und RefDevice der beiden Models
         // !!! verglichen werden und dann ggf. AutoGrow zuschlagen !!!
@@ -222,3 +223,5 @@ SfxStyleSheet* SdrText::GetStyleSheet() const
 {
     return mrObject.GetStyleSheet();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

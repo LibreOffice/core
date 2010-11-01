@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,3 +43,5 @@ public:
     static ByteString ConvertToUTF8( const ByteString &rASCII, rtl_TextEncoding nEncoding );
     static ByteString ConvertFromUTF8( const ByteString &rUTF8, rtl_TextEncoding nEncoding );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

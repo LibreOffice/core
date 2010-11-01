@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -43,7 +44,7 @@
 
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -142,7 +143,7 @@ namespace sd { namespace toolpanel
     //------------------------------------------------------------------------------------------------------------------
     Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const ::rtl::OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
 
         const PanelId ePanelId( toolpanel::GetStandardPanelId( i_rResourceURL ) );
         if ( ePanelId == PID_UNKNOWN )
@@ -253,3 +254,5 @@ namespace sd { namespace toolpanel
 //......................................................................................................................
 } } // namespace sd::toolpanel
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

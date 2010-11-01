@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  ************************************************************************/
 
@@ -2414,3 +2415,5 @@ int token_debug(const char * /*format*/, ...)
    return 0;
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

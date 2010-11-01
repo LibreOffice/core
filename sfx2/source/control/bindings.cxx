@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svtools/itemdel.hxx>
-
-#ifndef GCC
-#endif
 
 // wg. nInReschedule
 #include "appdata.hxx"
@@ -373,7 +371,7 @@ void SfxBindings::HidePopups( bool bHide )
         pImp->pWorkWin->HidePopups_Impl( bHide, sal_True );
 }
 
-void SfxBindings::HidePopupCtrls_Impl( FASTBOOL bHide )
+void SfxBindings::HidePopupCtrls_Impl( bool bHide )
 {
     if ( bHide )
     {
@@ -1503,10 +1501,10 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         }
 
         // Mu\s der Slot "uberhaupt upgedatet werden ?
-        FASTBOOL bInsert = pSiblingCache && pSiblingCache->IsControllerDirty();
+        bool bInsert = pSiblingCache && pSiblingCache->IsControllerDirty();
 
         // Bugfix #26161#: Es reicht nicht, nach der selben Shell zu fragen !!
-        FASTBOOL bSameMethod = pSiblingCache && pFnc == pSiblingFnc;
+        bool bSameMethod = pSiblingCache && pFnc == pSiblingFnc;
 
         // Wenn der Slot ein nicht-dirty MasterSlot ist, dann ist vielleicht
         // einer seiner Slaves dirty ? Dann wird der Masterslot doch eingef"ugt.
@@ -1736,7 +1734,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     pImp->aTimer.SetTimeout(TIMEOUT_UPDATING);
 
     // at least 10 loops and further if more jobs are available but no input
-    FASTBOOL bPreEmptive = pTimer && !pSfxApp->Get_Impl()->nInReschedule;
+    bool bPreEmptive = pTimer && !pSfxApp->Get_Impl()->nInReschedule;
     sal_uInt16 nLoops = 10;
     pImp->bInNextJob = sal_True;
     const sal_uInt16 nCount = pImp->pCaches->Count();
@@ -2431,3 +2429,5 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
 
     return xRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

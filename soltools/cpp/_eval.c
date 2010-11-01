@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdlib.h>
 #include <string.h>
 #include "cpp.h"
@@ -764,3 +765,5 @@ int
                 i = -1;
     return i;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

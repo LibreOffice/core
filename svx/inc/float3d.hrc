@@ -106,7 +106,7 @@
 #define FT_AMBIENTLIGHT                80
 #define FL_LIGHT                               81
 
-// Texturen
+// Textures
 #define FT_TEX_KIND             90
 #define BTN_TEX_LUMINANCE       91
 #define BTN_TEX_COLOR           92

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,6 +106,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/wrkwin.hxx>
 #include <tools/StringListResource.hxx>
+#include <sal/macros.h>
 
 #include <limits>
 
@@ -1723,7 +1725,7 @@ namespace pcr
             // propagate the changes to the min/max/default fields
             Any aCurrentProp;
             ::rtl::OUString aAffectedProps[] = { PROPERTY_VALUE, PROPERTY_DEFAULT_VALUE, PROPERTY_VALUEMIN, PROPERTY_VALUEMAX };
-            for (sal_uInt16 i=0; i<sizeof(aAffectedProps)/sizeof(aAffectedProps[0]); ++i)
+            for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(aAffectedProps); ++i)
             {
                 Reference< XPropertyControl > xControl;
                 try
@@ -1770,7 +1772,7 @@ namespace pcr
                 ::rtl::OUString aFormattedPropertyControls[] = {
                     PROPERTY_EFFECTIVE_MIN, PROPERTY_EFFECTIVE_MAX, PROPERTY_EFFECTIVE_DEFAULT, PROPERTY_EFFECTIVE_VALUE
                 };
-                for ( sal_uInt16 i=0; i<sizeof(aFormattedPropertyControls)/sizeof(aFormattedPropertyControls[0]); ++i )
+                for ( sal_uInt16 i=0; i<SAL_N_ELEMENTS(aFormattedPropertyControls); ++i )
                 {
                     Reference< XPropertyControl > xControl;
                     try
@@ -2163,8 +2165,8 @@ namespace pcr
                     ControlType::PROGRESSBAR
                 };
 
-                sal_Int32 nKnownControlTypes = sizeof( aControlModelServiceNames ) / sizeof( aControlModelServiceNames[ 0 ] );
-                OSL_ENSURE( nKnownControlTypes == sizeof( nClassIDs ) / sizeof( nClassIDs[ 0 ] ),
+                sal_Int32 nKnownControlTypes = SAL_N_ELEMENTS( aControlModelServiceNames );
+                OSL_ENSURE( nKnownControlTypes == SAL_N_ELEMENTS( nClassIDs ),
                     "FormComponentPropertyHandler::impl_classifyControlModel_throw: inconsistence" );
 
                 for ( sal_Int32 i = 0; i < nKnownControlTypes; ++i )
@@ -3339,3 +3341,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

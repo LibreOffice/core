@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ protected:
 
     bool isSystemDependentWindowPeer() const { return m_bWHWND; }
 
-    virtual ::vos::IMutex& GetMutexImpl() = 0;
+    virtual ::osl::SolarMutex& GetMutexImpl() = 0;
     virtual Window* GetWindowImpl() = 0;
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() = 0;
 
@@ -95,7 +96,7 @@ class VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer
 {
 protected:
-    virtual vos::IMutex& GetMutexImpl();
+    virtual osl::SolarMutex& GetMutexImpl();
     virtual Window* GetWindowImpl();
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 
@@ -121,3 +122,4 @@ public:
 
 #endif // _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -201,7 +201,7 @@ published service UnoControlButtonModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies whether the control should show repeating behaviour.
+    /** specifies whether the control should show repeating behavior.
 
         <p>Normally, when you click a button with the mouse, you need to
         release the mouse button, and press it again. With this property

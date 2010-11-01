@@ -42,7 +42,7 @@ module data
 
 /** A selection change listener that is attached to a
     <type>XRangeHighlighter</type> in order to get notified about
-    selection changes that affect range hightlighting.
+    selection changes that affect range highlighting.
  */
 service RangeHighlightListener
 {

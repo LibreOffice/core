@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -205,7 +206,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         aPropValue.Value <<= aResourceURL;
         aPropSeq[2] <<= aPropValue;
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xServiceManager );
         xToolBar = Reference< ::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
@@ -217,3 +218,4 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

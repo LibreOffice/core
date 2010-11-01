@@ -40,7 +40,7 @@ interface XListBox: com::sun::star::uno::XInterface
 {
     [attribute] any Value;
     [attribute] string Text;
-    [attribute] boolean MultiSelect;
+    [attribute] long MultiSelect;
     [attribute] any ListIndex;
         [attribute, readonly ] long ListCount;
     void AddItem( [in] any pvargItem, [in] any pvargIndex );

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/configitem.hxx>
@@ -44,7 +43,6 @@
 #include <unotools/bootstrap.hxx>
 
 #include <unotools/ucbhelper.hxx>
-#include <vos/process.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -260,27 +258,16 @@ static VarNameAttribute aVarNameAttribute[] =
     { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
 };
 
-#if 0
-// currently unused
-static Sequence< OUString > GetPathPropertyNames()
-{
-    const int nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
-    for ( int i = 0; i < nCount; i++ )
-        pNames[i] = OUString::createFromAscii( aPropNames[i].pPropName );
-
-    return aNames;
-}
-#endif
-
 // class SvtPathOptions_Impl ---------------------------------------------
 
 const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 {
+    if ( ePath >= SvtPathOptions::PATH_COUNT )
+        return m_aEmptyString;
+
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( ePath < SvtPathOptions::PATH_COUNT )
+    try
     {
         OUString    aPathValue;
         String      aResult;
@@ -304,6 +291,9 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 
         m_aPathArray[ ePath ] = aPathValue;
         return m_aPathArray[ ePath ];
+    }
+    catch (UnknownPropertyException &)
+    {
     }
 
     return m_aEmptyString;
@@ -532,7 +522,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
-    Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    Any aLocale = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
     {
@@ -1089,3 +1079,5 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
     *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

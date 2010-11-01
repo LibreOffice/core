@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #define _CONNECTIVITY_PROPERTYIDS_HXX_
@@ -134,3 +135,4 @@ pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERT
 #endif // _CONNECTIVITY_PROPERTYIDS_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
 
     Point aRet;
 
-    DBG_ASSERT( pParentWin, "Window not found" );
+    OSL_ENSURE( pParentWin, "Window not found" );
     if (pParentWin)
     {
         Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
@@ -230,7 +231,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                     {
                         //get dialog size:
                         awt::Size aDialogAWTSize;
-                        if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
+                        if( xDialogProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) )
                             >>= aDialogAWTSize )
                         {
                             Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -242,14 +243,14 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                                     aSwRect = pFlyFrmFmt->GetAnchoredObj()->GetObjRectWithSpaces();
                                 Rectangle aRect( aSwRect.SVRect() );
                                 Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
-                                xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
+                                xDialogProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Position")),
                                     uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                             }
                         }
                     }
                     catch( uno::Exception& )
                     {
-                        DBG_ERROR( "Chart wizard couldn't be positioned automatically\n" );
+                        OSL_ENSURE(false, "Chart wizard couldn't be positioned automatically\n" );
                     }
                 }
 
@@ -261,7 +262,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 }
                 else
                 {
-                    DBG_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
+                    OSL_ENSURE( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
                         "dialog execution failed" );
                 }
             }
@@ -283,3 +284,4 @@ void __EXPORT AutoEdit::KeyInput( const KeyEvent& rEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

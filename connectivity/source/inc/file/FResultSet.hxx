@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,14 +102,14 @@ namespace connectivity
 //          ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
             OSkipDeletedSet                         m_aSkipDeletedSet;
 
-            ::vos::ORef<OKeySet>                    m_pFileSet;
+            ::rtl::Reference<OKeySet>                   m_pFileSet;
             OKeySet::Vector::iterator               m_aFileSetIter;
 
 
 
             OSortIndex*                             m_pSortIndex;
-            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
-            ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
+            ::rtl::Reference<connectivity::OSQLColumns> m_xColumns; // this are the select columns
+            ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;
             OFileTable*                             m_pTable;
             connectivity::OSQLParseNode*            m_pParseTree;
 
@@ -290,7 +291,7 @@ namespace connectivity
             inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
             inline void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
             inline void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
-            inline void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>&   _xParamColumns) { m_xParamColumns = _xParamColumns; }
+            inline void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
             inline void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
             inline void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
             inline void setSelectRow(const OValueRefRow& _rRow)
@@ -310,7 +311,7 @@ namespace connectivity
             void clear();
             static void setBoundedColumns(const OValueRefRow& _rRow,
                                     const OValueRefRow& _rSelectRow,
-                                    const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
                                     sal_Bool _bSetColumnMapping,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
@@ -339,3 +340,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_FILE_ORESULTSET_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

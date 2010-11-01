@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,6 +52,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/impbmp.hxx>
 #include <vcl/svids.hrc>
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -417,7 +419,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 
 GtkSalFrame::~GtkSalFrame()
 {
-    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); ++i )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
     {
         if( !m_aGraphics[i].pGraphics )
             continue;
@@ -796,6 +798,8 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
 
     // force wm class hint
     m_nExtStyle = ~0;
+    if (m_pParent)
+        m_sWMClass = m_pParent->m_sWMClass;
     SetExtendedFrameStyle( 0 );
 
     if( m_pParent && m_pParent->m_pWindow && ! isChild() )
@@ -979,24 +983,9 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     if( nStyle != m_nExtStyle && ! isChild() )
     {
         m_nExtStyle = nStyle;
-        if( GTK_WIDGET_REALIZED( m_pWindow ) )
-        {
-            XClassHint* pClass = XAllocClassHint();
-            rtl::OString aResHint = X11SalData::getFrameResName( m_nExtStyle );
-            pClass->res_name  = const_cast<char*>(aResHint.getStr());
-            pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-            XSetClassHint( getDisplay()->GetDisplay(),
-                           GDK_WINDOW_XWINDOW(m_pWindow->window),
-                           pClass );
-            XFree( pClass );
-        }
-        else
-            gtk_window_set_wmclass( GTK_WINDOW(m_pWindow),
-                                    X11SalData::getFrameResName( m_nExtStyle ),
-                                    X11SalData::getFrameClassName() );
+        updateWMClass();
     }
 }
-
 
 SalGraphics* GtkSalFrame::GetGraphics()
 {
@@ -1738,7 +1727,7 @@ void GtkSalFrame::moveToScreen( int nScreen )
         m_aSystemData.pAppContext   = NULL;
         m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
         // update graphics if necessary
-        for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         {
             if( m_aGraphics[i].bInUse )
                 m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(m_pWindow->window), m_nScreen );
@@ -1787,6 +1776,40 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
             maGeometry.nScreenNumber = nNewScreen;
             gtk_window_move( GTK_WINDOW(m_pWindow), maGeometry.nX, maGeometry.nY );
         }
+    }
+}
+
+void GtkSalFrame::updateWMClass()
+{
+    rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
+
+    if( GTK_WIDGET_REALIZED( m_pWindow ) )
+    {
+        XClassHint* pClass = XAllocClassHint();
+        rtl::OString aResName = X11SalData::getFrameResName( m_nExtStyle );
+        pClass->res_name  = const_cast<char*>(aResName.getStr());
+        pClass->res_class = const_cast<char*>(pResClass);
+        XSetClassHint( getDisplay()->GetDisplay(),
+                       GDK_WINDOW_XWINDOW(m_pWindow->window),
+                       pClass );
+        XFree( pClass );
+    }
+    else
+        gtk_window_set_wmclass( GTK_WINDOW(m_pWindow),
+                                X11SalData::getFrameResName( m_nExtStyle ),
+                                pResClass );
+}
+
+void GtkSalFrame::SetApplicationID( const rtl::OUString &rWMClass )
+{
+    if( rWMClass != m_sWMClass && ! isChild() )
+    {
+        m_sWMClass = rWMClass;
+        updateWMClass();
+
+        for( std::list< GtkSalFrame* >::iterator it = m_aChildren.begin(); it != m_aChildren.end(); ++it )
+            (*it)->SetApplicationID(rWMClass);
     }
 }
 
@@ -2399,7 +2422,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     }
 
     // free xrender resources
-    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         if( m_aGraphics[i].bInUse )
             m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
 
@@ -2434,7 +2457,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     }
 
     // update graphics
-    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
     {
         if( m_aGraphics[i].bInUse )
         {
@@ -3551,6 +3574,10 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
     {
         GTK_YIELD_GRAB();
 
+        const bool bWasPreedit =
+            (pThis->m_aInputEvent.mpTextAttr != 0) ||
+            pThis->m_bPreeditJustChanged;
+
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
         pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
@@ -3574,9 +3601,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
          *  or because there never was a preedit.
          */
         bool bSingleCommit = false;
-        bool bWasPreedit =
-            (pThis->m_aInputEvent.mpTextAttr != 0) ||
-            pThis->m_bPreeditJustChanged;
         if( ! bWasPreedit
             && pThis->m_aInputEvent.maText.Len() == 1
             && ! pThis->m_aPrevKeyPresses.empty()
@@ -3819,3 +3843,5 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
 
     return FALSE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

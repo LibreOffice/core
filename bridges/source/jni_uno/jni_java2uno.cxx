@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <sal/alloca.h>
 
 #include "jni_bridge.h"
-//#include "jni_finalizer.h"
 
 #include <rtl/ustrbuf.hxx>
 
@@ -702,3 +702,5 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

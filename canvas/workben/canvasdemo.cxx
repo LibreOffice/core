@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,7 @@
 #include <vcl/canvastools.hxx>
 
 #include <rtl/bootstrap.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
@@ -250,7 +252,7 @@ class DemoRenderer
         {
             const double SCALE=7.0;
             const char hilbert[] = "urdrrulurulldluuruluurdrurddldrrruluurdrurddldrddlulldrdldrrurd";
-            int nLength = sizeof( hilbert ) / sizeof (hilbert [0]);
+            int nLength = SAL_N_ELEMENTS( hilbert );
 
             uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
@@ -710,3 +712,4 @@ DemoApp aDemoApp;
 //   - complete all of pre-existing canvas bits
 //   - affine transform tweakage ...
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

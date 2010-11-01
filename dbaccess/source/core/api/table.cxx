@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 //= ODBTable
 //==========================================================================
 DBG_NAME(ODBTable)
-//--------------------------------------------------------------------------
+
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const Reference< XConnection >& _rxConn
         ,const ::rtl::OUString& _rCatalog
@@ -97,7 +98,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more
     // likely that it's already used up than it's here.)
 }
-// -----------------------------------------------------------------------------
+
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
                    ,const Reference< XConnection >& _rxConn)
                 throw(SQLException)
@@ -107,15 +108,14 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     DBG_CTOR(ODBTable, NULL);
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::ODBTable" );
 }
-// -------------------------------------------------------------------------
+
 ODBTable::~ODBTable()
 {
     DBG_DTOR(ODBTable, NULL);
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_REFCOUNT(ODBTable,OTable_Base)
 
-//--------------------------------------------------------------------------
 OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumn" );
@@ -139,13 +139,13 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
 
     return pReturn;
 }
-// -----------------------------------------------------------------------------
+
 void ODBTable::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::columnAppended" );
     // not interested in
 }
-// -----------------------------------------------------------------------------
+
 void ODBTable::columnDropped(const ::rtl::OUString& _sName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::columnDropped" );
@@ -155,7 +155,7 @@ void ODBTable::columnDropped(const ::rtl::OUString& _sName)
         xDrop->dropByName(_sName);
     }
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getImplementationId" );
@@ -173,7 +173,6 @@ Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
 void SAL_CALL ODBTable::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::disposing" );
@@ -184,7 +183,6 @@ void SAL_CALL ODBTable::disposing()
     m_pColumnMediator = NULL;
 }
 
-//------------------------------------------------------------------------------
 void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getFastPropertyValue" );
@@ -195,7 +193,7 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 
     OTable_Base::getFastPropertyValue(_rValue, _nHandle);
 }
-// -------------------------------------------------------------------------
+
 void ODBTable::construct()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::construct" );
@@ -256,7 +254,7 @@ void ODBTable::construct()
 
     refreshColumns();
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ODBTable::createArrayHelper( sal_Int32 _nId) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createArrayHelper" );
@@ -281,15 +279,15 @@ void ODBTable::construct()
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & SAL_CALL ODBTable::getInfoHelper()
 {
     return *ODBTable_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
-// -------------------------------------------------------------------------
+
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE)
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getInfoHelper" );
@@ -299,7 +297,7 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeExcepti
         return Any();
     return OTable_Base::queryInterface( rType);
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getTypes" );
@@ -321,8 +319,8 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
     Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
+
 // XRename,
-//------------------------------------------------------------------------------
 void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::rename" );
@@ -337,7 +335,6 @@ void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLExce
 }
 
 // XAlterTable,
-//------------------------------------------------------------------------------
 void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::alterColumnByName" );
@@ -353,7 +350,7 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
     getAlterService()->alterColumnByName(xTable,_rName,_rxDescriptor);
     m_pColumns->refresh();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getSomething" );
@@ -365,7 +362,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) thr
 
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getUnoTunnelImplementationId" );
@@ -381,13 +378,13 @@ Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
     }
     return pId->getImplementationId();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet > ODBTable::createColumnDescriptor()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumnDescriptor" );
     return new OTableColumnDescriptor( true );
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumns" );
@@ -401,16 +398,16 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
     pCol->setMediator( m_pColumnMediator.get() );
     return pCol;
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* ODBTable::createKeys(const TStringVector& _rNames)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createKeys" );
     return new connectivity::OKeysHelper(this,m_aMutex,_rNames);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createIndexes" );
     return new OIndexes(this,m_aMutex,_rNames,NULL);
 }
-// -----------------------------------------------------------------------------
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

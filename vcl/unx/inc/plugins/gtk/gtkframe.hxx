@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,11 +118,12 @@ class GtkSalFrame : public SalFrame
                 return (event != NULL)
                     && (event->window == window)
                     && (event->send_event == send_event)
-                    && (event->state == state)
+                    // ignore non-Gdk state bits, e.g., these used by IBus
+                    && ((event->state & GDK_MODIFIER_MASK) == (state & GDK_MODIFIER_MASK))
                     && (event->keyval == keyval)
                     && (event->hardware_keycode == hardware_keycode)
                     && (event->group == group)
-                    && (event->time - time < 3)
+                    && (event->time - time < 300)
                     ;
             }
         };
@@ -190,6 +192,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
     String                          m_aTitle;
+    rtl::OUString                   m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
 
@@ -267,6 +270,8 @@ class GtkSalFrame : public SalFrame
     void setMinMaxSize();
     void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
+
+    void updateWMClass();
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
@@ -385,6 +390,7 @@ public:
     virtual void                SetBackgroundBitmap( SalBitmap* );
 
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
@@ -409,3 +415,5 @@ GType ooo_fixed_get_type( void );
 } // extern "C"
 
 #endif //_VCL_GTKFRAME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

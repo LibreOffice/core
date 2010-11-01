@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 
 //------------------------------------------------------------
 // class SdrPercentItem
-// Ganze Prozente von 0
+// Integer percents of 0
 //------------------------------------------------------------
 
 class SVX_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
@@ -55,7 +56,7 @@ public:
 
 //------------------------------------------------------------
 // class SdrSignedPercentItem
-// Ganze Prozente von +/-
+// Integer percents of +/-
 //------------------------------------------------------------
 
 class SVX_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
@@ -77,3 +78,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

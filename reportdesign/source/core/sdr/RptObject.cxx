@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -573,9 +574,9 @@ void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
     SetPropsFromRect(rRect);
 }
 //----------------------------------------------------------------------------
-FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
+    bool bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
@@ -815,10 +816,10 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
 }
 //----------------------------------------------------------------------------
 
-FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         impl_setReportComponent_nothrow();
@@ -1089,10 +1090,10 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 }
 //----------------------------------------------------------------------------
 
-FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    FASTBOOL bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
+    bool bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
@@ -1221,20 +1222,12 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
         pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
-        uno::Sequence< beans::PropertyValue > aArgs( 4 );
-        aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-            uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("HasCategories"), -1,
-            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-        xReceiver->setArguments( aArgs );
+        ::comphelper::NamedValueCollection aArgs;
+        aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );
+        aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
+        aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+        aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+        xReceiver->setArguments( aArgs.getPropertyValues() );
 
         if( xChartModel.is() )
             xChartModel->unlockControllers();
@@ -1262,3 +1255,5 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

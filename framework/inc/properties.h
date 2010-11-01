@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -271,25 +272,8 @@ namespace framework{
 #define TABWINDOW_PROPHANDLE_TOPWINDOW                  1
 #define TABWINDOW_PROPCOUNT                             2
 
-//_______________________________________________
-/** properties for tab window service (new) */
-#define TABWINDOWSERVICE_PROPNAME_ASCII_WINDOW          "Window"
-#define TABWINDOWSERVICE_PROPNAME_WINDOW                ::rtl::OUString::createFromAscii( TABWINDOWSERVICE_PROPNAME_ASCII_WINDOW )
-
 #define TABWINDOWSERVICE_PROPHANDLE_WINDOW              0
 #define TABWINDOWSERVICE_PROPCOUNT                      1
-
-//_______________________________________________
-/** properties of tabreg service */
-static const char* TABREG_PROPNAME_ASCII_TITLE          = "title";
-
-static const ::rtl::OUString TABREG_PROPNAME_TITLE      = ::rtl::OUString::createFromAscii(TABREG_PROPNAME_ASCII_TITLE);
-
-//_______________________________________________
-/** properties of controller service */
-static const char* CONTROLLER_PROPNAME_ASCII_ICONID         = "IconId";
-
-static const ::rtl::OUString CONTROLLER_PROPNAME_ICONID     = ::rtl::OUString::createFromAscii(CONTROLLER_PROPNAME_ASCII_ICONID);
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
@@ -352,3 +336,5 @@ class PropHelper
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_PROPERTIES_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

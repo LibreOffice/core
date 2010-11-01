@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,7 +242,7 @@ namespace dbmm
                 LanguageMapping( "Python",     ePython ),          // TODO: is this correct?
                 LanguageMapping( "Basic",      eBasic )
             };
-            for ( size_t i=0; i < sizeof( aLanguageMapping ) / sizeof( aLanguageMapping[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aLanguageMapping ); ++i )
             {
                 if ( _rLanguage.equalsAscii( aLanguageMapping[i].pAsciiLanguage ) )
                 {
@@ -1305,7 +1306,7 @@ namespace dbmm
             ScriptType aKnownStorageBasedTypes[] = {
                 eBeanShell, eJavaScript, ePython, eJava
             };
-            for ( size_t i=0; i<sizeof( aKnownStorageBasedTypes ) / sizeof( aKnownStorageBasedTypes[0] ); ++i )
+            for ( size_t i=0; i< SAL_N_ELEMENTS( aKnownStorageBasedTypes ); ++i )
                 aElementNames.erase( lcl_getScriptsSubStorageName( aKnownStorageBasedTypes[i] ) );
 
             if ( !aElementNames.empty() )
@@ -1835,7 +1836,7 @@ namespace dbmm
             Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
 
             Reference< XNameContainer > xDialogModel( m_aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext() );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
 
             // adjust the events of the dialog
             impl_adjustDialogElementEvents_throw( xDialogModel );
@@ -1850,7 +1851,7 @@ namespace dbmm
             }
 
             // export dialog model
-            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext() );
+            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
             _inout_rDialogLibraryElement <<= xISP;
         }
         catch( const Exception& )
@@ -1988,3 +1989,5 @@ namespace dbmm
 //........................................................................
 } // namespace dbmm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

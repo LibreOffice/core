@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,9 @@
 
 namespace XPath
 {
-    CNodeList::CNodeList(boost::shared_ptr<xmlXPathObject>& rxpathObj)
-        : m_pNodeSet(0)
+    CNodeList::CNodeList(boost::shared_ptr<xmlXPathObject>& rxpathObj, const Reference< XNode >& contextNode)
+        : m_xContextNode(contextNode)
+        , m_pNodeSet(0)
     {
         if (rxpathObj != NULL && rxpathObj->type == XPATH_NODESET)
         {
@@ -63,3 +65,4 @@ namespace XPath
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

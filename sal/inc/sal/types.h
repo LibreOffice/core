@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define _SAL_TYPES_H_
 
 #include <sal/config.h>
+#include <sal/macros.h>
 
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
@@ -433,3 +435,4 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #endif /*_SAL_TYPES_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

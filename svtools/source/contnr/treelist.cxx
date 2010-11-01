@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,7 @@
 
 #define _TREELIST_CXX
 
-#ifndef GCC
-#endif
-
 #include <svtools/treelist.hxx>
-
-#ifdef DBG_UTIL
-// Prueft Integritaet der Liste nach jeder Operation
-//#define CHECK_INTEGRITY
-#endif
 
 
 DBG_NAME(SvListEntry);
@@ -2124,3 +2117,4 @@ void SvTreeList::GetInsertionPos( SvListEntry* pEntry, SvListEntry* pParent,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

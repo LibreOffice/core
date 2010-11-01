@@ -36,13 +36,8 @@
 
 RCD_LANGUAGE rcdata
 {
-#ifdef LG_D
-	"040704B0", 	// Germany -> Unicode
-	"040704E4", 	// Germany -> Windows, Multilingual
-#else
-	"040904B0", 	// Germany -> Unicode
+	"040904B0", 	// USA -> Unicode
 	"040904E4", 	// USA -> Windows, Multilingual
-#endif
 	"04090000", 	// USA -> 7-Bit-ASCII
 	0				// end of table
 }
@@ -72,19 +67,6 @@ VS_VERSION_INFO versioninfo
 	{
 		block "StringFileInfo"
 		{
-#ifdef LG_D
-			block "040704E4"
-			{
-				// German StringTable
-                value "CompanyName",		"The Document Foundation\0"
-				value "FileDescription",    "Service Tags Wrapper\0"
-				value "FileVersion",		PPS(VER_LEVEL) "\0"
-				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	"STCLIENT_WRAPPER.EXE\0"
-                value "InternalName",		"stclient_wrapper\0"
-                value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
-			}
-#else
 			block "040904E4"
 			{
 				// International StringTable
@@ -96,16 +78,11 @@ VS_VERSION_INFO versioninfo
                 value "InternalName", 		"stclient_wrapper\0"
                 value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
 			}
-#endif
 		}
 
 		block "VarFileInfo"
 		{
-#ifdef LG_D
-			value "Translation", 0x0407, 1252
-#else
 			value "Translation", 0x0409, 1252
-#endif
 		}
 	}
 

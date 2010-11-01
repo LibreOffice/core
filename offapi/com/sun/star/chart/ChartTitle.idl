@@ -83,7 +83,7 @@ published service ChartTitle
 
     /** contains the text of the title.
 
-        <p>Note that you can not change attributes of parts of a
+        <p>Note that you cannot change attributes of parts of a
         title, e.g., put one word in bold characters.  All formatting
         affects the entire string.</p>
      */

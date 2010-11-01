@@ -87,15 +87,15 @@ service Axis
     */
     [property]      ::com::sun::star::chart::ChartAxisArrangeOrderType ArrangeOrder;
 
-    /** Determines wether the labels are allowed to break into more than one line
+    /** Determines whether the labels are allowed to break into more than one line
     */
     [property]      boolean   TextBreak;
 
-    /** Determines wether the labels are allowed to overlap
+    /** Determines whether the labels are allowed to overlap
     */
     [property]      boolean   TextOverlap;
 
-    /** Determines wether the characters in a single labels should be stacked one upon each other
+    /** Determines whether the characters in a single labels should be stacked one upon each other
     */
     [property]      boolean   StackCharacters;
 

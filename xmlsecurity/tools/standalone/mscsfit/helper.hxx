@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdio.h>
 #include <rtl/ustring.hxx>
 
@@ -202,3 +203,4 @@ Reference< XOutputStream > createStreamToFile( const OUString sFile ) ;
  */
 Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext >& xContext , OUString sUnoUrl , OUString sRdbUrl  ) throw( RuntimeException , Exception ) ;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

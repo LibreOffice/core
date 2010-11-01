@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -420,15 +421,6 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                 DrawShadedRect( nTransStart, nTransEnd, rStyleSettings.GetHighlightColor() );
             }
         }
-
-#if 0
-        // 3D border is no longer used
-        SetLineColor( rStyleSettings.GetLightColor() );
-        if (bVertical)
-            DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) );
-        else
-            DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) );
-#endif
 
         SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
@@ -1044,3 +1036,4 @@ void ScHeaderControl::SetMarking( BOOL /* bSet */ )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -186,7 +186,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         publish = p;
 
 
-        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "wizard/bitmap/");
+        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "../wizard/bitmap/");
 
         //Load Resources
         resources = new FTPDialogResources(xmsf);

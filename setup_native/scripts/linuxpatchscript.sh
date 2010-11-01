@@ -26,7 +26,7 @@ fi
 echo
 read -p "Patching the installation in ${FULLPRODUCTINSTALLLOCATION}. Continue (y/n) ? " -n 1 reply leftover
 echo
-[ "$reply" == "y" ] || exit 1
+[ "$reply" = "y" ] || exit 1
 
 echo
 echo "About to update the following packages ..."
@@ -50,7 +50,7 @@ if [ "x$KDERPM" != "x" ]; then
   # Check, that $RPMLIST does not contain kde integration rpm (then it is already installed)
   KDERPMINSTALLED=`grep kde-integration ${RPMLIST}`
 
-  if [ "x$KDERPMINSTALLED" == "x" ]; then
+  if [ "x$KDERPMINSTALLED" = "x" ]; then
     # Install the kde integration rpm
     RPMLIST="$RPMLIST $KDERPM"
   fi

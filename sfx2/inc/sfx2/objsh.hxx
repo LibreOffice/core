@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,7 @@
 //  include something else
 //________________________________________________________________________________________________________________
 
-//#if 0 // _SOLAR__PRIVATE
 #include <vcl/timer.hxx>
-//#endif
 #include <svl/poolitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
@@ -223,15 +222,10 @@ private:
                                 bIsTmp :1;          // temp. Storage
 
 private:
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> & i_xDocProps);
 
     SAL_DLLPRIVATE sal_Bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
-
-//REMOVE        sal_Bool                    SaveInfoAndConfig_Impl( SvStorageRef pNewStg );
-
-//#endif
 
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
@@ -314,10 +308,8 @@ public:
     void                        SetSharedXMLFlag( sal_Bool bFlag ) const;
     sal_Bool                    HasSharedXMLFlagSet() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
     SAL_DLLPRIVATE void SetMacroMode_Impl(sal_Bool bModal=sal_True);
-//#endif
 
     void                        ResetError();
     sal_uInt32                  GetError() const;
@@ -368,7 +360,7 @@ public:
     sal_Bool                    SaveCompletedChildren( sal_Bool bSuccess );
 
     sal_Bool                    InsertFrom( SfxMedium &rMedium );
-    sal_Bool                    ImportFrom( SfxMedium &rMedium );
+    virtual sal_Bool            ImportFrom( SfxMedium &rMedium );
     sal_Bool                    ExportTo( SfxMedium &rMedium );
 
     // xmlsec05, check with SFX team
@@ -414,8 +406,8 @@ public:
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam,
-        bool bRaiseError = true
-    );
+        bool bRaiseError = true,
+        const ::com::sun::star::uno::Any* aCaller = 0 );
 
     static ErrCode  CallXScript(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxScriptContext,
@@ -424,7 +416,8 @@ public:
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam,
-        bool bRaiseError = true
+        bool bRaiseError = true,
+        const ::com::sun::star::uno::Any* aCaller = 0
     );
 
     /** adjusts the internal macro mode, according to the current security settings
@@ -724,8 +717,6 @@ public:
 
     // =================================
 
-//#if 0 // _SOLAR__PRIVATE
-
     SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const;
 
     SAL_DLLPRIVATE sal_Bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
@@ -826,8 +817,6 @@ public:
     0x9eaba5c3, 0xb232, 0x4309, \
     0x84, 0x5f, 0x5f, 0x15, 0xea, 0x50, 0xd0, 0x74
 
-//#if 0 // _SOLAR__PRIVATE
-
     struct ModifyBlocker_Impl
     {
         SfxObjectShell* pPersist;
@@ -844,7 +833,7 @@ public:
                 pPersist->EnableSetModified( bWasEnabled );
         }
     };
-//#endif
+
 
 //--------------------------------------------------------------------
 
@@ -857,8 +846,6 @@ SV_IMPL_LOCK(SfxObjectShell)
 SV_IMPL_REF(SfxObjectShell)
 
 SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& rName, BOOL bWriting );
-
-//#if 0 // _SOLAR__PRIVATE
 //--------------------------------------------------------------------
 class AutoReloadTimer_Impl : public Timer
 {
@@ -871,7 +858,6 @@ public:
                           SfxObjectShell* pSh );
     virtual void Timeout();
 };
-//#endif
 
 //-------------------------------------------------------------------------
 
@@ -907,3 +893,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

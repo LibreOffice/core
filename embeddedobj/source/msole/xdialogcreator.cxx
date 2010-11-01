@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <comphelper/classids.hxx>
 
 #include "platform.h"
@@ -178,7 +179,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     io.dwFlags = IOF_SELECTCREATENEW | IOF_DISABLELINK;
 
 
-    ::vos::OModule aOleDlgLib;
+    ::osl::Module aOleDlgLib;
     if( !aOleDlgLib.load( ::rtl::OUString::createFromAscii( "oledlg" ) ) )
         throw uno::RuntimeException();
 
@@ -381,3 +382,4 @@ uno::Sequence< ::rtl::OUString > SAL_CALL MSOLEDialogObjectCreator::getSupported
     return impl_staticGetSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

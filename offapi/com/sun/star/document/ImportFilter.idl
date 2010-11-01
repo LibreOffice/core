@@ -75,7 +75,7 @@ published service ImportFilter
 
         <p>
         It's used to filter a document at loading time.
-        The target document should be already setted by using another interface
+        The target document should be already set by using another interface
         <member>ImportFilter::XImporter</member> which is supported by this service too.
         </p>
 
@@ -117,11 +117,11 @@ published service ImportFilter
         This internal filter name can be used on service <type>FilterFactory</type>
         to get further informations about it (e.g. his registration for mime types or extensions etc.)
         It's important that returned string is the "internal name" of the filter which must be
-        unambigous against all other registered filter in current instalation.
+        unambiguous against all other registered filters in current installation.
         </p>
         <p>
         <strong>Attention!</strong><br>
-        Supported method setName() sould be ignored or forwarded to the FilterFactory.
+        Supported method setName() should be ignored or forwarded to the FilterFactory.
         It's not allowed to set it directly to the configuration. Because it depends
         from real implementation of the FilterFactory if it will be allowed or not!
          </p>

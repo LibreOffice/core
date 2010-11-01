@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
@@ -45,7 +46,6 @@
 const USHORT START_ITEMID = 1000;
 
 using namespace rtl;
-using namespace vos;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -130,7 +130,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                     if ( IsSeparator( xPropSet ))
                     {
                         // Separator
-                        OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         pSubMenu->InsertSeparator();
                     }
                     else
@@ -146,7 +146,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                         USHORT nNewItemId = nItemId++;
                         GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
-                        OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         {
                             // insert new menu item
                             sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
@@ -335,7 +335,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
 
 void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer >& rActionTriggerContainer )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
@@ -406,3 +406,5 @@ Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFr
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

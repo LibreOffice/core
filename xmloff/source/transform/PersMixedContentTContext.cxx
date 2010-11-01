@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,3 +157,5 @@ void XMLPersMixedContentTContext::Characters( const OUString& rChars )
 {
     AddContent( new XMLPersTextTContext_Impl( GetTransformer(), rChars ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,14 +33,13 @@ LIBTARGET=no
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+    $(SLO)$/datafdlg.obj		\
     $(SLO)$/delcldlg.obj		\
     $(SLO)$/inscldlg.obj		\
     $(SLO)$/delcodlg.obj		\

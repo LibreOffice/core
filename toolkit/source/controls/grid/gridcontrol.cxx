@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -282,3 +283,5 @@ Reference< XInterface > SAL_CALL GridControlModel_CreateInstance( const Referenc
 {
     return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridModel );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

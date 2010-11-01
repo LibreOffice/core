@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <osl/file.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
@@ -149,7 +150,7 @@ void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*
 throw ( uno::RuntimeException )
 {
     // either clipboard or ViewShell is going to be destroyed -> no interest in listening anymore
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if ( pViewShell )
     {
         uno::Reference < lang::XComponent > xCtrl( pViewShell->GetController(), uno::UNO_QUERY );
@@ -163,7 +164,7 @@ throw ( uno::RuntimeException )
 void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::clipboard::ClipboardEvent& )
     throw ( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if( pViewShell )
     {
         SfxBindings& rBind = pViewShell->GetViewFrame()->GetBindings();
@@ -651,7 +652,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     }
                     catch ( uno::Exception& )
                     {
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window *pParent = SFX_APP()->GetTopWindow();
                         ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
                         bRet = FALSE;
@@ -1688,7 +1689,7 @@ BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 /*  [Beschreibung]
 
@@ -1699,7 +1700,7 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
     [R"uckgabewert]
 
-    FASTBOOL                TRUE
+    bool                    TRUE
                             die Taste ist konfiguriert, der betreffende
                             Handler wurde gerufen
 
@@ -1715,14 +1716,14 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return ExecKey_Impl(rKeyEvent);
 }
 
-FASTBOOL SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
+bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 {
     return ExecKey_Impl(rKeyEvent);
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ShowCursor( FASTBOOL /*bOn*/ )
+void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
 /*  [Beschreibung]
 
@@ -2244,3 +2245,4 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

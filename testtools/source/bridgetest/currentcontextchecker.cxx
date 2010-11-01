@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,3 +128,5 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
             this, setSteps >= 0 ? setSteps - 1 : -1, checkSteps - 1);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

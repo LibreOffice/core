@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,7 +224,7 @@ private:
     void impl_fillRowSet_throw();
     void impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
-    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >& i_aColumnNames);
+    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const ::com::sun::star::uno::Sequence< ::rtl::OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();
     ::com::sun::star::uno::Any impl_getNumberFormatKey_nothrow(const ::rtl::OUString & _sRangeRepresentation) const;
 
@@ -276,3 +277,5 @@ private:
 } // namespace dbaccess
 
 #endif // DBA_DATABASEDATAPROVIDER_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

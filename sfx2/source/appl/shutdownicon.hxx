@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifndef __SHUTDOWNICON_HXX__
 #define __SHUTDOWNICON_HXX__
@@ -169,3 +170,5 @@ extern "C" {
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

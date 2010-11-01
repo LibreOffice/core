@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #endif
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -885,7 +886,7 @@ void AssistentDlgImpl::TemplateScanDone (
     std::vector<TemplateDir*>& rTemplateFolder)
 {
     //  This method is called from a thread.  Therefore we get the solar mutex.
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Copy the contents of the given template folders to a local list.
     maPresentList.swap (rTemplateFolder);
@@ -2035,3 +2036,5 @@ void NextButton::Enable (bool bEnable)
     maNextButton1.Enable(bEnable);
     maNextButton2.Enable(bEnable);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

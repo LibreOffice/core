@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -495,8 +496,45 @@ private:
     void                Init();
 };
 
+// amelia
+class ScUndoDataForm: public ScBlockUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoDataForm( ScDocShell* pNewDocShell,
+                                SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
+                                const ScMarkData& rMark,
+                                ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
+                                USHORT nNewFlags,
+                                ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
+                                BOOL bRedoIsFilled = TRUE
+                                 );
+    virtual     ~ScUndoDataForm();
 
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    ScMarkData      aMarkData;
+    ScDocument*     pUndoDoc;
+    ScDocument*     pRedoDoc;
+    USHORT          nFlags;
+    ScRefUndoData*      pRefUndoData;
+    ScRefUndoData*      pRefRedoData;
+    ULONG           nStartChangeAction;
+    ULONG           nEndChangeAction;
+    BOOL            bRedoFilled;
+
+    void            DoChange( const BOOL bUndo );
+    void            SetChangeTrack();
+};
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

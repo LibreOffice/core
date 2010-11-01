@@ -31,7 +31,7 @@ module com { module sun { module star { module accessibility {
 
 /** Collection of relation types.
 
-    <p>This list of constants defines the availabe types of relations that
+    <p>This list of constants defines the available types of relations that
     are usable by <type>AccessibleRelation</type>.</p>
 
     <p>We are using constants instead of a more typesafe enum.  The reason
@@ -76,7 +76,7 @@ published constants AccessibleRelationType
     */
     const short CONTROLLER_FOR = 4;
 
-    /** Lable-for relation type.
+    /** Label-for relation type.
 
         <p>Indicates an object is a label for one or more target
         objects.</p>
@@ -107,7 +107,7 @@ published constants AccessibleRelationType
 
     /** Node-Child-of relation type.
 
-        <p>Indicates an object is a cell in a tree or treetable which is
+        <p>Indicates an object is a cell in a tree or tree table which is
         displayed because a cell in the same column is expanded and
         identifies that cell.</p>
 

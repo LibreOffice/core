@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1294,3 +1295,4 @@ void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
     // does not do anything, only avoids crash if the method is used for wrong shell
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

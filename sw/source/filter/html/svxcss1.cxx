@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1096,12 +1097,10 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
             nHeight = (ULONG)nPHeight;
         }
         break;
-//#ifdef PERCENTAGE_POSSIBLE
     case CSS1_PERCENTAGE:
         // nur fuer Drop-Caps!
         nPropHeight = (USHORT)pExpr->GetNumber();
         break;
-//#endif
     case CSS1_IDENT:
         {
             USHORT nSize;
@@ -3313,3 +3312,5 @@ void SvxCSS1Parser::ParseProperty( const String& rProperty,
         (((CSS1PropEntry*)pFound)->pFunc)( pExpr, *pItemSet, *pPropInfo, *this );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

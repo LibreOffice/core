@@ -47,13 +47,13 @@ published interface XEventHandler: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** requests the implementor of this interface to handle a platform
-        dependend event.
+        dependent event.
 
         @returns <TRUE/> if the event was handled properly and no further
         handling should take place, <FALSE/> otherwise.
 
         @param event
-        the platform dependend event.
+        the platform dependent event.
     */
     boolean handleEvent( [in] any event );
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,3 +45,5 @@ unsigned int OfficeToSystemDragActions(sal_Int8 dragActions);
    <type>com::sun::star::datatransfer::dnd::DNDConstants</type>.
  */
 sal_Int8 SystemToOfficeDragActions(unsigned int dragActions);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

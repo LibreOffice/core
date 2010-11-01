@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,15 +66,11 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
-
 BookmarkPopup_Impl::BookmarkPopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
 }
-
-// -----------------------------------------------------------------------
 
 void BookmarkPopup_Impl::Select()
 {
@@ -89,13 +86,9 @@ SwBookmarkControl::SwBookmarkControl( USHORT _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
-
 SwBookmarkControl::~SwBookmarkControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void SwBookmarkControl::StateChanged(
     USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
@@ -109,14 +102,10 @@ void SwBookmarkControl::StateChanged(
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwBookmarkControl::Paint( const UserDrawEvent&  )
 {
     GetStatusBar().SetItemText( GetId(), sPageNumber );
 }
-
-// -----------------------------------------------------------------------
 
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )
 {
@@ -156,3 +145,5 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         ReleaseMouse();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <tools/table.hxx>
 
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include "editeng/editengdllapi.h"
@@ -50,7 +51,7 @@ struct ForbiddenCharactersInfo
 
 DECLARE_TABLE( SvxForbiddenCharactersTableImpl, ForbiddenCharactersInfo* )
 
-class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public SvxForbiddenCharactersTableImpl, public vos::OReference
+class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public SvxForbiddenCharactersTableImpl, public salhelper::SimpleReferenceObject
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
@@ -66,3 +67,4 @@ public:
 
 #endif // _FORBIDDENCHARACTERSTABLE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

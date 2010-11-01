@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -141,6 +142,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
     virtual void                ResetClipRegion();
     virtual void                BeginSetClipRegion( ULONG nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
@@ -150,3 +152,5 @@ public:
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
 #endif // _SV_SALFRAME_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

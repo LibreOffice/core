@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,7 @@
 
 #include <cppuhelper/servicefactory.hxx>
 
-#include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -228,3 +228,5 @@ int main (int argc, char **argv)
     rComp->dispose();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

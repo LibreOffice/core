@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,11 +90,6 @@
 #include <set>
 
 #include "i18npool/mslangid.hxx"
-
-#include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
-using namespace vos;
-#endif
 
 using namespace ::com::sun::star;
 
@@ -5809,3 +5805,5 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
     }
     mpPptEscherEx->CloseContainer();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

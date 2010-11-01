@@ -42,23 +42,19 @@ SRC1FILES =	\
             galtheme.src			
 
 SLOFILES =	\
-            $(SLO)$/galexpl.obj		\
-            $(SLO)$/galctrl.obj		\
-            $(SLO)$/gallery1.obj	\
-            $(SLO)$/galtheme.obj	\
-            $(SLO)$/galmisc.obj		\
-            $(SLO)$/galobj.obj		\
-            $(SLO)$/codec.obj		\
-            $(SLO)$/galbrws.obj		\
-            $(SLO)$/galbrws1.obj	\
-            $(SLO)$/galbrws2.obj		
+            $(EXCEPTIONSFILES)		\
+            $(SLO)$/codec.obj
 
 EXCEPTIONSFILES =	\
-                    $(SLO)$/gallery1.obj	\
-                    $(SLO)$/galtheme.obj	\
-                    $(SLO)$/galmisc.obj		\
-                    $(SLO)$/galbrws1.obj	\
-                    $(SLO)$/galexpl.obj
+            $(SLO)$/galbrws.obj		\
+            $(SLO)$/galbrws1.obj	\
+            $(SLO)$/galbrws2.obj	\
+            $(SLO)$/galctrl.obj		\
+            $(SLO)$/galexpl.obj		\
+            $(SLO)$/gallery1.obj	\
+            $(SLO)$/galmisc.obj		\
+            $(SLO)$/galobj.obj		\
+            $(SLO)$/galtheme.obj
 
 RESLIB1NAME = $(TARGET)
 RESLIB1IMAGES = $(PRJ)$/res

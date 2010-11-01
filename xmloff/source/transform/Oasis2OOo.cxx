@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2086,3 +2087,5 @@ Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
     OSL_TRACE("Creating Oasis2OOoTransformer");
     return (cppu::OWeakObject*)new Oasis2OOoTransformer;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

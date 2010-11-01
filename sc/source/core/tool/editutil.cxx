@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -777,3 +778,5 @@ ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
         SetEditTextObjectPool( pTextObjectPool );
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

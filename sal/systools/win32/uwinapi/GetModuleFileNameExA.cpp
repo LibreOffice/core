@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "macros.h"
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
@@ -51,3 +52,4 @@ IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExA, (HANDLE hP
     return dwResult;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

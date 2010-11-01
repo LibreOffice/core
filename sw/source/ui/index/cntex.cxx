@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,9 +91,6 @@ using ::rtl::OUString;
 #endif
 #define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
 
-/* -----------------04.11.99 11:28-------------------
-
- --------------------------------------------------*/
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                          const char* pPropName, const String& rValue)
@@ -105,12 +103,14 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
         xProps->setPropertyValue(uPropName, aValue);
     }
 }
+
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                            USHORT nId, const String& rValue)
 {
     lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
 }
+
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                            USHORT nId, sal_Int16 nValue )
@@ -137,7 +137,7 @@ void lcl_SetBOOLProp(
         xProps->setPropertyValue(uPropName, aValue);
     }
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
 {
     try
@@ -179,14 +179,11 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
     }
     catch(Exception&)
     {
-        DBG_ERROR("::CreateExample() - exception caught");
+        OSL_ENSURE(false, "::CreateExample() - exception caught");
     }
     return 0;
 }
 
-/* --------------------------------------------------
-
- --------------------------------------------------*/
 void SwMultiTOXTabDialog::CreateOrUpdateExample(
     TOXTypes nTOXIndex, sal_uInt16 nPage, sal_uInt16 nCurrentLevel)
 {
@@ -206,7 +203,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
     try
     {
-        DBG_ASSERT(pxIndexSectionsArr[nTOXIndex] &&
+        OSL_ENSURE(pxIndexSectionsArr[nTOXIndex] &&
                         pxIndexSectionsArr[nTOXIndex]->xContainerSection.is(),
                             "Section not created");
          uno::Reference< frame::XModel > & xModel = pExampleFrame->GetModel();
@@ -317,8 +314,6 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   0 != (nsSwTOOElements::TOO_CALC &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_DRAW,   0 != (nsSwTOOElements::TOO_DRAW_IMPRESS&nOLEOptions));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, 0 != (nsSwTOOElements::TOO_OTHER|nOLEOptions       ));
-
-            //lcl_SetBOOLProp(xInfo, xIdxProps, , rDesc.IsLevelFromChapter());
         }
         const SwForm* pForm = GetForm(eCurrentTOXType);
         if(bInitialCreate || !nPage || nPage == TOX_PAGE_ENTRY)
@@ -433,7 +428,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     aSequPropVals.realloc(nTokenIndex);
 
                     uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
-                    DBG_ASSERT(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
+                    OSL_ENSURE(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
                         "wrong property type");
 
 
@@ -473,32 +468,13 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     pForm->GetTemplate(i + nOffset));
             }
         }
-/*
-    const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
-    const String&   GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
-
-    String          GetAuthBrackets() const {return sAuthBrackets;}
-    sal_Bool            IsAuthSequence() const {return bIsAuthSequence;}
-    sal_Bool            IsSortByDocument()const {return bSortByDocument ;}
-
-    SwTOXSortKey GetSortKey1() const {return eSortKey1;}
-    SwTOXSortKey GetSortKey2() const {return eSortKey2;}
-    SwTOXSortKey GetSortKey3() const {return eSortKey3;}
-*/
-        //
         pxIndexSectionsArr[nTOXIndex]->xDocumentIndex->update();
-
-//#if OSL_DEBUG_LEVEL > 1
-//      uno::Reference< frame::XStorable >  xStor(xModel, uno::UNO_QUERY);
-//      String sURL("file:///e|/temp/sw/idxexample.sdw");
-//   uno::Sequence< beans::PropertyValue > aArgs(0);
-//      xStor->storeToURL(S2U(sURL), aArgs);
-//#endif
 
     }
     catch(Exception&)
     {
-        DBG_ERROR("::CreateExample() - exception caught");
+        OSL_ENSURE(false, "::CreateExample() - exception caught");
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

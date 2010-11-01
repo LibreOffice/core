@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_linguistic.hxx"
 
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
@@ -63,7 +65,7 @@ static const char *aCH[] =
     UPN_IS_USE_DICTIONARY_LIST,
 };
 
-static int nCHCount = sizeof(aCH) / sizeof(aCH[0]);
+static int nCHCount = SAL_N_ELEMENTS(aCH);
 
 
 PropertyChgHelper::PropertyChgHelper(
@@ -388,7 +390,7 @@ PropertyHelper_Spell::PropertyHelper_Spell(
         Reference< XPropertySet > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_SPELLCHECKER )
 {
-    AddPropNames( aSP, sizeof(aSP) / sizeof(aSP[0]) );
+    AddPropNames( aSP, SAL_N_ELEMENTS(aSP));
     SetDefaultValues();
     GetCurrentValues();
 
@@ -576,7 +578,7 @@ PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         Reference< XPropertySet > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
 {
-    AddPropNames( aHP, sizeof(aHP) / sizeof(aHP[0]) );
+    AddPropNames( aHP, SAL_N_ELEMENTS(aHP));
     SetDefaultValues();
     GetCurrentValues();
 }
@@ -715,3 +717,4 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

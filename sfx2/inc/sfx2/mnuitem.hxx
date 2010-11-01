@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,7 +154,6 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
-//#if 0 // _SOLAR__PRIVATE
 
 class SfxAppMenuControl_Impl : public SfxMenuControl
 {
@@ -171,6 +171,6 @@ public:
     ~SfxAppMenuControl_Impl();
 };
 
-//#endif
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

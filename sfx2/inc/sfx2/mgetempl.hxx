@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,13 +83,11 @@ class SfxManageStyleSheetPage : public SfxTabPage
 private:
 friend class SfxStyleDialog;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
 
     void    UpdateName_Impl(ListBox *, const String &rNew);
     void    SetDescriptionText_Impl();
-//#endif
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
     ~SfxManageStyleSheetPage();
@@ -111,3 +110,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

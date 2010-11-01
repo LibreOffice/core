@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,7 @@ class TOOLS_DLLPUBLIC Table : private Container
 {
 private:
     ULONG   nCount;
-//#if 0 // _SOLAR__PRIVATE
     TOOLS_DLLPRIVATE ULONG  ImplGetIndex( ULONG nKey, ULONG* pIndex = NULL ) const;
-//#endif
 public:
             Table( USHORT nInitSize = 16, USHORT nReSize = 16 );
             Table( const Table& rTable ) : Container( rTable )
@@ -150,3 +149,5 @@ public:                                                                 \
 };
 
 #endif // _TOOLS_TABLE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

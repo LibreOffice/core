@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 
@@ -713,7 +714,7 @@ SwAccessibleTable::SwAccessibleTable(
     SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrm ),
     mpTableData( 0 )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
@@ -735,7 +736,7 @@ SwAccessibleTable::SwAccessibleTable(
 
 SwAccessibleTable::~SwAccessibleTable()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     delete mpTableData;
 }
@@ -839,7 +840,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -875,7 +876,7 @@ void SwAccessibleTable::ClearTableData()
 OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -885,7 +886,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -895,7 +896,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnCount(  )
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -980,7 +981,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
 {
     sal_Int32 nExtend = -1;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1011,7 +1012,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
 {
     sal_Int32 nExtend = -1;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1065,7 +1066,7 @@ uno::Reference< XAccessibleTable > SAL_CALL
 uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1089,7 +1090,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows
 uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColumns()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1112,7 +1113,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColu
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1139,7 +1140,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
         sal_Int32 nColumn )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1169,7 +1170,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
 {
     uno::Reference< XAccessible > xRet;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1201,7 +1202,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
 {
     sal_Bool bRet = sal_False;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1228,7 +1229,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
 {
     sal_Int32 nRet = -1;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1246,7 +1247,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
 {
     sal_Int32 nRet = -1;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1285,7 +1286,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 {
     sal_Int32 nRet = -1;
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
@@ -1347,7 +1348,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
 
 void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( HasTableData() )
         GetTableData().SetTablePos( GetFrm()->Frm().Pos() );
@@ -1357,7 +1358,7 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
 
 void SwAccessibleTable::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
         pRegisteredIn->Remove( this );
@@ -1368,7 +1369,7 @@ void SwAccessibleTable::Dispose( sal_Bool bRecursive )
 void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
                                       sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const SwFrm *pFrm = rChildFrmOrObj.GetSwFrm();
     ASSERT( pFrm, "frame expected" );
@@ -1391,7 +1392,7 @@ void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
 void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChildFrmOrObj,
                                                   const SwRect& rOldBox )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( HasTableData() )
     {
@@ -1430,7 +1431,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     // --> OD 2007-06-27 #i77106#
@@ -1537,7 +1538,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     // --> OD 2007-06-27 #i77106#
@@ -1551,7 +1552,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
 void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
     throw ( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
@@ -1578,7 +1579,7 @@ void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
 sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
     throw ( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     // iterate over all children and count isAccessibleChildSelected()
@@ -1599,7 +1600,7 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChi
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     // paremter checking (part 1): index lower 0
@@ -1628,7 +1629,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -1683,7 +1684,7 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
                                                           const SwTabFrm *pTabFrm )
     : SwAccessibleTable( pMap2, pTabFrm )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
@@ -1732,7 +1733,7 @@ uno::Any SAL_CALL SwAccessibleTableColHeaders::queryInterface( const uno::Type& 
 sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount(void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -1801,3 +1802,5 @@ uno::Reference< XAccessibleTable >
     static const sal_Char sImplName[] = "com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplName));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,6 @@
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage       ( pParent, SW_RES( TP_FLD_VAR ), rCoreSet ),
@@ -99,17 +97,9 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aNumFormatLB.SetShowLanguageControl(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldVarPage::~SwFldVarPage()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldVarPage::Reset(const SfxItemSet& )
 {
@@ -204,10 +194,6 @@ void SwFldVarPage::Reset(const SfxItemSet& )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // Alte ListBoxPos sichern
@@ -239,10 +225,6 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 {
@@ -611,7 +593,6 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 /*--------------------------------------------------------------------
      Beschreibung: Typen in der SelectionBox erneuern
  --------------------------------------------------------------------*/
-
 void SwFldVarPage::UpdateSubType()
 {
     String sOldSel;
@@ -714,10 +695,6 @@ void SwFldVarPage::UpdateSubType()
     SubTypeHdl(pLB);
     aSelectionLB.SetUpdateMode(TRUE);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
 {
@@ -851,7 +828,6 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
 /*--------------------------------------------------------------------
     Beschreibung: Modify
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
 {
     String sValue(aValueED.GetText());
@@ -977,10 +953,6 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 {
@@ -1130,10 +1102,6 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
     return TRUE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
 {
     BOOL bEnable = aChapterLevelLB.GetSelectEntryPos() != 0;
@@ -1145,10 +1113,6 @@ IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, EMPTYARG )
 {
     BOOL bEnable = aSeparatorED.GetText().Len() != 0 ||
@@ -1157,10 +1121,6 @@ IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
 {
@@ -1293,29 +1253,16 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SwFldVarPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldVarPage( pParent, rAttrSet ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFldVarPage::GetGroup()
 {
     return GRP_VAR;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId ) :
     ListBox (pDialog, rResId),
@@ -1323,10 +1270,6 @@ SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId )
     bCallAddSelection(FALSE)
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1355,9 +1298,7 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 
     return nHandled;
 }
-/* -----------------12.01.99 11:14-------------------
- *
- * --------------------------------------------------*/
+
 void SwFldVarPage::FillUserData()
 {
     String sData(String::CreateFromAscii(USER_DATA_VERSION));
@@ -1371,3 +1312,4 @@ void SwFldVarPage::FillUserData()
     SetUserData(sData);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

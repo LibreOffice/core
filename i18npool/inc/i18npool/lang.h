@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -351,6 +352,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TAJIK                      0x0428
 #define LANGUAGE_TAMAZIGHT_ARABIC           0x045F
 #define LANGUAGE_TAMAZIGHT_LATIN            0x085F
+#define LANGUAGE_TAMAZIGHT_TIFINAGH         0x0C5F
 #define LANGUAGE_TAMIL                      0x0449
 #define LANGUAGE_TATAR                      0x0444
 #define LANGUAGE_TELUGU                     0x044A
@@ -518,3 +520,5 @@ typedef unsigned short LanguageType;
 
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

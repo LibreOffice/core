@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include "bibresid.hxx"
 
 #include "bibtools.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -73,7 +74,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
         ::com::sun::star::uno::Any aState=rEvt.State;
@@ -108,7 +109,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
@@ -148,7 +149,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
@@ -186,7 +187,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
@@ -641,3 +642,5 @@ void BibToolBar::AdjustToolBox()
         Invalidate();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

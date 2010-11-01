@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,6 @@
 #endif
 
 #include "secimpl.h"
-
-#ifndef PAM_BINARY_MSG
-#define PAM_BINARY_MSG 6
-#endif
 
 extern oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 extern void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
@@ -315,3 +312,4 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

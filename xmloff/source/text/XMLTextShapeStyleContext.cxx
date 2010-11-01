@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,3 +248,5 @@ void XMLTextShapeStyleContext::Finish( sal_Bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

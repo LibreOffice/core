@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <unotools/configitem.hxx>
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "swdllapi.h"
 
 #define FONT_STANDARD       0
@@ -119,3 +120,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

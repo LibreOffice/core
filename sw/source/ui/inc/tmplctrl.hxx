@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,10 @@
 #define _TMPLCTRL_HXX
 
 // include ---------------------------------------------------------------
-
 #include <sfx2/stbitem.hxx>
 #include <tools/string.hxx>
 
-
 // class BookmarkToolBoxControl -------------------------------------------
-
 class SwTemplateControl : public SfxStatusBarControl
 {
 protected:
@@ -53,6 +51,6 @@ private:
     String  sTemplate;
 };
 
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

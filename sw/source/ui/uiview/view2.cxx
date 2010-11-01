@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -158,7 +159,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
 
-
 static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId )
 {
     if (nWhichId == RES_CHRATR_LANGUAGE ||
@@ -187,7 +187,6 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId
 /*---------------------------------------------------------------------------
     Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
  ----------------------------------------------------------------------------*/
-
 String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
                             const String& rDisplay )
 {
@@ -207,7 +206,6 @@ String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
 
     return aStr;
 }
-
 
 int SwView::InsertGraphic( const String &rPath, const String &rFilter,
                                 BOOL bLink, GraphicFilter *pFlt,
@@ -253,7 +251,6 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     }
     return nRes;
 }
-
 
 BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
 {
@@ -324,7 +321,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
     catch(Exception& )
     {
-        DBG_ERROR("control acces failed");
+        OSL_ENSURE(false, "control acces failed");
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
@@ -355,7 +352,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 try
                 {
                     Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
+                    OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                     bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
                     Any aTemplateValue = xCtrlAcc->getValue(
                         ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
@@ -366,7 +363,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 }
                 catch(Exception& )
                 {
-                    DBG_ERROR("control acces failed");
+                    OSL_ENSURE(false, "control acces failed");
                 }
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -390,7 +387,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             else
             {
                 Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
+                OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                 bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
                 Any aTemplateValue = xCtrlAcc->getValue(
                     ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
@@ -487,7 +484,6 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     return bReturn;
 }
 
-
 void __EXPORT SwView::Execute(SfxRequest &rReq)
 {
     USHORT nSlot = rReq.GetSlot();
@@ -505,9 +501,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case FN_LINE_NUMBERING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_LINE_NUMBERING,    *this);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -545,7 +541,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
                 if( aPasswd.getLength() )
                 {
-                    DBG_ASSERT( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
+                    OSL_ENSURE( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
@@ -1041,10 +1037,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SfxHelp::OpenHelpAgent( &pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
                                                         &pTmpFrame->GetWindow());
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1159,7 +1155,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     if(!bIgnore)
@@ -1169,7 +1165,6 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   SeitenNr-Feld invalidieren
  --------------------------------------------------------------------*/
-
 void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr)
 {
     String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
@@ -1182,15 +1177,13 @@ void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgSt
 /*--------------------------------------------------------------------
     Beschreibung:   Status der Stauszeile
  --------------------------------------------------------------------*/
-
-
 void SwView::StateStatusLine(SfxItemSet &rSet)
 {
     SwWrtShell& rShell = GetWrtShell();
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
-    ASSERT( nWhich, "leeres Set");
+    OSL_ENSURE( nWhich, "empty set");
 
     while( nWhich )
     {
@@ -1379,7 +1372,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     sStr = pTOX->GetTOXName();
                                 else
                                 {
-                                    ASSERT( !this,
+                                    OSL_ENSURE( !this,
                                         "was ist das fuer ein Verzeichnis?" );
                                     sStr = pCurrSect->GetSectionName();
                                 }
@@ -1530,8 +1523,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Execute fuer die Stauszeile
  --------------------------------------------------------------------*/
-
-
 void SwView::ExecuteStatusLine(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetWrtShell();
@@ -1612,7 +1603,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     }
 
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -1817,7 +1808,6 @@ void SwView::InsFrmMode(USHORT nCols)
 /*--------------------------------------------------------------------
     Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
-
 void SwView::EditLinkDlg()
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -1959,7 +1949,6 @@ BOOL SwView::JumpToSwMark( const String& rMark )
 // Undo "Insert form file" crashes with documents imported from binary filter (.sdw) => disabled
 // Undo "Insert form file" crashes with (.odt) documents crashes if these documents contains
 // page styles with active header/footer => disabled for those documents
-
 sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
 {
     sal_uInt16 nRet = 0;
@@ -1981,7 +1970,6 @@ sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
 /*--------------------------------------------------------------------
     Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
-
 void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 {
     pViewImpl->InitRequest( rRequest );
@@ -2060,7 +2048,7 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
         case SID_INSERTDOC:             bInsert = TRUE;     break;
 
         default:
-            ASSERT( !this, "Unbekannte SlotId!" );
+            OSL_ENSURE( !this, "unknown SlotId!" );
             bInsert = TRUE;
             nSlotId = SID_INSERTDOC;
             break;
@@ -2188,9 +2176,7 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     delete pMedium;
     return nFound;
 }
-/* -----------------05.02.2003 12:06-----------------
- *
- * --------------------------------------------------*/
+
 void SwView::EnableMailMerge(BOOL bEnable )
 {
     bInMailMerge = bEnable;
@@ -2198,8 +2184,7 @@ void SwView::EnableMailMerge(BOOL bEnable )
     rBind.Invalidate(FN_INSERT_FIELD_DATA_ONLY);
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
 }
-/*
-*/
+
 namespace
 {
     sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XNameAccess >& _rDatasourceContext )
@@ -2213,10 +2198,6 @@ namespace
                 );
     }
 }
-
-/* -----------------27.11.2002 12:12-----------------
- *
- * --------------------------------------------------*/
 
 class SwMergeSourceWarningBox_Impl : public ModalDialog
 {
@@ -2264,9 +2245,6 @@ class SwMergeSourceWarningBox_Impl : public ModalDialog
         void            SetMessText( const String& rText ) { aMessageFI.SetText( rText ); }
 };
 
-
-
-
 void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
 {
     if(bUseCurrentDocument)
@@ -2279,7 +2257,7 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             if( xMgr.is() )
             {
                 uno::Reference<XInterface> xInstance = xMgr->createInstance(
-                    OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
                 xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
             }
             if(!xDBContext.is())
@@ -2300,11 +2278,11 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             {
                 //take an existing data source or create a new one?
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact, "Dialogdiet fail!");
                     AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(
                                                         DLG_MERGE_FIELD_CONNECTIONS,
                                                         &GetViewFrame()->GetWindow());
-                    DBG_ASSERT(pConnectionsDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pConnectionsDlg, "Dialogdiet fail!");
                     if(RET_OK == pConnectionsDlg->Execute())
                         bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
                     else
@@ -2460,3 +2438,4 @@ void SwView::ExecuteScan( SfxRequest& rReq )
         pViewImpl->ExecuteScan(rReq) ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

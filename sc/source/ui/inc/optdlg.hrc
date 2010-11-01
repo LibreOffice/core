@@ -27,13 +27,6 @@
 
 #include "sc.hrc"
 
-/*
-#define RID_SCDLG_OPTIONS       256
-#define RID_SCPAGE_VIEW         256
-#define RID_SCPAGE_USERLISTS    257
-#define RID_SCPAGE_CALC         258
-#define RID_SCPAGE_PRINT        259
-*/
 
 #define TP_GENERAL          1
 #define TP_SAVE             2
@@ -89,14 +82,6 @@
 #define BTN_NULLVALS        21
 #define BTN_NOTES           22
 #define GB_CONTENTS         23
-
-//#define FT_OLE            31
-//#define FT_CHARTS         32
-//#define FT_DRAWINGS       33
-//#define LB_OLE            34
-//#define LB_CHARTS         35
-//#define LB_DRAWINGS       36
-//#define GB_OBJECTS        37
 
 
 // TP_USERLISTS:
@@ -205,3 +190,8 @@
 #define FT_FORMULA_SEP_ARRAY_C    89
 #define ED_FORMULA_SEP_ARRAY_C    90
 #define BTN_FORMULA_SEP_RESET     91
+
+// TP_COMPATIBILITY
+#define FL_KEY_BINDINGS       1
+#define FT_KEY_BINDINGS       2
+#define LB_KEY_BINDINGS       3

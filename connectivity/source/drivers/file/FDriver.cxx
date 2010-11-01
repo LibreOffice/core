@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -248,7 +249,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const
     return getDataDefinitionByConnection(connect(url,info));
 }
 // -----------------------------------------------------------------------------
-void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORef<connectivity::OSQLColumns> rParameterColumns)
+void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::rtl::Reference<connectivity::OSQLColumns> rParameterColumns)
 {
     // den alten namen beibehalten
 
@@ -283,3 +284,4 @@ OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xCo
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

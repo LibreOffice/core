@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,7 +111,7 @@ public:
 
     void                ReadDoc( void );
     void                Write( SvStream& rSvStrm );
-    void                WriteXml( SvStream& rSvStrm );
+    void                WriteXml( XclExpXmlStream& );
 };
 
 
@@ -118,3 +119,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

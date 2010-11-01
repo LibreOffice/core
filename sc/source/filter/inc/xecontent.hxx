@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,6 +114,8 @@ public:
     inline const String* GetRepr() const { return mxRepr.get(); }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
+
+    virtual void        WriteEmbeddedData( XclExpStream& rStrm );
 private:
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
@@ -350,3 +353,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

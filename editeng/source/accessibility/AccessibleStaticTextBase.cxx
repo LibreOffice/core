@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <vector>
 #include <algorithm>
 #include <boost/bind.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequenceasvector.hxx>
@@ -491,7 +492,7 @@ namespace accessibility
     AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
         mpImpl( new AccessibleStaticTextBase_Impl() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SetEditSource( pEditSource );
     }
@@ -641,7 +642,7 @@ namespace accessibility
     // XAccessibleText
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getCaretPosition() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 i, nPos, nParas;
         for( i=0, nPos=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
@@ -660,7 +661,7 @@ namespace accessibility
 
     sal_Unicode SAL_CALL AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
 
@@ -669,7 +670,7 @@ namespace accessibility
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
 
@@ -678,7 +679,7 @@ namespace accessibility
 
     awt::Rectangle SAL_CALL AccessibleStaticTextBase::getCharacterBounds( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // #108900# Allow ranges for nIndex, as one-past-the-end
         // values are now legal, too.
@@ -696,7 +697,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getCharacterCount() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 i, nCount, nParas;
         for( i=0, nCount=0, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
@@ -707,7 +708,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         const sal_Int32 nParas( mpImpl->GetParagraphCount() );
         sal_Int32 nIndex;
@@ -735,7 +736,7 @@ namespace accessibility
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getSelectedText() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 nStart( getSelectionStart() );
         sal_Int32 nEnd( getSelectionEnd() );
@@ -749,7 +750,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionStart() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 i, nPos, nParas;
         for( i=0, nPos=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
@@ -763,7 +764,7 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionEnd() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 i, nPos, nParas;
         for( i=0, nPos=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
@@ -777,7 +778,7 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
         EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
@@ -788,7 +789,7 @@ namespace accessibility
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getText() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 i, nParas;
         ::rtl::OUString aRes;
@@ -800,7 +801,7 @@ namespace accessibility
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( nStartIndex > nEndIndex )
             ::std::swap(nStartIndex, nEndIndex);
@@ -833,7 +834,7 @@ namespace accessibility
 
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
@@ -868,7 +869,7 @@ namespace accessibility
 
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
@@ -908,7 +909,7 @@ namespace accessibility
 
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
@@ -942,7 +943,7 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( nStartIndex > nEndIndex )
             ::std::swap(nStartIndex, nEndIndex);
@@ -959,7 +960,7 @@ namespace accessibility
     {
         // get the intersection of the default attributes of all paragraphs
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         PropertyValueVector aDefAttrVec( mpImpl->GetParagraph( 0 ).getDefaultAttributes( RequestedAttributes ) );
 
@@ -997,7 +998,7 @@ namespace accessibility
         // get those default attributes of the paragraph, which are not part
         // of the intersection of all paragraphs and add them to the run attributes
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         EPosition aPos( mpImpl->Index2Internal( nIndex ) );
         AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
@@ -1045,3 +1046,5 @@ namespace accessibility
 }  // end of namespace accessibility
 
 //------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

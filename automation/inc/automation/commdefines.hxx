@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -146,3 +147,4 @@ typedef comm_USHORT CommunicationOption;
 
 #define CH_SetApplication           ((HandshakeType)0x0106) /// Set Description of Client
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,3 +102,5 @@ sdecl::class_<GObjectImpl, sdecl::with_args<true> > serviceBI;
 extern sdecl::ServiceDecl const serviceDecl( serviceBI, "com.sun.star.graphic.GraphicObject", "com.sun.star.graphic.GraphicObject" );
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

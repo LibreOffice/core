@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,12 @@
 #include "precompiled_framework.hxx"
 
 #include "backingwindow.hxx"
+#include "classes/resource.hrc"
 #include "framework.hrc"
 #include "classes/fwkresid.hxx"
 #include <services.h>
+
+#include <sal/macros.h>
 
 #include "vcl/metric.hxx"
 #include "vcl/mnemonic.hxx"
@@ -382,8 +386,13 @@ void BackingWindow::prepareRecentFileMenu()
             aBuf.append( aMenuTitle );
             mpRecentMenu->InsertItem( static_cast<USHORT>(i+1), aBuf.makeStringAndClear() );
         }
-        maOpenButton.SetPopupMenu( mpRecentMenu );
     }
+    else
+    {
+        String aNoDoc( FwkResId( STR_NODOCUMENT ) );
+        mpRecentMenu->InsertItem( 0xffff, aNoDoc );
+    }
+    maOpenButton.SetPopupMenu( mpRecentMenu );
 }
 
 void BackingWindow::initBackground()
@@ -408,7 +417,9 @@ void BackingWindow::initBackground()
     if( !! maBackgroundMiddle )
         aMiddleSize = maBackgroundMiddle.GetSizePixel();
     // load middle segment
-    maBackgroundMiddle = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_MIDDLE ) );
+
+    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
+
     // and scale it to previous size
     if( aMiddleSize.Width() && aMiddleSize.Height() )
         maBackgroundMiddle.Scale( aMiddleSize );
@@ -416,13 +427,13 @@ void BackingWindow::initBackground()
     if( GetSettings().GetLayoutRTL() )
     {
         // replace images by RTL versions
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_RIGHT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_LEFT) );
+        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
+        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
     }
     else
     {
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_LEFT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) );
+        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
+        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
     }
     maToolbox.SetItemImage( nItemId_Extensions, BitmapEx( FwkResId( BMP_BACKING_EXT ) ) );
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );
@@ -681,7 +692,7 @@ void BackingWindow::layoutButton(
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
     nTextWidth += maButtonImageSize.Width() + 8; // add some fuzz to be on the safe side
-    if( nColumn >= 0 && nColumn < static_cast<int>(sizeof(mnColumnWidth)/sizeof(mnColumnWidth[0])) )
+    if( nColumn >= 0 && nColumn < static_cast<int>(SAL_N_ELEMENTS(mnColumnWidth)) )
     {
         if( nTextWidth > mnColumnWidth[nColumn] )
             mnColumnWidth[nColumn] = nTextWidth;
@@ -1104,3 +1115,4 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

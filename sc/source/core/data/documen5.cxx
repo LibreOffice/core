@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -558,15 +559,6 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         }
         if ( bChanged )
         {
-#if 0
-            if ( nDz != 0 )
-            {   // #81844# sheet to be deleted or inserted or moved
-                // => no valid sheet names for references right now
-                pChartListener->ChangeListening( aNewRLR, bDataChanged );
-                pChartListener->ScheduleSeriesRanges();
-            }
-            else
-#endif
             {
 //              SetChartRangeList( pChartListener->GetString(), aNewRLR );
 //              pChartListener->ChangeListening( aNewRLR, bDataChanged );
@@ -792,3 +784,4 @@ void ScDocument::AddOLEObjectToCollection(const String& rName)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

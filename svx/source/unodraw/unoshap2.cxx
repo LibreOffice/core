@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,15 +35,15 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>  //added by BerryJia for fixing Bug102407 2002-11-4
-#include <com/sun/star/style/ParagraphAdjust.hpp>   //added by BerryJia for fixing Bug102407 2002-11-4
+#include <com/sun/star/awt/TextAlign.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/fltcall.hxx>
 #include <svtools/filter.hxx>
 
@@ -74,7 +75,6 @@
 
 using ::rtl::OUString;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -221,7 +221,7 @@ void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException)
 void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
@@ -248,8 +248,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
         // Establish connection between new SdrObject and its wrapper before
         // inserting the new shape into the group.  There a new wrapper
         // would be created when this connection would not already exist.
-        if(pShape)
-            pShape->Create( pSdrShape, mxPage.get() );
+        pShape->Create( pSdrShape, mxPage.get() );
 
         if( mpModel )
             mpModel->SetChanged();
@@ -264,7 +263,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
 void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SdrObject* pSdrShape = NULL;
     SvxShape* pShape = SvxShape::getImplementation( xShape );
@@ -318,7 +317,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 //----------------------------------------------------------------------
 sal_Int32 SAL_CALL SvxShapeGroup::getCount() throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     sal_Int32 nRetval = 0;
 
@@ -334,7 +333,7 @@ sal_Int32 SAL_CALL SvxShapeGroup::getCount() throw( uno::RuntimeException )
 uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( !mpObj.is() || mpObj->GetSubList() == NULL )
         throw uno::RuntimeException();
@@ -362,7 +361,7 @@ uno::Type SAL_CALL SvxShapeGroup::getElementType() throw( uno::RuntimeException 
 //----------------------------------------------------------------------
 sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     return mpObj.is() && mpObj->GetSubList() && (mpObj->GetSubList()->GetObjCount() > 0);
 }
@@ -480,7 +479,7 @@ void SAL_CALL SvxShapeConnector::setSize( const awt::Size& rSize )
 
 void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType ) throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
     SvxShape* pShape = SvxShape::getImplementation( xRef );
@@ -496,7 +495,7 @@ void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XC
 void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType  )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
     SvxShape* pShape = SvxShape::getImplementation( xRef );
@@ -512,7 +511,7 @@ void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XCon
 void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing::XConnectableShape >&  )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
         mpObj->DisconnectFromNode( sal_True );
@@ -525,7 +524,7 @@ void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing:
 void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::XConnectableShape >& )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
         mpObj->DisconnectFromNode( sal_False );
@@ -648,7 +647,7 @@ void SAL_CALL SvxShapeControl::setSize( const awt::Size& rSize )
 Reference< awt::XControlModel > SAL_CALL SvxShapeControl::getControl()
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     Reference< awt::XControlModel > xModel;
 
@@ -663,7 +662,7 @@ Reference< awt::XControlModel > SAL_CALL SvxShapeControl::getControl()
 void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >& xControl )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SdrUnoObj* pUnoObj = dynamic_cast< SdrUnoObj * >(mpObj.get());
     if( pUnoObj )
@@ -1290,7 +1289,7 @@ drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const throw()
 //----------------------------------------------------------------------
 void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
         ((SdrPathObj*)mpObj.get())->SetPathPoly(rNew);
@@ -1299,7 +1298,7 @@ void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(
 //----------------------------------------------------------------------
 basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
     {
@@ -1586,7 +1585,7 @@ drawing::PolygonKind SvxShapePolyPolygonBezier::GetPolygonKind() const throw()
 //----------------------------------------------------------------------
 void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
         static_cast<SdrPathObj*>(mpObj.get())->SetPathPoly(rNew);
@@ -1595,7 +1594,7 @@ void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) 
 //----------------------------------------------------------------------
 basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
     {
@@ -1957,7 +1956,7 @@ OUString SAL_CALL SvxCustomShape::getShapeType()
 //------------------------------------------------------------------1----
 awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     if ( mpModel && mpObj.is() )
     {
         SdrAShapeObjGeoData aCustomShapeGeoData;
@@ -2062,7 +2061,7 @@ void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
 void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     SdrObject* pObject = mpObj.get();
 
     sal_Bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
@@ -2144,3 +2143,5 @@ void SvxCustomShape::createCustomShapeDefaults( const rtl::OUString& rValueType 
 {
     ((SdrObjCustomShape*)mpObj.get())->MergeDefaultAttributes( &rValueType );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

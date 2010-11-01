@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_extensions.hxx"
 
 #define STRICT
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
 
 #pragma warning (push,1)
@@ -68,3 +69,4 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     return TRUE;    // ok
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

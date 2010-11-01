@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "rtl/instance.hxx"
+#include <sal/macros.h>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -251,11 +253,12 @@ static const struct {
     { "om_ET",  lcl_DATA_OTHERS },
     { "plt_MG", lcl_DATA_OTHERS },
     { "mai_IN", lcl_DATA_OTHERS },
+    { "kab_DZ", lcl_DATA_OTHERS }
 };
 
 static const sal_Unicode under = sal_Unicode('_');
 
-static const sal_Int16 nbOfLocales = sizeof(aLibTable) / sizeof(aLibTable[0]);
+static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 
 struct LocaleDataLookupTableItem
 {
@@ -673,14 +676,9 @@ LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
         }
     } section[SECTIONS];
 
-#if 0
-// #i79398# wntmsci10 MSVC doesn't get this right with optimization.
-    const sal_Int32 formatCount = section[0].getFunc( *this, rLocale, "getAllFormats0")
-                                + section[1].getFunc( *this, rLocale, "getAllFormats1");
-#else
     sal_Int32 formatCount  = section[0].getFunc( *this, rLocale, "getAllFormats0");
               formatCount += section[1].getFunc( *this, rLocale, "getAllFormats1");
-#endif
+
     Sequence< FormatElement > seq(formatCount);
     sal_Int32 f = 0;
     for (int s = 0; s < SECTIONS; ++s)
@@ -1471,3 +1469,5 @@ LocaleData::getSupportedServiceNames() throw( RuntimeException )
         aRet[0] = OUString::createFromAscii(clocaledata);
         return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

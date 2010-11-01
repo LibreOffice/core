@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,8 @@
 #include "RptDef.hxx"
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
+#include <sal/macros.h>
 
 #include <boost/bind.hpp>
 
@@ -700,7 +702,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
         {
             UniReference< XMLShapeExport > xShapeExport = GetShapeExport();
             xShapeExport->seekShapes(_xProp.get());
-            vos::OGuard aGuard(Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             xShapeExport->collectShapeAutoStyles(xShape.get());
         }
         else
@@ -1643,7 +1645,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 if ( sFunction.getLength() )
                 {
                     sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
-                    for(sal_uInt32 j= 0; j < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++j)
+                    for(sal_uInt32 j= 0; j < SAL_N_ELEMENTS(pReplaceChars);++j)
                         sFunctionName = sFunctionName.replace(pReplaceChars[j],'_');
 
                     xFunction->setName(sFunctionName);
@@ -1670,3 +1672,4 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
 }// rptxml
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,10 +89,6 @@ namespace framework
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
-#if 0
-        DECL_STATIC_LINK( License, Terminate, void* );
-#endif
-
         /*
         XJob...
         any execute([in] sequence< ::com::sun::star::beans::NamedValue > Arguments )
@@ -121,3 +118,5 @@ namespace framework
 } // namespace framework
 
 #endif // __FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,6 +65,10 @@ typedef javaPluginError (*jfw_plugin_startJavaVirtualMachine_ptr)(
     JavaVM ** ppVM,
     JNIEnv ** ppEnv);
 
+typedef javaPluginError (*jfw_plugin_existJRE_ptr)(
+    const JavaInfo *info,
+    sal_Bool *exist);
+
 
 namespace jfw
 {
@@ -122,3 +127,5 @@ public:
 };
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

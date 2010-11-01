@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3793,7 +3794,6 @@ MetaAction* MetaFloatTransparentAction::Clone()
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
-    maMtf.Move(nHorzMove, nVertMove);
 }
 
 // ------------------------------------------------------------------------
@@ -3804,7 +3804,6 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPoint = aRectangle.TopLeft();
     maSize = aRectangle.GetSize();
-    maMtf.Scale(fScaleX, fScaleY);
 }
 
 // ------------------------------------------------------------------------
@@ -4301,3 +4300,5 @@ void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 }
 
 // ========================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

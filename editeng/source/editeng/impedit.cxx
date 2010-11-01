@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <editeng/flditem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/transfer.hxx>
@@ -1537,7 +1538,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
 {
     DBG_ASSERT( !pDragAndDropInfo, "dragGestureRecognized - DragAndDropInfo exist!" );
 
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     pDragAndDropInfo = NULL;
 
@@ -1617,7 +1618,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
 
 void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     DBG_ASSERT( pDragAndDropInfo, "ImpEditView::dragDropEnd: pDragAndDropInfo is NULL!" );
 
@@ -1710,7 +1711,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
 
 void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     DBG_ASSERT( pDragAndDropInfo, "Drop - No Drag&Drop info?!" );
 
@@ -1783,7 +1784,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
 
 void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( !pDragAndDropInfo )
         pDragAndDropInfo = new DragAndDropInfo( );
@@ -1810,7 +1811,7 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
 
 void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     HideDDCursor();
 
@@ -1823,7 +1824,7 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
 
 void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
     aMousePos = GetWindow()->PixelToLogic( aMousePos );
@@ -1998,3 +1999,5 @@ void ImpEditView::RemoveDragAndDropListeners()
         bActiveDragAndDropListener = FALSE;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

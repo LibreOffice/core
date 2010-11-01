@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -77,7 +78,7 @@ AccessibleOutlineView::AccessibleOutlineView (
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
       maTextHelper( ::std::auto_ptr< SvxEditSource >( NULL ) )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for making the edit engine accessible.
@@ -193,7 +194,7 @@ void AccessibleOutlineView::FireEvent(const AccessibleEventObject& aEvent )
 
 void AccessibleOutlineView::Activated (void)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // delegate listener handling to children manager.
     maTextHelper.SetFocus(sal_True);
@@ -201,7 +202,7 @@ void AccessibleOutlineView::Activated (void)
 
 void AccessibleOutlineView::Deactivated (void)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // delegate listener handling to children manager.
     maTextHelper.SetFocus(sal_False);
@@ -253,7 +254,7 @@ void SAL_CALL
     AccessibleOutlineView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return String( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N) );
 }
@@ -266,17 +267,19 @@ void SAL_CALL
     AccessibleOutlineView::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return String( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_D) );
 }
 
 void AccessibleOutlineView::UpdateChildren()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // Update visible children
     maTextHelper.UpdateChildren();
 }
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

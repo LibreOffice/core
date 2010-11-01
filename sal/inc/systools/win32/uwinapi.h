@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #pragma once
-
+#include <sal/macros.h>
 #ifdef _UWINAPI_
 #   define _KERNEL32_
 #   define _USER32_
@@ -102,10 +103,6 @@ EXTERN_C WINBASEAPI DWORD WINAPI GetUserDomainW( LPWSTR lpBuffer, DWORD nBuffser
 
 EXTERN_C WINBASEAPI DWORD WINAPI GetProcessId( HANDLE hProcess );
 
-/* macro that calculates the count of elements of a static array */
-
-#define elementsof(buf) (sizeof(buf) / sizeof((buf)[0]))
-
 #ifdef __cplusplus
 
 inline bool IsValidHandle(HANDLE handle)
@@ -119,3 +116,4 @@ inline bool IsValidHandle(HANDLE handle)
 
 #endif  /* __cplusplus */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -759,18 +760,15 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
             // getting the string for the producer
             String aProducer;
-            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-            if ( pMgr )
-            {
-                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                ::rtl::OUString sProductName;
-                aProductName >>= sProductName;
-                aProducer = sProductName;
-                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-                aProductName >>= sProductName;
-                aProducer.AppendAscii(" ");
-                aProducer += String( sProductName );
-            }
+            ::utl::ConfigManager& rMgr = ::utl::ConfigManager::GetConfigManager();
+            Any aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+            ::rtl::OUString sProductName;
+            aProductName >>= sProductName;
+            aProducer = sProductName;
+            aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+            aProductName >>= sProductName;
+            aProducer.AppendAscii(" ");
+            aProducer += String( sProductName );
             aDocInfo.Producer = aProducer;
             aDocInfo.Creator = aCreator;
 
@@ -1977,3 +1975,4 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

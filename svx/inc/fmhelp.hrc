@@ -104,13 +104,13 @@
     // at the end of the file!!
 
 // -----------------------------------------------------------------------
-// "Uberlaufpr"ufung -----------------------------------------------------
+// Overflow check --------------------------------------------------------
 // -----------------------------------------------------------------------
 
 #define ACT_FM_HID_END      HID_XFORMS_TAB_CONTROL
 
 #if ACT_FM_HID_END > HID_FORMS_END
-#error Resource-Ueberlauf in #line, #file
+#error Resource overflow in #line, #file
 #endif
 
 #endif

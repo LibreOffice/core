@@ -73,8 +73,7 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
-        $(VOSLIB)			\
-        $(SALLIB) 
+        $(SALLIB)
 
 SHL1DEPN=makefile.mk
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 #include "interpre.hxx"
 #include "attrib.hxx"
@@ -2442,7 +2444,7 @@ void ScInterpreter::ScRoman()
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
             static const USHORT pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-            static const USHORT nMaxIndex = (USHORT)(sizeof(pValues) / sizeof(pValues[0]) - 1);
+            static const USHORT nMaxIndex = (USHORT)(SAL_N_ELEMENTS(pValues) - 1);
 
             String aRoman;
             USHORT nVal = (USHORT) fVal;
@@ -2675,7 +2677,7 @@ BOOL lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
         { "SKK", 30.1260,  2 }
     };
 
-    const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
+    const size_t nConversionCount = SAL_N_ELEMENTS(aConvertTable);
     for ( size_t i = 0; i < nConversionCount; i++ )
         if ( aSearchUnit.EqualsIgnoreCaseAscii( aConvertTable[i].pCurrText ) )
         {
@@ -3031,3 +3033,4 @@ failed :
     PushError( errNoRef );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

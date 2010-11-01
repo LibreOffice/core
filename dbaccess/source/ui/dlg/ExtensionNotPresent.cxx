@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -199,7 +200,7 @@ IMPL_LINK( OExtensionNotPresentDialog, Download_Click, PushButton*, EMPTYARG )
         if (suDownloadURL.getLength() == 0)
         {
             // fallback
-            suDownloadURL = UNISTRING("http://extensions.documentfoundation.org");
+            suDownloadURL = UNISTRING("http://extensions.libreoffice.org");
         }
 
         // open such URL in a browser
@@ -218,3 +219,4 @@ IMPL_LINK( OExtensionNotPresentDialog, Download_Click, PushButton*, EMPTYARG )
 } // rptui
 // =============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

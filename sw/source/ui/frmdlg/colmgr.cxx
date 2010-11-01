@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,6 @@
 /*------------------------------------------------------------------------
  Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
 ------------------------------------------------------------------------*/
-
-
-
 void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 {
     const USHORT nCount = rCol.GetColumns().Count();
@@ -56,22 +54,16 @@ void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
     rCol.SetWishWidth(nWidth);
 }
 
-
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
  Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
 ------------------------------------------------------------------------*/
-
-
-
 void SwColMgr::SetCount(USHORT nCount, USHORT  nGutterWidth)
 {
     aFmtCol.Init(nCount, nGutterWidth, nWidth);
     aFmtCol.SetWishWidth(nWidth);
     aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
 }
-
-
 
 USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
 {
@@ -80,17 +72,12 @@ USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
         nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         const SwColumns& rCols = aFmtCol.GetColumns();
         nRet = rCols.GetObject(nPos)->GetRight() + rCols.GetObject(nPos + 1)->GetLeft();
     }
     return nRet;
 }
-
-/*-----------------22.10.96 14.28-------------------
-
---------------------------------------------------*/
-
 
 void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 {
@@ -98,7 +85,7 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
         aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
         USHORT nGutterWidth2 = nGutterWidth / 2;
         rCols.GetObject(nPos)->SetRight(nGutterWidth2);
@@ -109,38 +96,29 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 /*------------------------------------------------------------------------
  Beschreibung:  Hoehe Trennlinie
 ------------------------------------------------------------------------*/
-
-
-
 short SwColMgr::GetLineHeightPercent() const
 {
     return (short)aFmtCol.GetLineHeight();
 }
 
-
-
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
-    ASSERT(nPercent <= 100, LineHeight darf nur bis 100 % gross  sein);
+    OSL_ENSURE(nPercent <= 100, "line height may only be 100 \%");
     aFmtCol.SetLineHeight((BYTE)nPercent);
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  Spaltenbreite
 ------------------------------------------------------------------------*/
-
-
-
 USHORT SwColMgr::GetColWidth(USHORT nIdx) const
 {
-    ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
+    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
-
-
 void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 {
-    ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
+    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     aFmtCol.GetColumns()[nIdx]->SetWishWidth(nWd);
 
 }
@@ -148,9 +126,6 @@ void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 /*--------------------------------------------------------------------
     Beschreibung:   Groesse neu setzen
  --------------------------------------------------------------------*/
-
-
-
 void SwColMgr::SetActualWidth(USHORT nW)
 {
     nWidth = nW;
@@ -160,9 +135,6 @@ void SwColMgr::SetActualWidth(USHORT nW)
 /*--------------------------------------------------------------------
     Beschreibung: ctor
  --------------------------------------------------------------------*/
-
-
-
 SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),
     nWidth(nActWidth)
@@ -179,13 +151,8 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
     ::FitToActualSize(aFmtCol, nWidth);
 }
 
+SwColMgr::~SwColMgr()
+{
+}
 
-
-
-SwColMgr::~SwColMgr() {}
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

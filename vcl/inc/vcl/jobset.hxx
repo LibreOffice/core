@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,12 +48,10 @@ class VCL_DLLPUBLIC JobSetup
 private:
     ImplJobSetup*       mpData;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE ImplJobSetup*        ImplGetData();
     SAL_DLLPRIVATE ImplJobSetup*        ImplGetConstData();
     SAL_DLLPRIVATE const ImplJobSetup*  ImplGetConstData() const;
-//#endif
 
 public:
                         JobSetup();
@@ -81,3 +80,5 @@ public:
 };
 
 #endif  // _SV_JOBSET_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

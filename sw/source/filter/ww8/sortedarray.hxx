@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef WW_SORTEDARRAY_HXX
 #define WW_SORTEDARRAY_HXX
@@ -83,12 +82,12 @@ namespace ww
                 {
                     if (!bBroken)
                     {
-                        sError = rtl::OUString::createFromAscii(
+                        sError = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "WW8: Duplicate in list, almost certainly don't "
                             "want that!\n"
                             "(You will not see this message again unless you "
                             "restart)\n"
-                            "Extra entries are...\n");
+                            "Extra entries are...\n"));
                         bBroken=true;
                     }
 
@@ -118,4 +117,4 @@ namespace ww
 }
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

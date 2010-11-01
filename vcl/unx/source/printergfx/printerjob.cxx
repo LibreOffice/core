@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,6 +51,7 @@
 
 #include "osl/thread.h"
 #include "sal/alloca.h"
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <vector>
@@ -427,7 +429,7 @@ PrinterJob::StartJob (
     sal_Char pCreationDate [256];
     WritePS (mpJobHeader, "%%CreationDate: (");
     getLocalTime(pCreationDate);
-    for( unsigned int i = 0; i < sizeof(pCreationDate)/sizeof(pCreationDate[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCreationDate); i++ )
     {
         if( pCreationDate[i] == '\n' )
         {
@@ -1197,3 +1199,5 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
 
     return bSuccess && bFeatureSuccess;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

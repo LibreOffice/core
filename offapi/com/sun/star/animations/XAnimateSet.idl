@@ -41,7 +41,7 @@
     This interface provides a simple means of just setting the value of an attribute for
     a specified duration.
 
-    When using XAnimateSet, the following memebers are ignored
+    When using XAnimateSet, the following members are ignored
     <ul>
     <li><member>XAnimate::Values</member></li>
     <li><member>XAnimate::KeyTimes</member></li>

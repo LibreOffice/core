@@ -1,0 +1,10 @@
+<node oor:name="Calc Office Open XML Template" oor:op="replace">
+    <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER TEMPLATE TEMPLATEPATH</value></prop>
+    <prop oor:name="UIComponent"/>
+    <prop oor:name="FilterService"><value>com.sun.star.comp.oox.ExcelFilter</value></prop>
+    <prop oor:name="UserData"><value>OOXML</value></prop>
+    <prop oor:name="FileFormatVersion"><value>1</value></prop>
+    <prop oor:name="Type"><value>Office Open XML Spreadsheet Template</value></prop>
+    <prop oor:name="TemplateName"/>
+    <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+</node>

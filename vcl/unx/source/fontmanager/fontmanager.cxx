@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,8 @@
 #include "rtl/tencinfo.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/strbuf.hxx"
+
+#include <sal/macros.h>
 
 #include "i18npool/mslangid.hxx"
 
@@ -853,7 +856,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                 RTL_TEXTENCODING_JIS_X_0208
             };
 
-        for( unsigned int enc = 0; enc < sizeof( aEncs )/sizeof(aEncs[0]) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
+        for( unsigned int enc = 0; enc < SAL_N_ELEMENTS( aEncs ) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
         {
             sal_Int32 nIndex = 0, nOffset = 1;
             do
@@ -1186,7 +1189,7 @@ PrintFontManager::PrintFontManager() :
         m_pFontCache( NULL ),
         m_bFontconfigSuccess( false )
 {
-    for( unsigned int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAdobeCodes ); i++ )
     {
         m_aUnicodeToAdobename.insert( ::std::hash_multimap< sal_Unicode, ::rtl::OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
         m_aAdobenameToUnicode.insert( ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
@@ -1195,15 +1198,6 @@ PrintFontManager::PrintFontManager() :
             m_aUnicodeToAdobecode.insert( ::std::hash_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
             m_aAdobecodeToUnicode.insert( ::std::hash_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
         }
-#if 0
-        m_aUnicodeToAdobename[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].pAdobename;
-        m_aAdobenameToUnicode[ aAdobeCodes[i].pAdobename ] = aAdobeCodes[i].aUnicode;
-        if( aAdobeCodes[i].aAdobeStandardCode )
-        {
-            m_aUnicodeToAdobecode[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].aAdobeStandardCode;
-            m_aAdobecodeToUnicode[ aAdobeCodes[i].aAdobeStandardCode ] = aAdobeCodes[i].aUnicode;
-        }
-#endif
     }
 }
 
@@ -1296,7 +1290,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
         // first look for an adjacent file
         static const char* pSuffix[] = { ".afm", ".AFM" };
 
-        for( unsigned int i = 0; i < sizeof(pSuffix)/sizeof(pSuffix[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(pSuffix); i++ )
         {
             ByteString aName( rFontFile );
             aName.Erase( aName.Len()-4 );
@@ -2804,7 +2798,7 @@ family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily )
 
     rtl::OString aFamily = rtl::OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
     sal_uInt32 nLower = 0;
-    sal_uInt32 nUpper = sizeof(pFamilyMatch) / sizeof(pFamilyMatch[0]);
+    sal_uInt32 nUpper = SAL_N_ELEMENTS(pFamilyMatch);
 
     while( nLower < nUpper )
     {
@@ -4097,3 +4091,5 @@ bool PrintFontManager::readOverrideMetrics()
 
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

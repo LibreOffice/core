@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,15 +73,14 @@ static ChainablePropertySetInfo * lcl_createPrintPreviewSettingsInfo()
     };
     return new ChainablePropertySetInfo ( aPrintPreviewSettingsMap_Impl );
 }
+
 SwXPrintPreviewSettings::SwXPrintPreviewSettings( SwDoc *pDoc)
 : ChainablePropertySet ( lcl_createPrintPreviewSettingsInfo (), &Application::GetSolarMutex() )
 , mbPreviewDataChanged( sal_False )
 , mpDoc( pDoc)
 {
 }
-/*-- 17.12.98 12:54:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXPrintPreviewSettings::~SwXPrintPreviewSettings()
     throw()
 {
@@ -98,11 +98,13 @@ Any SAL_CALL SwXPrintPreviewSettings::queryInterface( const Type& rType )
                                         dynamic_cast< XPropertySet* >( this )   ,
                                         dynamic_cast< XMultiPropertySet* >( this ) );
 }
+
 void SwXPrintPreviewSettings::acquire ()
     throw ()
 {
     OWeakObject::acquire();
 }
+
 void SwXPrintPreviewSettings::release ()
     throw ()
 {
@@ -244,6 +246,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
             throw UnknownPropertyException();
     }
 }
+
 void SwXPrintPreviewSettings::_postSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
@@ -262,6 +265,7 @@ void SwXPrintPreviewSettings::_preGetValues ()
     if (mpDoc)
         mpConstPreViewData = mpDoc->GetPreViewPrtData();
 }
+
 void SwXPrintPreviewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
@@ -339,28 +343,23 @@ void SwXPrintPreviewSettings::_getSingleValue( const comphelper::PropertyInfo & 
     if(bBool)
         rValue.setValue(&bBoolVal, ::getBooleanCppuType());
 }
+
 void SwXPrintPreviewSettings::_postGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     mpConstPreViewData = NULL;
 }
-/* -----------------------------06.04.00 11:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXPrintPreviewSettings::getImplementationName(void) throw( RuntimeException )
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM ( "SwXPrintPreviewSettings" ) );
 }
-/* -----------------------------06.04.00 11:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwXPrintPreviewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return rServiceName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.PrintPreviewSettings") );
 }
-/* -----------------------------06.04.00 11:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXPrintPreviewSettings::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -369,3 +368,4 @@ Sequence< OUString > SwXPrintPreviewSettings::getSupportedServiceNames(void) thr
     return aRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

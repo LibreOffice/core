@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@ void OEvoabPreparedStatement::construct( const ::rtl::OUString& _sql )
 
     m_aQueryData = impl_getEBookQuery_throw( m_sSqlStatement );
     ENSURE_OR_THROW( m_aQueryData.getQuery(), "no EBookQuery" );
-    ENSURE_OR_THROW( m_aQueryData.xSelectColumns.isValid(), "no SelectColumn" );
+    ENSURE_OR_THROW( m_aQueryData.xSelectColumns.is(), "no SelectColumn" );
 
     // create our meta data
     OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( m_aQueryData.sTable );
@@ -333,3 +334,5 @@ sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  ) throw(SQLException
     return sal_False;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

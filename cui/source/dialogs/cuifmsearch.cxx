@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svxdlg.hxx>
+#include <sal/macros.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
@@ -72,7 +74,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 
         // hide the options for the japanese search
         Control* pFieldsToMove[] = { &m_flState, &m_ftRecordLabel, &m_ftRecord, &m_ftHint };
-        implMoveControls(pFieldsToMove, sizeof(pFieldsToMove)/sizeof(pFieldsToMove[0]), nDifference, &m_flOptions);
+        implMoveControls(pFieldsToMove, SAL_N_ELEMENTS(pFieldsToMove), nDifference, &m_flOptions);
 
         m_aSoundsLikeCJK.Hide();
         m_aSoundsLikeCJKSettings.Hide();
@@ -171,7 +173,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
                 &m_pbApproxSettings, &m_aHalfFullFormsCJK, &m_aSoundsLikeCJK, &m_aSoundsLikeCJKSettings,
                 &m_flState, &m_ftRecordLabel, &m_ftRecord, &m_ftHint };
 
-        implMoveControls(pFieldsToMove, sizeof(pFieldsToMove)/sizeof(pFieldsToMove[0]), nDifference, &m_flWhere);
+        implMoveControls(pFieldsToMove, SAL_N_ELEMENTS(pFieldsToMove), nDifference, &m_flWhere);
 
         Point pt = m_rbAllFields.GetPosPixel();
         pt.X() = m_ftForm.GetPosPixel().X();
@@ -275,7 +277,7 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
         RID_STR_SEARCH_END,
         RID_STR_SEARCH_WHOLE
     };
-    for ( size_t i=0; i<sizeof(nResIds)/sizeof(nResIds[0]); ++i )
+    for ( size_t i=0; i<SAL_N_ELEMENTS(nResIds); ++i )
         m_lbPosition.InsertEntry( String( CUI_RES( nResIds[i] ) ) );
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
@@ -724,13 +726,13 @@ void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
         &m_pbSearchAgain, &m_pbClose };
 
     if (!bEnable)
-        for (sal_uInt32 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
+        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(pAffectedControls); ++i)
         {
             pAffectedControls[i]->SetUpdateMode(bEnable);
             pAffectedControls[i]->EnablePaint(bEnable);
         }
     else
-        for (sal_uInt32 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
+        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(pAffectedControls); ++i)
         {
             pAffectedControls[i]->EnablePaint(bEnable);
             pAffectedControls[i]->SetUpdateMode(bEnable);
@@ -768,7 +770,7 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
 //------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         // diese eine Methode Thread-sicher machen (das ist ein Overkill, die ganze restliche Applikation dafuer zu blockieren,
         // aber im Augenblick haben wir kein anderes Sicherheitskonpzept)
 
@@ -962,3 +964,4 @@ void FmSearchDialog::SaveParams() const
     m_pConfig->setParams( aCurrentSettings );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,9 +85,6 @@ using namespace ::com::sun::star::view;
 #define DEFAULT_ADDRESS_WIDTH  (MM50*15)// 7,5 cm
 #define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
 
-/*-- 15.04.2004 08:16:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
 #ifdef MSC
@@ -179,18 +177,14 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aAlignToBodyCB.SetClickHdl(LINK(this, SwMailMergeLayoutPage, AlignToTextHdl_Impl));
     m_aAlignToBodyCB.Check();
 }
-/*-- 15.04.2004 08:17:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 {
     delete m_pExampleFrame;
     File::remove( m_sExampleURL );
 
 }
-/*-- 27.05.2004 13:41:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeLayoutPage::ActivatePage()
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -251,9 +245,7 @@ void SwMailMergeLayoutPage::ActivatePage()
 
     }
 }
-/*-- 11.05.2004 10:41:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     //now insert the frame and the greeting
@@ -270,9 +262,7 @@ sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason
     }
     return sal_True;
 }
-/*-- 24.06.2004 09:50:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
         SwMailMergeConfigItem& rConfigItem,
         const Point& rAddressPosition,
@@ -300,9 +290,7 @@ SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
     pView->GetWrtShell().EndUndo(UNDO_INSERT);
     return pAddressBlockFormat;
 }
-/*-- 11.05.2004 12:49:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         SwWrtShell& rShell,
         SwMailMergeConfigItem& rConfigItem,
@@ -332,7 +320,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
 
     rShell.NewFlyFrm(aSet, sal_True );
     SwFrmFmt* pRet = rShell.GetFlyFrmFmt();
-    ASSERT( pRet, "Fly not inserted" );
+    OSL_ENSURE( pRet, "Fly not inserted" );
 
     rShell.UnSelectFrm();
     const Sequence< ::rtl::OUString> aBlocks = rConfigItem.GetAddressBlocks();
@@ -458,9 +446,6 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
     return pRet;
 }
 
-/*-- 12.05.2004 12:20:19---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample)
 {
     //set the cursor to the desired position - if no text content is here then
@@ -578,7 +563,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
 //          Neutral: [database.sNameColumn]
-            DBG_ASSERT(sGenderColumn.Len() && rFemaleGenderValue.getLength(),
+            OSL_ENSURE(sGenderColumn.Len() && rFemaleGenderValue.getLength(),
                     "gender settings not available - how to form the condition?");
             //column used as lastname
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
@@ -687,11 +672,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     //put the cursor to the start of the paragraph
     rShell.SttPara();
 
-    DBG_ASSERT(0 == rShell.GetTableFmt(), "What to do with a table here?");
+    OSL_ENSURE(0 == rShell.GetTableFmt(), "What to do with a table here?");
 }
-/*-- 10.05.2004 09:34:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
 {
     m_aExampleWIN.Show( TRUE );
@@ -705,7 +688,7 @@ IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
     SwXTextDocument* pXDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
     SwDocShell* pDocShell = pXDoc->GetDocShell();
     m_pExampleWrtShell = pDocShell->GetWrtShell();
-    DBG_ASSERT(m_pExampleWrtShell, "No SwWrtShell found!");
+    OSL_ENSURE(m_pExampleWrtShell, "No SwWrtShell found!");
     if(!m_pExampleWrtShell)
         return 0;
 
@@ -735,9 +718,7 @@ IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
     m_aTopMF.SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
     return 0;
 }
-/*-- 10.05.2004 14:05:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
 {
     if(m_pExampleWrtShell)
@@ -761,10 +742,6 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-
-/*-- 10.05.2004 15:56:51---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, EMPTYARG)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)
@@ -786,9 +763,6 @@ IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, EMPTYARG)
     return 0;
 }
 
-/*-- 10.05.2004 16:13:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
     bool bDown = pButton == &m_aDownPB;
@@ -803,9 +777,7 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 
     return 0;
 }
-/*-- 15.07.2004 16:05:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, CheckBox*, pBox)
 {
     sal_Bool bCheck = pBox->IsChecked() && pBox->IsEnabled();
@@ -814,3 +786,5 @@ IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, CheckBox*, pBox)
     ChangeAddressHdl_Impl( 0 );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

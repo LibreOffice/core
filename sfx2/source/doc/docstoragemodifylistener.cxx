@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/docstoragemodifylistener.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -56,7 +57,7 @@ namespace sfx2
     //=
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::vos::IMutex& _rMutex )
+    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex )
         :m_pDocument( &_rDocument )
         ,m_rMutex( _rMutex )
     {
@@ -70,14 +71,14 @@ namespace sfx2
     //--------------------------------------------------------------------
     void DocumentStorageModifyListener::dispose()
     {
-        ::vos::OGuard aGuard( m_rMutex );
+        ::osl::SolarGuard aGuard( m_rMutex );
         m_pDocument = NULL;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( m_rMutex );
+        ::osl::SolarGuard aGuard( m_rMutex );
         // storageIsModified must not contain any locking!
         if ( m_pDocument )
             m_pDocument->storageIsModified();
@@ -94,3 +95,5 @@ namespace sfx2
 //........................................................................
 } // namespace sfx2
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

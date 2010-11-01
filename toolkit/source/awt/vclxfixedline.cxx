@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXFixedLine, VCLXWindow );
 void SAL_CALL VCLXFixedLine::dispose() throw(RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -79,7 +80,7 @@ void SAL_CALL VCLXFixedLine::dispose() throw(RuntimeException)
 
 void VCLXFixedLine::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-    ::vos::OClearableGuard aGuard( GetMutex() );
+    ::osl::ClearableSolarGuard aGuard( GetMutex() );
 /*
     switch ( _rVclWindowEvent.GetId() )
     {
@@ -95,7 +96,7 @@ void VCLXFixedLine::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 
 void SAL_CALL VCLXFixedLine::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -112,7 +113,7 @@ void SAL_CALL VCLXFixedLine::setProperty( const ::rtl::OUString& PropertyName, c
 
 Any SAL_CALL VCLXFixedLine::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     Any aReturn;
     if ( GetWindow() )
@@ -130,3 +131,5 @@ Any SAL_CALL VCLXFixedLine::getProperty( const ::rtl::OUString& PropertyName ) t
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,6 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/menuoptions.hxx>
 #include <framework/menuconfiguration.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
@@ -254,7 +253,7 @@ void SfxMenuControl::StateChanged
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
 
-    FASTBOOL bIsObjMenu =
+    bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
     // enabled/disabled-Flag pauschal korrigieren
@@ -577,3 +576,5 @@ void SfxUnoMenuControl::Select()
 {
     pUnoCtrl->Execute();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1265,3 +1266,5 @@ rtl::OUString* ScRowStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32
 {
     return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>
@@ -666,3 +665,4 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

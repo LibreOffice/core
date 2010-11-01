@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _PYUNO_PYUNO_HXX_
 #define _PYUNO_PYUNO_HXX_
 
@@ -294,3 +295,5 @@ public:
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

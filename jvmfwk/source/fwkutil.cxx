@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -270,10 +271,12 @@ rtl::OUString findPlugin(
         {
             rtl::OUString url;
 #ifdef UNX
-#ifdef MACOSX
-            rtl::OUString path = rtl::OUString::createFromAscii("DYLD_LIBRARY_PATH");
+#if defined(MACOSX)
+            rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DYLD_LIBRARY_PATH"));
+#elif defined(AIX)
+            rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LIBPATH"));
 #else
-            rtl::OUString path = rtl::OUString::createFromAscii("LD_LIBRARY_PATH");
+            rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LD_LIBRARY_PATH"));
 #endif
             rtl::OUString env_path;
             oslProcessError err = osl_getEnvironment(path.pData, &env_path.pData);
@@ -352,3 +355,5 @@ jfw::FileStatus checkFileURL(const rtl::OUString & sURL)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

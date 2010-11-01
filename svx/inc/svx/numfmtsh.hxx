@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,8 +65,9 @@ enum SvxNumberValueType
 
 // define ----------------------------------------------------------------
 
-#define CAT_ALL             0   // Reihenfolge der Kategorie-
-#define CAT_USERDEFINED     1   // ListBox-Eintraege in der TabPage
+// sort order of the category ListBox entries in the TabPage
+#define CAT_ALL             0
+#define CAT_USERDEFINED     1
 #define CAT_NUMBER          2
 #define CAT_PERCENT         3
 #define CAT_CURRENCY        4
@@ -171,7 +173,7 @@ public:
                                            String&       rPreviewStr,
                                            Color*&       rpFontColor );
 
-    void                MakePrevStringFromVal( const String& rFormatStr,        //@ 19.09.97
+    void                MakePrevStringFromVal( const String& rFormatStr,
                                                 String& rPreviewStr,
                                                 Color*& rpFontColor,
                                                 double  nValue);
@@ -218,7 +220,7 @@ public:
     void                GetCurrencyFormats(SvStrings& rList);
 
 private:
-    static const double     DEFAULT_NUMVALUE;   // 123456789
+    static const double     DEFAULT_NUMVALUE;
 
     SvNumberFormatter*      pFormatter;
     SvNumberFormatTable*    pCurFmtTable;
@@ -265,3 +267,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

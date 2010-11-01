@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -355,7 +356,7 @@ OUString SAL_CALL vcl_session_getImplementationName()
 Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.frame.SessionManagerClient");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionManagerClient"));
     return aRet;
 }
 
@@ -367,3 +368,5 @@ Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XM
 
     return Reference< XInterface >(pSVData->xSMClient, UNO_QUERY );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

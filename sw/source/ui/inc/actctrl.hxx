@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 /*--------------------------------------------------------------------
     Beschreibung:   numerische Eingabe
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC NumEditAction: public NumericField
 {
     Link aActionLink;
@@ -77,6 +77,7 @@ public:
                             NoSpaceEdit(pWin, rResId)
                                 {SetForbiddenChars(String::CreateFromAscii(" .<>"));}
 };
+
 /* -----------------25.06.2003 15:55-----------------
     call a link when KEY_RETURN is pressed
  --------------------------------------------------*/
@@ -94,3 +95,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

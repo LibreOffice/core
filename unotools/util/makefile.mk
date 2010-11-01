@@ -63,7 +63,6 @@ SHL1STDLIBS= \
         $(CPPULIB) \
         $(I18NISOLANGLIB) \
         $(TOOLSLIB) \
-        $(VOSLIB) \
         $(SALLIB)
 
 SHL1LIBS=$(LIB1TARGET)

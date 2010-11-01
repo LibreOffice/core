@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/ucb/CertificateValidationRequest.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/datetime.hxx"
 #include "svl/zforlist.hxx"
 #include "vcl/svapp.hxx"
@@ -137,7 +138,7 @@ executeUnknownAuthDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -186,7 +187,7 @@ executeSSLWarnDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -355,3 +356,4 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

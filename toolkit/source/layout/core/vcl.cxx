@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,3 +65,5 @@ static PushButton* get_button (Dialog const* dialog, sal_uInt32 type)
 IMPLEMENT_CLOSING_DIALOG (Dialog);
 IMPLEMENT_CLOSING_DIALOG (ModelessDialog);
 IMPLEMENT_CLOSING_DIALOG (ModalDialog);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

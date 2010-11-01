@@ -99,5 +99,4 @@
     <project-build-dependency>typelib</project-build-dependency>
     <project-build-dependency>uno</project-build-dependency>
     <project-build-dependency>vcl</project-build-dependency>
-    <project-build-dependency>vos</project-build-dependency>
 </module-description>

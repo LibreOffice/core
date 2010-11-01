@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1139,3 +1140,5 @@ sal_Bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
 
     return rVal1.nVal > rVal2.nVal;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

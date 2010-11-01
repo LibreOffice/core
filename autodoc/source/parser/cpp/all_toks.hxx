@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -184,7 +185,7 @@ class Tok_UnblockMacro : public ::TextToken
 
 
 
-#if 0 // just for viewing:
+/* just for viewing:
 class Tok_TypeKey : public cpp::Token                  // file-><type-PE>
 class Tok_Template : public cpp::Token                 // file
 class Tok_Namespace : public cpp::Token                // file
@@ -211,9 +212,10 @@ class Tok_Operator : public cpp::Token                 // expression
 
 class Tok_Ignore : public cpp::Token
 class Tok_ContextChanger : public cpp::Token
-#endif // 0
-
+*/
 
 }   // namespace cpp
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

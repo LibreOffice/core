@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -373,6 +374,9 @@ sal_Bool SAL_CALL
         return TRUE;
 #endif
 
+    // return FALSE to process SPELLML requests (they are longer than the header)
+    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return FALSE;
+
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
     // PropertySet which are overridden by the supplied ones from the
@@ -718,3 +722,5 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
 
 
 ///////////////////////////////////////////////////////////////////////////
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

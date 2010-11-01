@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,10 @@
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
-/* -----------------04.03.2004 12:58-----------------
+/*
     contains strings needed for positioning dialogs
     of frames and drawing in Writer
- --------------------------------------------------*/
+ */
 class SvxSwFramePosString_Impl;
 class SVX_DLLPUBLIC SvxSwFramePosString
 {
@@ -92,3 +93,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

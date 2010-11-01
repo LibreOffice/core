@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,11 +158,7 @@ public:\
 SV_DECL_PERSIST_LIST(ClassName,EntryName)\
 SV_IMPL_PERSIST_LIST(ClassName,EntryName)
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
-//#else
-//typedef UniqueIndex SvPersistUIdx;
-//#endif
 
 //=========================================================================
 class SvStream;
@@ -264,3 +261,5 @@ public:
 };
 
 #endif // _PSTM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

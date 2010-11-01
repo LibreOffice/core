@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -426,7 +427,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -493,7 +494,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUStri
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -595,7 +596,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001   if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -684,7 +685,8 @@ DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)//CHINA001 const Reference< XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
+            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
+
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
@@ -722,7 +724,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-        const InterfaceArray& arrFields, FMSEARCH_MODE eMode)//CHINA001 const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
+        const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
@@ -1181,14 +1183,14 @@ void FmSearchEngine::ImplStartNextSearch()
     m_bCancelAsynchRequest = sal_False;
     m_bSearchingCurrently = sal_True;
 
-    if (m_eMode == SM_USETHREAD)//CHINA001 if (m_eMode == FmSearchDialog::SM_USETHREAD)
+    if (m_eMode == SM_USETHREAD)
     {
         FmSearchThread* pSearcher = new FmSearchThread(this);
             // der loescht sich nach Beendigung selber ...
         pSearcher->setTerminationHandler(LINK(this, FmSearchEngine, OnSearchTerminated));
 
         pSearcher->createSuspended();
-        pSearcher->setPriority(::vos::OThread::TPriority_Lowest);
+        pSearcher->setPriority(osl_Thread_PriorityLowest);
         pSearcher->resume();
     }
     else
@@ -1295,3 +1297,4 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
     InvalidatePreviousLoc();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

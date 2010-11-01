@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/waitobj.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 #define MAX_THREADS 10
@@ -488,7 +489,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
 // -----------------------------------------------------------------------------
 IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
@@ -613,3 +614,4 @@ bool ORelationController::allowQueries() const
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

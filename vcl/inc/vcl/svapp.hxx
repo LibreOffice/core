@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,8 @@
 #ifndef _SV_SVAPP_HXX
 #define _SV_SVAPP_HXX
 
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/unqid.hxx>
@@ -38,6 +39,7 @@
 #include <vcl/apptypes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
+class BitmapEx;
 class Link;
 class AllSettings;
 class DataChangedEvent;
@@ -260,6 +262,7 @@ public:
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void                Init();
+    virtual void                InitFinished();
     virtual void                DeInit();
 
     static void                 InitAppRes( const ResId& rResId );
@@ -276,8 +279,8 @@ public:
     static void                 Reschedule( bool bAllEvents = false );
     static void                 Yield( bool bAllEvents = false );
     static void                 EndYield();
-    static vos::IMutex&                     GetSolarMutex();
-    static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
+    static osl::SolarMutex&     GetSolarMutex();
+    static oslThreadIdentifier  GetMainThreadIdentifier();
     static ULONG                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( ULONG nCount );
     static void                 EnableNoYieldMode( bool i_bNoYield );
@@ -360,6 +363,7 @@ public:
 
     static void                 SetAppName( const String& rUniqueName );
     static String               GetAppName();
+    static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
     static void                 SetDisplayName( const UniString& rDisplayName );
     static UniString            GetDisplayName();
@@ -494,6 +498,69 @@ private:
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };
 
+
+class VCL_DLLPUBLIC SolarMutexGuard
+{
+    private:
+        SolarMutexGuard( const SolarMutexGuard& );
+        const SolarMutexGuard& operator = ( const SolarMutexGuard& );
+        ::osl::SolarMutex& m_solarMutex;
+
+    public:
+
+        /** Acquires the object specified as parameter.
+         */
+        SolarMutexGuard() :
+        m_solarMutex(Application::GetSolarMutex())
+    {
+        m_solarMutex.acquire();
+    }
+
+    /** Releases the mutex or interface. */
+    ~SolarMutexGuard()
+    {
+        m_solarMutex.release();
+    }
+};
+
+class VCL_DLLPUBLIC SolarMutexClearableGuard
+{
+    SolarMutexClearableGuard( const SolarMutexClearableGuard& );
+    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& );
+    bool m_bCleared;
+public:
+    /** Acquires mutex
+        @param pMutex pointer to mutex which is to be acquired  */
+    SolarMutexClearableGuard()
+        : m_bCleared(false)
+        , m_solarMutex( Application::GetSolarMutex() )
+        {
+            m_solarMutex.acquire();
+        }
+
+    /** Releases mutex. */
+    virtual ~SolarMutexClearableGuard()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+            }
+        }
+
+    /** Releases mutex. */
+    void SAL_CALL clear()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+                m_bCleared = true;
+            }
+        }
+protected:
+    osl::SolarMutex& m_solarMutex;
+};
+
+
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor
  and restores the mutex in its destructor.
@@ -547,3 +614,5 @@ inline void Application::EndYield()
 }
 
 #endif // _APP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

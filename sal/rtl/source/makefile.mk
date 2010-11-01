@@ -61,7 +61,9 @@ UWINAPILIB:=
 
 .IF "$(header)" == ""
 
+.IF "$(OS)" != "AIX"
 ALWAYSDBGFILES=$(SLO)$/debugprint.obj
+.ENDIF
 
 .IF "$(ALWAYSDBGFILES)" != ""
 ALWAYSDBGTARGET=do_it_alwaysdebug
@@ -95,7 +97,7 @@ SLOFILES=   \
             $(SLO)$/alloc_cache.obj \
             $(SLO)$/alloc_arena.obj
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
 SLOFILES+=$(SLO)$/memory_fini.obj
 .ENDIF
 
@@ -128,7 +130,7 @@ OBJFILES=   \
             $(OBJ)$/alloc_cache.obj \
             $(OBJ)$/alloc_arena.obj
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
 OBJFILES+=$(OBJ)$/memory_fini.obj
 .ENDIF
 
@@ -137,25 +139,6 @@ APP1TARGET=gen_makefile
 APP1OBJS=$(SLO)$/gen_makefile.obj
 APP1LIBSALCPPRT=
 APP1RPATH=NONE
-
-# --- Extra objs ----------------------------------------------------
-
-.IF "$(OS)"=="LINUX" || "$(OS)"=="OS2"
-
-#
-# This part builds a second version of alloc.c, with 
-# FORCE_SYSALLOC defined. Is later used in util/makefile.mk
-# to build a tiny replacement lib to LD_PRELOAD into the 
-# office, enabling e.g. proper valgrinding.
-#
-
-SECOND_BUILD=SYSALLOC
-SYSALLOC_SLOFILES=	$(SLO)$/alloc_global.obj
-SYSALLOCCDEFS+=-DFORCE_SYSALLOC
-
-.ENDIF # .IF "$(OS)"=="LINUX"
-
-#.ENDIF
 
 .ENDIF
 

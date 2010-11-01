@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* Conversion tables for KS C 5601-1992 based encoding conversion.
    Copyright (C) 1998 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
@@ -758,3 +759,5 @@ const hchar ksc5601_hanja_to_ucs[4888]=
   0x59ec, 0x5b09, 0x5e0c, 0x6199, 0x6198, 0x6231, 0x665e, 0x66e6,
   0x7199, 0x71b9, 0x71ba, 0x72a7, 0x79a7, 0x7a00, 0x7fb2, 0x8a70
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

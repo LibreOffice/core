@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "tools/testtoolloader.hxx"
 #include <osl/module.h>
 #include <rtl/logfile.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include "tools/solar.h"
 #include "tools/string.hxx"
 #include "tools/debug.hxx"
@@ -56,16 +57,14 @@ static bool bLoggerStarted = false;
 
 sal_uInt32 GetCommandLineParamCount()
 {
-    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
-    return aStartInfo.getCommandArgCount();
+    return osl_getCommandArgCount();
 }
 
 String GetCommandLineParam( sal_uInt32 nParam )
 {
-    NAMESPACE_VOS( OStartupInfo ) aStartInfo;
     ::rtl::OUString aParam;
-    NAMESPACE_VOS( OStartupInfo )::TStartupError eError = aStartInfo.getCommandArg( nParam, aParam );
-    if ( eError == NAMESPACE_VOS( OStartupInfo )::E_None )
+    oslProcessError eError = osl_getCommandArg( nParam, &aParam.pData );
+    if ( eError == osl_Process_E_None )
         return String( aParam );
     else
     {
@@ -183,3 +182,5 @@ void DeInitTestToolLib()
 }
 
 } // namespace tools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

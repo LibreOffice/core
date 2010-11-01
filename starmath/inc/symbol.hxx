@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,10 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SYMBOL_HXX
 #define SYMBOL_HXX
 
-#include <vos/refernce.hxx>
 #include <vcl/font.hxx>
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
@@ -46,7 +47,7 @@
 #include "smmod.hxx"
 
 
-#define SYMBOLSET_NONE  0xFFFF
+#define SYMBOLSET_NONE      0xFFFF
 #define SYMBOL_NONE     0xFFFF
 
 
@@ -78,6 +79,7 @@ inline const String GetUiSymbolSetName( const String &rExportSymbolSetName )
 
 class SmSym
 {
+private:
     SmFace              m_aFace;
     String              m_aName;
     String              m_aExportName;
@@ -147,6 +149,7 @@ struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, 
 
 class SmSymbolManager : public SfxListener
 {
+private:
     SymbolMap_t         m_aSymbols;
     bool                m_bModified;
 
@@ -187,3 +190,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

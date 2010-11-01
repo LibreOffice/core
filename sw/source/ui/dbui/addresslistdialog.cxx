@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,12 +85,8 @@ using namespace ::rtl;
 #define ITEMID_NAME         1
 #define ITEMID_TABLE        2
 
-//typedef SharedUNOComponent< XConnection >   SharedConnection;
-
 static const char* cUTF8 = "UTF-8";
-/*-- 07.05.2004 14:11:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 struct AddressUserData_Impl
 {
     uno::Reference<XDataSource>             xSource;
@@ -105,6 +102,7 @@ struct AddressUserData_Impl
         nTableAndQueryCount(-1)
         {}
 };
+
 ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
 {
     ::rtl::OUString sURL;
@@ -150,9 +148,7 @@ struct AddressUserData_Impl
     }
     return sURL;
 }
-/*-- 07.04.2004 16:35:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
 #ifdef MSC
@@ -229,7 +225,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
     const SwDBData& rCurrentData = rConfigItem.GetCurrentDBData();
 
-    DBG_ASSERT(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
+    OSL_ENSURE(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
     m_aListLB.SelectAll( FALSE );
@@ -280,9 +276,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aListLB.SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
     TableSelectHdl_Impl(NULL);
 }
-/*-- 07.04.2004 16:35:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressListDialog::~SwAddressListDialog()
 {
     SvLBoxEntry* pEntry = m_aListLB.First();
@@ -293,9 +287,7 @@ SwAddressListDialog::~SwAddressListDialog()
         pEntry = m_aListLB.Next( pEntry );
     }
 }
-/*-- 07.04.2004 16:35:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
@@ -355,15 +347,13 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
             }
             catch(Exception& )
             {
-                DBG_ERROR("exception caught in SwAddressListDialog::FilterHdl_Impl");
+                OSL_ENSURE(false, "exception caught in SwAddressListDialog::FilterHdl_Impl");
             }
         }
     }
     return 0;
 }
-/*-- 07.04.2004 16:35:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, EMPTYARG)
 {
     String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
@@ -375,9 +365,7 @@ IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, EMPTYARG)
     }
     return 0;
 }
-/*-- 07.04.2004 16:35:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
     String sInputURL;
@@ -467,9 +455,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
     delete pDlg;
     return 0;
 }
-/*-- 22.04.2004 10:30:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 {
     SvLBoxEntry* pEntry = m_aListLB.FirstSelected();
@@ -501,9 +487,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
     }
     return 0;
 };
-/*-- 19.04.2004 09:41:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTabListBox*, EMPTYARG)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
@@ -511,6 +495,7 @@ IMPL_LINK(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTabListBox*, EMPTYARG)
                                                 StaticListBoxSelectHdl_Impl ), pSelect );
     return 0;
 }
+
 IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*, pSelect)
 {
     //prevent nested calls of the select handler
@@ -534,6 +519,18 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
         pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         if(pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
+            /*
+             * We're a callback from a selection from a list box, which takes
+             * place on mouse down before mouse up. The next dialog also has a
+             * list box. Spawning it means this list box doesn't get the mouse
+             * down event. So it sticks on "making selection" mode. So if you
+             * cancel the next dialog and just move the mouse out of this entry
+             * and back then the dialog pops up again, without requiring a click
+             *
+             * Most expedient thing to do is to manually end the parent selection
+             * here.
+             */
+            pThis->m_aListLB.EndSelection();
             pThis->DetectTablesAndQueries(pSelect, !sTable.Len());
         }
         else
@@ -556,10 +553,8 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
     return 0;
 }
 
-/*-- 13.05.2004 14:59:25---------------------------------------------------
-    detect the number of tables for a data source
-    if only one is available then set it at the entry
-  -----------------------------------------------------------------------*/
+// detect the number of tables for a data source
+// if only one is available then set it at the entry
 void SwAddressListDialog::DetectTablesAndQueries(
         SvLBoxEntry* pSelect,
         bool bWidthDialog)
@@ -652,14 +647,11 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
     catch(Exception& )
     {
-        DBG_ERROR("exception caught in SwAddressListDialog::DetectTablesAndQueries");
+        OSL_ENSURE(false, "exception caught in SwAddressListDialog::DetectTablesAndQueries");
         m_aOK.Enable( sal_False );
     }
 }
 
-/*-- 13.05.2004 12:55:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 {
     EnterWait();
@@ -680,18 +672,12 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-/*-- 08.04.2004 14:52:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, OKHdl_Impl, PushButton*, EMPTYARG)
 {
     EndDialog(TRUE);
     return 0;
 }
 
-/*-- 07.05.2004 14:17:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 {
     uno::Reference< XDataSource>  xRet;
@@ -704,9 +690,7 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
     return xRet;
 
 }
-/*-- 07.05.2004 14:17:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SharedConnection    SwAddressListDialog::GetConnection()
 {
     SharedConnection xRet;
@@ -718,9 +702,7 @@ SharedConnection    SwAddressListDialog::GetConnection()
     }
     return xRet;
 }
-/*-- 07.05.2004 14:17:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
 {
     uno::Reference< XColumnsSupplier> xRet;
@@ -732,9 +714,7 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
     }
     return xRet;
 }
-/*-- 14.05.2004 15:04:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString     SwAddressListDialog::GetFilter()
 {
     ::rtl::OUString sRet;
@@ -746,3 +726,5 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
     }
     return sRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

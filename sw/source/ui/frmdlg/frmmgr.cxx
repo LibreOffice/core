@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,6 @@ static USHORT __FAR_DATA aFrmMgrRange[] = {
 /*--------------------------------------------------------------------
      Beschreibung: Rahmen-Attribute ueber Shell ermitteln
  --------------------------------------------------------------------*/
-
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
     aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
     pOwnSh( pSh ),
@@ -111,11 +111,9 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, const SfxItemSet &
     }
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung:  Initialisieren
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::UpdateAttrMgr()
 {
     if ( !bNewFrm && pOwnSh->IsFrmSelected() )
@@ -142,11 +140,10 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 /*--------------------------------------------------------------------
     Beschreibung: Bestehenden Fly-Frame aendern
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::UpdateFlyFrm()
 {
-    ASSERT( pOwnSh->IsFrmSelected(),
-        "Kein Rahmen selektiert oder keine Shell, Update nicht moeglich");
+    OSL_ENSURE( pOwnSh->IsFrmSelected(),
+        "no frame selected or no shell, update not possible");
 
     if( pOwnSh->IsFrmSelected() )
     {
@@ -176,7 +173,6 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 /*--------------------------------------------------------------------
      Beschreibung:  Rahmen einfuegen
  --------------------------------------------------------------------*/
-
 BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
 {
     pOwnSh->StartAllAction();
@@ -200,13 +196,12 @@ BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
                 Nicht erlaubte Werte des Aufzaehlungstypes werden
                 korrigiert.
 ------------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Point  &rPos,
                                    const Size   &rSize,
                                    BOOL bAbs )
 {
-    ASSERT( eAnchorType == FLY_AT_PAGE ||
+    OSL_ENSURE( eAnchorType == FLY_AT_PAGE ||
             eAnchorType == FLY_AT_PARA ||
             eAnchorType == FLY_AT_CHAR ||
             eAnchorType == FLY_AT_FLY  ||
@@ -225,7 +220,6 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
 /*--------------------------------------------------------------------
      Beschreibung:  Anker setzen
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 {
     USHORT nPhyPageNum, nVirtPageNum;
@@ -247,15 +241,14 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 /*------------------------------------------------------------------------
  Beschreibung:  Setzen des Attributs fuer Spalten
 ------------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 {
     aSet.Put( rCol );
 }
+
 /*--------------------------------------------------------------------
      Beschreibung:  Absolute Position setzen
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
     bAbsPos = TRUE;
@@ -511,7 +504,6 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 /*--------------------------------------------------------------------
     Beschreibung: Korrektur fuer Umrandung
  --------------------------------------------------------------------*/
-
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
@@ -540,7 +532,6 @@ SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
     return rShadow.CalcShadowSpace(SHADOW_RIGHT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Attribut aus dem Set loeschen
  --------------------------------------------------------------------*/
@@ -551,7 +542,7 @@ void SwFlyFrmAttrMgr::DelAttr( USHORT nId )
 
 void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
-    ASSERT( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
+    OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
 
     SvxLRSpaceItem aTmp( (SvxLRSpaceItem&)aSet.Get( RES_LR_SPACE ) );
     if( LONG_MAX != nLeft )
@@ -563,7 +554,7 @@ void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 
 void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
 {
-    ASSERT(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
+    OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
 
     SvxULSpaceItem aTmp( (SvxULSpaceItem&)aSet.Get( RES_UL_SPACE ) );
     if( LONG_MAX != nTop )
@@ -621,3 +612,5 @@ void SwFlyFrmAttrMgr::SetAttrSet(const SfxItemSet& rSet)
     aSet.ClearItem();
     aSet.Put( rSet );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

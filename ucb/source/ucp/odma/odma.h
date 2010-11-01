@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* odma.h - Definitions, prototypes, etc. for Open Document Managment API
     (ODMA) version 2.0.
 
@@ -313,3 +314,5 @@ ODMSTATUS WINAPI ODMSetDocRelation(ODMHANDLE odmHandle, LPSTR lpszDocId,
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

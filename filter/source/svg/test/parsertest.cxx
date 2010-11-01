@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *    OpenOffice.org - a multi-platform office productivity suite
@@ -207,3 +208,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TestParser, "test svg parser fragments");
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

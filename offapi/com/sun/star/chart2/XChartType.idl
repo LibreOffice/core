@@ -25,7 +25,7 @@ module chart2
 interface XChartType : com::sun::star::uno::XInterface
 {
     /** A string representation of the chart type.
-        This needs to be the service-name which can be used to create a charttype.
+        This needs to be the service-name which can be used to create a chart type.
      */
     string getChartType();
 
@@ -33,16 +33,16 @@ interface XChartType : com::sun::star::uno::XInterface
         current settings and for the given dimension.
 
         @throws IllegalArgumentException
-            This charttype cannot be displayed in the given dimension.
+            This chart type cannot be displayed in the given dimension.
      */
     XCoordinateSystem createCoordinateSystem( [in] long DimensionCount )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** Returns a sequence of roles that are undestood by this chart
+    /** Returns a sequence of roles that are understood by this chart
         type.
 
         <p>All roles must be listed in the order in which they are
-        usually parsed.  This ensures that glueing sequences together
+        usually parsed.  This ensures that gluing sequences together
         and splitting them up apart again results in the same
         structure as before.</p>
 

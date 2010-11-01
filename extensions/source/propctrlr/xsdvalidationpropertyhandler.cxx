@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,6 +53,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <functional>
@@ -628,7 +630,7 @@ namespace pcr
             size_t i=0;
             const ::rtl::OUString* pLoop = NULL;
             for ( i = 0, pLoop = aFacets;
-                  i < sizeof( aFacets ) / sizeof( aFacets[0] );
+                  i < SAL_N_ELEMENTS( aFacets );
                   ++i, ++pLoop
                 )
             {
@@ -690,3 +692,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,25 +38,33 @@ TARGET=edit
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
+            $(SLO)$/svmedit.obj		\
+            $(SLO)$/svmedit2.obj	\
+            $(SLO)$/sychconv.obj	\
+            $(SLO)$/syntaxhighlight.obj \
             $(SLO)$/textdata.obj	\
             $(SLO)$/textdoc.obj		\
             $(SLO)$/texteng.obj		\
             $(SLO)$/textundo.obj	\
             $(SLO)$/textview.obj	\
+            $(SLO)$/textwindowpeer.obj	\
             $(SLO)$/txtattr.obj		\
             $(SLO)$/xtextedt.obj	\
-            $(SLO)$/sychconv.obj	\
-            $(SLO)$/svmedit.obj		\
-            $(SLO)$/svmedit2.obj    \
-            $(SLO)$/textwindowpeer.obj	\
-            $(SLO)$/syntaxhighlight.obj \
         $(SLO)$/editsyntaxhighlighter.obj
 
 EXCEPTIONSFILES=	\
+            $(SLO)$/editsyntaxhighlighter.obj \
+            $(SLO)$/svmedit.obj		\
+            $(SLO)$/svmedit2.obj	\
+            $(SLO)$/sychconv.obj	\
+            $(SLO)$/syntaxhighlight.obj \
+            $(SLO)$/textdata.obj	\
+            $(SLO)$/textdoc.obj		\
+            $(SLO)$/texteng.obj		\
+            $(SLO)$/textundo.obj	\
             $(SLO)$/textview.obj	\
-            $(SLO)$/textdoc.obj     \
-            $(SLO)$/texteng.obj     \
-            $(SLO)$/textwindowpeer.obj
+            $(SLO)$/textwindowpeer.obj	\
+            $(SLO)$/xtextedt.obj
 
 # --- Targets ------------------------------------------------------
 

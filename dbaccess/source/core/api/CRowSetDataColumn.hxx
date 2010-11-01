@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,21 +84,18 @@ namespace dbaccess
     protected:
         using ODataColumn::getFastPropertyValue;
     };
-    // -------------------------------------------------------------------------
-//  typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >
-//          ORowSetDataColumns_COLLECTION;
 
     typedef connectivity::sdbcx::OCollection ORowSetDataColumns_BASE;
     class ORowSetDataColumns : public ORowSetDataColumns_BASE
     {
-        ::vos::ORef< ::connectivity::OSQLColumns> m_aColumns;
+        ::rtl::Reference< ::connectivity::OSQLColumns> m_aColumns;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
     public:
         ORowSetDataColumns(
                         sal_Bool _bCase,
-                        const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+                        const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector
@@ -105,9 +103,10 @@ namespace dbaccess
         virtual ~ORowSetDataColumns();
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
-        void assign(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector);
+        void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector);
     };
 }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

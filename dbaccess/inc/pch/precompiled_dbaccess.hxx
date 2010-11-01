@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -476,6 +477,8 @@
 #include "editeng/svxenum.hxx"
 #include "svx/svxids.hrc"
 
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "tools/diagnose_ex.h"
 
@@ -498,10 +501,7 @@
 #include "unotools/processfactory.hxx"
 
 
-#include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
-#include "vos/thread.hxx"
+#include "osl/mutex.hxx"
 
 #include "xmloff/ProgressBarHelper.hxx"
 #include "xmloff/XMLConstantsPropertyHandler.hxx"
@@ -518,3 +518,4 @@
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

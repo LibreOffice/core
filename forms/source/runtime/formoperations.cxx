@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,8 @@
 #include <comphelper/property.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
+#include <sal/macros.h>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_FormOperations()
@@ -469,7 +471,7 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
         if ( ( _nFeature != FormFeature::DeleteRecord ) && ( _nFeature != FormFeature::UndoRecordChanges ) )
@@ -742,7 +744,7 @@ namespace frm
             return;
         }
 
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
         // at the moment we have only one feature which supports execution parameters
@@ -1123,7 +1125,7 @@ namespace frm
                 FormFeature::SaveRecordChanges,
                 FormFeature::UndoRecordChanges
             };
-            size_t nFeatureCount = sizeof( pModifyDependentFeatures ) / sizeof( pModifyDependentFeatures[ 0 ] );
+            size_t nFeatureCount = SAL_N_ELEMENTS( pModifyDependentFeatures );
             s_aModifyDependentFeatures = Sequence< sal_Int16 >( pModifyDependentFeatures, nFeatureCount );
         }
 
@@ -1737,3 +1739,5 @@ namespace frm
 //........................................................................
 } // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

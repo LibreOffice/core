@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -348,3 +349,5 @@
 #define HID_FAX_WIZZARD 1661
 #define HID_LETTER_WIZZARD  1660
 #define HID_LAUNCH_REGISTRY 1002
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 #include <osl/conditn.h>
 
 #include <rtl/byteseq.hxx>
+
+#include <boost/shared_ptr.hpp>
 
 #include "jobqueue.hxx"
 
@@ -76,12 +79,15 @@ namespace cppu_threadpool {
 
     typedef ::std::list < struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;
 
+    class DisposedCallerAdmin;
+    typedef boost::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
+
     class DisposedCallerAdmin
     {
     public:
         ~DisposedCallerAdmin();
 
-        static DisposedCallerAdmin *getInstance();
+        static DisposedCallerAdminHolder getInstance();
 
         void dispose( sal_Int64 nDisposeId );
         void stopDisposing( sal_Int64 nDisposeId );
@@ -92,11 +98,15 @@ namespace cppu_threadpool {
         DisposedCallerList m_lst;
     };
 
+    class ThreadPool;
+    typedef boost::shared_ptr<ThreadPool> ThreadPoolHolder;
+
     class ThreadPool
     {
     public:
+        ThreadPool();
         ~ThreadPool();
-        static ThreadPool *getInstance();
+        static ThreadPoolHolder getInstance();
 
         void dispose( sal_Int64 nDisposeId );
         void stopDisposing( sal_Int64 nDisposeId );
@@ -124,6 +134,10 @@ namespace cppu_threadpool {
 
         ::osl::Mutex m_mutexWaitingThreadList;
         WaitingThreadList m_lstThreads;
+
+        DisposedCallerAdminHolder m_DisposedCallerAdmin;
     };
 
 } // end namespace cppu_threadpool
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

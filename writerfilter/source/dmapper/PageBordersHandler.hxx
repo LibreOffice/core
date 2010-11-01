@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_PAGEBORDERSHANDLER_HXX
 #define INCLUDED_PAGEBORDERSHANDLER_HXX
 
@@ -55,3 +56,5 @@ typedef boost::shared_ptr< PageBordersHandler > PageBordersHandlerPtr;
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

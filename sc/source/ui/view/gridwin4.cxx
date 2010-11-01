@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -825,38 +826,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() )
     {
-        // The AutoFill shrink area has an own overlay now
-#if 0
-        //  Schraffur beim Loeschen per AutoFill
-        if ( pViewData->GetRefType() == SC_REFTYPE_FILL )
-        {
-            ScRange aRange;
-            if ( pViewData->GetDelMark( aRange ) )
-            {
-                if ( aRange.aStart.Col() < nX1 ) aRange.aStart.SetCol(nX1);
-                if ( aRange.aEnd.Col() > nX2 )   aRange.aEnd.SetCol(nX2);
-                if ( aRange.aStart.Row() < nY1 ) aRange.aStart.SetRow(nY1);
-                if ( aRange.aEnd.Row() > nY2 )   aRange.aEnd.SetRow(nY2);
-                if ( aRange.aStart.Col() <= aRange.aEnd.Col() &&
-                     aRange.aStart.Row() <= aRange.aEnd.Row() )
-                {
-                    Point aStart = pViewData->GetScrPos( aRange.aStart.Col(),
-                                                         aRange.aStart.Row(), eWhich );
-                    Point aEnd = pViewData->GetScrPos( aRange.aEnd.Col()+1,
-                                                       aRange.aEnd.Row()+1, eWhich );
-                    aEnd.X() -= 1;
-                    aEnd.Y() -= 1;
-
-                    //  Markierung aufheben - roter Rahmen bleibt stehen
-                    Rectangle aRect( aStart,aEnd );
-                    Invert( aRect, INVERT_HIGHLIGHT );
-
-                    //! Delete-Bereich extra kennzeichnen?!?!?
-                }
-            }
-        }
-#endif
-
         Color aRefColor( rColorCfg.GetColorValue(svtools::CALCREFERENCE).nColor );
         aOutputData.DrawRefMark( pViewData->GetRefStartX(), pViewData->GetRefStartY(),
                                  pViewData->GetRefEndX(), pViewData->GetRefEndY(),
@@ -993,15 +962,14 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
         Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
-        String aPageText = ScGlobal::GetRscString( STR_PAGE );
+        String aPageStr = ScGlobal::GetRscString( STR_PGNUM );
         if ( nPageScript == 0 )
         {
             //  get script type of translated "Page" string only once
-            nPageScript = pDoc->GetStringScriptType( aPageText );
+            nPageScript = pDoc->GetStringScriptType( aPageStr );
             if (nPageScript == 0)
                 nPageScript = ScGlobal::GetDefaultScriptType();
         }
-        aPageText += ' ';
 
         Font aFont;
         ScEditEngineDefaulter* pEditEng = NULL;
@@ -1126,8 +1094,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     nPageNo += ((long)nColPos)*nRowBreaks+nRowPos;
                                 else
                                     nPageNo += ((long)nRowPos)*nColBreaks+nColPos;
-                                String aPageStr = aPageText;
-                                aPageStr += String::CreateFromInt32(nPageNo);
+                                aPageStr.SearchAndReplaceAscii("%1", String::CreateFromInt32(nPageNo));
 
                                 if ( pEditEng )
                                 {
@@ -1275,7 +1242,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
-                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
                     aCellBtn.setDrawBaseButton(false);
                     aCellBtn.setDrawPopupButton(true);
                     aCellBtn.setHasHiddenMember(bArrowState);
@@ -1299,17 +1267,13 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     long nPosX = aScrPos.X();
                     long nPosY = aScrPos.Y();
-                    if ( bLayoutRTL )
-                    {
-                        // overwrite the right, not left (visually) grid as long as the
-                        // left/right colors of the button borders aren't mirrored.
-                        nPosX -= nSizeX - 2;
-                    }
+                    // bLayoutRTL is handled in setBoundingBox
 
                     String aStr;
                     pDoc->GetString(nCol, nRow, nTab, aStr);
                     aCellBtn.setText(aStr);
-                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                     aCellBtn.setDrawBaseButton(true);
                     aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
                     aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
@@ -1984,3 +1948,4 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

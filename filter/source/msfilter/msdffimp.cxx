@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <math.h>
@@ -127,10 +128,7 @@
 #include <svx/sdasaitm.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
-#include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
-using namespace vos;
-#endif
+
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -8155,3 +8153,5 @@ SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )
     SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.find(nShapeId) );
     return aIter != maShapeIdContainer.end() ? (*aIter).second : 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -319,9 +320,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     // Verzeichnisse
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
     BOOL    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
-
-        //  new fields
-    BOOL    UpdateField( sw::mark::IFieldmark &fieldBM);
 
     // Numerierung und Bullets
     /**
@@ -651,3 +649,5 @@ inline BOOL SwWrtShell::Is_FnDragEQBeginDrag() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

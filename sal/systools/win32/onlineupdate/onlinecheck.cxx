@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #endif
 
 #include <sal/types.h>
+#include <sal/macros.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -44,8 +46,6 @@
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
-
-#define elementsof(a) (sizeof(a)/sizeof((a)[0]))
 
 // #i71984
 extern "C" sal_Bool SAL_CALL hasInternetConnection()
@@ -65,7 +65,7 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     BOOL fIsConnected = InternetGetConnectedStateEx(
         &dwFlags,
         szConnectionName,
-        elementsof(szConnectionName),
+        SAL_N_ELEMENTS(szConnectionName),
         0 );
 
     return fIsConnected ? sal_True : sal_False;
@@ -80,3 +80,5 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     }
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

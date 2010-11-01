@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -454,6 +455,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "Calc",               "Formula",              SID_SC_TP_FORMULA },
     { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
     { "Calc",               "Changes",              SID_SC_TP_CHANGES },
+    { "Calc",               "Compatibility",        SID_SC_TP_COMPATIBILITY },
     { "Calc",               "Grid",                 SID_SC_TP_GRID },
     { "Calc",               "Print",                RID_SC_TP_PRINT },
     { "Impress",            NULL,                   SID_SD_EDITOPTIONS },
@@ -2702,7 +2704,7 @@ short OfaTreeOptionsDialog::Execute()
             }
         }
 
-        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        utl::ConfigManager::GetConfigManager().StoreConfigItems();
     }
 
     return nRet;
@@ -2876,3 +2878,4 @@ void ExtensionsTabPage::HideWindow()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

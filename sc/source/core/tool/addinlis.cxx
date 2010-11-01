@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,13 @@
 
 #include <tools/debug.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 
 
 #include "addinlis.hxx"
 #include "miscuno.hxx"      // SC_IMPL_SERVICE_INFO
 #include "document.hxx"
 #include "brdcst.hxx"
-#include "unoguard.hxx"
 #include "sc.hrc"
 
 using namespace com::sun::star;
@@ -135,23 +136,9 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;          //! or generate a UserEvent
+    SolarMutexGuard aGuard;         //! or generate a UserEvent
 
     aResult = aEvent.Value;     // store result
-
-    if ( !HasListeners() )
-    {
-        //! remove from list and removeListener, as in RemoveDocument ???
-
-#if 0
-        //! this will crash if called before first StartListening !!!
-        aAllListeners.Remove( this );
-        if ( xVolRes.is() )
-            xVolRes->removeResultListener( this );
-        release();  // Ref for aAllListeners - this may be deleted here
-        return;
-#endif
-    }
 
     //  notify document of changes
 
@@ -188,3 +175,4 @@ void SAL_CALL ScAddInListener::disposing( const ::com::sun::star::lang::EventObj
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,16 +92,6 @@ struct SvxViewLayoutItem : public LAYOUT_SfxPoolItem
     void SetBookMode( bool )
     {
     }
-#if 0 // needed for real SfxPoolItem
-    int operator==( const SfxPoolItem& ) const
-    {
-        return 0;
-    }
-    SfxPoolItem* Clone( SfxItemPool* ) const
-    {
-        return 0;
-    }
-#endif
 };
 #else /* !TEST_LAYOUT */
 #include <svx/zoomitem.hxx>
@@ -620,3 +611,4 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

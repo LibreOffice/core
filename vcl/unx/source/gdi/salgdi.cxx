@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -224,22 +225,10 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
 {
-#if 0 // TODO: use SetDrawable() instead
-    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
-    hDrawable_      = aTarget;
-    m_nScreen       = nScreen;
-    SetXRenderFormat( NULL );
-    if( m_aRenderPicture )
-        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
 
-    nPenPixel_      = GetPixel( nPenColor_ );
-    nTextPixel_     = GetPixel( nTextColor_ );
-    nBrushPixel_    = GetPixel( nBrushColor_ );
-#else
     m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
     m_nScreen = nScreen;
     SetDrawable( aTarget, nScreen );
-#endif
 
     bWindow_        = TRUE;
     m_pFrame        = pFrame;
@@ -1051,13 +1040,6 @@ XID X11SalGraphics::GetXRenderPicture()
         m_aRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
     }
 
-#if 0
-    // setup clipping so the callers don't have to do it themselves
-    // TODO: avoid clipping if already set correctly
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
-    else
-#endif
     {
         // reset clip region
         // TODO: avoid clip reset if already done
@@ -1287,3 +1269,4 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

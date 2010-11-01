@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -42,7 +43,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
@@ -132,7 +133,7 @@ namespace oooimprovecore
         else
             help_url = OUString::createFromAscii("http://www.openoffice.org");
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             aSet.Put( SfxStringItem( SID_CURRENT_URL, help_url ) );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -188,3 +189,5 @@ namespace oooimprovecore
         static OAutoRegistration<Core> auto_reg;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

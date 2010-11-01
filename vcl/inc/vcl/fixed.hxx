@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@ class UserDrawEvent;
 
 class VCL_DLLPUBLIC FixedText : public Control
 {
-//#if 0 // _SOLAR__PRIVATE
 private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -53,7 +53,6 @@ private:
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
     SAL_DLLPRIVATE static USHORT   ImplGetTextStyle( WinBits nWinBits );
-//#endif
 protected:
     virtual void    FillLayoutData() const;
     virtual const Font&
@@ -197,3 +196,5 @@ public:
 };
 
 #endif  // _SV_FIXED_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

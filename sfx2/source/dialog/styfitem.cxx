@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-
-#ifndef GCC
-#endif
 
 #include <sfx2/styfitem.hxx>
 #include <svtools/localresaccess.hxx>
@@ -185,3 +183,5 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _
 
     return bSuccess;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

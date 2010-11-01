@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>
@@ -124,6 +125,40 @@ DBG_NAME(SfxObjectShell)
 
 static WeakReference< XInterface > s_xCurrentComponent;
 
+void lcl_UpdateAppBasicDocVars(  const Reference< XInterface >& _rxComponent, bool bClear = false )
+{
+    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+    if ( pAppMgr )
+    {
+        uno::Reference< beans::XPropertySet > xProps( _rxComponent, uno::UNO_QUERY );
+        if ( xProps.is() )
+        {
+            try
+            {
+                // ThisVBADocObj contains a PropertyValue
+                // Name  is ( the name of the VBA global to insert )
+                // Value is the Object to insert.
+                // ( note: at the moment the Value is actually the model so
+                // it strictly is not necessary, however we do intend to store
+                // not the model in basic but a custom object, so we keep this
+                // level of indirection for future proofing )
+                beans::PropertyValue aProp;
+                xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisVBADocObj") ) ) >>= aProp;
+                rtl::OString sTmp( rtl::OUStringToOString( aProp.Name, RTL_TEXTENCODING_UTF8 ) );
+                const char* pAscii = sTmp.getStr();
+                if ( bClear )
+                    pAppMgr->SetGlobalUNOConstant( pAscii, uno::makeAny( uno::Reference< uno::XInterface >() ) );
+                else
+                    pAppMgr->SetGlobalUNOConstant( pAscii, aProp.Value );
+
+            }
+            catch( uno::Exception& e )
+            {
+            }
+        }
+    }
+}
+
 //=========================================================================
 
 
@@ -148,16 +183,17 @@ void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::E
 
 void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
 void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
     // am I ThisComponent in AppBasic?
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
+        lcl_UpdateAppBasicDocVars( SfxObjectShell::GetCurrentComponent(), true );
         // remove ThisComponent reference from AppBasic
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
@@ -804,22 +840,6 @@ void SfxObjectShell::InitBasicManager_Impl()
 }
 
 //--------------------------------------------------------------------
-#if 0 //(mba)
-SotObjectRef SfxObjectShell::CreateAggObj( const SotFactory* pFact )
-{
-    // SvDispatch?
-    SotFactory* pDispFact = SvDispatch::ClassFactory();
-    if( pFact == pDispFact )
-        return( (SfxShellObject*)GetSbxObject() );
-
-    // sonst unbekannte Aggregation
-    DBG_ERROR("unkekannte Factory");
-    SotObjectRef aSvObjectRef;
-    return aSvObjectRef;
-}
-#endif
-
-//--------------------------------------------------------------------
 
 sal_uInt16 SfxObjectShell::Count()
 {
@@ -848,7 +868,7 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 
     if ( !pEventNameContainer )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !pEventNameContainer )
         {
             static uno::Sequence< ::rtl::OUString > aEventNameContainer = GlobalEventConfig().getElementNames();
@@ -910,7 +930,10 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
     s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
+    {
+        lcl_UpdateAppBasicDocVars( _rxComponent );
         pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
+    }
 
 #if OSL_DEBUG_LEVEL > 0
     const char* pComponentImplName = _rxComponent.get() ? typeid( *_rxComponent.get() ).name() : "void";
@@ -1131,3 +1154,4 @@ bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence<
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

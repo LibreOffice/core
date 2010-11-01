@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1638,7 +1639,7 @@ void LoadEnv::impl_reactForLoadingState()
 
         if (bMinimized)
         {
-            ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
             // check for system window is neccessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
@@ -1749,7 +1750,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pWindow )
     {
@@ -1817,7 +1818,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
        return;
 
     // SOLAR SAFE ->
-    ::vos::OClearableGuard aSolarLock1(Application::GetSolarMutex());
+    SolarMutexClearableGuard aSolarGuard1;
 
     Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
@@ -1834,7 +1835,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (pWorkWindow->IsMinimized())
         return;
 
-    aSolarLock1.clear();
+    aSolarGuard1.clear();
     // <- SOLAR SAFE
 
     // SAFE ->
@@ -1876,7 +1877,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         if (sWindowState.getLength())
         {
             // SOLAR SAFE ->
-            ::vos::OClearableGuard aSolarLock2(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
 
             // We have to retrieve the window pointer again. Because nobody can guarantee
             // that the XWindow was not disposed inbetween .-)
@@ -1889,8 +1890,6 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
             SystemWindow* pSystemWindow = (SystemWindow*)pWindowCheck;
             pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
-
-            aSolarLock2.clear();
             // <- SOLAR SAFE
         }
     }
@@ -1902,3 +1901,4 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

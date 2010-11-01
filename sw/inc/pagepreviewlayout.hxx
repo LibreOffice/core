@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #define _PAGEPREVIEWLAYOUT_HXX
 
@@ -558,9 +559,6 @@ public:
     sal_uInt16 GetColOfPage( sal_uInt16 _nPageNum ) const;
 
     // OD 18.12.2002 #103492#
-    Size GetMaxPageSize() const;
-
-    // OD 18.12.2002 #103492#
     Size GetPrevwDocSize() const;
 
     /** get size of a preview page by its physical page number
@@ -622,3 +620,5 @@ public:
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

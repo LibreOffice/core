@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,6 +64,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include <sal/macros.h>
 #include "tools/solar.h"
 #include "unotools/charclass.hxx"
 
@@ -284,7 +286,7 @@ void Test::testNormalizedMakeRelative() {
           "nonex3/nonex4" }
 #endif
     };
-    for (std::size_t i = 0; i < sizeof tests / sizeof tests[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
         css::uno::Reference< css::uri::XUriReference > ref(
             URIHelper::normalizedMakeRelative(
                 m_context, rtl::OUString::createFromAscii(tests[i].base),
@@ -414,7 +416,7 @@ void Test::testFindFirstURLInText() {
         com::sun::star::lang::Locale(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")), rtl::OUString()));
-    for (std::size_t i = 0; i < sizeof tests / sizeof tests[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
         rtl::OUString input(rtl::OUString::createFromAscii(tests[i].input));
         xub_StrLen begin = 0;
         xub_StrLen end = static_cast< xub_StrLen >(input.getLength());
@@ -457,3 +459,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
 }
 
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

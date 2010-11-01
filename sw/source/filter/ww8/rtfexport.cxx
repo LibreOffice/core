@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -282,8 +283,14 @@ void RtfExport::WriteRevTab()
 
     // Now write the table
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_REVTBL << ' ';
-    for(std::map<String,USHORT>::iterator aIter = m_aRedlineTbl.begin(); aIter != m_aRedlineTbl.end(); ++aIter)
-        Strm() << '{' << OutString((*aIter).first, eDefaultEncoding) << ";}";
+    for(USHORT i = 0; i < m_aRedlineTbl.size(); ++i)
+    {
+        const String* pAuthor = GetRedline(i);
+        Strm() << '{';
+        if (pAuthor)
+            Strm() << OutString(*pAuthor, eDefaultEncoding);
+        Strm() << ";}";
+    }
     Strm() << '}' << sNewLine;
 }
 
@@ -453,6 +460,10 @@ void RtfExport::WritePageDescTable()
     }
     Strm() << '}' << sNewLine;
     bOutPageDescs = FALSE;
+
+    // reset table infos, otherwise the depth of the cells will be incorrect,
+    // in case the page style (header or footer) had tables
+    mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 }
 
 void RtfExport::ExportDocument_Impl()
@@ -726,6 +737,11 @@ void RtfExport::OutputOLENode( const SwOLENode& )
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
+}
+
+void RtfExport::OutputLinkedOLE( const rtl::OUString& )
+{
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 }
 
 void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
@@ -1110,9 +1126,12 @@ USHORT RtfExport::GetRedline( const String& rAuthor )
     }
 }
 
-void RtfExport::OutContent( const SwNode& rNode )
+const String* RtfExport::GetRedline( USHORT nId )
 {
-        OutputContentNode(*rNode.GetCntntNode());
+    for(std::map<String,USHORT>::iterator aIter = m_aRedlineTbl.begin(); aIter != m_aRedlineTbl.end(); ++aIter)
+        if ((*aIter).second == nId)
+            return &(*aIter).first;
+    return NULL;
 }
 
 void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage )
@@ -1154,6 +1173,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, 
     if( pAktPageDesc != &rPgDsc )
     {
         pAktPageDesc = &rPgDsc;
+        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_HEADER,
                     FALSE, &pItem ) == SFX_ITEM_SET )
             WriteHeaderFooter(*pItem, true);
@@ -1213,6 +1233,7 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
+/// Glue class to call RtfExport as an internal filter, needed by copy&paste support.
 class SwRTFWriter : public Writer
 {
        public:
@@ -1244,4 +1265,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName,
     xRet = new SwRTFWriter( rFltName, rBaseURL );
 }
 
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

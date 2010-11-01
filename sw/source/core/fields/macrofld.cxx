@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,8 +248,8 @@ BOOL SwMacroField::isScriptURL( const String& str )
 
     uno::Reference< uri::XUriReferenceFactory >
         xFactory( xSMgr->createInstance(
-            OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory" ) ), uno::UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.uri.UriReferenceFactory")) ), uno::UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -262,3 +263,5 @@ BOOL SwMacroField::isScriptURL( const String& str )
     }
     return FALSE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

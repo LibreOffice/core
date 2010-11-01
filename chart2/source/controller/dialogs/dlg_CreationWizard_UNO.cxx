@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include "ContainerHelper.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -73,7 +74,7 @@ CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponen
 }
 CreationWizardUnoDlg::~CreationWizardUnoDlg()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_pDialog )
     {
         delete m_pDialog;
@@ -179,7 +180,7 @@ uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( vo
 // XTerminateListener
 void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ ) throw( frame::TerminationVetoException, uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     // we will never give a veto here
     if( m_pDialog && !m_pDialog->isClosable() )
@@ -209,7 +210,7 @@ void SAL_CALL CreationWizardUnoDlg::setTitle( const ::rtl::OUString& /*rTitle*/ 
 //-------------------------------------------------------------------------
 void CreationWizardUnoDlg::createDialogOnDemand()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( !m_pDialog )
     {
         Window* pParent = NULL;
@@ -252,7 +253,7 @@ sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  ) throw(uno::RuntimeException
 {
     sal_Int16 nRet = RET_CANCEL;
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( !m_pDialog )
             return nRet;
@@ -294,7 +295,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     m_xParentWindow.clear();
 
     // /--
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_pDialog )
     {
         delete m_pDialog;
@@ -340,7 +341,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const ::rtl::OUString& rPr
 
         //set left upper outer corner relative to screen
         //pixels, screen position
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
         {
@@ -372,7 +373,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
     {
         //get left upper outer corner relative to screen
         //pixels, screen position
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
         {
@@ -385,7 +386,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
     {
         //get outer size inclusive decoration
         //pixels, screen position
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
         {
@@ -431,3 +432,5 @@ void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const ::rtl::O
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

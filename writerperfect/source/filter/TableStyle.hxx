@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* TableStyle: Stores (and writes) table-based information that is
  * needed at the head of an OO document.
  *
@@ -78,3 +79,5 @@ private:
     std::vector<TableRowStyle *> mTableRowStyles;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SOActiveX.cpp : Implementation of CSOActiveX
 
 #pragma warning (disable:4505)
@@ -1149,3 +1150,4 @@ HRESULT CSOActiveX::GetURL( const OLECHAR* url,
 
 // ---------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

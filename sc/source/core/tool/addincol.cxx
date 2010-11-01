@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/xception.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
 
@@ -1227,14 +1227,6 @@ String ScUnoAddInCollection::FindFunction( const String& rUpperName, BOOL bLocal
         ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( rUpperName ) );
         if ( iLook != pLocalHashMap->end() )
             return iLook->second->GetOriginalName();
-
-#if 0
-        //  after that, scan international names (really?)
-
-        iLook = pNameHashMap->find( rUpperName );
-        if ( iLook != pNameHashMap->end() )
-            return iLook->second->GetOriginalName();
-#endif
     }
     else
     {
@@ -1572,12 +1564,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         {
             nErrCode = errIllegalArgument;
         }
-#if 0
-        catch(FloatingPointException&)
-        {
-            nErrCode = errIllegalFPOperation;
-        }
-#endif
+
         catch(reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(
@@ -1800,3 +1787,4 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

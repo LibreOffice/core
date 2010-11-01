@@ -31,7 +31,7 @@ PRJNAME=sc
 TARGET=vbaobj
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
-
+CDEFS+=-DVBA_OOBUILD_HACK
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -63,18 +63,29 @@ SLOFILES= \
         $(SLO)$/vbacharttitle.obj \
         $(SLO)$/vbacomment.obj \
         $(SLO)$/vbacomments.obj \
+        $(SLO)$/vbacommentshape.obj \
         $(SLO)$/vbacondition.obj \
         $(SLO)$/vbadialog.obj \
         $(SLO)$/vbadialogs.obj \
         $(SLO)$/vbaeventshelper.obj \
+        $(SLO)$/vbafiledialog.obj \
+        $(SLO)$/vbafiledialogselecteditems.obj \
+        $(SLO)$/vbafilesearch.obj \
         $(SLO)$/vbafont.obj \
         $(SLO)$/vbaformat.obj \
         $(SLO)$/vbaformatcondition.obj \
         $(SLO)$/vbaformatconditions.obj \
+        $(SLO)$/vbafoundfiles.obj \
         $(SLO)$/vbaglobals.obj \
         $(SLO)$/vbahyperlink.obj \
         $(SLO)$/vbahyperlinks.obj \
         $(SLO)$/vbainterior.obj \
+        $(SLO)$/vbamenubar.obj  \
+        $(SLO)$/vbamenubars.obj \
+        $(SLO)$/vbamenu.obj \
+        $(SLO)$/vbamenus.obj \
+        $(SLO)$/vbamenuitem.obj \
+        $(SLO)$/vbamenuitems.obj \
         $(SLO)$/vbaname.obj \
         $(SLO)$/vbanames.obj \
         $(SLO)$/vbaoleobject.obj \
@@ -88,6 +99,7 @@ SLOFILES= \
         $(SLO)$/vbapivotcache.obj \
         $(SLO)$/vbapivottable.obj \
         $(SLO)$/vbapivottables.obj \
+        $(SLO)$/vbaquerytable.obj \
         $(SLO)$/vbarange.obj \
         $(SLO)$/vbaseriescollection.obj \
         $(SLO)$/vbasheetobject.obj \

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
 #include <errno.h>
 #include <dlfcn.h>
 #include <unistd.h>
@@ -209,7 +215,7 @@ static void signal_handler( int nSig )
     fprintf( stderr, "caught signal %d, exiting\n", nSig );
 #ifdef LINUX
     void* pStack[64];
-    int nStackLevels = backtrace( pStack, sizeof(pStack)/sizeof(pStack[0]) );
+    int nStackLevels = backtrace( pStack, SAL_N_ELEMENTS(pStack) );
     backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
 #endif
 #endif
@@ -513,3 +519,4 @@ extern "C" {
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

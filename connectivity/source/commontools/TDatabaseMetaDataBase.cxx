@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include "resource/sharedresources.hxx"
 #include "resource/common_res.hrc"
 #include <connectivity/dbexception.hxx>
+#include <sal/macros.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -148,7 +150,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                 ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
                 aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
                 sal_Int32* pType = pTypes;
-                for (sal_Int32 i = 1; i <= sal_Int32(sizeof(pTypes)/sizeof(pTypes[0])); ++i,++pType)
+                for (sal_Int32 i = 1; i <= sal_Int32(SAL_N_ELEMENTS(pTypes)); ++i,++pType)
                 {
                     ORowSetValue aValue;
                     aValue.fill(i,*pType,xRow);
@@ -331,3 +333,5 @@ sal_Bool SAL_CALL ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  ) th
     return callImplMethod(m_storesMixedCaseQuotedIdentifiers,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_storesMixedCaseQuotedIdentifiers_throw));
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

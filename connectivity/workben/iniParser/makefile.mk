@@ -42,13 +42,12 @@ OBJFILES=       $(OBJ)$/main.obj
 
 
 APPSTDLIBS=$(SALLIB) \
-        $(VOSLIB) \
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
     $(UCBHELPERLIB)	\
     $(DBTOOLSLIB)	\
     $(COMPHELPERLIB)
-            
+
 
 # ... cfgapi ..............................
 
@@ -57,6 +56,6 @@ APP1OBJS=       $(OBJFILES)
 APP1STDLIBS = $(APPSTDLIBS)
 
 # --- Targets ------------------------------------------------------
-    
+
 .INCLUDE :      target.mk
 

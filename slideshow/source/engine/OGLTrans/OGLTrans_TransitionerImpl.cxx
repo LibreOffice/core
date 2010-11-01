@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1210,6 +1211,9 @@ void OGLTransitionerImpl::disposeContextAndWindow()
 
 void OGLTransitionerImpl::disposeTextures()
 {
+    if( !GLWin.ctx )
+        return;
+
 #ifdef WNT
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #endif
@@ -1307,11 +1311,21 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
     GLenteringSlide( 0 ),
     pWindow( NULL ),
     mxView(),
+    mxLeavingBitmap(),
+    mxEnteringBitmap(),
     EnteringBytes(),
     LeavingBytes(),
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+    LeavingPixmap(0),
+    EnteringPixmap(0),
+#endif
     mbRestoreSync( false ),
     mbUseLeavingPixmap( false ),
     mbUseEnteringPixmap( false ),
+    mbFreeLeavingPixmap( false ),
+    mbFreeEnteringPixmap( false ),
+    maLeavingPixmap(0),
+    maEnteringPixmap(0),
     SlideBitmapLayout(),
     SlideSize(),
     pTransition(pOGLTransition)
@@ -1482,3 +1496,5 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 COMPHELPER_SERVICEDECL_EXPORTS1(OGLTransitionFactoryDecl)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

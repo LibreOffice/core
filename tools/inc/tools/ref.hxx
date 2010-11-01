@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -366,11 +367,9 @@ public:
     UINT32          GetRefCount() const { return nRefCount; }
 };
 
-//#if 0 // _SOLAR__PRIVATE
 #ifndef EMPTYARG
 #define EMPTYARG
 #endif
-//#endif
 
 SV_DECL_IMPL_REF(SvRefBase)
 
@@ -454,3 +453,5 @@ public:                                                             \
 SV_DECL_WEAK( SvWeakBase )
 
 #endif // _Weak_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

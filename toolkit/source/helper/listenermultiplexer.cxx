@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,6 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-//#include "precompiled_toolkit.hxx"
 #include "precompiled_toolkit.hxx"
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -211,3 +211,5 @@ IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeEditListenerMultiplexer, ::com::sun::s
 //  ----------------------------------------------------
 IMPL_LISTENERMULTIPLEXER_BASEMETHODS( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener, selectionChanged, ::com::sun::star::awt::grid::GridSelectionEvent )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

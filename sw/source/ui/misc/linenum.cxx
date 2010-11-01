@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,10 +53,6 @@
 
 #include <IDocumentStylePoolAccess.hxx>
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     SfxSingleTabDialog(&pVw->GetViewFrame()->GetWindow(), 0, 0),
     pSh(pVw->GetWrtShellPtr())
@@ -66,17 +63,9 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 __EXPORT SwLineNumberingDlg::~SwLineNumberingDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 {
@@ -91,10 +80,6 @@ IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 
     return 0;
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
                                                     const SfxItemSet& rSet )
@@ -131,26 +116,14 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     ::FillCharStyleListBox(aCharStyleLB, pSh->GetView().GetDocShell());
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 __EXPORT SwLineNumberingPage::~SwLineNumberingPage()
 {
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwLineNumberingPage( pParent, rSet );
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 {
@@ -224,7 +197,6 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 /*--------------------------------------------------------------------
     Beschreibung: Modify
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 {
     BOOL bHasValue = aDivisorED.GetText().Len() != 0;
@@ -239,7 +211,6 @@ IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: On/Off
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
 {
     BOOL bEnable = aNumberingOnCB.IsChecked();
@@ -269,10 +240,6 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
 
     return 0;
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
@@ -327,4 +294,4 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
     return FALSE;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

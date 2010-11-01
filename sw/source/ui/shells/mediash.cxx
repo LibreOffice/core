@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
 
 
 #include <cmdid.h>
@@ -87,8 +86,6 @@ SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_MEDIA_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_MEDIA_TOOLBOX));
 }
-
-// ------------------------------------------------------------------------------
 
 void SwMediaShell::ExecMedia(SfxRequest &rReq)
 {
@@ -161,8 +158,6 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
     }
 }
 
-// ------------------------------------------------------------------------------
-
 void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 {
     SfxWhichIter    aIter( rSet );
@@ -205,8 +200,6 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
     }
 }
 
-// ------------------------------------------------------------------------------
-
 SwMediaShell::SwMediaShell(SwView &_rView) :
     SwBaseShell(_rView)
 
@@ -214,3 +207,5 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
     SetName(String::CreateFromAscii("Media Playback"));
     SetHelpId(SW_MEDIASHELL);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

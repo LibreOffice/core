@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,9 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-#include <aboutbmpnames.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef GCC
-#endif
 
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -43,8 +41,16 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <unotools/configmgr.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
+
+#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
+#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include <comphelper/processfactory.hxx>
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/bootstrap.hxx"
 
 #include <sfx2/sfxuno.hxx>
 #include "about.hxx"
@@ -54,6 +60,8 @@
 
 #include "dialog.hrc"
 
+using namespace ::com::sun::star;
+
 // defines ---------------------------------------------------------------
 
 #define SCROLL_OFFSET   1
@@ -62,73 +70,12 @@
 
 #define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
 
-// class AboutDialog -----------------------------------------------------
-static bool impl_loadBitmap(
-    const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
-    Image &rLogo )
-{
-    rtl::OUString uri( rPath );
-    rtl::Bootstrap::expandMacros( uri );
-    INetURLObject aObj( uri );
-    aObj.insertName( rBmpFileName );
-    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-    if ( !aStrm.GetError() )
-    {
-        // Use graphic class to also support more graphic formats (bmp,png,...)
-        Graphic aGraphic;
-
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
-
-        // Default case, we load the intro bitmap from a seperate file
-        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-        BitmapEx aBmp = aGraphic.GetBitmapEx();
-        rLogo = Image( aBmp );
-        return true;
-    }
-    return false;
-}
-
 /** loads the application logo as used in the about dialog and impress slideshow pause screen */
 Image SfxApplication::GetApplicationLogo()
 {
-    Image aAppLogo;
-
-    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
-    bool bLoaded = false;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
-    }
-    while ( !bLoaded && ( nIndex >= 0 ) );
-
-    // fallback to "about.bmp"
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
-    }
-
-    if ( !bLoaded )
-    {
-        bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
-        if ( !bLoaded )
-            bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
-    }
-
-    return aAppLogo;
+    BitmapEx aBitmap;
+    Application::LoadBrandBitmap ("about", aBitmap);
+    return Image( aBitmap );
 }
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
@@ -138,13 +85,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
-    // FIXME: What is the purpose of the aBuildData when it is not connected to any widget?
-    aBuildData      ( this ),
+    aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
     aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
     aDevVersionStr  ( rVerStr ),
     aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
-    aVersionTextStr(          ResId( ABOUT_STR_VERSION, *rId.GetResMgr() ) ),
+    aVersionTextStr(            ResId( ABOUT_STR_VERSION, *rId.GetResMgr() ) ),
     aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
+    aLinkStr        (           ResId( ABOUT_STR_LINK, *rId.GetResMgr() ) ),
     aTimer          (),
     nOff            ( 0 ),
     m_nDeltaWidth   ( 0 ),
@@ -209,24 +156,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     aVersionText.SetBackground();
     aCopyrightText.SetBackground();
+    aInfoLink.SetURL( aLinkStr );
+    aInfoLink.SetBackground();
+    aInfoLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
 
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
-    aBuildData.SetBackground( aWall );
-
-    Font aSmallFont = rSettings.GetInfoFont();
-    Size aSmaller = aNewFont.GetSize();
-    aSmaller.Width() = (long) (aSmaller.Width() * 0.75);
-    aSmaller.Height() = (long) (aSmaller.Height() * 0.75);
-    aNewFont.SetSize( aSmaller );
-    aBuildData.SetFont( aNewFont );
-    aBuildData.SetBackground( aWall );
-    // FIXME: What is the purpose of the build data?
-    // they are not showed even when set, so???
-    String aBuildDataString;
-    aBuildData.SetText( aBuildDataString );
-    aBuildData.Show();
 
     aCopyrightText.SetText( aCopyrightTextStr );
 
@@ -259,17 +195,29 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     Size aOKSiz = aOKButton.GetSizePixel();
     Point aOKPnt = aOKButton.GetPosPixel();
 
+    // FixedHyperlink with more info link
+    Point aLinkPnt = aInfoLink.GetPosPixel();
+    Size aLinkSize = aInfoLink.GetSizePixel();
+
     // Multiline edit with Copyright-Text
     Point aCopyPnt = aCopyrightText.GetPosPixel();
     Size aCopySize = aCopyrightText.GetSizePixel();
     aCopySize.Width()  = nTextWidth;
-    aCopySize.Height() = aOutSiz.Height() - nY - ( aOKSiz.Height() * 2 ) - nCtrlMargin;
+    aCopySize.Height() = aOutSiz.Height() - nY - ( aOKSiz.Height() * 2 ) - 3*aLinkSize.Height() - nCtrlMargin;
 
     aCopyPnt.X() = ( aOutSiz.Width() - aCopySize.Width() ) / 2;
     aCopyPnt.Y() = nY;
     aCopyrightText.SetPosSizePixel( aCopyPnt, aCopySize );
 
-    nY += aCopySize.Height() + nCtrlMargin;
+    nY += aCopySize.Height() + aLinkSize.Height();
+
+    aLinkSize.Width() = aInfoLink.CalcMinimumSize().Width();
+    aLinkPnt.X() = ( aOutSiz.Width() - aLinkSize.Width() ) / 2;
+    aLinkPnt.Y() = nY;
+    aInfoLink.SetPosSizePixel( aLinkPnt, aLinkSize );
+
+    nY += aLinkSize.Height() + nCtrlMargin;
+
     aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
     aOKPnt.Y() = nY;
     aOKButton.SetPosPixel( aOKPnt );
@@ -334,6 +282,35 @@ IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
     aTimer.SetTimeout( SCROLL_TIMER );
     aTimer.Start();
     return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+{
+    rtl::OUString sURL=pHyperlink->GetURL();
+    rtl::OUString sTitle=GetText();
+
+    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
+        return 1;
+    try
+    {
+        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+    }
+    catch ( uno::Exception& )
+    {
+        uno::Any exc( ::cppu::getCaughtException() );
+        rtl::OUString msg( ::comphelper::anyToString( exc ) );
+        const SolarMutexGuard guard;
+        ErrorBox aErrorBox( NULL, WB_OK, msg );
+        aErrorBox.SetText( sTitle );
+        aErrorBox.Execute();
+    }
+
+    return 1;
 }
 
 // -----------------------------------------------------------------------
@@ -419,3 +396,5 @@ void AboutDialog::Paint( const Rectangle& rRect )
         Close();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

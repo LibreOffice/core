@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,8 @@
  ************************************************************************/
 
 #include "vbapalette.hxx"
+
+#include <sal/macros.h>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -62,7 +65,7 @@ public:
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
     {
-        return sizeof(spnDefColorTable8) / sizeof(spnDefColorTable8[0]);
+        return SAL_N_ELEMENTS(spnDefColorTable8);
     }
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
@@ -109,3 +112,5 @@ ScVbaPalette::getPalette() const
         return new DefaultPalette();
     return xIndex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

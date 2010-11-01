@@ -111,7 +111,10 @@ CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
-CFLAGSOPT=$(CDEFAULTOPT) -fno-strict-aliasing		# optimizing for products
+CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
+.IF "$(USE_SYSTEM_STL)"!="YES"
+CFLAGSOPT+=-fno-strict-aliasing #STLPort headers are full of aliasing warnings
+.ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
@@ -132,6 +135,7 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
+    lotuswordpro \
     soldep
 
 # switches for dynamic and static linking

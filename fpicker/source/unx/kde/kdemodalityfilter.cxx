@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,18 +39,18 @@
 // Modality filter
 //////////////////////////////////////////////////////////////////////////
 
-ModalityFilter::ModalityFilter( WId nWinId )
+KDEModalityFilter::KDEModalityFilter( WId nWinId )
     : m_nWinId( nWinId )
 {
     kapp->installEventFilter( this );
 }
 
-ModalityFilter::~ModalityFilter()
+KDEModalityFilter::~KDEModalityFilter()
 {
     kapp->removeEventFilter( this );
 }
 
-bool ModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
+bool KDEModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
 {
     if ( pObject->isWidgetType() && pEvent->type() == QEvent::Show )
     {
@@ -62,3 +63,5 @@ bool ModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
     }
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

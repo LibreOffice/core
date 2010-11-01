@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,11 +33,9 @@
 #include <vcl/dndlcon.hxx>
 #include <vcl/window.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svdata.hxx>
-using namespace ::osl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -61,20 +60,11 @@ DNDEventDispatcher::~DNDEventDispatcher()
 {
 }
 
-//==================================================================================================
-// DNDEventDispatcher::drop
-//==================================================================================================
-
-void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
-    throw(RuntimeException)
+Window* DNDEventDispatcher::findTopLevelWindow(Point location)
 {
-    MutexGuard aImplGuard( m_aMutex );
-
-    Point location( dtde.LocationX, dtde.LocationY );
+    SolarMutexGuard aSolarGuard;
 
     // find the window that is toplevel for this coordinates
-    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-
     // because those coordinates come from outside, they must be mirrored if RTL layout is active
     if( Application::GetSettings().GetLayoutRTL() )
         m_pTopWindow->ImplMirrorFramePos( location );
@@ -89,7 +79,21 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     if( pChildWindow->ImplIsAntiparallel() )
         pChildWindow->ImplReMirror( location );
 
-    aSolarGuard.clear();
+    return pChildWindow;
+}
+
+//==================================================================================================
+// DNDEventDispatcher::drop
+//==================================================================================================
+
+void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
+    throw(RuntimeException)
+{
+    osl::MutexGuard aImplGuard( m_aMutex );
+
+    Point location( dtde.LocationX, dtde.LocationY );
+
+    Window* pChildWindow = findTopLevelWindow(location);
 
     // handle the case that drop is in an other vcl window than the last dragOver
     if( pChildWindow != m_pCurrentWindow )
@@ -125,27 +129,10 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
 
-    // find the window that is toplevel for this coordinates
-    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-
-    // because those coordinates come from outside, they must be mirrored if RTL layout is active
-    if( Application::GetSettings().GetLayoutRTL() )
-        m_pTopWindow->ImplMirrorFramePos( location );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
-
-    if( NULL == pChildWindow )
-        pChildWindow = m_pTopWindow;
-
-    while( pChildWindow->ImplGetClientWindow() )
-        pChildWindow = pChildWindow->ImplGetClientWindow();
-
-    if( pChildWindow->ImplIsAntiparallel() )
-        pChildWindow->ImplReMirror( location );
-
-    aSolarGuard.clear();
+    Window * pChildWindow = findTopLevelWindow(location);
 
     // assume pointer write operation to be atomic
     m_pCurrentWindow = pChildWindow;
@@ -170,7 +157,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     fireDragExitEvent( m_pCurrentWindow );
 
@@ -186,29 +173,12 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
-    // find the window that is toplevel for this coordinates
-    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-
-    // because those coordinates come from outside, they must be mirrored if RTL layout is active
-    if( Application::GetSettings().GetLayoutRTL() )
-        m_pTopWindow->ImplMirrorFramePos( location );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
-
-    if( NULL == pChildWindow )
-        pChildWindow = m_pTopWindow;
-
-    while( pChildWindow->ImplGetClientWindow() )
-        pChildWindow = pChildWindow->ImplGetClientWindow();
-
-    if( pChildWindow->ImplIsAntiparallel() )
-        pChildWindow->ImplReMirror( location );
-
-    aSolarGuard.clear();
+    Window * pChildWindow = findTopLevelWindow(location);
 
     if( pChildWindow != m_pCurrentWindow )
     {
@@ -244,29 +214,12 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
-    // find the window that is toplevel for this coordinates
-    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-
-    // because those coordinates come from outside, they must be mirrored if RTL layout is active
-    if( Application::GetSettings().GetLayoutRTL() )
-        m_pTopWindow->ImplMirrorFramePos( location );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
-
-    if( NULL == pChildWindow )
-        pChildWindow = m_pTopWindow;
-
-    while( pChildWindow->ImplGetClientWindow() )
-        pChildWindow = pChildWindow->ImplGetClientWindow();
-
-    if( pChildWindow->ImplIsAntiparallel() )
-        pChildWindow->ImplReMirror( location );
-
-    aSolarGuard.clear();
+    Window* pChildWindow = findTopLevelWindow(location);
 
     if( pChildWindow != m_pCurrentWindow )
     {
@@ -302,28 +255,12 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
     throw(RuntimeException)
-{   MutexGuard aImplGuard( m_aMutex );
+{
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point origin( dge.DragOriginX, dge.DragOriginY );
 
-    // find the window that is toplevel for this coordinates
-    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-
-    // because those coordinates come from outside, they must be mirrored if RTL layout is active
-    if( Application::GetSettings().GetLayoutRTL() )
-        m_pTopWindow->ImplMirrorFramePos( origin );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( origin );
-
-    if( NULL == pChildWindow )
-        pChildWindow = m_pTopWindow;
-
-    while( pChildWindow->ImplGetClientWindow() )
-        pChildWindow = pChildWindow->ImplGetClientWindow();
-
-    if( pChildWindow->ImplIsAntiparallel() )
-        pChildWindow->ImplReMirror( origin );
-
-    aSolarGuard.clear();
+    Window* pChildWindow = findTopLevelWindow(origin);
 
     fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
 }
@@ -367,7 +304,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aSolarGuard;
 
         // set an UI lock
         pWindow->IncrementLockCount();
@@ -379,7 +316,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ImplFrameToOutput( rLocation );
-            aGuard.clear();
+            aSolarGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragEnterEvent(
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, aFlavorList );
@@ -403,7 +340,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aSolarGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -412,7 +349,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ImplFrameToOutput( rLocation );
-            aGuard.clear();
+            aSolarGuard.clear();
 
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragOverEvent(
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions );
@@ -432,7 +369,7 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -463,7 +400,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -496,7 +433,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -541,7 +478,7 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDragGestureRecognizer > xDragGestureRecognizer = pWindow->GetDragGestureRecognizer();
@@ -562,3 +499,5 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
 
     return n;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -220,3 +221,5 @@ typedef ::std::multimap< ::rtl::OUString, ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
 #endif  // SCH_XML_TRANSPORTTYPES_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

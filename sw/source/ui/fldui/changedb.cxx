@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,8 +70,6 @@ using namespace ::com::sun::star::lang;
 /*--------------------------------------------------------------------
     Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
-
-
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
 
@@ -123,8 +122,6 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 /*--------------------------------------------------------------------
     Beschreibung: Datenbank-Listboxen initialisieren
  --------------------------------------------------------------------*/
-
-
 void SwChangeDBDlg::FillDBPopup()
 {
     Reference<XNameAccess> xDBContext;
@@ -134,7 +131,7 @@ void SwChangeDBDlg::FillDBPopup()
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
         xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
     }
-    DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+    OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
 
     const SwDBData& rDBData = pSh->GetDBData();
     String sDBName(rDBData.sDataSource);
@@ -175,11 +172,6 @@ void SwChangeDBDlg::FillDBPopup()
     }
 
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
@@ -242,9 +234,7 @@ void __EXPORT SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
+
 void SwChangeDBDlg::UpdateFlds()
 {
     SvStringsDtor aDBNames( (BYTE)aUsedDBTLB.GetSelectionCount(), 1 );
@@ -278,11 +268,6 @@ void SwChangeDBDlg::UpdateFlds()
     pSh->EndAllAction();
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 {
     String sTableName, sColumnName;
@@ -297,11 +282,6 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
@@ -321,7 +301,6 @@ IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: Datenbankname fuer Anzeige wandeln
  --------------------------------------------------------------------*/
-
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
     String sTmp(rDBData.sDataSource);
@@ -338,9 +317,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 
     aDocDBNameFT.SetText(sName);
 }
-/*-- 27.05.2004 09:14:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
@@ -349,3 +326,4 @@ IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

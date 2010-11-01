@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -513,3 +514,5 @@ BOOL GalleryExplorer::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
 {
     return SgaObjectSvDraw::DrawCentered( pOut, rModel );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,7 @@ awt::Rectangle AccessibleChartView::GetWindowPosSize() const
     if( pWindow )
     {
         // /-- solar
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         Point aVCLPoint( pWindow->OutputToAbsoluteScreenPixel( Point( 0, 0 ) ));
         aBBox.X = aVCLPoint.getX();
         aBBox.Y = aVCLPoint.getY();
@@ -414,3 +415,5 @@ void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

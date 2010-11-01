@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,6 +63,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/string.h>
+#include <sal/macros.h>
 
 #include <vector>
 
@@ -485,7 +487,7 @@ namespace
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
         {
-            for ( ULONG name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
+            for ( ULONG name = 0; name < SAL_N_ELEMENTS( names ); ++name )
             {
                 if ( strcmp( aBuf, names[ name ] ) == 0 )
                 {
@@ -1810,3 +1812,5 @@ void DbgOutTypef( USHORT, const sal_Char*, ... ) {}
 void DbgOutf( const sal_Char*, ... ) {}
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

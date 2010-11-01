@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,6 @@
 
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class GraphCtrlUserCall;
 class SvxGraphCtrlAccessibleContext;
@@ -140,13 +135,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
-//#if 0 // _SOLAR__PRIVATE
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class GraphCtrlUserCall : public SdrObjUserCall
 {
@@ -159,12 +147,6 @@ public:
 
     virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect );
 };
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class GraphCtrlView : public SdrView
 {
@@ -187,7 +169,6 @@ public:
     virtual         ~GraphCtrlView() {};
 };
 
-//#endif // __PRIVATE
-
 #endif // _GRAPHCTL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

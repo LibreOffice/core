@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 
 #include <vcl/image.hxx>
 
-//#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 
@@ -172,3 +172,5 @@ private:
 };
 
 #endif // _TREE_CONTROL_PEER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

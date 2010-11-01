@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,6 +84,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     comphelper::EmbeddedObjectContainer*    pOLEChildList;
     sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
     bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
+    bool                    bIsATemplate; //prevent nested calls of UpdateFontList
     // Methoden fuer den Zugriff aufs Doc
     SW_DLLPRIVATE void                  AddLink();
     SW_DLLPRIVATE void                  RemoveLink();
@@ -303,6 +305,8 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
+    SW_DLLPRIVATE sal_Bool IsTemplate() { return bIsATemplate; }
+    SW_DLLPRIVATE void SetIsTemplate( bool bValue ) { bIsATemplate = bValue; }
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
 
@@ -320,3 +324,5 @@ class Graphic;
 String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

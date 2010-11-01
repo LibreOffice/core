@@ -1598,6 +1598,31 @@ SfxVoidItem DataSort SID_SORT
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem DataForm SID_DATA_FORM
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DATA;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem DataSubTotals SID_SUBTOTALS
 ()
 [
@@ -6271,55 +6296,55 @@ SfxVoidItem StandardFonts SID_STANDARD_FONTS
 
 //--------------------------------------------------------------------------
 // ISSUE66550_HLINK_FOR_SHAPES
-//SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
-//()
-//[
-//   /* flags: */
-//   AutoUpdate = FALSE,
-//   Cachable = Cachable,
-//   FastCall = TRUE,
-//   HasCoreId = FALSE,
-//   HasDialog = TRUE,
-//   ReadOnlyDoc = TRUE,
-//   Toggle = FALSE,
-//   Container = FALSE,
-//   RecordAbsolute = FALSE,
-//   RecordPerSet;
-//   Synchron;
-//
+SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
+()
+[
+   /* flags: */
+   AutoUpdate = FALSE,
+   Cachable = Cachable,
+   FastCall = TRUE,
+   HasCoreId = FALSE,
+   HasDialog = TRUE,
+   ReadOnlyDoc = TRUE,
+   Toggle = FALSE,
+   Container = FALSE,
+   RecordAbsolute = FALSE,
+   RecordPerSet;
+   Synchron;
+
 //   /* config: */
-//   AccelConfig = TRUE,
-//   MenuConfig = FALSE,
-//   StatusBarConfig = FALSE,
-//   ToolBoxConfig = FALSE,
-//   GroupId = GID_DRAWING;
-//]
+   AccelConfig = TRUE,
+   MenuConfig = FALSE,
+   StatusBarConfig = FALSE,
+   ToolBoxConfig = FALSE,
+   GroupId = GID_DRAWING;
+]
 
 //--------------------------------------------------------------------------
 // ISSUE66550_HLINK_FOR_SHAPES
-//SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
-//()
-//[
-//   /* flags: */
-//   AutoUpdate = TRUE,
-//   Cachable = Cachable,
-//   FastCall = TRUE,
-//   HasCoreId = FALSE,
-//   HasDialog = FALSE,
-//   ReadOnlyDoc = TRUE,
-//   Toggle = FALSE,
-//   Container = FALSE,
-//   RecordAbsolute = FALSE,
-//   RecordPerSet;
-//   Synchron;
-//
-//   /* config: */
-//   AccelConfig = TRUE,
-//   MenuConfig = FALSE,
-//   StatusBarConfig = FALSE,
-//   ToolBoxConfig = FALSE,
-//   GroupId = GID_DRAWING;
-//]
+SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
+()
+[
+   /* flags: */
+   AutoUpdate = TRUE,
+   Cachable = Cachable,
+   FastCall = TRUE,
+   HasCoreId = FALSE,
+   HasDialog = FALSE,
+   ReadOnlyDoc = TRUE,
+   Toggle = FALSE,
+   Container = FALSE,
+   RecordAbsolute = FALSE,
+   RecordPerSet;
+   Synchron;
+
+   /* config: */
+   AccelConfig = TRUE,
+   MenuConfig = FALSE,
+   StatusBarConfig = FALSE,
+   ToolBoxConfig = FALSE,
+   GroupId = GID_DRAWING;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem StandardTextAttributes SID_TEXT_STANDARD

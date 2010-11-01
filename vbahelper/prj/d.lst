@@ -27,3 +27,4 @@ mkdir: %_DEST%\inc%_EXT%\basic
 ..\inc\vbahelper\vbashaperange.hxx %_DEST%\inc%_EXT%\vbahelper\vbashaperange.hxx
 ..\inc\vbahelper\vbapagesetupbase.hxx %_DEST%\inc%_EXT%\vbahelper\vbapagesetupbase.hxx
 ..\inc\vbahelper\vbaeventshelperbase.hxx %_DEST%\inc%_EXT%\vbahelper\vbaeventshelperbase.hxx
+..\inc\vbahelper\vbaeventshelperbase.hxx %_DEST%\inc%_EXT%\vbahelper\vbaeventshelperbase.hxx

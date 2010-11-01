@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,12 @@
 #ifndef SC_VBA_CHECKBOX_HXX
 #define SC_VBA_CHECKBOX_HXX
 #include <cppuhelper/implbase2.hxx>
-#include <ooo/vba/msforms/XRadioButton.hpp>
+#include <ooo/vba/msforms/XCheckBox.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XRadioButton, css::script::XDefaultProperty > CheckBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XCheckBox, css::script::XDefaultProperty > CheckBoxImpl_BASE;
 
 class ScVbaCheckbox : public CheckBoxImpl_BASE
 {
@@ -51,3 +52,5 @@ public:
 };
 
 #endif //SC_VBA_CHECKBOX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

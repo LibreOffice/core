@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -187,7 +188,7 @@ String SmFontPickList::GetStringItem(void *pItem)
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTITALIC));
     }
-    if (IsBold( *pFont ))    // bold?
+    if (IsBold( *pFont ))
     {
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTBOLD));
@@ -379,3 +380,4 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

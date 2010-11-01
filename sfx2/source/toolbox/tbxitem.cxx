@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,9 +76,6 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/dispatch.hxx>
@@ -151,7 +149,7 @@ static Window* GetTopMostParentSystemWindow( Window* pWindow )
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
@@ -295,7 +293,7 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     svt::ToolboxController::dispose();
 
     // Remove and destroy our item window at our toolbox
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
     delete pWindow;
@@ -328,7 +326,7 @@ void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, SfxTbxCtrlFacto
 
 SfxToolBoxControl* SfxToolBoxControl::CreateControl( USHORT nSlotId, USHORT nTbxId, ToolBox *pBox, SfxModule* pMod  )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxToolBoxControl *pCtrl;
     SfxApplication *pApp = SFX_APP();
@@ -466,7 +464,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
 {
     Reference < XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getFrameInterface().is() )
         xController = getFrameInterface()->getController();
 
@@ -537,7 +535,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getFrameInterface().is() )
         xController = getFrameInterface()->getController();
 
@@ -667,24 +665,24 @@ void SAL_CALL SfxToolBoxControl::updateImage() throw (::com::sun::star::uno::Run
 // XToolbarController
 void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Select( (USHORT)KeyModifier );
 }
 void SAL_CALL SfxToolBoxControl::click() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Click();
 }
 
 void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     DoubleClick();
 }
 
 Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = CreatePopupWindow();
     if ( pWindow )
         return VCLUnoHelper::GetInterface( pWindow );
@@ -694,7 +692,7 @@ Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPo
 
 Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< ::com::sun::star::awt::XWindow >& rParent ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
 }
 
@@ -733,7 +731,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL SfxToolBoxControl::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& aEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aSubToolBarResName;
     if ( pImpl->mxUIElement.is() )
@@ -819,7 +817,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSubToolBarResName )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( pImpl->pBox )
     {
@@ -1110,7 +1108,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_xFrame.is() )
         xController = m_xFrame->getController();
 
@@ -1891,3 +1889,5 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, Execute
 void SfxAppToolBoxControl_Impl::Click( )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -164,45 +164,6 @@ EXPORT BOOLEAN _db_pon_ = FALSE;    /* TRUE if debugging currently on */
  *  Externally supplied functions.
  */
 
-/* Disable the manual definitions, if something is missing use #include's! */
-#if 0
-
-#ifdef unix         /* Only needed for unix */
-IMPORT VOID perror ();      /* Print system/library error */
-IMPORT int chown ();        /* Change owner of a file */
-IMPORT int getgid ();       /* Get real group id */
-IMPORT int getuid ();       /* Get real user id */
-IMPORT int access ();       /* Test file for access */
-#else
-#if !(AMIGA || LATTICE || __TURBOC__)
-LOCAL VOID perror ();       /* Fake system/library error print routine */
-#endif
-#endif
-
-# if BSD4_3 || sun
-IMPORT int getrusage ();
-#endif
-
-IMPORT int atoi ();     /* Convert ascii to integer */
-IMPORT VOID exit ();        /* Terminate execution */
-IMPORT int fclose ();       /* Close a stream */
-IMPORT FILE *fopen ();      /* Open a stream */
-#if !defined(__BORLANDC__)
-IMPORT int fprintf ();      /* Formatted print on file */
-#endif
-IMPORT VOID free ();
-IMPORT char *malloc ();     /* Allocate memory */
-IMPORT int strcmp ();       /* Compare strings */
-IMPORT char *strcpy ();     /* Copy strings around */
-IMPORT int strlen ();       /* Find length of string */
-
-#ifndef fflush          /* This is sometimes a macro */
-IMPORT int fflush ();       /* Flush output for stream */
-#endif
-
-#endif
-
-
 /*
  *  The user may specify a list of functions to trace or
  *  debug.  These lists are kept in a linear linked list,

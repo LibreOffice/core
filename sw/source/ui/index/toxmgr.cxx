@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,9 +84,7 @@ void SwTOXMgr::DeleteTOXMark()
     // zur naechsten wandern
     pCurTOXMark = pNext;
 }
-/* -----------------20.08.99 10:48-------------------
 
- --------------------------------------------------*/
 void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 {
     SwTOXMark* pMark = 0;
@@ -93,8 +92,8 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     {
         case  TOX_CONTENT:
         {
-            ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
-                                            ungueltiger Level InsertTOCMark);
+            OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
+                       "invalid InsertTOCMark level");
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_CONTENT, 0));
             pMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
@@ -128,8 +127,8 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         break;
         case  TOX_USER:
         {
-            ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
-                                            ungueltiger Level InsertTOCMark);
+            OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
+                       "invalid InsertTOCMark level");
             USHORT nId = rDesc.GetTOUName() ?
                 GetUserTypeID(*rDesc.GetTOUName()) : 0;
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_USER, nId));
@@ -152,7 +151,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
 
     pSh->StartAllAction();
     if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
@@ -250,7 +249,7 @@ USHORT SwTOXMgr::GetUserTypeID(const String& rStr)
 
 void SwTOXMgr::NextTOXMark(BOOL bSame)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_NXT : TOX_NXT;
@@ -261,7 +260,7 @@ void SwTOXMgr::NextTOXMark(BOOL bSame)
 
 void SwTOXMgr::PrevTOXMark(BOOL bSame)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_PRV : TOX_PRV;
@@ -286,10 +285,6 @@ void SwTOXMgr::SetCurTOXMark(USHORT nId)
 {
     pCurTOXMark = (nId < aCurMarks.Count()) ? aCurMarks[nId] : 0;
 }
-
-/* -----------------01.07.99 16:23-------------------
-
- --------------------------------------------------*/
 
 BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
@@ -413,7 +408,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     }
 
 
-    DBG_ASSERT(pNewTOX, "no TOXBase created!" );
+    OSL_ENSURE(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
         return FALSE;
 
@@ -472,9 +467,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     return bRet;
 }
-/* -----------------20.10.99 14:11-------------------
 
- --------------------------------------------------*/
 void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
                         SwTOXSortKey eKey2,
                             SwTOXSortKey eKey3)
@@ -493,9 +486,6 @@ void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
     eSortKey3 = aArr[2];
 }
 
-/* -----------------10.09.99 10:02-------------------
-
- --------------------------------------------------*/
 void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 {
     for(USHORT i = 0; i < MAXLEVEL; i++)
@@ -521,3 +511,4 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

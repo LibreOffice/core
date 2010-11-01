@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -972,11 +973,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     BOOL bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
     BOOL bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetLineStyle() );
     BOOL bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // #97650# default is AUTO now
-#if 0
-// keine StyleSheet-Fontangaben: hart fuer jede Zelle
-    BOOL bSetFontName   = TRUE;
-    USHORT nSetFontSizeNumber = GetFontSizeNumber( (USHORT)rFontHeightItem.GetHeight() );
-#else
     BOOL bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
     USHORT nSetFontSizeNumber = 0;
     UINT32 nFontHeight = rFontHeightItem.GetHeight();
@@ -986,7 +982,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         if ( nSetFontSizeNumber == aHTMLStyle.nFontSizeNumber )
             nSetFontSizeNumber = 0;   // no difference, don't set
     }
-#endif
+
     BOOL bSetFont = (bSetFontColor || bSetFontName || nSetFontSizeNumber);
 
     //! TODO: we could entirely use CSS1 here instead, but that would exclude
@@ -1347,3 +1343,4 @@ void ScHTMLExport::IncIndent( short nVal )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

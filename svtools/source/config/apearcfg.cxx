@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 #define DEFAULT_LOOKNFEEL   0
 #define DEFAULT_DRAGMODE    2
@@ -51,7 +53,7 @@ sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
      Beschreibung:
  --------------------------------------------------------------------*/
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
-    :ConfigItem(OUString::createFromAscii("Office.Common/View"))
+    :ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View")))
     ,nLookNFeel         ( DEFAULT_LOOKNFEEL )
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
@@ -128,7 +130,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
             ,"FontAntiAliasing/MinPixelHeight"  //  9
 #endif
         };
-        const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
+        const int nCount = SAL_N_ELEMENTS( aPropNames );
         aNames.realloc(nCount);
 
         const sal_Char** pAsciiNames = aPropNames;
@@ -319,3 +321,4 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

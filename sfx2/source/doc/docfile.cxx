@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2773,18 +2774,6 @@ void SfxMedium::CloseStreams_Impl()
 
 void SfxMedium::RefreshName_Impl()
 {
-#if 0   //(dv)
-    if ( pImp->aContent.get().is() )
-    {
-        String aNameP = pImp->xAnchor->GetViewURL();
-        pImp->aOrigURL = aNameP;
-        aLogicName = aNameP;
-        DELETEZ( pURLObj );
-        if (aLogicName.Len())
-            aLogicName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-        SetIsRemote_Impl();
-    }
-#endif  //(dv)
 }
 
 void SfxMedium::SetIsRemote_Impl()
@@ -3923,3 +3912,4 @@ sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
     return bResult;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

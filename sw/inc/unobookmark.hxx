@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,6 +80,8 @@ protected:
                 ::com::sun::star::uno::RuntimeException);
 
     const ::sw::mark::IMark* GetBookmark() const;
+
+    void registerInMark( SwXBookmark& rXMark, ::sw::mark::IMark* const pMarkBase );
 
     virtual ~SwXBookmark();
 
@@ -239,6 +242,10 @@ private:
 
 public:
 
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextContent>
+        CreateXFieldmark( SwDoc & rDoc, ::sw::mark::IMark & rMark );
+
     SwXFieldmark(bool isReplacementObject,
             ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0);
 
@@ -258,3 +265,4 @@ public:
 
 #endif // SW_UNOBOOKMARK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

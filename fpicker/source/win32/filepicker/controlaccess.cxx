@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 //------------------------------------------------------------------------
 
 #include <tchar.h>
+#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
 #include "..\misc\WinImplHelper.hxx"
@@ -183,8 +185,7 @@ namespace // private
         stc2,       //  LISTBOX_FILTER_LABEL
         stc3        //  LISTBOX_FILE_NAME_LABEL
     };
-    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
-        sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
+    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS = SAL_N_ELEMENTS(WindowsFileOpenCtrlIds);
 
 }; // end namespace
 
@@ -259,3 +260,5 @@ int SAL_CALL CommonFilePickerCtrlIdToWinFileOpenCtrlId( sal_Int16 aControlId )
 
     return WindowsFileOpenCtrlIds[aControlId];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

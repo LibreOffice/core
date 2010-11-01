@@ -63,7 +63,7 @@ APP1OBJS=$(SLOFILES)
 APP1RPATH=BRAND
 APP1STDLIBS=\
             $(SALLIB) \
-            $(KDE_LIBS) -lkio
+            $(KDE_LIBS) -lkio -lX11
 
 
 .ENDIF # "$(GUIBASE)" != "unx" || "$(ENABLE_KDE)" != "TRUE"

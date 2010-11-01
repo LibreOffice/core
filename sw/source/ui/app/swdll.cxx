@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,13 +52,6 @@
 #include <svx/objfac3d.hxx>
 
 #include <unomid.h>
-
-
-/*************************************************************************
-|*
-|* Init
-|*
-\************************************************************************/
 
 void SwDLL::Init()
 {
@@ -121,14 +115,6 @@ void SwDLL::Init()
     RegisterControls();
 }
 
-
-
-/*************************************************************************
-|*
-|* Exit
-|*
-\************************************************************************/
-
 void SwDLL::Exit()
 {
     // called directly befor unloading the DLL
@@ -148,3 +134,4 @@ void SwDLL::Exit()
     (*ppShlPtr) = NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

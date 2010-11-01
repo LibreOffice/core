@@ -201,6 +201,8 @@
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
+#define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
+#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 258)
 
 // Strings ------------------------------------------
 

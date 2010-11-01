@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: cppsetup.c,v 1.13 94/04/17 20:10:32 gildea Exp $ */
 /*
 
@@ -232,3 +233,4 @@ int cppsetup(line, filep, inc)
 }
 #endif /* CPP */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

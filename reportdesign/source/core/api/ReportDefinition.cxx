@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -814,7 +815,7 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
 
     // SYNCHRONIZED --->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
     m_pImpl->m_aControllers.clear();
@@ -1249,7 +1250,7 @@ void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util
 // XCloseable
 void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1293,7 +1294,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
 ::sal_Bool SAL_CALL OReportDefinition::attachResource( const ::rtl::OUString& /*_rURL*/, const uno::Sequence< beans::PropertyValue >& _aArguments ) throw (uno::RuntimeException)
 {
     // LLA: we had a deadlock problem in our context, so we get the SolarMutex earlier.
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1468,7 +1469,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     if ( !_xStorageToSaveTo.is() )
         throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     // create XStatusIndicator
@@ -1870,7 +1871,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         aArguments.get_ensureType( "ReadOnly", bReadOnly );
         nFirstOpenMode = bReadOnly ? 1 : 0;
     }
-    const size_t nLastOpenMode = sizeof( nOpenModes ) / sizeof( nOpenModes[0] ) - 1;
+    const size_t nLastOpenMode = SAL_N_ELEMENTS( nOpenModes ) - 1;
     for ( size_t i=nFirstOpenMode; i <= nLastOpenMode; ++i )
     {
         uno::Sequence< uno::Any > aStorageCreationArgs(2);
@@ -2427,7 +2428,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OReportDefinition::getAvailableService
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"))
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
+    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
 
     uno::Sequence< ::rtl::OUString > aSeq( nSvxComponentServiceNameListCount );
     ::rtl::OUString* pStrings = aSeq.getArray();
@@ -2726,7 +2727,7 @@ bool OReportDefinition::isEnableSetModified() const
 }
 uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2748,7 +2749,7 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
 // -----------------------------------------------------------------------------
 uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHelper_throw()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2771,7 +2772,7 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2784,7 +2785,7 @@ void SAL_CALL OReportDefinition::setTitle( const ::rtl::OUString& sTitle )
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2797,7 +2798,7 @@ void SAL_CALL OReportDefinition::addTitleChangeListener( const uno::Reference< f
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2812,7 +2813,7 @@ void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2828,7 +2829,7 @@ void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference
            uno::RuntimeException         )
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2841,7 +2842,7 @@ void SAL_CALL OReportDefinition::releaseNumber( ::sal_Int32 nNumber )
            uno::RuntimeException         )
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2854,7 +2855,7 @@ void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference
            uno::RuntimeException         )
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2866,7 +2867,7 @@ void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference
     throw (uno::RuntimeException)
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2937,3 +2938,4 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
 }// namespace reportdesign
 // =============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

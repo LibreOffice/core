@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,3 +103,4 @@ void SdXMLImplSetEffect( ::com::sun::star::presentation::AnimationEffect eEffect
 
 #endif  //  _XMLOFF_ANIM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

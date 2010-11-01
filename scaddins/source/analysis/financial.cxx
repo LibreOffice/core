@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -333,12 +334,6 @@ double SAL_CALL AnalysisAddIn::getYielddisc( constREFXPS& xOpt,
 
     sal_Int32   nNullDate = GetNullDate( xOpt );
 
-#if 0
-    double      fRet = 1.0 - fPrice / fRedemp;
-    fRet /= GetYearFrac( nNullDate, nSettle, nMat, getDateMode( xOpt, rOB ) );
-    fRet /= 0.99795;  // don't know what this constant means in original
-#endif
-
     double fRet = ( fRedemp / fPrice ) - 1.0;
     fRet /= GetYearFrac( nNullDate, nSettle, nMat, getDateMode( xOpt, rOB ) );
 
@@ -665,3 +660,4 @@ double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const SEQSEQ( doubl
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

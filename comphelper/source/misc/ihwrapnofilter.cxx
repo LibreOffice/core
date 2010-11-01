@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,13 +52,13 @@ namespace comphelper
     uno::Sequence< ::rtl::OUString > SAL_CALL OIHWrapNoFilterDialog::impl_staticGetSupportedServiceNames()
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandlerWrapper");
+        aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandlerWrapper"));
         return aRet;
     }
 
     ::rtl::OUString SAL_CALL OIHWrapNoFilterDialog::impl_staticGetImplementationName()
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.task.InteractionHandlerWrapper");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.task.InteractionHandlerWrapper"));
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -115,3 +116,5 @@ namespace comphelper
         return impl_staticGetSupportedServiceNames();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

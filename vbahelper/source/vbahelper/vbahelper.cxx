@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -117,158 +119,6 @@ nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
     }
     return false;
 }
-#if 0
-namespace excel // all in this namespace probably can be moved to sc
-{
-
-
-const ::rtl::OUString REPLACE_CELLS_WARNING(  RTL_CONSTASCII_USTRINGPARAM( "ReplaceCellsWarning"));
-class PasteCellsWarningReseter
-{
-private:
-    bool bInitialWarningState;
-    static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
-    {
-        static uno::Reference< beans::XPropertySet > xTmpProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
-        static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.GlobalSheetSettings" ) ) ,xContext ), uno::UNO_QUERY_THROW );
-        return xProps;
-    }
-
-    bool getReplaceCellsWarning() throw ( uno::RuntimeException )
-    {
-        sal_Bool res = sal_False;
-        getGlobalSheetSettings()->getPropertyValue( REPLACE_CELLS_WARNING ) >>= res;
-        return ( res == sal_True );
-    }
-
-    void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
-    {
-        getGlobalSheetSettings()->setPropertyValue( REPLACE_CELLS_WARNING, uno::makeAny( bState ) );
-    }
-public:
-    PasteCellsWarningReseter() throw ( uno::RuntimeException )
-    {
-        bInitialWarningState = getReplaceCellsWarning();
-        if ( bInitialWarningState )
-            setReplaceCellsWarning( false );
-    }
-    ~PasteCellsWarningReseter()
-    {
-        if ( bInitialWarningState )
-        {
-            // don't allow dtor to throw
-            try
-            {
-                setReplaceCellsWarning( true );
-            }
-            catch ( uno::Exception& /*e*/ ){}
-        }
-    }
-};
-
-void
-implnPaste()
-{
-    PasteCellsWarningReseter resetWarningBox;
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();
-    if ( pViewShell )
-    {
-        pViewShell->PasteFromSystem();
-        pViewShell->CellContentChanged();
-    }
-}
-
-
-void
-implnCopy()
-{
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();
-    if ( pViewShell )
-        pViewShell->CopyToClip(NULL,false,false,true);
-}
-
-void
-implnCut()
-{
-    ScTabViewShell* pViewShell =  getCurrentBestViewShell();
-    if ( pViewShell )
-        pViewShell->CutToClip( NULL, TRUE );
-}
-void implnPasteSpecial(SfxViewShell* pViewShell, USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
-{
-    PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
-    InsCellCmd eMoveMode = INS_NONE;
-
-    if ( !pTabViewShell )
-        // none active, try next best
-        pTabViewShell = getCurrentBestViewShell();
-    if ( pTabViewShell )
-    {
-        ScViewData* pView = pTabViewShell->GetViewData();
-        Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
-        if ( pView && pWin )
-        {
-            if ( bAsLink && bOtherDoc )
-                pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
-            else
-            {
-                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-                ScDocument* pDoc = NULL;
-                if ( pOwnClip )
-                    pDoc = pOwnClip->GetDocument();
-                pTabViewShell->PasteFromClip( nFlags, pDoc,
-                    nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, TRUE );
-                pTabViewShell->CellContentChanged();
-            }
-        }
-    }
-
-}
-
-ScDocShell*
-getDocShell( css::uno::Reference< css::frame::XModel>& xModel )
-{
-    uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
-    ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
-    ScDocShell* pDocShell = NULL;
-    if ( pModel )
-        pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
-    return pDocShell;
-
-}
-
-ScTabViewShell*
-getBestViewShell(  css::uno::Reference< css::frame::XModel>& xModel )
-{
-    ScDocShell* pDocShell = getDocShell( xModel );
-    if ( pDocShell )
-        return pDocShell->GetBestViewShell();
-    return NULL;
-}
-
-ScTabViewShell*
-getCurrentBestViewShell()
-{
-    uno::Reference< frame::XModel > xModel = getCurrentDocument();
-    return getBestViewShell( xModel );
-}
-
-SfxViewFrame*
-getCurrentViewFrame()
-{
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();
-    if ( pViewShell )
-        return pViewShell->GetViewFrame();
-    return NULL;
-}
-};
-
-#endif
 
 uno::Reference< beans::XIntrospectionAccess >
 getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
@@ -311,7 +161,7 @@ void dispatchExecute(SfxViewShell* pViewShell, USHORT nSlot, SfxCallMode nCall)
 }
 
 void
-dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUString& aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
+dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps, const uno::Reference< frame::XDispatchResultListener >& rListener, const sal_Bool bSilent )
 {
     util::URL url;
     url.Complete = aUrl;
@@ -343,6 +193,7 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
     }
 
     uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,emptyString,0);
+    uno::Reference< frame::XNotifyingDispatch > xNotifyingDispatcher( xDispatcher, uno::UNO_QUERY );
 
     uno::Sequence<beans::PropertyValue> dispatchProps(1);
 
@@ -358,11 +209,20 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
             *pDest = *pSrc;
     }
 
-    (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
-    (*pDest).Value <<= (sal_Bool)sal_True;
+    if ( bSilent )
+    {
+        (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
+        (*pDest).Value <<= (sal_Bool)sal_True;
+    }
 
-    if (xDispatcher.is())
+    if ( !rListener.is() && xDispatcher.is() )
+    {
         xDispatcher->dispatch( url, dispatchProps );
+    }
+    else if ( rListener.is() && xNotifyingDispatcher.is() )
+    {
+        xNotifyingDispatcher->dispatchWithNotification( url, dispatchProps, rListener );
+    }
 }
 
 void
@@ -959,6 +819,23 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
         throw uno::RuntimeException();
 }
 
+uno::Any getDefaultPropByIntrospection( const uno::Any& aObj ) throw ( uno::RuntimeException )
+{
+    uno::Any aValue;
+    uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
+    uno::Reference< script::XDefaultProperty > xDefaultProperty( aObj, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet;
+
+    if ( xUnoAccess.is() )
+        xPropSet.set( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY );
+
+    if ( xPropSet.is() )
+        aValue = xPropSet->getPropertyValue( xDefaultProperty->getDefaultPropertyName() );
+    else
+        throw uno::RuntimeException();
+    return aValue;
+}
+
 uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName )
 {
     uno::Any result;
@@ -984,6 +861,18 @@ sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const r
         }
     }
     return sal_False;
+}
+
+void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName, const uno::Any& aValue )
+{
+   if( setPropertyValue( aProp, aName, aValue ) )
+    return;
+
+  // append the property
+  sal_Int32 nLength = aProp.getLength();
+  aProp.realloc( nLength + 1 );
+  aProp[ nLength ].Name = aName;
+  aProp[ nLength ].Value = aValue;
 }
 
 // ====UserFormGeomentryHelper====
@@ -1448,6 +1337,28 @@ void UserFormGeometryHelper::setHeight( double nHeight )
             return xIf;
         }
 
+    // Listener for XNotifyingDispatch
+    VBADispatchListener::VBADispatchListener() : m_State( sal_False )
+    {
+    }
+
+    // Listener for XNotifyingDispatch
+    VBADispatchListener::~VBADispatchListener()
+    {
+    }
+
+    // Listener for XNotifyingDispatch
+    void SAL_CALL VBADispatchListener::dispatchFinished( const frame::DispatchResultEvent& aEvent ) throw ( uno::RuntimeException )
+    {
+        m_Result = aEvent.Result;
+        m_State = ( aEvent.State == frame::DispatchResultState::SUCCESS ) ? sal_True : sal_False;
+    }
+
+    // Listener for XNotifyingDispatch
+    void SAL_CALL VBADispatchListener::disposing( const lang::EventObject& /*aEvent*/ ) throw( uno::RuntimeException )
+    {
+    }
+
         SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
         {
             SfxObjectShell* pFoundShell = NULL;
@@ -1463,3 +1374,5 @@ void UserFormGeometryHelper::setHeight( double nHeight )
 
 } // openoffice
 } //org
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

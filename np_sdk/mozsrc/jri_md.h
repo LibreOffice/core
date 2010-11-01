@@ -171,14 +171,6 @@ extern "C" {
 
 /* Java Scalar Types */
 
-#if 0   /* now in jni.h */
-typedef short           jchar;
-typedef short           jshort;
-typedef float           jfloat;
-typedef double          jdouble;
-typedef juint           jsize;
-#endif
-
 /* moved from jni.h -- Sun's new jni.h doesn't have this anymore */
 #ifdef __cplusplus
 typedef class _jobject *jref;

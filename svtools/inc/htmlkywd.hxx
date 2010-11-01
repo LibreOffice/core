@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -799,3 +800,5 @@
 #define OOO_STRING_SVTOOLS_HTML_ET_text "text/plain"
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

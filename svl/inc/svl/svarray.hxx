@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 #ifndef _SVARRAY_HXX
 #define _SVARRAY_HXX
 
-#if 0
-***********************************************************************
+/***********************************************************************
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
@@ -95,8 +95,7 @@
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor
-***********************************************************************
-#endif
+***********************************************************************/
 
 #include "svl/svldllapi.h"
 
@@ -673,15 +672,9 @@ _SV_DECL_PTRARR_DEF_PLAIN( SvPtrarrPlain, VoidPtr, 0, 1, SVL_DLLPUBLIC )
 
 // SORTARR - Begin
 
-#ifdef __MWERKS__
-#define __MWERKS__PRIVATE public
-#else
-#define __MWERKS__PRIVATE private
-#endif
-
 #define _SORT_CLASS_DEF(nm, AE, IS, GS, vis)\
 typedef BOOL (*FnForEach_##nm)( const AE&, void* );\
-class vis nm : __MWERKS__PRIVATE nm##_SAR \
+class vis nm : private nm##_SAR \
 {\
 public:\
     nm(USHORT nSize = IS, BYTE nG = GS)\
@@ -1051,3 +1044,5 @@ public:\
 #endif
 
 #endif  //_SVARRAY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

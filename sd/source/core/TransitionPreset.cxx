@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -53,7 +54,6 @@
 
 #include "sdpage.hxx"
 
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 
@@ -231,7 +231,7 @@ const TransitionPresetList& TransitionPreset::getTransitionPresetList()
 {
     if( !mpTransitionPresetList )
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if( !mpTransitionPresetList )
         {
             mpTransitionPresetList = new sd::TransitionPresetList();
@@ -254,3 +254,5 @@ void TransitionPreset::apply( SdPage* pSlide ) const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

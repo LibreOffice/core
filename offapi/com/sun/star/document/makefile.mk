@@ -114,7 +114,9 @@ IDLFILES=\
     XDocumentRevisionListPersistence.idl\
     DocumentRevisionListPersistence.idl \
     XDocumentLanguages.idl \
-    XCodeNameQuery.idl
+    XCodeNameQuery.idl \
+    XCompatWriterDocProperties.idl \
+    XVbaMethodParameter.idl \
 
 
 # ------------------------------------------------------------------

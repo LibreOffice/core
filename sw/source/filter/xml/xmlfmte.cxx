@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,6 +59,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
+
+using rtl::OUString;
 
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 {
@@ -361,3 +364,5 @@ SvXMLAutoStylePoolP* SwXMLExport::CreateAutoStylePool()
 {
     return new SwXMLAutoStylePoolP( *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

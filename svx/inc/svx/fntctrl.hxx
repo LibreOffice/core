@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    // Aus Effizienz-gr"unden nicht const
+    // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
     void                SetFont( const SvxFont& rFont );
@@ -86,3 +87,4 @@ public:
 
 #endif // #ifndef _SVX_FNTCTRL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

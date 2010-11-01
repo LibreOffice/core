@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -212,8 +213,14 @@ class TitleBarUpdate : // interfaces
          */
         void impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
+        //Hook to set GNOME3/Windows 7 applicationID for toplevel frames
+        //http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx
+        //http://live.gnome.org/GnomeShell/ApplicationBased
+        void impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame);
 }; // class TitleBarUpdate
 
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

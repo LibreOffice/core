@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,7 +157,7 @@ SwDrawDocument::~SwDrawDocument()
 \************************************************************************/
 
 
-SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
     pPage->SetName( String::CreateFromAscii(
@@ -234,3 +235,5 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
 }
 
 // <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,10 +83,10 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
+
 /*--------------------------------------------------------------------
     Beschreibung:   Drawing-Ids ausfuehren
  --------------------------------------------------------------------*/
-
 void SwView::ExecDraw(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -145,7 +146,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pFormView )
         {
             SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
-            DBG_ASSERT( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
+            OSL_ENSURE( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
             if( pDescriptorItem )
             {
                 ::svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
@@ -410,9 +411,6 @@ void SwView::ExecDraw(SfxRequest& rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Drawing beenden
  --------------------------------------------------------------------*/
-
-
-
 void SwView::ExitDraw()
 {
     NoRotate();
@@ -464,9 +462,6 @@ void SwView::ExitDraw()
 /*--------------------------------------------------------------------
     Beschreibung:   Rotate-Mode abschalten
  --------------------------------------------------------------------*/
-
-
-
 void SwView::NoRotate()
 {
     if (IsDrawRotate())
@@ -482,14 +477,13 @@ void SwView::NoRotate()
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-
 sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SdrObject* pObj;
     SdrPageView* pPV;
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    ASSERT( pSdrView, "EnterDrawTextMode without DrawView?" );
+    OSL_ENSURE( pSdrView, "EnterDrawTextMode without DrawView?" );
 
     sal_Bool bReturn = sal_False;
 
@@ -621,15 +615,12 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 /******************************************************************************
  *  Beschreibung: Ist ein DrawTextObjekt selektiert?
  ******************************************************************************/
-
-
-
 sal_Bool SwView::IsTextTool() const
 {
     sal_uInt16 nId;
     sal_uInt32 nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
-    ASSERT( pSdrView, "IsTextTool without DrawView?" );
+    OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );
 
     if (pSdrView->IsCreateMode())
         pSdrView->SetCreateMode(sal_False);
@@ -638,31 +629,15 @@ sal_Bool SwView::IsTextTool() const
     return (nInvent==SdrInventor);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SdrView* SwView::GetDrawView() const
 {
     return GetWrtShell().GetDrawView();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwView::IsBezierEditMode()
 {
     return (!IsDrawSelMode() && GetWrtShell().GetDrawView()->HasMarkablePoints());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwView::IsFormMode() const
 {
@@ -674,12 +649,6 @@ sal_Bool SwView::IsFormMode() const
     return AreOnlyFormsSelected();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
 {
     if (pDrawActual)
@@ -687,19 +656,11 @@ void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
     pDrawActual = pFuncPtr;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::SetSelDrawSlot()
 {
     nDrawSfxId = SID_OBJECT_SELECT;
     sDrawCustom.Erase();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwView::AreOnlyFormsSelected() const
 {
@@ -733,10 +694,6 @@ sal_Bool SwView::AreOnlyFormsSelected() const
     return bForm;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
 {
     sal_Bool bRet = sal_False;
@@ -755,10 +712,6 @@ sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
 
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
 {
@@ -779,7 +732,6 @@ sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
     return bRet;
 }
 
-
 //#i87414# mod
 IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
@@ -788,9 +740,6 @@ IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
 {
     sal_Bool bRet = sal_False;
@@ -807,12 +756,6 @@ sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwView::IsDrawTextHyphenate()
 {
     SdrView *pSdrView = pWrtShell->GetDrawView();
@@ -828,12 +771,6 @@ sal_Bool SwView::IsDrawTextHyphenate()
     return bHyphenate;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwView::HyphenateDrawText()
 {
     SdrView *pSdrView = pWrtShell->GetDrawView();
@@ -845,5 +782,4 @@ void SwView::HyphenateDrawText()
     GetViewFrame()->GetBindings().Invalidate(FN_HYPHENATE_OPT_DLG);
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

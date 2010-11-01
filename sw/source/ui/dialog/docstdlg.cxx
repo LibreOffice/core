@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,27 +46,17 @@
 #include <docstdlg.hxx>
 #include <modcfg.hxx>
 
-// fuer Statistikfelder
+// for statistics fields
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
 #include <docstdlg.hrc>
 
 
-/*--------------------------------------------------------------------
-    Beschreibung: Create
- --------------------------------------------------------------------*/
-
-
 SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwDocStatPage(pParent, rSet);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor
- --------------------------------------------------------------------*/
-
 
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
@@ -120,11 +111,6 @@ BOOL  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
     return FALSE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
@@ -158,7 +144,7 @@ void SwDocStatPage::Update()
     else if ( pVSh->ISA(SwPagePreView) )
         pSh = ((SwPagePreView*)pVSh)->GetViewShell();
 
-    ASSERT( pSh, "Shell not found" );
+    OSL_ENSURE( pSh, "Shell not found" );
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), TRUE );
     pSh->StartAction();
@@ -183,3 +169,4 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

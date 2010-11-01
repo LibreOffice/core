@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 
+#include <sal/macros.h>
 
 #include "Section.hxx"
 #include "corestrings.hrc"
@@ -181,3 +183,4 @@ namespace reportdesign
 // =============================================================================
 #endif // REPORTDESIGN_TOOLS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,9 +78,6 @@
 
 static BOOL bLastRelative = FALSE;
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SW_RES( TP_NUM_POSITION ), rSet ),
@@ -184,16 +182,12 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     aRelativeCB.Check(bLastRelative);
     aPreviewWIN.SetPositionMode();
 }
-/*-----------------03.12.97 10:02-------------------
 
---------------------------------------------------*/
 SwNumPositionTabPage::~SwNumPositionTabPage()
 {
     delete pActNum;
 }
-/*-----------------03.12.97 10:06-------------------
 
---------------------------------------------------*/
 void SwNumPositionTabPage::InitControls()
 {
     bInInintControl = TRUE;
@@ -410,9 +404,6 @@ void SwNumPositionTabPage::InitControls()
     bInInintControl = FALSE;
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
 {
     const SfxPoolItem* pItem;
@@ -454,9 +445,6 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     aPreviewWIN.Invalidate();
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     SwOutlineTabDialog::SetActNumLevel(nActNumLvl);
@@ -466,9 +454,6 @@ int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 BOOL SwNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if(pOutlineDlg)
@@ -482,9 +467,6 @@ BOOL SwNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
@@ -531,7 +513,7 @@ void SwNumPositionTabPage::InitPosAndSpaceMode()
 {
     if ( pActNum == 0 )
     {
-        DBG_ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );
         return;
     }
@@ -582,18 +564,12 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 }
 // <--
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 SfxTabPage* SwNumPositionTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwNumPositionTabPage(pParent, rAttrSet);
 }
 
-/*-----------------04.12.97 12:51-------------------
-
---------------------------------------------------*/
 void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
 {
     pWrtSh = pSh;
@@ -644,9 +620,6 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     // <--
 }
 
-/*-----------------03.12.97 11:06-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwNumPositionTabPage, EditModifyHdl, Edit *, EMPTYARG )
 {
     USHORT nMask = 1;
@@ -674,9 +647,7 @@ IMPL_LINK( SwNumPositionTabPage, EditModifyHdl, Edit *, EMPTYARG )
     SetModified();
     return 0;
 }
-/*-----------------03.12.97 11:11-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
 {
     USHORT nSaveNumLvl = nActNumLvl;
@@ -724,9 +695,7 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
     InitControls();
     return 0;
 }
-/*-----------------03.12.97 12:24-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
 {
     if(bInInintControl)
@@ -787,9 +756,6 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
     return 0;
 }
 
-/*-----------------04.12.97 12:35-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
 {
     BOOL bOn = pBox->IsChecked();
@@ -973,9 +939,6 @@ IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
 }
 // <--
 
-/*-----------------05.12.97 15:33-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwNumPositionTabPage, StandardHdl, PushButton *, EMPTYARG )
 {
     USHORT nMask = 1;
@@ -1031,12 +994,6 @@ void SwNumPositionTabPage::SetModified(BOOL bRepaint)
 
 #endif
 
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
-
-
 SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh) :
     SfxTabDialog(pParent, SW_RES(DLG_SVXTEST_NUM_BULLET), pSwItemSet, FALSE, &aEmptyStr),
@@ -1058,17 +1015,10 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
     AddTabPage( RID_SVXPAGE_NUM_POSITION );
 
 }
-/*-----------------07.02.97 12.08-------------------
-
---------------------------------------------------*/
 
 SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 {
 }
-
-/*-----------------07.02.97 14.48-------------------
-
---------------------------------------------------*/
 
 void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
 {
@@ -1134,22 +1084,18 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
         break;
     }
 }
-/*-----------------17.02.97 16.52-------------------
 
---------------------------------------------------*/
 short  SwSvxNumBulletTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
     pExampleSet->ClearItem(SID_PARAM_NUM_PRESET);
     return nRet;
 }
-/* -----------------02.12.98 08:35-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
 {
     EndDialog(RET_USER);
     return 0;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

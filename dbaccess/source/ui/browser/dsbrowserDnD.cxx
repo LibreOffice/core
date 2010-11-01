@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,7 +242,7 @@ namespace dbaui
     IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     {
         m_nAsyncDrop = 0;
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
 
         if ( m_aAsyncDrop.nType == E_TABLE )
@@ -293,3 +294,4 @@ namespace dbaui
 }   // namespace dbaui
 // .........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -87,11 +87,11 @@ SHL1STDLIBS+= \
     $(SVLLIB)			\
         $(UNOTOOLSLIB)                     \
     $(TOOLSLIB)			\
-    $(VOSLIB)			\
     $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB)
+    $(SALLIB) \
+    $(SALHELPERLIB)
 
 .IF "$(GUIBASE)"=="unx"
 SHL1STDLIBS+=$(X11LINK_DYNAMIC)

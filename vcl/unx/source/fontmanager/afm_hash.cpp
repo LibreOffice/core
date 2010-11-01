@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* C++ code produced by gperf version 3.0.1 */
 /* Command-line: gperf -C -t -l -L C++ -m 20 -Z AfmKeywordHash afm_keyword_list  */
 /* Computed positions: -k'1,4,6,$' */
@@ -243,3 +244,5 @@ AfmKeywordHash::in_word_set (register const char *str, register unsigned int len
     }
   return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

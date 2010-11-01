@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -466,7 +467,7 @@ register void    (*outfun)() /* BP */
 done:   if (dotflag || expseen) {               /* Floating point?      */
             if (c == 'l' || c == 'L') {
                 (*outfun)(c);
-                c = get();                      /* Ungotten later       */
+                get();                          /* Ungotten later       */
             }
         }
         else {                                  /* Else it's an integer */
@@ -792,11 +793,7 @@ get_from_file:
         if ((file = infile) == NULL)
             return (EOF_CHAR);
 newline:
-#if 0
-        fprintf( pCppOut, "get(%s), recursion %d, line %d, bptr = %d, buffer \"%s\"\n",
-            file->filename, recursion, line,
-            file->bptr - file->buffer, file->buffer);
-#endif
+
         /*
          * Read a character from the current input line or macro.
          * At EOS, either finish the current macro (freeing temp.
@@ -1146,3 +1143,4 @@ void ciwarn(char* format, int narg)
         domsg("IWarning", format, &narg);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

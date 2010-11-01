@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,12 +56,13 @@
 #include <comphelper/property.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <algorithm>
 #include <functional>
+#include <sal/macros.h>
 
 //------------------------------------------------------------------------
 // !!! outside the namespace !!!
@@ -281,7 +283,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (com::sun::star::util::VetoException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( m_bSuspendingPropertyHandlers || !suspendAll_nothrow() )
@@ -369,7 +371,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
@@ -534,7 +536,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::dispose(  ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
 
         // stop inspecting the current object
         stopInspection( false );
@@ -1504,7 +1506,7 @@ namespace pcr
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
             };
             xHandlerContext = ::cppu::createComponentContext(
-                aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+                aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
                 m_aContext.getUNOContext() );
         }
 
@@ -1722,7 +1724,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::setHelpSectionText( const ::rtl::OUString& _rHelpText ) throw (NoSupportException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !haveView() )
@@ -1768,3 +1770,4 @@ namespace pcr
 //............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

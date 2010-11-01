@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,11 +86,6 @@ SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 
 TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
     SwBaseShell( _rView )
 {
@@ -105,22 +101,12 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
     SwTransferable::CreateSelection( GetShell() );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawBaseShell::~SwDrawBaseShell()
 {
     GetView().ExitDraw();
     GetShell().Edit();
     SwTransferable::ClearSelection( GetShell() );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawBaseShell::Execute(SfxRequest &rReq)
 {
@@ -137,7 +123,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     //Sonderfall Align per Menue
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
-        DBG_ASSERT(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem erwartet");
+        OSL_ENSURE(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem expected");
         nSlotId = nSlotId + ((const SfxEnumItem*)pItem)->GetValue();
         nSlotId++;
     }
@@ -174,10 +160,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         pSh->GetObjAttr(aSet);
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                         SfxAbstractDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE, RC_DLG_SWWRAPDLG );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         if (pDlg->Execute() == RET_OK)
                         {
@@ -236,7 +222,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                         pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
                                 pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pCaptionDlg;
-                                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                             }
                         }
                         else
@@ -249,7 +235,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                             pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
                                 pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pTransform;
-                                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                             }
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
@@ -615,7 +601,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         }
 
         default:
-            DBG_ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong Dispatcher");
             return;
     }
     if(!bDone)
@@ -631,6 +617,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
     }
 }
+
 /* -----------------------------27.02.2002 15:27------------------------------
     Checks whether a given name is allowed for a group shape
  ---------------------------------------------------------------------------*/
@@ -639,7 +626,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection");
+    OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const String sCurrentName = pObj->GetName();
     String sNewName;
@@ -678,9 +665,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     }
     return nRet;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+
 void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -772,11 +757,6 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 BOOL SwDrawBaseShell::Disable(SfxItemSet& rSet, USHORT nWhich)
 {
@@ -990,6 +970,4 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     return 0;
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

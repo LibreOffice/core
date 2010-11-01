@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "java/sql/DatabaseMetaData.hxx"
 #include "java/sql/Connection.hxx"
 #include "java/sql/ResultSet.hxx"
@@ -461,7 +463,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 for (sal_Int32 i = 1 ; i <= nCount ; ++i)
                 {
                     sColumnName = xMeta->getColumnName(i);
-                    for (sal_uInt32 j = 0 ; j < sizeof(sPrivs)/sizeof(sPrivs[0]); ++j)
+                    for (sal_uInt32 j = 0 ; j < SAL_N_ELEMENTS(sPrivs); ++j)
                     {
                         if ( sPrivs[j] == sColumnName )
                         {
@@ -1460,3 +1462,5 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
     return out ? new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection ) : 0;
 }
 // -------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

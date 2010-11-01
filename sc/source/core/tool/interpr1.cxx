@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,6 +71,7 @@
 #include "rangenam.hxx"
 #include "compiler.hxx"
 #include "externalrefmgr.hxx"
+#include <basic/sbstar.hxx>
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 
@@ -85,7 +87,7 @@ using namespace formula;
 using ::std::auto_ptr;
 
 //-----------------------------------------------------------------------------
-// Funktionen
+// Functions
 //-----------------------------------------------------------------------------
 
 
@@ -1154,7 +1156,7 @@ void ScInterpreter::ScAnd()
                                 bHaveValue = TRUE;
                                 nRes &= ( GetCellValue( aAdr, pCell ) != 0.0 );
                             }
-                            // else: Xcl setzt hier keinen Fehler
+                            // else: Xcl raises no error here
                         }
                     }
                     break;
@@ -1252,7 +1254,7 @@ void ScInterpreter::ScOr()
                                 bHaveValue = TRUE;
                                 nRes |= ( GetCellValue( aAdr, pCell ) != 0.0 );
                             }
-                            // else: Xcl setzt hier keinen Fehler
+                            // else: Xcl raises no error here
                         }
                     }
                     break;
@@ -2495,7 +2497,7 @@ void ScInterpreter::ScN()
 
 
 void ScInterpreter::ScTrim()
-{   // trimmt nicht nur sondern schnibbelt auch doppelte raus!
+{   // Doesn't only trim but writes out twice!
     String aVal( GetString() );
     aVal.EraseLeadingChars();
     aVal.EraseTrailingChars();
@@ -2504,7 +2506,7 @@ void ScInterpreter::ScTrim()
     register const sal_Unicode* const pEnd = p + aVal.Len();
     while ( p < pEnd )
     {
-        if ( *p != ' ' || p[-1] != ' ' )    // erster kann kein ' ' sein, -1 ist also ok
+        if ( *p != ' ' || p[-1] != ' ' )    // ' ' can't be first, -1 is fine too
             aStr += *p;
         p++;
     }
@@ -2605,7 +2607,7 @@ void ScInterpreter::ScT()
                 PushString( EMPTY_STRING );
             else
             {
-                //  wie GetString()
+                // like GetString()
                 GetCellString( aTempStr, pCell );
                 PushString( aTempStr );
             }
@@ -3386,7 +3388,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                     ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
                     if (aValIter.GetFirst(fVal, nErr))
                     {
-                        //  Schleife aus Performance-Gruenden nach innen verlegt:
+                        // placed the loop on the inside for performance reasons:
                         aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
                         switch( eFunc )
                         {
@@ -4297,7 +4299,17 @@ void ScInterpreter::ScMatch()
                 }
             }
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+            {
+        BOOL bIsVBAMode = FALSE;
+                if ( pDok )
+                    bIsVBAMode = pDok->IsInVBAMode();
+
+                // #TODO handle MSO wildcards
+                if ( bIsVBAMode )
+                    rParam.bRegExp = FALSE;
+                else
+                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+            }
 
             if (pMatSrc) // The source data is matrix array.
             {
@@ -4666,7 +4678,7 @@ void ScInterpreter::ScCountIf()
                 else
                 {
                     ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                    // Entry.nField im Iterator bei Spaltenwechsel weiterschalten
+                    // Keep Entry.nField in iterator on column change
                     aCellIter.SetAdvanceQueryParamEntryField( TRUE );
                     if ( aCellIter.GetFirst() )
                     {
@@ -6447,17 +6459,11 @@ void ScInterpreter::ScIndirect()
                 rData->ValidateTabRefs();
 
                 ScRange aRange;
-#if 0
-                // This is some really odd Excel behavior and renders named
-                // ranges containing relative references totally useless.
-                if (!rData->IsReference(aRange, ScAddress( aPos.Tab(), 0, 0)))
-                    break;
-#else
+
                 // This is the usual way to treat named ranges containing
                 // relative references.
                 if (!rData->IsReference( aRange, aPos))
                     break;
-#endif
 
                 if (aRange.aStart == aRange.aEnd)
                     PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
@@ -7631,3 +7637,5 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
     }
     return bFound;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

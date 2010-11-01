@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,8 +81,8 @@ struct SfxItemPool_Impl
     USHORT                          nStoringStart, nStoringEnd; // zu speichernder Range
     BYTE                            nMajorVer, nMinorVer; // Pool selbst
     SfxMapUnit                      eDefMetric;
-    FASTBOOL                        bInSetItem;
-    FASTBOOL                        bStreaming; // in Load() bzw. Store()
+    bool                            bInSetItem;
+    bool                            bStreaming; // in Load() bzw. Store()
 
     SfxItemPool_Impl( USHORT nStart, USHORT nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])
@@ -199,3 +200,4 @@ inline USHORT SfxItemPool::GetIndex_Impl(USHORT nWhich) const
     return nWhich - nStart;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ void OReportModel::detachController()
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
 //----------------------------------------------------------------------------
-SdrPage* OReportModel::AllocPage(FASTBOOL /*bMasterPage*/)
+SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
     OSL_ENSURE(0,"Who called me!");
@@ -231,3 +232,5 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const ::rtl::OUStrin
 //==================================================================
 }   //rptui
 //==================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
@@ -42,14 +40,13 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include "dlelstnr.hxx"
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -61,9 +58,6 @@ using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
 #define A2OU(x) OUString::createFromAscii(x)
 
-/* -----------------------------17.03.00 09:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
@@ -93,26 +87,20 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
         }
         catch (uno::Exception &)
         {
-            DBG_ASSERT(0, "exception caught in SwLinguServiceEventListener c-tor" );
+            OSL_ENSURE(0, "exception caught in SwLinguServiceEventListener c-tor" );
         }
     }
 }
-/* -----------------------------17.03.00 09:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwLinguServiceEventListener::~SwLinguServiceEventListener()
 {
 }
-
-/* -----------------------------17.03.00 09:06--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 void SwLinguServiceEventListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent)
         throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
 
@@ -133,12 +121,11 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
         SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
     sal_Bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
@@ -164,12 +151,11 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
     }
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::disposing(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (xLngSvcMgr.is()  &&  rEventObj.Source == xLngSvcMgr)
         xLngSvcMgr = 0;
@@ -177,20 +163,18 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
         xGCIterator = 0;
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
+    //SolarMutexGuard aGuard;
 }
-
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
     {
@@ -202,3 +186,4 @@ void SAL_CALL SwLinguServiceEventListener::notifyTermination(
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

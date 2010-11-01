@@ -19,14 +19,12 @@
 
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
-    <project-build-dependency>  vos         </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
     <project-build-dependency>  sv          </project-build-dependency>
     <project-build-dependency>  tools       </project-build-dependency>
 
     <runtime-module-dependency> cppu2       </runtime-module-dependency>
     <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
-    <runtime-module-dependency> vos2$(COM)  </runtime-module-dependency>
     <runtime-module-dependency> sal2        </runtime-module-dependency>
     <runtime-module-dependency> tl          </runtime-module-dependency>
     <runtime-module-dependency> sv          </runtime-module-dependency>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,7 +181,7 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
 
 void GraphCtrl::InitSdrModel()
 {
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SdrPage* pPage;
 
@@ -614,7 +615,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                         if(pView->IsDragObj())
                         {
-                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                            bool bWasNoSnap = rDragStat.IsNoSnap();
                             BOOL bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
@@ -956,3 +957,5 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 
     return mpAccContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

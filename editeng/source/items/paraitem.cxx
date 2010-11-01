@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1140,9 +1141,12 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int32 nNewPos = 0;
             if (!(rVal >>= nNewPos) )
                 return sal_False;
+            if (bConvert)
+                nNewPos = MM100_TO_TWIP ( nNewPos );
+            if (nNewPos <= 0)
+                return sal_False;
             const SvxTabStop& rTab = *(GetStart());
-            SvxTabStop aNewTab ( bConvert ? MM100_TO_TWIP ( nNewPos ) : nNewPos,
-                                 rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
+            SvxTabStop aNewTab ( nNewPos, rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
             Remove ( 0 );
             Insert( aNewTab );
             break;
@@ -1242,7 +1246,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     //Alles nur SWG!
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();
-    const FASTBOOL bStoreDefTabs = pPool
+    const bool bStoreDefTabs = pPool
         && pPool->GetName().EqualsAscii("SWG")
         && ::IsDefaultItem( this );
 
@@ -1420,7 +1424,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
 )   const
 {
     rText.Erase();
-    FASTBOOL bSet = ( GetValue().Len() > 0 );
+    bool bSet = ( GetValue().Len() > 0 );
 
     switch ( ePres )
     {
@@ -1755,3 +1759,4 @@ SfxItemPresentation SvxParaGridItem::GetPresentation(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

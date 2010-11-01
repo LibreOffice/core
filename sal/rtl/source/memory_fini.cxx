@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,3 +53,5 @@ RTL_Memory_Fini::~RTL_Memory_Fini() {
 
 
 static RTL_Memory_Fini rtl_Memory_Fini;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

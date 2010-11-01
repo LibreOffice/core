@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/printdlg.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -264,7 +265,7 @@ namespace
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // search for any view of this document that is currently printing
     const Printer *pPrinter = NULL;
@@ -461,7 +462,7 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxViewShell* pViewSh = NULL;
     SfxPrinter* pPrinter = NULL;
@@ -506,7 +507,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         {
             /* SAFE { */
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 while( m_pPrinter->IsPrinting() )
                     Application::Yield();
                 m_pPrinter = NULL; // don't delete it! It's borrowed only :-)
@@ -584,7 +585,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // object already disposed?
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // get view for sfx printing capabilities
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
@@ -893,14 +894,15 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 
 void SAL_CALL SfxPrintHelper::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference < view::XPrintJobListener>*)0), xListener );
 }
 
 void SAL_CALL SfxPrintHelper::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference < view::XPrintJobListener>*)0), xListener );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

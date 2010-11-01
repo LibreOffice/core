@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 #ifndef _SVX_OPTGENRL_HXX
 #define _SVX_OPTGENRL_HXX
 
-// Defines for setting the fokus of a Edit via a slot from external.
+// Defines for setting the focus of a Edit via a slot from external.
 #define UNKNOWN_EDIT    ((USHORT)0)
 #define COMPANY_EDIT    ((USHORT)1)
 #define FIRSTNAME_EDIT  ((USHORT)2)
@@ -47,4 +48,4 @@
 
 #endif // #ifndef _SVX_OPTGENRL_HXX
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

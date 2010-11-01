@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include "svx/svxdllapi.h"
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                Clipboard-Format fuer XOutDev-Fuellattribute
+//                Clipboard format for XOutDev filling attributes
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class XFillAttrSetItem;
@@ -54,7 +55,6 @@ public:
                         XFillExchangeData(const XFillAttrSetItem rXFillAttrSetItem);
                         virtual ~XFillExchangeData();
 
-                        // Zuweisungsoperator
                         XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
 
     SVX_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );
@@ -65,3 +65,5 @@ public:
 };
 
 #endif                  // _SVX_XEXCH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

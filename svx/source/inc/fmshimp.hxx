@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,6 @@
 #include "svx/fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <osl/mutex.hxx>
-#include <vos/thread.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/stl_types.hxx>
@@ -604,3 +604,5 @@ public:
 };
 
 #endif          // _SVX_FMSHIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

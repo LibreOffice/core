@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -730,3 +731,5 @@ PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& r
 }
 
 } /* namespace psp */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

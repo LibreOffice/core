@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,7 @@
 
 #include <rtl/digest.h>
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 
 // since the copying uses 32000 blocks usually, it makes sense to have a smaller size
 #define MAX_STORCACHE_SIZE 30000
@@ -2173,25 +2175,14 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
     return m_pData->m_pTypeCollection->getTypes() ;
 }
 
+namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
 //-----------------------------------------------
 uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
         throw( uno::RuntimeException )
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pID == NULL )
-        {
-            static ::cppu::OImplementationId aID( sal_False ) ;
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
-
+    ::cppu::OImplementationId &rId = lcl_ImplId::get();
+    return rId.getImplementationId();
 }
 
 //-----------------------------------------------
@@ -3611,3 +3602,4 @@ void SAL_CALL OWriteStream::removeTransactionListener( const uno::Reference< emb
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

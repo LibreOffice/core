@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -168,7 +169,7 @@ public:
 
 protected:
     /// Mutex guarding this object.
-    ::vos::OMutex maMutex;
+    ::osl::Mutex maMutex;
 
 private:
     /// The implementation of this helper interface.
@@ -179,3 +180,5 @@ private:
 }
 //... namespace utl .......................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

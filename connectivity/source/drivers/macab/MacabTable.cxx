@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,3 +95,5 @@ void MacabTable::refreshColumns()
     else
         m_pColumns  = new MacabColumns(this,m_aMutex,aVector);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

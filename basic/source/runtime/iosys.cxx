@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <osl/security.h>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "runtime.hxx"
 
@@ -66,7 +67,6 @@
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 
 using namespace comphelper;
-using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -343,7 +343,7 @@ BOOL hasUno( void )
 
 class OslStream : public SvStream
 {
-    File maFile;
+    osl::File maFile;
     short mnStrmMode;
 
 public:
@@ -375,14 +375,14 @@ OslStream::OslStream( const String& rName, short nStrmMode )
         nFlags = OpenFlag_Read;
     }
 
-    FileBase::RC nRet = maFile.open( nFlags );
-    if( nRet == FileBase::E_NOENT && nFlags != OpenFlag_Read )
+    osl::FileBase::RC nRet = maFile.open( nFlags );
+    if( nRet == osl::FileBase::E_NOENT && nFlags != OpenFlag_Read )
     {
         nFlags |= OpenFlag_Create;
         nRet = maFile.open( nFlags );
     }
 
-    if( nRet != FileBase::E_None )
+    if( nRet != osl::FileBase::E_None )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -397,7 +397,7 @@ OslStream::~OslStream()
 ULONG OslStream::GetData( void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesRead = nSize;
-    FileBase::RC nRet = FileBase::E_None;
+    osl::FileBase::RC nRet = osl::FileBase::E_None;
     nRet = maFile.read( pData, nBytesRead, nBytesRead );
     return (ULONG)nBytesRead;
 }
@@ -405,14 +405,14 @@ ULONG OslStream::GetData( void* pData, ULONG nSize )
 ULONG OslStream::PutData( const void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesWritten;
-    FileBase::RC nRet = FileBase::E_None;
+    osl::FileBase::RC nRet = osl::FileBase::E_None;
     nRet = maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
     return (ULONG)nBytesWritten;
 }
 
 ULONG OslStream::SeekPos( ULONG nPos )
 {
-    FileBase::RC nRet;
+    osl::FileBase::RC nRet;
     if( nPos == STREAM_SEEK_TO_END )
     {
         nRet = maFile.setPos( Pos_End, 0 );
@@ -432,7 +432,7 @@ void OslStream::FlushData()
 
 void OslStream::SetSize( ULONG nSize )
 {
-    FileBase::RC nRet = FileBase::E_None;
+    osl::FileBase::RC nRet = osl::FileBase::E_None;
     nRet = maFile.setSize( (sal_uInt64)nSize );
 }
 
@@ -1035,7 +1035,7 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
             aOut.Erase( 0, 1 );
         String aStr( s, gsl_getSystemTextEncoding() );
         {
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                         String(), aStr ).Execute() )
@@ -1044,3 +1044,4 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

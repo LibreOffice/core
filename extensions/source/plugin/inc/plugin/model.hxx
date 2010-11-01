@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,3 +135,5 @@ class PluginModel : public BroadcasterHelperHolder,
 Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 
 #endif // __PLUGIN_MODEL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

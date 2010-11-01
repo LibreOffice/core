@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,3 +65,5 @@ SlideSorterChildWindow::~SlideSorterChildWindow (void)
 SFX_IMPL_DOCKINGWINDOW(SlideSorterChildWindow, SID_SLIDE_BROWSER)
 
 } } // end of namespace ::sd::slidesorter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

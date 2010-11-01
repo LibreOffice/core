@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-
-
-
 #include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -50,11 +48,6 @@
 #include "drawsh.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -100,12 +93,12 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             BOOL bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+            OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             pView);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
             if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
@@ -142,13 +135,13 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+            OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
             SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
                 pObj,
                 bHasMarked);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();
@@ -181,11 +174,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         if (bChanged)
             pDoc->SetChanged(TRUE);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
 {
@@ -231,11 +219,6 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             pView->GetModel()->SetChanged(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 {
     SdrView* pSdrView = GetShell().GetDrawView();
@@ -251,5 +234,4 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
         rSet.Put(pSdrView->GetDefaultAttr());
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

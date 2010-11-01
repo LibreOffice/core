@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -169,11 +170,6 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
                 pTab[nTab]->SetDrawPageSize(false,false);     // #54782# set the right size immediately
-#if 0
-                ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
-                ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
-                pDrawLayer->SetPageSize( nTab, Size( nx, ny ) );
-#endif
             }
         }
 
@@ -717,12 +713,12 @@ void ScDocument::SetXMLFromWrapper( BOOL bVal )
     bXMLFromWrapper = bVal;
 }
 
-vos::ORef<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
+rtl::Reference<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
 {
     return xForbiddenCharacters;
 }
 
-void ScDocument::SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersTable> xNew )
+void ScDocument::SetForbiddenCharacters( const rtl::Reference<SvxForbiddenCharactersTable> xNew )
 {
     xForbiddenCharacters = xNew;
     if ( pEditEngine )
@@ -775,3 +771,4 @@ void ScDocument::SetAsianKerning(BOOL bNew)
         pDrawLayer->SetKernAsianPunctuation( (BOOL)nAsianKerning );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -601,7 +602,7 @@ QueryData OCommonStatement::impl_getEBookQuery_throw( const ::rtl::OUString& _rS
 
     // a postcondition of this method is that we properly determined the SELECT columns
     aData.xSelectColumns = m_aSQLIterator.getSelectColumns();
-    if ( !aData.xSelectColumns.isValid() )
+    if ( !aData.xSelectColumns.is() )
         m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
     return aData;
@@ -680,3 +681,5 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& /*sql*/ ) t
 }
 
 } } // namespace ::connectivity::evoab
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

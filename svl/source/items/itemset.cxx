@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,6 @@
 
 #if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
-
-#ifndef GCC
 #endif
 
 #define _SVSTDARR_USHORTS
@@ -1501,7 +1499,7 @@ USHORT SfxItemSet::GetWhichByPos( USHORT nPos ) const
 SvStream &SfxItemSet::Store
 (
     SvStream&   rStream,        // Zielstream f"ur normale Items
-    FASTBOOL    bDirect         // TRUE: Items direkt speicher, FALSE: Surrogate
+    bool        bDirect         // TRUE: Items direkt speicher, FALSE: Surrogate
 )   const
 
 /*  [Beschreibung]
@@ -1568,7 +1566,7 @@ SvStream &SfxItemSet::Load
 (
     SvStream&           rStream,    //  Stream, aus dem geladen werden soll
 
-    FASTBOOL            bDirect,    /*  TRUE
+    bool                bDirect,    /*  TRUE
                                         Items werden direkt aus dem Stream
                                         gelesen, nicht "uber Surrogate
 
@@ -2042,73 +2040,6 @@ void SfxItemSet::DisableItem(USHORT nWhich)
 
 // -----------------------------------------------------------------------
 
-#if 0
-BOOL SfxAllItemSet::Remove(USHORT nWhich)
-{
-    DBG_CHKTHIS(SfxAllItemSet, 0);
-    USHORT *pPtr = _pWhichRanges;
-    USHORT nPos = 0;
-    while( *pPtr )
-    {
-        if( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
-        {
-            USHORT *pTmp = pPtr;
-            USHORT nLeft = 0;
-            USHORT nRest = 0;
-            while(*++pTmp){
-                if( nLeft & 1 )
-                    nRest = *pTmp - *(pTmp-1) + 1;
-                ++nLeft;
-            }
-
-            // in diesem Bereich
-            nPos += nWhich - *pPtr;
-            nRest -= nWhich - *pPtr;
-            // 3,3
-            if(*pPtr == nWhich && *(pPtr+1) == nWhich) {
-                memmove(pPtr, pPtr + 2, nLeft * sizeof(USHORT));
-                nFree += 2;
-            }
-                // Anfang
-            else if(*pPtr == nWhich)
-                (*pPtr)++;
-                // Ende
-            else if(*(pPtr+1) == nWhich)
-                (*(pPtr+1))--;
-            else {
-                if(nPos + nRest + 2 > nFree) {
-                    USHORT nOf = pPtr - _pWhichRanges;
-                    _pWhichRanges = IncrSize(_pWhichRanges, nPos + nRest, nInitCount);
-                    nFree += nInitCount;
-                    pPtr = _pWhichRanges + nOf;
-                }
-                memmove(pPtr +2, pPtr, (nLeft+2) * sizeof(USHORT));
-                *++pPtr  = nWhich-1;
-                *++pPtr = nWhich+1;
-                nFree -= 2;
-            }
-            SfxPoolItem* pItem = *( _aItems + nPos );
-            if( pItem )
-            {
-                if(_pPool)
-                    _pPool->Remove(*pItem );
-                else
-                    delete pItem;
-                --_nCount;
-            }
-            memmove(_aItems + nPos +1, _aItems + nPos,
-                    sizeof(SfxPoolItem *) * (nRest - 1));
-            break;          // dann beim Parent suchen
-        }
-        nPos += *(pPtr+1) - *pPtr + 1;
-        pPtr += 2;
-    }
-    return *pPtr? TRUE: FALSE;
-}
-#endif
-
-// -----------------------------------------------------------------------
-
 SfxItemSet *SfxAllItemSet::Clone(BOOL bItems, SfxItemPool *pToPool ) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
@@ -2123,3 +2054,4 @@ SfxItemSet *SfxAllItemSet::Clone(BOOL bItems, SfxItemPool *pToPool ) const
         return bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*_pPool);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

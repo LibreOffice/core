@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -168,9 +169,9 @@ public:
     void                        MergeRange( USHORT nFrom, USHORT nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
-    virtual SvStream &          Load( SvStream &, FASTBOOL bDirect = FALSE,
+    virtual SvStream &          Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
-    virtual SvStream &          Store( SvStream &, FASTBOOL bDirect = FALSE ) const;
+    virtual SvStream &          Store( SvStream &, bool bDirect = false ) const;
 
     virtual int                 operator==(const SfxItemSet &) const;
 };
@@ -211,3 +212,4 @@ public:
 
 #endif // #ifndef _SFXITEMSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

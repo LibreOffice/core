@@ -89,7 +89,7 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
         specifies which buttons should be available on the
         message box. A combination of
         <type scope="com::sun::star::awt">MessageBoxButtons</type>. An <b>infobox</b>
-        ignores this paramter and always use button "OK".
+        ignores this parameter and always use button "OK".
 
         @param aTitle
         specifies the title of the message box.

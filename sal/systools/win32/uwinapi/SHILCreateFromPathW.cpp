@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "uwinapi.h"
 
 EXTERN_C LPITEMIDLIST WINAPI SHSimpleIDListFromPathW_Failure( LPCWSTR lpPathW )
@@ -30,3 +31,5 @@ EXTERN_C void WINAPI ResolveThunk_SHSimpleIDListFromPathW( FARPROC *lppfn, LPCST
 
 
 DEFINE_CUSTOM_THUNK( kernel32, GetLongPathNameW, DWORD, WINAPI, GetLongPathNameW, ( LPCWSTR lpShortPathW, LPWSTR lpLongPathW, DWORD cchBuffer ) );
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

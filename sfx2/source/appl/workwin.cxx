@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
-#ifndef GCC
-#endif
 
 #include <stdio.h>
 #include <hash_map>
@@ -171,7 +169,7 @@ LayoutManagerListener::~LayoutManagerListener()
 
 void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pWrkWin && !m_bHasFrame )
     {
         m_xFrame    = xFrame;
@@ -236,7 +234,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL LayoutManagerListener::dispose()
 throw( css::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // reset member
     m_pWrkWin = 0;
@@ -283,7 +281,7 @@ void SAL_CALL LayoutManagerListener::disposing(
     const css::lang::EventObject& )
 throw( css::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pWrkWin = 0;
     m_bHasFrame = sal_False;
     m_xFrame = css::uno::Reference< css::frame::XFrame >();
@@ -298,7 +296,7 @@ void SAL_CALL LayoutManagerListener::layoutEvent(
     const css::uno::Any&                        )
 throw (css::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pWrkWin )
     {
         if ( eLayoutEvent == css::frame::LayoutManagerEvents::VISIBLE )
@@ -1290,7 +1288,7 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
 
 //------------------------------------------------------------------------
 
-FASTBOOL SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
+bool SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
 
 /*  [Beschreibung]
 
@@ -1485,13 +1483,13 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
         // die Modi bestimmen, f"ur die die ToolBox gilt
         USHORT nTbxMode = aObjBarList[n].nMode;
-        FASTBOOL bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
+        bool bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
                                   ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
         nTbxMode &= ~SFX_VISIBILITY_FULLSCREEN;
         nTbxMode &= ~SFX_VISIBILITY_VIEWER;
 
         // wird in diesem Kontext eine ToolBox gefordert?
-        FASTBOOL bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
+        bool bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
         if ( bDestroy )
         {
             rtl::OUString aTbxId( m_aTbxTypeName );
@@ -1652,11 +1650,6 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
         if ( bSetFocus )
             bSetFocus = pChildWin->WantsFocus();
         pChildWin->SetWorkWindow_Impl( this );
-#if 0
-        // Enable-Status richtig setzen
-        pChildWin->GetWindow()->EnableInput( pCW->bEnable &&
-            ( pWorkWin->IsInputEnabled() /* || pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT */ ) );
-#endif
         // Zumindest der ExtraString wird beim Auswerten ver"andert, also neu holen
         SfxChildWinInfo aInfo = pChildWin->GetInfo();
         pCW->aInfo.aExtraString = aInfo.aExtraString;
@@ -2218,11 +2211,6 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, BOOL bEnabled, U
         pCW->nInterfaceId = nInter;
     pCW->nVisibility = nMode;
     pCW->bEnable = bEnabled;
-#if 0
-    if ( pCW->pWin )
-        pCW->pWin->GetWindow()->EnableInput( bEnabled &&
-            ( pWorkWin->IsInputEnabled() /* || pCW->pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT */ ) );
-#endif
     pCW->nVisibility = nMode;
 }
 
@@ -3138,3 +3126,4 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& )
     ArrangeChilds_Impl();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

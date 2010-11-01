@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,13 +48,12 @@
 #include <tools/debug.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <CustomAnimationPreset.hxx>
 
 #include <algorithm>
 
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -613,7 +613,7 @@ const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets(
 {
     if( !mpCustomAnimationPresets )
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( !mpCustomAnimationPresets )
         {
@@ -670,3 +670,4 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

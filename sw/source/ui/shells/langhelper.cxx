@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -255,7 +256,7 @@ namespace SwLangHelper
             USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
 
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
-            DBG_ASSERT( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
+            OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
             //get ScriptType
             USHORT nLangWhichId = 0;
@@ -267,7 +268,7 @@ namespace SwLangHelper
                 case SCRIPTTYPE_COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
                 default:
                     bIsSingleScriptType = false;
-                    DBG_ERROR( "unexpected case" );
+                    OSL_ENSURE(false, "unexpected case" );
             }
             if (bIsSingleScriptType)
             {
@@ -340,7 +341,7 @@ namespace SwLangHelper
             // whole paragraph)
 
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
-            DBG_ASSERT( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
+            OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
                 for (sal_uInt16 i = 0; i < 3; ++i)
@@ -438,7 +439,7 @@ namespace SwLangHelper
             // there is more than one language...
             nLang = LANGUAGE_DONTKNOW;
         }
-        DBG_ASSERT( nLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+        OSL_ENSURE( nLang != LANGUAGE_SYSTEM, "failed to get the language?" );
 
         return nLang;
     }
@@ -489,7 +490,7 @@ namespace SwLangHelper
                 }
             }
         }
-        DBG_ASSERT( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+        OSL_ENSURE( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
 
         return nCurrentLang;
     }
@@ -537,7 +538,7 @@ namespace SwLangHelper
                 }
             }
         }
-        DBG_ASSERT( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+        OSL_ENSURE( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
 
         return nCurrentLang;
     }
@@ -610,3 +611,4 @@ namespace SwLangHelper
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <hintids.hxx>
 #include <tools/ref.hxx>
 #include <svx/dialogs.hrc>
+#include <sal/macros.h>
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -56,10 +58,10 @@
 #include <pgfnote.hrc>
 
 #define TWIP_TO_LBOX 5
+
 /*-----------------------------------------------------#---------------
     Beschreibung:   vordefinierte Linien in Point
  --------------------------------------------------------------------*/
-
 static const USHORT __FAR_DATA nLines[] = {
     0,
     50,
@@ -69,20 +71,17 @@ static const USHORT __FAR_DATA nLines[] = {
     500
 };
 
-static const USHORT nLineCount = sizeof(nLines) / sizeof(nLines[0]);
+static const USHORT nLineCount = SAL_N_ELEMENTS(nLines);
 
 static USHORT __FAR_DATA aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
 };
 
-
 /*------------------------------------------------------------------------
  Beschreibung:  liefert zurueck, ob die Linienbreite nWidth bereits
                 in der Listbox enthalten ist.
 ------------------------------------------------------------------------*/
-
-
 BOOL lcl_HasLineWidth(USHORT nWidth)
 {
     for(USHORT i = 0; i < nLineCount; ++i) {
@@ -97,8 +96,6 @@ BOOL lcl_HasLineWidth(USHORT nWidth)
                 Arten, wie die Hoehe des Fussnotenbereiches angegeben
                 werden kann.
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK_INLINE_START( SwFootNotePage, HeightPage, Button *, EMPTYARG )
 {
     aMaxHeightEdit.Enable(FALSE);
@@ -118,8 +115,6 @@ IMPL_LINK_INLINE_END( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
 /*------------------------------------------------------------------------
  Beschreibung:  Handler Grenzwerte
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
 {
     aMaxHeightEdit.SetMax(aMaxHeightEdit.Normalize(lMaxHeight -
@@ -180,17 +175,10 @@ SwFootNotePage::~SwFootNotePage()
 {
 }
 
-
 SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwFootNotePage(pParent, rSet);
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwFootNotePage::Reset(const SfxItemSet &rSet)
 {
@@ -257,8 +245,6 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
-
-
 BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
@@ -359,5 +345,4 @@ USHORT* SwFootNotePage::GetRanges()
     return aPageRg;
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1170,9 +1171,6 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
         case svUnknown:             mxData->mbOk = false;                   break;
         case svDouble:              ProcessDouble( aTokData );              break;
         case svString:              ProcessString( aTokData );              break;
-#if 0   // erAck
-        case svError:               ProcessError( aTokData );               break;
-#endif
         case svSingleRef:           ProcessCellRef( aTokData );             break;
         case svDoubleRef:           ProcessRangeRef( aTokData );            break;
         case svExternalSingleRef:   ProcessExternalCellRef( aTokData );     break;
@@ -1220,11 +1218,7 @@ void XclExpFmlaCompImpl::ProcessString( const XclExpScToken& rTokData )
 
 void XclExpFmlaCompImpl::ProcessError( const XclExpScToken& rTokData )
 {
-#if 0   // erAck
-    AppendErrorToken( XclTools::GetXclErrorCode( rTokData.mpScToken->GetError() ), rTokData.mnSpaces );
-#else
     (void)rTokData; // compiler warning
-#endif
 }
 
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpScToken& rTokData )
@@ -2644,3 +2638,4 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

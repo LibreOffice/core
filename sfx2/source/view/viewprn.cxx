@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,17 +144,25 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
         aRenderOptions[1].Value = i_rViewProp;
         aRenderOptions[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
         aRenderOptions[2].Value <<= sal_True;
-        Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
-        int nProps = aRenderParms.getLength();
-        for( int i = 0; i < nProps; i++ )
+        try
         {
-            if( aRenderParms[i].Name.equalsAscii( "ExtraPrintUIOptions" ) )
+            Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
+            int nProps = aRenderParms.getLength();
+            for( int i = 0; i < nProps; i++ )
             {
-                Sequence< beans::PropertyValue > aUIProps;
-                aRenderParms[i].Value >>= aUIProps;
-                setUIOptions( aUIProps );
-                break;
+                if( aRenderParms[i].Name.equalsAscii( "ExtraPrintUIOptions" ) )
+                {
+                    Sequence< beans::PropertyValue > aUIProps;
+                    aRenderParms[i].Value >>= aUIProps;
+                    setUIOptions( aUIProps );
+                    break;
+                }
             }
+        }
+        catch( lang::IllegalArgumentException& )
+        {
+            // the first renderer should always be available for the UI options,
+            // but catch the exception to be safe
         }
     }
 
@@ -234,7 +243,13 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        aResult = mxRenderable->getRenderer( i_nPage, getSelectionObject(), aJobOptions );
+        try
+        {
+            aResult = mxRenderable->getRenderer( i_nPage, getSelectionObject(), aJobOptions );
+        }
+        catch( lang::IllegalArgumentException& )
+        {
+        }
     }
     return aResult;
 }
@@ -514,8 +529,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     SfxPrinter *pDocPrinter = GetPrinter();
 
     // Printer-Options auswerten
-    FASTBOOL bOriToDoc = FALSE;
-    FASTBOOL bSizeToDoc = FALSE;
+    bool bOriToDoc = false;
+    bool bSizeToDoc = false;
     if ( &pDocPrinter->GetOptions() )
     {
         USHORT nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
@@ -874,6 +889,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                         aReq.AppendItem( SfxStringItem( SID_PRINTER_NAME, pDlgPrinter->GetName() ) );
                         aReq.Done();
                     }
+                    if ( nId == SID_SETUPPRINTER )
+                    {
+                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, TRUE ) );
+                    }
 
                     // take the changes made in the dialog
                     pPrinter = SetPrinter_Impl( pDlgPrinter );
@@ -894,6 +913,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     rReq.Ignore();
                     if ( SID_PRINTDOC == nId )
                         rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                    if ( nId == SID_SETUPPRINTER )
+                    {
+                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, FALSE ) );
+            }
                 }
             }
         }
@@ -919,15 +942,7 @@ PrintDialog* SfxViewShell::CreatePrintDialog( Window* /*pParent*/ )
 */
 
 {
-    #if 0
-    PrintDialog *pDlg = new PrintDialog( pParent, false );
-    pDlg->SetFirstPage( 1 );
-    pDlg->SetLastPage( 9999 );
-    pDlg->EnableCollate();
-    return pDlg;
-    #else
     return NULL;
-    #endif
 }
 
 //--------------------------------------------------------------------
@@ -943,42 +958,8 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
                                PrintDialog* /*pPrintDlg*/,
                                BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
-    #if 0
-    // Printer-Dialogbox waehrend des Ausdrucks mu\s schon vor
-    // StartJob erzeugt werden, da SV bei einem Quit-Event h"angt
-    SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
-    SfxPrinter *pDocPrinter = GetPrinter(TRUE);
-    if ( !pPrinter )
-        pPrinter = pDocPrinter;
-    else if ( pDocPrinter != pPrinter )
-    {
-        pProgress->RestoreOnEndPrint( pDocPrinter->Clone() );
-        SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
-    }
-    pProgress->SetWaitMode(FALSE);
-
-    // Drucker starten
-    PreparePrint( pPrintDlg );
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    if ( pPrinter->StartJob(pObjShell->GetTitle(0)) )
-    {
-        // Drucken
-        Print( *pProgress, bIsAPI, pPrintDlg );
-        pProgress->Stop();
-        pProgress->DeleteOnEndPrint();
-        pPrinter->EndJob();
-    }
-    else
-    {
-        // Printer konnte nicht gestartet werden
-        delete pProgress;
-    }
-
-    return pPrinter->GetError();
-    #else
     DBG_ERROR( "DoPrint called, dead code !" );
     return ERRCODE_IO_NOTSUPPORTED;
-    #endif
 }
 
 //--------------------------------------------------------------------
@@ -1043,3 +1024,4 @@ JobSetup SfxViewShell::GetJobSetup() const
     return JobSetup();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

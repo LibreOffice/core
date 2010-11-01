@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,11 +46,6 @@
 #include <cmdid.h>
 #include <labprt.hrc>
 
-
-// --------------------------------------------------------------------------
-
-
-
 SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_LAB_PRT), rSet),
@@ -71,7 +67,7 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwLabPrtPage, CountHdl);
     aPageButton  .SetClickHdl( aLk );
     aSingleButton.SetClickHdl( aLk );
@@ -89,25 +85,17 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     }
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwLabPrtPage::~SwLabPrtPage()
 {
     if (pPrinter)
         delete pPrinter;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 {
     if (pButton == &aPrtSetup)
     {
-        // Druck-Setup aufrufen
+        // Call printer setup
         if (!pPrinter)
             pPrinter = new Printer;
 
@@ -128,34 +116,22 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 
     if ( bEnable )
         aColField.GrabFocus();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
-        ASSERT( pButton == &aPageButton, "NewButton?" );
+        OSL_ENSURE( pButton == &aPageButton, "NewButton?" );
 #endif
     return 0;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SfxTabPage* SwLabPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwLabPrtPage( pParent, rSet );
 }
 
-// --------------------------------------------------------------------------
-
-
-
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )
 {
     Reset(rSet);
 }
-
-// --------------------------------------------------------------------------
-
-
 
 int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
@@ -165,10 +141,6 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
     rItem.bPage = aPageButton.IsChecked();
@@ -176,10 +148,6 @@ void SwLabPrtPage::FillItem(SwLabItem& rItem)
     rItem.nRow  = (USHORT) aRowField.GetValue();
     rItem.bSynchron = aSynchronCB.IsChecked() && aSynchronCB.IsEnabled();
 }
-
-// --------------------------------------------------------------------------
-
-
 
 BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 {
@@ -190,10 +158,6 @@ BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 
     return TRUE;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabPrtPage::Reset(const SfxItemSet& )
 {
@@ -234,3 +198,4 @@ void SwLabPrtPage::Reset(const SfxItemSet& )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

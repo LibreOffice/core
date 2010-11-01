@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,6 +83,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::io;
+
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
         "SymbolTextDistance";
@@ -1406,3 +1410,4 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     rNumRule->replaceByIndex( nLevel, aAny );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1515,3 +1516,5 @@ const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
     }
     return *pSeq;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

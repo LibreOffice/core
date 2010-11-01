@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -382,3 +383,5 @@ void XMLImageMapExport::ExportPolygon(
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
                           aPoints.GetExportString());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

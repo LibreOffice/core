@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -302,7 +303,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                         if ( pView->IsDragObj() )
                         {
-                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                            bool bWasNoSnap = rDragStat.IsNoSnap();
                             BOOL bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
@@ -635,3 +636,5 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 }
 
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

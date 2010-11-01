@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,6 @@ using namespace utl;
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 
-
-// ----------------------------------------------------------------------------
 SwLabItem::SwLabItem() :
 
     SfxPoolItem(FN_LABEL),
@@ -65,13 +64,12 @@ SwLabItem::SwLabItem() :
     lHeight = 5669; // 10 cm
 }
 
-// ----------------------------------------------------------------------------
 SwLabItem::SwLabItem(const SwLabItem& rItem) :
     SfxPoolItem(FN_LABEL)
 {
         *this = rItem;
 }
-// ----------------------------------------------------------------------------
+
 SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 {
     bAddr    = rItem.bAddr;
@@ -132,10 +130,6 @@ SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
     return *this;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 int SwLabItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwLabItem& rLab = (const SwLabItem&) rItem;
@@ -161,7 +155,7 @@ int SwLabItem::operator ==(const SfxPoolItem& rItem) const
            aLstMake == rLab.aLstMake&&
            aLstType == rLab.aLstType&&
            sDBName  == rLab.sDBName &&
-               aPrivFirstName ==        rLab.aPrivFirstName&&
+            aPrivFirstName ==       rLab.aPrivFirstName&&
             aPrivName ==             rLab.aPrivName&&
             aPrivShortCut ==         rLab.aPrivShortCut&&
                aPrivFirstName2 ==        rLab.aPrivFirstName2&&
@@ -197,15 +191,11 @@ int SwLabItem::operator ==(const SfxPoolItem& rItem) const
             sGlossaryBlockName ==    rLab.sGlossaryBlockName;
 }
 
-// --------------------------------------------------------------------------
 SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
 {
     return new SwLabItem(*this);
 }
 
-/* -----------------------------25.09.00 16:25--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
 {
     static const char* aLabelPropNames[] =
@@ -277,9 +267,7 @@ Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
         pNames[nIndex++] = OUString::createFromAscii(aBusinessPropNames[nBusiness]);
     return aNames;
 }
-/* ----------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     ConfigItem(bLabel ? C2U("Office.Writer/Label") :  C2U("Office.Writer/BusinessCard")),
     bIsLabel(bLabel)
@@ -288,7 +276,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     sal_Bool bNoConfigValues = sal_True;
     if(aValues.getLength() == aNames.getLength())
     {
@@ -402,9 +390,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
         SetModified();
     }
 }
-/* -----------------------------25.09.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void    SwLabCfgItem::Commit()
@@ -478,3 +464,4 @@ void    SwLabCfgItem::Commit()
     PutProperties(aNames, aValues);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

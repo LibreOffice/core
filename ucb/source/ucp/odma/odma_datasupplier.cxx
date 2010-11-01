@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -287,8 +288,11 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     DWORD dwFlags = ODM_SPECIFIC;
     odm = NODMQueryExecute(ContentProvider::getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );
-    if(odm != ODM_SUCCESS)
+    if(odm != ODM_SUCCESS) {
+        delete[] pQueryId;
+        delete[] lpszDMSList;
         return sal_False;
+    }
 
     sal_uInt16 nCount       = 10;
     sal_uInt16 nMaxCount    = 10;
@@ -452,3 +456,5 @@ void DataSupplier::validate()
     throw( ResultSetException )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

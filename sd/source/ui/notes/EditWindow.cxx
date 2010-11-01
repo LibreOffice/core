@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include "sdresid.hxx"
 #include <svl/itempool.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
@@ -873,7 +874,7 @@ void EditWindow::Delete()
 void EditWindow::InsertText(const String& Text)
 {
     DBG_ASSERT( mpEditView, "EditView missing" );
-    ::vos::OGuard aGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (mpEditView)
         mpEditView->InsertText(Text);
 }
@@ -881,3 +882,5 @@ void EditWindow::InsertText(const String& Text)
 
 
 } } // end of namespace ::sd::notes
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

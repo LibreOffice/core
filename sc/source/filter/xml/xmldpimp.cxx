@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,6 +65,8 @@ using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::rtl::OUString;
+
+using rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -1838,3 +1841,5 @@ void ScXMLDataPilotGroupMemberContext::EndElement()
     if (sName.getLength())
         pDataPilotGroup->AddMember(sName);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

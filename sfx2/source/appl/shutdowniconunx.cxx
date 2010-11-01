@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifdef ENABLE_QUICKSTART_APPLET
 
@@ -8,7 +9,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <eggtray/eggtrayicon.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <sfx2/app.hxx>
@@ -37,6 +38,7 @@ static ResMgr *pVCLResMgr;
 static EggTrayIcon *pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
 static GtkWidget *pOpenMenuItem = NULL;
+static GtkWidget *pDisableMenuItem = NULL;
 
 static void open_url_cb( GtkWidget *, gpointer data )
 {
@@ -65,8 +67,10 @@ static void systray_disable_cb()
 static void exit_quickstarter_cb( GtkWidget * )
 {
     egg_tray_icon_cancel_message (pTrayIcon, 1 );
-    ShutdownIcon::getInstance()->terminateDesktop();
     plugin_shutdown_sys_tray();
+    //terminate may cause this .so to be unloaded. So we must be hands off
+    //all calls into this .so after this call
+    ShutdownIcon::terminateDesktop();
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
@@ -263,7 +267,7 @@ static void populate_menu( GtkWidget *pMenu )
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
-    (void) add_image_menu_item
+    pDisableMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_CLOSE,
           pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH_UNX ),
           G_CALLBACK( systray_disable_cb ) );
@@ -287,6 +291,7 @@ static void refresh_menu( GtkWidget *pMenu )
     bool bModal = ShutdownIcon::bModalMode;
     gtk_widget_set_sensitive( pExitMenuItem, !bModal);
     gtk_widget_set_sensitive( pOpenMenuItem, !bModal);
+    gtk_widget_set_sensitive( pDisableMenuItem, !bModal);
 }
 
 extern "C" {
@@ -343,7 +348,7 @@ extern "C" {
     static gboolean
     show_at_idle( gpointer )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aGuard;
         gtk_widget_show_all( GTK_WIDGET( pTrayIcon ) );
         return FALSE;
     }
@@ -351,7 +356,7 @@ extern "C" {
 
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( !g_type_from_name( "GdkDisplay" ) )
         return;
@@ -395,13 +400,16 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 
 void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     if( !pTrayIcon )
         return;
     gtk_widget_destroy( GTK_WIDGET( pTrayIcon ) );
     pTrayIcon = NULL;
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;
+    pDisableMenuItem = NULL;
 }
 
 #endif // ENABLE_QUICKSTART_APPLET
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

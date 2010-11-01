@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,3 +34,4 @@
 // TODO: reference any additional headers you need in STDAFX.H
 // and not in this file
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

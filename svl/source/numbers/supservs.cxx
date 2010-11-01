@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <comphelper/sharedmutex.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <strmadpt.hxx>
 #include "instrm.hxx"
@@ -42,7 +43,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-using namespace ::vos;
 using namespace ::utl;
 
 #define PERSISTENT_SERVICE_NAME     ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
@@ -227,3 +227,4 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

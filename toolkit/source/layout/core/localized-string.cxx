@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ uno::Any LocalizedString::queryInterface( uno::Type const& rType )
 void LocalizedString::setText( OUString const& s )
     throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( Window *w = GetWindow() )
         return w->SetText( s );
@@ -69,7 +70,7 @@ void LocalizedString::setText( OUString const& s )
 OUString LocalizedString::getText()
     throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( Window *w = GetWindow() )
         return w->GetText();
@@ -77,3 +78,5 @@ OUString LocalizedString::getText()
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

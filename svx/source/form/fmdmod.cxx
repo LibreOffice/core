@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+#include <sal/macros.h>
 #include <svx/fmdmod.hxx>
 #include "fmservs.hxx"
 #include <fmobj.hxx>
@@ -86,7 +88,7 @@ using namespace ::svxform;
         FM_SUN_COMPONENT_IMAGECONTROL
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
+    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq( nSvxComponentServiceNameListCount );
     ::rtl::OUString* pStrings = aSeq.getArray();
@@ -129,3 +131,4 @@ using namespace ::svxform;
 */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

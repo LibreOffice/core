@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using ::rtl::OUString;
@@ -76,7 +77,7 @@ sal_Int32 SAL_CALL
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     sal_Int32 nChildCount (mrTreeNode.GetControlContainer().GetControlCount());
     if (GetScrollPanel().IsVerticalScrollBarVisible())
@@ -96,7 +97,7 @@ Reference<XAccessible> SAL_CALL
         RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     Reference<XAccessible> xChild;
 
@@ -149,3 +150,5 @@ ScrollPanel& AccessibleScrollPanel::GetScrollPanel (void) const
 }
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

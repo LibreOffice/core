@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_fpicker.hxx"
 
 // includes --------------------------------------------------------------
-
+#include <sal/macros.h>
 #include "iodlg.hxx"
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -2570,7 +2571,7 @@ void SvtFileDialog::implArrangeControls()
     // loop through all these controls and adjust the z-order
     Window* pPreviousWin = NULL;
     Control** pCurrent = pControls;
-    for ( sal_Int32 i = 0; i < sal_Int32(sizeof( pControls ) / sizeof( pControls[ 0 ] )); ++i, ++pCurrent )
+    for ( sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS( pControls )); ++i, ++pCurrent )
     {
         if ( !*pCurrent )
             // this control is not available in the current operation mode -> skip
@@ -2750,7 +2751,7 @@ void SvtFileDialog::Resize()
             _pPbPlay, _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions, _pCbSelection
         };
         Control** ppMoveControls = aMoveControlsVert;
-        Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsVert ) / sizeof( aMoveControlsVert[0] );
+        Control** ppMoveControlsEnd = ppMoveControls + SAL_N_ELEMENTS( aMoveControlsVert );
         for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
             lcl_MoveControl( *ppMoveControls, 0, nDeltaY );
     }
@@ -2762,7 +2763,7 @@ void SvtFileDialog::Resize()
             _pImp->_pBtnFileOpen, _pImp->_pBtnCancel, _pImp->_pBtnHelp
         };
         Control** ppMoveControls = aMoveControlsBoth;
-        Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsBoth ) / sizeof( aMoveControlsBoth[0] );
+        Control** ppMoveControlsEnd = ppMoveControls + SAL_N_ELEMENTS( aMoveControlsBoth );
         for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
             lcl_MoveControl( *ppMoveControls, nDeltaX, nDeltaY );
     }
@@ -2774,7 +2775,7 @@ void SvtFileDialog::Resize()
             _pImp->_pBtnUp, _pImp->_pBtnNewFolder, _pImp->_pBtnStandard
         };
         Control** ppMoveControls = aMoveControlsHor;
-        Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsHor ) / sizeof( aMoveControlsHor[0] );
+        Control** ppMoveControlsEnd = ppMoveControls + SAL_N_ELEMENTS( aMoveControlsHor );
         for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
             lcl_MoveControl( *ppMoveControls, nDeltaX, 0 );
     }
@@ -2787,7 +2788,7 @@ void SvtFileDialog::Resize()
             _pImp->_pEdFileName, _pImp->_pLbFileVersion, _pImp->_pLbTemplates, _pImp->_pLbImageTemplates,
             _pImp->GetFilterListControl(), _pImp->_pFtCurrentPath,
         };
-        sal_Int32 nSizeControls = sizeof( aSizeControls ) / sizeof( aSizeControls[0] );
+        sal_Int32 nSizeControls = SAL_N_ELEMENTS( aSizeControls );
         Control** ppSizeControls = aSizeControls;
         for ( sal_Int32 j=0; j<nSizeControls; ++j, ++ppSizeControls )
         {
@@ -3263,7 +3264,6 @@ BOOL SvtFileDialog::AddControl( Window* pControl, BOOL bNewLine )
     Point aNewControlPos;
     Size* pNewDlgSize = NULL;
     BOOL bNewRow = bNewLine;
-    FASTBOOL bFirstNewRow = FALSE;
 
     if ( nType == WINDOW_WINDOW )
     {
@@ -3296,7 +3296,6 @@ BOOL SvtFileDialog::AddControl( Window* pControl, BOOL bNewLine )
     {
         // Create a new row if there was no usercontrol before.
         bNewRow = TRUE;
-        bFirstNewRow = TRUE;
     }
 
     // Check if a new row has to be created.
@@ -3470,3 +3469,5 @@ IMPL_LINK( QueryFolderNameDialog, NameHdl, Edit *, EMPTYARG )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,14 @@ TextBody::TextBody()
 {
 }
 
+TextBody::TextBody( TextBodyPtr pBody )
+{
+    if( pBody.get() ) {
+        maTextProperties = pBody->maTextProperties;
+        maTextListStyle = pBody->maTextListStyle;
+    }
+}
+
 TextBody::~TextBody()
 {
 }
@@ -70,3 +79,5 @@ void TextBody::insertAt(
 
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

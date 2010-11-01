@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -677,14 +678,6 @@ void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlig
 {
     m_aScrollWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
 }
-#if 0
-// -----------------------------------------------------------------------------
-sal_Bool ODesignView::isAlignPossible() const
-{
-    ::boost::shared_ptr<OSectionWindow> pMarkedSection = getMarkedSection();
-    return pMarkedSection.get() && pMarkedSection->getReportSection().getSectionView().IsAlignPossible();
-}
-#endif
 //------------------------------------------------------------------------------
 sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
@@ -785,3 +778,5 @@ sal_uInt16 ODesignView::getZoomFactor(SvxZoomType _eType) const
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

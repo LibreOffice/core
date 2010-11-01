@@ -32,7 +32,7 @@ ModalDialog DLG_WORDCOUNT
     HelpID = HID_DLG_WORDCOUNT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 170 , 108 ) ;
+    Size = MAP_APPFONT ( 170 , 132 ) ;
     Text [ en-US ] = "Word Count" ;
     Moveable = TRUE ;
 
@@ -66,50 +66,74 @@ ModalDialog DLG_WORDCOUNT
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Right = TRUE;
     };
+    FixedText       FT_CURRENTCHARACTEREXCLUDINGSPACES
+    {
+        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Characters excluding spaces:";
+    };
+    FixedText       FI_CURRENTCHARACTEREXCLUDINGSPACES
+    {
+        Pos = MAP_APPFONT ( 111 , 38 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Right = TRUE;
+    };
     FixedLine       FL_DOC
     {
-        Pos = MAP_APPFONT (  6, 40 ) ;
+        Pos = MAP_APPFONT (  6, 52 ) ;
         Size = MAP_APPFONT ( 158 , 8 ) ;
         Text [ en-US ] = "Whole document";
     };
     FixedText       FT_DOCWORD
     {
-        Pos = MAP_APPFONT (  12, 51 ) ;
+        Pos = MAP_APPFONT (  12, 63 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Words:";
     };
     FixedText       FI_DOCWORD
     {
-        Pos = MAP_APPFONT ( 111 , 51 ) ;
+        Pos = MAP_APPFONT ( 111 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Right = TRUE;
     };
     FixedText       FT_DOCCHARACTER
     {
-        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Characters:";
     };
     FixedText       FI_DOCCHARACTER
     {
-        Pos = MAP_APPFONT (  111, 63 ) ;
+        Pos = MAP_APPFONT (  111, 75 ) ;
+        Size = MAP_APPFONT (  50, 8 ) ;
+        Right = TRUE;
+    };
+    FixedText       FT_DOCCHARACTEREXCLUDINGSPACES
+    {
+        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Characters excluding spaces:";
+    };
+    FixedText       FI_DOCCHARACTEREXCLUDINGSPACES
+    {
+        Pos = MAP_APPFONT (  111, 87 ) ;
         Size = MAP_APPFONT (  50, 8 ) ;
         Right = TRUE;
     };
     FixedLine  FL_BOTTOM
     {
-        Pos = MAP_APPFONT ( 6 , 77 ) ;
+        Pos = MAP_APPFONT ( 6 , 101 ) ;
         Size = MAP_APPFONT ( 158 , 8 ) ;
     };
     OKButton        PB_OK
     {
-        Pos = MAP_APPFONT ( 61 , 88 ) ;
+        Pos = MAP_APPFONT ( 61 , 112 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     HelpButton      PB_HELP
     {
-        Pos = MAP_APPFONT ( 114 , 88 ) ;
+        Pos = MAP_APPFONT ( 114 , 112 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1422,3 +1423,5 @@ geometry::RealSize2D GetSize (const geometry::RealRectangle2D& rBox)
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

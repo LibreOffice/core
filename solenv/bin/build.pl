@@ -42,6 +42,7 @@
     use Fcntl;
     use POSIX qw(:errno_h);
     use Sys::Hostname;
+    use IPC::Open3;
 
     use lib ("$ENV{SOLARENV}/bin/modules");
     use SourceConfig;
@@ -208,9 +209,16 @@
     %module_deps_hash_pids = ();
     my @argv = @ARGV;
     my $source_config_file;
+    my $zenity_pid = 0;
+    my $zenity_in = '';
+    my $zenity_out = '';
+    my $zenity_err = '';
 ### main ###
 
     get_options();
+
+    zenity_open();
+    zenity_tooltip("Starting build.");
 
 #    my $temp_html_file = CorrectPath($tmp_dir. '/' . $ENV{INPATH}. '.build.html');
     get_build_modes();
@@ -538,7 +546,6 @@ sub schedule_rebuild {
         };
     };
 };
-
 
 #
 # procedure retrieves build list path
@@ -1697,44 +1704,53 @@ sub get_switch_options {
 sub cancel_build {
 #    close_server_socket();
     my $broken_modules_number = scalar @broken_modules_names;
-    my $message_part = 'build ';
-    if (scalar keys %incompatibles) {
-        my @incompatible_modules = keys %incompatibles;
-        if ($stop_build_on_error) {
-            $message_part .= "--from @incompatible_modules:@broken_modules_names\n";
-        } else {
-            $message_part .= "--from @broken_modules_names\n";
-        };
-    } else {
-        if ($processes_to_run) {
-            $message_part .= "--from ";
-        } else {
-            $message_part .= "--all:";
-        };
-        $message_part .= "@broken_modules_names\n";
 
-    };
-    if ($broken_modules_number && $build_all_parents) {
-        print "\n";
-        print $broken_modules_number;
-        print " module(s): ";
-        foreach (@broken_modules_names) {
-            print "\n\t$_";
-        };
-        print "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
-        foreach (keys %broken_build) {
-            print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
-        };
-        print "\nAttention: if you fix the errors in above module(s) you may continue the build issuing the following command:\n\n\t" . $message_part;
-    } else {
+    print "\n";
+    print "-----------------------------------------------------------------------\n";
+    print "        Oh dear - something failed during the build - sorry !\n";
+    print "  For more help with debugging build errors, please see the section in:\n";
+    print "            http://wiki.documentfoundation.org/Development\n";
+    print "\n";
+
+    if (!$broken_modules_number || !$build_all_parents) {
         while (children_number()) {
             handle_dead_children(1);
         }
+    }
+
+    if (keys %broken_build) {
+        print "  internal build errors:\n\n";
         foreach (keys %broken_build) {
             print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
-    };
+        print "\n";
+    }
+
+    my $module = shift @broken_modules_names;
+    if ($broken_modules_number > 1) {
+        print " it seems you are using a threaded build, which means that the\n";
+        print " actual compile error is probably hidden far above, and could be\n";
+        print " inside any of these other modules:\n";
+        print "     @broken_modules_names\n";
+        print " please re-run build inside each one to isolate the problem.\n";
+    } else {
+        print " it seems that the error is inside '$module', please re-run build\n";
+        print " inside this module to isolate the error and/or test your fix:\n";
+    }
+    print "-----------------------------------------------------------------------\n";
     print "\n";
+    print "" . $ENV{'OOO_SHELL'} . "\n";
+    print "cd " . $ENV{'SRC_ROOT'} . "\n";
+    print "source ./" . $ENV{'ENV_SCRIPT'} . ".sh\n";
+    print "cd $module\n";
+    print "build\n";
+    print "\n";
+    print "when the problem is isolated and fixed exit and re-run 'make' from the top-level\n";
+    print "sometimes (sadly) it is necessary to rm -Rf " . $ENV{INPATH} . " in a module.\n";
+
+    zenity_message("LibreOffice Build Failed!");
+    zenity_close();
+
     do_exit(1);
 };
 
@@ -1982,6 +1998,8 @@ sub mp_success_exit {
 #    };
     print "\nMultiprocessing build is finished\n";
     print "Maximal number of processes run: $maximal_processes\n";
+    zenity_message("LibreOffice Build Success!");
+    zenity_close();
     do_exit(0);
 };
 
@@ -2127,7 +2145,51 @@ sub print_announce {
     $announce_string .= $echo . $text;
     $announce_string .= $echo . "=============\n";
     print $announce_string;
+    my $total_modules = scalar(keys %build_lists_hash);
+    my $modules_started = scalar(keys %module_announced) + 1;
+    zenity_tooltip("($modules_started/$total_modules) $text");
     $module_announced{$Prj}++;
+};
+
+sub zenity_enabled {
+    return 0 if (!defined $ENV{DISPLAY});
+    return 0 if ($ENV{ENABLE_ZENITY} ne "TRUE");
+    return 1;
+}
+
+sub zenity_open {
+    if (zenity_enabled()) {
+        my $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
+                               "zenity --notification --listen");
+    };
+};
+
+sub zenity_close {
+    if (zenity_enabled()) {
+        sleep(1); # Give Zenity a chance to show the message.
+        kill 1, $zenity_pid;
+    };
+};
+
+sub zenity_icon {
+    if (zenity_enabled()) {
+        my $filename = shift;
+        print $zenity_in "icon: $filename\n";
+    };
+};
+
+sub zenity_tooltip {
+    if (zenity_enabled()) {
+        my $text = shift;
+        print $zenity_in "tooltip: LibreOffice Build: $text\n";
+    };
+};
+
+sub zenity_message {
+    if (zenity_enabled()) {
+        my $text = shift;
+        print $zenity_in "message: $text\n";
+    };
 };
 
 sub are_all_dependent {
@@ -2392,7 +2454,7 @@ sub prepare_incompatible_build {
         print "WARNING(S):\n";
         print STDERR "$_\n" foreach (@warnings);
         print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n" if (!$prepare);
-        sleep(10);
+        sleep(5);
     };
     if ($prepare) {
     print "\nPreparation finished";

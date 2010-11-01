@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5711,7 +5712,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
                     BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 aTbSymbol.InsertItem( nId,aImage, aURL, 0, 0 ); //modify
@@ -5875,7 +5876,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
                     BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 if ( bOK && !!aImage )
@@ -6044,3 +6045,5 @@ BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long a
 
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <tools/string.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -61,10 +62,8 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include "ModelImpl.hxx"
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 class OSharedConnectionManager;
 class OChildCommitListen_Impl;
@@ -232,10 +231,9 @@ protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

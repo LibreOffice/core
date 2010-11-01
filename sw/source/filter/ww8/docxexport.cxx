@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,12 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <oox/export/chartexport.hxx>
 
 #include <map>
 #include <algorithm>
@@ -291,6 +294,33 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
     OSL_TRACE( "TODO DocxExport::ForFormText()\n" );
 }
 
+rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
+{
+    rtl::OUString aFileName = rtl::OUStringBuffer()
+                                .appendAscii("charts/chart")
+                                .append(nCount)
+                                .appendAscii( ".xml" )
+                                .makeStringAndClear();
+
+    OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                    S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" ),
+                    aFileName );
+
+    aFileName = rtl::OUStringBuffer()
+                  .appendAscii("word/charts/chart")
+                  .append(nCount)
+                  .appendAscii( ".xml" )
+                  .makeStringAndClear();
+
+    ::sax_fastparser::FSHelperPtr pChartFS =
+        m_pFilter->openFragmentStreamWithSerializer( aFileName,
+            S( "application/vnd.openxmlformats-officedocument.drawingml.chart" ) );
+
+    oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
+    aChartExport.ExportContent();
+    return ::rtl::OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+}
+
 void DocxExport::ExportDocument_Impl()
 {
     InitStyles();
@@ -371,6 +401,11 @@ void DocxExport::OutputGrfNode( const SwGrfNode& )
 void DocxExport::OutputOLENode( const SwOLENode& )
 {
     OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
+}
+
+void DocxExport::OutputLinkedOLE( const OUString& )
+{
+    // Nothing to implement here: WW8 only
 }
 
 ULONG DocxExport::ReplaceCr( BYTE )
@@ -680,4 +715,4 @@ DocxExport::~DocxExport()
     delete m_pDrawingML, m_pDrawingML = NULL;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

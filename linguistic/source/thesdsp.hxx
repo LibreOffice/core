@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -127,3 +128,4 @@ inline ::com::sun::star::uno::Reference<
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

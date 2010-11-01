@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,15 +43,11 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
-// -----------------------------------------------------------------------
-
 const long nImageWidthSingle = 15;
 const long nImageWidthAuto = 25;
 const long nImageWidthBook = 23;
 const long nImageWidthSum = 63;
 const long nImageHeight = 11;
-
-// -----------------------------------------------------------------------
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
@@ -80,14 +77,10 @@ SwViewLayoutControl::SwViewLayoutControl( USHORT _nSlotId, USHORT _nId, StatusBa
     mpImpl->maImageBookMode_Active      = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC)     : SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
 }
 
-// -----------------------------------------------------------------------
-
 SwViewLayoutControl::~SwViewLayoutControl()
 {
     delete mpImpl;
 }
-
-// -----------------------------------------------------------------------
 
 void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -95,7 +88,7 @@ void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, co
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
-        DBG_ASSERT( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
+        OSL_ENSURE( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
         const USHORT nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 
@@ -115,8 +108,6 @@ void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, co
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
 }
-
-// -----------------------------------------------------------------------
 
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {
@@ -203,3 +194,5 @@ BOOL SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

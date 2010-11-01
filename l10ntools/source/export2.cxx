@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <osl/time.h>
 #include <osl/process.h>
 #include <rtl/ustring.hxx>
+#include <sal/macros.h>
 #include <iostream>
 #include <iomanip>
 #include <tools/urlobj.hxx>
@@ -665,7 +667,7 @@ void Export::getCurrentDir( string& dir )
 void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix )
 {
     static const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    static const int  COUNT_OF_LETTERS = sizeof(LETTERS)/sizeof(LETTERS[0]) - 1;
+    static const int  COUNT_OF_LETTERS = SAL_N_ELEMENTS(LETTERS) - 1;
     sRandStr.Append( sPrefix );
 
     static sal_uInt64 value;
@@ -732,3 +734,5 @@ DirEntry Export::GetTempFile()
     delete sTempFilename;
     return aDirEntry;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

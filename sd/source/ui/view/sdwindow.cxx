@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,6 +73,7 @@ Window::Window(::Window* pParent)
       maWinPos(0, 0),           // vorsichtshalber; die Werte sollten aber
       maViewOrigin(0, 0),       // vom Besitzer des Fensters neu gesetzt
       maViewSize(1000, 1000),   // werden
+      maPrevSize(-1,-1),
       mnMinZoom(MIN_ZOOM),
       mnMaxZoom(MAX_ZOOM),
       mbMinZoomAutoCalc(false),
@@ -471,6 +473,9 @@ long Window::SetZoomFactor(long nZoom)
     aMap.SetScaleY(Fraction(nZoom, 100));
     SetMapMode(aMap);
 
+    // invalidate previous size - it was relative to the old scaling
+    maPrevSize = Size(-1,-1);
+
     // Update the map mode's origin (to what effect?).
     UpdateMapOrigin();
 
@@ -667,11 +672,20 @@ void Window::SetMinZoomAutoCalc (bool bAuto)
 
 void Window::UpdateMapOrigin(BOOL bInvalidate)
 {
-    BOOL    bChanged = FALSE;
-    Size    aWinSize = PixelToLogic(GetOutputSizePixel());
+    BOOL       bChanged = FALSE;
+    const Size aWinSize = PixelToLogic(GetOutputSizePixel());
 
     if ( mbCenterAllowed )
     {
+        if( maPrevSize != Size(-1,-1) )
+        {
+            // keep view centered around current pos, when window
+            // resizes
+            maWinPos.X() -= (aWinSize.Width() - maPrevSize.Width()) / 2;
+            maWinPos.Y() -= (aWinSize.Height() - maPrevSize.Height()) / 2;
+            bChanged = TRUE;
+        }
+
         if ( maWinPos.X() > maViewSize.Width() - aWinSize.Width() )
         {
             maWinPos.X() = maViewSize.Width() - aWinSize.Width();
@@ -695,6 +709,8 @@ void Window::UpdateMapOrigin(BOOL bInvalidate)
     }
 
     UpdateMapMode ();
+
+    maPrevSize = aWinSize;
 
     if (bChanged && bInvalidate)
         Invalidate();
@@ -1208,3 +1224,5 @@ Selection Window::GetSurroundingTextSelection() const
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

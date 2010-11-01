@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,20 @@ uno::Reference< word::XRange > SAL_CALL
 SwVbaParagraph::getRange( ) throw ( uno::RuntimeException )
 {
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText(), sal_True ) );
+}
+
+uno::Any SAL_CALL
+SwVbaParagraph::getStyle( ) throw ( uno::RuntimeException )
+{
+    uno::Reference< word::XRange > xRange = getRange();
+    return xRange->getStyle();
+}
+
+void SAL_CALL
+SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException )
+{
+    uno::Reference< word::XRange > xRange = getRange();
+    xRange->setStyle( style );
 }
 
 rtl::OUString&
@@ -172,3 +187,5 @@ SwVbaParagraphs::getServiceNames()
     }
     return sNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

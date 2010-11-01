@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,3 +94,5 @@ typedef ::std::map<StyleName_t, LocaleSet_t>  StyleLocaleMap_t;
 const StyleLocalePair_t EMPTY_STYLELOCALE_PAIR = ::std::make_pair(::std::wstring(), EMPTY_LOCALE );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,20 +65,17 @@
 #include <svx/svdetc.hxx>
 #include <editeng/fhgtitem.hxx>
 
-// OD 26.06.2003 #108784#
 #include <svx/svdpagv.hxx>
-// OD 2004-04-01 #i26791#
+
 #include <dcontact.hxx>
 #include <txtfrm.hxx>
 #include <frmfmt.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
-// --> OD 2006-03-14 #i62875#
+
 #include <svx/svditer.hxx>
-// <--
-// --> OD 2006-11-01 #130889#
+
 #include <vector>
-// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -89,11 +87,8 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 |*
 |*  SwDoc::GroupSelection / SwDoc::UnGroupSelection
 |*
-|*  Ersterstellung      JP 21.08.95
-|*  Letzte Aenderung    JP 21.08.95
-|*
 |*************************************************************************/
-// OD 2004-04-01 #i26791# - local method to determine positioning and
+// local method to determine positioning and
 // alignment attributes for a drawing object, which is newly connected to
 // the layout. Used for a newly formed group object <SwDoc::GroupSelection(..)>
 // and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
@@ -1072,3 +1067,4 @@ namespace docfunc
 }
 // <--
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

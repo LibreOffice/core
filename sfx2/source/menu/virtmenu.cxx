@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,6 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/urlobj.hxx>
-
-#ifndef GCC
-#endif
 
 #include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>
@@ -776,7 +774,7 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
+bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 {
     // Selber suchen, da SV mit 'USHORT nSID = pSVMenu->GetCurItemId();' immer
     // 0 liefert. Das ist so, weil die Event-Weiterleitung lt. TH nichts mit
@@ -786,7 +784,7 @@ FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
     for ( USHORT nPos = 0; nPos < nCount; ++nPos )
     {
         // angesprochenes Sub-Menu gefunden?
-        FASTBOOL bFound = FALSE;
+        bool bFound = false;
         USHORT nSID = pSVMenu->GetItemId(nPos);
         SfxMenuControl &rCtrl = pItems[nPos];
         bFound = pSVMenu->GetPopupMenu(nSID) == pMenu;
@@ -1367,3 +1365,4 @@ void SfxVirtualMenu::SetHelpIds( ResMgr *pRes )
     pResMgr = pRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

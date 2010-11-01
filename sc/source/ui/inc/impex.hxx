@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ struct ScExportTextOptions
     bool mbAddQuotes;
 };
 
-class ScImportExport
+class SC_DLLPUBLIC ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument* pDoc;
@@ -189,3 +190,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

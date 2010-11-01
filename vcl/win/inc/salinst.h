@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 #include <vcl/sv.h>
 #include <vcl/salinst.hxx>
 
-namespace vos { class OMutex; }
-
 // -------------------
 // - SalInstanceData -
 // -------------------
@@ -45,7 +44,7 @@ public:
     HINSTANCE           mhInst;                 // Instance Handle
     HWND                mhComWnd;               // window, for communication (between threads and the main thread)
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-    vos::OMutex*        mpSalWaitMutex;         // Sal-Wait-Mutex
+    osl::Mutex*         mpSalWaitMutex;         // Sal-Wait-Mutex
     USHORT              mnYieldWaitCount;       // Wait-Count
 public:
     WinSalInstance();
@@ -74,7 +73,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
@@ -101,3 +100,5 @@ void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
 
 #endif // _SV_SALINST_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

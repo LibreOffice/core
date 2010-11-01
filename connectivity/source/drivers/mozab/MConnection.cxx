@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,6 +128,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     ,m_nMaxResultRecords( -1 )
     ,m_aNameMapper(NULL)
     ,m_eSDBCAddressType(SDBCAddress::Unknown)
+    ,m_bForceLoadTable(false)
 {
     m_pDriver->acquire();
 
@@ -601,3 +603,5 @@ void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const R
 }
 
 } } // namespace connectivity::mozab
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

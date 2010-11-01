@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace com::sun::star;
 
@@ -132,7 +133,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
                                                     ::sal_Int32 nNewState )
     throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     nState = nNewState;
     if ( !pObject )
         return;
@@ -168,7 +169,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
 
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
     {
         if ( nState == embed::EmbedStates::RUNNING )
@@ -179,7 +180,9 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
             else
                 pObject->UpdateReplacement();
         }
-        else if ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE )
+        else if ( nState == embed::EmbedStates::ACTIVE ||
+                  nState == embed::EmbedStates::UI_ACTIVE ||
+                  nState == embed::EmbedStates::INPLACE_ACTIVE )
         {
             // in case the object is inplace or UI active the replacement image should be updated on demand
             pObject->UpdateReplacementOnDemand();
@@ -189,17 +192,8 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-#if 0
-    if ( pObject && aEvent.EventName.equalsAscii("OnSaveDone") || aEvent.EventName.equalsAscii("OnSaveAsDone") )
-    {
-        // TODO/LATER: container must be set before!
-        // When is this event created? Who sets the new container when it changed?
-        pObject->UpdateReplacement();
-    }
-    else
-#endif
     if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
     {
         pObject->UpdateReplacement();
@@ -951,3 +945,4 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
 
 } // namespace svt
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

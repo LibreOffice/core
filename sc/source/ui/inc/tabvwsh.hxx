@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -201,7 +202,7 @@ protected:
     virtual void    Deactivate(BOOL bMDI);
     virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
-    virtual void    ShowCursor(FASTBOOL bOn);
+    virtual void    ShowCursor(bool bOn);
 
     virtual void    Move();     // Benachrichtigung
 
@@ -226,7 +227,7 @@ protected:
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient );
 
-    virtual FASTBOOL KeyInput( const KeyEvent &rKeyEvent );
+    virtual bool    KeyInput( const KeyEvent &rKeyEvent );
     virtual SdrView* GetDrawView() const;
 
 public:
@@ -246,7 +247,7 @@ public:
 
     virtual         ~ScTabViewShell();
 
-    Window*         GetDialogParent();
+    SC_DLLPUBLIC Window* GetDialogParent();
 
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
@@ -289,7 +290,7 @@ public:
     void            GetSaveState( SfxItemSet& rSet );
     void            ExecSearch( SfxRequest& rReq );
 
-    void            ExecuteUndo(SfxRequest& rReq);
+    SC_DLLPUBLIC    void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
     void            ExecuteSbx( SfxRequest& rReq );
@@ -427,3 +428,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define _EXT_SCANNER_HXX
 
 #include <tools/stream.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weak.hxx>
@@ -64,7 +65,7 @@ class ScannerManager : public OWeakObject, XScannerManager, AWT::XBitmap
 {
 protected:
 
-    vos::OMutex                             maProtector;
+    osl::Mutex                              maProtector;
     void*                                   mpData;
 
     void                                    AcquireData();
@@ -108,3 +109,5 @@ public:
 REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::star::lang::XMultiServiceFactory )& rxFactory ) throw( Exception );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

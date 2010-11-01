@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -261,15 +262,6 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
  * should be attempted with the username/password, or non-zero to
  * cancel the request. (if non-zero, username and password are
  * ignored.)  */
-
-#if 0
-    // Give'em only a limited mumber of retries..
-    if ( attempt > 9 )
-    {
-        // abort
-        return -1;
-    }
-#endif
 
     NeonSession * theSession = static_cast< NeonSession * >( inUserData );
     DAVAuthListener * pListener
@@ -2198,3 +2190,5 @@ rtl::OUString NeonSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
     // error.
     return rtl::OUString();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star::awt;
@@ -91,7 +92,7 @@ GenericToolboxController::~GenericToolboxController()
 void SAL_CALL GenericToolboxController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::ToolboxController::dispose();
 
@@ -107,7 +108,7 @@ throw ( RuntimeException )
     ::rtl::OUString                     aCommandURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -148,7 +149,7 @@ throw ( RuntimeException )
 void GenericToolboxController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -206,3 +207,5 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolboxController, ExecuteHdl_Impl, ExecuteI
 }
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,11 +70,12 @@ public:
     ~ScDPFieldButton();
 
     void setText(const ::rtl::OUString& rText);
-    void setBoundingBox(const Point& rPos, const Size& rSize);
+    void setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL);
     void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
     void setHasHiddenMember(bool b);
     void setPopupPressed(bool b);
+    void setPopupLeft(bool b);
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
@@ -94,6 +96,7 @@ private:
     bool                    mbPopupButton;
     bool                    mbHasHiddenMember;
     bool                    mbPopupPressed;
+    bool                    mbPopupLeft;
 };
 
 // ============================================================================
@@ -359,3 +362,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

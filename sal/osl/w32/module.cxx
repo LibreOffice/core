@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -392,8 +393,6 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
   DWORD cb                 // size of the structure
 );
 
-#define bufsizeof(buffer) (sizeof(buffer) / sizeof((buffer)[0]))
-
 /* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Libary 6.0a say so */
 
 static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pustrURL )
@@ -482,3 +481,4 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, 
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

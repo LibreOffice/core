@@ -119,7 +119,7 @@ en-US = "French 'Classic and Reform 1990' spelling, thesaurus and hyphenation"
 en-US = "Galician"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_GL]
-en-US = "Galician spellchecker dictionary for OpenOffice.org"
+en-US = "Galician spellchecker dictionary for %PRODUCTNAME"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HE]
 en-US = "Hebrew"
@@ -132,6 +132,12 @@ en-US = "Hungarian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HU]
 en-US = "Hungarian spelling dictionary, hyphenation patterns, and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_HR]
+en-US = "Croatian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_HR]
+en-US = "Croatian spelling dictionary and hyphenation patterns"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_IT]
 en-US = "Italian"

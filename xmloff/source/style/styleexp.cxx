@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -383,32 +384,6 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
     return sal_True;
 }
 
-#if 0
-void XMLStyleExport::exportStyleFamily(
-    const sal_Char *pFamily,
-    const OUString& rXMLFamily,
-    const UniReference < XMLPropertySetMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
-{
-    const OUString sFamily(OUString::createFromAscii(pFamily ));
-    UniReference < SvXMLExportPropertyMapper > xExpPropMapper =
-        new SvXMLExportPropertyMapper( rPropMapper );
-    exportStyleFamily( sFamily, rXMLFamily, xExpPropMapper, bUsed, nFamily,
-                       pPrefix);
-}
-
-void XMLStyleExport::exportStyleFamily(
-    const OUString& rFamily, const OUString& rXMLFamily,
-    const UniReference < XMLPropertySetMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
-{
-    UniReference < SvXMLExportPropertyMapper > xExpPropMapper =
-        new SvXMLExportPropertyMapper( rPropMapper );
-    exportStyleFamily( rFamily, rXMLFamily, xExpPropMapper, bUsed, nFamily,
-                       pPrefix);
-}
-#endif
-
 void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
     const OUString& rXMLFamily,
@@ -557,3 +532,4 @@ void XMLStyleExport::exportStyleFamily(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,31 +55,11 @@
 
 namespace unocontrols{
 
-#define UNO3_ANY                                        ::com::sun::star::uno::Any
-#define UNO3_ILLEGALARGUMENTEXCEPTION                   ::com::sun::star::lang::IllegalArgumentException
-#define UNO3_IPROPERTYARRAYHELPER                       ::cppu::IPropertyArrayHelper
-#define UNO3_OBROADCASTHELPER                           ::cppu::OBroadcastHelper
-#define UNO3_OCONNECTIONPOINTCONTAINERHELPER            OConnectionPointContainerHelper
-#define UNO3_OMULTITYPEINTERFACECONTAINERHELPER         ::cppu::OMultiTypeInterfaceContainerHelper
-#define UNO3_OPROPERTYSETHELPER                         ::cppu::OPropertySetHelper
-#define UNO3_OUSTRING                                   ::rtl::OUString
-#define UNO3_PROPERTY                                   ::com::sun::star::beans::Property
-#define UNO3_PROPERTYVALUE                              ::com::sun::star::beans::PropertyValue
-#define UNO3_REFERENCE                                  ::com::sun::star::uno::Reference
-#define UNO3_RUNTIMEEXCEPTION                           ::com::sun::star::uno::RuntimeException
-#define UNO3_SEQUENCE                                   ::com::sun::star::uno::Sequence
-#define UNO3_TYPE                                       ::com::sun::star::uno::Type
-#define UNO3_WINDOWDESCRIPTOR                           ::com::sun::star::awt::WindowDescriptor
-#define UNO3_XCONNECTIONPOINT                           ::com::sun::star::lang::XConnectionPoint
-#define UNO3_XCONNECTIONPOINTCONTAINER                  ::com::sun::star::lang::XConnectionPointContainer
-#define UNO3_XCONTROLMODEL                              ::com::sun::star::awt::XControlModel
-#define UNO3_XFRAME                                     ::com::sun::star::frame::XFrame
-#define UNO3_XGRAPHICS                                  ::com::sun::star::awt::XGraphics
-#define UNO3_XINTERFACE                                 ::com::sun::star::uno::XInterface
-#define UNO3_XMULTISERVICEFACTORY                       ::com::sun::star::lang::XMultiServiceFactory
-#define UNO3_XPROPERTYSETINFO                           ::com::sun::star::beans::XPropertySetInfo
-#define UNO3_XTOOLKIT                                   ::com::sun::star::awt::XToolkit
-#define UNO3_XWINDOWPEER                                ::com::sun::star::awt::XWindowPeer
+#define CSS_UNO     ::com::sun::star::uno
+#define CSS_LANG    ::com::sun::star::lang
+#define CSS_BEANS   ::com::sun::star::beans
+#define CSS_AWT     ::com::sun::star::awt
+#define CSS_FRAME   ::com::sun::star::frame
 
 //______________________________________________________________________________________________________________
 //  defines
@@ -99,11 +80,11 @@ namespace unocontrols{
 //  class
 //______________________________________________________________________________________________________________
 
-class FrameControl  : public UNO3_XCONTROLMODEL
-                    , public UNO3_XCONNECTIONPOINTCONTAINER
+class FrameControl  : public CSS_AWT::XControlModel
+                    , public CSS_LANG::XConnectionPointContainer
                     , public BaseControl                                // This order is neccessary for right initialization of m_aMutex!
-                    , public UNO3_OBROADCASTHELPER
-                    , public UNO3_OPROPERTYSETHELPER
+                    , public ::cppu::OBroadcastHelper
+                    , public ::cppu::OPropertySetHelper
 {
 
 //______________________________________________________________________________________________________________
@@ -129,7 +110,7 @@ public:
         @onerror
     */
 
-    FrameControl( const UNO3_REFERENCE< UNO3_XMULTISERVICEFACTORY >& xFactory );
+    FrameControl( const CSS_UNO::Reference< CSS_LANG::XMultiServiceFactory >& xFactory );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -163,7 +144,9 @@ public:
         @onerror
     */
 
-    virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Any SAL_CALL queryInterface(
+        const CSS_UNO::Type& aType
+    ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -214,7 +197,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getTypes() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getTypes()
+        throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XAggregation
@@ -233,7 +217,9 @@ public:
         @onerror
     */
 
-    UNO3_ANY SAL_CALL queryAggregation( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+    CSS_UNO::Any SAL_CALL queryAggregation(
+        const CSS_UNO::Type& aType
+    ) throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XControl
@@ -252,8 +238,10 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL createPeer(   const   UNO3_REFERENCE< UNO3_XTOOLKIT >&    xToolkit    ,
-                                        const   UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParent     ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL createPeer(
+        const CSS_UNO::Reference< CSS_AWT::XToolkit >&      xToolkit ,
+        const CSS_UNO::Reference< CSS_AWT::XWindowPeer >&   xParent
+    ) throw ( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -268,7 +256,9 @@ public:
         @onerror
     */
 
-    virtual sal_Bool SAL_CALL setModel( const UNO3_REFERENCE< UNO3_XCONTROLMODEL >& xModel ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual sal_Bool SAL_CALL setModel(
+        const CSS_UNO::Reference< CSS_AWT::XControlModel >& xModel
+    ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -283,7 +273,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_REFERENCE< UNO3_XCONTROLMODEL > SAL_CALL getModel() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Reference< CSS_AWT::XControlModel > SAL_CALL getModel()
+        throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XComponent
@@ -302,7 +293,7 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL dispose() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XView
@@ -321,7 +312,9 @@ public:
         @onerror
     */
 
-    virtual sal_Bool SAL_CALL setGraphics( const UNO3_REFERENCE< UNO3_XGRAPHICS >& xDevice ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual sal_Bool SAL_CALL setGraphics(
+        const CSS_UNO::Reference< CSS_AWT::XGraphics >& xDevice
+    ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -336,7 +329,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_REFERENCE< UNO3_XGRAPHICS > SAL_CALL getGraphics() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Reference< CSS_AWT::XGraphics > SAL_CALL getGraphics()
+        throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  XConnectionPointContainer
@@ -355,7 +349,8 @@ public:
         @onerror
     */
 
-    virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getConnectionPointTypes() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Sequence< CSS_UNO::Type > SAL_CALL getConnectionPointTypes()
+        throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -370,7 +365,9 @@ public:
         @onerror
     */
 
-    virtual UNO3_REFERENCE< UNO3_XCONNECTIONPOINT > SAL_CALL queryConnectionPoint( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual CSS_UNO::Reference< CSS_LANG::XConnectionPoint > SAL_CALL queryConnectionPoint(
+        const CSS_UNO::Type& aType
+    ) throw ( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -385,8 +382,10 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL advise(   const   UNO3_TYPE&                          aType       ,
-                                    const   UNO3_REFERENCE< UNO3_XINTERFACE >&  xListener   ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL advise(
+        const CSS_UNO::Type&                                aType       ,
+        const CSS_UNO::Reference< CSS_UNO::XInterface >&    xListener
+    ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -401,8 +400,10 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL unadvise( const   UNO3_TYPE&                          aType       ,
-                                    const   UNO3_REFERENCE< UNO3_XINTERFACE >&  xListener   ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL unadvise(
+        const CSS_UNO::Type&                                aType ,
+        const CSS_UNO::Reference< CSS_UNO::XInterface >&    xListener
+    ) throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  impl but public methods to register service!
@@ -421,7 +422,7 @@ public:
         @onerror
     */
 
-    static const UNO3_SEQUENCE< UNO3_OUSTRING > impl_getStaticSupportedServiceNames();
+    static const CSS_UNO::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
 
     /**_________________________________________________________________________________________________________
         @short
@@ -436,7 +437,7 @@ public:
         @onerror
     */
 
-    static const UNO3_OUSTRING impl_getStaticImplementationName();
+    static const ::rtl::OUString impl_getStaticImplementationName();
 
 //______________________________________________________________________________________________________________
 //  protected methods
@@ -461,10 +462,12 @@ protected:
         @onerror
     */
 
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(         UNO3_ANY&   rConvertedValue ,
-                                                                UNO3_ANY&   rOldValue       ,
-                                                                sal_Int32   nHandle         ,
-                                                        const   UNO3_ANY&   rValue          ) throw( UNO3_ILLEGALARGUMENTEXCEPTION );
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        CSS_UNO::Any&       rConvertedValue   ,
+        CSS_UNO::Any&       rOldValue         ,
+        sal_Int32           nHandle           ,
+        const CSS_UNO::Any& rValue
+    ) throw( CSS_LANG::IllegalArgumentException );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -479,8 +482,10 @@ protected:
         @onerror
     */
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32   nHandle ,
-                                                              const UNO3_ANY&   rValue  ) throw ( ::com::sun::star::uno::Exception );
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        sal_Int32 nHandle ,
+        const CSS_UNO::Any& rValue
+    ) throw ( ::com::sun::star::uno::Exception );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -495,8 +500,8 @@ protected:
         @onerror
     */
 
-    virtual void SAL_CALL getFastPropertyValue( UNO3_ANY&   rValue  ,
-                                                  sal_Int32 nHandle ) const ;
+    virtual void SAL_CALL getFastPropertyValue( CSS_UNO::Any&   rValue  ,
+                                                sal_Int32       nHandle ) const ;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -511,7 +516,7 @@ protected:
         @onerror
     */
 
-    virtual UNO3_IPROPERTYARRAYHELPER& SAL_CALL getInfoHelper();
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     //__________________________________________________________________________________________________________
     //  XPropertySet
@@ -530,7 +535,8 @@ protected:
         @onerror
     */
 
-    UNO3_REFERENCE< UNO3_XPROPERTYSETINFO > SAL_CALL getPropertySetInfo() throw( UNO3_RUNTIMEEXCEPTION );
+    CSS_UNO::Reference< CSS_BEANS::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
     //  BaseControl
@@ -549,7 +555,9 @@ protected:
         @onerror
     */
 
-    virtual UNO3_WINDOWDESCRIPTOR* impl_getWindowDescriptor( const UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParentPeer );
+    virtual CSS_AWT::WindowDescriptor* impl_getWindowDescriptor(
+        const CSS_UNO::Reference< CSS_AWT::XWindowPeer >& xParentPeer
+    );
 
 //______________________________________________________________________________________________________________
 //  private methods
@@ -570,9 +578,9 @@ private:
         @onerror
     */
 
-    void impl_createFrame(  const   UNO3_REFERENCE< UNO3_XWINDOWPEER >&     xPeer           ,
-                            const   UNO3_OUSTRING&                          sURL            ,
-                            const   UNO3_SEQUENCE< UNO3_PROPERTYVALUE >&    seqArguments    );
+    void impl_createFrame(  const CSS_UNO::Reference< CSS_AWT::XWindowPeer >&       xPeer           ,
+                            const ::rtl::OUString&                                  sURL            ,
+                            const CSS_UNO::Sequence< CSS_BEANS::PropertyValue >&    seqArguments    );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -602,7 +610,7 @@ private:
         @onerror
     */
 
-    static const UNO3_SEQUENCE< UNO3_PROPERTY > impl_getStaticPropertyDescriptor();
+    static const CSS_UNO::Sequence< CSS_BEANS::Property > impl_getStaticPropertyDescriptor();
 
 
 //______________________________________________________________________________________________________________
@@ -611,14 +619,23 @@ private:
 
 private:
 
-    UNO3_REFERENCE< UNO3_XFRAME >               m_xFrame                    ;
-    UNO3_OUSTRING                               m_sComponentURL             ;
-    UNO3_SEQUENCE< UNO3_PROPERTYVALUE >         m_seqLoaderArguments        ;
-    UNO3_OMULTITYPEINTERFACECONTAINERHELPER     m_aInterfaceContainer       ;
-    UNO3_OCONNECTIONPOINTCONTAINERHELPER        m_aConnectionPointContainer ;
+    CSS_UNO::Reference< CSS_FRAME::XFrame >         m_xFrame                    ;
+    ::rtl::OUString                                 m_sComponentURL             ;
+    CSS_UNO::Sequence< CSS_BEANS::PropertyValue >   m_seqLoaderArguments        ;
+    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer       ;
+    OConnectionPointContainerHelper                 m_aConnectionPointContainer ;
 
 };  // class FrameControl
+
+// The namespace alaises are only used in the header
+#undef CSS_UNO
+#undef CSS_LANG
+#undef CSS_BEANS
+#undef CSS_AWT
+#undef CSS_FRAME
 
 }   // namespace unocontrols
 
 #endif  // #ifndef _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

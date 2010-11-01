@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 #include "precompiled_sfx2.hxx"
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/msg.hxx>
 
@@ -64,3 +63,4 @@ USHORT SfxSlot::GetWhich( const SfxItemPool &rPool ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

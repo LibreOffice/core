@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +51,7 @@
 #include <stdio.h>
 #pragma warning(pop)
 
+#include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
 /* #define VERBOSE_DEBUG_OUTPUT 1 */
@@ -184,7 +186,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
         return TRUE;
     ui_langs[num_ui_langs] = langid_to_string((LANGID) langid, NULL);
     num_ui_langs++;
-    if (num_ui_langs == sizeof(ui_langs) / sizeof(ui_langs[0]))
+    if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
         return FALSE;
     return TRUE;
 }
@@ -345,3 +347,5 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
 
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

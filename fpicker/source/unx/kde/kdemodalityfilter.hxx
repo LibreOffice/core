@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,18 @@
 
 #include <qobject.h>
 
-class ModalityFilter : public QObject
+class KDEModalityFilter : public QObject
 {
 private:
     WId m_nWinId;
 
 public:
-    ModalityFilter( WId nWinId );
-    virtual ~ModalityFilter();
+    KDEModalityFilter( WId nWinId );
+    virtual ~KDEModalityFilter();
 
     virtual bool eventFilter( QObject *pObject, QEvent *pEvent );
 };
 
 #endif // _KDEMODALITYFILTER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

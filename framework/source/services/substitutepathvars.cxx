@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <i18npool/mslangid.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/resmgr.hxx>
@@ -285,7 +286,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
         while ( nSharePoints < aSharePointNames.getLength() )
         {
             rtl::OUString aSharePointNodeName( m_aSharePointsNodeName );
-            aSharePointNodeName += rtl::OUString::createFromAscii( "/" );
+            aSharePointNodeName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             aSharePointNodeName += aSharePointNames[ nSharePoints ];
 
             SubstituteRuleVector aRuleSet;
@@ -717,12 +718,24 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkPath" );
     rtl::OUString aWorkPath;
-    ::comphelper::ConfigurationHelper::readDirectKey(
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
-                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
-                            ::rtl::OUString::createFromAscii("Paths/Work"),
-                            ::rtl::OUString::createFromAscii("WritePath"),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paths/Work")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
+    }
+    catch(RuntimeException &)
+    {
+    }
+
+    // fallback in case config layer does not return an useable work dir value.
+    if (aWorkPath.getLength() < 1)
+        aWorkPath = GetWorkVariableValue();
+
     return aWorkPath;
 }
 
@@ -730,12 +743,19 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkVariableValue" );
     ::rtl::OUString aWorkPath;
-    ::comphelper::ConfigurationHelper::readDirectKey(
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
-                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
-                            ::rtl::OUString::createFromAscii("Variables"),
-                            ::rtl::OUString::createFromAscii("Work"),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Variables")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Work")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
+    }
+    catch(RuntimeException &)
+    {
+    }
 
     // fallback to $HOME in  case platform dependend config layer does not return
     // an usuable work dir value.
@@ -1205,7 +1225,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Detect the language type of the current office
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
     rtl::OUString aLocaleStr;
-    if ( utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
+    if ( utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
         aPreDefPathVariables.m_eLanguageType = MsLangId::convertIsoStringToLanguage( aLocaleStr );
     else
     {
@@ -1245,3 +1265,5 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

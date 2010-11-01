@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,9 +65,9 @@
 #include <dialmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/controldims.hrc>
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svl/intitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
@@ -1190,7 +1191,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
     const Size aSize15x15 = Size( 15, 15 );
-    FASTBOOL bOwn = FALSE;
+    bool bOwn = FALSE;
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
@@ -1959,7 +1960,7 @@ void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
     }
 }
 
-void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)
@@ -1975,3 +1976,5 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
             EnableTransparency(TRUE, TRUE);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

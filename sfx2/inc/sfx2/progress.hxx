@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,13 +80,12 @@ public:
     static void             EnterLock();
     static void             LeaveLock();
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus* );
     DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, DefaultBindingProgress, SvProgressArg* );
-    SAL_DLLPRIVATE FASTBOOL StatusBarManagerGone_Impl(SfxStatusBarManager*pStb);
+    SAL_DLLPRIVATE bool  StatusBarManagerGone_Impl(SfxStatusBarManager*pStb);
     SAL_DLLPRIVATE const String& GetStateText_Impl() const;
-//#endif
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

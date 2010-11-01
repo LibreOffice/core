@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -523,3 +524,5 @@ void SvXMLAutoStylePoolP_Impl::ClearEntries()
     for(sal_uInt32 a = 0L; a < maFamilyList.Count(); a++)
         maFamilyList[a]->ClearEntries();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

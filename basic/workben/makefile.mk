@@ -51,14 +51,14 @@ APP1STDLIBS= \
             $(CPPULIB) \
             $(SJLIB) \
             $(SOTLIB) \
-            $(VOSLIB)
+
 
 #.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
 #APP1STDLIBS+=$(CPPULIB)
 #.ENDIF
 #.IF "$(GUI)"=="UNX"
 #APP1STDLIBS+= \
-#			$(VOSLIB) \
+#			 \
 #			$(SALLIB)
 #.ENDIF
 

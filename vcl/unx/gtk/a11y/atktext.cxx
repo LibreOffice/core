@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -874,3 +875,5 @@ textIfaceInit (AtkTextIface *iface)
   iface->get_character_extents = text_wrapper_get_character_extents;
   iface->get_offset_at_point = text_wrapper_get_offset_at_point;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,9 @@
 
 struct ZipEntry;
 class EncryptionData;
-namespace vos
+namespace rtl
 {
-    template < class T > class ORef;
+    template < class T > class Reference;
 }
 class ZipOutputStream
 {
@@ -74,7 +75,7 @@ public:
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ZipEntry& rEntry,
-            vos::ORef < EncryptionData > &rData,
+            rtl::Reference < EncryptionData > &rData,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL closeEntry(  )
@@ -97,3 +98,5 @@ protected:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

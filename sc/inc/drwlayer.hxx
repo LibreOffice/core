@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,7 +119,7 @@ public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
     virtual         ~ScDrawLayer();
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
     virtual void    SetChanged( sal_Bool bFlg = sal_True );
 
@@ -164,9 +165,6 @@ public:
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
-#if 0
-    void            DeleteObjects( SCTAB nTab );
-#endif
 
     void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
@@ -231,3 +229,4 @@ protected:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

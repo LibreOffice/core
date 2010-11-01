@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_sc.hxx"
 
 #include "compiler.hxx"
+#include <sal/macros.h>
 
 // ODFF, English, Programmatical, ODF_11
 ScCompiler::AddInMap ScCompiler::maAddInMap[] =
@@ -145,5 +147,7 @@ const ScCompiler::AddInMap* ScCompiler::GetAddInMap()
 // static
 size_t ScCompiler::GetAddInMapCount()
 {
-    return sizeof(maAddInMap)/sizeof(maAddInMap[0]);
+    return SAL_N_ELEMENTS(maAddInMap);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

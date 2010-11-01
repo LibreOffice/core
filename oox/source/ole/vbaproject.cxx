@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -418,7 +419,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
                 VbaUserForm aForm( mxGlobalFactory, rGraphicHelper, bDefaultColorBgr );
-                aForm.importForm( xDialogLib, *xSubStrg, aModuleName, eTextEnc );
+                aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch( Exception& )
             {
@@ -451,3 +452,5 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 #include "rtl/strbuf.hxx"
 #ifdef WNT
 #include <direct.h>
-//#include <WinBase.h>
 #include "tools/prewin.h"
 #include <windows.h>
 #include "tools/postwin.h"
@@ -714,3 +714,4 @@ void HelpParser::Process( LangHashMap* aLangHM , const ByteString& sCur , ResDat
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

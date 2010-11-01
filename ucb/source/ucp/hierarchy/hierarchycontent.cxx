@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,12 +121,6 @@ HierarchyContent* HierarchyContent::create(
          !Info.Type.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) ) )
         return 0;
-
-#if 0
-    // Fail, if content does exist.
-    if ( hasData( rxSMgr, pProvider, Identifier ) )
-        return 0;
-#endif
 
     return new HierarchyContent( rxSMgr, pProvider, Identifier, Info );
 }
@@ -2007,3 +2002,5 @@ HierarchyContentProperties::getCreatableContentsInfo() const
         return uno::Sequence< ucb::ContentInfo >( 0 );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -258,3 +259,5 @@ XInputStream_impl::getLength(
     else
         return sal_Int64( uEndPos );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

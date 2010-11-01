@@ -46,8 +46,9 @@ TARFILE_NAME=libtextcat-2.2
 TARFILE_MD5=128cfc86ed5953e57fe0f5ae98b62c2e
 TARFILE_ROOTDIR=libtextcat-2.2
 
-PATCH_FILES=libtextcat-2.2.patch
-
+PATCH_FILES=\
+    libtextcat-2.2.patch \
+    libtextcat-aix.patch
 
 ADDITIONAL_FILES= \
                 src$/utf8misc.h \
@@ -62,6 +63,9 @@ ADDITIONAL_FILES= \
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
+.IF "$(OS)"=="AIX"
+CONFIGURE_FLAGS+= CFLAGS=-D_LINUX_SOURCE_COMPAT
+.ENDIF
 
 BUILD_ACTION=make
 

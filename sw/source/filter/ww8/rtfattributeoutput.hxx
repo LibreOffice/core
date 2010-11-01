@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,7 @@ class SwGrfNode;
 class SwOLENode;
 class SdrObject;
 
+/// The class that has handlers for various resource types when exporting as RTF
 class RtfAttributeOutput : public AttributeOutputBase
 {
 public:
@@ -539,6 +541,21 @@ private:
     bool m_bBufferSectionHeaders;
     rtl::OStringBuffer m_aSectionHeaders;
 
+    /*
+     * Support for starting multiple tables at the same cell.
+     * If the current table is the last started one.
+     */
+    bool m_bLastTable;
+    /*
+     * List of already started but not yet defined tables (need to be defined
+     * after the nested tables).
+     */
+    std::vector< rtl::OString > m_aTables;
+    /*
+     * If cell info is already output.
+     */
+    bool m_bWroteCellInfo;
+
 public:
     RtfAttributeOutput( RtfExport &rExport );
 
@@ -571,4 +588,4 @@ public:
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_
 
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

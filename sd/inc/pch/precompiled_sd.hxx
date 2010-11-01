@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************cherex
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -905,12 +906,12 @@
 #include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
-#include "vos/diagnose.hxx"
-#include "vos/module.hxx"
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/thread.hxx"
-#include "vos/xception.hxx"
+#include "osl/diagnose.h"
+#include "osl/module.hxx"
+#include "osl/mutex.hxx"
+#include "osl/process.h"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

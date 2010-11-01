@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //===============================================
 // namespace
@@ -556,3 +557,5 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
 }
 
 } // namespace svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

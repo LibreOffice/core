@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -200,7 +201,7 @@ start:
         case SbxBYREF | SbxBYTE:
             nRes = p->nByte; break;
 
-        // ab hier wird getestet
+        // from here on will be tested
         case SbxBYREF | SbxCHAR:
             aTmp.nChar = *p->pChar; goto ref;
         case SbxBYREF | SbxINTEGER:
@@ -327,3 +328,4 @@ void ImpPutByte( SbxValues* p, BYTE n )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

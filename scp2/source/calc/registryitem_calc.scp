@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -265,6 +267,8 @@ RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Versionind
     Value = "opendocument.CalcDocument.1";
 End
 
+#endif // WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
@@ -272,12 +276,16 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6
     REG_VALUE_LNG(SO60_SPREADSHEET)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "soffice.StarCalcDocument.6\CLSID";
     Value = "{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -639,12 +647,16 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1
     REG_VALUE_LNG(OO_CALC)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "opendocument.CalcDocument.1\CLSID";
     Value = "{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

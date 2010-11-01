@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
-#include "pam.hxx"
 #include "node.hxx"
 #include "format.hxx"
 
@@ -129,3 +129,4 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

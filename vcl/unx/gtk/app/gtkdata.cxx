@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <poll.h>
-#ifdef FREEBSD
+#if defined(FREEBSD) || defined(NETBSD)
 #include <sys/types.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -53,6 +54,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 
+#include <osl/conditn.h>
 #include <tools/debug.hxx>
 #include "i18n_im.hxx"
 #include "i18n_xkb.hxx"
@@ -217,11 +219,12 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             {
                 gint nMonitors = gdk_screen_get_n_monitors(pScreen);
                 m_aXineramaScreens = std::vector<Rectangle>();
+                m_aXineramaScreenIndexMap = std::vector<int>(nMonitors);
                 for (gint i = 0; i < nMonitors; ++i)
                 {
                     GdkRectangle dest;
                     gdk_screen_get_monitor_geometry(pScreen, i, &dest);
-                    addXineramaScreenUnique( dest.x, dest.y, dest.width, dest.height );
+                    addXineramaScreenUnique( i, dest.x, dest.y, dest.width, dest.height );
                 }
                 m_bXinerama = m_aXineramaScreens.size() > 1;
                 if( ! m_aFrames.empty() )
@@ -233,6 +236,35 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             }
         }
     }
+}
+
+extern "C"
+{
+    typedef gint(* screen_get_primary_monitor)(GdkScreen *screen);
+}
+
+int GtkSalDisplay::GetDefaultMonitorNumber() const
+{
+    GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
+#if GTK_CHECK_VERSION(2,20,0)
+    return m_aXineramaScreenIndexMap[gdk_screen_get_primary_monitor(pScreen)];
+#else
+    static screen_get_primary_monitor sym_gdk_screen_get_primary_monitor =
+        (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
+    if (sym_gdk_screen_get_primary_monitor)
+        return m_aXineramaScreenIndexMap[sym_gdk_screen_get_primary_monitor(pScreen)];
+#if GTK_CHECK_VERSION(2,14,0)
+    //gdk_screen_get_primary_monitor unavailable, take the first laptop monitor
+    //as the default
+    gint nMonitors = gdk_screen_get_n_monitors(pScreen);
+    for (gint i = 0; i < nMonitors; ++i)
+    {
+        if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0)
+            return m_aXineramaScreenIndexMap[i];
+    }
+#endif
+    return 0;
+#endif
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const
@@ -639,9 +671,10 @@ void GtkXLib::Init()
      * the clipboard build another connection
      * to the xserver using $DISPLAY
      */
-    char *pPutEnvIsBroken = g_strdup_printf( "DISPLAY=%s",
-                                             gdk_display_get_name( pGdkDisp ) );
-    putenv( pPutEnvIsBroken );
+    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+    const gchar *name = gdk_display_get_name( pGdkDisp );
+    rtl::OUString envValue(name, strlen(name), aEnc);
+    osl_setEnvironment(envVar.pData, envValue.pData);
 
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
@@ -995,3 +1028,5 @@ void GtkData::Init()
     pXLib_ = new GtkXLib();
     pXLib_->Init();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,6 +132,11 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
+                                } else {
+                                    EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                                    aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                    aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                    aAdjustmentSeq[ 0 ] = aAdjustmentVal;
                                 }
                                 aIter++;
                             }
@@ -269,3 +275,5 @@ double CustomShapeProperties::getValue( const std::vector< CustomShapeGuide >& r
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

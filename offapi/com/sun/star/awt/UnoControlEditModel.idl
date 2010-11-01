@@ -69,7 +69,7 @@ published service UnoControlEditModel
 
     //-------------------------------------------------------------------------
 
-    /** If set to true an horizontal scrollbar will be added automaticly
+    /** If set to true an horizontal scrollbar will be added automatically
         when needed.
 
         @since OOo 2.3.0
@@ -78,7 +78,7 @@ published service UnoControlEditModel
 
     //-------------------------------------------------------------------------
 
-    /** If set to true an vertical scrollbar will be added automaticly
+    /** If set to true an vertical scrollbar will be added automatically
         when needed.
 
         @since OOo 2.3.0

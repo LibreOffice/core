@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/svxids.hrc>
 #define ITEMID_COLOR        1
 #define ITEMID_BRUSH        2
@@ -142,7 +143,7 @@ void SAL_CALL OToolboxController::release() throw ()
 void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
     ToolboxController::initialize(_rArguments);
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
@@ -288,7 +289,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
 Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
 {
     // execute the menu
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     Reference< awt::XWindow > xRet;
@@ -305,7 +306,7 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
     if ( xSub.is() )
@@ -315,7 +316,7 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
 // -----------------------------------------------------------------------------
 void SAL_CALL OToolboxController::functionSelected( const ::rtl::OUString& rCommand ) throw (uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
@@ -327,7 +328,7 @@ void SAL_CALL OToolboxController::functionSelected( const ::rtl::OUString& rComm
 // -----------------------------------------------------------------------------
 void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
@@ -358,3 +359,4 @@ throw (uno::RuntimeException)
 //..........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

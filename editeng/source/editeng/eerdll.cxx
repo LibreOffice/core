@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -184,9 +185,9 @@ SfxPoolItem** GlobalEditData::GetDefItems()
     return ppDefItems;
 }
 
-vos::ORef<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTable()
+rtl::Reference<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTable()
 {
-    if ( !xForbiddenCharsTable.isValid() )
+    if ( !xForbiddenCharsTable.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
@@ -238,3 +239,5 @@ EditDLL::~EditDLL()
     delete pResMgr;
     delete pGlobalData;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "macros.h"
 #include <tlhelp32.h>
 
@@ -55,3 +56,5 @@ IMPLEMENT_THUNK( kernel32, TRYLOAD, HANDLE, WINAPI, CreateToolhelp32Snapshot, (D
     SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
     return NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

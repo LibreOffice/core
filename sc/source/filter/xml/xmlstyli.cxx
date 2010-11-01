@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,6 +77,9 @@ using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 //using namespace ::com::sun::star::text;
 using namespace ::formula;
+
+using rtl::OUString;
+using com::sun::star::uno::Reference;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -1087,3 +1091,4 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

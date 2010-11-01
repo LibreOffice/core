@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,10 +73,70 @@
 
 using ::std::list;
 
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+using namespace ::com::sun::star;
+
+typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
+typedef ::std::vector< ColorData > ColorDataVec;
+
+class PaletteIndex : public XIndexAccess_BASE
+{
+public:
+    PaletteIndex( const ColorDataVec& rColorDataTable ) : maColorData( rColorDataTable ) {}
+
+    // Methods XIndexAccess
+    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
+    {
+         return  maColorData.size();
+    }
+
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        //--Index;  // apparently the palette is already 1 based
+        return uno::makeAny( sal_Int32( maColorData[ Index ] ) );
+    }
+
+    // Methods XElementAcess
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
+    {
+        return ::getCppuType( (sal_Int32*)0 );
+    }
+    virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException)
+    {
+        return (maColorData.size() > 0);
+    }
+
+private:
+    ColorDataVec        maColorData;
+};
+
+void
+XclImpPalette::ExportPalette()
+{
+    if( SfxObjectShell* pDocShell = mrRoot.GetDocShell() )
+    {
+        // copy values in color palette
+        sal_Int16 nColors =  maColorTable.size();
+        ColorDataVec aColors;
+        aColors.resize( nColors );
+        for( sal_uInt16 nIndex = 0; nIndex < nColors; ++nIndex )
+            aColors[ nIndex ] = GetColorData( nIndex );
+
+        uno::Reference< beans::XPropertySet > xProps( pDocShell->GetModel(), uno::UNO_QUERY );
+        if ( xProps.is() )
+        {
+            uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( aColors ) );
+            xProps->setPropertyValue( CREATE_OUSTRING("ColorPalette"), uno::makeAny( xIndex ) );
+        }
+    }
+
+}
 // PALETTE record - color information =========================================
 
 XclImpPalette::XclImpPalette( const XclImpRoot& rRoot ) :
-    XclDefaultPalette( rRoot )
+    XclDefaultPalette( rRoot ), mrRoot( rRoot )
 {
 }
 
@@ -109,6 +170,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
         rStrm >> aColor;
         maColorTable[ nIndex ] = aColor.GetColor();
     }
+    ExportPalette();
 }
 
 // FONT record - font information =============================================
@@ -1880,3 +1942,4 @@ void XclImpXFRangeBuffer::Finalize()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1884,3 +1885,4 @@ bool SwTxtFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) c
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

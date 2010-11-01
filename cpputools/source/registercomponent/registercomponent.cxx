@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,10 +67,6 @@ using com::sun::star::container::XSet;
 using com::sun::star::container::XContentEnumerationAccess;
 using com::sun::star::container::XEnumeration;
 
-#ifdef SAL_W32
-#define putenv _putenv
-#endif
-
 namespace {
 
 OUString replacePrefix(OUString const & url, OUString const & prefix) {
@@ -86,7 +83,7 @@ OUString replacePrefix(OUString const & url, OUString const & prefix) {
 
 sal_Bool isFileUrl(const OUString& fileName)
 {
-    if (fileName.indexOf(OUString::createFromAscii("file://")) == 0 )
+    if (fileName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("file://"))) == 0 )
         return sal_True;
     return sal_False;
 }
@@ -313,14 +310,9 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         i++;
                         if( i < ac )
                         {
-                            // leak this string as some platforms assume to own
-                            // the pointer
-                            sal_Char * p = (sal_Char *) rtl_allocateMemory( 13+ strlen( av[i] ) );
-                            p[0] = 0;
-                            strcat( p, "CLASSPATH=" ); // #100211# - checked
-                            strcat( p, av[i] );        // #100211# - checked
-
-                            putenv( p );
+                            rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("CLASSPATH"));
+                            rtl::OUString envValue(av[i], strlen(av[i]), osl_getThreadTextEncoding());
+                            osl_setEnvironment(envVar.pData, envValue.pData);
                         }
                         break;
                     }
@@ -702,7 +694,7 @@ static void bootstrap(
         }
         reg = Reference< XSimpleRegistry >(
             xSMgr->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")), UNO_QUERY);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))), UNO_QUERY);
 
         if (reg.is())
         {
@@ -735,15 +727,15 @@ static void bootstrap(
         // we know our java loader, so we check, whether a java-loader is
         // registered
         Reference< XInterface > r = loadSharedLibComponentFactory(
-            OUString::createFromAscii( "javavm.uno" SAL_DLLEXTENSION ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.uno" SAL_DLLEXTENSION)),
             OUString(),
-            OUString::createFromAscii( "com.sun.star.comp.stoc.JavaVirtualMachine" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaVirtualMachine")),
             xSMgr,
             Reference< XRegistryKey > () );
         Reference< XInterface > r2 = loadSharedLibComponentFactory(
-            OUString::createFromAscii( "javaloader.uno" SAL_DLLEXTENSION ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader.uno" SAL_DLLEXTENSION)),
             OUString(),
-            OUString::createFromAscii(( "com.sun.star.comp.stoc.JavaComponentLoader" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader")),
             xSMgr,
             Reference< XRegistryKey > () );
         Reference <XSet> xSet( xSMgr, UNO_QUERY );
@@ -853,3 +845,4 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include "osl/time.h"
+#include <sal/macros.h>
+#include <osl/time.h>
 #include <osl/diagnose.h>
 
 #include "osl/doublecheckedlocking.h"
@@ -1354,7 +1356,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
 
-    const int nProps = sizeof (aGenericProperties) / sizeof (aGenericProperties[0]);
+    const int nProps = SAL_N_ELEMENTS(aGenericProperties);
 
     return uno::Sequence< beans::Property > ( aGenericProperties, nProps );
 
@@ -1398,8 +1400,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
-    const int nProps
-        = sizeof( aCommandInfoTable ) / sizeof( aCommandInfoTable[ 0 ] );
+    const int nProps = SAL_N_ELEMENTS( aCommandInfoTable );
     return uno::Sequence< ucb::CommandInfo >(
         aCommandInfoTable, isFolder( xEnv ) ? nProps : nProps - 2 );
 }
@@ -1645,9 +1646,17 @@ extern "C" {
                     ucbhelper::InteractionSupplyAuthentication > & xSupp
                     = xRequest->getAuthenticationSupplier();
 
-                aUserName = xSupp->getUserName();
-                aDomain   = xSupp->getRealm();
-                aPassword = xSupp->getPassword();
+                ::rtl::OUString aNewDomain, aNewUserName, aNewPassword;
+
+                aNewUserName = xSupp->getUserName();
+                if ( aNewUserName.getLength() )
+                    aUserName = aNewUserName;
+                aNewDomain = xSupp->getRealm();
+                if ( aNewDomain.getLength() )
+                    aDomain = aNewDomain;
+                aNewPassword = xSupp->getPassword();
+                if ( aNewPassword.getLength() )
+                    aPassword = aNewPassword;
 
                 {
                     osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -1815,3 +1824,5 @@ gvfs::Authentication::~Authentication()
 
     refresh_auth( vq );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

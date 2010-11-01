@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,8 @@
 ************************************************************************/
 
 #include "precompiled_shell.hxx"
-#include "sal/config.h"
+#include <sal/macros.h>
+#include <sal/config.h>
 
 #include <string.h>
 
@@ -36,6 +38,7 @@
 #include "osl/thread.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "sal/macros.h"
 
 #include "gconfaccess.hxx"
 
@@ -818,8 +821,7 @@ ConfigurationValue const ConfigurationValues[] =
 #endif // ENABLE_LOCKDOWN
 };
 
-std::size_t const nConfigurationValues =
-    sizeof ConfigurationValues / sizeof ConfigurationValues[0];
+std::size_t const nConfigurationValues = SAL_N_ELEMENTS(ConfigurationValues);
 
 css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
 {
@@ -846,3 +848,5 @@ css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

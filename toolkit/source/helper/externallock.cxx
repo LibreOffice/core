@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 #include <toolkit/helper/externallock.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 // -----------------------------------------------------------------------------
@@ -44,3 +45,4 @@ void VCLExternalSolarLock::release()
     Application::GetSolarMutex().release();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

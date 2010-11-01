@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
-
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
@@ -101,7 +101,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
     AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
     AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
@@ -135,16 +135,9 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         SetCurPageId(nDefPage);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFrmDlg::~SwFrmDlg()
 {
 }
-
-
-
 
 void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
@@ -211,3 +204,5 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

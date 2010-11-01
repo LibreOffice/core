@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -172,8 +173,6 @@ class SVT_DLLPUBLIC GraphicDescriptor
 
     void                ImpConstruct();
 
-//#if 0 // _SOLAR__PRIVATE
-
     BOOL                ImpDetectBMP( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectGIF( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectJPG( SvStream& rStm, BOOL bExtendedInfo );
@@ -198,8 +197,6 @@ class SVT_DLLPUBLIC GraphicDescriptor
     BOOL                ImpDetectWMF( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectSGV( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo );
-
-//#endif
 
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );
@@ -425,3 +422,5 @@ SVT_DLLPUBLIC BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rM
 SVT_DLLPUBLIC BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
 #endif  //_FILTER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

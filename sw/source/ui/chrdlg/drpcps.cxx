@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #include <hintids.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
@@ -43,7 +42,6 @@
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
-
 
 #include <vcl/metric.hxx>
 #include <svl/stritem.hxx>
@@ -89,10 +87,6 @@ static USHORT __FAR_DATA aPageRg[] = {
     RES_PARATR_DROP, RES_PARATR_DROP,
     0
 };
-
-
-
-// class SwDropCapsPict *****************************************************
 
 class SwDropCapsPict : public Control
 {
@@ -196,20 +190,11 @@ static void calcFontHeightAnyAscent( OutputDevice* _pWin, Font& _rFont, long& _n
     }
 }
 
-/****************************************************************************
-Pict: Dtor
-****************************************************************************/
-
-
  SwDropCapsPict::~SwDropCapsPict()
 {
      if( mbDelPrinter )
          delete mpPrinter;
 }
-
-/****************************************************************************
-Pict: Update Font
-****************************************************************************/
 
 #define LINES  10
 #define BORDER  2
@@ -266,7 +251,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
             SwCharFmt *pFmt = pPage->rSh.GetCharStyle(
                                     pPage->aTemplateBox.GetSelectEntry(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
-            ASSERT(pFmt, "Zeichenvorlage existiert nicht!");
+            OSL_ENSURE(pFmt, "character style doesn't exist!");
             const SvxFontItem &rFmtFont = pFmt->GetFont();
 
             aFont.SetFamily (rFmtFont.GetFamily());
@@ -330,7 +315,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
         Size (aOutputSizePixel.Width () - 2 * BORDER,
               aOutputSizePixel.Height() - 2 * BORDER))));
 
-    ASSERT(mnLineH > 0, "So klein lassen wir uns nicht machen");
+    OSL_ENSURE(mnLineH > 0, "We cannot make it that small");
     long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
     SetFillColor( maTextLineColor );
     for (USHORT i = 0; i < LINES; ++i)
@@ -414,7 +399,7 @@ void SwDropCapsPict::CheckScript( void )
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xBreak = Reference< I18N::XBreakIterator >(xMSF->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),UNO_QUERY);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),UNO_QUERY);
     }
     if( xBreak.is() )
     {
@@ -532,11 +517,6 @@ void SwDropCapsPict::_InitPrinter()
     }
 }
 
-/****************************************************************************
-Dlg: Ctor
-****************************************************************************/
-
-
 SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
@@ -547,19 +527,9 @@ SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
     SetTabPage(pNewPage);
 }
 
-/****************************************************************************
-Dlg: Dtor
-****************************************************************************/
-
-
  SwDropCapsDlg::~SwDropCapsDlg()
 {
 }
-
-/****************************************************************************
-Page: Ctor
-****************************************************************************/
-
 
 SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
 
@@ -597,12 +567,12 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     aTextText.Enable( !bFormat );
     aTextEdit.Enable( !bFormat );
 
-    // Metriken
+    // Metrics
     SetMetric( aDistanceField, GetDfltMetric(bHtmlMode) );
 
     pPict->SetBorderStyle( WINDOW_BORDER_MONO );
 
-    // Handler installieren
+    // Install handler
     Link aLk = LINK(this, SwDropCapsPage, ModifyHdl);
     aDropCapsField.SetModifyHdl( aLk );
     aLinesField   .SetModifyHdl( aLk );
@@ -613,16 +583,10 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     aWholeWordCB  .SetClickHdl (LINK(this, SwDropCapsPage, WholeWordHdl ));
 }
 
-/****************************************************************************
-Page: Dtor
-****************************************************************************/
-
-
  SwDropCapsPage::~SwDropCapsPage()
 {
     delete pPict;
 }
-
 
 int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 {
@@ -636,7 +600,6 @@ int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 Page: Factory
 ****************************************************************************/
 
-
 SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
     const SfxItemSet &rSet)
 {
@@ -646,7 +609,6 @@ SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
 /****************************************************************************
 Page: FillItemSet-Overload
 ****************************************************************************/
-
 
 BOOL  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
 {
@@ -658,7 +620,6 @@ BOOL  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
 /****************************************************************************
 Page: Reset-Overload
 ****************************************************************************/
-
 
 void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 {
@@ -681,12 +642,13 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
     ::FillCharStyleListBox(aTemplateBox, rSh.GetView().GetDocShell(), TRUE);
 
     aTemplateBox.InsertEntry(SW_RESSTR(SW_STR_NONE), 0);
-    // Vorlage defaulten
+
+    // Reset format
     aTemplateBox.SelectEntryPos(0);
     if (aFmtDrop.GetCharFmt())
         aTemplateBox.SelectEntry(aFmtDrop.GetCharFmt()->GetName());
 
-    // Controls enablen
+    // Enable controls
     aDropCapsBox.Check(aFmtDrop.GetLines() > 1);
     const USHORT nVal = USHORT(aDropCapsField.GetValue());
     if (bFormat)
@@ -831,12 +793,10 @@ IMPL_LINK_INLINE_START( SwDropCapsPage, SelectHdl, ListBox *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwDropCapsPage, SelectHdl, ListBox *, EMPTYARG )
 
-
 USHORT*  SwDropCapsPage::GetRanges()
 {
     return aPageRg;
 }
-
 
 void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 {
@@ -888,3 +848,4 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

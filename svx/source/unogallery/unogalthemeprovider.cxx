@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include "unogaltheme.hxx"
 #include "svx/gallery1.hxx"
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
@@ -159,7 +160,7 @@ uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const vos::OGuard                   aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 >    aId;
 
     if( aId.getLength() == 0 )
@@ -207,7 +208,7 @@ uno::Type SAL_CALL GalleryThemeProvider::getElementType()
 sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     return( ( mpGallery != NULL ) && ( mpGallery->GetThemeCount() > 0 ) );
 }
@@ -217,7 +218,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
 uno::Any SAL_CALL GalleryThemeProvider::getByName( const ::rtl::OUString& rName )
     throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     uno::Any            aRet;
 
     if( !mpGallery || !mpGallery->HasTheme( rName ) )
@@ -237,7 +238,7 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const ::rtl::OUString& rName 
 uno::Sequence< ::rtl::OUString > SAL_CALL GalleryThemeProvider::getElementNames()
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard                 aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_uInt32                          i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
     uno::Sequence< ::rtl::OUString >    aSeq( nCount );
 
@@ -259,7 +260,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GalleryThemeProvider::getElementNames(
 sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const ::rtl::OUString& rName )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     sal_Bool bRet = sal_False;
 
@@ -274,7 +275,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const ::rtl::OUString& rName 
 uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const ::rtl::OUString& rThemeName )
     throw (container::ElementExistException, uno::RuntimeException)
 {
-    const ::vos::OGuard                         aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     uno::Reference< gallery::XGalleryTheme >    xRet;
 
     if( mpGallery )
@@ -297,7 +298,7 @@ uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNe
 void SAL_CALL GalleryThemeProvider::removeByName( const ::rtl::OUString& rName )
     throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     if( !mpGallery ||
         !mpGallery->HasTheme( rName ) ||
@@ -312,3 +313,5 @@ void SAL_CALL GalleryThemeProvider::removeByName( const ::rtl::OUString& rName )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,6 @@ namespace utl
                                 xConfigurationProvider;
             ConfigMgr_Impl*     pMgrImpl;
 
-            static  ConfigManager*  pConfigManager;
             static void getBasisAboutBoxProductVersion( rtl::OUString& rVersion );
 
         public:
@@ -80,8 +80,7 @@ namespace utl
 
             void StoreConfigItems();
 
-            static ConfigManager*           GetConfigManager();
-            static void                     RemoveConfigManager();
+            static ConfigManager&           GetConfigManager();
             static rtl::OUString            GetConfigBaseURL();
 
             enum ConfigProperty
@@ -114,3 +113,5 @@ namespace utl
     };
 }//namespace utl
 #endif //_UTL_CONFIGMGR_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

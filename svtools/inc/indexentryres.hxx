@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifndef SVTOOLS_INDEXENTRYRESSOURCE_HXX
 #define SVTOOLS_INDEXENTRYRESSOURCE_HXX
@@ -21,3 +22,4 @@ class SVT_DLLPUBLIC IndexEntryRessource
 #endif /* SVTOOLS_INDEXENTRYRESSOURCE_HXX */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

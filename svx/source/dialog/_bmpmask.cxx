@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1239,3 +1240,5 @@ void SvxBmpMask::SetAccessibleNames (void)
     sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 4"));
     aCbx4.SetAccessibleName (sSourceColorN);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

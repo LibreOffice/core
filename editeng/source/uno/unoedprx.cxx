@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <limits.h>
 #include <vector>
 #include <algorithm>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -1314,3 +1315,4 @@ void SvxAccessibleTextEditViewAdapter::SetForwarder( SvxEditViewForwarder&      
     mrTextForwarder = &rTextForwarder;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

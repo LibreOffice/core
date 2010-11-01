@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,8 +84,8 @@ public:
     virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
     virtual USHORT           GetVersion( USHORT nFileVersion ) const;
 
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const   SvxBorderLine* GetTop()    const { return pTop; }
     const   SvxBorderLine* GetBottom() const { return pBottom; }
@@ -191,8 +192,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool            ScaleMetrics( long nMult, long nDiv );
+    virtual bool            HasMetrics() const;
 
     const SvxBorderLine*    GetHori() const { return pHori; }
     const SvxBorderLine*    GetVert() const { return pVert; }
@@ -224,3 +225,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

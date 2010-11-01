@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +27,11 @@
  ************************************************************************/
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <l10ntools/vosapp.hxx>
 
 #include <osl/file.hxx>
+#include <osl/process.h>
+
+#include <l10ntools/vosapp.hxx>
 
 #include "export.hxx"
 #include "layoutparse.hxx"
@@ -203,11 +206,7 @@ translateElement( XMLElement* element, ByteString const& lang,
                 entry->GetText( translation, STRING_TYP_TEXT, lang, true );
     //            ByteString original = removeContent( element );
                 if ( !translation.Len() )
-#if 0
-                    translation = original;
-#else
                     translation = BSTRING( ( *i )->GetValue() );
-#endif
                 delete translateAttribute( attributes, **i , STRING( translation ) );
             }
         }
@@ -397,3 +396,5 @@ SAL_IMPLEMENT_MAIN()
     t.Main();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

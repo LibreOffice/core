@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,9 @@
 
 #include <tchar.h>
 #include <string>
-#include <systools/win32/uwinapi.h>
+#include <sal/macros.h>
 
+#include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
 using namespace std;
@@ -110,7 +112,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         TEXT("ProductCode"),
         TEXT("INVALIDDIRECTORY"),
         szValue,
-        elementsof(szValue),
+        SAL_N_ELEMENTS(szValue),
         sSetupiniPath.c_str()
         );
 
@@ -132,7 +134,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         TEXT("buildid"),
         TEXT("ISWRONGPRODUCT"),
         szValue,
-        elementsof(szValue),
+        SAL_N_ELEMENTS(szValue),
         sSetupiniPath.c_str()
         );
 
@@ -173,7 +175,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
             TEXT("ProductBuildid"),
             TEXT("8918"),
             szValue,
-            elementsof(szValue),
+            SAL_N_ELEMENTS(szValue),
             sSetupiniPath.c_str()
             );
 
@@ -197,7 +199,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         TEXT("ALLUSERS"),
         TEXT(""),
         szValue,
-        elementsof(szValue),
+        SAL_N_ELEMENTS(szValue),
         sSetupiniPath.c_str()
         );
 
@@ -209,3 +211,5 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

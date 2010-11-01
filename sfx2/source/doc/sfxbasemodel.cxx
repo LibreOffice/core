@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/salctype.hxx>
 #include <sot/clsids.hxx>
 #include <sot/storinfo.hxx>
@@ -133,10 +134,6 @@
 #include <sfxresid.hxx>
 
 //________________________________________________________________________________________________________
-// const
-static const ::rtl::OUString SERVICENAME_DESKTOP = ::rtl::OUString::createFromAscii ("com.sun.star.frame.Desktop");
-
-//________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
 
@@ -181,7 +178,7 @@ SfxDocInfoListener_Impl::~SfxDocInfoListener_Impl()
 void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
         throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // notify changes to the SfxObjectShell
     m_rShell.FlushDocInfo();
@@ -883,7 +880,15 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
 
     return m_pData->m_xDocumentInfo;
 }
-
+void
+SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
+{
+    // object already disposed?
+    ::SolarMutexGuard aGuard;
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+    m_pData->m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
+}
 // document::XDocumentPropertiesSupplier:
 uno::Reference< document::XDocumentProperties > SAL_CALL
 SfxBaseModel::getDocumentProperties()
@@ -913,7 +918,7 @@ SfxBaseModel::getDocumentProperties()
 void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( impl_isDisposed() )
         return;
 
@@ -1359,7 +1364,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
 {
     static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
 
@@ -3024,7 +3029,7 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
 class SvObject;
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( GetObjectShell() )
     {
         SvGlobalName aName( aIdentifier );
@@ -3165,7 +3170,7 @@ rtl::OUString SfxBaseModel::getRuntimeUID() const
 
 sal_Bool SfxBaseModel::hasValidSignatures() const
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pObjectShell.Is() )
         return ( m_pData->m_pObjectShell->ImplGetSignatureState( sal_False ) == SIGNATURESTATE_SIGNATURES_OK );
     return sal_False;
@@ -3384,20 +3389,6 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
 
     Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
-#if 0
-    Window* pWindow = NULL;
-    SfxViewFrame* pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-
-    if ( pWindow )
-    {
-        MapMode aInternalMapMode( pViewFrm->GetWindow().GetMapMode() );
-        MapMode aExternalMapMode( m_pData->m_pObjectShell->GetMapUnit() );
-
-        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aInternalMapMode, aExternalMapMode );
-    }
-#endif
-
     return awt::Size( aTmpRect.GetWidth(), aTmpRect.GetHeight() );
 }
 
@@ -3552,15 +3543,23 @@ void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& x
         throw IOEXCEPTION(); // TODO:
 
     // the persistence should be switched only if the storage is different
-    if ( xStorage != m_pData->m_pObjectShell->GetStorage()
-      && !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+    if ( xStorage != m_pData->m_pObjectShell->GetStorage() )
     {
-        sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
-        throw task::ErrorCodeIOException( ::rtl::OUString(),
-                                            uno::Reference< uno::XInterface >(),
-                                            nError ? nError : ERRCODE_IO_GENERAL );
+        if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+        {
+            sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+            throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                uno::Reference< uno::XInterface >(),
+                                                nError ? nError : ERRCODE_IO_GENERAL );
+        }
+        else
+        {
+            // UICfgMgr has a reference to the old storage, update it
+            uno::Reference< ui::XUIConfigurationStorage > xUICfgMgrStorage( getUIConfigurationManager(), uno::UNO_QUERY );
+            if ( xUICfgMgrStorage.is() )
+                xUICfgMgrStorage->setStorage( xStorage );
+        }
     }
-
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
 }
 
@@ -3643,6 +3642,7 @@ css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
     if ( ! m_pData->m_xTitleHelper.is ())
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory ();
+        static const ::rtl::OUString SERVICENAME_DESKTOP(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
         css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
 
@@ -4307,3 +4307,4 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     return xDMA->storeMetadataToMedium(i_rMedium);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

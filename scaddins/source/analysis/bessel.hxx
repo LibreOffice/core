@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,3 +59,4 @@ double BesselK( double x, sal_Int32 n ) throw( ::com::sun::star::lang::IllegalAr
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

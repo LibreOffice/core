@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -325,7 +326,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 // -----------------------------------------------------------------------------
 BOOL OConnectionLine::IsValid() const
 {
-    return m_pData.isValid();
+    return m_pData.is();
 }
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
@@ -381,3 +382,4 @@ Point OConnectionLine::getMidPoint() const
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

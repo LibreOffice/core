@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <comphelper/processfactory.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/appuno.hxx>
@@ -457,10 +455,10 @@ void SfxStateCache::SetState_Impl
     DBG_PROFSTART(SfxStateCacheSetState);
 
     // m"ussen die Controller "uberhaupt benachrichtigt werden?
-    FASTBOOL bNotify = bItemDirty;
+    bool bNotify = bItemDirty;
     if ( !bItemDirty )
     {
-        FASTBOOL bBothAvailable = pLastItem && pState &&
+        bool bBothAvailable = pLastItem && pState &&
                     !IsInvalidItem(pState) && !IsInvalidItem(pLastItem);
         DBG_ASSERT( !bBothAvailable || pState != pLastItem, "setting state with own item" );
         if ( bBothAvailable )
@@ -575,3 +573,4 @@ void SfxStateCache::Dispatch( const SfxItemSet* pSet, sal_Bool bForceSynchron )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

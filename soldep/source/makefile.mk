@@ -70,7 +70,6 @@ SHL1STDLIBS     = $(SVTOOLLIB)		\
                 $(SOTLIB)			\
                 $(BTSTRPLIB)		\
                 $(TOOLSLIB) 		\
-                $(VOSLIB)			\
                 $(SALLIB)           \
                 $(CPPULIB)  \
                    $(PERL_LIB)
@@ -111,7 +110,6 @@ APP1STDLIBS= \
             $(SOTLIB)			\
             $(BTSTRPLIB)		\
             $(TOOLSLIB) 		\
-            $(VOSLIB)			\
             $(SALLIB)           \
                $(CPPULIB)  \
                $(PERL_LIB)

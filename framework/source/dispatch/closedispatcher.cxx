@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 
 //_______________________________________________
@@ -629,7 +630,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             //     Attention ! Checking Window->GetParent() isnt the right approach here.
             //     Because sometimes VCL create "implicit border windows" as parents even we created
             //     a simple XWindow using the toolkit only .-(
-            ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+            SolarMutexGuard aSolarLock;
             Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if (
                 (pWindow                  ) &&
@@ -651,3 +652,5 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

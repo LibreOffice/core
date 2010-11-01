@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
@@ -142,13 +141,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     if (!bUseEnhFields) {
     aFormula.sDefault = GetFieldResult(pF);
 
-#if 0 // why not? (flr)
-    //substituting Unicode spacing 0x2002 with double space for layout
-    aFormula.sDefault.SearchAndReplaceAll(
-        String(static_cast< sal_Unicode >(0x2002)),
-        CREATE_CONST_ASC("  "));
-#endif
-
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
               aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
     aFld.SetHelp(aFormula.sHelp);
@@ -182,8 +174,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
         maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_FORMTEXT));
-        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Description")] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
-        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Name")] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+        maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description"))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+        maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
     return FLD_TEXT;
     }
@@ -1408,7 +1400,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         pLFOInfo->pNumRule->Set(aLFOLVL.nLevel, aNumFmt);
                     }
                     bLVLOk = true;
-                    pLFOInfo->maOverrides[aLFOLVL.nLevel] = aLFOLVL;
+
+                    if (nMaxLevel > aLFOLVL.nLevel)
+                        pLFOInfo->maOverrides[aLFOLVL.nLevel] = aLFOLVL;
                 }
                 if( !bLVLOk )
                     break;
@@ -2644,7 +2638,4 @@ sal_Bool SwMSConvertControls::InsertControl(
     return sal_True;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

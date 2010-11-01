@@ -156,12 +156,6 @@ SHL1STDLIBS+=-lcrypt
 .ENDIF
 .ENDIF
 
-# #i105898# required for LD_PRELOAD libsalalloc_malloc.so
-#           if sal is linked with -Bsymbolic-functions
-.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
-SHL1LINKFLAGS+=-Wl,--dynamic-list=salalloc.list
-.ENDIF # .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
-
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
 .IF "$(linkinc)" != ""
@@ -181,24 +175,6 @@ SHL1DEPN=
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
-
-#
-# This part builds a tiny extra lib,
-# containing an alloc.c which uses system 
-# heap instead of our own mem management. 
-# This is e.g. useful for proper valgrinding
-# the office.
-#
-.IF "$(OS)"=="LINUX"
-
-TARGET2 = salalloc_malloc
-SHL2TARGET= $(TARGET2)
-SHL2IMPLIB= i$(TARGET2)
-SHL2VERSIONMAP=	salalloc.map
-
-SHL2LIBS+=$(SLB)$/SYSALLOC_cpprtl.lib
-
-.ENDIF # .IF "$(OS)"=="LINUX"
 
 # --- Coverage -----------------------------------------------------
 # LLA: 20040304 The follows lines are an additional which is only need if we run

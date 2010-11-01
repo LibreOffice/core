@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/srchitem.hxx>
+#include <sal/macros.h>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
@@ -196,14 +198,14 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 
             if (nSlot == FN_REPEAT_SEARCH)
             {
-                ASSERT(pSrchItem, "Search-Item fehlt");
+                OSL_ENSURE(pSrchItem, "SearchItem missing");
                 if( !pSrchItem )
                     pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
             }
             else
             {
                 // SearchItem aus Request besorgen
-                ASSERT(pArgs, "Args fehlen");
+                OSL_ENSURE(pArgs, "Args missing");
                 if ( pArgs )
                 {
                     delete pSrchItem;
@@ -379,16 +381,16 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 
             SvUShorts aArr( 0, 16 );
             aArr.Insert(    aNormalAttr,
-                            sizeof( aNormalAttr ) / sizeof( aNormalAttr[0] ),
+                            SAL_N_ELEMENTS( aNormalAttr ),
                             0 );
             if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
                 aArr.Insert(    aCTLAttr,
-                                sizeof( aCTLAttr ) / sizeof( aCTLAttr[0] ),
+                                SAL_N_ELEMENTS( aCTLAttr ),
                                 14 );
             SvtCJKOptions aCJKOpt;
             if( aCJKOpt.IsAnyEnabled() )
                 aArr.Insert(    aCJKAttr,
-                                sizeof( aCJKAttr ) / sizeof( aCJKAttr[0] ),
+                                SAL_N_ELEMENTS( aCJKAttr ),
                                 14 );
 
             SfxItemSet aSet( pWrtShell->GetAttrPool(), aArr.GetData() );
@@ -413,13 +415,13 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         }
         break;
         default:
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if(nSlot)
             {
                 ByteString sStr( "nSlot: " );
                 sStr += ByteString::CreateFromInt32( nSlot );
-                sStr += " falscher Dispatcher (viewsrch.cxx)";
-                DBG_ERROR( sStr.GetBuffer() );
+                sStr += " wrong Dispatcher (viewsrch.cxx)";
+                OSL_ENSURE(false, sStr.GetBuffer() );
             }
 #endif
             return;
@@ -807,3 +809,4 @@ void SwView::StateSearch(SfxItemSet &rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 //______________________________________________________________________________________________________________
 //  include of my own project
@@ -376,7 +377,7 @@ void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHan
         case PROPERTYHANDLE_LOADERARGUMENTS     :       rValue >>= m_seqLoaderArguments ;
                                                         break ;
 
-        default :                                       VOS_ENSHURE ( nHandle == -1, ERRORTEXT_VOSENSHURE ) ;
+        default :                                       OSL_ENSURE ( nHandle == -1, ERRORTEXT_VOSENSHURE ) ;
     }
 }
 
@@ -400,7 +401,7 @@ void FrameControl::getFastPropertyValue(    Any&        rRet    ,
         case PROPERTYHANDLE_FRAME           :       rRet <<= m_xFrame ;
                                                        break ;
 
-        default :                                   VOS_ENSHURE ( nHandle == -1, ERRORTEXT_VOSENSHURE ) ;
+        default :                                   OSL_ENSURE ( nHandle == -1, ERRORTEXT_VOSENSHURE ) ;
     }
 }
 
@@ -602,3 +603,5 @@ const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
 }
 
 }   // namespace unocontrols
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

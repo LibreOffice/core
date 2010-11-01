@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -211,23 +212,6 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
             rDoc.PutCell( aScPos, pCell );
         }
         break;
-
-        // fix for #i31050# disabled, HYPERLINK is not able to return numeric value (#i91351#)
-#if 0
-        case CELLTYPE_VALUE:
-        {
-            // #i31050# replace number with HYPERLINK function
-            ScTokenArray aTokenArray;
-            aTokenArray.AddOpCode( ocHyperLink );
-            aTokenArray.AddOpCode( ocOpen );
-            aTokenArray.AddString( rUrl );
-            aTokenArray.AddOpCode( ocSep );
-            aTokenArray.AddDouble( rDoc.GetValue( aScPos ) );
-            aTokenArray.AddOpCode( ocClose );
-            rDoc.PutCell( aScPos, new ScFormulaCell( &rDoc, aScPos, &aTokenArray ) );
-        }
-        break;
-#endif
 
         default:;
     }
@@ -1340,3 +1324,4 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

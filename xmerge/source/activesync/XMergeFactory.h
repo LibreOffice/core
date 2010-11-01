@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // XMergeFactory.h: interface for the CXMergeFactory class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -32,3 +33,5 @@ public:
 };
 
 #endif // !defined(AFX_XMERGEFACTORY_H__3150043C_57FB_4BC8_9104_379506FA6B9F__INCLUDED_)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

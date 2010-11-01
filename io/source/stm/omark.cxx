@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -729,7 +730,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( nBytesToSkip < 0 )
         throw BufferSizeExceededException(
-            ::rtl::OUString::createFromAscii( "precondition not met: XInputStream::skipBytes: non-negative integer required!" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("precondition not met: XInputStream::skipBytes: non-negative integer required!")),
             *this
         );
 
@@ -1013,3 +1014,5 @@ Sequence<OUString> OMarkableInputStream_getSupportedServiceNames(void)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

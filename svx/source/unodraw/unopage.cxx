@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/clsids.hxx>
@@ -60,7 +61,6 @@
 #include <vcl/svapp.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -195,7 +195,7 @@ void SvxDrawPage::disposing() throw()
 void SvxDrawPage::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // An frequently programming error is to release the last
     // reference to this object in the disposing message.
@@ -252,7 +252,7 @@ void SvxDrawPage::dispose()
 
 void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpModel == 0 )
         throw lang::DisposedException();
@@ -264,7 +264,7 @@ void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Refere
 
 void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpModel == 0 )
         throw lang::DisposedException();
@@ -304,7 +304,7 @@ void SvxDrawPage::Notify( SfxBroadcaster&, const SfxHint& /*rHint*/ )
 void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -329,8 +329,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     if(pObj == NULL)
         return;
 
-    if(pShape)
-        pShape->Create( pObj, this );
+    pShape->Create( pObj, this );
 
     if( mpModel )
         mpModel->SetChanged();
@@ -340,7 +339,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -377,7 +376,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 sal_Int32 SAL_CALL SvxDrawPage::getCount()
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -389,7 +388,7 @@ sal_Int32 SAL_CALL SvxDrawPage::getCount()
 uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -420,7 +419,7 @@ uno::Type SAL_CALL SvxDrawPage::getElementType()
 sal_Bool SAL_CALL SvxDrawPage::hasElements()
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -488,7 +487,7 @@ void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xSha
 Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< drawing::XShapes >& xShapes )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -527,7 +526,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
 void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGroup )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
@@ -1006,3 +1005,5 @@ SdrPage* GetSdrPageFromXDrawPage( uno::Reference< drawing::XDrawPage > xDrawPage
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

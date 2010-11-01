@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -268,8 +269,6 @@ private:
                                   DirEntryFlag aDirFlag,
                                   FSysPathStyle eStyle );
 
-//#if 0 // _SOLAR__PRIVATE
-
     friend class Dir;
     friend class FileStat;
     friend const char* ImpCheckDirEntry( const void* p );
@@ -296,8 +295,6 @@ protected:
     FileStat*           ImpGetStat() const { return pStat; }
     void                ImpSetStat( FileStat *p ) { pStat = p; }
 #endif
-
-//#endif
 
 protected:
     void                SetError( ULONG nErr ) { nError = nErr; }
@@ -571,3 +568,4 @@ void FSysTest();
 
 #endif // #ifndef _FSYS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

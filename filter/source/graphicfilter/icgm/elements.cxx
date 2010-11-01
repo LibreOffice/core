@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -393,3 +394,4 @@ Bundle* CGMElements::InsertBundle( List& rList, Bundle& rBundle )
     return pBundle;
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

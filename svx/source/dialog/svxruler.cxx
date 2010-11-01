@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3764,12 +3765,14 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
                          nId == FUNIT_MILE ||
                          nId == FUNIT_CHAR ||
                          nId == FUNIT_LINE ))
+                {
                     if (( nId == FUNIT_CHAR ) && bHorz )
                            ;
                     else if (( nId == FUNIT_LINE ) && !bHorz )
                            ;
                     else
                            aMenu.RemoveItem(i - 1);
+                }
             }
             aMenu.Execute( this, rCEvt.GetMousePosPixel() );
         }
@@ -3954,3 +3957,4 @@ void SvxRuler::SetTabsRelativeToIndent( BOOL bRel )
     pRuler_Imp->bIsTabsRelativeToIndent = bRel;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -184,7 +185,7 @@ public:
     virtual void    SetUppBorder(INT32 nBorder);
     virtual void    SetLwrBorder(INT32 nBorder);
     virtual void    SetModel(SdrModel* pNewModel);
-    virtual FASTBOOL IsReadOnly() const;
+    virtual bool    IsReadOnly() const;
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
@@ -407,3 +408,5 @@ private:
 };
 
 #endif     // _SDPAGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

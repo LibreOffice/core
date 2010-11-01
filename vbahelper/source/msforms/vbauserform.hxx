@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,10 +44,13 @@ class ScVbaUserForm : public ScVbaUserForm_BASE
 private:
     css::uno::Reference< css::awt::XDialog > m_xDialog;
     bool mbDispose;
+    rtl::OUString m_sLibName;
 protected:
 public:
     ScVbaUserForm( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
     virtual ~ScVbaUserForm();
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
     // XUserForm
     virtual void SAL_CALL RePaint(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Show(  ) throw (css::uno::RuntimeException);
@@ -67,3 +71,5 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

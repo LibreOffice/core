@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef GCC
-#endif
+#include <sal/macros.h>
 #include <vcl/msgbox.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
@@ -44,8 +44,6 @@
 
 static USHORT   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 static BOOL     bOutputForPrinter = TRUE;
-
-#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SfxResId( TP_COMMONPRINTOPTIONS ), rSet ),
@@ -234,7 +232,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         aReduceBitmapsResolutionLB.SelectEntryPos( 0 );
     else
     {
-        for( long i = ( DPI_COUNT - 1 ); i >= 0; i-- )
+        for( long i = ( SAL_N_ELEMENTS(aDPIArray) - 1 ); i >= 0; i-- )
         {
             if( nDPI >= aDPIArray[ i ] )
             {
@@ -363,7 +361,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReducedBitmapMode( aReduceBitmapsOptimalRB.IsChecked() ? PRINTER_BITMAP_OPTIMAL :
                                            ( aReduceBitmapsNormalRB.IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
     pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ Min( (USHORT) aReduceBitmapsResolutionLB.GetSelectEntryPos(),
-                                                            (USHORT)( sizeof( aDPIArray ) / sizeof( aDPIArray[ 0 ] ) - 1 ) ) ] );
+                                                            (USHORT)( SAL_N_ELEMENTS( aDPIArray ) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( aReduceBitmapsTransparencyCB.IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( aConvertToGreyscalesCB.IsChecked() );
 }
@@ -490,3 +488,5 @@ IMPL_LINK( TransparencyPrintWarningBox, ClickNoBtn, PushButton*, pButton )
     EndDialog( RET_NO );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

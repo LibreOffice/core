@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -696,7 +697,7 @@ BOOL ScDrawView::SelectObject( const String& rName )
 }
 
 
-FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
+bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
 {
     //  Markierung nicht aendern, wenn Ole-Objekt aktiv
     //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
@@ -805,3 +806,5 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

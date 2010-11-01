@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <sal/macros.h>
 
 typedef unsigned short hchar;
 
@@ -369,7 +371,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 #ifndef DEBUG
 hchar *getMathMLEntity(const char *tex, hchar *buf)
 {
-     static int tabSize = sizeof( FormulaMapTab ) / sizeof( FormulaMapTab[0] );
+     static int tabSize = SAL_N_ELEMENTS( FormulaMapTab );
      int i, len;
 
      for( i = 0 ; i < tabSize ; i++ ){
@@ -396,3 +398,5 @@ char *getMathMLEntity(const char *tex, char *buf)
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

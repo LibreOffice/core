@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ using namespace ::com::sun::star::registry                      ;
             sKeyName    +=  OUString::createFromAscii( "/UNO/SERVICES" );                                               \
                                                                                                                         \
             /* Create new key with new name. */                                                                         \
-             xNewKey = xKey->createKey( sKeyName );                                                                     \
+            xNewKey = xKey->createKey( sKeyName );                                                                      \
                                                                                                                         \
             /* If this new key valid ... */                                                                             \
             if ( xNewKey.is () )                                                                                        \
@@ -320,3 +321,5 @@ extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementat
     // Return with result of this operation.
     return pReturn ;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

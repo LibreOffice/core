@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "vcl/svapp.hxx"
 
@@ -62,7 +63,7 @@ executeFilterDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -469,3 +470,4 @@ UUIInteractionHelper::handleFilterOptionsRequest(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

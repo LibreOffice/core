@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,26 +112,6 @@ void ScRefTokenHelper::compileRangeRepresentation(
                             ScSharedTokenRef(static_cast<ScToken*>(p->Clone())));
             }
         }
-
-#if 0
-        switch (p->GetType())
-        {
-            case svSingleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   single ref\n");
-            break;
-            case svDoubleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   double ref\n");
-            break;
-            case svExternalSingleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   external single ref\n");
-            break;
-            case svExternalDoubleRef:
-                fprintf(stdout, "ScChart2DataProvider::compileRangeRepresentation:   external double ref\n");
-            break;
-            default:
-                ;
-        }
-#endif
 
     }
     if (bFailure)
@@ -493,3 +474,5 @@ ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScRange& rRange)
     ScSharedTokenRef pRef(new ScDoubleRefToken(aRefData));
     return pRef;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

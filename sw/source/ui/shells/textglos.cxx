@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,6 @@
 #include <misc.hrc>
 
 // STATIC DATA -----------------------------------------------------------
-
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {
     USHORT nSlot = rReq.GetSlot();
@@ -88,7 +88,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -104,7 +104,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -120,7 +120,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -131,7 +131,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
     if(bUpdateList)
@@ -142,4 +142,4 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     }
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_svtools.hxx"
 
 #include "datwin.hxx"
-
-#ifndef GCC
-#endif
 
 #include <vcl/svapp.hxx>
 
@@ -774,3 +772,4 @@ void BrowserScrollBar::EndScroll()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,6 +95,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include "macromgr.hxx"
 
 using namespace com::sun::star;
 
@@ -157,6 +159,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pDocProtection( NULL ),
         mpClipParam( NULL),
         pExternalRefMgr( NULL ),
+        mpMacroMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
         pExtDocOptions( NULL ),
@@ -452,9 +455,9 @@ ScDocument::~ScDocument()
     // delete the EditEngine before destroying the xPoolHelper
     delete pCacheFieldEditEngine;
 
-    if ( xPoolHelper.isValid() && !bIsClip )
+    if ( xPoolHelper.is() && !bIsClip )
         xPoolHelper->SourceDocumentGone();
-    xPoolHelper.unbind();
+    xPoolHelper.clear();
 
     DeleteColorTable();
     delete pScriptTypeData;
@@ -1276,3 +1279,5 @@ void ScDocument::ClearLookupCaches()
     if( pLookupCacheMapImpl )
         pLookupCacheMapImpl->clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

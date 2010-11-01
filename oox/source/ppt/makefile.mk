@@ -53,6 +53,7 @@ SLOFILES =	\
         $(SLO)$/headerfootercontext.obj \
         $(SLO)$/layoutfragmenthandler.obj\
         $(SLO)$/pptfilterhelpers.obj\
+        $(SLO)$/pptgraphicshapecontext.obj \
         $(SLO)$/pptimport.obj\
         $(SLO)$/pptshape.obj \
         $(SLO)$/pptshapecontext.obj \

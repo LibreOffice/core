@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1642,3 +1643,5 @@ MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
         Show();
     EnableMultiSelection( TRUE );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

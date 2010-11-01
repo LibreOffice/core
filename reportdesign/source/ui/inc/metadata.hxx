@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #define RPTUI_METADATA_HXX_
 
 #include "ModuleHelper.hxx"
+
+#include <sal/macros.h>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/Property.hpp>
@@ -160,3 +163,4 @@ namespace rptui
 
 #endif // RPTUI_METADATA_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

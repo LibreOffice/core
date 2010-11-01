@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ public:
 
     // XFastPropertySet
     // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
-    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException) { return ::com::sun::star::uno::Any(); }
+    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/)  throw (::com::sun::star::uno::RuntimeException) { return ::com::sun::star::uno::Any(); }
     virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException);
 
 private:
@@ -58,3 +59,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

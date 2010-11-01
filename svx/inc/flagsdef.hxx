@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@ enum SvxModeType
 // define ----------------------------------------------------------------
 
 // 1/2 cm in TWIPS
-// wird auch fuer Minimalgrosse der LayFrms aller Arten benutzt
+// Is also used for minimum size of LayFrms of any kind
 #define MM50   283  //from original svx/inc/paragrph.hxx
 
 //--------------from original svx/inc/tabstpge.hxx
@@ -101,3 +102,5 @@ enum SvxModeType
 //-----
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <sal/macros.h>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
@@ -163,7 +165,8 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     OUString sRet;
     if( xAnnotation.is() )
     {
-        const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
 
         com::sun::star::util::DateTime aDateTime( xAnnotation->getDateTime() );
 
@@ -970,30 +973,6 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
     return 0;
 }
-#if 0
-OUString AnnotationManagerImpl::GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
-{
-    OUString sRet;
-    if( xAnnotation.is() )
-    {
-        OUString sAuthor( xAnnotation->getAuthor() );
-        if( sAuthor.getLength() != 0 )
-        {
-            sRet += sAuthor;
-        }
-        sRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
-
-        sRet += getAnnotationDateTimeString( xAnnotation );
-        sRet += OUString( RTL_CONSTASCII_USTRINGPARAM( "]\n" ) );
-
-        Reference< XText > xText( xAnnotation->getTextRange() );
-        if( xText.is() )
-            sRet += xText->getString();
-    }
-
-    return sRet;
-}
-#endif
 
 void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {
@@ -1137,7 +1116,7 @@ Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_NORMAL,     COL_AUTHOR5_NORMAL,     COL_AUTHOR6_NORMAL,
             COL_AUTHOR7_NORMAL,     COL_AUTHOR8_NORMAL,     COL_AUTHOR9_NORMAL };
 
-        return Color( aArrayNormal[ aAuthorIndex % (sizeof( aArrayNormal )/ sizeof( aArrayNormal[0] ))]);
+        return Color( aArrayNormal[ aAuthorIndex % (SAL_N_ELEMENTS(aArrayNormal))]);
     }
     else
         return Color(COL_WHITE);
@@ -1152,7 +1131,7 @@ Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_LIGHT,      COL_AUTHOR5_LIGHT,      COL_AUTHOR6_LIGHT,
             COL_AUTHOR7_LIGHT,      COL_AUTHOR8_LIGHT,      COL_AUTHOR9_LIGHT };
 
-        return Color( aArrayLight[ aAuthorIndex % (sizeof( aArrayLight )/ sizeof( aArrayLight[0] ))]);
+        return Color( aArrayLight[ aAuthorIndex % (SAL_N_ELEMENTS(aArrayLight))]);
     }
     else
         return Color(COL_WHITE);
@@ -1167,7 +1146,7 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
             COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
 
-        return Color( aArrayAnkor[  aAuthorIndex % (sizeof( aArrayAnkor )   / sizeof( aArrayAnkor[0] ))]);
+        return Color( aArrayAnkor[  aAuthorIndex % (SAL_N_ELEMENTS(aArrayAnkor))]);
     }
     else
         return Color(COL_WHITE);
@@ -1270,3 +1249,5 @@ void AnnotationManager::GetAnnotationState(SfxItemSet& rItemSet)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

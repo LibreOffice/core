@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 #include <stdio.h>
 #include <osl/file.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -504,3 +505,5 @@ void ContentProvider::subst( rtl::OUString& instpath ) const
     if( xCfgMgr.is() )
         instpath = xCfgMgr->substituteVariables( instpath );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

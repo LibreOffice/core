@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <string>
 #include <hash_map>
 #include <unicode/regex.h>
@@ -50,3 +51,5 @@ class INIreader
 };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

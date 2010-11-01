@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,6 @@ using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
     Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
-
 sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
                               SwField* pField, BOOL bNextButton ) :
 
@@ -105,10 +105,6 @@ sw::DropDownFieldDialog::~DropDownFieldDialog()
 {
 }
 
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
-
 void sw::DropDownFieldDialog::Apply()
 {
     if(pDropField)
@@ -130,12 +126,11 @@ void sw::DropDownFieldDialog::Apply()
         }
     }
 }
-/* -----------------17.06.2003 10:50-----------------
 
- --------------------------------------------------*/
 IMPL_LINK(sw::DropDownFieldDialog, ButtonHdl, PushButton*, pButton)
 {
     EndDialog(&aNextPB == pButton ? RET_OK : RET_YES );
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

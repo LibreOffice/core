@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,7 +148,6 @@ public:
 
 protected:
 
-    //ORefCount         m_refCount;
     oslInterlockedCount m_refCount;
     Reference<XInterface>       m_xInst;
     GUID                m_guid;
@@ -276,3 +276,4 @@ protected:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

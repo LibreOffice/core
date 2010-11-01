@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <classes/fwlresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
@@ -87,7 +88,7 @@ void SAL_CALL LogoTextStatusbarController::release() throw ()
 void SAL_CALL LogoTextStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
 
@@ -176,3 +177,5 @@ void SAL_CALL LogoTextStatusbarController::doubleClick() throw (::com::sun::star
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

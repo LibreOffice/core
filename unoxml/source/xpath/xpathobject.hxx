@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,10 +53,11 @@ namespace XPath
     {
     private:
     boost::shared_ptr<xmlXPathObject> m_pXPathObj;
+    const Reference< XNode > m_xContextNode;
     XPathObjectType m_xPathObjectType;
 
     public:
-    CXPathObject(xmlXPathObjectPtr xpathObj);
+    CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode);
 
     /**
         get object type
@@ -111,3 +113,5 @@ namespace XPath
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

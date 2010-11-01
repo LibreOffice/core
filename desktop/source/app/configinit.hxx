@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _DESKTOP_CONFIGINIT_HXX_
 #define _DESKTOP_CONFIGINIT_HXX_
 
@@ -69,3 +70,5 @@ com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
 
 //-----------------------------------------------------------------------------
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

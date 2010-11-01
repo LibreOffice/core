@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,15 +79,21 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_THIS_FILE       __FILE__
 
 /* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
+/* as documented in http://www.openoffice.org/issues/show_bug.cgi?id=114290 ,
+   this cannot work, so disable it for now */
+#if 1
+#define OSL_THIS_FUNC " "
+#else
 #ifdef __func__
 #define OSL_THIS_FUNC __func__
-#elifdef __PRETTY_FUNCTION__
+#elif defined (__PRETTY_FUNCTION__)
 #define OSL_THIS_FUNC __PRETTY_FUNCTION__
-#elifdef __FUNCTION__
+#elif defined (__FUNCTION__)
 #define OSL_THIS_FUNC __FUNCTION__
 #else
 #define OSL_THIS_FUNC " "
 #endif
+#endif /* 1 */
 
 /* the macro OSL_TO_STRING is intended to be an office internal macro for now */
 #define OSL_TO_STRING( x ) #x
@@ -158,3 +165,5 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #endif /* OSL_DEBUG_LEVEL */
 
 #endif /* _OSL_DIAGNOSE_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,7 +58,9 @@
 #define SID_TEXT                                (SID_SMA_START + 100)
 #define SID_GAPHIC_SM                           (SID_SMA_START + 101)
 #define SID_FITINWINDOW             (SID_SMA_START + 103)
-#define SID_INSERTTEXT              (SID_SMA_START + 104)
+/** Command for inserting a symbol specified by a string (Inserts an SmSpecialNode) */
+#define SID_INSERTSYMBOL            (SID_SMA_START + 104)
+/** Command for inserting a math construction specified in commands.src */
 #define SID_INSERTCOMMAND           (SID_SMA_START + 105)
 
 #define SID_LOADSYMBOLS             (SID_SMA_START + 107)

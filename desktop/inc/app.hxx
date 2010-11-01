@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
 
 #define DESKTOP_SAVETASKS_MOD 0x1
 #define DESKTOP_SAVETASKS_UNMOD 0x2
@@ -57,7 +57,7 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
+class AcceptorMap : public std::map< rtl::OUString, Reference<XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
@@ -86,6 +86,7 @@ class Desktop : public Application
                                 ~Desktop();
         virtual void            Main( );
         virtual void            Init();
+        virtual void            InitFinished();
         virtual void            DeInit();
         virtual BOOL            QueryExit();
         virtual USHORT          Exception(USHORT nError);
@@ -153,6 +154,7 @@ class Desktop : public Application
 
         sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
         sal_Bool                InitializeConfiguration();
+        void                    FlushConfiguration();
         sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
@@ -191,9 +193,9 @@ class Desktop : public Application
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
-        static void                         createAcceptor(const OUString& aDescription);
+        static void                         createAcceptor(const rtl::OUString& aDescription);
         static void                         enableAcceptors();
-        static void                         destroyAcceptor(const OUString& aDescription);
+        static void                         destroyAcceptor(const rtl::OUString& aDescription);
 
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
@@ -212,3 +214,5 @@ class Desktop : public Application
 }
 
 #endif // _DESKTOP_APP_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

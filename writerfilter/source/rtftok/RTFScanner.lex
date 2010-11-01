@@ -28,10 +28,10 @@
 /* compile with flex++ -8 -f -+ -Sflex.skl -ortfparser.cxx rtfparser.lex */
 %option yylineno
 %{
-  //#include <io.h>
 #include <math.h>
 #include <string.h>
 #include <osl/file.h>
+#include <sal/macros.h>
 #include <assert.h>
 #include <vector>
 
@@ -103,7 +103,7 @@ void yyFlexLexer::split_ctrl(char *_yytext, char* token, char *value)
      eventHandler.dest(token, value);
    }
  
-#define _num_of_destctrls (sizeof(_destctrls)/sizeof(_destctrls[0]))
+#define _num_of_destctrls (SAL_N_ELEMENTS(_destctrls))
 static const char* _destctrls[] = {
 "aftncn",
 "aftnsep",

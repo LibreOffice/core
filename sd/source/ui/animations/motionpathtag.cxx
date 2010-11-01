@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -798,7 +799,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
             if(mrView.IsDragObj())
             {
-                FASTBOOL bWasNoSnap = mrView.GetDragStat().IsNoSnap();
+                bool bWasNoSnap = mrView.GetDragStat().IsNoSnap();
                 BOOL bWasSnapEnabled = mrView.IsSnapEnabled();
 
                 // switch snapping off
@@ -1325,3 +1326,4 @@ void SAL_CALL MotionPathTag::release(  ) throw ()
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

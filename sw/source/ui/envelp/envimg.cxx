@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,6 @@ using namespace ::com::sun::star::uno;
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
-// --------------------------------------------------------------------------
 SW_DLLPUBLIC String MakeSender()
 {
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
@@ -103,7 +103,7 @@ SW_DLLPUBLIC String MakeSender()
     }
     return sRet;
 }
-// --------------------------------------------------------------------------
+
 SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
@@ -123,7 +123,7 @@ SwEnvItem::SwEnvItem() :
     lAddrFromLeft   = Max(lWidth, lHeight) / 2;
     lAddrFromTop    = Min(lWidth, lHeight) / 2;
 }
-// --------------------------------------------------------------------------
+
 SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
     SfxPoolItem(FN_ENVELOP),
     aAddrText      (rItem.aAddrText),
@@ -142,7 +142,6 @@ SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
 {
 }
 
-// --------------------------------------------------------------------------
 SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
 {
     aAddrText       = rItem.aAddrText;
@@ -160,7 +159,7 @@ SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
     lShiftDown      = rItem.lShiftDown;
     return *this;
 }
-// --------------------------------------------------------------------------
+
 int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwEnvItem& rEnv = (const SwEnvItem&) rItem;
@@ -180,13 +179,11 @@ int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
            lShiftDown      == rEnv.lShiftDown;
 }
 
-// --------------------------------------------------------------------------
 SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
 {
     return new SwEnvItem(*this);
 }
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
+
 SwEnvCfgItem::SwEnvCfgItem() :
     ConfigItem(C2U("Office.Writer/Envelope"))
 {
@@ -194,7 +191,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -249,15 +246,11 @@ SwEnvCfgItem::SwEnvCfgItem() :
         }
     }
 }
-/* -----------------------------26.09.00 14:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwEnvCfgItem::~SwEnvCfgItem()
 {
 }
-/* -----------------------------26.09.00 14:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEnvCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -289,9 +282,6 @@ void    SwEnvCfgItem::Commit()
 
 void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/* -----------------------------26.09.00 14:04--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -313,8 +303,10 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
     const int nCount = 13;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
+
     for(int i = 0; i < nCount; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
     return aNames;
 }
 
@@ -337,14 +329,12 @@ bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
         case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
         default:
-            DBG_ERROR("Wrong memberId");
+            OSL_ENSURE(false, "Wrong memberId");
             bRet = false;
     }
     return bRet;
 }
-/* -----------------------------26.04.01 12:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
     bool bRet = false;
@@ -371,7 +361,9 @@ bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
         case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
         default:
-            DBG_ERROR("Wrong memberId");
+            OSL_ENSURE(false,"Wrong memberId");
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

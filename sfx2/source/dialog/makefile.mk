@@ -37,40 +37,40 @@ TARGET=dialog
 # --- Files --------------------------------------------------------------
 
 EXCEPTIONSFILES=\
+        $(SLO)$/about.obj		\
+        $(SLO)$/alienwarn.obj		\
+        $(SLO)$/basedlgs.obj		\
+        $(SLO)$/dinfdlg.obj		\
+        $(SLO)$/dinfedt.obj		\
+        $(SLO)$/dockwin.obj		\
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filtergrouping.obj	\
-        $(SLO)$/itemconnect.obj     \
+        $(SLO)$/intro.obj		\
+        $(SLO)$/itemconnect.obj		\
         $(SLO)$/mailmodel.obj		\
-        $(SLO)$/partwnd.obj         \
-        $(SLO)$/recfloat.obj        \
-        $(SLO)$/templdlg.obj        \
-        $(SLO)$/dinfdlg.obj         \
-        $(SLO)$/dockwin.obj         \
-        $(SLO)$/taskpane.obj
+        $(SLO)$/mgetempl.obj		\
+        $(SLO)$/navigat.obj		\
+        $(SLO)$/newstyle.obj		\
+        $(SLO)$/partwnd.obj		\
+        $(SLO)$/passwd.obj		\
+        $(SLO)$/printopt.obj		\
+        $(SLO)$/recfloat.obj		\
+        $(SLO)$/securitypage.obj	\
+        $(SLO)$/sfxdlg.obj		\
+        $(SLO)$/splitwin.obj		\
+        $(SLO)$/srchdlg.obj		\
+        $(SLO)$/styledlg.obj		\
+        $(SLO)$/tabdlg.obj		\
+        $(SLO)$/taskpane.obj		\
+        $(SLO)$/templdlg.obj		\
+        $(SLO)$/titledockwin.obj	\
+        $(SLO)$/tplcitem.obj		\
+        $(SLO)$/versdlg.obj
 
 SLOFILES =\
-        $(EXCEPTIONSFILES)			\
-        $(SLO)$/about.obj           \
-        $(SLO)$/alienwarn.obj       \
-        $(SLO)$/basedlgs.obj		\
-        $(SLO)$/dinfedt.obj			\
-        $(SLO)$/intro.obj			\
-        $(SLO)$/mgetempl.obj		\
-        $(SLO)$/navigat.obj			\
-        $(SLO)$/newstyle.obj		\
-        $(SLO)$/passwd.obj			\
-        $(SLO)$/printopt.obj		\
-        $(SLO)$/sfxdlg.obj          \
-        $(SLO)$/splitwin.obj		\
-        $(SLO)$/srchdlg.obj         \
+        $(EXCEPTIONSFILES)		\
         $(SLO)$/styfitem.obj		\
-        $(SLO)$/styledlg.obj		\
-        $(SLO)$/tabdlg.obj			\
-        $(SLO)$/tplcitem.obj		\
-        $(SLO)$/tplpitem.obj		\
-        $(SLO)$/versdlg.obj         \
-        $(SLO)$/securitypage.obj    \
-        $(SLO)$/titledockwin.obj
+        $(SLO)$/tplpitem.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
@@ -113,15 +113,3 @@ $(INCCOM)$/cuilib.hxx: makefile.mk
 .ENDIF
 
 $(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
-
-$(SLO)$/about.obj : $(INCCOM)$/aboutbmpnames.hxx
-
-.INCLUDE .IGNORE : $(MISC)$/about_bmp_names.mk
-
-.IF "$(ABOUT_BITMAPS:f)"!="$(LASTTIME_ABOUT_BITMAPS)"
-DO_PHONY=.PHONY
-.ENDIF			# "$(ABOUT_BITMAPS:f)"!="$(LASTTIME_ABOUT_BITMAPS)"
-
-$(INCCOM)$/aboutbmpnames.hxx $(DO_PHONY):
-    echo const char ABOUT_BITMAP_STRINGLIST[]=$(EMQ)"$(ABOUT_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
-    echo LASTTIME_ABOUT_BITMAPS=$(ABOUT_BITMAPS:f) > $(MISC)$/about_bmp_names.mk

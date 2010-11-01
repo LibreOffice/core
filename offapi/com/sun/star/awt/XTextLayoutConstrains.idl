@@ -42,7 +42,7 @@
 
 //=============================================================================
 
-/** specifies the layout contstraints for a text field.
+/** specifies the layout constraints for a text field.
  */
 published interface XTextLayoutConstrains: com::sun::star::uno::XInterface
 {

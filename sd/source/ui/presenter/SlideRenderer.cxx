@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include "SlideRenderer.hxx"
 #include "sdpage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppcanvas/vclfactory.hxx>
 
@@ -133,7 +134,7 @@ Reference<awt::XBitmap> SlideRenderer::createPreview (
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return VCLUnoHelper::CreateBitmap(
         CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor));
@@ -150,7 +151,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     cppcanvas::BitmapCanvasSharedPtr pCanvas (cppcanvas::VCLFactory::getInstance().createCanvas(
         Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));
@@ -270,3 +271,4 @@ void SlideRenderer::ThrowIfDisposed (void)
 
 } } // end of namespace ::sd::presenter
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

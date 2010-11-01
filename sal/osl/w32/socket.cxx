@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -288,25 +289,6 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 /* oslSocketDialupImpl */
 /*****************************************************************************/
 static oslSocketDialupImpl *pDialupImpl = NULL;
-
-#if 0  /* INTERNAL DEBUG ONLY */
-BOOL WINAPI __osl_autodial_Impl (DWORD dwFlags, DWORD dwReserved)
-{
-    return 0;
-}
-
-BOOL WINAPI __osl_autodialHangup_Impl (DWORD dwReserved)
-{
-    return 1;
-}
-
-BOOL WINAPI __osl_getConnectedState_Impl (LPDWORD lpdwFlags, DWORD dwReserved)
-{
-    if (lpdwFlags)
-        *lpdwFlags = 0;
-    return 0;
-}
-#endif /* INTERNAL DEBUG ONLY */
 
 /*
  * __osl_createSocketDialupImpl.
@@ -2188,3 +2170,5 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents (
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sal/macros.h>
 
 #ifdef HAVE_STATFS_H
 #undef HAVE_STATFS_H
@@ -66,7 +68,6 @@ static const sal_Char* MOUNTTAB="/etc/mnttab";
 #include <sys/vfs.h>
 #define  HAVE_STATFS_H
 #include <sys/quota.h>
-//#include <ctype.h>
 static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #elif defined(NETBSD) || defined(FREEBSD)
@@ -75,7 +76,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/ucred.h>
 #include <sys/mount.h>
 #include <ufs/ufs/quota.h>
-//#include <ctype.h>
 #define  HAVE_STATFS_H
 
 /* No mounting table on *BSD
@@ -85,7 +85,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #elif defined(MACOSX)
 
 #include <ufs/ufs/quota.h>
-//#include <ctype.h>
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
@@ -181,7 +180,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 
 #ifdef HAVE_STATFS_H
 
-#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(MACOSX)
 #   define __OSL_STATFS_STRUCT                  struct statfs
 #   define __OSL_STATFS(dir, sfs)               statfs((dir), (sfs))
 #   define __OSL_STATFS_BLKSIZ(a)               ((sal_uInt64)((a).f_bsize))
@@ -193,7 +192,33 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
    of the target platforms fix it!!!! */
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
-#endif /* FREEBSD || NETBSD || MACOSX */
+#endif /* FREEBSD || MACOSX */
+
+#if defined(NETBSD)
+
+#include <sys/param.h>
+
+/* statvfs() replaced statfs() in 2.99.9 */
+# if __NetBSD_Version__ >= 299000900
+       /* 2.0D or later */
+#   define __OSL_STATFS_STRUCT              struct statvfs
+#   define __OSL_STATFS(dir, sfs)           statvfs((dir), (sfs))
+#   define __OSL_STATFS_ISREMOTE(a)         (((a).f_flag & ST_LOCAL) == 0)
+
+# else
+       /* version before 2.0D */
+#   define __OSL_STATFS_STRUCT              struct statfs
+#   define __OSL_STATFS(dir, sfs)           statfs((dir), (sfs))
+#   define __OSL_STATFS_ISREMOTE(a)         (((a).f_type & MNT_LOCAL) == 0)
+
+# endif /* >2.0D */
+
+#   define __OSL_STATFS_BLKSIZ(a)           ((sal_uInt64)((a).f_bsize))
+#   define __OSL_STATFS_TYPENAME(a)         ((a).f_fstypename)
+
+#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a) (strcmp((a).f_fstypename, "msdos") != 0 && strcmp((a).f_fstypename, "ntfs") != 0 && strcmp((a).f_fstypename, "smbfs") != 0)
+#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a)    (strcmp((a).f_fstypename, "msdos") != 0)
+#endif /* NETBSD */
 
 #if defined(LINUX)
 #   define __OSL_NFS_SUPER_MAGIC                 0x6969
@@ -229,7 +254,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #else /* no statfs available */
 
 #   define __OSL_STATFS_STRUCT                   struct dummy {int i;}
-#   define __OSL_STATFS_INIT(a)                  ((void)0)
+#   define __OSL_STATFS_INIT(a)                  ((void)a)
 #   define __OSL_STATFS(dir, sfs)                (1)
 #   define __OSL_STATFS_ISREMOTE(sfs)            (0)
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
@@ -517,7 +542,7 @@ oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
     return osl_File_E_None;
 }
 
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(AIX)
 
 /*****************************************
  * osl_newVolumeDeviceHandleImpl
@@ -572,7 +597,7 @@ osl_isAFloppyDevice (const char* pDeviceName)
     };
 
     int i;
-    for (i = 0; i < (sizeof(pFloppyDevice)/sizeof(pFloppyDevice[0])); i++)
+    for (i = 0; i < SAL_N_ELEMENTS(pFloppyDevice); i++)
     {
         if (strncmp(pDeviceName, pFloppyDevice[i], strlen(pFloppyDevice[i])) == 0)
             return sal_True;
@@ -1093,23 +1118,26 @@ osl_isFloppyMounted (oslVolumeDeviceHandleImpl* pDevice)
  *
  *****************************************************************************/
 
-#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
 static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 {
+    (void)pszPath;
     return NULL;
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
 static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 {
+    (void)hFloppy;
     return osl_File_E_BUSY;
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
 static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 {
+    (void)hFloppy;
     return osl_File_E_BUSY;
 }
 #endif /* MACOSX */
@@ -1153,3 +1181,5 @@ static void osl_printFloppyHandle(oslVolumeDeviceHandleImpl* pItem)
     return;
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

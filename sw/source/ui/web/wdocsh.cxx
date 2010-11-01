@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,7 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_Bool bTemplate /* = sal_False */) const
 {
     (void)bTemplate;
-    DBG_ASSERT( bTemplate == sal_False, "No template for Writer Web" );
+    OSL_ENSURE( bTemplate == sal_False, "No template for Writer Web" );
 
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
@@ -110,3 +111,4 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

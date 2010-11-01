@@ -78,6 +78,7 @@ SHL1STDLIBS= \
         $(SVLLIB)	\
         $(MSFILTERLIB)	\
         $(UNOTOOLSLIB)	\
+        $(XMLOFFLIB)    \
         $(TOOLSLIB)
 
 # link openssl, copied this bit from ucb/source/ucp/webdav/makefile.mk

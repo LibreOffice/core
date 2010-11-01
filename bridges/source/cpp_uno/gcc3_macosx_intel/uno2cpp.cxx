@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 #include "precompiled_bridges.hxx"
 
 #include <stdio.h>
-
-// #include <malloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -493,3 +492,5 @@ void unoInterfaceProxyDispatch(
 }
 
 } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

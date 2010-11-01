@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,11 +46,13 @@
 #elif defined SCO
 #define TOOLS_INETDEF_OS "SCO"
 #elif defined NETBSD && defined X86
-#define TOOLS_INETDEF_OS "NETBSD x86"
+#define TOOLS_INETDEF_OS "NetBSD/i386"
+#elif defined NETBSD && defined X86_64
+#define TOOLS_INETDEF_OS "NetBSD/amd64"
 #elif defined NETBSD && defined ARM32
-#define TOOLS_INETDEF_OS "NETBSD ARM32"
+#define TOOLS_INETDEF_OS "NetBSD/arm"
 #elif defined NETBSD && defined SPARC
-#define TOOLS_INETDEF_OS "NETBSD Sparc"
+#define TOOLS_INETDEF_OS "NetBSD/sparc"
 #elif defined LINUX && defined X86
 #define TOOLS_INETDEF_OS "Linux"
 #elif defined FREEBSD && defined X86
@@ -109,3 +112,4 @@
 
 #endif // _TOOLS_INETDEF_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

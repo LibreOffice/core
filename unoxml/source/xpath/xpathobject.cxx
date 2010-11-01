@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,8 @@
 
 namespace XPath
 {
-    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj)
-        : m_pXPathObj(xpathObj, xmlXPathFreeObject)
+    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode)
+        : m_pXPathObj(xpathObj, xmlXPathFreeObject), m_xContextNode(contextNode)
     {
         switch (m_pXPathObj->type)
         {
@@ -85,7 +86,7 @@ namespace XPath
     */
     Reference< XNodeList > SAL_CALL CXPathObject::getNodeList() throw (RuntimeException)
     {
-        return Reference< XNodeList >(new CNodeList(m_pXPathObj));
+        return Reference< XNodeList >(new CNodeList(m_pXPathObj, m_xContextNode));
     }
 
      /**
@@ -155,3 +156,4 @@ namespace XPath
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,8 +224,8 @@ public:
     // Focus, KeyInput, Cursor
     void                        GotFocus() const;
     inline void                 LostFocus() const;
-    virtual void                ShowCursor( FASTBOOL bOn = TRUE );
-    virtual FASTBOOL            KeyInput( const KeyEvent &rKeyEvent );
+    virtual void                ShowCursor( bool bOn = true );
+    virtual bool                KeyInput( const KeyEvent &rKeyEvent );
     BOOL                        Escape();
 
     // Viewing Interface
@@ -298,7 +299,7 @@ public:
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
-    SAL_DLLPRIVATE FASTBOOL GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
+    SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient )
                                 { GetIPClientList_Impl(TRUE)->Insert(pIPClient); }
@@ -381,3 +382,4 @@ inline SfxViewFrame* SfxViewShell::GetViewFrame() const
 #endif // #ifndef _SFXVIEWSH_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

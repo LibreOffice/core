@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -342,3 +343,5 @@ void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SOLARIZE ) )
         rSet.DisableItem( SID_GRFFILTER_SOLARIZE );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

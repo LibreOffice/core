@@ -40,9 +40,7 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
 
 # --- Files --------------------------------------------------------
 
@@ -102,7 +100,8 @@ SLOFILES =	\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xltools.obj					\
         $(SLO)$/xltracer.obj				\
-        $(SLO)$/xlview.obj
+        $(SLO)$/xlview.obj \
+        $(SLO)$/xltoolbar.obj \
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES = \
@@ -151,6 +150,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xltoolbar.obj \
         $(SLO)$/xltools.obj					\
         $(SLO)$/xlview.obj
 

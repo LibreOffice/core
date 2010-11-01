@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 using namespace ::com::sun::star;
-
 
 class CompareLine
 {
@@ -194,11 +194,7 @@ public:
     Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 );
 };
 
-// ====================================================================
-
 CompareLine::~CompareLine() {}
-
-// ----------------------------------------------------------------------
 
 CompareData::CompareData()
     : pIndex( 0 ), pChangedFlag( 0 ), nSttLineNum( 0 )
@@ -311,8 +307,6 @@ void CompareData::CheckForChangesInLine( const CompareData& ,
 {
 }
 
-// ----------------------------------------------------------------------
-
 Hash::Hash( ULONG nSize )
     : nCount( 1 )
 {
@@ -399,8 +393,6 @@ void Hash::CalcHashValue( CompareData& rData )
     }
 }
 
-// ----------------------------------------------------------------------
-
 Compare::Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 )
 {
     MovedData *pMD1, *pMD2;
@@ -446,8 +438,6 @@ Compare::Compare( ULONG nDiff, CompareData& rData1, CompareData& rData2 )
     delete pMD1;
     delete pMD2;
 }
-
-
 
 void Compare::CountDifference( const CompareData& rData, ULONG* pCounts )
 {
@@ -587,8 +577,6 @@ void Compare::CheckDiscard( ULONG nLen, sal_Char* pDiscard )
     }
 }
 
-// ----------------------------------------------------------------------
-
 Compare::MovedData::MovedData( CompareData& rData, sal_Char* pDiscard )
     : pIndex( 0 ), pLineNum( 0 ), nCount( 0 )
 {
@@ -621,9 +609,7 @@ Compare::MovedData::~MovedData()
     delete pLineNum;
 }
 
-// ----------------------------------------------------------------------
-
-    // Suche die verschobenen Lines
+// Suche die verschobenen Lines
 Compare::CompareSequence::CompareSequence(
                             CompareData& rD1, CompareData& rD2,
                             const MovedData& rMD1, const MovedData& rMD2 )
@@ -839,8 +825,6 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
     }
 }
 
-/*  */
-
 class SwCompareLine : public CompareLine
 {
     const SwNode& rNode;
@@ -890,8 +874,6 @@ public:
 
     void SetRedlinesToDoc( BOOL bUseDocInfo );
 };
-
-// ----------------------------------------------------------------
 
 SwCompareLine::SwCompareLine( const SwNode& rNd )
     : rNode( rNd )
@@ -1246,8 +1228,6 @@ BOOL SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     return bRet;
 }
 
-// ----------------------------------------------------------------
-
 SwCompareData::~SwCompareData()
 {
     if( pDelRing )
@@ -1291,7 +1271,6 @@ ULONG SwCompareData::PrevIdx( const SwNode* pNd )
     }
     return pNd->GetIndex() - 1;
 }
-
 
 void SwCompareData::CheckRanges( CompareData& rData )
 {
@@ -1345,7 +1324,6 @@ void SwCompareData::CheckRanges( CompareData& rData )
         nDstSttIdx = NextIdx( pNd );
     }
 }
-
 
 void SwCompareData::ShowInsert( ULONG nStt, ULONG nEnd )
 {
@@ -1566,11 +1544,7 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
     }
 }
 
-/*  */
-
-
-
-    // returnt (?die Anzahl der Unterschiede?) ob etwas unterschiedlich ist
+// returnt (?die Anzahl der Unterschiede?) ob etwas unterschiedlich ist
 long SwDoc::CompareDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
@@ -1613,7 +1587,6 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     return nRet;
 }
-
 
 typedef void (SwDoc::*FNInsUndo)( SwUndo* );
 
@@ -1873,4 +1846,4 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     return nRet;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 namespace rptui
@@ -93,7 +94,7 @@ OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory
 void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
     StatusbarController::initialize(_rArguments);
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     StatusBar* pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow));
@@ -131,7 +132,7 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
 // XStatusListener
 void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEvent)throw ( RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if ( m_pController.is() )
@@ -228,3 +229,5 @@ void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::Runt
 // =============================================================================
 } // rptui
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

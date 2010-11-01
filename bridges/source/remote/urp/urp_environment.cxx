@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -514,8 +515,8 @@ void SAL_CALL uno_ext_getMapping(
 
         ::rtl::OUString sFromName = pFrom->pTypeName;
         ::rtl::OUString sToName = pTo->pTypeName;
-        ::rtl::OUString sUno = OUString::createFromAscii( UNO_LB_UNO );
-        ::rtl::OUString sRemote = OUString::createFromAscii( "urp" );
+        ::rtl::OUString sUno(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO));
+        ::rtl::OUString sRemote(RTL_CONSTASCII_USTRINGPARAM("urp"));
         if ( sFromName.equalsIgnoreAsciiCase( sRemote ) &&
              sToName.equalsIgnoreAsciiCase( sUno ) )
         {
@@ -549,3 +550,5 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

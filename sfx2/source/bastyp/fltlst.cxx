@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <sfx2/docfac.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //*****************************************************************************************************************
 //  namespaces
@@ -95,7 +96,7 @@ SfxFilterListener::~SfxFilterListener()
 
 void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xContainer( aSource.Source, uno::UNO_QUERY );
     if(
         (xContainer.is()           ) &&
@@ -108,7 +109,7 @@ void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) t
 
 void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xNotifier( aSource.Source, uno::UNO_QUERY );
     if (!xNotifier.is())
         return;
@@ -116,3 +117,5 @@ void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) t
     if (xNotifier == m_xFilterCache)
         m_xFilterCache.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

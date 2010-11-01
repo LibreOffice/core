@@ -50,7 +50,6 @@ SHL1USE_EXPORTS=name
 
 SHL1LIBS=	$(LIB1TARGET)
 SHL1STDLIBS= \
-                $(VOSLIB)		\
                 $(CPPULIB)		\
                 $(CPPUHELPERLIB)\
                 $(COMPHELPERLIB)\

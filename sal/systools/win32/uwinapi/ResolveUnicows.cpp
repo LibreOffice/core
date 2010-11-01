@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifdef __MINGW32__
 #define _GDI32_
 #include "macros.h"
@@ -508,3 +509,5 @@ DEFINE_UNICOWS_THUNK( winmm, PROC, WINAPI, wglGetProcAddress, (LPCSTR) )
 DEFINE_UNICOWS_THUNK( user32, int, WINAPIV, wsprintfW, (LPWSTR,LPCWSTR,...) )
 DEFINE_UNICOWS_THUNK( user32, int, WINAPI, wvsprintfW, (LPWSTR,LPCWSTR,va_list arglist) )
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

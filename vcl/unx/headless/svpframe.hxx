@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,5 +125,8 @@ public:
 
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
+    virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
 };
 #endif // _SVP_SVPFRAME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

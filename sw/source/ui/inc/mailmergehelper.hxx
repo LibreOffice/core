@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,8 @@
 #include <vcl/scrbar.hxx>
 #include "swdllapi.h"
 
-
 class SwMailMergeConfigItem;
+
 namespace com{ namespace sun{ namespace star{
     namespace uno{
         class XComponentContext;
@@ -56,9 +57,7 @@ namespace com{ namespace sun{ namespace star{
         class XMailService;
     }
 }}}
-/*-- 14.06.2004 12:27:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 namespace SwMailMergeHelper
 {
     SW_DLLPUBLIC String  CallSaveAsDialog(String& rFilter);
@@ -70,9 +69,7 @@ namespace SwMailMergeHelper
                             const String& rOutMailServerPassword,
                             Window* pDialogParentWindow = 0 );
 }
-/* -----------------06.04.2004 10:29-----------------
 
- --------------------------------------------------*/
 class SW_DLLPUBLIC SwBoldFixedInfo : public FixedInfo
 {
 public:
@@ -156,6 +153,7 @@ struct SwMergeAddressItem
         bIsColumn(false),
         bIsReturn(false) {}
 };
+
 class SW_DLLPUBLIC   SwAddressIterator
 {
     String sAddress;
@@ -167,9 +165,6 @@ public:
     bool                HasMore() const{return sAddress.Len() > 0;}
 };
 
-/*-- 21.05.2004 10:31:15---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwAuthenticator :
     public cppu::WeakImplHelper1< ::com::sun::star::mail::XAuthenticator>
 {
@@ -189,9 +184,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
 
 };
-/*-- 25.08.2004 12:48:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwConnectionContext :
     public cppu::WeakImplHelper1< ::com::sun::star::uno::XCurrentContext >
 {
@@ -206,17 +199,13 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL     getValueByName( const ::rtl::OUString& Name )
                                                             throw (::com::sun::star::uno::RuntimeException);
 };
-/*-- 21.05.2004 10:39:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMutexBase
 {
 public:
     osl::Mutex m_aMutex;
 };
-/*-- 21.05.2004 10:39:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwConnectionListener :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener >
@@ -239,9 +228,6 @@ public:
         throw(com::sun::star::uno::RuntimeException);
 };
 
-/*-- 13.07.2004 09:02:12---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwMailTransferable :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper2
@@ -281,9 +267,6 @@ class SwMailTransferable :
 
 };
 
-/*-- 22.06.2004 16:38:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwMailMessage :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XMailMessage >
@@ -338,12 +321,11 @@ public:
     void                                SetSenderAddress(const ::rtl::OUString& rSenderAddress)
                                                 {m_sSenderAddress = rSenderAddress;}
 };
-/*-- 21.05.2004 10:17:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SW_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
         getCurrentCmpCtx(
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory> rSrvMgr);
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

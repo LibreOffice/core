@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //.........................................................................
 namespace frm
@@ -517,7 +518,7 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
             if ( !approveAction() )
                 return;
 
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             dispatch( nFeatureId );
             return;
         }
@@ -778,3 +779,4 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

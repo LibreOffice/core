@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,7 +120,6 @@
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
-
 //Fuer die Erkennung der Id, die variable von Gallery mit SID_GALLERY_BG_BRUSH
 //ankommt.
 static BYTE nParagraphPos;
@@ -155,7 +155,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-
 SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxIMapDlgChildWindow::GetChildWindowId());
@@ -167,8 +166,6 @@ TYPEINIT1(SwBaseShell,SfxShell)
 /*--------------------------------------------------------------------
     Beschreibung:   statics
  --------------------------------------------------------------------*/
-
-
 void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
     Graphic aGrf( rSh.GetIMapGraphic() );
@@ -193,7 +190,6 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     delete pList;
 }
 
-
 BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 {
     Graphic aGraf( rSh.GetIMapGraphic() );
@@ -215,7 +211,6 @@ BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 /*--------------------------------------------------------------------
     Beschreibung:   loeschen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -255,7 +250,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLeft();
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
             return;
     }
     rReq.Done();
@@ -263,10 +258,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     //#i42732# - notify the edit window that from now on we do not use the input language
     rTmpEditWin.SetUseInputLanguage( sal_False );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
@@ -423,7 +414,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
             return;
     }
     if(!bIgnore)
@@ -433,7 +424,6 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   ClipBoard-Status
  --------------------------------------------------------------------*/
-
 void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -490,7 +480,6 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -522,7 +511,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             rSh.Do( SwWrtShell::REPEAT );
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_ENSURE(false, "wrong Dispatcher");
     }
 
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
@@ -531,7 +520,6 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
-
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -599,7 +587,6 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Slot-Id auswerten bzw. Dispatchen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::Execute(SfxRequest &rReq)
 {
     const SfxPoolItem *pItem;
@@ -872,11 +859,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
                             GetView(),DLG_CONV_TEXT_TABLE , bToTable);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
@@ -1171,7 +1158,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     static_cast<const SfxBoolItem*>( pItem )->GetValue();
 
                 // set form design mode
-                DBG_ASSERT( GetView().GetFormShell() != NULL, "form shell?" );
+                OSL_ENSURE( GetView().GetFormShell() != NULL, "form shell?" );
                 SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
                 aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
                 GetView().GetFormShell()->Execute( aReq );
@@ -1230,7 +1217,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_PAGE_STYLE_SET_PAPER_SIZE:
         case FN_PAGE_STYLE_SET_PAPER_BIN:
         {
-            DBG_ERROR("not implemented");
+            OSL_ENSURE(false, "not implemented");
         }
         break;
 
@@ -1257,7 +1244,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-                DBG_ERROR("falscher Dispatcher");
+                OSL_ENSURE(false, "wrong Dispatcher");
         }
 
     }
@@ -1809,8 +1796,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
-
 void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -1826,8 +1811,6 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
-
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
     BOOL bParentCntProt = GetShell().IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
@@ -1851,11 +1834,6 @@ void SwBaseShell::StateStyle( SfxItemSet &rSet )
     else
         GetView().GetDocShell()->StateStyleSheet(rSet, &GetShell());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBaseShell::SetWrapMode( USHORT nSlot )
 {
@@ -1948,7 +1926,6 @@ void SwBaseShell::SetWrapMode( USHORT nSlot )
 /*--------------------------------------------------------------------
     Beschreibung:   Update der Statuszeile erzwingen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 {
     eFrameMode = eMode;
@@ -1975,7 +1952,6 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor
  --------------------------------------------------------------------*/
-
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),
@@ -1988,7 +1964,6 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 
-
 SwBaseShell::~SwBaseShell()
 {
     if( rView.GetCurShell() == this )
@@ -1998,10 +1973,6 @@ SwBaseShell::~SwBaseShell()
     if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
         rView.GetWrtShell().SetGrfArrivedLnk( Link() );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 {
@@ -2128,10 +2099,6 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
@@ -2218,10 +2185,6 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
     delete pFntCoreSet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::GetBckColState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -2278,10 +2241,6 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 {
@@ -2351,7 +2310,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         default:
 //          bMsgOk = FALSE;
             rReq.Ignore();
-            DBG_ERROR( "Unbekannte Message bei ExecuteAttr!" );
+            OSL_ENSURE(false, "unknown message in ExecuteAttr!" );
             return;
     }
 
@@ -2387,11 +2346,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -2423,11 +2377,6 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_BORDER_REDUCED_MODE, !bTableMode ));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -2445,6 +2394,14 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
     switch ( nSlot )
     {
+        case FN_FORMAT_TITLEPAGE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact->CreateTitlePageDlg( pMDI );
+            pDlg->Execute();
+            delete pDlg;
+        }
+        break;
         case FN_FORMAT_PAGE_COLUMN_DLG:
         case FN_FORMAT_PAGE_DLG:
         {
@@ -2476,10 +2433,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2493,10 +2450,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2511,10 +2468,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2536,7 +2493,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
             SfxAbstractDialog * pDlg = 0;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
 
             // Tabellenzelle(n) selektiert?
@@ -2548,7 +2505,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2567,7 +2524,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrmAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
@@ -2582,7 +2539,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2598,28 +2555,21 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
         }
         break;
-        default:DBG_ERROR("falscher Dispatcher (basesh.cxx)");
+        default:OSL_ENSURE(false, "wrong Dispatcher (basesh.cxx)");
     }
     if(!bDone)
         rReq.Done();
 }
-
-// ----------------------------------------------------------------------------
-
 
 SwWrtShell& SwBaseShell::GetShell()
 {
     return rView.GetWrtShell();
 }
 
-// ----------------------------------------------------------------------------
-
 SwWrtShell* SwBaseShell::GetShellPtr()
 {
     return rView.GetWrtShellPtr();
 }
-
-// ----------------------------------------------------------------------------
 
 void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 {
@@ -2699,9 +2649,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             if( !nCols || !nRows )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( DLG_INSERT_TABLE, rTempView );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
@@ -2756,8 +2706,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
         }
     }
 }
-
-// ----------------------------------------------------------------------------
 
 void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
 {
@@ -2839,7 +2787,6 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
     }
 }
 
-
 void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -2908,16 +2855,17 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView(), DLG_CHANGE_DB );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
         break;
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            OSL_ENSURE(false, "wrong dispatcher");
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

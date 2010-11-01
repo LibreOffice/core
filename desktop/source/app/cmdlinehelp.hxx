@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -19,3 +20,5 @@ namespace desktop
     };
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

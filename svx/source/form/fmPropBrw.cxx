@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
+#include <sal/macros.h>
 
 #include "fmhelp.hrc"
 #include "fmprop.hrc"
@@ -306,7 +309,7 @@ FmPropBrw::~FmPropBrw()
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ) };
-            for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
+            for ( size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i )
                 xName->removeByName( pProps[i] );
         }
     }
@@ -593,7 +596,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ), makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
-        ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+        ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
         xOwnContext ) );
 
     bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
@@ -720,3 +723,5 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     }
     m_bInStateChange = false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

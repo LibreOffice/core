@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <ooo/vba/word/XFont.hpp>
+#include <ooo/vba/word/XListTemplate.hpp>
 
 
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XStyle > SwVbaStyle_BASE;
@@ -40,13 +42,14 @@ typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XStyle > SwVbaStyle_BASE;
 class SwVbaStyle : public SwVbaStyle_BASE
 {
 private:
+    css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxStyleProps;
     css::uno::Reference< css::style::XStyle > mxStyle;
 public:
-    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     virtual ~SwVbaStyle(){}
 
-    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, const css::uno::Reference< ooo::vba::word::XStyle >& xStyle ) throw (css::uno::RuntimeException);
+    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle ) throw (css::uno::RuntimeException);
     static rtl::OUString getOOoStyleTypeFromMSWord( sal_Int32 _wdStyleType );
     static sal_Int32 getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps ) throw (css::uno::RuntimeException);
     static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, sal_Int32 _languageid ) throw (css::uno::RuntimeException);
@@ -58,6 +61,20 @@ public:
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL LinkToListTemplate( const css::uno::Reference< ooo::vba::word::XListTemplate >& ListTemplate, const css::uno::Any& ListLevelNumber ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setNameLocal( const ::rtl::OUString& _namelocal ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getAutomaticallyUpdate() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAutomaticallyUpdate( ::sal_Bool _automaticallyupdate ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getBaseStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setBaseStyle( const css::uno::Any& _basestyle ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getNextParagraphStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setNextParagraphStyle( const css::uno::Any& _nextparagraphstyle ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getListLevelNumber() throw (css::uno::RuntimeException);
+
+    //XDefaultProperty
+    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")); }
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
@@ -65,3 +82,5 @@ public:
 };
 
 #endif //SW_VBA_AXIS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

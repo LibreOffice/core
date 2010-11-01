@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -165,3 +166,5 @@ css::uno::Reference< css::uno::XInterface > MyListener::st_createInstance(const 
     css::uno::Reference< css::uno::XInterface > xListener(static_cast< css::task::XJob* >(pListener), css::uno::UNO_QUERY);
     return xListener;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

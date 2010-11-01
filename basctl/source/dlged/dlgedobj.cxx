@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,8 +193,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     }
 
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->PixelToLogic( aSize, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->PixelToLogic( aPos, MAP_APPFONT );
+    aSize = pDevice->PixelToLogic( aSize, MAP_APPFONT );
 
     // set out parameters
     nXOut = aPos.Width();
@@ -240,10 +241,9 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
         aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
         aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
     }
-
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->PixelToLogic( aSize, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->PixelToLogic( aPos, MAP_APPFONT );
+    aSize = pDevice->PixelToLogic( aSize, MAP_APPFONT );
 
     // set out parameters
     nXOut = aPos.Width();
@@ -285,9 +285,9 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformControlToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
-    aFormPos = pDevice->LogicToPixel( aFormPos, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->LogicToPixel( aPos, MAP_APPFONT );
+    aSize = pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    aFormPos = pDevice->LogicToPixel( aFormPos, MAP_APPFONT );
 
     // add form position
     aPos.Width() += aFormPos.Width();
@@ -331,13 +331,14 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformFormToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
 
     // take window borders into account
     DlgEdForm* pForm = NULL;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
+
+    aPos = pDevice->LogicToPixel( aPos, MAP_APPFONT );
+    aSize = pDevice->LogicToPixel( aSize, MAP_APPFONT );
 
     // take window borders into account
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
@@ -1049,9 +1050,9 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
 
 //----------------------------------------------------------------------------
 
-FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     SetDefaults();
     StartListening();
@@ -1825,9 +1826,9 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
 
 //----------------------------------------------------------------------------
 
-FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     // stop listening
     EndListening(sal_False);
@@ -1892,3 +1893,4 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
 //----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

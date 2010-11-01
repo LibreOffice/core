@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -445,7 +446,7 @@ namespace
 //------------------------------------------------------------------------
 void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !m_pModel )
         return;
@@ -495,7 +496,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
 //------------------------------------------------------------------------
 void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
     Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
@@ -530,7 +531,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
 //------------------------------------------------------------------------
 void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
     Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
@@ -2083,3 +2084,5 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _
 //........................................................................
 }   // namespace svxform
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

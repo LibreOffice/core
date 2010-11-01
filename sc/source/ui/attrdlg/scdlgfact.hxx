@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@ class ScDataPilotDatabaseDlg;
 class ScDataPilotSourceTypeDlg;
 class ScDataPilotServiceDlg;
 class ScDeleteCellDlg;
+class ScDataFormDlg;
 class ScDeleteContentsDlg;
 class ScFillSeriesDlg;
 class ScGroupDlg;
@@ -161,6 +163,12 @@ class AbstractScDeleteCellDlg_Impl : public AbstractScDeleteCellDlg  //add for S
 {
     DECL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl,ScDeleteCellDlg)
     virtual DelCellCmd GetDelCellCmd() const;
+};
+
+//for dataform
+class AbstractScDataFormDlg_Impl : public AbstractScDataFormDlg  //add for ScDataFormDlg
+{
+    DECL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl,ScDataFormDlg);
 };
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg  //add for ScDeleteContentsDlg
@@ -424,6 +432,9 @@ public:
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId,
                                                             BOOL bDisallowCellMove = FALSE ); //add for ScDeleteCellDlg
 
+    //for dataform
+    virtual AbstractScDataFormDlg * CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell*      pTabViewShell); //add for ScDeleteCellDlg
+
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
                                                                  USHORT  nCheckDefaults = 0 );
 
@@ -580,3 +591,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #ifndef APPLICAT_HXX
 #define APPLICAT_HXX
 
@@ -33,23 +33,10 @@ class SvxErrorHandler;
 
 #include <sfx2/app.hxx>
 
-/**************************************************************************/
-/*
-**
-**  MACRO DEFINITION
-**
-**/
 
-#define SMDLL   1
+#define SMDLL           1
+#define APPLICATIONNAME     "smath3"
 
-#define APPLICATIONNAME      "smath3"
-
-/**************************************************************************/
-/*
-**
-**  CLASS DEFINITION
-**
-**/
 
 #ifdef WIN
 #define RELEASE     "WIN304"
@@ -88,10 +75,10 @@ class SmApplicat: public SfxApplication
 protected:
     SvxErrorHandler     *pSvxErrorHandler;
 
-    virtual void        OpenClients();
+    virtual void    OpenClients();
 
     // initialization / deinitialization
-    virtual void        Init();
+    virtual void    Init();
     virtual void        Exit();
 
 public:
@@ -105,5 +92,7 @@ public:
 };
 
 #endif
+
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

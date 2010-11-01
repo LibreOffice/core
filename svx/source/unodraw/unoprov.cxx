@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
+
 #define _SVX_USE_UNOGLOBALS_
 
 #include <com/sun/star/table/XTable.hpp>
@@ -42,7 +45,7 @@
 #include <hash_map>
 #include <vcl/fldunit.hxx>
 #include <tools/shl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>
@@ -645,6 +648,9 @@ SfxItemPropertyMapEntry* ImplGetSvxControlShapePropertyMap()
         // #i68101#
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
+        // #i112587#
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
+        { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
         {0,0,0,0,0,0}
 
     };
@@ -875,7 +881,7 @@ namespace {
               { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"),    E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
               { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"),    E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
           };
-          for (sal_uInt32 i = 0; i < sizeof(aInit)/sizeof(aInit[0]); i++)
+          for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aInit); i++)
               aImpl[rtl::OUString( aInit[i].name, aInit[i].length, RTL_TEXTENCODING_ASCII_US ) ] = aInit[i].id;
           bInited = true;
         }
@@ -1413,7 +1419,7 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( nServiceId > SVXUNO_SERVICEID_LASTID )
     {
@@ -1448,3 +1454,4 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { NULL };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

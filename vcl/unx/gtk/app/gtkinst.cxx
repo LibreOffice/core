@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ void GtkHookedYieldMutex::ThreadsLeave()
 
 #if OSL_DEBUG_LEVEL > 1
     if( mnThreadId &&
-        mnThreadId != NAMESPACE_VOS(OThread)::getCurrentIdentifier())
+        mnThreadId != osl::Thread::getCurrentIdentifier())
         fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
 #endif
 
@@ -242,32 +243,32 @@ GtkYieldMutex::GtkYieldMutex()
 
 void GtkYieldMutex::acquire()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     if( mnCount > 0 && mnThreadId == aCurrentThread )
     {
         mnCount++;
-        OMutex::release();
+        SolarMutexObject::release();
         return;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 
     // obtain gdk mutex
     gdk_threads_enter();
 
     // obtained gdk mutex, now lock count is one by definition
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount = 1;
     mnThreadId = aCurrentThread;
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 void GtkYieldMutex::release()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     // strange things happen, do nothing if we don't own the mutex
     if( mnThreadId == aCurrentThread )
     {
@@ -278,29 +279,29 @@ void GtkYieldMutex::release()
             mnThreadId = 0;
         }
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool GtkYieldMutex::tryToAcquire()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     if( mnCount > 0 )
     {
         if( mnThreadId == aCurrentThread )
         {
             mnCount++;
-            OMutex::release();
+            SolarMutexObject::release();
             return sal_True;
         }
         else
         {
-            OMutex::release();
+            SolarMutexObject::release();
             return sal_False;
         }
     }
-    OMutex::release();
+    SolarMutexObject::release();
 
     // HACK: gdk_threads_mutex is private, we shouldn't use it.
     // how to we do a try_lock without having a gdk_threads_try_enter ?
@@ -308,10 +309,10 @@ sal_Bool GtkYieldMutex::tryToAcquire()
         return sal_False;
 
     // obtained gdk mutex, now lock count is one by definition
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount = 1;
     mnThreadId = aCurrentThread;
-    OMutex::release();
+    SolarMutexObject::release();
 
     return sal_True;
 }
@@ -324,19 +325,19 @@ int GtkYieldMutex::Grab()
     // is now locked again by gtk implicitly
 
     // obtained gdk mutex, now lock count is one by definition
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     int nRet = mnCount;
     if( mnCount == 0 ) // recursive else
-        mnThreadId = vos::OThread::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
 #if OSL_DEBUG_LEVEL > 1
-    else if( mnThreadId != vos::OThread::getCurrentIdentifier() )
+    else if( mnThreadId != osl::Thread::getCurrentIdentifier() )
     {
         fprintf( stderr, "Yield mutex grabbed in different thread !\n" );
         abort();
     }
 #endif
     mnCount = 1;
-    OMutex::release();
+    SolarMutexObject::release();
     return nRet;
 }
 
@@ -344,9 +345,11 @@ void GtkYieldMutex::Ungrab( int nGrabs )
 {
     // this MUST only be called when leaving the callback
     // that locked the mutex with Grab()
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount = nGrabs;
     if( mnCount == 0 )
         mnThreadId = 0;
-    OMutex::release();
+    SolarMutexObject::release();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

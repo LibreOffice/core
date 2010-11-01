@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@
 #include <txtftn.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -77,7 +78,16 @@
 #include <unorefmark.hxx>
 #include <unometa.hxx>
 #include "docsh.hxx"
-
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <vbahelper/vbaaccesshelper.hxx>
+#include <basic/basmgr.hxx>
+#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -87,9 +97,186 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-/******************************************************************************
- *
- ******************************************************************************/
+using rtl::OUString;
+
+class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
+{
+    SwDocShell* mpDocShell;
+    rtl::OUString msThisDocumentCodeName;
+public:
+    SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
+        // XCodeNameQuery
+    rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
+    {
+        // Initialise the code name
+        if ( msThisDocumentCodeName.getLength() == 0 )
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+        rtl::OUString sProjectName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") ) );
+                if ( mpDocShell->GetBasicManager()->GetName().Len() )
+                    sProjectName =  mpDocShell->GetBasicManager()->GetName();
+
+                uno::Reference< container::XNameAccess > xLib( xLibContainer->getByName( sProjectName ), uno::UNO_QUERY_THROW );
+                uno::Sequence< rtl::OUString > sModuleNames = xLib->getElementNames();
+                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+
+                for ( sal_Int32 i=0; i < sModuleNames.getLength(); ++i )
+                {
+                    script::ModuleInfo mInfo;
+
+                    if ( xVBAModuleInfo->hasModuleInfo( sModuleNames[ i ] ) &&  xVBAModuleInfo->getModuleInfo( sModuleNames[ i ] ).ModuleType == script::ModuleType::DOCUMENT )
+                    {
+                        msThisDocumentCodeName = sModuleNames[ i ];
+                        break;
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+        rtl::OUString sCodeName;
+        if ( mpDocShell )
+        {
+            OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
+            // need to find the page ( and index )  for this control
+            uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
+            sal_Int32 nLen = xIndex->getCount();
+            bool bMatched = false;
+            uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
+                try
+                {
+                    uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+                    // get the www-standard container
+                    uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+                    sal_Int32 nCntrls = xFormControls->getCount();
+                    for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+                    {
+                        uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                        bMatched = ( xControl == xIf );
+                        if ( bMatched )
+                        {
+                            sCodeName = msThisDocumentCodeName;
+                            break;
+                        }
+                    }
+                }
+                catch( uno::Exception& ) {}
+        }
+        // Probably should throw here ( if !bMatched )
+        return sCodeName;
+    }
+};
+
+typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
+class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
+{
+    SwDocShell* mpDocShell;
+    StringHashMap mTemplateToProject;
+public:
+    SwVbaProjectNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
+    {
+    }
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    {
+        return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
+    }
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    {
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        return uno::makeAny( mTemplateToProject.find( aName )->second );
+    }
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        uno::Sequence< rtl::OUString > aElements( mTemplateToProject.size() );
+        StringHashMap::iterator it_end = mTemplateToProject.end();
+        sal_Int32 index = 0;
+        for ( StringHashMap::iterator it = mTemplateToProject.begin(); it != it_end; ++it, ++index )
+            aElements[ index ] = it->first;
+        return aElements;
+    }
+
+    virtual void SAL_CALL insertByName( const rtl::OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException )
+    {
+
+        rtl::OUString sProjectName;
+        aElement >>= sProjectName;
+        OSL_TRACE("** Template cache inserting template name %s with project %s"
+            , rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr()
+            , rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        mTemplateToProject[ aName ] = sProjectName;
+    }
+
+    virtual void SAL_CALL removeByName( const rtl::OUString& Name ) throw ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
+    {
+        if ( !hasByName( Name ) )
+            throw container::NoSuchElementException();
+        mTemplateToProject.erase( Name );
+    }
+    virtual void SAL_CALL replaceByName( const rtl::OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
+    {
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        insertByName( aName, aElement ); // insert will overwrite
+    }
+    // XElemenAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return ::getCppuType((const rtl::OUString*)0);
+    }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException )
+    {
+
+        return ( mTemplateToProject.size() > 0 );
+    }
+
+};
+
+class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
+{
+    SwDocShell* mpDocShell;
+public:
+    SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
+    {
+        // #FIXME #TODO is the code name for ThisDocument read anywhere?
+    }
+
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    {
+        // #FIXME #TODO we really need to be checking against the codename for
+        // ThisDocument
+        if ( aName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisDocument" ) ) ) )
+            return sal_True;
+        return sal_False;
+    }
+    ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    {
+        if ( !hasByName( aName ) )
+             throw container::NoSuchElementException();
+    uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[0] = uno::Any( uno::Reference< uno::XInterface >() );
+        aArgs[1] = uno::Any( mpDocShell->GetModel() );
+        uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
+        OSL_TRACE("Creating Object ( ooo.vba.word.Document ) 0x%x", xDocObj.get() );
+        return  uno::makeAny( xDocObj );
+    }
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        uno::Sequence< rtl::OUString > aNames;
+        return aNames;
+    }
+    // XElemenAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException){ return uno::Type(); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException ) { return sal_True; }
+
+};
+
 struct  ProvNamesId_Type
 {
     const char *    pName;
@@ -209,6 +396,10 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.Fieldmark",                          SW_SERVICE_TYPE_FIELDMARK },
     { "com.sun.star.text.FormFieldmark",                      SW_SERVICE_TYPE_FORMFIELDMARK },
     { "com.sun.star.text.InContentMetadata",                  SW_SERVICE_TYPE_META },
+    { "ooo.vba.VBAObjectModuleObjectProvider",                SW_SERVICE_VBAOBJECTPROVIDER },
+    { "ooo.vba.VBACodeNameProvider",                          SW_SERVICE_VBACODENAMEPROVIDER },
+    { "ooo.vba.VBAProjectNameProvider",                       SW_SERVICE_VBAPROJECTNAMEPROVIDER },
+    { "ooo.vba.VBAGlobals",                       SW_SERVICE_VBAGLOBALS },
 
     // case-correct versions of the service names (see #i67811)
     { CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME },
@@ -270,9 +461,6 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY }
 };
 
-/* -----------------------------23.03.01 13:38--------------------------------
-
- ---------------------------------------------------------------------------*/
 const SvEventDescription* lcl_GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -288,24 +476,19 @@ const SvEventDescription* lcl_GetSupportedMacroItems()
 /******************************************************************
  * SwXServiceProvider
  ******************************************************************/
-/*-- 13.01.99 13:31:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OUString sRet;
-    sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     if(nObjectType < nEntries)
         sRet = C2U(aProvNamesId[nObjectType].pName);
     return sRet;
 }
-/* -----------------11.03.99 12:05-------------------
- *
- * --------------------------------------------------*/
+
 uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 {
-    sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     sal_uInt16 n = 0;
@@ -323,12 +506,9 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 
 }
 
-/*-- 13.01.99 13:31:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 {
-    sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     for(sal_uInt16 i = 0; i < nEntries; i++ )
     {
         if( COMPARE_EQUAL == rServiceName.compareToAscii(aProvNamesId[i].pName))
@@ -336,12 +516,10 @@ sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
     }
     return SW_SERVICE_INVALID;
 }
-/* -----------------13.01.99 14:37-------------------
- *
- * --------------------------------------------------*/
+
 uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc* pDoc)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< uno::XInterface >  xRet;
     switch(nObjectType)
     {
@@ -389,6 +567,50 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet =  (cppu::OWeakObject*)pFieldmark;
         }
         break;
+        case  SW_SERVICE_VBAOBJECTPROVIDER :
+        {
+            SwVbaObjectForCodeNameProvider* pObjProv = new SwVbaObjectForCodeNameProvider( pDoc->GetDocShell() );
+            xRet =  (cppu::OWeakObject*)pObjProv;
+        }
+        break;
+        case  SW_SERVICE_VBACODENAMEPROVIDER :
+        {
+            if ( pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
+            {
+                SwVbaCodeNameProvider* pObjProv = new SwVbaCodeNameProvider( pDoc->GetDocShell() );
+                xRet =  (cppu::OWeakObject*)pObjProv;
+            }
+        }
+        break;
+        case  SW_SERVICE_VBAPROJECTNAMEPROVIDER :
+        {
+                        uno::Reference< container::XNameContainer > xProjProv = pDoc->GetVBATemplateToProjectCache();
+                        if ( !xProjProv.is() && pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
+                        {
+                xProjProv = new SwVbaProjectNameProvider( pDoc->GetDocShell() );
+                            pDoc->SetVBATemplateToProjectCache( xProjProv );
+                        }
+            //xRet =  (cppu::OWeakObject*)xProjProv;
+            xRet = xProjProv;
+        }
+        break;
+        case  SW_SERVICE_VBAGLOBALS :
+        {
+            if ( pDoc )
+            {
+                uno::Any aGlobs;
+                if ( !pDoc->GetDocShell()->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
+                {
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals")), aArgs );
+                    pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                }
+                aGlobs >>= xRet;
+            }
+        }
+        break;
+
         case  SW_SERVICE_TYPE_FOOTNOTE :
             xRet =  (cppu::OWeakObject*)new SwXFootnote(sal_False);
         break;
@@ -618,44 +840,35 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
     }
     return xRet;
 }
+
 /******************************************************************
  * SwXTextTables
  ******************************************************************/
 //SMART_UNO_IMPLEMENTATION( SwXTextTables, UsrObject );
-
-/*-- 13.01.99 12:56:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextTables::SwXTextTables(SwDoc* pDc) :
         SwUnoCollection(pDc)
 {
 
 }
-/*-- 13.01.99 12:56:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextTables::~SwXTextTables()
 {
 
 }
-/*-- 13.01.99 12:56:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SwXTextTables::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;
     if(IsValid())
         nRet = GetDoc()->GetTblFrmFmtCount(sal_True);
     return nRet;
 }
-/*-- 13.01.99 12:56:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
         throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -673,13 +886,11 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     return aRet;
 }
-/*-- 13.01.99 12:56:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXTextTables::getByName(const OUString& rItemName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -704,13 +915,11 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
         throw uno::RuntimeException();
     return aRet;
 }
-/*-- 13.01.99 12:56:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SwXTextTables::getElementNames(void)
         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(sal_True);
@@ -727,13 +936,11 @@ uno::Sequence< OUString > SwXTextTables::getElementNames(void)
     }
     return aSeq;
 }
-/*-- 13.01.99 12:56:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextTables::hasByName(const OUString& rName)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bRet= sal_False;
     if(IsValid())
     {
@@ -753,42 +960,32 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
         throw uno::RuntimeException();
     return bRet;
 }
-/*-- 13.01.99 12:56:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL
     SwXTextTables::getElementType(  )
         throw(uno::RuntimeException)
 {
     return ::getCppuType((uno::Reference<XTextTable>*)0);
 }
-/*-- 13.01.99 12:56:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetTblFrmFmtCount(sal_True);
 }
-/* -----------------25.10.99 16:01-------------------
 
- --------------------------------------------------*/
 OUString SwXTextTables::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXTextTables");
 }
-/* -----------------25.10.99 16:01-------------------
 
- --------------------------------------------------*/
 sal_Bool SwXTextTables::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return rServiceName == C2U("com.sun.star.text.TextTables");
 }
-/* -----------------25.10.99 16:01-------------------
 
- --------------------------------------------------*/
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
@@ -796,19 +993,16 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( u
     pArr[0] = C2U("com.sun.star.text.TextTables");
     return aRet;
 }
-/*-- 13.01.99 12:56:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXTextTable* pTbl = (SwXTextTable*)SwClientIter( rFmt ).
                                     First( TYPE( SwXTextTable ));
     if( !pTbl )
         pTbl = new SwXTextTable(rFmt);
     return pTbl ;
 }
-
 
 /******************************************************************
  *  SwXFrameEnumeration
@@ -895,7 +1089,7 @@ template<FlyCntType T>
 SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     : m_aFrames()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SwSpzFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
     if(!pFmts->Count())
         return;
@@ -927,14 +1121,14 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
 template<FlyCntType T>
 sal_Bool SwXFrameEnumeration<T>::hasMoreElements(void) throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return !m_aFrames.empty();
 }
 
 template<FlyCntType T>
 Any SwXFrameEnumeration<T>::nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(m_aFrames.empty())
         throw NoSuchElementException();
     Any aResult = *m_aFrames.begin();
@@ -988,7 +1182,7 @@ SwXFrames::~SwXFrames()
 
 uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     switch(eType)
@@ -1009,7 +1203,7 @@ uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw
 
 sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFlyCount(eType);
@@ -1018,7 +1212,7 @@ sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException)
 uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     throw(IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     if(nIndex < 0 || nIndex >= USHRT_MAX)
@@ -1032,7 +1226,7 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
 uno::Any SwXFrames::getByName(const OUString& rName)
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwFrmFmt* pFmt;
@@ -1055,7 +1249,7 @@ uno::Any SwXFrames::getByName(const OUString& rName)
 
 uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const Reference<XEnumeration> xEnum = createEnumeration();
@@ -1072,7 +1266,7 @@ uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeExce
 
 sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     switch(eType)
@@ -1088,7 +1282,7 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
 
 uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     switch(eType)
     {
         case FLYCNTTYPE_FRM:
@@ -1104,7 +1298,7 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 
 sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFlyCount(eType) > 0;
@@ -1130,23 +1324,16 @@ SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
 /******************************************************************
  * SwXTextFrames
  ******************************************************************/
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextFrames");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextFrames::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1154,16 +1341,12 @@ Sequence< OUString > SwXTextFrames::getSupportedServiceNames(void) throw( Runtim
     pArray[0] = C2U("com.sun.star.text.TextFrames");
     return aRet;
 }
-/*-- 14.01.99 08:06:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextFrames::SwXTextFrames(SwDoc* _pDoc) :
     SwXFrames(_pDoc, FLYCNTTYPE_FRM)
 {
 }
-/*-- 14.01.99 08:06:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextFrames::~SwXTextFrames()
 {
 }
@@ -1172,24 +1355,16 @@ SwXTextFrames::~SwXTextFrames()
  *  SwXTextGraphicObjects
  ******************************************************************/
 //SMART_UNO_IMPLEMENTATION( SwXTextGraphicObjects, UsrObject );
-
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextGraphicObjects");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextGraphicObjects") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1197,16 +1372,12 @@ Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames(void) throw
     pArray[0] = C2U("com.sun.star.text.TextGraphicObjects");
     return aRet;
 }
-/*-- 14.01.99 08:45:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextGraphicObjects::SwXTextGraphicObjects(SwDoc* _pDoc) :
     SwXFrames(_pDoc, FLYCNTTYPE_GRF)
 {
 }
-/*-- 14.01.99 08:45:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextGraphicObjects::~SwXTextGraphicObjects()
 {
 }
@@ -1214,23 +1385,16 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 /******************************************************************
  *  SwXTextEmbeddedObjects
  ******************************************************************/
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextEmbeddedObjects");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextEmbeddedObjects") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1238,41 +1402,28 @@ Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames(void) thro
     pArray[0] = C2U("com.sun.star.text.TextEmbeddedObjects");
     return aRet;
 }
-/*-- 14.01.99 08:45:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextEmbeddedObjects::SwXTextEmbeddedObjects(SwDoc* _pDoc) :
         SwXFrames(_pDoc, FLYCNTTYPE_OLE)
 {
 }
-/*-- 14.01.99 08:45:31---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 {
 }
 
-/******************************************************************
- *
- ******************************************************************/
 #define PASSWORD_STD_TIMEOUT 1000
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextSections");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextSections") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1280,25 +1431,19 @@ Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( Runt
     pArray[0] = C2U("com.sun.star.text.TextSections");
     return aRet;
 }
-/*-- 14.01.99 09:06:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextSections::SwXTextSections(SwDoc* _pDoc) :
     SwUnoCollection(_pDoc)
 {
 }
-/*-- 14.01.99 09:06:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextSections::~SwXTextSections()
 {
 }
-/*-- 14.01.99 09:06:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
@@ -1310,13 +1455,11 @@ sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
     }
     return nCount;
 }
-/*-- 14.01.99 09:06:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< XTextSection >  xRet;
     if(IsValid())
     {
@@ -1345,13 +1488,11 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     return makeAny(xRet);
 }
-/*-- 14.01.99 09:06:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXTextSections::getByName(const OUString& Name)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -1376,13 +1517,11 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
         throw uno::RuntimeException();
     return aRet;
 }
-/*-- 14.01.99 09:06:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     sal_uInt16 nCount = GetDoc()->GetSections().Count();
@@ -1411,13 +1550,11 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     }
     return aSeq;
 }
-/*-- 14.01.99 09:06:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextSections::hasByName(const OUString& Name)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
     String aName(Name);
     if(IsValid())
@@ -1441,19 +1578,15 @@ sal_Bool SwXTextSections::hasByName(const OUString& Name)
     }
     return bRet;
 }
-/*-- 14.01.99 09:06:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL SwXTextSections::getElementType() throw(uno::RuntimeException)
 {
     return ::getCppuType((uno::Reference<XTextSection>*)0);
 }
-/*-- 14.01.99 09:06:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_uInt16 nCount = 0;
     if(IsValid())
     {
@@ -1464,9 +1597,7 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
         throw uno::RuntimeException();
     return nCount > 0;
 }
-/*-- 14.01.99 09:06:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 {
     return SwXTextSection::CreateXTextSection(&rFmt);
@@ -1474,18 +1605,18 @@ uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 
 OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
 {
-    return OUString::createFromAscii("SwXBookmarks");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXBookmarks"));
 }
 
 BOOL SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return OUString::createFromAscii("com.sun.star.text.Bookmarks") == rServiceName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks")) == rServiceName;
 }
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.text.Bookmarks");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks"));
     return aRet;
 }
 
@@ -1499,7 +1630,7 @@ SwXBookmarks::~SwXBookmarks()
 sal_Int32 SwXBookmarks::getCount(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->getIDocumentMarkAccess()->getMarksCount();
@@ -1508,7 +1639,7 @@ sal_Int32 SwXBookmarks::getCount(void)
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
@@ -1526,7 +1657,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
 uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -1545,7 +1676,7 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
 uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -1561,7 +1692,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
 sal_Bool SwXBookmarks::hasByName(const OUString& rName)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -1578,15 +1709,11 @@ uno::Type SAL_CALL SwXBookmarks::getElementType()
 sal_Bool SwXBookmarks::hasElements(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount() != 0;
 }
-
-/******************************************************************
- *
- ******************************************************************/
 
 SwXNumberingRulesCollection::SwXNumberingRulesCollection( SwDoc* _pDoc ) :
     SwUnoCollection(_pDoc)
@@ -1599,7 +1726,7 @@ SwXNumberingRulesCollection::~SwXNumberingRulesCollection()
 
 sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetNumRuleTbl().Count();
@@ -1608,7 +1735,7 @@ sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeExcepti
 uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -1634,29 +1761,22 @@ uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType() throw(uno::Runt
 
 sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetNumRuleTbl().Count() > 0;
 }
 
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXFootnotes");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.Footnotes") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1664,26 +1784,20 @@ Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( Runtime
     pArray[0] = C2U("com.sun.star.text.Footnotes");
     return aRet;
 }
-/*-- 14.01.99 09:03:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc)
     : SwUnoCollection(_pDoc)
     , m_bEndnote(bEnd)
 {
 }
-/*-- 14.01.99 09:03:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXFootnotes::~SwXFootnotes()
 {
 }
-/*-- 14.01.99 09:03:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     sal_Int32 nCount = 0;
@@ -1699,13 +1813,11 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
     }
     return nCount;
 }
-/*-- 14.01.99 09:03:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     sal_Int32 nCount = 0;
     if(IsValid())
@@ -1735,51 +1847,35 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     return aRet;
 }
-/*-- 14.01.99 09:03:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL SwXFootnotes::getElementType() throw(uno::RuntimeException)
 {
     return ::getCppuType((uno::Reference<XFootnote>*)0);
 }
-/*-- 14.01.99 09:03:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFtnIdxs().Count() > 0;
 }
-/* -----------------------------05.09.00 12:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
     return SwXFootnote::CreateXFootnote(rDoc, rFmt);
 }
 
-/******************************************************************
- *
- ******************************************************************/
-/* -----------------------------06.04.00 12:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXReferenceMarks");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.ReferenceMarks") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1787,36 +1883,28 @@ Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames(void) throw( Ru
     pArray[0] = C2U("com.sun.star.text.ReferenceMarks");
     return aRet;
 }
-/*-- 14.01.99 09:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXReferenceMarks::SwXReferenceMarks(SwDoc* _pDoc) :
     SwUnoCollection(_pDoc)
 {
 }
-/*-- 14.01.99 09:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXReferenceMarks::~SwXReferenceMarks()
 {
 }
-/*-- 14.01.99 09:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SwXReferenceMarks::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetRefMarks();
 }
-/*-- 14.01.99 09:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(!IsValid())
         throw uno::RuntimeException();
@@ -1834,13 +1922,11 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
         throw IndexOutOfBoundsException();
     return aRet;
 }
-/*-- 14.01.99 09:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXReferenceMarks::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -1857,12 +1943,10 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
         throw uno::RuntimeException();
     return aRet;
 }
-/*-- 14.01.99 09:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence<OUString> aRet;
     if(IsValid())
     {
@@ -1877,46 +1961,35 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
         throw uno::RuntimeException();
     return aRet;
 }
-/*-- 14.01.99 09:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXReferenceMarks::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetRefMark( rName);
 }
-/*-- 14.01.99 09:03:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL SwXReferenceMarks::getElementType() throw(uno::RuntimeException)
 {
     return ::getCppuType((uno::Reference<XTextContent>*)0);
 }
-/*-- 14.01.99 09:03:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetRefMarks();
 }
-/*-- 14.01.99 09:03:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
 
-/******************************************************************
- *
- ******************************************************************/
 /*-----------------11.03.98 11:18-------------------
     Gueltigkeitspruefung
 --------------------------------------------------*/
@@ -1926,3 +1999,4 @@ void SwUnoCollection::Invalidate()
     pDoc = 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "ndtxt.hxx"
 
 using ::rtl::OUString;
@@ -78,6 +79,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 using ::std::hash_map;
+using rtl::OUString;
 
 enum SwXMLTableElemTokens
 {
@@ -1314,7 +1316,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OUString sXmlId;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -2680,7 +2682,7 @@ void SwXMLTableContext::MakeTable()
     // this method will modify the document directly -> lock SolarMutex
     // This will call all other MakeTable*(..) methods, so
     // those don't need to be locked separately.
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // #i97274# handle invalid tables
     if (!pRows || !pRows->Count() || !GetColumnCount())
@@ -2949,3 +2951,5 @@ Reference < XTextContent > SwXMLTableContext::GetXTextContent() const
 {
     return xTextContent;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

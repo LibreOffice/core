@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>
 
@@ -342,7 +343,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // is this a request for a context menu?
         if ( _rEvent.PopupTrigger )
         {
@@ -1396,3 +1397,5 @@ namespace svx
 //........................................................................
 } // namespace svx
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,11 +171,9 @@ public:
                     CreateAccessible();
 };
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Sicht auf ein Dokument
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 {
     // ViewWindow und Henkel zur Core
@@ -327,11 +326,11 @@ public:
 };
 
 // ----------------- inline Methoden ----------------------
-
-
 inline void SwPagePreView::AdjustEditWin()
 {
     OuterResizePixel( Point(), GetFrameWindow()->GetOutputSizePixel() );
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

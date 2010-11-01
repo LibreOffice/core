@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,21 +30,16 @@
 #include <osl/thread.h>
 
 #include <osl/diagnose.h>
-//#include <osl/socket.h>
 
 #ifndef _OSL_FILE_PATH_HELPER_H_
 #include "file_path_helper.h"
 #endif
 
 #include "procimpl.h"
-//#include "sockimpl.h"
-//#include "secimpl.h"
 
 #include <ctype.h>
 
-//#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-//#endif
 
 // for exception logging
 #include <stdio.h>
@@ -146,27 +142,6 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     char szImagePath[PATH_MAX] = "";
     char szWorkDir[PATH_MAX] = "";
 
-#if 0
-    if (Options & osl_Process_SEARCHPATH)
-    {
-        const rtl::OUString PATH1;
-        OUString PATH (RTL_CONSTASCII_USTRINGPARAM("PATH"));
-
-        rtl_uString * pSearchPath = 0;
-        osl_getEnvironment (PATH.pData, &pSearchPath);
-        if (pSearchPath)
-        {
-            rtl_uString * pSearchResult = 0;
-            osl_searchPath (ustrImageName, pSearchPath, &pSearchResult);
-            if (pSearchResult)
-            {
-                rtl_uString_assign (ustrImageName, pSearchResult);
-                rtl_uString_release (pSearchResult);
-            }
-            rtl_uString_release (pSearchPath);
-        }
-    }
-#endif
 
     if ( ustrImageName && ustrImageName->length )
     {
@@ -1011,3 +986,5 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

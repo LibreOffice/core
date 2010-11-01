@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,11 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <ctype.h>
 #include <hintids.hxx>
 
+#include <sal/macros.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
@@ -145,7 +146,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     xub_StrLen nTokenStt = rName.Search( sNm );
     sNm.ToLowerAscii();
 
-    for (size_t n = 0; n < sizeof(aFldNmArr) / sizeof(aFldNmArr[0]); ++n)
+    for (size_t n = 0; n < SAL_N_ELEMENTS(aFldNmArr); ++n)
     {
         const sal_Char* pCmp = aFldNmArr[n].pFldNm;
         int nLen = *pCmp++;
@@ -1222,4 +1223,4 @@ INSINGLECHAR:
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

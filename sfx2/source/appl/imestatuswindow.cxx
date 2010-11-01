@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 namespace css = com::sun::star;
 
@@ -158,7 +159,7 @@ void SAL_CALL
 ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & )
     throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SfxApplication* pApp = SfxApplication::Get();
     if (pApp)
     pApp->Invalidate(SID_SHOW_IME_STATUS_WINDOW);
@@ -229,3 +230,4 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
     return xConfig;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

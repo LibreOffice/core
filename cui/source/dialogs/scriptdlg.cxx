@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /**********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <cuires.hrc>
 #include "scriptdlg.hrc"
@@ -1646,7 +1647,7 @@ SvxScriptErrorDialog::SvxScriptErrorDialog(
     Window* , ::com::sun::star::uno::Any aException )
     : m_sMessage()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_sMessage = GetErrorMessage( aException );
 }
 
@@ -1689,3 +1690,5 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

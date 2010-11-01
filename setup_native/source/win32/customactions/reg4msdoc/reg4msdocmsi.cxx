@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,6 @@
 
 #include <memory>
 #include <string>
-
-#define ELEMENTS_OF_ARRAY(a) (sizeof(a)/sizeof(a[0]))
 
 void DetermineWordPreselectionState(MSIHANDLE handle)
 {
@@ -187,3 +186,5 @@ extern "C" UINT __stdcall DeinstallExecSequenceEntry(MSIHANDLE handle)
 
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* TableStyle: Stores (and writes) table-based information that is
  * needed at the head of an OO document.
  *
@@ -161,3 +162,5 @@ void TableStyle::write(DocumentHandler *pHandler) const
     for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); iterTableCell++)
         (*iterTableCell)->write(pHandler);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

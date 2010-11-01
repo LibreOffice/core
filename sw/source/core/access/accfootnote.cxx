@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -63,7 +64,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
         pFtnFrm )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_uInt16 nResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
                                    : STR_ACCESS_FOOTNOTE_NAME;
@@ -78,7 +79,7 @@ SwAccessibleFootnote::~SwAccessibleFootnote()
 OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -137,7 +138,7 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -153,3 +154,5 @@ sal_Bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )
     const SwTxtFtn *pTxtFtn = pFtnFrm ->GetAttr();
     return pTxtFtn && pTxtFtn->GetFtn().IsEndNote() ;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

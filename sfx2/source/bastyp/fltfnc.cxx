@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <rtl/ustring.hxx>
-#include <vos/process.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -97,7 +97,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
-using namespace ::vos;
 #include <svl/ctypeitm.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
@@ -1221,3 +1220,5 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
             pImplArr->GetObject(n)->Update();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

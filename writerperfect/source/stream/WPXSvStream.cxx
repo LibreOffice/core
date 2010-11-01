@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "WPXSvStream.h"
 #include "filter/FilterInternal.hxx"
 #include <tools/stream.hxx>
@@ -172,3 +173,5 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream()
 {
     return getDocumentOLEStream( "PerfectOffice_MAIN" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

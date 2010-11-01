@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,10 +77,8 @@
 #define RetryButton layout::RetryButton
 #define SfxTabDialog layout::SfxTabDialog
 #define SfxTabPage layout::SfxTabPage
-#if ENABLE_LAYOUT
 #define SvxFontListBox layout::SvxFontListBox
 #define SvxLanguageBox layout::SvxLanguageBox
-#endif
 #define SpinField layout::SpinField
 #define TabControl layout::TabControl
 #define TabPage layout::TabPage
@@ -105,3 +104,5 @@
 #endif /* ENABLE_LAYOUT */
 
 #endif /* _LAYOUT_PRE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

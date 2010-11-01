@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
@@ -1078,7 +1079,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
     {
         if ( !editingCommand() )
         {
-            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
             String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             sName = aDefaultName.GetToken(0,' ');
@@ -1159,7 +1160,7 @@ void OQueryController::impl_onModifyChanged()
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( getContainer() && Source.Source.is() )
     {
@@ -1635,7 +1636,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 // -----------------------------------------------------------------------------
 short OQueryController::saveModified()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     short nRet = RET_YES;
     if ( !isConnected() || !isModified() )
@@ -1866,3 +1867,4 @@ void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( Runt
 } // namespace dbaui
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

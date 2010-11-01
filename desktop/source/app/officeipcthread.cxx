@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include "dispatchwatcher.hxx"
 #include <memory>
 #include <stdio.h>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -48,12 +49,10 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
-#include "osl/file.hxx"
 
-using namespace vos;
 using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
@@ -220,14 +219,17 @@ bool addArgument(
 }
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
-namespace { struct Security : public rtl::Static<OSecurity, Security> {}; }
+    namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
-
+// Turns a string in aMsg such as file://home/foo/.libreoffice/3
+// Into a hex string of well known length ff132a86...
 String CreateMD5FromString( const OUString& aMsg )
 {
-    // PRE: aStr "file"
-    // BACK: Str "ababab....0f" Hexcode String
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+    fprintf (stderr, "create md5 frim '%s'\n",
+             (const sal_Char *)rtl::OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8));
+#endif
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle > 0 )
@@ -292,11 +294,11 @@ void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
     Application::PostUserEvent( STATIC_LINK( NULL, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
 }
 
-OSignalHandler::TSignalAction SAL_CALL SalMainPipeExchangeSignalHandler::signal(TSignalInfo *pInfo)
+oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
         OfficeIPCThread::DisableOfficeIPCThread();
-    return (TAction_CallNextHandler);
+    return osl_Signal_ActCallNextHdl;
 }
 
 // ----------------------------------------------------------------------------
@@ -434,7 +436,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     ::rtl::OUString aUserInstallPath;
     ::rtl::OUString aDummy;
 
-    ::vos::OStartupInfo aInfo;
     OfficeIPCThread* pThread = new OfficeIPCThread;
 
     pThread->maPipeIdent = OUString( RTL_CONSTASCII_USTRINGPARAM( "SingleOfficeIPC_" ) );
@@ -458,7 +459,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     OUString            aIniName;
 
-    aInfo.getExecutableFile( aIniName );
+    osl_getExecutableFile( &aIniName.pData );
+
     sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
     if ( lastIndex > 0 )
     {
@@ -500,22 +502,22 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
     do
     {
-        OSecurity &rSecurity = Security::get();
+        osl::Security &rSecurity = Security::get();
         // Try to create pipe
-        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity ))
+        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
         }
-        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, rSecurity )) // Creation not successfull, now we try to connect
+        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successfull, now we try to connect
         {
             // Pipe connected to first office
             nPipeMode = PIPEMODE_CONNECTED;
         }
         else
         {
-            OPipe::TPipeError eReason = pThread->maPipe.getError();
-            if ((eReason == OPipe::E_ConnectionRefused) || (eReason == OPipe::E_invalidError))
+            oslPipeError eReason = pThread->maPipe.getError();
+            if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
                 return IPC_STATUS_BOOTSTRAP_ERROR;
 
             // Wait for second office to be ready
@@ -536,7 +538,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     else
     {
         // Seems another office is running. Pipe arguments to it and self terminate
-        pThread->maStreamPipe = pThread->maPipe;
+        osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
         sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
@@ -559,13 +561,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
         }
         // finaly, write the string onto the pipe
-        pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
-        pThread->maStreamPipe.write( "\0", 1 );
+        aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
+        aStreamPipe.write( "\0", 1 );
 
         // wait for confirmation #95361# #95425#
         ByteString aToken(sc_aConfirmationSequence);
         char *aReceiveBuffer = new char[aToken.Len()+1];
-        int n = pThread->maStreamPipe.read( aReceiveBuffer, aToken.Len() );
+        int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
         aReceiveBuffer[n]='\0';
 
         delete pThread;
@@ -594,15 +596,15 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
-        OPipe Pipe( pOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, Security::get() );
+        osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
         //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
-        if (Pipe.isValid())
+        if (aPipe.is())
         {
-            Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
+            aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
 
             // close the pipe so that the streampipe on the other
             // side produces EOF
-            Pipe.close();
+            aPipe.close();
         }
 
         // release mutex to avoid deadlocks
@@ -657,11 +659,10 @@ void SAL_CALL OfficeIPCThread::run()
 {
     do
     {
-        OPipe::TPipeError
-            nError = maPipe.accept( maStreamPipe );
+        oslPipeError nError = maPipe.accept( maStreamPipe );
 
 
-        if( nError == OStreamPipe::E_None )
+        if( nError == osl_Pipe_E_None )
         {
 
             // #111143# and others:
@@ -919,7 +920,7 @@ void SAL_CALL OfficeIPCThread::run()
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;
-            sleep( tval );
+            wait( tval );
         }
     } while( schedule() );
 }
@@ -1052,3 +1053,5 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

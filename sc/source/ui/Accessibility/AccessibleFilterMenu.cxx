@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include "AccessibleGlobal.hxx"
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterMenuItem.hxx"
-#include "unoguard.hxx"
 #include "global.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
@@ -396,3 +396,5 @@ void ScAccessibleFilterMenu::updateStates()
     if (isSelected())
         p->insert(SELECTED);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_i18npool.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
 #include <data/numberchar.h>
@@ -465,7 +467,7 @@ static const sal_Char *natnum1Locales[] = {
     "dz",
     "fa"
 };
-static sal_Int16 nbOfLocale = sizeof(natnum1Locales)/sizeof(natnum1Locales[0]);
+static sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
 
 //! ATTENTION: Do not change order of elements!
 //! Number and order must match elements of natnum1Locales!
@@ -496,7 +498,7 @@ static sal_Int16 natnum1[] = {
     NumberChar_dz,
     NumberChar_EastIndic_ar
 };
-static sal_Int16 sizeof_natnum1 = sizeof(natnum1)/sizeof(natnum1[0]);
+static sal_Int16 sizeof_natnum1 = SAL_N_ELEMENTS(natnum1);
 
 //! ATTENTION: Do not change order of elements!
 //! Order must match first elements of natnum1Locales!
@@ -507,7 +509,7 @@ static sal_Int16 natnum2[] = {
     NumberChar_Upper_ko,
     NumberChar_he
 };
-static sal_Int16 sizeof_natnum2 = sizeof(natnum2)/sizeof(natnum2[0]);
+static sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
 #define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
 #define isCtry(ctry) rLocale.Country.equalsAsciiL(ctry, 2)
@@ -915,3 +917,5 @@ NativeNumberSupplier::getSupportedServiceNames() throw( RuntimeException )
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

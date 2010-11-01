@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1917,3 +1918,5 @@ String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFi
 String DenoteSpecialCharacters(const String & rStr);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

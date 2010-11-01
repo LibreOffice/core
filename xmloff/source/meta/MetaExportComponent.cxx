@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,17 +141,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
     xDocHandler->startDocument();
     {
-#if 0
-        GetAttrList().AddAttribute(
-                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_DC ),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_DC ) );
-        GetAttrList().AddAttribute(
-                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_META ),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_META ) );
-        GetAttrList().AddAttribute(
-                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
-#else
+
         const SvXMLNamespaceMap& rMap = GetNamespaceMap();
         sal_uInt16 nPos = rMap.GetFirstKey();
         while( USHRT_MAX != nPos )
@@ -158,7 +149,6 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             GetAttrList().AddAttribute( rMap.GetAttrNameByKey( nPos ), rMap.GetNameByKey( nPos ) );
             nPos = GetNamespaceMap().GetNextKey( nPos );
         }
-#endif
 
         const sal_Char* pVersion = 0;
         switch( getDefaultVersion() )
@@ -252,3 +242,4 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
     return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

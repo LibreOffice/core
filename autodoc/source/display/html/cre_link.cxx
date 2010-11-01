@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -267,3 +268,5 @@ LinkCreator::Create_PrePath( const ary::cpp::CodeEntity & i_rData )
     NameScope_const_iterator it( i_rData.Owner(), pEnv->Gate() );
     Recursive_CreatePath( pOut, it );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

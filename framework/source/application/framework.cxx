@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <helper/oinstanceprovider.hxx>
 #include <classes/servicemanager.hxx>
 #include <macros/debug.hxx>
+#include <osl/process.h>
 
 #include <defines.hxx>
 
@@ -67,14 +69,12 @@
 #include <svtools/unoiface.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vos/process.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::rtl                           ;
-using namespace ::vos                           ;
 using namespace ::comphelper                    ;
 using namespace ::framework                     ;
 using namespace ::com::sun::star::uno           ;
@@ -166,13 +166,12 @@ void FrameWork::impl_analyzeCommandArguments()
     m_bUsePlugIn = sal_False;   // depends from "/plugin"
 
     // Then step over all given arguments and search for supported one.
-    OStartupInfo    aInfo       ;
     OUString        sArgument   ;
-    sal_uInt32      nCount      = aInfo.getCommandArgCount();
+    sal_uInt32      nCount = osl_getCommandArgCount();
     for ( sal_uInt32 nArgument=0; nArgument<nCount; ++nArgument )
     {
         // If extraction of current argument successfull ...
-        if ( aInfo.getCommandArg( nArgument, sArgument ) == osl_Process_E_None )
+        if ( osl_getCommandArg( nArgument, &sArgument.pData ) == osl_Process_E_None )
         {
             // ... search for matching with supported values.
             if ( sArgument == COMMANDARGUMENT_PLUGIN )
@@ -218,28 +217,6 @@ void FrameWork::Main()
         // c) Initialize connection to possible PlugIn dll.
 
 // OPipeConnection removed, connection to plugin now uses acceptor service
-#if 0
-        if ( m_bUsePlugIn == sal_True )
-        {
-            Reference< XConnection >    xConnection         = new OPipeConnection( xGlobalServiceManager );
-            Reference< XBridgeFactory > xBridgeFactory      ( xGlobalServiceManager->createInstance( SERVICENAME_BRIDGEFACTORY  ), UNO_QUERY );
-            if  (
-                    ( xConnection.is()          == sal_True )   &&
-                    ( xBridgeFactory.is()       == sal_True )
-                )
-            {
-                Reference< XBridge > xBridge = xBridgeFactory->createBridge(    NAME_PLUGINBRIDGE                               ,
-                                                                                PROTOCOL_PLUGINBRIDGE                           ,
-                                                                                xConnection                                     ,
-                                                                                new OInstanceProvider( xGlobalServiceManager )  );
-            }
-            else
-            {
-                // Error handling ... !?
-                LOG_ASSERT( sal_False, "FrameWork::Main()\nNo connection to plugin. Initialization of bridge failed.\n" )
-            }
-        }
-#endif
         //---------------------------------------------------------------------------------------------------------
         // d) Initialize new task with a HTML-URL in it.
 
@@ -276,3 +253,5 @@ void FrameWork::Main()
         Execute();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

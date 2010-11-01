@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <vos/signal.hxx>
 #include <tools/debug.hxx>
 #include <tools/table.hxx>
 #include <tools/stream.hxx>
@@ -43,6 +43,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <osl/signal.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/instance.hxx>
@@ -835,19 +836,20 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
 static void RscException_Impl()
 {
-    switch ( NAMESPACE_VOS(OSignalHandler)::raise( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
+    switch ( osl_raiseSignal( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
     {
-        case NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler:
-            abort();
+    case osl_Signal_ActCallNextHdl:
+        abort();
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_Ignore:
-            return;
+    case osl_Signal_ActIgnore:
+        return;
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_AbortApplication:
-            abort();
+    case osl_Signal_ActAbortApp:
+        abort();
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_KillApplication:
-            exit(-1);
+    default:
+    case osl_Signal_ActKillApp:
+        exit(-1);
     }
 }
 
@@ -1917,7 +1919,7 @@ SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star:
 // -----------------------------------------------------------------------
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     if ( ( RSC_STRING != _resourceType ) && ( RSC_RESOURCE != _resourceType ) )
         return false;
@@ -1929,7 +1931,7 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
 // -----------------------------------------------------------------------
 UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadString : have no impl class !" );
     // perhaps constructed with an invalid filename ?
@@ -2000,7 +2002,7 @@ const ::com::sun::star::lang::Locale& SimpleResMgr::GetLocale() const
 
 sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadBlob : have no impl class !" );
 
@@ -2070,3 +2072,5 @@ void SimpleResMgr::FreeBlob( void* pBuffer )
     void* pCompleteBuffer = (void*)(((BYTE*)pBuffer) - sizeof(RSHEADER_TYPE));
     rtl_freeMemory(pCompleteBuffer);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

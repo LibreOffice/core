@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -349,3 +350,5 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
 
     OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

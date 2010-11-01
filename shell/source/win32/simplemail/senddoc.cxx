@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 #include <osl/diagnose.h>
+#include <sal/macros.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/uri.hxx>
+#include <osl/thread.hxx>
 
 #include "simplemapi.hxx"
 
@@ -164,7 +170,17 @@ void initMapiMessage(
 {
     ZeroMemory(pMapiMessage, sizeof(MapiMessage));
 
+    try {
+         rtl_uString *subject = NULL;
+         rtl_uString_newFromAscii(&subject, const_cast<char*>(gSubject.c_str()));
+         rtl_uString *decoded_subject = NULL;
+         rtl_uriDecode(subject, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &decoded_subject);
+         rtl::OUString ou_subject(decoded_subject);
+         pMapiMessage->lpszSubject = strdup(OUStringToOString(ou_subject, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr());
+    }
+    catch (...) {
     pMapiMessage->lpszSubject = const_cast<char*>(gSubject.c_str());
+    }
     pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<char*>(gBody.c_str()) : NULL);
     pMapiMessage->lpOriginator = aMapiOriginator;
     pMapiMessage->lpRecips = &aMapiRecipientList[0];
@@ -186,7 +202,7 @@ char* KnownParameter[] =
     "--mapi-logon-ui"
 };
 
-const size_t nKnownParameter = (sizeof(KnownParameter)/sizeof(KnownParameter[0]));
+const size_t nKnownParameter = (SAL_N_ELEMENTS(KnownParameter));
 
 /** @internal */
 bool isKnownParameter(const char* aParameterName)
@@ -342,3 +358,5 @@ int main(int argc, char* argv[])
         MessageBox(NULL, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
     }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

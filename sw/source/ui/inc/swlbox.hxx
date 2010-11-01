@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@ SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10, 10)
 /*--------------------------------------------------------------------
      Beschreibung: SwBoxEntry
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
@@ -64,8 +64,8 @@ public:
 /*--------------------------------------------------------------------
      Beschreibung: fuer ComboBoxen
  --------------------------------------------------------------------*/
-
 typedef USHORT SwComboBoxStyle;
+
 namespace nsSwComboBoxStyle
 {
     const SwComboBoxStyle CBS_UPPER         = 0x01;
@@ -122,3 +122,5 @@ public:
 };
 
 #endif /* _SWLBOX_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

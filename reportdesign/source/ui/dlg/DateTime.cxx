@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
     m_aTimeControlling.enableOnCheckMark( m_aTime, m_aFTTimeFormat, m_aTimeListBox);
 
     CheckBox* pCheckBoxes[] = { &m_aDate,&m_aTime};
-    for ( size_t i = 0 ; i < sizeof(pCheckBoxes)/sizeof(pCheckBoxes[0]); ++i)
+    for ( size_t i = 0 ; i < SAL_N_ELEMENTS(pCheckBoxes); ++i)
         pCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
     FreeResource();
@@ -253,3 +254,5 @@ sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
 // =============================================================================
 } // rptui
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

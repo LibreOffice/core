@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <tools/stream.hxx>
 #include <shellio.hxx>
 
-// This is just here so that we don't have to copy&paste its string format methods
+/// Dummy Writer implementation to be able to use the string format methods of the base class
 class RtfWriter : public Writer
 {
 protected:
@@ -81,4 +82,5 @@ public:
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
 
 #endif // _RTFEXPORTFILTER_HXX_
-/* vi:set shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

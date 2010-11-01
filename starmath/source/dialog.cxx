@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1485,8 +1486,8 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
         aText += (sal_Unicode)' ';
 
         rViewSh.GetViewFrame()->GetDispatcher()->Execute(
-                SID_INSERTTEXT, SFX_CALLMODE_STANDARD,
-                new SfxStringItem(SID_INSERTTEXT, aText), 0L);
+                SID_INSERTSYMBOL, SFX_CALLMODE_STANDARD,
+                new SfxStringItem(SID_INSERTSYMBOL, aText), 0L);
     }
 
     return 0;
@@ -2440,3 +2441,4 @@ void SmSymDefineDialog::SelectChar(xub_Unicode cChar)
 
 /**************************************************************************/
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

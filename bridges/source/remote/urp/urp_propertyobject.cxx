@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -454,7 +455,7 @@ void SAL_CALL PropertyObject::implGetProperties( uno_Sequence **ppReturnValue )
     ProtocolProperty *pElements = (ProtocolProperty * ) ( *ppReturnValue )->elements;
     Properties *pP = m_pLocalSetting;
 
-    assignToIdl( &(pElements[PROPERTY_BRIDGEID]),PROPERTY_BRIDGEID, *(Sequence< sal_Int8 > *)&(pP->seqBridgeID) );
+    assignToIdl( &(pElements[PROPERTY_BRIDGEID]),PROPERTY_BRIDGEID, toUnoSequence(pP->seqBridgeID) );
     assignToIdl( &(pElements[PROPERTY_TYPECACHESIZE]),PROPERTY_TYPECACHESIZE,pP->nTypeCacheSize );
     assignToIdl( &(pElements[PROPERTY_OIDCACHESIZE]),PROPERTY_OIDCACHESIZE, pP->nOidCacheSize );
     assignToIdl( &(pElements[PROPERTY_TIDCACHESIZE]),PROPERTY_TIDCACHESIZE, pP->nTidCacheSize );
@@ -760,7 +761,7 @@ void SAL_CALL PropertyObject::implCommitChange( uno_Sequence *pSequence, uno_Any
         {
             InvalidProtocolChangeException exception;
             Type type = getCppuType( &exception );
-            exception.Message = OUString::createFromAscii( "urp: unknown Property " );
+            exception.Message = OUString(RTL_CONSTASCII_USTRINGPARAM("urp: unknown Property "));
             exception.Message += pP[i].Name;
             exception.invalidProperty = pP[i];
             exception.reason = 1;
@@ -791,3 +792,5 @@ void SAL_CALL PropertyObject::waitUntilChangesAreCommitted()
     osl_waitCondition( m_commitChangeCondition , 0 );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

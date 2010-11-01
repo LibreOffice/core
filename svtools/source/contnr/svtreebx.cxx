@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #define _SVTREEBX_CXX
 #include <vcl/svapp.hxx>
-#ifndef GCC
-#endif
 
 class TabBar;
 
@@ -2653,3 +2652,5 @@ void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rSt
 {
       SvLBox::FillAccessibleStateSet( rStateSet );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

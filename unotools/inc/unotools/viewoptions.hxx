@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -351,3 +352,5 @@ class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
 };      // class SvtViewOptions
 
 #endif  // #ifndef INCLUDED_unotools_VIEWOPTIONS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

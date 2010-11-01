@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/impbmp.hxx"
+#include "vcl/solarmutex.hxx"
 
 #include "saldata.hxx"
 #include "salinst.h"
@@ -110,7 +112,7 @@ class AquaDelayedSettingsChanged : public Timer
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
-    vos::OGuard aGuard( *mpSalYieldMutex );
+    osl::SolarGuard aGuard( *mpSalYieldMutex );
     AquaDelayedSettingsChanged* pTimer = new AquaDelayedSettingsChanged( bInvalidate );
     pTimer->SetTimeout( 50 );
     pTimer->Start();
@@ -370,27 +372,27 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::acquire()
 {
-    OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    SolarMutexObject::acquire();
+    mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }
@@ -470,7 +472,7 @@ AquaSalInstance::AquaSalInstance()
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
-    maMainThread = vos::OThread::getCurrentIdentifier();
+    maMainThread = osl::Thread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
     mnActivePrintJobs = 0;
@@ -525,7 +527,7 @@ void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* p
 
 // -----------------------------------------------------------------------
 
-vos::IMutex* AquaSalInstance::GetYieldMutex()
+osl::SolarMutex* AquaSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
@@ -536,7 +538,7 @@ ULONG AquaSalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         osl::Thread::getCurrentIdentifier() )
     {
         ULONG nCount = pYieldMutex->GetAcquireCount();
         ULONG n = nCount;
@@ -568,7 +570,7 @@ void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
 
 bool AquaSalInstance::isNSAppThread() const
 {
-    return vos::OThread::getCurrentIdentifier() == maMainThread;
+    return osl::Thread::getCurrentIdentifier() == maMainThread;
 }
 
 // -----------------------------------------------------------------------
@@ -1311,3 +1313,5 @@ NSImage* CreateNSImage( const Image& rImage )
 
     return pImage;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

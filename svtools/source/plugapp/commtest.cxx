@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include <tools/simplecm.hxx>
 #include "communi.hxx"
 #include "brooker.hxx"
-//#include <tools/bcst.hxx>
 
 #include "commtest.hrc"
 
@@ -259,3 +259,4 @@ IMPL_LINK( CommunicationTester, DataReceived, CommunicationLink*, pCL )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

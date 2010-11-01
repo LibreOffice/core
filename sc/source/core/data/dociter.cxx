@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -542,6 +543,10 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         }
 
         SCSIZE nCellCount = mpDoc->GetCellCount(nTab, nCol);
+        if (!nCellCount)
+            // No cells found in this column.  Bail out.
+            return false;
+
         SCROW nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
         while ( (nColRow < nCellCount) && (nThisRow < nRow) )
             nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, ++nColRow);
@@ -2213,3 +2218,5 @@ SCROW ScRowBreakIterator::next()
     ++maItr;
     return maItr == maEnd ? NOT_FOUND : *maItr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

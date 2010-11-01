@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,6 +62,7 @@ class SwList;
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
+#include <sal/macros.h>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <ndarr.hxx>
@@ -72,16 +74,14 @@ class SwList;
 #include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
-#ifdef FUTURE_VBA
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
-#endif
 
 #include <hash_map>
 #include <stringhash.hxx>
@@ -407,10 +407,9 @@ class SW_DLLPUBLIC SwDoc :
     SwChartLockController_Helper  *pChartControllerHelper;
 
     // table of forbidden characters of this document
-    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
-#ifdef FUTURE_VBA
+    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
-#endif
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
     // --> OD 2007-10-26 #i83479#
 public:
     struct lessThanNodeNum
@@ -753,8 +752,8 @@ public:
     virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value);
     virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const;
     virtual void setForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters );
-    virtual vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable();
-    virtual const vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
+    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable();
+    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const;
     virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode );
     virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const;
@@ -2136,9 +2135,9 @@ public:
     {
         return n32DummyCompatabilityOptions2;
     }
-#ifdef FUTURE_VBA
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
-#endif
+    void SetVBATemplateToProjectCache( com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
+        com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
@@ -2224,3 +2223,5 @@ namespace docfunc
 }
 // <--
 #endif  //_DOC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

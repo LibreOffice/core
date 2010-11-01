@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
             OResultSet*                                         m_pResultSet;
-            ::vos::ORef<connectivity::OSQLColumns>              m_xParamColumns;    // the parameter columns
+            ::rtl::Reference<connectivity::OSQLColumns>             m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
             virtual OResultSet* createResultSet();
@@ -133,3 +134,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_FILE_OPREPAREDSTATEMENT_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

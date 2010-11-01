@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -400,7 +401,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     BOOL                mbHideBtnVisible;
     BOOL                mbDisplayable;
 
-//#if 0 // _SOLAR__PRIVATE
     friend class Application;
     friend class Menu;
     friend class MenuBarWindow;
@@ -410,7 +410,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     SAL_DLLPRIVATE static Window*   ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu );
     SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, BOOL bDelete );
     SAL_DLLPRIVATE BOOL             ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu = TRUE );
-//#endif
 
 public:
                         MenuBar();
@@ -532,3 +531,4 @@ inline PopupMenu& PopupMenu::operator =( const PopupMenu& rMenu )
 
 #endif // _SV_MENU_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

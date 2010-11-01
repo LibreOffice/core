@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@ class OCommandDefinition;
 typedef ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
                         OCommandDefinition_PROP;
 
-
 class OCommandDefinition    :public OComponentDefinition
                             ,public OCommandDefinition_Base
                             ,public OCommandDefinition_PROP
@@ -120,3 +120,4 @@ private:
 #endif // _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

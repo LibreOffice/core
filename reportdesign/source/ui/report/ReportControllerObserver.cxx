@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
 #include <svl/smplhint.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -417,7 +418,7 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     // neues Object zum lauschen
@@ -431,7 +432,7 @@ void SAL_CALL OXReportControllerObserver::elementInserted(const container::Conta
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::elementReplaced(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     uno::Reference< uno::XInterface >  xIface(evt.ReplacedElement,uno::UNO_QUERY);
@@ -445,7 +446,7 @@ void SAL_CALL OXReportControllerObserver::elementReplaced(const container::Conta
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     uno::Reference< uno::XInterface >  xIface( evt.Element, uno::UNO_QUERY );
@@ -460,3 +461,4 @@ void SAL_CALL OXReportControllerObserver::elementRemoved(const container::Contai
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

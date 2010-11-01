@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-
+#include <sal/macros.h>
 #include "fmprop.hrc"
 #include "fmresids.hrc"
 #include "svx/fmtools.hxx"
@@ -673,7 +674,7 @@ void DbCellControl::implAdjustGenericFieldSetting( const Reference< XPropertySet
 //------------------------------------------------------------------------------
 void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XPropertySet > xSourceProps( _rEvent.Source, UNO_QUERY );
 
@@ -735,7 +736,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
 
     if ( ( _eInitWhat & InitWritingMode ) != 0 )
     {
-        for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS( pWindows ); ++i )
         {
             if ( pWindows[i] )
                 pWindows[i]->EnableRTL( rParent.IsRTLEnabled() );
@@ -744,7 +745,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
 
     if ( ( _eInitWhat & InitFont ) != 0 )
     {
-        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
         {
             if ( !pWindows[i] )
                 continue;
@@ -776,7 +777,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
         sal_Bool bTextLineColor = rParent.IsTextLineColor();
         Color aTextLineColor( rParent.GetTextLineColor() );
 
-        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
         {
             if ( pWindows[i] )
             {
@@ -797,7 +798,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
         if (rParent.IsControlBackground())
         {
             Color aColor( rParent.GetControlBackground());
-            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
             {
                 if ( pWindows[i] )
                 {
@@ -4042,7 +4043,7 @@ void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActi
 //------------------------------------------------------------------
 void SAL_CALL FmXCheckBoxCell::setLabel( const ::rtl::OUString& _Label ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pColumn )
     {
         DbGridControl& rGrid( m_pColumn->GetParent() );
@@ -4838,3 +4839,4 @@ IMPL_LINK( FmXFilterCell, OnCommit, void*, EMPTYARG )
     return 1;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

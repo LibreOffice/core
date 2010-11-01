@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
-#include <vos/xception.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
@@ -86,6 +86,8 @@
 
 using namespace com::sun::star;
 using ::rtl::OUString;
+
+using rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -993,3 +995,4 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

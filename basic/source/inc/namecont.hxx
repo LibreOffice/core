@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
+#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 #include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -59,6 +61,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
@@ -67,13 +70,14 @@ class BasicManager;
 namespace basic
 {
 
-typedef ::cppu::WeakComponentImplHelper8<
+typedef ::cppu::WeakComponentImplHelper9<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::XStorageBasedLibraryContainer,
     ::com::sun::star::script::XLibraryContainerPassword,
     ::com::sun::star::script::XLibraryContainerExport,
     ::com::sun::star::script::XLibraryContainer3,
     ::com::sun::star::container::XContainer,
+    ::com::sun::star::script::XLibraryQueryExecutable,
     ::com::sun::star::script::vba::XVBACompatibility,
     ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
 
@@ -764,3 +768,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

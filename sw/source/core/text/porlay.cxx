@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
 
-//#ifdef BIDI
 #include <unicode/ubidi.h>
 #include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
 
@@ -2458,3 +2458,4 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
     rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

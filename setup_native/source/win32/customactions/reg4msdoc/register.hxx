@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,3 +81,5 @@ bool query_preselect_registration_for_ms_application(
 int FixReturnRegistrationState(MSIHANDLE handle);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

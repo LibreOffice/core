@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -890,7 +891,7 @@ SfxItemPresentation XFillBmpSizeXItem::GetPresentation
 |*
 \*************************************************************************/
 
-FASTBOOL XFillBmpSizeXItem::HasMetrics() const
+bool XFillBmpSizeXItem::HasMetrics() const
 {
     return GetValue() > 0L;
 }
@@ -1006,7 +1007,7 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
 |*
 \*************************************************************************/
 
-FASTBOOL XFillBmpSizeYItem::HasMetrics() const
+bool XFillBmpSizeYItem::HasMetrics() const
 {
     return GetValue() > 0L;
 }
@@ -1710,3 +1711,4 @@ SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation eP
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

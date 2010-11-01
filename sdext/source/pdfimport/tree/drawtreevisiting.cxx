@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,22 +128,6 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
         isComplex = true;
     }
-
-    #if 0
-    // FIXME: need to have a service to do this mirroring
-    if (isComplex)  // If so, reverse string
-    {
-        rtl::OUString flippedStr(RTL_CONSTASCII_USTRINGPARAM( "" ));
-        for(int i = str.getLength() - 1; i >= 0; i--)
-        {
-             sal_Unicode cChar = str[ i ];
-             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
-             rtl::OUString uC(cChar);
-             flippedStr += uC;
-        }
-        str = flippedStr;
-    }
-    #endif
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
@@ -1095,3 +1080,5 @@ void DrawXmlFinalizer::visit( DocumentElement& elem, const std::list< Element* >
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

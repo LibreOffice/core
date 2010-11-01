@@ -40,6 +40,7 @@
 #define CB_EBAS_STG     5
 #define CB_PBAS_CODE    6
 #define CB_PBAS_STG     7
+#define CB_WBAS_WBCTBL  8
 
 #define CLB_SETTINGS    1
 #define ST_CHG_MATH     1

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -764,7 +765,7 @@ namespace /* private */
     bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result)
     {
         bool          bfound = false;
-        rtl::OUString path   = rtl::OUString::createFromAscii("PATH");
+        rtl::OUString path(RTL_CONSTASCII_USTRINGPARAM("PATH"));
         rtl::OUString env_path;
 
         if (osl_Process_E_None == osl_getEnvironment(path.pData, &env_path.pData))
@@ -986,3 +987,5 @@ int TextToUnicode(
     unic_text[nDestBytes] = '\0';
     return nDestBytes;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

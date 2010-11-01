@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #if !defined(AFX_STDAFX_H_)
 #define AFX_STDAFX_H_
 
@@ -7,7 +8,7 @@
 
 #define STRICT
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 #endif
 #define _ATL_APARTMENT_THREADED
 // #define _ATL_STATIC_REGISTRY
@@ -40,3 +41,4 @@ using ::std::max;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

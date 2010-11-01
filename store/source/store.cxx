@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -763,3 +764,5 @@ storeError SAL_CALL store_remove (
     // Remove.
     return xManager->remove (aKey);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

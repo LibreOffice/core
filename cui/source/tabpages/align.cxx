@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,9 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/localresaccess.hxx>
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svl/intitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
 
 namespace svx {
 
@@ -220,7 +221,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
         maLbFrameDir.Hide();
     }
 
-    // diese Page braucht ExchangeSupport
+    // This page needs ExchangeSupport.
     SetExchangeSupport();
 
     FreeResource();
@@ -396,3 +397,4 @@ IMPL_LINK( AlignmentTabPage, UpdateEnableHdl, void*, EMPTYARG )
 
 } // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

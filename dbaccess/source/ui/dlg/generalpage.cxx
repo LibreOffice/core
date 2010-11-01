@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,7 +127,7 @@ namespace dbaui
                 &m_aTypePostLabel
             };
             const long nOffset = m_aRB_OpenDocument.GetPosPixel().Y() - m_aRB_CreateDatabase.GetPosPixel().Y();
-            for ( size_t i=0; i < sizeof( pWindowsToMove ) / sizeof( pWindowsToMove[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( pWindowsToMove ); ++i )
             {
                 Point aPos( pWindowsToMove[i]->GetPosPixel() );
                 aPos.Y() -= nOffset;
@@ -634,3 +635,4 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

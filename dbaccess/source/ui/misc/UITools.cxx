@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,6 @@
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-//#define ITEMID_ORIENTATION     SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
@@ -1052,7 +1052,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
 
     delete pFormatDescriptor;
     SfxItemPool::Free(pPool);
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
     return bRet;
@@ -1269,29 +1269,29 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
     return sName;
 }
 // -----------------------------------------------------------------------------
-    void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
-    {
-        Any aLocale =
-            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-        ::rtl::OUString sLocaleStr;
-        if ( !( aLocale >>= sLocaleStr ) )
-            // fallback is english
-            sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
+{
+    Any aLocale =
+    ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+    ::rtl::OUString sLocaleStr;
+    if ( !( aLocale >>= sLocaleStr ) )
+        // fallback is english
+        sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
 
-        // query part exists?
-        if ( _bQuestionMark )
-            // no, so start with '?'
-            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
-        else
-            // yes, so only append with '&'
-            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+    // query part exists?
+    if ( _bQuestionMark )
+        // no, so start with '?'
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+    else
+        // yes, so only append with '&'
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
 
-        // set parameters
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
-        _rURL += sLocaleStr;
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
-        _rURL += SvtHelpOptions().GetSystem();
-    }
+    // set parameters
+    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
+    _rURL += sLocaleStr;
+    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
+    _rURL += SvtHelpOptions().GetSystem();
+}
 
 namespace
 {
@@ -1477,7 +1477,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
 // -----------------------------------------------------------------------------
 sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));
     aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(_sName));
     OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
@@ -1718,3 +1718,5 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
 // .........................................................................
 } // dbaui
 // .........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

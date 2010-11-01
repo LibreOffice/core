@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
-//CHINA001 #include "../dialog/grfpage.hxx"
+
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdview.hxx>
@@ -71,7 +72,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 // -----------
 // - Defines -
 // -----------
@@ -1007,13 +1008,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                     aCropDlgAttr, 950 );
                     const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
-                    //CHINA001 SfxTabPage*          pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
+
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet error!");//CHINA001
+                    DBG_ASSERT(pFact, "Dialogdiet error!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
-                    DBG_ASSERT(fnCreatePage, "Dialogdiet error!");//CHINA001
+                    DBG_ASSERT(fnCreatePage, "Dialogdiet error!");
                     SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
-                    //CHINA001 end
+
                     pTabPage->SetText( aCropStr );
                     aCropDialog.SetTabPage( pTabPage );
 
@@ -1285,3 +1286,5 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
         nWhich = aIter.NextWhich();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

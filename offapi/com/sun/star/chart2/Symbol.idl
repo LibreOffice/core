@@ -91,7 +91,7 @@ struct Symbol
 
     /** The size of the symbol in 100th of a mm.
 
-        @todo use a structure using doubles insted of longs
+        @todo use a structure using doubles instead of longs
      */
     com::sun::star::awt::Size                           Size;
 

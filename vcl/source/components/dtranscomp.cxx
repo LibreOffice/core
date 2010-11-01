@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/svdata.hxx"
 #include "vcl/salinst.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "osl/mutex.hxx"
 
 #include "cppuhelper/compbase1.hxx"
@@ -271,7 +272,7 @@ Reference< XInterface > ClipboardFactory::createInstance() throw()
 
 Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateClipboard( arguments );
     return xResult;
 }
@@ -409,7 +410,7 @@ OUString SAL_CALL DragSource_getImplementationName()
 
 Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMultiServiceFactory >&  )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDragSource();
     return xResult;
 }
@@ -524,7 +525,7 @@ OUString SAL_CALL DropTarget_getImplementationName()
 
 Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDropTarget();
     return xResult;
 }
@@ -550,3 +551,4 @@ Reference< XInterface > SalInstance::CreateDropTarget()
     return Reference< XInterface >( ( cppu::OWeakObject * )new vcl::GenericDropTarget() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

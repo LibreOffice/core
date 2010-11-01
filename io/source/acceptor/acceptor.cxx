@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -307,7 +308,7 @@ namespace io_acceptor
             if( !pNames )
             {
                 static Sequence< OUString > seqNames(1);
-                seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+                seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
                 pNames = &seqNames;
             }
         }
@@ -381,3 +382,4 @@ void * SAL_CALL component_getFactory(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

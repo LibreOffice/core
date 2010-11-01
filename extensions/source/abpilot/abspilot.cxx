@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,13 +116,12 @@ namespace abp
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 
         // some initial settings
+#ifdef UNX
 #ifdef MACOSX
         m_aSettings.eType = AST_MACAB;
-#elif WITH_MOZILLA
-#ifdef UNX
-        m_aSettings.eType = AST_MORK;
 #else
-        m_aSettings.eType = AST_OE;
+// FIXME: if KDE use KAB instead
+        m_aSettings.eType = AST_EVOLUTION;
 #endif
 #else
         m_aSettings.eType = AST_OTHER;
@@ -498,3 +498,4 @@ namespace abp
 }   // namespace abp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

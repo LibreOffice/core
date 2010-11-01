@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -448,12 +449,11 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
         return GetOldItem( rSet, nSlot );
 }
 
-// add CHINA001  begin
+
 void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
 {
     DBG_ASSERT(0, "SfxTabPage::PageCreated should not be called");
-}//CHINA001
-// add CHINA001 end
+}
 
 // -----------------------------------------------------------------------
 
@@ -1761,7 +1761,7 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 */
 
 {
-    FASTBOOL bSet = ( pSet != NULL );
+    bool bSet = ( pSet != NULL );
 
     pSet = pInSet;
 
@@ -1796,3 +1796,5 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
 }
 
 END_NAMESPACE_LAYOUT_SFX_TABDIALOG
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

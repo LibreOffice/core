@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -426,3 +427,4 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
 
 } } // eof of namespace sw::access
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

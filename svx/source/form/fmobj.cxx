@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -656,7 +657,7 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
 }
 
 //------------------------------------------------------------------
-FASTBOOL FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
+bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult && SDRCREATE_FORCEEND == eCmd && rStat.GetView() )
@@ -734,3 +735,5 @@ void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

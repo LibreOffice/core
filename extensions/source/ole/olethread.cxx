@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,8 @@
 #include <tools/presys.h>
 #include <tools/postsys.h>
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
-using namespace vos;
 using namespace std;
 
 namespace ole_adapter
@@ -50,7 +50,7 @@ typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID);
 
 void o2u_attachCurrentThread()
 {
-    static OThreadData oleThreadData;
+    static osl::ThreadData oleThreadData;
 
     if ((sal_Bool)(sal_IntPtr)oleThreadData.getData() != sal_True)
     {
@@ -75,3 +75,5 @@ void o2u_attachCurrentThread()
 }
 
 } // end namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

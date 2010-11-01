@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ sdbcx::ObjectType OFlatColumns::createObject(const ::rtl::OUString& _rName)
 {
 
     OFlatTable* pTable = (OFlatTable*)m_pTable;
-    ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
     sdbcx::ObjectType xRet;
     if(aIter != aCols->get().end())
@@ -54,3 +55,4 @@ sdbcx::ObjectType OFlatColumns::createObject(const ::rtl::OUString& _rName)
 // -------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,13 +124,10 @@ using ::com::sun::star::util::SearchOptions;
 #define BMARGPRN        1000
 #define BORDERPRN       300
 
-
-
 SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
-
 
 SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 {
@@ -141,11 +139,6 @@ SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 }
 
 TYPEINIT1(SwSrcView, SfxViewShell)
-
-/*-----------------18.11.96 08.05-------------------
-
---------------------------------------------------*/
-
 
 void lcl_PrintHeader( OutputDevice &rOutDev, USHORT nPages, USHORT nCurPage, const String& rTitle )
 {
@@ -200,9 +193,7 @@ void lcl_PrintHeader( OutputDevice &rOutDev, USHORT nPages, USHORT nCurPage, con
     rOutDev.SetFont( aOldFont );
     rOutDev.SetFillColor( aOldFillColor );
 }
-/* -----------------13.11.2003 16:24-----------------
 
- --------------------------------------------------*/
 rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
 {
     rtl_TextEncoding eRet = eLoadEncoding;
@@ -215,9 +206,6 @@ rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     }
     return eRet;
 }
-/*-----------------18.11.96 08.21-------------------
-
---------------------------------------------------*/
 
 void lcl_ConvertTabsToSpaces( String& rLine )
 {
@@ -241,11 +229,6 @@ void lcl_ConvertTabsToSpaces( String& rLine )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
     SfxViewShell( pViewFrame, SWSRCVIEWFLAGS ),
     aEditWin( &pViewFrame->GetWindow(), this ),
@@ -256,15 +239,10 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
     Init();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< USHORT >( rSel.GetStart().GetPara() ) );
 
@@ -281,20 +259,12 @@ SwSrcView::~SwSrcView()
     delete pSearchItem;
 }
 
-/*-----------------24.04.97 10:37-------------------
-
---------------------------------------------------*/
 void SwSrcView::SaveContentTo(SfxMedium& rMed)
 {
     SvStream* pOutStream = rMed.GetOutStream();
     pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
     aEditWin.Write( *pOutStream );//, EE_FORMAT_TEXT);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcView::Init()
 {
@@ -315,20 +285,11 @@ void SwSrcView::Init()
     StartListening(*pDocShell,TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwDocShell*     SwSrcView::GetDocShell()
 {
     SfxObjectShell* pObjShell = GetViewFrame()->GetObjectShell();
     return PTR_CAST(SwDocShell, pObjShell);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcView::SaveContent(const String& rTmpFile)
 {
@@ -338,11 +299,6 @@ void SwSrcView::SaveContent(const String& rTmpFile)
     aEditWin.Write(*pOutStream);//, EE_FORMAT_TEXT);
     aMedium.Commit();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcView::Execute(SfxRequest& rReq)
 {
@@ -426,7 +382,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             const SfxItemSet* pTmpArgs = rReq.GetArgs();
 
             USHORT nWhich = pTmpArgs->GetWhichByPos( 0 );
-            DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
+            OSL_ENSURE( nWhich, "Wich fuer SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( (const SvxSearchItem&)rItem);
             StartSearchAndReplace( (const SvxSearchItem&)rItem, FALSE, rReq.IsAPI() );
@@ -478,11 +434,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
     }
     aEditWin.Invalidate();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcView::GetState(SfxItemSet& rSet)
 {
@@ -613,11 +564,6 @@ void SwSrcView::GetState(SfxItemSet& rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SvxSearchItem* SwSrcView::GetSearchItem()
 {
     if(!pSearchItem)
@@ -627,21 +573,11 @@ SvxSearchItem* SwSrcView::GetSearchItem()
     return pSearchItem;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
 {
     delete pSearchItem;
     pSearchItem = (SvxSearchItem*)rItem.Clone();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                                                     BOOL bFromStart,
@@ -725,10 +661,6 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     return nFound;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
 {
     SwDocShell* pDocSh = GetDocShell();
@@ -750,18 +682,11 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
 {
     return  GetDocShell()->GetDoc()->getPrinter( bCreate );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 sal_Int32 SwSrcView::PrintSource(
     OutputDevice *pOutDev,
     sal_Int32 nPage,
@@ -832,15 +757,9 @@ sal_Int32 SwSrcView::PrintSource(
 
     pOutDev->Pop();
 
-    DBG_ASSERT( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );
+    OSL_ENSURE( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );
     return nCurPage;
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -862,9 +781,6 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxViewShell::Notify(rBC, rHint);
 }
 
-/*-----------------19.04.97 10:19-------------------
-
---------------------------------------------------*/
 void SwSrcView::Load(SwDocShell* pDocShell)
 {
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
@@ -950,7 +866,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         pDocShell->SetModified();// das Flag wird zwischendurch zurueckgesetzt
     // AutoLoad abschalten
     pDocShell->SetAutoLoad(INetURLObject(), 0, FALSE);
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
     USHORT nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);
     aEditWin.GetTextEngine()->ResetUndo();
@@ -958,3 +874,4 @@ void SwSrcView::Load(SwDocShell* pDocShell)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/acceleratorexecute.hxx>
+#include <sal/macros.h>
 #include <memory>
 #include "dbaccessdllapi.h"
 
@@ -91,3 +93,4 @@ namespace dbaui
 }
 #endif // DBAUI_DATAVIEW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

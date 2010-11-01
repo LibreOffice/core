@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,12 +80,9 @@ using namespace ::com::sun::star;
     Beschreibung:   Debug-Methode
  --------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Columns eintueten
  --------------------------------------------------------------------*/
-
-
 void lcl_FillSvxColumn(const SwFmtCol& rCol,
                           USHORT nTotalWidth,
                           SvxColumnItem& rColItem,
@@ -126,13 +124,11 @@ void lcl_FillSvxColumn(const SwFmtCol& rCol,
 /*--------------------------------------------------------------------
     Beschreibung:   ColumnItem in ColumnInfo ueberfuehren
  --------------------------------------------------------------------*/
-
-
 void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           USHORT nTotalWidth,
                           SwFmtCol& rCols)
 {
-    ASSERT( rCols.GetNumCols() == rColItem.Count(), "Column count mismatch" );
+    OSL_ENSURE( rCols.GetNumCols() == rColItem.Count(), "Column count mismatch" );
     // #126939# ruler executes that change the columns shortly after the selection has changed
     // can result in a crash
     if(rCols.GetNumCols() != rColItem.Count())
@@ -146,7 +142,7 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
     // Tabcols der Reihe nach
     for( USHORT i=0; i < rColItem.Count()-1; ++i )
     {
-        DBG_ASSERT(rColItem[i+1].nStart >= rColItem[i].nEnd,"\201berlappende Spalten" );
+        OSL_ENSURE(rColItem[i+1].nStart >= rColItem[i].nEnd,"overlapping columns" );
         USHORT nStart = static_cast< USHORT >(rColItem[i+1].nStart);
         USHORT nEnd = static_cast< USHORT >(rColItem[i].nEnd);
         if(nStart < nEnd)
@@ -178,8 +174,6 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 /*--------------------------------------------------------------------
     Beschreibung:   Tabs loeschen
  --------------------------------------------------------------------*/
-
-
 void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 {
     // Def Tabs loeschen
@@ -199,8 +193,6 @@ void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 /*--------------------------------------------------------------------
     Beschreibung:   Seitenrand umdrehen
  --------------------------------------------------------------------*/
-
-
 void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 {
     USHORT nPhyPage, nVirPage;
@@ -218,8 +210,6 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
     Beschreibung:   Wenn der Rahmenrand verschoben wird, sollen die
                     Spaltentrenner an der gleichen absoluten Position bleiben
  --------------------------------------------------------------------*/
-
-
 void lcl_Scale(long& nVal, long nScale)
 {
     nVal *= nScale;
@@ -264,12 +254,11 @@ void ResizeFrameCols(SwFmtCol& rCol,
     //reset auto width
     rCol.SetOrtho(FALSE, 0, 0 );
 }
+
 /*--------------------------------------------------------------------
     Beschreibung:   Hier werden alle Aenderungen der Tableiste
                     wieder in das Modell geschossen
  --------------------------------------------------------------------*/
-
-
 void SwView::ExecTabWin( SfxRequest& rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -529,7 +518,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aUL.SetLower( (USHORT)aLongULSpace.GetLower() );
                 aDesc.GetMaster().SetFmtAttr( aUL );
 
-                if( bHead && pHeaderFmt || !bHead && pFooterFmt )
+                if( (bHead && pHeaderFmt) || (!bHead && pFooterFmt ))
                 {
                     SwFmtFrmSize aSz( bHead ? pHeaderFmt->GetFrmSize() :
                                               pFooterFmt->GetFrmSize() );
@@ -694,9 +683,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxColumnItem aColItem((const SvxColumnItem&)rReq.
                                             GetArgs()->Get(nSlot));
 
-        if( bSetTabColFromDoc || !bSect && rSh.GetTableFmt() )
+        if( bSetTabColFromDoc || (!bSect && rSh.GetTableFmt()))
         {
-            ASSERT(aColItem.Count(), "ColDesc ist leer!!");
+            OSL_ENSURE(aColItem.Count(), "ColDesc is empty!!");
 
             const BOOL bSingleLine = ((const SfxBoolItem&)rReq.
                             GetArgs()->Get(SID_RULER_ACT_LINE_ONLY)).GetValue();
@@ -773,7 +762,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 if(bSect)
                 {
                     const SwSection *pSect = rSh.GetAnySection();
-                    ASSERT( pSect, "Welcher Bereich?");
+                    OSL_ENSURE( pSect, "Which section?");
                     pSectFmt = pSect->GetFmt();
                 }
                 else
@@ -826,9 +815,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxColumnItem aColItem((const SvxColumnItem&)rReq.
                                             GetArgs()->Get(nSlot));
 
-        if( bSetTabColFromDoc || !bSect && rSh.GetTableFmt() )
+        if( bSetTabColFromDoc || (!bSect && rSh.GetTableFmt()) )
         {
-            ASSERT(aColItem.Count(), "ColDesc ist leer!!");
+            OSL_ENSURE(aColItem.Count(), "ColDesc is empty!!");
 
             SwTabCols aTabCols;
             if ( bSetTabRowFromDoc )
@@ -886,7 +875,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     break;
 
     default:
-        ASSERT( !this, "Falsche SlotId");
+        OSL_ENSURE( !this, "wrong SlotId");
     }
     rSh.EndAllAction();
 
@@ -902,8 +891,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     sprich alle relevanten Attribute an der CursorPos
                     werden der Tableiste uebermittelt
  --------------------------------------------------------------------*/
-
-
 void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -1074,13 +1061,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( ISA( SwWebView ) ||
                  IsTabColFromDoc() ||
                  IsTabRowFromDoc() ||
-                 ( nSelType & nsSelectionType::SEL_GRF) ||
-                    (nSelType & nsSelectionType::SEL_FRM) ||
-                    (nSelType & nsSelectionType::SEL_OLE) ||
-                    SFX_ITEM_AVAILABLE > aCoreSet.GetItemState(RES_LR_SPACE)||
-                    !bVerticalWriting && (SID_ATTR_TABSTOP_VERTICAL == nWhich)||
-                    bVerticalWriting && (RES_PARATR_TABSTOP == nWhich)
-                 )
+                 ( nSelType & nsSelectionType::SEL_GRF ) ||
+                 ( nSelType & nsSelectionType::SEL_FRM ) ||
+                 ( nSelType & nsSelectionType::SEL_OLE ) ||
+                 ( SFX_ITEM_AVAILABLE > aCoreSet.GetItemState(RES_LR_SPACE) ) ||
+                 (!bVerticalWriting && (SID_ATTR_TABSTOP_VERTICAL == nWhich) ) ||
+                 ( bVerticalWriting && (RES_PARATR_TABSTOP == nWhich))
+               )
                 rSet.DisableItem( nWhich );
             else
             {
@@ -1090,7 +1077,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                                             rSh.GetDefault(RES_PARATR_TABSTOP);
 
-                DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?");
+                OSL_ENSURE(pHRuler, "why is there no ruler?");
                 long nDefTabDist = ::GetTabDist(rDefTabs);
                 pHRuler->SetDefTabDist( nDefTabDist );
                 pVRuler->SetDefTabDist( nDefTabDist );
@@ -1103,12 +1090,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_ATTR_PARA_LRSPACE:
         {
             if ( nSelType & nsSelectionType::SEL_GRF ||
-                    nSelType & nsSelectionType::SEL_FRM ||
-                    nSelType & nsSelectionType::SEL_OLE ||
-                    nFrmType == FRMTYPE_DRAWOBJ ||
-                    !bVerticalWriting && (SID_ATTR_PARA_LRSPACE_VERTICAL == nWhich)||
-                    bVerticalWriting && (SID_ATTR_PARA_LRSPACE == nWhich)
-                    )
+                 nSelType & nsSelectionType::SEL_FRM ||
+                 nSelType & nsSelectionType::SEL_OLE ||
+                 nFrmType == FRMTYPE_DRAWOBJ ||
+                 (!bVerticalWriting && (SID_ATTR_PARA_LRSPACE_VERTICAL == nWhich)) ||
+                 ( bVerticalWriting && (SID_ATTR_PARA_LRSPACE == nWhich))
+                )
             {
                 rSet.DisableItem(nWhich);
             }
@@ -1282,12 +1269,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
             BOOL bTableVertical = bHasTable && rSh.IsTableVertical();
 
-            if((SID_RULER_BORDERS_VERTICAL == nWhich) &&
-                    ((bHasTable && !bTableVertical)||
-                        (!bVerticalWriting && !bFrmSelection && !bHasTable ) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
-                ((SID_RULER_BORDERS == nWhich) &&
-                    ((bHasTable && bTableVertical)||
-                        (bVerticalWriting && !bFrmSelection&& !bHasTable) || bFrameHasVerticalColumns)))
+            if(((SID_RULER_BORDERS_VERTICAL == nWhich) &&
+                ((bHasTable && !bTableVertical) ||
+                 (!bVerticalWriting && !bFrmSelection && !bHasTable ) ||
+                 ( bFrmSelection && !bFrameHasVerticalColumns))) ||
+               ((SID_RULER_BORDERS == nWhich) &&
+                ((bHasTable && bTableVertical) ||
+                 (bVerticalWriting && !bFrmSelection&& !bHasTable) || bFrameHasVerticalColumns)))
                 rSet.DisableItem(nWhich);
             else if ( bHasTable )
             {
@@ -1306,7 +1294,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nNum = aTabCols.Count() - nNum;
                 }
 
-                ASSERT(nNum <= aTabCols.Count(), "TabCol not found");
+                OSL_ENSURE(nNum <= aTabCols.Count(), "TabCol not found");
                 const int nLft = aTabCols.GetLeftMin() + aTabCols.GetLeft();
                 const int nRgt = (USHORT)(bTableVertical ? nPageHeight : nPageWidth) -
                                   (aTabCols.GetLeftMin() +
@@ -1381,7 +1369,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                      nFrmType & FRMTYPE_COLSECT )
                 {
                     const SwSection *pSect = rSh.GetAnySection(FALSE, pPt);
-                    ASSERT( pSect, "Welcher Bereich?");
+                    OSL_ENSURE( pSect, "Which section?");
                     if( pSect )
                     {
                         SwSectionFmt *pFmt = pSect->GetFmt();
@@ -1501,10 +1489,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             BOOL bFrameRTL;
             BOOL bFrameHasVerticalColumns =  rSh.IsFrmVertical(FALSE, bFrameRTL) && bFrmSelection;
 
-            if((SID_RULER_ROWS == nWhich) &&
-                    ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
-                ((SID_RULER_ROWS_VERTICAL == nWhich) &&
-                    ((bVerticalWriting && !bFrmSelection) || bFrameHasVerticalColumns)))
+            if(((SID_RULER_ROWS == nWhich) &&
+                ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns))) ||
+               ((SID_RULER_ROWS_VERTICAL == nWhich) &&
+                ((bVerticalWriting && !bFrmSelection) || bFrameHasVerticalColumns)))
                 rSet.DisableItem(nWhich);
             else if ( IsTabRowFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
@@ -1522,7 +1510,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     rSh.GetTabRows( aTabCols );
                 }
 
-//                ASSERT(nNum <= aTabCols.Count(), "TabCol not found");
                 const int nLft = aTabCols.GetLeftMin();
                 const int nRgt = (USHORT)(bVerticalWriting ? nPageWidth : nPageHeight) -
                                   (aTabCols.GetLeftMin() +
@@ -1732,7 +1719,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         eRecType = bSectOutTbl ? RECT_OUTTABSECTION
                                                : RECT_SECTION;
                         const SwSection *pSect = rSh.GetAnySection( bSectOutTbl, pPt );
-                        ASSERT( pSect, "Welcher Bereich?");
+                        OSL_ENSURE( pSect, "Which section?");
                         pFmt = pSect->GetFmt();
                     }
                     else if( bFrame )
@@ -1764,7 +1751,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     if( nNum > rCols.Count() )
                     {
-                        ASSERT( !this, "es wird auf dem falschen FmtCol gearbeitet!" );
+                        OSL_ENSURE( !this, "wrong FmtCol is being edited!" );
                         nNum = rCols.Count();
                     }
 
@@ -1845,4 +1832,4 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     }
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

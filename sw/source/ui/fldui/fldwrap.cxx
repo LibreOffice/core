@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,10 +52,6 @@
 
 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
@@ -63,10 +60,6 @@ SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
     m_aUpdateTimer.SetTimeout(200);
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 {
@@ -78,7 +71,6 @@ IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-
 BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
     BOOL bRet = FALSE;
@@ -94,10 +86,6 @@ BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
@@ -105,21 +93,16 @@ SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
     return aInfo;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo*  )
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
     pDlg->Start();
@@ -129,7 +112,6 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
 /*--------------------------------------------------------------------
     Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-
 BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     BOOL bRet;
@@ -142,10 +124,6 @@ BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDlgWrapper::ShowPage(USHORT nPage)
 {
     pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF);
@@ -153,9 +131,6 @@ void SwFldDlgWrapper::ShowPage(USHORT nPage)
 
 SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
 
-/* -----------------04.02.2003 14:17-----------------
- *
- * --------------------------------------------------*/
 SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
@@ -164,19 +139,17 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
     aInfo.bVisible = FALSE;
     return aInfo;
 }
-/* -----------------04.02.2003 14:17-----------------
- *
- * --------------------------------------------------*/
+
 SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
 
     pWindow = pDlg->GetWindow();
@@ -185,6 +158,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
     pDlg->Initialize( pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
+
 /* -----------------04.02.2003 14:17-----------------
  * re-init after doc activation
  * --------------------------------------------------*/
@@ -198,3 +172,5 @@ BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

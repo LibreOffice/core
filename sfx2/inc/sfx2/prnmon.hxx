@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,35 +44,6 @@ struct SfxPrintProgress_Impl;
 
 #define PAGE_MAX    9999        //max. Anzahl der Seiten die gedruckt werden
 
-//--------------------------------------------------------------------
-/*
-class SFX2_DLLPUBLIC SfxPrintProgress: public SfxProgress
-{
-    SfxPrintProgress_Impl*  pImp;
-
-private:
-//#if 0 // _SOLAR__PRIVATE
-    DECL_DLLPRIVATE_LINK( PrintErrorNotify, void * );
-    DECL_DLLPRIVATE_LINK( StartPrintNotify, void * );
-    DECL_DLLPRIVATE_LINK( EndPrintNotify, void * );
-//#endif
-public:
-                            SfxPrintProgress( SfxViewShell* pViewSh,
-                                              FASTBOOL bShow = TRUE );
-    virtual                 ~SfxPrintProgress();
-
-    virtual void            SetText( const String &rText );
-            BOOL            SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 );
-    virtual BOOL            SetState( ULONG nVal, ULONG nNewRange = 0 );
-
-    void                    RestoreOnEndPrint( SfxPrinter *pOldPrinter );
-    void                    RestoreOnEndPrint( SfxPrinter *pOldPrinter,
-                                               BOOL bOldEnablePrintFile );
-    void                    DeleteOnEndPrint();
-    void                    SetCancelHdl( const Link& aCancelHdl );
-    BOOL                    IsAborted() const;
-};
-*/
 // ------------------------------------------------------------------------
 
 struct SfxPrintOptDlg_Impl;
@@ -102,3 +74,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

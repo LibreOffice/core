@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1220,3 +1221,4 @@ void ImplCommand( Window* pWin, CommandEvent &aCmdEvnt )
     CALL_EVENT_WITH_NOTIFY( EVENT_COMMAND, aCmdEvnt, pWin, Command )
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

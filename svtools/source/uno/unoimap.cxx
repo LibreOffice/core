@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 
 #include <list>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "unoevent.hxx"
@@ -389,7 +390,7 @@ uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     static uno::Sequence< sal_Int8 > aId;
     if( aId.getLength() == 0 )
@@ -820,3 +821,5 @@ sal_Bool SvUnoImageMap_fillImageMap( Reference< XInterface > xImageMap, ImageMap
 
     return pUnoImageMap->fillImageMap( rMap );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,9 +111,13 @@
 #   include <dlfcn.h>
 #   include <endian.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif __BYTE_ORDER == __BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif __BYTE_ORDER == __PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
@@ -131,7 +136,10 @@
 #endif
 
 #ifdef NETBSD
-#   define  ETIME ETIMEDOUT
+#   include <sys/param.h>
+#       ifndef ETIME
+#     define  ETIME ETIMEDOUT
+#       endif
 #   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <netdb.h>
@@ -227,22 +235,25 @@ extern unsigned int nanosleep(unsigned int);
 #   define AF_IPX -1
 #   include <strings.h>
 #   include <pthread.h>
+#   include <dlfcn.h>
 #   include <sys/time.h>
 #   include <sys/un.h>
 #   include <netinet/tcp.h>
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#   define  sched_yield()               pthread_yield()
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
 #   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_DL_FUNCTIONS
 #endif
 
 #ifdef HPUX
@@ -478,7 +489,9 @@ extern int sem_post(sem_t* sem);
 
 #ifdef NO_PTHREAD_RTL
 #if !defined FREEBSD || (__FreeBSD_version < 500112)
+#if !defined NETBSD
 struct passwd *getpwent_r(struct passwd *pwd, char *buffer,  int buflen);
+#endif
 extern struct spwd *getspnam_r(const char *name, struct spwd *result,
                                char *buffer, int buflen);
 
@@ -493,3 +506,4 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
 #endif /* __OSL_SYSTEM_H__ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

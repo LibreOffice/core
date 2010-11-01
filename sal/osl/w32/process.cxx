@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -413,6 +414,25 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
     return osl_Process_E_Unknown;
 }
 
+oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
+{
+    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
+    LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
+    if (SetEnvironmentVariableW(lpName, lpValue))
+        return osl_Process_E_None;
+    return osl_Process_E_Unknown;
+}
+
+oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
+{
+    //If the second parameter is NULL, the variable is deleted from the current
+    //process's environment.
+    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
+    if (SetEnvironmentVariableW(lpName, NULL))
+        return osl_Process_E_None;
+    return osl_Process_E_Unknown;
+}
+
 /***************************************************************************
  * Current Working Directory.
  ***************************************************************************/
@@ -618,3 +638,5 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
 
     return pSocket;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

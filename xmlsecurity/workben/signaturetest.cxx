@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -549,3 +550,5 @@ IMPL_LINK( MyWin, StartVerifySignatureHdl, void*, EMPTYARG )
 
 
 #endif // #ifdef TEST_IMPLEMENTATION_DIRECTLY
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

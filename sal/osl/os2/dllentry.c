@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #include "system.h"
 #include "sockimpl.h"
 #include "secimpl.h"
-//#include "daemimpl.h"
 
 #include <osl/diagnose.h>
 
@@ -73,3 +73,4 @@ sal_uInt32 _System _DLL_InitTerm( sal_uInt32 nModule,
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

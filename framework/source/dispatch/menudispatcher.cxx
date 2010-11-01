@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/logfile.hxx>
 
@@ -83,10 +84,7 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
-using namespace ::vos                           ;
-
+    using ::rtl::OUString;
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
@@ -210,7 +208,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
         {
             uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
 
-            OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             {
                 Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
@@ -306,7 +304,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
         Window* pWindow = NULL;
 
         // Use SolarMutex for threadsafe code too!
-        OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         {
             pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             while ( pWindow && !pWindow->IsSystemWindow() )
@@ -486,3 +484,5 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_removeStatusListener(  const   u
 #endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

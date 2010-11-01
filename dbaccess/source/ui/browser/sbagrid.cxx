@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-//#define ITEMID_ORIENTATION     SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
@@ -329,7 +329,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     EventObject aEvt;
     aEvt.Source = *this;
@@ -441,7 +441,7 @@ IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
     SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
     if ( pGrid )    // if this fails, we were disposing before arriving here
     {
-        if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+        if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
         {
             // still not in the main thread (see SbaXGridPeer::dispatch). post an event, again
             // without moving the special even to the back of the queue
@@ -481,7 +481,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     if (!pGrid)
         return;
 
-    if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+    if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
     {
         // we're not in the main thread. This is bad, as we want to raise windows here,
         // and VCL does not like windows to be opened in non-main threads (at least on Win32).
@@ -504,7 +504,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
         return;
     }
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int16 nColId = -1;
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
@@ -660,7 +660,7 @@ SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
 //---------------------------------------------------------------------------------------
 void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     ImplStartColumnDrag( _nAction, _rPosPixel );
@@ -1172,7 +1172,7 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 //---------------------------------------------------------------------------------------
 void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     sal_Bool bHandled = sal_False;
@@ -1652,7 +1652,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
     ::rtl::OUString sRet;
     if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sRet = String(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
     }
     else
@@ -1666,3 +1666,4 @@ void SbaGridControl::DeleteSelectedRows()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

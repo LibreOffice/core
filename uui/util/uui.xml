@@ -27,7 +27,6 @@
     <project-build-dependency>toolkit</project-build-dependency>
     <project-build-dependency>tools</project-build-dependency>
     <project-build-dependency>vcl</project-build-dependency>
-    <project-build-dependency>vos</project-build-dependency>
     <runtime-module-dependency>cppu3</runtime-module-dependency>
     <runtime-module-dependency>cppuhelper3$(COM)</runtime-module-dependency>
     <runtime-module-dependency>sal3</runtime-module-dependency>

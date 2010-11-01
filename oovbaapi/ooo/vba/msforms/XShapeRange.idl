@@ -47,6 +47,7 @@ interface XShapeRange
 {
     interface ooo::vba::XCollection;
 
+    [attribute] string Name;
     [attribute] double Height;
     [attribute] double Width;
     [attribute] double Left;
@@ -65,6 +66,7 @@ interface XShapeRange
     void IncrementRotation( [in] double Increment );
     void IncrementLeft( [in] double Increment );
     void IncrementTop( [in] double Increment );
+    void ZOrder( [in] long ZOrderCmd );
 };
 }; }; };
 

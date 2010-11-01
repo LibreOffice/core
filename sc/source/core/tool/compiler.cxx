@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/zforlist.hxx>
+#include <sal/macros.h>
 #include <tools/rcid.h>
 #include <tools/rc.hxx>
 #include <tools/solar.h>
@@ -2538,7 +2540,7 @@ BOOL ScCompiler::IsOpCode( const String& rName, bool bInArray )
             { "LEGACY.TDIST",                   ocTDist },          // TDIST -> LEGACY.TDIST
             { "ORG.OPENOFFICE.EASTERSUNDAY",    ocEasterSunday }    // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
         };
-        static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
+        static const size_t nOdffAliases = SAL_N_ELEMENTS(aOdffAliases);
         for (size_t i=0; i<nOdffAliases; ++i)
         {
             if (rName.EqualsIgnoreCaseAscii( aOdffAliases[i].pName))
@@ -3566,11 +3568,6 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
     bool bAllowBooleans = bInArray;
     xub_StrLen nSpaces = NextSymbol(bInArray);
 
-#if 0
-    fprintf( stderr, "NextNewToken '%s' (spaces = %d)\n",
-             rtl::OUStringToOString( cSymbol, RTL_TEXTENCODING_UTF8 ).getStr(), nSpaces );
-#endif
-
     if (!cSymbol[0])
         return false;
 
@@ -3643,11 +3640,6 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
             p++;
         bMayBeFuncName = ( *p == '(' );
     }
-
-#if 0
-    fprintf( stderr, "Token '%s'\n",
-            rtl::OUStringToOString( aUpper, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
 
     // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
@@ -3749,11 +3741,6 @@ void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormu
 
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
-#if 0
-    fprintf( stderr, "CompileString '%s'\n",
-             rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
     if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
         SetGrammar( FormulaGrammar::GRAM_PODF );
@@ -5497,3 +5484,5 @@ FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaT
 {
     return ScToken::ExtendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

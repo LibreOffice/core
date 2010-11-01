@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,3 +66,5 @@ main() {
     success &= testDecode("=?iso-8859-1?B?QUJD?=", "ABC");
     return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

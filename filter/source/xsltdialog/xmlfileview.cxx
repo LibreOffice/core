@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 #include <rtl/tencinfo.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/textview.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/stream.hxx>
@@ -102,7 +103,7 @@ XMLErrorHandler::XMLErrorHandler( XMLSourceFileDialog* pParent, ListBox& rListBo
 // XMLErrorHandler
 void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
@@ -117,7 +118,7 @@ void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAX
 
 void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
@@ -986,3 +987,5 @@ void XMLFileWindow::DoSyntaxHighlight( USHORT nPara )
         pTmp->ShowCursor( FALSE/*pTmp->IsAutoScroll()*/ );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

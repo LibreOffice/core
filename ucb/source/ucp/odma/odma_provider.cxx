@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -190,21 +191,10 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT))))
         throw ucb::IllegalIdentifierException();
 
-    // @@@ Further id checks may go here...
-#if 0
-    if ( id-check-failes )
-        throw ucb::IllegalIdentifierException();
-#endif
 
     // @@@ Id normalization may go here...
-#if 0
-    // Normalize URL and create new Id.
-    rtl::OUString aCanonicURL = ( Identifier->getContentIdentifier() );
-    uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
-#else
+
     uno::Reference< ucb::XContentIdentifier > xCanonicId = Identifier;
-#endif
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -618,3 +608,5 @@ sal_Bool ContentProvider::deleteDocument(const ::rtl::Reference<ContentPropertie
     return odm == ODM_SUCCESS;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

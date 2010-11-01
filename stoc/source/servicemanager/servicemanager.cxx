@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2053,3 +2054,5 @@ Reference<XInterface > SAL_CALL OServiceManagerWrapper_CreateInstance(
     return (OWeakObject *)new stoc_smgr::OServiceManagerWrapper( xContext );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

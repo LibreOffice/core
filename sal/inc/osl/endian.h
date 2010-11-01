@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,11 +67,14 @@ extern "C" {
 #ifdef NETBSD
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
 #   endif
 #endif
 
@@ -103,9 +107,13 @@ extern "C" {
 #ifdef AIX
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
@@ -233,3 +241,4 @@ extern "C" {
 
 #endif /*_OSL_ENDIAN_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

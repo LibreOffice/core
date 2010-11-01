@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "sal/config.h"
+#include "sal/macros.h"
 
 #include <cstddef>
 #include <functional>
@@ -179,7 +180,7 @@ private:
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no service manager")),
             static_cast< ::cppu::OWeakObject * >(this));
     }
-    for (::std::size_t i = 0; i < sizeof services / sizeof services[0]; ++i) {
+    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
         ::css::uno::Reference< ::css::uno::XInterface > instance;
         try {
             instance = manager->createInstanceWithContext(
@@ -200,7 +201,7 @@ private:
     }
     static char const * const singletons[] = {
         "com.sun.star.util.theMacroExpander" };
-    for (::std::size_t i = 0; i < sizeof singletons / sizeof singletons[0]; ++i)
+    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(singletons); ++i)
     {
         ::rtl::OUStringBuffer b;
         b.appendAscii(RTL_CONSTASCII_STRINGPARAM("/singletons/"));

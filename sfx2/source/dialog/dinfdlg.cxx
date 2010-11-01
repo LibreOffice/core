@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,8 @@ String CreateSizeText( ULONG nSize, BOOL bExtraBytes, BOOL bSmartExtraBytes )
         fSize /= nGiga;
         nDec = 3;
     }
-    const LocaleDataWrapper& rLocaleWrapper = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     String aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
     aSizeStr += aUnitStr;
     if ( bExtraBytes && ( nSize1 < nSize2 ) )
@@ -2476,3 +2478,4 @@ SfxTabPage* SfxCustomPropertiesPage::Create( Window* pParent, const SfxItemSet& 
     return new SfxCustomPropertiesPage( pParent, rItemSet );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

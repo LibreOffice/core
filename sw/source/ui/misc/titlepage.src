@@ -1,0 +1,248 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *        Caolán McNamara <caolanm@redhat.com> (Red Hat, Inc.)
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Caolán McNamara <caolanm@redhat.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+/* StarView ressource file */
+
+#include <sfx2/sfx.hrc>
+#include <svx/dialogs.hrc>
+#include "globals.hrc"
+#include "misc.hrc"
+#include "titlepage.hrc"
+#include "helpid.h"
+/**************************************************************************/
+/*                                                                        */
+/**************************************************************************/
+ModalDialog DLG_TITLEPAGE
+{
+    HelpID = HID_TITLEPAGE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 216 , 201 ) ;
+    Text [ en-US ] = "Title Pages" ;
+    Moveable = TRUE ;
+
+    FixedLine FL_MAKEINSERT
+    {
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
+        Size = MAP_APPFONT ( 204 , 8 ) ;
+        Text [ en-US ] = "Make Title Pages" ;
+        Text [ x-comment ] = " ";
+    };
+    RadioButton RB_USE_EXISTING_PAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ en-US ] = "Convert existing pages to title pages" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text [ x-comment ] = " ";
+    };
+    RadioButton RB_INSERT_NEW_PAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ en-US ] = "Insert new title pages" ;
+        Text [ x-comment ] = " ";
+    };
+    FixedText FT_PAGE_COUNT
+    {
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Number of title pages" ;
+        Text [ x-comment ] = " ";
+    };
+    NumericField NF_PAGE_COUNT
+    {
+        Pos = MAP_APPFONT ( 80 , 50 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 65535;
+        First = 1 ;
+        Last = 65535;
+        SpinSize = 1 ;
+    };
+    FixedText FT_PAGE_PAGES
+    {
+        Pos = MAP_APPFONT ( 116 , 50 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text [ en-US ] = "pages" ;
+        Text [ x-comment ] = " ";
+    };
+    FixedText FT_PAGE_START
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
+        Text [ en-US ] = "Place title pages at" ;
+        Text [ x-comment ] = " ";
+    };
+    RadioButton RB_DOCUMENT_START
+    {
+        Pos = MAP_APPFONT ( 70 , 66 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text [ en-US ] = "Document Start" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text [ x-comment ] = " ";
+    };
+    RadioButton RB_PAGE_START
+    {
+        Pos = MAP_APPFONT ( 70 , 78 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Text [ en-US ] = "Page" ;
+        Text [ x-comment ] = " ";
+    };
+    NumericField NF_PAGE_START
+    {
+        Pos = MAP_APPFONT ( 95 , 78 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 65535;
+        First = 1 ;
+        Last = 65535;
+        SpinSize = 1 ;
+    };
+    FixedLine FL_NUMBERING
+    {
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Size = MAP_APPFONT ( 204 , 8 ) ;
+        Text [ en-US ] = "Page Numbering" ;
+        Text [ x-comment ] = " ";
+    };
+    CheckBox CB_RESTART_NUMBERING
+    {
+        Pos = MAP_APPFONT ( 12, 111  ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Reset Page Numbering after title pages" ;
+        Text [ x-comment ] = " ";
+    };
+    FixedText FT_RESTART_NUMBERING
+    {
+        Pos = MAP_APPFONT ( 140 , 111 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "Page Number" ;
+        Text [ x-comment ] = " ";
+    };
+    NumericField NF_RESTART_NUMBERING
+    {
+        Pos = MAP_APPFONT ( 180 , 111 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 65535;
+        First = 1 ;
+        Last = 65535;
+        SpinSize = 1 ;
+    };
+    CheckBox CB_SET_PAGE_NUMBER
+    {
+        Pos = MAP_APPFONT ( 12 , 125 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Set Page Number for first title page" ;
+        Text [ x-comment ] = " ";
+    };
+    FixedText FT_SET_PAGE_NUMBER
+    {
+        Pos = MAP_APPFONT ( 140 , 125 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "Page Number" ;
+        Text [ x-comment ] = " ";
+    };
+    NumericField NF_SET_PAGE_NUMBER
+    {
+        Pos = MAP_APPFONT ( 180 , 125 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 65535;
+        First = 1 ;
+        Last = 65535;
+        SpinSize = 1 ;
+    };
+    FixedLine FL_PAGE_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 6 , 141 ) ;
+        Size = MAP_APPFONT ( 204 , 8 ) ;
+        Text [ en-US ] = "Edit Page Properties" ;
+        Text [ x-comment ] = " ";
+    };
+    ListBox LB_PAGE_PROPERTIES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Size = MAP_APPFONT ( 150 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+    };
+    PushButton PB_PAGE_PROPERTIES
+    {
+                Pos = MAP_APPFONT ( 170 , 154 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Text [ en-US ] = "Edit..." ;
+    };
+    FixedLine FL_BOTTOM
+    {
+        Pos = MAP_APPFONT ( 6 , 170 ) ;
+        Size = MAP_APPFONT ( 204 , 8 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 54 , 181 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 107 , 181 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 160 , 181 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};

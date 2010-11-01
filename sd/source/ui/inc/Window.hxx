@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,6 +171,7 @@ protected:
     Point maWinPos;
     Point maViewOrigin;
     Size maViewSize;
+    Size maPrevSize; // contains previous window size in logical coords
     USHORT mnMinZoom;
     USHORT mnMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
@@ -214,3 +216,5 @@ protected:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

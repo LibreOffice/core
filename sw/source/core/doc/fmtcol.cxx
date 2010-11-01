@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <sal/macros.h>
 #include <hintids.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -316,7 +319,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     }
 
 
-    for( int nC = 0, nArrLen = sizeof(aFontSizeArr) / sizeof( aFontSizeArr[0]);
+    for( int nC = 0, nArrLen = SAL_N_ELEMENTS(aFontSizeArr);
             nC < nArrLen; ++nC )
     {
         SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
@@ -713,3 +716,5 @@ void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()
 //<-end,zhaojianwei
 
 //FEATURE::CONDCOLL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

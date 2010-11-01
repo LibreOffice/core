@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,18 @@
 #include "KDESalDisplay.hxx"
 
 #include "KDEXLib.hxx"
+#include "VCLKDEApplication.hxx"
+
+#include <assert.h>
+#include <saldata.hxx>
+
+SalKDEDisplay* SalKDEDisplay::selfptr = NULL;
 
 SalKDEDisplay::SalKDEDisplay( Display* pDisp )
     : SalX11Display( pDisp )
 {
+    assert( selfptr == NULL );
+    selfptr = this;
 }
 
 SalKDEDisplay::~SalKDEDisplay()
@@ -40,6 +49,23 @@ SalKDEDisplay::~SalKDEDisplay()
     static_cast<KDEXLib*>(GetXLib())->doStartup();
     // clean up own members
     doDestruct();
+    selfptr = NULL;
     // prevent SalDisplay from closing KApplication's display
     pDisp_ = NULL;
 }
+
+void SalKDEDisplay::Yield()
+{
+    if( DispatchInternalEvent() )
+        return;
+
+    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
+                osl::Thread::getCurrentIdentifier(),
+                "will crash soon since solar mutex not locked in SalKDEDisplay::Yield" );
+
+    XEvent event;
+    XNextEvent( pDisp_, &event );
+    qApp->x11ProcessEvent( &event );
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,16 @@
  *
  ************************************************************************/
 
+#include "uno/mapping.h"
+
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+void dummy_can_throw_anything( char const * );
 
 // ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
 
@@ -84,3 +89,5 @@ void raiseException(
 void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

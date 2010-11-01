@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,9 +100,7 @@ public:
     void onTagDeselected( AnnotationTag& rTag );
 
     void onSelectionChanged();
-#if 0
-    rtl::OUString GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
-#endif
+
     void addListener();
     void removeListener();
 
@@ -142,3 +141,5 @@ private:
 }
 
 #endif // _SD_ANNOTATIONMANAGER_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

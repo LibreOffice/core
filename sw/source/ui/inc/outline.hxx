@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,6 @@ class SwWrtShell;
 class SwNumRule;
 class SwChapterNumRules;
 
-/* -----------------07.07.98 13:38-------------------
- *
- * --------------------------------------------------*/
 class SwOutlineTabDialog : public SfxTabDialog
 {
     static     USHORT    nNumLevel;
@@ -89,9 +87,7 @@ class SwOutlineTabDialog : public SfxTabDialog
     static USHORT       GetActNumLevel() {return nNumLevel;}
     static void         SetActNumLevel(USHORT nSet) {nNumLevel = nSet;}
 };
-/* -----------------07.07.98 13:47-------------------
- *
- * --------------------------------------------------*/
+
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
     ListBox         aLevelLB;
@@ -153,4 +149,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

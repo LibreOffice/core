@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -141,7 +142,7 @@ BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldNa
     if(aIter == aEnd)
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
-        if (!pNew.isValid())
+        if (!pNew.is())
             return FALSE;
 
         m_vConnLineData.push_back(pNew);
@@ -194,3 +195,4 @@ void OTableConnectionData::normalizeLines()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

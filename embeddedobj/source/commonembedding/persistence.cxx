@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1794,14 +1795,11 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                     ::rtl::OUString::createFromAscii( "The object is not a valid linked object!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
-#if 0
     else
     {
         // the current implementation of OOo links does not implement this method since it does not implement
         // all the set of interfaces required for OOo embedded object ( XEmbedPersist is not supported ).
-        throw io::IOException(); // TODO:
     }
-#endif
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
@@ -1914,3 +1912,4 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
     return m_aLinkURL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

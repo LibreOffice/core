@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -307,12 +308,12 @@ void OTableEditorCtrl::InitCellController()
 
     Size aHeight;
     const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell,pHelpTextCell};
-    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls);++i)
     {
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
     SetDataRowHeight(aHeight.Height());
 
     ClearModified();
@@ -1961,3 +1962,4 @@ long OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

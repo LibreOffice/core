@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,3 +72,5 @@ namespace dbaui
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLED, "Enabled");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_MOUSE_WHEEL_BEHAVIOR, "MouseWheelBehavior");
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

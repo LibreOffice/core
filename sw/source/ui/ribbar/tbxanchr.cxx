@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ void  SwTbxAnchor::Click()
     }
     if(!pActiveView)
     {
-        DBG_ERROR("No active view could be found");
+        OSL_ENSURE(false, "No active view found");
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
@@ -162,3 +163,5 @@ void  SwTbxAnchor::Click()
     if (nSlotId)
         pDispatch->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

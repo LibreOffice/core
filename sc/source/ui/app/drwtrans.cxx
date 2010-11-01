@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@
 #include <svl/itempool.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "drwtrans.hxx"
 #include "docsh.hxx"
@@ -243,7 +244,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
 ScDrawTransferObj::~ScDrawTransferObj()
 {
-    Application::GetSolarMutex().acquire();     //! ???
+    SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pDrawClipboard == this )
@@ -265,8 +266,6 @@ ScDrawTransferObj::~ScDrawTransferObj()
 
     delete pBookmark;
     delete pDragSourceView;
-
-    Application::GetSolarMutex().release();     //! ???
 }
 
 // static
@@ -802,3 +801,4 @@ sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::S
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

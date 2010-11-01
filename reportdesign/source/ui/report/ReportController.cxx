@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,7 +143,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "PropertyForward.hxx"
 #include "SectionWindow.hxx"
 
@@ -982,7 +983,7 @@ namespace
 // -----------------------------------------------------------------------------
 void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( !getView() )
     {
@@ -1846,7 +1847,7 @@ sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( Runt
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getView() && getView()->IsInModalMode() )
@@ -2162,7 +2163,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/resizebar"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sectionshrinkbar"))
         };
-        for (size_t i = 0; i< sizeof(s_sMenu)/sizeof(s_sMenu[0]); ++i)
+        for (size_t i = 0; i< SAL_N_ELEMENTS(s_sMenu); ++i)
         {
             _xLayoutManager->createElement( s_sMenu[i] );
             _xLayoutManager->requestElement( s_sMenu[i] );
@@ -2175,7 +2176,7 @@ void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _
     uno::Reference< report::XGroup> xGroup(_rEvent.Element,uno::UNO_QUERY);
     if ( xGroup.is() )
     {
-        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
         sal_Int32 nGroupPos = 0;
         _rEvent.Accessor >>= nGroupPos;
@@ -2231,14 +2232,14 @@ void SAL_CALL OReportController::elementRemoved( const ContainerEvent& _rEvent )
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     OSL_ENSURE(0,"Not yet implemented!");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
@@ -2559,7 +2560,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     }
     SfxItemPool::Free(pPool);
 
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
 }
@@ -2757,7 +2758,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
         ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitPosition")),          SID_SPLIT_POSITION)
     };
 
-    uno::Sequence<beans::PropertyValue> aCommandProps(sizeof(pViewDataList)/sizeof(pViewDataList[0]));
+    uno::Sequence<beans::PropertyValue> aCommandProps(SAL_N_ELEMENTS(pViewDataList));
     beans::PropertyValue* pIter = aCommandProps.getArray();
     beans::PropertyValue* pEnd = pIter + aCommandProps.getLength();
     for (sal_Int32 i = 0; pIter != pEnd; ++pIter,++i)
@@ -3224,11 +3225,11 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
                                             ,PROPERTY_FORMATSSUPPLIER
                                             ,PROPERTY_BACKGROUNDCOLOR
         };
-        for(size_t i = 0; i < sizeof(sProps)/sizeof(sProps[0]);++i)
+        for(size_t i = 0; i < SAL_N_ELEMENTS(sProps);++i)
         {
             if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
                 xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
-        } // for(size_t i = 0; i < sizeof(sProps)/sizeof(sProps[0]);++i)
+        } // for(size_t i = 0; i < SAL_N_ELEMENTS(sProps);++i)
 
         if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
             xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
@@ -3512,7 +3513,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     ::rtl::OUString sDefaultName;
                     size_t i = 0;
                     OUnoObject* pObjs[2];
-                    for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
+                    for(i = 0; i < SAL_N_ELEMENTS(pControl);++i)
                     {
                         pObjs[i] = dynamic_cast<OUnoObject*>(pControl[i]);
                         uno::Reference<beans::XPropertySet> xUnoProp(pObjs[i]->GetUnoControlModel(),uno::UNO_QUERY_THROW);
@@ -3527,7 +3528,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                                                             ,PROPERTY_BORDER
                                                             ,PROPERTY_BACKGROUNDCOLOR
                         };
-                        for(size_t k = 0; k < sizeof(sProps)/sizeof(sProps[0]);++k)
+                        for(size_t k = 0; k < SAL_N_ELEMENTS(sProps);++k)
                         {
                             if ( xInfo->hasPropertyByName(sProps[k]) && xShapeInfo->hasPropertyByName(sProps[k]) )
                                 xUnoProp->setPropertyValue(sProps[k],xShapeProp->getPropertyValue(sProps[k]));
@@ -3594,7 +3595,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
-                    for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i) // insert controls
+                    for(i = 0; i < SAL_N_ELEMENTS(pControl);++i) // insert controls
                     {
                         correctOverlapping(pControl[i],pSectionWindow[1-i]->getReportSection());
                     }
@@ -3648,7 +3649,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
             else
             {
-                for(size_t i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
+                for(size_t i = 0; i < SAL_N_ELEMENTS(pControl);++i)
                     delete pControl[i];
             }
         }
@@ -3709,7 +3710,7 @@ void OReportController::listen(const bool _bAdd)
     void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const ::rtl::OUString&, const uno::Reference< XPropertyChangeListener >& ) =
         _bAdd ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
 
-    for (size_t i = 0; i < sizeof(aProps)/sizeof(aProps[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
         (m_xReportDefinition.get()->*pPropertyListenerAction)( aProps[i], static_cast< XPropertyChangeListener* >( this ) );
 
     OXUndoEnvironment& rUndoEnv = m_aReportModel->GetUndoEnv();
@@ -3718,7 +3719,7 @@ void OReportController::listen(const bool _bAdd)
     const beans::Property* pIter = aSeq.getConstArray();
     const beans::Property* pEnd   = pIter + aSeq.getLength();
     const ::rtl::OUString* pPropsBegin = &aProps[0];
-    const ::rtl::OUString* pPropsEnd   = pPropsBegin + (sizeof(aProps)/sizeof(aProps[0])) - 3;
+    const ::rtl::OUString* pPropsEnd   = pPropsBegin + (SAL_N_ELEMENTS(aProps)) - 3;
     for(;pIter != pEnd;++pIter)
     {
         if ( ::std::find(pPropsBegin,pPropsEnd,pIter->Name) == pPropsEnd )
@@ -4063,7 +4064,7 @@ void OReportController::checkChartEnabled()
 ::rtl::OUString SAL_CALL OReportController::getTitle()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     uno::Reference< frame::XTitle> xTitle(m_xReportDefinition,uno::UNO_QUERY_THROW);
@@ -4114,7 +4115,7 @@ void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (
 {
     static ::rtl::OUString s_sModes[] = { ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("remote")),
                                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal")) };
-    return uno::Sequence< ::rtl::OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
+    return uno::Sequence< ::rtl::OUString> (&s_sModes[0],SAL_N_ELEMENTS(s_sModes));
 }
 ::sal_Bool SAL_CALL OReportController::supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -4305,7 +4306,7 @@ void OReportController::openZoomDialog()
         }
         SfxItemPool::Free(pPool);
 
-        for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+        for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
             delete pDefaults[i];
     } // if(pFact)
 }
@@ -4335,7 +4336,7 @@ awt::Size SAL_CALL OReportController::getVisualAreaSize( ::sal_Int64 /*nAspect*/
 // -----------------------------------------------------------------------------
 embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepresentation( ::sal_Int64 _nAspect ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     embed::VisualRepresentation aResult;
     if ( !m_bInGeneratePreview )
@@ -4400,3 +4401,5 @@ uno::Reference< container::XNameAccess > OReportController::getColumns() const
     return sLabel;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

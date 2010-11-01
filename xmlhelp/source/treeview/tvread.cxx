@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 #include <string.h>
 #include <rtl/ustrbuf.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include "tvread.hxx"
 #include <expat.h>
 #include <osl/file.hxx>
@@ -1065,7 +1066,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1095,7 +1096,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1125,7 +1126,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     {
         const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1215,7 +1216,7 @@ rtl::OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
             }
 
         case END_REACHED:
-                VOS_ENSURE( false, "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -1316,3 +1317,4 @@ rtl::OUString TreeFileIterator::implGetTreeFileFromPackage
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

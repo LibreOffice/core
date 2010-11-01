@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 void test()
 {
     portion = appendPortion("text");
@@ -54,3 +55,5 @@ void test()
   tableContext.endCell:
     merge text ranges of portions to one and add this range to ranges of row.
  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

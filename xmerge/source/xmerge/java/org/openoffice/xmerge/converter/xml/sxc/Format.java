@@ -98,6 +98,9 @@ public class Format implements Cloneable {
      * Constructor that creates a new <code>Format</code> object
      * by setting all the format attributes.
      *
+     * @param attributes  Attributes flags (alignment, bold, etc.)
+     * @param fontSize    Size of the font in points.
+     * @param fontName    Name of the font to use.
      */
        public Format(int attributes, int fontSize, String fontName) {
 
@@ -129,7 +132,6 @@ public class Format implements Cloneable {
         sizeInPoints = fmt.sizeInPoints;
     }
 
-
     /**
      *  Reset this <code>Format</code> description.
      */
@@ -149,9 +151,10 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Set one or more text attributes to <i>on</i>.
+     *  Set one or more text attributes.
      *
-     *  @param  flags  Flag attributes to set <i>on</i>.
+     *  @param  flags  Flag attributes to set.
+     *  @param  toggle True to set flags, false to clear them.
      */
     public void setAttribute(int flags, boolean toggle) {
         mask |= flags;
@@ -191,7 +194,6 @@ public class Format implements Cloneable {
     public boolean isSet(int attribute) {
         return (!((mask & attribute) == 0));
     }
-
 
     /**
      *  Set the formatting category of this object, ie number, date,
@@ -236,7 +238,6 @@ public class Format implements Cloneable {
         value = newValue;
     }
 
-
      /**
       *  Set the <code>Format</code> specifier for this category.
       *
@@ -245,7 +246,6 @@ public class Format implements Cloneable {
      public void setFormatSpecifier(String formatString) {
          formatSpecifier = formatString;
      }
-
 
      /**
       *  Get the <code>Format</code> specifier for this category.
@@ -256,7 +256,6 @@ public class Format implements Cloneable {
          return formatSpecifier;
      }
 
-
      /**
       *  Set the precision of the number to be displayed.
       *
@@ -265,7 +264,6 @@ public class Format implements Cloneable {
      public void setDecimalPlaces(int precision) {
          decimalPlaces = precision;
      }
-
 
      /**
       *  Get the number of decimal places displayed.
@@ -276,7 +274,6 @@ public class Format implements Cloneable {
          return decimalPlaces;
      }
 
-
      /**
       *  Set the font used for this cell.
       *
@@ -285,7 +282,6 @@ public class Format implements Cloneable {
      public void setFontName(String fontName) {
          this.fontName = fontName;
      }
-
 
      /**
       *  Get the font used for this cell.
@@ -297,72 +293,69 @@ public class Format implements Cloneable {
      }
 
      /**
-      *  Set the font used for this cell.
+      *  Set the font size (in points) used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      *  @param  fontSize  The font size in points.
       */
      public void setFontSize(int fontSize) {
          sizeInPoints = fontSize;
      }
 
-
      /**
-      *  Get the font used for this cell.
+      *  Get the font size (in points) used for this cell.
       *
-      *  @return  The font name.
+      *  @return  The font size in points.
       */
      public int getFontSize() {
          return sizeInPoints;
      }
 
       /**
-      *  Set the alignmen used for this cell.
+      *  Set the vertical alignment used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      *  @param  vertAlign  The vertical alignment.
       */
      public void setVertAlign(int vertAlign) {
          this.vertAlign = vertAlign;
      }
 
-
      /**
-      *  Get the alignment used for this cell.
+      *  Get the vertical alignment used for this cell.
       *
-      *  @return  The font name.
+      *  @return  The vertical alignment.
       */
      public int getVertAlign() {
          return vertAlign;
      }
 
       /**
-      *  Set the alignmen used for this cell.
+      *  Set the alignment used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      *  @param  align The alignment to use.
       */
      public void setAlign(int align) {
          this.align = align;
      }
 
-
      /**
       *  Get the alignment used for this cell.
       *
-      *  @return  The font name.
+      *  @return  The alignment.
       */
      public int getAlign() {
          return align;
      }
+
      /**
       *  Set the Foreground <code>Color</code> for this cell.
       *
-      *  @param  color  A <code>Color</code> object representing the
+      *  @param  c  A <code>Color</code> object representing the
       *                 foreground color.
       */
      public void setForeground(Color c) {
          if(c!=null)
             foreground = new Color(c.getRGB());
      }
-
 
      /**
       *  Get the Foreground <code>Color</code> for this cell.
@@ -373,11 +366,10 @@ public class Format implements Cloneable {
          return foreground;
      }
 
-
      /**
       *  Set the Background <code>Color</code> for this cell
       *
-      *  @param  color  A <code>Color</code> object representing
+      *  @param  c  A <code>Color</code> object representing
       *                 the background color.
       */
      public void setBackground(Color c) {
@@ -385,9 +377,8 @@ public class Format implements Cloneable {
              background = new Color(c.getRGB());
      }
 
-
      /**
-      *  Get the Foreground <code>Color</code> for this cell
+      *  Get the Background <code>Color</code> for this cell
       *
       *  @return  Background <code>Color</code> value
       */
@@ -396,9 +387,9 @@ public class Format implements Cloneable {
      }
 
      /**
-      *  Get the Foreground <code>Color</code> for this cell
+      *  Get a string representation of this <code>Format</code>
       *
-      *  @return  Background <code>Color</code> value
+      *  @return  A string indicating the value and category.
       */
      public String toString() {
          return new String("Value : " + getValue() + " Category : " + getCategory());
@@ -433,13 +424,13 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Return true if <code>style</code> specifies as much or less
-     *  than this <code>Style</code>, and nothing it specifies
-     *  contradicts this <code>Style</code>.
+     *  Return true if passed <code>Format</code> specifies as much or less
+     *  than this <code>Format</code>, and nothing it specifies
+     *  contradicts this <code>Format</code>.
      *
-     *  @param  style  The <code>Style</code> to check.
+     *  @param  rhs  The <code>Format</code> to check.
      *
-     *  @return  true if <code>style</code> is a subset, false
+     *  @return  true if <code>rhs</code> is a subset, false
      *           otherwise.
      */
     public boolean isSubset(Format rhs) {
@@ -472,4 +463,3 @@ public class Format implements Cloneable {
         return true;
     }
 }
-

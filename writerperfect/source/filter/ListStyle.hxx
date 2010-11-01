@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* ListStyle: Stores (and writes) list-based information that is
  * needed at the head of an OO document.
  *
@@ -99,3 +100,5 @@ public:
     void updateListLevel(const int iLevel, const WPXPropertyList &xPropList);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

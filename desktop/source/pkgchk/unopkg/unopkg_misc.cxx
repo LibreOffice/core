@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -396,6 +397,7 @@ Reference<XComponentContext> bootstrapStandAlone(
     if (! ::ucbhelper::ContentBroker::initialize( xServiceManager, ucb_args ))
         throw RuntimeException( OUSTR("cannot initialize UCB!"), 0 );
 
+    disposeGuard.setDeinitUCB();
     return xContext;
 }
 
@@ -635,3 +637,5 @@ void removeFolder(OUString const & folderUrl)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

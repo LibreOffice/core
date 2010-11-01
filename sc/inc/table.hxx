@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,6 +89,8 @@ class ScFlatBoolColSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
 struct ScColWidthParam;
+
+typedef std::hash_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
 
 class ScTable
 {
@@ -183,6 +186,7 @@ private:
     Color           aTabBgColor;
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
+    NameToNameMap       localNameToGlobalName;
     bool            mbPageBreaksValid;
 
 friend class ScDocument;                    // fuer FillInfo
@@ -946,3 +950,4 @@ private:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

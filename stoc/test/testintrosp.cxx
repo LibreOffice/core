@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <osl/diagnose.h>
 
-//#include <vos/dynload.hxx>
-
 #include <ModuleA/XIntroTest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -48,7 +47,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-//#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -58,7 +56,6 @@
 
 using namespace rtl;
 using namespace cppu;
-//using namespace vos;
 using namespace ModuleA;
 //using namespace ModuleB;
 //using namespace ModuleC;
@@ -1615,3 +1612,4 @@ SAL_IMPLEMENT_MAIN()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

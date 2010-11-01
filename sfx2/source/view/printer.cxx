@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <vector>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/printer.hxx>
 #include <sfx2/printopt.hxx>
@@ -622,3 +620,4 @@ void SfxPrintOptionsDialog::DisableHelp()
     aHelpBtn.Disable();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

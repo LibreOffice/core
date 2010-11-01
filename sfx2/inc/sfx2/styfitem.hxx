@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,11 +75,7 @@ public:
     void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST(SfxStyleFamilyList, SfxStyleFamilyItem*)
-//#else
-//typedef List SfxStyleFamilyList;
-//#endif
 
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {
@@ -113,3 +110,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

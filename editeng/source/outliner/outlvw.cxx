@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -553,7 +554,9 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
     for( USHORT nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         pOwner->ImplCheckNumBulletItem( nPara );
-        pOwner->ImplCalcBulletText( nPara, FALSE, FALSE );
+        // update following paras as well, numbering depends on
+        // previous paras
+        pOwner->ImplCalcBulletText( nPara, TRUE, FALSE );
 
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
             pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
@@ -1730,3 +1733,4 @@ void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

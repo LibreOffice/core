@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -320,7 +321,6 @@ USHORT lcl_FindName( const SwPoolFmtList& rLst, SfxStyleFamily eFam,
 {
     if( rLst.Count() )
     {
-        // suchen
         String sSrch( ' ' );
         switch( eFam )
         {
@@ -474,7 +474,7 @@ const String&  SwDocStyleSheet::GetParent() const
 {
     if( !bPhysical )
     {
-        // dann pruefe, ob schon im Doc vorhanden
+        // check if it's already in document
         SwFmt* pFmt = 0;
         SwGetPoolIdFromName eGetType;
         switch(nFamily)
@@ -497,7 +497,7 @@ const String&  SwDocStyleSheet::GetParent() const
         case SFX_STYLE_FAMILY_PAGE:
         case SFX_STYLE_FAMILY_PSEUDO:
         default:
-            return aEmptyStr;       // es gibt keinen Parent
+            return aEmptyStr;       // there's no parent
         }
 
         String sTmp;
@@ -550,7 +550,7 @@ BOOL  SwDocStyleSheet::HasFollowSupport() const
         case SFX_STYLE_FAMILY_CHAR :
         case SFX_STYLE_FAMILY_PSEUDO: return FALSE;
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            OSL_ENSURE(!this, "unknown style family");
     }
     return FALSE;
 }
@@ -659,7 +659,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                     case SID_ATTR_AUTO_STYLE_UPDATE:
                     case SID_PARA_BACKGRND_DESTINATION:
                     case RES_PAGEDESC:
-                    //CTL no yet supported
+                    //CTL not yet supported
                     case RES_CHRATR_CTL_FONT:
                     case RES_CHRATR_CTL_FONTSIZE:
                     case RES_CHRATR_CTL_LANGUAGE:
@@ -785,7 +785,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
     {
         case SFX_STYLE_FAMILY_CHAR :
         {
-            ASSERT(pCharFmt, "SwCharFormat fehlt!");
+            OSL_ENSURE(pCharFmt, "SwCharFormat missing!");
             if( pCharFmt && pCharFmt->GetName() != rStr )
             {
                 pCharFmt->SetName( rStr );
@@ -795,7 +795,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
         }
         case SFX_STYLE_FAMILY_PARA :
         {
-            ASSERT(pColl, "Collektion fehlt!");
+            OSL_ENSURE(pColl, "Collection missing!");
             if( pColl && pColl->GetName() != rStr )
             {
                 if (pColl->GetName().Len() > 0)
@@ -809,7 +809,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
         }
         case SFX_STYLE_FAMILY_FRAME:
         {
-            ASSERT(pFrmFmt, "FrmFmt fehlt!");
+            OSL_ENSURE(pFrmFmt, "FrmFmt missing!");
             if( pFrmFmt && pFrmFmt->GetName() != rStr )
             {
                 if (pFrmFmt->GetName().Len() > 0)
@@ -822,7 +822,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
             break;
         }
         case SFX_STYLE_FAMILY_PAGE :
-            ASSERT(pDesc, "PageDesc fehlt!");
+            OSL_ENSURE(pDesc, "PageDesc missing!");
             if( pDesc && pDesc->GetName() != rStr )
             {
                 //PageDesc setzen - mit vorherigem kopieren - ist fuer das
@@ -843,7 +843,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
             }
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
-            ASSERT(pNumRule, "NumRule fehlt!");
+            OSL_ENSURE(pNumRule, "NumRule missing!");
 
             if (pNumRule)
             {
@@ -873,12 +873,12 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            OSL_ENSURE(!this, "unknown style family");
     }
 
     if( bChg )
     {
-        rPool.First();      // interne Liste muss geupdatet werden
+        rPool.First();  // internal list has to be updated
         rPool.Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
@@ -898,19 +898,19 @@ BOOL   SwDocStyleSheet::SetParent( const String& rStr)
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR :
-            ASSERT( pCharFmt, "SwCharFormat fehlt!" )
+            OSL_ENSURE( pCharFmt, "SwCharFormat missing!" );
             if( 0 != ( pFmt = pCharFmt ) && rStr.Len() )
                 pParent = lcl_FindCharFmt(rDoc, rStr);
             break;
 
         case SFX_STYLE_FAMILY_PARA :
-            ASSERT( pColl, "Collektion fehlt!")
+            OSL_ENSURE( pColl, "Collektion missing!");
             if( 0 != ( pFmt = pColl ) && rStr.Len() )
                 pParent = lcl_FindParaFmt( rDoc, rStr );
             break;
 
         case SFX_STYLE_FAMILY_FRAME:
-            ASSERT(pFrmFmt, "FrameFormat fehlt!");
+            OSL_ENSURE(pFrmFmt, "FrameFormat missing!");
             if( 0 != ( pFmt = pFrmFmt ) && rStr.Len() )
                 pParent = lcl_FindFrmFmt( rDoc, rStr );
             break;
@@ -919,7 +919,7 @@ BOOL   SwDocStyleSheet::SetParent( const String& rStr)
         case SFX_STYLE_FAMILY_PSEUDO:
             break;
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            OSL_ENSURE(!this, "unknown style family");
     }
 
     BOOL bRet = FALSE;
@@ -957,7 +957,7 @@ BOOL   SwDocStyleSheet::SetFollow( const String& rStr)
     {
     case SFX_STYLE_FAMILY_PARA :
     {
-        ASSERT(pColl, "Collection fehlt!");
+        OSL_ENSURE(pColl, "Collection missing!");
         if( pColl )
         {
             SwTxtFmtColl* pFollow = pColl;
@@ -970,7 +970,7 @@ BOOL   SwDocStyleSheet::SetFollow( const String& rStr)
     }
     case SFX_STYLE_FAMILY_PAGE :
     {
-        ASSERT(pDesc, "PageDesc fehlt!");
+        OSL_ENSURE(pDesc, "PageDesc missing!");
         if( pDesc )
         {
             const SwPageDesc* pFollowDesc = rStr.Len()
@@ -993,7 +993,7 @@ BOOL   SwDocStyleSheet::SetFollow( const String& rStr)
     case SFX_STYLE_FAMILY_PSEUDO:
         break;
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        OSL_ENSURE(!this, "unknwown style family");
     }
 
     return TRUE;
@@ -1012,8 +1012,9 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
     {
         case SFX_STYLE_FAMILY_CHAR:
             {
-                ASSERT(pCharFmt, "Wo ist das SwCharFmt");
+                OSL_ENSURE(pCharFmt, "Where's SwCharFmt");
                 aCoreSet.Put(pCharFmt->GetAttrSet());
+
                 if(pCharFmt->DerivedFrom())
                     aCoreSet.SetParent(&pCharFmt->DerivedFrom()->GetAttrSet());
             }
@@ -1030,19 +1031,21 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 aBoxInfo.SetValid( VALID_DISABLE, TRUE );
                 if ( nFamily == SFX_STYLE_FAMILY_PARA )
                 {
-                    ASSERT(pColl, "Wo ist die Collektion");
+                    OSL_ENSURE(pColl, "Where's Collection");
                     aCoreSet.Put(pColl->GetAttrSet());
                     aCoreSet.Put( aBoxInfo );
                     aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, pColl->IsAutoUpdateFmt()));
+
                     if(pColl->DerivedFrom())
                         aCoreSet.SetParent(&pColl->DerivedFrom()->GetAttrSet());
                 }
                 else
                 {
-                    ASSERT(pFrmFmt, "Wo ist das FrmFmt");
+                    OSL_ENSURE(pFrmFmt, "Where's FrmFmt");
                     aCoreSet.Put(pFrmFmt->GetAttrSet());
                     aCoreSet.Put( aBoxInfo );
                     aCoreSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, pFrmFmt->IsAutoUpdateFmt()));
+
                     if(pFrmFmt->DerivedFrom())
                         aCoreSet.SetParent(&pFrmFmt->DerivedFrom()->GetAttrSet());
                 }
@@ -1051,21 +1054,21 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
         case SFX_STYLE_FAMILY_PAGE :
             {
-                ASSERT(pDesc, "Kein PageDescriptor");
+                OSL_ENSURE(pDesc, "No PageDescriptor");
                 ::PageDescToItemSet(*((SwPageDesc*)pDesc), aCoreSet);
             }
             break;
 
         case SFX_STYLE_FAMILY_PSEUDO:
             {
-                ASSERT(pNumRule, "Keine NumRule");
+                OSL_ENSURE(pNumRule, "No NumRule");
                 SvxNumRule aRule = pNumRule->MakeSvxNumRule();
                 aCoreSet.Put(SvxNumBulletItem(aRule));
             }
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            OSL_ENSURE(!this, "unknown style family");
     }
     // Member der Basisklasse
     pSet = &aCoreSet;
@@ -1080,10 +1083,10 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         return;
     }
 
-    ASSERT( pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
+    OSL_ENSURE( pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
     if ( pColl->AreListLevelIndentsApplicable() )
     {
-        ASSERT( pColl->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET,
+        OSL_ENSURE( pColl->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET,
                 "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - list level indents are applicable at paragraph style, but no list style found. Serious defect -> please inform OD." );
         const String sNumRule = pColl->GetNumRule().GetValue();
         if( sNumRule.Len() )
@@ -1104,10 +1107,6 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   ItemSet setzen
- --------------------------------------------------------------------*/
-
 // handling of parameter <bResetIndentAttrsAtParagraphStyle>
 void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                                   const bool bResetIndentAttrsAtParagraphStyle )
@@ -1118,7 +1117,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
     SwImplShellAction aTmpSh( rDoc );
 
-    ASSERT( &rSet != &aCoreSet, "SetItemSet mit eigenem Set ist nicht erlaubt" );
+    OSL_ENSURE( &rSet != &aCoreSet, "SetItemSet with own Set is not allowed" );
 
     if ( rDoc.DoesUndo() )
     {
@@ -1135,14 +1134,14 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     {
         case SFX_STYLE_FAMILY_CHAR :
             {
-                ASSERT(pCharFmt, "Wo ist das CharFormat");
+                OSL_ENSURE(pCharFmt, "Where's CharFormat");
                 pFmt = pCharFmt;
             }
             break;
 
         case SFX_STYLE_FAMILY_PARA :
         {
-            ASSERT(pColl, "Wo ist die Collection");
+            OSL_ENSURE(pColl, "Where's Collection");
             const SfxPoolItem* pAutoUpdate;
             if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,FALSE, &pAutoUpdate ))
             {
@@ -1171,7 +1170,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     }
                 }
 
-                // Document auf die neue Bedingungen updaten
+                // Update document to new conditions
                 SwCondCollCondChg aMsg( pColl );
                 pColl->Modify( &aMsg, &aMsg );
             }
@@ -1267,7 +1266,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         }
         case SFX_STYLE_FAMILY_FRAME:
         {
-            ASSERT(pFrmFmt, "Wo ist das FrmFmt");
+            OSL_ENSURE(pFrmFmt, "Where's FrmFmt");
             const SfxPoolItem* pAutoUpdate;
             if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,FALSE, &pAutoUpdate ))
             {
@@ -1279,7 +1278,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
         case SFX_STYLE_FAMILY_PAGE :
             {
-                ASSERT(pDesc, "Wo ist der PageDescriptor");
+                OSL_ENSURE(pDesc, "Where's PageDescriptor");
 
                 if( rDoc.FindPageDescByName( pDesc->GetName(), &nPgDscPos ))
                 {
@@ -1299,7 +1298,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
         case SFX_STYLE_FAMILY_PSEUDO:
             {
-                ASSERT(pNumRule, "Wo ist die NumRule");
+                OSL_ENSURE(pNumRule, "Where's NumRule");
 
                 if (!pNumRule)
                     break;
@@ -1331,7 +1330,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            OSL_ENSURE(!this, "unknown style family");
     }
 
     if( pFmt && rSet.Count())
@@ -1371,7 +1370,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     else
     {
         aCoreSet.ClearItem();
-        if( pNewDsc )           // den muessen wir noch vernichten!!
+        if( pNewDsc )       // we still need to delete it
         {
             rDoc.PreDelPageDesc(pNewDsc); // #i7983#
             delete pNewDsc;
@@ -1696,7 +1695,7 @@ BOOL SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
 
         if( pFmt )
         {
-            ASSERT( bPhysical, "Format nicht gefunden" );
+            OSL_ENSURE( bPhysical, "Format not found" );
 
             nHelpId = pFmt->GetPoolHelpId();
             if( pFmt->GetPoolHlpFileId() != UCHAR_MAX )
@@ -1764,7 +1763,6 @@ void SwDocStyleSheet::Create()
             pNumRule = lcl_FindNumRule( rDoc, aName );
             if( !pNumRule )
             {
-                //JP 05.02.99: temp Namen erzeugen, damit kein ASSERT kommt
                 String sTmpNm( aName );
                 if( !aName.Len() )
                     sTmpNm = rDoc.GetUniqueNumRuleName();
@@ -1788,12 +1786,6 @@ void SwDocStyleSheet::Create()
     aCoreSet.ClearItem();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Konkrete Formate rausholen
- --------------------------------------------------------------------*/
-
-
-
 SwCharFmt* SwDocStyleSheet::GetCharFmt()
 {
     if(!bPhysical)
@@ -1801,14 +1793,12 @@ SwCharFmt* SwDocStyleSheet::GetCharFmt()
     return pCharFmt;
 }
 
-
 SwTxtFmtColl* SwDocStyleSheet::GetCollection()
 {
     if(!bPhysical)
         FillStyleSheet( FillPhysical );
     return pColl;
 }
-
 
 const SwPageDesc* SwDocStyleSheet::GetPageDesc()
 {
@@ -1826,7 +1816,7 @@ const SwNumRule * SwDocStyleSheet::GetNumRule()
 
 void SwDocStyleSheet::SetNumRule(const SwNumRule& rRule)
 {
-    DBG_ASSERT(pNumRule, "Wo ist die NumRule");
+    OSL_ENSURE(pNumRule, "Wo ist die NumRule");
     rDoc.ChgNumRuleFmts( rRule );
 }
 
@@ -1872,7 +1862,6 @@ SwFrmFmt* SwDocStyleSheet::GetFrmFmt()
     return pFrmFmt;
 }
 
-
 BOOL  SwDocStyleSheet::IsUsed() const
 {
     if( !bPhysical )
@@ -1881,7 +1870,6 @@ BOOL  SwDocStyleSheet::IsUsed() const
         pThis->FillStyleSheet( FillOnlyName );
     }
 
-    // immer noch nicht ?
     if( !bPhysical )
         return FALSE;
 
@@ -1897,7 +1885,7 @@ BOOL  SwDocStyleSheet::IsUsed() const
             return pNumRule ? rDoc.IsUsed( *pNumRule ) : FALSE;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        OSL_ENSURE(!this, "unknown style family");
         return FALSE;
     }
     return rDoc.IsUsed( *pMod );
@@ -1974,7 +1962,7 @@ static String sTemplateHelpFile = String::CreateFromAscii("swrhlppi.hlp");
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        OSL_ENSURE(!this, "unknown style family");
         return 0;
     }
 
@@ -2028,7 +2016,7 @@ void  SwDocStyleSheet::SetHelpId( const String& r, ULONG nId )
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        OSL_ENSURE(!this, "unknown style family");
         return ;
     }
     if( pTmpFmt )
@@ -2084,7 +2072,7 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make(
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOrg*/)
 {
-    ASSERT(!this , "Create im SW-Stylesheet-Pool geht nicht" );
+    OSL_ENSURE(!this , "Create im SW-Stylesheet-Pool geht nicht" );
     return NULL;
 }
 
@@ -2092,7 +2080,7 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOr
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const String &,
                                                 SfxStyleFamily, USHORT )
 {
-    ASSERT( !this, "Create im SW-Stylesheet-Pool geht nicht" );
+    OSL_ENSURE( !this, "Create im SW-Stylesheet-Pool geht nicht" );
     return NULL;
 }
 
@@ -2255,7 +2243,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        OSL_ENSURE(!this, "unknown style family");
         bBroadcast = FALSE;
     }
 
@@ -2291,7 +2279,7 @@ BOOL  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         break;
 
     default:
-        ASSERT(!this, "unbekannte Style-Familie");
+        OSL_ENSURE(!this, "unknown style family");
     }
 
     BOOL bRet = FALSE;
@@ -2381,7 +2369,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
             break;
 
         default:
-            ASSERT(!this, "unbekannte Style-Familie");
+            OSL_ENSURE(!this, "unknown style family");
         }
     }
 
@@ -2439,12 +2427,12 @@ SfxStyleSheetBase*  SwStyleSheetIterator::operator[]( USHORT nIdx )
 
 SfxStyleSheetBase*  SwStyleSheetIterator::First()
 {
-    // Alte Liste loeschen
+    // Delete old list
     bFirstCalled = TRUE;
     nLastPos = 0;
     aLst.Erase();
 
-    // aktuellen loeschen
+    // Delete current
     mxIterSheet->Reset();
 
     SwDoc& rDoc = ((SwDocStyleSheetPool*)pBasePool)->GetDoc();
@@ -2564,7 +2552,6 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 case SWSTYLEBIT_EXTRA:
                     if((nId  & COLL_GET_RANGE_BITS) != COLL_EXTRA_BITS) continue;
                     break;
-
                 case SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF:
                     if(IsPoolUserFmt(nId))
                         break;
@@ -2834,7 +2821,7 @@ void SwStyleSheetIterator::AppendStyleList(const SvStringsDtor& rList,
                         bUsed = rDoc.IsPoolPageDescUsed( nId );
                         break;
                 default:
-                    ASSERT( !this, "unknown PoolFmt-Id" );
+                    OSL_ENSURE( !this, "unknown PoolFmt-Id" );
             }
             if ( bUsed )
                 aLst.Append( cType, *rList[i] );
@@ -2864,3 +2851,4 @@ void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

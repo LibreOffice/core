@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -146,7 +147,7 @@ void ImpPutDouble( SbxValues* p, double n, BOOL bCoreString )
 start:
     switch( +p->eType )
     {
-        // Hier sind Tests notwendig
+        // Here are tests necessary
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -176,7 +177,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-            // ab hier nicht mehr
+            // from here on no longer
         case SbxSALINT64:
             p->nInt64 = ImpDoubleToSalInt64( n ); break;
         case SbxSALUINT64:
@@ -304,3 +305,4 @@ start:
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

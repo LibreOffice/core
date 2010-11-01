@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,3 +89,5 @@ typedef USHORT SalInvert;
 #define SAL_INVERT_TRACKFRAME       ((SalInvert)0x0004)
 
 #endif // _SV_SALGTYPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

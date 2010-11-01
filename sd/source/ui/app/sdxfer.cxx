@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <editeng/eeitem.hxx>
@@ -139,7 +140,7 @@ SdTransferable::~SdTransferable()
     if( mpSdView )
         EndListening( *const_cast< sd::View *>( mpSdView) );
 
-    Application::GetSolarMutex().acquire();
+    SolarMutexGuard aSolarGuard;
 
     ObjectReleased();
 
@@ -170,7 +171,6 @@ SdTransferable::~SdTransferable()
     delete mpVDev;
     delete mpObjDesc;
 
-    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
@@ -874,3 +874,5 @@ sal_Bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& 
 
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

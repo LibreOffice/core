@@ -53,7 +53,6 @@ DEPOBJFILES=$(APP2OBJS)
 APP2STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(SALLIB)							\
-                $(VOSLIB)							\
                 $(TOOLSLIB) 						\
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\

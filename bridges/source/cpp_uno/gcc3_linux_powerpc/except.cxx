@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -285,3 +286,4 @@ void fillUnoException( __cxa_exception * header, uno_Any * pExc, uno_Mapping * p
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

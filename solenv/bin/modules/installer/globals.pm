@@ -125,8 +125,8 @@ BEGIN
     $ismacosx = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
-    $islinuxrpmbuild = 0;
-    $islinuxdebbuild = 0;
+    $isrpmbuild = 0;
+    $isdebbuild = 0;
     $islinuxintelrpmbuild = 0;
     $islinuxppcrpmbuild = 0;
     $islinuxinteldebbuild = 0;

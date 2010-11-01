@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <rtl/uri.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
@@ -89,7 +90,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
     uno::Reference< util::XMacroExpander > xMacroExpander( m_xMacroExpander );
     if ( !xMacroExpander.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !xMacroExpander.is() )
         {
@@ -154,7 +155,7 @@ ImageButtonToolbarController::~ImageButtonToolbarController()
 void SAL_CALL ImageButtonToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
 }
 
@@ -162,7 +163,7 @@ throw ( RuntimeException )
 
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!
     if (( rControlCommand.Command.equalsAsciiL( "SetImag", 7 )) ||
         ( rControlCommand.Command.equalsAsciiL( "SetImage", 8 )) )
@@ -229,3 +230,4 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

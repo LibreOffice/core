@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,9 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::xml::sax::XFastDocumentHandler;
 using ::oox::core::BinaryFilterBase;
@@ -159,6 +162,32 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
     return new ExcelGraphicHelper( getWorkbookData() );
 }
 
+sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    if ( XmlFilterBase::filter( rDescriptor ) )
+        return true;
+
+    if ( isExportFilter() )
+    {
+        Reference< XExporter > xExporter( getGlobalFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilterExport" ) ), UNO_QUERY );
+
+        if ( xExporter.is() )
+        {
+            Reference< XComponent > xDocument( getModel(), UNO_QUERY );
+            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+
+            if ( xFilter.is() )
+            {
+                xExporter->setSourceDocument( xDocument );
+                if ( xFilter->filter( rDescriptor ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 OUString ExcelFilter::implGetImplementationName() const
 {
     return ExcelFilter_getImplementationName();
@@ -242,3 +271,5 @@ OUString ExcelBiffFilter::implGetImplementationName() const
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

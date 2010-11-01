@@ -51,7 +51,7 @@ interface XSystemDependentMenuPeer: com::sun::star::uno::XInterface
     /** returns a system-specific window handle.
 
         @returns
-        a sytem-specific handle to a menu
+        a system-specific handle to a menu
         or 0 if the menu is not in the same process.
 
         <p>You must check the machine ID and the process ID.<BR>

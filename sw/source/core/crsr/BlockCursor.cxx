@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,3 +105,4 @@ IBlockCursor *createBlockCursor( const SwCrsrShell& rCrsrSh, const SwPosition &r
     return new SwBlockCursor( rCrsrSh, rPos );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,11 +38,12 @@ TARGET=notify
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/eventsupplier.obj \
-                $(SLO)$/hintpost.obj
+	$(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES =	\
-        $(SLO)$/eventsupplier.obj
+	$(SLO)$/eventsupplier.obj \
+	$(SLO)$/hintpost.obj
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk

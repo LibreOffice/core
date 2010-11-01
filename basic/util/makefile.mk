@@ -57,13 +57,11 @@ SHL1STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB)	\
             $(VCLLIB) \
-            $(VOSLIB) \
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(SOTLIB) \
-            $(VOSLIB) \
             $(XMLSCRIPTLIB)
 
 .IF "$(SOLAR_JAVA)" != "TRUE"

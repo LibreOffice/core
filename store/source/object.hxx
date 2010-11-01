@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -130,3 +131,5 @@ SAL_CALL query (IStoreHandle *pHandle, OStoreObject*)
 } // namespace store
 
 #endif /* !_STORE_OBJECT_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +60,8 @@ class SbModule : public SbxObject
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
+    SbModule();
+    SbModule(const SbModule&);
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
@@ -132,6 +135,7 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
+    bool HasExeCode();
     BOOL IsVBACompat() const;
     void SetVBACompat( BOOL bCompat );
     INT32 GetModuleType() { return mnType; }
@@ -185,3 +189,5 @@ SV_DECL_IMPL_REF(SbClassModuleObject);
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,6 +61,8 @@ CONFIGURE_FLAGS= --disable-shared --with-pic
 
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"
 LCL_CONFIGURE_CFLAGS+=-m64
+.ELIF "$(OS)"=="AIX"
+LCL_CONFIGURE_CFLAG+=-D_LINUX_SOURCE_COMPAT
 .ENDIF
 
 .IF "$(SYSBASE)"!=""

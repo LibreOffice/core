@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
-                         FASTBOOL bUseExtColorTable
+                         bool bUseExtColorTable
                          )
             :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,m_pImpl(NULL)
@@ -133,7 +134,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                         FASTBOOL bUseExtColorTable)
+                         bool bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,m_pImpl( NULL )
             ,m_pObjShell(0)
@@ -173,7 +174,7 @@ FmFormModel::~FmFormModel()
 |* Erzeugt eine neue Seite
 |*
 \************************************************************************/
-SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 {
     return new FmFormPage(*this, NULL, bMasterPage);
 }
@@ -367,3 +368,5 @@ FmXUndoEnvironment& FmFormModel::GetUndoEnv()
 {
     return *m_pImpl->pUndoEnv;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

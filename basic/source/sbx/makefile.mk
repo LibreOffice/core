@@ -41,34 +41,35 @@ SRS1NAME=$(TARGET)
 SRC1FILES=	format.src
 
 SLOFILES=	\
-    $(SLO)$/sbxbase.obj	\
-    $(SLO)$/sbxres.obj  	\
-    $(SLO)$/sbxvalue.obj	\
-    $(SLO)$/sbxvals.obj	\
-    $(SLO)$/sbxvar.obj  	\
-    $(SLO)$/sbxarray.obj	\
-    $(SLO)$/sbxobj.obj	\
-    $(SLO)$/sbxcoll.obj	\
-    $(SLO)$/sbxexec.obj	\
-    $(SLO)$/sbxint.obj 	\
-    $(SLO)$/sbxlng.obj 	\
-    $(SLO)$/sbxsng.obj 	\
-    $(SLO)$/sbxmstrm.obj	\
-    $(SLO)$/sbxdbl.obj 	\
+    $(EXCEPTIONSFILES)	\
+    $(SLO)$/sbxbase.obj		\
+    $(SLO)$/sbxbool.obj		\
+    $(SLO)$/sbxbyte.obj		\
+    $(SLO)$/sbxchar.obj		\
+    $(SLO)$/sbxcoll.obj		\
     $(SLO)$/sbxcurr.obj 	\
-    $(SLO)$/sbxdate.obj	\
-    $(SLO)$/sbxstr.obj 	\
-    $(SLO)$/sbxbool.obj	\
-    $(SLO)$/sbxchar.obj	\
-    $(SLO)$/sbxbyte.obj	\
-    $(SLO)$/sbxuint.obj	\
-    $(SLO)$/sbxulng.obj	\
-    $(SLO)$/sbxform.obj	\
+    $(SLO)$/sbxdec.obj		\
+    $(SLO)$/sbxform.obj		\
+    $(SLO)$/sbxint.obj 		\
+    $(SLO)$/sbxlng.obj 		\
+    $(SLO)$/sbxmstrm.obj	\
+    $(SLO)$/sbxobj.obj		\
+    $(SLO)$/sbxres.obj  	\
+    $(SLO)$/sbxsng.obj 		\
+    $(SLO)$/sbxuint.obj		\
+    $(SLO)$/sbxulng.obj		\
+    $(SLO)$/sbxvals.obj		\
+    $(SLO)$/sbxvar.obj
+
+
+EXCEPTIONSFILES=	\
+    $(SLO)$/sbxarray.obj	\
+    $(SLO)$/sbxdate.obj		\
+    $(SLO)$/sbxdbl.obj 		\
+    $(SLO)$/sbxexec.obj		\
     $(SLO)$/sbxscan.obj 	\
-    $(SLO)$/sbxdec.obj
-
-
-EXCEPTIONSFILES=$(SLO)$/sbxarray.obj
+    $(SLO)$/sbxstr.obj 		\
+    $(SLO)$/sbxvalue.obj	\
 
 # --- Targets -------------------------------------------------------------
 

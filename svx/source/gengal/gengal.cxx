@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,6 @@
 #include <galtheme.hxx>
 #include <svx/gallery1.hxx>
 
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
@@ -241,8 +241,9 @@ void GalApp::Init()
 #endif
         rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
         rtl::OUString installPrefix = baseBinDir + rtl::OUString::createFromAscii( "/../.." );
-        rtl::OUString assignment = rtl::OUString::createFromAscii( "OOO_INSTALL_PREFIX=" ) + installPrefix;
-        putenv( strdup( OUSTRING_CSTR( assignment )));
+
+        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("OOO_INSTALL_PREFIX"));
+        osl_setEnvironment(envVar.pData, installPrefix.pData);
     }
     OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
 
@@ -316,3 +317,5 @@ void GalApp::Main()
 }
 
 GalApp aGalApp;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

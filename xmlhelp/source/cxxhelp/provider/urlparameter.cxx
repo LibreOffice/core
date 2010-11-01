@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #endif
 
 #include <string.h>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.hxx>
 #include <osl/thread.h>
 #include <rtl/memory.h>
 #include <osl/file.hxx>
@@ -1237,3 +1238,5 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
     delete[] tmp;
     len += len_;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
