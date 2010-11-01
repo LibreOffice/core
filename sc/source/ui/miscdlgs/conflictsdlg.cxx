@@ -37,7 +37,7 @@
 #include "conflictsdlg.hrc"
 #include "scresid.hxx"
 #include "viewdata.hxx"
-#include "tabview.hxx"
+#include "dbfunc.hxx"
 
 
 //=============================================================================
@@ -625,7 +625,7 @@ IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
         return 0;
     }
 
-    ScTabView* pTabView = reinterpret_cast< ScTabView* >( mpViewData->GetView() );
+    ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
     BOOL bContMark = FALSE;
     SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();

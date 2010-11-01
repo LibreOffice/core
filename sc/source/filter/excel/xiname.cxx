@@ -47,6 +47,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mpScData( 0 ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
+    mbFunction( false ),
     mbVBName( false )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
@@ -95,7 +96,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 2) *** convert sheet index and name *** --------------------------------
 
-    // Visual Basic procedure
+    // functions and VBA
+    mbFunction = ::get_flag( nFlags, EXC_NAME_FUNC );
     mbVBName = ::get_flag( nFlags, EXC_NAME_VB );
 
     // get built-in name, or convert characters invalid in Calc
@@ -215,7 +217,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // 4) *** create a defined name in the Calc document *** ------------------
 
     // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
-    if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbVBName )
+    if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
