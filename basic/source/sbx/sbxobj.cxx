@@ -1049,7 +1049,7 @@ SbxClassType SbxProperty::GetClass() const
     return SbxCLASS_PROPERTY;
 }
 
-void SbxObject::GarbageCollection( ULONG nObjects )
+void SbxObject::GarbageCollection( ULONG /*nObjects*/ )
 
 /*  [Beschreibung]
 
