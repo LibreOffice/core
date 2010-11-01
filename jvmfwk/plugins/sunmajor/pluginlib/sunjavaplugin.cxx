@@ -471,10 +471,10 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
      {
          JFW_ENSURE(0, OUSTR("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                              " could not load Java runtime library: \n")
-                    + sRuntimeLib + OUSTR("."));
+                    + sRuntimeLib + OUSTR("\n"));
          JFW_TRACE0(OUSTR("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                              " could not load Java runtime library: \n")
-                    + sRuntimeLib +  OUSTR("."));
+                    + sRuntimeLib +  OUSTR("\n"));
          return JFW_PLUGIN_E_VM_CREATION_FAILED;
      }
 
@@ -615,6 +615,64 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
    return errcode;
 }
 
+extern "C"
+javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
+{
+    javaPluginError ret = JFW_PLUGIN_E_NONE;
+    if (!pInfo || !exist)
+        return JFW_PLUGIN_E_INVALID_ARG;
+    ::rtl::OUString sLocation(pInfo->sLocation);
+
+    if (sLocation.getLength() == 0)
+        return JFW_PLUGIN_E_INVALID_ARG;
+    ::osl::DirectoryItem item;
+    ::osl::File::RC rc_item = ::osl::DirectoryItem::get(sLocation, item);
+    if (::osl::File::E_None == rc_item)
+    {
+        *exist = sal_True;
+    }
+    else if (::osl::File::E_NOENT == rc_item)
+    {
+        *exist = sal_False;
+    }
+    else
+    {
+        ret = JFW_PLUGIN_E_ERROR;
+    }
+#ifdef MACOSX
+    //We can have the situation that the JavaVM runtime library is not
+    //contained within JAVA_HOME. Then the check for JAVA_HOME would return
+    //true although the runtime library may not be loadable.
+    if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
+    {
+        rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
+        JFW_TRACE2(OUSTR("[Java framework] Checking existence of Java runtime library.\n"));
+
+        ::osl::DirectoryItem itemRt;
+        ::osl::File::RC rc_itemRt = ::osl::DirectoryItem::get(sRuntimeLib, itemRt);
+        if (::osl::File::E_None == rc_itemRt)
+        {
+            *exist = sal_True;
+            JFW_TRACE2(OUSTR("[Java framework] Java runtime library exist: ")
+              + sRuntimeLib + OUSTR("\n"));
+
+        }
+        else if (::osl::File::E_NOENT == rc_itemRt)
+        {
+            *exist = sal_False;
+            JFW_TRACE2(OUSTR("[Java framework] Java runtime library does not exist: ")
+                       + sRuntimeLib + OUSTR("\n"));
+        }
+        else
+        {
+            ret = JFW_PLUGIN_E_ERROR;
+            JFW_TRACE2(OUSTR("[Java framework] Error while looking for Java runtime library: ")
+                       + sRuntimeLib + OUSTR(" \n"));
+        }
+    }
+#endif
+    return ret;
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
