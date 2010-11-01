@@ -1054,7 +1054,6 @@ void SbiParser::Attribute()
     // TODO: Need to implement the method as an attributed object.
     while( Next() != EQ )
     {
-        String aSym( GetSym() );
         if( Next() != DOT)
             break;
     }
@@ -1071,7 +1070,6 @@ void SbiParser::Attribute()
 
 void SbiParser::Call()
 {
-    String aName( aSym );
     SbiExpression aVar( this, SbSYMBOL );
     aVar.Gen( FORCE_CALL );
     aGen.Gen( _GET );
