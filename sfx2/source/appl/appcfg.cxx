@@ -88,7 +88,6 @@
 #include <sfx2/evntconf.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include <sfx2/macrconf.hxx>
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfxresid.hxx"
@@ -983,13 +982,6 @@ BOOL SfxApplication::SaveAll_Impl(BOOL bPrompt, BOOL bAutoSave)
     }
 
     return bFunc;
-}
-
-//--------------------------------------------------------------------
-
-SfxMacroConfig* SfxApplication::GetMacroConfig() const
-{
-    return SfxMacroConfig::GetOrCreate();
 }
 
 //--------------------------------------------------------------------

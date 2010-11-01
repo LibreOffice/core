@@ -55,7 +55,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/msgpool.hxx>
 
 //====================================================================

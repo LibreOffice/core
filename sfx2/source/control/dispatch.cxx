@@ -69,7 +69,6 @@
 #include "slotserv.hxx"
 #include <sfx2/ipclient.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/childwin.hxx>

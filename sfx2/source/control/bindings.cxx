@@ -64,7 +64,6 @@
 #include <sfx2/objface.hxx>
 #include "sfxtypes.hxx"
 #include "workwin.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxuno.hxx>

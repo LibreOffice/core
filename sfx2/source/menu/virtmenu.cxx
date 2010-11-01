@@ -59,7 +59,6 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include "sfxpicklist.hxx"
-#include <sfx2/macrconf.hxx>
 #include "sfxresid.hxx"
 #include "menu.hrc"
 #include "imagemgr.hxx"

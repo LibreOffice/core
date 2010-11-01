@@ -218,7 +218,6 @@ public:
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();
-    SfxMacroConfig*             GetMacroConfig() const;
     SfxProgress*                GetProgress() const;
     const String&               GetLastSaveDirectory() const;
     USHORT                      GetFreeIndex();

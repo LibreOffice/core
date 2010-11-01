@@ -73,7 +73,6 @@
 #include "minfitem.hxx"
 #include "app.hrc"
 #include <sfx2/evntconf.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"

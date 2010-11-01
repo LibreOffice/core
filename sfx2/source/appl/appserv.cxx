@@ -122,7 +122,6 @@
 #include "arrdecl.hxx"
 #include <sfx2/childwin.hxx>
 #include "appdata.hxx"
-#include <sfx2/macrconf.hxx>
 #include "minfitem.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>
