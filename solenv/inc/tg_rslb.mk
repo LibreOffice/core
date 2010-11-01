@@ -30,22 +30,6 @@
 
 .IF "$(RESLIB$(TNR)TARGETN)"!=""
 
-.IF "$(BUILDHIDS)"!=""
-HIDRES$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(RESLIB$(TNR)NAME)_res.hid
-
-#HACK cut off the dirty srs files which are included from solver
-RESLIB$(TNR)HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB$(TNR)SRSFILES)))
-$(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
-    @echo "Making:   " $(@:f)
-    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
-# need to strip since solaris cannot handle tab-only whitespace here
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(strip, $(subst,/,/ $(RESLIB$(TNR)HIDFILES))) )| xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDRES$(TNR)PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
-
 $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)TARGETN) \
