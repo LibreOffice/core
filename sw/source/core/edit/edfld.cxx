@@ -342,11 +342,11 @@ SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
         ((SwSetExpField&)rFld).GetInputFlag() ) )
     {
         const SfxPoolItem* pItem;
-        USHORT n, nMaxItems =
-            pDoc->GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
+        sal_uInt32 n, nMaxItems =
+            pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
         for( n = 0; n < nMaxItems; ++n )
             if( 0 != (pItem =
-                      pDoc->GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) )
+                      pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
                 && ((SwFmtFld*)pItem)->GetFld() == &rFld )
             {
                 pTFld = ((SwFmtFld*)pItem)->GetTxtFld();

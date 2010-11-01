@@ -188,7 +188,6 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     maCharStyleMapper(*pD),
     maSegments(*this),
     maInsertedTables(*pD),
-    aMergeBoxes(0, 5),
     aTblFmts(0, 10),
     mpBookmarkStart(0),
     mpRedlineStack(0),
@@ -205,7 +204,7 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     sBaseURL( rBaseURL ),
     nAktPageDesc(0),
     nAktFirstPageDesc(0),
-    nAktBox(0),
+    m_nCurrentBox(0),
     nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX),
     nRowsToRepeat(0),
@@ -1759,7 +1758,7 @@ void SwRTFParser::NextToken( int nToken )
         if (!CantUseTables())
         {
             // aus der Line raus
-            nAktBox = 0;
+            m_nCurrentBox = 0;
             pTableNode = 0;
             // noch in der Tabelle drin?
             SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
@@ -3548,14 +3547,13 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 {
     ASSERT( RTF_FOOTNOTE == nToken ||
             RTF_FLY_INPARA == nToken ||
-            pPageDesc, "PageDesc fehlt" );
+            pPageDesc, "PageDesc is missing" );
 
     bool bContainsParaCache = bContainsPara;
-    // alle wichtigen Sachen sichern
+    // backup all important data
     SwPosition aSavePos( *pPam->GetPoint() );
-    SvxRTFItemStack aSaveStack;
-    aSaveStack.Insert( &GetAttrStack(), 0 );
-    GetAttrStack().Remove( 0, GetAttrStack().Count() );
+    SvxRTFItemStack aSaveStack(GetAttrStack());
+    GetAttrStack().clear();
 
     // save the fly array - after read, all flys may be set into
     // the header/footer
@@ -3605,7 +3603,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
             // wurde an der Position ein Escapement aufgespannt, so entferne
             // das jetzt. Fussnoten sind bei uns immer hochgestellt.
-            SvxRTFItemStackTypePtr pTmp = aSaveStack.Top();
+            SvxRTFItemStackTypePtr pTmp = aSaveStack.back();
             if( pTmp && pTmp->GetSttNodeIdx() ==
                 pPam->GetPoint()->nNode.GetIndex() &&
                 pTmp->GetSttCnt() == nPos )
@@ -3764,7 +3762,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     else
         SetNewGroup( FALSE );           // { - Klammer war kein Group-Start!
     mbIsFootnote = bOldIsFootnote;
-    GetAttrStack().Insert( &aSaveStack, 0 );
+    GetAttrStack() = aSaveStack;
 
     aFlyArr.Insert( &aSaveArray, 0 );
     aSaveArray.Remove( 0, aSaveArray.Count() );
@@ -4123,12 +4121,12 @@ void SwRTFParser::DelLastNode()
         if( pCNd && pCNd->StartOfSectionIndex()+2 <
             pCNd->EndOfSectionIndex() )
         {
-            if( GetAttrStack().Count() )
+            if( !GetAttrStack().empty() )
             {
                 // Attribut Stack-Eintraege, muessen ans Ende des vorherigen
                 // Nodes verschoben werden.
                 BOOL bMove = FALSE;
-                for( USHORT n = GetAttrStack().Count(); n; )
+                for( size_t n = GetAttrStack().size(); n; )
                 {
                     SvxRTFItemStackType* pStkEntry = (SvxRTFItemStackType*)
                                                     GetAttrStack()[ --n ];
@@ -4180,7 +4178,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                     // auf die neue Box umsetzen !!
                     SvxRTFItemStack& rAttrStk = GetAttrStack();
                     const SvxRTFItemStackType* pStk;
-                    for( USHORT n = 0; n < rAttrStk.Count(); ++n )
+                    for( size_t n = 0; n < rAttrStk.size(); ++n )
                         if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == nOldPos &&
                             !pStk->GetSttCnt() )
                             ((SvxRTFItemStackType*)pStk)->SetStartPos( SwxPosition( pPam ) );
