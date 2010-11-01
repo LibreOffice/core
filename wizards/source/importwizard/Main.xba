@@ -274,7 +274,7 @@ End Sub
 
 
 Function GetImportWizardPaths() as Boolean
-	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;../wizard/bitmap&quot;)
 	If SOBitmapPath &lt;&gt; &quot;&quot; Then
 		SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
 		If SOWorkPath &lt;&gt; &quot;&quot; Then

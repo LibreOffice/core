@@ -241,7 +241,7 @@ public abstract class WWD_Startup extends WWD_General
 
         String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template", "share", "/wizard");
 
-        String exclamationURL = FileAccess.connectURLs(soTemplateDir, "wizard/bitmap/caution_16.png");
+        String exclamationURL = FileAccess.connectURLs(soTemplateDir, "../wizard/bitmap/caution_16.png");
         this.drawNaviBar();
         this.buildStep1();
         this.buildStep2();
