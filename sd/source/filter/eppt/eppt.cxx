@@ -66,6 +66,10 @@
 #include <oox/export/utils.hxx>
 
 using namespace com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
+
+using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
@@ -142,7 +146,7 @@ void PPTWriter::exportPPTPost( )
 
     ImplWriteOLE();
 
-    ImplWriteVBA( pVBA );
+    ImplWriteVBA();
 
     if ( !ImplWriteAtomEnding() )
         return;
@@ -155,6 +159,8 @@ void PPTWriter::exportPPTPost( )
 
 // ---------------------------------------------------------------------------------------------
 
+void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom );
+
 void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
                                 sal_Bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
 {
@@ -166,7 +172,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     *mpStrm << rLayout.nLayout;
     mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs ( 8Stueck )
-    *mpStrm << (sal_uInt32)nMasterID                // master ID ( ist gleich 0x80000000 bei einer masterpage   )
+    *mpStrm << (sal_uInt32)(nMasterNum | 0x80000000)// master ID ( ist gleich 0x80000000 bei einer masterpage   )
             << (sal_uInt32)nPageNum + 0x100         // notes ID ( ist gleich null wenn keine notizen vorhanden )
             << nMode
             << (sal_uInt16)0;                       // padword
@@ -452,9 +458,9 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
         // the auto color is dependent to the page background,so we have to set a page that is in the right context
         if ( nInstance == EPP_TEXTTYPE_Notes )
-            ImplGetPageByIndex( 0, NOTICE );
+            GetPageByIndex( 0, NOTICE );
         else
-            ImplGetPageByIndex( 0, MASTER );
+            GetPageByIndex( 0, MASTER );
 
         mpPptEscherEx->BeginAtom();
 
@@ -477,7 +483,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
         }
         mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
     }
-    ImplGetPageByIndex( nPageNum, MASTER );
+    GetPageByIndex( nPageNum, MASTER );
 
     EscherSolverContainer aSolverContainer;
 
@@ -594,7 +600,7 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
         if ( mnCnvrtFlags & 0x8000 )
         {
             uno::Sequence<sal_uInt8> aThumbSeq;
-            if ( ImplGetPageByIndex( 0, NORMAL ) &&
+            if ( GetPageByIndex( 0, NORMAL ) &&
                  ImplGetPropertyValue( mXPagePropSet,
                     String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
             {
@@ -781,13 +787,13 @@ sal_Bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 3 );  //Master footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
     *mpStrm << (sal_uInt32)0x25000d;
-    if ( ImplGetPageByIndex( 0, MASTER ) )
+    if ( GetPageByIndex( 0, MASTER ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
     mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 4 );  //NotesMaster footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
     *mpStrm << (sal_uInt32)0x3d000d;
-    if ( ImplGetPageByIndex( 0, NOTICE ) )
+    if ( GetPageByIndex( 0, NOTICE ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
 
@@ -803,9 +809,9 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 << (INT32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
                 << (sal_uInt32)0;                               // reserved, usualy 0
 
-        if ( !ImplGetPageByIndex( i, NORMAL ) )                 // sehr aufregend: noch einmal ueber alle seiten
+        if ( !GetPageByIndex( i, NORMAL ) )                     // sehr aufregend: noch einmal ueber alle seiten
             return FALSE;
-        ImplSetCurrentStyleSheet( ImplGetMasterIndex( NORMAL ) );
+        SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
             aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );

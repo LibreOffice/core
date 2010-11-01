@@ -122,9 +122,6 @@ using namespace ::com::sun::star;
 
 // ---------------------------------------------------------------------------------------------
 
-com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xPPTBreakIter;
-com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xScriptTypeDetector;
-
 PPTExBulletProvider::PPTExBulletProvider()
 {
     pGraphicProv = new EscherGraphicProvider( _E_GRAPH_PROV_USE_INSTANCES  | _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
