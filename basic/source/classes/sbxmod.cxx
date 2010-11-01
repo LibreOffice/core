@@ -1756,18 +1756,22 @@ IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 
 bool SbModule::HasExeCode()
 {
-
-        ErrorHdlResetter aGblErrHdl;
     // And empty Image always has the Global Chain set up
-        static const unsigned char pEmptyImage[] = { 0x45, 0x0 , 0x0, 0x0, 0x0 };
-        // lets be stricter for the moment than VBA
+    static const unsigned char pEmptyImage[] = { 0x45, 0x0 , 0x0, 0x0, 0x0 };
+    // lets be stricter for the moment than VBA
+
+    if (!IsCompiled())
+    {
+        ErrorHdlResetter aGblErrHdl;
+        Compile();
+        if (aGblErrHdl.HasError()) //assume unsafe on compile error
+            return true;
+    }
 
     bool bRes = false;
-    if ( !IsCompiled() )
-        Compile();
-    if ( pImage && !( pImage->GetCodeSize() == 5 && ( memcmp( pImage->GetCode(), pEmptyImage, pImage->GetCodeSize() ) == 0 ) )
-        || aGblErrHdl.HasError() )
+    if (pImage && !(pImage->GetCodeSize() == 5 && (memcmp(pImage->GetCode(), pEmptyImage, pImage->GetCodeSize()) == 0 )))
         bRes = true;
+
     return bRes;
 }
 
