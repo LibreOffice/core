@@ -355,7 +355,17 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                    pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
+                {
+                    UCHAR* pTmp = realloc(pInfoBuffer, nInfoBuffer);
+                    if (pTmp)
+                        pInfoBuffer = pTmp;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = NULL;
+                        break;
+                    }
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -913,7 +923,17 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                    pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
+                {
+                    UCHAR* pTmp = realloc(pInfoBuffer, nInfoBuffer);
+                    if (pTmp)
+                        pInfoBuffer = pTmp;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = NULL;
+                        break;
+                    }
+                }
                 else
                 {
                     free(pInfoBuffer);
