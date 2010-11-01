@@ -44,7 +44,7 @@
 #include <fmtcol.hxx>
 
 // ---------------------
-// forward Deklarationen
+// forward declarations
 // ---------------------
 
 class SvUShorts;
@@ -82,9 +82,7 @@ class IDocumentLineNumberAccess;
 class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
-// --> OD 2007-10-31 #i83479#
 class IDocumentListItems;
-// <--
 
 // --------------------
 // class SwNode

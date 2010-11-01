@@ -44,7 +44,6 @@ class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
     SwFmtCntnt &operator=( const SwFmtCntnt & ); //Kopieren verboten
 
 public:
-//  SwFmtCntnt( const SwNodeIndex *pStartNodeIdx = 0 );
     SwFmtCntnt( const SwStartNode* pStartNode = 0 );
     SwFmtCntnt( const SwFmtCntnt &rCpy );
     ~SwFmtCntnt();

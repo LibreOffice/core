@@ -36,7 +36,6 @@
 #include <editsh.hxx>
 #include <flyenum.hxx>
 
-// OD 25.06.2003 #108784#
 #include <svx/svdtypes.hxx>
 
 #include <svtools/embedhlp.hxx>
@@ -171,7 +170,7 @@ struct SwGetCurColNumPara
 #define SW_TABCOL_VERT          2
 #define SW_TABROW_HORI          3
 #define SW_TABROW_VERT          4
-// --> FME 2004-07-30 #i32329# Enhanced table selection
+
 #define SW_TABSEL_HORI          5
 #define SW_TABSEL_HORI_RTL      6
 #define SW_TABROWSEL_HORI       7
@@ -180,7 +179,6 @@ struct SwGetCurColNumPara
 #define SW_TABSEL_VERT          10
 #define SW_TABROWSEL_VERT       11
 #define SW_TABCOLSEL_VERT       12
-// <--
 
 class SdrDropMarkerOverlay;
 
@@ -197,7 +195,6 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
 
     SW_DLLPRIVATE void ScrollTo( const Point &rPt );
 
-    // OD 25.06.2003 #108784# - correct type of 1st parameter
     SW_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
 
     // Used for mouse operations on a table:
@@ -273,7 +270,6 @@ public:
     bool IsObjSelectable( const Point& rPt );
     int IsInsideSelectedObj( const Point& rPt );    //!! returns enum values
 
-    // #107513#
     // Test if there is a draw object at that position and if it should be selected.
     // The 'should' is aimed at Writer text fly frames which may be in front of
     // the draw object.
@@ -293,7 +289,7 @@ public:
     USHORT GetFrmType( const Point *pPt, BOOL bStopAtFly ) const;
     USHORT GetSelFrmType() const;               //Selektion (Drawing)
 
-    /** #108784# check whether selected frame contains a control;
+    /** check whether selected frame contains a control;
      * companion method to GetSelFrmType, used for preventing
      * drag&drop of controls into header */
     bool IsSelContainsControl() const;
@@ -305,11 +301,10 @@ public:
     SwRect  GetObjRect() const;
     //Zum Verschieben von Flys mit der Tastatur
     SwRect  GetFlyRect() const;
-    // OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments to allow
-    //          negative vertical positions for fly frames anchored
+    // i#17567 - adjustments to allow negative vertical positions for fly frames anchored
     //          to paragraph or to character.
-    // OD 02.10.2003 #i18732# - adjustments for new option 'FollowTextFlow'
-    // OD 12.11.2003 #i22341# - adjustments for new vertical alignment at top of line
+    // i#18732 - adjustments for new option 'FollowTextFlow'
+    // i#22341 - adjustments for new vertical alignment at top of line
     void CalcBoundRect( SwRect& _orRect,
                         const RndStdIds _nAnchorId,
                         const sal_Int16 _eHoriRelOrient = com::sun::star::text::RelOrientation::FRAME,
@@ -356,12 +351,10 @@ public:
     const Graphic *GetGrfAtPos( const Point &rDocPos,
                                 String &rName, BOOL &rbLink ) const;
 
-    // --> OD 2009-07-13 #i73249#
     const String GetObjTitle() const;
     void SetObjTitle( const String& rTitle );
     const String GetObjDescription() const;
     void SetObjDescription( const String& rDescription );
-    // <--
 
 //SS fuer Rahmen --------------------------------------------
 
@@ -654,12 +647,9 @@ public:
     void SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
                           const Point &rPt );
 
-    // --> FME 2004-07-30 #i20126# Enhanced table selection
     // pEnd will be used during MouseMove
     bool SelTblRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
-    // <--
 
-    // #i24134# adjustment of table rows via Ruler
     void GetTabRows( SwTabCols &rToFill ) const;
     void SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly );
     void GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const;
@@ -744,7 +734,6 @@ public:
 
     /** SwFEShell::GetShapeBackgrd
 
-        OD 02.09.2002 for #102450#:
         method determines background color of the page the selected drawing
         object is on and returns this color.
         If no color is found, because no drawing object is selected or ...,
@@ -759,7 +748,6 @@ public:
 
     /** Is default horizontal text direction for selected drawing object right-to-left
 
-        OD 09.12.2002 #103045#
         Because drawing objects only painted for each page only, the default
         horizontal text direction of a drawing object is given by the corresponding
         page property.
@@ -773,14 +761,11 @@ public:
 
     void ParkCursorInTab();
 
-    // -> #i23726#
     SwTxtNode * GetNumRuleNodeAtPos(const Point &rPot);
     BOOL IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
-    // <- #i23726#
-    // --> OD 2005-02-21 #i42921#
+
     bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
                                    const Point& _rDocPos ) const;
-    // <--
 
 };
 

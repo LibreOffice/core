@@ -58,10 +58,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     // fuers GetRefFeld - oben/unten
     String          aGetRefFld_Up;
     String          aGetRefFld_Down;
-    // --> OD 2007-09-13 #i81002#
     // for GetRefField - referenced item not found
     String          aGetRefFld_RefItemNotFound;
-    // <--
     // fuer dynamisches Menu - String "alle"
     String          aStrAllPageHeadFoot;
     // fuer einige Listboxen - String "keine"
@@ -83,10 +81,6 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aHyperlinkClick;
 
     SvStringsDtor   aDocInfoLst;
-
-    // Fly-Anker Bmps
-//  Bitmap          aAnchorBmp;
-//  Bitmap          aDragAnchorBmp;
 
     // die AutoFormat-Redline-Kommentare
     inline const SvStringsDtor& GetAutoFmtNameLst() const;

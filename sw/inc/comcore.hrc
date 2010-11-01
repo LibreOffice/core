@@ -52,7 +52,7 @@
 #define STR_HYPH_TITLE                      (RC_COMCORE_BEGIN + 16)
 #define MSG_DISABLE_UNDO_QUESTION           (RC_COMCORE_BEGIN + 17)
 #define MSG_DISABLE_READLINE_QUESTION       (RC_COMCORE_BEGIN + 18)
-// -> #111827#
+
 #define STR_REDLINE_INSERT                  (RC_COMCORE_BEGIN + 19)
 #define STR_REDLINE_DELETE                  (RC_COMCORE_BEGIN + 20)
 #define STR_REDLINE_FORMAT                  (RC_COMCORE_BEGIN + 21)
@@ -68,8 +68,7 @@
 #define STR_REDLINE_MULTIPLE                (RC_COMCORE_BEGIN + 31)
 #define STR_N_REDLINES                      (RC_COMCORE_BEGIN + 32)
 #define STR_FIELD                           (RC_COMCORE_BEGIN + 33)
-// <- #111827#
-// -> #115575#
+
 #define STR_FRAME                           (RC_COMCORE_BEGIN + 34)
 #define STR_OLE                             (RC_COMCORE_BEGIN + 35)
 #define STR_MATH_FORMULA                    (RC_COMCORE_BEGIN + 36)
@@ -84,11 +83,9 @@
 #define STR_DRAWING_OBJECTS                 (RC_COMCORE_BEGIN + 45)
 #define STR_TABLE_NAME                      (RC_COMCORE_BEGIN + 46)
 #define STR_PARAGRAPH_UNDO                  (RC_COMCORE_BEGIN + 47)
-// <- #115575#
-// -> PB #146850#
+
 #define RID_GRAPHIC_REPLACEBMP_HC           (RC_COMCORE_BEGIN + 48)
 #define RID_GRAPHIC_ERRORBMP_HC             (RC_COMCORE_BEGIN + 49)
-// <- #146850#
 
 // defines fuer die Autoformat Redline Kommentare
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0

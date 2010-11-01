@@ -34,8 +34,6 @@ namespace tabopts
 {
     const USHORT DEFAULT_BORDER     = 0x01;
     const USHORT HEADLINE           = 0x02;
-//    const USHORT REPEAT             = 0x04;
-//    const USHORT HEADLINE_REPEAT    = 0x06;  // Headline + Repeat
     const USHORT SPLIT_LAYOUT       = 0x08;
     const USHORT HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
     const USHORT ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;

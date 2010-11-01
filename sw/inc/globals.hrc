@@ -29,8 +29,6 @@
 #define _GLOBALS_HRC
 
 
-// Versions-Definition wie in solar.h und swtypes.hxx
-//#define SW_FILEFORMAT_40 3580
 
 #include "rcid.hrc"
 

@@ -71,7 +71,7 @@ using namespace com::sun::star;
 
 TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
 
-// erfrage die Attribut-Beschreibung
+// query the attribute descriptions
 void SwAttrSet::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric,
@@ -911,20 +911,12 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
                 switch( GetValue() )
                 {
                 case FTNEND_ATPGORDOCEND:
-//                  rText = SW_RESSTR( STR_LAYOUT_FTN );
                     break;
 
                 case FTNEND_ATTXTEND:
                     break;
 
                 case FTNEND_ATTXTEND_OWNNUMSEQ:
-                    {
-//  String      sPrefix;
-//  String      sSuffix;
-//  SvxNumberType   aFmt;
-//  USHORT      nOffset;
-//                      rText +=
-                    }
                     break;
                 }
             }
@@ -1062,20 +1054,6 @@ SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-//    rText.Erase();
-//    switch ( ePres )
-//    {
-//        case SFX_ITEM_PRESENTATION_NONE:
-//            rText.Erase();
-//            break;
-//        case SFX_ITEM_PRESENTATION_NAMELESS:
-//        case SFX_ITEM_PRESENTATION_COMPLETE:
-//        {
-//            if ( GetValue() )
-//                rText = SW_RESSTR(STR_EDIT_IN_READONLY);
-//            return ePres;
-//        }
-//    }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

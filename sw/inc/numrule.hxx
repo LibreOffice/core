@@ -261,10 +261,6 @@ public:
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
 
-    // refactoring: provide certain method for certain purpose
-//    void        Indent(short aAmount, int nLevel = -1,
-//                       int nReferenceLevel = -1, BOOL bRelative = TRUE,
-//                       BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
     // change indent of all list levels by given difference
     void ChangeIndent( const short nDiff );
     // set indent of certain list level to given value

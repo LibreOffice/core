@@ -49,7 +49,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     GraphicObject aGrfObj;
     ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
-//  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
     String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
                                 // name or package url)
     String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
