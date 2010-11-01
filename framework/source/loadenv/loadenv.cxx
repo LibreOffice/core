@@ -103,6 +103,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/processfactory.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -1407,7 +1408,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // don't check the complete URL here.
             // use its main part - ignore optional jumpmarks!
             const ::rtl::OUString sURL = xModel->getURL();
-            if (!m_aURL.Main.equals(sURL))
+            if (!::utl::UCBContentHelper::EqualURLs( m_aURL.Main, sURL ))
             {
                 xTask.clear ();
                 continue;
