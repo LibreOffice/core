@@ -288,6 +288,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void             implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle );
         void             implts_createToolBar( const ::rtl::OUString& aName, bool& bNotify, ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& rUIElement );
         css::uno::Reference< css::ui::XUIElement > implts_createElement( const ::rtl::OUString& aName );
+        void             implts_setToolbarCreation( bool bStart = true );
+        bool             implts_isToolbarCreationActive();
 
         //---------------------------------------------------------------------------------------------------------
         // persistence methods
@@ -328,6 +330,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         bool                                                                 m_bDockingInProgress;
         bool                                                                 m_bVisible;
         bool                                                                 m_bLayoutInProgress;
+        bool                                                                 m_bToolbarCreation;
 
         ::rtl::OUString                                                      m_aFullAddonTbxPrefix;
         ::rtl::OUString                                                      m_aCustomTbxPrefix;

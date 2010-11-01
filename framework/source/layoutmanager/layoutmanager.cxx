@@ -1321,7 +1321,7 @@ throw ( RuntimeException )
     if ( !xDockingAreaAcceptor.is() )
         m_aAsyncLayoutTimer.Stop();
 
-        // Remove listener from old docking area acceptor
+    // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
     {
         Reference< awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
@@ -1330,15 +1330,11 @@ throw ( RuntimeException )
 
         m_aDockingArea = awt::Rectangle();
         if ( pToolbarManager )
-            pToolbarManager->reset();
+            pToolbarManager->resetDockingArea();
 
         Window* pContainerWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pContainerWindow )
             pContainerWindow->RemoveChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
-
-        // destroy panel manager
-        delete m_pPanelManager;
-        m_pPanelManager = NULL;
     }
 
     Reference< ui::XDockingAreaAcceptor > xOldDockingAreaAcceptor( m_xDockingAreaAcceptor );
@@ -1364,11 +1360,6 @@ throw ( RuntimeException )
         }
 
         uno::Reference< awt::XWindowPeer > xParent( m_xContainerWindow, UNO_QUERY );
-        pToolbarManager->setParentWindow( xParent );
-
-        // create new panel manager
-        m_pPanelManager = new PanelManager( m_xSMGR, m_xFrame );
-        m_pPanelManager->createPanels();
     }
 
     aWriteLock.unlock();
@@ -1376,7 +1367,7 @@ throw ( RuntimeException )
 
     if ( xDockingAreaAcceptor.is() )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // Add layout manager as listener to get notifications about toolbar button activties
         Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -1436,6 +1427,13 @@ void LayoutManager::implts_reparentChildWindows()
     }
 
     implts_resetMenuBar();
+
+    aWriteLock.lock();
+    uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
+    ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
+    if ( pToolbarManager )
+        pToolbarManager->setParentWindow( uno::Reference< awt::XWindowPeer >( xContainerWindow, uno::UNO_QUERY ));
+    aWriteLock.unlock();
 }
 
 uno::Reference< ui::XUIElement > LayoutManager::implts_createDockingWindow( const ::rtl::OUString& aElementName )

@@ -110,14 +110,14 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea )
     {
         ToolBox* pToolBox = dynamic_cast<ToolBox *>( pWindow );
         if ( pToolBox )
-    {
+        {
             aToolbarName = pToolBox->GetSmartHelpId().GetStr();
             sal_Int32 i = aToolbarName.lastIndexOf( ':' );
             if (( aToolbarName.getLength() > 0 ) && ( i > 0 ) && (( i+ 1 ) < aToolbarName.getLength() ))
                 aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name
             else
-          aToolbarName = ::rtl::OUString();
-    }
+              aToolbarName = ::rtl::OUString();
+        }
     }
     return aToolbarName;
 }
@@ -169,7 +169,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     bool bRet = xUIElement.is();
     if ( bRet )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard     aGuard( Application::GetSolarMutex() );
         _xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
         _rPosSize = _xWindow->getPosSize();
 
@@ -311,12 +311,12 @@ uno::Reference< frame::XModel > impl_getModelFromFrame( const uno::Reference< fr
 {
     // Query for the model to get check the context information
     uno::Reference< frame::XModel > xModel;
-    if ( rFrame.is() )
-    {
+        if ( rFrame.is() )
+        {
         uno::Reference< frame::XController > xController( rFrame->getController(), uno::UNO_QUERY );
-        if ( xController.is() )
-            xModel = xController->getModel();
-    }
+            if ( xController.is() )
+                xModel = xController->getModel();
+        }
 
     return xModel;
 }
