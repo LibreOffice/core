@@ -133,6 +133,7 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
 
 SaneDlg::~SaneDlg()
 {
+    mrSane.SetReloadOptionsHdl( maOldLink );
 }
 
 short SaneDlg::Execute()
@@ -479,14 +480,12 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         double fRes = (double)maReslBox.GetValue();
         SetAdjustedNumericalValue( "resolution", fRes );
-        mrSane.SetReloadOptionsHdl( maOldLink );
         UpdateScanArea( TRUE );
         SaveState();
         EndDialog( mrSane.IsOpen() ? 1 : 0 );
     }
     else if( pButton == &maCancelButton )
     {
-        mrSane.SetReloadOptionsHdl( maOldLink );
         mrSane.Close();
         EndDialog( 0 );
     }
@@ -689,9 +688,9 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
 
 IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, /*pSane*/ )
 {
-     mnCurrentOption = -1;
-     mnCurrentElement = 0;
-     DisableOption();
+    mnCurrentOption = -1;
+    mnCurrentElement = 0;
+    DisableOption();
     // #92024# preserve preview rect, should only be set
     // initially or in AcquirePreview
     Rectangle aPreviewRect = maPreviewRect;
