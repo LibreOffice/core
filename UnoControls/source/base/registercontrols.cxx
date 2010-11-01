@@ -93,59 +93,6 @@ using namespace ::com::sun::star::registry                      ;
     }
 
 //******************************************************************************************************************************
-#define COMPONENT_INFO(CLASS)                                                                                           \
-                                                                                                                        \
-    AS_DBG_OUT ( "\tCOMPONENT_INFO():\t[start]\n" )                                                                     \
-    try                                                                                                                 \
-    {                                                                                                                   \
-        /* Set default result of follow operations !!! */                                                               \
-        bReturn = sal_False ;                                                                                           \
-                                                                                                                        \
-        /* Do the follow only, if given key is valid ! */                                                               \
-        if ( xKey.is () )                                                                                               \
-        {                                                                                                               \
-            AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\txkey is valid ...\n" )                                                 \
-            /* Build new keyname */                                                                                     \
-            sKeyName     =  OUString::createFromAscii( "/" )            ;                                               \
-            sKeyName    +=  CLASS::impl_getStaticImplementationName()   ;                                               \
-            sKeyName    +=  OUString::createFromAscii( "/UNO/SERVICES" );                                               \
-                                                                                                                        \
-            /* Create new key with new name. */                                                                         \
-             xNewKey = xKey->createKey( sKeyName );                                                                     \
-                                                                                                                        \
-            /* If this new key valid ... */                                                                             \
-            if ( xNewKey.is () )                                                                                        \
-            {                                                                                                           \
-                AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\txNewkey is valid ...\n" )                                          \
-                /* Get information about supported services. */                                                         \
-                seqServiceNames =   CLASS::impl_getStaticSupportedServiceNames()    ;                                   \
-                pArray          =   seqServiceNames.getArray()                      ;                                   \
-                nLength         =   seqServiceNames.getLength()                     ;                                   \
-                nCounter        =   0                                               ;                                   \
-                                                                                                                        \
-                AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\tloop ..." )                                                        \
-                /* Then set this information on this key. */                                                            \
-                for ( nCounter = 0; nCounter < nLength; ++nCounter )                                                    \
-                {                                                                                                       \
-                    xNewKey->createKey( pArray [nCounter] );                                                            \
-                }                                                                                                       \
-                AS_DBG_OUT ( " OK\n" )                                                                                  \
-                                                                                                                        \
-                /* Result of this operations = OK. */                                                                   \
-                bReturn = sal_True ;                                                                                    \
-            }                                                                                                           \
-            AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\t... leave xNewKey\n" )                                                 \
-        }                                                                                                               \
-        AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\t... leave xKey\n" )                                                        \
-    }                                                                                                                   \
-    catch( InvalidRegistryException& )                                                                                  \
-    {                                                                                                                   \
-        AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\tInvalidRegistryException detected!!!\n" )                                  \
-        bReturn = sal_False ;                                                                                           \
-    }                                                                                                                   \
-    AS_DBG_OUT ( "\tCOMPONENT_INFO():\t[end]\n" )
-
-//******************************************************************************************************************************
 #define CREATEFACTORY_ONEINSTANCE(CLASS)                                                                                \
                                                                                                                         \
     AS_DBG_OUT ( "\tCREATEFACTORY_ONEINSTANCE():\t[start]\n" )                                                          \
@@ -215,53 +162,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(    const   sal_
                                                                             uno_Environment**   /*ppEnvironment*/           )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-//______________________________________________________________________________________________________________
-//  write component info to registry
-//______________________________________________________________________________________________________________
-
-extern "C" sal_Bool SAL_CALL component_writeInfo(   void*   /*pServiceManager*/ ,
-                                                    void*   pRegistryKey    )
-{
-    AS_DBG_OUT ( "component_writeInfo():\t[start]\n" )
-
-    // Set default return value for this operation - if it failed.
-    sal_Bool bReturn = sal_False ;
-
-    if ( pRegistryKey != NULL )
-    {
-        AS_DBG_OUT ( "component_writeInfo():\t\tpRegistryKey is valid ... enter scope\n" )
-
-        // Define variables for following macros!
-        // bReturn is set automaticly.
-        Reference< XRegistryKey >       xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) )   ;
-        Reference< XRegistryKey >       xNewKey                                                     ;
-        Sequence< OUString >            seqServiceNames                                             ;
-        const OUString*                 pArray                                                      ;
-        sal_Int32                       nLength                                                     ;
-        sal_Int32                       nCounter                                                    ;
-        OUString                        sKeyName                                                    ;
-
-        //=============================================================================
-        //  Add new macro line to register new services.
-        //
-        //  !!! ATTENTION !!!
-        //      Write no ";" at end of line! (see macro)
-        //=============================================================================
-        COMPONENT_INFO  ( FrameControl      )
-        COMPONENT_INFO  ( ProgressBar       )
-        COMPONENT_INFO  ( ProgressMonitor   )
-        COMPONENT_INFO  ( StatusIndicator   )
-        //=============================================================================
-
-        AS_DBG_OUT ( "component_writeInfo():\t\t... leave pRegistryKey scope\n" )
-    }
-
-    AS_DBG_OUT ( "component_writeInfo():\t[end]\n" )
-
-    // Return with result of this operation.
-    return bReturn ;
 }
 
 //______________________________________________________________________________________________________________

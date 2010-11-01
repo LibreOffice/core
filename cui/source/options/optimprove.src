@@ -34,7 +34,7 @@
 
 TabPage RID_SVXPAGE_IMPROVEMENT
 {
-    //!HelpId = HID_OPTIONS_IMPROVEMENT ;
+        HelpId = "cui:TabPage:RID_SVXPAGE_IMPROVEMENT" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
@@ -55,6 +55,7 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     };
     RadioButton RB_YES
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_IMPROVEMENT:RB_YES";
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 215 , 10 ) ;
         Check = TRUE ;
@@ -62,6 +63,7 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     };
     RadioButton RB_NO
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_IMPROVEMENT:RB_NO";
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 215 , 10 ) ;
         Text [ en-US ] = "~No, I do not wish to participate" ;
@@ -84,29 +86,30 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     FixedText FT_NR_REPORTS
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text [ en-US ] = "Number of reports sent:" ;
     };
     FixedText FT_NR_REPORTS_VALUE
     {
-        Pos = MAP_APPFONT ( 95 , 132 ) ;
+        Pos = MAP_APPFONT ( 111 , 132 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
     FixedText FT_NR_ACTIONS
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text [ en-US ] = "Number of tracked actions:" ;
     };
     FixedText FT_NR_ACTIONS_VALUE
     {
-        Pos = MAP_APPFONT ( 95 , 145 ) ;
+        Pos = MAP_APPFONT ( 111 , 145 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
     PushButton PB_SHOWDATA
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_IMPROVEMENT:PB_SHOWDATA";
         Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Show Data" ;
     };
     String STR_INFO

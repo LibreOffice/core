@@ -554,11 +554,15 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
         MacroList aMacros;
-        USHORT nMacros = pModule->GetMethods()->Count();
-        USHORT nMethod;
-        for ( nMethod = 0; nMethod  < nMacros; nMethod++ )
+        USHORT nMacroCount = pModule->GetMethods()->Count();
+        USHORT nRealMacroCount = 0;
+        USHORT iMeth;
+        for ( iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
-            SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( nMethod );
+            SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( iMeth );
+            if( pMethod->IsHidden() )
+                continue;
+            ++nRealMacroCount;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
             ULONG nPos = LIST_APPEND;
             // Eventuell weiter vorne ?
@@ -580,8 +584,8 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
         }
 
         aMacroBox.SetUpdateMode( FALSE );
-        for ( nMethod = 0; nMethod < nMacros; nMethod++ )
-            aMacroBox.InsertEntry( aMacros.GetObject( nMethod )->GetName() );
+        for ( iMeth = 0; iMeth < nRealMacroCount; iMeth++ )
+            aMacroBox.InsertEntry( aMacros.GetObject( iMeth )->GetName() );
         aMacroBox.SetUpdateMode( TRUE );
 
         if ( aMacroBox.GetEntryCount() )
