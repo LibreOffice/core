@@ -431,31 +431,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
     }
 }
 
-//--------------------------------------------------------------------
-void SfxApplication::MacroExec_Impl( SfxRequest& rReq )
-{
-    DBG_MEMTEST();
-    if ( SfxMacroConfig::IsMacroSlot( rReq.GetSlot() ) )
-    {
-        // SlotId referenzieren, damit nicht im Execute der Slot abgeschossen
-        // werden kann
-        GetMacroConfig()->RegisterSlotId(rReq.GetSlot());
-        SFX_REQUEST_ARG(rReq, pArgs, SfxStringItem,
-                        rReq.GetSlot(), sal_False);
-        String aArgs;
-        if( pArgs ) aArgs = pArgs->GetValue();
-        if ( GetMacroConfig()->ExecuteMacro(rReq.GetSlot(), aArgs ) )
-            rReq.Done();
-        GetMacroConfig()->ReleaseSlotId(rReq.GetSlot());
-    }
-}
-
-//--------------------------------------------------------------------
-void SfxApplication::MacroState_Impl( SfxItemSet& )
-{
-    DBG_MEMTEST();
-}
-
 //-------------------------------------------------------------------------
 
 void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
