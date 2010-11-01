@@ -1050,7 +1050,7 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
     {
         m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
         BYTE nFlags = ( bWithId ? 0x01 : 0 );
-        m_arrInvalidSlots_Flags.Insert(nFlags, m_arrInvalidSlots_Flags.Count());
+        m_arrInvalidSlots_Flags.push_back(nFlags);
     }
     else
         if (nId)
@@ -1088,7 +1088,7 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
-    DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.Count(),
+    DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.size(),
         "FmXFormShell::OnInvalidateSlots : inconsistent slot arrays !");
     BYTE nFlags;
     for (sal_Int16 i=0; i<m_arrInvalidSlots.Count(); ++i)
@@ -1102,7 +1102,7 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
     }
 
     m_arrInvalidSlots.Remove(0, m_arrInvalidSlots.Count());
-    m_arrInvalidSlots_Flags.Remove(0, m_arrInvalidSlots_Flags.Count());
+    m_arrInvalidSlots_Flags.clear();
     return 0L;
 }
 
