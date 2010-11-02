@@ -47,7 +47,7 @@
 
     @see com::sun::star::frame::ToolbarController
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XSubToolbarController : com::sun::star::uno::XInterface
 {

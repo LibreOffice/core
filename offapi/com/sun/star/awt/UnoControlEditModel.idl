@@ -72,7 +72,7 @@ published service UnoControlEditModel
     /** If set to true an horizontal scrollbar will be added automaticly
         when needed.
 
-        @since OOo 2.3.0
+        @since OOo 2.3
      */
     [optional, property] boolean AutoHScroll;
 
@@ -81,7 +81,7 @@ published service UnoControlEditModel
     /** If set to true an vertical scrollbar will be added automaticly
         when needed.
 
-        @since OOo 2.3.0
+        @since OOo 2.3
      */
     [optional, property] boolean AutoVScroll;
 
@@ -110,7 +110,7 @@ published service UnoControlEditModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 
@@ -170,7 +170,7 @@ published service UnoControlEditModel
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] boolean HideInactiveSelection;
 
@@ -196,7 +196,7 @@ published service UnoControlEditModel
         No matter which line end format is used in this new text then, usual control implementations
         should recognize all line end formats and display them properly.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] short LineEndFormat;
 
@@ -218,7 +218,7 @@ published service UnoControlEditModel
 
     /** specifies whether the control paints it background or not.
 
-        @since OOo 2.3.0
+        @since OOo 2.3
      */
     [optional, property] boolean PaintTransparent;
 
@@ -279,7 +279,7 @@ published service UnoControlEditModel
 
     /** specifies the vertical alignment of the text in the control.
 
-        @since OpenOffice.org 3.3
+        @since OOo 3.3
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };

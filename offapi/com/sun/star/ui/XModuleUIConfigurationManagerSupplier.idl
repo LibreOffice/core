@@ -41,7 +41,7 @@ module com { module sun { module star { module ui {
 /** allows to retrieve user interface configuration managers related to
     OpenOffice.org modules.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XModuleUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface

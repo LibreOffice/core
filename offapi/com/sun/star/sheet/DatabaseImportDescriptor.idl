@@ -72,7 +72,7 @@ published service DatabaseImportDescriptor
     /** specifies whether the SQL statement is given directly to the database
         or is parsed before.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
 
      */
     [optional, property] boolean IsNative;
@@ -80,7 +80,7 @@ published service DatabaseImportDescriptor
     //-------------------------------------------------------------------------
 
     /** indicates a connection URL, which locates a database driver.
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] string ConnectionResource;
 

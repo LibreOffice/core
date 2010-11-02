@@ -39,7 +39,7 @@ module com { module sun { module star { module frame {
 /** specifies a factory for
     <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>s.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service TransientDocumentsDocumentContentFactory
 {

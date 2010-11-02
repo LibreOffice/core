@@ -72,7 +72,7 @@
     the size and position of those user interface elements.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service LayoutManager

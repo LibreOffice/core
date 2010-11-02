@@ -45,7 +45,7 @@ module com { module sun { module star { module rendering {
 
 /** Interface to access the palette of a color-indexed bitmap.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XBitmapPalette : ::com::sun::star::uno::XInterface
 {

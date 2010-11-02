@@ -51,7 +51,7 @@ module com { module sun { module star { module frame {
     if it contains a registered command URL.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service StatusbarControllerFactory

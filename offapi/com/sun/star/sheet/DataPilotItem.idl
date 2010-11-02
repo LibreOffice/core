@@ -77,7 +77,7 @@ service DataPilotItem
 
     /** specifies the item's position in its field if sorting is manual.
 
-        @since OOo 2.4.0
+        @since OOo 2.4
      */
     [optional, property] long Position;
 };

@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module sdb {
     This continuation is typically used in conjunction with a
     <type scope="com::sun::star::sdb">DocumentSaveRequest</type>.
     </p>
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 interface XInteractionDocumentSave: com::sun::star::task::XInteractionContinuation
 {

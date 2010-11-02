@@ -79,7 +79,7 @@ information.</p>
 </table></p>
 
 @see <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113">Document Object Model (DOM) Level 2 Core Specification</a> </p>
-@since OOo 2.0.0
+@since OOo 2.0
 */
 interface XNode : com::sun::star::uno::XInterface
 {

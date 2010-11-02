@@ -50,7 +50,7 @@ module com { module sun { module star { module form { module runtime {
 /** encapsulates operations on a database form which has a UI representation,
     and is interacting with the user.
 
-    @since OpenOffice.org 2.2.0
+    @since OOo 2.2
  */
 service FormOperations : XFormOperations
 {

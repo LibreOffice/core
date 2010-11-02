@@ -39,7 +39,7 @@ interface XPackage;
    called with a different value for the <code>removed</code> parameter and that
    the <type>XPackage</type> object created by that call still exist.
 
-   @since OOo 3.3.0
+   @since OOo 3.3
 */
 exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
     /** the value of the <code>removed</code> parameter which was used in

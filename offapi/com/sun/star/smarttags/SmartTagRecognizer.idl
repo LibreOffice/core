@@ -47,7 +47,7 @@ module com { module sun { module star { module smarttags {
        associated with specific actions which are defined by
        implementations of the <type>SmartTagAction</type> service.</p>
 
-    @since OOo 2.3.0
+    @since OOo 2.3
  */
 
 service SmartTagRecognizer : XSmartTagRecognizer {};

@@ -38,7 +38,7 @@ module com { module sun { module star { module ui {
     interface configuration data to a storage and to retrieve information
     about the current state.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface

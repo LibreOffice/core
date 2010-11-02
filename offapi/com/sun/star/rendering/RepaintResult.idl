@@ -32,7 +32,7 @@ module com { module sun { module star { module rendering {
 /** These constants specify the result of the
    <type>XCachedPrimitive</type> render operation.<p>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 constants RepaintResult
 {

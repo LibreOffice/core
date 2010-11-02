@@ -72,7 +72,7 @@ published service Schema
     /**
       The URL of the layer data.
 
-      @since OOo 2.0.0
+      @since OOo 2.0
       */
     [property,optional,readonly] string URL ;
 

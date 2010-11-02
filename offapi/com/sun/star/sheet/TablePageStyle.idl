@@ -197,7 +197,7 @@ published service TablePageStyle
 
     /** contains the number of horizontal pages the sheet will printed on.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 
      */
     [property, optional] short ScaleToPagesX;
@@ -206,7 +206,7 @@ published service TablePageStyle
 
     /** contains the number of vertical pages the sheet will printed on.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 
      */
     [property, optional] short ScaleToPagesY;

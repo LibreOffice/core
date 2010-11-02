@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 /** Exception is thrown when data or column model isn't set.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 exception GridInvalidModelException : com::sun::star::uno::RuntimeException
 {

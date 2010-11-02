@@ -35,7 +35,7 @@ module com { module sun { module star { module rendering {
 
 /** This structure contains attributes needed to run an animation.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct AnimationAttributes
 {

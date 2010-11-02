@@ -39,7 +39,7 @@ module com { module sun { module star { module form { module runtime {
 
     @see XFilterController
 
-    @since OpenOffice.org 3.3
+    @since OOo 3.3
  */
 struct FilterEvent : ::com::sun::star::lang::EventObject
 {

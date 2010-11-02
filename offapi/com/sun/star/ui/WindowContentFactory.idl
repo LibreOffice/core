@@ -47,7 +47,7 @@ module com { module sun { module star { module ui {
     The specific type of the created window depends on the provided arguments.
     </p>
 
-    @since OOo 3.1.0
+    @since OOo 3.1
 */
 
 service WindowContentFactory : com::sun::star::lang::XSingleComponentFactory

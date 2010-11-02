@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module text {
     <p>These constants are used with
     <method>XTextMarkup::commitTextMarkup()</method></p>
 
-    @since OOo 2.3.0
+    @since OOo 2.3
  */
 
 constants TextMarkupType

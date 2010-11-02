@@ -47,7 +47,7 @@ module com { module sun { module star { module ui {
     that are part of a single OpenOffice.org module, like Writer or Calc.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service ModuleUICommandDescription

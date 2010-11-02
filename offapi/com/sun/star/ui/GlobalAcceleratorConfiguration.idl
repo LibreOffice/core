@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module ui {
     by using an UNO service manager. It provides then access to
     the global accelerator configuration.</p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service GlobalAcceleratorConfiguration : XAcceleratorConfiguration
 {};

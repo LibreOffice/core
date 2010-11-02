@@ -68,7 +68,7 @@ module com {  module sun {  module star {  module geometry {
     printer. Then, the total transformation matrix and the device
     resolution determine the actual measurement unit.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct Matrix2D
 {

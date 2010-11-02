@@ -37,7 +37,7 @@ module com { module sun { module star { module ui {
 /** this event is broadcasted by a configuration manager whenever the state of
     user interface element has changed.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 published struct ConfigurationEvent : ::com::sun::star::container::ContainerEvent

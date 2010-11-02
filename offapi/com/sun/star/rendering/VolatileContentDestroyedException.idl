@@ -38,7 +38,7 @@ module com { module sun { module star { module rendering {
         When accessing or rendering XVolatileBitmap data, that has
         been invalidated by the system, this exception will be thrown.<p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     exception VolatileContentDestroyedException : ::com::sun::star::uno::Exception
     {

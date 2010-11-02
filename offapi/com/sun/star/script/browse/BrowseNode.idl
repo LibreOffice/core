@@ -46,7 +46,7 @@ module com {
     XBrowseNode interface. XInvocation is an optional interface that is used
     to execute macros, or to create/delete/rename macros or macro containers.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service BrowseNode
 {

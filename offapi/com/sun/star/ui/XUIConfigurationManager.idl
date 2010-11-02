@@ -70,7 +70,7 @@ module com { module sun { module star { module ui {
     controls the structure of all customizable user interface
     elements.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XUIConfigurationManager : ::com::sun::star::uno::XInterface

@@ -42,7 +42,7 @@ module com { module sun { module star { module mail {
 
    @see com::sun::star::mail::XMailServer
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 exception SendMailMessageFailedException: com::sun::star::mail::MailException
 {

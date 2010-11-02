@@ -134,7 +134,7 @@ published service DatabaseRange
 
     /** specifies the time between two refresh actions in seconds.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] long RefreshPeriod;
 
@@ -142,7 +142,7 @@ published service DatabaseRange
 
     /** specifies whether the imported data is only a selection of the database.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] boolean FromSelection;
 

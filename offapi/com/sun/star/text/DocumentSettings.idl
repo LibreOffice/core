@@ -139,7 +139,7 @@ published service DocumentSettings
         a proportional line spacing is only applied below a text line and
         it's always added to the paragraph spacing between two paragraphs.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     [optional, property] boolean UseFormerLineSpacing;
     // ------------------------------------------------------------
@@ -156,7 +156,7 @@ published service DocumentSettings
         the spacing of the last paragraph respectively table of a table
         cell isn't added at the bottom of this table cell.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     [optional, property] boolean AddParaSpacingToTableCells;
     // ------------------------------------------------------------
@@ -174,7 +174,7 @@ published service DocumentSettings
         its vertical position, doesn't include the lower spacing and the
         line spacing of the previous paragraph.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     [optional, property] boolean UseFormerObjectPositioning;
 
@@ -191,7 +191,7 @@ published service DocumentSettings
         If <FALSE/> (default value), the former object positioning
         algorithm (known from OpenOffice.org 1.1) is applied.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     [optional, property] boolean ConsiderTextWrapOnObjPos;
 

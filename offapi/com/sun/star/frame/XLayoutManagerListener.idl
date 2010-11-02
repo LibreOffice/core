@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module frame {
     @see ::com::sun::star::frame::LayoutManager
     @see ::com::sun::star::frame::LayoutManagerEvents
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XLayoutManagerListener : com::sun::star::lang::XEventListener
 {
