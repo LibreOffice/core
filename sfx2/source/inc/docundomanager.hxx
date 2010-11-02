@@ -117,9 +117,9 @@ namespace sfx2
             );
 
         void impl_do_nolck(
-                USHORT ( ::svl::IUndoManager::*i_checkMethod )() const,
+                USHORT ( ::svl::IUndoManager::*i_checkMethod )( bool const ) const,
                 BOOL ( ::svl::IUndoManager::*i_doMethod )(),
-                UniString ( ::svl::IUndoManager::*i_titleRetriever )( USHORT ) const,
+                UniString ( ::svl::IUndoManager::*i_titleRetriever )( USHORT, bool const ) const,
                 void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& )
             );
 
