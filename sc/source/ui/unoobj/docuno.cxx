@@ -225,15 +225,15 @@ ScPrintUIOptions::ScPrintUIOptions()
     sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
 
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    DBG_ASSERT( aStrings.Count() >= 19, "resource incomplete" );
-    if( aStrings.Count() < 19 ) // bad resource ?
+    DBG_ASSERT( aStrings.Count() >= 10, "resource incomplete" );
+    if( aStrings.Count() < 10 ) // bad resource ?
         return;
 
     m_aUIProperties.realloc( 8 );
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
-    String aAppGroupname( aStrings.GetString( 18 ) );
+    String aAppGroupname( aStrings.GetString( 9 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SCALC ) );
     m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
@@ -243,35 +243,35 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create a bool option for empty pages
     m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
-                                                  rtl::OUString( aStrings.GetString( 2 ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsIncludeEmptyPages" ) ),
                                                   ! bSuppress
                                                   );
     // create Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
-    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ),
+    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 2 ) ),
                                                       rtl::OUString(),
                                                       aPrintRangeOpt
                                                       );
 
     // create a choice for the content to create
-    uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpTexts( 3 );
-    aChoices[0] = aStrings.GetString( 7 );
-    aHelpTexts[0] = aStrings.GetString( 8 );
-    aChoices[1] = aStrings.GetString( 9 );
-    aHelpTexts[1] = aStrings.GetString( 10 );
-    aChoices[2] = aStrings.GetString( 11 );
-    aHelpTexts[2] = aStrings.GetString( 12 );
+    uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpIds( 3 );
+    aChoices[0] = aStrings.GetString( 3 );
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aChoices[1] = aStrings.GetString( 4 );
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+    aChoices[2] = aStrings.GetString( 5 );
+    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ) );
     m_aUIProperties[4].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpTexts,
+                                                    aHelpIds,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ),
                                                     aChoices,
                                                     nContent );
 
     // create Subgroup for print range
     aPrintRangeOpt.mbInternalOnly = sal_True;
-    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ),
+    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ),
                                                       rtl::OUString(),
                                                       aPrintRangeOpt
                                                       );
@@ -279,13 +279,13 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create a choice for the range to print
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
     aChoices.realloc( 2 );
-    aHelpTexts.realloc( 2 );
-    aChoices[0] = aStrings.GetString( 14 );
-    aHelpTexts[0] = aStrings.GetString( 15 );
-    aChoices[1] = aStrings.GetString( 16 );
-    aHelpTexts[1] = aStrings.GetString( 17 );
+    aHelpIds.realloc( 2 );
+    aChoices[0] = aStrings.GetString( 7 );
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0" ) );
+    aChoices[1] = aStrings.GetString( 8 );
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" ) );
     m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpTexts,
+                                                    aHelpIds,
                                                     aPrintRangeName,
                                                     aChoices,
                                                     0 );
@@ -293,24 +293,11 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[7].Value = getEditControlOpt( rtl::OUString(),
-                                                  rtl::OUString(),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageRange:Edit" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                   rtl::OUString(),
                                                   aPageRangeOpt
                                                   );
-
-    // "Print only selected sheets" isn't needed because of the "Selected Sheets" choice in "Print content"
-#if 0
-    // create subgroup for sheets
-    m_aUIProperties[8].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
-
-    // create a bool option for selected pages only
-    m_aUIProperties[9].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 4 ) ),
-                                                  rtl::OUString( aStrings.GetString( 5 ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
-                                                  i_bSelectedOnly
-                                                  );
-#endif
 }
 
 void ScPrintUIOptions::SetDefaults()
