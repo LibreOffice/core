@@ -439,6 +439,7 @@ namespace {
                                 rtl::OUString()
                                 ) );
 
+            uno::Sequence< rtl::OUString > aHelpIds;
             if( mbImpress )
             {
                 vcl::PrinterOptionsHelper::UIControlOptions aPrintOpt;
@@ -449,9 +450,11 @@ namespace {
                                     aPrintOpt )
                                     );
 
+                aHelpIds.realloc( 1 );
+                aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageContentType:ListBox" ) );
                 AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                     String( SdResId( _STR_IMPRESS_PRINT_UI_CONTENT ) ),
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_HELP),
+                                    aHelpIds,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) ),
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_CHOICES),
                                     0,
@@ -459,11 +462,12 @@ namespace {
                                     )
                                 );
 
+                aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:SlidesPerPage:ListBox" ) );
                 vcl::PrinterOptionsHelper::UIControlOptions
                     aContentOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) ), 1 );
                 AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                     String( SdResId( _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE ) ),
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES_HELP),
+                                    aHelpIds,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) ),
                                     GetSlidesPerPageSequence(),
                                     0,
@@ -473,11 +477,12 @@ namespace {
                                     )
                                 );
 
+                aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:SlidesPerPageOrder:ListBox" ) );
                 vcl::PrinterOptionsHelper::UIControlOptions
                     aSlidesPerPageOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) ), -1, sal_True );
                 AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                     String( SdResId( _STR_IMPRESS_PRINT_UI_ORDER ) ),
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES_HELP),
+                                    aHelpIds,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPageOrder" ) ),
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                     0,
@@ -495,7 +500,7 @@ namespace {
             {
                 AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                     String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_NAME) ),
-                                    String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_NAME_HELP) ),
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:IsPrintName:CheckBox" ) ),
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintName" ) ),
                                     sal_False
                                     )
@@ -505,7 +510,7 @@ namespace {
             {
                 AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                     String( SdResId(_STR_DRAW_PRINT_UI_IS_PRINT_NAME) ),
-                                    String( SdResId(_STR_DRAW_PRINT_UI_IS_PRINT_NAME_HELP) ),
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:IsPrintName:CheckBox" ) ),
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintName" ) ),
                                     sal_False
                                     )
@@ -514,7 +519,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE_HELP) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:IsPrintDateTime:CheckBox" ) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintDateTime" ) ),
                                 sal_False
                                 )
@@ -524,7 +529,7 @@ namespace {
             {
                 AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                     String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN) ),
-                                    String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN_HELP) ),
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:IsPrintHidden:CheckBox" ) ),
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintHidden" ) ),
                                     sal_False
                                     )
@@ -534,9 +539,13 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
                                String( SdResId(_STR_IMPRESS_PRINT_UI_QUALITY) ), rtl::OUString() ) );
 
+            aHelpIds.realloc( 3 );
+            aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Quality:RadioButton:0" ) );
+            aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Quality:RadioButton:1" ) );
+            aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Quality:RadioButton:2" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 rtl::OUString(),
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES_HELP),
+                                aHelpIds,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
                                 0
@@ -546,6 +555,11 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
                                String( SdResId(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS) ), rtl::OUString() ) );
 
+            aHelpIds.realloc( 4 );
+            aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:0" ) );
+            aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:1" ) );
+            aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:2" ) );
+            aHelpIds[3] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:3" ) );
             if( mbImpress )
             {
                 // FIXME: additional dependency on PrintProspect = false
@@ -553,7 +567,7 @@ namespace {
                     aPageOptionsOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) ), 0 );
                 AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                     rtl::OUString(),
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP),
+                                    aHelpIds,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ),
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
                                     0,
@@ -569,7 +583,7 @@ namespace {
                     aPageOptionsOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), sal_False );
                 AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                     rtl::OUString(),
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP),
+                                    aHelpIds,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ),
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                     0,
@@ -589,7 +603,7 @@ namespace {
             // brochure printing
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_HELP) ),
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintProspect:CheckBox" ) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ),
                                 sal_False,
                                 aBrochureOpt
@@ -599,9 +613,11 @@ namespace {
             vcl::PrinterOptionsHelper::UIControlOptions
                 aIncludeOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), -1, sal_False );
             aIncludeOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+            aHelpIds.realloc( 1 );
+            aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE) ),
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST_HELP),
+                                aHelpIds,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectInclude" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
@@ -616,7 +632,7 @@ namespace {
             aPaperTrayOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPageOptGroup" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY_HELP) ),
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox" ) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPaperFromSetup" ) ),
                                 sal_False,
                                 aPaperTrayOpt
@@ -634,8 +650,12 @@ namespace {
 
             // create a choice for the content to create
             rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+            aHelpIds.realloc( 3 );
+            aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+            aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+            aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt( rtl::OUString(),
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE_HELP),
+                                aHelpIds,
                                 aPrintRangeName,
                                 CreateChoice(mbImpress
                                              ? _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
