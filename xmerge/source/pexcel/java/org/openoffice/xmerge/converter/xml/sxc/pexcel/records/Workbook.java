@@ -69,7 +69,6 @@ OfficeConstants {
         eof             = new Eof();
     }
 
-
     /**
      * Constructs a pocket Excel Workbook with the name of the file passed in
      * as an argument. Also fills out a basic header block containing the
@@ -91,7 +90,9 @@ OfficeConstants {
      * Constructs a pocket Excel Workbook from the
      * <code>InputStream</code> and assigns it the document name passed in
      *
-     * @param   is InputStream containing a Pocket Excel Data file.
+     * @param   name Name of the Pocket Excel Data file. (including the file
+     *               extension)
+     * @param   is   InputStream containing a Pocket Excel Data file.
      */
     public Workbook(String name, InputStream is) throws IOException {
         read(is);
@@ -240,7 +241,7 @@ OfficeConstants {
     /**
       * Adds a ExtendedFormat record to the workbook
      *
-      * @param  f the font recrod to add
+      * @param  fmt the font record to add
       */
     public int addExtendedFormat(Format fmt) throws IOException {
 
@@ -362,7 +363,7 @@ OfficeConstants {
     /**
      * Adds a <code>Worksheet</code> to the workbook.
      *
-     * @return name the name of the <code>Worksheet</code> to be added
+     * @param name the name of the <code>Worksheet</code> to be added
      */
     public void addWorksheet(String name) throws IOException {
 
@@ -376,7 +377,10 @@ OfficeConstants {
     /**
      * Adds a cell to the current worksheet.
      *
-     * @return the name of the <code>Worksheet</code> to be added
+     * @param row          Row index for the new cell.
+     * @param col          Column index for the new cell.
+     * @param fmt          Format description for the new cell.
+     * @param cellContents Contents for the new cell.
      */
     public void addCell(int row,int col, Format fmt, String cellContents)
     throws IOException {
@@ -429,7 +433,7 @@ OfficeConstants {
 
     /**
       * Will create a number of ColInfo records based on the column widths
-     * based in.
+     * passed in.
      *
       * @param  columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
       */
@@ -470,12 +474,11 @@ OfficeConstants {
         }
     }
 
-    /**
-      * Will create a number of ColInfo recrods based on the column widths
-     * based in.
-     *
-      * @param  an integer list representing the column widths
-      */
+   /**
+    * Add a name definition to the workbook.
+    *
+    * @param nameDefinition The name definition to add.
+    */
     public void addNameDefinition(NameDefinition nameDefinition) throws IOException {
 
         DefinedName dn = new DefinedName(nameDefinition, this);
