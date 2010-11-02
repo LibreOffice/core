@@ -164,9 +164,6 @@ struct SfxUndoManager_Data
 
     sal_Int32       mnLockCount;
     bool            mbDoing;
-#ifdef DBG_UTIL
-    bool            mbCompatibilityAssertions;
-#endif
 
     UndoListeners   aListeners;
 
@@ -176,9 +173,7 @@ struct SfxUndoManager_Data
         ,pFatherUndoArray( NULL )
         ,mnLockCount( 0 )
         ,mbDoing( false )
-#ifdef DBG_UTIL
-        ,mbCompatibilityAssertions( true )
-#endif
+
     {
         pActUndoArray = pUndoArray;
     }
@@ -359,7 +354,7 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
     if ( IsUndoEnabled() )
     {
         // Redo-Actions loeschen
-        if ( ImplGetRedoActionCount() > 0 )
+        if ( GetRedoActionCount() > 0 )
             ClearRedo();
 
         if ( m_pData->pActUndoArray->nMaxUndoActions )
@@ -815,16 +810,6 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
 }
 
 //------------------------------------------------------------------------
-#ifdef DBG_UTIL
-void SfxUndoManager::DbgEnableCompatibilityAssertions( bool const i_enable )
-{
-    OSL_ENSURE( m_pData->mbCompatibilityAssertions != i_enable,
-        "SfxUndoManager::DbgEnableCompatibilityAssertions: nested calls not supported, this is expected to be with each call!" );
-    m_pData->mbCompatibilityAssertions = i_enable;
-}
-#endif
-
-//------------------------------------------------------------------------
 
 USHORT SfxListUndoAction::GetId() const
 {
@@ -930,7 +915,7 @@ SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
         // is dirty, too.
     if ( pManager->GetMaxUndoActionCount() )
     {
-        USHORT nPos = pUndoManagerImplementation->ImplGetUndoActionCount()-1;
+        USHORT nPos = pManager->GetUndoActionCount()-1;
         pAction = pUndoManagerImplementation->m_pData->pActUndoArray->aUndoActions[nPos];
         pAction->SetLinked();
     }
