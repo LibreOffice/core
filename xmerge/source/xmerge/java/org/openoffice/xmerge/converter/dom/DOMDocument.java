@@ -157,7 +157,7 @@ public class DOMDocument
      *  Sets the Content of the <code>Document</code> to the contents of the
      *  supplied <code>Node</code> list.
      *
-     *  @return  DOM <code>Document</code> object.
+     *  @param newDom DOM <code>Document</code> object.
      */
     public void setContentDOM( Node newDom) {
     contentDoc=(Document)newDom;
