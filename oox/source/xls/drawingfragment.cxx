@@ -28,44 +28,30 @@
 
 #include "oox/xls/drawingfragment.hxx"
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/form/binding/XListEntrySource.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
-#include "properties.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertyset.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
+#include "properties.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::beans::NamedValue;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::XControlModel;
-using ::com::sun::star::form::binding::XBindableValue;
-using ::com::sun::star::form::binding::XListEntrySink;
-using ::com::sun::star::form::binding::XListEntrySource;
-using ::com::sun::star::form::binding::XValueBinding;
-using ::com::sun::star::drawing::XShape;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
+
 using ::oox::core::ContextHandlerRef;
 using ::oox::drawingml::ConnectorShapeContext;
 using ::oox::drawingml::GraphicalObjectFrameContext;
@@ -74,10 +60,10 @@ using ::oox::drawingml::Shape;
 using ::oox::drawingml::ShapePtr;
 using ::oox::drawingml::ShapeContext;
 using ::oox::drawingml::ShapeGroupContext;
-// no using's for ::oox::vml, that may clash with ::oox::drawingml types
+using ::rtl::OUString;
 
-namespace oox {
-namespace xls {
+
+// no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
 // ============================================================================
 
@@ -557,7 +543,8 @@ bool VmlFindNoteFunc::operator()( const ::oox::vml::ShapeBase& rShape ) const
 
 VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     ::oox::vml::Drawing( rHelper.getOoxFilter(), rHelper.getDrawPage(), ::oox::vml::VMLDRAWING_EXCEL ),
-    WorksheetHelper( rHelper )
+    WorksheetHelper( rHelper ),
+    maControlConv( rHelper.getBaseFilter().getModel(), rHelper.getBaseFilter().getGraphicHelper() )
 {
 }
 
@@ -592,65 +579,9 @@ void VmlDrawing::convertControlClientData( const Reference< XControlModel >& rxC
         // printable
         aPropSet.setProperty( PROP_Printable, rClientData.mbPrintObject );
 
-        // linked cell
-        if( rClientData.maLinkedCell.getLength() > 0 ) try
-        {
-            Reference< XBindableValue > xBindable( rxCtrlModel, UNO_QUERY_THROW );
-
-            // convert formula string to cell address
-            FormulaParser& rParser = getFormulaParser();
-            TokensFormulaContext aContext( true, false );
-            aContext.setBaseAddress( CellAddress( getSheetIndex(), 0, 0 ) );
-            rParser.importFormula( aContext, rClientData.maLinkedCell );
-            CellAddress aAddress;
-            if( rParser.extractCellAddress( aAddress, aContext.getTokens(), true ) )
-            {
-                // create argument sequence for createInstanceWithArguments()
-                NamedValue aValue;
-                aValue.Name = CREATE_OUSTRING( "BoundCell" );
-                aValue.Value <<= aAddress;
-                Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= aValue;
-
-                // create the CellValueBinding instance and set at the control model
-                Reference< XValueBinding > xBinding( getDocumentFactory()->createInstanceWithArguments(
-                    CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
-                xBindable->setValueBinding( xBinding );
-            }
-        }
-        catch( Exception& )
-        {
-        }
-
-        // source range
-        if( rClientData.maSourceRange.getLength() > 0 ) try
-        {
-            Reference< XListEntrySink > xEntrySink( rxCtrlModel, UNO_QUERY_THROW );
-
-            // convert formula string to cell range
-            FormulaParser& rParser = getFormulaParser();
-            TokensFormulaContext aContext( true, false );
-            aContext.setBaseAddress( CellAddress( getSheetIndex(), 0, 0 ) );
-            rParser.importFormula( aContext, rClientData.maSourceRange );
-            CellRangeAddress aRange;
-            if( rParser.extractCellRange( aRange, aContext.getTokens(), true ) )
-            {
-                // create argument sequence for createInstanceWithArguments()
-                NamedValue aValue;
-                aValue.Name = CREATE_OUSTRING( "CellRange" );
-                aValue.Value <<= aRange;
-                Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= aValue;
-
-                // create the EntrySource instance and set at the control model
-                Reference< XListEntrySource > xEntrySource( getDocumentFactory()->createInstanceWithArguments(
-                    CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
-                xEntrySink->setListEntrySource( xEntrySource );
-            }
-        }
-        catch( Exception& )
-        {
-        }
+        // control sources
+        if( (rClientData.maLinkedCell.getLength() > 0) || (rClientData.maSourceRange.getLength() > 0) )
+            maControlConv.bindToSources( rxCtrlModel, rClientData.maLinkedCell, rClientData.maSourceRange, getSheetIndex() );
     }
 }
 

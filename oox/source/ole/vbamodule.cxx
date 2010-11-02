@@ -27,29 +27,101 @@
  ************************************************************************/
 
 #include "oox/ole/vbamodule.hxx"
+#include <hash_map>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
 #include "oox/ole/vbahelper.hxx"
 #include "oox/ole/vbainputstream.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::script::vba;
-using namespace ::com::sun::star::uno;
-
 namespace oox {
 namespace ole {
 
 // ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::vba;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+// ============================================================================
+typedef ::cppu::WeakImplHelper1< XIndexContainer > OleIdToNameContainer_BASE;
+typedef std::hash_map< sal_Int32, rtl::OUString >  ObjIdToName;
+
+class OleIdToNameContainer : public OleIdToNameContainer_BASE
+{
+    ObjIdToName ObjIdToNameHash;
+    ::osl::Mutex m_aMutex;
+    bool hasByIndex( ::sal_Int32 Index )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ( ObjIdToNameHash.find( Index ) != ObjIdToNameHash.end() );
+    }
+public:
+    OleIdToNameContainer() {}
+    // XIndexContainer Methods
+    virtual void SAL_CALL insertByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        rtl::OUString sOleName;
+        if ( !( Element >>= sOleName ) )
+            throw IllegalArgumentException();
+        ObjIdToNameHash[ Index ] = sOleName;
+    }
+    virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByIndex( Index ) )
+            throw IndexOutOfBoundsException();
+        ObjIdToNameHash.erase( ObjIdToNameHash.find( Index ) );
+    }
+    // XIndexReplace Methods
+    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByIndex( Index ) )
+            throw IndexOutOfBoundsException();
+        rtl::OUString sOleName;
+        if ( !( Element >>= sOleName ) )
+            throw IllegalArgumentException();
+        ObjIdToNameHash[ Index ] = sOleName;
+    }
+    // XIndexAccess Methods
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ObjIdToNameHash.size();
+    }
+    virtual Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByIndex( Index ) )
+            throw IndexOutOfBoundsException();
+        return makeAny( ObjIdToNameHash[ Index ] );
+    }
+    // XElementAccess Methods
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
+    {
+        return ::getCppuType( static_cast< const ::rtl::OUString* >( 0 ) );
+    }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ( getCount() > 0 );
+    }
+};
+
+ // ============================================================================
 
 VbaModule::VbaModule( const Reference< XModel >& rxDocModel, const OUString& rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
     mxDocModel( rxDocModel ),
@@ -129,18 +201,86 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
     OSL_ENSURE( mnOffset < SAL_MAX_UINT32, "VbaModule::importDirRecords - missing module stream offset" );
 }
 
-void VbaModule::importSourceCode( StorageBase& rVbaStrg,
+void VbaModule::createAndImportModule( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxBasicLib,
+        const Reference< XNameAccess >& rxDocObjectNA, const Reference< XNameContainer >& rxOleNameOverrides ) const
+{
+    OUString aVBASourceCode = readSourceCode( rVbaStrg, rxOleNameOverrides );
+    createModule( aVBASourceCode, rxBasicLib, rxDocObjectNA );
+}
+
+void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
+{
+    createModule( OUString(), rxBasicLib, rxDocObjectNA );
+}
+
+// private --------------------------------------------------------------------
+
+OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
+{
+    OUStringBuffer aSourceCode;
+    if( (maStreamName.getLength() > 0) && (mnOffset != SAL_MAX_UINT32) )
+    {
+        BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
+        OSL_ENSURE( !aInStrm.isEof(), "VbaModule::readSourceCode - cannot open module stream" );
+        // skip the 'performance cache' stored before the actual source code
+        aInStrm.seek( mnOffset );
+        // if stream is still valid, load the source code
+        if( !aInStrm.isEof() )
+        {
+            // decompression starts at current stream position of aInStrm
+            VbaInputStream aVbaStrm( aInStrm );
+            // load the source code line-by-line, with some more processing
+            TextInputStream aVbaTextStrm( aVbaStrm, meTextEnc );
+            while( !aVbaTextStrm.isEof() )
+            {
+                OUString aCodeLine = aVbaTextStrm.readLine();
+                if( aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
+                {
+                    // attribute
+                    extractOleOverrideFromAttr( aCodeLine, rxOleNameOverrides );
+                }
+                else
+                {
+                    // normal source code line
+                    if( !mbExecutable )
+                        aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );
+                    aSourceCode.append( aCodeLine ).append( sal_Unicode( '\n' ) );
+                }
+            }
+        }
+    }
+    return aSourceCode.makeStringAndClear();
+}
+
+void VbaModule::extractOleOverrideFromAttr( const OUString& rAttribute, const Reference< XNameContainer >& rxOleNameOverrides ) const
+{
+    // format of the attribute we are interested in is
+    // Attribute VB_Control = "ControlName", intString, MSForms, ControlTypeAsString
+    // e.g.
+    // Attribute VB_Control = "CommandButton1, 201, 19, MSForms, CommandButton"
+    OUString sControlAttribute = CREATE_OUSTRING( "Attribute VB_Control = \"" );
+    if ( rxOleNameOverrides.is() && rAttribute.indexOf( sControlAttribute ) !=  -1 )
+    {
+        OUString sRest = rAttribute.copy( sControlAttribute.getLength() );
+        sal_Int32 nPos = sRest.indexOf( ',' );
+        OUString sCntrlName = sRest.copy( 0, nPos );
+
+        sal_Int32 nCntrlId = sRest.copy( nPos + 1 ).copy( 0, sRest.indexOf( ',', nPos + 1) ).toInt32();
+        OSL_TRACE("In module %s, assiging %d controlname %s",
+            rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr(), nCntrlId,
+            rtl::OUStringToOString( sCntrlName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        if ( !rxOleNameOverrides->hasByName( maName ) )
+            rxOleNameOverrides->insertByName( maName, Any( Reference< XIndexContainer> ( new OleIdToNameContainer ) ) );
+        Reference< XIndexContainer > xIdToOleName;
+        if ( rxOleNameOverrides->getByName( maName ) >>= xIdToOleName )
+            xIdToOleName->insertByIndex( nCntrlId, makeAny( sCntrlName ) );
+    }
+}
+
+void VbaModule::createModule( const OUString& rVBASourceCode,
         const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
 {
-    if( (maName.getLength() == 0) || (maStreamName.getLength() == 0) || (mnOffset == SAL_MAX_UINT32) )
-        return;
-
-    BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
-    OSL_ENSURE( !aInStrm.isEof(), "VbaModule::importSourceCode - cannot open module stream" );
-    // skip the 'performance cache' stored before the actual source code
-    aInStrm.seek( mnOffset );
-    // if stream is still valid, load the source code
-    if( aInStrm.isEof() )
+    if( maName.getLength() == 0 )
         return;
 
     // prepare the Basic module
@@ -189,21 +329,8 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
             append( maName.replace( ' ', '_' ) ).append( sal_Unicode( '\n' ) );
     }
 
-    // decompression starts at current stream position of aInStrm
-    VbaInputStream aVbaStrm( aInStrm );
-    // load the source code line-by-line, with some more processing
-    TextInputStream aVbaTextStrm( aVbaStrm, meTextEnc );
-    while( !aVbaTextStrm.isEof() )
-    {
-        OUString aCodeLine = aVbaTextStrm.readLine();
-        // skip all 'Attribute' statements
-        if( !aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
-        {
-            if( !mbExecutable )
-                aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );
-            aSourceCode.append( aCodeLine ).append( sal_Unicode( '\n' ) );
-        }
-    }
+    // append passed VBA source code
+    aSourceCode.append( rVBASourceCode );
 
     // close the subroutine named after the module
     if( !mbExecutable )
@@ -226,7 +353,7 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "VbaModule::importSourceCode - cannot insert module into library" );
+        OSL_ENSURE( false, "VbaModule::createModule - cannot insert module into library" );
     }
 }
 

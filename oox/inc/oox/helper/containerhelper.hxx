@@ -125,6 +125,13 @@ public:
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
                         }
 
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
+    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3, typename ParamType4 >
+    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
+                        {
+                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3, aParam4 ) );
+                        }
     /** Calls the passed functor for every contained object. Passes the index as
         first argument and the object reference as second argument to rFunctor. */
     template< typename FunctorType >
@@ -281,6 +288,13 @@ public:
     inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
+                        }
+    /** Calls the passed member function of ObjType on every contained object,
+        automatically skips all elements that are empty references. */
+    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3, typename ParamType4 >
+    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
+                        {
+                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3, aParam4 ) );
                         }
     /** Calls the passed functor for every contained object. Passes the key as
         first argument and the object reference as second argument to rFunctor. */

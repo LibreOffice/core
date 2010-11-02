@@ -521,7 +521,6 @@ void lclReadCharArray( SvStorageStream& rStrm, char*& rpcCharArr, sal_uInt32 nLe
     }
 }
 
-
 /** Creates an OUString from a character array created with lclReadCharArray().
 
     The passed parameters must match, that means the length field must be the
@@ -547,6 +546,39 @@ OUString lclCreateOUString( const char* pcCharArr, sal_uInt32 nLenFld )
         return svt::BinFilterUtils::CreateOUStringFromStringArray( pcCharArr, nBufSize );
 
     return svt::BinFilterUtils::CreateOUStringFromUniStringArray( pcCharArr, nBufSize );
+}
+
+void readArrayString( SotStorageStream *pS, std::vector< rtl::OUString >& sStringsOut, sal_Int32 nSize, long nStart )
+{
+    unsigned long nFinish = pS->Tell() + nSize;
+    while ( pS->Tell() < nFinish )
+    {
+        sal_Int32 nStringLen = 0;
+        *pS >> nStringLen;
+        sal_uInt32 nStringSize = lclGetBufferSize( nStringLen );
+        sal_Char* pString = new sal_Char[ nStringSize ];
+        pS->Read( pString, nStringSize );
+        rtl::OUString sString = lclCreateOUString( pString, nStringLen );
+        delete[] pString;
+        sStringsOut.push_back( sString );
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+    }
+}
+
+OUString createSubStreamName( const sal_uInt32& subStorageId )
+{
+    static OUString sI = OUString::createFromAscii("i");
+    static OUString sZero = OUString::createFromAscii( "0" );
+    OUStringBuffer buf( 6 );
+    buf.append( sI );
+    // for subStorage id < 10 stream name has leading '0'
+    // eg "i07"
+    if ( subStorageId < 10 )
+    {
+        buf.append( sZero );
+    }
+    buf.append( OUString::valueOf( (sal_Int32)subStorageId ) );
+    return buf.makeStringAndClear();
 }
 
 // export ---------------------------------------------------------------------
@@ -641,6 +673,44 @@ void SvxOcxString::WriteCharArray( SvStorageStream& rStrm ) const
     }
 }
 
+class MultiPageProps
+{
+public:
+    sal_uInt16  nIdentifier; // major & minor version
+    sal_uInt16  nFixedAreaLen; // size of record
+    sal_uInt8   pBlockFlags[4]; // size of record
+    sal_Int32   mnPageCount;
+    sal_Int32   mnID;
+    bool        mbEnabled;
+    std::vector< sal_Int32 > mnIDs;
+
+    MultiPageProps();
+    bool Read(SotStorageStream *pS);
+};
+
+MultiPageProps::MultiPageProps() : nIdentifier(0), nFixedAreaLen(0), mnPageCount(0), mnID(0), mbEnabled( true )
+{
+}
+
+bool MultiPageProps::Read(SotStorageStream *pS)
+{
+    *pS >> nIdentifier >> nFixedAreaLen;
+    pS->Read( pBlockFlags, sizeof( pBlockFlags ) );
+    if ( pBlockFlags[ 0 ] & 0x02 )
+        *pS >> mnPageCount;
+    if ( pBlockFlags[ 0 ] & 0x04 )
+        *pS >> mnID;
+    if ( pBlockFlags[ 0 ] & 0x08 )
+        mbEnabled = false;
+    for ( sal_Int32 i=0; i<mnPageCount; ++i )
+    {
+        sal_Int32 nID(0);
+        *pS >> nID;
+        mnIDs.push_back( nID );
+    }
+    return true;
+}
+
 const sal_uInt16 USERFORM = (sal_uInt16)0xFF;
 const sal_uInt16 STDCONTAINER = (sal_uInt16)0xFE;
 
@@ -666,34 +736,23 @@ const sal_uInt16 TOGGLEBUTTON = (sal_uInt16)0x1C;
 const sal_uInt16 SCROLLBAR = (sal_uInt16)0x2F;
 
 const sal_uInt16 MULTIPAGE = (sal_uInt16)0x39;
-// The IDs with bit 0x8000 set appear to be generated.
-// It looks like these ID's are used with the non-toolbox [1]
-// ActiveX controls that can be present in a Userform
-// ( note: RefEdit seems to be an exception )
-// In UserForm::Read just before the Container record starts
-// you will notice there can be sometimes trailing records,
-// it seems that these records have a 1:1 relationship with the non-toolbox
-// controls present in the Userform. An id in the trailing record
-// seems to identify the specific ActiveX control and an artificial nTypeIdent
-// e.g. 0x8000, 0x8001 etc. is created so as to be able to associate
-// the ActiveX control when referenced later
-// [1] Such ActiveX controls are added via Tools/AddionalControls
-// menu
 
-// create a fixed set of those special id(s)
-// ahem, we can only read one Progress bars at the moment so....
+const sal_uInt16 UNKNOWNCTRL = (sal_uInt16)0x7FFF;
 const sal_uInt16 PROGRESSBAR = (sal_uInt16)0x8000;
 
-// A set of IDs from the trailing records mentioned above that seem to
-// identify the following ActiveX controls
+// following ActiveX controls are just for reference ( are NOT supported )
+const sal_uInt16 REFEDIT = (sal_uInt16)0x8001;
+const sal_uInt16 CALENDAR = (sal_uInt16)0x8002;
+const sal_uInt16 IMAGECOMBO = (sal_uInt16)0x8003;
+const sal_uInt16 IMAGELIST = (sal_uInt16)0x8004;
+const sal_uInt16 SLIDER = (sal_uInt16)0x8005;
+const sal_uInt16 STATUSBAR = (sal_uInt16)0x8006;
+const sal_uInt16 CHARTSPACE = (sal_uInt16)0x8007;
+
+// A set of common CLSIDs
+// there are to identify the following ActiveX controls ( that appear in the ClassTable records )
 // Currently we only can process ( in a limited way ) the ProgressBar
 // the other ID's are for reference ( & future )
-
-// RefEdit control {00024512-0000-0000-c000-000000000046}
-const sal_uInt8 aRefEditID[] =
-{
-0x12, 0x45, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
-};
 
 // Microsoft ProgressBar Control, version 6.0 {35053A22-8589-11D1-B16A-00C0F0283628}
 const sal_uInt8 aProgressID[] =
@@ -701,12 +760,17 @@ const sal_uInt8 aProgressID[] =
 0x22, 0x3a, 0x05, 0x35, 0x89, 0x85, 0xd1, 0x11,  0xb1, 0x6a, 0x00, 0xc0, 0xf0, 0x28, 0x36, 0x28,
 };
 
+// RefEdit control {00024512-0000-0000-c000-000000000046}
+const sal_uInt8 aRefEditID[] =
+{
+0x12, 0x45, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
+};
+
 // Calendar Control 10.0
 const sal_uInt8 aCalendarID[] =
 {
 0x2b, 0xc9, 0x27, 0x8e, 0x64, 0x12, 0x1c, 0x10, 0x8a, 0x2f, 0x04, 0x02, 0x24, 0x00, 0x9c, 0x02,
 };
-
 
 // Microsoft ImageComboxBox Control, version 6.0 {DD9DA666-8594-11D1-B16A-00C0F0283628}
 const sal_uInt8 aImageComboID[] =
@@ -738,58 +802,321 @@ const sal_uInt8 aChartSpaceID[] =
 0x46, 0xe5, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
 };
 
-const sal_Int16 ActiveXIDLen = 0x10; // CLSID len
-const sal_Int16 ActiveXIDBlockLen = 0x30; // the block len that contains the CLSID
+const sal_uInt8 nSizeOfClsid = sizeof( aProgressID );
 
-bool lcl_handleActiveXControl(  SvStorageStream *pS, sal_uInt16& nTypeID )
+struct ClsIdTypeIDPair
 {
-    nTypeID = 0; // Illegal ActiveX ID
-    bool bRes = false;
-    sal_uInt16 nIdentifier, nFixedAreaLen;
-    *pS >> nIdentifier;
-    *pS >> nFixedAreaLen;
-    pS->SeekRel( ( nFixedAreaLen - ActiveXIDBlockLen ) );
-    sal_uInt8 aID[ ActiveXIDLen ];
-    if ( !pS->IsEof() )
-    {
-        pS->Read( aID, ActiveXIDLen );
-        pS->SeekRel( ActiveXIDBlockLen - ActiveXIDLen ); // read remainer of record
-        if ( memcmp( aID, aProgressID, ActiveXIDLen ) == 0 )
-        {
-            nTypeID = PROGRESSBAR;
-            OSL_TRACE("Found supported ***PROGRESSBAR*** ActiveX control");
-            bRes = true;
-        }
-#if (OSL_DEBUG_LEVEL > 0)
-        // If we really want to process these more controls we should put them in
-        // a list or array and have a single loop testing each id. For the moment
-        // as we only can process PROGRESSBAR, not much point doing that until
-        // we add support for at least another activex control
+//    ClsIdTypeIDPair() : pClsID( NULL ), nTypeID( UNKNOWNCTRL ) {}
+    const sal_uInt8* pClsID;
+    const sal_uInt16 nTypeID;
+};
 
-        else if ( memcmp( aID, aCalendarID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***CALENDAR*** ActiveX control");
-        else if ( memcmp( aID, aRefEditID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***REFEDIT*** ActiveX control");
-        else if ( memcmp( aID, aImageComboID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***IMAGECOMBO*** ActiveX control");
-        else if ( memcmp( aID, aImageListID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***IMAGELIST*** ActiveX control");
-        else if ( memcmp( aID, aChartSpaceID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***CHARTSPACE*** ActiveX control");
-        else if ( memcmp( aID, aSliderID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***SLIDER*** ActiveX control");
-        else if ( memcmp( aID, aStatusBarID, ActiveXIDLen ) == 0 )
-            OSL_TRACE("Found unsupported ***STATUSBAR*** ActiveX control");
+ClsIdTypeIDPair ClsidList[] = { { aProgressID, PROGRESSBAR },
+// unsupported common activex controls
+#ifdef DEBUG
+                                 { aRefEditID, REFEDIT },
+                                 { aCalendarID, CALENDAR },
+                                 { aImageComboID, IMAGECOMBO },
+                                 { aImageListID, IMAGELIST },
+                                 { aSliderID, SLIDER },
+                                 { aStatusBarID, STATUSBAR },
+                                 { aChartSpaceID, CHARTSPACE },
 #endif
-        else
-        {
-            OSL_TRACE("Unknown activeX ID !");
-        }
-    }
-    return bRes;
-}
+};
 
 typedef std::vector< ContainerRecord > ContainerRecordList;
+
+class FormObjectDepthTypeCount
+{
+    public:
+    sal_uInt8 depth;
+    sal_uInt8 TypeOrCount;
+    std::auto_ptr< sal_uInt8 > OptionalType;
+    FormObjectDepthTypeCount() : depth(0), TypeOrCount(0) {}
+    bool Read( SvStorageStream* pS )
+    {
+        *pS >> depth >> TypeOrCount;
+        if ( TypeOrCount &  0x80 )
+        {
+            OptionalType.reset( new sal_uInt8 );
+            *pS >> *OptionalType;
+        }
+        TypeOrCount = ( TypeOrCount >> 1 );
+        return true;
+    }
+};
+
+class ClassTable
+{
+    sal_uInt16 nIdentifier;
+    sal_uInt16 nFixedAreaLen;
+    sal_uInt32 nContentFlags;
+    sal_uInt16 nClassTableFlags;
+    sal_uInt16 nVarFlags;
+    sal_Int32 nCountOfMethods;
+    sal_Int32 nDispidBind;
+    sal_uInt16 nGetBindIndex;
+    sal_uInt16 nPutBindIndex;
+    sal_uInt16 nBindType;
+    sal_uInt16 nGetValueIndex;
+    sal_uInt16 nPutValueIndex;
+    sal_uInt16 nValueType;
+    sal_uInt32 nDisidRowset;
+    sal_uInt16 nSetRowset;
+    sal_uInt8 pClsId[16];
+    sal_uInt8 pDispEvent[16];
+    sal_uInt8 pDefaultProg[16];
+    sal_uInt16 nTypeId;
+public:
+    ClassTable() :  nIdentifier( 0 )
+                   ,nFixedAreaLen( 0 )
+                   ,nContentFlags(0)
+                   ,nClassTableFlags(0)
+                   ,nVarFlags(0)
+                   ,nCountOfMethods(0)
+                   ,nDispidBind(0)
+                   ,nGetBindIndex(0)
+                   ,nPutBindIndex(0)
+                   ,nBindType(0)
+                   ,nGetValueIndex(0)
+                   ,nPutValueIndex(0)
+                   ,nValueType(0)
+                   ,nDisidRowset(0)
+                   ,nSetRowset(0)
+                   ,nTypeId(UNKNOWNCTRL)
+
+    {
+        memset( pClsId, 0, sizeof( pClsId ) );
+        memset( pDispEvent, 0, sizeof( pDispEvent ) );
+        memset( pDefaultProg, 0, sizeof( pDefaultProg ) );
+    }
+    bool Read(  SvStorageStream* pS )
+    {
+        long nStartPos = pS->Tell();
+        *pS >> nIdentifier >> nFixedAreaLen >> nContentFlags;
+        bool bClsID( false );
+        bool bDispEvent( false );
+        bool bDefaultProg( false );
+        if (  nContentFlags & 0x00000001 )
+            bClsID = true;
+        if (  nContentFlags & 0x00000002 )
+            bDispEvent = true;
+//        if (  nContentFlags & 0x00000004 ) ' not set should be 0
+        if (  nContentFlags & 0x00000008 )
+            bDefaultProg = true;
+        if (  nContentFlags & 0x00000010 )
+            *pS >> nClassTableFlags >> nVarFlags;
+        if (  nContentFlags & 0x00000020 )
+            *pS >> nCountOfMethods;
+        if (  nContentFlags & 0x00000040 )
+            *pS >> nDispidBind;
+        if (  nContentFlags & 0x00000080 )
+            *pS >> nGetBindIndex;
+        if (  nContentFlags & 0x00000100 )
+            *pS >> nPutBindIndex;
+        if (  nContentFlags & 0x00000200 )
+            *pS >> nBindType;
+        if (  nContentFlags & 0x00000400 )
+            *pS >> nGetValueIndex;
+        if (  nContentFlags & 0x00000800 )
+            *pS >> nPutValueIndex;
+        if (  nContentFlags & 0x00001000 )
+            *pS >> nValueType;
+        if (  nContentFlags & 0x00002000 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            *pS >> nDisidRowset;
+        }
+        if (  nContentFlags & 0x00004000 )
+            *pS >> nSetRowset;
+        ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+        // Extra Block
+        if ( bClsID )
+            pS->Read( pClsId, sizeof( pClsId ) );
+        if ( bDispEvent )
+            pS->Read( pDispEvent, sizeof( pDispEvent ) );
+        if ( bDefaultProg )
+            pS->Read( pDefaultProg, sizeof( pDefaultProg ) );
+
+        sal_Int32 nNumIds =  sizeof( ClsidList ) / sizeof( ClsidList[0] );
+
+        if ( bClsID )
+        {
+            for ( sal_Int32 index = 0; index < nNumIds; ++index )
+            {
+                if ( memcmp( pClsId, ClsidList[ index ].pClsID, nSizeOfClsid ) == 0 )
+                {
+                    nTypeId = ClsidList[ index ].nTypeID;
+                    OSL_TRACE( "... found activex control ClsidList[ %d ] and have given it TypeIdent 0x%x", index, nTypeId );
+                }
+            }
+        }
+        ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+        return true;
+    }
+
+    sal_uInt16 getTypeId() { return nTypeId; }
+};
+
+class OleSiteConcreteControl
+{
+    sal_uInt16 nIdentifier;
+    sal_uInt16 nFixedAreaLen;
+    sal_uInt32 nContentFlags;
+public:
+    OleSiteConcreteControl() :  nIdentifier( 0 ), nFixedAreaLen( 0 ), nContentFlags(0) {}
+    bool Read( ContainerRecord& rec, SvStorageStream* pS )
+    {
+        long nStartPos = pS->Tell();
+        *pS >> nIdentifier >> nFixedAreaLen >> nContentFlags;
+
+        bool bPosition( false );
+
+        sal_uInt32 nNameLen = 0;
+        // length of control name
+        if ( nContentFlags & 0x00000001 )
+            *pS >> nNameLen;
+        // length of control tag
+        sal_uInt32 nTagLen = 0;
+        if( nContentFlags & 0x00000002 )
+            *pS >> nTagLen;
+        // substorage id for frames
+        if( nContentFlags & 0x00000004 )
+            *pS >> rec.nSubStorageId;
+        // help-context id
+        if( nContentFlags & 0x00000008 )
+            pS->SeekRel( 4 );
+        // option flags
+        if( nContentFlags & 0x00000010 )
+        {
+            sal_uInt32 nBitFlags = 0;
+            *pS >> nBitFlags;
+            rec.bVisible = ( nBitFlags & 0x02 );
+            rec.bTabStop = ( nBitFlags & 0x01 );
+        }
+        // substream size
+        if( nContentFlags & 0x00000020 )
+            *pS >> rec.nSubStreamLen;
+        // tabstop position
+        if( nContentFlags & 0x00000040 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 2 );
+            *pS >> rec.nTabPos;
+        }
+        // control type
+        if( nContentFlags & 0x00000080 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 2 );
+            *pS >> rec.nTypeIdent;
+        }
+        if( nContentFlags & 0x00000100 )
+            bPosition = true;
+        sal_Int16 nGroupId = 0;
+        if( nContentFlags & 0x00000200 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 2 );
+            *pS >> nGroupId;
+        }
+
+        // length of infotip
+        sal_uInt32 nTipLen = 0;
+        if( nContentFlags & 0x00000800 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            *pS >> nTipLen;
+        }
+        sal_uInt32 nCntrlIdLen = 0;
+        if( nContentFlags & 0x00001000 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            *pS >> nCntrlIdLen;
+        }
+
+        // length of control source name
+        sal_uInt32 nCtrlSrcLen = 0;
+        if( nContentFlags & 0x00002000 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            *pS >> nCtrlSrcLen;
+        }
+
+        // length of row source name
+        sal_uInt32 nRowSrcLen = 0;
+        if( nContentFlags & 0x00004000 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            *pS >> nRowSrcLen;
+        }
+
+        ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+        // control name
+        sal_Char* pName = 0;
+        sal_uInt32 nNameBufSize = lclGetBufferSize( nNameLen );
+        if( nNameBufSize > 0 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            pName = new char[ nNameBufSize ];
+            pS->Read( pName, nNameBufSize );
+        }
+        // control tag
+        sal_uInt32 nTagBufSize = lclGetBufferSize( nTagLen );
+        if( nTagBufSize > 0 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            pS->SeekRel( nTagBufSize );
+        }
+
+        // control position
+        if( bPosition )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            *pS >> rec.nLeft >> rec.nTop;
+        }
+
+        // control infotip
+        sal_uInt32 nTipBufSize = lclGetBufferSize( nTipLen );
+        if( nTipBufSize > 0 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            std::auto_ptr< sal_Char > pTipName;
+            pTipName.reset( new sal_Char[ nTipBufSize ] );
+            pS->Read( pTipName.get(), nTipBufSize );
+            rec.controlTip = lclCreateOUString( pTipName.get(), nTipLen );
+        }
+        // control id
+        sal_uInt32 nCntrlIdSize = lclGetBufferSize( nCntrlIdLen );
+        if( nCntrlIdSize > 0 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            pS->SeekRel( nCntrlIdSize );
+        }
+        // control source name
+        sal_uInt32 nCtrlSrcBufSize = lclGetBufferSize( nCtrlSrcLen );
+        if( nCtrlSrcBufSize > 0 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            std::vector< sal_Char > pCtrlSrcName( nCtrlSrcBufSize );
+            pS->Read( &pCtrlSrcName[0], nCtrlSrcBufSize );
+            rec.sCtrlSource = lclCreateOUString( &pCtrlSrcName[0], nCtrlSrcLen );
+            OSL_TRACE("*** *** *** ControlSourceName -> %s ", rtl::OUStringToOString( rec.sCtrlSource, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        // row source name
+        sal_uInt32 nRowSrcBufSize = lclGetBufferSize( nRowSrcLen );
+        if( nRowSrcBufSize > 0 )
+        {
+            ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+            std::vector< sal_Char > pRowSrcName( nRowSrcBufSize );
+            pS->Read( &pRowSrcName[0], nRowSrcBufSize );
+            rec.sRowSource =  lclCreateOUString( &pRowSrcName[0], nRowSrcLen );
+            OSL_TRACE("*** *** *** RowSourceName -> %s ", rtl::OUStringToOString( rec.sRowSource, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+
+        ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+        rec.cName = lclCreateOUString(pName, nNameLen);
+        delete[] pName;
+        return true;
+    }
+};
 
 class ContainerRecReader
 {
@@ -797,179 +1124,42 @@ class ContainerRecReader
 
     virtual ~ContainerRecReader() {}
 
-    virtual bool Read( OCX_ContainerControl* pContainerControl, SvStorageStream *pS)
+    virtual bool Read( OCX_ParentControl* pContainerControl, SvStorageStream *pS, std::vector< ClassTable >& rSiteClassInfo )
     {
         *pS >> nNoRecords;
         *pS >> nTotalLen;
-
-        if ( isMultiPage )
+        long nStart = pS->Tell();
+        for ( sal_uInt32 nSite = 0; nSite < nNoRecords; )
         {
-            if ( !handleMultiPageHdr( pS ) )
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if ( !handleStandardHdr( pS ) )
-            {
-                return false;
-            }
+            FormObjectDepthTypeCount siteAndDepth;
+            siteAndDepth.Read( pS );
+            nSite += ( siteAndDepth.OptionalType.get() ? siteAndDepth.TypeOrCount : 1 );
         }
 
-        records.clear();
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+
         for (sal_uInt32 nRecord = 0; nRecord < nNoRecords; ++nRecord)
         {
-            // DR #134146# redo loading of FrameChild data
 
             ContainerRecord rec;
 
-            // record header
-            sal_uInt16 nId, nSize;
-            *pS >> nId >> nSize;
-            sal_Size nStartPos = pS->Tell();
-
-            // content flags
-            sal_uInt32 nContentFlags;
-            *pS >> nContentFlags;
-
-            // length of control name
-            sal_uInt32 nNameLen = 0;
-            if( nContentFlags & 0x00000001 )
-                *pS >> nNameLen;
-            // length of control tag
-            sal_uInt32 nTagLen = 0;
-            if( nContentFlags & 0x00000002 )
-                *pS >> nTagLen;
-            // substorage id for frames
-            if( nContentFlags & 0x00000004 )
-                *pS >> rec.nSubStorageId;
-            // help-context id
-            if( nContentFlags & 0x00000008 )
-                pS->SeekRel( 4 );
-            // option flags
-            if( nContentFlags & 0x00000010 )
+            OleSiteConcreteControl site;
+            site.Read( rec, pS );
+            if ( rec.nTypeIdent >= ( UNKNOWNCTRL + 1 ) )
             {
-                sal_uInt32 nBitFlags = 0;
-                *pS >> nBitFlags;
-                rec.bVisible = ( ( nBitFlags & 0x02 ) == 0x02 );
+                sal_uInt16 nIndex = rec.nTypeIdent - ( UNKNOWNCTRL + 1 );
+                if ( nIndex <  rSiteClassInfo.size() )
+                    rec.nTypeIdent = rSiteClassInfo[ nIndex ].getTypeId();
             }
-            // substream size
-            if( nContentFlags & 0x00000020 )
-                *pS >> rec.nSubStreamLen;
-            // tabstop position
-            if( nContentFlags & 0x00000040 )
-                *pS >> rec.nTabPos;
-            // control type
-            if( nContentFlags & 0x00000080 )
-                *pS >> rec.nTypeIdent;
-            if( nContentFlags & 0x00000200 )
-                pS->SeekRel( 4 ); // Grouping?
-            // length of infotip
-            sal_uInt32 nTipLen = 0;
-            if( nContentFlags & 0x00000800 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                *pS >> nTipLen;
-            }
-
-            sal_uInt32 nCntrlIdLen = 0;
-            if( nContentFlags & 0x00001000 )
-                *pS >> nCntrlIdLen;
-
-            // length of control source name
-            sal_uInt32 nCtrlSrcLen = 0;
-            if( nContentFlags & 0x00002000 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                *pS >> nCtrlSrcLen;
-            }
-
-            // length of row source name
-            sal_uInt32 nRowSrcLen = 0;
-            if( nContentFlags & 0x00004000 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                *pS >> nRowSrcLen;
-            }
-
-            // control name
-            sal_Char* pName = 0;
-            sal_uInt32 nNameBufSize = lclGetBufferSize( nNameLen );
-            if( nNameBufSize > 0 )
-            {
-                pName = new char[ nNameBufSize ];
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                pS->Read( pName, nNameBufSize );
-            }
-            // control tag
-            sal_uInt32 nTagBufSize = lclGetBufferSize( nTagLen );
-            if( nTagBufSize > 0 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                pS->SeekRel( nTagBufSize );
-            }
-
-            // control position
-            if( nContentFlags & 0x00000100 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                *pS >> rec.nLeft >> rec.nTop;
-            }
-
-            // control infotip
-            sal_uInt32 nTipBufSize = lclGetBufferSize( nTipLen );
-            if( nTipBufSize > 0 )
-            {
-                std::auto_ptr< sal_Char > pTipName;
-                pTipName.reset( new sal_Char[ nTipBufSize ] );
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                pS->Read( pTipName.get(), nTipBufSize );
-                rec.controlTip = lclCreateOUString( pTipName.get(), nTipLen );
-            }
-            // control id
-            sal_uInt32 nCntrlIdSize = lclGetBufferSize( nCntrlIdLen );
-            if( nCntrlIdSize > 0 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                pS->SeekRel( nCntrlIdSize );
-            }
-            // control source name
-            sal_uInt32 nCtrlSrcBufSize = lclGetBufferSize( nCtrlSrcLen );
-            if( nCtrlSrcBufSize > 0 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                std::auto_ptr< sal_Char > pCtrlSrcName;
-                pCtrlSrcName.reset( new sal_Char[ nCtrlSrcBufSize ] );
-                pS->Read( pCtrlSrcName.get(), nCtrlSrcBufSize );
-                rec.sCtrlSource = lclCreateOUString( pCtrlSrcName.get(), nCtrlSrcLen );
-                OSL_TRACE("*** *** *** ControlSourceName -> %s ", rtl::OUStringToOString( rec.sCtrlSource, RTL_TEXTENCODING_UTF8 ).getStr() );
-            }
-            // row source name
-            sal_uInt32 nRowSrcBufSize = lclGetBufferSize( nRowSrcLen );
-            if( nRowSrcBufSize > 0 )
-            {
-                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                std::auto_ptr< sal_Char > pRowSrcName;
-                pRowSrcName.reset( new sal_Char[ nRowSrcBufSize ] );
-                pS->Read( pRowSrcName.get(), nRowSrcBufSize );
-                rec.sRowSource =  lclCreateOUString( pRowSrcName.get(), nRowSrcLen );
-                OSL_TRACE("*** *** *** RowSourceName -> %s ", rtl::OUStringToOString( rec.sRowSource, RTL_TEXTENCODING_UTF8 ).getStr() );
-            }
-
-            // seek to end of data
-            pS->Seek( nStartPos + nSize );
-
-            rec.cName = lclCreateOUString(pName, nNameLen);
-            delete[] pName;
-
             OCX_Control* pControl = NULL;
+            OSL_TRACE("** About to create control of type 0x%x with name %s from rec", rec.nTypeIdent, rtl::OUStringToOString( rec.cName, RTL_TEXTENCODING_UTF8 ).getStr() );
             if( pContainerControl->createFromContainerRecord( rec, pControl ) &&
                 pControl )
             {
                 // propagate doc shell from parent
                 pControl->pDocSh = pContainerControl->pDocSh;
                 pContainerControl->ProcessControl( pControl, pS, rec );
+
             }
             else if ( rec.nTypeIdent & 0x8000 )
             {
@@ -987,90 +1177,12 @@ class ContainerRecReader
         return true;
     }
 
+    ContainerRecReader():nNoRecords(0), nTotalLen(0){}
     protected:
-    ContainerRecReader() : isMultiPage(false){}
-    bool isMultiPage;
     sal_uInt32 nNoRecords;
     sal_uInt32 nTotalLen;
 
     private:
-    bool handleStandardHdr( SvStorageStream* pS )
-    {
-        sal_uInt8 aUnknown11[4];
-        pS->Read(aUnknown11, sizeof(aUnknown11));
-        // discovered a dialog with value of 0xFF for aUnknown11
-        // needed an extra 4 bytes to offset correctly  into the control
-        // records. Valid test or coincidence ?
-        if ( aUnknown11[1] == 0xFF )
-           pS->Read( aUnknown11, sizeof(aUnknown11));
-        return true;
-    }
-
-    bool handleMultiPageHdr( SvStorageStream* pS )
-    {
-        sal_uInt32 nUnknown_32b; // unknown 32 bit structure, flags ?
-        sal_uInt16 nUnknown_16b; // unknown 16 bit structure
-        sal_uInt16 nMysteryLen; // lenght of unknown sub record
-
-        *pS >> nUnknown_32b;
-        *pS >> nUnknown_16b;
-        *pS >> nMysteryLen;
-
-        pS->SeekRel( nMysteryLen );
-        return true;
-    }
-    ContainerRecordList records;
-};
-
-class StdContainerRecReader : public ContainerRecReader
-{
-    public:
-    StdContainerRecReader(){}
-};
-
-class MultiPageContainerRecReader : public ContainerRecReader
-{
-    public:
-    MultiPageContainerRecReader()
-    {
-        // NP ( 27-01-05 )
-        // Strictly speaking this approach shouldn't be necessary.
-        // It should be possible to have a common routine read the
-        // container record array and by examining the flags present in
-        // the record to determine we expect to read or not.
-        // In this case for a MultPage control there is no Top or Left
-        // values in the control record array, however time contraints
-        // and associated risk prevent further investigation of this
-        // at the moment.
-        // similar situation exists for the start of the container record
-        // which in the case of the MultiPage is different from
-        // UserForm & Frame ( the other containers )
-
-        isMultiPage = true; // tell the base class skip
-    }
-};
-
-class ContainerRecordReaderFac
-{
-    public:
-    static ContainerRecReader* instance( sal_uInt32 containerType )
-    {
-        switch( containerType )
-        {
-            case PAGE:
-            case FRAME:
-            case USERFORM:
-            case STDCONTAINER:
-                return new StdContainerRecReader();
-            case MULTIPAGE:
-                return new MultiPageContainerRecReader();
-            default:
-                DBG_ERROR("Illegal container type for factory");
-                return NULL;
-        }
-    }
-    private:
-    ContainerRecordReaderFac();
 };
 
 } // namespace
@@ -1273,6 +1385,7 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
     }
 
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
+
     if (!xPropSet.is())
         return sal_False;
 
@@ -2200,6 +2313,12 @@ sal_Bool OCX_TextBox::Import(com::sun::star::uno::Reference<
         {
             rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
         }
+    }
+
+    if ( sImageUrl.getLength() )
+    {
+        aTmp <<= sImageUrl;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("ImageURL"), aTmp);
     }
 
     aFontData.Import(rPropSet);
@@ -3648,8 +3767,15 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
     {
         pS->Read(pPictureHeader,20);
         *pS >> nPictureLen;
-        pPicture = new sal_uInt8[nPictureLen];
-        pS->Read(pPicture,nPictureLen);
+        long imagePos = pS->Tell();
+        mxGrfObj = lcl_readGraphicObject( pS );
+        if( mxGrfObj.is() )
+        {
+            sImageUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
+            sImageUrl = sImageUrl + mxGrfObj->getUniqueID();
+        }
+        // make sure the stream position should be pointing after the image
+        pS->Seek( imagePos + nPictureLen );
     }
     if (nIcon)
     {
@@ -3669,325 +3795,61 @@ TypeName::TypeName(sal_Char *pName, sal_uInt32 nStoreId, sal_uInt32 nLen, sal_uI
 {
 }
 
-OCX_ContainerControl::OCX_ContainerControl( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const uno::Reference< container::XNameContainer >  &rParent,
-            OCX_Control* pParent ) :
-                OCX_Control(sN, pParent), mxParent(rParent), nNoRecords(0), nTotalLen(0), containerType( STDCONTAINER )
-{
-
-    mContainerStorage = parent->OpenSotStorage(storageName,
-        STREAM_READWRITE |
-        STREAM_NOCREATE |
-        STREAM_SHARE_DENYALL);
-    mContainerStream = mContainerStorage->OpenSotStream(
-        String(RTL_CONSTASCII_STRINGPARAM("f"),
-        RTL_TEXTENCODING_MS_1252),
-        STREAM_STD_READ | STREAM_NOCREATE);
-    mContainedControlsStream = mContainerStorage->OpenSotStream( String(RTL_CONSTASCII_STRINGPARAM("o"),
-        RTL_TEXTENCODING_MS_1252),
-        STREAM_STD_READ | STREAM_NOCREATE);
-}
-OCX_ContainerControl::~OCX_ContainerControl()
-{
-    CtrlIterator aEnd = mpControls.end();
-    for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
-    {
-        delete *aIter;
-    }
-}
-
-// Really import should receive the parent e.g. a Userform, Frame or Multi Page
-// and call import on its containees with itself  ( up-called from
-// the base class ) but... the reality is we have no containment model
-// so we make sure rPropSet is always the parent Dialog
-
-sal_Bool OCX_ContainerControl::Import(uno::Reference<beans::XPropertySet>& /* rProps */ )
-{
-    if ( !mxParent.is() )
-    {
-        return sal_False;
-    }
-    CtrlIterator aEnd = mpControls.end();
-//    int count = 0;
-    for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
-    {
-        if ( !(*aIter)->Import( mxParent ) )
-        {
-            return sal_False;
-        }
-    }
-    return sal_True;
-}
-
-OUString OCX_ContainerControl::createSubStreamName( const sal_uInt32& subStorageId )
-{
-    static OUString sI = OUString::createFromAscii("i");
-    static OUString sZero = OUString::createFromAscii( "0" );
-    OUStringBuffer buf( 6 );
-    buf.append( sI );
-    // for subStorage id < 10 stream name has leading '0'
-    // eg "i07"
-    if ( subStorageId < 10 )
-    {
-        buf.append( sZero );
-    }
-    buf.append( OUString::valueOf( (sal_Int32)subStorageId ) );
-    return buf.makeStringAndClear();
-}
-
-
-bool OCX_ContainerControl::createFromContainerRecord( ContainerRecord& record, OCX_Control*& pControl )
-{
-    pControl = NULL;
-    if (  record.nTypeIdent & 0x8000 )
-    {
-        std::hash_map<sal_uInt16, sal_uInt16>::iterator it = mActiveXIDMap.find( record.nTypeIdent );
-        if ( it == mActiveXIDMap.end() )
-            return false;
-        // replace the generated id with our hardcoded one
-        record.nTypeIdent = it->second;
-    }
-    switch ( record.nTypeIdent)
-        {
-            case CMDBUTTON:
-                pControl = new OCX_CommandButton;
-                break;
-            case LABEL:
-                pControl = new OCX_UserFormLabel(this);
-                break;
-            case TEXTBOX:
-                pControl = new OCX_TextBox;
-                break;
-            case LISTBOX:
-                pControl = new OCX_ListBox;
-                break;
-            case COMBOBOX:
-                pControl = new OCX_ComboBox;
-                break;
-            case CHECKBOX:
-                pControl =  new OCX_CheckBox;
-                break;
-            case OPTIONBUTTON:
-                pControl = new OCX_OptionButton;
-                break;
-            case TOGGLEBUTTON:
-                pControl = new OCX_ToggleButton;
-                break;
-            case IMAGE: //Image
-            {
-                pControl = new OCX_Image;
-                break;
-            }
-            case PAGE: // Page
-            {
-                OUString sMSStore = createSubStreamName( record.nSubStorageId );
-                pControl = new OCX_Page(mContainerStorage, sMSStore,
-                    record.cName, mxParent, this);
-                break;
-            }
-            case MULTIPAGE: // MultiPage
-            {
-                OUString sMSStore = createSubStreamName( record.nSubStorageId );
-                pControl = new OCX_MultiPage( mContainerStorage, sMSStore,
-                    record.cName, mxParent, this);
-                break;
-            }
-            case FRAME:  //Frame
-            {
-                OUString sFrameStore = createSubStreamName( record.nSubStorageId );
-                pControl = new OCX_Frame(mContainerStorage, sFrameStore,
-                    record.cName, mxParent, this);
-
-                break;
-            }
-            case SPINBUTTON: //SpinButton
-            {
-                pControl = new OCX_SpinButton;
-                break;
-            }
-            case TABSTRIP: //TabStrip
-            {
-                pControl = new OCX_TabStrip;
-                break;
-            }
-            case SCROLLBAR: //ScrollBar
-                pControl = new OCX_ScrollBar;
-                break;
-            case PROGRESSBAR: //ProgressBar Active X control
-                pControl = new OCX_ProgressBar;
-                break;
-            default:
-                OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
-                DBG_ERROR( "Unknown control");
-                return false;
-        }
-        pControl->sName = record.cName;
-        return true;
-}
-
-
-void addSeperator( std::vector< OCX_Control* >& dest )
-{
-    OCX_Control* seperator = new OCX_CommandButton;
-    seperator->SetInDialog(true);
-    seperator->sName = C2S("GroupSeperator");
-    dest.push_back( seperator );
-}
-
-void addRButtons( std::vector< OCX_Control* >& src,
-                  std::vector< OCX_Control* >& dest,
-                  bool addGroupSeperator )
-{
-    if ( addGroupSeperator )
-    {
-        addSeperator( dest );
-    }
-
-    for ( CtrlIterator rbIter = src.begin(); rbIter != src.end(); ++rbIter )
-    {
-        dest.push_back( *rbIter );
-    }
-}
-
-void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream* /* pS */,  ContainerRecord& rec )
-{
-    SotStorageStreamRef oStream = mContainedControlsStream;
-
-    // can insert into OO Dialog (e.g is this a supported dialog control)??
-    if ( rec.nTypeIdent == TABSTRIP )
-    {
-        // skip the record in the stream, discard the control
-        oStream->SeekRel( rec.nSubStreamLen );
-        delete pControl;
-    }
-    else
-    {
-        // A container control needs to read the f stream in
-        // the folder ( substorage ) associated with this control
-        switch ( rec.nTypeIdent )
-        {
-            case FRAME:
-            case MULTIPAGE:
-            case PAGE:
-                {
-                    OCX_ContainerControl* pContainer =
-                        static_cast< OCX_ContainerControl* >( pControl );
-                    oStream = pContainer->getContainerStream();
-                    break;
-                }
-            case LISTBOX:
-            case OPTIONBUTTON:
-            case COMBOBOX:
-            case SPINBUTTON:
-            case SCROLLBAR:
-                {
-                    pControl->msCtrlSource = rec.sCtrlSource;
-                    pControl->msRowSource = rec.sRowSource;
-                }
-        }
-        pControl->sName = rec.cName;
-        pControl->msToolTip = rec.controlTip;
-        // Position of controls is relative to the container
-        pControl->mnTop = rec.nTop + mnTop;
-        pControl->mnLeft = rec.nLeft + mnLeft;
-        // MS tabIndex, pretty useless in OpenOffice land
-        // as tab indexes in MS are relative to parent container.
-        // However we need this value in order to set
-        // OpenOffice tab indices in a sensible way to
-        // reflect the ms tabbing from orig MS UserForm, see below
-        pControl->mnTabPos = rec.nTabPos;
-        pControl->SetInDialog(true);
-        pControl->mbVisible = rec.bVisible;
-        if ( mnStep )
-        {
-            // If the container has a step then it should be
-            // applied to all containees
-            pControl->mnStep = mnStep;
-        }
-        pControl->msParentName = sName;
-
-        // #117490# DR: container records provide size of substream, use it here...
-
-        // remember initial position to set correct stream position
-        ULONG nStrmPos = oStream->Tell();
-        // import control, may return with invalid stream position
-        pControl->FullRead(oStream);
-        // set stream to position behind substream of this control
-        oStream->Seek( nStrmPos + rec.nSubStreamLen );
-
-        mpControls.push_back( pControl );
-    }
-}
-
-sal_Bool OCX_ContainerControl::Read(SvStorageStream *pS)
-{
-
-    if ( mpParent )
-    {
-        mnBackColor = mpParent->mnBackColor;
-    }
-
-    std::auto_ptr< ContainerRecReader > reader (
-        ContainerRecordReaderFac::instance( containerType ) );
-
-    reader->Read( this, pS );
-    // Need to honour the MS Tab Indexes. However MS tab indexes are
-    // relative to parent, this hack sorts the controls in each container
-    // based on the ms tab indexes. When import is called we create the
-    // controls in Open/Star office based on the order of the tab indexes,
-    // this ensures that the default tab index created by Star/Open office
-    // reflects the "flattened" ms tab order.
-    ::std::sort( mpControls.begin(), mpControls.end(), SortOrderByTabPos() );
-    return true;
-}
-
 OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
             const ::rtl::OUString& storageName,
             const ::rtl::OUString& sN,
             const uno::Reference< container::XNameContainer >  &rDialog,
             OCX_Control* pParent):
-        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ), fUnknown1(0), fEnabled(1),
-        fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0),
-        nVertPos(1), nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
-        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
-        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
-        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0)
+                OCX_ParentControl(parent, storageName, sN, rDialog, pParent ), bHasTabs( true )
+
 {
-    //msDialogType = C2U("NotSupported");
     msDialogType = C2U("com.sun.star.awt.UnoMultiPageModel");
     mnForeColor = 0x80000012L,
     mnBackColor = 0x8000000FL;
     bSetInDialog = true;// UserForm control only
     aFontData.SetHasAlign(TRUE);
-    containerType = MULTIPAGE;
-    mnCurrentPageStep = 0;
+    nActiveTab = 0;
+    // open up the 'x' stream
+    mXStream = mContainerStorage->OpenSotStream(
+        String(RTL_CONSTASCII_STRINGPARAM("x"),
+        RTL_TEXTENCODING_MS_1252),
+        STREAM_STD_READ | STREAM_NOCREATE);
 }
 
 void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* /* pS */,  ContainerRecord& rec )
 {
     SotStorageStreamRef oStream = mContainedControlsStream;
 
-    OCX_Page *pPage = NULL;
-    if ( rec.nTypeIdent == PAGE )
-        pPage = static_cast< OCX_Page* >( pControl );
-    if ( pPage != NULL )
+    if ( rec.nTypeIdent == TABSTRIP )
     {
-        pPage->mnStep = ++mnCurrentPageStep;
+        // TabStrip reads the 'o' stream
+        OCX_TabStrip oTabStrip;
+        oTabStrip.sName = C2S("FromMultiPage-o");
+        oTabStrip.Read( mContainedControlsStream );
+        sCaptions = oTabStrip.msItems;
+        bHasTabs = oTabStrip.bHasTabs;
+        nHeight = oTabStrip.nHeight;
+        nWidth = oTabStrip.nWidth;
+    }
+    else if ( rec.nTypeIdent == PAGE )
+    {
+        OCX_Page *pPage = NULL;
+        pPage = static_cast< OCX_Page* >( pControl );
+        if ( pPage != NULL )
+        {
+            oStream = pPage->getContainerStream();;
+            // Position of controls is relative to pos of this MuliPage
+            // Control
+            pPage->FullRead( oStream );
+            // nWidth & nHeight seem to screw up multipage control
+            pPage->nWidth = 0;
+            pPage->nHeight = 0;
+            pPage->mnBackColor = mnBackColor;
 
-        pPage->mnTop =  mnTop;// move these to Page::import ?
-        pPage->mnLeft = mnLeft;
-        pPage->mnBackColor = mnBackColor;
+            mpControls.push_back( pPage );
+            idToPage[ pPage->mnID ] = pPage;
+        }
 
-        oStream = pPage->getContainerStream();;
-        // Position of controls is relative to pos of this MuliPage
-        // Control
-        pPage->FullRead( oStream );
-
-        mpControls.push_back( pPage );
     }
     else
     {
@@ -4001,110 +3863,78 @@ sal_Bool OCX_MultiPage::Read(SvStorageStream *pS)
 {
     // Unlike the other containers e.g. UserForm & Frame
     // the o stream is does not contain info for the contained controls
-    // ( e.g. the pages themselves ) but seems to be for the MultiPage
-    // itself - need to check this in more detail
+    // 'o' stream contains a tabstrip control
+    // 'f' stream as usual ( info about the containees )
+    // '01..09' ( etc. ) these streams contain the page controls
+    // 'x' stream, this contains an array of properties for each page followed
+    //    by a set of properties for the multipage control itself
 
-    // For the moment skip read of the MultiPage specific properties
-    // not much point reading these as we can't display the multi page
-    // control or in fact any sort of tabbed layout, best we can do is
-    // import just the contained controls of the individual pages
-    // Note: the record skipped below ( does not contain the expected
-    // info on this control, that seems to be contained in the o stream,
-    // see comment above)
+    // read the 'f' stream
+    OCX_ParentControl::Read(pS);
+
+    // Read the 'x' stream
+    // consists of
+    //   a) nTabs + 1 PageProperties ( which are little use to us )
+    //      => skip
+    //   b) a MutliPageProperty ( which contains at least the page count and
+    //       IDs of the pages ( and order ) - useful for associating correct page
+    //       with correct tab
+
+
     OCX_Control skip(C2S("Dummy"));
-    skip.Read( pS );
-    mnCurrentPageStep = mnStep; //( set step of of pages relative to step
-                                //of this MultiPage ( e.g. emulate containment )
-    return OCX_ContainerControl::Read(pS);
+    sal_Int32 nPagePropsToRead = sCaptions.size() + 1;
+    for ( sal_Int32 page = 0; page < nPagePropsToRead; ++page )
+        skip.Read( mXStream );
+    MultiPageProps multiPage;
+    multiPage.Read( mXStream );
+    mPageIds = multiPage.mnIDs;
+    return true;
 }
 
 
 sal_Bool OCX_MultiPage::Import(com::sun::star::uno::Reference<
     com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OCX_ContainerControl::Import( rPropSet );
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp);
+    if ( !bHasTabs )
+        rPropSet->setPropertyValue(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Decoration")), uno::makeAny( sal_False ) );
+    aTmp <<= ImportColor(mnBackColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    // apply caption/titles to pages
+    std::vector<sal_Int32>::iterator itCtrlId = mPageIds.begin();
+    std::vector<sal_Int32>::iterator itCtrlId_end = mPageIds.end();
+    std::vector< rtl::OUString >::iterator  itCaption = sCaptions.begin();
+    mpControls.clear();
+    // need to sort the controls according to the order of the ids
+    for ( sal_Int32 index = 1 ; ( sCaptions.size() == idToPage.size() ) && itCtrlId != itCtrlId_end; ++itCtrlId, ++itCaption, ++index )
+    {
+        std::hash_map< sal_Int32, OCX_Page* >::iterator it = idToPage.find( *itCtrlId );
+        if ( it != idToPage.end() )
+        {
+            it->second->msTitle = *itCaption;
+            if ( it->second->mbVisible )
+                nActiveTab = index;
+            mpControls.push_back( it->second );
+
+        }
+    }
+
+    OCX_ParentControl::Import( rPropSet );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiPageValue"), uno::makeAny( nActiveTab ));
     return sal_True;
 }
 
-sal_Bool OCX_MultiPage::Import(com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog)
-{
-    uno::Reference<beans::XPropertySet> xPropSet( rDialog, uno::UNO_QUERY );
-
-    // Although MultiPage is not represeted by a "real" control we still
-    // need to propagate the backcolor of this logical parent
-    // ( the dialog or Frame or whatever ) to the children of this control.
-    // For example the controls contained in the Page of a
-    // MultiPage control use the parents backcolor ( e,g,
-    // Pages backcolor ) when trying to fake transparency
-    mnBackColor = mpParent->mnBackColor;
-
-    if ( xPropSet.is() )
-    {
-        uno::Reference<lang::XMultiServiceFactory>
-            xFactory(rDialog, uno::UNO_QUERY);
-    OSL_TRACE("** MultiPage creating control %s", rtl::OUStringToOString( msDialogType, RTL_TEXTENCODING_UTF8 ).getStr() );
-    uno::Reference<uno::XInterface> xCreate = xFactory->createInstance(msDialogType);
-    if (!xCreate.is())
-        return sal_False;
-
-    uno::Reference<awt::XControlModel> xModel(xCreate, uno::UNO_QUERY);
-    if (!xModel.is())
-        return sal_False;
-
-        try
-        {
-        // we should just call MultiPage::Import( XPropertySet )
-            OSL_TRACE("********* MULTIPAGE cName %s", rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        uno::Any aTmp(&sName,getCppuType((OUString *)0));
-        uno::Reference<beans::XPropertySet> xPrps(xModel, uno::UNO_QUERY);
-        xPrps->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
-        aTmp = uno::makeAny( mnCurrentPageStep );
-        xPrps->setPropertyValue( WW8_ASCII2STR("ProgressValueMax"), aTmp );
-        // default current page to 0 ( #FIXME, we need to read this value )
-        aTmp = uno::makeAny( sal_Int32(0) );
-        xPrps->setPropertyValue( WW8_ASCII2STR("ProgressValue"), aTmp );
-            OSL_TRACE("********* MULTIPAGE vomitted out properties");
-
-    // Calls import on contained controls
-            rDialog->insertByName(sName, uno::makeAny(xModel));
-            OSL_TRACE("*** inserted ***");
-        }
-        catch( uno::Exception& )
-        {
-            DBG_ERRORFILE(
-                ByteString( "OCX_Control::Import - cannot insert control \"" ).
-                Append( ByteString( sName, RTL_TEXTENCODING_UTF8 ) ).
-                Append( '"' ).GetBuffer() );
-        }
-
-        // Calls import on contained pages
-        return OCX_ContainerControl::Import( xPropSet );
-    }
-    OSL_TRACE("*** Major problem, no dialog to add controls to ");
-    DBG_ERROR(" Major problem, no dialog to add controls to ");
-    return false;
-}
-
-
-
 OCX_Page::OCX_Page( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
+            sal_Int32 nId,
             const ::rtl::OUString& sN,
             const uno::Reference< container::XNameContainer >  &rDialog,
             OCX_Control* pParent):
-        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),
-        fUnknown1(0), fEnabled(1), fLocked(0),
-        fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
-        nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
-        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
-        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
-        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0)
+                OCX_ParentControl(parent, createSubStreamName( nId ), sN, rDialog, pParent ), mnID( nId )
 {
-    msDialogType = C2U("NotSupported");
+    msDialogType = C2U("com.sun.star.awt.UnoPageModel");
     mnForeColor = 0x80000012,
     mnBackColor = 0x8000000F,
     bSetInDialog = true;// UserForm control only
@@ -4114,65 +3944,35 @@ OCX_Page::OCX_Page( SotStorageRef& parent,
 
 sal_Bool OCX_Page::Read(SvStorageStream *pS)
 {
-    long nStart = pS->Tell();
-    *pS >> nIdentifier;
-    DBG_ASSERT(0x400==nIdentifier,
-            "A control that has a different identifier");
-    *pS >> nFixedAreaLen;
-    pS->Read(pBlockFlags,4);
-
-    pS->SeekRel( nFixedAreaLen - sizeof( pBlockFlags ) );
-
-    ReadAlign( pS, pS->Tell() - nStart, 4);
-
-    if (pBlockFlags[2] & 0x10)
-    {
-        //Font Stuff..
-        pS->SeekRel(0x1a);
-        sal_uInt8 nFontLen;
-        *pS >> nFontLen;
-        pS->SeekRel(nFontLen);
-    }
-    return OCX_ContainerControl::Read(pS);
-
+    return OCX_ParentControl::Read(pS);
 }
 
 sal_Bool OCX_Page::Import(com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog)
+    com::sun::star::beans::XPropertySet>
+    &rPropSet)
 {
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp);
 
-    uno::Reference<beans::XPropertySet> xPropSet( rDialog, uno::UNO_QUERY );
-    if ( xPropSet.is() )
-    {
-        // apply Step to contained controls
-        CtrlIterator aEnd = mpControls.end();
-        for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
-        {
-            (*aIter)->mnStep = mnStep;
-        }
-        // Calls import on contained pages
-        return OCX_ContainerControl::Import( xPropSet );
-    }
-    OSL_TRACE("*** Major problem, no dialog to add controls to ");
-    DBG_ERROR("*** Major problem, no dialog to add controls to ");
-    return sal_False;
+    if (msTitle.getLength())
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Title"), uno::makeAny( msTitle ) );
+
+    aTmp <<= ImportColor(mnBackColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    // Calls import on contained controls
+    OCX_ParentControl::Import( rPropSet );
+    return sal_True;
+
 }
 
 OCX_Frame::OCX_Frame( SotStorageRef& parent,
             const ::rtl::OUString& storageName,
             const ::rtl::OUString& sN,
-            const uno::Reference< container::XNameContainer >  &rDialog, OCX_Control* pParent):
-        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),fUnknown1(0),fEnabled(1), fLocked(0),
-        fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
-        nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
-        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
-        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
-        nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0)
+            const uno::Reference< container::XNameContainer >  &rDialog, OCX_Control* pParent): OCX_ParentControl(parent, storageName, sN, rDialog, pParent )
 {
-    msDialogType = C2U("com.sun.star.awt.UnoControlGroupBoxModel");
+    msDialogType = C2U("com.sun.star.awt.UnoFrameModel");
     mnForeColor = 0x80000012;
     mnBackColor = 0x8000000F;
     bSetInDialog = true;// UserForm control only
@@ -4182,159 +3982,7 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
 
 sal_Bool OCX_Frame::Read(SvStorageStream *pS)
 {
-    long nStart = pS->Tell();
-    *pS >> nIdentifier;
-    DBG_ASSERT(0x400==nIdentifier,
-            "A control that has a different identifier");
-    *pS >> nFixedAreaLen;
-    pS->Read(pBlockFlags,4);
-
-    if (pBlockFlags[0] & 0x01)
-    {
-            DBG_ASSERT(!this, "ARSE");
-    }
-    if (pBlockFlags[0] & 0x02)
-            *pS >> mnBackColor;
-    if (pBlockFlags[0] & 0x04)
-            *pS >> mnForeColor;
-    if (pBlockFlags[0] & 0x08)
-        *pS >> fUnknown1;
-    if (pBlockFlags[0] & 0x40)
-    {
-        sal_uInt8 nTemp;
-        *pS >> nTemp;
-        fEnabled = (nTemp&0x04)>>2;
-        fBackStyle = (nTemp&0x08)>>3;
-        *pS >> nTemp;
-        *pS >> nTemp;
-        fWordWrap = (nTemp&0x80)>>7;
-        *pS >> nTemp;
-        fAutoSize = (nTemp&0x10)>>4;
-    }
-    if (pBlockFlags[0] & 0x80)
-    {
-        *pS >> nBorderStyle;
-    }
-
-    ReadAlign(pS, pS->Tell() - nStart, 4);
-
-    if (pBlockFlags[1] & 0x01)
-        *pS >> nMousePointer;
-    if (pBlockFlags[1] & 0x02)
-        *pS >> nKeepScrollBarsVisible;
-    if (pBlockFlags[1] & 0x20)
-        *pS >> fUnknown1; // another unknown 32 bit ( or is 8 or 16 bit with padding ? )
-
-    if (pBlockFlags[1] & 0x80)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 2);
-        *pS >> nIcon;
-        DBG_ASSERT(nIcon == 0xFFFF, "Unexpected nIcon");
-    }
-
-    bool bCaption = false;
-
-    if (pBlockFlags[2] & 0x01)
-        *pS >> nCycle;
-    if (pBlockFlags[2] & 0x02)
-        *pS >> nSpecialEffect;
-
-    if (pBlockFlags[2] & 0x04)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> nBorderColor;
-    }
-
-    if (pBlockFlags[2] & 0x08)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> nCaptionLen;
-        bCaption = true;
-    }
-
-    if (pBlockFlags[2] & 0x10)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 2);
-        sal_uInt16 nNoIdea;
-        *pS >> nNoIdea;
-        DBG_ASSERT(nNoIdea == 0xFFFF, "Expected 0xFFFF, (related to font ?)");
-    }
-
-    if (pBlockFlags[2] & 0x20)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 2);
-        *pS >> nPicture;
-        DBG_ASSERT(nPicture == 0xFFFF, "Unexpected nIcon");
-    }
-
-    if (pBlockFlags[2] & 0x80)
-        *pS >> nPictureAlignment;
-
-    if (pBlockFlags[3] & 0x01)
-        bPictureTiling = true;
-
-    if (pBlockFlags[3] & 0x02)
-        *pS >> nPictureSizeMode;
-
-    if (pBlockFlags[3] & 0x04)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> fUnknown8;
-    }
-
-    if (pBlockFlags[3] & 0x08)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> fUnknown9;
-    }
-
-    ReadAlign(pS, pS->Tell() - nStart, 4);
-    *pS >> nWidth;
-    *pS >> nHeight;
-    *pS >> nScrollWidth;
-    *pS >> nScrollHeight;
-
-    if (pBlockFlags[1] & 0x10)
-    {
-        *pS >> nScrollLeft;
-        *pS >> nScrollTop;
-    }
-
-    if ( bCaption )
-    {
-        lclReadCharArray( *pS, pCaption, nCaptionLen, pS->Tell() - nStart);
-    }
-
-    OUString tempCaption =  lclCreateOUString( pCaption, nCaptionLen );
-
-    if (nIcon)
-    {
-        pS->Read(pIconHeader,20);
-        *pS >> nIconLen;
-        pIcon = new sal_uInt8[nIconLen];
-        pS->Read(pIcon,nIconLen);
-    }
-
-    if (nPicture)
-    {
-        pS->Read(pPictureHeader,20);
-        *pS >> nPictureLen;
-        pPicture = new sal_uInt8[nPictureLen];
-        pS->Read(pPicture,nPictureLen);
-    }
-
-    ReadAlign( pS, pS->Tell() - nStart, 4);
-
-    if (pBlockFlags[2] & 0x10)
-    {
-        //Font Stuff..
-        pS->SeekRel(0x1a);
-        sal_uInt8 nFontLen;
-        *pS >> nFontLen;
-        pS->SeekRel(nFontLen);
-    }
-
-    return OCX_ContainerControl::Read( pS );
+    return OCX_ParentControl::Read( pS );
 }
 
 sal_Bool OCX_Frame::Import(com::sun::star::uno::Reference<
@@ -4349,195 +3997,26 @@ sal_Bool OCX_Frame::Import(com::sun::star::uno::Reference<
         rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
+    aTmp <<= ImportColor(mnBackColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
     // Calls import on contained controls
-    OCX_ContainerControl::Import( rPropSet );
+    OCX_ParentControl::Import( rPropSet );
     return sal_True;
 }
+
 OCX_UserForm::OCX_UserForm( SotStorageRef& parent,
             const OUString& storageName,
             const OUString& sN,
             const ::uno::Reference< container::XNameContainer >  &rDialog,
             const ::uno::Reference< lang::XMultiServiceFactory >& rMsf):
-        OCX_ContainerControl(parent, storageName, sN, rDialog),
-        nChildrenA(0), fEnabled(1), fLocked(0),
-        fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
-        nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012), nChildrenB(0),
-        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
-        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
-        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
-        nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0)
+            OCX_ParentControl(parent, storageName, sN, rDialog )
     {
-            mnForeColor = 0x80000012;
-            mnBackColor = 0x8000000F;
-            uno::Reference< beans::XPropertySet> xProps( rMsf, uno::UNO_QUERY);
-            if ( xProps.is() )
-            {
-                xProps->getPropertyValue(C2S("DefaultContext"))  >>= mxCtx;
-            }
-            aFontData.SetHasAlign(TRUE);
-        }
-sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
-{
-    long nStart = pS->Tell();
-    *pS >> nIdentifier;
-    DBG_ASSERT(0x400==nIdentifier,
-            "A control that has a different identifier");
-    *pS >> nFixedAreaLen;
-    pS->Read(pBlockFlags,4);
-
-    if (pBlockFlags[0] & 0x01)
+    uno::Reference< beans::XPropertySet> xProps( rMsf, uno::UNO_QUERY);
+    if ( xProps.is() )
     {
-            DBG_ASSERT(!this, "ARSE");
+        xProps->getPropertyValue(C2S("DefaultContext"))  >>= mxCtx;
     }
-    if (pBlockFlags[0] & 0x02)
-        *pS >> mnBackColor;
-    if (pBlockFlags[0] & 0x04)
-        *pS >> mnForeColor;
-    if (pBlockFlags[0] & 0x08)
-        *pS >> nChildrenA;
-    if (pBlockFlags[0] & 0x40)
-    {
-        sal_uInt8 nTemp;
-        *pS >> nTemp;
-        fEnabled = (nTemp&0x04)>>2;
-        fBackStyle = (nTemp&0x08)>>3;
-        *pS >> nTemp;
-        *pS >> nTemp;
-        fWordWrap = (nTemp&0x80)>>7;
-        *pS >> nTemp;
-        fAutoSize = (nTemp&0x10)>>4;
-    }
-    if (pBlockFlags[0] & 0x80)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> nBorderStyle;
-    }
-#if 0
-        sal_uInt16 nFixedOrAlign;
-        *pS >> nFixedOrAlign;
-#endif
-    if (pBlockFlags[1] & 0x01)
-        *pS >> nMousePointer;
-    if (pBlockFlags[1] & 0x02)
-        *pS >> nKeepScrollBarsVisible;
-    if (pBlockFlags[1] & 0x20)
-    {
-        sal_uInt32 nUnknown32;
-        *pS >> nUnknown32;
-    }
-    if (pBlockFlags[1] & 0x80)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 2);
-        *pS >> nIcon;
-        DBG_ASSERT(nIcon == 0xFFFF, "Unexpected nIcon");
-    }
-    if (pBlockFlags[2] & 0x01)
-        *pS >> nCycle;
-    if (pBlockFlags[2] & 0x02)
-        *pS >> nSpecialEffect;
-
-    if (pBlockFlags[2] & 0x04)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> nBorderColor;
-    }
-
-    if (pBlockFlags[2] & 0x10)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 2);
-        sal_uInt16 nNoIdea;
-        *pS >> nNoIdea;
-        DBG_ASSERT(nNoIdea == 0xFFFF, "Expected 0xFFFF, (related to font ?)");
-    }
-
-    if (pBlockFlags[2] & 0x20)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 2);
-        *pS >> nPicture;
-        DBG_ASSERT(nPicture == 0xFFFF, "Unexpected nIcon");
-    }
-
-    if (pBlockFlags[2] & 0x80)
-        *pS >> nPictureAlignment;
-
-    if (pBlockFlags[3] & 0x01)
-        bPictureTiling = true;
-
-    if (pBlockFlags[3] & 0x02)
-        *pS >> nPictureSizeMode;
-
-    if (pBlockFlags[3] & 0x04)
-    {
-        ReadAlign(pS, pS->Tell() - nStart, 4);
-        *pS >> nChildrenB;
-    }
-
-    ReadAlign(pS, pS->Tell() - nStart, 4);
-    *pS >> nDrawBuffer;
-
-    ReadAlign(pS, pS->Tell() - nStart, 4);
-    *pS >> nWidth;
-    *pS >> nHeight;
-    *pS >> nScrollWidth;
-    *pS >> nScrollHeight;
-
-    if (pBlockFlags[1] & 0x10)
-    {
-        *pS >> nScrollLeft;
-        *pS >> nScrollTop;
-    }
-
-    if (nIcon)
-    {
-        pS->Read(pIconHeader,20);
-        *pS >> nIconLen;
-        pIcon = new sal_uInt8[nIconLen];
-        pS->Read(pIcon,nIconLen);
-    }
-
-    ReadAlign( pS, pS->Tell() - nStart, 4);
-    if (pBlockFlags[2] & 0x10)
-    {
-        //Font Stuff..
-        pS->SeekRel(0x1a);
-        sal_uInt8 nFontLen;
-        *pS >> nFontLen;
-        pS->SeekRel(nFontLen);
-    }
-    if (nPicture)
-    {
-        pS->Read(pPictureHeader,20);
-        *pS >> nPictureLen;
-        long imagePos = pS->Tell();
-        // great embedded object
-        mxGrfObj = lcl_readGraphicObject( pS );
-        if( mxGrfObj.is() )
-        {
-            sImageUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
-            sImageUrl = sImageUrl + mxGrfObj->getUniqueID();
-        }
-        // make sure the stream position should be pointing after the image.
-        pS->Seek( imagePos + nPictureLen );
-    }
-
-    sal_Int16 numTrailingRecs = 0;
-    *pS >> numTrailingRecs;
-    // seems to be no. of trailing records,
-    // before container record starts proper
-    // ( unknown what these trailing records are for)
-    if ( numTrailingRecs )
-    {
-        for ( sal_Int16 i = 0 ; numTrailingRecs ; --numTrailingRecs, ++i )
-        {
-            sal_uInt16 nTypeID = 0;
-            if ( lcl_handleActiveXControl( pS, nTypeID ) )
-            {
-                if ( nTypeID & 0x8000 ) // valid ActiveXID
-                    mActiveXIDMap[ ( i | 0x8000 ) ] = nTypeID;
-            }
-        }
-    }
-    return OCX_ContainerControl::Read( pS );
 }
 
 sal_Bool OCX_UserForm::Import(
@@ -4563,9 +4042,15 @@ sal_Bool OCX_UserForm::Import(
     aTmp <<= sal_Int32( aAppFontSize.Height ); //100th mm
     xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
 
+    if ( sImageUrl.getLength() )
+    {
+        aTmp <<= sImageUrl;
+        xDialogPropSet->setPropertyValue( WW8_ASCII2STR("ImageURL"), aTmp);
+    }
 
     uno::Reference<beans::XPropertySet> xPropSet( mxParent, uno::UNO_QUERY );
-    OCX_ContainerControl::Import( xPropSet );
+    OCX_ParentControl::Import( xPropSet );
+    uno::Reference< frame::XModel > xModel(  pDocSh ? pDocSh->GetModel() : NULL );
 
     uno::Reference<io::XInputStreamProvider> xSource =
         xmlscript::exportDialogModel(mxParent, mxCtx, pDocSh->GetModel() );
@@ -5133,6 +4618,11 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
     rPropSet->setPropertyValue( WW8_ASCII2STR("VerticalAlign"), aTmp );
 
     aFontData.Import(rPropSet);
+    if ( sImageUrl.getLength() )
+    {
+        aTmp <<= sImageUrl;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("ImageURL"), aTmp);
+    }
     return(sal_True);
 }
 
@@ -5592,36 +5082,246 @@ sal_Bool HTML_TextBox::ReadFontData(SotStorageStream * /*pS*/)
   return sal_True;
 }
 
+sal_Bool HTML_TextBox::ReadFontData(SotStorageStream *pS)
+{
+  return sal_True;
+}
+
 
 // Doesn't really read anything but just skips the
 // record.
 sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
 {
-    const long skipLen = 0x18;
+    long nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
         "A control that has a different identifier");
     *pS >> nFixedAreaLen;
 
     pS->Read(pBlockFlags, sizeof(pBlockFlags));
-    pS->SeekRel(skipLen);
-    *pS >> nNumTabs;
-    // skip to end of control
-    pS->SeekRel(nFixedAreaLen - sizeof(pBlockFlags) - sizeof(nNumTabs) - skipLen );
+
+    bool bSize = false;
+    bool bMultiRow = false;
+    bool bTooltips = true;
+    bool hasEmbeddedImage = false;
+    sal_Int32 nameSize = 0;
+    sal_Int32 tipStringSize = 0;
+    sal_Int32 nAcceleratorSize = 0;
+    sal_Int32 nItemSize = 0;
+    sal_Int32 nTagSize = 0;
+    if ( pBlockFlags[ 0 ] & 0x01 )
+    {
+        //List index
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; //
+        *pS >> nOptional32;
+    }
+    if (pBlockFlags[0] & 0x02)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> mnBackColor;
+    }
+    if (pBlockFlags[0] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> mnForeColor;
+    }
+    if (pBlockFlags[0] & 0x10)
+         bSize = true;
+    if (pBlockFlags[0] & 0x20)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nItemSize;
+    }
+    if (pBlockFlags[0] & 0x40)
+    {
+        sal_Int8 nOptional8 = 0; // mouse pointer
+        *pS >> nOptional8;
+    }
+    if (pBlockFlags[1] & 0x01)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; // taborientation
+        *pS >> nOptional32;
+    }
+    if (pBlockFlags[1] & 0x02)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; // tabstyle
+        *pS >> nOptional32;
+        if ( nOptional32 == 2 )
+            bHasTabs =false;
+    }
+    if (pBlockFlags[1] & 0x04)
+        bMultiRow = true;
+    if (pBlockFlags[1] & 0x08)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; // tabfixedwidth
+        *pS >> nOptional32;
+    }
+    if (pBlockFlags[1] & 0x10)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; // tabfixedheight
+        *pS >> nOptional32;
+    }
+    if (pBlockFlags[1] & 0x20)
+        bTooltips = false;
+
+    if (pBlockFlags[1] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> tipStringSize;
+    }
+
+    if (pBlockFlags[2] & 0x02)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nameSize;
+    }
+
+    if (pBlockFlags[2] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; // variouspropertybits
+        *pS >> nOptional32;
+    }
+
+    if (pBlockFlags[2] & 0x10)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_Int32 nOptional32 = 0; // tabsallocated
+        *pS >> nOptional32;
+    }
+
+    if (pBlockFlags[2] & 0x20)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nTagSize;
+    }
+
+    if (pBlockFlags[2] & 0x40)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nNumTabs;
+    }
+
+    if (pBlockFlags[2] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nAcceleratorSize;
+    }
+
+    if (pBlockFlags[3] & 0x01)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        sal_Int16 nOptional16 = 0; //  Mouse Icon
+        *pS >> nOptional16;
+        hasEmbeddedImage = true;
+    }
+
+    // Extra block
+    if ( bSize )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nWidth;
+        *pS >> nHeight;
+    }
+    if ( nItemSize )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        // read the caption for each tab
+        readArrayString( pS, msItems, nItemSize, nStart );
+        std::vector< rtl::OUString >::iterator it = msItems.begin();
+        std::vector< rtl::OUString >::iterator it_end = msItems.end();
+        for ( sal_Int32 i=0; it != it_end; ++i, ++it )
+            OSL_TRACE(" Caption [ %d ] is %s", i, rtl::OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+
+    if ( tipStringSize )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        // read the tip for each tab
+        std::vector< rtl::OUString > sTips;
+        readArrayString( pS, sTips, tipStringSize, nStart );
+        std::vector< rtl::OUString >::iterator it = sTips.begin();
+        std::vector< rtl::OUString >::iterator it_end = sTips.end();
+        for ( sal_Int32 i=0; it != it_end; ++i, ++it )
+            OSL_TRACE(" Tip [ %d ] is %s", i, rtl::OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+
+    if ( nameSize )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        // read the name for each tab
+        std::vector< rtl::OUString > sNames;
+        readArrayString( pS, sNames, nameSize, nStart );
+        std::vector< rtl::OUString >::iterator it = sNames.begin();
+        std::vector< rtl::OUString >::iterator it_end = sNames.end();
+        for ( sal_Int32 i=0; it != it_end; ++i, ++it )
+            OSL_TRACE(" Name [ %d ] is %s", i, rtl::OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+
+    if ( nTagSize )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        // read the name for each tab
+        std::vector< rtl::OUString > sTags;
+        readArrayString( pS, sTags, nTagSize, nStart );
+        std::vector< rtl::OUString >::iterator it = sTags.begin();
+        std::vector< rtl::OUString >::iterator it_end = sTags.end();
+        for ( sal_Int32 i=0; it != it_end; ++i, ++it )
+            OSL_TRACE(" Tag [ %d ] is %s", i, rtl::OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+
+    if ( nAcceleratorSize )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        // read the name for each tab
+        std::vector< rtl::OUString > sAccelerators;
+        readArrayString( pS, sAccelerators, nAcceleratorSize, nStart );
+        std::vector< rtl::OUString >::iterator it = sAccelerators.begin();
+        std::vector< rtl::OUString >::iterator it_end = sAccelerators.end();
+        for ( sal_Int32 i=0; it != it_end; ++i, ++it )
+            OSL_TRACE(" Accelerator [ %d ] is %s", i, rtl::OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+
+    // Stream data
+    if ( hasEmbeddedImage )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_uInt8 pPictureHeader[20];
+        sal_uInt32 nPictureLen(0);
+        pS->Read(pPictureHeader,20);
+        *pS >> nPictureLen;
+        long imagePos = pS->Tell();
+        // great embedded object
+        mxGrfObj = lcl_readGraphicObject( pS );
+        if( mxGrfObj.is() )
+        {
+            sImageUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
+            sImageUrl = sImageUrl + mxGrfObj->getUniqueID();
+        }
+        // make sure the stream position should be pointing after the image.
+        pS->Seek( imagePos + nPictureLen );
+    }
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    OCX_Control::ReadFontData(pS); // read textprops
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    for ( sal_Int32 i = 0; i < nNumTabs; ++i )
+    {
+        sal_uInt32 TabStripTabFlags(0);
+        *pS >> TabStripTabFlags;
+    }
     return sal_True;
 }
 
-sal_Bool OCX_TabStrip::ReadFontData(SotStorageStream *pS)
+sal_Bool OCX_TabStrip::ReadFontData(SotStorageStream* /* pS */)
 {
-    // Seems like there is a real font record followed by
-    // a number of blank records ( e.g. nFixedAreaLen = 0 )
-    // The number of trailing blank records is equal to the number of tabs
-    OCX_Control::ReadFontData(pS);
-    for ( sal_uInt16 index = 0; index < nNumTabs; index++ )
-    {
-        OCX_Control::Read(pS); // read trailing records
-    }
-    return sal_True;
+    // OCX_TabStrip::Read includes the text props
+    return true;
 }
 
 sal_Bool OCX_Image::Read(SotStorageStream *pS)
@@ -5707,12 +5407,10 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
 
     if ( hasEmbeddedImage )
     {
-        //image follows this block
-        //len of image is 0x14 relative to end of this block
-        pS->Seek( pS->Tell() + 0x14 );
-
-        sal_uInt32 nImageLen = 0;
-        *pS >> nImageLen;
+        sal_uInt8 pPictureHeader[20];
+        sal_uInt32 nPictureLen(0);
+        pS->Read(pPictureHeader,20);
+        *pS >> nPictureLen;
 
         long imagePos = pS->Tell();
 
@@ -5723,7 +5421,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
             sImageUrl = sImageUrl + mxGrfObj->getUniqueID();
         }
         // make sure the stream position should be pointing after the image
-        pS->Seek( imagePos + nImageLen );
+        pS->Seek( imagePos + nPictureLen );
     }
     return sal_True;
 }
@@ -6400,6 +6098,375 @@ sal_Bool OCX_ProgressBar::Import(uno::Reference< beans::XPropertySet > &rPropSet
         rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), uno::makeAny( sal_False ) );
     return sal_True;
 }
+
 // ============================================================================
+OCX_ParentControl::OCX_ParentControl( SotStorageRef& parent, const OUString& storageName, const OUString& sN, const ::uno::Reference< container::XNameContainer >  &rParent, OCX_Control* pParent ) : OCX_Control(sN, pParent),  mxParent(rParent), nNextAvailableID(0), nBooleanProperties(0), nGroupCnt(0), nZoom(0), fEnabled(1), fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1), nHorzPos(7), nBorderColor(0x80000012), nShapeCookie(0), nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nMousePointer(0), nSpecialEffect(0), nPicture(0), nPictureAlignment(2), nPictureSizeMode(0), bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0), nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0)
+{
+    mnForeColor = 0x80000012;
+    mnBackColor = 0x8000000F;
+    aFontData.SetHasAlign(TRUE);
+    mContainerStorage = parent->OpenSotStorage(storageName,
+        STREAM_READWRITE |
+        STREAM_NOCREATE |
+        STREAM_SHARE_DENYALL);
+    mContainerStream = mContainerStorage->OpenSotStream(
+        String(RTL_CONSTASCII_STRINGPARAM("f"),
+        RTL_TEXTENCODING_MS_1252),
+        STREAM_STD_READ | STREAM_NOCREATE);
+    mContainedControlsStream = mContainerStorage->OpenSotStream( String(RTL_CONSTASCII_STRINGPARAM("o"),
+        RTL_TEXTENCODING_MS_1252),
+        STREAM_STD_READ | STREAM_NOCREATE);
+}
+
+OCX_ParentControl::~OCX_ParentControl()
+{
+    CtrlIterator aEnd = mpControls.end();
+    for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
+    {
+        delete *aIter;
+    }
+}
+
+sal_Bool OCX_ParentControl::Import(uno::Reference<beans::XPropertySet>&  rProps  )
+{
+    // #FIXME we probably don't need this (fake) parent (mxParen) which is the dialog iirc
+    if ( !mxParent.is() )
+    {
+        return sal_False;
+    }
+    CtrlIterator aEnd = mpControls.end();
+//    int count = 0;
+    for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
+    {
+        uno::Reference< container::XNameContainer > xNameContainer( rProps, uno::UNO_QUERY );
+        if ( !(*aIter)->Import( xNameContainer ) )
+        {
+            return sal_False;
+        }
+    }
+    return sal_True;
+}
+
+bool OCX_ParentControl::createFromContainerRecord( const ContainerRecord& record, OCX_Control*& pControl )
+{
+    pControl = NULL;
+    switch ( record.nTypeIdent)
+        {
+            case CMDBUTTON:
+                pControl = new OCX_CommandButton;
+                break;
+            case LABEL:
+                pControl = new OCX_UserFormLabel(this);
+                break;
+            case TEXTBOX:
+                pControl = new OCX_TextBox;
+                break;
+            case LISTBOX:
+                pControl = new OCX_ListBox;
+                break;
+            case COMBOBOX:
+                pControl = new OCX_ComboBox;
+                break;
+            case CHECKBOX:
+                pControl =  new OCX_CheckBox;
+                break;
+            case OPTIONBUTTON:
+                pControl = new OCX_OptionButton;
+                break;
+            case TOGGLEBUTTON:
+                pControl = new OCX_ToggleButton;
+                break;
+            case IMAGE: //Image
+            {
+                pControl = new OCX_Image;
+                break;
+            }
+            case PAGE: // Page
+            {
+                pControl = new OCX_Page(mContainerStorage, record.nSubStorageId,
+                    record.cName, mxParent, this);
+                break;
+            }
+            case MULTIPAGE: // MultiPage
+            {
+                OUString sMSStore = createSubStreamName( record.nSubStorageId );
+                pControl = new OCX_MultiPage( mContainerStorage, sMSStore,
+                    record.cName, mxParent, this);
+                break;
+            }
+            case FRAME:  //Frame
+            {
+                OUString sFrameStore = createSubStreamName( record.nSubStorageId );
+                pControl = new OCX_Frame(mContainerStorage, sFrameStore,
+                    record.cName, mxParent, this);
+
+                break;
+            }
+            case SPINBUTTON: //SpinButton
+            {
+                pControl = new OCX_SpinButton;
+                break;
+            }
+            case TABSTRIP: //TabStrip
+            {
+                pControl = new OCX_TabStrip;
+                break;
+            }
+            case SCROLLBAR: //ScrollBar
+                pControl = new OCX_ScrollBar;
+                break;
+            case PROGRESSBAR: //ProgressBar Active X control
+                pControl = new OCX_ProgressBar;
+                break;
+            default:
+                OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
+                DBG_ERROR( "Unknown control");
+                return false;
+        }
+        pControl->sName = record.cName;
+
+        pControl->msToolTip = record.controlTip;
+        pControl->mnTop = record.nTop;
+        pControl->mnLeft = record.nLeft;
+        // MS tabIndex, pretty useless in OpenOffice land
+        // as tab indexes in MS are relative to parent container.
+        // However we need this value in order to set
+        // OpenOffice tab indices in a sensible way to
+        // reflect the ms tabbing from orig MS UserForm, see below
+        pControl->mnTabPos = record.nTabPos;
+        pControl->SetInDialog(true);
+        pControl->mbVisible = record.bVisible;
+
+        return true;
+}
+
+void OCX_ParentControl::ProcessControl(OCX_Control* pControl,SvStorageStream* /* pS */,  ContainerRecord& rec )
+{
+    SotStorageStreamRef oStream = mContainedControlsStream;
+
+    // can insert into OO Dialog (e.g is this a supported dialog control)??
+    if ( rec.nTypeIdent == TABSTRIP )
+    {
+        // skip the record in the stream, discard the control
+        oStream->SeekRel( rec.nSubStreamLen );
+        delete pControl;
+    }
+    else
+    {
+        // A container control needs to read the f stream in
+        // the folder ( substorage ) associated with this control
+        if (  rec.nTypeIdent ==  FRAME ||
+            rec.nTypeIdent ==  MULTIPAGE||
+            rec.nTypeIdent ==  PAGE )
+        {
+            OCX_ParentControl* pContainer =
+               static_cast< OCX_ParentControl* >( pControl );
+            oStream = pContainer->getContainerStream();
+        }
+        // #117490# DR: container records provide size of substream, use it here...
+
+        // remember initial position to set correct stream position
+        ULONG nStrmPos = oStream->Tell();
+        // import control, may return with invalid stream position
+        pControl->FullRead(oStream);
+        // set stream to position behind substream of this control
+        oStream->Seek( nStrmPos + rec.nSubStreamLen );
+    }
+}
+
+sal_Bool OCX_ParentControl::Read(SvStorageStream *pS)
+{
+    long nStart = pS->Tell();
+
+    *pS >> nIdentifier;
+    DBG_ASSERT(0x400==nIdentifier,
+        "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+    pS->Read(pBlockFlags,4);
+
+    bool bExtraSize = false;
+    bool bLogicalSize = false;
+    bool bScrollPosition = false;
+    bool bFont = false;
+    if (pBlockFlags[0] & 0x01)
+    {
+        DBG_ASSERT(!this, "ARSE");
+    }
+    if (pBlockFlags[0] & 0x02)
+        *pS >> mnBackColor;
+    if (pBlockFlags[0] & 0x04)
+        *pS >> mnForeColor;
+    if (pBlockFlags[0] & 0x08)
+        *pS >> nNextAvailableID;
+    if (pBlockFlags[0] & 0x40)
+        *pS >> nBooleanProperties;
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    if (pBlockFlags[0] & 0x80)
+    {
+        *pS >> nBorderStyle;
+    }
+    if (pBlockFlags[1] & 0x01)
+        *pS >> nMousePointer;
+    if (pBlockFlags[1] & 0x02)
+        *pS >> nKeepScrollBarsVisible;
+    if (pBlockFlags[1] & 0x04)
+        bExtraSize = true;
+    if (pBlockFlags[1] & 0x08)
+        bLogicalSize = true;
+    if (pBlockFlags[1] & 0x10)
+        bScrollPosition = true;
+    if (pBlockFlags[1] & 0x20)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nGroupCnt;
+    }
+
+    if (pBlockFlags[1] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        *pS >> nIcon;
+        DBG_ASSERT(nIcon == 0xFFFF, "Unexpected nIcon");
+    }
+    if (pBlockFlags[2] & 0x01)
+        *pS >> nCycle;
+    if (pBlockFlags[2] & 0x02)
+        *pS >> nSpecialEffect;
+    if (pBlockFlags[2] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nBorderColor;
+    }
+    if (pBlockFlags[2] & 0x08)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nCaptionLen;
+    }
+
+    if (pBlockFlags[2] & 0x10)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        sal_uInt16 nNoIdea;
+        *pS >> nNoIdea;
+        DBG_ASSERT(nNoIdea == 0xFFFF, "Expected 0xFFFF, (related to font ?)");
+        bFont = true;
+    }
+    if (pBlockFlags[2] & 0x20)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        *pS >> nPicture;
+        DBG_ASSERT(nPicture == 0xFFFF, "Unexpected nIcon");
+    }
+
+    if (pBlockFlags[2] & 0x40)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nZoom;
+    }
+    if (pBlockFlags[2] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nPictureAlignment;
+    }
+
+    if (pBlockFlags[3] & 0x01)
+        bPictureTiling = true;
+
+    if (pBlockFlags[3] & 0x02)
+        *pS >> nPictureSizeMode;
+
+    if (pBlockFlags[3] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nShapeCookie;
+    }
+    if (pBlockFlags[3] & 0x08)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nDrawBuffer;
+    }
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    // Extra
+    if ( bExtraSize )
+    {
+        *pS >> nWidth;
+        *pS >> nHeight;
+    }
+    if ( bLogicalSize )
+    {
+        *pS >> nScrollWidth;
+        *pS >> nScrollHeight;
+    }
+    if ( bScrollPosition )
+    {
+        *pS >> nScrollLeft;
+        *pS >> nScrollTop;
+    }
+    if  ( nCaptionLen )
+    {
+        sal_uInt32 nCaptionSize = lclGetBufferSize( nCaptionLen );
+        if ( nCaptionSize )
+        {
+            pCaption = new sal_Char[ nCaptionSize ];
+            pS->Read( pCaption, nCaptionSize );
+        }
+    }
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+
+    // StreamData
+    if (nIcon)
+    {
+        pS->Read(pIconHeader,20);
+        *pS >> nIconLen;
+        pIcon = new sal_uInt8[nIconLen];
+        pS->Read(pIcon,nIconLen);
+    }
+    if ( bFont )
+    {
+        //Font Stuff..
+        pS->SeekRel(0x1a);
+        sal_uInt8 nFontLen;
+        *pS >> nFontLen;
+        pS->SeekRel(nFontLen);
+    }
+    if (nPicture)
+    {
+        pS->Read(pPictureHeader,20);
+        *pS >> nPictureLen;
+        long imagePos = pS->Tell();
+        // great embedded object
+        mxGrfObj = lcl_readGraphicObject( pS );
+        if( mxGrfObj.is() )
+        {
+            sImageUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( GRAPHOBJ_URLPREFIX ) );
+            sImageUrl = sImageUrl + mxGrfObj->getUniqueID();
+        }
+        // make sure the stream position should be pointing after the image.
+        pS->Seek( imagePos + nPictureLen );
+    }
+    // FormSiteData
+    std::vector< ClassTable > siteClassInfo;
+    if ( ( nBooleanProperties & 0x00008000 ) == 0x0)
+    {
+        sal_Int16 numTrailingRecs = 0;
+        *pS >> numTrailingRecs;
+        if ( numTrailingRecs )
+        {
+            for ( ; numTrailingRecs ; --numTrailingRecs )
+            {
+                ClassTable cacheClass;
+                cacheClass.Read( pS );
+                siteClassInfo.push_back( cacheClass );
+            }
+        }
+    }
+    // Sites
+    ContainerRecReader reader;
+    reader.Read( this, pS, siteClassInfo );
+
+    return true;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
