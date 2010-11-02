@@ -80,7 +80,7 @@ void Test::createDocument()
 {
     ScDocument *doc = new ScDocument();
 
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM( ("foo") );
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             doc->InsertTab (0, aTabName));
     double val = 1;
