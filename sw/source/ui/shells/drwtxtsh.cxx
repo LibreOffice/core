@@ -671,7 +671,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
                 ::svl::IUndoManager* pUndoManager = GetUndoManager();
                 if( pUndoManager )
                 {
-                    UniString (::svl::IUndoManager:: *fnGetComment)( USHORT ) const;
+                    UniString (::svl::IUndoManager:: *fnGetComment)( USHORT, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
@@ -688,7 +688,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
                     {
                         String sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pUndoManager->*fnGetComment)( n ) )
+                            ( sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) )
                                     += '\n';
 
                         SfxStringListItem aItem( nWhich );

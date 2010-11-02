@@ -1258,7 +1258,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 ::svl::IUndoManager* pTmpUndoMgr = GetUndoManager();
                 if( pTmpUndoMgr )
                 {
-                    UniString(::svl::IUndoManager:: *fnGetComment)( USHORT ) const;
+                    UniString(::svl::IUndoManager:: *fnGetComment)( USHORT, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWh )
@@ -1275,7 +1275,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                     {
                         String sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pTmpUndoMgr->*fnGetComment)( n ) )
+                            ( sList += (pTmpUndoMgr->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) )
                                     += '\n';
 
                         SfxStringListItem aItem( nWh );
