@@ -1213,8 +1213,6 @@ private:
 /** Stores all drawing and OLE objects and additional data related to these objects. */
 class XclImpObjectManager : protected XclImpRoot
 {
-typedef std::hash_map< sal_Int32, String >  CntrlObjIdToName;
-typedef std::map< String, CntrlObjIdToName > CodeNameToCntrlObjIdInfo;
 public:
     explicit            XclImpObjectManager( const XclImpRoot& rRoot );
     virtual             ~XclImpObjectManager();
@@ -1231,12 +1229,14 @@ public:
     String              GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
-    void SetOleNameOverrideInfo( const CodeNameToCntrlObjIdInfo& rOverrideInfo ) {  maOleCtrlNameOverride = rOverrideInfo; }
+    /** Sets the container to receive overridden shape/ctrl names from
+        the filter. */
+    void SetOleNameOverrideInfo( const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
+    /** Returns the name of overridden name ( or zero length string ) for
+        associated object id. */
     String GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
     // ------------------------------------------------------------------------
 private:
-
-    CodeNameToCntrlObjIdInfo maOleCtrlNameOverride;
 
     /** Reads and returns a bitmap from WMF/PICT format. */
     static void         ReadWmf( Graphic& rGraphic, XclImpStream& rStrm );
@@ -1270,6 +1270,7 @@ private:
     typedef ScfRef< XclImpSheetDrawing >                XclImpSheetDrawingRef;
     typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 
+    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxOleCtrlNameOverride;
     DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
     SvMemoryStream      maDggStrm;          /// Copy of global DFF data (DGG container) in memory.
     XclImpSheetDrawingMap maSheetDrawings;  /// Drawing managers of all sheets.

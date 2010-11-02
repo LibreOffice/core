@@ -2691,8 +2691,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
         {
-            String sCodeName( genModuleName );
-            rDoc.SetCodeName( nTab, sCodeName );
+            rDoc.SetCodeName( nTab, genModuleName );
             script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
             xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
             xLib->insertByName( genModuleName, aSourceAny );

@@ -161,7 +161,7 @@ BOOL ScDocument::GetName( SCTAB nTab, String& rName ) const
     return FALSE;
 }
 
-BOOL ScDocument::SetCodeName( SCTAB nTab, String& rName )
+BOOL ScDocument::SetCodeName( SCTAB nTab, const String& rName )
 {
     if (VALIDTAB(nTab))
     {

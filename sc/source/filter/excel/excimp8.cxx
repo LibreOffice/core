@@ -105,12 +105,98 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <sfx2/app.hxx>
 #include "xltoolbar.hxx"
 
+
 using namespace com::sun::star;
+using namespace ::comphelper;
 using ::rtl::OUString;
+
+//OleNameOverrideContainer
+
+typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideContainer_BASE;
+
+class OleNameOverrideContainer : public OleNameOverrideContainer_BASE
+{
+private:
+    typedef std::hash_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
+       ::std::equal_to< ::rtl::OUString > > NamedIndexToOleName;
+    NamedIndexToOleName  IdToOleNameHash;
+    ::osl::Mutex m_aMutex;
+public:
+    // XElementAccess
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  container::XIndexContainer::static_type(0); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ( IdToOleNameHash.size() > 0 );
+    }
+    // XNameAcess
+    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByName(aName) )
+            throw container::NoSuchElementException();
+        return uno::makeAny( IdToOleNameHash[ aName ] );
+    }
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        uno::Sequence< ::rtl::OUString > aResult( IdToOleNameHash.size() );
+        NamedIndexToOleName::iterator it = IdToOleNameHash.begin();
+        NamedIndexToOleName::iterator it_end = IdToOleNameHash.end();
+        rtl::OUString* pName = aResult.getArray();
+        for (; it != it_end; ++it, ++pName )
+            *pName = it->first;
+        return aResult;
+    }
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );
+    }
+
+    // XElementAccess
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return IdToOleNameHash.size();
+    }
+    // XNameContainer
+    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( hasByName( aName ) )
+            throw container::ElementExistException();
+        uno::Reference< container::XIndexContainer > xElement;
+        if ( ! ( aElement >>= xElement ) )
+            throw lang::IllegalArgumentException();
+       IdToOleNameHash[ aName ] = xElement;
+    }
+    virtual void SAL_CALL removeByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        IdToOleNameHash.erase( IdToOleNameHash.find( aName ) );
+    }
+    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        uno::Reference< container::XIndexContainer > xElement;
+        if ( ! ( aElement >>= xElement ) )
+            throw lang::IllegalArgumentException();
+        IdToOleNameHash[ aName ] = xElement;
+    }
+};
 
 // defined in docfunc.cxx ( really this needs a new name )
 script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule );
@@ -244,9 +330,10 @@ void ImportExcel8::ReadBasic( void )
         bool bLoadCode = pFilterOpt->IsLoadExcelBasicCode();
         bool bLoadExecutable = pFilterOpt->IsLoadExcelBasicExecutable();
         bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
+        // #FIXME need to get rid of this, we can also do this from within oox
+        // via the "ooo.vba.VBAGlobals" service
         if( bLoadCode || bLoadStrg )
         {
-            SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
             bool bAsComment = !bLoadExecutable;
 
             if ( !bAsComment )
@@ -268,9 +355,45 @@ void ImportExcel8::ReadBasic( void )
 #endif
 
             }
-            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
-            if ( !bAsComment )
-                GetObjectManager().SetOleNameOverrideInfo( aBasicImport.ControlNameForObjectId() );
+        }
+        try
+        {
+            uno::Reference< lang::XComponent > xComponent( pShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Sequence< beans::NamedValue > aArgSeq( 1 );
+
+            // collect names of embedded form controls, as specified in the VBA project
+            aArgSeq[ 0 ].Name = CREATE_OUSTRING( "OleNameOverrideInfo" );
+            uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
+            aArgSeq[ 0 ].Value <<= xOleNameOverrideSink;
+
+            uno::Sequence< uno::Any > aArgs( 2 );
+            // framework calls filter objects with factory as first argument
+            aArgs[ 0 ] <<= getProcessServiceFactory();
+            aArgs[ 1 ] <<= aArgSeq;
+
+            uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelVBAProjectFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+            xImporter->setTargetDocument( xComponent );
+
+            MediaDescriptor aMediaDesc;
+            SfxMedium& rMedium = GetMedium();
+            SfxItemSet* pItemSet = rMedium.GetItemSet();
+            if( pItemSet )
+            {
+                if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
+                    aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
+                if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
+                    aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
+            }
+            aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
+            aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
+
+            // call the filter
+            uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
+            xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
+            GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
+        }
+        catch( uno::Exception& )
+        {
         }
     }
 }

@@ -3176,17 +3176,14 @@ XclImpDffConverter::~XclImpDffConverter()
 
 String XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
 {
-    String sOleName;
+    rtl::OUString sOleName;
     String sCodeName = GetExtDocOptions().GetCodeName( nTab );
 
-    CodeNameToCntrlObjIdInfo::iterator it = maOleCtrlNameOverride.find( sCodeName );
-    if ( it != maOleCtrlNameOverride.end() )
+    if (  mxOleCtrlNameOverride->hasByName( sCodeName ) )
     {
-        CntrlObjIdToName::iterator it_id = it->second.find( nObjId );
-        if ( it_id != it->second.end() )
-        {
-            sOleName = it_id->second;
-        }
+        Reference< XIndexContainer > xIdToOleName;
+        mxOleCtrlNameOverride->getByName( sCodeName ) >>= xIdToOleName;
+        xIdToOleName->getByIndex( nObjId ) >>= sOleName;
     }
     OSL_TRACE("XclImpObjectManager::GetOleNameOverride tab %d, ( module %s ) object id ( %d ) is %s", nTab,
         rtl::OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(), nObjId,
