@@ -77,7 +77,7 @@ using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::ItemListEvent;
 using ::com::sun::star::awt::XItemList;
 using ::com::sun::star::graphic::XGraphic;
-
+using ::com::sun::star::graphic::XGraphicProvider;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt::VisualEffect;
@@ -2070,7 +2070,32 @@ void VCLXListBox::ImplCallItemListeners()
         maItemListeners.itemStateChanged( aEvent );
     }
 }
+namespace
+{
+     Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
+     {
+         if ( !i_rImageURL.getLength() )
+             return Image();
 
+        try
+        {
+             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+             Reference< XGraphicProvider > xProvider;
+             if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+             {
+                 ::comphelper::NamedValueCollection aMediaProperties;
+                 aMediaProperties.put( "URL", i_rImageURL );
+                 Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+                return Image( xGraphic );
+             }
+         }
+         catch( const uno::Exception& )
+         {
+             DBG_UNHANDLED_EXCEPTION();
+         }
+         return Image();
+     }
+}
 void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );

@@ -230,96 +230,6 @@ TOOLKIT_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sa
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryKey )
-{
-    if (_pRegistryKey)
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey =
-            static_cast< ::com::sun::star::registry::XRegistryKey* >( _pRegistryKey );
-
-        registerServices( xRegistryKey, "VCLXToolkit", szServiceName_Toolkit, szServiceName2_Toolkit );
-        registerServices( xRegistryKey, "VCLXPopupMenu", szServiceName_PopupMenu, szServiceName2_PopupMenu );
-        registerServices( xRegistryKey, "VCLXMenuBar", szServiceName_MenuBar, szServiceName2_MenuBar );
-        registerServices( xRegistryKey, "VCLXPointer", szServiceName_Pointer, szServiceName2_Pointer );
-        registerServices( xRegistryKey, "UnoControlContainer", szServiceName_UnoControlContainer, szServiceName2_UnoControlContainer );
-        registerServices( xRegistryKey, "UnoControlContainerModel", szServiceName_UnoControlContainerModel, szServiceName2_UnoControlContainerModel );
-        registerServices( xRegistryKey, "StdTabController", szServiceName_TabController, szServiceName2_TabController );
-        registerServices( xRegistryKey, "StdTabControllerModel", szServiceName_TabControllerModel, szServiceName2_TabControllerModel );
-        registerServices( xRegistryKey, "UnoDialogControl", szServiceName_UnoControlDialog, szServiceName2_UnoControlDialog );
-        registerServices( xRegistryKey, "UnoControlDialogModel", szServiceName_UnoControlDialogModel, szServiceName2_UnoControlDialogModel );
-        registerServices( xRegistryKey, "UnoEditControl", szServiceName_UnoControlEdit, szServiceName2_UnoControlEdit );
-        registerServices( xRegistryKey, "UnoControlEditModel", szServiceName_UnoControlEditModel, szServiceName2_UnoControlEditModel );
-        registerServices( xRegistryKey, "UnoDateFieldControl", szServiceName_UnoControlDateField, szServiceName2_UnoControlDateField );
-        registerServices( xRegistryKey, "UnoControlDateFieldModel", szServiceName_UnoControlDateFieldModel, szServiceName2_UnoControlDateFieldModel );
-        registerServices( xRegistryKey, "UnoTimeFieldControl", szServiceName_UnoControlTimeField, szServiceName2_UnoControlTimeField );
-        registerServices( xRegistryKey, "UnoControlTimeFieldModel", szServiceName_UnoControlTimeFieldModel, szServiceName2_UnoControlTimeFieldModel );
-        registerServices( xRegistryKey, "UnoNumericFieldControl", szServiceName_UnoControlNumericField, szServiceName2_UnoControlNumericField );
-        registerServices( xRegistryKey, "UnoControlNumericFieldModel", szServiceName_UnoControlNumericFieldModel, szServiceName2_UnoControlNumericFieldModel );
-        registerServices( xRegistryKey, "UnoCurrencyFieldControl", szServiceName_UnoControlCurrencyField, szServiceName2_UnoControlCurrencyField );
-        registerServices( xRegistryKey, "UnoControlCurrencyFieldModel", szServiceName_UnoControlCurrencyFieldModel, szServiceName2_UnoControlCurrencyFieldModel );
-        registerServices( xRegistryKey, "UnoPatternFieldControl", szServiceName_UnoControlPatternField, szServiceName2_UnoControlPatternField );
-        registerServices( xRegistryKey, "UnoControlPatternFieldModel", szServiceName_UnoControlPatternFieldModel, szServiceName2_UnoControlPatternFieldModel );
-        registerServices( xRegistryKey, "UnoFormattedFieldControl", szServiceName_UnoControlFormattedField, szServiceName2_UnoControlFormattedField );
-        registerServices( xRegistryKey, "UnoControlFormattedFieldModel", szServiceName_UnoControlFormattedFieldModel, szServiceName2_UnoControlFormattedFieldModel );
-        registerServices( xRegistryKey, "UnoFileControl", szServiceName_UnoControlFileControl, szServiceName2_UnoControlFileControl );
-        registerServices( xRegistryKey, "UnoControlFileControlModel", szServiceName_UnoControlFileControlModel, szServiceName2_UnoControlFileControlModel );
-        registerServices( xRegistryKey, "UnoButtonControl", szServiceName_UnoControlButton, szServiceName2_UnoControlButton );
-        registerServices( xRegistryKey, "UnoControlButtonModel", szServiceName_UnoControlButtonModel, szServiceName2_UnoControlButtonModel );
-        registerServices( xRegistryKey, "UnoImageControlControl", szServiceName_UnoControlImageButton, szServiceName2_UnoControlImageButton );
-        registerServices( xRegistryKey, "UnoControlImageControlModel", szServiceName_UnoControlImageButtonModel, szServiceName2_UnoControlImageButtonModel );
-        registerServices( xRegistryKey, "UnoImageControlControl", szServiceName_UnoControlImageControl, szServiceName2_UnoControlImageControl );
-        registerServices( xRegistryKey, "UnoControlImageControlModel", szServiceName_UnoControlImageControlModel, szServiceName2_UnoControlImageControlModel );
-        registerServices( xRegistryKey, "UnoRadioButtonControl", szServiceName_UnoControlRadioButton, szServiceName2_UnoControlRadioButton );
-        registerServices( xRegistryKey, "UnoControlRadioButtonModel", szServiceName_UnoControlRadioButtonModel, szServiceName2_UnoControlRadioButtonModel );
-        registerServices( xRegistryKey, "UnoCheckBoxControl", szServiceName_UnoControlCheckBox, szServiceName2_UnoControlCheckBox );
-        registerServices( xRegistryKey, "UnoControlCheckBoxModel", szServiceName_UnoControlCheckBoxModel, szServiceName2_UnoControlCheckBoxModel );
-        registerServices( xRegistryKey, "UnoListBoxControl", szServiceName_UnoControlListBox, szServiceName2_UnoControlListBox );
-        registerServices( xRegistryKey, "UnoControlListBoxModel", szServiceName_UnoControlListBoxModel, szServiceName2_UnoControlListBoxModel );
-        registerServices( xRegistryKey, "UnoComboBoxControl", szServiceName_UnoControlComboBox, szServiceName2_UnoControlComboBox );
-        registerServices( xRegistryKey, "UnoControlComboBoxModel", szServiceName_UnoControlComboBoxModel, szServiceName2_UnoControlComboBoxModel );
-        registerServices( xRegistryKey, "UnoFixedTextControl", szServiceName_UnoControlFixedText, szServiceName2_UnoControlFixedText );
-        registerServices( xRegistryKey, "UnoControlFixedTextModel", szServiceName_UnoControlFixedTextModel, szServiceName2_UnoControlFixedTextModel );
-        registerServices( xRegistryKey, "UnoGroupBoxControl", szServiceName_UnoControlGroupBox, szServiceName2_UnoControlGroupBox );
-        registerServices( xRegistryKey, "UnoControlGroupBoxModel", szServiceName_UnoControlGroupBoxModel, szServiceName2_UnoControlGroupBoxModel );
-        registerServices( xRegistryKey, "UnoProgressBarControl", szServiceName_UnoControlProgressBar, szServiceName2_UnoControlProgressBar );
-        registerServices( xRegistryKey, "UnoControlProgressBarModel", szServiceName_UnoControlProgressBarModel, szServiceName2_UnoControlProgressBarModel );
-        registerServices( xRegistryKey, "UnoScrollBarControl", szServiceName_UnoControlScrollBar, szServiceName2_UnoControlScrollBar );
-        registerServices( xRegistryKey, "UnoControlScrollBarModel", szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel );
-        registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
-        registerServices( xRegistryKey, "UnoSpinButtonControl", szServiceName_UnoSpinButtonControl );
-        registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
-        registerServices( xRegistryKey, "UnoControlFixedLineModel", szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel );
-        registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
-        registerServices( xRegistryKey, "UnoRoadmapControl", szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap );
-        registerServices( xRegistryKey, "UnoControlRoadmapModel", szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel );
-        registerServices( xRegistryKey, "TreeControl", szServiceName_TreeControl );
-        registerServices( xRegistryKey, "TreeControlModel", szServiceName_TreeControlModel );
-        registerServices( xRegistryKey, "MutableTreeDataModel", szServiceName_MutableTreeDataModel );
-        registerServices( xRegistryKey, "UnoSimpleAnimationControlModel", szServiceName_UnoSimpleAnimationControlModel, szServiceName2_UnoSimpleAnimationControlModel );
-        registerServices( xRegistryKey, "UnoSimpleAnimationControl", szServiceName_UnoSimpleAnimationControl, szServiceName2_UnoSimpleAnimationControl );
-        registerServices( xRegistryKey, "UnoThrobberControlModel", szServiceName_UnoThrobberControlModel, szServiceName2_UnoThrobberControlModel );
-        registerServices( xRegistryKey, "UnoThrobberControl", szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl );
-        registerServices( xRegistryKey, "UnoFixedHyperlinkControl", szServiceName_UnoControlFixedHyperlink );
-        registerServices( xRegistryKey, "UnoControlFixedHyperlinkModel", szServiceName_UnoControlFixedHyperlinkModel );
-        registerServices( xRegistryKey, "GridControl", szServiceName_GridControl );
-        registerServices( xRegistryKey, "GridControlModel", szServiceName_GridControlModel );
-        registerServices( xRegistryKey, "DefaultGridDataModel", szServiceName_DefaultGridDataModel );
-        registerServices( xRegistryKey, "DefaultGridColumnModel", szServiceName_DefaultGridColumnModel );
-        registerServices( xRegistryKey, "GridColumn", szServiceName_GridColumn );
-        registerServices( xRegistryKey, "UnoControlTabPageModel", szServiceName_UnoControlTabPageModel);
-        registerServices( xRegistryKey, "UnoControlTabPage", szServiceName_UnoControlTabPage );
-        registerServices( xRegistryKey, "UnoControlTabPageContainerModel", szServiceName_UnoControlTabPageContainerModel );
-        registerServices( xRegistryKey, "UnoControlTabPageContainer", szServiceName_UnoControlTabPageContainer);
-
-    //  UnoControlTabPageModel_component_writeInfo(_pServiceManager, _pRegistryKey);
-        comp_AsyncCallback_component_writeInfo( _pServiceManager, _pRegistryKey );
-        comp_Layout_component_writeInfo( _pServiceManager, _pRegistryKey );
-
-        return sal_True;
-    }
-    return sal_False;
-}
-
 TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
 {
     void* pRet = NULL;
@@ -406,15 +316,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
-        //if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.tab.UnoControlTabPageModel" )== 0 )
-        //{
-        //  Reference < ::com::sun::star::beans::XPropertySet > xPropertySet (xServiceFactory, UNO_QUERY);
-        //  Any any = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii("DefaultContext"));
-  //          Reference < XComponentContext > xCompCtx;
-        //  any <<= xCompCtx;
-        //  return UnoControlTabPageModel_CreateInstance (xCompCtx);
-        //}
-
         if( pRet == 0 )
             pRet = comp_Layout_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
     }
