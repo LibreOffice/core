@@ -49,6 +49,81 @@ using ::rtl::OUString;
 
 namespace xmlscript
 {
+
+Reference< xml::input::XElement > Frame::startChildElement(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException)
+{
+    if ( !m_xContainer.is() )
+        m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoFrameModel") ) ), UNO_QUERY );
+    // event
+    if (_pImport->isEventElement( nUid, rLocalName ))
+    {
+       return new EventElement(
+            nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
+    {
+        // Create new DialogImport for this container
+        DialogImport* pFrameImport = new DialogImport( *_pImport );
+        pFrameImport->_xDialogModel = m_xContainer;
+        return new BulletinBoardElement( rLocalName, xAttributes, this,  pFrameImport );
+    }
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title") ))
+    {
+        getStringAttr( &_label,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+            xAttributes,
+            _pImport->XMLNS_DIALOGS_UID );
+
+        return new ElementBase(
+            _pImport->XMLNS_DIALOGS_UID,
+            rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        OSL_TRACE("****** ARGGGGG!!!! **********");
+        throw     xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+
+void Frame::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+        if ( !m_xContainer.is() )
+            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoFrameModel") ) ), UNO_QUERY );
+        Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
+        // _pImport is what we need to add to ( e.g. the dialog in this case )
+    ControlImportContext ctx( _pImport, xProps,   getControlId( _xAttributes ) );
+
+    Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+    if (_label.getLength())
+    {
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                                         makeAny( _label ) );
+    }
+    ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
+}
+
+//===
 Reference< xml::input::XElement > MultiPage::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -61,16 +136,13 @@ rtl::OUString _label = rtl::OUString::createFromAscii("foo");
         return new EventElement(
             nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title") ))
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
     {
-        getStringAttr( &_label,
-                       OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
-                       xAttributes,
-                       _pImport->XMLNS_DIALOGS_UID );
+        // Create new DialogImport for this container
 
-        return new ElementBase(
-            _pImport->XMLNS_DIALOGS_UID,
-            rLocalName, xAttributes, this, _pImport );
+        DialogImport* pMultiPageImport = new DialogImport( *_pImport );
+                pMultiPageImport->_xDialogModel = m_xContainer;
+        return new BulletinBoardElement( rLocalName, xAttributes, this,  pMultiPageImport );
     }
     else
     {
@@ -85,10 +157,10 @@ rtl::OUString _label = rtl::OUString::createFromAscii("foo");
 void MultiPage::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoMultiPageModel") ) );
-//      OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) );
+        Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
+        // _pImport is what we need to add to ( e.g. the dialog in this case )
+    ControlImportContext ctx( _pImport, xProps, getControlId( _xAttributes ));
+
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -98,125 +170,76 @@ void MultiPage::endElement()
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
+        pStyle->importBackgroundColorStyle( xControlModel );
     }
 
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
-    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValue") ),
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiPageValue") ),
                             OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                             _xAttributes );
-    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMax") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
-                            _xAttributes );
+        ctx.importBooleanProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Decoration") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("withtabs") ),
+        _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
 }
 
-// #FIXME cut'n'pasted from xmloff/source/core/xmlimp.cxx:1251
-// of course we need to find a common home for this helper
-
-bool IsPackageURL( const ::rtl::OUString& rURL )
+Reference< xml::input::XElement > Page::startChildElement(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
 {
-    // Some quick tests: Some may rely on the package structure!
-    sal_Int32 nLen = rURL.getLength();
-    if( (nLen > 0 && '/' == rURL[0]) )
-        // RFC2396 net_path or abs_path
-        return false;
-    else if( nLen > 1 && '.' == rURL[0] )
+    // event
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
-        if( '.' == rURL[1] )
-            // ../: We are never going up one level, so we know
-            // it's not an external URI
-            return false;
-        else if( '/' == rURL[1] )
-            // we are remaining on a level, so it's an package URI
-            return true;
+        return new EventElement(
+            nUid, rLocalName, xAttributes, this, _pImport );
     }
-
-    // Now check for a RFC2396 schema
-    sal_Int32 nPos = 1;
-    while( nPos < nLen )
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
     {
-        switch( rURL[nPos] )
-        {
-            case '/':
-                // a relative path segement
-                return true;
-            case ':':
-                // a schema
-                return false;
-            default:
-                break;
-                // we don't care about any other characters
-        }
-        ++nPos;
-    }
 
-    return true;
+        DialogImport* pPageImport = new DialogImport( *_pImport );
+                pPageImport->_xDialogModel = m_xContainer;
+        return new BulletinBoardElement( rLocalName, xAttributes, this,  pPageImport );
+    }
+    else
+    {
+
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
 }
+//__________________________________________________________________________________________________
 
-void importBindableAndListRangeBits( DialogImport* _pImport, const rtl::OUString sLinkedCell, const rtl::OUString & sCellRange, ControlImportContext& ctx )
+void Page::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
 {
-    Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );
-    if ( xFac.is() && ( sLinkedCell.getLength() ||  sCellRange.getLength() ) )
+        Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
+
+    ControlImportContext ctx( _pImport, xProps, getControlId( _xAttributes ));
+
+    Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
     {
-        // Set up Celllink
-        if ( sLinkedCell.getLength() )
-        {
-            Reference< form::binding::XBindableValue > xBindable( ctx.getControlModel(), uno::UNO_QUERY );
-            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellAddressConversion" )), uno::UNO_QUERY );
-            if ( xBindable.is() && xConvertor.is() )
-            {
-                table::CellAddress aAddress;
-                xConvertor->setPropertyValue( OUSTR( "PersistentRepresentation" ), uno::makeAny( sLinkedCell ) );
-                xConvertor->getPropertyValue( OUSTR( "Address" ) ) >>= aAddress;
-                beans::NamedValue aArg1;
-                aArg1.Name = OUSTR("BoundCell");
-                aArg1.Value <<= aAddress;
-
-                uno::Sequence< uno::Any > aArgs(1);
-                aArgs[ 0 ]  <<= aArg1;
-
-                uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( OUSTR("com.sun.star.table.CellValueBinding" ), aArgs ), uno::UNO_QUERY );
-                xBindable->setValueBinding( xBinding );
-
-            }
-        }
-        // Set up CelllRange
-        if ( sCellRange.getLength() )
-        {
-           Reference< form::binding::XListEntrySink  > xListEntrySink( ctx.getControlModel(), uno::UNO_QUERY );
-           Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellRangeAddressConversion" )), uno::UNO_QUERY );
-           if ( xListEntrySink.is() && xConvertor.is() )
-           {
-               table::CellRangeAddress aAddress;
-               xConvertor->setPropertyValue( OUSTR( "PersistentRepresentation" ), uno::makeAny( sCellRange ) );
-               xConvertor->getPropertyValue( OUSTR( "Address" ) ) >>= aAddress;
-               beans::NamedValue aArg1;
-               aArg1.Name = OUSTR("CellRange");
-               aArg1.Value <<= aAddress;
-
-               uno::Sequence< uno::Any > aArgs(1);
-               aArgs[ 0 ]  <<= aArg1;
-
-               uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( OUSTR("com.sun.star.table.CellRangeListSource" ), aArgs ), uno::UNO_QUERY );
-               xListEntrySink->setListEntrySource( xSource );
-
-           }
-       }
-   }
-}
-
-sal_Bool isVBACompatibilityMode( DialogImport* _pImport )
-{
-    sal_Bool bVBAMode = sal_False;
-    Reference< script::vba::XVBACompatibility > xVBACompat( _pImport->getScriptLibraryContainer(), UNO_QUERY );
-    if( xVBACompat.is() )
-    {
-        bVBAMode = xVBACompat->getVBACompatibilityMode();
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+        pStyle->importBackgroundColorStyle( xControlModel );
     }
-    return bVBAMode;
+
+    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ), OUString( RTL_CONSTASCII_USTRINGPARAM("title") ), _xAttributes );
+    ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 // progessmeter
@@ -298,23 +321,9 @@ Reference< xml::input::XElement > ScrollBarElement::startChildElement(
 void ScrollBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    OUString sService( OUSTR("com.sun.star.awt.UnoControlScrollBarModel") );
-    // we should probably limit this to vba mode also ( leave for now )
-    if ( isVBACompatibilityMode( _pImport ) )
-        sService = OUSTR("com.sun.star.form.component.ScrollBar");
-
-    OUString sLinkedCell;
-    try
-    {
-        sLinkedCell = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "linked-cell" ) );
-    }
-    catch( Exception& /*e*/ )
-    {
-    }
-
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        sService );
+        getControlModelName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ), _xAttributes ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -358,10 +367,7 @@ void ScrollBarElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("symbol-color") ),
                                _xAttributes );
 
-    // import cell-link
-    OUString sCellRange;
-    importBindableAndListRangeBits( _pImport, sLinkedCell, sCellRange, ctx );
-
+    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -393,18 +399,9 @@ Reference< xml::input::XElement > SpinButtonElement::startChildElement(
 void SpinButtonElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    OUString sLinkedCell;
-    try
-    {
-        sLinkedCell = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "linked-cell" ) );
-    }
-    catch( Exception& /*e*/ )
-    {
-    }
-
     ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.SpinButton") ) );
+                            _pImport, getControlId( _xAttributes ),
+                            getControlModelName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlSpinButtonModel") ), _xAttributes ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -417,33 +414,25 @@ void SpinButtonElement::endElement()
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
     ctx.importOrientationProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
-                                   _xAttributes );
+    OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+         _xAttributes );
     ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("SpinIncrement") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("increment") ),
-                            _xAttributes );
+        OUString( RTL_CONSTASCII_USTRINGPARAM("increment") ),
+        _xAttributes );
     ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("SpinValue") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("curval") ),
-                            _xAttributes );
+    OUString( RTL_CONSTASCII_USTRINGPARAM("curval") ),_xAttributes );
     ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("SpinValueMax") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("maxval") ),
-                            _xAttributes );
+    OUString( RTL_CONSTASCII_USTRINGPARAM("maxval") ), _xAttributes );
     ctx.importLongProperty( OUSTR("SpinValueMin"), OUSTR("minval"),
-                            _xAttributes );
-    ctx.importLongProperty( OUSTR("Repeat"), OUSTR("repeat"),
-                            _xAttributes );
+        _xAttributes );
+    ctx.importLongProperty( OUSTR("Repeat"), OUSTR("repeat"), _xAttributes );
     ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat-delay"),
-                            _xAttributes );
+_xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
-                               _xAttributes );
+    OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ), _xAttributes );
     ctx.importHexLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("SymbolColor") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("symbol-color") ),
-                               _xAttributes );
-    // import cell-link
-    OUString sCellRange;
-    importBindableAndListRangeBits( _pImport, sLinkedCell, sCellRange, ctx );
-
+    OUString( RTL_CONSTASCII_USTRINGPARAM("symbol-color") ), _xAttributes );
+    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -746,6 +735,7 @@ void FormattedFieldElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("enforce-format") ),
                                _xAttributes );
 
+    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1285,34 +1275,7 @@ void ImageControlElement::endElement()
     rtl::OUString sURL = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "src" ) );
     Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
 
-    if ( xDocStorage.is() && IsPackageURL( sURL ) )
-    {
-        uno::Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
-
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
-        aContext.createComponentWithArguments( OUSTR( "com.sun.star.comp.Svx.GraphicImportHelper" ), aArgs, xGraphicResolver );
-
-        if ( xGraphicResolver.is() )
-        {
-            rtl::OUString aTmp( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
-            aTmp += sURL;
-            sURL = xGraphicResolver->resolveGraphicObjectURL( aTmp );
-            Reference< beans::XPropertySet > xProps( ctx.getControlModel(), UNO_QUERY );
-            // we must set the url while the graphic object ( held by the resolver is in scope )
-            if ( xProps.is() )
-                xProps->setPropertyValue( OUSTR("ImageURL"), makeAny( sURL ) );
-        }
-    }
-
-    else if ( sURL.getLength() > 0 )
-    {
-        Reference< beans::XPropertySet > xProps( ctx.getControlModel(), UNO_QUERY );
-        if ( xProps.is() )
-            xProps->setPropertyValue( OUSTR("ImageURL"), makeAny( sURL ) );
-    }
-
+    ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "src" ), _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
                                _xAttributes );
@@ -1645,24 +1608,10 @@ void TitledBoxElement::endElement()
         Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
         Reference< xml::input::XAttributes > xAttributes(
             xRadio->getAttributes() );
-        OUString sLinkedCell;
-        OUString sCellRange;
-        OUString sService( OUSTR("com.sun.star.awt.UnoControlRadioButtonModel") );
-        try
-        {
-            sLinkedCell = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "linked-cell" ) );
-            // we should probably limit this to vba mode also ( leave for now )
-            if ( isVBACompatibilityMode( _pImport ) )
-                sService = OUSTR("com.sun.star.form.component.RadioButton");
-        }
-        catch( Exception& /*e*/ )
-        {
-        }
-
 
         ControlImportContext ctx(
             _pImport, getControlId( xAttributes ),
-            sService );
+            getControlModelName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ), xAttributes ) );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
         Reference< xml::input::XElement > xStyle( getStyle( xAttributes ) );
@@ -1689,9 +1638,7 @@ void TitledBoxElement::endElement()
         ctx.importVerticalAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VerticalAlign") ),
                                          OUString( RTL_CONSTASCII_USTRINGPARAM("valign") ),
                                          xAttributes );
-        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
-                                  xAttributes );
+        ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
         ctx.importImagePositionProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImagePosition") ),
                                          OUString( RTL_CONSTASCII_USTRINGPARAM("image-position") ),
                                          xAttributes );
@@ -1714,7 +1661,7 @@ void TitledBoxElement::endElement()
         }
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
-    importBindableAndListRangeBits( _pImport, sLinkedCell, sCellRange, ctx );
+        ctx.importDataAwareProperty( OUSTR("linked-cell" ), xAttributes );
         ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
@@ -1790,23 +1737,10 @@ void RadioGroupElement::endElement()
         Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
         Reference< xml::input::XAttributes > xAttributes(
             xRadio->getAttributes() );
-        OUString sLinkedCell;
-        OUString sCellRange;
-        OUString sService( OUSTR("com.sun.star.awt.UnoControlRadioButtonModel") );
-        try
-        {
-            sLinkedCell = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "linked-cell" ) );
-            // we should probably limit this to vba mode also ( leave for now )
-            if ( isVBACompatibilityMode( _pImport ) )
-                sService = OUSTR("com.sun.star.form.component.RadioButton");
-        }
-        catch( Exception& /*e*/ )
-        {
-        }
 
         ControlImportContext ctx(
             _pImport, getControlId( xAttributes ),
-            sService );
+            getControlModelName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ), xAttributes ) );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
         Reference< xml::input::XElement > xStyle( getStyle( xAttributes ) );
@@ -1833,9 +1767,7 @@ void RadioGroupElement::endElement()
         ctx.importVerticalAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VerticalAlign") ),
                                          OUString( RTL_CONSTASCII_USTRINGPARAM("valign") ),
                                          xAttributes );
-        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
-                                  xAttributes );
+        ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), xAttributes );
         ctx.importImagePositionProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImagePosition") ),
                                          OUString( RTL_CONSTASCII_USTRINGPARAM("image-position") ),
                                          xAttributes );
@@ -1858,7 +1790,8 @@ void RadioGroupElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-    importBindableAndListRangeBits( _pImport, sLinkedCell, sCellRange, ctx );
+        ctx.importDataAwareProperty( OUSTR("linked-cell" ), xAttributes );
+
         ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
@@ -1979,26 +1912,10 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
 void MenuListElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-        OUString sLinkedCell;
-        OUString sCellRange;
-        OUString sListBoxService( OUSTR("com.sun.star.awt.UnoControlListBoxModel") );
-
-        // we should probably limit this to vba mode also ( leave for now )
-        if ( isVBACompatibilityMode( _pImport ) )
-            sListBoxService = OUSTR("com.sun.star.form.component.ListBox");
-
-        try
-        {
-            sLinkedCell = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "linked-cell" ) );
-            sCellRange = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "source-cell-range" ) );
-        }
-        catch( Exception& /*e*/ )
-        {
-        }
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        //OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ) );
-        sListBoxService );
+
+    getControlModelName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ), _xAttributes  ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -2031,17 +1948,16 @@ void MenuListElement::endElement()
     ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                              _xAttributes );
-        // import cell-link and cell source range
-    importBindableAndListRangeBits( _pImport, sLinkedCell, sCellRange, ctx );
+    bool bHasLinkedCell = ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
+    bool bHasSrcRange = ctx.importDataAwareProperty( OUSTR("source-cell-range" ), _xAttributes );
     if (_popup.is())
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-        if (  !sCellRange.getLength() )
-            xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
-                                         makeAny( p->getItemValues() ) );
-        if (  !sLinkedCell.getLength() )
-            xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ),
-                                         makeAny( p->getSelectedItems() ) );
+        if ( !bHasSrcRange )
+            xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ), makeAny( p->getItemValues() ) );
+        if ( !bHasLinkedCell )
+            xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ), makeAny( p->getSelectedItems() ) );
+
     }
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -2086,26 +2002,9 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
 void ComboBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-        OUString sService( OUSTR("com.sun.star.awt.UnoControlComboBoxModel") );
-
-        // we should probably limit this to vba mode also ( leave for now )
-        if ( isVBACompatibilityMode( _pImport ) )
-            sService = OUSTR("com.sun.star.form.component.ComboBox");
-
-        OUString sLinkedCell;
-        OUString sCellRange;
-        try
-        {
-            sLinkedCell = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "linked-cell" ) );
-            sCellRange = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "source-cell-range" ) );
-        }
-        catch( Exception& /*e*/ )
-        {
-        }
-
     ControlImportContext ctx(
         _pImport, getControlId( _xAttributes ),
-        sService );
+        getControlModelName( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ), _xAttributes ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -2147,10 +2046,9 @@ void ComboBoxElement::endElement()
     ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                              _xAttributes );
-    // import cell-link and cell source range
-    importBindableAndListRangeBits( _pImport, sLinkedCell, sCellRange, ctx );
-
-    if (_popup.is() && !sCellRange.getLength() )
+    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
+    bool bHasSrcRange = ctx.importDataAwareProperty( OUSTR("source-cell-range" ), _xAttributes );
+    if (_popup.is() && !bHasSrcRange )
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
@@ -2217,9 +2115,7 @@ void CheckBoxElement::endElement()
     ctx.importVerticalAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VerticalAlign") ),
                                      OUString( RTL_CONSTASCII_USTRINGPARAM("valign") ),
                                      _xAttributes );
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
-                              _xAttributes );
+    ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
     ctx.importImagePositionProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImagePosition") ),
                                      OUString( RTL_CONSTASCII_USTRINGPARAM("image-position") ),
                                      _xAttributes );
@@ -2320,9 +2216,7 @@ void ButtonElement::endElement()
     ctx.importButtonTypeProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PushButtonType") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("button-type") ),
                                   _xAttributes );
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
-                              _xAttributes );
+    ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
     ctx.importImagePositionProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImagePosition") ),
                                      OUString( RTL_CONSTASCII_USTRINGPARAM("image-position") ),
                                      _xAttributes );
@@ -2477,7 +2371,7 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
         return new ScrollBarElement( rLocalName, xAttributes, this, _pImport );
     }
     // spinbutton
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("spinbutton") ) && isVBACompatibilityMode( _pImport ) )
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("spinbutton") ) )
     {
         return new SpinButtonElement( rLocalName, xAttributes, this, _pImport );
     }
@@ -2489,6 +2383,14 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("multipage") ))
     {
         return new MultiPage( rLocalName, xAttributes, this, _pImport );
+    }
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("frame") ))
+    {
+        return new Frame( rLocalName, xAttributes, this, _pImport );
+    }
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("page") ))
+    {
+        return new Page( rLocalName, xAttributes, this, _pImport );
     }
     // bulletinboard
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
@@ -2665,10 +2567,7 @@ void WindowElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("Decoration") ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("withtitlebar") ),
         _xAttributes );
-    ctx.importStringProperty(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
-        _xAttributes );
+        ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)

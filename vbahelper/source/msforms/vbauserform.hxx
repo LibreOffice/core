@@ -31,6 +31,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/msforms/XUserForm.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
@@ -49,6 +50,7 @@ protected:
 public:
     ScVbaUserForm( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
     virtual ~ScVbaUserForm();
+    static css::uno::Reference< css::awt::XControl > nestedSearch( const rtl::OUString& aPropertyName, css::uno::Reference< css::awt::XControlContainer >& xContainer );
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
     // XUserForm

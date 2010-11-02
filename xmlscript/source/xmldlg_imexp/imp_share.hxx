@@ -45,7 +45,7 @@
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <vector>
-
+#include <boost/shared_ptr.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -117,16 +117,19 @@ inline bool getLongAttr(
 class ImportContext;
 
 //==============================================================================
+typedef ::cppu::WeakImplHelper1< css::xml::input::XRoot >   DialogImport_Base;
 struct DialogImport
-    : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
+    : DialogImport_Base
 {
     friend class ImportContext;
 
     css::uno::Reference< css::uno::XComponentContext > _xContext;
     css::uno::Reference< css::util::XNumberFormatsSupplier > _xSupplier;
 
-    ::std::vector< ::rtl::OUString > _styleNames;
-    ::std::vector< css::uno::Reference< css::xml::input::XElement > > _styles;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString > > _pStyleNames;
+    ::boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > _pStyles;
+    ::std::vector< ::rtl::OUString >& _styleNames;
+    ::std::vector< css::uno::Reference< css::xml::input::XElement > >& _styles;
 
     css::uno::Reference< css::container::XNameContainer > _xDialogModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > _xDialogModelFactory;
@@ -166,13 +169,32 @@ public:
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference<css::container::XNameContainer>
         const & xDialogModel,
+        ::boost::shared_ptr< ::std::vector< ::rtl::OUString > >& pStyleNames,
+        ::boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > >& pStyles,
         css::uno::Reference<css::frame::XModel> const & xDoc )
         SAL_THROW( () )
         : _xContext( xContext )
+        , _pStyleNames( pStyleNames )
+        , _pStyles( pStyles )
+        , _styleNames( *_pStyleNames )
+        , _styles( *_pStyles )
         , _xDialogModel( xDialogModel )
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW ), _xDoc( xDoc )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
+    inline DialogImport( const DialogImport& rOther ) : DialogImport_Base()
+        , _xContext( rOther._xContext )
+        , _xSupplier( rOther._xSupplier )
+        , _pStyleNames( rOther._pStyleNames )
+        , _pStyles( rOther._pStyles )
+        , _styleNames( *_pStyleNames )
+        , _styles( *_pStyles )
+        , _xDialogModel( rOther._xDialogModel )
+        , _xDialogModelFactory( rOther._xDialogModelFactory )
+        , _xDoc( rOther._xDoc )
+        , XMLNS_DIALOGS_UID( rOther.XMLNS_DIALOGS_UID )
+        , XMLNS_SCRIPT_UID( rOther.XMLNS_SCRIPT_UID ) {}
+
     virtual ~DialogImport()
         SAL_THROW( () );
 
@@ -365,6 +387,9 @@ protected:
 
     ::rtl::OUString getControlId(
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    ::rtl::OUString getControlModelName(
+        rtl::OUString const& rDefaultModel,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     css::uno::Reference< css::xml::input::XElement > getStyle(
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 public:
@@ -435,6 +460,8 @@ public:
     bool importVerticalAlignProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importImageURLProperty( rtl::OUString const & rPropName, rtl::OUString const & rAttrName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes );
     bool importImageAlignProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
@@ -459,6 +486,9 @@ public:
     bool importSelectionTypeProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importDataAwareProperty(
+        ::rtl::OUString const & rPropName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 };
 
 //==============================================================================
@@ -473,6 +503,14 @@ public:
             css::uno::Reference< css::beans::XPropertySet >(
                 pImport->_xDialogModelFactory->createInstance( rControlName ),
                 css::uno::UNO_QUERY_THROW ), rId )
+        {}
+    inline ControlImportContext(
+        DialogImport * pImport,
+        const css::uno::Reference< css::beans::XPropertySet >& xProps, ::rtl::OUString const & rControlName )
+        : ImportContext(
+            pImport,
+                xProps,
+                rControlName )
         {}
     inline ~ControlImportContext()
     {
@@ -1004,6 +1042,7 @@ public:
 };
 
 //==============================================================================
+
 class SpinButtonElement
     : public ControlElement
 {
@@ -1044,8 +1083,64 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
-        {}
+        {
+            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoMultiPageModel") ) ), css::uno::UNO_QUERY );
+        }
+private:
+    css::uno::Reference< css::container::XNameContainer > m_xContainer;
 };
+
+//==============================================================================
+class Frame
+    : public ControlElement
+{
+    ::rtl::OUString _label;
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid, ::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+
+    inline Frame(
+        ::rtl::OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+private:
+    css::uno::Reference< css::container::XNameContainer > m_xContainer;
+};
+
+//==============================================================================
+class Page
+    : public ControlElement
+{
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid, ::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+
+    inline Page(
+        ::rtl::OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {
+            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoPageModel") ) ), css::uno::UNO_QUERY );
+        }
+private:
+    css::uno::Reference< css::container::XNameContainer > m_xContainer;
+};
+
 
 class ProgressBarElement
     : public ControlElement

@@ -58,9 +58,19 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 #include <com/sun/star/view/SelectionType.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
+
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -128,6 +138,20 @@ OUString ControlElement::getControlId(
     }
     return aId;
 }
+
+OUString ControlElement::getControlModelName(
+    OUString const& rDefaultModel,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aModel;
+    aModel = xAttributes->getValueByUidName(
+        _pImport->XMLNS_DIALOGS_UID,
+        OUString( RTL_CONSTASCII_USTRINGPARAM("control-implementation") ) );
+    if (! aModel.getLength())
+        aModel = rDefaultModel;
+    return aModel;
+}
+
 
 //##################################################################################################
 
@@ -820,6 +844,7 @@ bool ImportContext::importDoubleProperty(
     }
     return false;
 }
+
 //__________________________________________________________________________________________________
 bool ImportContext::importBooleanProperty(
     OUString const & rPropName, OUString const & rAttrName,
@@ -969,6 +994,115 @@ bool ImportContext::importVerticalAlignProperty(
         return true;
     }
     return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importImageURLProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    rtl::OUString sURL = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rAttrName );
+    if ( sURL.getLength() )
+    {
+        Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
+
+        uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
+        if ( xDocStorage.is() )
+        {
+            uno::Sequence< Any > aArgs( 1 );
+            aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
+            ::comphelper::ComponentContext aContext( _pImport->getComponentContext() );
+            aContext.createComponentWithArguments( OUSTR( "com.sun.star.comp.Svx.GraphicImportHelper" ), aArgs, xGraphicResolver );
+            if ( xGraphicResolver.is() )
+            {
+                rtl::OUString aTmp( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+                aTmp += sURL;
+                try
+                {
+                    aTmp = xGraphicResolver->resolveGraphicObjectURL( aTmp );
+                    if ( aTmp.getLength() )
+                        sURL = aTmp;
+                }
+                catch( uno::Exception& e )
+                {
+                    (void)e;
+                    return false;
+                }
+
+            }
+        }
+        if ( sURL.getLength() > 0 )
+        {
+            Reference< beans::XPropertySet > xProps( getControlModel(), UNO_QUERY );
+            if ( xProps.is() )
+            {
+                xProps->setPropertyValue( rPropName, makeAny( sURL ) );
+                return true;
+            }
+        }
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+ bool ImportContext::importDataAwareProperty(
+        ::rtl::OUString const & rPropName,
+        Reference<xml::input::XAttributes> const & xAttributes )
+{
+    OUString sLinkedCell;
+    OUString sCellRange;
+    if ( rPropName.equals( OUSTR("linked-cell" ) ) )
+       sLinkedCell = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
+    if ( rPropName.equals( OUSTR(  "source-cell-range" ) ) )
+        sCellRange = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
+    bool bRes = false;
+    Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );
+    if ( xFac.is() && ( sLinkedCell.getLength() ||  sCellRange.getLength() ) )
+    {
+        // Set up Celllink
+        if ( sLinkedCell.getLength() )
+        {
+            Reference< form::binding::XBindableValue > xBindable( getControlModel(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellAddressConversion" )), uno::UNO_QUERY );
+            if ( xBindable.is() && xConvertor.is() )
+            {
+                table::CellAddress aAddress;
+                xConvertor->setPropertyValue( OUSTR( "PersistentRepresentation" ), uno::makeAny( sLinkedCell ) );
+                xConvertor->getPropertyValue( OUSTR( "Address" ) ) >>= aAddress;
+                beans::NamedValue aArg1;
+                aArg1.Name = OUSTR("BoundCell");
+                aArg1.Value <<= aAddress;
+
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[ 0 ]  <<= aArg1;
+
+                uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( OUSTR("com.sun.star.table.CellValueBinding" ), aArgs ), uno::UNO_QUERY );
+                xBindable->setValueBinding( xBinding );
+                bRes = true;
+            }
+        }
+        // Set up CelllRange
+        if ( sCellRange.getLength() )
+        {
+            Reference< form::binding::XListEntrySink  > xListEntrySink( getControlModel(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellRangeAddressConversion" )), uno::UNO_QUERY );
+            if ( xListEntrySink.is() && xConvertor.is() )
+            {
+                table::CellRangeAddress aAddress;
+                xConvertor->setPropertyValue( OUSTR( "PersistentRepresentation" ), uno::makeAny( sCellRange ) );
+                xConvertor->getPropertyValue( OUSTR( "Address" ) ) >>= aAddress;
+                beans::NamedValue aArg1;
+                aArg1.Name = OUSTR("CellRange");
+                aArg1.Value <<= aAddress;
+
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[ 0 ]  <<= aArg1;
+
+                uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( OUSTR("com.sun.star.table.CellRangeListSource" ), aArgs ), uno::UNO_QUERY );
+                xListEntrySink->setListEntrySource( xSource );
+                bRes = true;
+            }
+        }
+    }
+    return bRes;
 }
 //__________________________________________________________________________________________________
 bool ImportContext::importImageAlignProperty(
@@ -1921,11 +2055,13 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
-    DialogImport* pImport = new DialogImport( xContext, xDialogModel, xDocument );
-    return ::xmlscript::createDocumentHandler(
-        static_cast< xml::input::XRoot * >( pImport ) );
+    // single set of styles and stylenames apply to all containees
+    :: boost::shared_ptr< ::std::vector< ::rtl::OUString > > pStyleNames( new ::std::vector< ::rtl::OUString > );
+    :: boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new ::std::vector< css::uno::Reference< css::xml::input::XElement > > );
+     return ::xmlscript::createDocumentHandler(
+         static_cast< xml::input::XRoot * >(
+            new DialogImport( xContext, xDialogModel, pStyleNames, pStyles, xDocument ) ) );
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

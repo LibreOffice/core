@@ -56,6 +56,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 #include <com/sun/star/container/XNamed.hpp>
 
@@ -688,9 +689,9 @@ private:
 
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
-    SfxObjectShell* mpShell;
     sal_Bool m_bDocClosed;
-
+    SfxObjectShell* mpShell;
+    rtl::OUString msProject;
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
@@ -698,7 +699,7 @@ OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
-
+    msProject = rtl::OUString::createFromAscii("Standard");
 }
 
 void
@@ -716,6 +717,14 @@ EventListener::setShellFromModel()
         }
         pShell = SfxObjectShell::GetNext( *pShell );
     }
+    // set ProjectName from model
+    try
+    {
+        uno::Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
+        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+        msProject = xVBAMode->getProjectName();
+    }
+    catch ( uno::Exception& ) {}
 }
 
 //XEventListener
@@ -772,13 +781,13 @@ EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::Invocatio
 
 // XCloseListener
 void SAL_CALL
-EventListener::queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
+EventListener::queryClosing( const lang::EventObject& /*Source*/, ::sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
 {
     //Nothing to do
 }
 
 void SAL_CALL
-EventListener::notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+EventListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     m_bDocClosed = sal_True;
     uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
@@ -931,36 +940,34 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
     if ( !xDlg.is() )
     {
-    OSL_TRACE("Getting Control");
+        OSL_TRACE("Getting Control");
         // evt.Source is
         // a) Dialog
         // b) xShapeControl ( from api (sheet control) )
         // c) eventmanager ( I guess )
         // d) vba control ( from api also )
-    uno::Reference< drawing::XControlShape > xCntrlShape( evt.Source, uno::UNO_QUERY );
-    uno::Reference< awt::XControl > xControl( aEvent.Source, uno::UNO_QUERY );
-    if ( xCntrlShape.is() )
-    {
-                // for sheet controls ( that fire from the api ) we don't
-                // have the real control ( thats only available from the view )
-                // api code creates just a control instance that is transferred
-                // via aEvent.Arguments[ 0 ] that control though has no
-                // info like name etc.
-        uno::Reference< drawing::XControlShape >  xCntrlShape( evt.Source, UNO_QUERY_THROW );
-        OSL_TRACE("Got control shape");
-        uno::Reference< container::XNamed > xName( xCntrlShape->getControl(), uno::UNO_QUERY_THROW );
-        OSL_TRACE("Got xnamed ");
-        sName = xName->getName();
-    }
-    else
+        uno::Reference< drawing::XControlShape > xCntrlShape( evt.Source, uno::UNO_QUERY );
+        uno::Reference< awt::XControl > xControl( aEvent.Source, uno::UNO_QUERY );
+        if ( xCntrlShape.is() )
         {
-                // Userform control ( fired from the api or from event manager )
-        uno::Reference< beans::XPropertySet > xProps;
-        OSL_TRACE("Getting properties");
-        xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sName;
-    }
-
+            // for sheet controls ( that fire from the api ) we don't
+            // have the real control ( thats only available from the view )
+            // api code creates just a control instance that is transferred
+            // via aEvent.Arguments[ 0 ] that control though has no
+            // info like name etc.
+            OSL_TRACE("Got control shape");
+            uno::Reference< container::XNamed > xName( xCntrlShape->getControl(), uno::UNO_QUERY_THROW );
+            OSL_TRACE("Got xnamed ");
+            sName = xName->getName();
+        }
+        else
+        {
+            // Userform control ( fired from the api or from event manager )
+            uno::Reference< beans::XPropertySet > xProps;
+            OSL_TRACE("Getting properties");
+            xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
+            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sName;
+        }
     }
     //dumpEvent( evt );
     EventInfoHash& infos = getEventTransInfo();
@@ -984,7 +991,6 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             eventInfo_it->second.begin();
         std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
 
-        StarBASIC* pBasic = mpShell->GetBasic();
         BasicManager* pBasicManager = mpShell->GetBasicManager();
         rtl::OUString sProject;
         rtl::OUString sScriptCode( evt.ScriptCode );
