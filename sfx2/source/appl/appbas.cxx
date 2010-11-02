@@ -284,20 +284,6 @@ StarBASIC* SfxApplication::GetBasic()
     return GetBasicManager()->GetLib(0);
 }
 
-//--------------------------------------------------------------------
-
-void SfxApplication::EnterBasicCall()
-{
-    // TODO: remove this no-op
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::LeaveBasicCall()
-{
-    // TODO: remove this no-op
-}
-
 //-------------------------------------------------------------------------
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {

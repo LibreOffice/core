@@ -241,8 +241,6 @@ public:
     StarBASIC*                  GetBasic();
     USHORT                      SaveBasicManager() const;
     USHORT                      SaveBasicAndDialogContainer() const;
-    void                        EnterBasicCall();
-    void                        LeaveBasicCall();
     void                        RegisterBasicConstants( const char *pPrefix,
                                                         const SfxConstant *pConsts,
                                                         USHORT nCount );

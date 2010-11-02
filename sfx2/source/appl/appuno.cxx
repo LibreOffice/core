@@ -1727,7 +1727,6 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
     throw ( ::com::sun::star::uno::RuntimeException )
 {
     SfxApplication* pApp = SFX_APP();
-    pApp->EnterBasicCall();
     SfxObjectShell* pCurrent = pSh;
     if ( !pCurrent )
         // all not full qualified names use the BASIC of the given or current document
@@ -1850,7 +1849,6 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
         nErr = SbxBase::GetError();
     }
 
-    pApp->LeaveBasicCall();
     SbxBase::ResetError();
     return nErr;
 }
