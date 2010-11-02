@@ -207,7 +207,10 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool SmGraphicWindow::IsInlineEditEnabled() const
 {
-    return pViewShell->GetEditWindow()->IsInlineEditEnabled();
+    //Avoid crash on startup (happens when starmath is selected from splash screen)
+    if(pViewShell->GetEditWindow())
+        return pViewShell->GetEditWindow()->IsInlineEditEnabled();
+    return false;
 }
 
 void SmGraphicWindow::GetFocus()
