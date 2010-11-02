@@ -575,7 +575,7 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, Prin
     }
 
     uno::Sequence < beans::PropertyValue > aProps(1);
-    aProps[0].Name = ::rtl::OUString::createFromAscii( "PrintSheets" );
+    aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PrintSheets" ));
     aProps[0].Value <<= aSheets;
     SetAdditionalPrintOptions( aProps );
 

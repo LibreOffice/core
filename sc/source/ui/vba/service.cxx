@@ -101,9 +101,9 @@ extern "C"
                     reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
 
                 Reference< registry::XRegistryKey >xKey = pKey->createKey(
-                    rtl::OUString::createFromAscii( ("ooo.vba.Globals/UNO/SINGLETONS/ooo.vba.theGlobals") ) );
-                xKey->setStringValue( ::rtl::OUString::createFromAscii(
-                    ("ooo.vba.Globals") ) );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("ooo.vba.Globals/UNO/SINGLETONS/ooo.vba.theGlobals") )) );
+                xKey->setStringValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    ("ooo.vba.Globals") )) );
                 return sal_True;
             }
             catch( uno::Exception& /*e*/ )

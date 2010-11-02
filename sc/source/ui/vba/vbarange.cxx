@@ -263,7 +263,7 @@ ScCellRangesBase* ScVbaRange::getCellRangesBase() throw ( uno::RuntimeException 
         return ScCellRangesBase::getImplementation( mxRanges );
     if( mxRange.is() )
         return ScCellRangesBase::getImplementation( mxRange );
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("General Error creating range - Unknown" ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("General Error creating range - Unknown" )), uno::Reference< uno::XInterface >() );
 }
 
 ScCellRangeObj* ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
@@ -510,7 +510,7 @@ public:
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         sal_Int16 nType = ::comphelper::getINT16(
-            xNumberProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) );
+            xNumberProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) );
         return nType;
     }
 
@@ -518,7 +518,7 @@ public:
     {
         lang::Locale aLocale;
         uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();
-        xNumProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aLocale;
+        xNumProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Locale" )) ) >>= aLocale;
         sal_Int32 nNewIndex = mxFormats->queryKey(rFormat, aLocale, false );
         if ( nNewIndex == -1 ) // format not defined
         {
@@ -532,7 +532,7 @@ public:
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         lang::Locale aLocale;
-        xNumberProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aLocale;
+        xNumberProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Locale" )) ) >>= aLocale;
         uno::Reference<util::XNumberFormatTypes> xTypes( mxFormats, uno::UNO_QUERY );
         if ( xTypes.is() )
         {
@@ -919,7 +919,7 @@ public:
 
 };
 
-const static rtl::OUString sNA = rtl::OUString::createFromAscii("#N/A");
+const static rtl::OUString sNA(RTL_CONSTASCII_USTRINGPARAM("#N/A"));
 
 class Dim1ArrayValueSetter : public ArrayVisitor
 {
@@ -1482,10 +1482,10 @@ uno::Any SAL_CALL ScVbaRange::getName() throw (uno::RuntimeException)
     uno::Reference< frame::XModel > xModel = pDocShell ? pDocShell->GetModel() : NULL;
     if ( !xModel.is() )
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid document" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid document" )), uno::Reference< uno::XInterface >() );
     }
     uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("NamedRanges")) , uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"))) , uno::UNO_QUERY_THROW );
 
     uno::Reference< excel::XNames > xNames( new ScVbaNames( uno::Reference< XHelperInterface >(), mxContext , xNamedRanges , xModel ) );
     sal_Int32 nCount = xNames->getCount();
@@ -2408,7 +2408,7 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Illegal param" ) ), uno::Reference< uno::XInterface >() );
 
         if ( aRange.aStart.Row() < 0 || aRange.aEnd.Row() < 0 )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii("Internal failure, illegal param"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Internal failure, illegal param")), uno::Reference< uno::XInterface >() );
         // return a normal range ( even for multi-selection
         uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aRange ) );
         return new ScVbaRange( mxParent, mxContext, xRange, true  );
@@ -2455,7 +2455,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Illegal param" ) ), uno::Reference< uno::XInterface >() );
 
         if ( aRange.aStart.Col() < 0 || aRange.aEnd.Col() < 0 )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii("Internal failure, illegal param"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Internal failure, illegal param")), uno::Reference< uno::XInterface >() );
     }
     // Columns() - no params
     uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aRange ) );
@@ -3224,7 +3224,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Range::Replace, illegal value for LookIn." )) , uno::Reference< uno::XInterface >() );
                 }
                 newOptions.SetCellType( nSearchType );
-                xDescriptor->setPropertyValue( rtl::OUString::createFromAscii( "SearchType" ), uno::makeAny( nSearchType ) );
+                xDescriptor->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SearchType" )), uno::makeAny( nSearchType ) );
             }
         }
 
@@ -3273,7 +3273,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 else
                     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Range::Replace, illegal value for SearchDirection" )) , uno::Reference< uno::XInterface >() );
                 newOptions.SetBackward( bSearchBackwards );
-                xDescriptor->setPropertyValue( rtl::OUString::createFromAscii( "SearchBackwards" ), uno::makeAny( bSearchBackwards ) );
+                xDescriptor->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SearchBackwards" )), uno::makeAny( bSearchBackwards ) );
             }
         }
 
@@ -4789,7 +4789,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( Destination.hasValue() )
     {
         if( !( Destination >>= xRange ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Destination parameter should be a range" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Destination parameter should be a range" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set range\n");
     }
@@ -4804,7 +4804,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if ( DataType.hasValue() )
     {
         if( !( DataType >>= xlTextParsingType ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "DataType parameter should be a short" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataType parameter should be a short" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set Datatype\n" );
     }
@@ -4814,7 +4814,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( TextQualifier.hasValue() )
     {
         if( !( TextQualifier >>= xlTextQualifier ))
-             throw uno::RuntimeException( rtl::OUString::createFromAscii( "TextQualifier parameter should be a short" ),
+             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TextQualifier parameter should be a short" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set TextQualifier\n");
     }
@@ -4823,7 +4823,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( ConsecutiveDelimiter.hasValue() )
     {
         if( !( ConsecutiveDelimiter >>= bConsecutiveDelimiter ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "ConsecutiveDelimiter parameter should be a boolean" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ConsecutiveDelimiter parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set ConsecutiveDelimiter\n");
     }
@@ -4832,7 +4832,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( Tab.hasValue() && bDilimited )
     {
         if( !( Tab >>= bTab ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Tab parameter should be a boolean" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Tab parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set Tab\n");
     }
@@ -4841,7 +4841,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( Semicolon.hasValue() && bDilimited )
     {
         if( !( Semicolon >>= bSemicolon ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Semicolon parameter should be a boolean" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Semicolon parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set Semicolon\n");
     }
@@ -4849,7 +4849,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( Comma.hasValue() && bDilimited )
     {
         if( !( Comma >>= bComma ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Comma parameter should be a boolean" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Comma parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set Comma\n");
     }
@@ -4857,7 +4857,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( Space.hasValue() && bDilimited )
     {
         if( !( Space >>= bSpace ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Space parameter should be a boolean" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Space parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
         OSL_TRACE("set Space\n");
     }
@@ -4869,12 +4869,12 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         {
             if( OtherChar.hasValue() )
                 if( !( OtherChar >>= sOtherChar ) )
-                    throw uno::RuntimeException( rtl::OUString::createFromAscii( "OtherChar parameter should be a String" ),
+                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OtherChar parameter should be a String" )),
                         uno::Reference< uno::XInterface >() );
         OSL_TRACE("set OtherChar\n" );
         }
      else if( bOther )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Other parameter should be a True" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Other parameter should be a True" )),
                     uno::Reference< uno::XInterface >() );
     }
     // FieldInfo, Optional Variant. An array containing parse information for the individual columns of data.
@@ -4889,7 +4889,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( DecimalSeparator.hasValue() )
     {
         if( !( DecimalSeparator >>= sDecimalSeparator ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "DecimalSeparator parameter should be a String" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DecimalSeparator parameter should be a String" )),
                 uno::Reference< uno::XInterface >() );
         OSL_TRACE("set DecimalSeparator\n" );
     }
@@ -4897,7 +4897,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if( ThousandsSeparator.hasValue() )
     {
         if( !( ThousandsSeparator >>= sThousandsSeparator ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "ThousandsSeparator parameter should be a String" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ThousandsSeparator parameter should be a String" )),
                 uno::Reference< uno::XInterface >() );
         OSL_TRACE("set ThousandsSpeparator\n" );
     }
@@ -5289,9 +5289,9 @@ throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::Run
 
     Data >>= xIntRes;
     uno::Reference< script::XInvocation > xInvRes(xIntRes, uno::UNO_QUERY_THROW);
-    rtl::OUString oMoveNext = rtl::OUString::createFromAscii("MoveNext") ;
-    rtl::OUString oEof  = rtl::OUString::createFromAscii("EOF") ;
-    rtl::OUString oFields  = rtl::OUString::createFromAscii("Fields") ;
+    rtl::OUString oMoveNext(RTL_CONSTASCII_USTRINGPARAM("MoveNext")) ;
+    rtl::OUString oEof(RTL_CONSTASCII_USTRINGPARAM("EOF")) ;
+    rtl::OUString oFields(RTL_CONSTASCII_USTRINGPARAM("Fields")) ;
 
     if( !xInvRes->hasMethod(oMoveNext))
     {
@@ -5302,7 +5302,7 @@ throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::Run
     aRet = xInvRes->getValue(oFields);
     aRet >>= xIntFields;
     uno::Reference< script::XInvocation > xInvFields(xIntFields, uno::UNO_QUERY_THROW);
-    aRet = xInvFields->getValue( rtl::OUString::createFromAscii("Count")) ;
+    aRet = xInvFields->getValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Count"))) ;
     aRet >>= lColCnt;
 
     //Set the assign column number
@@ -5330,12 +5330,12 @@ throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::Run
             nCol = l;
             aPar <<= nCol;
             //get every field
-            aRet = xInvFields->invoke( rtl::OUString::createFromAscii("Item"), uno::Sequence< uno::Any >(&aPar,1) , aOutParamIndex,aOutParam);
+            aRet = xInvFields->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Item")), uno::Sequence< uno::Any >(&aPar,1) , aOutParamIndex,aOutParam);
             aRet >>= xIntFld;
             uno::Reference< script::XInvocation > xInvFld(xIntFld, uno::UNO_QUERY_THROW); //Get the Field obj
 
             //set the field value
-            aRet = xInvFld->getValue( rtl::OUString::createFromAscii("Value") );
+            aRet = xInvFld->getValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")) );
             uno::Reference< excel::XRange > xRngToFill = xRngPos->Offset(aCrrRow,aCrrCol );
 
             xRngToFill->setValue(aRet);

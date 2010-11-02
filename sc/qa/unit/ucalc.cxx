@@ -80,13 +80,13 @@ void Test::createDocument()
 {
     ScDocument *doc = new ScDocument();
 
-    rtl::OUString aTabName = rtl::OUString::createFromAscii ("foo");
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM( ("foo") );
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             doc->InsertTab (0, aTabName));
     double val = 1;
     doc->SetValue (0, 0, 0, val);
     doc->SetValue (0, 1, 0, val);
-    doc->SetString (0, 2, 0, rtl::OUString::createFromAscii ("=SUM(A1:A2)"));
+    doc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
     doc->CalcAll();
     double result;
     doc->GetValue (0, 2, 0, result);
