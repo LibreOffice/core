@@ -112,7 +112,7 @@ public class ColourConverter {
      * cases where the 16 colour values are something other than there default
      * values (e.g. in the case of pocket Excel)
      *
-     * @param short[] a 16 bit array mapping the 16 colours to there values
+     * @param lookup[] a 16 bit array mapping the 16 colours to their values
      */
     public ColourConverter(short lookup[]) {
 
@@ -155,7 +155,7 @@ public class ColourConverter {
      * This method maps a Pocket Word colour index value to an RGB value as
      * used by OpenOffice.
      *
-     * @param   index   The index into Pocket Word's colour table.
+     * @param   colour   The index into Pocket Word's colour table.
      *
      * @return  A Color object representing the RGB value of the Pocket Word
      *          colour.
