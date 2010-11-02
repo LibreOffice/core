@@ -216,14 +216,12 @@ IMPL_LINK( BasicIDEData, ExecuteMacroEvent, void *, pData )
 {
     if ( pData )
     {
-        SFX_APP()->EnterBasicCall();
         SbMethod* pMethod = (SbMethod*)pData;
 
         // Ist es eine StarScript-Methode? Am Parent erkennen
         DBG_ASSERT( pMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
         BasicIDE::RunMethod( pMethod );
         pMethod->ReleaseRef();  // muss vorher inkrementiert worden sein!
-        SFX_APP()->LeaveBasicCall();
     }
     return 0;
 }

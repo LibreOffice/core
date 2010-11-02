@@ -225,7 +225,6 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEDLL::Init();
 
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
-    SFX_APP()->EnterBasicCall();
 
     String aScriptURL;
     BOOL bError = FALSE;
@@ -344,8 +343,6 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     }
 
     delete pChooser;
-
-    SFX_APP()->LeaveBasicCall();
 
     return ::rtl::OUString( aScriptURL );
 }
