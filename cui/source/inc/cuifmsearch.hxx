@@ -31,7 +31,7 @@
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
-#include <svx/fmsearch.hxx> //CHINA001
+#include <svx/fmsearch.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
@@ -55,7 +55,7 @@ namespace svxform {
 }
 
 // ===================================================================================================
-// = class FmSearchDialog - Dialog fuer Suchen in Formularen/Tabellen
+// = class FmSearchDialog - Dialog for searching in Forms/Tables
 // ===================================================================================================
 
 struct FmSearchProgress;
@@ -66,7 +66,7 @@ class FmSearchDialog : public ModalDialog
 {
     friend class FmSearchEngine;
 
-    // meine ganzen Controls
+    // my all Controls
     FixedLine       m_flSearchFor;
     RadioButton     m_rbSearchForText;
     RadioButton     m_rbSearchForNull;
@@ -104,19 +104,19 @@ class FmSearchDialog : public ModalDialog
 
     Window*         m_pPreSearchFocus;
 
-    Link    m_lnkFoundHandler;          // Handler fuer "gefunden"
-    Link    m_lnkCanceledNotFoundHdl;   // Handler fuer Positionierung des Cursors
+    Link    m_lnkFoundHandler;          // Handler for "found"
+    Link    m_lnkCanceledNotFoundHdl;   // Handler for Positioning the Cursors
 
-    Link    m_lnkContextSupplier;       // fuer Suche in verschiedenen Kontexten
+    Link    m_lnkContextSupplier;       // for search in contexts
 
-    // ein Array, in dem ich mir fuer jeden Kontext das aktuell selektierte Feld merke
+    // an Array, in dem ich mir fuer jeden Kontext das aktuell selektierte Feld merke
     ::std::vector<String> m_arrContextFields;
 
     // fuer die eigentliche Arbeit ...
     FmSearchEngine* m_pSearchEngine;
 
     Timer           m_aDelayedPaint;
-        // siehe EnableSearchUI
+        // see EnableSearchUI
 
     ::svxform::FmSearchConfigItem*      m_pConfig;
 public:
@@ -183,7 +183,7 @@ protected:
     void SaveParams() const;
 
 private:
-    // Handler fuer die Controls
+    // Handler for the Controls
     DECL_LINK( OnClickedFieldRadios, Button* );
     DECL_LINK( OnClickedSearchAgain, Button* );
     DECL_LINK( OnClickedSpecialSettings, Button* );
@@ -201,7 +201,7 @@ private:
     DECL_LINK( OnSearchProgress, FmSearchProgress* );
 
     DECL_LINK( OnDelayedPaint, void* );
-        // siehe EnableSearchUI
+        // see EnableSearchUI
 
     void implMoveControls(Control** _ppControls, sal_Int32 _nControls, sal_Int32 _nUp, Control* _pToResize);
 

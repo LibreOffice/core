@@ -437,7 +437,7 @@ protected:
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
 
-    SvxConfigPage( Window*, /* const ResId&, */ const SfxItemSet& );
+    SvxConfigPage( Window*, const SfxItemSet& );
     virtual ~SvxConfigPage();
 
     DECL_LINK( MoveHdl, Button * );
@@ -783,7 +783,7 @@ private:
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
 
-    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);// Added by shizhoubo
+    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
 
 public:
 

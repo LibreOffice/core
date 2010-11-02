@@ -42,7 +42,6 @@ class SvxAreaTabDialog : public SfxTabDialog
 {
 private:
     SdrModel*           mpDrawModel;
-//  const SdrView*      mpView;
 
     XColorTable*        mpColorTab;
     XColorTable*        mpNewColorTab;
@@ -120,10 +119,8 @@ class SvxTransparenceTabPage : public SvxTabPage
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    //CHINA001 UINT16*             pPageType;
-    //CHINA001 UINT16*             pDlgType;
-    UINT16             nPageType; //add CHINA001
-    UINT16             nDlgType;  //add CHINA001
+    UINT16             nPageType;
+    UINT16             nDlgType;
 
     // main selection
     FixedLine           aFlProp;
@@ -188,11 +185,9 @@ public:
     virtual int  DeactivatePage(SfxItemSet* pSet);
     virtual void PointChanged(Window* pWindow, RECT_POINT eRP);
 
-    //CHINA001 void SetPageType(UINT16 *pInType) { pPageType = pInType; }
-    //CHINA001 void SetDlgType(UINT16* pInType) { pDlgType = pInType; }
-    void SetPageType(UINT16 nInType) { nPageType = nInType; } //add CHINA001
-    void SetDlgType(UINT16 nInType) { nDlgType = nInType; }//add CHINA001
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    void SetPageType(UINT16 nInType) { nPageType = nInType; }
+    void SetDlgType(UINT16 nInType) { nDlgType = nInType; }
+    virtual void PageCreated (SfxAllItemSet aSet);
 };
 
 /*************************************************************************
@@ -258,12 +253,9 @@ private:
     ChangeType*         pnGradientListState;
     ChangeType*         pnHatchingListState;
 
-    //CHINA001 USHORT*             pPageType;
-    //CHINA001 USHORT*             pDlgType;
-    //CHINA001 USHORT*             pPos;
-    UINT16 nPageType; //add CHINA001
-    UINT16 nDlgType;//add CHINA001
-    UINT16 nPos; //add CHINA001
+    UINT16 nPageType;
+    UINT16 nDlgType;
+    UINT16 nPos;
 
     BOOL*               pbAreaTP;
 
@@ -287,7 +279,6 @@ private:
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ClickBitmapHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
-//  DECL_LINK( ModifyTransparentHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
@@ -314,14 +305,11 @@ public:
                 { pHatchingList = pHtchLst; }
     void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
 
-    //CHINA001 void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001
-    //CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }//add CHINA001
-    //CHINA001 void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
-    void    SetPos( UINT16 nInPos ) { nPos = nInPos; }//add CHINA001
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; }
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }
+    void    SetPos( UINT16 nInPos ) { nPos = nInPos; }
     void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
@@ -357,8 +345,8 @@ private:
 
     XColorTable*        pColorTab;
     ChangeType*         pnColorTableState;
-    UINT16              nPageType;  //add CHINA001
-    UINT16              nDlgType;   //add CHINA001
+    UINT16              nPageType;
+    UINT16              nDlgType;
     USHORT*             pPos;
     BOOL*               pbAreaTP;
 
@@ -388,13 +376,11 @@ public:
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
-//CHINA001  void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-//CHINA001  void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }    //add CHINA001
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; }
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }
     void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
     void    DisablePage( BOOL bIn ) { bDisable = bIn; }
 };
 
@@ -797,7 +783,6 @@ public:
 
     virtual void FillUserData();
 };
-
 
 #endif // _CUI_TAB_AREA_HXX
 

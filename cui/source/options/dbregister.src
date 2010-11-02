@@ -34,7 +34,6 @@
 #define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
 TabPage RID_SFXPAGE_DBREGISTER
 {
-    // HelpId = HID_OPTIONS_DBREGISTER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;

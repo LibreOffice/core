@@ -34,7 +34,7 @@
 #include <vcl/button.hxx>
 #include <svtools/svtreebx.hxx>
 
-#include "hlmarkwn_def.hxx" //ADD CHINA001
+#include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;
 
 //########################################################################
@@ -69,7 +69,6 @@ private:
 
     PushButton      maBtApply;
     PushButton      maBtClose;
-    //SvTreeListBox maLbTree;
     SvxHlmarkTreeLBox maLbTree;
 
     BOOL            mbUserMoved;

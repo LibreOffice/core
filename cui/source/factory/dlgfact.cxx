@@ -132,7 +132,6 @@ short AbstractSvxZoomDialog_Impl::Execute()
     return pDlg->Execute();
 }
 
-//IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
