@@ -41,7 +41,7 @@ module com { module sun { module star { module java {
     by distributors to determine what versions are supported. If this
     file is modified, then the current settings are regarded as invalid.</p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 exception InvalidJavaSettingsException: JavaInitializationException
 {
