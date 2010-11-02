@@ -111,7 +111,6 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     // --> FME 2005-01-21 #i41075#
     // Only setup the printer if we need one:
-    const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
     const bool bBrowseMode = pOpt->getBrowseMode();
     if( pPDFOut )
         InitPrt( pPDFOut );
