@@ -72,6 +72,16 @@
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX                  "vnd.sun.star.Package:"
 
+class ImageHelper
+{
+public:
+    // The routine will always attempt to return a valid XGraphic for the passed _rURL
+    // additionallly xOutGraphicObject will container the associated XGraphicObject ( if url
+    // is valid for that )
+    // and is set appropriately ( e.g. NULL if non GraphicObject scheme ) or valid object
+    // if the rURL points to a valid object
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >& xOutGraphicObject, const ::rtl::OUString& _rURL );
+};
 
 //  ----------------------------------------------------
 //  class UnoControlEditModel
@@ -634,44 +644,6 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedTextModel, UnoControlModel, szServiceName2_UnoControlFixedTextModel )
-
-};
-
-class UnoMultiPageModel : public UnoControlModel
-{
-protected:
-    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
-
-public:
-                        UnoMultiPageModel();
-                        UnoMultiPageModel( const UnoMultiPageModel& rModel ) : UnoControlModel( rModel ) {;}
-
-    UnoControlModel*    Clone() const { return new UnoMultiPageModel( *this ); }
-
-    // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, UnoControlModel, szServiceName_UnoMultiPageModel )
-
-};
-//  ----------------------------------------------------
-//  class UnoGroupBoxControl
-//  ----------------------------------------------------
-class UnoMultiPageControl : public UnoControlBase
-{
-public:
-                        UnoMultiPageControl();
-    ::rtl::OUString     GetComponentServiceName();
-
-    sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, UnoControlBase, szServiceName_UnoMultiPageControl )
 
 };
 

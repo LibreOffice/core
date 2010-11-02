@@ -26,7 +26,8 @@
  *
  ************************************************************************/
 
-#include "vclxtabpage.hxx"
+#include <vclxtabpage.hxx>
+
 #include "forward.hxx"
 
 #include <com/sun/star/awt/PosSize.hpp>

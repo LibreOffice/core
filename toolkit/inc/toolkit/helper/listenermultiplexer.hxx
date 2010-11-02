@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/XTextListener.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
+#include <com/sun/star/awt/XTabListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/awt/XSpinListener.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
@@ -181,6 +182,17 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener )
     void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
+//  class TabListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener )
+    void SAL_CALL inserted( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removed( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL changed( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL activated( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL deactivated( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
 //  ----------------------------------------------------

@@ -174,6 +174,18 @@ const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) c
 
 // -----------------------------------------------------------------------
 
+WinBits TabControl::ImplInitStyle( WinBits nStyle )
+{
+    if ( !(nStyle & WB_NOTABSTOP) )
+        nStyle |= WB_TABSTOP;
+    if ( !(nStyle & WB_NOGROUP) )
+        nStyle |= WB_GROUP;
+
+    return nStyle;
+}
+
+// -----------------------------------------------------------------------
+
 void TabControl::ImplInitSettings( BOOL bFont,
                                    BOOL bForeground, BOOL bBackground )
 {
@@ -230,6 +242,7 @@ TabControl::TabControl( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_TABCONTROL )
 {
     ImplInit( pParent, nStyle );
+    OSL_TRACE("*** TABCONTROL no notabs? %s", ( GetStyle() & WB_NOBORDER ) ? "true" : "false" );
 }
 
 // -----------------------------------------------------------------------
@@ -695,7 +708,13 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
 
     if ( pPage )
     {
-        pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
+        if (  ( GetStyle() & WB_NOBORDER ) )
+        {
+            Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
+            pPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
+        }
+        else
+            pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
 
         // activate page here so the conbtrols can be switched
         // also set the help id of the parent window to that of the tab page
@@ -755,6 +774,12 @@ BOOL TabControl::ImplPosCurTabPage()
     ImplTabItem* pItem = ImplGetItem( GetCurPageId() );
     if ( pItem && pItem->mpTabPage )
     {
+        if (  ( GetStyle() & WB_NOBORDER ) )
+        {
+            Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
+            pItem->mpTabPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
+            return TRUE;
+        }
         Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
         pItem->mpTabPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
         return TRUE;
@@ -1163,7 +1188,8 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
 
 void TabControl::Paint( const Rectangle& rRect )
 {
-    ImplPaint( rRect, false );
+    if (  !( GetStyle() & WB_NOBORDER ) )
+        ImplPaint( rRect, false );
 }
 
 // -----------------------------------------------------------------------
@@ -1599,6 +1625,10 @@ void TabControl::StateChanged( StateChangedType nType )
     {
         ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
+    }
+    else if ( nType == STATE_CHANGE_STYLE )
+    {
+        SetStyle( ImplInitStyle( GetStyle() ) );
     }
 }
 

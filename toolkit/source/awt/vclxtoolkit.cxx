@@ -116,6 +116,7 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
+#include "awt/vclxtabcontrol.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -283,6 +284,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "floatingwindow",     WINDOW_FLOATINGWINDOW },
     { "framewindow",        VCLWINDOW_FRAMEWINDOW },
     { "groupbox",           WINDOW_GROUPBOX },
+    { "frame",          WINDOW_GROUPBOX },
     { "helpbutton",         WINDOW_HELPBUTTON },
     { "imagebutton",        WINDOW_IMAGEBUTTON },
     { "imageradiobutton",   WINDOW_IMAGERADIOBUTTON },
@@ -623,7 +625,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     Window* pNewWindow = NULL;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
-
+    bool bFrameControl = false;
+    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("frame") ) )
+        bFrameControl = true;
+    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs") ) )
+    {
+        nWinBits |= WB_NOBORDER;
+        nType = ImplGetComponentType( String( RTL_CONSTASCII_USTRINGPARAM("tabcontrol") ) );
+    }
     if ( !pParent )
     {
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
@@ -720,7 +729,17 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new FloatingWindow( pParent, nWinBits );
             break;
             case WINDOW_GROUPBOX:
+                        {
                 pNewWindow = new GroupBox( pParent, nWinBits );
+                                if ( bFrameControl )
+                                {
+                                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
+                                    *ppNewComp = new VCLXFrame;
+                                    // Frame control needs to recieve
+                                    // Mouse events
+                                    pGroupBox->SetMouseTransparent( FALSE );
+                                }
+                        }
             break;
             case WINDOW_HELPBUTTON:
                 pNewWindow = new HelpButton( pParent, nWinBits );
@@ -860,6 +879,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
+                *ppNewComp = new VCLXMultiPage;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );

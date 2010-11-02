@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "vclxtabcontrol.hxx"
+#include <vclxtabcontrol.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <sal/macros.h>

@@ -2290,6 +2290,7 @@ void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 VCLXDialog::VCLXDialog()
 {
+    OSL_TRACE("XDialog created");
 }
 
 VCLXDialog::~VCLXDialog()
@@ -2498,11 +2499,318 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
+
+//  ----------------------------------------------------
+//  class VCLXTabPage
+//  ----------------------------------------------------
+VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
+{
+    OSL_TRACE("VCLXMultiPage::VCLXMultiPage()" );
+}
+
+void VCLXMultiPage::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_MULTIPAGEVALUE,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEALIGN,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_FOCUSONCLICK,
+                     0);
+    VCLXContainer::ImplGetPropertyIds( rIds );
+}
+
+VCLXMultiPage::~VCLXMultiPage()
+{
+}
+void SAL_CALL VCLXMultiPage::dispose() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::lang::EventObject aObj;
+    aObj.Source = (::cppu::OWeakObject*)this;
+    maTabListeners.disposeAndClear( aObj );
+    VCLXContainer::dispose();
+}
+::com::sun::star::uno::Any SAL_CALL VCLXMultiPage::queryInterface(const ::com::sun::star::uno::Type & rType )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, static_cast< awt::XSimpleTabController*>( this ) );
+
+    return ( aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ) );
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXMultiPage )
+    VCLXContainer::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XView
+void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
+    {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
+        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    }
+}
+
+// ::com::sun::star::awt::XDevice,
+::com::sun::star::awt::DeviceInfo SAL_CALL VCLXMultiPage::getInfo()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+    return aInfo;
+}
+
+uno::Any SAL_CALL VCLXMultiPage::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    OSL_TRACE(" **** VCLXMultiPage::getProperty( %s )",
+        rtl::OUStringToOString( PropertyName,
+        RTL_TEXTENCODING_UTF8 ).getStr() );
+    ::com::sun::star::uno::Any aProp;
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+
+        case BASEPROPERTY_MULTIPAGEVALUE:
+        {
+            aProp <<= getActiveTabID();
+        }
+        break;
+        default:
+            aProp <<= VCLXContainer::getProperty( PropertyName );
+    }
+    return aProp;
+}
+
+void SAL_CALL VCLXMultiPage::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", rtl::OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    TabControl* pTabControl = (TabControl*)GetWindow();
+    if ( pTabControl )
+    {
+        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_MULTIPAGEVALUE:
+            {
+                OSL_TRACE("***MULTIPAGE VALUE");
+                sal_Int32 nId(0);
+                Value >>= nId;
+                // when the multipage is created we attempt to set the activepage
+                // but no pages created
+                if ( nId && nId <= getWindows().getLength() )
+                    activateTab( nId );
+            }
+            case BASEPROPERTY_GRAPHIC:
+            {
+                Reference< XGraphic > xGraphic;
+                if (( Value >>= xGraphic ) && xGraphic.is() )
+                {
+                    Image aImage( xGraphic );
+
+                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    pTabControl->SetBackground( aWallpaper );
+                }
+                else if ( bVoid || !xGraphic.is() )
+                {
+                    Color aColor = pTabControl->GetControlBackground().GetColor();
+                    if ( aColor == COL_AUTO )
+                        aColor = pTabControl->GetSettings().GetStyleSettings().GetDialogColor();
+
+                    Wallpaper aWallpaper( aColor );
+                    pTabControl->SetBackground( aWallpaper );
+                }
+            }
+            break;
+
+            default:
+            {
+                VCLXContainer::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+TabControl *VCLXMultiPage::getTabControl() const throw (uno::RuntimeException)
+{
+    TabControl *pTabControl = dynamic_cast< TabControl* >( GetWindow() );
+    if ( pTabControl )
+        return pTabControl;
+    throw uno::RuntimeException();
+}
+sal_Int32 SAL_CALL VCLXMultiPage::insertTab() throw (uno::RuntimeException)
+{
+    TabControl *pTabControl = getTabControl();
+    TabPage* pTab = new TabPage( pTabControl );
+    rtl::OUString title (RTL_CONSTASCII_USTRINGPARAM( "" ) );
+    return static_cast< sal_Int32 >( insertTab( pTab, title ) );
+}
+
+USHORT VCLXMultiPage::insertTab( TabPage* pPage, rtl::OUString& sTitle )
+{
+    TabControl *pTabControl = getTabControl();
+    USHORT id = sal::static_int_cast< USHORT >( mTabId++ );
+    pTabControl->InsertPage( id, sTitle.getStr(), TAB_APPEND );
+    pTabControl->SetTabPage( id, pPage );
+    return id;
+}
+
+void SAL_CALL VCLXMultiPage::removeTab( sal_Int32 ID ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+{
+    TabControl *pTabControl = getTabControl();
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+    pTabControl->RemovePage( sal::static_int_cast< USHORT >( ID ) );
+}
+
+void SAL_CALL VCLXMultiPage::activateTab( sal_Int32 ID ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+{
+    TabControl *pTabControl = getTabControl();
+    OSL_TRACE("Attempting to activate tab %d, active tab is %d, numtabs is %d", ID, getActiveTabID(), getWindows().getLength() );
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+    pTabControl->SelectTabPage( sal::static_int_cast< USHORT >( ID ) );
+}
+
+sal_Int32 SAL_CALL VCLXMultiPage::getActiveTabID() throw (uno::RuntimeException)
+{
+    return getTabControl()->GetCurPageId( );
+}
+
+void SAL_CALL VCLXMultiPage::addTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maTabListeners.addInterface( xListener );
+}
+
+void SAL_CALL VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maTabListeners.addInterface( xListener );
+}
+
+void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< beans::NamedValue >& Properties ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    TabControl *pTabControl = getTabControl();
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+
+    for ( int i = 0; i < Properties.getLength(); i++ )
+    {
+        const rtl::OUString &name = Properties[i].Name;
+        const uno::Any &value = Properties[i].Value;
+
+        if ( name  == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
+        {
+            rtl::OUString title = value.get<rtl::OUString>();
+            pTabControl->SetPageText( sal::static_int_cast< USHORT >( ID ), title.getStr() );
+        }
+    }
+}
+
+uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int32 ID )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    TabControl *pTabControl = getTabControl();
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+
+#define ADD_PROP( seq, i, name, val ) {                                \
+        beans::NamedValue value;                                                  \
+        value.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) ); \
+        value.Value = uno::makeAny( val );                                      \
+        seq[i] = value;                                                    \
+    }
+
+    uno::Sequence< beans::NamedValue > props( 2 );
+    ADD_PROP( props, 0, "Title", rtl::OUString( pTabControl->GetPageText( sal::static_int_cast< USHORT >( ID ) ) ) );
+    ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< USHORT >( ID ) ) );
+#undef ADD_PROP
+    return props;
+}
+void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_TABPAGE_DEACTIVATE:
+        {
+            ULONG nPageID = (ULONG)( rVclWindowEvent.GetData() );
+            maTabListeners.deactivated( nPageID );
+            break;
+
+        }
+        case VCLEVENT_TABPAGE_ACTIVATE:
+        {
+            ULONG nPageID = (ULONG)( rVclWindowEvent.GetData() );
+            maTabListeners.activated( nPageID );
+            break;
+        }
+        default:
+            VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
+            break;
+    };
+}
+
 //  ----------------------------------------------------
 //  class VCLXTabPage
 //  ----------------------------------------------------
 VCLXTabPage::VCLXTabPage()
 {
+}
+
+void VCLXTabPage::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEALIGN,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_FOCUSONCLICK,
+                     0);
+    VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
 VCLXTabPage::~VCLXTabPage()
@@ -2594,9 +2902,18 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
+TabPage *VCLXTabPage::getTabPage() const throw (uno::RuntimeException)
+{
+    TabPage *pTabPage = dynamic_cast< TabPage* >( GetWindow() );
+    if ( pTabPage )
+        return pTabPage;
+    throw uno::RuntimeException();
+}
+
 //  ----------------------------------------------------
 //  class VCLXFixedHyperlink
 //  ----------------------------------------------------
+
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
 
     maActionListeners( *this )
@@ -6266,6 +6583,101 @@ VCLXToolBox::~VCLXToolBox()
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
 {
     return getAccessibleFactory().createAccessibleContext( this );
+}
+
+//  ----------------------------------------------------
+//  class VCLXFrame
+//  ----------------------------------------------------
+VCLXFrame::VCLXFrame()
+{
+}
+
+void VCLXFrame::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_LABEL,
+                     0);
+    VCLXContainer::ImplGetPropertyIds( rIds );
+}
+
+VCLXFrame::~VCLXFrame()
+{
+}
+
+::com::sun::star::uno::Any SAL_CALL VCLXFrame::queryInterface(const ::com::sun::star::uno::Type & rType )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    return VCLXContainer::queryInterface( rType );
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXFrame )
+    VCLXContainer::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XView
+void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
+    {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
+        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    }
+}
+
+// ::com::sun::star::awt::XDevice,
+::com::sun::star::awt::DeviceInfo SAL_CALL VCLXFrame::getInfo()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+    return aInfo;
+}
+
+void SAL_CALL VCLXFrame::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+#if OSL_DEBUG_LEVEL > 0
+    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+    (void)bVoid;
+#endif
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        default:
+        {
+            VCLXContainer::setProperty( PropertyName, Value );
+        }
+    }
+}
+
+void VCLXFrame::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+    VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

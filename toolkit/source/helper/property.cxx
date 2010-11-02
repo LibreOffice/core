@@ -56,6 +56,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/types.hxx>
 #include <functional>
 #include <algorithm>
@@ -289,7 +290,9 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "EvenRowBackgroundColor", GRID_EVEN_ROW_BACKGROUND, sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "HeaderBackgroundColor",  GRID_HEADER_BACKGROUND,  sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "GridLineColor",          GRID_LINE_COLOR,         sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_3     ( "RowBackgroundColor",     GRID_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID )
+            DECL_PROP_3     ( "RowBackgroundColor",     GRID_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_DEP_PROP_3 ( "MultiPageValue",          MULTIPAGEVALUE,      sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "AllDialogChildren",                USERFORMCONTAINEES,                Reference< ::com::sun::star::container::XNameContainer >,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
