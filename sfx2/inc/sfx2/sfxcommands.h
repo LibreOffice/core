@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,7 +202,6 @@
 #define CMD_SID_PASTE_SPECIAL                       ".uno:PasteSpecial"
 #define CMD_SID_DOCPATH                             ".uno:DocPath"
 #define CMD_SID_PICKLIST                            ".uno:PickList"
-#define CMD_SID_PLAYMACRO                           ".uno:PlayMacro"
 #define CMD_SID_PLUGINS_ACTIVE                      ".uno:PlugInsActive"
 #define CMD_SID_PRINTDOC                            ".uno:Print"
 #define CMD_SID_PRINTDOCDIRECT                      ".uno:PrintDefault"
@@ -225,7 +224,6 @@
 #define CMD_SID_REPEAT                              ".uno:RepeatAction"
 #define CMD_SID_RUBY_DIALOG                         ".uno:RubyDialog"
 #define CMD_SID_BASICRUN                            ".uno:RunBasic"
-#define CMD_SID_STARTSW                             ".uno:RunStarWriter"
 #define CMD_SID_SAVEDOC                             ".uno:Save"
 #define CMD_SID_SAVEDOCS                            ".uno:SaveAll"
 #define CMD_SID_SAVEASDOC                           ".uno:SaveAs"
@@ -276,7 +274,6 @@
 #define CMD_SID_TITLE                               ".uno:Title"
 #define CMD_SID_BASICIDE_TOGGLEBRKPNT               ".uno:ToggleBreakPoint"
 #define CMD_SID_BASICIDE_SHOWWINDOW                 ".uno:BasicIDEShowWindow"
-#define CMD_SID_EDITMACRO                           ".uno:ToolsMacroEdit"
 #define CMD_SID_UNDO                                ".uno:Undo"
 #define CMD_SID_FORMATPAINTBRUSH                    ".uno:FormatPaintbrush"
 #define CMD_SID_ATTR_UNDO_COUNT                     ".uno:UndoCount"

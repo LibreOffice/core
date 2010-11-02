@@ -304,7 +304,6 @@ public:
     SAL_DLLPRIVATE void         SetProgress_Impl(SfxProgress *);
     SAL_DLLPRIVATE const String& GetLastDir_Impl() const;
     SAL_DLLPRIVATE void         SetLastDir_Impl( const String & );
-    SAL_DLLPRIVATE void         PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBas );
 
     SAL_DLLPRIVATE void         EnterAsynchronCall_Impl();
     SAL_DLLPRIVATE FASTBOOL     IsInAsynchronCall_Impl() const;

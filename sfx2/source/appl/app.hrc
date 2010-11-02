@@ -46,7 +46,6 @@
 #define MSG_CANT_QUIT                           (RID_SFX_APP_START+10)
 #define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
 #define STR_AUTOSAVE                            (RID_SFX_APP_START+12)
-#define STR_MAIL                                (RID_SFX_APP_START+13)
 #define MSG_ERR_WRITE_SBL                       (RID_SFX_APP_START+14)
 #define MSG_IS_SERVER                           (RID_SFX_APP_START+15)
 
@@ -54,10 +53,6 @@
 #define STR_SYSRESEXCEPTION                     (RID_SFX_APP_START+22)
 #define STR_DOUBLEEXCEPTION                     (RID_SFX_APP_START+23)
 #define STR_RESWARNING                          (RID_SFX_APP_START+24)
-#define STR_ERR_NOTEMPLATE                      (RID_SFX_APP_START+27)
-#define STR_RECOVER_TITLE                       (RID_SFX_APP_START+28)
-#define STR_RECOVER_QUERY                       (RID_SFX_APP_START+29)
-#define STR_RECOVER_PREPARED                    (RID_SFX_APP_START+30)
 #define MSG_ERR_SOINIT                          (RID_SFX_APP_START+31)
 
 #define MSG_IOERR_FILE_NOT_FOUND                (RID_SFX_APP_START+32)
@@ -76,11 +71,6 @@
 #define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
 
 #define STR_QUITAPP                             (RID_SFX_APP_START+59)
-#define STR_EXITANDRETURN                       (RID_SFX_APP_START+60)
-#define STR_ERR_NOFILE                          (RID_SFX_APP_START+61)
-#define STR_EXTHELPSTATUS                       (RID_SFX_APP_START+62)
-
-#define STR_ADDRESS_NAME                        (RID_SFX_APP_START+65)
 
 #define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)
 #define RID_STR_HLPAPPNOTSTARTED                (RID_SFX_APP_START+69)
@@ -100,8 +90,6 @@
 #define STR_MEMINFO_OBJINFO                 (RID_SFX_APP_START+86)
 
 #define RID_PLUGIN                          (RID_SFX_APP_START+87)
-
-#define RID_WARN_POST_MAILTO                (RID_SFX_APP_START+88)
 
 #define RID_STR_NOWELCOMESCREEN             (RID_SFX_APP_START+91)
 

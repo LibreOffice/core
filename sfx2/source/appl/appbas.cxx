@@ -352,10 +352,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_PLAYMACRO:
-            PlayMacro_Impl( rReq, GetBasic() );
-            break;
-
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
         {
@@ -429,44 +425,4 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
         }
     }
 }
-
-//-------------------------------------------------------------------------
-
-void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
-{
-    EnterBasicCall();
-    sal_Bool bOK = sal_False;
-
-    // Makro und asynch-Flag
-    SFX_REQUEST_ARG(rReq,pMacro,SfxStringItem,SID_STATEMENT,sal_False);
-    SFX_REQUEST_ARG(rReq,pAsynch,SfxBoolItem,SID_ASYNCHRON,sal_False);
-
-    if ( pAsynch && pAsynch->GetValue() )
-    {
-        // asynchron ausf"uhren
-        GetDispatcher_Impl()->Execute( SID_PLAYMACRO, SFX_CALLMODE_ASYNCHRON, pMacro, 0L );
-        rReq.Done();
-    }
-    else if ( pMacro )
-    {
-        // Statement aufbereiten
-        DBG_ASSERT( pBasic, "no BASIC found" ) ;
-        String aStatement( '[' );
-        aStatement += pMacro->GetValue();
-        aStatement += ']';
-
-        // P"aventiv den Request abschlie\sen, da er ggf. zerst"ort wird
-        rReq.Done();
-        rReq.ReleaseArgs();
-
-        // Statement ausf"uhren
-        pBasic->Execute( aStatement );
-        bOK = 0 == SbxBase::GetError();
-        SbxBase::ResetError();
-    }
-
-    LeaveBasicCall();
-    rReq.SetReturnValue(SfxBoolItem(0,bOK));
-}
-
 

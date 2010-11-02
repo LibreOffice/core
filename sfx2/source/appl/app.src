@@ -102,89 +102,6 @@ Resource SID_UNKNOWN
     String 1 "-" ;
 };
 
-Resource BMP_SFX_COLOR
-{
-    ExtraData =
-    {
-        SID_NEWDOC;             // 043
-        SID_OPENDOC;            // 044
-        SID_CLOSEDOC;           // 045
-        SID_RELOAD;             // 046
-        SID_SAVEASDOC;          // 047
-        SID_PRINTDOC;           // 051
-        SID_SETUPPRINTER;       // 053
-        SID_QUITAPP;            // 054
-        SID_UNDO;               // 055
-        SID_REDO;               // 056
-        SID_REPEAT;             // 057
-        SID_CUT;                // 058
-        SID_COPY;               // 059
-        SID_PASTE;              // 060
-        SID_DELETE;             // 061
-        SID_SELECTALL;          // 062
-        SID_SAVEDOC;            // 063 vormals 046
-        SID_EXITANDRETURN;      // 064 vormals 054
-        SID_RECORDMACRO;        // 095
-        SID_EDITMACRO;          // 096
-        SID_HELPMENU;           // 098
-        SID_CONFIG;             // 123
-        SID_CONFIGTOOLBOX;      // 124
-        0;
-    };
-    Bitmap BMP_SFX_SMALL { File = "sco.bmp" ; };
-    Bitmap BMP_SFX_LARGE { File = "lco.bmp" ; };
-};
-
-Resource BMP_SFX_MONO
-{
-    ExtraData =
-    {
-        SID_NEWDOC;             // 043
-        SID_OPENDOC;            // 044
-        SID_CLOSEDOC;           // 045
-        SID_RELOAD;             // 046
-        SID_SAVEASDOC;          // 047
-        SID_PRINTDOC;           // 051
-        SID_SETUPPRINTER;       // 053
-        SID_QUITAPP;            // 054
-        SID_UNDO;               // 055
-        SID_REDO;               // 056
-        SID_REPEAT;             // 057
-        SID_CUT;                // 058
-        SID_COPY;               // 059
-        SID_PASTE;              // 060
-        SID_DELETE;             // 061
-        SID_SELECTALL;          // 062
-        SID_SAVEDOC;            // 063 vormals 046
-        SID_EXITANDRETURN;      // 064 vormals 054
-        SID_RECORDMACRO;        // 095
-        SID_EDITMACRO;          // 096
-        SID_HELPMENU;           // 098
-        SID_CONFIG;             // 123
-        SID_CONFIGTOOLBOX;      // 124
-        0;
-    };
-    Bitmap BMP_SFX_SMALL { File = "smo.bmp" ; };
-    Bitmap BMP_SFX_LARGE { File = "lmo.bmp" ; };
-};
-
-WarningBox RID_WARN_POST_MAILTO
-{
-    BUTTONS = WB_OK_CANCEL ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
-};
-
-String STR_RECOVER_TITLE
-{
-    Text [ en-US ] = "File Recovery" ;
-};
-
-String STR_RECOVER_QUERY
-{
-    Text [ en-US ] = "Should the file \"$1\" be restored?" ;
-};
-
 String GID_INTERN
 {
     Text [ en-US ] = "Internal" ;
@@ -499,39 +416,9 @@ ToolBox RID_FULLSCREENTOOLBOX
     };
 };
 
-String STR_ERR_NOTEMPLATE
-{
-    Text [ en-US ] = "The selected template has an incorrect format" ;
-};
-
-String STR_ERR_NOFILE
-{
-    Text [ en-US ] = "Can't open file $." ;
-};
-
 String STR_QUITAPP
 {
     Text [ en-US ] = "E~xit" ;
-};
-
-String STR_EXITANDRETURN
-{
-    Text [ en-US ] = "E~xit & return to " ;
-};
-
-String STR_EXTHELPSTATUS
-{
-    Text [ en-US ] = "Select a command or click to select a theme." ;
-};
-
-String STR_MAIL
-{
-    Text [ en-US ] = "Mail" ;
-};
-
-String STR_ADDRESS_NAME
-{
-    Text [ en-US ] = "Addresses" ;
 };
 
 String RID_STR_HELP
