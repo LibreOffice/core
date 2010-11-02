@@ -25,14 +25,14 @@
  *
  ************************************************************************/
 
-package complex.toolkit.interface_tests;
+package complex.toolkit;
 
 import com.sun.star.awt.XRequestCallback;
-import lib.MultiMethodTest;
+// import lib.MultiMethodTest;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.awt.XRequestCallback</code>
@@ -44,7 +44,7 @@ import share.LogWriter;
  */
 public class _XRequestCallback {
 
-    private LogWriter log;
+    // private LogWriter log;
 
     private static final String className =
         "com.sun.star.awt.XRequestCallback" ;
@@ -55,11 +55,10 @@ public class _XRequestCallback {
     String text = null;
 
 
-    public _XRequestCallback(XInterface object, LogWriter log, XMultiServiceFactory xMSF ) {
-        oObj = (XRequestCallback)UnoRuntime.queryInterface(
-                                    XRequestCallback.class, object);
+    public _XRequestCallback(XInterface object, XMultiServiceFactory xMSF ) {
+        oObj = UnoRuntime.queryInterface(XRequestCallback.class, object);
         this.xMSF = xMSF;
-        this.log = log;
+        // this.log = log;
     }
 
 
@@ -70,6 +69,7 @@ public class _XRequestCallback {
      * <ul>
      *  <li> <code>addCallback()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _addCallback() {
 
@@ -80,7 +80,7 @@ public class _XRequestCallback {
         } catch (com.sun.star.uno.RuntimeException ie) {
             res = false;
         }
-        log.println("addCallback called" );
+        System.out.println("addCallback called" );
 
         return res;
     }

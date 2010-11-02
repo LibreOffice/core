@@ -25,31 +25,30 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-ENABLE_EXCEPTIONS=TRUE
-PRJNAME=vcl
-TARGET=helper
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+PRJ = ../../..
+PRJNAME = comphelper
+TARGET = qa_complex_comphelper
 
-# --- Settings -----------------------------------------------------
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/comphelper
+JAVATESTFILES = \
+    Map.java \
+    SequenceOutputStreamUnitTest.java
+    
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile2.pmk
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-# --- Files --------------------------------------------------------
+ALLTAR : javatest
 
-SLOFILES=\
-    $(SLO)$/strhelper.obj   	\
-    $(SLO)$/evntpost.obj		\
-    $(SLO)$/canvasbitmap.obj    \
-    $(SLO)$/canvastools.obj		\
-    $(SLO)$/xconnection.obj		\
-    $(SLO)$/threadex.obj		\
-    $(SLO)$/lazydelete.obj
+.END
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.INCLUDE :  $(PRJ)$/util$/target.pmk

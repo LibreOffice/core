@@ -46,7 +46,7 @@
 
 #include "unotools/localedatawrapper.hxx"
 
-#include "rtl/ustrbuf.hxx"
+#include "rtl/strbuf.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -61,8 +61,8 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
 #define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
-#define SMHID2( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ":" a ":" b ) ), HID_PRINTDLG ) )
-#define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ), HID_PRINTDLG ) )
+#define SMHID2( a, b ) SetHelpId( rtl::OString( HELPID_PREFIX ":" a ":" b ) )
+#define SMHID1( a ) SetHelpId( rtl::OString( HELPID_PREFIX  ":" a  ) )
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId )
@@ -1127,24 +1127,24 @@ bool PrintDialog::isSingleJobs()
 
 static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId = -1, const rtl::OUString& i_rPropName = rtl::OUString() )
 {
-    rtl::OUStringBuffer aBuf( 256 );
-    aBuf.appendAscii( HELPID_PREFIX );
+    rtl::OStringBuffer aBuf( 256 );
+    aBuf.append( HELPID_PREFIX );
     if( i_rPropName.getLength() )
     {
-        aBuf.append( sal_Unicode( ':' ) );
-        aBuf.append( i_rPropName );
+        aBuf.append( ':' );
+        aBuf.append( rtl::OUStringToOString( i_rPropName, RTL_TEXTENCODING_UTF8 ) );
     }
     if( i_pType )
     {
-        aBuf.append( sal_Unicode( ':' ) );
-        aBuf.appendAscii( i_pType );
+        aBuf.append( ':' );
+        aBuf.append( i_pType );
     }
     if( i_nId >= 0 )
     {
-        aBuf.append( sal_Unicode( ':' ) );
+        aBuf.append( ':' );
         aBuf.append( i_nId );
     }
-    i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear(), HID_PRINTDLG ) );
+    i_pWindow->SetHelpId( aBuf.makeStringAndClear() );
 }
 
 static void setHelpText( Window* /*i_pWindow*/, const Sequence< rtl::OUString >& /*i_rHelpTexts*/, sal_Int32 /*i_nIndex*/ )
@@ -2147,7 +2147,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         if( pHelp )
         {
             // FIXME: find out proper help URL and use here
-            pHelp->Start( HID_PRINTDLG, GetParent() );
+            pHelp->Start( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ), GetParent() );
         }
     }
     else if( pButton == &maForwardBtn )
@@ -2575,6 +2575,7 @@ void PrintProgressDialog::tick()
 
 void PrintProgressDialog::reset()
 {
+    mbCanceled = false;
     setProgress( 0 );
 }
 

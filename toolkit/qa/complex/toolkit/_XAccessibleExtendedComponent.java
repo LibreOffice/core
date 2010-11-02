@@ -25,16 +25,16 @@
  *
  ************************************************************************/
 
-package complex.toolkit.interface_tests;
+package complex.toolkit;
 
-import lib.MultiMethodTest;
+// import lib.MultiMethodTest;
 import com.sun.star.accessibility.XAccessibleExtendedComponent;
-import com.sun.star.accessibility.XAccessibleStateSet;
-import com.sun.star.accessibility.AccessibleStateType;
+// import com.sun.star.accessibility.XAccessibleStateSet;
+// import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.awt.XFont;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleExtendedComponent</code>
@@ -51,7 +51,7 @@ import share.LogWriter;
  */
 public class _XAccessibleExtendedComponent {
 
-    private LogWriter log;
+    // private LogWriter log;
     private static final String className =
         "com.sun.star.accessibility.XAccessibleExtendedComponent" ;
 
@@ -62,38 +62,40 @@ public class _XAccessibleExtendedComponent {
         return className;
     }
 
-    public _XAccessibleExtendedComponent(XInterface object, LogWriter log) {
-        oObj = (XAccessibleExtendedComponent)UnoRuntime.queryInterface(
-                                    XAccessibleExtendedComponent.class, object);
-        this.log = log;
+    public _XAccessibleExtendedComponent(XInterface object/*, LogWriter log*/) {
+        oObj = UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, object);
+        // this.log = log;
     }
 
     /**
      * Just calls the method.
+     * @return
      */
     public boolean _getFont() {
         XFont font = oObj.getFont();
-        log.println("getFont(): " + font);
+        System.out.println("getFont(): " + font);
         return true;
     }
 
     /**
      * Calls the method and checks returned value.
      * Has OK status if returned value isn't null.
+     * @return
      */
     public boolean _getTitledBorderText() {
         String titleBorderText = oObj.getTitledBorderText();
-        log.println("getTitledBorderText(): '" + titleBorderText + "'");
+        System.out.println("getTitledBorderText(): '" + titleBorderText + "'");
         return titleBorderText != null;
     }
 
     /**
      * Calls the method and checks returned value.
      * Has OK status if returned value isn't null.
+     * @return
      */
     public boolean _getToolTipText() {
         String toolTipText = oObj.getToolTipText();
-        log.println("getToolTipText(): '" + toolTipText + "'");
+        System.out.println("getToolTipText(): '" + toolTipText + "'");
         return toolTipText != null;
     }
 }
