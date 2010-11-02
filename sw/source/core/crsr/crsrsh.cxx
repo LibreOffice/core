@@ -3305,22 +3305,6 @@ String SwCrsrShell::GetCrsrDescr() const
     return aResult;
 }
 
-<<<<<<< local
-SwRect SwCrsrShell::GetRectOfCurrentChar()
-{
-    SwCntntFrm* pFrm = pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), 0, pCurCrsr->GetPoint(), FALSE );
-    SwRect aRet;
-    SwCrsrMoveState aTmpState( MV_NONE );
-    aTmpState.bRealHeight = TRUE;
-    pFrm->GetCharRect( aRet, *pCurCrsr->GetPoint(), &aTmpState );
-    //const SwTwips nRealHeight = aTmpState.aRealHeight.Y();
-    if (aTmpState.aRealHeight.X() != 0)
-        aRet.Top(aRet.Top() + aTmpState.aRealHeight.X());
-    return aRet;
-}
-
-=======
->>>>>>> other
 // SMARTTAGS
 
 void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,

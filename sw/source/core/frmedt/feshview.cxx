@@ -599,11 +599,7 @@ bool SwFEShell::IsSelContainsControl() const
         // if we have one marked object, get the SdrObject and check
         // whether it contains a control
         const SdrObject* pSdrObject = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-<<<<<<< local
-        bRet = pSdrObject && CheckControlLayer( pSdrObject );
-=======
-        bRet = ::CheckControlLayer( pSdrObject );
->>>>>>> other
+        bRet = pSdrObject && ::CheckControlLayer( pSdrObject );
     }
     return bRet;
 }

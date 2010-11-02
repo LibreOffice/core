@@ -1707,41 +1707,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
-<<<<<<< local
-=======
-
-sal_uInt16 SwDoc::GetPageCount() const
-{
-    return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
-}
-
-const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
-{
-    Size aSize;
-    if ( GetRootFrm() && nPageNum )
-    {
-        const SwPageFrm* pPage = static_cast<const SwPageFrm*>
-                                 (GetRootFrm()->Lower());
-
-        while ( --nPageNum && pPage->GetNext() )
-        {
-            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-        }
-
-        // switch to next page for an empty page, if empty pages are not skipped
-        // in order to get a sensible page size for an empty page - e.g. for printing.
-        if ( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
-        {
-            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-        }
-
-        aSize = pPage->Frm().SSize();
-    }
-    return aSize;
-}
-
-
->>>>>>> other
 /*************************************************************************
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/

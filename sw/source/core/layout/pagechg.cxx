@@ -1394,19 +1394,11 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 
 sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
-<<<<<<< local
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( !pSh || pSh->GetViewOptions()->getBrowseMode() )
-        return sw::sidebarwindows::SIDEBAR_NONE;
-=======
-    if ( !GetShell() ||
-         GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
-        // --> OD 2010-06-03 #i111964# - provide default sidebar position
         return sw::sidebarwindows::SIDEBAR_RIGHT;
-        // <--
     }
->>>>>>> other
     else
     {
         const bool bLTR = getRootFrm()->IsLeftToRightViewLayout();
