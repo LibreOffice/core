@@ -981,9 +981,7 @@ namespace sw
                     case LANGUAGE_FRENCH_LUXEMBOURG:
                     case LANGUAGE_FRENCH_MONACO:
                         {
-                            if (nChar == 'a' || nChar == 'A')
-                                rParams.SetChar (nI, 'O');
-                            else if (nChar == 'y' || nChar == 'Y')
+                            if (nChar == 'y' || nChar == 'Y')
                                 rParams.SetChar (nI, 'A');
                             else if (nChar == 'd' || nChar == 'D')
                                 rParams.SetChar (nI, 'J');
