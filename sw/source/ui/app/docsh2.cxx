@@ -1684,9 +1684,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     ClearHeaderAttributesForSourceViewHack();
 
     // MIB 24.07.97: Das Dokument-Basic muss auch noch d'ran glauben ...
-    // Ein EnterBasicCall braucht man hier nicht, weil man nichts ruft und
-    // in HTML-Dokument kein Dok-Basic vorhanden sein kann, das noch nicht
-    // geladen wurde.
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
     //#59620# HasBasic() zeigt an, dass es schon einen BasicManager an der DocShell
     //          gibt. Der wurde im HTML-Import immer angelegt, wenn Macros im Quelltext

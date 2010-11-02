@@ -280,14 +280,11 @@ void SwHTMLWriter::OutBasic()
     if( !bCfgStarBasic )
         return;
 
-    SFX_APP()->EnterBasicCall();
-
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     ASSERT( pBasicMan, "Wo ist der Basic-Manager?" );
     //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
     if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
-        SFX_APP()->LeaveBasicCall();
         return;
     }
 
@@ -334,8 +331,6 @@ void SwHTMLWriter::OutBasic()
                                      eDestEnc, &aNonConvertableCharacters );
         }
     }
-
-    SFX_APP()->LeaveBasicCall();
 }
 
 static const char* aEventNames[] =
