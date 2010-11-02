@@ -38,21 +38,21 @@ TARGET=richtext
 # --- Files -------------------------------------
 
 EXCEPTIONSFILES=\
-            $(SLO)$/richtextunowrapper.obj \
-            $(SLO)$/richtextmodel.obj \
-            $(SLO)$/richtextcontrol.obj \
-            $(SLO)$/featuredispatcher.obj \
-            $(SLO)$/clipboarddispatcher.obj \
             $(SLO)$/attributedispatcher.obj \
+            $(SLO)$/clipboarddispatcher.obj \
+            $(SLO)$/featuredispatcher.obj \
             $(SLO)$/parametrizedattributedispatcher.obj \
-            $(SLO)$/specialdispatchers.obj \
+            $(SLO)$/richtextcontrol.obj \
             $(SLO)$/richtextengine.obj \
-            $(SLO)$/richtextimplcontrol.obj
-
-SLOFILES=	$(EXCEPTIONSFILES) \
+            $(SLO)$/richtextimplcontrol.obj \
+            $(SLO)$/richtextmodel.obj \
+            $(SLO)$/richtextunowrapper.obj \
             $(SLO)$/richtextvclcontrol.obj \
             $(SLO)$/richtextviewport.obj \
             $(SLO)$/rtattributehandler.obj \
+            $(SLO)$/specialdispatchers.obj
+
+SLOFILES=	$(EXCEPTIONSFILES)
 
 # --- Targets ----------------------------------
 

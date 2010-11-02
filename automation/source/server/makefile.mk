@@ -36,17 +36,12 @@ TARGET=server
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/XMLParser.obj \
-    $(SLO)$/recorder.obj \
-    $(SLO)$/svcommstream.obj \
+    $(EXCEPTIONSFILES) \
     $(SLO)$/cmdbasestream.obj \
-    $(SLO)$/scmdstrm.obj \
-    $(SLO)$/statemnt.obj \
-    $(SLO)$/sta_list.obj \
     $(SLO)$/editwin.obj \
-    $(SLO)$/server.obj \
     $(SLO)$/retstrm.obj \
-    $(SLO)$/profiler.obj
+    $(SLO)$/scmdstrm.obj \
+    $(SLO)$/svcommstream.obj
 
 
 OBJFILES = \
@@ -54,9 +49,12 @@ OBJFILES = \
     $(OBJ)$/svcommstream.obj
 
 EXCEPTIONSFILES = \
-    $(SLO)$/statemnt.obj \
+    $(SLO)$/XMLParser.obj \
+    $(SLO)$/profiler.obj \
+    $(SLO)$/recorder.obj \
     $(SLO)$/server.obj \
-    $(SLO)$/XMLParser.obj
+    $(SLO)$/sta_list.obj \
+    $(SLO)$/statemnt.obj
 
 NOOPTFILES = $(SLO)$/statemnt.obj
 

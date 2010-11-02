@@ -37,18 +37,16 @@ TARGET=testtool
 # --- Allgemein ------------------------------------------------------------
 
 OBJFILES = \
-    $(OBJ)$/cmdstrm.obj              \
+    $(EXCEPTIONSFILES)               \
     $(OBJ)$/cretstrm.obj             \
-    $(OBJ)$/objtest.obj              \
-    $(OBJ)$/tcommuni.obj             \
-    $(OBJ)$/comm_bas.obj             \
     $(OBJ)$/httprequest.obj          \
     
 
 EXCEPTIONSFILES= \
-    $(OBJ)$/tcommuni.obj             \
     $(OBJ)$/cmdstrm.obj              \
-    $(OBJ)$/objtest.obj
+    $(OBJ)$/comm_bas.obj             \
+    $(OBJ)$/objtest.obj              \
+    $(OBJ)$/tcommuni.obj
 
 HXXFILES = $(INCCOM)$/keycodes.hxx			\
     $(INCCOM)$/classes.hxx			\

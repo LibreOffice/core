@@ -39,19 +39,20 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES=$(SLO)$/dlged.obj	\
-                $(SLO)$/dlgedobj.obj \
-                $(SLO)$/dlgedfac.obj	\
-                $(SLO)$/dlgedlist.obj	\
+EXCEPTIONSFILES= \
+                $(SLO)$/dlged.obj	\
                 $(SLO)$/dlgedclip.obj	\
+                $(SLO)$/dlgedfac.obj	\
+                $(SLO)$/dlgedfunc.obj	\
+                $(SLO)$/dlgedlist.obj	\
+                $(SLO)$/dlgedmod.obj	\
+                $(SLO)$/dlgedobj.obj	\
+                $(SLO)$/dlgedpage.obj	\
+                $(SLO)$/dlgedview.obj	\
+                $(SLO)$/managelang.obj	\
                 $(SLO)$/propbrw.obj
 
-SLOFILES=   $(EXCEPTIONSFILES)      \
-            $(SLO)$/dlgedfunc.obj	\
-            $(SLO)$/dlgedmod.obj	\
-            $(SLO)$/dlgedpage.obj	\
-            $(SLO)$/dlgedview.obj	\
-            $(SLO)$/managelang.obj
+SLOFILES=       $(EXCEPTIONSFILES)
 
 SRS1NAME=$(TARGET)
 SRC1FILES=	dlgresid.src \
