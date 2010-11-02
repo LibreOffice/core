@@ -81,8 +81,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 15, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 15 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 9, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 9 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
@@ -107,35 +107,35 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
     m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
-                                                  aLocalizedStrings.GetString( 3 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TitleRow:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_TITLE_ROW ) ),
                                                   pConfig->IsPrintTitle() );
     // create a bool option for formula text (matches to SID_PRINTTEXT)
-    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
-                                                  aLocalizedStrings.GetString( 5 ),
+    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:FormulaText:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_FORMULA_TEXT ) ),
                                                   pConfig->IsPrintFormulaText() );
     // create a bool option for border (matches to SID_PRINTFRAME)
-    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
-                                                  aLocalizedStrings.GetString( 7 ),
+    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Border:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_BORDER ) ),
                                                   pConfig->IsPrintFrame() );
 
     // create subgroup for print format
-    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 8 ), rtl::OUString() );
+    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 5 ), rtl::OUString() );
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< rtl::OUString > aChoices( 3 );
-    aChoices[0] = aLocalizedStrings.GetString( 9 );
-    aChoices[1] = aLocalizedStrings.GetString( 11 );
-    aChoices[2] = aLocalizedStrings.GetString( 13 );
-    Sequence< rtl::OUString > aHelpTexts( 3 );
-    aHelpTexts[0] = aLocalizedStrings.GetString( 10 );
-    aHelpTexts[1] = aLocalizedStrings.GetString( 12 );
-    aHelpTexts[2] = aLocalizedStrings.GetString( 14 );
+    aChoices[0] = aLocalizedStrings.GetString( 6 );
+    aChoices[1] = aLocalizedStrings.GetString( 7 );
+    aChoices[2] = aLocalizedStrings.GetString( 8 );
+    Sequence< rtl::OUString > aHelpIds( 3 );
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0" ) );
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1" ) );
+    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2" ) );
     OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_FORMAT ) );
     m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpTexts,
+                                                    aHelpIds,
                                                     aPrintFormatProp,
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
                                                     );
@@ -143,7 +143,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
-                                                     aLocalizedStrings.GetString( 14 ),
+                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintScale:NumericField," ) ),
                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
