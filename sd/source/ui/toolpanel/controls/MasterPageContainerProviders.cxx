@@ -131,8 +131,8 @@ Image TemplatePreviewProvider::operator() (
         {
             uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
                 xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.embed.StorageFactory")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.embed.StorageFactory"))),
                 uno::UNO_QUERY);
 
             if (xStorageFactory.is())
@@ -150,14 +150,14 @@ Image TemplatePreviewProvider::operator() (
                     {
                         uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnails"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnails")),
                                 embed::ElementModes::READ));
                         if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
                                 xStorage->cloneStreamElement(
-                                    ::rtl::OUString::createFromAscii(
-                                        "thumbnail.png")));
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "thumbnail.png"))));
                             if (xThumbnailCopy.is())
                                 xIStream = xThumbnailCopy->getInputStream();
                         }
@@ -183,7 +183,7 @@ Image TemplatePreviewProvider::operator() (
                     {
                         uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnail"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnail")),
                                 embed::ElementModes::READ));
                         if (xStorage.is())
                         {

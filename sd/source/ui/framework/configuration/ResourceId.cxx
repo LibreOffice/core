@@ -75,7 +75,7 @@ Sequence<rtl::OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.ResourceId"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ResourceId")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

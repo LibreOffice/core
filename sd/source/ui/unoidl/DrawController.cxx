@@ -247,7 +247,7 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
 
 
 
-static OUString ssServiceName (OUString::createFromAscii(
+static OUString ssServiceName (RTL_CONSTASCII_USTRINGPARAM(
     "com.sun.star.drawing.DrawingDocumentDrawView"));
 
 sal_Bool SAL_CALL DrawController::supportsService (

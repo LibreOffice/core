@@ -229,7 +229,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
-        ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:VerticalTextState")));
 
     // Add this new object as shell to the shell factory.
     GetShellManager()->AddSubShell(HID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);

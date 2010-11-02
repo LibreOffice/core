@@ -67,7 +67,7 @@ Sequence<rtl::OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (v
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicToolBarFactory"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicToolBarFactory")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

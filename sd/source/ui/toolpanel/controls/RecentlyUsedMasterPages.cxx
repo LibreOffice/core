@@ -197,8 +197,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
         if ( ! xSet.is())
             return;
 
-        const String sURLMemberName (OUString::createFromAscii("URL"));
-        const String sNameMemberName (OUString::createFromAscii("Name"));
+        const String sURLMemberName (RTL_CONSTASCII_USTRINGPARAM("URL"));
+        const String sNameMemberName (RTL_CONSTASCII_USTRINGPARAM("Name"));
         OUString sURL;
         OUString sName;
 
@@ -272,8 +272,8 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
             xSet->removeByName (aKeys[i]);
 
         // Fill it with the URLs of this object.
-        const String sURLMemberName (OUString::createFromAscii("URL"));
-        const String sNameMemberName (OUString::createFromAscii("Name"));
+        const String sURLMemberName (RTL_CONSTASCII_USTRINGPARAM("URL"));
+        const String sNameMemberName (RTL_CONSTASCII_USTRINGPARAM("Name"));
         Any aValue;
         Reference<lang::XSingleServiceFactory> xChildFactory (
             xSet, UNO_QUERY);
@@ -286,7 +286,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
                 ++iDescriptor,++nIndex)
         {
             // Create new child.
-            OUString sKey (OUString::createFromAscii("index_"));
+            OUString sKey (RTL_CONSTASCII_USTRINGPARAM("index_"));
             sKey += OUString::valueOf(nIndex);
             Reference<container::XNameReplace> xChild(
                 xChildFactory->createInstance(), UNO_QUERY);

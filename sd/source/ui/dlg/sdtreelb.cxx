@@ -227,9 +227,9 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 {
     if (mnListBoxDropFormatId == SAL_MAX_UINT32)
         mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "application/x-openoffice-treelistbox-moveonly;"
-                    "windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""));
+                    "windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\"")));
     return mnListBoxDropFormatId;
 }
 

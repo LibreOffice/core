@@ -805,7 +805,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
                 break;
 
             Reference<frame::XDesktop> xDesktop (xFactory->createInstance (
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY);
             if ( ! xDesktop.is())
                 break;
 

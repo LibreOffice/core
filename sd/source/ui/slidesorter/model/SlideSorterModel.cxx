@@ -193,7 +193,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
     {
         try
         {
-            const Any aNumber (xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+            const Any aNumber (xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))));
             sal_Int16 nNumber (-1);
             aNumber >>= nNumber;
             nNumber -= 1;

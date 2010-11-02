@@ -3012,18 +3012,18 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
         uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
 
         uno::Reference< util::XURLTransformer > xParser(
-            xFac->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ),
+            xFac->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" )) ),
                 uno::UNO_QUERY_THROW);
         util::URL aURL;
-        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/setAutoSaveState");
+        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/setAutoSaveState"));
         xParser->parseStrict(aURL);
 
         Sequence< beans::PropertyValue > aArgs(1);
-        aArgs[0].Name = OUString::createFromAscii("AutoSaveState");
+        aArgs[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
         aArgs[0].Value <<= bOn ? sal_True : sal_False;
 
         uno::Reference< frame::XDispatch > xAutoSave(
-            xFac->createInstance(OUString::createFromAscii("com.sun.star.frame.AutoRecovery")),
+            xFac->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.AutoRecovery"))),
             uno::UNO_QUERY_THROW);
         xAutoSave->dispatch(aURL, aArgs);
     }

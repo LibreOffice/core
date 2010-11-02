@@ -100,7 +100,7 @@ Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
 
 ::rtl::OUString PresenterPreviewCache_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPreviewCache");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPreviewCache"));
 }
 
 
@@ -110,7 +110,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames 
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterPreviewCache"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

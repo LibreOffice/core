@@ -73,7 +73,7 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
 
 ::rtl::OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterTextView");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterTextView"));
 }
 
 
@@ -83,7 +83,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNam
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterTextView"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterTextView")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -193,7 +193,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString::createFromAscii("PresenterTextView: invalid number of arguments"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterTextView: invalid number of arguments")),
                 static_cast<XWeak*>(this));
     }
 }
@@ -303,15 +303,15 @@ void PresenterTextView::ThrowIfDisposed (void)
 //===== PresenterTextView::Implementation =====================================
 
 PresenterTextView::Implementation::Implementation (void)
-    : msTextPropertyName(OUString::createFromAscii("Text")),
-      msBitmapPropertyName(OUString::createFromAscii("Bitmap")),
-      msSizePropertyName(OUString::createFromAscii("Size")),
-      msBackgroundColorPropertyName(OUString::createFromAscii("BackgroundColor")),
-      msTextColorPropertyName(OUString::createFromAscii("TextColor")),
-      msFontDescriptorPropertyName(OUString::createFromAscii("FontDescriptor")),
-      msTopPropertyName(OUString::createFromAscii("Top")),
-      msTopRelativePropertyName(OUString::createFromAscii("RelativeTop")),
-      msTotalHeightPropertyName(OUString::createFromAscii("TotalHeight")),
+    : msTextPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Text"))),
+      msBitmapPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap"))),
+      msSizePropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Size"))),
+      msBackgroundColorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("BackgroundColor"))),
+      msTextColorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("TextColor"))),
+      msFontDescriptorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("FontDescriptor"))),
+      msTopPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Top"))),
+      msTopRelativePropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeTop"))),
+      msTotalHeightPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("TotalHeight"))),
       mxBitmap(),
       mpCanvas(),
       mpOutputDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0)),

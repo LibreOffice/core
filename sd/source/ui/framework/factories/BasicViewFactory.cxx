@@ -88,7 +88,7 @@ Sequence<rtl::OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicViewFactory"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicViewFactory")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
