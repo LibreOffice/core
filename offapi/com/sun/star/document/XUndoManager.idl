@@ -130,7 +130,7 @@ interface XUndoManager
             if the undo stack is currently empty, in which case it is impossible to push a hidden undo action onto
             it.
 
-        @see emterUndoContext
+        @see enterUndoContext
         @see leaveUndoContext
     */
     void    enterHiddenUndoContext()
@@ -225,7 +225,7 @@ interface XUndoManager
     /** determines whether <member>undo</member> can reasonably be expected to succeed.
 
         @return
-            <FALSE/> if and only if the undo stack is currently, empty, or there is an open and not-yet-closed
+            <FALSE/> if and only if the undo stack is currently empty, or there is an open and not-yet-closed
             undo context.
     */
     boolean isUndoPossible();
@@ -233,7 +233,7 @@ interface XUndoManager
     /** determines whether <member>redo</member> can reasonably be expected to succeed.
 
         @return
-            <FALSE/> if and only if the redo stack is currently, empty, or there is an open and not-yet-closed
+            <FALSE/> if and only if the redo stack is currently empty, or there is an open and not-yet-closed
             undo context.
     */
     boolean isRedoPossible();

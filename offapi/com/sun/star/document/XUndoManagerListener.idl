@@ -126,7 +126,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     /** is called when an Undo context has been left, but no actions have been added within this context.
 
         <p>In such a case, the context which has just been left will not contribute to the undo stack, but instead
-        be silently removed.</p>
+        be silently removed. Consequently, the <member>UndoManagerEvent::UndoActionTitle</member> is empty.</p>
 
         @see XUndoManager::leaveUndoContext
         @see leftContext
