@@ -1576,7 +1576,7 @@ class SwUndoInsertLabel : public SwUndo
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
                         const String& rSeparator,
-                        const String& rNumberSeparator, /
+                        const String& rNumberSeparator,
                         const BOOL bBefore, const USHORT nId,
                         const String& rCharacterStyle,
                         const BOOL bCpyBrd );
