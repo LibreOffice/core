@@ -38,12 +38,12 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
+my ( $outfile, $bootfile, $newline, $comment,
      $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
      $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include,
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -205,10 +205,10 @@ if ( $platform =~ m/solaris/ )
    if ($platform =~ m/^i[3456]86/)
    {
       if ( $CC =~ "gcc") {
-         $outfile        = "SolarisX86GccEnv.Set";
+         $outfile        = "SolarisX86GccEnv.Set.sh";
          $OUTPATH        = "unxsogi";
       } else {
-         $outfile        = "SolarisX86Env.Set";
+         $outfile        = "SolarisX86Env.Set.sh";
          $OUTPATH        = "unxsoli4";
       }
       $CPU            = "I";
@@ -221,10 +221,10 @@ if ( $platform =~ m/solaris/ )
    else
    {
       if ( $CC =~ "gcc") {
-         $outfile        = "SolarisSparcGccEnv.Set";
+         $outfile        = "SolarisSparcGccEnv.Set.sh";
          $OUTPATH        = "unxsogs";
       } else {
-         $outfile        = "SolarisSparcEnv.Set";
+         $outfile        = "SolarisSparcEnv.Set.sh";
          $OUTPATH        = "unxsols4";
       }
       $CPU            = "S";
@@ -256,7 +256,7 @@ elsif ( $platform =~ m/netbsd/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting NetBSD x86 specific values... ";
-      $outfile        = "NetBSDX86Env.Set";
+      $outfile        = "NetBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxbsdi";
@@ -266,7 +266,7 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/^sparc/)
    {  print "Setting NetBSD Sparc specific values... ";
-      $outfile        = "NetBSDSparcEnv.Set";
+      $outfile        = "NetBSDSparcEnv.Set.sh";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxbsds";
@@ -276,7 +276,7 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/powerpc/)
    {  print "Setting NetBSD PPC specific values... ";
-      $outfile        = "NetBSDPPCEnv.Set";
+      $outfile        = "NetBSDPPCEnv.Set.sh";
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
       $OUTPATH        = "unxbsdppc";
@@ -319,7 +319,7 @@ elsif ( $platform =~ m/kfreebsd/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting GNU/kFreeBSD x86 specific values... ";
-      $outfile        = "GNUkFreeBSDX86Env.Set";
+      $outfile        = "GNUkFreeBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxkfgi6";
@@ -331,7 +331,7 @@ elsif ( $platform =~ m/kfreebsd/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
-      $outfile        = "GNUkFreeBSDX86-64Env.Set";
+      $outfile        = "GNUkFreeBSDX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxkfgx6";
@@ -357,7 +357,7 @@ elsif ( $platform =~ m/freebsd/ )
    if ($platform =~ m/^amd64/)
    {  my ( $JAVA_OS );
       print "Setting FreeBSD AMD64 specific values... ";
-      $outfile        = "FreeBSDAMDEnv.Set";
+      $outfile        = "FreeBSDAMDEnv.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxfbsdx";
@@ -376,7 +376,7 @@ elsif ( $platform =~ m/freebsd/ )
    }
    elsif ($platform =~ m/^i386/)
    {  print "Setting FreeBSD x86 specific values... ";
-      $outfile        = "FreeBSDX86Env.Set";
+      $outfile        = "FreeBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxfbsdi";
@@ -410,7 +410,7 @@ elsif ( $platform =~ m/linux/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting Linux x86 specific values... ";
-      $outfile        = "LinuxX86Env.Set";
+      $outfile        = "LinuxX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
 
@@ -435,7 +435,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
-      $outfile        = "LinuxX86-64Env.Set";
+      $outfile        = "LinuxX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxlngx6";
@@ -447,7 +447,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^ia64/)
    {  print "Setting Linux ia64 specific values... ";
-      $outfile        = "LinuxIA64Env.Set";
+      $outfile        = "LinuxIA64Env.Set.sh";
       $CPU            = "A";
       $CPUNAME        = "IA64";
       $OUTPATH        = "unxlnga";
@@ -458,7 +458,7 @@ elsif ( $platform =~ m/linux/ )
    elsif ($platform =~ m/^sparc/)
 
    {  print "Setting Linux Sparc specific values... ";
-      $outfile        = "LinuxSparcEnv.Set";
+      $outfile        = "LinuxSparcEnv.Set.sh";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxlngs";
@@ -470,7 +470,7 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux PPC64 specific values... ";
-         $outfile = "LinuxPPC64Env.Set";
+         $outfile = "LinuxPPC64Env.Set.sh";
          $OUTPATH = "unxlngppc64";
          $CPUNAME = "POWERPC64";
 
@@ -482,7 +482,7 @@ elsif ( $platform =~ m/linux/ )
       }
       else {
          print "Setting Linux PPC specific values... ";
-         $outfile = "LinuxPPCEnv.Set";
+         $outfile = "LinuxPPCEnv.Set.sh";
          $OUTPATH = "unxlngppc";
          $CPUNAME = "POWERPC";
 
@@ -510,14 +510,14 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux zSeries specific values... ";
-         $outfile        = "LinuxS390XEnv.Set";
+         $outfile        = "LinuxS390XEnv.Set.sh";
          $CPUNAME        = "S390X";
 	 $ARCH           = "s390x";
          $OUTPATH        = "unxlngs390x";
       }
       else {
          print "Setting Linux S/390 specific values... ";
-         $outfile        = "LinuxS390Env.Set";
+         $outfile        = "LinuxS390Env.Set.sh";
          $CPUNAME        = "S390";
 	 $ARCH           = "s390";
          $OUTPATH        = "unxlngs390";
@@ -529,7 +529,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^m68k/)
    {  print "Setting Linux m68k specific values... ";
-      $outfile        = "LinuxM68KEnv.Set";
+      $outfile        = "LinuxM68KEnv.Set.sh";
       $CPU            = "6";
       $CPUNAME        = "M68K";
       $OUTPATH        = "unxlngm68k";
@@ -539,7 +539,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^hppa/)
    {  print "Setting Linux hppa specific values... ";
-      $outfile        = "LinuxHPPAEnv.Set";
+      $outfile        = "LinuxHPPAEnv.Set.sh";
       $CPU            = "H";
       $CPUNAME        = "HPPA";
       $OUTPATH        = "unxlnghppa";
@@ -550,7 +550,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^alpha/)
    {  print "Setting Linux Alpha specific values... ";
-      $outfile        = "LinuxAlphaEnv.Set";
+      $outfile        = "LinuxAlphaEnv.Set.sh";
       $CPU            = "L";
       $CPUNAME        = "AXP";
       $OUTPATH        = "unxlngaxp";
@@ -560,7 +560,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^arm.*?l-/)
    {  print "Setting Linux ARM specific values... ";
-      $outfile        = "LinuxARMEnv.Set";
+      $outfile        = "LinuxARMEnv.Set.sh";
       $CPU            = "R";
       $CPUNAME        = "ARM";
       $OUTPATH        = "unxlngr";
@@ -571,7 +571,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^mips/)
    {  print "Setting Linux MIPS specific values... ";
-      $outfile        = "LinuxMIPSEnv.Set";
+      $outfile        = "LinuxMIPSEnv.Set.sh";
       $CPU            = "M";
       $CPUNAME        = "GODSON";
       $OUTPATH        = "unxlngmips";
@@ -615,7 +615,7 @@ elsif ( $platform =~ m/linux/ )
 }
 elsif ( $platform =~ m/osf1/ )
 {     print "Setting Tru64 specific values... ";
-      $outfile        = "Tru64AlphaEnv.Set";
+      $outfile        = "Tru64AlphaEnv.Set.sh";
       $BIG_SVX        = "TRUE";
       $COM            = "CXX";
       $COMPATH        = '@COMPATH@';
@@ -658,7 +658,7 @@ elsif ( $platform =~ m/cygwin/ )
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
-      $outfile        = "winmingw.set";
+      $outfile        = "winmingw.set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
@@ -668,7 +668,7 @@ elsif ( $platform =~ m/cygwin/ )
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
-  {   $outfile        = "winenv.set";
+  {   $outfile        = "winenv.set.sh";
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
@@ -730,7 +730,7 @@ elsif ( $platform =~ m/os2/ )
       $use_shl_versions = "TRUE";
   {
       print "Setting OS/2 gcc 3.3.5 specific values... \n";
-      $outfile        = "os2env.set";
+      $outfile        = "os2env.set.sh";
       $COM            = "GCC";
       $CVER           = "C300";
       $OUTPATH        = "os2gcci";
@@ -755,7 +755,7 @@ elsif ( $platform =~ m/darwin/ )
       if ($platform =~ m/^powerpc/)
       {
           print "Setting values for Mac OS X/Darwin on PowerPC... ";
-          $outfile        = "MacOSXPPCEnv.Set";
+          $outfile        = "MacOSXPPCEnv.Set.sh";
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
@@ -763,7 +763,7 @@ elsif ( $platform =~ m/darwin/ )
       else
       {
           print "Setting values for Mac OS X/Darwin on default x86... ";
-          $outfile        = "MacOSXX86Env.Set";
+          $outfile        = "MacOSXX86Env.Set.sh";
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
@@ -783,7 +783,7 @@ elsif ( $platform =~ m/darwin/ )
 elsif ( $platform =~ m/aix/ )
 {
    print "Setting AIX PPC specific values... ";
-   $outfile        = "aixPPCEnv.Set";
+   $outfile        = "aixPPCEnv.Set.sh";
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
    $OUTPATH        = "unxaigppc";
@@ -915,9 +915,6 @@ $USR_CCS              = $USR.$ds."ccs";
 $USR_OPENWIN          = $USR.$ds."openwin";
 $USR_DT               = $USR.$ds."dt";
 $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
-
-# Generate alternate output file for sh?
-$outfile_sh = $outfile.".sh";
 
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
@@ -1520,18 +1517,13 @@ print "done\n";
 open( OUT, ">$outfile" ) ||
    die "Cannot open $outfile: $!\n";
 
-# Create sh environment file
-open( OUT_SH, ">$outfile_sh" ) ||
-  die "Cannot open $outfile_sh: $!\n";
-
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
 #------------------------------------------
 #
 # Write file header.
-CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
-CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
+CreateFileHeader( *OUT, $UPD, $platform, "sh/bash/ksh", "#" );
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
@@ -2065,10 +2057,8 @@ ToFile( "ENV_SCRIPT", "$outfile", "e" );
 #
 # Writing unset variables you might not need to file.
 #
-print OUT $unsetvars;
-
-print OUT_SH "export $exportvars$newline";
-print OUT_SH "unset $unsetvarssh$newline";
+print OUT "export $exportvars$newline";
+print OUT "unset $unsetvars$newline";
 
 
 #
@@ -2077,8 +2067,6 @@ print OUT_SH "unset $unsetvarssh$newline";
 #---------------------------
 #
 close( OUT ) || print "Can't close $outfile: $!";
-
-close( OUT_SH ) || print "Can't close $outfile_sh: $!";
 
 #
 #------------------------------
@@ -2096,11 +2084,6 @@ close( OUT_SH ) || print "Can't close $outfile_sh: $!";
 $tmp = $SRC_ROOT.$ds.$outfile;
 if (rename( $outfile, $tmp ) ne 1)
 {  `mv -f $outfile $tmp`;
-}
-
-$tmp = $SRC_ROOT.$ds.$outfile_sh;
-if (rename( $outfile_sh, $tmp ) ne 1)
-{  `mv -f $outfile_sh $tmp`;
 }
 
 #
@@ -2138,7 +2121,7 @@ $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n";
+print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile\n";
 print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n";
 if ( $MINGW eq "yes" )
 {  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
@@ -2242,8 +2225,7 @@ sub CreateFileHeader
 #                   c - comment
 #                   n - newline
 #                   x - raw, write as is to OUT_BAT
-#                   y - raw, write as is to OUT
-#                   z - raw, write as is to OUT_SH
+#                   z - raw, write as is to OUT
 # Return value:  void
 #---------------------------------------------------------
 sub ToFile {
@@ -2251,28 +2233,23 @@ sub ToFile {
       # Write an environment variable to file.
       if (defined $_[ 1 ] && $_[ 1 ] ne "" ) {
          my $envvar = $_[ 1 ];
-         my $envvarbash = $envvar;
 
          # Tcsh/bash needs backslashes quoted
          $envvar =~ s/\\/\\\\/g;
-         $envvarbash = $envvar;
 
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar) if ( '@VERBOSE@' eq 'TRUE' );
-         print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
-         print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
+         print OUT "$_[ 0 ]=\"$envvar\"$newline";      # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
       } else {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") if ( '@VERBOSE@' eq 'TRUE' );
-         $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
-         $unsetvarssh .= " $_[ 0 ]";                             # for sh file
+         $unsetvars .= " $_[ 0 ]";                             # for sh file
       }
    }
    elsif ( $_[ 2 ] eq "a" )
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n" if ( '@VERBOSE@' eq 'TRUE' );    # to stdout
-      print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
-      print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
+      print OUT "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
    }
    elsif ( $_[ 2 ] eq "c" )
    {  # Write a comment to file.
@@ -2287,25 +2264,15 @@ sub ToFile {
       print OUT "$comment$newline";
       print OUT "$comment $_[ 0 ]$newline";
       print OUT "$comment$newline";
-      print OUT_SH "$newline";
-      print OUT_SH "$comment$newline";
-      print OUT_SH "$comment $_[ 0 ]$newline";
-      print OUT_SH "$comment$newline";
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
-      print OUT_SH "$newline";
-   }
-   elsif ( $_[ 2 ] eq "y" )
-   {
-      #Write first argument as is, and nothing else
-      print OUT "$_[ 0 ]$newline";
    }
    elsif ( $_[ 2 ] eq "z" )
    {
       #Write first argument as is, and nothing else
-      print OUT_SH "$_[ 0 ]$newline";
+      print OUT "$_[ 0 ]$newline";
    }
    else
    {  print "Unknown type!$newline";
