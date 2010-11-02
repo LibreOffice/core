@@ -287,8 +287,37 @@ public:
     virtual void            AddUndoListener( SfxUndoListener& i_listener );
     virtual void            RemoveUndoListener( SfxUndoListener& i_listener );
 
+#ifdef DBG_UTIL
+    /** enables or disables assertions when certain methods are called while a list action is currently open
+
+        In the course of CWS undoapi, the behavior of the following methods was changed:
+        <ul><li>GetUndoActionCount</li>
+            <li>GetUndoActionId</li>
+            <li>GetUndoActionComment</li>
+            <li>GetUndoAction</li>
+            <li>GetRedoActionCount</li>
+            <li>GetRedoActionComment</li>
+        </ul>
+
+        Those methods formerly worked on the current level, that is, when you entered a list action, the the
+        method worked within this list action only. With the CWS, the methods were changed to always work on the top
+        level, no matter the number of open, nested list actions.
+
+        This is not a problem as long as all *existing* calls are made while no list action is open. Probably, this is
+        true - but just in case it isn't, the methods have an assertion which fires when they're called while a list
+        action is open.
+
+        However, CWS undoapi introduced clients of those methods which are *allowed* to call them with open list actions.
+        This makes them different from all clients which existed before the CWS. To not fire the assertions from within
+        such clients where the calls are legitimate, we allow to temporarily disable the said assertions.
+    */
+    void    DbgEnableCompatibilityAssertions( bool const i_enable );
+#endif
+
 private:
     USHORT ImplLeaveListAction( const bool i_merge );
+    USHORT ImplGetRedoActionCount() const;
+    USHORT ImplGetUndoActionCount() const;
 };
 
 //=========================================================================
