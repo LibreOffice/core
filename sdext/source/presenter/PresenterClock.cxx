@@ -419,7 +419,6 @@ void SAL_CALL PresenterClock::windowPaint (const awt::PaintEvent& rEvent)
 {
     (void)rEvent;
     ThrowIfDisposed();
-    ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
     Paint(rEvent.UpdateRect);
 }
 
