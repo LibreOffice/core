@@ -269,7 +269,7 @@ public final class Debug {
      *  <p>This logs the message during runtime if debug.info or debug.trace
      *  in the properties file is set to true.</p>
      *
-     *  @param   int   Log type, one of the Debug constants
+     *  @param   flag  Log type, one of the Debug constants
      *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
      *                 or a combination of which or'ed together.
      *  @param   msg   The message.
@@ -291,7 +291,7 @@ public final class Debug {
      *  of the exception passed in.  Refer to the other log method
      *  for description.
      *
-     *  @param   int   Log type, one of the Debug constants
+     *  @param   flag  Log type, one of the Debug constants
      *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
      *                 or a combination of which or'ed together.
      *  @param   msg   The message.
