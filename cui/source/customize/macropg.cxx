@@ -284,9 +284,6 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnPrint",               RID_SVXSTR_EVENT_PRINTDOC ) );
     aDisplayNames.push_back( EventDisplayName( "OnModifyChanged",       RID_SVXSTR_EVENT_MODIFYCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnTitleChanged",        RID_SVXSTR_EVENT_TITLECHANGED ) );
-//    aDisplayNames.push_back( EventDisplayName( "OnModeChanged",         RID_SVXSTR_EVENT_MODECHANGED ) );
-//    aDisplayNames.push_back( EventDisplayName( "OnVisAreaChanged",      RID_SVXSTR_EVENT_VISAREACHANGED ) );
-//    aDisplayNames.push_back( EventDisplayName( "OnStorageChanged",      RID_SVXSTR_EVENT_STORAGECHANGED ) );
 
     // application specific events
     aDisplayNames.push_back( EventDisplayName( "OnMailMerge",           RID_SVXSTR_EVENT_MAILMERGE ) );
@@ -296,7 +293,6 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnPageCountChange",     RID_SVXSTR_EVENT_PAGECOUNTCHANGE ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentOpened",  RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentClosed",  RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED ) );
-//    aDisplayNames.push_back( EventDisplayName( "OnLayoutFinished",        RID_SVXSTR_EVENT_LAYOUT_FINISHED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSelect",              RID_SVXSTR_EVENT_SELECTIONCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnDoubleClick",         RID_SVXSTR_EVENT_DOUBLECLICK ) );
     aDisplayNames.push_back( EventDisplayName( "OnRightClick",          RID_SVXSTR_EVENT_RIGHTCLICK ) );
@@ -727,7 +723,6 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( FALSE );
-    // pE->ReplaceItem( new SvLBoxString( pE, 0, sEventURL ), LB_MACROS_ITEMPOS );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
             pImpl->pMacroImg, pImpl->pComponentImg,
             pImpl->pMacroImg_h, pImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
@@ -862,9 +857,6 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
 
     if( !mpImpl->bIDEDialogMode )
     {
-        // Size aSizeAssign;
-        // Point aPosAssign;
-        // mpImpl->pAssignPB->GetPosSizePixel( aPosAssign, aSizeAssign );
         Point aPosAssign = mpImpl->pAssignPB->GetPosPixel();
         Point aPosComp = mpImpl->pAssignComponentPB->GetPosPixel();
 

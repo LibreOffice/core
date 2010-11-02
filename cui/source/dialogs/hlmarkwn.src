@@ -76,20 +76,3 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
 {
     Text [ en-US ] = "Couldn't open the document." ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

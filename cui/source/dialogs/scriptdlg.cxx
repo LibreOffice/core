@@ -267,7 +267,6 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
-        /*SvLBoxEntry* pBasicManagerRootEntry =*/
             insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
                 0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
@@ -467,18 +466,6 @@ void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
 void __EXPORT SFTreeListBox::ExpandedHdl()
 {
-/*        SvLBoxEntry* pEntry = GetHdlEntry();
-        DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
-
-        if ( !IsExpanded( pEntry ) && pEntry->HasChildsOnDemand() )
-        {
-                SvLBoxEntry* pChild = FirstChild( pEntry );
-                while ( pChild )
-                {
-                        GetModel()->Remove( pChild );   // Ruft auch den DTOR
-                        pChild = FirstChild( pEntry );
-                }
-        }*/
 }
 
 // ----------------------------------------------------------------------------
@@ -1166,21 +1153,6 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
             {
                 ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
                 bValid = TRUE;
-                /*
-                for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
-                {
-                    if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
-                    {
-                        bValid = FALSE;
-                        String aError( m_createErrStr );
-                        aError.Append( m_createDupStr );
-                        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-                        aErrorBox.SetText( m_createErrTitleStr );
-                        aErrorBox.Execute();
-                        xNewDlg->SetObjectName( aNewName );
-                        break;
-                    }
-                } */
                 if( bValid )
                     aNewName = aUserSuppliedName;
             }

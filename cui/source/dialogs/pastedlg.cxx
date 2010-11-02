@@ -164,53 +164,6 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         String* pName = (String*) aSupplementTable.Get( nFormat );
         String aName;
 
-#ifdef WNT
-/*
-        if( !pName &&
-            ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) )
-        {
-            BOOL IsClipboardObject_Impl( SotDataObject * );
-            if( IsClipboardObject_Impl( pDataObj ) )
-            {
-                IDataObject * pDO = NULL;
-                OleGetClipboard( &pDO );
-                if( pDO )
-                {
-                    FORMATETC fe;
-                    STGMEDIUM stm;
-                    (fe).cfFormat=RegisterClipboardFormat( "Object Descriptor" );
-                    (fe).dwAspect=DVASPECT_CONTENT;
-                    (fe).ptd=NULL;
-                    (fe).tymed=TYMED_HGLOBAL;
-                    (fe).lindex=-1;
-
-                    if (SUCCEEDED(pDO->GetData(&fe, &stm)))
-                    {
-                        LPOBJECTDESCRIPTOR pOD=(LPOBJECTDESCRIPTOR)GlobalLock(stm.hGlobal);
-                        if( pOD->dwFullUserTypeName )
-                        {
-                            OLECHAR * pN = (OLECHAR *)(((BYTE *)pOD) + pOD->dwFullUserTypeName);
-                            aName.Append( pN );
-                            pName = &aName;
-                            // set format to ole object
-                            nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-                        }
-                        if( pOD->dwSrcOfCopy )
-                        {
-                            OLECHAR * pN = (OLECHAR *)(((BYTE *)pOD) + pOD->dwSrcOfCopy);
-                            aSourceName.Append( *pN++ );
-                        }
-                        else
-                            aSourceName = String( ResId( STR_UNKNOWN_SOURCE, SOAPP->GetResMgr() ) );
-                        GlobalUnlock(stm.hGlobal);
-                        ReleaseStgMedium(&stm);
-                    }
-                }
-            }
-        }
-*/
-#endif
-
         // if there is an "Embed Source" or and "Embedded Object" on the
         // Clipboard we read the Description and the Source of this object
         // from an accompanied "Object Descriptor" format on the clipboard

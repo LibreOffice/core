@@ -1037,7 +1037,6 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
 
                 if ( xFolderPicker.is() )
                 {
-//                  svt::SetDialogHelpId( xFolderPicker, HID_GALLERY_NEWTHEME_FINDFILES );
                     String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
                     xFolderPicker->setDisplayDirectory(aDlgPathName);
 
@@ -1148,7 +1147,6 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
         if( !aLbxFound.GetSelectEntryCount() || !bEntriesFound )
         {
             SvxOpenGraphicDialog aDlg(String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ) );
-//          aDlg.SetDialogHelpId( HID_GALLERY_NEWTHEME_ADDFILES );
             aDlg.EnableLink(sal_False);
             aDlg.AsLink(sal_False);
 

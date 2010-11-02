@@ -238,26 +238,6 @@ void SvxHpLinkDlg::Move()
     Window::Move();
 }
 
-/*long SvxHpLinkDlg::PreNotify( NotifyEvent& rNEvt )
-{
-    long nRet = 0;
-
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        DBG_ASSERT( rNEvt.GetKeyEvent(), "-SvxHpLinkDlg::PreNotify(): no KeyEvent for key event?!" );
-
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-        if( KEY_MOD2 == pKEvt->GetKeyCode().GetModifier() && pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
-            nRet = 1;
-    }
-
-    if( !nRet )
-        nRet = IconChoiceDialog::PreNotify( rNEvt );
-
-    return nRet;
-}*/
-
 /*************************************************************************
 |*
 |* Click on Apply-button

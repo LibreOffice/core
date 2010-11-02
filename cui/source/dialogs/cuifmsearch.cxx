@@ -85,7 +85,6 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
         m_aHalfFullFormsCJK.Hide();
 
         // never ignore the width (ignoring is expensive) if the option is not available at all
-        // 04.12.2001 - 91973 - fs@openoffice.org
         m_pSearchEngine->SetIgnoreWidthCJK( sal_False );
     }
 
@@ -630,7 +629,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     if ( !bEnable )
     {
         // if one of my children has the focus, remember it
-        // 104332 - 2002-10-17 - fs@openoffice.org
         Window* pFocusWindow = Application::GetFocusWindow( );
         if ( pFocusWindow && IsChild( pFocusWindow ) )
             m_pPreSearchFocus = pFocusWindow;
@@ -665,7 +663,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
         {   // this means we're preparing for starting a search
             // In this case, EnableSearchForDependees disabled the search button
             // But as we're about to use it for cancelling the search, we really need to enable it, again
-            // 07.12.2001 - 95246 - fs@openoffice.org
             m_pbSearchAgain.Enable( sal_True );
         }
     }
@@ -678,7 +675,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 
     if ( bEnable )
     {   // restore focus
-        // 104332 - 2002-10-17 - fs@openoffice.org
         if ( m_pPreSearchFocus )
         {
             m_pPreSearchFocus->GrabFocus();
@@ -809,7 +805,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
                 : RID_SVXERR_SEARCH_NORECORD;
             ErrorBox(this, CUI_RES(nErrorId)).Execute();
         }
-            // KEIN break !
+            // NO break !
         case FmSearchProgress::STATE_CANCELED:
             EnableSearchUI(sal_True);
             if (m_lnkCanceledNotFoundHdl.IsSet())

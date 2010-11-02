@@ -600,19 +600,15 @@ namespace svx
         m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions,
                                         LINK( this, HangulHanjaConversionDialog, OnOption ) );
         m_pPlayground->GetButton( SvxCommonLinguisticControl::eOptions )->Show();
-//      m_pPlayground->EnableButton( SvxCommonLinguisticControl::eOptions, true );
 
         if ( editeng::HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
         {
-//          m_aHanjaOnly.Enable( sal_False );
             m_pIgnoreNonPrimary = &m_aHangulOnly;
         }
         else
         {
-//          m_aHangulOnly.Enable( sal_False );
             m_pIgnoreNonPrimary = &m_aHanjaOnly;
         }
-//        m_pIgnoreNonPrimary->Check();
 
         // initial focus
         FocusSuggestion( );
@@ -894,8 +890,6 @@ namespace svx
     //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversionDialog::GetUseBothDirections( ) const
     {
-//      DBG_ASSERT( m_pIgnoreNonPrimary, "HangulHanjaConversionDialog::GetUseBothDirections: where's the check box pointer?" );
-//      return m_pIgnoreNonPrimary ? !m_pIgnoreNonPrimary->IsChecked( ) : sal_True;
         return !m_aHangulOnly.IsChecked() && !m_aHanjaOnly.IsChecked();
     }
 
@@ -1173,7 +1167,6 @@ namespace svx
         m_aDictsLB.SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
         m_aDictsLB.SetSelectionMode( SINGLE_SELECTION );
         m_aDictsLB.SetHighlightRange();
-//      m_aDictsLB.SetHelpId( xxx );
         m_aDictsLB.SetSelectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
         m_aDictsLB.SetDeselectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
 

@@ -97,4 +97,3 @@
 #define COL_OLD     54
 #define COL_2       63
 #define COL_DIFF    (COL_2 - COL_OLD)
-

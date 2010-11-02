@@ -36,7 +36,6 @@
 
 TabPage RID_SVXPAGE_MACROASSIGN
 {
-     // HelpID = HID_MACROASSIGN ;
     Hide = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;

@@ -125,26 +125,3 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
 {
     Text [ en-US ] = "The file %1 already exists." ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

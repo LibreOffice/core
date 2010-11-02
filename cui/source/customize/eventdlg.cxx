@@ -97,7 +97,6 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     uno::Reference< document::XEventsSupplier > xSupplier;
 
-//    xSupplier = uno::Reference< document::XEventsSupplier >( new GlobalEventConfig());
     xSupplier = uno::Reference< document::XEventsSupplier > (
         ::comphelper::getProcessServiceFactory()->createInstance(
             OUString::createFromAscii(

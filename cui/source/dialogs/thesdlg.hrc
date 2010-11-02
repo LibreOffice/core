@@ -47,6 +47,4 @@
 
 #define STR_ERR_TEXTNOTFOUND    101
 
-
 #endif
-

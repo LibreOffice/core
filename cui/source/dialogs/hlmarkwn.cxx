@@ -316,27 +316,6 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     }
     return (mnError==0);
 }
-/*
-void SvxHlinkDlgMarkWnd::Error(int nNr)
-{
-    switch(nNr)
-    {
-        case 0:
-        {
-            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
-            //maLbTree.SetTextColor( Color(COL_BLACK) );
-            //maLbTree.DrawText( aDrawRect, "Keine Ziele im Dokument vorhanden.", TEXT_DRAW_LEFT);// | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-            maLbTree.DrawText( Point(0,0), "Keine Ziele im Dokument vorhanden.");
-            maLbTree.DrawLine(aDrawRect.TopLeft(), aDrawRect.BottomRight() );
-        }
-        break;
-        case 1:
-            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
-            maLbTree.DrawText( aDrawRect, "Das Dokument konnte nicht ge�ffnet werden.", TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-            break;
-    }
-}
-*/
 /*************************************************************************
 |*
 |* Fill Tree-Control

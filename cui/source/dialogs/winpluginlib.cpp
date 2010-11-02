@@ -37,7 +37,6 @@
 #include <Shlwapi.h>
 #include <stdio.h>
 
-
 #define SO_PATH_SIZE        4096
 #define MOZ_PLUGIN_DLL_NAME "npsopluginmi.dll"
 extern "C" {
@@ -81,8 +80,7 @@ int lc_isInstalled(const  char* realFilePath)
         sprintf(sSoPath,"%s", realFilePath);
         ret = 0;
     }
-    //ret =  GetCurrentDirectory( SO_PATH_SIZE, sSoPath);
-    //ret = GetEnvironmentVariable("prog", sSoPath, SO_PATH_SIZE);
+
     // GetCurrentDirectory return the char number of the string
     if(ret == 0){
         DWORD  dType = REG_SZ;
@@ -156,7 +154,6 @@ int lc_installPlugin(const  char* realFilePath)
     char sSoPath[SO_PATH_SIZE];
     DWORD  sState;
 
-
     LONG ret;
     ret = RegOpenKeyEx(HKEY_LOCAL_MACHINE,  "SOFTWARE",  0,  KEY_READ|KEY_WRITE, &hKeySoftware);
     if(ret != ERROR_SUCCESS){
@@ -196,7 +193,6 @@ int lc_installPlugin(const  char* realFilePath)
     RegFlushKey(hStarOffice);
     RegFlushKey(hMozillaPlugins);
 
-
     if((realFilePath == NULL) || (strlen(realFilePath) == 0) || (strlen(realFilePath) >= SO_PATH_SIZE))
         ret = -1;
     else{
@@ -204,7 +200,6 @@ int lc_installPlugin(const  char* realFilePath)
         ret = 0;
     }
 
-    //ret =  GetCurrentDirectory( SO_PATH_SIZE, sSoPath);
     // GetCurrentDirectory return the char number of the string
     if(ret == 0){
         ret = RegSetValueEx( hStarOffice, "Path", 0, REG_SZ,  (LPBYTE) sSoPath, strlen(sSoPath) + 1);

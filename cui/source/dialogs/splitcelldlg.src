@@ -128,5 +128,3 @@ ModalDialog RID_SVX_SPLITCELLDLG
         Text [ en-US ] = "Direction" ;
     };
 };
-
-

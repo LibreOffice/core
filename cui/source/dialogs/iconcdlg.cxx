@@ -268,12 +268,12 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 
 IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
                                      const EIconChoicePos ePos,
-                                     const SfxItemSet *pItemSet )//, BOOL bEditFmt, const String *pUserButtonText = 0 )
+                                     const SfxItemSet *pItemSet )
 :   ModalDialog         ( pParent, rResId ),
     meChoicePos     ( ePos ),
     maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
                             WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP ),
+                            WB_NODRAGSELECTION | WB_TABSTOP ),
     mnCurrentPageId ( USHRT_MAX ),
 
     aOKBtn          ( this, WB_DEFBUTTON ),
@@ -292,10 +292,8 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     bModified       ( FALSE ),
     bItemsReset     ( FALSE )
 {
-    // IconChoiceCtrl-Settings
-    //maIconCtrl.SetBackground ( Wallpaper( Color (146, 146, 186) ) );
 
-    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
+    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
     SetCtrlPos ( meChoicePos );
     maIconCtrl.SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     maIconCtrl.Show();
@@ -324,26 +322,6 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
 
     SetPosSizeCtrls ( TRUE );
 }
-
-// -----------------------------------------------------------------------
-
-/*
-IconChoiceDialog ::IconChoiceDialog ( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
-                   const SfxItemSet * = 0, BOOL bEditFmt = FALSE,
-                   const String *pUserButtonText = 0 )
-:   meChoicePos     ( PosLeft ),    // Default erst ma Links
-    maIconCtrl      ( this, Die_Winbits ),
-    aOKBtn          ( this ),
-    pUserBtn        ( pUserButtonText? new PushButton(this): 0 ),
-    aCancelBtn      ( this ),
-    aHelpBtn        ( this ),
-    aResetBtn       ( this ),
-    aBaseFmtBtn     ( this ),
-    mnCurrentPageId ( 0 )
-{
-    FreeResource();
-}
-*/
 
 // -----------------------------------------------------------------------
 
@@ -380,18 +358,6 @@ IconChoiceDialog ::~IconChoiceDialog ()
         }
         delete pData;
     }
-
-    // remove Pagelist
-/*  for ( i=0; i<maPageList.Count(); i++ )
-    {
-        IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
-
-        if ( pData->bOnDemand )
-            delete ( SfxItemSet * )&( pData->pPage->GetItemSet() );
-
-        delete pData->pPage;
-        delete pData;
-    }*/
 
     // remove Userdata from Icons
     for ( i=0; i<maIconCtrl.GetEntryCount(); i++)
@@ -1250,7 +1216,7 @@ void IconChoiceDialog::Start_Impl()
     USHORT nActPage;
 
     if ( mnCurrentPageId == 0 || mnCurrentPageId == USHRT_MAX )
-        nActPage = maPageList.GetObject(0)->nId;//First()->nId;
+        nActPage = maPageList.GetObject(0)->nId;
     else
         nActPage = mnCurrentPageId;
 

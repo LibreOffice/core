@@ -94,7 +94,7 @@ SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, c
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer f"ur die BallonHelp
+    // Timer for the BallonHelp
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SvxConfigFunctionListBox_Impl, TimerHdl ) );
@@ -1040,7 +1040,6 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     aCategories.SetFunctionListBox( &aCommands );
     aCategories.Init();
-    // aCategories.Select( aCategories.GetEntry( 0, 0 ) );
 
     aCategories.SetSelectHdl(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );

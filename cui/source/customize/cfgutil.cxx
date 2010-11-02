@@ -185,15 +185,6 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     if (!aStyle.sLabel.getLength())
     {
         aStyle.sLabel = aStyle.sCommand;
-        /*
-        #if OSL_DEBUG_LEVEL > 1
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("There is no UIName for the style command \"");
-        sMsg.append     (aStyle.sCommand                              );
-        sMsg.appendAscii("\". The UI will be invalid then ..."        );
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
-        #endif
-        */
     }
 }
 
@@ -291,7 +282,7 @@ SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, c
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer f"ur die BallonHelp
+    // Timer for the BallonHelp
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SfxConfigFunctionListBox_Impl, TimerHdl ) );
@@ -304,20 +295,7 @@ SfxConfigFunctionListBox_Impl::~SfxConfigFunctionListBox_Impl()
 
 void SfxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& )
 {
-    /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
-    Point aMousePos = rMEvt.GetPosPixel();
-    pCurEntry = GetCurEntry();
-
-    if ( pCurEntry && GetEntry( aMousePos ) == pCurEntry )
-        aTimer.Start();
-    else
-    {
-        Help::ShowBalloon( this, aMousePos, String() );
-        aTimer.Stop();
-    }
-    */
 }
-
 
 IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
 /*  Beschreibung
@@ -327,16 +305,6 @@ IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
 */
 {
     (void)pTimer; // unused
-    /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
-    aTimer.Stop();
-    Point aMousePos = GetPointerPosPixel();
-    SvLBoxEntry *pEntry = GetCurEntry();
-    if ( pEntry && GetEntry( aMousePos ) == pEntry && pCurEntry == pEntry )
-    {
-        String sHelpText = GetHelpText( pEntry );
-        Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), sHelpText );
-    }
-    */
     return 0L;
 }
 
@@ -464,57 +432,12 @@ USHORT SfxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
     return 0;
 }
 
-/*
-String SfxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
-{
-    // Information zum selektierten Entry aus den Userdaten holen
-    SfxGroupInfo_Impl *pInfo = pEntry ? (SfxGroupInfo_Impl*) pEntry->GetUserData(): 0;
-    if ( pInfo )
-    {
-        switch ( pInfo->nKind )
-        {
-            case SFX_CFGGROUP_FUNCTION :
-            case SFX_CFGFUNCTION_SLOT :
-            {
-                // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
-                USHORT nId = pInfo->nOrd;
-                String aText = Application::GetHelp()->GetHelpText( nId, this );
-
-                if ( !aText.Len() )
-                    aText = SFX_SLOTPOOL().GetSlotHelpText_Impl( nId );
-                return aText;
-            }
-
-            case SFX_CFGGROUP_SCRIPTCONTAINER :
-            case SFX_CFGFUNCTION_SCRIPT :
-            case SFX_CFGGROUP_BASICMGR :
-            case SFX_CFGGROUP_DOCBASICMGR :
-            case SFX_CFGGROUP_BASICLIB :
-            case SFX_CFGGROUP_BASICMOD :
-            case SFX_CFGFUNCTION_MACRO :
-            {
-                // Eintrag ist ein Macro, Hilfe aus der MacroInfo
-                SfxMacroInfo *pMacInfo = (SfxMacroInfo*) pInfo->pObject;
-                return pMacInfo->GetHelpText();
-            }
-
-            case SFX_CFGGROUP_STYLES :
-                return String();
-        }
-    }
-
-    return String();
-}*/
-
 void SfxConfigFunctionListBox_Impl::FunctionSelected()
 /*  Beschreibung
     Setzt die Balloonhelp zur"uck, da diese immer den Helptext des selektierten
     Entry anzeigen soll.
 */
 {
-    /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
-    Help::ShowBalloon( this, Point(), String() );
-    */
 }
 
 void SfxConfigFunctionListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
@@ -817,7 +740,6 @@ namespace
         }
         catch( const Exception& )
         {
-            //DBG_UNHANDLED_EXCEPTION();
         }
 
         return xDocument;
@@ -847,46 +769,6 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         InitStyles();
     }
 
-    /*
-
-    // Verwendet wird der aktuelle Slotpool
-    if ( nMode )
-    {
-        pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-        for ( USHORT i=1; i<pSlotPool->GetGroupCount(); i++ )
-        {
-            // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-            String aName = pSlotPool->SeekGroup( i );
-            const SfxSlot *pSfxSlot = pSlotPool->FirstSlot();
-            if ( pSfxSlot )
-            {
-                // Check if all entries are not useable. Don't
-                // insert a group without any useable function.
-                sal_Bool bActiveEntries = sal_False;
-                while ( pSfxSlot )
-                {
-                    USHORT nId = pSfxSlot->GetSlotId();
-                    if ( pSfxSlot->GetMode() & nMode )
-                    {
-                        bActiveEntries = sal_True;
-                        break;
-                    }
-
-                    pSfxSlot = pSlotPool->NextSlot();
-                }
-
-                if ( bActiveEntries )
-                {
-                    // Wenn Gruppe nicht leer
-                    SvLBoxEntry *pEntry = InsertEntry( aName, NULL );
-                    SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_FUNCTION, i );
-                    aArr.Insert( pInfo, aArr.Count() );
-                    pEntry->SetUserData( pInfo );
-                }
-            }
-        }
-    }
-*/
     SfxApplication *pSfxApp = SFX_APP();
     if ( bShowBasic )
     {
@@ -898,20 +780,6 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         // Zuerst AppBasic
         BasicManager *pAppBasicMgr = pSfxApp->GetBasicManager();
         BOOL bInsert = TRUE;
-        /*
-        if ( pArr )
-        {
-            bInsert = FALSE;
-            for ( USHORT n=0; n<pArr->Count(); n++ )
-            {
-                if ( *(*pArr)[n] == pSfxApp->GetName() )
-                {
-                    bInsert = TRUE;
-                    break;
-                }
-            }
-        }
-        */
 
         if ( bInsert )
         {
@@ -923,10 +791,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                 aAppBasTitle += aMacroName;
                 SvLBoxEntry *pEntry = InsertEntry( aAppBasTitle, 0 );
                 SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_BASICMGR, 0, pAppBasicMgr );
-    //          aArr.Insert( pInfo, aArr.Count() );
                 pEntry->SetUserData( pInfo );
                 pEntry->EnableChildsOnDemand( TRUE );
-    //          Expand( pEntry );
             }
         }
 
@@ -967,7 +833,6 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
                 ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
-            //rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
         }
         catch( Exception& e )
         {
@@ -1108,14 +973,6 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         pEntry->SetUserData( pInfo );
         pEntry->EnableChildsOnDemand( TRUE );
     }
-
-/*  {
-        String sSymbols( String::CreateFromAscii("Symbols") );
-        SvLBoxEntry *pEntry = InsertEntry( sSymbols, 0 );
-        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_SPECIALCHARACTERS, 0, 0 ); // TODO last parameter should contain user data
-        aArr.Insert( pInfo, aArr.Count() );
-        pEntry->SetUserData( pInfo );
-    } */
 
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( TRUE );
@@ -1290,15 +1147,6 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
     if (!sUIName.getLength())
     {
         sUIName = sCommand;
-        /*
-        #if OSL_DEBUG_LEVEL > 1
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("There is no UIName for the internal command \"");
-        sMsg.append     (sCommand                                        );
-        sMsg.appendAscii("\". The UI will be invalid then ..."           );
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
-        #endif
-        */
     }
 
     return sUIName;
@@ -1576,7 +1424,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 {
                     SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
 
-                    BOOL bIsStarScript = FALSE; //pMod->ISA( SbJScriptModule );
+                    BOOL bIsStarScript = FALSE;
                     BOOL bWantsStarScript = pImp->m_aScriptType.EqualsAscii("StarScript");
                     if ( bIsStarScript != bWantsStarScript )
                         continue;
@@ -1714,21 +1562,6 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
 
 void SfxConfigGroupListBox_Impl::AddAndSelect( const SfxStringItem* , const SfxStringItem* )
 {
-    /*
-    if ( pText )
-    {
-        Select( GetEntry( GetEntryCount()-1) );
-        SvLBoxEntry* pFuncEntry = pFunctionListBox->InsertEntry( pText->GetValue(), NULL );
-        SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_SPECIALCHARACTERS, 0, 0 );
-        String aCommand = String::CreateFromAscii(".uno:InsertSymbol?Symbols:string=");
-        aCommand += pText->GetValue();
-        pFunctionListBox->aArr.Insert( pGrpInfo, pFunctionListBox->aArr.Count() );
-        pGrpInfo->sCommand = aCommand;
-        pGrpInfo->sLabel = String::CreateFromAscii("Symbols: ");
-        pGrpInfo->sLabel += pText->GetValue();
-        pFuncEntry->SetUserData( pGrpInfo );
-    }
-    */
 }
 
 void SfxConfigGroupListBox_Impl::SelectMacro( const SfxMacroInfoItem *pItem )

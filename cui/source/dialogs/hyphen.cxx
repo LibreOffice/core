@@ -75,7 +75,6 @@ HyphenEdit_Impl::HyphenEdit_Impl( Window* pParent, const ResId& rResId ) :
 
 void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-//  sal_uInt16 nMod  = rKEvt.GetKeyCode().GetModifier();
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     switch ( nCode )
@@ -105,7 +104,6 @@ void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 struct SvxHyphenWordDialog_Impl
 {
     SvxHyphenWordDialog *       m_pDialog;
-//    Window *                    m_pParent;
 
     FixedText           aWordFT;
     HyphenEdit_Impl     aWordEdit;

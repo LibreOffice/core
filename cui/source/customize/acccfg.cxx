@@ -635,11 +635,6 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
                                            USHORT       /*nFlags*/,
                                            SvLBoxEntry* pEntry )
 {
-    /*/ ??? realy needed !!!
-    Font aOldFont(rDevice.GetFont());
-    Font aNewFont(aOldFont         );
-    rDevice.SetFont( aFont );
-    */
 
     if (!pEntry)
         return;
@@ -653,7 +648,6 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
     else
         rDevice.DrawCtrlText(aPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE);
 
-    //rDev.SetFont( aOldFont );
 }
 
 //-----------------------------------------------
@@ -1520,7 +1514,6 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );
-//  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
     m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
 

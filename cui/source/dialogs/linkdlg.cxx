@@ -126,7 +126,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, BOOL bHtml 
     Automatic().SetClickHdl( LINK( this, SvBaseLinksDlg, AutomaticClickHdl ) );
     Manual().SetClickHdl( LINK( this, SvBaseLinksDlg, ManualClickHdl ) );
     UpdateNow().SetClickHdl( LINK( this, SvBaseLinksDlg, UpdateNowClickHdl ) );
-//  OpenSource().SetClickHdl( LINK( this, SvBaseLinksDlg, OpenSourceClickHdl ) );
     ChangeSource().SetClickHdl( LINK( this, SvBaseLinksDlg, ChangeSourceClickHdl ) );
     if(!bHtmlMode)
         BreakLink().SetClickHdl( LINK( this, SvBaseLinksDlg, BreakLinkClickHdl ) );
@@ -337,15 +336,6 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-/*
-IMPL_LINK_INLINE_START( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
-{
-    DBG_ASSERT( !this, "Open noch nicht impl." );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
-*/
-
 IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 {
     (void)pPushButton;
@@ -485,7 +475,6 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             Automatic().Disable();
             Manual().Disable();
             UpdateNow().Disable();
-//            OpenSource().Disable();
             ChangeSource().Disable();
             BreakLink().Disable();
 
@@ -502,8 +491,6 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 {
     (void)pTimer;
-//    for( SvLBoxEntry* pBox = Links().First(); pBox;
-//          pBox = Links().Next( pBox ))
 
     Links().SetUpdateMode(FALSE);
     for( ULONG nPos = Links().GetEntryCount(); nPos; )
@@ -529,7 +516,6 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 
     if( _pLink && _pLink->WasLastEditOK() )
     {
-        // JP 09.01.98:
         // StarImpress/Draw tauschen die LinkObjecte selbst aus!
         // also suche den Link im Manager, wenn der nicht mehr existiert,
         // dann setze fuelle die Liste komplett neu. Ansonsten braucht

@@ -264,12 +264,10 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
 :   mpDialog( pDialog ),
     aShowSet        ( pDialog, ResId( CT_SHOWSET, *pResContext ) ),
     aShowText       ( pDialog, ResId( CT_SHOWTEXT, *pResContext ) ),
-//    aShowShortcut   ( pDialog, ResId( CT_ASSIGN, *pResContext ) ),
     aOKBtn          ( pDialog, ResId( BTN_CHAR_OK, *pResContext ) ),
     aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL, *pResContext ) ),
     aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP, *pResContext ) ),
     aDeleteBtn      ( pDialog, ResId( BTN_DELETE, *pResContext ) ),
-//    aAssignBtn      ( pDialog, ResId( BT_ASSIGN, *pResContext ) ),
     aFontText       ( pDialog, ResId( FT_FONT, *pResContext ) ),
     aFontLB         ( pDialog, ResId( LB_FONT, *pResContext ) ),
     aSubsetText     ( pDialog, ResId( FT_SUBSET, *pResContext ) ),
@@ -277,7 +275,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
     aSymbolText     ( pDialog, ResId( FT_SYMBOLE, *pResContext ) ),
     aShowChar       ( pDialog, ResId( CT_SHOWCHAR, *pResContext ), TRUE ),
     aCharCodeText   ( pDialog, ResId( FT_CHARCODE, *pResContext ) ),
-//    aAssignText     ( pDialog, ResId( FT_ASSIGN, *pResContext ) ),
     bOne( bOne_ ),
     pSubsetMap( NULL )
 {
@@ -342,7 +339,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
     aShowSet.SetHighlightHdl( LINK( this, SvxCharMapData, CharHighlightHdl ) );
     aShowSet.SetPreSelectHdl( LINK( this, SvxCharMapData, CharPreSelectHdl ) );
     aDeleteBtn.SetClickHdl( LINK( this, SvxCharMapData, DeleteHdl ) );
-//    aAssignBtn.SetClickHdl( LINK( this, SvxCharMapData, AssignHdl ) );
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
         aOKBtn.Disable();

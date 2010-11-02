@@ -56,7 +56,6 @@
 #include <toolkit/unohlp.hxx>
 
 #include <algorithm>
-//add
 #include <cuires.hrc>
 #include "cfg.hrc"
 #include "helpid.hrc"
@@ -150,7 +149,7 @@ void printPropertySet(
 
         uno::Any a = xPropSet->getPropertyValue( aPropDetails[i].Name );
 
-        if ( ( a >>= tmp ) /* && tmp.getLength() != 0 */ )
+        if ( a >>= tmp )
         {
             OSL_TRACE("%s: Got property: %s = %s",
                 PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
@@ -222,10 +221,6 @@ OUString replaceSaveInName(
     {
         name = rMessage.replaceAt(
             pos, placeholder.getLength(), rSaveInName );
-    }
-    else
-    {
-        // don't change the message
     }
 
     return name;
@@ -2637,7 +2632,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
                 GetSaveInData()->SetModified( TRUE );
             }
 
-            // #i68101# Moemory leak (!)
+            // #i68101# Memory leak (!)
             delete pNameDialog;
 
             break;
@@ -3234,42 +3229,6 @@ SvxConfigEntry::GetProperties(
 
     return aPropSeq;
 }
-
-/*
-SvxMenuConfigEntry::SvxMenuConfigEntry(
-    const uno::Sequence< beans::PropertyValue >& rProperties,
-    const uno::Reference< container::XNameAccess >& rCommandToLabelMap )
-    :
-        SvxConfigEntry( rProperties, rCommandToLabelMap )
-{
-    uno::Reference< container::XIndexAccess > aChildren;
-
-    for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
-    {
-        if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
-        {
-            rProperties[i].Value >>= aChildren;
-        }
-    }
-
-    if ( aChildren.is() )
-    {
-        SetPopup( TRUE );
-        SetEntries( new SvxEntries() );
-
-           uno::Sequence< beans::PropertyValue > aProps;
-        for ( sal_Int32 i = 0; i < aChildren->getCount(); i++ )
-        {
-               if ( aChildren->getByIndex( i ) >>= aProps )
-            {
-                SvxConfigEntry* pEntry =
-                    new SvxMenuConfigEntry( aProps, rCommandToLabelMap );
-                GetEntries()->push_back( pEntry );
-            }
-        }
-    }
-}
-*/
 
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
                                 const OUString& rCommandURL, bool bPopup, bool bParentData )
