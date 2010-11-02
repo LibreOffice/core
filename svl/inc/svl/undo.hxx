@@ -158,6 +158,12 @@ namespace svl
     class SAL_NO_VTABLE IUndoManager
     {
     public:
+        enum
+        {
+            CurrentLevel = true,
+            TopLevel = false
+        };
+
         virtual                 ~IUndoManager() { };
 
         virtual void            SetMaxUndoActionCount( USHORT nMaxUndoActionCount ) = 0;
@@ -165,13 +171,13 @@ namespace svl
 
         virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE ) = 0;
 
-        virtual USHORT          GetUndoActionCount() const = 0;
+        virtual USHORT          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual USHORT          GetUndoActionId() const = 0;
-        virtual UniString       GetUndoActionComment( USHORT nNo=0 ) const = 0;
+        virtual UniString       GetUndoActionComment( USHORT nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual SfxUndoAction*  GetUndoAction( USHORT nNo=0 ) const = 0;
 
-        virtual USHORT          GetRedoActionCount() const = 0;
-        virtual UniString       GetRedoActionComment( USHORT nNo=0 ) const = 0;
+        virtual USHORT          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
+        virtual UniString       GetRedoActionComment( USHORT nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
 
         virtual BOOL            Undo() = 0;
         virtual BOOL            Redo() = 0;
@@ -255,12 +261,12 @@ public:
     virtual void            SetMaxUndoActionCount( USHORT nMaxUndoActionCount );
     virtual USHORT          GetMaxUndoActionCount() const;
     virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
-    virtual USHORT          GetUndoActionCount() const;
+    virtual USHORT          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     virtual USHORT          GetUndoActionId() const;
-    virtual UniString       GetUndoActionComment( USHORT nNo=0 ) const;
+    virtual UniString       GetUndoActionComment( USHORT nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual SfxUndoAction*  GetUndoAction( USHORT nNo=0 ) const;
-    virtual USHORT          GetRedoActionCount() const;
-    virtual UniString       GetRedoActionComment( USHORT nNo=0 ) const;
+    virtual USHORT          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
+    virtual UniString       GetRedoActionComment( USHORT nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual BOOL            Undo();
     virtual BOOL            Redo();
     virtual void            Clear();

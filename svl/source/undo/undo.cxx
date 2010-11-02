@@ -399,25 +399,25 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 
 //------------------------------------------------------------------------
 
-USHORT SfxUndoManager::GetUndoActionCount() const
+USHORT SfxUndoManager::GetUndoActionCount( bool const i_currentLevel ) const
 {
-    return m_pData->pActUndoArray->nCurUndoAction;
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
+    return pUndoArray->nCurUndoAction;
 }
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
+XubString SfxUndoManager::GetUndoActionComment( USHORT nNo, bool const i_currentLevel ) const
 {
-    DBG_ASSERT( nNo < m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment(), illegal id!" );
-    if( nNo < m_pData->pActUndoArray->nCurUndoAction )
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
+
+    String sComment;
+    DBG_ASSERT( nNo < pUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment: illegal index!" );
+    if( nNo < pUndoArray->nCurUndoAction )
     {
-        return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo]->GetComment(); //!
+        sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction - 1 - nNo ]->GetComment();
     }
-    else
-    {
-        XubString aEmpty;
-        return aEmpty;
-    }
+    return sComment;
 }
 
 //------------------------------------------------------------------------
@@ -534,16 +534,18 @@ BOOL SfxUndoManager::Undo()
 
 //------------------------------------------------------------------------
 
-USHORT SfxUndoManager::GetRedoActionCount() const
+USHORT SfxUndoManager::GetRedoActionCount( bool const i_currentLevel ) const
 {
-    return m_pData->pActUndoArray->aUndoActions.Count() - m_pData->pActUndoArray->nCurUndoAction; //!
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
+    return pUndoArray->aUndoActions.Count() - pUndoArray->nCurUndoAction;
 }
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoManager::GetRedoActionComment( USHORT nNo ) const
+XubString SfxUndoManager::GetRedoActionComment( USHORT nNo, bool const i_currentLevel ) const
 {
-    return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction+nNo]->GetComment(); //!
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
+    return pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ]->GetComment();
 }
 
 //------------------------------------------------------------------------
