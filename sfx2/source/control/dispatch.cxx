@@ -1028,7 +1028,6 @@ void SfxDispatcher::_Execute
     if ( IsLocked( rSlot.GetSlotId() ) )
         return;
 
-    sal_uInt16 nSlot = rSlot.GetSlotId();
     if ( (eCallMode & SFX_CALLMODE_ASYNCHRON) ||
          ( !(eCallMode & SFX_CALLMODE_SYNCHRON) &&
            rSlot.IsMode(SFX_SLOT_ASYNCHRON) ) )
@@ -2294,7 +2293,6 @@ sal_Bool SfxDispatcher::_FindServer
     SFX_STACK(SfxDispatcher::_FindServer);
 
     // Dispatcher gelockt? (SID_HELP_PI trotzdem durchlassen)
-    SfxApplication *pSfxApp = SFX_APP();
     if ( IsLocked(nSlot) )
     {
         pImp->bInvalidateOnUnlock = sal_True;
@@ -2634,7 +2632,6 @@ const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
     {
         Flush();
 
-        sal_uInt16 nSlot = pSlot->GetSlotId();
         if ( pSlot->IsMode(SFX_SLOT_ASYNCHRON) )
             //! ignoriert rSvr
         {

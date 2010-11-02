@@ -1763,44 +1763,6 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
 }
 
 //-------------------------------------------------------------------------
-namespace {
-    using namespace ::com::sun::star::uno;
-
-    //.....................................................................
-    static SbxArrayRef lcl_translateUno2Basic( const void* _pAnySequence )
-    {
-        SbxArrayRef xReturn;
-        if ( _pAnySequence )
-        {
-            // in real it's a sequence of Any (by convention)
-            const Sequence< Any >* pArguments = static_cast< const Sequence< Any >* >( _pAnySequence );
-
-            // do we have arguments ?
-            if ( pArguments->getLength() )
-            {
-                // yep
-                xReturn = new SbxArray;
-                String sEmptyName;
-
-                // loop through the sequence
-                const Any* pArg     =           pArguments->getConstArray();
-                const Any* pArgEnd  = pArg  +   pArguments->getLength();
-
-                for ( sal_uInt16 nArgPos=1; pArg != pArgEnd; ++pArg, ++nArgPos )
-                    // and create a Sb object for every Any
-                    xReturn->Put( GetSbUnoObject( sEmptyName, *pArg ), nArgPos );
-            }
-        }
-        return xReturn;
-    }
-    //.....................................................................
-    void lcl_translateBasic2Uno( const SbxVariableRef& _rBasicValue, void* _pAny )
-    {
-        if ( _pAny )
-            *static_cast< Any* >( _pAny ) = sbxToUnoValue( _rBasicValue );
-    }
-}
-
 SfxFrame* SfxObjectShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 {
     return pSelf;
