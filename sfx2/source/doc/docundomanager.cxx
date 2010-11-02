@@ -157,6 +157,40 @@ namespace sfx2
     }
 
     //==================================================================================================================
+    //= helper
+    //==================================================================================================================
+    namespace
+    {
+#ifdef DBG_UTIL
+        struct UndoManagerDiagnosticsGuard
+        {
+            UndoManagerDiagnosticsGuard( const ::svl::IUndoManager& i_undoManager )
+                :m_pUndoManager( dynamic_cast< SfxUndoManager* >( const_cast< ::svl::IUndoManager* >( &i_undoManager ) ) )
+            {
+                if ( m_pUndoManager )
+                    m_pUndoManager->DbgEnableCompatibilityAssertions( false );
+            }
+
+            ~UndoManagerDiagnosticsGuard()
+            {
+                if ( m_pUndoManager )
+                    m_pUndoManager->DbgEnableCompatibilityAssertions( true );
+            }
+
+        private:
+            SfxUndoManager* m_pUndoManager;
+        };
+#else
+        struct UndoManagerDiagnosticsGuard
+        {
+            UndoManagerDiagnosticsGuard( const ::svl::IUndoManager& )
+            {
+            }
+        };
+#endif
+    }
+
+    //==================================================================================================================
     //= DocumentUndoManager_Impl
     //==================================================================================================================
     struct DocumentUndoManager_Impl : public SfxUndoListener
@@ -166,6 +200,7 @@ namespace sfx2
         DocumentUndoManager&                rAntiImpl;
         bool                                bAPIActionRunning;
         ::std::stack< bool >                aContextVisibilities;
+        ::std::stack< ::rtl::OUString >     aContextTitles;
 #if OSL_DEBUG_LEVEL > 0
         ::std::stack< bool >                aContextAPIFlags;
 #endif
@@ -213,6 +248,8 @@ namespace sfx2
             pUndoManager->RemoveUndoListener( *this );
             pUndoManager = NULL;
         }
+
+        const ::rtl::OUString& getTopContextTitle() const { return aContextTitles.top(); }
 
         // SfxUndoListener
         virtual void actionUndone( SfxUndoAction& i_action );
@@ -329,6 +366,8 @@ namespace sfx2
         aContextAPIFlags.push( bAPIActionRunning );
 #endif
 
+        aContextTitles.push( i_comment );
+
         if ( bAPIActionRunning )
             return;
 
@@ -358,6 +397,8 @@ namespace sfx2
         aContextAPIFlags.pop();
         OSL_ENSURE( bCurrentContextIsAPIContext == bAPIActionRunning, "DocumentUndoManager_Impl::listActionLeftAndMerged: API and non-API contexts interwoven!" );
 #endif
+
+        aContextTitles.pop();
 
         if ( bAPIActionRunning )
             return;
@@ -505,6 +546,7 @@ namespace sfx2
 
         USHORT nContextElements = 0;
         bool isHiddenContext = false;
+        const ::rtl::OUString sContextTitle = m_pImpl->getTopContextTitle();
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
 
