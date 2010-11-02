@@ -43,12 +43,11 @@ CDEFS+= -DDBG_ANIM_LOG
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
-        $(SLO)$/sdfilter.obj	\
-        $(SLO)$/sdpptwrp.obj	
+        $(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES= \
-           $(SLO)$/pptin.obj		\
-           $(SLO)$/sdfilter.obj
+        $(SLO)$/sdfilter.obj	\
+        $(SLO)$/sdpptwrp.obj
 
 # --- Tagets -------------------------------------------------------
 
