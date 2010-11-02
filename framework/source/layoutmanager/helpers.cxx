@@ -111,7 +111,7 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea )
         ToolBox* pToolBox = dynamic_cast<ToolBox *>( pWindow );
         if ( pToolBox )
         {
-            aToolbarName = pToolBox->GetSmartHelpId().GetStr();
+            aToolbarName = rtl::OStringToOUString( pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8 );
             sal_Int32 i = aToolbarName.lastIndexOf( ':' );
             if (( aToolbarName.getLength() > 0 ) && ( i > 0 ) && (( i+ 1 ) < aToolbarName.getLength() ))
                 aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name

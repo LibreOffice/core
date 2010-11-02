@@ -1780,15 +1780,15 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
         if ( pViewFrame )
         {
             Window* pWindow = rNEvt.GetWindow();
-            ULONG nHelpId  = 0;
-            while ( !nHelpId && pWindow )
+            rtl::OString sHelpId;
+            while ( !sHelpId.getLength() && pWindow )
             {
-                nHelpId = pWindow->GetHelpId();
+                sHelpId = pWindow->GetHelpId();
                 pWindow = pWindow->GetParent();
             }
 
-            if ( nHelpId )
-                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), nHelpId );
+            if ( sHelpId.getLength() )
+                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), sHelpId );
         }
     }
 
