@@ -36,7 +36,9 @@ TARGET=cgm
 
 # --- Files --------------------------------------------------------
 
-SLOFILES = $(SLO)$/sdcgmfilter.obj	
+SLOFILES = $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = $(SLO)$/sdcgmfilter.obj
 
 # --- Targets --------------------------------------------------------------
 

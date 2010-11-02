@@ -59,24 +59,19 @@ SRC1FILES =	\
 #		$(OBJ)$/sdresid.obj	\
 
 SLOFILES =	\
+        $(EXCEPTIONSFILES)		\
+        $(SLO)$/sdresid.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/optsitem.obj		\
+        $(SLO)$/sddll.obj		\
+        $(SLO)$/sddll1.obj      	\
+        $(SLO)$/sddll2.obj      	\
         $(SLO)$/sdmod.obj		\
         $(SLO)$/sdmod1.obj		\
         $(SLO)$/sdmod2.obj		\
-        $(SLO)$/sddll.obj		\
-        $(SLO)$/sddll1.obj      \
-        $(SLO)$/sddll2.obj      \
-        $(SLO)$/tbxww.obj		\
-        $(SLO)$/optsitem.obj	\
-        $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\
         $(SLO)$/sdxfer.obj		\
-        $(SLO)$/tmplctrl.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/sddll1.obj      \
-        $(SLO)$/sddll2.obj      \
-        $(SLO)$/sdxfer.obj		\
-        $(SLO)$/sdmod1.obj		\
         $(SLO)$/tbxww.obj		\
         $(SLO)$/tmplctrl.obj
 
