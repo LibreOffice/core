@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt { module tab {
 /** An instance of this interface is used by the <type>XTabPageContainer</type> to
     get notifications about changes in activation of tab pages.
 
-    @since OOo 3.3.0
+    @since OOo 3.4
  */
 interface XTabPageContainerListener: com::sun::star::lang::XEventListener
 {

@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt { module tab {
 
 /** An event used by a <type>XTabPageContainer</type> to notify changes in tab page activation.
 
-    @since OOo 3.3.0
+    @since OOo 3.4
  */
 struct TabPageActivatedEvent: com::sun::star::lang::EventObject
 {

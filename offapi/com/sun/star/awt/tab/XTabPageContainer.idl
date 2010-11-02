@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt { module tab {
 
     @see UnoControlTabPageContainer
 
-    @since OOo 3.3.0
+    @since OOo 3.4
  */
 interface XTabPageContainer
 {
