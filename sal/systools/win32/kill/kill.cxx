@@ -73,57 +73,7 @@ static inline bool IsValidHandle( HANDLE handle )
 // Retrieves function adress in another process
 /////////////////////////////////////////////////////////////////////////////
 
-#if 1
 #define GetProcAddressEx( hProcess, hModule, lpProcName ) GetProcAddress( hModule, lpProcName )
-#else
-FARPROC WINAPI GetProcAddressEx( HANDLE hProcess, HMODULE hModule, LPCSTR lpProcName )
-{
-    FARPROC lpfnProcAddress = GetProcAddress( hModule, lpProcName );
-
-    if ( lpfnProcAddress )
-    {
-        DWORD   dwProcessId = GetProcessId( hProcess );
-
-        if ( GetCurrentProcessId() != dwProcessId )
-        {
-            FARPROC lpfnRemoteProcAddress = NULL;
-            TCHAR   szBaseName[MAX_PATH];
-
-            if ( GetModuleBaseName( GetCurrentProcess(), hModule, szBaseName, SAL_N_ELEMENTS(szBaseName) ) )
-            {
-                HMODULE ahModules[MAX_MODULES];
-                DWORD   cbNeeded = 0;
-
-                if ( EnumProcessModules( hProcess, ahModules, sizeof(ahModules), &cbNeeded ) )
-                {
-                    ULONG   nModules = cbNeeded / sizeof(ahModules[0]);
-
-                    for ( ULONG n = 0; n < nModules; n++ )
-                    {
-                        TCHAR   szRemoteBaseName[MAX_PATH];
-
-                        if ( GetModuleBaseName(
-                            hProcess, ahModules[n], szRemoteBaseName, SAL_N_ELEMENTS(szRemoteBaseName) ) &&
-                            0 == lstrcmpi( szRemoteBaseName, szBaseName )
-                            )
-                        {
-                            lpfnRemoteProcAddress = lpfnProcAddress;
-
-                            if ( ahModules[n] != hModule )
-                                *(LPBYTE*)&lpfnRemoteProcAddress += (LPBYTE)ahModules[n] - (LPBYTE)hModule;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            lpfnProcAddress = lpfnRemoteProcAddress;
-        }
-    }
-
-    return lpfnProcAddress;
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // Raises a signal in an other process
