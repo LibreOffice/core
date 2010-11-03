@@ -1335,8 +1335,10 @@ elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd/)
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
                         $L.$JRETHREADDIR.
-                        $L_STLPORT_LIB.
-                        $L.$XLIB;
+                        $L_STLPORT_LIB;
+   if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" ) {
+      $SOLARLIB       .= $L.$XLIB;
+   }
 }
 elsif ($platform =~ m/cygwin|os2/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
