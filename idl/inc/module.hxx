@@ -34,8 +34,8 @@
 struct SvNamePos
 {
     SvGlobalName    aUUId;
-    UINT32          nStmPos;
-    SvNamePos( const SvGlobalName & rName, UINT32 nPos )
+    sal_uInt32          nStmPos;
+    SvNamePos( const SvGlobalName & rName, sal_uInt32 nPos )
         : aUUId( rName )
         , nStmPos( nPos ) {}
 };
@@ -55,16 +55,16 @@ class SvMetaModule : public SvMetaExtern
     SvString                aModulePrefix;
 
 #ifdef IDL_COMPILER
-    BOOL                    bImported   : 1,
+    sal_Bool                    bImported   : 1,
                             bIsModified : 1;
     SvGlobalName            aBeginName;
     SvGlobalName            aEndName;
     SvGlobalName            aNextName;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteContextSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void        WriteContextSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 #endif
 public:
                         SV_DECL_META_FACTORY1( SvMetaModule, SvMetaExtern, 13 )
@@ -73,7 +73,7 @@ public:
     const String &      GetIdlFileName() const { return aIdlFileName; }
     const ByteString &      GetModulePrefix() const { return aModulePrefix; }
 
-    virtual BOOL        SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
+    virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
 
     const ByteString &      GetHelpFileName() const { return aHelpFileName; }
     const ByteString &      GetTypeLibFileName() const { return aTypeLibFile; }
@@ -84,20 +84,20 @@ public:
 
 #ifdef IDL_COMPILER
                         SvMetaModule( const String & rIdlFileName,
-                                      BOOL bImported );
+                                      sal_Bool bImported );
 
-    BOOL                FillNextName( SvGlobalName * );
-    BOOL                IsImported() const { return bImported; }
-    BOOL                IsModified() const { return bIsModified; }
+    sal_Bool                FillNextName( SvGlobalName * );
+    sal_Bool                IsImported() const { return bImported; }
+    sal_Bool                IsModified() const { return bIsModified; }
 
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
     virtual void        WriteAttributes( SvIdlDataBase & rBase,
-                                        SvStream & rOutStm, USHORT nTab,
+                                        SvStream & rOutStm, sal_uInt16 nTab,
                                             WriteType, WriteAttribute = 0 );
 //    virtual void        WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm, SvNamePosList & rList );
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                     WriteType, WriteAttribute = 0 );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -105,8 +105,8 @@ public:
     virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                                       Table *pIdTable );
 
-    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
-    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaModule)
