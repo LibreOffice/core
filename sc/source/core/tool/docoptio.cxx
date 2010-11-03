@@ -452,7 +452,8 @@ ScDocCfg::ScDocCfg() :
             {
                 case SCFORMULAOPT_GRAMMAR:
                 {
-                    ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
+                    // Get default value in case this option is not set.
+                    ::formula::FormulaGrammar::Grammar eGram = GetFormulaSyntax();
 
                     do
                     {
@@ -471,6 +472,8 @@ ScDocCfg::ScDocCfg() :
                             case 2: // Excel R1C1
                                 eGram = ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
                             break;
+                            default:
+                                ;
                         }
                     }
                     while (false);
