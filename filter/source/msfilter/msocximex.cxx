@@ -5082,12 +5082,6 @@ sal_Bool HTML_TextBox::ReadFontData(SotStorageStream * /*pS*/)
   return sal_True;
 }
 
-sal_Bool HTML_TextBox::ReadFontData(SotStorageStream *pS)
-{
-  return sal_True;
-}
-
-
 // Doesn't really read anything but just skips the
 // record.
 sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
