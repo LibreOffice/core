@@ -2412,13 +2412,11 @@ BOOL SwDoc::HasInvisibleContent() const
     //
     if( ! bRet )
     {
-        SwTxtNode* pTxtNd;
         for( ULONG n = GetNodes().Count(); !bRet && (n > 0); )
         {
             SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
             if ( pTxtNd )
             {
-                bool bRemoved = false;
                 SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
                 if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
                 {
