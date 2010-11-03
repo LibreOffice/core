@@ -180,8 +180,9 @@ public:
 
     const SmNode *  FindTokenAt(USHORT nRow, USHORT nCol) const;
     const SmNode *  FindRectClosestTo(const Point &rPoint) const;
+
     // --> 4.7.2010 #i972#
-    virtual long GetFormulaBaseline() const { return (long)0; } //dummy, used in SmTableNode
+    virtual long GetFormulaBaseline() const;
     // <--
 };
 
@@ -471,7 +472,7 @@ public:
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    long GetFormulaBaseline() const { return nFormulaBaseline; }
+    virtual long GetFormulaBaseline() const;
 };
 
 

@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -58,13 +59,11 @@
 #include <vcl/graph.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
-
-#include <../../core/inc/flyfrm.hxx>
-
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <frmfmt.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
 #include <wdocsh.hxx>
@@ -74,6 +73,7 @@
 #include <view.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
+#include <cfgitems.hxx>
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
 #include <shellio.hxx>
@@ -480,8 +480,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
         if ( xObj.is() )
         {
-            BOOL bActivate2 = InsertOleObject( xObj );
-            if( bActivate && bDoVerb )
+            if( InsertOleObject( xObj ) && bActivate && bDoVerb )
             {
                 SfxInPlaceClient* pClient = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
                 if ( !pClient )
@@ -505,8 +504,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 //#50270# Error brauchen wir nicht handeln, das erledigt das
                 //DoVerb in der SfxViewShell
-                if ( bActivate2 )
-                    pClient->DoVerb( SVVERB_SHOW );
+                pClient->DoVerb( SVVERB_SHOW );
 
                 // TODO/LATER: set document name - should be done in Client
                 //if ( !ERRCODE_TOERROR( nErr ) )
@@ -604,7 +602,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
     // --> #i972#
-    if ( bStarMath ) //sets baseline
+    if ( bStarMath && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
     // <--
 
@@ -881,17 +879,14 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     if ( bUseObjectSize )
     {
         // --> this moves non-resizable object so that when adding borders the baseline remains the same
-        const SwFlyFrm *pFly = GetCurrFlyFrm();
-        if ( pFly )
+        const SwFlyFrmFmt *pFlyFrmFmt = dynamic_cast< const SwFlyFrmFmt * >( GetFlyFrmFmt() );
+        ASSERT( pFlyFrmFmt, "Could not find fly frame." );
+        if ( pFlyFrmFmt )
         {
-            const Point aPoint = pFly->GetLastFlyFrmPrtRectPos();
+            const Point &rPoint = pFlyFrmFmt->GetLastFlyFrmPrtRectPos();
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
                         : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
-            aArea += aPoint - aRect.Pos();
-        }
-        else
-        {
-            ASSERT( FALSE , "Could not find fly frame." );
+            aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
         }
         // <--
         aArea.Width ( _aVisArea.Width() );

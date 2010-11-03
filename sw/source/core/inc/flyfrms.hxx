@@ -188,7 +188,6 @@ class SwFlyInCntFrm : public SwFlyFrm
 
     BOOL bInvalidLayout :1;
     BOOL bInvalidCntnt  :1;
-    bool bPosCalculated;
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -238,8 +237,6 @@ public:
     // format of the anchor frame
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
     // <--
-
-    void SetPosCalculated( bool bNew ) { bPosCalculated = bNew; }
 };
 
 inline void SwFlyInCntFrm::InvalidateLayout() const

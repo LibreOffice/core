@@ -31,16 +31,15 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-#include <hintids.hxx>
-#ifndef _CMDID_H
-#include <cmdid.h>
-#endif
-#include <vcl/svapp.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #endif
+
+#include <doc.hxx>
+#include <hintids.hxx>
+#include <cmdid.h>
+#include <vcl/svapp.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/eitem.hxx>
@@ -55,15 +54,9 @@
 #include <fmtcol.hxx>
 #include <charatr.hxx>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
@@ -73,26 +66,14 @@
 #include <initui.hxx>
 #include <optpage.hxx>
 #include <swprtopt.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <crstate.hxx>
 #include <viewopt.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _CONFIG_HRC
 #include <config.hrc>
-#endif
-#ifndef _REDLOPT_HRC
 #include <redlopt.hrc>
-#endif
-#ifndef _OPTDLG_HRC
 #include <optdlg.hrc>
-#endif
 #include <svx/strarray.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
@@ -1510,6 +1491,7 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     return 0;
 }
+
 void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
@@ -1547,15 +1529,17 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aFillTabRB( this, SW_RES( RB_SHDWCRSFILLTAB )),
     aFillSpaceRB( this, SW_RES( RB_SHDWCRSFILLSPACE )),
     aCrsrOptFL   ( this, SW_RES( FL_CRSR_OPT)),
-    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT ))
+    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT )),
+    m_aLayoutOptionsFL( this, SW_RES( FL_LAYOUT_OPTIONS ) ),
+    m_aMathBaselineAlignmentCB( this, SW_RES( CB_MATH_BASELINE_ALIGNMENT ) ),
+    m_pWrtShell( NULL )
 {
     FreeResource();
     const SfxPoolItem* pItem = 0;
-    SwShadowCursorItem aOpt;
 
+    SwShadowCursorItem aOpt;
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
-
     aOnOffCB.Check( aOpt.IsOn() );
 
     BYTE eMode = aOpt.GetMode();
@@ -1600,6 +1584,15 @@ SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet&
     return new SwShdwCrsrOptionsTabPage( pParent, rSet );
 }
 
+
+void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
+{
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    if (pWrtSh)
+        SetWrtShell(pWrtSh->GetValue());
+}
+
+
 BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     SwShadowCursorItem aOpt;
@@ -1624,6 +1617,10 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( aOpt );
         bRet = TRUE;
     }
+
+    m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+            m_aMathBaselineAlignmentCB.IsChecked() );
+    bRet |= m_aMathBaselineAlignmentCB.IsChecked() != m_aMathBaselineAlignmentCB.GetSavedValue();
 
     if( aCrsrInProtCB.IsChecked() != aCrsrInProtCB.GetSavedValue())
     {
@@ -1658,11 +1655,10 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem = 0;
-    SwShadowCursorItem aOpt;
 
+    SwShadowCursorItem aOpt;
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
-
     aOnOffCB.Check( aOpt.IsOn() );
 
     BYTE eMode = aOpt.GetMode();
@@ -1670,6 +1666,9 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     aFillMarginRB.Check( FILL_MARGIN == eMode );
     aFillTabRB.Check( FILL_TAB == eMode );
     aFillSpaceRB.Check( FILL_SPACE == eMode );
+
+    m_aMathBaselineAlignmentCB.Check( m_pWrtShell->GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
+    m_aMathBaselineAlignmentCB.SaveValue();
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
         aCrsrInProtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
@@ -2613,6 +2612,5 @@ IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 #endif
-
 
 

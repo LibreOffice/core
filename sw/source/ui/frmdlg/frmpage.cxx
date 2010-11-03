@@ -677,7 +677,10 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     nOldV(text::VertOrientation::TOP),
     nOldVRel(text::RelOrientation::PRINT_AREA),
     pVMap( 0 ),
-    pHMap( 0 )
+    pHMap( 0 ),
+    m_bAllowVertPositioning( true ),
+    m_bIsMathOLE( false ),
+    m_bIsMathBaselineAlignment( false )
 {
     FreeResource();
     SetExchangeSupport();
@@ -784,6 +787,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
 
     const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
+
+    m_bIsMathOLE                = ((const SfxBoolItem&)rSet.Get( FN_OLE_IS_MATH )).GetValue();
+    m_bIsMathBaselineAlignment  = ((const SfxBoolItem&)rSet.Get( FN_MATH_BASELINE_ALIGNMENT )).GetValue();
+    EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
+            && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
 
     if (bFormat)
     {
@@ -1280,8 +1288,8 @@ void SwFrmPage::InitPos(RndStdIds eId,
         if ( nY != LONG_MAX )
             aAtVertPosED.SetValue( aAtVertPosED.Normalize(nY), FUNIT_TWIP );
     }
-    aAtVertPosFT.Enable( bEnable );
-    aAtVertPosED.Enable( bEnable );
+    aAtVertPosFT.Enable( bEnable && m_bAllowVertPositioning );
+    aAtVertPosED.Enable( bEnable && m_bAllowVertPositioning );
     UpdateExample();
 }
 
@@ -1488,8 +1496,10 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
         }
     }
 
-    _rLB.Enable(_rLB.GetEntryCount() != 0);
-    _rFT.Enable(_rLB.GetEntryCount() != 0);
+    const bool bEnable = _rLB.GetEntryCount() != 0
+            && (&_rLB != &aVertRelationLB || m_bAllowVertPositioning);
+    _rLB.Enable( bEnable );
+    _rFT.Enable( bEnable );
 
     RelHdl(&_rLB);
 
@@ -1850,6 +1860,10 @@ IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
         PosHdl(&aHorizontalDLB);
         PosHdl(&aVerticalDLB);
     }
+
+    EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
+            && FLY_AS_CHAR == eId) );
+
     return 0;
 }
 
@@ -1875,7 +1889,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     }
     else
     {
-        BOOL bEnable = text::VertOrientation::NONE == nAlign;
+        BOOL bEnable = text::VertOrientation::NONE == nAlign && m_bAllowVertPositioning;
         aAtVertPosED.Enable( bEnable );
         aAtVertPosFT.Enable( bEnable );
     }
@@ -2303,6 +2317,19 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
 //        aSizeFL.SetSizePixel(aSizeSize);
     }
 }
+
+
+void SwFrmPage::EnableVerticalPositioning( bool bEnable )
+{
+    m_bAllowVertPositioning = bEnable;
+    aVerticalFT.Enable( bEnable );
+    aVerticalDLB.Enable( bEnable );
+    aAtVertPosFT.Enable( bEnable );
+    aAtVertPosED.Enable( bEnable );
+    aVertRelationFT.Enable( bEnable );
+    aVertRelationLB.Enable( bEnable );
+}
+
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -3246,4 +3273,3 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
     }
     return 0;
 }
-

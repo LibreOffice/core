@@ -56,7 +56,6 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pAnch )
 {
     bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
-    bPosCalculated = FALSE;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
@@ -204,12 +203,6 @@ void SwFlyInCntFrm::MakeObjPos()
     if ( !bValidPos )
     {
         bValidPos = TRUE;
-        // --> let the position be set, only if it was calculated in
-        // SwAsCharAnchoredObjectPosition::CalcPosition
-        //TLMATH01_ ????
-        if ( !bPosCalculated )
-            return;
-        // <--
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf

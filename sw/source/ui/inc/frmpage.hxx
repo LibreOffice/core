@@ -28,27 +28,17 @@
 #ifndef _FRMPAGE_HXX
 #define _FRMPAGE_HXX
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <sfx2/tabdlg.hxx>
 #include <svx/swframeposstrings.hxx>
 #include <swtypes.hxx>
 #include <bmpwin.hxx>
 #include <svx/swframeexample.hxx>
 #include <prcntfld.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 
 namespace sfx2{class FileDialogHelper;}
@@ -142,6 +132,10 @@ class SwFrmPage: public SfxTabPage
     FrmMap* pVMap;
     FrmMap* pHMap;
 
+    bool    m_bAllowVertPositioning;
+    bool    m_bIsMathOLE;
+    bool    m_bIsMathBaselineAlignment;
+
     virtual void    ActivatePage(const SfxItemSet& rSet);
     virtual int     DeactivatePage(SfxItemSet *pSet);
 
@@ -205,6 +199,7 @@ public:
     void            SetFormatUsed(BOOL bFmt);
     void            SetFrmType(USHORT nType)    { nDlgType  = nType;     }
     inline BOOL     IsInGraficMode( void )      { return nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE; }
+    void            EnableVerticalPositioning( bool bEnable );
 };
 
 class SwGrfExtPage: public SfxTabPage

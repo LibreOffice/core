@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
@@ -69,6 +70,8 @@
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <swundo.hxx>
+#include <frame.hxx>
+#include <notxtfrm.hxx>
 // --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
 // <--
@@ -1526,7 +1529,10 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         }
     }
 
-    pFly->SetLastFlyFrmPrtRectPos( pFly->Prt().Pos() ); //stores the value of last Prt rect
+    SwFlyFrmFmt *pFlyFrmFmt = pFly->GetFmt();
+    ASSERT( pFlyFrmFmt, "fly frame format missing!" );
+    if ( pFlyFrmFmt )
+        pFlyFrmFmt->SetLastFlyFrmPrtRectPos( pFly->Prt().Pos() ); //stores the value of last Prt rect
 
     EndAllAction();
 
@@ -1590,6 +1596,20 @@ const String& SwFEShell::GetFlyName() const
 
     ASSERT( !this, "kein FlyFrame selektiert" )
     return aEmptyStr;
+}
+
+
+const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
+{
+    uno::Reference < embed::XEmbeddedObject > xObj;
+    SwFlyFrm * pFly = FindFlyFrm();
+    if (pFly && pFly->Lower() && pFly->Lower()->IsNoTxtFrm())
+    {
+        SwOLENode *pNd = ((SwNoTxtFrm*)pFly->Lower())->GetNode()->GetOLENode();
+        if (pNd)
+            xObj = pNd->GetOLEObj().GetOleRef();
+    }
+    return xObj;
 }
 
 
@@ -2203,10 +2223,12 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
         const MapMode aTargetMapMode( MAP_TWIP );
         nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
 
-        //TLMATH01 ??? is nBaseline really always > 0 ?
         ASSERT( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );
         //nBaseline must be moved by aPrt position
-        nBaseline += pFly->GetLastFlyFrmPrtRectPos().Y();
+        const SwFlyFrmFmt *pFlyFrmFmt = pFly->GetFmt();
+        ASSERT( pFlyFrmFmt, "fly frame format missing!" );
+        if ( pFlyFrmFmt )
+            nBaseline += pFlyFrmFmt->GetLastFlyFrmPrtRectPos().Y();
 
         const SwFmtVertOrient &rVert = pFrmFmt->GetVertOrient();
         SwFmtVertOrient aVert( rVert );
@@ -2247,5 +2269,3 @@ void SwFEShell::AlignAllFormulasToBaseline()
 
     EndAllAction();
 }
-
-

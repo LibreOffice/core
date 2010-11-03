@@ -28,9 +28,9 @@
 #define _FLYFRM_HXX
 
 #include "layfrm.hxx"
+#include "frmfmt.hxx"
 
 class SwPageFrm;
-class SwFlyFrmFmt;
 class SwFmtFrmSize;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
@@ -77,9 +77,6 @@ protected:
 
     // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
 //    Point aRelPos;   //Die Relative Position zum Master
-    Point aLastFlyFrmPrtRectPos; // it stores the previous position of Prt rectangle from RequestObjectResize
-                                 // so it can be used to move frames of non-resizable objects to align them correctly
-                                 // when they get borders (this is done in SwWrtShell::CalcAndGetScale)
 
 private:
     BOOL bLocked    :1; //Cntnt-gebundene Flys muessen derart blockiert werden
@@ -287,8 +284,10 @@ public:
     */
     virtual bool IsFormatPossible() const;
 
-    const Point GetLastFlyFrmPrtRectPos() const { return aLastFlyFrmPrtRectPos; }
-    void SetLastFlyFrmPrtRectPos( Point aPoint ) { aLastFlyFrmPrtRectPos = aPoint; }
-
+    // overwriting "SwFrmFmt *SwLayoutFrm::GetFmt" to provide the correct derived return type.
+    // (This is in order to skip on the otherwise necessary casting of the result to
+    // 'SwFlyFrmFmt *' after calls to this function. The casting is now done in this function.)
+    virtual const SwFlyFrmFmt *GetFmt() const;
+    virtual       SwFlyFrmFmt *GetFmt();
 };
 #endif

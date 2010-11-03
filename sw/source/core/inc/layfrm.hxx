@@ -123,9 +123,9 @@ public:
     // <--
     BOOL IsAnLower( const SwFrm * ) const;
 
-    const SwFrmFmt *GetFmt() const { return (const SwFrmFmt*)GetDep(); }
-          SwFrmFmt *GetFmt()       { return (SwFrmFmt*)GetDep(); }
-    void            SetFrmFmt( SwFrmFmt* );
+    virtual const SwFrmFmt *GetFmt() const;
+    virtual       SwFrmFmt *GetFmt();
+    void        SetFrmFmt( SwFrmFmt* );
 
     //Verschieben der Ftns aller Lower - ab dem StartCntnt.
     //TRUE wenn mindestens eine Ftn verschoben wurde.

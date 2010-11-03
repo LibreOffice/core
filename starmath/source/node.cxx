@@ -573,6 +573,13 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
     return pResult;
 }
 
+
+long SmNode::GetFormulaBaseline() const
+{
+    DBG_ASSERT( 0, "This dummy implementation should not have been called." );
+    return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
@@ -792,7 +799,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nFormulaBaseline = GetAlignM();
         // move from middle position by constant - distance
         // between middle and baseline for single letter
-        nFormulaBaseline+= aRect.GetBaseline() - aRect.GetAlignM();
+        nFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
     }
     // <--
 }
@@ -801,6 +808,12 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 SmNode * SmTableNode::GetLeftMost()
 {
     return this;
+}
+
+
+long SmTableNode::GetFormulaBaseline() const
+{
+    return nFormulaBaseline;
 }
 
 
@@ -865,9 +878,8 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         {
             aPos = pNode->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
 
-            // no horizontal space before first node
-            if (i)
-                aPos.X() += nDist;
+            // add horizontal space to the left for each but the first sub node
+            aPos.X() += nDist;
 
             pNode->MoveTo(aPos);
             ExtendBy( *pNode, RCP_XOR );
