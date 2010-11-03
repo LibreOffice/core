@@ -275,6 +275,9 @@ inline void TypeDescriptor_Init_Impl::callChain(
 //__________________________________________________________________________________________________
 TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 {
+#ifdef DONT_LEAK_STATIC_DATA
+    // The cleanup from commit 55c3066e52ad1843549c442e8d74f886507c58f4
+    // introduced a breakage on SUSE, Caolan will have a look
     if( pCache )
     {
         TypeDescriptionList_Impl::const_iterator aIt = pCache->begin();
@@ -355,6 +358,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
     delete pCallbacks;
     pCallbacks = 0;
 
+#endif
     if( pMutex )
     {
         delete pMutex;
