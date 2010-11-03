@@ -56,7 +56,7 @@ constants FormulaMapGroupSpecialOffset
         constants.</li>
         <li>A <atom>string</atom> for literal text.</li>
         <li>A <atom dim="[][]">any</atom> for a literal array. The contained
-        values shall be of type <atom>double</atom> or atom>string</atom>.
+        values shall be of type <atom>double</atom> or <atom>string</atom>.
         Floating-point values and strings may occur together in an array.</li>
         <li>A struct of type <type>SingleReference</type> for a reference to a
         single cell in the own document.</li>
@@ -142,7 +142,7 @@ constants FormulaMapGroupSpecialOffset
         able to parse.
 
         <p>The <member>FormulaToken::Data</member> member shall contain a
-        <atom>string</string> with the bad data. This string will be displayed
+        <atom>string</atom> with the bad data. This string will be displayed
         literally in the formula.</p>
      */
     const long BAD = 7;
