@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _EXPFLD_HXX
-#define _EXPFLD_HXX
+#ifndef SW_EXPFLD_HXX
+#define SW_EXPFLD_HXX
 
 #include <svl/svarray.hxx>
 #include "swdllapi.h"
@@ -98,15 +98,15 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 
     bool            bLateInitialization; // #i82544#
 
+    virtual String              Expand() const;
+    virtual SwField*            Copy() const;
+
 public:
     SwGetExpField( SwGetExpFieldType*, const String& rFormel,
                    USHORT nSubType = nsSwGetSetExpType::GSE_EXPR, ULONG nFmt = 0);
 
     virtual void                SetValue( const double& rVal );
     virtual void                SetLanguage(USHORT nLng);
-
-    virtual String              Expand() const;
-    virtual SwField*            Copy() const;
 
     inline const String&        GetExpStr() const;
     inline void                 ChgExpStr(const String& rExpand);
@@ -119,7 +119,7 @@ public:
     // (wird nur von der Formatierung aufgerufen!!)
     void                        ChangeExpansion( const SwFrm&, const SwTxtFld& );
 
-    virtual String              GetCntnt(BOOL bName = FALSE) const;
+    virtual String      GetFieldName() const;
 
     // Die Formel aendern
     virtual String              GetPar2() const;
@@ -234,13 +234,13 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     USHORT          nSeqNo;
     USHORT          nSubType;
 
+    virtual String              Expand() const;
+    virtual SwField*            Copy() const;
+
 public:
     SwSetExpField(SwSetExpFieldType*, const String& rFormel, ULONG nFmt = 0);
 
     virtual void                SetValue( const double& rVal );
-
-    virtual String              Expand() const;
-    virtual SwField*            Copy() const;
 
     inline const String&        GetExpStr() const;
 
@@ -252,7 +252,8 @@ public:
     inline void                 SetInputFlag(BOOL bInp);
     inline BOOL                 GetInputFlag() const;
 
-    virtual String              GetCntnt(BOOL bName = FALSE) const;
+    virtual String              GetFieldName() const;
+
     virtual USHORT              GetSubType() const;
     virtual void                SetSubType(USHORT nType);
 
@@ -319,15 +320,17 @@ class SW_DLLPUBLIC SwInputField : public SwField
     String  aHelp;
     String  aToolTip;
     USHORT  nSubType;
+
+    virtual String          Expand() const;
+    virtual SwField*        Copy() const;
+
 public:
     // Direkte Eingabe ueber Dialog alten Wert loeschen
     SwInputField(SwInputFieldType*, const String& rContent ,
                  const String& rPrompt, USHORT nSubType = 0,
                  ULONG nFmt = 0);
 
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
+    virtual String          GetFieldName() const;
 
     // Content
     virtual const String&   GetPar1() const;
@@ -405,8 +408,13 @@ class SwTblField : public SwValueField, public SwTableFormula
     String      sExpand;
     USHORT      nSubType;
 
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
+
     // suche den TextNode, in dem das Feld steht
     virtual const SwNode* GetNodeOfFormula() const;
+
+    String GetCommand();
 
 public:
     SwTblField( SwTblFieldType*, const String& rFormel,
@@ -415,8 +423,6 @@ public:
     virtual void        SetValue( const double& rVal );
     virtual USHORT      GetSubType() const;
     virtual void        SetSubType(USHORT nType);
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
 
     const String&       GetExpStr() const               { return sExpand; }
     void                ChgExpStr(const String& rStr)   { sExpand = rStr; }
@@ -424,7 +430,8 @@ public:
     // berechne sich selbst
     void                CalcField( SwTblCalcPara& rCalcPara );
 
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
+    virtual String      GetFieldName() const;
+
     // Die Formel
     virtual String      GetPar2()   const;
     virtual void        SetPar2(const String& rStr);
@@ -433,4 +440,4 @@ public:
 };
 
 
-#endif // _EXPFLD_HXX
+#endif // SW_EXPFLD_HXX

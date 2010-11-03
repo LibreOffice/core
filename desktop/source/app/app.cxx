@@ -785,7 +785,6 @@ BOOL Desktop::QueryExit()
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
         utl::ConfigManager::GetConfigManager()->StoreConfigItems();
-        FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     }
     catch ( RuntimeException& )
@@ -817,6 +816,7 @@ BOOL Desktop::QueryExit()
     }
     else
     {
+        FlushConfiguration();
         try
         {
             // it is no problem to call DisableOfficeIPCThread() more than once

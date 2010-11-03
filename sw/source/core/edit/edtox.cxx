@@ -234,25 +234,6 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     return bRet;
 }
 
-BOOL SwEditShell::UpdateField( sw::mark::IFieldmark &fieldBM)
-{
-//    SwDocShell* pDocSh = pDoc->GetDocShell();
-    //@TODO implement me...; add undo etc...
-    if ( pDoc && fieldBM.IsExpanded( ) ) {
-        SwPosition aSttPos = fieldBM.GetMarkStart( );
-        aSttPos.nContent++;
-
-        SwPosition aEndPos = fieldBM.GetMarkEnd( );
-        aEndPos.nContent--;
-
-        SwPaM aPaM( aSttPos, aEndPos );
-        pDoc->DeleteRange(aPaM);
-        pDoc->InsertString(aPaM, String::CreateFromAscii("Implement me ;-)") );
-    }
-    return TRUE;
-}
-
-
 /*--------------------------------------------------------------------
      Beschreibung: Aktuelles Verzeichnis vor oder in dem der Cursor
                                    steht

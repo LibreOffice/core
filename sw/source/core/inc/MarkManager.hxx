@@ -39,9 +39,9 @@ namespace sw { namespace mark
     {
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
-
+#if OSL_DEBUG_LEVEL > 1
             void dumpFieldmarks( ) const;
-
+#endif
             // IDocumentMarkAccess
             virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const ::rtl::OUString& rName, IDocumentMarkAccess::MarkType eMark);
 

@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
@@ -41,7 +39,7 @@ void SwFrm::Format( const SwBorderAttrs * )
     ASSERT( FALSE, "Format() der Basisklasse gerufen." );
 }
 
-void SwFrm::Paint(const SwRect &, const SwPrtOptions * ) const
+void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
 {
     ASSERT( FALSE, "Paint() der Basisklasse gerufen." );
 }

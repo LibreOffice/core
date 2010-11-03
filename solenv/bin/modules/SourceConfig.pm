@@ -388,7 +388,18 @@ sub add_active_repositories {
 
 sub add_active_modules {
     my $self = shift;
-    $self->{NEW_MODULES} = shift;
+    my $module_list_ref = shift;
+    my $ignored_modules_string = '';
+    my @real_modules = ();
+    foreach my $module (sort @$module_list_ref) {
+        if ($self->get_module_path($module)) {
+            push(@real_modules, $module);
+        } else {
+            $ignored_modules_string .= " $module";
+        };
+    };
+    push (@{$self->{WARNINGS}}, "\nWARNING: following modules are not found in active repositories, and have not been added to the " . $self->get_config_file_default_path() . ":$ignored_modules_string\n") if ($ignored_modules_string);
+    $self->{NEW_MODULES} = \@real_modules;
     croak('Empty module list passed for addition to source_config') if (!scalar @{$self->{NEW_MODULES}});
     $self->{VERBOSE} = shift;
     generate_config_file($self);

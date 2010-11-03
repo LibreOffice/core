@@ -71,9 +71,7 @@
 #include <poolfmt.hxx>
 #include <mdiexp.hxx>
 #include <swwait.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -266,7 +264,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
 |*
 *************************************************************************/
 
-void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
+void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     if ( Frm().IsEmpty() )
         return;

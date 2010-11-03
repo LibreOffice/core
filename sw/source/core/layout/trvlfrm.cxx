@@ -1811,10 +1811,10 @@ USHORT SwFrm::GetVirtPageNum() const
     const SwFrm *pFrm = 0;
     const SfxItemPool &rPool = pPage->GetFmt()->GetDoc()->GetAttrPool();
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = rPool.GetItemCount( RES_PAGEDESC );
-    for( USHORT n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rPool.GetItem( RES_PAGEDESC, n ) ))
+        if( 0 == (pItem = rPool.GetItem2( RES_PAGEDESC, n ) ))
             continue;
 
         const SwFmtPageDesc *pDesc = (SwFmtPageDesc*)pItem;

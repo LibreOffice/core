@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TXMSRT_HXX
-#define _TXMSRT_HXX
+#ifndef SW_TXMSRT_HXX
+#define SW_TXMSRT_HXX
 
 #include <i18npool/lang.h>
 #include <tox.hxx>
@@ -154,7 +154,7 @@ private:
     String sSortTxt;
     String sSortTxtReading;
 
-    virtual void _GetText( String&, String& ) = 0;
+    virtual void GetText_Impl( String&, String& ) const = 0;
 };
 
 inline void SwTOXSortTabBase::GetTxt( String& rSortTxt,
@@ -163,7 +163,7 @@ inline void SwTOXSortTabBase::GetTxt( String& rSortTxt,
     if( !bValidTxt )
     {
         SwTOXSortTabBase* pThis = (SwTOXSortTabBase*)this;
-        pThis->_GetText( pThis->sSortTxt, pThis->sSortTxtReading );
+        pThis->GetText_Impl( pThis->sSortTxt, pThis->sSortTxtReading );
         pThis->bValidTxt = TRUE;
     }
 
@@ -194,7 +194,7 @@ struct SwTOXIndex : public SwTOXSortTabBase
     virtual BOOL    operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
     BYTE    nKeyLevel;
 };
@@ -211,7 +211,7 @@ struct SwTOXCustom : public SwTOXSortTabBase
     virtual BOOL   operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
     String  aKey;
     String  sReading;
@@ -231,7 +231,7 @@ struct SwTOXContent : public SwTOXSortTabBase
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
 };
 
@@ -248,7 +248,7 @@ struct SwTOXPara : public SwTOXSortTabBase
 
     virtual String  GetURL() const;
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
     SwTOXElement eType;
     USHORT m_nLevel;
@@ -267,7 +267,7 @@ struct SwTOXTable : public SwTOXSortTabBase
 
     virtual String  GetURL() const;
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
     USHORT nLevel;
 };
@@ -277,7 +277,7 @@ struct SwTOXAuthority : public SwTOXSortTabBase
 private:
     SwFmtFld& m_rField;
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
 public:
     SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
@@ -291,4 +291,4 @@ public:
 };
 
 
-#endif // _TXMSRT_HXX
+#endif // SW_TXMSRT_HXX

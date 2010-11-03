@@ -49,6 +49,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/unattr.obj \
         $(SLO)$/undobj.obj \
         $(SLO)$/undraw.obj \
+        $(SLO)$/unnum.obj \
         $(SLO)$/unovwr.obj \
         $(SLO)$/untbl.obj
 

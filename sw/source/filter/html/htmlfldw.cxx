@@ -305,7 +305,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     }
 
     // Inhalt des Feldes ausgeben
-    String const sExpand( pFld->ExpandField(rWrt.pDoc->IsClipBoard()) );
+    String const sExpand( pFld->ExpandField(true) );
     sal_Bool bNeedsCJKProcessing = sal_False;
     if( sExpand.Len() )
     {

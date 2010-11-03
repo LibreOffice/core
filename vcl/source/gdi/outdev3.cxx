@@ -27,62 +27,57 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <cstring>
-#include <i18npool/mslangid.hxx>
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salgdi.hxx>
-#include <vcl/sallayout.hxx>
-#include <rtl/tencinfo.h>
-#include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/impfont.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/outdata.hxx>
-#include <vcl/outfont.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/poly.hxx>
-#include <vcl/outdev.h>
-#include <vcl/virdev.hxx>
-#include <vcl/print.hxx>
-#include <vcl/event.hxx>
-#include <vcl/window.h>
-#include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/bmpacc.hxx>
-#include <unotools/fontcvt.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/edit.hxx>
-#include <unotools/fontcfg.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/textlayout.hxx>
-#ifndef _OSL_FILE_H
-#include <osl/file.h>
-#endif
+#include "i18npool/mslangid.hxx"
+
+#include "svsys.h"
+#include "vcl/salgdi.hxx"
+#include "vcl/sallayout.hxx"
+#include "rtl/tencinfo.h"
+#include "tools/debug.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/metric.hxx"
+#include "vcl/impfont.hxx"
+#include "vcl/metaact.hxx"
+#include "vcl/gdimtf.hxx"
+#include "vcl/outdata.hxx"
+#include "vcl/outfont.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+#include "tools/poly.hxx"
+#include "vcl/outdev.h"
+#include "vcl/virdev.hxx"
+#include "vcl/print.hxx"
+#include "vcl/event.hxx"
+#include "vcl/window.h"
+#include "vcl/window.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/bmpacc.hxx"
+#include "unotools/fontcvt.hxx"
+#include "vcl/outdev.hxx"
+#include "vcl/edit.hxx"
+#include "unotools/fontcfg.hxx"
+#include "vcl/sysdata.hxx"
+#include "vcl/textlayout.hxx"
+#include "vcl/svids.hrc"
+#include "osl/file.h"
 #ifdef ENABLE_GRAPHITE
-#include <vcl/graphite_features.hxx>
+#include "vcl/graphite_features.hxx"
 #endif
 #ifdef USE_BUILTIN_RASTERIZER
-#include <vcl/glyphcache.hxx>
+#include "vcl/glyphcache.hxx"
 #endif
 
-#include <vcl/unohelp.hxx>
-#include <pdfwriter_impl.hxx>
-#include <vcl/controllayout.hxx>
-#include <rtl/logfile.hxx>
+#include "vcl/unohelp.hxx"
+#include "pdfwriter_impl.hxx"
+#include "vcl/controllayout.hxx"
+#include "rtl/logfile.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
-#include <com/sun/star/beans/PropertyValues.hdl>
-#endif
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include "com/sun/star/beans/PropertyValues.hpp"
+#include "com/sun/star/i18n/XBreakIterator.hpp"
+#include "com/sun/star/i18n/WordType.hpp"
+#include "com/sun/star/linguistic2/XLinguServiceManager.hpp"
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -92,7 +87,7 @@
 #define GLYPH_FONT_HEIGHT   256
 #endif
 
-#include <sal/alloca.h>
+#include "sal/alloca.h"
 
 #include <cmath>
 #include <cstring>
@@ -2926,6 +2921,18 @@ void OutputDevice::ImplInitFontList() const
             RTL_LOGFILE_CONTEXT( aLog, "OutputDevice::ImplInitFontList()" );
             mpGraphics->GetDevFontList( mpFontList );
         }
+    }
+    if( meOutDevType == OUTDEV_WINDOW && ! mpFontList->Count() )
+    {
+        String aError( RTL_CONSTASCII_USTRINGPARAM( "Application error: no fonts and no vcl resource found on your system" ) );
+        ResMgr* pMgr = ImplGetResMgr();
+        if( pMgr )
+        {
+            String aResStr( ResId( SV_ACCESSERROR_NO_FONTS, *pMgr ) );
+            if( aResStr.Len() )
+                aError = aResStr;
+        }
+        Application::Abort( aError );
     }
 }
 
@@ -6834,7 +6841,20 @@ String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, c
 
     if ( nIndex != STRING_LEN )
     {
-        if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
+        if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
+        {
+            String aTmpStr( aStr );
+            xub_StrLen nEraseChars = 4;
+            while( nEraseChars < aStr.Len() && _rLayout.GetTextWidth( aTmpStr, 0, aTmpStr.Len() ) > nMaxWidth )
+            {
+                aTmpStr = aStr;
+                xub_StrLen i = (aTmpStr.Len() - nEraseChars)/2;
+                aTmpStr.Erase( i, nEraseChars++ );
+                aTmpStr.InsertAscii( "...", i );
+            }
+            aStr = aTmpStr;
+        }
+        else if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
         {
             aStr.Erase( nIndex );
             if ( nIndex > 1 )

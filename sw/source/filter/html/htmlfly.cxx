@@ -1835,10 +1835,10 @@ void SwHTMLWriter::CollectLinkTargets()
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
 
-    USHORT n, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pINetFmt = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem(
+        if( 0 != (pINetFmt = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
             0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&
             0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -1849,10 +1849,10 @@ void SwHTMLWriter::CollectLinkTargets()
     }
 
     const SwFmtURL *pURL;
-    nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_URL );
+    nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_URL );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pURL = (SwFmtURL*)pDoc->GetAttrPool().GetItem(
+        if( 0 != (pURL = (SwFmtURL*)pDoc->GetAttrPool().GetItem2(
             RES_URL, n ) ) )
         {
             AddLinkTarget( pURL->GetURL() );

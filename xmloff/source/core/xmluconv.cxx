@@ -200,7 +200,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
     sal_Bool bNeg = sal_False;
     double nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     const sal_Int32 nLen = rString.getLength();
 
     // skip white space
@@ -679,7 +679,7 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
     sal_Bool bNeg = sal_False;
     rValue = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     const sal_Int32 nLen = rString.getLength();
 
     // skip white space

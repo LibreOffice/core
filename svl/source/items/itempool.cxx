@@ -38,14 +38,6 @@
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
-#include <algorithm>
-
-// STATIC DATA -----------------------------------------------------------
-
-
-//========================================================================
-
-SV_IMPL_PTRARR( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl* );
 
 //========================================================================
 
@@ -275,13 +267,12 @@ SfxItemPool::SfxItemPool
             (*( ppPoolDefaults + n ))->SetKind( SFX_ITEMS_POOLDEFAULT );
         }
 
-    // Version-Map kopieren
-    USHORT nVerCount = rPool.pImp->aVersions.Count();
-    for ( USHORT nVer = 0; nVer < nVerCount; ++nVer )
+    // Copy Version-Map
+    for ( size_t nVer = 0; nVer < rPool.pImp->aVersions.size(); ++nVer )
     {
-        const SfxPoolVersion_Impl *pOld = rPool.pImp->aVersions.GetObject(nVer);
-        const SfxPoolVersion_Impl *pNew = new SfxPoolVersion_Impl( *pOld );
-        pImp->aVersions.Insert( pNew, nVer );
+        const SfxPoolVersion_ImplPtr pOld = rPool.pImp->aVersions[nVer];
+        SfxPoolVersion_ImplPtr pNew = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl( *pOld ) );
+        pImp->aVersions.push_back( pNew );
     }
 
     // Verkettung wiederherstellen
@@ -454,9 +445,8 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                                                 pSecondary->pImp->ppPoolItems + n;
                     if ( *ppItemArr )
                     {
-                        SfxPoolItem** ppHtArr =
-                                        (SfxPoolItem**)(*ppItemArr)->GetData();
-                        for( USHORT i = (*ppItemArr)->Count(); i; ++ppHtArr, --i )
+                        SfxPoolItemArrayBase_Impl::iterator ppHtArr =   (*ppItemArr)->begin();
+                        for( size_t i = (*ppItemArr)->size(); i; ++ppHtArr, --i )
                             if ( !(*ppHtArr) )
                             {
                                 DBG_ERROR( "old secondary pool must be empty" );
@@ -582,8 +572,8 @@ void SfxItemPool::Delete()
             {
                 if ( *ppItemArr )
                 {
-                    SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-                    for ( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
+                    SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+                    for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
                         if (*ppHtArr)
                         {
 #ifdef DBG_UTIL
@@ -614,8 +604,8 @@ void SfxItemPool::Delete()
     {
         if ( *ppItemArr )
         {
-            SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-            for ( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
+            SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+            for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
                 if (*ppHtArr)
                 {
 #ifdef DBG_UTIL
@@ -663,8 +653,8 @@ void SfxItemPool::Cleanup()
                  ((*ppDefaultItem && (*ppDefaultItem)->ISA(SfxSetItem)) ||
                   (*ppStaticDefaultItem)->ISA(SfxSetItem)) )
             {
-                SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-                for ( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
+                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+                for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
                     if ( *ppHtArr && !(*ppHtArr)->GetRefCount() )
                     {
                          DELETEZ(*ppHtArr);
@@ -681,8 +671,8 @@ void SfxItemPool::Cleanup()
     {
         if ( *ppItemArr )
         {
-            SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-            for ( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
+            SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+            for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
                 if ( *ppHtArr && !(*ppHtArr)->GetRefCount() )
                     DELETEZ( *ppHtArr );
         }
@@ -782,15 +772,16 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
     if( !*ppItemArr )
         *ppItemArr = new SfxPoolItemArray_Impl;
 
-    SfxPoolItem **ppFree = 0;
-    SfxPoolItem** ppHtArray = (SfxPoolItem**)(*ppItemArr)->GetData();
+    SfxPoolItemArrayBase_Impl::iterator ppFree;
+    BOOL ppFreeIsSet = FALSE;
+    SfxPoolItemArrayBase_Impl::iterator ppHtArray = (*ppItemArr)->begin();
     if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
     {
         // wenn es ueberhaupt gepoolt ist, koennte es schon drin sein
         if ( IsPooledItem(&rItem) )
         {
             // 1. Schleife: teste ob der Pointer vorhanden ist.
-            for( USHORT n = (*ppItemArr)->Count(); n; ++ppHtArray, --n )
+            for( size_t n = (*ppItemArr)->size(); n; ++ppHtArray, --n )
                 if( &rItem == (*ppHtArray) )
                 {
                     AddRef( **ppHtArray );
@@ -799,8 +790,8 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
         }
 
         // 2. Schleife: dann muessen eben die Attribute verglichen werden
-        USHORT n;
-        for ( n = (*ppItemArr)->Count(), ppHtArray = (SfxPoolItem**)(*ppItemArr)->GetData();
+        size_t n;
+        for ( n = (*ppItemArr)->size(), ppHtArray = (*ppItemArr)->begin();
               n; ++ppHtArray, --n )
         {
             if ( *ppHtArray )
@@ -812,22 +803,26 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
                 }
             }
             else
-                if ( !ppFree )
+                if ( ppFreeIsSet == FALSE )
+                {
                     ppFree = ppHtArray;
+                    ppFreeIsSet = TRUE;
+                }
         }
     }
     else
     {
         // freien Platz suchen
-        SfxPoolItem** ppHtArr;
-        USHORT n, nCount = (*ppItemArr)->Count();
+        SfxPoolItemArrayBase_Impl::iterator ppHtArr;
+        size_t n, nCount = (*ppItemArr)->size();
         for ( n = (*ppItemArr)->nFirstFree,
-                  ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData() + n;
+                  ppHtArr = (*ppItemArr)->begin() + n;
               n < nCount;
               ++ppHtArr, ++n )
             if ( !*ppHtArr )
             {
                 ppFree = ppHtArr;
+                ppFreeIsSet = TRUE;
                 break;
             }
 
@@ -853,9 +848,9 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
 #endif
 #endif
     AddRef( *pNewItem, pImp->nInitRefCount );
-    const SfxPoolItem* pTemp = pNewItem;
-    if ( !ppFree )
-        (*ppItemArr)->Insert( pTemp, (*ppItemArr)->Count() );
+    SfxPoolItem* pTemp = pNewItem;
+    if ( ppFreeIsSet == FALSE )
+        (*ppItemArr)->push_back( pTemp );
     else
     {
         DBG_ASSERT( *ppFree == 0, "using surrogate in use" );
@@ -915,8 +910,8 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     // Item im eigenen Pool suchen
     SfxPoolItemArray_Impl** ppItemArr = (pImp->ppPoolItems + nIndex);
     SFX_ASSERT( *ppItemArr, rItem.Which(), "removing Item not in Pool" );
-    SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-    for( USHORT n = (*ppItemArr)->Count(); n; ++ppHtArr, --n )
+    SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+    for( size_t n = (*ppItemArr)->size(); n; ++ppHtArr, --n )
         if( *ppHtArr == &rItem )
         {
             if ( (*ppHtArr)->GetRefCount() ) //!
@@ -928,7 +923,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
             }
 
             // ggf. kleinstmoegliche freie Position merken
-            USHORT nPos = (*ppItemArr)->Count() - n;
+            size_t nPos = (*ppItemArr)->size() - n;
             if ( (*ppItemArr)->nFirstFree > nPos )
                 (*ppItemArr)->nFirstFree = nPos;
 
@@ -1009,24 +1004,24 @@ void SfxItemPool::FillItemIdRanges_Impl( USHORT*& pWhichRanges ) const
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem *SfxItemPool::GetItem(USHORT nWhich, USHORT nOfst) const
+const SfxPoolItem *SfxItemPool::GetItem2(USHORT nWhich, sal_uInt32 nOfst) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
     if ( !IsInRange(nWhich) )
     {
         if ( pSecondary )
-            return pSecondary->GetItem( nWhich, nOfst );
+            return pSecondary->GetItem2( nWhich, nOfst );
         SFX_ASSERT( 0, nWhich, "unknown Which-Id - cannot resolve surrogate" );
         return 0;
     }
 
     // dflt-Attribut?
-    if ( nOfst == SFX_ITEMS_STATICDEFAULT )
+    if ( nOfst == SFX_ITEMS_DEFAULT )
         return *(ppStaticDefaults + GetIndex_Impl(nWhich));
 
     SfxPoolItemArray_Impl* pItemArr = *(pImp->ppPoolItems + GetIndex_Impl(nWhich));
-    if( pItemArr && nOfst < pItemArr->Count() )
+    if( pItemArr && nOfst < pItemArr->size() )
         return (*pItemArr)[nOfst];
 
     return 0;
@@ -1034,21 +1029,21 @@ const SfxPoolItem *SfxItemPool::GetItem(USHORT nWhich, USHORT nOfst) const
 
 // -----------------------------------------------------------------------
 
-USHORT SfxItemPool::GetItemCount(USHORT nWhich) const
+sal_uInt32 SfxItemPool::GetItemCount2(USHORT nWhich) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
     if ( !IsInRange(nWhich) )
     {
         if ( pSecondary )
-            return pSecondary->GetItemCount( nWhich );
+            return pSecondary->GetItemCount2( nWhich );
         SFX_ASSERT( 0, nWhich, "unknown Which-Id - cannot resolve surrogate" );
         return 0;
     }
 
     SfxPoolItemArray_Impl* pItemArr = *(pImp->ppPoolItems + GetIndex_Impl(nWhich));
     if  ( pItemArr )
-        return pItemArr->Count();
+        return pItemArr->size();
     return 0;
 }
 

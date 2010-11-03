@@ -30,6 +30,7 @@
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
 #include "../inc/msfilter.hxx"
+#include <deque>
 
 #include <com/sun/star/util/DateTime.hpp>
 
@@ -37,7 +38,6 @@
 class Color;
 class Font;
 class SvPtrarr;
-class RTFColorTbl;
 class SwFmt;
 class SwFlyFrmFmt;
 class SwPosFlyFrms;
@@ -57,6 +57,7 @@ extern SwNodeFnTab aRTFNodeFnTab;
 // be used
 #define DEF_ENCODING        RTL_TEXTENCODING_ASCII_US
 
+typedef std::deque<Color> RTFColorTbl;
 
 class RTF_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {

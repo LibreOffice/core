@@ -49,6 +49,7 @@ CDEFS+=-DDEBUG
 EXCEPTIONSFILES = \
     $(SLO)$/anchoreddrawobject.obj \
     $(SLO)$/flycnt.obj \
+    $(SLO)$/layact.obj \
     $(SLO)$/laycache.obj \
     $(SLO)$/layouter.obj \
     $(SLO)$/movedfwdfrmsbyobjpos.obj \

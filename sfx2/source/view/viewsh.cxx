@@ -240,9 +240,21 @@ static ::rtl::OUString RetrieveLabelFromCommand(
 }
 
 //=========================================================================
-SfxViewShell_Impl::SfxViewShell_Impl()
+SfxViewShell_Impl::SfxViewShell_Impl(USHORT const nFlags)
 : aInterceptorContainer( aMutex )
-, pAccExec(0)
+,   m_bControllerSet(false)
+,   m_nPrinterLocks(0)
+,   m_bCanPrint(SFX_VIEW_CAN_PRINT == (nFlags & SFX_VIEW_CAN_PRINT))
+,   m_bHasPrintOptions(
+        SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS))
+,   m_bPlugInsActive(true)
+,   m_bIsShowView(SFX_VIEW_NO_SHOW != (nFlags & SFX_VIEW_NO_SHOW))
+,   m_bGotOwnership(false)
+,   m_bGotFrameOwnership(false)
+,   m_eScroll(SCROLLING_DEFAULT)
+,   m_nFamily(-1)   // undefined, default set by TemplateDialog
+,   m_pController(0)
+,   m_pAccExec(0)
 {}
 
 //=========================================================================
@@ -374,7 +386,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         {
             SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId, FALSE);
             if (pItem)
-                pImp->nFamily = pItem->GetValue();
+            {
+                pImp->m_nFamily = pItem->GetValue();
+            }
             break;
         }
 
@@ -674,7 +688,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         case SID_PLUGINS_ACTIVE:
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, FALSE);
-            BOOL bActive = pShowItem ? pShowItem->GetValue() : !pImp->bPlugInsActive;
+            bool const bActive = (pShowItem)
+                ? pShowItem->GetValue()
+                : !pImp->m_bPlugInsActive;
             // ggf. recorden
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( nId, bActive ) );
@@ -684,7 +700,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             rReq.Done(TRUE);
 
             // ausfuehren
-            if ( !pShowItem || bActive != pImp->bPlugInsActive )
+            if (!pShowItem || (bActive != pImp->m_bPlugInsActive))
             {
                 SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
                 if ( pTopFrame != &GetFrame()->GetFrame() )
@@ -704,7 +720,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         SfxViewShell *pView = pTopFrame->GetCurrentViewFrame()->GetViewShell();
                         if ( pView )
                         {
-                            pView->pImp->bPlugInsActive = bActive;
+                            pView->pImp->m_bPlugInsActive = bActive;
                             Rectangle aVisArea = GetObjectShell()->GetVisArea();
                             VisAreaChanged(aVisArea);
 
@@ -758,7 +774,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             case SID_PRINTER_NAME:
             {
-                BOOL bEnabled = pImp->bCanPrint && !pImp->nPrinterLocks;
+                bool bEnabled = pImp->m_bCanPrint && !pImp->m_nPrinterLocks;
                 bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
@@ -812,7 +828,8 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             // PlugIns running
             case SID_PLUGINS_ACTIVE:
             {
-                rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE, !pImp->bPlugInsActive) );
+                rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE,
+                                        !pImp->m_bPlugInsActive) );
                 break;
             }
 /*
@@ -832,7 +849,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 */
             case SID_STYLE_FAMILY :
             {
-                rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->nFamily ) );
+                rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->m_nFamily ) );
                 break;
             }
         }
@@ -1155,8 +1172,10 @@ void SfxViewShell::InvalidateBorder()
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
     GetViewFrame()->InvalidateBorderImpl( this );
-    if ( pImp->pController )
-        pImp->pController->BorderWidthsChanged_Impl();
+    if (pImp->m_pController.is())
+    {
+        pImp->m_pController->BorderWidthsChanged_Impl();
+    }
 }
 
 //--------------------------------------------------------------------
@@ -1171,8 +1190,10 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
         GetViewFrame()->SetBorderPixelImpl( this, rBorder );
 
         // notify related controller that border size is changed
-        if ( pImp->pController )
-            pImp->pController->BorderWidthsChanged_Impl();
+        if (pImp->m_pController.is())
+        {
+            pImp->m_pController->BorderWidthsChanged_Impl();
+        }
     }
 }
 
@@ -1247,7 +1268,7 @@ SfxViewShell::SfxViewShell
 )
 
 :   SfxShell(this)
-    ,pImp( new SfxViewShell_Impl )
+,   pImp( new SfxViewShell_Impl(nFlags) )
     ,pIPClientList( 0 )
     ,pFrame(pViewFrame)
     ,pSubShell(0)
@@ -1257,22 +1278,12 @@ SfxViewShell::SfxViewShell
     DBG_CTOR(SfxViewShell, 0);
 
     //pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
-    pImp->pController = 0;
-    pImp->bIsShowView =
-        !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
 
-    pImp->bCanPrint = SFX_VIEW_CAN_PRINT == (nFlags & SFX_VIEW_CAN_PRINT);
-    pImp->bHasPrintOptions =
-        SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS);
-    pImp->bPlugInsActive = TRUE;
-    pImp->bGotOwnerShip = FALSE;
-    pImp->bGotFrameOwnerShip = FALSE;
     if ( pViewFrame->GetParentViewFrame() )
-        pImp->bPlugInsActive = pViewFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
-    pImp->eScroll = SCROLLING_DEFAULT;
-    pImp->nPrinterLocks = 0;
-    pImp->bControllerSet = FALSE;
-    pImp->nFamily = 0xFFFF;                 // undefined, default set by TemplateDialog
+    {
+        pImp->m_bPlugInsActive = pViewFrame->GetParentViewFrame()
+            ->GetViewShell()->pImp->m_bPlugInsActive;
+    }
     SetMargin( pViewFrame->GetMargin_Impl() );
 
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
@@ -1301,16 +1312,10 @@ SfxViewShell::~SfxViewShell()
         pImp->xClipboardListener = NULL;
     }
 
-    if ( pImp->pController )
+    if (pImp->m_pController.is())
     {
-        pImp->pController->ReleaseShell_Impl();
-        pImp->pController->release();
-        pImp->pController = NULL;
-    }
-
-    if (pImp->pAccExec)
-    {
-        DELETEZ( pImp->pAccExec );
+        pImp->m_pController->ReleaseShell_Impl();
+        pImp->m_pController.clear();
     }
 
     //DELETEZ( pImp->pPrinterCommandQueue );
@@ -1660,7 +1665,8 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
                             if ( pItem )
                             {
-                                pImp->pController->restoreViewData( pItem->GetValue() );
+                                pImp->m_pController->restoreViewData(
+                                        pItem->GetValue() );
                                 pSet->ClearItem( SID_VIEW_DATA );
                             }
 
@@ -1679,13 +1685,15 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
 
 BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
-    if (!pImp->pAccExec)
+    if (!pImp->m_pAccExec.get())
     {
-        pImp->pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
-        pImp->pAccExec->init(::comphelper::getProcessServiceFactory(), pFrame->GetFrame().GetFrameInterface());
+        pImp->m_pAccExec.reset(
+                ::svt::AcceleratorExecute::createAcceleratorHelper() );
+        pImp->m_pAccExec->init(::comphelper::getProcessServiceFactory(),
+                pFrame->GetFrame().GetFrameInterface());
     }
 
-    return pImp->pAccExec->execute(aKey.GetKeyCode());
+    return pImp->m_pAccExec->execute(aKey.GetKeyCode());
 }
 
 //--------------------------------------------------------------------
@@ -1828,7 +1836,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
         ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 );
 
     // this method is called when either a client is created or the "Edit/Plugins" checkbox is checked
-    if ( !pIPClient->IsObjectInPlaceActive() && pImp->bPlugInsActive )
+    if ( !pIPClient->IsObjectInPlaceActive() && pImp->m_bPlugInsActive )
     {
            // object in client is currently not active
            // check if the object wants to be activated always or when it becomes at least partially visible
@@ -1844,7 +1852,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
             }
         }
     }
-    else if ( !pImp->bPlugInsActive )
+    else if (!pImp->m_bPlugInsActive)
     {
            // object in client is currently active and "Edit/Plugins" checkbox is selected
            // check if the object wants to be activated always or when it becomes at least partially visible
@@ -1858,7 +1866,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
 
 BOOL SfxViewShell::PlugInsActive() const
 {
-    return pImp->bPlugInsActive;
+    return pImp->m_bPlugInsActive;
 }
 
 //--------------------------------------------------------------------
@@ -1884,14 +1892,14 @@ void SfxViewShell::DiscardClients_Impl()
 
 SfxScrollingMode SfxViewShell::GetScrollingMode() const
 {
-    return pImp->eScroll;
+    return pImp->m_eScroll;
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::SetScrollingMode( SfxScrollingMode eMode )
 {
-    pImp->eScroll = eMode;
+    pImp->m_eScroll = eMode;
 }
 
 //--------------------------------------------------------------------
@@ -1958,7 +1966,7 @@ void SfxViewShell::MarginChanged()
 
 BOOL SfxViewShell::IsShowView_Impl() const
 {
-    return pImp->bIsShowView;
+    return pImp->m_bIsShowView;
 }
 
 //--------------------------------------------------------------------
@@ -1990,9 +1998,8 @@ SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( BOOL bCreate ) const
 
 void SfxViewShell::SetController( SfxBaseController* pController )
 {
-    pImp->pController = pController;
-    pImp->pController->acquire();
-    pImp->bControllerSet = TRUE;
+    pImp->m_pController = pController;
+    pImp->m_bControllerSet = true;
 
     // there should be no old listener, but if there is one, it should be disconnected
     if (  pImp->xClipboardListener.is() )
@@ -2004,12 +2011,12 @@ void SfxViewShell::SetController( SfxBaseController* pController )
 
 Reference < XController > SfxViewShell::GetController()
 {
-    return pImp->pController;
+    return pImp->m_pController.get();
 }
 
 SfxBaseController* SfxViewShell::GetBaseController_Impl() const
 {
-    return pImp->pController;
+    return pImp->m_pController.get();
 }
 
 void SfxViewShell::AddContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
@@ -2131,20 +2138,20 @@ void SfxViewShell::TakeOwnerShip_Impl()
 {
     // currently there is only one reason to take OwnerShip: a hidden frame is printed
     // so the ViewShell will check this on EndPrint (->prnmon.cxx)
-    pImp->bGotOwnerShip = TRUE;
+    pImp->m_bGotOwnership = true;
 }
 
 void SfxViewShell::TakeFrameOwnerShip_Impl()
 {
     // currently there is only one reason to take OwnerShip: a hidden frame is printed
     // so the ViewShell will check this on EndPrint (->prnmon.cxx)
-    pImp->bGotFrameOwnerShip = TRUE;
+    pImp->m_bGotFrameOwnership = true;
 }
 
 void SfxViewShell::CheckOwnerShip_Impl()
 {
     BOOL bSuccess = FALSE;
-    if( pImp->bGotOwnerShip )
+    if (pImp->m_bGotOwnership)
     {
         com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xModel(
                 GetObjectShell()->GetModel(), com::sun::star::uno::UNO_QUERY );
@@ -2162,7 +2169,7 @@ void SfxViewShell::CheckOwnerShip_Impl()
         }
     }
 
-    if( !bSuccess && pImp->bGotFrameOwnerShip )
+    if (!bSuccess && pImp->m_bGotFrameOwnership)
     {
         // document couldn't be closed or it shouldn't, now try at least to close the frame
         com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xFrame(
@@ -2182,19 +2189,23 @@ void SfxViewShell::CheckOwnerShip_Impl()
 
 long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
 {
-    if ( pImp->pController )
-        return pImp->pController->HandleEvent_Impl( rEvent );
+    if (pImp->m_pController.is())
+    {
+        return pImp->m_pController->HandleEvent_Impl( rEvent );
+    }
     return 0;
 }
 
 BOOL SfxViewShell::HasKeyListeners_Impl()
 {
-    return pImp->pController ? pImp->pController->HasKeyListeners_Impl() : FALSE;
+    return (pImp->m_pController.is())
+        ? pImp->m_pController->HasKeyListeners_Impl() : FALSE;
 }
 
 BOOL SfxViewShell::HasMouseClickListeners_Impl()
 {
-    return pImp->pController ? pImp->pController->HasMouseClickListeners_Impl() : FALSE;
+    return (pImp->m_pController.is())
+        ? pImp->m_pController->HasMouseClickListeners_Impl() : FALSE;
 }
 
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )

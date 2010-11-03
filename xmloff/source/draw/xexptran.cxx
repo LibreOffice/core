@@ -1455,8 +1455,8 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
     // second loop
     if(nNumPoints)
     {
-        nPos = 0L;
-        maPoly.realloc(1L);
+        nPos = 0;
+        maPoly.realloc(1);
         drawing::PointSequence* pOuterSequence = maPoly.getArray();
         pOuterSequence->realloc(nNumPoints);
         awt::Point* pInnerSequence = pOuterSequence->getArray();
@@ -2651,8 +2651,8 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -2682,8 +2682,8 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -2713,7 +2713,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
                         sal_Int32 nY(mnLastY);
 
                         if(bRelative)
@@ -2741,7 +2741,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         sal_Int32 nX(mnLastX);
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                             nY += mnLastY;
@@ -2769,10 +2769,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     {
                         sal_Int32 nX1;
                         sal_Int32 nY1;
-                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -2830,12 +2830,12 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        sal_Int32 nX1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX1(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY1(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -2879,10 +2879,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
 
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        sal_Int32 nXX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nYY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nXX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nYY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -2932,8 +2932,8 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     {
                         sal_Int32 nXX;
                         sal_Int32 nYY;
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {

@@ -52,10 +52,11 @@ namespace XPath
     {
     private:
     boost::shared_ptr<xmlXPathObject> m_pXPathObj;
+    const Reference< XNode > m_xContextNode;
     XPathObjectType m_xPathObjectType;
 
     public:
-    CXPathObject(xmlXPathObjectPtr xpathObj);
+    CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode);
 
     /**
         get object type

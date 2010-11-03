@@ -31,8 +31,8 @@
 
 namespace XPath
 {
-    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj)
-        : m_pXPathObj(xpathObj, xmlXPathFreeObject)
+    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode)
+        : m_pXPathObj(xpathObj, xmlXPathFreeObject), m_xContextNode(contextNode)
     {
         switch (m_pXPathObj->type)
         {

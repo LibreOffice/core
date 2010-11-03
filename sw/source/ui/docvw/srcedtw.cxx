@@ -62,6 +62,8 @@
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
+#include <deque>
+
 
 
 struct SwTextPortion
@@ -75,17 +77,8 @@ struct SwTextPortion
 #define MAX_HIGHLIGHTTIME 200
 #define SYNTAX_HIGHLIGHT_TIMEOUT 200
 
-SV_DECL_VARARR(SwTextPortions, SwTextPortion,16,16)
+typedef std::deque<SwTextPortion> SwTextPortions;
 
-/* -----------------15.01.97 12.07-------------------
-
---------------------------------------------------*/
-
-SV_IMPL_VARARR(SwTextPortions, SwTextPortion)
-
-/*-----------------15.01.97 12.08-------------------
-
---------------------------------------------------*/
 
 static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 {
@@ -101,11 +94,11 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 
 
     const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;         // Anzahl der eingefuegten Portions
-    USHORT nActPos = 0;         //Position, an der '<' gefunden wurde
-    USHORT nOffset = 0;         //Offset von nActPos zur '<'
-    USHORT nPortStart = USHRT_MAX;  // fuer die TextPortion
-    USHORT nPortEnd  =  0;  //
+    USHORT nInsert = 0;             // Number of inserted Portions
+    USHORT nActPos = 0;             // Position, at the '<' was found
+    USHORT nOffset = 0;             // Offset of nActPos for '<'
+    USHORT nPortStart = USHRT_MAX;  // For the TextPortion
+    USHORT nPortEnd  =  0;          //
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -122,7 +115,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aText.nStart += 1;
                 aText.nEnd = nActPos - 1;
                 aText.eType = svtools::HTMLUNKNOWN;
-                aPortionList.Insert(aText, nInsert++);
+                aPortionList.push_back( aText );
+                nInsert++;
             }
             sal_Unicode cFollowFirst = rSource.GetChar((xub_StrLen)(nActPos + 1));
             sal_Unicode cFollowNext = rSource.GetChar((xub_StrLen)(nActPos + 2));
@@ -212,7 +206,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aTextPortion.nStart = nPortStart + 1;
                     aTextPortion.nEnd = nPortEnd;
                     aTextPortion.eType = eFoundType;
-                    aPortionList.Insert(aTextPortion, nInsert++);
+                    aPortionList.push_back( aTextPortion );
+                    nInsert++;
                     eFoundType = svtools::HTMLUNKNOWN;
                 }
 
@@ -226,7 +221,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
         aText.nStart = nPortEnd + 1;
         aText.nEnd = nActPos - 1;
         aText.eType = svtools::HTMLUNKNOWN;
-        aPortionList.Insert(aText, nInsert++);
+        aPortionList.push_back( aText );
+        nInsert++;
     }
 }
 
@@ -749,7 +745,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     SwTextPortions aPortionList;
     lcl_Highlight(rSource, aPortionList);
 
-    USHORT nCount = aPortionList.Count();
+    size_t nCount = aPortionList.size();
     if ( !nCount )
         return;
 
@@ -757,7 +753,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoeben
     {
         nCount--;
-        aPortionList.Remove( nCount);
+        aPortionList.pop_back();
         if ( !nCount )
             return;
     }
@@ -777,7 +773,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
 #ifdef DBG_UTIL
         USHORT nLine = aPortionList[0].nLine;
 #endif
-        for ( USHORT i = 0; i < nCount; i++ )
+        for ( size_t i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
             DBG_ASSERT( r.nLine == nLine, "doch mehrere Zeilen ?" );
@@ -796,7 +792,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         }
     }
 
-    for ( USHORT i = 0; i < aPortionList.Count(); i++ )
+    for ( size_t i = 0; i < aPortionList.size(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben

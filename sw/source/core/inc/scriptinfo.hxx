@@ -139,24 +139,24 @@ public:
     inline BYTE GetDefaultDir() const { return nDefaultDir; };
 
     // array operations, nCnt refers to array position
-    inline USHORT CountScriptChg() const;
-    inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
+    inline size_t CountScriptChg() const;
+    inline xub_StrLen GetScriptChg( const size_t nCnt ) const;
     inline BYTE GetScriptType( const USHORT nCnt ) const;
 
-    inline USHORT CountDirChg() const;
-    inline xub_StrLen GetDirChg( const USHORT nCnt ) const;
-    inline BYTE GetDirType( const USHORT nCnt ) const;
+    inline size_t CountDirChg() const;
+    inline xub_StrLen GetDirChg( const size_t nCnt ) const;
+    inline BYTE GetDirType( const size_t nCnt ) const;
 
-    inline USHORT CountKashida() const;
-    inline xub_StrLen GetKashida( const USHORT nCnt ) const;
+    inline size_t CountKashida() const;
+    inline xub_StrLen GetKashida( const size_t nCnt ) const;
 
-    inline USHORT CountCompChg() const;
-    inline xub_StrLen GetCompStart( const USHORT nCnt ) const;
-    inline xub_StrLen GetCompLen( const USHORT nCnt ) const;
-    inline BYTE GetCompType( const USHORT nCnt ) const;
+    inline size_t CountCompChg() const;
+    inline xub_StrLen GetCompStart( const size_t nCnt ) const;
+    inline xub_StrLen GetCompLen( const size_t nCnt ) const;
+    inline BYTE GetCompType( const size_t nCnt ) const;
 
-    inline USHORT CountHiddenChg() const;
-    inline xub_StrLen GetHiddenChg( const USHORT nCnt ) const;
+    inline size_t CountHiddenChg() const;
+    inline xub_StrLen GetHiddenChg( const size_t nCnt ) const;
     static void CalcHiddenRanges( const SwTxtNode& rNode,
                                                 MultiSelection& rHiddenMulti );
 
@@ -356,59 +356,59 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
     if ( nPos < nInvalidityPos )
         nInvalidityPos = nPos;
 };
-inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
-inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountScriptChg() const { return aScriptChg.size(); }
+inline xub_StrLen SwScriptInfo::GetScriptChg( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aScriptChg.Count(),"No ScriptChange today!");
+    ASSERT( nCnt < aScriptChg.size(),"No ScriptChange today!");
     return aScriptChg[ nCnt ];
 }
 inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
-    ASSERT( nCnt < aScriptChg.Count(),"No ScriptType today!");
+    ASSERT( nCnt < aScriptType.size(),"No ScriptType today!");
     return aScriptType[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
-inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountDirChg() const { return aDirChg.size(); }
+inline xub_StrLen SwScriptInfo::GetDirChg( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aDirChg.Count(),"No DirChange today!");
+    ASSERT( nCnt < aDirChg.size(),"No DirChange today!");
     return aDirChg[ nCnt ];
 }
-inline BYTE SwScriptInfo::GetDirType( const xub_StrLen nCnt ) const
+inline BYTE SwScriptInfo::GetDirType( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aDirChg.Count(),"No DirType today!");
+    ASSERT( nCnt < aDirType.size(),"No DirType today!");
     return aDirType[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::CountKashida() const { return aKashida.Count(); }
-inline xub_StrLen SwScriptInfo::GetKashida( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountKashida() const { return aKashida.size(); }
+inline xub_StrLen SwScriptInfo::GetKashida( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aKashida.Count(),"No Kashidas today!");
+    ASSERT( nCnt < aKashida.size(),"No Kashidas today!");
     return aKashida[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
-inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountCompChg() const { return aCompChg.size(); };
+inline xub_StrLen SwScriptInfo::GetCompStart( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.Count(),"No CompressionStart today!");
+    ASSERT( nCnt < aCompChg.size(),"No CompressionStart today!");
     return aCompChg[ nCnt ];
 }
-inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
+inline xub_StrLen SwScriptInfo::GetCompLen( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.Count(),"No CompressionLen today!");
+    ASSERT( nCnt < aCompLen.size(),"No CompressionLen today!");
     return aCompLen[ nCnt ];
 }
 
-inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
+inline BYTE SwScriptInfo::GetCompType( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.Count(),"No CompressionType today!");
+    ASSERT( nCnt < aCompType.size(),"No CompressionType today!");
     return aCompType[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::CountHiddenChg() const { return aHiddenChg.Count(); };
-inline xub_StrLen SwScriptInfo::GetHiddenChg( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountHiddenChg() const { return aHiddenChg.size(); };
+inline xub_StrLen SwScriptInfo::GetHiddenChg( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aHiddenChg.Count(),"No HiddenChg today!");
+    ASSERT( nCnt < aHiddenChg.size(),"No HiddenChg today!");
     return aHiddenChg[ nCnt ];
 }
 

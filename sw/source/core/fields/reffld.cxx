@@ -62,18 +62,12 @@
 // <--
 #include <ftnidx.hxx>
 #include <viewsh.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <shellres.hxx>
 #include <poolfmt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 
@@ -280,11 +274,8 @@ String SwGetRefField::Expand() const
 }
 
 
-String SwGetRefField::GetCntnt(BOOL bName) const
+String SwGetRefField::GetFieldName() const
 {
-    if( !bName )
-        return Expand();
-
     String aStr(GetTyp()->GetName());
     aStr += ' ';
     aStr += sSetRefName;

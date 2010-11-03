@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _VIEWSH_HXX
-#define _VIEWSH_HXX
+#ifndef SW_VIEWSH_HXX
+#define SW_VIEWSH_HXX
+
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/rtti.hxx>
@@ -67,7 +68,6 @@ class SfxItemPool;
 class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
-class SwPrtOptions;
 class SwPrintData;
 class SwPagePreViewPrtData;
 class Window;
@@ -357,7 +357,8 @@ public:
 
     // printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
+    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev,
+            SwPrintData const& rPrintData,
             sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
     // printing of one brochure page
@@ -368,8 +369,7 @@ public:
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
-    // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxObjectShellRef& );
+    /// fill temporary doc with selected text for Print or PDF export
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
@@ -467,7 +467,7 @@ public:
         input parameter - constant reference to print options, to which the
         view option will be adjusted.
     */
-    void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
+    void AdjustOptionsForPagePreview( SwPrintData const& rPrintOptions );
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }
@@ -633,4 +633,4 @@ inline const SfxItemPool& ViewShell::GetAttrPool() const
 
 
 
-#endif //_VIEWSH_HXX
+#endif // SW_VIEWSH_HXX

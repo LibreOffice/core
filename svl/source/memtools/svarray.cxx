@@ -61,7 +61,6 @@
 #include <tools/debug.hxx>
 
 SV_IMPL_VARARR(SvPtrarr,VoidPtr)
-SV_IMPL_VARARR_PLAIN(SvPtrarrPlain,VoidPtr)
 
 USHORT SvPtrarr::GetPos( const VoidPtr& aElement ) const
 {   USHORT n;
@@ -69,25 +68,12 @@ USHORT SvPtrarr::GetPos( const VoidPtr& aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
-{   USHORT n;
-    for( n=0; n < nA && *(GetData()+n) != aElement; ) n++;
-    return ( n >= nA ? USHRT_MAX : n );
-}
-
-
-SV_IMPL_VARARR( SvBools, BOOL )
-SV_IMPL_VARARR( SvBytes, BYTE )
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
 SV_IMPL_VARARR( SvLongs, long)
-SV_IMPL_VARARR( SvShorts, short )
 
 SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
 SV_IMPL_VARARR_SORT( SvLongsSort, long )
-SV_IMPL_VARARR_SORT( SvXub_StrLensSort, xub_StrLen )
-
-SV_IMPL_VARARR( SvXub_StrLens, xub_StrLen )
 
 SV_IMPL_PTRARR( SvStrings, StringPtr )
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )

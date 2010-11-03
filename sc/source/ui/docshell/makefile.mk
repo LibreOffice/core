@@ -98,6 +98,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/docsh.obj \
         $(SLO)$/docsh3.obj	\
         $(SLO)$/docsh4.obj \
+        $(SLO)$/docsh5.obj   	\
         $(SLO)$/docsh8.obj \
         $(SLO)$/externalrefmgr.obj \
         $(SLO)$/dbdocimp.obj \

@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include "OOXMLFactory.hxx"

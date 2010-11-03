@@ -28,15 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <unotools/configmgr.hxx>
 #include <prtopt.hxx>
-#include <swprtopt.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <unomid.h>
+
 
 using namespace utl;
 using rtl::OUString;

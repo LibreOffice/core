@@ -1347,9 +1347,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                     nOldWidth = ((SvxTabStopItem&)aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
 
             int bChg = FALSE;
-            USHORT nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_TABSTOP );
-            for( USHORT n = 0; n < nMaxItems; ++n )
-                if( 0 != (pTmpItem = GetAttrPool().GetItem( RES_PARATR_TABSTOP, n ) ))
+            sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_PARATR_TABSTOP );
+            for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+                if( 0 != (pTmpItem = GetAttrPool().GetItem2( RES_PARATR_TABSTOP, n ) ))
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
                                                 *(SvxTabStopItem*)pTmpItem );
 

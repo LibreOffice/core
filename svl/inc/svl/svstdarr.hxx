@@ -42,20 +42,11 @@
 
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>
+#include <deque>
 
-//#ifdef _SVSTDARR_BOOLS
-#ifndef _SVSTDARR_BOOLS_DECL
-SV_DECL_VARARR_VISIBILITY( SvBools, BOOL, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BOOLS_DECL
-#endif
-//#endif
+typedef std::deque< BOOL > SvBools;
 
-//#ifdef _SVSTDARR_BYTES
-#ifndef _SVSTDARR_BYTES_DECL
-SV_DECL_VARARR_VISIBILITY( SvBytes, BYTE, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BYTES_DECL
-#endif
-//#endif
+typedef std::deque< BYTE > SvBytes;
 
 //#ifdef _SVSTDARR_ULONGS
 #ifndef _SVSTDARR_ULONGS_DECL
@@ -139,12 +130,7 @@ SV_DECL_VARARR_SORT_VISIBILITY( SvLongsSort, long, 1, 1, SVL_DLLPUBLIC )
 #endif
 //#endif
 
-//#ifdef _SVSTDARR_SHORTS
-#ifndef _SVSTDARR_SHORTS_DECL
-SV_DECL_VARARR_VISIBILITY( SvShorts, short, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_SHORTS_DECL
-#endif
-//#endif
+typedef std::deque< short > SvShorts;
 
 /*
  form here all Arrays for Strings, ByteString and then
@@ -255,17 +241,5 @@ SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvByteStringsISortDtor, ByteStringPtr, 1, 1,
 #endif
 //#endif
 
-//#ifdef _SVSTDARR_XUB_STRLEN
-#ifndef _SVSTDARR_XUB_STRLEN_DECL
-SV_DECL_VARARR_VISIBILITY( SvXub_StrLens, xub_StrLen, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_XUB_STRLEN_DECL
-#endif
-//#endif
-
-//#ifdef _SVSTDARR_XUB_STRLENSORT
-#ifndef _SVSTDARR_XUB_STRLENSORT_DECL
-SV_DECL_VARARR_SORT_VISIBILITY( SvXub_StrLensSort, xub_StrLen, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_XUB_STRLENSORT_DECL
-#endif
-//#endif
+typedef std::deque< xub_StrLen > SvXub_StrLens;
 

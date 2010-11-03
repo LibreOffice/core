@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CHPFLD_HXX
-#define _CHPFLD_HXX
+#ifndef SW_CHPFLD_HXX
+#define SW_CHPFLD_HXX
 
 #include "fldbas.hxx"
 
@@ -69,6 +69,10 @@ class SW_DLLPUBLIC SwChapterField : public SwField
     friend class SwChapterFieldType;
     BYTE nLevel;
     String sTitle, sNumber, sPre, sPost;
+
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
 
@@ -81,9 +85,6 @@ public:
         BOOL bSrchNum = FALSE);
     // <--
     void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
-
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
 
     inline BYTE GetLevel() const;
     inline void SetLevel(BYTE);
@@ -99,4 +100,4 @@ inline void SwChapterField::SetLevel(BYTE nLev) { nLevel = nLev; }
 inline const String& SwChapterField::GetNumber() const { return sNumber; }
 inline const String& SwChapterField::GetTitle() const { return sTitle; }
 
-#endif // _CHPFLD_HXX
+#endif // SW_CHPFLD_HXX

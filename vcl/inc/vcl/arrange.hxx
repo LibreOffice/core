@@ -385,7 +385,12 @@ namespace vcl
         sal_uInt64 getMap( sal_uInt32 i_nX, sal_uInt32 i_nY )
         { return static_cast< sal_uInt64 >(i_nX) | (static_cast< sal_uInt64>(i_nY) << 32 ); }
 
-        Size getOptimalSize( WindowSizeType, std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights ) const;
+        static void distributeExtraSize( std::vector<long>& io_rSizes, const std::vector<sal_Int32>& i_rPrios, long i_nExtraWidth );
+
+        Size getOptimalSize( WindowSizeType,
+                             std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights,
+                             std::vector<sal_Int32>& o_rColumnPrio, std::vector<sal_Int32>& o_rRowPrio
+                            ) const;
     protected:
         virtual Element* getElement( size_t i_nIndex )
         { return i_nIndex < m_aElements.size() ? &m_aElements[ i_nIndex ] : 0; }

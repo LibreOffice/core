@@ -903,14 +903,17 @@ void SAL_CALL SwXTextView::setRubyList(
 /*-- 29.12.02 15:45:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/ )
+SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc()
 {
     SwWrtShell& rOldSh = m_pView->GetWrtShell();
     SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess()->getPrinter( false );
     SwDocShell* pDocSh;
     SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
-    rOldSh.FillPrtDoc(pDocSh->GetDoc(),  pPrt);
+    SwDoc *const pTempDoc( pDocSh->GetDoc() );
+    // #i103634#, #i112425#: do not expand numbering and fields on PDF export
+    pTempDoc->SetClipBoard(true);
+    rOldSh.FillPrtDoc(pTempDoc,  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.

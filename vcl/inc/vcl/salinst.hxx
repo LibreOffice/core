@@ -60,6 +60,7 @@ struct SalItemParams;
 class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
+class Menu;
 
 namespace vos { class IMutex; }
 
@@ -133,6 +134,8 @@ public:
     virtual vos::IMutex*        GetYieldMutex() = 0;
     virtual ULONG               ReleaseYieldMutex() = 0;
     virtual void                AcquireYieldMutex( ULONG nCount ) = 0;
+    // return true, if yield mutex is owned by this thread, else false
+    virtual bool                CheckYieldMutex() = 0;
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
@@ -141,10 +144,10 @@ public:
     virtual bool                AnyInput( USHORT nType ) = 0;
 
                             // Menues
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar ) = 0;
-    virtual void            DestroyMenu( SalMenu* pMenu) = 0;
-    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData ) = 0;
-    virtual void            DestroyMenuItem( SalMenuItem* pItem ) = 0;
+    virtual SalMenu*        CreateMenu( BOOL bMenuBar, Menu* pMenu );
+    virtual void            DestroyMenu( SalMenu* pMenu);
+    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
+    virtual void            DestroyMenuItem( SalMenuItem* pItem );
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() = 0;

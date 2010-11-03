@@ -85,8 +85,6 @@ const sal_Char SwRTFWriter::sNewLine = '\012';
 const sal_Char __FAR_DATA SwRTFWriter::sNewLine[] = "\015\012";
 #endif
 
-SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
-SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
 SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL ) :
@@ -638,13 +636,18 @@ void SwRTFWriter::OutDocInfoStat()
 
 static void InsColor( RTFColorTbl& rTbl, const Color& rCol )
 {
-    USHORT n;
-    for( n = 0; n < rTbl.Count(); ++n )
+    for( size_t n = 0; n < rTbl.size(); ++n )
         if( rTbl[n] == rCol )
-            return;         // schon vorhanden, zurueck
+            return;         // already exists, return
 
-    n = COL_AUTO == rCol.GetColor() ? 0 : rTbl.Count();
-    rTbl.Insert( rCol, n );
+    if ( COL_AUTO == rCol.GetColor() )
+    {
+        rTbl.push_front( rCol );
+    }
+    else
+    {
+        rTbl.push_back( rCol );
+    }
 }
 
 static void InsColorLine( RTFColorTbl& rTbl, const SvxBoxItem& rBox )
@@ -663,14 +666,15 @@ static void InsColorLine( RTFColorTbl& rTbl, const SvxBoxItem& rBox )
 
 void SwRTFWriter::OutRTFColorTab()
 {
-    ASSERT( pColTbl, "Wo ist meine Color-Tabelle?" );
+    ASSERT( pColTbl, "Where's table color?" );
 
-    // dann baue die ColorTabelle aus allen Attributen, die Colors
-    // enthalten und im Pool angemeldet sind auf.
-    USHORT n, nMaxItem;
+    // Build the color table from all attributes. The Colors
+    // included and registered in the pool are on.
+    size_t n;
+    sal_uInt32 nMaxItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
 
-    // das Charakter - Color Attribut
+    // the character - Color attribute
     {
         const SvxColorItem* pCol = (const SvxColorItem*)GetDfltAttr(
                                                 RES_CHRATR_COLOR );
@@ -678,30 +682,30 @@ void SwRTFWriter::OutRTFColorTab()
         if( 0 != ( pCol = (const SvxColorItem*)rPool.GetPoolDefaultItem(
                 RES_CHRATR_COLOR ) ))
             InsColor( *pColTbl, pCol->GetValue() );
-        nMaxItem = rPool.GetItemCount(RES_CHRATR_COLOR);
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_COLOR);
         for( n = 0; n < nMaxItem; ++n )
         {
-            if( 0 != (pCol = (const SvxColorItem*)rPool.GetItem(
+            if( 0 != (pCol = (const SvxColorItem*)rPool.GetItem2(
                 RES_CHRATR_COLOR, n ) ) )
                 InsColor( *pColTbl, pCol->GetValue() );
         }
 
         const SvxUnderlineItem* pUnder = (const SvxUnderlineItem*)GetDfltAttr( RES_CHRATR_UNDERLINE );
         InsColor( *pColTbl, pUnder->GetColor() );
-        nMaxItem = rPool.GetItemCount(RES_CHRATR_UNDERLINE);
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for( n = 0; n < nMaxItem;n++)
         {
-            if( 0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem( RES_CHRATR_UNDERLINE, n ) ) )
+            if( 0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem2( RES_CHRATR_UNDERLINE, n ) ) )
                 InsColor( *pColTbl, pUnder->GetColor() );
 
         }
 
         const SvxOverlineItem* pOver = (const SvxOverlineItem*)GetDfltAttr( RES_CHRATR_OVERLINE );
         InsColor( *pColTbl, pOver->GetColor() );
-        nMaxItem = rPool.GetItemCount(RES_CHRATR_OVERLINE);
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for( n = 0; n < nMaxItem;n++)
         {
-            if( 0 != (pOver = (const SvxOverlineItem*)rPool.GetItem( RES_CHRATR_OVERLINE, n ) ) )
+            if( 0 != (pOver = (const SvxOverlineItem*)rPool.GetItem2( RES_CHRATR_OVERLINE, n ) ) )
                 InsColor( *pColTbl, pOver->GetColor() );
 
         }
@@ -721,9 +725,9 @@ void SwRTFWriter::OutRTFColorTab()
         {
             InsColor( *pColTbl, pBkgrd->GetColor() );
         }
-        nMaxItem = rPool.GetItemCount( *pIds );
+        nMaxItem = rPool.GetItemCount2( *pIds );
         for( n = 0; n < nMaxItem; ++n )
-            if( 0 != (pBkgrd = (const SvxBrushItem*)rPool.GetItem(
+            if( 0 != (pBkgrd = (const SvxBrushItem*)rPool.GetItem2(
                     *pIds , n ) ))
             {
                 InsColor( *pColTbl, pBkgrd->GetColor() );
@@ -740,9 +744,9 @@ void SwRTFWriter::OutRTFColorTab()
         {
             InsColor( *pColTbl, pShadow->GetColor() );
         }
-        nMaxItem = rPool.GetItemCount(RES_SHADOW);
+        nMaxItem = rPool.GetItemCount2(RES_SHADOW);
         for( n = 0; n < nMaxItem; ++n )
-            if( 0 != (pShadow = (const SvxShadowItem*)rPool.GetItem(
+            if( 0 != (pShadow = (const SvxShadowItem*)rPool.GetItem2(
                 RES_SHADOW, n ) ) )
             {
                 InsColor( *pColTbl, pShadow->GetColor() );
@@ -756,16 +760,16 @@ void SwRTFWriter::OutRTFColorTab()
         if( 0 != ( pBox = (const SvxBoxItem*)rPool.GetPoolDefaultItem(
                         RES_BOX ) ))
             InsColorLine( *pColTbl, *pBox );
-        nMaxItem = rPool.GetItemCount(RES_BOX);
+        nMaxItem = rPool.GetItemCount2(RES_BOX);
         for( n = 0; n < nMaxItem; ++n )
-            if( 0 != (pBox = (const SvxBoxItem*)rPool.GetItem( RES_BOX, n ) ))
+            if( 0 != (pBox = (const SvxBoxItem*)rPool.GetItem2( RES_BOX, n ) ))
                 InsColorLine( *pColTbl, *pBox );
     }
 
     // und raus damit
     Strm() << SwRTFWriter::sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
 
-    for( n = 0; n < pColTbl->Count(); n++ )
+    for( n = 0; n < pColTbl->size(); n++ )
     {
         const Color& rCol = (*pColTbl)[ n ];
         if( n || COL_AUTO != rCol.GetColor() )
@@ -884,10 +888,10 @@ void SwRTFWriter::OutRTFFontTab()
     PutNumFmtFontsInAttrPool();
     PutCJKandCTLFontsInAttrPool();
 
-    USHORT nMaxItem = rPool.GetItemCount(RES_CHRATR_FONT);
-    for (USHORT nGet = 0; nGet < nMaxItem; ++nGet)
+    sal_uInt32 nMaxItem = rPool.GetItemCount2(RES_CHRATR_FONT);
+    for (sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet)
     {
-        pFont = (const SvxFontItem*)rPool.GetItem(RES_CHRATR_FONT, nGet);
+        pFont = (const SvxFontItem*)rPool.GetItem2(RES_CHRATR_FONT, nGet);
         if (pFont)
             _OutFont(*this, *pFont, n++);
     }
@@ -1345,12 +1349,12 @@ void SwRTFWriter::OutFlyFrm()
 
 USHORT SwRTFWriter::GetId( const Color& rColor ) const
 {
-    ASSERT( pColTbl, "Wo ist meine Color-Tabelle?" );
-    for( USHORT n = 0; n < pColTbl->Count(); n++ )
+    ASSERT( pColTbl, "Where's color table?" );
+    for( size_t n = 0; n < pColTbl->size(); n++ )
         if( rColor == (*pColTbl)[ n ] )
             return n;
 
-    ASSERT( FALSE, "Color nicht in der Tabelle" );
+    ASSERT( FALSE, "Color not exists in the pColTbl table" );
     return 0;
 }
 
@@ -1370,9 +1374,9 @@ USHORT SwRTFWriter::GetId( const SvxFontItem& rFont ) const
         ++n;
     }
 
-    USHORT nMaxItem = rPool.GetItemCount( RES_CHRATR_FONT );
-    for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem(
+    sal_uInt32 nMaxItem = rPool.GetItemCount2( RES_CHRATR_FONT );
+    for( sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet )
+        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem2(
             RES_CHRATR_FONT, nGet )) )
         {
             if( rFont == *pFont )

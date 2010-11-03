@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DOCUFLD_HXX
-#define _DOCUFLD_HXX
+#ifndef SW_DOCUFLD_HXX
+#define SW_DOCUFLD_HXX
 
 
 #include <tools/date.hxx>
@@ -363,6 +363,9 @@ class SwHiddenTxtField : public SwField
     BOOL    bIsHidden  : 1;     // ist es nicht sichtbar?
     BOOL    bValid     : 1;     // DB-Feld evaluiert?
 
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
+
 public:
     SwHiddenTxtField( SwHiddenTxtFieldType*,
                      BOOL   bConditional,
@@ -377,9 +380,7 @@ public:
                       const String& rFalse,
                       USHORT nSubType = TYP_HIDDENTXTFLD);
 
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
+    virtual String      GetFieldName() const;
 
     void                Evaluate(SwDoc*);
 
@@ -463,6 +464,9 @@ class SW_DLLPUBLIC SwMacroField : public SwField
     String  aText;
     BOOL      bIsScriptURL;
 
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     // Direkte Eingabe alten Wert loeschen
     SwMacroField( SwMacroFieldType*, const String& rLibAndName,
@@ -473,9 +477,7 @@ public:
     String           GetMacroName() const;
     SvxMacro         GetSvxMacro() const;
 
-    virtual String   GetCntnt(BOOL bName = FALSE) const;
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
+    virtual String   GetFieldName() const;
 
     // Library und FileName
     virtual const String& GetPar1() const;
@@ -571,6 +573,9 @@ class SW_DLLPUBLIC SwDocInfoField : public SwValueField
     String  aContent;
     String  aName;
 
+    virtual String          Expand() const;
+    virtual SwField*        Copy() const;
+
 public:
     SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, sal_uInt32 nFmt=0);
     SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, const String& rValue, sal_uInt32 nFmt=0);
@@ -578,9 +583,7 @@ public:
     virtual void            SetSubType(USHORT);
     virtual USHORT          GetSubType() const;
     virtual void            SetLanguage(USHORT nLng);
-    virtual String          Expand() const;
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
-    virtual SwField*        Copy() const;
+    virtual String          GetFieldName() const;
     String                  GetName() const { return aName; }
     void                    SetName( const String& rName ) { aName = rName; }
     inline void             SetExpansion(const String& rStr) { aContent = rStr; }
@@ -833,4 +836,4 @@ public:
 };
 
 
-#endif // _DOCUFLD_HXX
+#endif // SW_DOCUFLD_HXX

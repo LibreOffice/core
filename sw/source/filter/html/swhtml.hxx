@@ -406,8 +406,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrs      aParaAttrs; // vorlauefige Absatz-Attribute
     _HTMLAttrTable  aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
-    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, deren Anker verschoben wird
-    SvXub_StrLens   aMoveFlyCnts;// und deren Content-Positionen
+    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    SvXub_StrLens   aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *pAppletImpl; // das aktuelle Applet
 

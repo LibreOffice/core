@@ -377,7 +377,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPr
     if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-        const SfxPoolItem* pItem = pPool->GetItem( pEntry->nWID, SFX_ITEMS_STATICDEFAULT );
+        const SfxPoolItem* pItem = pPool->GetItem2( pEntry->nWID, SFX_ITEMS_DEFAULT );
         if (pItem)
             pItem->QueryValue( aRet, pEntry->nMemberId );
     }

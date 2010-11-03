@@ -400,7 +400,7 @@ protected:
     PrinterController( const boost::shared_ptr<Printer>& );
 public:
     enum NupOrderType
-    { LRTB, TBLR };
+    { LRTB, TBLR, TBRL, RLTB };
     struct MultiPageSetup
     {
         // all metrics in 100th mm

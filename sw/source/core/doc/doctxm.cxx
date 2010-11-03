@@ -110,9 +110,9 @@ USHORT SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
     const SwTxtTOXMark* pMark;
     const SfxPoolItem* pItem;
     const SwTOXType* pTOXType;
-    USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_TOXMARK );
+    sal_uInt32 i, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
     for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_TOXMARK, i ) ) &&
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i ) ) &&
             0!= ( pTOXType = ((SwTOXMark*)pItem)->GetTOXType()) &&
             TOX_INDEX == pTOXType->GetType() &&
             0 != ( pMark = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&

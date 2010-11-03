@@ -978,7 +978,7 @@ void Menu::ImplInit()
     mpLayoutData    = NULL;
     mpFirstDel      = NULL;         // Dtor notification list
     // Native-support: returns NULL if not supported
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar );
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar, this );
 }
 
 Menu* Menu::ImplGetStartedFrom() const
@@ -2484,6 +2484,16 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     if ( !bIsMenuBar )
     {
+        // popup menus should not be wider than half the screen
+        // except on rather small screens
+        // TODO: move GetScreenNumber from SystemWindow to Window ?
+        // currently we rely on internal privileges
+        unsigned int nScreenNumber = pWin->ImplGetWindowImpl()->mpFrame->maGeometry.nScreenNumber;
+        Rectangle aDispRect( Application::GetScreenPosSizePixel( nScreenNumber ) );
+        long nScreenWidth = aDispRect.GetWidth() >= 800 ? aDispRect.GetWidth() : 800;
+        if( nMaxWidth > nScreenWidth/2 )
+            nMaxWidth = nScreenWidth/2;
+
         USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
         if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
@@ -2575,6 +2585,26 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
         Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
         i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, TRUE, FALSE, 2, NULL, &aColor );
     }
+}
+
+static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_nMaxWidth )
+{
+    xub_StrLen nPos = STRING_NOTFOUND;
+    String aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
+    aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS );
+    // re-insert mnemonic
+    if( nPos != STRING_NOTFOUND )
+    {
+        if( nPos < aNonMnem.Len() && i_rLong.GetChar(nPos+1) == aNonMnem.GetChar(nPos) )
+        {
+            rtl::OUStringBuffer aBuf( i_rLong.Len() );
+            aBuf.append( aNonMnem.GetBuffer(), nPos );
+            aBuf.append( sal_Unicode('~') );
+            aBuf.append( aNonMnem.GetBuffer()+nPos );
+            aNonMnem = aBuf.makeStringAndClear();
+        }
+    }
+    return aNonMnem;
 }
 
 void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* pThisItemOnly, BOOL bHighlighted, bool bLayout ) const
@@ -2767,7 +2797,19 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                             pWin->GetSettings().GetStyleSettings().GetMenuColor();
                         pWin->SetBackground( Wallpaper( aBg ) );
                     }
-                    pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
+                    // how much space is there for the text ?
+                    long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpace;
+                    if( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
+                    {
+                        XubString aAccText = pData->aAccelKey.GetName();
+                        nMaxItemTextWidth -= pWin->GetTextWidth( aAccText ) + 3*nExtra;
+                    }
+                    if( !bIsMenuBar && pData->pSubMenu )
+                    {
+                        nMaxItemTextWidth -= nFontHeight - nExtra;
+                    }
+                    String aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
+                    pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.Len(), nStyle, pVector, pDisplayText );
                     if( bSetTmpBackground )
                         pWin->SetBackground();
                 }

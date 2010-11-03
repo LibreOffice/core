@@ -578,12 +578,27 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     VCLToCocoa( aStateRect );
     aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
 
-    // relase and acquire mutex again since this call can block waiting for an internal lock
-    {
-        [mpWindow setFrame: aStateRect display: NO];
-    }
+    [mpWindow setFrame: aStateRect display: NO];
+    if( pState->mnState == SAL_FRAMESTATE_MINIMIZED )
+        [mpWindow miniaturize: NSApp];
+    else if( [mpWindow isMiniaturized] )
+        [mpWindow deminiaturize: NSApp];
 
-    // FIXME: HTH maximized state ?
+
+    /* ZOOMED is not really maximized (actually it toggles between a user set size and
+       the program specified one), but comes closest since the default behavior is
+       "maximized" if the user did not intervene
+    */
+    if( pState->mnState == SAL_FRAMESTATE_MAXIMIZED )
+    {
+        if(! [mpWindow isZoomed])
+            [mpWindow zoom: NSApp];
+    }
+    else
+    {
+        if( [mpWindow isZoomed] )
+            [mpWindow zoom: NSApp];
+    }
 
     // get new geometry
     UpdateFrameGeometry();
@@ -640,8 +655,6 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnY         = long(aStateRect.origin.y);
     pState->mnWidth     = long(aStateRect.size.width);
     pState->mnHeight    = long(aStateRect.size.height);
-
-    // FIXME: HTH maximized state ?
 
     if( [mpWindow isMiniaturized] )
         pState->mnState = SAL_FRAMESTATE_MINIMIZED;

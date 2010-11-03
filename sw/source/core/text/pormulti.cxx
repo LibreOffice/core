@@ -1022,10 +1022,10 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         {
             pRet->pItem = NULL;
             pRet->pAttr = (*pHints)[n2Lines];
-            aEnd.Insert( *pRet->pAttr->GetEnd(), 0 );
+            aEnd.push_front( *pRet->pAttr->GetEnd() );
             if( pItem )
             {
-                aEnd[ 0 ] = GetTxt().Len();
+                aEnd.front() = GetTxt().Len();
                 bOn = ((SvxTwoLinesItem*)pItem)->GetEndBracket() ==
                         p2Lines->GetEndBracket() &&
                       ((SvxTwoLinesItem*)pItem)->GetStartBracket() ==
@@ -1036,7 +1036,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         {
             pRet->pItem = pItem;
             pRet->pAttr = NULL;
-            aEnd.Insert( GetTxt().Len(), 0 );
+            aEnd.push_front( GetTxt().Len() );
         }
         pRet->nId = SW_MC_DOUBLE;
         pRet->nLevel = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
@@ -1070,23 +1070,23 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                 // If the start of the next atribute is behind the end of
                 // the last attribute on the aEnd-stack, this is the endposition
                 // on the stack is the end of the 2-line portion.
-                if( !bOn || aEnd[ aEnd.Count()-1 ] < *pTmp->GetStart() )
+                if( !bOn || aEnd.back() < *pTmp->GetStart() )
                     break;
                 // At this moment, bOn is TRUE and the next attribute starts
                 // behind rPos, so we could move rPos to the next startpoint
                 rPos = *pTmp->GetStart();
                 // We clean up the aEnd-stack, endpositions equal to rPos are
                 // superfluous.
-                while( aEnd.Count() && aEnd[ aEnd.Count()-1 ] <= rPos )
+                while( !aEnd.empty() && aEnd.back() <= rPos )
                 {
                     bOn = !bOn;
-                    aEnd.Remove( aEnd.Count()-1, 1 );
+                    aEnd.pop_back();
                 }
                 // If the endstack is empty, we simulate an attribute with
                 // state TRUE and endposition rPos
-                if( !aEnd.Count() )
+                if( aEnd.empty() )
                 {
-                    aEnd.Insert( rPos, 0 );
+                    aEnd.push_front( rPos );
                     bOn = sal_True;
                 }
             }
@@ -1098,8 +1098,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                 if( bTwo == bOn )
                 {   // .. with the same state, so the last attribute could
                     // be continued.
-                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
-                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                    if( aEnd.back() < *pTmp->GetEnd() )
+                        aEnd.back() = *pTmp->GetEnd();
                 }
                 else
                 {   // .. with a different state.
@@ -1107,17 +1107,17 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                     // If this is smaller than the last on the stack, we put
                     // it on the stack. If it has the same endposition, the last
                     // could be removed.
-                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
-                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
-                    else if( aEnd.Count() > 1 )
-                        aEnd.Remove( aEnd.Count()-1, 1 );
+                    if( aEnd.back() > *pTmp->GetEnd() )
+                        aEnd.push_back( *pTmp->GetEnd() );
+                    else if( aEnd.size() > 1 )
+                        aEnd.pop_back();
                     else
-                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                        aEnd.back() = *pTmp->GetEnd();
                 }
             }
         }
-        if( bOn && aEnd.Count() )
-            rPos = aEnd[ aEnd.Count()-1 ];
+        if( bOn && !aEnd.empty() )
+            rPos = aEnd.back();
         return pRet;
     }
     if( nRotate < nCount || ( pRotItem && pRotItem == pRotate &&
@@ -1133,7 +1133,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, which could interrupts the winning rotation attribute.
         sal_Bool bOn = pItem ? sal_True : sal_False;
-        aEnd.Insert( GetTxt().Len(), 0 );
+        aEnd.push_front( GetTxt().Len() );
         // n2Lines is the index of the last 2-line-attribute, which contains
         // the actual position.
         i = 0;
@@ -1145,17 +1145,17 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                 continue;
             if( n2Start < *pTmp->GetStart() )
             {
-                if( bOn || aEnd[ aEnd.Count()-1 ] < *pTmp->GetStart() )
+                if( bOn || aEnd.back() < *pTmp->GetStart() )
                     break;
                 n2Start = *pTmp->GetStart();
-                while( aEnd.Count() && aEnd[ aEnd.Count()-1 ] <= n2Start )
+                while( !aEnd.empty() && aEnd.back() <= n2Start )
                 {
                     bOn = !bOn;
-                    aEnd.Remove( aEnd.Count()-1, 1 );
+                    aEnd.pop_back();
                 }
-                if( !aEnd.Count() )
+                if( aEnd.empty() )
                 {
-                    aEnd.Insert( n2Start, 0 );
+                    aEnd.push_front( n2Start );
                     bOn = sal_False;
                 }
             }
@@ -1170,36 +1170,36 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
-                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                    if( aEnd.back() < *pTmp->GetEnd() )
+                        aEnd.back() = *pTmp->GetEnd();
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
-                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
-                    else if( aEnd.Count() > 1 )
-                        aEnd.Remove( aEnd.Count()-1, 1 );
+                    if( aEnd.back() > *pTmp->GetEnd() )
+                        aEnd.push_back( *pTmp->GetEnd() );
+                    else if( aEnd.size() > 1 )
+                        aEnd.pop_back();
                     else
-                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                        aEnd.back() = *pTmp->GetEnd();
                 }
             }
         }
-        if( !bOn && aEnd.Count() )
-            n2Start = aEnd[ aEnd.Count()-1 ];
+        if( !bOn && !aEnd.empty() )
+            n2Start = aEnd.back();
 
-        if( aEnd.Count() )
-            aEnd.Remove( 0, aEnd.Count() );
+        if( !aEnd.empty() )
+            aEnd.clear();
 
         bOn = sal_True;
         if( nRotate < nCount )
         {
             pRet->pItem = NULL;
             pRet->pAttr = (*pHints)[nRotate];
-            aEnd.Insert( *pRet->pAttr->GetEnd(), 0 );
+            aEnd.push_front( *pRet->pAttr->GetEnd() );
             if( pRotItem )
             {
-                aEnd[ 0 ] = GetTxt().Len();
+                aEnd.front() = GetTxt().Len();
                 bOn = ((SvxCharRotateItem*)pRotItem)->GetValue() ==
                         pRotate->GetValue();
             }
@@ -1208,7 +1208,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         {
             pRet->pItem = pRotItem;
             pRet->pAttr = NULL;
-            aEnd.Insert( GetTxt().Len(), 0 );
+            aEnd.push_front( GetTxt().Len() );
         }
         i = 0;
         while( i < nCount )
@@ -1218,17 +1218,17 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                 continue;
             if( rPos < *pTmp->GetStart() )
             {
-                if( !bOn || aEnd[ aEnd.Count()-1 ] < *pTmp->GetStart() )
+                if( !bOn || aEnd.back() < *pTmp->GetStart() )
                     break;
                 rPos = *pTmp->GetStart();
-                while( aEnd.Count() && aEnd[ aEnd.Count()-1 ] <= rPos )
+                while( !aEnd.empty() && aEnd.back() <= rPos )
                 {
                     bOn = !bOn;
-                    aEnd.Remove( aEnd.Count()-1, 1 );
+                    aEnd.pop_back();
                 }
-                if( !aEnd.Count() )
+                if( aEnd.empty() )
                 {
-                    aEnd.Insert( rPos, 0 );
+                    aEnd.push_front( rPos );
                     bOn = sal_True;
                 }
             }
@@ -1241,23 +1241,23 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
-                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                    if( aEnd.back() < *pTmp->GetEnd() )
+                        aEnd.back() = *pTmp->GetEnd();
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
-                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
-                    else if( aEnd.Count() > 1 )
-                        aEnd.Remove( aEnd.Count()-1, 1 );
+                    if( aEnd.back() > *pTmp->GetEnd() )
+                        aEnd.push_back( *pTmp->GetEnd() );
+                    else if( aEnd.size() > 1 )
+                        aEnd.pop_back();
                     else
-                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                        aEnd.back() = *pTmp->GetEnd();
                 }
             }
         }
-        if( bOn && aEnd.Count() )
-            rPos = aEnd[ aEnd.Count()-1 ];
+        if( bOn && !aEnd.empty() )
+            rPos = aEnd.back();
         if( rPos > n2Start )
             rPos = n2Start;
         return pRet;

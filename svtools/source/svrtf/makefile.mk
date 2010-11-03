@@ -30,6 +30,8 @@ PRJ=..$/..
 PRJNAME=svtools
 TARGET=svrtf
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk

@@ -566,6 +566,22 @@ void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
+bool AquaSalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
 bool AquaSalInstance::isNSAppThread() const
 {
     return vos::OThread::getCurrentIdentifier() == maMainThread;

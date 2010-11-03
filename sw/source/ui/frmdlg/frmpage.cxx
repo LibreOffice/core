@@ -1080,7 +1080,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
                             aWidthED .GetValue() == aWidthED .GetMin() &&
                             aHeightED.GetValue() == aHeightED.GetMin());
 
-    if ((bNew && !bFormat) || (bValueModified || bCheckChanged) && bLegalValue)
+    if ((bNew && !bFormat) || ((bValueModified || bCheckChanged) && bLegalValue))
     {
         sal_Int64 nNewWidth  = aWidthED.DenormalizePercent(aWidthED.GetRealValue(FUNIT_TWIP));
         sal_Int64 nNewHeight = aHeightED.DenormalizePercent(aHeightED.GetRealValue(FUNIT_TWIP));

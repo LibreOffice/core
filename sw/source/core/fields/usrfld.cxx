@@ -40,12 +40,12 @@
 #include <doc.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
 /*--------------------------------------------------------------------
     Beschreibung: Benutzerfelder
  --------------------------------------------------------------------*/
@@ -72,17 +72,14 @@ SwField* SwUserField::Copy() const
     return pTmp;
 }
 
-String SwUserField::GetCntnt(sal_Bool bName) const
+String SwUserField::GetFieldName() const
 {
-    if ( bName )
-    {   String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
-        aStr += ' ';
-        aStr += GetTyp()->GetName();
-        aStr.AppendAscii(" = ");
-        aStr += ((SwUserFieldType*)GetTyp())->GetContent();
-        return aStr;
-    }
-    return Expand();
+    String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
+    aStr += ' ';
+    aStr += GetTyp()->GetName();
+    aStr.AppendAscii(" = ");
+    aStr += static_cast<SwUserFieldType*>(GetTyp())->GetContent();
+    return aStr;
 }
 
 double SwUserField::GetValue() const

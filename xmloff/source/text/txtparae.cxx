@@ -3423,7 +3423,7 @@ void XMLTextParagraphExport::exportTextRange(
 void XMLTextParagraphExport::exportText( const OUString& rText,
                                            sal_Bool& rPrevCharIsSpace )
 {
-    sal_Int32 nExpStartPos = 0L;
+    sal_Int32 nExpStartPos = 0;
     sal_Int32 nEndPos = rText.getLength();
     sal_Int32 nSpaceChars = 0;
     for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )

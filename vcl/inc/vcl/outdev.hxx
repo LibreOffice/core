@@ -185,6 +185,9 @@ struct KerningPair
 #define TEXT_DRAW_MULTILINE             ((USHORT)0x1000)
 #define TEXT_DRAW_WORDBREAK             ((USHORT)0x2000)
 #define TEXT_DRAW_NEWSELLIPSIS          ((USHORT)0x4000)
+// in the long run we should make text style flags longer
+// but at the moment we can get away with this 2 bit field for ellipsis style
+#define TEXT_DRAW_CENTERELLIPSIS        (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS)
 
 #define TEXT_DRAW_WORDBREAK_HYPHENATION (((USHORT)0x8000) | TEXT_DRAW_WORDBREAK)
 
@@ -1114,7 +1117,7 @@ public:
 
     /** Added return value to see if EPS could be painted directly.
         Theoreticaly, handing over a matrix would be needed to handle
-        painting rotated EPS files (e.g. contained mín Metafiles). This
+        painting rotated EPS files (e.g. contained in Metafiles). This
         would then need to be supported for Mac and PS printers, but
         that's too much for now, wrote #i107046# for this */
     bool                DrawEPS( const Point& rPt, const Size& rSz,

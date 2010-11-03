@@ -212,10 +212,10 @@ inline BOOL FontPrevWin_Impl::Is100PercentFontWidthValid() const
 void FontPrevWin_Impl::_CheckScript()
 {
     aScriptText = aText;
-    USHORT nCnt = aScriptChg.Count();
+    size_t nCnt = aScriptChg.size();
     if( nCnt )
     {
-        aScriptChg.Remove( 0, nCnt );
+        aScriptChg.clear();
         aScriptType.Remove( 0, nCnt );
         aTextWidth.Remove( 0, nCnt );
         nCnt = 0;
@@ -250,16 +250,16 @@ void FontPrevWin_Impl::_CheckScript()
                 if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                     nType == U_COMBINING_SPACING_MARK )
                 {
-                    aScriptChg.Insert( nChg - 1, nCnt );
+                    aScriptChg.push_back( nChg - 1 );
                 }
                 else
                 {
-                    aScriptChg.Insert( nChg, nCnt );
+                    aScriptChg.push_back( nChg );
                 }
             }
             else
             {
-                aScriptChg.Insert( nChg, nCnt );
+                aScriptChg.push_back( nChg );
             }
             aScriptType.Insert( nScript, nCnt );
             aTextWidth.Insert( ULONG(0), nCnt++ );
@@ -289,7 +289,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     USHORT nIdx = 0;
     xub_StrLen nStart = 0;
     xub_StrLen nEnd;
-    USHORT nCnt = aScriptChg.Count();
+    size_t nCnt = aScriptChg.size();
     if( nCnt )
     {
         nEnd = aScriptChg[ nIdx ];
@@ -368,7 +368,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     USHORT nIdx = 0;
     xub_StrLen nStart = 0;
     xub_StrLen nEnd;
-    USHORT nCnt = aScriptChg.Count();
+    size_t nCnt = aScriptChg.size();
     if( nCnt )
     {
         nEnd = aScriptChg[ nIdx ];
