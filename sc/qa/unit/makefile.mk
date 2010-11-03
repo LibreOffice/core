@@ -106,7 +106,6 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
-        -c configmgr.uno$(DLLPOST) \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
 
 #Tweak things to that we use the .res files in the solver
