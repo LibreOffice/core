@@ -371,19 +371,6 @@ String STR_OBJECT
     Text [ en-US ] = "Object" ;
 };
 
-String STR_EDITOBJECT
-{
-    Text [ en-US ] = "~Edit";
-};
-
-// --> PB 2004-08-20 #i33095#
-/* obsolete
-String STR_OPENOBJECT
-{
-    Text [ en-US ] = "~Open";
-};
-*/
-
 QueryBox DLG_MACROQUERY
 {
     Buttons = WB_OK_CANCEL;

@@ -146,11 +146,6 @@
 #define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)
 
 #define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
-#define STR_EDITOBJECT                      (RID_SFX_DOC_START+ 85)
-// --> PB 2004-08-20 #i33095#
-/* obsolete
-#define STR_OPENOBJECT                      (RID_SFX_DOC_START+ 86)
-*/
 
 #define DLOAD_URL 1
 #define DLOAD_STATUS 2

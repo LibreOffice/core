@@ -222,7 +222,6 @@
 #define RID_BUILDVERSION                    (RID_SFX_START+5)
 
 #define RID_DOCALREADYLOADED_DLG            (RID_SFX_START+1)
-#define RID_CANTLOADDOC_DLG                 (RID_SFX_START+2)
 
 #define TP_DOCINFODESC                      (RID_SFX_START+3)
 #define TP_DOCINFODOC                       (RID_SFX_START+4)
