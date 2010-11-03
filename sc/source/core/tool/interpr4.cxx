@@ -2707,8 +2707,6 @@ void ScInterpreter::ScMacro()
 
     //  keine Sicherheitsabfrage mehr vorneweg (nur CheckMacroWarn), das passiert im CallBasic
 
-    SfxApplication* pSfxApp = SFX_APP();
-
     //  Wenn das Dok waehrend eines Basic-Calls geladen wurde,
     //  ist das Sbx-Objekt evtl. nicht angelegt (?)
 //  pDocSh->GetSbxObject();
