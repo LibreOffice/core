@@ -44,8 +44,6 @@ public:
     // @@@ semantic: no copy ctor.
     SwUnoCrsr( SwUnoCrsr& );
 private:
-    // forbidden and not implemented.
-    //SwUnoCrsr( const SwUnoCrsr& );
     SwUnoCrsr & operator= ( const SwUnoCrsr& );
 
 protected:
@@ -55,8 +53,6 @@ protected:
     virtual void DoSetBidiLevelUpDown();
 
 public:
-
-//  virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
@@ -100,8 +96,6 @@ class SwUnoTableCrsr : public virtual SwUnoCrsr, public virtual SwTableCursor
 public:
     SwUnoTableCrsr( const SwPosition& rPos );
     virtual ~SwUnoTableCrsr();
-
-//  virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt

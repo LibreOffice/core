@@ -42,7 +42,6 @@ class ViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
-//#define VIEWOPT_1_IDLE             0x00000001L  no longer used, see new member 'bIdle'
 #define VIEWOPT_1_TAB           0x00000002L
 #define VIEWOPT_1_BLANK         0x00000004L
 #define VIEWOPT_1_HARDBLANK     0x00000008L
@@ -54,8 +53,6 @@ namespace svtools{ class ColorConfig;}
 
 #define VIEWOPT_1_REF           0x00000400L
 #define VIEWOPT_1_FLDNAME       0x00000800L
-//#define           0x00001000L
-//#define      0x00002000L
 #define VIEWOPT_1_POSTITS       0x00004000L
 #define VIEWOPT_1_FLD_HIDDEN    0x00008000L
 #define VIEWOPT_1_CHAR_HIDDEN   0x00010000L
@@ -63,13 +60,11 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_1_TABLE         0x00040000L
 #define VIEWOPT_1_DRAW          0x00080000L
 #define VIEWOPT_1_CONTROL       0x00100000L
-//#define  0x00200000L
 #define VIEWOPT_1_CROSSHAIR     0x00400000L
 #define VIEWOPT_1_SNAP          0x00800000L
 #define VIEWOPT_1_SYNCHRONIZE   0x01000000L
 #define VIEWOPT_1_GRIDVISIBLE   0x02000000L
 #define VIEWOPT_1_ONLINESPELL   0x04000000L
-//#define VIEWOPT_1_HIDESPELL     0x08000000L   /* removed #i91949 */
 #define VIEWOPT_1_RESERVED1     0x10000000L
 #define VIEWOPT_1_VIEWMETACHARS 0x20000000L
 #define VIEWOPT_1_PAGEBACK      0x40000000L
@@ -159,9 +154,7 @@ protected:
     BOOL            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
     BOOL            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
     BOOL            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
-    // --> FME 2004-06-29 #114856# Formular view
     BOOL            bFormView : 1;
-    // <--
     BOOL            bBookview : 1;      // view mode for page preview
     BOOL            mbViewLayoutBookMode : 1; // book view mode for edit view
     sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
@@ -390,11 +383,6 @@ public:
     inline void SetPrinting(BOOL b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PRINTING) : (nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
 
-/*---------------------------------------------------------------------------
-
-----------------------------------------------------------------------------*/
-
-
     inline short GetDivisionX() const   { return nDivisionX; }
     inline void  SetDivisionX( short n ){ nDivisionX = n; }
     inline short GetDivisionY() const   { return nDivisionY; }
@@ -410,17 +398,14 @@ public:
     BOOL         IsSelectionInReadonly() const {return bSelectionInReadonly;}
     void         SetSelectionInReadonly(BOOL bSet) {bSelectionInReadonly = bSet;}
 
-    // --> FME 2004-06-29 #114856# Formular view
     BOOL         IsFormView() const { return bFormView; }
     void         SetFormView( BOOL bSet ) { bFormView = bSet; }
-    // <--
 
     inline BOOL  IsPagePrevBookview() const { return bBookview; }
     inline void  SetPagePrevBookview(BOOL bSet) { bBookview = bSet; }
 
     BOOL IsAutoCompleteWords() const;
 
-    // PAGES01
     bool   IsViewLayoutBookMode() const { return mbViewLayoutBookMode; }
     void   SetViewLayoutBookMode( bool bNew ) { mbViewLayoutBookMode = bNew; }
     USHORT GetViewLayoutColumns() const { return mnViewLayoutColumns; }

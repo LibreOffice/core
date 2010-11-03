@@ -80,7 +80,6 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
                                             // Grafik-Links. Sind alle da,
                                             // dann ist Doc voll. geladen
 
-    //SvPersistRef            xOLEChildList;  // fuers RemoveOLEObjects
     comphelper::EmbeddedObjectContainer*    pOLEChildList;
     sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
     bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
@@ -258,15 +257,12 @@ public:
                         BOOL bColumn = FALSE,
                         SwWrtShell*     pActShell = 0 );
 
-    // --> OD 2006-11-07 #i59688#
+    // #i59688#
     // linked graphics are now loaded on demand.
     // Thus, loading of linked graphics no longer needed and necessary for
     // the load of document being finished.
-//    // Timer starten fuers ueberpruefen der Grafik-Links. Sind alle
-//    // vollstaendig geladen, dann ist das Doc fertig
-//    void StartLoadFinishedTimer();
+
     void LoadingFinished();
-    // <--
 
     // eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
     virtual void CancelTransfers();
@@ -291,15 +287,14 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetEventNames();
 
-    // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+    // #i20883# Digital Signatures and Encryption
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
-    // <--
 
-    // --> FME 2005-02-25 #i42634# Overwrites SfxObjectShell::UpdateLinks
+
+    // #i42634# Overwrites SfxObjectShell::UpdateLinks
     // This new function is necessary to trigger update of links in docs
     // read by the binary filter:
     virtual void UpdateLinks();
-    // <--
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();

@@ -58,7 +58,7 @@
 
 #include <vcl/svapp.hxx>
 
-//JP 14.01.99: Size Abpruefung
+// Size Abpruefung
 #define NAVI_ENTRIES 20
 #if NAVI_ENTRIES != NID_COUNT
 #error SwScrollNaviPopup-CTOR static Array falsche Size. Wurden neue IDs zugefuegt ??
@@ -73,9 +73,6 @@ using namespace ::com::sun::star::frame;
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxInsertCtrl, SfxImageItem);
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxBoolItem );
 
-/**********************************************************************
-
-**********************************************************************/
 SwTbxInsertCtrl::SwTbxInsertCtrl(
     USHORT nSlotId,
     USHORT nId,
@@ -85,9 +82,7 @@ SwTbxInsertCtrl::SwTbxInsertCtrl(
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
-/**********************************************************************
 
-**********************************************************************/
 SwTbxInsertCtrl::~SwTbxInsertCtrl()
 {
 }
@@ -107,11 +102,6 @@ void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
 
     SfxToolBoxControl::update();
 }
-
-/**********************************************************************
-
-**********************************************************************/
-
 
 void SwTbxInsertCtrl::StateChanged( USHORT /*nSID*/,
                                       SfxItemState eState,
@@ -144,10 +134,6 @@ void SwTbxInsertCtrl::StateChanged( USHORT /*nSID*/,
     }
 
 }
-/**********************************************************************
-
-**********************************************************************/
-
 
 SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
 {
@@ -164,20 +150,10 @@ SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
     return NULL;
 }
 
-/**********************************************************************
-
-**********************************************************************/
-
-
 SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
 {
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
-
-
-/**********************************************************************
-
-**********************************************************************/
 
 
 void SwTbxInsertCtrl::Select( BOOL /*bMod1*/ )
@@ -199,11 +175,6 @@ void SwTbxInsertCtrl::Select( BOOL /*bMod1*/ )
     }
 }
 
-/**********************************************************************
-
-**********************************************************************/
-
-
 SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     USHORT nSlotId,
     USHORT nId,
@@ -214,20 +185,11 @@ SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
-/**********************************************************************
-
-**********************************************************************/
-
 
 SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
 {
     DelPopup();
 }
-
-/**********************************************************************
-
-**********************************************************************/
-
 
 SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
 {
@@ -304,20 +266,10 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
 }
 
 
-/**********************************************************************
-
-**********************************************************************/
-
-
 SfxPopupWindowType SwTbxAutoTextCtrl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONTIMEOUT;
 }
-
-/**********************************************************************
-
-**********************************************************************/
-
 
 void SwTbxAutoTextCtrl::StateChanged( USHORT nSID,
                                               SfxItemState eState,
@@ -329,11 +281,6 @@ void SwTbxAutoTextCtrl::StateChanged( USHORT nSID,
         GetToolBox().CheckItem( GetId(), ((SfxBoolItem*)pState)->GetValue() );
     }
 }
-
-/**********************************************************************
-
-**********************************************************************/
-
 
 IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
 {
@@ -392,11 +339,6 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
     return 0;
 }
 
-/**********************************************************************
-
-**********************************************************************/
-
-
 void SwTbxAutoTextCtrl::DelPopup()
 {
     if(pPopup)
@@ -414,9 +356,7 @@ void SwTbxAutoTextCtrl::DelPopup()
     }
 }
 
-/*-----------------19.02.97 10.52-------------------
-    Navigations-Popup
---------------------------------------------------*/
+/* Navigations-Popup */
 // determine the order of the toolbox items
 static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
 {
@@ -534,16 +474,11 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
     aToolBox.StartSelection();
     aToolBox.Show();
 }
-/*-----------------19.02.97 12.45-------------------
-
---------------------------------------------------*/
 
 SwScrollNaviPopup::~SwScrollNaviPopup()
 {
 }
-/* -----------------------------08.05.2002 14:00------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -552,9 +487,7 @@ void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
 
     Window::DataChanged( rDCEvt );
 }
-/* -----------------------------08.05.2002 14:02------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwScrollNaviPopup::ApplyImageList()
 {
     ImageList& rImgLst = aToolBox.GetSettings().GetStyleSettings().GetHighContrastMode() ?
@@ -565,18 +498,11 @@ void SwScrollNaviPopup::ApplyImageList()
         aToolBox.SetItemImage(nNaviId, rImgLst.GetImage(nNaviId));
     }
 }
-/*-----------------19.02.97 13.58-------------------
-
---------------------------------------------------*/
 
 SfxPopupWindow* SwScrollNaviPopup::Clone() const
 {
     return new SwScrollNaviPopup( GetId(), GetFrame() );
 }
-
-/*-----------------19.02.97 14.10-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
 {
@@ -608,9 +534,6 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     }
     return 0;
 }
-/*-----------------23.02.97 18.21-------------------
-
---------------------------------------------------*/
 
 void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -619,9 +542,6 @@ void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
         ((SwScrollNaviPopup*)GetParent())->EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
 }
 
-/*-----------------20.06.97 13:28-------------------
-
---------------------------------------------------*/
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
     SetItemText(NID_NEXT, SwScrollNaviPopup::GetQuickHelpText(TRUE));
@@ -630,9 +550,6 @@ void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 }
 
-/*-----------------20.06.97 13:41-------------------
-
---------------------------------------------------*/
 String  SwScrollNaviPopup::GetQuickHelpText(BOOL bNext)
 {
     USHORT nResId = STR_IMGBTN_START;
@@ -641,17 +558,12 @@ String  SwScrollNaviPopup::GetQuickHelpText(BOOL bNext)
         nResId += NID_COUNT;
     return String(SW_RES(nResId));
 }
-/* -----------------------------05.09.2002 13:53------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNaviImageButton::Click()
 {
-//    SfxBindings& rBind = SfxViewFrame::Current()->GetBindings();
-//    rBind.ENTERREGISTRATIONS();
     pPopup = new
         SwScrollNaviPopup( FN_SCROLL_NAVIGATION,
                            m_xFrame );
-//    rBind.LEAVEREGISTRATIONS();
     Point aPos = OutputToScreenPixel(Point(0,0));
     Rectangle aRect(aPos, GetSizePixel());
     SetPopupWindow( pPopup );
@@ -700,10 +612,6 @@ IMPL_LINK( SwNaviImageButton, ClosePopupWindow, SfxPopupWindow *, pWindow )
     return 1;
 }
 
-/*-----------------21.02.97 09:41-------------------
-
---------------------------------------------------*/
-
 void SwHlpImageButton::RequestHelp( const HelpEvent& rHEvt )
 {
 
@@ -711,10 +619,6 @@ void SwHlpImageButton::RequestHelp( const HelpEvent& rHEvt )
 
     ImageButton::RequestHelp(rHEvt);
 }
-
-/*-----------------25.02.97 12:38-------------------
-
---------------------------------------------------*/
 
 SwNaviImageButton::SwNaviImageButton(
     Window* pParent,
@@ -733,9 +637,7 @@ SwNaviImageButton::SwNaviImageButton(
     SetQuickHelpText(sQuickText);
     SetModeImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImageH : aImage);
 }
-/* -----------------------------2002/07/05 9:41-------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -744,9 +646,7 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 
     Window::DataChanged( rDCEvt );
 }
-/* -----------------26.11.2002 09:28-----------------
- *
- * --------------------------------------------------*/
+
 class SwZoomBox_Impl : public ComboBox
 {
     USHORT          nSlotId;
@@ -767,9 +667,7 @@ protected:
     void ReleaseFocus();
 
 };
-/* -----------------26.11.2002 09:29-----------------
- *
- * --------------------------------------------------*/
+
 SwZoomBox_Impl::SwZoomBox_Impl(
     Window* pParent,
     USHORT nSlot,
@@ -789,14 +687,10 @@ SwZoomBox_Impl::SwZoomBox_Impl(
         InsertEntry(sEntry);
     }
 }
-/* -----------------26.11.2002 09:29-----------------
- *
- * --------------------------------------------------*/
+
 SwZoomBox_Impl::~SwZoomBox_Impl()
 {}
-/* -----------------26.11.2002 09:34-----------------
- *
- * --------------------------------------------------*/
+
 void    SwZoomBox_Impl::Select()
 {
     if ( !IsTravelSelect() )
@@ -826,9 +720,7 @@ void    SwZoomBox_Impl::Select()
         ReleaseFocus();
     }
 }
-/* -----------------02.12.2002 07:49-----------------
- *
- * --------------------------------------------------*/
+
 long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
@@ -865,9 +757,7 @@ long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
 
     return nHandled ? nHandled : ComboBox::Notify( rNEvt );
 }
-/* -----------------02.12.2002 07:51-----------------
- *
- * --------------------------------------------------*/
+
 void SwZoomBox_Impl::ReleaseFocus()
 {
     if ( !bRelease )
@@ -886,9 +776,6 @@ void SwZoomBox_Impl::ReleaseFocus()
     }
 }
 
-/* -----------------26.11.2002 09:29-----------------
- *
- * --------------------------------------------------*/
 SFX_IMPL_TOOLBOX_CONTROL( SwPreviewZoomControl, SfxUInt16Item);
 
 SwPreviewZoomControl::SwPreviewZoomControl(
@@ -898,15 +785,11 @@ SwPreviewZoomControl::SwPreviewZoomControl(
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
-/* -----------------26.11.2002 09:29-----------------
- *
- * --------------------------------------------------*/
+
 SwPreviewZoomControl::~SwPreviewZoomControl()
 {
 }
-/* -----------------26.11.2002 09:29-----------------
- *
- * --------------------------------------------------*/
+
 void SwPreviewZoomControl::StateChanged( USHORT /*nSID*/,
                                          SfxItemState eState,
                                          const SfxPoolItem* pState )
@@ -922,9 +805,7 @@ void SwPreviewZoomControl::StateChanged( USHORT /*nSID*/,
         pBox->SaveValue();
     }
 }
-/* -----------------26.11.2002 09:29-----------------
- *
- * --------------------------------------------------*/
+
 Window* SwPreviewZoomControl::CreateItemWindow( Window *pParent )
 {
     SwZoomBox_Impl* pRet = new SwZoomBox_Impl( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));

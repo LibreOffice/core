@@ -249,7 +249,7 @@ namespace sfx2 {
 typedef SwPageDesc* SwPageDescPtr;
 SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
 
-// forward declartion
+// forward declaration
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
 // global function to start grammar checking in the document
@@ -285,10 +285,10 @@ class SW_DLLPUBLIC SwDoc :
 
     // -------------------------------------------------------------------
     // die Objecte
-    SwNodes     aNodes;                 // Inhalt des Dokumentes
-    SwNodes     aUndoNodes;             // Inhalt fuer das Undo
-    SwAttrPool* mpAttrPool;             // der Attribut Pool
-    SwPageDescs aPageDescs;             // PageDescriptoren
+    SwNodes     aNodes;                 // document content
+    SwNodes     aUndoNodes;             // content for undo
+    SwAttrPool* mpAttrPool;             // attribute pool
+    SwPageDescs aPageDescs;             // PageDescriptors
     Link        aOle2Link;              // OLE 2.0-Benachrichtigung
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
@@ -310,13 +310,13 @@ class SW_DLLPUBLIC SwDoc :
     // die Pointer
                                 //Defaultformate
     SwFrmFmt        *pDfltFrmFmt;
-     SwFrmFmt       *pEmptyPageFmt;     // Format fuer die Default-Leerseite.
+     SwFrmFmt       *pEmptyPageFmt;     // Format for the default empty page
     SwFrmFmt        *pColumnContFmt;    // Format fuer Spaltencontainer
     SwCharFmt       *pDfltCharFmt;
     SwTxtFmtColl    *pDfltTxtFmtColl;   // Defaultformatcollections
     SwGrfFmtColl    *pDfltGrfFmtColl;
 
-    SwFrmFmts       *pFrmFmtTbl;        // Formattabellen
+    SwFrmFmts       *pFrmFmtTbl;        // Format table
     SwCharFmts      *pCharFmtTbl;
     SwSpzFrmFmts    *pSpzFrmFmtTbl;
     SwSectionFmts   *pSectionFmtTbl;
@@ -416,7 +416,7 @@ private:
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
     // -------------------------------------------------------------------
-    // sonstige
+    // other
     sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
     sal_uInt16  nUndoSavePos;       // Position im Undo-Array, ab der das Doc
                                     // nicht als modifiziert gilt
@@ -484,7 +484,7 @@ private:
     bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
     bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
-    bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
+    bool mbLinksUpdated          : 1;    // #i38810#
                                          // flag indicating, that the links have been updated.
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
@@ -569,30 +569,30 @@ private:
     bool mbAddFlyOffsets                    : 1;
     bool mbAddExternalLeading               : 1;
     bool mbUseHiResolutionVirtualDevice     : 1;
-    bool mbOldLineSpacing                   : 1;    // OD  2004-01-06 #i11859#
-    bool mbAddParaSpacingToTableCells       : 1;    // OD  2004-02-16 #106629#
-    bool mbUseFormerObjectPos               : 1;    // OD  2004-03-12 #i11860#
-    bool mbUseFormerTextWrapping            : 1;    // FME 2005-05-11 #108724#
-    bool mbConsiderWrapOnObjPos             : 1;    // OD  2004-05-05 #i28701#
+    bool mbOldLineSpacing                   : 1;    // #i11859#
+    bool mbAddParaSpacingToTableCells       : 1;
+    bool mbUseFormerObjectPos               : 1;    // #i11860#
+    bool mbUseFormerTextWrapping            : 1;
+    bool mbConsiderWrapOnObjPos             : 1;    // #i28701#
                                                     // TRUE: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
 
     // non-ui-compatibility flags:
-    bool mbOldNumbering                             : 1;   // HBRINKM #111955#
-    bool mbIgnoreFirstLineIndentInNumbering         : 1;   // FME 2005-05-30# i47448#
-    bool mbDoNotJustifyLinesWithManualBreak         : 1;   // FME 2005-06-08 #i49277#
-    bool mbDoNotResetParaAttrsForNumFont            : 1;   // FME 2005-08-11 #i53199#
-    bool mbTableRowKeep                             : 1;   // FME 2006-02-10 #131283#
-    bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // FME 2006-03-01 #i3952#
-    bool mbDoNotCaptureDrawObjsOnPage               : 1;   // OD 2006-03-14 #i62875#
+    bool mbOldNumbering                             : 1;
+    bool mbIgnoreFirstLineIndentInNumbering         : 1;   // #i47448#
+    bool mbDoNotJustifyLinesWithManualBreak         : 1;   // #i49277#
+    bool mbDoNotResetParaAttrsForNumFont            : 1;   // #i53199#
+    bool mbTableRowKeep                             : 1;
+    bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // #i3952#
+    bool mbDoNotCaptureDrawObjsOnPage               : 1;   // #i62875#
     bool mbOutlineLevelYieldsOutlineRule            : 1;
-    bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // OD 2006-04-13 #b6402800#
-    bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
-    bool mbOldPrinterMetrics                        : 1;   // FME 2007-05-14 #147385#
+    bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // #b6402800#
+    bool mbUnixForceZeroExtLeading                  : 1;   // #i60945#
+    bool mbOldPrinterMetrics                        : 1;
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
     bool mbProtectForm                              : 1;
     bool mbInvertBorderSpacing                      : 1;
     bool mbCollapseEmptyCellPara                    : 1;
-    bool mbTabAtLeftIndentForParagraphsInList;             // OD 2008-06-05 #i89181# - see above
+    bool mbTabAtLeftIndentForParagraphsInList;             // #i89181# - see above
 
     sal_uInt32  n32DummyCompatabilityOptions1;
     sal_uInt32  n32DummyCompatabilityOptions2;
@@ -605,7 +605,7 @@ private:
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
 
-    //---------------- privat Methods ------------------------------
+    //---------------- private Methods ------------------------------
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
     sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // loescht alle UndoObjecte vom Anfang
@@ -1067,11 +1067,11 @@ public:
     SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);
     SwDrawFrmFmt *MakeDrawFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
 
-    // JP 08.05.98: fuer Flys muss jetzt diese Schnittstelle benutzt
-    //              werden. pAnchorPos muss gesetzt sein, wenn keine
-    //              Seitenbindung vorliegt UND der ::com::sun::star::chaos::Anchor nicht schon
-    //              im FlySet/FrmFmt mit gueltiger CntntPos gesetzt ist
-    /* #109161# new parameter bCalledFromShell
+    // fuer Flys muss jetzt diese Schnittstelle benutzt
+    // werden. pAnchorPos muss gesetzt sein, wenn keine
+    // Seitenbindung vorliegt UND der ::com::sun::star::chaos::Anchor nicht schon
+    // im FlySet/FrmFmt mit gueltiger CntntPos gesetzt ist
+    /* new parameter bCalledFromShell
 
        TRUE: An existing adjust item at pAnchorPos is propagated to
        the content node of the new fly section. That propagation only
@@ -1497,16 +1497,6 @@ public:
                      sal_Bool bSetItem = sal_True,
                      const bool bResetIndentAttrs = false );
     void SetCounted( const SwPaM&, bool bCounted);
-
-    // no longer needed.
-    // SwDoc::SetNumRule( rPaM, rNumRule, false, <ListId>, sal_True, true ) have to be used instead.
-//    /**
-//       Replace numbering rules in a PaM by another numbering rule.
-
-//       \param rPaM         PaM to replace the numbering rules in
-//       \param rNumRule     numbering rule to replace the present numbering rules
-//     */
-//    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
@@ -2122,7 +2112,7 @@ namespace docfunc
 
     /** method to check, if the outline style has to written as a normal list style
 
-        OD 2006-09-27 #i69627#
+        #i69627#
         The outline style has to written as a normal list style, if a parent
         paragraph style of one of the paragraph styles, which are assigned to
         the list levels of the outline style, has a list style set or inherits

@@ -161,7 +161,6 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     String      sName;
     const SwNode* pOutlChgNd;
-//  sal_Unicode cDelim;
     String      sDelim;
     USHORT      nType;
     BYTE        nLevel;
@@ -193,8 +192,6 @@ public:
     String MakeSeqName( USHORT nSeqNo );
 
     // Seqencefelder ggfs. Kapitelweise numerieren
-//  sal_Unicode GetDelimiter() const        { return cDelim; }
-//  void SetDelimiter( sal_Unicode c )      { cDelim = c; }
     const String& GetDelimiter() const      { return sDelim; }
     void SetDelimiter( const String& s )    { sDelim = s; }
     BYTE GetOutlineLvl() const              { return nLevel; }
@@ -394,11 +391,6 @@ public:
     SwTblFieldType(SwDoc* pDocPtr);
     virtual SwFieldType* Copy() const;
 };
-
-
-// MSC will den hier nicht
-//typedef void (SwField:: *FnScanFormel)( const SwTable&, String&,
-//                                   String&, String* = 0, void* = 0 );
 
 
 class SwTblField : public SwValueField, public SwTableFormula

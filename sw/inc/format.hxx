@@ -45,8 +45,6 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
-//  friend class SwSwgReader;
-//  friend class SwSwgWriter;
 
     String aFmtName;
     SwAttrSet aSet;
@@ -101,19 +99,14 @@ public:
                                           BOOL bInParents = TRUE ) const;
     inline SfxItemState GetItemState( USHORT nWhich, BOOL bSrchInParent = TRUE,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    // --> OD 2008-03-03 #refactorlists#
-    // methods renamed and made virtual
     virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
     virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
     virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
-    // <--
 
-    // --> OD 2007-01-24 #i73790#
-    // Method renamed and made virtual
+
     // Nimmt alle Hints aus dem Delta-Array,
     // liefert die Anzahl der geloeschten Hints
     virtual USHORT ResetAllFmtAttr();
-    // <--
 
     inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
     inline BOOL IsDefault() const { return DerivedFrom() == 0; }
@@ -187,7 +180,6 @@ public:
     //              den Parents gesucht werden soll. Wird nichts gefunden,
     //              wird das deflt. Attribut returnt.
     // Charakter-Attribute  - impl. steht im charatr.hxx
-    // AMA 12.10.94: Umstellung von SwFmt... auf Svx...
     inline const SvxPostureItem      &GetPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem       &GetWeight( BOOL = TRUE ) const;
     inline const SvxShadowedItem     &GetShadowed( BOOL = TRUE ) const;
@@ -264,9 +256,9 @@ public:
     inline const SvxFrameDirectionItem    &GetFrmDir( BOOL = TRUE ) const;
     inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
-    // OD 18.09.2003 #i18732#
+    // #i18732#
     inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
-    // OD 2004-05-05 #i28701#
+    // #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
@@ -308,7 +300,6 @@ public:
 
     /** SwFmt::IsBackgroundTransparent - for feature #99657#
 
-        OD 22.08.2002
         Virtual method to determine, if background of format is transparent.
         Default implementation returns false. Thus, subclasses have to overload
         method, if the specific subclass can have a transparent background.
@@ -321,7 +312,6 @@ public:
 
     /** SwFmt::IsShadowTransparent - for feature #99657#
 
-        OD 22.08.2002
         Virtual method to determine, if shadow of format is transparent.
         Default implementation returns false. Thus, subclasses have to overload
         method, if the specific subclass can have a transparent shadow.
@@ -333,7 +323,7 @@ public:
     virtual sal_Bool IsShadowTransparent() const;
 };
 
-// --------------- inline Implementierungen ------------------------
+// --------------- inline Implementations ------------------------
 
 inline const SfxPoolItem& SwFmt::GetFmtAttr( USHORT nWhich,
                                              BOOL bInParents ) const

@@ -233,7 +233,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
 
 
-    // dvo 2002-05-27, #99027#: There's a special treatment for file lists with a single
+    //                          There's a special treatment for file lists with a single
     //                          element, that depends on the actual content of the
     //                          Transferable to be accessible. Since the transferable
     //                          may only be accessed after the drop has been accepted
@@ -247,7 +247,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, m_nDropFormat, nEventAction, 0,
                                 &rEvt.maDropEvent.Transferable );
 
@@ -256,7 +255,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
                                 m_nDropDestination, FALSE, rEvt.mbDefault, &aDocPt, nRet))
-//!!    nRet = SFX_APP()->ExecuteDrop( rEvt );
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
         //Bei internem D&D nicht mehr aufraeumen!
@@ -404,7 +402,6 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, m_nDropFormat, nEventAction );
 
     if( EXCHG_INOUT_ACTION_NONE != m_nDropAction )
@@ -433,7 +430,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             else if( rEvt.mbDefault )
             {
-                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
+                //              internes Drag&Drop: bei gleichem Doc ein Move
                 //              ansonten ein Copy - Task 54974
                 nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
                                     ? DND_ACTION_MOVE
@@ -495,7 +492,6 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     CleanupDropUserMarker();
     rSh.UnSetVisCrsr();
-//!!    return SFX_APP()->AcceptDrop( rEvt );
     return DND_ACTION_NONE;
 }
 

@@ -72,7 +72,6 @@ class SwAutoCompleteWord;
 class SwFmtRefMark;
 
 class SwNumRule;        // Numerierung
-//class SwNodeNum;      // Numerierung
 
 class SwUndoIds;        // fuer Undo
 class SwTxtFmtColl;
@@ -228,7 +227,6 @@ public:
     //  alle Cursor. Copy und Paste muss aufgrund der FlyFrames in
     //  der FEShell stehen!
     // kopiere alle Selectionen und das Doc
-    //JP 21.10.96: und fuer die SVX-Autokorrektur
     BOOL _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = 0 );
 
     long SplitNode( BOOL bAutoFormat = FALSE, BOOL bCheckTableStart = TRUE );
@@ -246,10 +244,7 @@ public:
     // Anwenden / Entfernen von Attributen
     // liefert Attribute im angeforderten AttributSet. Wenn nicht eindeutig
     // steht im Set ein DONT_CARE !!
-    // --> OD 2008-01-16 #newlistlevelattrs#
-    // Renaming method to <GetCurAttr(..)> indicating that the attributes at
-    // the current cursors are retrieved.
-    // Introduce 2nd optional parameter <bMergeIndentValuesOfNumRule>.
+    // 2nd optional parameter <bMergeIndentValuesOfNumRule>.
     // If <bMergeIndentValuesOfNumRule> == TRUE, the indent attributes of
     // the corresponding list level of an applied list style is merged into
     // the requested item set as a LR-SPACE item, if corresponding node has not
@@ -257,7 +252,6 @@ public:
     // level is SvxNumberFormat::LABEL_ALIGNMENT.
     BOOL GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
-    // <--
     void SetAttr( const SfxPoolItem&, USHORT nFlags = 0 );
     void SetAttr( const SfxItemSet&, USHORT nFlags = 0 );
 
@@ -305,11 +299,10 @@ public:
     USHORT GetTxtFmtCollCount() const;
     SwTxtFmtColl& GetTxtFmtColl( USHORT nTxtFmtColl) const;
     SwTxtFmtColl* GetCurTxtFmtColl() const;
-    // --> OD 2007-11-06 #i62675#
+    // #i62675#
     // Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTxtFmtColl(..)>
     void SetTxtFmtColl( SwTxtFmtColl*,
                         bool bResetListAttrs = false );
-    // <--
     SwTxtFmtColl *MakeTxtFmtColl(const String &rFmtCollName,
         SwTxtFmtColl *pDerivedFrom = 0);
     void FillByEx(SwTxtFmtColl*, BOOL bReset = FALSE);

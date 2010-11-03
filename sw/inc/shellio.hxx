@@ -61,7 +61,6 @@ class SvStream;
 class SvStrings;
 class SvxFontItem;
 class SvxMacroTableDtor;
-//class Sw3Io;
 class SwCntntNode;
 class SwCrsrShell;
 class SwDoc;
@@ -175,18 +174,15 @@ class SwReader: public SwDocFac
 public:
     /*
      * Initiales Einlesen. Dokument wird erst beim Read(..) angelegt.
-     * JP 25.04.95: oder falls es mitgegeben wird, in dieses.
+     *  oder falls es mitgegeben wird, in dieses.
      *              Sonderfall fuer Load mit Sw3Reader
      */
-    //SwReader( SotStorage&, const String& rFilename, SwDoc *pDoc = 0 );
-    //SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwDoc *pDoc = 0 );
     SwReader( SfxMedium&, const String& rFilename, SwDoc *pDoc = 0 );
     /*
      * In ein existierendes Dokument einlesen, Dokument und
      * Position im Dokument werden aus dem SwPaM uebernommen.
      */
     SwReader( SvStream&, const String& rFilename, const String& rBaseURL, SwPaM& );
-    //SwReader( SotStorage&, const String& rFilename, SwPaM& );
     SwReader( SfxMedium&, const String& rFilename, SwPaM& );
     SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwPaM& );
 
@@ -209,7 +205,6 @@ protected:
 
 
 
-/*  */
 /****************  SPEZIELLE Reader ************************/
 
 // spezielle - Reader koennen beides sein !! (Excel, W4W, .. )
@@ -221,7 +216,6 @@ class SW_DLLPUBLIC Reader
     friend class SwReader;
     SwDoc* pTemplate;
     String aTemplateNm;
-    //String sBaseURL;
 
     Date aDStamp;
     Time aTStamp;
@@ -306,11 +300,6 @@ public:
     AsciiReader(): Reader() {}
 };
 
-/*class SwgReader: public Reader
-{
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-};
-*/
 class SW_DLLPUBLIC StgReader : public Reader
 {
     String aFltName;
@@ -325,22 +314,6 @@ public:
 };
 
 
-/*class Sw3Reader : public StgReader
-{
-    Sw3Io* pIO;
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-public:
-    Sw3Reader() : pIO( 0 ) {}
-
-    void   SetSw3Io( Sw3Io* pIo )     { pIO = pIo; }
-
-    // read the sections of the document, which is equal to the medium.
-    // returns the count of it
-    virtual USHORT GetSectionList( SfxMedium& rMedium,
-                                SvStrings& rStrings ) const;
-};*/
-
-/*  */
 ////////////////////////////////////////////////////////////////////////////
 
 // Der uebergebene Stream muss dynamisch angelegt werden und
@@ -351,8 +324,6 @@ class SwImpBlocks;
 
 class SW_DLLPUBLIC SwTextBlocks
 {
-//  friend class Sw2TextBlocks;
-//  friend class Sw3IoImp;
     SwImpBlocks* pImp;
     ULONG        nErr;
 
@@ -413,7 +384,6 @@ extern void _FinitFilter();
 
 extern SwRead ReadAscii, /*ReadSwg, ReadSw3, */ReadHTML, ReadXML;
 
-//SW_DLLPUBLIC SwRead SwGetReaderSw3();
 SW_DLLPUBLIC SwRead SwGetReaderXML();
 
 // END source/filter/basflt/fltini.cxx
@@ -422,7 +392,6 @@ SW_DLLPUBLIC SwRead SwGetReaderXML();
 extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden shellio.cxx
 
 
-/*  */
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -495,7 +464,6 @@ public:
     virtual void SetPasswd( const String& );
     virtual void SetVersion( const String&, long );
     virtual BOOL IsStgWriter() const;
-//  virtual BOOL IsSw3Writer() const;
 
     void SetShowProgress( BOOL bFlag = FALSE )  { bShowProgress = bFlag; }
 
@@ -578,22 +546,6 @@ public:
     SotStorage& GetStorage() const       { return *pStg; }
 };
 
-/*class Sw3Writer : public StgWriter
-{
-    Sw3Io* pIO;
-    BOOL bSaveAs : 1;
-
-    virtual ULONG WriteStorage();
-    virtual ULONG WriteMedium( SfxMedium& );
-
-public:
-    Sw3Writer() : pIO( 0 ), bSaveAs( FALSE ) {}
-
-    virtual BOOL IsSw3Writer() const;
-};
-
-*/
-
 // Schnittstellenklasse fuer den allgemeinen Zugriff auf die
 // speziellen Writer
 
@@ -608,8 +560,6 @@ class SwWriter
     SwCrsrShell *pShell;
     SwDoc &rDoc;
 
-    //String sBaseURL;
-
     BOOL bWriteAll;
 
 public:
@@ -619,19 +569,13 @@ public:
     SwWriter( SvStream&, SwDoc & );
     SwWriter( SvStream&, SwPaM &, BOOL bWriteAll = FALSE );
 
-//  SwWriter( SotStorage&, SwCrsrShell &,BOOL bWriteAll = FALSE );
     SwWriter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, SwDoc& );
-//  SwWriter( SotStorage&, SwPaM&, BOOL bWriteAll = FALSE );
 
     SwWriter( SfxMedium&, SwCrsrShell &,BOOL bWriteAll = FALSE );
     SwWriter( SfxMedium&, SwDoc & );
-//  SwWriter( SfxMedium&, SwPaM&, BOOL bWriteAll = FALSE );
-
-    //const String&       GetBaseURL() const { return sBaseURL;}
 };
 
 
-/*  */
 /////////////////////////////////////////////////////////////////////////////
 
 typedef Reader* (*FnGetReader)();
@@ -671,7 +615,6 @@ namespace SwReaderWriter
 
 void GetRTFWriter( const String&, const String&, WriterRef& );
 void GetASCWriter( const String&, const String&, WriterRef& );
-//void GetSw3Writer( const String&, const String&, WriterRef& );
 void GetHTMLWriter( const String&, const String&, WriterRef& );
 void GetXMLWriter( const String&, const String&, WriterRef& );
 void GetWW8Writer( const String&, const String&, WriterRef& );

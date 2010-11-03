@@ -121,8 +121,6 @@ void  SwTbxAnchor::Click()
             pDispatch = pViewFrame->GetDispatcher();
     }
 
-//    SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
-//    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
     SwView* pActiveView = 0;
     if(pViewFrame)
     {

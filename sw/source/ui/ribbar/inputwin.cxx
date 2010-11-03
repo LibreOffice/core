@@ -214,8 +214,8 @@ void SwInputWindow::ShowWin()
         OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
         pMgr = new SwFldMgr;
 
-        // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
-        //              also setzen
+        // Formel soll immer mit einem "=" beginnen, hier
+        // also setzen
         String sEdit( '=' );
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
@@ -379,8 +379,8 @@ void  SwInputWindow::ApplyFormula()
     }
     pWrtShell->Pop( FALSE );
 
-    // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
-    //              also wieder entfernen
+    // Formel soll immer mit einem "=" beginnen, hier
+    // also wieder entfernen
     String sEdit( aEdit.GetText() );
     sEdit.EraseLeadingChars().EraseTrailingChars();
     if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
@@ -594,8 +594,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
             nEndPos = nStartPos;
             while( nEndPos < nLen )
             {
-                if( cClose == (cCh = aActText.GetChar( nEndPos )) /*||
-                    cCh == cCloseBracket*/ )
+                if( cClose == (cCh = aActText.GetChar( nEndPos )))
                 {
                     bFound = TRUE;
                     break;
@@ -627,14 +626,12 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         {
             SetText( aActText );
             SetSelection( Selection( nPos, nPos ) );
-//          GetModifyHdl().Call( this );
         }
     }
     GrabFocus();
 
 }
 //==================================================================
-
 
 SwInputChild::SwInputChild(Window* _pParent,
                                 USHORT nId,
@@ -661,27 +658,5 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
     return aInfo;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

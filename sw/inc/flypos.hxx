@@ -39,7 +39,6 @@ class SwNodeIndex;
 class SW_DLLPUBLIC SwPosFlyFrm
 {
     const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
-//  SwPosition* pPos;           // Position in den ContentNode
     SwNodeIndex* pNdIdx;        // es reicht ein Index auf den Node
     UINT32 nOrdNum;
 public:

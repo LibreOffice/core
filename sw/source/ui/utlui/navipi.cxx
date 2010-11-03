@@ -284,7 +284,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             }
         }
         return TRUE;
-        //break;
         // Funktionen, die eine direkte Aktion ausloesen
 
         case FN_SELECT_FOOTER:
@@ -400,9 +399,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
     return TRUE;
 }
 
-/*-----------------13.07.04 -------------------
- ----------------------------------------------*/
-
 IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
 {
     const USHORT nCurrItemId = pBox->GetCurItemId();
@@ -421,9 +417,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
                 pMenu->SetHelpId(i + 1, HID_NAVI_DRAG_HYP + i);
-                    /*HID_NAVI_DRAG_HYP
-                    HID_NAVI_DRAG_LINK
-                    HID_NAVI_DRAG_COPY  */
+
             }
             pMenu->CheckItem( nRegionMode + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
@@ -461,15 +455,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
     return TRUE;
 }
 
-/*-----------------13.07.04 -------------------
---------------------------------------------------*/
 
 SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId) :
             SwHelpToolBox(pParent, rResId)
 {}
-/*-----------------19.06.97 09:09-------------------
 
---------------------------------------------------*/
 void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 {
     if(rEvt.GetButtons() == MOUSE_LEFT &&
@@ -480,18 +470,13 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     else
         SwHelpToolBox::MouseButtonDown(rEvt);
 }
-/* -----------------------------12.03.2002 16:55------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus)
 {
-//    SfxBindings& rBind = GetCreateView()->GetViewFrame()->GetBindings();
-//    rBind.ENTERREGISTRATIONS();
     Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
     SwScrollNaviPopup* pPopup = new
         SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
                           xFrame );
-//    rBind.LEAVEREGISTRATIONS();
 
     Rectangle aRect(rRect);
     Point aT1 = aRect.TopLeft();
@@ -506,9 +491,6 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus
     }
 }
 
-/*-----------------19.06.97 10:12-------------------
-
---------------------------------------------------*/
 void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
     USHORT nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
@@ -795,8 +777,6 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     bPageCtrlsVisible = TRUE;
 
-//  Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SHOW_ROOT);
-//  USHORT nWidth = 2 * (USHORT)aFirstRect.Left();
     //doppelte Separatoren sind nicht erlaubt, also muss
     //die passende Groesse anders ermittelt werden
     Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SELECT_FOOTNOTE);
@@ -1172,7 +1152,7 @@ void SwNavigationPI::UpdateListBox()
     while (pView)
     {
         SfxObjectShell* pDoc = pView->GetDocShell();
-        // pb: #i53333# don't show help pages here
+        // #i53333# don't show help pages here
         if ( !pDoc->IsHelpDocument() )
         {
             String sEntry = pDoc->GetTitle();
@@ -1224,10 +1204,6 @@ void SwNavigationPI::UpdateListBox()
     aDocListBox.Enable( !bDisable );
     aDocListBox.SetUpdateMode(TRUE);
 }
-
-/*-----------------16.06.97 15:05-------------------
-
---------------------------------------------------*/
 
 /*------------------------------------------------------------------------
     Beschreibung:
@@ -1344,10 +1320,6 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-/*-----------------27.11.96 13.00-------------------
-
---------------------------------------------------*/
-
 void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
 {
     nRegionMode = nNewMode;
@@ -1366,10 +1338,6 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
                                     rImgLst.GetImage(nDropId));
 }
 
-
-/*-----------------12.06.97 09:47-------------------
-
---------------------------------------------------*/
 
 BOOL    SwNavigationPI::ToggleTree()
 {
@@ -1404,9 +1372,6 @@ BOOL    SwNavigationPI::ToggleTree()
     return bRet;
 }
 
-/*-----------------13.06.97 09:42-------------------
-
---------------------------------------------------*/
 BOOL    SwNavigationPI::IsGlobalDoc() const
 {
     BOOL bRet = FALSE;
@@ -1418,18 +1383,14 @@ BOOL    SwNavigationPI::IsGlobalDoc() const
     }
     return bRet;
 }
-/* -----------------26.10.98 08:10-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwNavigationPI, ChangePageHdl, Timer*, EMPTYARG )
 {
     EditAction(&GetPageEdit());
     GetPageEdit().GrabFocus();
     return 0;
 }
-/* -----------------26.10.98 08:14-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwNavigationPI, PageEditModifyHdl, Edit*, EMPTYARG )
 {
     if(aPageChgTimer.IsActive())
@@ -1438,9 +1399,6 @@ IMPL_LINK( SwNavigationPI, PageEditModifyHdl, Edit*, EMPTYARG )
     return 0;
 }
 
-/* -----------------------------23.04.01 07:34--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwView*  SwNavigationPI::GetCreateView() const
 {
     if(!pCreateView)
@@ -1492,9 +1450,7 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
         pNavi->_ZoomIn();
     }
 }
-/* -----------------------------06.05.2002 10:06------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -1508,9 +1464,7 @@ void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
         SetBackground( aBack );
     }
 }
-/* -----------------------------06.05.2002 10:07------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNavigationPI::InitImageList()
 {
     USHORT k;

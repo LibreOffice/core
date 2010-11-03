@@ -364,8 +364,6 @@ class SW_DLLPUBLIC SwForm
     TOXTypes    eType;
     USHORT      nFormMaxLevel;
 
-    //USHORT    nFirstTabPos; -> Value in tab token
-//  BOOL    bHasFirstTabPos : 1;
     BOOL    bGenerateTabPos : 1;
     BOOL    bIsRelTabPos : 1;
     BOOL    bCommaSeparated : 1;
@@ -466,7 +464,6 @@ namespace nsSwTOOElements
     const SwTOOElements TOO_CHART           = 0x02;
     const SwTOOElements TOO_CALC            = 0x08;
     const SwTOOElements TOO_DRAW_IMPRESS    = 0x10;
-//  const SwTOOElements TOO_IMPRESS         = 0x20;
     const SwTOOElements TOO_OTHER           = 0x80;
 }
 
@@ -770,9 +767,6 @@ inline USHORT SwTOXBase::GetLevel() const
 
 inline void SwTOXBase::SetTemplateName(const String& rName)
 {
-//  ASSERT(GetTOXType()->GetType() == TOX_USER, "Falscher Feldtyp");
-//  ASSERT(aData.pTemplateName, "pTemplateName == 0");
-//  (*aData.pTemplateName) = rName;
     DBG_WARNING("SwTOXBase::SetTemplateName obsolete");
     aStyleNames[0] = rName;
 

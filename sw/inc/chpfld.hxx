@@ -73,14 +73,10 @@ class SW_DLLPUBLIC SwChapterField : public SwField
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
 
-    // --> OD 2008-02-14 #i53420#
-//    void ChangeExpansion( const SwFrm*,
-//                          const SwTxtNode*,
-//                          BOOL bSrchNum = FALSE);
+    // #i53420#
     void ChangeExpansion( const SwFrm*,
                           const SwCntntNode*,
         BOOL bSrchNum = FALSE);
-    // <--
     void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
 
     virtual String   Expand() const;
