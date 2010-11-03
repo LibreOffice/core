@@ -208,6 +208,11 @@ public:
 
     BOOL                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
     void                        SetConvertToGreyscales( BOOL bSet ) { mbConvertToGreyscales = bSet; }
+
+    // read printer options from configuration, parameter decides whether the set for
+    // print "to printer" or "to file" should be read.
+    // returns true if config was read, false if an error occured
+    bool                        ReadFromConfig( bool bFile );
 };
 
 // -----------
@@ -538,6 +543,7 @@ public:
     SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
 
     SAL_DLLPRIVATE ULONG removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE void resetPrinterOptions( bool i_bFileOutput );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

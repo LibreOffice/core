@@ -553,6 +553,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     XubString* pPrintFile = NULL;
     if ( mbPrintFile )
         pPrintFile = &maPrintFile;
+    mpPrinterOptions->ReadFromConfig( mbPrintFile );
 
     maJobName               = i_rJobName;
     mnCurPage               = 1;
@@ -731,6 +732,13 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
               makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mpPrinter->GetPaperBin();
     mpImplData->mnFixedPaperBin = -1;
+}
+
+void PrinterController:: resetPrinterOptions( bool i_bFileOutput )
+{
+    PrinterOptions aOpt;
+    aOpt.ReadFromConfig( i_bFileOutput );
+    mpImplData->mpPrinter->SetPrinterOptions( aOpt );
 }
 
 bool PrinterController::setupPrinter( Window* i_pParent )

@@ -65,6 +65,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
     , maOrigSize( 10, 10 )
     , maPageVDev( *this )
     , maToolTipString( String( VclResId( SV_PRINT_PRINTPREVIEW_TXT ) ) )
+    , mbGreyscale( false )
 {
     SetPaintTransparent( TRUE );
     SetBackground();
@@ -245,6 +246,11 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         maPageVDev.Erase();
         maPageVDev.Push();
         maPageVDev.SetMapMode( MAP_100TH_MM );
+        ULONG nOldDrawMode = maPageVDev.GetDrawMode();
+        if( mbGreyscale )
+            maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
+                                    ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                      DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
         aMtf.WindStart();
         aMtf.Scale( fScale, fScale );
         aMtf.WindStart();
@@ -254,6 +260,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         SetMapMode( MAP_PIXEL );
         maPageVDev.SetMapMode( MAP_PIXEL );
         DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
+        maPageVDev.SetDrawMode( nOldDrawMode );
 
         DecorationView aVw( this );
         Rectangle aFrame( aOffset + Point( -1, -1 ), Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
@@ -285,7 +292,8 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
                                                   const Size& i_rOrigSize,
                                                   const rtl::OUString& i_rReplacement,
                                                   sal_Int32 i_nDPIX,
-                                                  sal_Int32 i_nDPIY
+                                                  sal_Int32 i_nDPIY,
+                                                  bool i_bGreyscale
                                                  )
 {
     rtl::OUStringBuffer aBuf( 256 );
@@ -306,6 +314,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
+    mbGreyscale = i_bGreyscale;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
     maPageVDev.EnableOutput( TRUE );
     Resize();
@@ -808,9 +817,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // init reverse print
     maOptionsPage.maReverseOrderBox.Check( maPController->getReversePrint() );
 
-    // get the first page
-    preparePreview( true, true );
-
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
     for( std::vector< rtl::OUString >::const_iterator it = rQueues.begin();
@@ -841,6 +847,12 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
             maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
         }
     }
+    // not printing to file
+    maPController->resetPrinterOptions( false );
+
+    // get the first page
+    preparePreview( true, true );
+
     // update the text fields for the printer
     updatePrinterText();
 
@@ -1024,6 +1036,11 @@ void PrintDialog::readFromSettings()
         }
     }
     maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+    if( maOptionsPage.maToFileBox.IsChecked() )
+    {
+        maPController->resetPrinterOptions( true );
+        preparePreview( true, true );
+    }
 }
 
 void PrintDialog::storeToSettings()
@@ -1859,7 +1876,8 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr,
-                                    aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY()
+                                    aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY(),
+                                    aPrt->GetPrinterOptions().IsConvertToGreyscales()
                                    );
 
         maForwardBtn.Enable( mnCurPage < nPages-1 );
@@ -2046,6 +2064,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         String aNewPrinter( pBox->GetSelectEntry() );
         // set new printer
         maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
+        maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
         // update text fields
         updatePrinterText();
     }
@@ -2091,7 +2110,9 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     else if( pButton == &maOptionsPage.maToFileBox )
     {
         maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+        maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
         maLayout.resize();
+        preparePreview( true, true );
     }
     else if( pButton == &maNUpPage.maBrochureBtn )
     {

@@ -322,6 +322,9 @@ class ControllerProperties
             GDIMetaFile aMtf;
             PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
             VirtualDevice aDev;
+            if( mpController->getPrinter()->GetPrinterOptions().IsConvertToGreyscales() )
+                aDev.SetDrawMode( aDev.GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
+                                                         DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
             // see salprn.cxx, currently we pretend to be a 720dpi device on printers
             aDev.SetReferenceDevice( 720, 720 );
             aDev.EnableOutput( TRUE );
