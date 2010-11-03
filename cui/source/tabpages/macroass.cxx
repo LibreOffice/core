@@ -346,7 +346,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         }
         else
         {
-            OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead??! (out of interest: tell fs, please!)" );
+            OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
             pThis->aTbl.Insert(
                 nEvent, new SvxMacro( sScriptURI, String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
         }
