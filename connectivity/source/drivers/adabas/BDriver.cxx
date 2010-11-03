@@ -1180,7 +1180,7 @@ int ODriver::X_STOP(const ::rtl::OUString& sDBName)
     ::rtl::OUString sArg2 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
 
     const sal_uInt32 nArgsCount = 3;
-    rtl_uString* pArgs[nArgsCount] = { sArg1.pData, sDBName.pData, sArg3.pData };
+    rtl_uString* pArgs[nArgsCount] = { sArg1.pData, sDBName.pData, sArg2.pData };
     sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stp.exe"));
 #else
     const sal_uInt32 nArgsCount = 1;
