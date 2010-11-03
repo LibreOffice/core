@@ -1726,7 +1726,6 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ::com::sun::star::uno::RuntimeException )
 {
-    SfxApplication* pApp = SFX_APP();
     SfxObjectShell* pCurrent = pSh;
     if ( !pCurrent )
         // all not full qualified names use the BASIC of the given or current document
