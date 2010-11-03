@@ -393,6 +393,45 @@ elsif ( $platform =~ m/freebsd/ )
    }
       $INPATH         = $OUTPATH.$PROEXT;
 }
+elsif ( $platform =~ m/openbsd/ )
+{     $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@';
+      $CVER           = "C300";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GVER           = "VCL";
+      $OS             = "OPENBSD";
+      $PATH_SEPERATOR = $ps;
+      $OSVERSION      = '@OSVERSION@';
+      $OUTPATH        = "unxobsd";
+      $outfile        = "OpenBSDEnv.Set.sh";
+   if ($platform =~ m/^amd64/)
+   {
+      print "Setting OpenBSD AMD64 specific values... ";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
+   elsif ($platform =~ m/^i386/)
+   {  print "Setting OpenBSD x86 specific values... ";
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+   }
+   else
+   {  print "Unsupported OpenBSD architecture: $platform \n";
+         exit 1;
+   }
+   if( @GCCVER@ >= 30401 ) {
+      $CVER        = "C341";
+   }
+      $INPATH         = $OUTPATH.$PROEXT;
+}
 elsif ( $platform =~ m/linux/ )
 {
 # General Linux settings:
@@ -1044,7 +1083,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix/)
+elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix|openbsd/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1110,7 +1149,7 @@ if ($platform =~ m/cygwin|os2/)
 }
 
 # The general environment path.
-if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
+if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris|openbsd/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1336,7 +1375,7 @@ if ($platform =~ m/solaris/)
                         $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd/)
+elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1381,10 +1420,10 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix/)
+if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix|openbsd/)
 {
 $SOLARINC	     .= $STLPORT_stlport;
-if ($platform =~ m/linux|freebsd|netbsd/)
+if ($platform =~ m/linux|freebsd|netbsd|openbsd/)
 {
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
@@ -1408,6 +1447,10 @@ if ($platform =~ m/linux/)
    	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31".
                      $I.'$JAVA_HOME'.$INCLUDE;
 
+	if ($platform =~ m/openbsd/)
+	{  $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
+	}
+
 	#include system dependent Java include directory
 	if (!($JDK eq "gcj"))
 	{
@@ -1429,13 +1472,16 @@ if ($platform =~ m/linux/)
 		elsif ( $platform =~ m/aix/ )
 		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."aix";
 		}
+		elsif ($platform =~ m/openbsd/)
+		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."openbsd";
+		}
 
    		#java threads include path
 
    		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
 	}
     #The tail, if needed
-    if ($platform =~ m/linux|freebsd|netbsd|aix/)
+    if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd/)
     {  $SOLARINC  .= $I.$XINC;
     }
     elsif ($platform =~ m/osf1/)
