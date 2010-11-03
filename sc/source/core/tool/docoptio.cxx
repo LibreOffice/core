@@ -385,7 +385,7 @@ ScDocCfg::ScDocCfg() :
     aValues = aCalcItem.GetProperties(aNames);
     aCalcItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -631,6 +631,7 @@ IMPL_LINK( ScDocCfg, FormulaCommitHdl, void *, EMPTYARG )
                 {
                     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1:    nVal = 1; break;
                     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:  nVal = 2; break;
+                    default: break;
                 }
                 pValues[nProp] <<= nVal;
             }

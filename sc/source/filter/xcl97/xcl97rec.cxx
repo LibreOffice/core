@@ -103,9 +103,9 @@ sal_Int32 XclExpObjList::mnVmlCount;
 
 XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) :
     XclExpRoot( rRoot ),
+    mnScTab( rRoot.GetCurrScTab() ),
     mrEscherEx( rEscherEx ),
-    pSolverContainer( 0 ),
-    mnScTab( rRoot.GetCurrScTab() )
+    pSolverContainer( 0 )
 {
     pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
     // open the DGCONTAINER and the patriarch group shape
@@ -972,6 +972,8 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
     WriteFromTo( rStrm, rObj.GetShape(), rObj.GetTab() );
 }
 
+/* is this function (WritePicPr) exported or only local, if such I'll remove it */
+/*
 static void
 WritePicPr( sax_fastparser::FSHelperPtr pDrawing, sal_Int32 nId, Reference< XPropertySet > xPropSet )
 {
@@ -1006,7 +1008,7 @@ WritePicPr( sax_fastparser::FSHelperPtr pDrawing, sal_Int32 nId, Reference< XPro
     pDrawing->endElement( FSNS( XML_xdr, XML_cNvPicPr ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_nvPicPr ) );
 }
-
+*/
 
 static const char*
 GetEditAs( XclObjAny& rObj )
