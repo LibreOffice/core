@@ -136,6 +136,13 @@ BOOL __EXPORT ScStyleSheet::SetParent( const String& rParentName )
         {
             SfxItemSet& rParentSet = pStyle->GetItemSet();
             GetItemSet().SetParent( &rParentSet );
+
+            // #i113491# Drag&Drop in the stylist's hierarchical view doesn't execute a slot,
+            // so the repaint has to come from here (after modifying the ItemSet).
+            // RepaintRange checks the document's IsVisible flag and locked repaints.
+            ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
+            if (pDoc)
+                pDoc->RepaintRange( ScRange( 0,0,0, MAXCOL,MAXROW,MAXTAB ) );
         }
     }
 

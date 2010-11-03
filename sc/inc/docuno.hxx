@@ -134,6 +134,8 @@ public:
     void                    AfterXMLLoading(sal_Bool bRet);
     ScSheetSaveData*        GetSheetSaveData();
 
+    void                    RepaintRange( const ScRange& rRange );
+
     bool                    HasChangesListeners() const;
 
     void                    NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,

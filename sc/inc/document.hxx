@@ -1512,6 +1512,8 @@ public:
 
     BOOL            ContinueOnlineSpelling();   // TRUE = etwas gefunden
 
+    void            RepaintRange( const ScRange& rRange );
+
     BOOL            IsIdleDisabled() const      { return bIdleDisabled; }
     void            DisableIdle(BOOL bDo)       { bIdleDisabled = bDo; }
 
