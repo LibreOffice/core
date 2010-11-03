@@ -52,7 +52,7 @@ published service SheetFilterDescriptor
 
     /** provides access to the collection of filter fields.
      */
-    interface com::sun::star::sheet::XSheetFilterDescriptor;
+    interface XSheetFilterDescriptor;
 
     //-------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ published service SheetFilterDescriptor
 
         @since OOo 3.2
      */
-    [optional] interface com::sun::star::sheet::XSheetFilterDescriptor2;
+    [optional] interface XSheetFilterDescriptor2;
 
     //-------------------------------------------------------------------------
 
