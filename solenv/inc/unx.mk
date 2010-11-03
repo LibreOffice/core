@@ -147,6 +147,10 @@
 .INCLUDE : unxfbsd.mk
 .ENDIF
 
+.IF "$(COM)$(OS)" == "GCCOPENBSD"
+.INCLUDE : unxobsd.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
 .INCLUDE : unxmacxp.mk
 .ENDIF

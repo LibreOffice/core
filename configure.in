@@ -1556,8 +1556,20 @@ case "$build_os" in
         test_cups=no
         test_randr=no
         test_freetype=yes
-       PTHREAD_LIBS=-pthread
+        PTHREAD_LIBS=-pthread
         _os=AIX
+        ;;
+    openbsd*)
+        test_x=yes
+        test_gtk=yes
+        build_cairo=yes
+        test_kde=yes
+        test_cups=yes
+        test_freetype=yes
+        test_randr=yes
+        PTHREAD_CFLAGS="-pthread -D_THREAD_SAFE"
+        PTHREAD_LIBS="-pthread"
+        _os=OpenBSD
         ;;
    *)
    AC_MSG_ERROR([$_os operating system is not suitable to build LibreOffice!])
@@ -3803,6 +3815,9 @@ if test "$enable_epm" = "yes"; then
     AIX)
         PKGFORMAT=rpm
         ;;
+    OpenBSD)
+        PKGFORMAT=portable
+        ;;
     *BSD)
         PKGFORMAT=bsd
         ;;
@@ -5549,7 +5564,7 @@ fi
 dnl ===================================================================
 dnl Check for system openssl
 dnl ===================================================================
-if test "$_os" = "Darwin" -o "$_os" = "NetBSD" && test "$with_system_openssl" != "no"; then
+if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" && test "$with_system_openssl" != "no"; then
    with_system_openssl=yes
 fi
 AC_MSG_CHECKING([which libssl to use])
@@ -5558,7 +5573,7 @@ if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
     AC_MSG_RESULT([external])
     # Mac OS builds should get out without extra stuff is the Mac porters'
     # wish. And pkg-config is although Xcode ships a .pc for openssl
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" ; then
+    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" ; then
         OPENSSL_CFLAGS=
         OPENSSL_LIBS="-lssl -lcrypto"
     else
@@ -7833,7 +7848,7 @@ dnl ===================================================================
 dnl Number of CPUs to use during the build
 dnl ===================================================================
 AC_MSG_CHECKING([for number of processors to use])
-if test "z`uname -s`" = "zDarwin"; then
+if test "z`uname -s`" = "zDarwin" -o "z`uname -s`" = "zOpenBSD"; then
     BUILD_NCPUS=`sysctl -n hw.ncpu`
 else
     BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
