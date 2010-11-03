@@ -442,8 +442,8 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
                 GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
-            xDocProps->setTemplateName(::rtl::OUString::createFromAscii(""));
-            xDocProps->setTemplateURL(::rtl::OUString::createFromAscii(""));
+            xDocProps->setTemplateName(::rtl::OUString());
+            xDocProps->setTemplateURL(::rtl::OUString());
             xDocProps->setTemplateDate(::util::DateTime());
         }
     }

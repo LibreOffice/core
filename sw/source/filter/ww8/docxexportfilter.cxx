@@ -154,7 +154,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                     static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( IMPL_NAME_RTFEXPORT "/UNO/SERVICES/" ) ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME_RTFEXPORT "/UNO/SERVICES/" )) ) );
             xNewKey1->createKey( RtfExport_getSupportedServiceNames().getConstArray()[0] );
 
             bRet = sal_True;
@@ -168,7 +168,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                     static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( IMPL_NAME_RTFIMPORT "/UNO/SERVICES/" ) ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME_RTFIMPORT "/UNO/SERVICES/" )) ) );
             xNewKey1->createKey( RtfExport_getSupportedServiceNames().getConstArray()[0] );
 
             bRet = sal_True;
@@ -202,7 +202,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
                     DocxExport_createInstance,
                     DocxExport_getSupportedServiceNames() ) );
     } else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFEXPORT ) == 0 ) {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFEXPORT ) );
+        const OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME_RTFEXPORT));
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                     reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
@@ -210,7 +210,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
                     RtfExport_createInstance,
                     RtfExport_getSupportedServiceNames() ) );
     } else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFIMPORT ) == 0 ) {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFIMPORT ) );
+        const OUString aServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME_RTFIMPORT )) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                     reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),

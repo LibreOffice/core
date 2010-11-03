@@ -799,7 +799,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
                 rNode.GetLang( nPos ) ) );
     OUString sLang( aLocale.Language );
     if ( aLocale.Country.getLength( ) > 0 )
-        sLang += OUString::createFromAscii( "-" ) + OUString( aLocale.Country );
+        sLang += OUString(RTL_CONSTASCII_USTRINGPARAM( "-" )) + OUString( aLocale.Country );
     m_pSerializer->singleElementNS( XML_w, XML_lid,
             FSNS( XML_w, XML_val ),
             OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
@@ -1756,7 +1756,7 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rS
     {
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
         if( xPropSet.is() )
-            xChartDoc.set( xPropSet->getPropertyValue( rtl::OUString::createFromAscii("Model") ), uno::UNO_QUERY );
+            xChartDoc.set( xPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")) ), uno::UNO_QUERY );
     }
 
     if( xChartDoc.is() )
@@ -1781,7 +1781,7 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rS
 
         // should get the unique id
         sal_Int32 nID = 1;
-        OUString sName = rtl::OUString::createFromAscii("Object 1");
+        OUString sName(RTL_CONSTASCII_USTRINGPARAM("Object 1"));
         uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
         if( xNamed.is() )
             sName = xNamed->getName();

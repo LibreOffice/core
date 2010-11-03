@@ -404,8 +404,7 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_aServerED.GetText(),
                         sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_aPortNF.GetValue()),
-                        ::rtl::OUString::createFromAscii(
-                                m_pParent->m_aSecureCB.IsChecked() ? "Ssl" : "Insecure"));
+                        m_pParent->m_aSecureCB.IsChecked() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
             xMailService->connect(xConnectionContext, xAuthenticator);
             bIsLoggedIn = xMailService->isConnected();
             if( xInMailService.is() )

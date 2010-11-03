@@ -3565,7 +3565,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -3578,7 +3578,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         aFldHeader[5] |= 0x80; // ffhaslistbox
         const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
         if(pListEntries != pParameters->end())
         {
             uno::Sequence< ::rtl::OUString > vListEntries;

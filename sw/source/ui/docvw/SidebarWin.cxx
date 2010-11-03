@@ -93,7 +93,7 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_SHADOW_BRIGHT    Color(180,180,180)
 #define POSTIT_SHADOW_DARK      Color(83,83,83)
 
-#define EMPTYSTRING             rtl::OUString::createFromAscii("")
+#define EMPTYSTRING             rtl::OUString()
 
 /************** SwSidebarWin************************************/
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
@@ -400,7 +400,7 @@ void SwSidebarWin::CheckMetaText()
     else if (sMeta.Len() > 22)
     {
         sMeta.Erase(20);
-        sMeta = sMeta + rtl::OUString::createFromAscii("...");
+        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {
@@ -426,7 +426,7 @@ void SwSidebarWin::CheckMetaText()
     }
     if (GetTime()!=0)
     {
-        sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( GetTime(),false );
+        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( GetTime(),false );
     }
     if ( mpMetadataDate->GetText() != sMeta )
     {

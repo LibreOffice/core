@@ -1758,7 +1758,7 @@ void SwHTMLParser::InsertInput()
     case HTML_IT_RADIO:
         {
             if( !bValue )
-                aTmp <<= OUString::createFromAscii( OOO_STRING_SVTOOLS_HTML_on );
+                aTmp <<= OUString(RTL_CONSTASCII_USTRINGPARAM( OOO_STRING_SVTOOLS_HTML_on ));
             xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("RefValue")),
                                         aTmp );
             aTmp <<= OUString();

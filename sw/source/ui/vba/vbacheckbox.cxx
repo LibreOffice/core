@@ -74,7 +74,7 @@ sal_Bool SAL_CALL SwVbaCheckBox::getValue() throw ( uno::RuntimeException )
 
 void SAL_CALL SwVbaCheckBox::setValue( sal_Bool value ) throw ( uno::RuntimeException )
 {
-    rtl::OUString sValue = rtl::OUString::createFromAscii( value ? "on" : "off" );
+    rtl::OUString sValue = value ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("on")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("off"));
     mxFormField->addParam( rtl::OUString::createFromAscii( ECMA_FORMCHECKBOX_CHECKED ), sValue, sal_True );
 }
 

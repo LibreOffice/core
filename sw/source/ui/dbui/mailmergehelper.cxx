@@ -169,7 +169,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetMailServer(),
                         rConfigItem.GetMailPort(),
-                        ::rtl::OUString::createFromAscii( rConfigItem.IsSecureConnection() ? "Ssl" : "Insecure"));
+                        rConfigItem.IsSecureConnection() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")) );
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }

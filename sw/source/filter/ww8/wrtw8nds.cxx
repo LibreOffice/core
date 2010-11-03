@@ -1823,7 +1823,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sFieldId;
@@ -1832,7 +1832,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
 
                     it = pFieldmark->GetParameters()->find(
-                            rtl::OUString::createFromAscii( ODF_CODE_PARAM ) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_CODE_PARAM )) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sOUCode;
@@ -1851,7 +1851,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 {
                     // Check for the presence of a linked OLE object
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString::createFromAscii( ODF_OLE_PARAM ) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_OLE_PARAM )) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sOleId;
@@ -1872,7 +1872,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sFieldId;
