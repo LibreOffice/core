@@ -1292,6 +1292,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating directories
         ####################################################
 
+        if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { installer::download::set_download_filename($languagestringref, $allvariableshashref); }
+        else { installer::download::resolve_variables_in_downloadname($allvariableshashref, "", $languagestringref); }
+
         $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
 
         my $listfiledir = installer::systemactions::create_directories("listfile", $languagestringref);
