@@ -46,7 +46,7 @@
 char const * SyntaxStrings[] = {
 "basic-type:",
 "\tvoid|        char|       int|        float|      double|",
-"\tUINT16|      INT16|      UINT32|     INT32|      BOOL|"
+"\tUINT16|      INT16|      UINT32|     INT32|      BOOL|",
 "\tBYTE|        String|     SbxObject",
 "",
 "{ import \"filename\" }\n",

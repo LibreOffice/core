@@ -226,7 +226,7 @@ sal_Bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
     if( nVal )
         rOutStm << pName->GetName().GetBuffer();
     else
-        rOutStm << pName->GetName().GetBuffer() << "(sal_False)";
+        rOutStm << pName->GetName().GetBuffer() << "(FALSE)";
     return sal_True;
 }
 
@@ -244,7 +244,7 @@ ByteString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
     else
     {
         ByteString aTmp( pName->GetName() );
-        aTmp += "(sal_False)";
+        aTmp += "(FALSE)";
         return aTmp;
     }
 }
