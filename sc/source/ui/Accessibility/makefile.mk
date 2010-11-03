@@ -37,53 +37,33 @@ TARGET=accessibility
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =  										\
-        $(SLO)$/AccessibleContextBase.obj			\
-        $(SLO)$/AccessibleTableBase.obj				\
-        $(SLO)$/AccessibleDocument.obj				\
-        $(SLO)$/AccessibleGlobal.obj				\
-        $(SLO)$/AccessibleSpreadsheet.obj			\
-        $(SLO)$/AccessibleCell.obj					\
-        $(SLO)$/AccessibilityHints.obj				\
-        $(SLO)$/AccessibleDocumentBase.obj			\
-        $(SLO)$/AccessibleCellBase.obj				\
-        $(SLO)$/AccessibleDocumentPagePreview.obj	\
-        $(SLO)$/AccessibleFilterMenu.obj	\
-        $(SLO)$/AccessibleFilterMenuItem.obj	\
-        $(SLO)$/AccessibleFilterTopWindow.obj	\
-        $(SLO)$/AccessiblePreviewTable.obj			\
-        $(SLO)$/AccessiblePreviewCell.obj			\
-        $(SLO)$/AccessiblePreviewHeaderCell.obj		\
-        $(SLO)$/AccessiblePageHeader.obj			\
-        $(SLO)$/AccessibleText.obj					\
-        $(SLO)$/AccessiblePageHeaderArea.obj		\
-        $(SLO)$/DrawModelBroadcaster.obj			\
-        $(SLO)$/AccessibleEditObject.obj			\
-        $(SLO)$/AccessibleDataPilotControl.obj		\
-        $(SLO)$/AccessibleCsvControl.obj
+SLOFILES =  							\
+        $(EXCEPTIONSFILES)
 
-EXCEPTIONSFILES=									\
-        $(SLO)$/AccessibleContextBase.obj			\
-        $(SLO)$/AccessibleTableBase.obj				\
-        $(SLO)$/AccessibleDocument.obj				\
-        $(SLO)$/AccessibleGlobal.obj				\
-        $(SLO)$/AccessibleSpreadsheet.obj			\
-        $(SLO)$/AccessibleCell.obj					\
-        $(SLO)$/AccessibleDocumentBase.obj			\
+EXCEPTIONSFILES=						\
+        $(SLO)$/AccessibleCell.obj				\
         $(SLO)$/AccessibleCellBase.obj				\
-        $(SLO)$/AccessibleDocumentPagePreview.obj	\
-        $(SLO)$/AccessibleFilterMenu.obj	\
-        $(SLO)$/AccessibleFilterMenuItem.obj	\
-        $(SLO)$/AccessibleFilterTopWindow.obj	\
-        $(SLO)$/AccessiblePreviewTable.obj			\
-        $(SLO)$/AccessiblePreviewCell.obj			\
-        $(SLO)$/AccessiblePreviewHeaderCell.obj		\
-        $(SLO)$/AccessiblePageHeader.obj			\
-        $(SLO)$/AccessiblePageHeaderArea.obj		\
-        $(SLO)$/DrawModelBroadcaster.obj			\
+        $(SLO)$/AccessibleContextBase.obj			\
+        $(SLO)$/AccessibleCsvControl.obj			\
+        $(SLO)$/AccessibleDataPilotControl.obj			\
+        $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleDocumentBase.obj			\
+        $(SLO)$/AccessibleDocumentPagePreview.obj		\
         $(SLO)$/AccessibleEditObject.obj			\
-        $(SLO)$/AccessibleDataPilotControl.obj		\
-        $(SLO)$/AccessibleCsvControl.obj
+        $(SLO)$/AccessibleFilterMenu.obj			\
+        $(SLO)$/AccessibleFilterMenuItem.obj			\
+        $(SLO)$/AccessibleFilterTopWindow.obj			\
+        $(SLO)$/AccessibleGlobal.obj				\
+        $(SLO)$/AccessibilityHints.obj				\
+        $(SLO)$/AccessiblePageHeader.obj			\
+        $(SLO)$/AccessiblePageHeaderArea.obj			\
+        $(SLO)$/AccessiblePreviewCell.obj			\
+        $(SLO)$/AccessiblePreviewHeaderCell.obj			\
+        $(SLO)$/AccessiblePreviewTable.obj			\
+        $(SLO)$/AccessibleSpreadsheet.obj			\
+        $(SLO)$/AccessibleTableBase.obj				\
+        $(SLO)$/AccessibleText.obj				\
+        $(SLO)$/DrawModelBroadcaster.obj			\
 
 # --- Tagets -------------------------------------------------------
 
