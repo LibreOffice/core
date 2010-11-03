@@ -88,8 +88,8 @@ SvGlobalName::SvGlobalName( const CLSID & rId )
 }
 
 SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                            sal_Int8 b8, sal_Int8 b9, sal_Int8 b10, sal_Int8 b11,
-                            sal_Int8 b12, sal_Int8 b13, sal_Int8 b14, sal_Int8 b15 )
+                            sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                            sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
     pImp = new ImpSvGlobalName();
     pImp->nRefCount++;

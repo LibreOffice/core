@@ -40,7 +40,7 @@
 
 extern "C"
 {
-sal_Bool WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 )
+BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 )
 {
     return Rectangle( hDC, X1, Y1, X2, Y2 );
 }
@@ -50,7 +50,7 @@ sal_Bool WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 )
 
 extern "C"
 {
-sal_Bool WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt )
+BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt )
 {
     return Polygon( hDC, ppt, ncnt );
 }
@@ -60,7 +60,7 @@ sal_Bool WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt )
 
 extern "C"
 {
-sal_Bool WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt )
+BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt )
 {
     return PolyPolygon( hDC, ppt, npcnt, ncnt );
 }
