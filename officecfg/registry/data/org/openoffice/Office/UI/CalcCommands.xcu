@@ -1205,12 +1205,11 @@
                     <value xml:lang="en-US">~Remove Filter</value>
                 </prop>
             </node>
-                        <node oor:name=".uno:DataForm" oor:op="replace">
-                                <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="de">D~atenForm...</value>
-                                        <value xml:lang="en-US">D~ataForm...</value>
-                                </prop>
-                        </node>
+            <node oor:name=".uno:DataForm" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">F~orm...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DataSubTotals" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Sub~totals...</value>
