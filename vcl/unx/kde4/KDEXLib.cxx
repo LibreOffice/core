@@ -105,16 +105,16 @@ void KDEXLib::Init()
     pInputMethod->SetLocale();
     XrmInitialize();
 
-    KAboutData *kAboutData = new KAboutData("OpenOffice.org",
+    KAboutData *kAboutData = new KAboutData("LibreOffice",
             "kdelibs4",
-            ki18n( "OpenOffice.org" ),
-            "3.0.0",
-            ki18n( "OpenOffice.org with KDE Native Widget Support." ),
+            ki18n( "LibreOffice" ),
+            "3.3.0",
+            ki18n( "LibreOffice with KDE Native Widget Support." ),
             KAboutData::License_LGPL,
             ki18n( "Copyright (c) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Novell, Inc"),
-            ki18n( "OpenOffice.org is an office suite.\n" ),
-            "http://kde.openoffice.org/index.html",
-            "dev@kde.openoffice.org" );
+            ki18n( "LibreOffice is an office suite.\n" ),
+            "http://libreoffice.org",
+            "libreoffice@lists.freedesktop.org" );
 
     kAboutData->addAuthor( ki18n( "Jan Holesovsky" ),
             ki18n( "Original author and maintainer of the KDE NWF." ),
