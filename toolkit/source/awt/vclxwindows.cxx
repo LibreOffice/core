@@ -2535,7 +2535,7 @@ VCLXMultiPage::~VCLXMultiPage()
 }
 void SAL_CALL VCLXMultiPage::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -2559,7 +2559,7 @@ IMPL_XTYPEPROVIDER_END
 void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = GetWindow();
 
     if ( pWindow )
@@ -2585,7 +2585,7 @@ throw(::com::sun::star::uno::RuntimeException)
 
 uno::Any SAL_CALL VCLXMultiPage::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     OSL_TRACE(" **** VCLXMultiPage::getProperty( %s )",
         rtl::OUStringToOString( PropertyName,
         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -2610,7 +2610,7 @@ void SAL_CALL VCLXMultiPage::setProperty(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", rtl::OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     TabControl* pTabControl = (TabControl*)GetWindow();
@@ -2710,19 +2710,19 @@ sal_Int32 SAL_CALL VCLXMultiPage::getActiveTabID() throw (uno::RuntimeException)
 
 void SAL_CALL VCLXMultiPage::addTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maTabListeners.addInterface( xListener );
 }
 
 void SAL_CALL VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maTabListeners.addInterface( xListener );
 }
 
 void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< beans::NamedValue >& Properties ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
         throw lang::IndexOutOfBoundsException();
@@ -2743,7 +2743,7 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
 uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int32 ID )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
         throw lang::IndexOutOfBoundsException();
@@ -6628,7 +6628,7 @@ IMPL_XTYPEPROVIDER_END
 void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = GetWindow();
 
     if ( pWindow )
@@ -6657,7 +6657,7 @@ void SAL_CALL VCLXFrame::setProperty(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
 #if OSL_DEBUG_LEVEL > 0
     sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;

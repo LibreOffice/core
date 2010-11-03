@@ -1717,7 +1717,8 @@ void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxCo
 
 void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
+
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
@@ -2160,7 +2161,7 @@ UnoDialogContainerControl::getTypes() throw(RuntimeException)
 
 void UnoDialogContainerControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 }
 
@@ -2266,7 +2267,7 @@ throw(RuntimeException)
 
 sal_Bool UnoDialogContainerControl::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // destroy the old tab controller, if existent
     if ( mxTabController.is() )
@@ -2339,8 +2340,7 @@ sal_Bool UnoDialogContainerControl::setModel( const Reference< XControlModel >& 
 }
 void UnoDialogContainerControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    SolarMutexGuard aSolarGuard;
 
     UnoControl::setDesignMode( bOn );
 
@@ -2360,7 +2360,6 @@ void UnoDialogContainerControl::setDesignMode( sal_Bool bOn ) throw(RuntimeExcep
 void UnoDialogContainerControl::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-
     Reference< XControlModel > xModel;
     ::rtl::OUString aName;
 
@@ -2598,7 +2597,7 @@ throw(RuntimeException)
 sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
 {
         // #Can we move all the Resource stuff to the UnoDialogContainerControl ?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
         sal_Bool bRet = UnoDialogContainerControl::setModel( rxModel );
     ImplStartListingForResourceEvents();
     return bRet;
