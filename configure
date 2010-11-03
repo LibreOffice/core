@@ -22905,6 +22905,7 @@ fi
 
 
 
+
 echo "$as_me:$LINENO: checking which libhunspell to use" >&5
 echo $ECHO_N "checking which libhunspell to use... $ECHO_C" >&6
 if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
