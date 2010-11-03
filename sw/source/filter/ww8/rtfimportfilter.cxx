@@ -97,7 +97,9 @@ sal_Bool RtfImportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     }
 
     RtfReader aReader;
-    return aReader.Read(pStream, *pDoc, aURL, *pCurPam) == 0;
+    sal_Bool bRet = aReader.Read(pStream, *pDoc, aURL, *pCurPam) == 0;
+    delete pStream;
+    return bRet;
 }
 
 
