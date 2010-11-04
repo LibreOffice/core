@@ -87,7 +87,7 @@
 
 #########################
 #                       #
-#   Globale Variablen   #
+#   Global Variables    #
 #                       #
 #########################
 
@@ -151,7 +151,6 @@
     %platforms = (); # platforms available or being working with
     %platforms_to_copy = (); # copy output trees for the platforms when --prepare
     $tmp_dir = get_tmp_dir(); # temp directory for checkout and other actions
-#    $dmake_batch = undef;     #
     @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
     %build_list_paths = (); # build lists names
     %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
@@ -168,15 +167,13 @@
     %build_in_progress_shown = ();  # hash of modules being built,
                                     # and shown last time (to keep order)
     $build_time = time;
-    $html_last_updated = 0;
     %jobs_hash = ();
     $html_path = undef;
     $build_finished = 0;
     $html_file = '';
-    %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
+    %had_error = (); # hack for mysterious windows problems - try run dmake 2 times if first time there was an error
     $mkout = CorrectPath("$ENV{SOLARENV}/bin/mkout.pl");
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
-#    %weight_stored = ();
     $grab_output = 1;
     $stop_build_on_error = 0; # for multiprocessing mode: do not build further module if there is an error
     $interactive = 0; # for interactive mode... (for testing purpose enabled by default)
@@ -204,7 +201,7 @@
     my %add_to_config = ();
     my %remove_from_config = ();
     my $clear_config = 0;
-    my $finisched_children = 0;
+    my $finished_children = 0;
     my $debug = 0;
     %module_deps_hash_pids = ();
     my @argv = @ARGV;
@@ -220,7 +217,6 @@
     zenity_open();
     zenity_tooltip("Starting build.");
 
-#    my $temp_html_file = CorrectPath($tmp_dir. '/' . $ENV{INPATH}. '.build.html');
     get_build_modes();
     %deliver_env = ();
     if ($prepare) {
@@ -265,7 +261,6 @@
     %prj_platform = ();
     $check_error_string = '';
     $dmake = '';
-#    $dmake_bin = '';
     $dmake_args = '';
     $echo = '';
     $new_line = "\n";
@@ -285,8 +280,6 @@
         } else {
             print_error ("Cannot open file $cmd_file");
         };
-#    } elsif ($show) {
-#        select STDOUT;
     };
 
     print $new_line;
@@ -300,8 +293,6 @@
     }
     if (scalar keys %broken_build) {
         cancel_build();
-#    } elsif (!$custom_job && $post_custom_job) {
-#        do_post_custom_job(CorrectPath($StandDir.$initial_module));
     };
     print_warnings();
     if (scalar keys %active_modules) {
@@ -420,7 +411,6 @@ sub start_html_message_trigger {
 
     if ($child_id) {
         # parent
-#       print "started listener trigger\n";
     } else {
         my $buffer_size = 1024;
         my $buffer;
@@ -437,7 +427,6 @@ sub start_html_message_trigger {
             if (connect(SOCKET, $paddr)) {
                 $full_buffer .= "\n";
                 syswrite SOCKET, $full_buffer, length $full_buffer;
-#                close SOCKET or die "Child close socket: $!";
             } else {
                 die "Child connect: $!";
             };
@@ -447,7 +436,6 @@ sub start_html_message_trigger {
 };
 
 sub get_html_orders {
-#    print "Parent gonna read\n";
     return if (!$interactive);
     my $buffer_size = 1024;
     my $buffer;
@@ -455,10 +443,9 @@ sub get_html_orders {
     my $full_buffer = '';
     my %modules_to_rebuild = ();
     my %modules_to_delete = ();
-        while ($rv = sysread(HTML_PIPE, $buffer, $buffer_size)) {
-            $full_buffer .= $buffer;
-        };
-#    };
+    while ($rv = sysread(HTML_PIPE, $buffer, $buffer_size)) {
+        $full_buffer .= $buffer;
+    };
     my @html_messages = split(/\n/, $full_buffer);
     foreach (@html_messages) {
         if (/^html_port:(\d+)/) {
@@ -491,7 +478,6 @@ sub get_html_orders {
         schedule_rebuild(\%modules_to_rebuild);
         generate_html_file();
     };
-#    print "Parent got nothing to read\n";
 };
 
 sub schedule_delete {
@@ -643,7 +629,7 @@ sub expand_dependencies {
 # This procedure fills the second hash with reversed dependencies,
 # ie, with info about modules "waiting" for the module
 #
-sub reverse_dependensies {
+sub reverse_dependencies {
     my ($deps_hash, $reversed) = @_;
     foreach my $module (keys %$deps_hash) {
         foreach (keys %{$$deps_hash{$module}}) {
@@ -673,7 +659,7 @@ sub build_all {
         prepare_incompatible_build(\%global_deps_hash) if ($incompatible && (!$build_from_with_branches));
         if ($build_from_with_branches) {
             my %reversed_full_deps_hash = ();
-            reverse_dependensies(\%global_deps_hash, \%reversed_full_deps_hash);
+            reverse_dependencies(\%global_deps_hash, \%reversed_full_deps_hash);
             prepare_build_from_with_branches(\%global_deps_hash, \%reversed_full_deps_hash);
         }
         if ($build_all_cont || $build_since) {
@@ -698,7 +684,7 @@ sub build_all {
         };
         store_weights(\%global_deps_hash);
         backup_deps_hash(\%global_deps_hash, \%global_deps_hash_backup);
-        reverse_dependensies(\%global_deps_hash_backup, \%reversed_dependencies);
+        reverse_dependencies(\%global_deps_hash_backup, \%reversed_dependencies);
         $modules_number = scalar keys %global_deps_hash;
         initialize_html_info($_) foreach (keys %global_deps_hash);
         if ($processes_to_run) {
@@ -817,7 +803,6 @@ sub dmake_dir {
         _exit(0);
     } elsif ($error_code && ($error_code != -1)) {
         return $error_code;
-#        print_error("Error $? occurred while making $job_name");
     };
 };
 
@@ -895,7 +880,6 @@ sub get_prj_platform {
             };
         };
     };
-#seek(BUILD_LST, 0, 0);
 };
 
 #
@@ -957,7 +941,6 @@ sub get_deps_hash {
     };
 
     my  $build_list_ref = $build_lists_hash{$module_to_build};
-#    delete $build_lists_hash{$module_to_build};
     if (ref($build_list_ref) eq 'XMLBuildListParser') {
         get_deps_from_object($module_to_build, $build_list_ref, $dependencies_hash);
     } else {
@@ -1024,7 +1007,6 @@ sub get_deps_hash {
             };
         };
     };
-#    check_deps_hash($dependencies_hash);
     resolve_aliases($dependencies_hash, \%PathHash);
     if (!$prepare) {
         add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
@@ -1102,14 +1084,9 @@ sub CorrectPath {
 
 
 sub check_dmake {
-#print "Checking dmake...";
     if (open(DMAKEVERSION, "dmake -V |")) {
-#    if (open(DMAKEVERSION, "dmake -V |")) {
         my @dmake_version = <DMAKEVERSION>;
         close DMAKEVERSION;
-#       if ($dmake_version[0] =~ /^dmake\s\-\sCopyright\s\(c\)/) {
-#            print " Using version $1\n" if ($dmake_version[0] =~ /Version\s(\d+\.*\d*)/);
-#        };
         return;
     };
     my $error_message = 'dmake: Command not found.';
@@ -1161,33 +1138,7 @@ sub get_stand_dir {
         $initial_module = $`;
     };
     $module_paths{$initial_module} = $StandDir . "/$initial_module";
-#    $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
-#    if ( defined $ENV{PWD} ) {
-#       $StandDir = $ENV{PWD};
-#   } elsif (defined $ENV{_cwd}) {
-#       $StandDir = $ENV{_cwd};
-#   } else {
-#       $StandDir = cwd();
-#    };
-#    my $previous_dir = '';
-#    do {
-#        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
-#            if (-e $StandDir . '/prj/'.$_) {
-#                $initial_module = File::Basename::basename($StandDir);
-#                $build_list_paths{$initial_module} =$StandDir . '/prj/'.$_;
-#                $StandDir = File::Basename::dirname($StandDir);
-#                $module_paths{$initial_module} = $StandDir . "/$initial_module";
-                return $StandDir;
-#            } elsif ($StandDir eq $previous_dir) {
-#                $ENV{mk_tmp} = '';
-#                print_error('Found no project to build');
-#            };
-#        };
-#        $previous_dir = $StandDir;
-#        $StandDir = File::Basename::dirname(Cwd::realpath($StandDir));
-#        print_error('Found no project to build') if (!$StandDir);
-#    }
-#    while (chdir "$StandDir");
+    return $StandDir;
 };
 
 #
@@ -1591,7 +1542,6 @@ sub get_options {
     $grab_output = 0 if ($dont_grab_output);
     print_error('Switches --with_branches and --all collision') if ($build_from_with_branches && $build_all_cont);
     print_error('Switch --skip is for building multiple modules only!!') if ((scalar keys %skip_modules) && (!$build_all_parents));
-#    print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     print_error('Switches --with_branches and --since collision') if ($build_from_with_branches && $build_since);
     if ($show) {
         $processes_to_run = 0;
@@ -1702,7 +1652,6 @@ sub get_switch_options {
 # cancel build when one of children has error exit code
 #
 sub cancel_build {
-#    close_server_socket();
     my $broken_modules_number = scalar @broken_modules_names;
 
     print "\n";
@@ -1820,7 +1769,7 @@ sub handle_dead_children {
                 } else {
                     clear_from_child($pid);
                 };
-                $finisched_children++;
+                $finished_children++;
             };
         };
     } while(children_number() >= $processes_to_run);
@@ -1828,7 +1777,7 @@ sub handle_dead_children {
 
 sub give_second_chance {
     my $pid = shift;
-    # A malicious hack for misterious windows problems - try 2 times
+    # A malicious hack for mysterious windows problems - try 2 times
     # to run dmake in the same directory if errors occurs
     my $child_nick = $processes_hash{$pid};
     $running_children{$folders_hashes{$child_nick}}--;
@@ -1956,7 +1905,7 @@ sub build_multiprocessing {
     my $Prj;
     do {
         my $got_module = 0;
-        $finisched_children = 0;
+        $finished_children = 0;
         while ($Prj = pick_prj_to_build(\%global_deps_hash)) {
             if (!defined $projects_deps_hash{$Prj}) {
                 $projects_deps_hash{$Prj} = {};
@@ -1970,8 +1919,7 @@ sub build_multiprocessing {
         };
         if (!$got_module) {
             cancel_build() if ((!scalar keys %module_build_queue) && !children_number());
-            if (!$finisched_children) {
-#                print "#### 1979: Starting waiting for dead child\n";
+            if (!$finished_children) {
                 handle_dead_children(1);
             };
         };
@@ -1980,7 +1928,6 @@ sub build_multiprocessing {
     # Let the last module be built till the end
     while (scalar keys %module_build_queue) {
         build_actual_queue(\%module_build_queue);
-#        print "#### 1988: Starting waiting for dead child\n";
         handle_dead_children(1);
     };
     # Let all children finish their work
@@ -1992,10 +1939,6 @@ sub build_multiprocessing {
 };
 
 sub mp_success_exit {
-#    close_server_socket();
-#    if (!$custom_job && $post_custom_job) {
-#        do_post_custom_job(CorrectPath($StandDir.$initial_module));
-#    };
     print "\nMultiprocessing build is finished\n";
     print "Maximal number of processes run: $maximal_processes\n";
     zenity_message("LibreOffice Build Success!");
@@ -2012,7 +1955,6 @@ sub build_actual_queue {
     do {
         my @sorted_queue = sort {(scalar keys %{$projects_deps_hash{$a}}) <=> (scalar keys %{$projects_deps_hash{$b}})} keys %$build_queue;
         my $started_children = 0;
-#        foreach $Prj (@sorted_queue) {
         foreach $Prj (keys %$build_queue) {
             get_html_orders();
             if ($reschedule_queue) {
@@ -2089,7 +2031,6 @@ sub do_custom_job {
     my $error_code = 0;
     if ($job eq $pre_job) {
         announce_module($module);
-#        html_store_job_info($dependencies_hash, $job_dir);
         remove_from_dependencies($module_job, $dependencies_hash);
     } else {
         $error_code = run_job($job, $module_paths{$module}, $module_job);
@@ -2293,13 +2234,11 @@ sub clear_module {
         next if (/^\.+$/);
         my $dir = CorrectPath($module_paths{$module}.'/'.$_);
         if ((!-d $dir.'/.svn') && is_output_tree($dir)) {
-            #print "I would delete $dir\n";
             rmtree("$dir", 0, 1);
             if (-d $dir) {
                 system("$remove_command $dir");
                 if (-d $dir) {
                     push(@warnings, "Cannot delete $dir");
-#print_error("Cannot delete $dir");
                 } else {
                     print STDERR (">>> Removed $dir by force\n");
                 };
@@ -2386,7 +2325,6 @@ sub prepare_build_from_with_branches {
             if (defined ${$$reversed_full_deps_hash{$prerequisite}}{$dependent_module}) {
                 remove_from_dependencies($prerequisite, $full_deps_hash);
                 delete $$full_deps_hash{$prerequisite};
-#                print "Removed $prerequisite\n";
                 last;
             };
         };
@@ -2527,9 +2465,6 @@ sub get_list_of_modules {
             };
         };
     };
-#    if (!scalar %$hash_ref) {
-#        print_error('No module list supplied!!');
-#    };
 };
 
 sub get_modules_passed {
@@ -2639,7 +2574,6 @@ sub clear_delivered {
             };
         };
         my $undeliver = "$deliver_command $deliver_delete_switches $nul";
-#        my $current_dir = getcwd();
         foreach my $module (sort @modules_built) {
             if (chdir($module_paths{$module})) {
                 print "Removing delivered from module $module\n";
@@ -2652,8 +2586,6 @@ sub clear_delivered {
                 push(@warnings, "Could not remove delivered files from the module $module. Your build can become inconsistent.\n");
             };
         };
-#        chdir $current_dir;
-#        getcwd();
     };
     $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
 };
@@ -2786,7 +2718,6 @@ sub pick_for_build_type {
 };
 
 sub do_exit {
-#    close_server_socket();
     my $exit_code = shift;
     $build_finished++;
     generate_html_file(1);
@@ -2832,7 +2763,6 @@ sub generate_html_file {
     return if (!$html);
     my $force_update = shift;
     $force_update++ if ($debug);
-    $html_last_updated = time;
     my @modules_order = sort_modules_appearance();
     my ($successes_percent, $errors_percent) = get_progress_percentage(scalar keys %html_info, scalar keys %build_is_finished, scalar keys %modules_with_errors);
     my $build_duration = get_time_line(time - $build_time);
@@ -2918,9 +2848,6 @@ sub generate_html_file {
             print HTML $errors_number;
             print HTML ' error(s)\">', $_, '</a>");' . "\n";
         } else {
-#            print HTML 'document.write("<em style=color:gray>' . $_ . '</em>");';
-####            print HTML 'document.write("<em style=color:gray>' . $_ ."href=\'http://$local_host_ip:$html_port/delete=\'$_". '</em>");';
-
             print HTML 'document.write("            <a target=\'infoframe\' id=';
             print HTML $_;
             print HTML ' href=\"javascript:void(0)\"; title=\"Remove module\">' . $_ . '</a>");' . "\n";
@@ -3279,7 +3206,6 @@ sub get_html_info {
         }
     } else {
         return(undef, undef, 0, 0, 0, '-');
-#        $dirs_info_line .= 'No information available yet';
     };
     $dirs_info_line =~ s/(<br>)*$//o;
     $dirs_info_line .= '\'';
@@ -3294,13 +3220,9 @@ sub get_html_info {
         $errors_info_line .= 'No errors';
     };
     $errors_info_line .= '\'';
-#    if (defined $full_info) {
     my $time_line = get_time_line($$module_info_hash{BUILD_TIME});
-        my ($successes_percent, $errors_percent) = get_progress_percentage($dirs_number - 1, $successful_number - 1, $errorful_number);
-        return($errors_info_line, $dirs_info_line, $errorful_number, $successes_percent, $errors_percent, $time_line);
-#    } else {
-#        return($errors_info_line, $dirs_info_line, $errorful_number);
-#    };
+    my ($successes_percent, $errors_percent) = get_progress_percentage($dirs_number - 1, $successful_number - 1, $errorful_number);
+    return($errors_info_line, $dirs_info_line, $errorful_number, $successes_percent, $errors_percent, $time_line);
 };
 
 sub get_time_line {
@@ -3414,8 +3336,6 @@ sub check_client_jobs {
             delete $processes_hash{$_};
             delete $clients_jobs{$_};
             delete $clients_times{$_};
-#        } else {
-#            print time - $clients_times{$_} . "\n";
         };
     };
 };
@@ -3440,10 +3360,6 @@ sub run_server {
             if ($error) {
                 print STDERR "port $_: $error\n";
             } else {
-#                $SIG{KILL} = \&stop_server;
-#                $SIG{INT} = \&stop_server;
-#                $SIG{TERM} = \&stop_server;
-#                $SIG{QUIT} = \&stop_server;
                 last;
             };
         };
@@ -3479,7 +3395,6 @@ sub run_server {
             };
         } else {
             if ($client_hash{result} eq "0") {
-#                print "$clients_jobs{$pid} succedded on $pid\n";
             } else {
                 print "Error $client_hash{result}\n";
                 if (store_error($pid, $client_hash{result})) {
@@ -3505,7 +3420,6 @@ sub run_server {
             $job_string = $lost_jobs[0];
             delete $lost_client_jobs{$lost_jobs[0]};
         } else {
-#            $job_string = get_job_string(\@build_queue, $pid);
             $job_string = get_job_string(\@build_queue);
         };
         if ($job_string) {
@@ -3567,10 +3481,8 @@ sub get_job_string {
             $jobs_hash{$job_dir}->{START_TIME} = time();
             $jobs_hash{$job_dir}->{STATUS} = 'building';
             if ($job_dir =~ /(\s)$pre_job/o) {
-#                if ($' eq $pre_job) {
-                    do_custom_job($job_dir, $dependencies_hash);
-                    $job_dir = '';
-#                }
+                do_custom_job($job_dir, $dependencies_hash);
+                $job_dir = '';
             };
         } while (!$job_dir);
     };
