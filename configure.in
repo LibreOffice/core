@@ -5078,6 +5078,7 @@ else
 	SYSTEM_REDLAND=NO
 fi
 AC_SUBST(SYSTEM_REDLAND)
+AC_SUBST(REDLAND_CFLAGS)
 AC_SUBST(REDLAND_LIBS)
 
 dnl ===================================================================
