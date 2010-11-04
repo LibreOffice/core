@@ -42,7 +42,6 @@ SRC1FILES=		filedlg2.src	\
                                 so3res.src    \
                                 formats.src    \
                 prnsetup.src	\
-                printdlg.src	\
                 colrdlg.src		\
                 addresstemplate.src	\
                 wizardmachine.src
@@ -63,7 +62,6 @@ SLOFILES=	\
                     $(SLO)$/filedlg.obj 	\
                     $(SLO)$/filedlg2.obj	\
                     $(SLO)$/prnsetup.obj	\
-                    $(SLO)$/printdlg.obj	\
                     $(SLO)$/colctrl.obj 	\
                     $(SLO)$/colrdlg.obj 	\
                     $(SLO)$/property.obj	\
