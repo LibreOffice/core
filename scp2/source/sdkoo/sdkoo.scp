@@ -82,7 +82,8 @@ End
 Directory gid_Dir_Basis_Sdk
 #if defined MACOSX
     ParentID = PREDEFINED_PROGDIR;
-    DosName = "OpenOffice.org${OOOBASEVERSION}_SDK";
+    // DosName = "OpenOffice.org${OOOBASEVERSION}_SDK";
+    DosName = "OpenOffice.org_SDK";
 #else
   #if defined WNT
     ParentID = gid_Dir_Sdkoo_Root;
