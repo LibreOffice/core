@@ -176,18 +176,13 @@ public:
     virtual vos::IMutex*    GetYieldMutex();
     virtual ULONG           ReleaseYieldMutex();
     virtual void            AcquireYieldMutex( ULONG nCount );
+    virtual bool            CheckYieldMutex();
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
     virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool            AnyInput( USHORT nType );
-
-                            // Menues
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar );
-    virtual void            DestroyMenu( SalMenu* pMenu);
-    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
-    virtual void            DestroyMenuItem( SalMenuItem* pItem );
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession();
