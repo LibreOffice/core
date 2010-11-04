@@ -502,7 +502,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                 if( pFormatter )
                 {
-                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri);
+                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri, rLang);
                     if (nFmtIdx)
                         nNumFmtType = pFormatter->GetType(nFmtIdx);
                 }

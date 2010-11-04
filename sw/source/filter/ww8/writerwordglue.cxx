@@ -60,6 +60,8 @@
 #   include <frmatr.hxx>            //GetLRSpace...
 #   include <ndtxt.hxx>             //SwTxtNode
 #   include <breakit.hxx>           //pBreakIt
+#include <i18npool/mslangid.hxx>
+#endif
 
 #define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
@@ -806,7 +808,8 @@ namespace sw
         }
 
         ULONG MSDateTimeFormatToSwFormat(String& rParams,
-            SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri)
+            SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri,
+            USHORT nDocLang)
         {
             // tell the Formatter about the new entry
             UINT16 nCheckPos = 0;
@@ -815,9 +818,50 @@ namespace sw
 
             SwapQuotesInField(rParams);
 
-            //#102782#, #102815#, #108341# & #111944# have to work at the same time :-)
-            bool bForceJapanese(false);
-            bool bForceNatNum(false);
+            // Force to Japanese when finding one of 'geaE'
+            rtl::OUString sJChars = rtl::OUString::createFromAscii( "geE" );
+            bool bForceJapanese = ( STRING_NOTFOUND != rParams.SearchChar( sJChars.getStr() ) );
+            if ( bForceJapanese )
+            {
+                rParams.SearchAndReplaceAll( String::CreateFromAscii( "ee" ),
+                                             String::CreateFromAscii( "yyyy" ) );
+                rParams.SearchAndReplaceAll( String::CreateFromAscii( "EE" ),
+                                             String::CreateFromAscii( "YYYY" ) );
+            }
+            if (LANGUAGE_FRENCH != nDocLang)
+            {
+                // Handle the 'a' case here
+                xub_StrLen nLastPos = 0;
+                do
+                {
+                    xub_StrLen nPos = rParams.Search( 'a', nLastPos + 1 );
+                    bForceJapanese |= ( nPos != STRING_NOTFOUND && IsNotAM( rParams, nPos ) );
+                    nLastPos = nPos;
+                } while ( STRING_NOTFOUND != nLastPos );
+            }
+
+            // Force to NatNum when finding one of 'oOA'
+            String sOldParams( rParams );
+            rParams.SearchAndReplaceAll( String::CreateFromAscii( "o" ),
+                                         String::CreateFromAscii( "m" ) );
+            rParams.SearchAndReplaceAll( String::CreateFromAscii( "O" ),
+                                         String::CreateFromAscii( "M" ) );
+            bool bForceNatNum = !sOldParams.Equals( rParams );
+            if (LANGUAGE_FRENCH != nDocLang)
+            {
+                // Handle the 'A' case here
+                xub_StrLen nLastPos = 0;
+                do
+                {
+                    xub_StrLen nPos = rParams.Search( 'A', nLastPos + 1 );
+                    bool bIsCharA = ( nPos != STRING_NOTFOUND && IsNotAM( rParams, nPos ) );
+                    bForceNatNum |= bIsCharA;
+                    if ( bIsCharA )
+                        rParams.SetChar( nPos, 'D' );
+                    nLastPos = nPos;
+                } while ( STRING_NOTFOUND != nLastPos );
+            }
+
             xub_StrLen nLen = rParams.Len();
             xub_StrLen nI = 0;
             while (nI < nLen)
@@ -834,46 +878,18 @@ namespace sw
                 else //normal unquoted section
                 {
                     sal_Unicode nChar = rParams.GetChar(nI);
-                    if (nChar == 'O')
+
+                    // Change the localized word string to english
+                    switch ( nDocLang )
                     {
-                        rParams.SetChar(nI, 'M');
-                        bForceNatNum = true;
+                        case LANGUAGE_FRENCH:
+                            if ( ( nChar == 'a' || nChar == 'A' ) && IsNotAM(rParams, nI) )
+                                rParams.SetChar(nI, 'Y');
+                            break;
+                        default:
+                            ;
                     }
-                    else if (nChar == 'o')
-                    {
-                        rParams.SetChar(nI, 'm');
-                        bForceNatNum = true;
-                    }
-                    else if ((nChar == 'A') && IsNotAM(rParams, nI))
-                    {
-                        rParams.SetChar(nI, 'D');
-                        bForceNatNum = true;
-                    }
-                    else if ((nChar == 'g') || (nChar == 'G'))
-                        bForceJapanese = true;
-                    else if ((nChar == 'a') && IsNotAM(rParams, nI))
-                        bForceJapanese = true;
-                    else if (nChar == 'E')
-                    {
-                        if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'E'))
-                        {
-                            rParams.Replace(nI, 2, CREATE_CONST_ASC("YYYY"));
-                            nLen+=2;
-                            nI+=3;
-                        }
-                        bForceJapanese = true;
-                    }
-                    else if (nChar == 'e')
-                    {
-                        if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'e'))
-                        {
-                            rParams.Replace(nI, 2, CREATE_CONST_ASC("yyyy"));
-                            nLen+=2;
-                            nI+=3;
-                        }
-                        bForceJapanese = true;
-                    }
-                    else if (nChar == '/')
+                    if (nChar == '/')
                     {
                         // MM We have to escape '/' in case it's used as a char
                         rParams.Replace(nI, 1, CREATE_CONST_ASC("\\/"));
@@ -886,110 +902,114 @@ namespace sw
                     // Should be made with i18n framework.
                     // The list of the mappings and of those "special" locales is to be found at:
                     // http://l10n.openoffice.org/i18n_framework/LocaleData.html
-                    switch ( rLang )
+                    if ( !bForceJapanese && !bForceNatNum )
                     {
-                    case LANGUAGE_FINNISH:
+                        // Convert to the localized equivalent for OOo
+                        switch ( rLang )
                         {
-                            if (nChar == 'y' || nChar == 'Y')
-                                rParams.SetChar (nI, 'V');
-                            else if (nChar == 'm' || nChar == 'M')
-                                rParams.SetChar (nI, 'K');
-                            else if (nChar == 'd' || nChar == 'D')
-                                rParams.SetChar (nI, 'P');
-                            else if (nChar == 'h' || nChar == 'H')
-                                rParams.SetChar (nI, 'T');
-                        }
-                        break;
-                    case LANGUAGE_DANISH:
-                    case LANGUAGE_NORWEGIAN:
-                    case LANGUAGE_NORWEGIAN_BOKMAL:
-                    case LANGUAGE_NORWEGIAN_NYNORSK:
-                    case LANGUAGE_SWEDISH:
-                    case LANGUAGE_SWEDISH_FINLAND:
-                        {
-                            if (nChar == 'h' || nChar == 'H')
-                                rParams.SetChar (nI, 'T');
-                        }
-                        break;
-                    case LANGUAGE_PORTUGUESE:
-                    case LANGUAGE_PORTUGUESE_BRAZILIAN:
-                    case LANGUAGE_SPANISH_MODERN:
-                    case LANGUAGE_SPANISH_DATED:
-                    case LANGUAGE_SPANISH_MEXICAN:
-                    case LANGUAGE_SPANISH_GUATEMALA:
-                    case LANGUAGE_SPANISH_COSTARICA:
-                    case LANGUAGE_SPANISH_PANAMA:
-                    case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
-                    case LANGUAGE_SPANISH_VENEZUELA:
-                    case LANGUAGE_SPANISH_COLOMBIA:
-                    case LANGUAGE_SPANISH_PERU:
-                    case LANGUAGE_SPANISH_ARGENTINA:
-                    case LANGUAGE_SPANISH_ECUADOR:
-                    case LANGUAGE_SPANISH_CHILE:
-                    case LANGUAGE_SPANISH_URUGUAY:
-                    case LANGUAGE_SPANISH_PARAGUAY:
-                    case LANGUAGE_SPANISH_BOLIVIA:
-                    case LANGUAGE_SPANISH_EL_SALVADOR:
-                    case LANGUAGE_SPANISH_HONDURAS:
-                    case LANGUAGE_SPANISH_NICARAGUA:
-                    case LANGUAGE_SPANISH_PUERTO_RICO:
-                        {
-                            if (nChar == 'a' || nChar == 'A')
-                                rParams.SetChar (nI, 'O');
-                            else if (nChar == 'y' || nChar == 'Y')
-                                rParams.SetChar (nI, 'A');
-                        }
-                        break;
-                    case LANGUAGE_DUTCH:
-                    case LANGUAGE_DUTCH_BELGIAN:
-                        {
-                            if (nChar == 'y' || nChar == 'Y')
-                                rParams.SetChar (nI, 'J');
-                            else if (nChar == 'u' || nChar == 'U')
-                                rParams.SetChar (nI, 'H');
-                        }
-                        break;
-                    case LANGUAGE_ITALIAN:
-                    case LANGUAGE_ITALIAN_SWISS:
-                        {
-                            if (nChar == 'a' || nChar == 'A')
-                                rParams.SetChar (nI, 'O');
-                            else if (nChar == 'g' || nChar == 'G')
-                                rParams.SetChar (nI, 'X');
-                            else if (nChar == 'y' || nChar == 'Y')
-                                rParams.SetChar(nI, 'A');
-                            else if (nChar == 'd' || nChar == 'D')
-                                rParams.SetChar (nI, 'G');
-                        }
-                        break;
-                    case LANGUAGE_GERMAN:
-                    case LANGUAGE_GERMAN_SWISS:
-                    case LANGUAGE_GERMAN_AUSTRIAN:
-                    case LANGUAGE_GERMAN_LUXEMBOURG:
-                    case LANGUAGE_GERMAN_LIECHTENSTEIN:
-                        {
-                            if (nChar == 'y' || nChar == 'Y')
-                                rParams.SetChar (nI, 'J');
-                            else if (nChar == 'd' || nChar == 'D')
-                                rParams.SetChar (nI, 'T');
-                        }
-                        break;
-                    case LANGUAGE_FRENCH:
-                    case LANGUAGE_FRENCH_BELGIAN:
-                    case LANGUAGE_FRENCH_CANADIAN:
-                    case LANGUAGE_FRENCH_SWISS:
-                    case LANGUAGE_FRENCH_LUXEMBOURG:
-                    case LANGUAGE_FRENCH_MONACO:
-                        {
-                            if (nChar == 'y' || nChar == 'Y')
-                                rParams.SetChar (nI, 'A');
-                            else if (nChar == 'd' || nChar == 'D')
-                                rParams.SetChar (nI, 'J');
-                        }
-                        break;
-                    default:
-                        {
-                            ; // Nothing
+                        case LANGUAGE_FINNISH:
+                            {
+                                if (nChar == 'y' || nChar == 'Y')
+                                    rParams.SetChar (nI, 'V');
+                                else if (nChar == 'm' || nChar == 'M')
+                                    rParams.SetChar (nI, 'K');
+                                else if (nChar == 'd' || nChar == 'D')
+                                    rParams.SetChar (nI, 'P');
+                                else if (nChar == 'h' || nChar == 'H')
+                                    rParams.SetChar (nI, 'T');
+                            }
+                            break;
+                        case LANGUAGE_DANISH:
+                        case LANGUAGE_NORWEGIAN:
+                        case LANGUAGE_NORWEGIAN_BOKMAL:
+                        case LANGUAGE_NORWEGIAN_NYNORSK:
+                        case LANGUAGE_SWEDISH:
+                        case LANGUAGE_SWEDISH_FINLAND:
+                            {
+                                if (nChar == 'h' || nChar == 'H')
+                                    rParams.SetChar (nI, 'T');
+                            }
+                            break;
+                        case LANGUAGE_PORTUGUESE:
+                        case LANGUAGE_PORTUGUESE_BRAZILIAN:
+                        case LANGUAGE_SPANISH_MODERN:
+                        case LANGUAGE_SPANISH_DATED:
+                        case LANGUAGE_SPANISH_MEXICAN:
+                        case LANGUAGE_SPANISH_GUATEMALA:
+                        case LANGUAGE_SPANISH_COSTARICA:
+                        case LANGUAGE_SPANISH_PANAMA:
+                        case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
+                        case LANGUAGE_SPANISH_VENEZUELA:
+                        case LANGUAGE_SPANISH_COLOMBIA:
+                        case LANGUAGE_SPANISH_PERU:
+                        case LANGUAGE_SPANISH_ARGENTINA:
+                        case LANGUAGE_SPANISH_ECUADOR:
+                        case LANGUAGE_SPANISH_CHILE:
+                        case LANGUAGE_SPANISH_URUGUAY:
+                        case LANGUAGE_SPANISH_PARAGUAY:
+                        case LANGUAGE_SPANISH_BOLIVIA:
+                        case LANGUAGE_SPANISH_EL_SALVADOR:
+                        case LANGUAGE_SPANISH_HONDURAS:
+                        case LANGUAGE_SPANISH_NICARAGUA:
+                        case LANGUAGE_SPANISH_PUERTO_RICO:
+                            {
+                                if (nChar == 'a' || nChar == 'A')
+                                    rParams.SetChar (nI, 'O');
+                                else if (nChar == 'y' || nChar == 'Y')
+                                    rParams.SetChar (nI, 'A');
+                            }
+                            break;
+                        case LANGUAGE_DUTCH:
+                        case LANGUAGE_DUTCH_BELGIAN:
+                            {
+                                if (nChar == 'y' || nChar == 'Y')
+                                    rParams.SetChar (nI, 'J');
+                                else if (nChar == 'u' || nChar == 'U')
+                                    rParams.SetChar (nI, 'H');
+                            }
+                            break;
+                        case LANGUAGE_ITALIAN:
+                        case LANGUAGE_ITALIAN_SWISS:
+                            {
+                                if (nChar == 'a' || nChar == 'A')
+                                    rParams.SetChar (nI, 'O');
+                                else if (nChar == 'g' || nChar == 'G')
+                                    rParams.SetChar (nI, 'X');
+                                else if (nChar == 'y' || nChar == 'Y')
+                                    rParams.SetChar(nI, 'A');
+                                else if (nChar == 'd' || nChar == 'D')
+                                    rParams.SetChar (nI, 'G');
+                            }
+                            break;
+                        case LANGUAGE_GERMAN:
+                        case LANGUAGE_GERMAN_SWISS:
+                        case LANGUAGE_GERMAN_AUSTRIAN:
+                        case LANGUAGE_GERMAN_LUXEMBOURG:
+                        case LANGUAGE_GERMAN_LIECHTENSTEIN:
+                            {
+                                if (nChar == 'y' || nChar == 'Y')
+                                    rParams.SetChar (nI, 'J');
+                                else if (nChar == 'd' || nChar == 'D')
+                                    rParams.SetChar (nI, 'T');
+                            }
+                            break;
+                        case LANGUAGE_FRENCH:
+                        case LANGUAGE_FRENCH_BELGIAN:
+                        case LANGUAGE_FRENCH_CANADIAN:
+                        case LANGUAGE_FRENCH_SWISS:
+                        case LANGUAGE_FRENCH_LUXEMBOURG:
+                        case LANGUAGE_FRENCH_MONACO:
+                            {
+                                if (nChar == 'y' || nChar == 'Y' || nChar == 'a')
+                                    rParams.SetChar (nI, 'A');
+                                else if (nChar == 'd' || nChar == 'D' || nChar == 'j')
+                                    rParams.SetChar (nI, 'J');
+                            }
+                            break;
+                        default:
+                            {
+                                ; // Nothing
+                            }
                         }
                     }
                 }
@@ -1036,7 +1056,6 @@ namespace sw
                     rFmt.SetChar(nI, '\"');
             }
         }
-
 
     }
 }

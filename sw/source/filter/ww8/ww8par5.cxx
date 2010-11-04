@@ -654,7 +654,8 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
     }
 
     ULONG nFmtIdx =
-        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
+        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri,
+                GetFib().lid);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
         nNumFmtType = pFormatter->GetType(nFmtIdx);
