@@ -222,7 +222,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     else
     {
         if( IsDocumentEncrypted() )
-            Add( new XclExpFilePass( GetRoot() ) );
+            Add( new XclExpFileEncryption( GetRoot() ) );
         Add( new XclExpInterfaceHdr( nCodePage ) );
         Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
         Add( new XclExpInterfaceEnd );

@@ -32,6 +32,7 @@
 #include <utility>
 
 #include <rtl/ustring.hxx>
+#include <rtl/random.h>
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
 
@@ -65,6 +66,7 @@ using ::utl::OStreamWrapper;
 using ::std::vector;
 
 using namespace formula;
+using namespace ::com::sun::star;
 
 // ============================================================================
 
@@ -484,17 +486,16 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
 
 // ============================================================================
 
-XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot, const sal_uInt8 nDocId[16],
-                                            const sal_uInt8 nSalt[16] ) :
+XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
     mrRoot(rRoot),
     mnOldPos(STREAM_SEEK_TO_END),
     mbValid(false)
 {
-    String aPass = rRoot.GetPassword();
-    if (aPass.Len() == 0)
+    uno::Sequence< beans::NamedValue > aEncryptionData = rRoot.GetEncryptionData();
+    if ( aEncryptionData.getLength() == 0 )
         // Empty password.  Get the default biff8 password.
-        aPass = rRoot.GetDefaultPassword();
-    Init(aPass, nDocId, nSalt);
+        aEncryptionData = rRoot.GenerateDefaultEncryptionData();
+    Init( aEncryptionData );
 }
 
 XclExpBiff8Encrypter::~XclExpBiff8Encrypter()
@@ -506,9 +507,22 @@ bool XclExpBiff8Encrypter::IsValid() const
     return mbValid;
 }
 
-void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 nSaltDigest[16] ) const
+void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 pnSaltDigest[16] ) const
 {
-    memcpy(nSaltDigest, mnSaltDigest, 16);
+    if ( sizeof( mpnSaltDigest ) == 16 )
+        memcpy( pnSaltDigest, mpnSaltDigest, 16 );
+}
+
+void XclExpBiff8Encrypter::GetSalt( sal_uInt8 pnSalt[16] ) const
+{
+    if ( sizeof( mpnSalt ) == 16 )
+        memcpy( pnSalt, mpnSalt, 16 );
+}
+
+void XclExpBiff8Encrypter::GetDocId( sal_uInt8 pnDocId[16] ) const
+{
+    if ( sizeof( mpnDocId ) == 16 )
+    memcpy( pnDocId, mpnDocId, 16 );
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt8 nData )
@@ -565,36 +579,32 @@ void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_Int32 nData )
     Encrypt(rStrm, static_cast<sal_uInt32>(nData));
 }
 
-void XclExpBiff8Encrypter::Init( const String& aPass, const sal_uInt8 nDocId[16],
-                                 const sal_uInt8 nSalt[16] )
+void XclExpBiff8Encrypter::Init( const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    memset(mnSaltDigest, 0, sizeof(mnSaltDigest));
+    mbValid = false;
 
-    xub_StrLen nLen = aPass.Len();
-    bool bValid = (0 < nLen) && (nLen < 16);
-    if ( bValid )
+    if ( maCodec.InitCodec( aEncryptionData ) )
     {
-        // transform String to sal_uInt16 array
-        memset(mnPassw, 0, sizeof(mnPassw));
-        for (xub_StrLen nChar = 0; nChar < nLen; ++nChar)
-            mnPassw[nChar] = static_cast<sal_uInt16>(aPass.GetChar(nChar));
+        maCodec.GetDocId( mpnDocId );
 
-        // copy document ID
-        memcpy(mnDocId, nDocId, sizeof(mnDocId));
+        // generate the salt here
+        TimeValue aTime;
+        osl_getSystemTime( &aTime );
+        rtlRandomPool aRandomPool = rtl_random_createPool ();
+        rtl_random_addBytes( aRandomPool, &aTime, 8 );
+        rtl_random_getBytes( aRandomPool, mpnSalt, 16 );
+        rtl_random_destroyPool( aRandomPool );
 
-        // init codec
-        maCodec.InitKey(mnPassw, mnDocId);
+        memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
 
         // generate salt hash.
         ::msfilter::MSCodec_Std97 aCodec;
-        aCodec.InitKey(mnPassw, mnDocId);
-        aCodec.CreateSaltDigest(nSalt, mnSaltDigest);
+        aCodec.InitCodec( aEncryptionData );
+        aCodec.GetDigestFromSalt( mpnSalt, mpnSaltDigest );
 
         // verify to make sure it's in good shape.
-        bValid = maCodec.VerifyKey(nSalt, mnSaltDigest);
+        mbValid = maCodec.VerifyKey( mpnSalt, mpnSaltDigest );
     }
-
-    mbValid = bValid;
 }
 
 sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos ) const

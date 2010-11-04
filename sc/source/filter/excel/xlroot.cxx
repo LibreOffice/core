@@ -71,6 +71,8 @@ using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XFramesSupplier;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
+using namespace ::com::sun::star;
+
 // Global data ================================================================
 
 #ifdef DBG_UTIL
@@ -240,11 +242,11 @@ sal_Int32 XclRoot::GetHmmFromPixelY( double fPixelY ) const
     return static_cast< sal_Int32 >( fPixelY * mrData.mfScreenPixelY + 0.5 );
 }
 
-String XclRoot::RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
     aDefaultPasswords.push_back( mrData.maDefPassword );
-    return ScfApiHelper::QueryPasswordForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
+    return ScfApiHelper::QueryEncryptionDataForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
 }
 
 bool XclRoot::HasVbaStorage() const
