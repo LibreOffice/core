@@ -1856,29 +1856,29 @@ namespace {
 
 // Multiply n x m Mat A with m x l Mat B to n x l Mat R
 void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
-                              SCSIZE n, SCSIZE m, SCSIZE l)
-            {
+                   SCSIZE n, SCSIZE m, SCSIZE l)
+{
     double sum;
     for (SCSIZE row = 0; row < n; row++)
-                {
+    {
         for (SCSIZE col = 0; col < l; col++)
         {   // result element(col, row) =sum[ (row of A) * (column of B)]
-                    sum = 0.0;
+            sum = 0.0;
             for (SCSIZE k = 0; k < m; k++)
                 sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
             pR->PutDouble(sum, col, row);
-                }
-            }
         }
+    }
+}
 
 // <A;B> over all elements; uses the matrices as vectors of length M
 double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)
-                    {
+{
     double fSum = 0.0;
     for (SCSIZE i=0; i<nM; i++)
         fSum += pMatA->GetDouble(i) * pMatB->GetDouble(i);
     return fSum;
-                    }
+}
 
 // Special version for use within QR decomposition.
 // Euclidean norm of column index C starting in row index R;
@@ -1889,7 +1889,7 @@ double lcl_GetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZ
     for (SCSIZE row=nR; row<nN; row++)
         fNorm  += (pMatA->GetDouble(nC,row)) * (pMatA->GetDouble(nC,row));
     return sqrt(fNorm);
-                }
+}
 
 // Euclidean norm of row index R starting in column index C;
 // matrix A has count N columns.
@@ -1899,7 +1899,7 @@ double lcl_TGetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSI
     for (SCSIZE col=nC; col<nN; col++)
         fNorm  += (pMatA->GetDouble(col,nR)) * (pMatA->GetDouble(col,nR));
     return sqrt(fNorm);
-            }
+}
 
 // Special version for use within QR decomposition.
 // Maximum norm of column index C starting in row index R;
@@ -1911,7 +1911,7 @@ double lcl_GetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE 
         if (fNorm < fabs(pMatA->GetDouble(nC,row)))
             fNorm = fabs(pMatA->GetDouble(nC,row));
     return fNorm;
-        }
+}
 
 // Maximum norm of row index R starting in col index C;
 // matrix A has count N columns.
@@ -1922,14 +1922,14 @@ double lcl_TGetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE
         if (fNorm < fabs(pMatA->GetDouble(col,nR)))
             fNorm = fabs(pMatA->GetDouble(col,nR));
     return fNorm;
-    }
+}
 
 // Special version for use within QR decomposition.
 // <A(Ca);B(Cb)> starting in row index R;
 // Ca and Cb are indices of columns, matrices A and B have count N rows.
 double lcl_GetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nCa,
-                        ScMatrixRef pMatB, SCSIZE nCb, SCSIZE nR, SCSIZE nN)
-    {
+                               ScMatrixRef pMatB, SCSIZE nCb, SCSIZE nR, SCSIZE nN)
+{
     double fResult = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
         fResult += pMatA->GetDouble(nCa,row) * pMatB->GetDouble(nCb,row);
@@ -1939,8 +1939,8 @@ double lcl_GetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nCa,
 // <A(Ra);B(Rb)> starting in column index C;
 // Ra and Rb are indices of rows, matrices A and B have count N columns.
 double lcl_TGetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nRa,
-                        ScMatrixRef pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN)
-        {
+                                ScMatrixRef pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN)
+{
     double fResult = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
         fResult += pMatA->GetDouble(col,nRa) * pMatB->GetDouble(col,nRb);
@@ -1948,13 +1948,13 @@ double lcl_TGetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nRa,
 }
 
 double lcl_GetSign(double fValue)
-            {
+{
     if (fValue < 0.0)
         return -1.0;
     else if (fValue > 0.0)
-            return 1.0;
-        else
-            return 0.0;
+        return 1.0;
+    else
+        return 0.0;
 }
 
 /* Calculates a QR decomposition with Householder reflection.
@@ -1971,8 +1971,8 @@ double lcl_GetSign(double fValue)
  * errors singularity is often not detected.
  */
 bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
-                    ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
-                {
+                                  ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
+{
     double fScale ;
     double fEuclid ;
     double fFactor ;
@@ -1984,10 +1984,10 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
         // calculate vector u of the householder transformation
         fScale = lcl_GetColumnMaximumNorm(pMatA, col, col, nN);
         if (fScale == 0.0)
-                    {
+        {
             // A is singular
             return false;
-                    }
+        }
         for (SCSIZE row = col; row <nN; row++)
             pMatA->PutDouble( pMatA->GetDouble(col,row)/fScale, col, row);
 
@@ -2002,16 +2002,15 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
         {
             fSum =lcl_GetColumnSumProduct(pMatA, col, pMatA, c, col, nN);
             for (SCSIZE row = col; row <nN; row++)
-                pMatA->PutDouble( pMatA->GetDouble(c,row)
-                         - fSum * fFactor * pMatA->GetDouble(col,row), c, row);
-                }
-            }
-    return true;
+                pMatA->PutDouble( pMatA->GetDouble(c,row) - fSum * fFactor * pMatA->GetDouble(col,row), c, row);
         }
+    }
+    return true;
+}
 
 // same with transposed matrix A, N is count of columns, K count of rows
 bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
-                    ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
+                                   ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     double fScale ;
     double fEuclid ;
@@ -2024,10 +2023,10 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
         // calculate vector u of the householder transformation
         fScale = lcl_TGetColumnMaximumNorm(pMatA, row, row, nN);
         if (fScale == 0.0)
-                    {
+        {
             // A is singular
             return false;
-            }
+        }
         for (SCSIZE col = row; col <nN; col++)
             pMatA->PutDouble( pMatA->GetDouble(col,row)/fScale, col, row);
 
@@ -2042,12 +2041,12 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
         {
             fSum =lcl_TGetColumnSumProduct(pMatA, row, pMatA, r, row, nN);
             for (SCSIZE col = row; col <nN; col++)
-                pMatA->PutDouble( pMatA->GetDouble(col,r)
-                         - fSum * fFactor * pMatA->GetDouble(col,row), col, r);
+                pMatA->PutDouble(
+                    pMatA->GetDouble(col,r) - fSum * fFactor * pMatA->GetDouble(col,row), col, r);
         }
     }
     return true;
-    }
+}
 
 
 /* Applies a Householder transformation to a column vector Y with is given as
@@ -2057,15 +2056,15 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
  * lcl_CaluclateQRdecomposition.
  */
 void lcl_ApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nC,
-                                          ScMatrixRef pMatY, SCSIZE nN)
-        {
+                                        ScMatrixRef pMatY, SCSIZE nN)
+{
     // ScMatrix matrices are zero based, index access (column,row)
     double fDenominator = lcl_GetColumnSumProduct(pMatA, nC, pMatA, nC, nC, nN);
     double fNumerator = lcl_GetColumnSumProduct(pMatA, nC, pMatY, 0, nC, nN);
     double fFactor = 2.0 * (fNumerator/fDenominator);
     for (SCSIZE row = nC; row < nN; row++)
         pMatY->PutDouble(
-          pMatY->GetDouble(row) - fFactor * pMatA->GetDouble(nC,row), row);
+            pMatY->GetDouble(row) - fFactor * pMatA->GetDouble(nC,row), row);
 }
 
 // Same with transposed matrices A and Y.
@@ -2115,8 +2114,8 @@ void lcl_SolveWithUpperRightTriangle(ScMatrixRef pMatA,
  * zero elements, no check is done.
  */
 void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
-                    ::std::vector< double>& pVecR, ScMatrixRef pMatT,
-                    SCSIZE nK, bool bIsTransposed)
+                                    ::std::vector< double>& pVecR, ScMatrixRef pMatT,
+                                    SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fSum;
@@ -2127,12 +2126,12 @@ void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
         {
             if (bIsTransposed)
                 fSum -= pMatA->GetDouble(col,row) * pMatT->GetDouble(col);
-        else
+            else
                 fSum -= pMatA->GetDouble(row,col) * pMatT->GetDouble(col);
-            }
-        pMatT->PutDouble( fSum / pVecR[row] , row);
-            }
         }
+        pMatT->PutDouble( fSum / pVecR[row] , row);
+    }
+}
 
 /* Calculates Z = R * B
  * R is given in matrix A and vector VecR as obtained from the QR
@@ -2141,18 +2140,18 @@ void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
  * not used.
  */
 void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
-                        ::std::vector< double>& pVecR, ScMatrixRef pMatB,
-                        ScMatrixRef pMatZ, SCSIZE nK, bool bIsTransposed)
+                                 ::std::vector< double>& pVecR, ScMatrixRef pMatB,
+                                 ScMatrixRef pMatZ, SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fSum;
     for (SCSIZE row = 0; row < nK; row++)
-        {
+    {
         fSum = pVecR[row] * pMatB->GetDouble(row);
         for (SCSIZE col = row+1; col < nK; col++)
             if (bIsTransposed)
                 fSum += pMatA->GetDouble(row,col) * pMatB->GetDouble(col);
-        else
+            else
                 fSum += pMatA->GetDouble(col,row) * pMatB->GetDouble(col);
         pMatZ->PutDouble( fSum, row);
     }
@@ -2161,33 +2160,33 @@ void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
 
 
 double lcl_GetMeanOverAll(ScMatrixRef pMat, SCSIZE nN)
-        {
+{
     double fSum = 0.0;
     for (SCSIZE i=0 ; i<nN; i++)
         fSum += pMat->GetDouble(i);
     return fSum/static_cast<double>(nN);
-        }
+}
 
 // Calculates means of the columns of matrix X. X is a RxC matrix;
 // ResMat is a 1xC matrix (=row).
 void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
-                                 SCSIZE nC, SCSIZE nR)
-        {
+                              SCSIZE nC, SCSIZE nR)
+{
     double fSum = 0.0;
     for (SCSIZE i=0; i < nC; i++)
-            {
+    {
         fSum =0.0;
         for (SCSIZE k=0; k < nR; k++)
             fSum += pX->GetDouble(i,k);   // GetDouble(Column,Row)
         pResMat ->PutDouble( fSum/static_cast<double>(nR),i);
-            }
+    }
 }
 
 // Calculates means of the rows of matrix X. X is a RxC matrix;
 // ResMat is a Rx1 matrix (=column).
 void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
-                             SCSIZE nC, SCSIZE nR)
-            {
+                           SCSIZE nC, SCSIZE nR)
+{
     double fSum = 0.0;
     for (SCSIZE k=0; k < nR; k++)
     {
@@ -2195,32 +2194,32 @@ void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
         for (SCSIZE i=0; i < nC; i++)
             fSum += pX->GetDouble(i,k);   // GetDouble(Column,Row)
         pResMat ->PutDouble( fSum/static_cast<double>(nC),k);
-            }
-        }
+    }
+}
 
 void lcl_CalculateColumnsDelta(ScMatrixRef pMat, ScMatrixRef pColumnMeans,
-                                 SCSIZE nC, SCSIZE nR)
+                               SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE i = 0; i < nC; i++)
         for (SCSIZE k = 0; k < nR; k++)
             pMat->PutDouble( ::rtl::math::approxSub
-                (pMat->GetDouble(i,k) , pColumnMeans->GetDouble(i) ) , i, k);
-    }
+                             (pMat->GetDouble(i,k) , pColumnMeans->GetDouble(i) ) , i, k);
+}
 
 void lcl_CalculateRowsDelta(ScMatrixRef pMat, ScMatrixRef pRowMeans,
-                             SCSIZE nC, SCSIZE nR)
+                            SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE k = 0; k < nR; k++)
         for (SCSIZE i = 0; i < nC; i++)
             pMat->PutDouble( ::rtl::math::approxSub
-                ( pMat->GetDouble(i,k) , pRowMeans->GetDouble(k) ) , i, k);
+                             ( pMat->GetDouble(i,k) , pRowMeans->GetDouble(k) ) , i, k);
 }
 
 // Case1 = simple regression
 // MatX = X - MeanX, MatY = Y - MeanY, y - haty = (y - MeanY) - (haty - MeanY)
 // = (y-MeanY)-((slope*x+a)-(slope*MeanX+a)) = (y-MeanY)-slope*(x-MeanX)
 double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
-                         SCSIZE nN)
+                      SCSIZE nN)
 {
     double fSum = 0.0;
     double fTemp = 0.0;
@@ -2341,6 +2340,7 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, BYTE& nCase, SCSIZE& nCX,
     }
     return true;
 }
+
 // -----------------------------------------------------------------------------
 
 // LINEST
@@ -2360,7 +2360,7 @@ void ScInterpreter::ScRKP()
 void ScInterpreter::CalulateRGPRKP(bool _bRKP)
 {
     BYTE nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
+    if (!MustHaveParamCount( nParamCount, 1, 4 ))
         return;
     bool bConstant, bStats;
 
@@ -2382,7 +2382,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
 //            return;
         }
         else
-        bConstant = GetBool();
+            bConstant = GetBool();
     }
     else
         bConstant = true;
@@ -2397,7 +2397,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
         }
         else
         {
-        pMatX = GetMatrix();
+            pMatX = GetMatrix();
         }
     }
     else
@@ -2417,39 +2417,39 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
     SCSIZE nCX, nCY; // number of columns
     SCSIZE nRX, nRY;    //number of rows
     SCSIZE K = 0, N = 0; // K=number of variables X, N=number of data samples
-    if ( !CheckMatrix(_bRKP,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY) )
-        {
-        PushIllegalParameter();
-            return;
-        }
-
-    // Enough data samples?
-    if ( (bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1) )
-            {
+    if (!CheckMatrix(_bRKP,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY))
+    {
         PushIllegalParameter();
         return;
-            }
+    }
+
+    // Enough data samples?
+    if ((bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1))
+    {
+        PushIllegalParameter();
+        return;
+    }
 
     ScMatrixRef pResMat;
     if (bStats)
         pResMat = GetNewMat(K+1,5);
-            else
+    else
         pResMat = GetNewMat(K+1,1);
     if (!pResMat)
-            {
+    {
         PushError(errCodeOverflow);
         return;
-            }
+    }
     // Fill unused cells in pResMat; order (column,row)
-            if (bStats)
-            {
+    if (bStats)
+    {
         for (SCSIZE i=2; i<K+1; i++)
-                {
+        {
             pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 2 );
             pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 3 );
             pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 4 );
-                }
-            }
+        }
+    }
 
     // Uses sum(x-MeanX)^2 and not [sum x^2]-N * MeanX^2 in case bConstant.
     // Clone constant matrices, so that Mat = Mat - Mean is possible.
@@ -2468,30 +2468,30 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
         // DeltaY is possible here; DeltaX depends on nCase, so later
         fMeanY = lcl_GetMeanOverAll(pMatY, N);
         for (SCSIZE i=0; i<N; i++)
-            {
+        {
             pMatY->PutDouble( ::rtl::math::approxSub(pMatY->GetDouble(i),fMeanY), i );
         }
     }
 
     if (nCase==1)
-                {
+    {
         // calculate simple regression
         double fMeanX = 0.0;
         if (bConstant)
         {   // Mat = Mat - Mean
             fMeanX = lcl_GetMeanOverAll(pMatX, N);
             for (SCSIZE i=0; i<N; i++)
-                    {
+            {
                 pMatX->PutDouble( ::rtl::math::approxSub(pMatX->GetDouble(i),fMeanX), i );
-                    }
-                }
+            }
+        }
         double fSumXY = lcl_GetSumProduct(pMatX,pMatY,N);
         double fSumX2 = lcl_GetSumProduct(pMatX,pMatX,N);
         if (fSumX2==0.0)
         {
             PushNoValue(); // all x-values are identical
             return;
-            }
+        }
         double fSlope = fSumXY / fSumX2;
         double fIntercept = 0.0;
         if (bConstant)
@@ -2522,11 +2522,11 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 else
                     pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 1, 1);
                 pResMat->PutDouble(1.0, 0, 2); // R^2
-        }
-        else
-        {
+            }
+            else
+            {
                 double fFstatistic = (fSSreg / static_cast<double>(K))
-                                        / (fSSresid / fDegreesFreedom);
+                                     / (fSSresid / fDegreesFreedom);
                 pResMat->PutDouble(fFstatistic, 0, 3);
 
                 // standard error of estimate
@@ -2537,24 +2537,24 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 pResMat->PutDouble(fSigmaSlope, 0, 1);
 
                 if (bConstant)
-                    {
+                {
                     double fSigmaIntercept = fRMSE
-                        * sqrt(fMeanX*fMeanX/fSumX2 + 1.0/static_cast<double>(N));
+                                             * sqrt(fMeanX*fMeanX/fSumX2 + 1.0/static_cast<double>(N));
                     pResMat->PutDouble(fSigmaIntercept, 1, 1);
-            }
+                }
                 else
                 {
                     pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 1, 1);
-        }
+                }
 
                 double fR2 = fSSreg / (fSSreg + fSSresid);
                 pResMat->PutDouble(fR2, 0, 2);
             }
+        }
+        PushMatrix(pResMat);
     }
-    PushMatrix(pResMat);
-}
     else // calculate multiple regression;
-{
+    {
         // Uses a QR decomposition X = QR. The solution B = (X'X)^(-1) * X' * Y
         // becomes B = R^(-1) * Q' * Y
         if (nCase ==2) // Y is column
@@ -2569,12 +2569,12 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 pMatZ = pMatY; // Y can be overwritten
             ScMatrixRef pSlopes = GetNewMat(1,K); // from b1 to bK
             if (!pMeans || !pMatZ || !pSlopes)
-{
+            {
                 PushError(errCodeOverflow);
                 return;
             }
-    if (bConstant)
-    {
+            if (bConstant)
+            {
                 lcl_CalculateColumnMeans(pMatX, pMeans, K, N);
                 lcl_CalculateColumnsDelta(pMatX, pMeans, K, N);
             }
@@ -2589,21 +2589,21 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             for (SCSIZE row=0; row < K && !bIsSingular; row++)
                 bIsSingular = bIsSingular || aVecR[row]==0.0;
             if (bIsSingular)
-                {
+            {
                 PushNoValue();
                 return;
-    }
+            }
             // Z = Q' Y;
             for (SCSIZE col = 0; col < K; col++)
-    {
+            {
                 lcl_ApplyHouseholderTransformation(pMatX, col, pMatZ, N);
-    }
+            }
             // B = R^(-1) * Q' * Y <=> B = R^(-1) * Z <=> R * B = Z
             // result Z should have zeros for index>=K; if not, ignore values
             for (SCSIZE col = 0; col < K ; col++)
-    {
+            {
                 pSlopes->PutDouble( pMatZ->GetDouble(col), col);
-}
+            }
             lcl_SolveWithUpperRightTriangle(pMatX, aVecR, pSlopes, K, false);
             double fIntercept = 0.0;
             if (bConstant)
@@ -2612,11 +2612,11 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             pResMat->PutDouble(_bRKP ? exp(fIntercept) : fIntercept, K, 0 );
             for (SCSIZE i = 0; i < K; i++)
                 pResMat->PutDouble(_bRKP ? exp(pSlopes->GetDouble(i))
-                                         : pSlopes->GetDouble(i) , K-1-i, 0);
+                                   : pSlopes->GetDouble(i) , K-1-i, 0);
 
 
             if (bStats)
-        {
+            {
                 double fSSreg = 0.0;
                 double fSSresid = 0.0;
                 // re-use memory of Z;
@@ -2660,9 +2660,9 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     pResMat->PutDouble(1.0, 0, 2); // R^2
                 }
                 else
-            {
+                {
                     double fFstatistic = (fSSreg / static_cast<double>(K))
-                                        / (fSSresid / fDegreesFreedom);
+                                         / (fSSresid / fDegreesFreedom);
                     pResMat->PutDouble(fFstatistic, 0, 3);
 
                     // standard error of estimate = root mean SSE
@@ -2692,28 +2692,28 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                         pResMat->PutDouble(fSigmaSlope, K-1-col, 1);
                         // (R' R) ^(-1) is symmetric
                         if (bConstant)
-                {
+                        {
                             fPart = lcl_GetSumProduct(pMeans, pMatZ, K);
                             fSigmaIntercept += fPart * pMeans->GetDouble(col);
-            }
-        }
+                        }
+                    }
                     if (bConstant)
                     {
                         fSigmaIntercept = fRMSE
-                         * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
+                                          * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
                         pResMat->PutDouble(fSigmaIntercept, K, 1);
-    }
-    else
-    {
+                    }
+                    else
+                    {
                         pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), K, 1);
-                }
+                    }
 
                     double fR2 = fSSreg / (fSSreg + fSSresid);
                     pResMat->PutDouble(fR2, 0, 2);
+                }
             }
+            PushMatrix(pResMat);
         }
-        PushMatrix(pResMat);
-    }
         else  // nCase == 3, Y is row, all matrices are transposed
         {
             ::std::vector< double> aVecR(N); // for QR decomposition
@@ -2748,10 +2748,10 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             for (SCSIZE row=0; row < K && !bIsSingular; row++)
                 bIsSingular = bIsSingular || aVecR[row]==0.0;
             if (bIsSingular)
-                {
+            {
                 PushNoValue();
                 return;
-                }
+            }
             // Z = Q' Y
             for (SCSIZE row = 0; row < K; row++)
             {
@@ -2762,7 +2762,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             for (SCSIZE col = 0; col < K ; col++)
             {
                 pSlopes->PutDouble( pMatZ->GetDouble(col), col);
-        }
+            }
             lcl_SolveWithUpperRightTriangle(pMatX, aVecR, pSlopes, K, true);
             double fIntercept = 0.0;
             if (bConstant)
@@ -2771,7 +2771,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             pResMat->PutDouble(_bRKP ? exp(fIntercept) : fIntercept, K, 0 );
             for (SCSIZE i = 0; i < K; i++)
                 pResMat->PutDouble(_bRKP ? exp(pSlopes->GetDouble(i))
-                                         : pSlopes->GetDouble(i) , K-1-i, 0);
+                                   : pSlopes->GetDouble(i) , K-1-i, 0);
 
 
             if (bStats)
@@ -2817,11 +2817,11 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
 
                     //  R^2 = SSreg / (SSreg + SSresid) = 1.0
                     pResMat->PutDouble(1.0, 0, 2); // R^2
-    }
-    else
-    {
+                }
+                else
+                {
                     double fFstatistic = (fSSreg / static_cast<double>(K))
-                                        / (fSSresid / fDegreesFreedom);
+                                         / (fSSresid / fDegreesFreedom);
                     pResMat->PutDouble(fFstatistic, 0, 3);
 
                     // standard error of estimate = root mean SSE
@@ -2854,24 +2854,24 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                         {
                             fPart = lcl_GetSumProduct(pMeans, pMatZ, K);
                             fSigmaIntercept += fPart * pMeans->GetDouble(row);
-    }
-}
+                        }
+                    }
                     if (bConstant)
-        {
+                    {
                         fSigmaIntercept = fRMSE
-                         * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
+                                          * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
                         pResMat->PutDouble(fSigmaIntercept, K, 1);
-        }
+                    }
                     else
-        {
+                    {
                         pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), K, 1);
-        }
+                    }
 
                     double fR2 = fSSreg / (fSSreg + fSSresid);
                     pResMat->PutDouble(fR2, 0, 2);
+                }
             }
-        }
-        PushMatrix(pResMat);
+            PushMatrix(pResMat);
         }
     }
     return;
@@ -2892,7 +2892,7 @@ void ScInterpreter::ScGrowth()
 void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
 {
     BYTE nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
+    if (!MustHaveParamCount( nParamCount, 1, 4 ))
         return;
 
     // optional forth parameter
@@ -2913,7 +2913,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             pMatNewX = NULL;
         }
         else
-        pMatNewX = GetMatrix();
+            pMatNewX = GetMatrix();
     }
     else
         pMatNewX = NULL;
@@ -2930,7 +2930,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         }
         else
         {
-        pMatX = GetMatrix();
+            pMatX = GetMatrix();
         }
     }
     else
@@ -2950,14 +2950,14 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     SCSIZE nCX, nCY; // number of columns
     SCSIZE nRX, nRY; //number of rows
     SCSIZE K = 0, N = 0; // K=number of variables X, N=number of data samples
-    if ( !CheckMatrix(_bGrowth,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY) )
+    if (!CheckMatrix(_bGrowth,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY))
     {
         PushIllegalParameter();
         return;
     }
 
     // Enough data samples?
-    if ( (bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1) )
+    if ((bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1))
     {
         PushIllegalParameter();
         return;
@@ -2982,7 +2982,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             return;
         }
         nCountXN = nCXN * nRXN;
-        for ( SCSIZE i = 0; i < nCountXN; i++ )
+        for (SCSIZE i = 0; i < nCountXN; i++)
             if (!pMatNewX->IsValue(i))
             {
                 PushIllegalArgument();
@@ -2991,7 +2991,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     }
     ScMatrixRef pResMat; // size depends on nCase
     if (nCase == 1)
-            pResMat = GetNewMat(nCXN,nRXN);
+        pResMat = GetNewMat(nCXN,nRXN);
     else
     {
         if (nCase==2)
@@ -3000,15 +3000,15 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             pResMat = GetNewMat(nCXN,1);
     }
     if (!pResMat)
-            {
+    {
         PushError(errCodeOverflow);
         return;
-            }
+    }
     // Uses sum(x-MeanX)^2 and not [sum x^2]-N * MeanX^2 in case bConstant.
     // Clone constant matrices, so that Mat = Mat - Mean is possible.
     double fMeanY = 0.0;
     if (bConstant)
-        {
+    {
         ScMatrixRef pCopyX = pMatX->CloneIfConst();
         ScMatrixRef pCopyY = pMatY->CloneIfConst();
         if (!pCopyX || !pCopyY)
@@ -3030,7 +3030,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     {
         // calculate simple regression
         double fMeanX = 0.0;
-            if (bConstant)
+        if (bConstant)
         {   // Mat = Mat - Mean
             fMeanX = lcl_GetMeanOverAll(pMatX, N);
             for (SCSIZE i=0; i<N; i++)
@@ -3056,9 +3056,9 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
                 fHelp = pMatNewX->GetDouble(i)*fSlope + fIntercept;
                 pResMat->PutDouble(_bGrowth ? exp(fHelp) : fHelp, i);
             }
-            }
-            else
-            {
+        }
+        else
+        {
             for (SCSIZE i = 0; i < nCountXN; i++)
             {
                 fHelp = pMatNewX->GetDouble(i)*fSlope;
@@ -3067,7 +3067,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         }
     }
     else // calculate multiple regression;
-            {
+    {
         if (nCase ==2) // Y is column
         {
             ::std::vector< double> aVecR(N); // for QR decomposition
@@ -3102,13 +3102,13 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             // Z := Q' Y; Y is overwritten with result Z
             for (SCSIZE col = 0; col < K; col++)
             {
-                  lcl_ApplyHouseholderTransformation(pMatX, col, pMatY, N);
+                lcl_ApplyHouseholderTransformation(pMatX, col, pMatY, N);
             }
             // B = R^(-1) * Q' * Y <=> B = R^(-1) * Z <=> R * B = Z
             // result Z should have zeros for index>=K; if not, ignore values
             for (SCSIZE col = 0; col < K ; col++)
             {
-                  pSlopes->PutDouble( pMatY->GetDouble(col), col);
+                pSlopes->PutDouble( pMatY->GetDouble(col), col);
             }
             lcl_SolveWithUpperRightTriangle(pMatX, aVecR, pSlopes, K, false);
 
@@ -3124,9 +3124,9 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             {
                 for (SCSIZE i = 0; i < nRXN; i++)
                     pResMat->PutDouble(exp(pResMat->GetDouble(i)), i);
+            }
         }
-    }
-    else
+        else
         { // nCase == 3, Y is row, all matrices are transposed
 
             ::std::vector< double> aVecR(N); // for QR decomposition
@@ -3134,12 +3134,12 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             ScMatrixRef pMeans = GetNewMat(1, K); // mean of each row
             ScMatrixRef pSlopes = GetNewMat(K,1); // row from b1 to bK
             if (!pMeans || !pSlopes)
-    {
+            {
                 PushError(errCodeOverflow);
-            return;
+                return;
             }
             if (bConstant)
-        {
+            {
                 lcl_CalculateRowMeans(pMatX, pMeans, N, K);
                 lcl_CalculateRowsDelta(pMatX, pMeans, N, K);
             }
@@ -3161,13 +3161,13 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             // Z := Q' Y; Y is overwritten with result Z
             for (SCSIZE row = 0; row < K; row++)
             {
-                  lcl_TApplyHouseholderTransformation(pMatX, row, pMatY, N);
-        }
+                lcl_TApplyHouseholderTransformation(pMatX, row, pMatY, N);
+            }
             // B = R^(-1) * Q' * Y <=> B = R^(-1) * Z <=> R * B = Z
             // result Z should have zeros for index>=K; if not, ignore values
             for (SCSIZE col = 0; col < K ; col++)
-        {
-                  pSlopes->PutDouble( pMatY->GetDouble(col), col);
+            {
+                pSlopes->PutDouble( pMatY->GetDouble(col), col);
             }
             lcl_SolveWithUpperRightTriangle(pMatX, aVecR, pSlopes, K, true);
 
