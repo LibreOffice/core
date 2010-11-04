@@ -197,13 +197,12 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
         pOldNumRule = new SwNumRule( rOld );
 }
 
-/*  */
+/*  */
 
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( UNDO_DELNUM ), SwUndRng( rPam ),
-    aNodeIdx( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode )),
-    aLevels( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
+    aNodeIdx( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
 {
     pHistory = new SwHistory;
 }
@@ -229,7 +228,7 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     for( USHORT n = 0; n < aNodeIdx.Count(); ++n )
     {
         SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
-        ASSERT( pNd, "wo ist der TextNode geblieben?" );
+        ASSERT( pNd, "Where is TextNode gone?" );
         pNd->SetAttrListLevel(aLevels[ n ] );
 
         if( pNd->GetCondFmtColl() )
@@ -261,12 +260,12 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
         USHORT nIns = aNodeIdx.Count();
         aNodeIdx.Insert( rNd.GetIndex(), nIns );
 
-        aLevels.Insert( static_cast<BYTE>(rNd.GetActualListLevel()), nIns );
+        aLevels.insert( aLevels.begin() + nIns, static_cast<BYTE>(rNd.GetActualListLevel()) );
     }
 }
 
 
-/*  */
+/*  */
 
 
 SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, BOOL bIsOutlMv )
@@ -325,7 +324,7 @@ void SwUndoMoveNum::Repeat( SwUndoIter& rUndoIter )
         rUndoIter.GetDoc().MoveParagraph( *rUndoIter.pAktPam, nOffset, FALSE );
 }
 
-/*  */
+/*  */
 
 
 SwUndoNumUpDown::SwUndoNumUpDown( const SwPaM& rPam, short nOff )
@@ -356,7 +355,7 @@ void SwUndoNumUpDown::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.GetDoc().NumUpDown( *rUndoIter.pAktPam, 1 == nOffset );
 }
 
-/*  */
+/*  */
 
 // #115901#
 SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL bOldNum,
@@ -402,7 +401,7 @@ void SwUndoNumOrNoNum::Repeat( SwUndoIter& rUndoIter )
                                        TRUE);
 }
 
-/*  */
+/*  */
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, BOOL bFlg )
     : SwUndo( UNDO_SETNUMRULESTART ),

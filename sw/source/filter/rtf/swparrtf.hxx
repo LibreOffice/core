@@ -29,9 +29,6 @@
 #ifndef _SWPARRTF_HXX
 #define _SWPARRTF_HXX
 
-#ifndef __SGI_STL_MAP
-#include <map>
-#endif
 #ifndef __SGI_STL_DEQUE
 #include <deque>
 #endif
@@ -47,9 +44,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <redline.hxx>
-#ifndef __SGI_STL_ALGORITHM
-#include <algorithm>
-#endif
+
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <ndindex.hxx>
 #include "../inc/msfilter.hxx"
@@ -160,7 +155,7 @@ DECLARE_TABLE( SwRTFStyleTbl, SwTxtFmtColl* )
 DECLARE_TABLE( SwRTFCharStyleTbl, SwCharFmt* )
 typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
-SV_DECL_VARARR( SwListArr, SwListEntry, 0, 20 )
+typedef std::deque< SwListEntry > SwListArr;
 
 struct DocPageInformation
 {
@@ -323,7 +318,7 @@ class SwRTFParser : public SvxRTFParser
     String sBaseURL;
 
     USHORT nAktPageDesc, nAktFirstPageDesc;
-    USHORT nAktBox;         // akt. Box
+    USHORT m_nCurrentBox;
     USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
     USHORT nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
     USHORT nRowsToRepeat;
