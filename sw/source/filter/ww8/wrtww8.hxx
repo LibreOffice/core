@@ -52,6 +52,11 @@
 #include <expfld.hxx>
 
 // einige Forward Deklarationen
+namespace msfilter
+{
+    class MSCodec_Std97;
+}
+
 class SwAttrIter;
 class AttributeOutputBase;
 class DocxAttributeOutput;
@@ -855,7 +860,7 @@ public:
 
     static void WriteString_xstz(SvStream& rStrm, const String& rStr, bool bAddZero);
 
-    String GetPassword();
+    bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 
     using StgWriter::Write;
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
