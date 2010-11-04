@@ -40,6 +40,11 @@
 					<desc>Must contain an UNO implementation(!) name of the implemented job component.</desc>
 				</info>
             		</prop>
+            		<prop oor:name="Context" oor:type="xs:string">
+                		<info>
+					<desc>An property to define the context this event should be active in. It can be empty or a colon separated list of the supported application modules.</desc>
+				</info>
+            		</prop>
             		<group oor:name="Arguments" oor:extensible="true">
                 		<info>
 					<desc>Can be filled with any argument, which is under control of the job component.</desc>

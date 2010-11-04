@@ -44,6 +44,7 @@
 //  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 //________________________________
 //  includes of other projects
@@ -145,7 +146,20 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
     for (int a=0; a<lArguments.getLength(); ++a)
     {
         if (a==0)
+        {
             lArguments[a] >>= m_xFrame;
+
+            css::uno::Reference< css::frame::XModuleManager > xModuleManager(
+                m_xSMGR->createInstance(
+                    SERVICENAME_MODULEMANAGER ),
+                css::uno::UNO_QUERY_THROW );
+            try
+            {
+                m_sModuleIdentifier = xModuleManager->identify( m_xFrame );
+            }
+            catch( css::uno::Exception& )
+            {}
+        }
     }
 
     aWriteLock.unlock();
@@ -289,16 +303,8 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
     // But a may given listener will know something ...
     // I think this operaton was finished successfully.
     // It's not realy an error, if no registered jobs could be located.
-    if (lJobs.getLength()<1 && xListener.is())
-    {
-        css::frame::DispatchResultEvent aEvent;
-        aEvent.Source = xThis;
-        aEvent.State  = css::frame::DispatchResultState::SUCCESS;
-        xListener->dispatchFinished(aEvent);
-        return;
-    }
-
     // Step over all found jobs and execute it
+    int nExecutedJobs=0;
     for (int j=0; j<lJobs.getLength(); ++j)
     {
         /* SAFE { */
@@ -307,6 +313,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         JobData aCfg(m_xSMGR);
         aCfg.setEvent(sEvent, lJobs[j]);
         aCfg.setEnvironment(JobData::E_DISPATCH);
+        const bool bIsEnabled=aCfg.hasCorrectContext(m_sModuleIdentifier);
 
         /*Attention!
             Jobs implements interfaces and dies by ref count!
@@ -320,6 +327,9 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         aReadLock.unlock();
         /* } SAFE */
 
+        if (!bIsEnabled)
+            continue;
+
         // Special mode for listener.
         // We dont notify it directly here. We delegate that
         // to the job implementation. But we must set ourself there too.
@@ -328,6 +338,15 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         if (xListener.is())
             pJob->setDispatchResultFake(xListener, xThis);
         pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
+        ++nExecutedJobs;
+    }
+
+    if (nExecutedJobs<1 && xListener.is())
+    {
+        css::frame::DispatchResultEvent aEvent;
+        aEvent.Source = xThis;
+        aEvent.State  = css::frame::DispatchResultState::SUCCESS;
+        xListener->dispatchFinished(aEvent);
     }
 }
 
