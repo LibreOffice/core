@@ -304,8 +304,6 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
     if( !pRefEdit && pEdit )
     {
         m_pDlg->RefInputStart( pEdit, pButton );
-//        if( pRefEdit )
-//            pRefEdit->SilentGrabFocus();
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -488,18 +486,15 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         // Fenstertitel anpassen
         m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
 
-//        if ( pButton )      // ueber den Button: Enter und Escape abfangen
-//        {
-            if (!pAccel.get())
-            {
-                pAccel.reset( new Accelerator );
-                pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
-                pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
-                pAccel->SetSelectHdl( LINK( this, ScFormulaReferenceHelper, AccelSelectHdl ) );
-            }
-            Application::InsertAccel( pAccel.get() );
-            bAccInserted = TRUE;
-//        }
+        if (!pAccel.get())
+        {
+            pAccel.reset( new Accelerator );
+            pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
+            pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
+            pAccel->SetSelectHdl( LINK( this, ScFormulaReferenceHelper, AccelSelectHdl ) );
+        }
+        Application::InsertAccel( pAccel.get() );
+        bAccInserted = TRUE;
     }
 }
 // -----------------------------------------------------------------------------
@@ -706,7 +701,6 @@ bool ScRefHandler::EnterRefMode()
     if( m_bInRefMode ) return false;
 
     SC_MOD()->InputEnterHandler();
-//    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
 
     ScTabViewShell* pScViewShell = NULL;
 
@@ -781,15 +775,6 @@ bool ScRefHandler::LeaveRefMode()
     m_bInRefMode = false;
     return true;
 }
-
-//----------------------------------------------------------------------------
-
-//SfxBindings& ScRefHandler::GetBindings()
-//{
-//  //! SfxModelessDialog should allow access to pBindings pointer
-//
-//  return *pMyBindings;
-//}
 
 //----------------------------------------------------------------------------
 
@@ -894,38 +879,6 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
 {
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
-
-//The two following function is commentted out by PengYunQuan for Validity Cell Range Picker
-//long ScAnyRefDlg::PreNotify( NotifyEvent& rNEvt )
-//{
-//  USHORT nSwitch=rNEvt.GetType();
-//  if(nSwitch==EVENT_GETFOCUS)
-//  {
-//      pActiveWin=rNEvt.GetWindow();
-//  }
-//  return SfxModelessDialog::PreNotify(rNEvt);
-//}
-//
-//void ScAnyRefDlg::StateChanged( StateChangedType nStateChange )
-//{
-//  SfxModelessDialog::StateChanged( nStateChange );
-//
-//  if(nStateChange == STATE_CHANGE_VISIBLE)
-//  {
-//      if(IsVisible())
-//      {
-//          m_aHelper.enableInput( FALSE );
-//          m_aHelper.EnableSpreadsheets();
-//          m_aHelper.SetDispatcherLock( TRUE );
-//          aTimer.Start();
-//      }
-//      else
-//      {
-//          m_aHelper.enableInput( TRUE );
-//          m_aHelper.SetDispatcherLock( FALSE );           //! here and in DoClose ?
-//      }
-//  }
-//}
 
 #if defined( _MSC_VER )
 #define INTRODUCE_TEMPLATE
