@@ -283,18 +283,14 @@ void QueryTable::importQueryTable( BiffInputStream& rStrm )
 
     // create a new connection object that will store settings from following records
     OSL_ENSURE( maModel.mnConnId == -1, "QueryTable::importQueryTable - multiple call" );
-    ConnectionRef xConnection = getConnections().createConnection();
-    OSL_ENSURE( xConnection.get(), "QueryTable::importQueryTable - cannot create connection object" );
-    if( xConnection.get() )
-    {
-        maModel.mnConnId = xConnection->getConnectionId();
+    Connection& rConnection = getConnections().createConnectionWithId();
+    maModel.mnConnId = rConnection.getConnectionId();
 
-        // a DBQUERY record with some PCITEM_STRING records must follow
-        bool bHasDbQuery = (rStrm.getNextRecId() == BIFF_ID_DBQUERY) && rStrm.startNextRecord();
-        OSL_ENSURE( bHasDbQuery, "QueryTable::importQueryTable - missing DBQUERY record" );
-        if( bHasDbQuery )
-            xConnection->importDbQuery( rStrm );
-    }
+    // a DBQUERY record with some PCITEM_STRING records must follow
+    bool bHasDbQuery = (rStrm.getNextRecId() == BIFF_ID_DBQUERY) && rStrm.startNextRecord();
+    OSL_ENSURE( bHasDbQuery, "QueryTable::importQueryTable - missing DBQUERY record" );
+    if( bHasDbQuery )
+        rConnection.importDbQuery( rStrm );
 }
 
 void QueryTable::importQueryTableRefresh( BiffInputStream& rStrm )

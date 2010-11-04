@@ -30,6 +30,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -136,6 +138,8 @@ public:
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
+    /** Creates and returns a database range on-the-fly in the Calc document. */
+    Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
 
@@ -350,17 +354,16 @@ Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bo
 
 Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
-    // find an unused name
-    PropertySet aDocProps( mxDoc );
-    Reference< XNamedRanges > xNamedRanges( aDocProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
-    Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY );
-    if( xNameAccess.is() )
-        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
-
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
-    if( xNamedRanges.is() && (orName.getLength() > 0) ) try
+    if( orName.getLength() > 0 ) try
     {
+        // find an unused name
+        PropertySet aDocProps( mxDoc );
+        Reference< XNamedRanges > xNamedRanges( aDocProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
+        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+        // create the named range
         xNamedRanges->addNewByName( orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
         xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
     }
@@ -369,6 +372,32 @@ Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName,
     }
     OSL_ENSURE( xNamedRange.is(), "WorkbookData::createNamedRangeObject - cannot create defined name" );
     return xNamedRange;
+}
+
+Reference< XDatabaseRange > WorkbookData::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
+{
+    // validate cell range
+    CellRangeAddress aDestRange = rRangeAddr;
+    bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
+
+    // create database range and insert it into the Calc document
+    Reference< XDatabaseRange > xDatabaseRange;
+    if( bValidRange && (orName.getLength() > 0) ) try
+    {
+        // find an unused name
+        PropertySet aDocProps( mxDoc );
+        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xNameAccess( xDatabaseRanges, UNO_QUERY_THROW );
+        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+        // create the database range
+        xDatabaseRanges->addNewByName( orName, aDestRange );
+        xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
+    return xDatabaseRange;
 }
 
 Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
@@ -712,6 +741,11 @@ Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, 
 Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
     return mrBookData.createNamedRangeObject( orName, nNameFlags );
+}
+
+Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
+{
+    return mrBookData.createDatabaseRangeObject( orName, rRangeAddr );
 }
 
 Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const

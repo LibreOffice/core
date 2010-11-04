@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES =										\
         $(SLO)$/addressconverter.obj			\
+        $(SLO)$/autofilterbuffer.obj			\
         $(SLO)$/autofiltercontext.obj			\
         $(SLO)$/biffcodec.obj					\
         $(SLO)$/biffdetector.obj				\
@@ -94,7 +95,7 @@ SLOFILES =										\
         $(SLO)$/workbooksettings.obj			\
         $(SLO)$/worksheetbuffer.obj				\
         $(SLO)$/worksheetfragment.obj			\
-        $(SLO)$/worksheethelper.obj             \
+        $(SLO)$/worksheethelper.obj				\
         $(SLO)$/worksheetsettings.obj
 
 # --- Targets -------------------------------------------------------

@@ -113,7 +113,7 @@ private:
 class BiffSheetDataContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffSheetDataContext( const BiffWorksheetFragmentBase& rParent );
+    explicit            BiffSheetDataContext( const WorksheetHelper& rHelper );
 
     /** Tries to import a sheet data record. */
     virtual void        importRecord( BiffInputStream& rStrm );

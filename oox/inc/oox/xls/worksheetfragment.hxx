@@ -144,6 +144,8 @@ public:
     virtual bool        importFragment();
 
 private:
+    /** Imports the AUTOFILTER and following records with auto filter settings. */
+    void                importAutoFilter( BiffInputStream& rStrm );
     /** Imports the COLINFO record and sets column properties and formatting. */
     void                importColInfo( BiffInputStream& rStrm );
     /** Imports the BIFF2 COLUMNDEFAULT record and sets column default formatting. */

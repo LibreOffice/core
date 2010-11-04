@@ -77,9 +77,6 @@ const sal_uInt16 BIFF12_ROW_CUSTOMHEIGHT    = 0x2000;
 const sal_uInt16 BIFF12_ROW_CUSTOMFORMAT    = 0x4000;
 const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
-const sal_uInt8 BIFF_BOOLERR_BOOL           = 0;
-const sal_uInt8 BIFF_BOOLERR_ERROR          = 1;
-
 const sal_uInt16 BIFF_DATATABLE_ROW         = 0x0004;
 const sal_uInt16 BIFF_DATATABLE_2D          = 0x0008;
 const sal_uInt16 BIFF_DATATABLE_REF1DEL     = 0x0010;
@@ -591,8 +588,8 @@ void SheetDataContext::importDataTable( RecordInputStream& rStrm )
 
 // ============================================================================
 
-BiffSheetDataContext::BiffSheetDataContext( const BiffWorksheetFragmentBase& rParent ) :
-    BiffWorksheetContextBase( rParent ),
+BiffSheetDataContext::BiffSheetDataContext( const WorksheetHelper& rHelper ) :
+    BiffWorksheetContextBase( rHelper ),
     mnBiff2XfId( 0 )
 {
     mnArrayIgnoreSize = (getBiff() == BIFF2) ? 1 : ((getBiff() <= BIFF4) ? 2 : 6);

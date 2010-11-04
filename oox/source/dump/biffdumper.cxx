@@ -2433,6 +2433,19 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpString( "password-creator", BIFF_STR_8BITLENGTH, BIFF_STR_SMARTFLAGS );
         break;
 
+        case BIFF_ID_FILTERCOLUMN:
+        {
+            dumpDec< sal_uInt16 >( "column-index" );
+            dumpHex< sal_uInt16 >( "flags", "FILTERCOLUMN-FLAGS" );
+            sal_uInt8 nStrLen1 = dumpFilterColumnOperator( "operator-1" );
+            sal_uInt8 nStrLen2 = dumpFilterColumnOperator( "operator-2" );
+            bool bBiff8 = eBiff == BIFF8;
+            rtl_TextEncoding eTextEnc = getBiffData().getTextEncoding();
+            if( nStrLen1 > 0 ) writeStringItem( "string-1", bBiff8 ? rStrm.readUniStringBody( nStrLen1, true ) : rStrm.readCharArrayUC( nStrLen1, eTextEnc, true ) );
+            if( nStrLen2 > 0 ) writeStringItem( "string-2", bBiff8 ? rStrm.readUniStringBody( nStrLen2, true ) : rStrm.readCharArrayUC( nStrLen2, eTextEnc, true ) );
+        }
+        break;
+
         case BIFF2_ID_FONT:
         case BIFF3_ID_FONT:
             dumpFontRec();
@@ -3260,6 +3273,38 @@ void WorkbookStreamObject::dumpExtGradientHead()
     dumpDec< double >( "pos-bottom" );
 }
 
+sal_uInt8 WorkbookStreamObject::dumpFilterColumnOperator( const String& rName )
+{
+    sal_uInt8 nStrLen = 0;
+    writeEmptyItem( rName );
+    IndentGuard aIndGuard( mxOut );
+    sal_uInt8 nType = dumpDec< sal_uInt8 >( "data-type", "FILTERCOLUMN-DATATYPE" );
+    dumpDec< sal_uInt8 >( "operator", "FILTERCOLUMN-OPERATOR" );
+    switch( nType )
+    {
+        case 2:
+            dumpRk( "value" );
+            dumpUnused( 4 );
+        break;
+        case 4:
+            dumpDec< double >( "value" );
+        break;
+        case 6:
+            dumpUnused( 4 );
+            nStrLen = dumpDec< sal_uInt8 >( "length" );
+            dumpBoolean( "simple" );
+            dumpUnused( 2 );
+        break;
+        case 8:
+            dumpBoolErr();
+            dumpUnused( 6 );
+        break;
+        default:
+            dumpUnused( 8 );
+    }
+    return nStrLen;
+}
+
 OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 nStrLen )
 {
     OUString aString;
@@ -3289,9 +3334,9 @@ void WorkbookStreamObject::dumpBoolErr()
 {
     MultiItemsGuard aMultiGuard( mxOut );
     sal_uInt8 nValue = dumpHex< sal_uInt8 >( "value" );
-    bool bErrCode = dumpBool< sal_uInt8 >( "is-errorcode" );
+    bool bErrCode = dumpBool< sal_uInt8 >( "is-error-code" );
     if( bErrCode )
-        writeErrorCodeItem( "errorcode", nValue );
+        writeErrorCodeItem( "error-code", nValue );
     else
         writeBooleanItem( "boolean", nValue );
 }

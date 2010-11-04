@@ -85,6 +85,8 @@ const sal_Int32 BIFF12_ID_CONTROL           = 0x0284;
 const sal_Int32 BIFF12_ID_CONTROLS          = 0x0283;
 const sal_Int32 BIFF12_ID_CUSTOMCHARTVIEW   = 0x028F;
 const sal_Int32 BIFF12_ID_CUSTOMCHARTVIEWS  = 0x028D;
+const sal_Int32 BIFF12_ID_CUSTOMFILTER      = 0x00AE;
+const sal_Int32 BIFF12_ID_CUSTOMFILTERS     = 0x00AC;
 const sal_Int32 BIFF12_ID_CUSTOMSHEETVIEW   = 0x01A7;
 const sal_Int32 BIFF12_ID_CUSTOMSHEETVIEWS  = 0x01A6;
 const sal_Int32 BIFF12_ID_CUSTOMWORKBOOKVIEW= 0x018D;
@@ -99,6 +101,8 @@ const sal_Int32 BIFF12_ID_DDEITEM_ERROR     = 0x0245;
 const sal_Int32 BIFF12_ID_DDEITEM_STRING    = 0x0246;
 const sal_Int32 BIFF12_ID_DEFINEDNAME       = 0x0027;
 const sal_Int32 BIFF12_ID_DIMENSION         = 0x0094;
+const sal_Int32 BIFF12_ID_DISCRETEFILTER    = 0x00A7;
+const sal_Int32 BIFF12_ID_DISCRETEFILTERS   = 0x00A5;
 const sal_Int32 BIFF12_ID_DRAWING           = 0x0226;
 const sal_Int32 BIFF12_ID_DXF               = 0x01FB;
 const sal_Int32 BIFF12_ID_DXFS              = 0x01F9;
@@ -266,6 +270,7 @@ const sal_uInt16 BIFF8_MAXRECSIZE           = 8224;
 
 const sal_uInt16 BIFF2_ID_ARRAY             = 0x0021;
 const sal_uInt16 BIFF3_ID_ARRAY             = 0x0221;
+const sal_uInt16 BIFF_ID_AUTOFILTER         = 0x009D;
 const sal_uInt16 BIFF2_ID_BLANK             = 0x0001;
 const sal_uInt16 BIFF3_ID_BLANK             = 0x0201;
 const sal_uInt16 BIFF2_ID_BOF               = 0x0009;
@@ -393,6 +398,8 @@ const sal_uInt16 BIFF_ID_EXTERNSHEET        = 0x0017;
 const sal_uInt16 BIFF_ID_EXTSST             = 0x00FF;
 const sal_uInt16 BIFF_ID_FILEPASS           = 0x002F;
 const sal_uInt16 BIFF_ID_FILESHARING        = 0x005B;
+const sal_uInt16 BIFF_ID_FILTERCOLUMN       = 0x009E;
+const sal_uInt16 BIFF_ID_FILTERMODE         = 0x009B;
 const sal_uInt16 BIFF2_ID_FONT              = 0x0031;
 const sal_uInt16 BIFF3_ID_FONT              = 0x0231;
 const sal_uInt16 BIFF5_ID_FONT              = 0x0031;
@@ -575,6 +582,9 @@ const sal_uInt8 BIFF_DATATYPE_DOUBLE        = 1;
 const sal_uInt8 BIFF_DATATYPE_STRING        = 2;
 const sal_uInt8 BIFF_DATATYPE_BOOL          = 4;
 const sal_uInt8 BIFF_DATATYPE_ERROR         = 16;
+
+const sal_uInt8 BIFF_BOOLERR_BOOL           = 0;
+const sal_uInt8 BIFF_BOOLERR_ERROR          = 1;
 
 // BIFF8 unicode strings ------------------------------------------------------
 

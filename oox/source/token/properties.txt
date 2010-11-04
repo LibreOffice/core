@@ -90,6 +90,7 @@ ContainsHeader
 Coordinates
 CopyBack
 CopyFormulas
+CopyOutputData
 CopyStyles
 CrossoverPosition
 CrossoverValue
@@ -147,6 +148,7 @@ FillGradientName
 FillStyle
 FillTransparence
 Filter
+FilterCriteriaSource
 FilterOptions
 FirstLineOffset
 FirstPageNumber
@@ -212,6 +214,7 @@ InputMessage
 InputTitle
 IsActive
 IsAdjustHeightEnabled
+IsCaseSensitive
 IsCellBackgroundTransparent
 IsChangeReadOnlyEnabled
 IsDate
@@ -284,6 +287,7 @@ NumberingType
 Offset
 OpCodeMap
 Orientation
+OutputPosition
 OverlapSequence
 PageScale
 PageStyle
@@ -356,6 +360,7 @@ RotationHorizontal
 RotationVertical
 RowGrand
 RowLabelRanges
+SaveOutputPosition
 ScaleMode
 ScaleToPages
 ScaleToPagesX
@@ -388,6 +393,7 @@ ShowPositiveError
 ShowZeroValues
 ShrinkToFit
 Size
+SkipDuplicates
 SortInfo
 Sound
 SoundOn
@@ -447,6 +453,7 @@ TriState
 Type
 URL
 Url
+UseFilterCriteriaSource
 UseRegularExpressions
 UseRings
 UseSelectedPage

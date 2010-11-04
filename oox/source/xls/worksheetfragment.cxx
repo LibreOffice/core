@@ -32,6 +32,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/autofilterbuffer.hxx"
 #include "oox/xls/autofiltercontext.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/commentsfragment.hxx"
@@ -267,9 +268,10 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case XLS_TOKEN( sheetData ):                return new SheetDataContext( *this );
-                case XLS_TOKEN( autoFilter ):               return new AutoFilterContext( *this );
                 case XLS_TOKEN( conditionalFormatting ):    return new CondFormatContext( *this );
                 case XLS_TOKEN( dataValidations ):          return new DataValidationsContext( *this );
+                case XLS_TOKEN( autoFilter ):               return new AutoFilterContext( *this, getAutoFilters().createAutoFilter() );
+                case XLS_TOKEN( scenarios ):                return new ScenariosContext( *this );
 
                 case XLS_TOKEN( sheetViews ):
                 case XLS_TOKEN( cols ):
@@ -292,8 +294,6 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( picture ):          getPageSettings().importPicture( getRelations(), rAttribs );    break;
                 case XLS_TOKEN( drawing ):          importDrawing( rAttribs );                                      break;
                 case XLS_TOKEN( legacyDrawing ):    importLegacyDrawing( rAttribs );                                break;
-                case XLS_TOKEN( scenarios ):
-                    return new ScenariosContext( *this );
             }
         break;
 
@@ -387,6 +387,7 @@ ContextHandlerRef WorksheetFragment::onCreateRecordContext( sal_Int32 nRecId, Re
                 case BIFF12_ID_SHEETDATA:       return new SheetDataContext( *this );
                 case BIFF12_ID_CONDFORMATTING:  return new CondFormatContext( *this );
                 case BIFF12_ID_DATAVALIDATIONS: return new DataValidationsContext( *this );
+                case BIFF12_ID_AUTOFILTER:      return new AutoFilterContext( *this, getAutoFilters().createAutoFilter() );
                 case BIFF12_ID_SCENARIOS:       return new ScenariosContext( *this );
 
                 case BIFF12_ID_SHEETVIEWS:
@@ -453,16 +454,20 @@ const RecordInfo* WorksheetFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
+        { BIFF12_ID_AUTOFILTER,         BIFF12_ID_AUTOFILTER + 1        },
         { BIFF12_ID_CFRULE,             BIFF12_ID_CFRULE + 1            },
         { BIFF12_ID_COLBREAKS,          BIFF12_ID_COLBREAKS + 1         },
         { BIFF12_ID_COLORSCALE,         BIFF12_ID_COLORSCALE + 1        },
         { BIFF12_ID_COLS,               BIFF12_ID_COLS + 1              },
         { BIFF12_ID_CONDFORMATTING,     BIFF12_ID_CONDFORMATTING + 1    },
         { BIFF12_ID_CONTROLS,           BIFF12_ID_CONTROLS + 2          },
+        { BIFF12_ID_CUSTOMFILTERS,      BIFF12_ID_CUSTOMFILTERS + 1     },
         { BIFF12_ID_CUSTOMSHEETVIEW,    BIFF12_ID_CUSTOMSHEETVIEW + 1   },
         { BIFF12_ID_CUSTOMSHEETVIEWS,   BIFF12_ID_CUSTOMSHEETVIEWS + 3  },
         { BIFF12_ID_DATABAR,            BIFF12_ID_DATABAR + 1           },
         { BIFF12_ID_DATAVALIDATIONS,    BIFF12_ID_DATAVALIDATIONS + 1   },
+        { BIFF12_ID_DISCRETEFILTERS,    BIFF12_ID_DISCRETEFILTERS + 1   },
+        { BIFF12_ID_FILTERCOLUMN,       BIFF12_ID_FILTERCOLUMN + 1      },
         { BIFF12_ID_HEADERFOOTER,       BIFF12_ID_HEADERFOOTER + 1      },
         { BIFF12_ID_ICONSET,            BIFF12_ID_ICONSET + 1           },
         { BIFF12_ID_MERGECELLS,         BIFF12_ID_MERGECELLS + 1        },
@@ -862,6 +867,7 @@ bool BiffWorksheetFragment::importFragment()
 
                     case BIFF5: switch( nRecId )
                     {
+                        case BIFF_ID_AUTOFILTER:    importAutoFilter( rStrm );                      break;
                         case BIFF_ID_COLINFO:       importColInfo( rStrm );                         break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight( rStrm );                    break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
@@ -882,6 +888,7 @@ bool BiffWorksheetFragment::importFragment()
 
                     case BIFF8: switch( nRecId )
                     {
+                        case BIFF_ID_AUTOFILTER:        importAutoFilter( rStrm );                      break;
                         case BIFF_ID_CFHEADER:          rCondFormats.importCfHeader( rStrm );           break;
                         case BIFF_ID_CODENAME:          rWorksheetSett.importCodeName( rStrm );         break;
                         case BIFF_ID_COLINFO:           importColInfo( rStrm );                         break;
@@ -940,6 +947,12 @@ bool BiffWorksheetFragment::importFragment()
 }
 
 // private --------------------------------------------------------------------
+
+void BiffWorksheetFragment::importAutoFilter( BiffInputStream& rStrm )
+{
+    mxContext.reset( new BiffAutoFilterContext( *this, getAutoFilters().createAutoFilter() ) );
+    mxContext->importRecord( rStrm );
+}
 
 void BiffWorksheetFragment::importColInfo( BiffInputStream& rStrm )
 {

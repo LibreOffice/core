@@ -443,6 +443,8 @@ private:
     void                dumpExtCfColor( const String& rName = EMPTY_STRING );
     void                dumpExtGradientHead();
 
+    sal_uInt8           dumpFilterColumnOperator( const String& rName );
+
     ::rtl::OUString     dumpPivotString( const String& rName, sal_uInt16 nStrLen );
     ::rtl::OUString     dumpPivotString( const String& rName );
 

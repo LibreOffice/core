@@ -126,7 +126,7 @@ class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
 public:
     explicit            BiffPivotCacheRecordsContext(
-                            const BiffWorkbookFragmentBase& rFragment,
+                            const WorkbookHelper& rHelper,
                             const PivotCache& rPivotCache );
 
     /** Reads the current record from stream and tries to insert a cell into

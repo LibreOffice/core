@@ -51,6 +51,9 @@ const sal_Int32 BIFF12_RECONNECT_AS_REQUIRED            = 1;
 const sal_Int32 BIFF12_RECONNECT_ALWAYS                 = 2;
 const sal_Int32 BIFF12_RECONNECT_NEVER                  = 3;
 
+const sal_uInt8 BIFF12_CONNECTION_SAVEPASSWORD_ON       = 1;
+const sal_uInt8 BIFF12_CONNECTION_SAVEPASSWORD_OFF      = 2;
+
 const sal_uInt16 BIFF12_CONNECTION_KEEPALIVE            = 0x0001;
 const sal_uInt16 BIFF12_CONNECTION_NEW                  = 0x0002;
 const sal_uInt16 BIFF12_CONNECTION_DELETED              = 0x0004;
@@ -187,6 +190,7 @@ ConnectionModel::ConnectionModel() :
     mnId( -1 ),
     mnType( BIFF12_CONNECTION_UNKNOWN ),
     mnReconnectMethod( BIFF12_RECONNECT_AS_REQUIRED ),
+    mnCredentials( XML_integrated ),
     mnInterval( 0 ),
     mbKeepAlive( false ),
     mbNew( false ),
@@ -194,7 +198,8 @@ ConnectionModel::ConnectionModel() :
     mbOnlyUseConnFile( false ),
     mbBackground( false ),
     mbRefreshOnLoad( false ),
-    mbSaveData( false )
+    mbSaveData( false ),
+    mbSavePassword( false )
 {
 }
 
@@ -224,6 +229,7 @@ void Connection::importConnection( const AttributeList& rAttribs )
     // type and reconnectionMethod are using the BIFF12 constants instead of XML tokens
     maModel.mnType            = rAttribs.getInteger( XML_type, BIFF12_CONNECTION_UNKNOWN );
     maModel.mnReconnectMethod = rAttribs.getInteger( XML_reconnectionMethod, BIFF12_RECONNECT_AS_REQUIRED );
+    maModel.mnCredentials     = rAttribs.getToken( XML_credentials, XML_integrated );
     maModel.mnInterval        = rAttribs.getInteger( XML_interval, 0 );
     maModel.mbKeepAlive       = rAttribs.getBool( XML_keepAlive, false );
     maModel.mbNew             = rAttribs.getBool( XML_new, false );
@@ -231,6 +237,8 @@ void Connection::importConnection( const AttributeList& rAttribs )
     maModel.mbOnlyUseConnFile = rAttribs.getBool( XML_onlyUseConnectionFile, false );
     maModel.mbBackground      = rAttribs.getBool( XML_background, false );
     maModel.mbRefreshOnLoad   = rAttribs.getBool( XML_refreshOnLoad, false );
+    maModel.mbSaveData        = rAttribs.getBool( XML_saveData, false );
+    maModel.mbSavePassword    = rAttribs.getBool( XML_savePassword, false );
 }
 
 void Connection::importWebPr( const AttributeList& rAttribs )
@@ -281,11 +289,13 @@ void Connection::importTable( const AttributeList& rAttribs, sal_Int32 nElement 
 
 void Connection::importConnection( RecordInputStream& rStrm )
 {
-    rStrm.skip( 4 );
     sal_uInt16 nFlags, nStrFlags;
+    sal_uInt8 nSavePassword, nCredentials;
+    rStrm.skip( 2 );
+    rStrm >> nSavePassword;
+    rStrm.skip( 1 );
     maModel.mnInterval = rStrm.readuInt16();
-    rStrm >> nFlags >> nStrFlags >> maModel.mnType >> maModel.mnReconnectMethod >> maModel.mnId;
-    rStrm.skip( 1 );    // credentials
+    rStrm >> nFlags >> nStrFlags >> maModel.mnType >> maModel.mnReconnectMethod >> maModel.mnId >> nCredentials;
 
     if( getFlag( nStrFlags, BIFF12_CONNECTION_HAS_SOURCEFILE ) )
         rStrm >> maModel.maSourceFile;
@@ -298,6 +308,9 @@ void Connection::importConnection( RecordInputStream& rStrm )
     if( getFlag( nStrFlags, BIFF12_CONNECTION_HAS_SSOID ) )
         rStrm >> maModel.maSsoId;
 
+    static const sal_Int32 spnCredentials[] = { XML_integrated, XML_none, XML_stored, XML_prompt };
+    maModel.mnCredentials = STATIC_ARRAY_SELECT( spnCredentials, nCredentials, XML_integrated );
+
     maModel.mbKeepAlive       = getFlag( nFlags, BIFF12_CONNECTION_KEEPALIVE );
     maModel.mbNew             = getFlag( nFlags, BIFF12_CONNECTION_NEW );
     maModel.mbDeleted         = getFlag( nFlags, BIFF12_CONNECTION_DELETED );
@@ -305,6 +318,7 @@ void Connection::importConnection( RecordInputStream& rStrm )
     maModel.mbBackground      = getFlag( nFlags, BIFF12_CONNECTION_BACKGROUND );
     maModel.mbRefreshOnLoad   = getFlag( nFlags, BIFF12_CONNECTION_REFRESHONLOAD );
     maModel.mbSaveData        = getFlag( nFlags, BIFF12_CONNECTION_SAVEDATA );
+    maModel.mbSavePassword    = nSavePassword == BIFF12_CONNECTION_SAVEPASSWORD_ON;
 }
 
 void Connection::importWebPr( RecordInputStream& rStrm )
@@ -370,6 +384,7 @@ void Connection::importDbQuery( BiffInputStream& rStrm )
 
     // same type constants in all BIFF versions
     maModel.mnType = extractValue< sal_Int32 >( nFlags, 0, 3 );
+    maModel.mbSavePassword = getFlag( nFlags, BIFF_DBQUERY_SAVEPASSWORD );
 
     OSL_ENSURE( getFlag( nFlags, BIFF_DBQUERY_ODBC ) == (maModel.mnType == BIFF12_CONNECTION_ODBC), "Connection::importDbQuery - wrong ODBC flag" );
     OSL_ENSURE( getFlag( nFlags, BIFF_DBQUERY_SQLQUERY ) != (maModel.mnType == BIFF12_CONNECTION_HTML), "Connection::importDbQuery - wrong SQL query flag" );
@@ -446,41 +461,39 @@ ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :
 {
 }
 
-ConnectionRef ConnectionsBuffer::importConnection( const AttributeList& rAttribs )
+Connection& ConnectionsBuffer::createConnection()
 {
     ConnectionRef xConnection( new Connection( *this ) );
-    xConnection->importConnection( rAttribs );
-    insertConnection( xConnection );
-    return xConnection;
+    maConnections.push_back( xConnection );
+    return *xConnection;
 }
 
-ConnectionRef ConnectionsBuffer::importConnection( RecordInputStream& rStrm )
-{
-    ConnectionRef xConnection( new Connection( *this ) );
-    xConnection->importConnection( rStrm );
-    insertConnection( xConnection );
-    return xConnection;
-}
-
-ConnectionRef ConnectionsBuffer::createConnection()
+Connection& ConnectionsBuffer::createConnectionWithId()
 {
     ConnectionRef xConnection( new Connection( *this, mnUnusedId ) );
-    insertConnection( xConnection );
-    return xConnection;
+    maConnections.push_back( xConnection );
+    insertConnectionToMap( xConnection );
+    return *xConnection;
+}
+
+void ConnectionsBuffer::finalizeImport()
+{
+    for( ConnectionVector::iterator aIt = maConnections.begin(), aEnd = maConnections.end(); aIt != aEnd; ++aIt )
+        insertConnectionToMap( *aIt );
 }
 
 ConnectionRef ConnectionsBuffer::getConnection( sal_Int32 nConnId ) const
 {
-    return maConnections.get( nConnId );
+    return maConnectionsById.get( nConnId );
 }
 
-void ConnectionsBuffer::insertConnection( const ConnectionRef& rxConnection )
+void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection )
 {
     sal_Int32 nConnId = rxConnection->getConnectionId();
     if( nConnId > 0 )
     {
-        OSL_ENSURE( !maConnections.has( nConnId ), "ConnectionsBuffer::insertConnection - multiple connection identifier" );
-        maConnections[ nConnId ] = rxConnection;
+        OSL_ENSURE( !maConnectionsById.has( nConnId ), "ConnectionsBuffer::insertConnectionToMap - multiple connection identifier" );
+        maConnectionsById[ nConnId ] = rxConnection;
         mnUnusedId = ::std::max< sal_Int32 >( mnUnusedId, nConnId + 1 );
     }
 }

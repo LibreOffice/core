@@ -84,8 +84,8 @@ const RecordInfo* QueryTableFragment::getRecordInfos() const
 
 // ============================================================================
 
-BiffQueryTableContext::BiffQueryTableContext( const BiffWorksheetFragmentBase& rFragment ) :
-    BiffWorksheetContextBase( rFragment ),
+BiffQueryTableContext::BiffQueryTableContext( const WorksheetHelper& rHelper ) :
+    BiffWorksheetContextBase( rHelper ),
     mrQueryTable( getQueryTables().createQueryTable() )
 {
 }

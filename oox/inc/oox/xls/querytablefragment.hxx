@@ -59,7 +59,7 @@ private:
 class BiffQueryTableContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffQueryTableContext( const BiffWorksheetFragmentBase& rFragment );
+    explicit            BiffQueryTableContext( const WorksheetHelper& rHelper );
 
     /** Imports all records related to the current query table. */
     virtual void        importRecord( BiffInputStream& rStrm );

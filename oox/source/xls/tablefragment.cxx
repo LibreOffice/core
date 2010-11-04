@@ -27,6 +27,10 @@
 
 #include "oox/xls/tablefragment.hxx"
 
+#include "oox/xls/autofilterbuffer.hxx"
+#include "oox/xls/autofiltercontext.hxx"
+#include "oox/xls/tablebuffer.hxx"
+
 namespace oox {
 namespace xls {
 
@@ -39,7 +43,8 @@ using ::rtl::OUString;
 // ============================================================================
 
 TableFragment::TableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath )
+    WorksheetFragmentBase( rHelper, rFragmentPath ),
+    mrTable( getTables().createTable() )
 {
 }
 
@@ -49,7 +54,14 @@ ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const Attr
     {
         case XML_ROOT_CONTEXT:
             if( nElement == XLS_TOKEN( table ) )
-                mxTable = getTables().importTable( rAttribs, getSheetIndex() );
+            {
+                mrTable.importTable( rAttribs, getSheetIndex() );
+                return this;
+            }
+        break;
+        case XLS_TOKEN( table ):
+            if( nElement == XLS_TOKEN( autoFilter ) )
+                return new AutoFilterContext( *this, mrTable.createAutoFilter() );
         break;
     }
     return 0;
@@ -61,7 +73,14 @@ ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, Record
     {
         case XML_ROOT_CONTEXT:
             if( nRecId == BIFF12_ID_TABLE )
-                mxTable = getTables().importTable( rStrm, getSheetIndex() );
+            {
+                mrTable.importTable( rStrm, getSheetIndex() );
+                return this;
+            }
+        break;
+        case BIFF12_ID_TABLE:
+            if( nRecId == BIFF12_ID_AUTOFILTER )
+                return new AutoFilterContext( *this, mrTable.createAutoFilter() );
         break;
     }
     return 0;
@@ -71,8 +90,12 @@ const RecordInfo* TableFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { BIFF12_ID_TABLE,  BIFF12_ID_TABLE + 1 },
-        { -1,               -1                  }
+        { BIFF12_ID_AUTOFILTER,         BIFF12_ID_AUTOFILTER + 1        },
+        { BIFF12_ID_CUSTOMFILTERS,      BIFF12_ID_CUSTOMFILTERS + 1     },
+        { BIFF12_ID_DISCRETEFILTERS,    BIFF12_ID_DISCRETEFILTERS + 1   },
+        { BIFF12_ID_FILTERCOLUMN,       BIFF12_ID_FILTERCOLUMN + 1      },
+        { BIFF12_ID_TABLE,              BIFF12_ID_TABLE + 1             },
+        { -1,                           -1                              }
     };
     return spRecInfos;
 }

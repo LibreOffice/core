@@ -387,9 +387,8 @@ bool BiffPivotCacheFragment::importFragment()
 
 // ============================================================================
 
-BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext(
-        const BiffWorkbookFragmentBase& rFragment, const PivotCache& rPivotCache ) :
-    BiffWorksheetContextBase( rFragment, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
+BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorkbookHelper& rHelper, const PivotCache& rPivotCache ) :
+    BiffWorksheetContextBase( rHelper, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
     mrPivotCache( rPivotCache ),
     mnColIdx( 0 ),
     mnRow( 0 ),

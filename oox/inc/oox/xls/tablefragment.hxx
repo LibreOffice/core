@@ -29,10 +29,11 @@
 #define OOX_XLS_TABLEFRAGMENT_HXX
 
 #include "oox/xls/excelhandlers.hxx"
-#include "oox/xls/tablebuffer.hxx"
 
 namespace oox {
 namespace xls {
+
+class Table;
 
 // ============================================================================
 
@@ -50,7 +51,7 @@ protected:
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
-    TableRef            mxTable;        /// Current table.
+    Table&              mrTable;
 };
 
 // ============================================================================

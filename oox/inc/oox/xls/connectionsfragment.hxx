@@ -29,24 +29,28 @@
 #define OOX_XLS_CONNECTIONSFRAGMENT_HXX
 
 #include "oox/xls/excelhandlers.hxx"
-#include "oox/xls/connectionsbuffer.hxx"
 
 namespace oox {
 namespace xls {
+
+class Connection;
 
 // ============================================================================
 
 class ConnectionContext : public WorkbookContextBase
 {
 public:
-    explicit            ConnectionContext( WorkbookFragmentBase& rParent, const ConnectionRef& rxConnection );
+    explicit            ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
+
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
-    ConnectionRef       mxConnection;
+    Connection&         mrConnection;
 };
 
 // ============================================================================
@@ -63,10 +67,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
-
-private:
-    void                importConnection( const AttributeList& rAttribs );
-    void                importWebPr( const AttributeList& rAttribs );
+    virtual void        finalizeImport();
 };
 
 // ============================================================================

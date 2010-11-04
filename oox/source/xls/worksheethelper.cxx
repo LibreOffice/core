@@ -59,6 +59,7 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/autofilterbuffer.hxx"
 #include "oox/xls/commentsbuffer.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/drawingfragment.hxx"
@@ -389,6 +390,8 @@ public:
     inline CondFormatBuffer& getCondFormats() { return maCondFormats; }
     /** Returns the buffer for all cell comments in this sheet. */
     inline CommentsBuffer& getComments() { return maComments; }
+    /** Returns the auto filters for the sheet. */
+    inline AutoFilterBuffer& getAutoFilters() { return maAutoFilters; }
     /** Returns the buffer for all web query tables in this sheet. */
     inline QueryTableBuffer& getQueryTables() { return maQueryTables; }
     /** Returns the page/print settings for this sheet. */
@@ -560,6 +563,7 @@ private:
     SharedFormulaBuffer maSharedFmlas;      /// Buffer for shared formulas in this sheet.
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formattings.
     CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
+    AutoFilterBuffer    maAutoFilters;      /// Sheet auto filters (not associated to a table).
     QueryTableBuffer    maQueryTables;      /// Buffer for all web query tables in this sheet.
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
@@ -589,6 +593,7 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, const ISegmentProgr
     maSharedFmlas( *this ),
     maCondFormats( *this ),
     maComments( *this ),
+    maAutoFilters( *this ),
     maQueryTables( *this ),
     maPageSett( *this ),
     maSheetViewSett( *this ),
@@ -1050,6 +1055,7 @@ void WorksheetData::finalizeWorksheetImport()
     finalizeHyperlinkRanges();
     finalizeValidationRanges();
     finalizeMergedRanges();
+    maAutoFilters.finalizeImport( getSheetIndex() );
     maSheetSett.finalizeImport();
     maCondFormats.finalizeImport();
     maQueryTables.finalizeImport();
@@ -1840,6 +1846,11 @@ CondFormatBuffer& WorksheetHelper::getCondFormats() const
 CommentsBuffer& WorksheetHelper::getComments() const
 {
     return mrSheetData.getComments();
+}
+
+AutoFilterBuffer& WorksheetHelper::getAutoFilters() const
+{
+    return mrSheetData.getAutoFilters();
 }
 
 QueryTableBuffer& WorksheetHelper::getQueryTables() const

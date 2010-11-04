@@ -29,6 +29,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/xls/biffhelper.hxx"
+#include "oox/xls/connectionsbuffer.hxx"
 
 namespace oox {
 namespace xls {
@@ -41,11 +42,10 @@ using ::oox::core::RecordInfo;
 
 // ============================================================================
 
-ConnectionContext::ConnectionContext( WorkbookFragmentBase& rParent, const ConnectionRef& rxConnection ) :
+ConnectionContext::ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection ) :
     WorkbookContextBase( rParent ),
-    mxConnection( rxConnection )
+    mrConnection( rConnection )
 {
-    OSL_ENSURE( mxConnection.get(), "ConnectionContext::ConnectionContext - missing connection" );
 }
 
 ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -55,7 +55,7 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( connection ):
             if( nElement == XLS_TOKEN( webPr ) )
             {
-                mxConnection->importWebPr( rAttribs );
+                mrConnection.importWebPr( rAttribs );
                 return this;
             }
         break;
@@ -63,16 +63,22 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( webPr ):
             if( nElement == XLS_TOKEN( tables ) )
             {
-                mxConnection->importTables( rAttribs );
+                mrConnection.importTables( rAttribs );
                 return this;
             }
         break;
 
         case XLS_TOKEN( tables ):
-            mxConnection->importTable( rAttribs, nElement );
+            mrConnection.importTable( rAttribs, nElement );
         break;
     }
     return 0;
+}
+
+void ConnectionContext::onStartElement( const AttributeList& rAttribs )
+{
+    if( getCurrentElement() == XLS_TOKEN( connection ) )
+        mrConnection.importConnection( rAttribs );
 }
 
 ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
@@ -82,7 +88,7 @@ ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, Re
         case BIFF12_ID_CONNECTION:
             if( nRecId == BIFF12_ID_WEBPR )
             {
-                mxConnection->importWebPr( rStrm );
+                mrConnection.importWebPr( rStrm );
                 return this;
             }
         break;
@@ -90,16 +96,22 @@ ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, Re
         case BIFF12_ID_WEBPR:
             if( nRecId == BIFF12_ID_WEBPRTABLES )
             {
-                mxConnection->importWebPrTables( rStrm );
+                mrConnection.importWebPrTables( rStrm );
                 return this;
             }
         break;
 
         case BIFF12_ID_WEBPRTABLES:
-            mxConnection->importWebPrTable( rStrm, nRecId );
+            mrConnection.importWebPrTable( rStrm, nRecId );
         break;
     }
     return 0;
+}
+
+void ConnectionContext::onStartRecord( RecordInputStream& rStrm )
+{
+    if( getCurrentElement() == BIFF12_ID_CONNECTION )
+        mrConnection.importConnection( rStrm );
 }
 
 // ============================================================================
@@ -109,7 +121,7 @@ ConnectionsFragment::ConnectionsFragment( const WorkbookHelper& rHelper, const O
 {
 }
 
-ContextHandlerRef ConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
 {
     switch( getCurrentElement() )
     {
@@ -120,17 +132,13 @@ ContextHandlerRef ConnectionsFragment::onCreateContext( sal_Int32 nElement, cons
 
         case XLS_TOKEN( connections ):
             if( nElement == XLS_TOKEN( connection ) )
-            {
-                ConnectionRef xConnection = getConnections().importConnection( rAttribs );
-                if( xConnection.get() )
-                    return new ConnectionContext( *this, xConnection );
-            }
+                return new ConnectionContext( *this, getConnections().createConnection() );
         break;
     }
     return 0;
 }
 
-ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& /*rStrm*/ )
 {
     switch( getCurrentElement() )
     {
@@ -141,11 +149,7 @@ ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, 
 
         case BIFF12_ID_CONNECTIONS:
             if( nRecId == BIFF12_ID_CONNECTION )
-            {
-                ConnectionRef xConnection = getConnections().importConnection( rStrm );
-                if( xConnection.get() )
-                    return new ConnectionContext( *this, xConnection );
-            }
+                return new ConnectionContext( *this, getConnections().createConnection() );
         break;
     }
     return 0;
@@ -162,6 +166,11 @@ const RecordInfo* ConnectionsFragment::getRecordInfos() const
         { -1,                       -1                          }
     };
     return spRecInfos;
+}
+
+void ConnectionsFragment::finalizeImport()
+{
+    getConnections().finalizeImport();
 }
 
 // ============================================================================

@@ -100,7 +100,7 @@ private:
 class BiffPivotTableContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment );
+    explicit            BiffPivotTableContext( const WorksheetHelper& rHelper );
 
     /** Imports all records related to the current pivot table. */
     virtual void        importRecord( BiffInputStream& rStrm );

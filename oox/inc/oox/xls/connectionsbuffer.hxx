@@ -86,6 +86,7 @@ struct ConnectionModel
     sal_Int32           mnId;               /// Unique connection identifier.
     sal_Int32           mnType;             /// Data source type.
     sal_Int32           mnReconnectMethod;  /// Reconnection method.
+    sal_Int32           mnCredentials;      /// Credentials method.
     sal_Int32           mnInterval;         /// Refresh interval in minutes.
     bool                mbKeepAlive;        /// True = keep connection open after import.
     bool                mbNew;              /// True = new connection, never updated.
@@ -94,6 +95,7 @@ struct ConnectionModel
     bool                mbBackground;       /// True = background refresh enabled.
     bool                mbRefreshOnLoad;    /// True = refresh connection on import.
     bool                mbSaveData;         /// True = save cached data with connection.
+    bool                mbSavePassword;     /// True = save password in connection string.
 
     explicit            ConnectionModel();
 
@@ -151,23 +153,27 @@ class ConnectionsBuffer : public WorkbookHelper
 public:
     explicit            ConnectionsBuffer( const WorkbookHelper& rHelper );
 
-    /** Imports connection settings from the connection element. */
-    ConnectionRef       importConnection( const AttributeList& rAttribs );
-    /** Imports connection settings from the CONNECTION record. */
-    ConnectionRef       importConnection( RecordInputStream& rStrm );
-    /** Creates a new empty connection with an unused identifier. */
-    ConnectionRef       createConnection();
+    /** Creates a new empty connection. */
+    Connection&         createConnection();
+    /** Creates a new empty connection with a valid but unused identifier. */
+    Connection&         createConnectionWithId();
+
+    /** Maps all connections by their identifier. */
+    void                finalizeImport();
 
     /** Returns a data connection by its unique identifier. */
     ConnectionRef       getConnection( sal_Int32 nConnId ) const;
 
 private:
-    /** Inserts the passed connection object. */
-    void                insertConnection( const ConnectionRef& rxConnection );
+    /** Inserts the passed connection into the map according to its identifier. */
+    void                insertConnectionToMap( const ConnectionRef& rxConnection );
 
 private:
+    typedef RefVector< Connection >         ConnectionVector;
     typedef RefMap< sal_Int32, Connection > ConnectionMap;
-    ConnectionMap       maConnections;
+
+    ConnectionVector    maConnections;
+    ConnectionMap       maConnectionsById;
     sal_Int32           mnUnusedId;
 };
 

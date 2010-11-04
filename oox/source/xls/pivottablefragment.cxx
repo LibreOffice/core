@@ -294,8 +294,8 @@ const RecordInfo* PivotTableFragment::getRecordInfos() const
 // ============================================================================
 // ============================================================================
 
-BiffPivotTableContext::BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment ) :
-    BiffWorksheetContextBase( rFragment ),
+BiffPivotTableContext::BiffPivotTableContext( const WorksheetHelper& rHelper ) :
+    BiffWorksheetContextBase( rHelper ),
     mrPivotTable( getPivotTables().createPivotTable() )
 {
 }

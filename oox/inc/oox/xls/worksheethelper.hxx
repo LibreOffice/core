@@ -50,6 +50,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
+class AutoFilterBuffer;
 struct BinAddress;
 struct BinRange;
 class BinRangeList;
@@ -315,6 +316,8 @@ public:
     CondFormatBuffer&   getCondFormats() const;
     /** Returns the buffer for all cell comments in this sheet. */
     CommentsBuffer&     getComments() const;
+    /** Returns the auto filters for the sheet. */
+    AutoFilterBuffer&   getAutoFilters() const;
     /** Returns the buffer for all web query tables in this sheet. */
     QueryTableBuffer&   getQueryTables() const;
     /** Returns the page/print settings for this sheet. */

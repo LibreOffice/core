@@ -1010,6 +1010,10 @@ void RecordStreamObject::implDumpRecordBody()
             mxFmlaObj->dumpCellFormula();
         break;
 
+        case BIFF12_ID_AUTOFILTER:
+            dumpRange( "filter-range" );
+        break;
+
         case BIFF12_ID_BINARYINDEXBLOCK:
             dumpRowRange( "row-range" );
             dumpUnknown( 12 );
@@ -1243,6 +1247,20 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "name" );
         break;
 
+        case BIFF12_ID_CUSTOMFILTER:
+        {
+            sal_uInt8 nType = dumpDec< sal_uInt8 >( "data-type", "CUSTOMFILTER-DATATYPE" );
+            dumpDec< sal_uInt8 >( "operator", "CUSTOMFILTER-OPERATOR" );
+            switch( nType )
+            {
+                case 4:     dumpDec< double >( "value" );               break;
+                case 6:     dumpUnused( 8 ); dumpString( "value" );     break;
+                case 8:     dumpBoolean( "value" ); dumpUnused( 7 );    break;
+                default:    dumpUnused( 8 );
+            }
+        }
+        break;
+
         case BIFF12_ID_DATATABLE:
             dumpRange( "table-range" );
             dumpAddress( "ref1" );
@@ -1293,6 +1311,15 @@ void RecordStreamObject::implDumpRecordBody()
 
         case BIFF12_ID_DIMENSION:
             dumpRange( "used-range" );
+        break;
+
+        case BIFF12_ID_DISCRETEFILTER:
+            dumpString( "value" );
+        break;
+
+        case BIFF12_ID_DISCRETEFILTERS:
+            dumpBool< sal_Int32 >( "show-blank" );
+            dumpDec< sal_Int32 >( "calendar-type", "DISCRETEFILTERS-CALTYPE" );
         break;
 
         case BIFF12_ID_DRAWING:
@@ -1506,6 +1533,11 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "last-edited" );
             dumpString( "lowest-edited" );
             dumpString( "build-version" );
+        break;
+
+        case BIFF12_ID_FILTERCOLUMN:
+            dumpDec< sal_Int32 >( "column-index" );
+            dumpHex< sal_uInt16 >( "flags", "FILTERCOLUMN-FLAGS" );
         break;
 
         case BIFF12_ID_FONT:
