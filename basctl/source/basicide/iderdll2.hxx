@@ -100,8 +100,6 @@ public:
 
     const String&           GetAddLibFilter() const { return aAddLibFilter; }
     void                    SetAddLibFilter( const String& rFilter )  { aAddLibFilter = rFilter; }
-
-    DECL_LINK( ExecuteMacroEvent, void * );
 };
 
 

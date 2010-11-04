@@ -54,6 +54,7 @@ SHL1STDLIBS= \
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
+            $(FWELIB) \
             $(BASICLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
