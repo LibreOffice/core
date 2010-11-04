@@ -647,6 +647,8 @@ namespace frm
         DBG_ASSERT( m_eListSourceType != ListSourceType_VALUELIST, "OListBoxModel::loadData: cannot load value list from DB!" );
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::loadData: cannot load from DB when I have an external list source!" );
 
+        const sal_Int16 nNULLPosBackup( m_nNULLPos );
+        const sal_Int32 nBoundColumnTypeBackup( m_nBoundColumnType );
         m_nNULLPos = -1;
         m_nBoundColumnType = DataType::SQLNULL;
 
@@ -782,6 +784,8 @@ namespace frm
                     // if none of the settings of the row set changed, compared to the last
                     // invocation of loadData, then don't re-fill the list. Instead, assume
                     // the list entries are the same.
+                    m_nNULLPos = nNULLPosBackup;
+                    m_nBoundColumnType = nBoundColumnTypeBackup;
                     return;
                 }
                 xListCursor.reset( m_aListRowSet.execute() );
