@@ -619,7 +619,7 @@
 #define SC_UNONAME_ADDRESS          "Address"
 #define SC_UNONAME_UIREPR           "UserInterfaceRepresentation"
 #define SC_UNONAME_PERSREPR         "PersistentRepresentation"
-#define SC_UNONAME_XL_A1_REPR       "XL_A1_Representation"
+#define SC_UNONAME_XLA1REPR       "XLA1Representation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
 // --> PB 2004-08-23 #i33095# Security Options
