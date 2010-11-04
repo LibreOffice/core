@@ -240,7 +240,7 @@ void ImportExcel8::ReadBasic( void )
 
         uno::Sequence< uno::Any > aArgs( 2 );
         // framework calls filter objects with factory as first argument
-        aArgs[ 0 ] <<= getProcessServiceFactory();
+        aArgs[ 0 ] <<= xFactory;
         aArgs[ 1 ] <<= aArgSeq;
 
         uno::Reference< document::XImporter > xImporter( xFactory->createInstanceWithArgumentsAndContext(
