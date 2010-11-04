@@ -1438,11 +1438,13 @@ if ($platform =~ m/linux/)
 }
 
 
-   	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31".
-                     $I.'$JAVA_HOME'.$INCLUDE;
+	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31";
 
+	# pickup system jpeg over java jpeg on OpenBSD
 	if ($platform =~ m/openbsd/)
 	{  $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
+	}
+	{  $SOLARINC  .= $I.'$JAVA_HOME'.$INCLUDE;
 	}
 
 	#include system dependent Java include directory
