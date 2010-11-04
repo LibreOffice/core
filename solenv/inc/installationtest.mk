@@ -39,7 +39,7 @@ my_instsets = $(shell ls -dt \
 installationtest_instset = $(my_instsets:1)
 .ELSE
 installationtest_instset = \
-    $(SOLARSRC)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/$(defaultlangiso)
+    $(SOLARSRC)/instsetoo_native/$(INPATH)/LibreOffice/archive/install
 .END
 
 .IF "$(OS)" == "WNT"
