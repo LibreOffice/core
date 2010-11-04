@@ -77,6 +77,7 @@ IDLFILES=\
     XLinkCreator.idl\
     XLinkFactory.idl\
     XEncryptionProtectedSource.idl\
+    XEncryptionProtectedSource2.idl\
     XInplaceClient.idl\
     XInsertObjectDialog.idl\
     XWindowSupplier.idl\
@@ -89,9 +90,11 @@ IDLFILES=\
     XTransferableSupplier.idl\
     XComponentSupplier.idl\
     XStorage.idl\
+    XStorage2.idl\
     XStorageRawAccess.idl\
     XExtendedStorageStream.idl\
     XHierarchicalStorageAccess.idl\
+    XHierarchicalStorageAccess2.idl\
     XHatchWindowController.idl\
     XHatchWindowFactory.idl\
     XHatchWindow.idl\
