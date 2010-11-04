@@ -113,7 +113,7 @@ public:
     void SetAttrOutlineLevel( int );
     int  GetAttrOutlineLevel() const;
     int  GetAssignedOutlineStyleLevel() const;
-    inline const bool IsAssignedToListLevelOfOutlineStyle() const
+    inline bool IsAssignedToListLevelOfOutlineStyle() const
     {
         return mbAssignedToOutlineStyle;
     }
