@@ -47,7 +47,7 @@ public class OfficeDocumentView
     private     OfficeDocument          m_document;
 
     /* ------------------------------------------------------------------ */
-    final protected XController getController()
+    final public XController getController()
     {
         return m_controller;
     }
