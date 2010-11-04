@@ -1738,7 +1738,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             // die in den Fussnoten liegen, nicht etwa die (spaltigen) Bereiche,
             // in denen die Fussnoten(Container) liegen.
             // #109767# Table frame is in section, insert section in cell frame.
-            if( pSct && ( pFtnFrm && !pSct->IsInFtn() ) || pUpper->IsCellFrm() )
+            if( (pSct && ( pFtnFrm && !pSct->IsInFtn() )) || pUpper->IsCellFrm() )
                 pSct = NULL;
             if( pSct )
             {   // damit der SectionFrm nicht zerstoert wird durch pTmp->MoveFwd()

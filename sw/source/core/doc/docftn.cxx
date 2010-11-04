@@ -333,8 +333,8 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         }
 
         BOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
-        BOOL bExtra   = !bNumChg &&
-                            rInfo.aFmt.GetNumberingType() != GetEndNoteInfo().aFmt.GetNumberingType()||
+        BOOL bExtra   = (!bNumChg && rInfo.aFmt.GetNumberingType() != GetEndNoteInfo().aFmt.GetNumberingType() )
+                                                                              ||
                             rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix() ||
                             rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix();
         BOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=

@@ -1004,8 +1004,8 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
                     const BOOL bFly = pObj->ISA(SwFlyFrm);
-                    if ( bFly &&
-                         WEIT_WECH == pObj->GetObjRect().Width()||
+                    if ( ( bFly &&
+                           WEIT_WECH == pObj->GetObjRect().Width() ) ||
                          rFmt.GetFrmSize().GetWidthPercent() )
                         continue;
 

@@ -1826,8 +1826,8 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
     sal_uInt16 nTextLen = GetText().Len();
-    if(rSel.A() == rSel.B() &&
-        !rSel.A() || rSel.A() == nTextLen )
+    if( (rSel.A() == rSel.B() &&
+         !rSel.A() ) || rSel.A() == nTextLen )
     {
         sal_Bool bCall = sal_False;
         KeyCode aCode = rKEvt.GetKeyCode();
@@ -3804,8 +3804,8 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 {
     sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pEdit);
-    if(nPos && !pEdit->IsNextControl() ||
-        nPos < aControlList.Count() - 1 && pEdit->IsNextControl())
+    if( (nPos && !pEdit->IsNextControl()) ||
+        (nPos < aControlList.Count() - 1 && pEdit->IsNextControl()))
     {
         aControlList.Seek(nPos);
         Control* pNextPrev = pEdit->IsNextControl() ? aControlList.Next() : aControlList.Prev();
@@ -3840,8 +3840,8 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 {
     sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pBtn);
-    if(nPos && !pBtn->IsNextControl() ||
-        nPos < aControlList.Count() - 1 && pBtn->IsNextControl())
+    if( (nPos && !pBtn->IsNextControl()) ||
+        (nPos < aControlList.Count() - 1 && pBtn->IsNextControl()))
     {
         aControlList.Seek(nPos);
         sal_Bool bNext = pBtn->IsNextControl();

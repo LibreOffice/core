@@ -902,7 +902,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 }
             break;
             case FN_INSERT_HRULER :
-                if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() || bCrsrInHidden )
+                if((rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel()) || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             break;
             case FN_FORMAT_COLUMN :

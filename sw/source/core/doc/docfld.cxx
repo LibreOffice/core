@@ -2464,9 +2464,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             {
                 SwDBData aDBData(((SwDBNumSetField*)pFld)->GetDBData(&rDoc));
 
-                if( bIsDBMgr &&
-                    rDoc.GetNewDBMgr()->OpenDataSource( aDBData.sDataSource, aDBData.sCommand )&&
-                    GETFLD_ALL == eGetMode ||
+                if( (bIsDBMgr &&
+                     rDoc.GetNewDBMgr()->OpenDataSource( aDBData.sDataSource, aDBData.sCommand )&&
+                     GETFLD_ALL == eGetMode) ||
                     ( GETFLD_CALC & eGetMode &&
                         ((SwDBNumSetField*)pFld)->IsCondValid()))
                     pFormel = &pFld->GetPar1();
@@ -2476,9 +2476,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             {
                 SwDBData aDBData(((SwDBNextSetField*)pFld)->GetDBData(&rDoc));
 
-                if( bIsDBMgr &&
-                    rDoc.GetNewDBMgr()->OpenDataSource( aDBData.sDataSource, aDBData.sCommand )&&
-                    GETFLD_ALL == eGetMode ||
+                if( (bIsDBMgr &&
+                     rDoc.GetNewDBMgr()->OpenDataSource( aDBData.sDataSource, aDBData.sCommand )&&
+                     GETFLD_ALL == eGetMode) ||
                     ( GETFLD_CALC & eGetMode &&
                         ((SwDBNextSetField*)pFld)->IsCondValid() ))
                     pFormel = &pFld->GetPar1();

@@ -1180,8 +1180,8 @@ bool lcl_IsOwnDocument( SwView& rView )
     String Created = xDocProps->getAuthor();
     String Changed = xDocProps->getModifiedBy();
     String FullName = SW_MOD()->GetUserOptions().GetFullName();
-    return FullName.Len() &&
-            (Changed.Len() && Changed == FullName ) ||
+    return (FullName.Len() &&
+            (Changed.Len() && Changed == FullName )) ||
             (!Changed.Len() && Created.Len() && Created == FullName );
 }
 
