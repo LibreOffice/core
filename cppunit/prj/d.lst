@@ -24,6 +24,9 @@ symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.1.dylib %_DEST%\lib%_EXT%\libcppunit.
 ..\%__SRC%\lib\libcppunit-1.12.so.1 %_DEST%\lib%_EXT%\libcppunit-1.12.so.1
 symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.so.1 %_DEST%\lib%_EXT%\libcppunit.so
 
+..\%__SRC%\lib\libcppunit-1.12.so.1.0 %_DEST%\lib%_EXT%\libcppunit-1.12.so.1.0
+symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.so.1.0 %_DEST%\lib%_EXT%\libcppunit.so
+
 ..\%__SRC%\lib\libcppunit-1.12.a %_DEST%\lib%_EXT%\libcppunit-1.12.a
 symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.a %_DEST%\lib%_EXT%\libcppunit.a
 

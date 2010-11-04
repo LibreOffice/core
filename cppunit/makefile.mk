@@ -142,7 +142,7 @@ OOO_STLPORT_LIBS += -lstdc++
 # execute that program; however, the program would fail to locate the STLport
 # library (another work-around might be to add something like --as-needed around
 # $(LIBSTLPORT)):
-.IF "$(OS)" == "FREEBSD" || "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS"
+.IF "$(OS)" == "FREEBSD" || "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS" || "$(OS)" == "OPENBSD"
 .IF "$(LD_LIBRARY_PATH)" == ""
 LD_LIBRARY_PATH := $(SOLARLIBDIR)
     # strictly speaking, this is incorrect if the LD_LIBRARY_PATH environment
@@ -183,6 +183,8 @@ OUT2LIB = ooo-install/lib/libcppunit-1.12.1.dylib
 EXTRPATH = NONE
 .ELIF "$(OS)" == "AIX"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.a
+.ELIF "$(OS)" == "OPENBSD"
+OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
 .END
