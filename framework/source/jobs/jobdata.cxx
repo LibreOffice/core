@@ -623,11 +623,21 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::lang::X
  */
 sal_Bool JobData::hasCorrectContext(const ::rtl::OUString& rModuleIdent) const
 {
-    if ( m_sContext.getLength() == 0 )
+    sal_Int32 nContextLen  = m_sContext.getLength();
+    sal_Int32 nModuleIdLen = rModuleIdent.getLength();
+
+    if ( nContextLen == 0 )
         return sal_True;
 
-    if ( rModuleIdent.getLength() > 0 )
-      return ( m_sContext.equals( rModuleIdent ));
+    if ( nModuleIdLen > 0 )
+    {
+        sal_Int32 nIndex = m_sContext.indexOf( rModuleIdent );
+        if ( nIndex >= 0 && ( nIndex+nModuleIdLen <= nContextLen ))
+    {
+        ::rtl::OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
+        return sContextModule.equals( rModuleIdent );
+    }
+    }
 
     return sal_False;
 }
