@@ -265,7 +265,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
         // Seite
-    for( i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_LANDSCAPE; ++i )
+    for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
         aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
     USHORT nCount = pSh->GetPageDescCnt();
