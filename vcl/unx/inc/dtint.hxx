@@ -37,7 +37,7 @@ class SalBitmap;
 class SalDisplay;
 class AllSettings;
 
-#ifndef _XLIB_H_
+#if !defined(_XLIB_H_) && !defined(_X11_XLIB_H_)
 // forwards from X
 struct Display;
 struct XEvent;
