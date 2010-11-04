@@ -1874,3 +1874,4 @@ String SwWrtShell::GetSelDescr() const
 
     return aResult;
 }
+

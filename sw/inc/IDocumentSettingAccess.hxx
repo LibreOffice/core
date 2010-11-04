@@ -210,4 +210,4 @@ protected:
     virtual ~IDocumentSettingAccess() {};
  };
 
- #endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED

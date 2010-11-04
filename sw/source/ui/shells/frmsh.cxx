@@ -1152,3 +1152,4 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     if ((nSel & nsSelectionType::SEL_GRF) || (nSel & nsSelectionType::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
+

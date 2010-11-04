@@ -218,3 +218,4 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
     }
 }
+

@@ -1016,3 +1016,4 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
     if( !Count() )
         DELETEZ( pOLELRU_Cache );
 }
+

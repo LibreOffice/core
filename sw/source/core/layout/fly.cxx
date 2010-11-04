@@ -2863,4 +2863,3 @@ SwFlyFrmFmt * SwFlyFrm::GetFmt()
     return static_cast< SwFlyFrmFmt * >( GetDep() );
 }
 
-    
