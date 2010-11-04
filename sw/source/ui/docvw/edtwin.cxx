@@ -1365,20 +1365,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if( ( bVertText && ( !bTblCrsr || bVertTable ) ) ||
                 ( bTblCrsr && bVertTable ) )
             {
-                if( KEY_UP == nKey )
-                    nKey = KEY_LEFT;
-                else if( KEY_DOWN == nKey )
-                    nKey = KEY_RIGHT;
-                else if ( !rSh.IsInRightToLeftText() )
-                {
-                    if( KEY_LEFT == nKey ) nKey = KEY_UP;
-                    else if( KEY_RIGHT == nKey ) nKey = KEY_DOWN;
-                }
-                else
-                {
-                    if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
-                    else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
-                }
+                // Attempt to integrate cursor travelling for mongolian layout does not work.
+                // Thus, back to previous mapping of cursor keys to direction keys.
+                if( KEY_UP == nKey ) nKey = KEY_LEFT;
+                else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
+                else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
+                else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
             }
 
             if ( rSh.IsInRightToLeftText() )
