@@ -1843,6 +1843,9 @@ void ScInterpreter::ScFrequency()
     pResMat->PutDouble(static_cast<double>(nDataSize-i), j);
     PushMatrix(pResMat);
 }
+
+namespace {
+
 // -----------------------------------------------------------------------------
 // Helper methods for LINEST/LOGEST and TREND/GROWTH
 // All matrices must already exist and have the needed size, no control tests
@@ -2227,6 +2230,8 @@ double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
         fSum += fTemp * fTemp;
     }
     return fSum;
+}
+
 }
 
 // Fill default values in matrix X, transform Y to log(Y) in case LOGEST|GROWTH,
