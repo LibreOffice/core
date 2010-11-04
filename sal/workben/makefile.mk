@@ -366,7 +366,8 @@ APP4DEPN=	$(SLB)$/sal.lib
 # tgetpwnam
 #
 .IF "$(TESTAPP)" == "tgetpwnam"
-.IF "$(OS)"=="SCO" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
+.IF "$(OS)"=="SCO" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD" || \
+	"$(OS)"=="OPENBSD"
 
 CXXFILES=	tgetpwnam.cxx
 OBJFILES=	$(OBJ)$/tgetpwnam.obj

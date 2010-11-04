@@ -27,7 +27,8 @@
  ************************************************************************/
 
 
-#if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD)
+#if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD) || \
+    defined (OPENBSD)
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,7 +41,7 @@ int backtrace( void **buffer, int max_frames );
 void backtrace_symbols_fd( void **buffer, int size, int fd );
 
 /* no frame.h on FreeBSD */
-#if defined (FREEBSD) || defined (NETBSD)
+#if defined (FREEBSD) || defined (NETBSD) || defined (OPENBSD)
 struct frame {
     long    arg0[8];
     long    arg1[6];
@@ -54,7 +55,7 @@ struct frame {
 } /* extern "C" */
 #endif
 
-#endif /* defined SOLARIS || FREEBSD */
+#endif /* defined SOLARIS || FREEBSD || OPENBSD */
 
 #if defined (LINUX) && defined (SPARC)
 #ifdef __cplusplus

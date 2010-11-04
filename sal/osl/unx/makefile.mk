@@ -118,7 +118,9 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
 SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
+	"$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || \
+	"$(OS)"=="AIX" || "$(OS)"=="OPENBSD"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
