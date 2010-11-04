@@ -30,7 +30,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/printdlg.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <vector>
@@ -337,51 +336,22 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 void SfxPrinter::EnableRange( USHORT nRange )
 {
-    PrintDialogRange eRange = (PrintDialogRange)nRange;
-
-    if ( eRange == PRINTDIALOG_ALL )
-        pImpl->mbAll = TRUE;
-    else if ( eRange == PRINTDIALOG_SELECTION )
-        pImpl->mbSelection = TRUE;
-    else if ( eRange == PRINTDIALOG_FROMTO )
-        pImpl->mbFromTo = TRUE;
-    else if ( eRange == PRINTDIALOG_RANGE )
-        pImpl->mbRange = TRUE;
+    OSL_ENSURE( 0, "dead code !" );
 }
 
 //--------------------------------------------------------------------
 
 void SfxPrinter::DisableRange( USHORT nRange )
 {
-    PrintDialogRange eRange = (PrintDialogRange)nRange;
-
-    if ( eRange == PRINTDIALOG_ALL )
-        pImpl->mbAll = FALSE;
-    else if ( eRange == PRINTDIALOG_SELECTION )
-        pImpl->mbSelection = FALSE;
-    else if ( eRange == PRINTDIALOG_FROMTO )
-        pImpl->mbFromTo = FALSE;
-    else if ( eRange == PRINTDIALOG_RANGE )
-        pImpl->mbRange = FALSE;
+    OSL_ENSURE( 0, "dead code !" );
 }
 
 //--------------------------------------------------------------------
 
 BOOL SfxPrinter::IsRangeEnabled( USHORT nRange ) const
 {
-    PrintDialogRange eRange = (PrintDialogRange)nRange;
-    BOOL bRet = FALSE;
-
-    if ( eRange == PRINTDIALOG_ALL )
-        bRet = pImpl->mbAll;
-    else if ( eRange == PRINTDIALOG_SELECTION )
-        bRet = pImpl->mbSelection;
-    else if ( eRange == PRINTDIALOG_FROMTO )
-        bRet = pImpl->mbFromTo;
-    else if ( eRange == PRINTDIALOG_RANGE )
-        bRet = pImpl->mbRange;
-
-    return bRet;
+    OSL_ENSURE( 0, "dead code !" );
+    return TRUE;
 }
 
 //--------------------------------------------------------------------
@@ -484,41 +454,8 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
 
 BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects )
 {
-    const SvtPrinterOptions     aPrinterOpt;
-    const SvtPrintFileOptions   aPrintFileOpt;
-    const SvtBasePrintOptions*  pPrinterOpt = &aPrinterOpt;
-    const SvtBasePrintOptions*  pPrintFileOpt = &aPrintFileOpt;
-    PrinterOptions              aNewPrinterOptions;
-    BOOL                        bRet = TRUE;
-
-    ( ( IsPrintFileEnabled() && GetPrintFile().Len() ) ? pPrintFileOpt : pPrinterOpt )->GetPrinterOptions( aNewPrinterOptions );
-
-    if( bAskAboutTransparentObjects && !aNewPrinterOptions.IsReduceTransparency() )
-    {
-        if ( !Application::IsHeadlessModeEnabled() )
-        {
-            SvtPrintWarningOptions aWarnOpt;
-
-            if( aWarnOpt.IsTransparency() )
-            {
-                TransparencyPrintWarningBox aWarnBox( pUIParent );
-                const USHORT                nRet = aWarnBox.Execute();
-
-                if( nRet == RET_CANCEL )
-                    bRet = FALSE;
-                else
-                {
-                    aNewPrinterOptions.SetReduceTransparency( nRet != RET_NO );
-                    aWarnOpt.SetTransparency( !aWarnBox.IsNoWarningChecked() );
-                }
-            }
-        }
-    }
-
-    if( bRet )
-        SetPrinterOptions( aNewPrinterOptions );
-
-    return bRet;
+    OSL_ENSURE( 0, "dead code !" );
+    return FALSE;
 }
 
 //--------------------------------------------------------------------
