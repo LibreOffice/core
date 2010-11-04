@@ -29,39 +29,34 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <msfilter.hxx>
-#   include "writerwordglue.hxx"
+#include "writerwordglue.hxx"
 #include <doc.hxx>
-#   include "writerhelper.hxx"
+#include "writerhelper.hxx"
 
 #include <algorithm>                //std::find_if
 #include <functional>               //std::unary_function
 
 #include <unicode/ubidi.h>          //ubidi_getLogicalRun
-#   include <tools/tenccvt.hxx>     //GetExtendedTextEncoding
-#   include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#   include <com/sun/star/i18n/ScriptType.hdl> //ScriptType
-#endif
+#include <tools/tenccvt.hxx>        //GetExtendedTextEncoding
+#include <i18nutil/unicode.hxx>     //unicode::getUnicodeScriptType
+#include <com/sun/star/i18n/ScriptType.hdl> //ScriptType
 
-#ifndef SV_FONTCVT_HXX
-#   include <unotools/fontcvt.hxx>   //GetSubsFontName
-#endif
-#   include <editeng/paperinf.hxx>      //lA0Width...
-#   include <editeng/lrspitem.hxx>      //SvxLRSpaceItem
-#   include <editeng/ulspitem.hxx>      //SvxULSpaceItem
-#   include <editeng/boxitem.hxx>       //SvxBoxItem
-#   include <editeng/fontitem.hxx>      //SvxFontItem
-#   include <frmfmt.hxx>            //SwFrmFmt
-#   include <fmtclds.hxx>           //SwFmtCol
-#   include <hfspacingitem.hxx>     //SwHeaderAndFooterEatSpacingItem
-#   include <fmtfsize.hxx>          //SwFmtFrmSize
-#   include <swrect.hxx>            //SwRect
-#   include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
-#   include <frmatr.hxx>            //GetLRSpace...
-#   include <ndtxt.hxx>             //SwTxtNode
-#   include <breakit.hxx>           //pBreakIt
+#include <unotools/fontcvt.hxx>  //GetSubsFontName
+#include <editeng/paperinf.hxx>  //lA0Width...
+#include <editeng/lrspitem.hxx>  //SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>  //SvxULSpaceItem
+#include <editeng/boxitem.hxx>   //SvxBoxItem
+#include <editeng/fontitem.hxx>  //SvxFontItem
+#include <frmfmt.hxx>            //SwFrmFmt
+#include <fmtclds.hxx>           //SwFmtCol
+#include <hfspacingitem.hxx>     //SwHeaderAndFooterEatSpacingItem
+#include <fmtfsize.hxx>          //SwFmtFrmSize
+#include <swrect.hxx>            //SwRect
+#include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
+#include <frmatr.hxx>            //GetLRSpace...
+#include <ndtxt.hxx>             //SwTxtNode
+#include <breakit.hxx>           //pBreakIt
 #include <i18npool/mslangid.hxx>
-#endif
 
 #define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
