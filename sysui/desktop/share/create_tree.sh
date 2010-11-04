@@ -101,6 +101,7 @@ cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
 if test "${PREFIX}" != libreoffice ; then
+    cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
     ln -sf /usr/bin/${PREFIX} ${DESTDIR}/usr/bin/libreoffice
     ln -sf /usr/bin/${PREFIX}-printeradmin ${DESTDIR}/usr/bin/libreoffice-printeradmin
 fi
