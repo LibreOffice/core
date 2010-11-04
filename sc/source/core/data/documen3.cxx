@@ -169,8 +169,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, BOOL bRemove
                         RemoveFlagsTab( aOldRange.aStart.Col(), aOldRange.aStart.Row(),
                                         aOldRange.aEnd.Col(),   aOldRange.aEnd.Row(),
                                         aOldRange.aStart.Tab(), SC_MF_AUTO );
-                        if (pShell)
-                            pShell->Broadcast( ScPaintHint( aOldRange, PAINT_GRID ) );
+                        RepaintRange( aOldRange );
                     }
                 }
             }

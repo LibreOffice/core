@@ -1545,7 +1545,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, BOOL bRecord
 }
 
 
-void ScViewFunc::RemoveStyleSheetInUse( SfxStyleSheet* pStyleSheet )
+void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
     // -------------------------------------------------------------------
@@ -1572,7 +1572,7 @@ void ScViewFunc::RemoveStyleSheetInUse( SfxStyleSheet* pStyleSheet )
         pHdl->ForgetLastPattern();
 }
 
-void ScViewFunc::UpdateStyleSheetInUse( SfxStyleSheet* pStyleSheet )
+void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
     // -------------------------------------------------------------------
