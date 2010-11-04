@@ -28,9 +28,9 @@ package com.sun.star.wizards.ui;
 
 import java.beans.PropertyChangeEvent;
 
-import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.*;
 import com.sun.star.awt.*;
+import java.util.ArrayList;
 
 public class SortingComponent
 {
@@ -255,32 +255,26 @@ public class SortingComponent
         {
             short iCurState;
             String CurFieldName;
-            String CurFieldTitle;
             setMaxSortIndex();
-            String[][] SortFieldNames = new String[MaxSortIndex + 1][2];
-            String[] SortDescriptions = new String[MaxSortIndex + 1];
+            // String[][] SortFieldNames = new String[MaxSortIndex + 1][2];
+            ArrayList<String[]> SortFieldNames = new ArrayList<String[]>();
+            ArrayList<String> SortDescriptions = new ArrayList<String>();
             for (int i = 0; i <= MaxSortIndex; i++)
             {
-                CurFieldName = xSortListBox[i].getSelectedItem();
-                SortFieldNames[i][0] = CurFieldName;
-                SortDescriptions[i] = CurFieldName;
-                iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + new Integer(i + 1).toString(), "State")).shortValue();
-                SortFieldNames[i][0] = CurFieldName;
-                if (iCurState == 1)
+                if (!((Boolean) CurUnoDialog.getControlProperty("lstSort" + (i + 1), "ReadOnly")))
                 {
-                    SortFieldNames[i][1] = "ASC";
-                }
-                else
-                {
-                    SortFieldNames[i][1] = "DESC";
+                    CurFieldName = xSortListBox[i].getSelectedItem();
+                    SortDescriptions.add(CurFieldName);
+                    iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + new Integer(i + 1).toString(), "State")).shortValue();
+                    SortFieldNames.add(new String[]{CurFieldName,iCurState == 1 ? "ASC" :"DESC" });
                 }
             }
             // When searching for a duplicate entry we can neglect wether the entries are to be sorted ascending or descending
             // TODO for the future we should deliver a messagebox when two different sorting modes have been applied to one field
-            int iduplicate = JavaTools.getDuplicateFieldIndex(SortDescriptions);
+            int iduplicate = JavaTools.getDuplicateFieldIndex(SortDescriptions.toArray(new String[SortDescriptions.size()]));
             if (iduplicate != -1)
             {
-                String sLocSortCriteriaisduplicate = JavaTools.replaceSubString(sSortCriteriaisduplicate, SortFieldNames[iduplicate][0], "<FIELDNAME>");
+                String sLocSortCriteriaisduplicate = JavaTools.replaceSubString(sSortCriteriaisduplicate, SortFieldNames.get(iduplicate)[0], "<FIELDNAME>");
                 CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, sLocSortCriteriaisduplicate);
                 CurUnoDialog.vetoableChange(new PropertyChangeEvent(CurUnoDialog, "Steps", new Integer(1), new Integer(2)));
                 CurUnoDialog.setFocus("lstSort" + (iduplicate + 1));
@@ -290,7 +284,7 @@ public class SortingComponent
             }
             else
             {
-                return SortFieldNames;
+                return SortFieldNames.toArray(new String[SortFieldNames.size()][2]);
             }
         }
         catch (Exception exception)
@@ -314,7 +308,7 @@ public class SortingComponent
                                 0
                             });
                 }
-            //          xSortListBox[i+1].selectItemPos((short)0, true);
+                //          xSortListBox[i+1].selectItemPos((short)0, true);
             }
             CurUnoDialog.setFocus("lblSort" + new Integer(CurIndex + 1));
             MaxSortIndex = CurIndex - 1;
