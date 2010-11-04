@@ -284,14 +284,16 @@ ModalDialog SV_DLG_PRINT
         {
             HelpID = ".HelpID:vcl:PrintDialog:NUpPage:OrderBox";
             Pos = MAP_APPFONT( 0, 0 );
-            Size = MAP_APPFONT( 10, 20 );
+            Size = MAP_APPFONT( 10, 50 );
             DropDown = TRUE;
             Border = TRUE;
             CurPos = 0;
             StringList [en-US] =
             {
-                < "left to right, then down"; SV_PRINT_PRT_NUP_ORDER_LRTD; >;
-                < "top to bottom, then right"; SV_PRINT_PRT_NUP_ORDER_TDLR; >;
+                < "left to right, then down"; SV_PRINT_PRT_NUP_ORDER_LRTB; >;
+                < "top to bottom, then right"; SV_PRINT_PRT_NUP_ORDER_TBLR; >;
+                < "top to bottom, then left"; SV_PRINT_PRT_NUP_ORDER_TBRL; >;
+                < "right to left, then down"; SV_PRINT_PRT_NUP_ORDER_RLTB; >;
             };
         };
         CheckBox SV_PRINT_PRT_NUP_BORDER_CB

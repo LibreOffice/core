@@ -66,6 +66,8 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
     , maPageVDev( *this )
     , maToolTipString( String( VclResId( SV_PRINT_PRINTPREVIEW_TXT ) ) )
     , mbGreyscale( false )
+    , maHorzDim( this, WB_HORZ | WB_CENTER  )
+    , maVertDim( this, WB_VERT | WB_VCENTER )
 {
     SetPaintTransparent( TRUE );
     SetBackground();
@@ -73,6 +75,11 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
         maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
     else
         maPageVDev.SetBackground( Color( COL_WHITE ) );
+    maHorzDim.Show();
+    maVertDim.Show();
+
+    maHorzDim.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "2.0in" ) ) );
+    maVertDim.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "2.0in" ) ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
@@ -159,9 +166,10 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
+    long nTextHeight = maHorzDim.GetTextHeight();
     // leave small space for decoration
-    aNewSize.Width() -= 2;
-    aNewSize.Height() -= 2;
+    aNewSize.Width() -= nTextHeight + 2;
+    aNewSize.Height() -= nTextHeight + 2;
     Size aScaledSize;
     double fScale = 1.0;
 
@@ -203,16 +211,28 @@ void PrintDialog::PrintPreviewWindow::Resize()
     }
 
     maPageVDev.SetOutputSizePixel( aScaledSize, FALSE );
+
+    // position dimension lines
+    Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
+                nTextHeight + (aNewSize.Height() - maPreviewSize.Height())/2 );
+    maHorzDim.SetPosSizePixel( Point( aRef.X(), aRef.Y() - nTextHeight ),
+                               Size( maPreviewSize.Width(), nTextHeight ) );
+    maVertDim.SetPosSizePixel( Point( aRef.X() - nTextHeight, aRef.Y() ),
+                               Size( nTextHeight, maPreviewSize.Height() ) );
+
 }
 
 void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 {
+    long nTextHeight = maHorzDim.GetTextHeight();
     Size aSize( GetSizePixel() );
+    aSize.Width()  -= nTextHeight;
+    aSize.Height() -= nTextHeight;
     if( maReplacementString.getLength() != 0 )
     {
         // replacement is active
         Push();
-        Rectangle aTextRect( Point( 0, 0 ), aSize );
+        Rectangle aTextRect( Point( nTextHeight, nTextHeight ), aSize );
         DecorationView aVw( this );
         aVw.DrawFrame( aTextRect, FRAME_DRAW_GROUP );
         aTextRect.Left()   += 2;
@@ -230,8 +250,8 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     {
         GDIMetaFile aMtf( maMtf );
 
-        Point aOffset( (aSize.Width() - maPreviewSize.Width()) / 2,
-                       (aSize.Height() - maPreviewSize.Height()) / 2 );
+        Point aOffset( (aSize.Width() - maPreviewSize.Width()) / 2 + nTextHeight,
+                       (aSize.Height() - maPreviewSize.Height()) / 2 + nTextHeight );
 
         Size aVDevSize( maPageVDev.GetOutputSizePixel() );
         const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
@@ -298,13 +318,6 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 {
     rtl::OUStringBuffer aBuf( 256 );
     aBuf.append( maToolTipString );
-    #if OSL_DEBUG_LEVEL > 0
-    aBuf.appendAscii( "\n---\nPageSize: " );
-    aBuf.append( sal_Int32( i_rOrigSize.Width()/100) );
-    aBuf.appendAscii( "mm x " );
-    aBuf.append( sal_Int32( i_rOrigSize.Height()/100) );
-    aBuf.appendAscii( "mm" );
-    #endif
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
     if( useHCColorReplacement() )
@@ -317,6 +330,27 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     mbGreyscale = i_bGreyscale;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
     maPageVDev.EnableOutput( TRUE );
+
+    // use correct measurements
+    const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
+    MapUnit eUnit = MAP_MM;
+    int nDigits = 0;
+    if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
+    {
+        eUnit = MAP_100TH_INCH;
+        nDigits = 2;
+    }
+    Size aLogicPaperSize( LogicToLogic( i_rOrigSize, MapMode( MAP_100TH_MM ), MapMode( eUnit ) ) );
+    String aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
+    aBuf.append( aNumText );
+    aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
+    maHorzDim.SetText( aBuf.makeStringAndClear() );
+
+    aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
+    aBuf.append( aNumText );
+    aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
+    maVertDim.SetText( aBuf.makeStringAndClear() );
+
     Resize();
     Invalidate();
 }
@@ -369,11 +403,17 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
         int nX = 0, nY = 0;
         switch( mnOrderMode )
         {
-        case SV_PRINT_PRT_NUP_ORDER_LRTD:
+        case SV_PRINT_PRT_NUP_ORDER_LRTB:
             nX = (i % mnColumns); nY = (i / mnColumns);
             break;
-        case SV_PRINT_PRT_NUP_ORDER_TDLR:
+        case SV_PRINT_PRT_NUP_ORDER_TBLR:
             nX = (i / mnRows); nY = (i % mnRows);
+            break;
+        case SV_PRINT_PRT_NUP_ORDER_RLTB:
+            nX = mnColumns - 1 - (i % mnColumns); nY = (i / mnColumns);
+            break;
+        case SV_PRINT_PRT_NUP_ORDER_TBRL:
+            nX = mnColumns - 1 - (i / mnRows); nY = (i % mnRows);
             break;
         }
         Size aTextSize( GetTextWidth( aPageText ), nTextHeight );
@@ -2026,10 +2066,14 @@ void PrintDialog::updateNup()
 
     int nOrderMode = int(sal_IntPtr(maNUpPage.maNupOrderBox.GetEntryData(
                            maNUpPage.maNupOrderBox.GetSelectEntryPos() )));
-    if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTD )
+    if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTB )
         aMPS.nOrder = PrinterController::LRTB;
-    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TDLR )
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBLR )
         aMPS.nOrder = PrinterController::TBLR;
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_RLTB )
+        aMPS.nOrder = PrinterController::RLTB;
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBRL )
+        aMPS.nOrder = PrinterController::TBRL;
 
     int nOrientationMode = int(sal_IntPtr(maNUpPage.maNupOrientationBox.GetEntryData(
                                  maNUpPage.maNupOrientationBox.GetSelectEntryPos() )));

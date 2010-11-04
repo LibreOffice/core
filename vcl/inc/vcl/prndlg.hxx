@@ -60,6 +60,8 @@ namespace vcl
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
             bool                mbGreyscale;
+            FixedLine           maHorzDim;
+            FixedLine           maVertDim;
 
             bool useHCColorReplacement() const;
         public:
