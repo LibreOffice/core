@@ -38,10 +38,11 @@ $(call gb_Executable_get_clean_target,%) :
         rm -f $(call gb_Executable_get_target,$*) \
             $(AUXTARGETS))
 
+# FIXME: this should be cp -pf but that might break on some nfs setups
 $(call gb_Executable_get_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && cp -pf $< $@ \
-            $(foreach target,$(AUXTARGETS), && cp -pf $(dir $<)/$(notdir $(target)) $(target)))
+        mkdir -p $(dir $@) && cp -f $< $@ \
+            $(foreach target,$(AUXTARGETS), && cp -f $(dir $<)/$(notdir $(target)) $(target)))
 
 define gb_Executable_Executable
 $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
