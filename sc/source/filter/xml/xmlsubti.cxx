@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
 // INCLUDE ---------------------------------------------------------------
 #include "xmlsubti.hxx"
 #include "global.hxx"
@@ -164,22 +163,12 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     nCurrentColStylePos(0),
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 ),
-    nTableCount( 0 ),
     nCurrentSheet( -1 )
 {
-    aTableVec.resize(nDefaultTabCount, NULL);
 }
 
 ScMyTables::~ScMyTables()
 {
-    ScMyTableData* pTable;
-    while (nTableCount > 0)
-    {
-        pTable = aTableVec[nTableCount - 1];
-        delete pTable;
-        aTableVec[nTableCount - 1] = NULL;
-        --nTableCount;
-    }
 }
 
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
@@ -189,14 +178,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
     {
         nCurrentColStylePos = 0;
         sCurrentSheetName = sTableName;
-        ScMyTableData* aTable;
-        while (nTableCount > 0)
-        {
-            aTable = aTableVec[nTableCount - 1];
-            delete aTable;
-            aTableVec[nTableCount - 1] = NULL;
-            --nTableCount;
-        }
+        maTables.clear();
         ++nCurrentSheet;
 
         maProtectionData = rProtectData;
@@ -355,16 +337,21 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
         //merge
         uno::Reference <table::XCellRange> xMergeCellRange;
         if (nCount == -1)
-            xMergeCellRange.set(xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn
-                                                    + aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()) - 1,
-                                                    aCellAddress.EndRow
-                                                    + aTableVec[nTableCount - 1]->GetRowsPerRow(aTableVec[nTableCount - 1]->GetRow()) - 1));
+        {
+            const ScMyTableData& r = maTables.back();
+            xMergeCellRange.set(
+                xCurrentCellRange->getCellRangeByPosition(
+                    aCellAddress.StartColumn, aCellAddress.StartRow,
+                    aCellAddress.EndColumn + r.GetColsPerCol(r.GetColumn()) - 1,
+                    aCellAddress.EndRow + r.GetRowsPerRow(r.GetRow()) - 1));
+        }
         else
-            xMergeCellRange.set(xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.StartColumn
-                                                    + nCount - 1,
-                                                    aCellAddress.EndRow));
+            xMergeCellRange.set(
+                xCurrentCellRange->getCellRangeByPosition(
+                    aCellAddress.StartColumn, aCellAddress.StartRow,
+                    aCellAddress.StartColumn + nCount - 1,
+                    aCellAddress.EndRow));
+
         uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
         if (xMergeable.is())
             xMergeable->merge(sal_True);
@@ -377,7 +364,8 @@ void ScMyTables::InsertRow()
     {
         table::CellRangeAddress aCellAddress;
         sal_Int32 nRow(GetRealCellPos().Row);
-        for (sal_Int32 j = 0; j < GetRealCellPos().Column - aTableVec[nTableCount - 1]->GetColumn() - 1; ++j)
+        const ScMyTableData& rTab = maTables.back();
+        for (sal_Int32 j = 0; j < GetRealCellPos().Column - rTab.GetColumn() - 1; ++j)
         {
             if (IsMerged(xCurrentCellRange, j, nRow - 1, aCellAddress))
             {
@@ -401,34 +389,41 @@ void ScMyTables::InsertRow()
 
 void ScMyTables::NewRow()
 {
-    if (nTableCount > 1)
-        if (aTableVec[nTableCount - 1]->GetRealRows(aTableVec[nTableCount - 1]->GetRow()) >
-            aTableVec[nTableCount - 2]->GetRowsPerRow(aTableVec[nTableCount - 2]->GetRow()) - 1)
+    size_t n = maTables.size();
+    if (n <= 1)
+        return;
+
+    if (maTables[n-1].GetRealRows(maTables[n-1].GetRow()) >
+        maTables[n-2].GetRowsPerRow(maTables[n-2].GetRow()) - 1)
+    {
+        if (GetRealCellPos().Column > 0)
+            InsertRow();
+
+        for (size_t i = n - 1; i > 0; --i)
         {
-            if (GetRealCellPos().Column > 0)
-                InsertRow();
-            for (sal_Int16 i = sal::static_int_cast<sal_Int16>(nTableCount - 1); i > 0; i--)
-            {
-                sal_Int32 nRow = aTableVec[i - 1]->GetRow();
-                aTableVec[i - 1]->SetRowsPerRow(nRow,
-                    aTableVec[i - 1]->GetRowsPerRow(nRow) + 1);
-                aTableVec[i - 1]->SetRealRows(nRow + 1,
-                    aTableVec[i - 1]->GetRealRows(nRow)
-                    + aTableVec[i - 1]->GetRowsPerRow(nRow));
-            }
+            sal_Int32 nRow = maTables[i-1].GetRow();
+            maTables[i-1].SetRowsPerRow(
+                nRow,
+                maTables[i-1].GetRowsPerRow(nRow) + 1);
+
+            maTables[i-1].SetRealRows(
+                nRow + 1,
+                maTables[i-1].GetRealRows(nRow) + maTables[i-1].GetRowsPerRow(nRow));
         }
+    }
 }
 
 void ScMyTables::AddRow()
 {
-    aTableVec[nTableCount - 1]->AddRow();
-    aTableVec[nTableCount - 1]->SetFirstColumn();
-    sal_Int32 nRow = aTableVec[nTableCount - 1]->GetRow();
+    ScMyTableData& rTab = maTables.back();
+    rTab.AddRow();
+    rTab.SetFirstColumn();
+    sal_Int32 nRow = rTab.GetRow();
     if (nRow > 0)
         NewRow();
-    aTableVec[nTableCount - 1]->SetRealRows(nRow + 1,
-        aTableVec[nTableCount - 1]->GetRealRows(nRow)
-        + aTableVec[nTableCount - 1]->GetRowsPerRow(nRow));
+
+    rTab.SetRealRows(
+        nRow + 1, rTab.GetRealRows(nRow) + rTab.GetRowsPerRow(nRow));
 }
 
 void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
@@ -442,7 +437,8 @@ void ScMyTables::InsertColumn()
     {
         table::CellRangeAddress aCellAddress;
         sal_Int32 nCol(GetRealCellPos().Column);
-        for (sal_Int32 j = 0; j <= GetRealCellPos().Row - aTableVec[nTableCount - 1]->GetRow() - 1; ++j)
+        sal_Int32 n = GetRealCellPos().Row - maTables.back().GetRow() - 1;
+        for (sal_Int32 j = 0; j <= n; ++j)
         {
             table::CellRangeAddress aTempCellAddress;
             if (IsMerged(xCurrentCellRange, nCol - 1, j, aCellAddress))
@@ -481,49 +477,51 @@ void ScMyTables::InsertColumn()
 
 void ScMyTables::NewColumn(sal_Bool bIsCovered)
 {
-    if (!bIsCovered)
+    if (bIsCovered)
+        return;
+
+    ScMyTableData& rLastTab = maTables.back();
+    sal_Int32 nColCount = rLastTab.GetColCount();
+    sal_Int32 nSpannedCols = rLastTab.GetSpannedCols();
+    if ( (nSpannedCols > nColCount) &&
+        (rLastTab.GetRow() == 0) &&
+        (rLastTab.GetColumn() == 0) )
     {
-        sal_Int32 nColCount(aTableVec[nTableCount - 1]->GetColCount());
-        sal_Int32 nSpannedCols(aTableVec[nTableCount - 1]->GetSpannedCols());
-        if ( (nSpannedCols > nColCount) &&
-            (aTableVec[nTableCount - 1]->GetRow() == 0) &&
-            (aTableVec[nTableCount - 1]->GetColumn() == 0) )
+        if (nColCount > 0)
         {
-            if (nColCount > 0)
+            sal_Int32 FirstColsSpanned(nSpannedCols / nColCount);
+            sal_Int32 LastColSpanned(FirstColsSpanned
+                + (nSpannedCols % nColCount));
+            for (sal_Int32 i = 0; i < nColCount - 1; ++i)
             {
-                sal_Int32 FirstColsSpanned(nSpannedCols / nColCount);
-                sal_Int32 LastColSpanned(FirstColsSpanned
-                    + (nSpannedCols % nColCount));
-                for (sal_Int32 i = 0; i < nColCount - 1; ++i)
-                {
-                    aTableVec[nTableCount - 1]->SetColsPerCol(i, FirstColsSpanned);
-                    aTableVec[nTableCount - 1]->SetRealCols(i + 1,
-                        aTableVec[nTableCount - 1]->GetRealCols(i)
-                        + FirstColsSpanned);
-                }
-                aTableVec[nTableCount - 1]->SetColsPerCol(nColCount - 1, LastColSpanned);
-                aTableVec[nTableCount - 1]->SetRealCols(nColCount - 1 + 1,
-                    aTableVec[nTableCount - 1]->GetRealCols(nColCount - 1)
-                    + LastColSpanned);
+                rLastTab.SetColsPerCol(i, FirstColsSpanned);
+                rLastTab.SetRealCols(i + 1, rLastTab.GetRealCols(i) + FirstColsSpanned);
             }
+            rLastTab.SetColsPerCol(nColCount - 1, LastColSpanned);
+            rLastTab.SetRealCols(
+                nColCount, rLastTab.GetRealCols(nColCount - 1) + LastColSpanned);
         }
-        if (aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn()) > nSpannedCols - 1)
+    }
+    if (rLastTab.GetRealCols(rLastTab.GetColumn()) > nSpannedCols - 1)
+    {
+        if (rLastTab.GetRow() == 0)
         {
-            if ( aTableVec[nTableCount - 1]->GetRow() == 0)
+            InsertColumn();
+            size_t n = maTables.size();
+            for (size_t i = n - 1; i > 0; --i)
             {
-                InsertColumn();
-                for (sal_Int16 i = sal::static_int_cast<sal_Int16>(nTableCount - 1); i > 0; i--)
-                {
-                    sal_Int32 nColPos = aTableVec[i - 1]->GetColumn() +
-                        aTableVec[i]->GetSpannedCols() - 1;
-                    aTableVec[i - 1]->SetColsPerCol(nColPos,
-                        aTableVec[i - 1]->GetColsPerCol(nColPos) +
-                        aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()));
-                    aTableVec[i - 1]->SetRealCols(nColPos + 1,
-                        aTableVec[i - 1]->GetRealCols(nColPos)
-                        + aTableVec[i - 1]->GetColsPerCol(nColPos));
-                    aTableVec[i - 1]->SetChangedCols(nColPos);
-                }
+                sal_Int32 nColPos =
+                    maTables[i-1].GetColumn() + maTables[i].GetSpannedCols() - 1;
+
+                maTables[i-1].SetColsPerCol(nColPos,
+                    maTables[i-1].GetColsPerCol(nColPos) +
+                    rLastTab.GetColsPerCol(rLastTab.GetColumn()));
+
+                maTables[i-1].SetRealCols(
+                    nColPos + 1,
+                    maTables[i-1].GetRealCols(nColPos) + maTables[i-1].GetColsPerCol(nColPos));
+
+                maTables[i-1].SetChangedCols(nColPos);
             }
         }
     }
@@ -531,21 +529,21 @@ void ScMyTables::NewColumn(sal_Bool bIsCovered)
 
 void ScMyTables::AddColumn(sal_Bool bIsCovered)
 {
-    aTableVec[nTableCount - 1]->AddColumn();
-    if (aTableVec[nTableCount - 1]->GetSubTableSpanned() > 1)
-        aTableVec[nTableCount - 1]->SetSubTableSpanned(aTableVec[nTableCount - 1]->GetSubTableSpanned() - 1);
+    ScMyTableData& rLastTab = maTables.back();
+    rLastTab.AddColumn();
+    if (rLastTab.GetSubTableSpanned() > 1)
+        rLastTab.SetSubTableSpanned(rLastTab.GetSubTableSpanned() - 1);
     else
     {
         NewColumn(bIsCovered);
-    //  if (!bIsCovered)
-            aTableVec[nTableCount - 1]->SetRealCols(aTableVec[nTableCount - 1]->GetColumn() + 1,
-                aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn())
-                + aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()));
-        if ((!bIsCovered) || (bIsCovered &&
-            (aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()) > 1)))
+        sal_Int32 nCol = rLastTab.GetColumn();
+        sal_Int32 nRow = rLastTab.GetRow();
+        rLastTab.SetRealCols(
+            nCol + 1, rLastTab.GetRealCols(nCol) + rLastTab.GetColsPerCol(nCol));
+
+        if ((!bIsCovered) || (bIsCovered && (rLastTab.GetColsPerCol(nCol) > 1)))
         {
-            if ((aTableVec[nTableCount - 1]->GetRowsPerRow(aTableVec[nTableCount - 1]->GetRow()) > 1) ||
-                (aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()) > 1))
+            if ((rLastTab.GetRowsPerRow(nRow) > 1) || (rLastTab.GetColsPerCol(nCol) > 1))
                 DoMerge();
         }
     }
@@ -553,38 +551,41 @@ void ScMyTables::AddColumn(sal_Bool bIsCovered)
 
 void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 {
-    ++nTableCount;
-    if (static_cast<sal_uInt32>(nTableCount) >= aTableVec.size())
-        aTableVec.resize(aTableVec.size() + nDefaultTabCount);
-    ScMyTableData* aTable(new ScMyTableData(nCurrentSheet));
-    if (nTableCount > 1)
+    maTables.push_back(new ScMyTableData(nCurrentSheet));
+
+    if (maTables.size() > 1)
     {
-        ScMyTableData* pTableData = aTableVec[nTableCount - 2];
-        const sal_Int32 nCol(pTableData->GetColumn());
-        const sal_Int32 nColCount(pTableData->GetColCount());
-        const sal_Int32 nColsPerCol(pTableData->GetColsPerCol(nCol));
-        sal_Int32 nSpannedCols(pTableData->GetSpannedCols());
-        sal_Int32 nTemp(nSpannedCols - nColCount);
-        sal_Int32 nTemp2(nCol - (nColCount - 1));
+        ScMyTableData& rFirstTab = maTables.front();
+
+        const sal_Int32 nCol = rFirstTab.GetColumn();
+        const sal_Int32 nColCount = rFirstTab.GetColCount();
+        const sal_Int32 nColsPerCol = rFirstTab.GetColsPerCol(nCol);
+
+        sal_Int32 nSpannedCols = rFirstTab.GetSpannedCols();
+        sal_Int32 nTemp = nSpannedCols - nColCount;
+        sal_Int32 nTemp2 = nCol - nColCount + 1;
         if ((nTemp > 0) && (nTemp2 == 0))
-            nTempSpannedCols *= (nTemp + 1);
+            nTempSpannedCols *= nTemp + 1;
         else
             if (nColsPerCol > 1)
                 nTempSpannedCols *= nColsPerCol;
 
         sal_Int32 nToMerge;
         if (nSpannedCols > nColCount)
-            nToMerge = pTableData->GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
+            nToMerge = rFirstTab.GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
         else
-            nToMerge = pTableData->GetChangedCols(nCol, nCol + nColsPerCol);
+            nToMerge = rFirstTab.GetChangedCols(nCol, nCol + nColsPerCol);
         if (nToMerge > nCol)
             nTempSpannedCols += nToMerge;
     }
-    aTable->SetSpannedCols(nTempSpannedCols);
-    aTableVec[nTableCount - 1] = aTable;
-    if (nTableCount > 1)
+
+    ScMyTableData& rNewTab = maTables.back();
+    rNewTab.SetSpannedCols(nTempSpannedCols);
+
+    size_t n = maTables.size();
+    if (n > 1)
     {
-        aTableVec[nTableCount - 2]->SetSubTableSpanned(aTable->GetSpannedCols());
+        maTables[n-2].SetSubTableSpanned(rNewTab.GetSpannedCols());
         UnMerge();
     }
 }
@@ -637,14 +638,10 @@ void ScMyTables::DeleteTable()
     rImport.LockSolarMutex();
 
     nCurrentColStylePos = 0;
-    if (nTableCount > 0)
-    {
-        ScMyTableData* aTable = aTableVec[nTableCount - 1];
-        delete aTable;
-        aTableVec[nTableCount - 1] = NULL;
-        nTableCount--;
-    }
-    if (nTableCount == 0) // only set the styles if all subtables are importet and the table is finished
+    if (!maTables.empty())
+        maTables.pop_back();
+
+    if (maTables.empty()) // only set the styles if all subtables are importet and the table is finished
     {
         rImport.GetStylesImportHelper()->SetStylesToRanges();
         rImport.SetStylesToRangesFinished();
@@ -704,14 +701,16 @@ void ScMyTables::DeleteTable()
 
 table::CellAddress ScMyTables::GetRealCellPos()
 {
-    sal_Int32 nRow(0);
-    sal_Int32 nCol(0);
-    for (sal_Int32 i = 0; i < nTableCount; ++i)
+    sal_Int32 nRow = 0;
+    sal_Int32 nCol = 0;
+    size_t n = maTables.size();
+    for (size_t i = 0; i < n; ++i)
     {
-        ScMyTableData* pTableData = aTableVec[i];
-        nCol += pTableData->GetRealCols(pTableData->GetColumn());
-        nRow += pTableData->GetRealRows(pTableData->GetRow());
+        const ScMyTableData& rTab = maTables[i];
+        nCol += rTab.GetRealCols(rTab.GetColumn());
+        nRow += rTab.GetRealRows(rTab.GetRow());
     }
+
     aRealCellPos.Row = nRow;
     aRealCellPos.Column = nCol;
     aRealCellPos.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
@@ -720,12 +719,13 @@ table::CellAddress ScMyTables::GetRealCellPos()
 
 void ScMyTables::AddColCount(sal_Int32 nTempColCount)
 {
-    aTableVec[nTableCount - 1]->SetColCount(aTableVec[nTableCount - 1]->GetColCount() + nTempColCount);
+    ScMyTableData& rLastTab = maTables.back();
+    rLastTab.SetColCount(rLastTab.GetColCount() + nTempColCount);
 }
 
 void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName)
 {
-    DBG_ASSERT(nTableCount == 1, "not possible to use default styles on columns in subtables");
+    DBG_ASSERT(maTables.size() == 1, "not possible to use default styles on columns in subtables");
     rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColStylePos, nRepeat);
     nCurrentColStylePos += nRepeat;
 }
