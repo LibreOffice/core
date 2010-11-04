@@ -59,7 +59,6 @@ my_components = \
     ctl \
     date \
     dba \
-    dbacfg \
     dbase \
     dbaxml \
     dbmm \
