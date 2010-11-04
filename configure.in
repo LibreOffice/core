@@ -156,17 +156,6 @@ AC_ARG_ENABLE(crashdump,
         [Enable the crashdump feature code.]),
 ,)
 
-AC_ARG_ENABLE(cl-standard,
-    AS_HELP_STRING([--enable-cl-standard],
-        [For Microsoft C/C++ compiler users, use non-optimizing standard
-         compiler.])
-    [
-                          This just disables optimization options and therefore
-                          removes a lot of warnings when using the cheaper
-                          standard compiler.
-    ],
-,)
-
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
         [Determines whether to use Gtk+ vclplug on platforms where Gtk+ is available.]),
@@ -1587,21 +1576,6 @@ AC_SUBST(ENABLE_CRASHDUMP)
 
 if test "$_os" = "WINNT"; then
    BUILD_TYPE="$BUILD_TYPE TWAIN"
-fi
-
-if test "$_os" = "WINNT"; then
-   dnl ===================================================================
-   dnl Set the VC_STANDARD variable.
-   dnl ===================================================================
-   AC_MSG_CHECKING([whether to use the standard non-optimizing compiler])
-   if test "$enable_cl_standard" = "" -o "$enable_cl_standard" = "no"; then
-      VC_STANDARD=""
-      AC_MSG_RESULT([no])
-   else
-      VC_STANDARD="TRUE"
-      AC_MSG_RESULT([yes])
-   fi
-   AC_SUBST(VC_STANDARD)
 fi
 
 dnl ===================================================================
