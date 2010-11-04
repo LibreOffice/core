@@ -27,12 +27,29 @@
 
 package complex.sfx2;
 
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XChild;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XNameReplace;
+import com.sun.star.container.XSet;
 import com.sun.star.document.EmptyUndoStackException;
 import com.sun.star.document.UndoContextNotClosedException;
 import com.sun.star.document.UndoFailedException;
 import com.sun.star.document.UndoManagerEvent;
+import com.sun.star.document.XEmbeddedScripts;
+import com.sun.star.document.XEventsSupplier;
 import com.sun.star.document.XUndoAction;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XEventListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,18 +58,35 @@ import com.sun.star.document.XUndoManagerSupplier;
 import complex.sfx2.undo.CalcDocumentTest;
 import com.sun.star.document.XUndoManager;
 import com.sun.star.document.XUndoManagerListener;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPageSupplier;
+import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XSingleComponentFactory;
+import com.sun.star.lang.XTypeProvider;
+import com.sun.star.script.ScriptEventDescriptor;
+import com.sun.star.script.XEventAttacherManager;
+import com.sun.star.script.XLibraryContainer;
+import com.sun.star.task.XJob;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.InvalidStateException;
 import com.sun.star.util.NotLockedException;
+import com.sun.star.view.XControlAccess;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
 import complex.sfx2.undo.WriterDocumentTest;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -60,6 +94,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.openoffice.test.OfficeConnection;
+import org.openoffice.test.tools.DocumentType;
+import org.openoffice.test.tools.SpreadsheetDocument;
 
 /**
  * Unit test for the UndoManager API
@@ -70,9 +106,17 @@ public class UndoManager
 {
     // -----------------------------------------------------------------------------------------------------------------
     @Before
-    public void beforeTest()
+    public void beforeTest() throws com.sun.star.uno.Exception
     {
         m_currentDocument = null;
+        m_undoListener = null;
+
+        // at our service factory, insert a new factory for our CallbackComponent
+        // this will allow the Basic code in our test documents to call back into this test case
+        // here, by just instantiating this service
+        final XSet globalFactory = UnoRuntime.queryInterface( XSet.class, getORB() );
+        m_callbackFactory = new CallbackComponentFactory();
+        globalFactory.insert( m_callbackFactory );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -104,11 +148,92 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void checkBrokenScripts() throws com.sun.star.uno.Exception, InterruptedException
+    {
+        System.out.println( "testing: broken scripts" );
+
+        m_currentDocument = OfficeDocument.blankDocument( getORB(), DocumentType.CALC );
+        m_undoListener = new UndoListener();
+        getUndoManager().addUndoManagerListener( m_undoListener );
+
+        impl_setupBrokenBasicScript();
+        final String scriptURI = "vnd.sun.star.script:default.callbacks.brokenScript?language=Basic&location=document";
+
+        // .............................................................................................................
+        // scenario 1: Pressing a button which is bound to execute the script
+        // (This is one of the many cases where SfxObjectShell::CallXScript is invoked)
+
+        // set up the button
+        final XPropertySet buttonModel = impl_setupButton();
+        buttonModel.setPropertyValue( "Label", "exec broken script" );
+        impl_assignStarBasicScript( buttonModel, "XActionListener", "actionPerformed",
+            "document:default.callbacks.brokenScript" );
+
+        // switch the doc's view to form alive mode (so the button will actually work)
+        m_currentDocument.getCurrentView().dispatch( ".uno:SwitchControlDesignMode" );
+
+        // click the button
+        m_callbackCalled = false;
+        impl_clickButton( buttonModel );
+        // the macro is executed asynchronously by the button, so wait at most 2 seconds for the callback to be
+        // triggered
+        impl_waitFor( m_callbackCondition, 2000 );
+        // check the callback has actually been called
+        assertTrue( "clicking the test button did not work as expected - basic script not called", m_callbackCalled );
+
+        // again, since the script is executed asynchronously, we might arrive here while its execution
+        // is not completely finished. Give OOo another (at most) 2 seconds to finish it.
+        m_undoListener.waitForAllContextsClosed( 20000 );
+        // assure that the Undo Context Depth of the doc is still "0": The Basic script entered such a
+        // context, and didn't close it (thus it is broken), but the application framework should have
+        // auto-closed the context after the macro finished.
+        assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
+
+        // .............................................................................................................
+        // scenario 2: dispatching the script URL. Technically, this is equivalent to configuring the
+        // script into a menu or toolbar, and selecting the respective menu/toolbar item
+        m_callbackCalled = false;
+        m_currentDocument.getCurrentView().dispatch( scriptURI );
+        assertTrue( "dispatching the Script URL did not work as expected - basic script not called", m_callbackCalled );
+        // same as above: The script didn't close the context, but the OOo framework should have
+        assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
+
+        // .............................................................................................................
+        // scenario 3: assigning the script to some document event, and triggering this event
+        final XEventsSupplier eventSupplier = UnoRuntime.queryInterface( XEventsSupplier.class, m_currentDocument.getDocument() );
+        final XNameReplace events = UnoRuntime.queryInterface( XNameReplace.class, eventSupplier.getEvents() );
+        final NamedValue[] scriptDescriptor = new NamedValue[] {
+            new NamedValue( "EventType", "Script" ),
+            new NamedValue( "Script", scriptURI )
+        };
+        events.replaceByName( "OnViewCreated", scriptDescriptor );
+
+        m_callbackCalled = false;
+        m_currentDocument.getCurrentView().dispatch( ".uno:NewWindow" );
+        assertTrue( "triggering an event did not work as expected - basic script not called", m_callbackCalled );
+        // same as above: The script didn't close the context, but the OOo framework should have
+        assertEquals( "undo context was not auto-closed as expected", 0, m_undoListener.getCurrentUndoContextDepth() );
+
+        // .............................................................................................................
+        // scenario 4: let the script enter an Undo context, but not close it, as usual.
+        // Additionally, let the script close the document - the OOo framework code which cares for
+        // auto-closing of Undo contexts should survive this, ideally ...
+        m_closeAfterCallback = true;
+        m_callbackCalled = false;
+        m_currentDocument.getCurrentView().dispatch( scriptURI );
+        assertTrue( m_callbackCalled );
+        assertTrue( "The Basic script should have closed the document.", m_undoListener.isDisposed() );
+        m_currentDocument = null;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     @After
     public void afterTest()
     {
         if ( m_currentDocument != null )
             m_currentDocument.close();
+        m_callbackFactory.dispose();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -116,10 +241,141 @@ public class UndoManager
      * returns the undo manager belonging to a given document
      * @return
      */
-    private XUndoManager getUndoManager( final OfficeDocument i_document )
+    private XUndoManager getUndoManager()
     {
-        XUndoManagerSupplier suppUndo = UnoRuntime.queryInterface( XUndoManagerSupplier.class, i_document.getDocument() );
+        XUndoManagerSupplier suppUndo = UnoRuntime.queryInterface( XUndoManagerSupplier.class, m_currentDocument.getDocument() );
         return suppUndo.getUndoManager();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private void impl_waitFor( final Object i_condition, final int i_milliSeconds ) throws InterruptedException
+    {
+        synchronized( i_condition )
+        {
+            i_condition.wait( i_milliSeconds );
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private void impl_setupBrokenBasicScript()
+    {
+        try
+        {
+            final XEmbeddedScripts embeddedScripts = UnoRuntime.queryInterface( XEmbeddedScripts.class, m_currentDocument.getDocument() );
+            final XLibraryContainer basicLibs = embeddedScripts.getBasicLibraries();
+            final XNameContainer basicLib = basicLibs.createLibrary( "default" );
+
+            final String brokenScriptCode =
+                "Option Explicit\n" +
+                "\n" +
+                "Sub brokenScript\n" +
+                "    Dim callback as Object\n" +
+                "    ThisComponent.UndoManager.enterUndoContext( \"" + getCallbackUndoContextTitle() + "\"\n" +
+                "\n" +
+                "    callback = createUnoService( \"" + getCallbackComponentServiceName() + "\" )\n" +
+                "    Dim emptyArgs() as new com.sun.star.beans.NamedValue\n" +
+                "    Dim result as String\n" +
+                "    result = callback.execute( emptyArgs() )\n" +
+                "    If result = \"close\" Then\n" +
+                "        ThisComponent.close( TRUE )\n" +
+                "    End If\n" +
+                "End Sub\n" +
+                "\n";
+
+            basicLib.insertByName( "callbacks", brokenScriptCode );
+        }
+        catch( com.sun.star.uno.Exception e )
+        {
+            fail( "caught an exception while setting up the script: " + e.toString() );
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private XPropertySet impl_setupButton() throws com.sun.star.uno.Exception
+    {
+        // let the document create a shape
+        final XMultiServiceFactory docAsFactory = UnoRuntime.queryInterface( XMultiServiceFactory.class,
+            m_currentDocument.getDocument() );
+        final XControlShape xShape = UnoRuntime.queryInterface( XControlShape.class,
+            docAsFactory.createInstance( "com.sun.star.drawing.ControlShape" ) );
+
+        // position and size of the shape
+        xShape.setSize( new Size( 28 * 100, 10 * 100 ) );
+        xShape.setPosition( new Point( 10 * 100, 10 * 100 ) );
+
+        // create the form component (the model of a form control)
+        final String sQualifiedComponentName = "com.sun.star.form.component.CommandButton";
+        final XControlModel controlModel = UnoRuntime.queryInterface( XControlModel.class,
+            getORB().createInstance( sQualifiedComponentName ) );
+
+        // knitt both
+        xShape.setControl( controlModel );
+
+        // add the shape to the shapes collection of the document
+        SpreadsheetDocument spreadsheetDoc = (SpreadsheetDocument)m_currentDocument;
+        final XDrawPageSupplier suppDrawPage = UnoRuntime.queryInterface( XDrawPageSupplier.class,
+            spreadsheetDoc.getSheet( 0 ) );
+        final XDrawPage insertIntoPage = suppDrawPage.getDrawPage();
+
+        final XShapes sheetShapes = UnoRuntime.queryInterface( XShapes.class, insertIntoPage );
+        sheetShapes.add( xShape );
+
+        return UnoRuntime.queryInterface( XPropertySet.class, controlModel );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private void impl_assignStarBasicScript( final XPropertySet i_controlModel, final String i_interfaceName,
+        final String i_interfaceMethod, final String i_scriptCode )
+    {
+        try
+        {
+            final XChild modelAsChild = UnoRuntime.queryInterface( XChild.class, i_controlModel );
+            final XIndexContainer parentForm = UnoRuntime.queryInterface( XIndexContainer.class, modelAsChild.getParent() );
+
+            final XEventAttacherManager manager = UnoRuntime.queryInterface( XEventAttacherManager.class, parentForm );
+
+            int containerPosition = -1;
+            for ( int i = 0; i < parentForm.getCount(); ++i )
+            {
+                final XPropertySet child = UnoRuntime.queryInterface( XPropertySet.class, parentForm.getByIndex( i ) );
+                if ( UnoRuntime.areSame( child, i_controlModel ) )
+                {
+                    containerPosition = i;
+                    break;
+                }
+            }
+            assertFalse( "could not find the given control model within its parent", containerPosition == -1 );
+            manager.registerScriptEvent( containerPosition, new ScriptEventDescriptor(
+                i_interfaceName,
+                i_interfaceMethod,
+                "",
+                "StarBasic",
+                i_scriptCode
+            ) );
+        }
+        catch( com.sun.star.uno.Exception e )
+        {
+            fail( "caught an exception while assigning the script event to the button: " + e.toString() );
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private void impl_clickButton( final XPropertySet i_buttonModel ) throws NoSuchElementException, IndexOutOfBoundsException
+    {
+        final XControlAccess controlAccess = UnoRuntime.queryInterface( XControlAccess.class,
+            m_currentDocument.getCurrentView().getController() );
+        final XControl control = controlAccess.getControl( UnoRuntime.queryInterface( XControlModel.class, i_buttonModel ) );
+        final XAccessible accessible = UnoRuntime.queryInterface( XAccessible.class, control );
+        final XAccessibleAction controlActions = UnoRuntime.queryInterface( XAccessibleAction.class, accessible.getAccessibleContext() );
+        for ( int i=0; i<controlActions.getAccessibleActionCount(); ++i )
+        {
+            if ( controlActions.getAccessibleActionDescription(i).equals( "click" ) )
+            {
+                controlActions.doAccessibleAction(i);
+                return;
+            }
+        }
+        fail( "did not find the accessible action named 'click'" );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -127,40 +383,53 @@ public class UndoManager
     {
         public void undoActionAdded( UndoManagerEvent i_event )
         {
+            assertFalse( "|undoActionAdded| called after document was disposed", m_isDisposed );
+
             ++m_undoActionsAdded;
             m_mostRecentlyAddedAction = i_event.UndoActionTitle;
         }
 
         public void actionUndone( UndoManagerEvent i_event )
         {
+            assertFalse( "|actionUndone| called after document was disposed", m_isDisposed );
+
             ++m_undoCount;
             m_mostRecentlyUndone = i_event.UndoActionTitle;
         }
 
         public void actionRedone( UndoManagerEvent i_event )
         {
+            assertFalse( "|actionRedone| called after document was disposed", m_isDisposed );
+
             ++m_redoCount;
-            m_mostRecentlyRedone = i_event.UndoActionTitle;
         }
 
         public void allActionsCleared( EventObject eo )
         {
+            assertFalse( "|allActionsCleared| called after document was disposed", m_isDisposed );
+
             m_wasCleared = true;
         }
 
         public void redoActionsCleared( EventObject eo )
         {
+            assertFalse( "|redoActionsCleared| called after document was disposed", m_isDisposed );
+
             m_redoWasCleared = true;
         }
 
         public void resetAll( EventObject i_event )
         {
+            assertFalse( "|resetAll| called after document was disposed", m_isDisposed );
+
             m_managerWasReset = true;
             m_activeUndoContexts.clear();
         }
 
         public void enteredContext( UndoManagerEvent i_event )
         {
+            assertFalse( "|enteredContext| called after document was disposed", m_isDisposed );
+
             m_activeUndoContexts.push( i_event.UndoActionTitle );
             assertEquals( "different opinions on the context nesting level (after entering)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
@@ -168,6 +437,8 @@ public class UndoManager
 
         public void enteredHiddenContext( UndoManagerEvent i_event )
         {
+            assertFalse( "|enteredHiddenContext| called after document was disposed", m_isDisposed );
+
             m_activeUndoContexts.push( i_event.UndoActionTitle );
             assertEquals( "different opinions on the context nesting level (after entering hidden)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
@@ -175,26 +446,35 @@ public class UndoManager
 
         public void leftContext( UndoManagerEvent i_event )
         {
+            assertFalse( "|leftContext| called after document was disposed", m_isDisposed );
+
             assertEquals( "nested undo context descriptions do not match", m_activeUndoContexts.pop(), i_event.UndoActionTitle );
             assertEquals( "different opinions on the context nesting level (after leaving)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
             m_leftContext = true;
+            impl_notifyContextDepth();
         }
 
         public void leftHiddenContext( UndoManagerEvent i_event )
         {
+            assertFalse( "|leftHiddenContext| called after document was disposed", m_isDisposed );
+
             m_activeUndoContexts.pop();
             assertEquals( "different opinions on the context nesting level (after leaving)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
             m_leftHiddenContext = true;
+            impl_notifyContextDepth();
         }
 
         public void cancelledContext( UndoManagerEvent i_event )
         {
+            assertFalse( "|cancelledContext| called after document was disposed", m_isDisposed );
+
             m_activeUndoContexts.pop();
             assertEquals( "different opinions on the context nesting level (after cancelling)",
                 m_activeUndoContexts.size(), i_event.UndoContextDepth );
             m_cancelledContext = true;
+            impl_notifyContextDepth();
         }
 
         public void disposing( EventObject i_event )
@@ -202,27 +482,47 @@ public class UndoManager
             m_isDisposed = true;
         }
 
-        int     getUndoActionsAdded() { return m_undoActionsAdded; }
-        int     getUndoActionCount() { return m_undoCount; }
-        int     getRedoActionCount() { return m_redoCount; }
-        String  getCurrentUndoContextTitle() { return m_activeUndoContexts.peek(); }
-        String  getMostRecentlyAddedActionTitle() { return m_mostRecentlyAddedAction; };
-        String  getMostRecentlyUndoneTitle() { return m_mostRecentlyUndone; }
-        String  getMostRecentlyRedoneTitle() { return m_mostRecentlyRedone; }
-        int     getUndoContextDepth() { return m_activeUndoContexts.size(); }
-        boolean isDisposed() { return m_isDisposed; }
-        boolean contextLeft() { return m_leftContext; }
-        boolean hiddenContextLeft() { return m_leftHiddenContext; }
-        boolean contextCancelled() { return m_cancelledContext; }
-        boolean stackWasCleared() { return m_wasCleared; }
-        boolean redoStackWasCleared() { return m_redoWasCleared; }
-        boolean managerWasReset() { return m_managerWasReset; }
+        public void waitForAllContextsClosed( final int i_milliSeconds ) throws InterruptedException
+        {
+            synchronized ( m_allContextsClosedCondition )
+            {
+                if ( m_activeUndoContexts.empty() )
+                    return;
+                m_allContextsClosedCondition.wait( i_milliSeconds );
+            }
+        }
+
+        private void impl_notifyContextDepth()
+        {
+            synchronized ( m_allContextsClosedCondition )
+            {
+                if ( m_activeUndoContexts.empty() )
+                {
+                    m_allContextsClosedCondition.notifyAll();
+                }
+            }
+        }
+
+        private int     getUndoActionsAdded() { return m_undoActionsAdded; }
+        private int     getUndoActionCount() { return m_undoCount; }
+        private int     getRedoActionCount() { return m_redoCount; }
+        private String  getCurrentUndoContextTitle() { return m_activeUndoContexts.peek(); }
+        private String  getMostRecentlyAddedActionTitle() { return m_mostRecentlyAddedAction; };
+        private String  getMostRecentlyUndoneTitle() { return m_mostRecentlyUndone; }
+        private int     getCurrentUndoContextDepth() { return m_activeUndoContexts.size(); }
+        private boolean isDisposed() { return m_isDisposed; }
+        private boolean wasContextLeft() { return m_leftContext; }
+        private boolean wasHiddenContextLeft() { return m_leftHiddenContext; }
+        private boolean hasContextBeenCancelled() { return m_cancelledContext; }
+        private boolean wereStacksCleared() { return m_wasCleared; }
+        private boolean wasRedoStackCleared() { return m_redoWasCleared; }
+        private boolean wasManagerReset() { return m_managerWasReset; }
 
         void reset()
         {
             m_undoActionsAdded = m_undoCount = m_redoCount = 0;
             m_activeUndoContexts.clear();
-            m_mostRecentlyAddedAction = m_mostRecentlyUndone = m_mostRecentlyRedone = null;
+            m_mostRecentlyAddedAction = m_mostRecentlyUndone = null;
             // m_isDisposed is not cleared, intentionally
             m_leftContext = m_leftHiddenContext = m_cancelledContext = m_wasCleared = m_redoWasCleared = m_managerWasReset = false;
         }
@@ -241,7 +541,7 @@ public class UndoManager
                         m_activeUndoContexts = new Stack<String>();
         private String  m_mostRecentlyAddedAction = null;
         private String  m_mostRecentlyUndone = null;
-        private String  m_mostRecentlyRedone = null;
+        private final Object    m_allContextsClosedCondition = new Object();
     };
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -271,50 +571,49 @@ public class UndoManager
             return;
         }
 
-        final XUndoManager undoManager = getUndoManager( test.getDocument() );
+        final XUndoManager undoManager = getUndoManager();
         undoManager.clear();
         assertFalse( "clearing the Undo manager should result in the impossibility to undo anything", undoManager.isUndoPossible() );
         assertFalse( "clearing the Undo manager should result in the impossibility to redo anything", undoManager.isRedoPossible() );
 
-        final UndoListener listener = new UndoListener();
-        undoManager.addUndoManagerListener( listener );
+        m_undoListener = new UndoListener();
+        undoManager.addUndoManagerListener( m_undoListener );
 
-        impl_testSingleModification( test, undoManager, listener );
-        impl_testMultipleModifications( test, undoManager, listener );
-        impl_testCustomUndoActions( test, undoManager, listener );
-        impl_testLocking( test, undoManager, listener );
-        impl_testNestedContexts( undoManager, listener );
-        impl_testErrorHandling( test, undoManager, listener );
-        impl_testContextHandling( undoManager, listener );
-        impl_testStackHandling( undoManager, listener );
-        impl_testClearance( undoManager, listener );
-        impl_testHiddenContexts( undoManager, listener );
+        impl_testSingleModification( test, undoManager );
+        impl_testMultipleModifications( test, undoManager );
+        impl_testCustomUndoActions( test, undoManager );
+        impl_testLocking( test, undoManager );
+        impl_testNestedContexts( undoManager );
+        impl_testErrorHandling( test, undoManager );
+        impl_testContextHandling( undoManager );
+        impl_testStackHandling( undoManager );
+        impl_testClearance( undoManager );
+        impl_testHiddenContexts( undoManager );
 
         // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
-        assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", listener.isDisposed() );
-        m_currentDocument = null;
+        assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", m_undoListener.isDisposed() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testSingleModification( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testSingleModification( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_test.doSingleModification();
         i_test.verifySingleModificationDocumentState();
 
         // undo the modification, ensure the listener got the proper notifications
-        assertEquals( "We did not yet do a undo!", 0, i_listener.getUndoActionCount() );
+        assertEquals( "We did not yet do a undo!", 0, m_undoListener.getUndoActionCount() );
         i_undoManager.undo();
         assertEquals( "A simple undo does not result in the proper Undo count.",
-            1, i_listener.getUndoActionCount() );
+            1, m_undoListener.getUndoActionCount() );
 
         // verify the document is in its initial state, again
         i_test.verifyInitialDocumentState();
 
         // redo the modification, ensure the listener got the proper notifications
-        assertEquals( "did not yet do a redo!", 0, i_listener.getRedoActionCount() );
+        assertEquals( "did not yet do a redo!", 0, m_undoListener.getRedoActionCount() );
         i_undoManager.redo();
-        assertEquals( "did a redo, but got no notification of it!", 1, i_listener.getRedoActionCount() );
+        assertEquals( "did a redo, but got no notification of it!", 1, m_undoListener.getRedoActionCount() );
         // ensure the document is in the proper state, again
         i_test.verifySingleModificationDocumentState();
 
@@ -322,42 +621,42 @@ public class UndoManager
         // expected
         i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
         i_test.verifyInitialDocumentState();
-        assertEquals( "UI-Undo does not notify the listener", 2, i_listener.getUndoActionCount() );
+        assertEquals( "UI-Undo does not notify the listener", 2, m_undoListener.getUndoActionCount() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testMultipleModifications( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testMultipleModifications( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
-        i_listener.reset();
-        assertEquals( "unexpected initial undo context depth", 0, i_listener.getUndoContextDepth() );
+        m_undoListener.reset();
+        assertEquals( "unexpected initial undo context depth", 0, m_undoListener.getCurrentUndoContextDepth() );
         i_undoManager.enterUndoContext( "Batch Changes" );
         assertEquals( "unexpected undo context depth after entering a context",
-            1, i_listener.getUndoContextDepth() );
+            1, m_undoListener.getCurrentUndoContextDepth() );
         assertEquals( "entering an Undo context has not been notified properly",
-            "Batch Changes", i_listener.getCurrentUndoContextTitle() );
+            "Batch Changes", m_undoListener.getCurrentUndoContextTitle() );
 
         final int modifications = i_test.doMultipleModifications();
         assertEquals( "unexpected number of undo actions while doing batch changes to the document",
-            modifications, i_listener.getUndoActionsAdded() );
+            modifications, m_undoListener.getUndoActionsAdded() );
         assertEquals( "seems the document operations touched the undo context depth",
-            1, i_listener.getUndoContextDepth() );
+            1, m_undoListener.getCurrentUndoContextDepth() );
 
         i_undoManager.leaveUndoContext();
         assertEquals( "unexpected undo context depth after leaving the last context",
-            0, i_listener.getUndoContextDepth() );
+            0, m_undoListener.getCurrentUndoContextDepth() );
         assertEquals( "no Undo done, yet - still the listener has been notified of an Undo action",
-            0, i_listener.getUndoActionCount() );
+            0, m_undoListener.getUndoActionCount() );
 
         i_undoManager.undo();
-        assertEquals( "Just did an undo - the listener should have been notified", 1, i_listener.getUndoActionCount() );
+        assertEquals( "Just did an undo - the listener should have been notified", 1, m_undoListener.getUndoActionCount() );
         i_test.verifyInitialDocumentState();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testCustomUndoActions( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testCustomUndoActions( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.clear();
-        i_listener.reset();
+        m_undoListener.reset();
         assertFalse( "undo stack not empty after clearing the undo manager", i_undoManager.isUndoPossible() );
         assertFalse( "redo stack not empty after clearing the undo manager", i_undoManager.isRedoPossible() );
         assertArrayEquals( ">0 descriptions for an empty undo stack?",
@@ -368,17 +667,17 @@ public class UndoManager
         // add two actions, one directly, one within a context
         final CustomUndoAction action1 = new CustomUndoAction( "UndoAction1" );
         i_undoManager.addUndoAction( action1 );
-        assertEquals( "Adding an undo action not observed by the listener", 1, i_listener.getUndoActionsAdded() );
+        assertEquals( "Adding an undo action not observed by the listener", 1, m_undoListener.getUndoActionsAdded() );
         assertEquals( "Adding an undo action did not notify the proper title",
-            action1.getTitle(), i_listener.getMostRecentlyAddedActionTitle() );
+            action1.getTitle(), m_undoListener.getMostRecentlyAddedActionTitle() );
         final String contextTitle = "Undo Context";
         i_undoManager.enterUndoContext( contextTitle );
         final CustomUndoAction action2 = new CustomUndoAction( "UndoAction2" );
         i_undoManager.addUndoAction( action2 );
         assertEquals( "Adding an undo action not observed by the listener",
-            2, i_listener.getUndoActionsAdded() );
+            2, m_undoListener.getUndoActionsAdded() );
         assertEquals( "Adding an undo action did not notify the proper title",
-            action2.getTitle(), i_listener.getMostRecentlyAddedActionTitle() );
+            action2.getTitle(), m_undoListener.getMostRecentlyAddedActionTitle() );
         i_undoManager.leaveUndoContext();
 
         // see if the manager has proper descriptions
@@ -390,7 +689,7 @@ public class UndoManager
         // undo one action
         i_undoManager.undo();
         assertEquals( "improper action title notified during programmatic Undo",
-            contextTitle, i_listener.getMostRecentlyUndoneTitle() );
+            contextTitle, m_undoListener.getMostRecentlyUndoneTitle() );
         assertTrue( "nested custom undo action has not been undone as expected", action2.undoCalled() );
         assertFalse( "nested custom undo action has not been undone as expected", action1.undoCalled() );
         assertArrayEquals( "unexpected Redo descriptions after undoing a nested custom action",
@@ -400,7 +699,7 @@ public class UndoManager
 
         // undo the second action, via UI dispatches
         i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-        assertEquals( "improper action title notified during UI Undo", action1.getTitle(), i_listener.getMostRecentlyUndoneTitle() );
+        assertEquals( "improper action title notified during UI Undo", action1.getTitle(), m_undoListener.getMostRecentlyUndoneTitle() );
         assertTrue( "nested custom undo action has not been undone as expected", action1.undoCalled() );
         assertArrayEquals( "unexpected Redo descriptions after undoing the second custom action",
             new String[]{action1.getTitle(), contextTitle}, i_undoManager.getAllRedoActionTitles() );
@@ -413,10 +712,10 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testLocking( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testLocking( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
 
         // implicit Undo actions, triggered by changes to the document
         assertFalse( "unexpected initial locking state", i_undoManager.isLocked() );
@@ -424,10 +723,10 @@ public class UndoManager
         assertTrue( "just locked the manager, why does it lie?", i_undoManager.isLocked() );
         i_test.doSingleModification();
         assertEquals( "when the Undo manager is locked, no implicit additions should happen",
-            0, i_listener.getUndoActionsAdded() );
+            0, m_undoListener.getUndoActionsAdded() );
         i_undoManager.unlock();
         assertEquals( "unlock is not expected to add collected actions - they should be discarded",
-            0, i_listener.getUndoActionsAdded() );
+            0, m_undoListener.getUndoActionsAdded() );
         assertFalse( "just unlocked the manager, why does it lie?", i_undoManager.isLocked() );
 
         // explicit Undo actions
@@ -435,13 +734,13 @@ public class UndoManager
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.unlock();
         assertEquals( "explicit Undo actions are expected to be ignored when the manager is locked",
-            0, i_listener.getUndoActionsAdded() );
+            0, m_undoListener.getUndoActionsAdded() );
 
         // Undo contexts while being locked
         i_undoManager.lock();
         i_undoManager.enterUndoContext( "Dummy Context" );
         i_undoManager.enterHiddenUndoContext();
-        assertEquals( "entering Undo contexts should be ignored when the manager is locked", 0, i_listener.getUndoContextDepth() );
+        assertEquals( "entering Undo contexts should be ignored when the manager is locked", 0, m_undoListener.getCurrentUndoContextDepth() );
         i_undoManager.leaveUndoContext();
         i_undoManager.leaveUndoContext();
         i_undoManager.unlock();
@@ -454,12 +753,12 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testContextHandling( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testContextHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         // .............................................................................................................
         // part I: non-empty contexts
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
 
         // put one action on the undo and one on the redo stack, as precondition for the following tests
         XUndoAction undoAction1 = new CustomUndoAction( "Undo Action 1" );
@@ -474,7 +773,7 @@ public class UndoManager
 
         // enter a context, add a single action
         i_undoManager.enterUndoContext( "Undo Context" );
-        assertEquals( "unexpected undo context depth after entering a context", 1, i_listener.getUndoContextDepth() );
+        assertEquals( "unexpected undo context depth after entering a context", 1, m_undoListener.getCurrentUndoContextDepth() );
         XUndoAction undoAction3 = new CustomUndoAction( "Undo Action 3" );
         i_undoManager.addUndoAction( undoAction3 );
 
@@ -492,31 +791,31 @@ public class UndoManager
 
         // leave the context, check the listener has been notified properly, and the notified context depth is correct
         i_undoManager.leaveUndoContext();
-        assertTrue( i_listener.contextLeft() );
-        assertFalse( i_listener.hiddenContextLeft() );
-        assertFalse( i_listener.contextCancelled() );
-        assertEquals( "unexpected undo context depth leaving a non-empty context", 0, i_listener.getUndoContextDepth() );
+        assertTrue( m_undoListener.wasContextLeft() );
+        assertFalse( m_undoListener.wasHiddenContextLeft() );
+        assertFalse( m_undoListener.hasContextBeenCancelled() );
+        assertEquals( "unexpected undo context depth leaving a non-empty context", 0, m_undoListener.getCurrentUndoContextDepth() );
 
         // .............................................................................................................
         // part II: empty contexts
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
 
         // enter a context, leave it immediately without adding an action to it
         i_undoManager.enterUndoContext( "Undo Context" );
         i_undoManager.leaveUndoContext();
-        assertFalse( i_listener.contextLeft() );
-        assertFalse( i_listener.hiddenContextLeft() );
-        assertTrue( i_listener.contextCancelled() );
+        assertFalse( m_undoListener.wasContextLeft() );
+        assertFalse( m_undoListener.wasHiddenContextLeft() );
+        assertTrue( m_undoListener.hasContextBeenCancelled() );
         assertFalse( "leaving an empty context should silently remove it, and not contribute to the stack",
             i_undoManager.isUndoPossible() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testNestedContexts( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testNestedContexts( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.enterUndoContext( "context 1" );
         i_undoManager.enterUndoContext( "context 1.1" );
         final CustomUndoAction action1 = new CustomUndoAction( "action 1.1.1" );
@@ -533,7 +832,7 @@ public class UndoManager
         i_undoManager.addUndoAction( action4 );
 
         i_undoManager.undo();
-        assertEquals( "undoing a single action notifies a wrong title", action4.getTitle(), i_listener.getMostRecentlyUndoneTitle() );
+        assertEquals( "undoing a single action notifies a wrong title", action4.getTitle(), m_undoListener.getMostRecentlyUndoneTitle() );
         assertTrue( "custom Undo not called", action4.undoCalled() );
         assertFalse( "too many custom Undos called", action1.undoCalled() || action2.undoCalled() || action3.undoCalled() );
         i_undoManager.undo();
@@ -541,10 +840,10 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testErrorHandling( final DocumentTest i_test, final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testErrorHandling( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
 
         // try retrieving the comments for the current Undo/Redo - this should fail
         boolean caughtExpected = false;
@@ -655,10 +954,10 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testStackHandling( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testStackHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
 
         assertFalse( i_undoManager.isUndoPossible() );
         assertFalse( i_undoManager.isRedoPossible() );
@@ -681,33 +980,33 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testClearance( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testClearance( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
 
         // add an action, clear the stack, verify the listener has been called
         i_undoManager.addUndoAction( new CustomUndoAction() );
-        assertFalse( "clearance listener unexpectedly called", i_listener.stackWasCleared() );
-        assertFalse( "redo-clearance listener unexpectedly called", i_listener.redoStackWasCleared() );
+        assertFalse( "clearance listener unexpectedly called", m_undoListener.wereStacksCleared() );
+        assertFalse( "redo-clearance listener unexpectedly called", m_undoListener.wasRedoStackCleared() );
         i_undoManager.clear();
-        assertTrue( "clearance listener not called as expected", i_listener.stackWasCleared() );
-        assertFalse( "redo-clearance listener unexpectedly called (2)", i_listener.redoStackWasCleared() );
+        assertTrue( "clearance listener not called as expected", m_undoListener.wereStacksCleared() );
+        assertFalse( "redo-clearance listener unexpectedly called (2)", m_undoListener.wasRedoStackCleared() );
 
         // ensure the listener is also called if the stack is actually empty at the moment of the call
-        i_listener.reset();
+        m_undoListener.reset();
         assertFalse( i_undoManager.isUndoPossible() );
         i_undoManager.clear();
-        assertTrue( "clearance listener is also expected to be called if the stack was empty before", i_listener.stackWasCleared() );
+        assertTrue( "clearance listener is also expected to be called if the stack was empty before", m_undoListener.wereStacksCleared() );
 
         // ensure the proper listeners are called for clearRedo
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.clearRedo();
-        assertFalse( i_listener.stackWasCleared() );
-        assertTrue( i_listener.redoStackWasCleared() );
+        assertFalse( m_undoListener.wereStacksCleared() );
+        assertTrue( m_undoListener.wasRedoStackCleared() );
 
         // ensure the redo listener is also called upon implicit redo stack clearance
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.undo();
@@ -715,10 +1014,10 @@ public class UndoManager
         assertTrue( i_undoManager.isRedoPossible() );
         i_undoManager.addUndoAction( new CustomUndoAction() );
         assertFalse( i_undoManager.isRedoPossible() );
-        assertTrue( "implicit clearance of the Redo stack does not notify listeners", i_listener.redoStackWasCleared() );
+        assertTrue( "implicit clearance of the Redo stack does not notify listeners", m_undoListener.wasRedoStackCleared() );
 
         // test resetting the manager
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.undo();
@@ -727,26 +1026,26 @@ public class UndoManager
         i_undoManager.reset();
         assertFalse( i_undoManager.isUndoPossible() );
         assertFalse( i_undoManager.isRedoPossible() );
-        assertTrue( "|reset| does not properly notify", i_listener.managerWasReset() );
+        assertTrue( "|reset| does not properly notify", m_undoListener.wasManagerReset() );
 
         // resetting the manager, with open undo contexts
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.enterUndoContext( "Undo Context" );
         i_undoManager.addUndoAction( new CustomUndoAction() );
         i_undoManager.enterHiddenUndoContext();
         i_undoManager.reset();
-        assertTrue( "|reset| while contexts are open does not properly notify", i_listener.managerWasReset() );
+        assertTrue( "|reset| while contexts are open does not properly notify", m_undoListener.wasManagerReset() );
         // verify the manager really has the proper context depth now
         i_undoManager.enterUndoContext( "Undo Context" );
-        assertEquals( "seems that |reset| did not really close the open contexts", 1, i_listener.getUndoContextDepth() );
+        assertEquals( "seems that |reset| did not really close the open contexts", 1, m_undoListener.getCurrentUndoContextDepth() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testHiddenContexts( final XUndoManager i_undoManager, final UndoListener i_listener ) throws com.sun.star.uno.Exception
+    private void impl_testHiddenContexts( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
-        i_listener.reset();
+        m_undoListener.reset();
         assertFalse( "precondition for testing hidden undo contexts not met", i_undoManager.isUndoPossible() );
 
         // entering a hidden context should be rejected if the stack is empty
@@ -764,10 +1063,10 @@ public class UndoManager
         final CustomUndoAction hiddenUndoAction = new CustomUndoAction( "hidden context action" );
         i_undoManager.addUndoAction( hiddenUndoAction );
         i_undoManager.leaveUndoContext();
-        assertFalse( "leaving a hidden should not call |leftUndocontext|", i_listener.contextLeft() );
-        assertTrue( "leaving a hidden does not call |leftHiddenUndocontext|", i_listener.hiddenContextLeft() );
-        assertFalse( "leaving a non-empty hidden context claims to have cancelled it", i_listener.contextCancelled() );
-        assertEquals( "leaving a hidden context is not properly notified", 0, i_listener.getUndoContextDepth() );
+        assertFalse( "leaving a hidden should not call |leftUndocontext|", m_undoListener.wasContextLeft() );
+        assertTrue( "leaving a hidden does not call |leftHiddenUndocontext|", m_undoListener.wasHiddenContextLeft() );
+        assertFalse( "leaving a non-empty hidden context claims to have cancelled it", m_undoListener.hasContextBeenCancelled() );
+        assertEquals( "leaving a hidden context is not properly notified", 0, m_undoListener.getCurrentUndoContextDepth() );
         assertArrayEquals( "unexpected Undo stack after leaving a hidden context",
             new String[] { undoAction1.getTitle(), undoAction0.getTitle() },
             i_undoManager.getAllUndoActionTitles() );
@@ -783,15 +1082,15 @@ public class UndoManager
             undoAction0.undoCalled() );
 
         // leaving an empty hidden context should call the proper notification method
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.enterHiddenUndoContext();
         i_undoManager.leaveUndoContext();
-        assertFalse( i_listener.contextLeft() );
-        assertFalse( i_listener.hiddenContextLeft() );
-        assertTrue( i_listener.contextCancelled() );
+        assertFalse( m_undoListener.wasContextLeft() );
+        assertFalse( m_undoListener.wasHiddenContextLeft() );
+        assertTrue( m_undoListener.hasContextBeenCancelled() );
 
         // nesting hidden and normal contexts
-        i_listener.reset();
+        m_undoListener.reset();
         i_undoManager.reset();
         final CustomUndoAction action0 = new CustomUndoAction( "action 0" );
         i_undoManager.addUndoAction( action0 );
@@ -810,11 +1109,11 @@ public class UndoManager
         final CustomUndoAction action3 = new CustomUndoAction( "action 3" );
         i_undoManager.addUndoAction( action3 );
         i_undoManager.enterHiddenUndoContext();
-        assertEquals( "mixed hidden/normal context do are not properly notified", 4, i_listener.getUndoContextDepth() );
+        assertEquals( "mixed hidden/normal context do are not properly notified", 4, m_undoListener.getCurrentUndoContextDepth() );
         i_undoManager.leaveUndoContext();
-        assertTrue( "the left context was empty - why wasn't 'cancelled' notified?", i_listener.contextCancelled() );
-        assertFalse( i_listener.contextLeft() );
-        assertFalse( i_listener.hiddenContextLeft() );
+        assertTrue( "the left context was empty - why wasn't 'cancelled' notified?", m_undoListener.hasContextBeenCancelled() );
+        assertFalse( m_undoListener.wasContextLeft() );
+        assertFalse( m_undoListener.wasHiddenContextLeft() );
         i_undoManager.leaveUndoContext();
         i_undoManager.leaveUndoContext();
         i_undoManager.leaveUndoContext();
@@ -948,6 +1247,118 @@ public class UndoManager
         private final short m_failWhich;
     }
 
-    private static final OfficeConnection m_connection = new OfficeConnection();
-    private OfficeDocument m_currentDocument;
+    // -----------------------------------------------------------------------------------------------------------------
+    private static String getCallbackUndoContextTitle()
+    {
+        return "Some Unfinished Undo Context";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private static String getCallbackComponentServiceName()
+    {
+        return "org.openoffice.complex.sfx2.Callback";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * a factory for a callback component which, at OOo runtime, is inserted into OOo's "component repository"
+     */
+    private class CallbackComponentFactory implements XSingleComponentFactory, XServiceInfo, XComponent
+    {
+        public Object createInstanceWithContext( XComponentContext i_context ) throws com.sun.star.uno.Exception
+        {
+            return new CallbackComponent();
+        }
+
+        public Object createInstanceWithArgumentsAndContext( Object[] i_arguments, XComponentContext i_context ) throws com.sun.star.uno.Exception
+        {
+            return createInstanceWithContext( i_context );
+        }
+
+        public String getImplementationName()
+        {
+            return "org.openoffice.complex.sfx2.CallbackComponent";
+        }
+
+        public boolean supportsService( String i_serviceName )
+        {
+            return i_serviceName.equals( getCallbackComponentServiceName() );
+        }
+
+        public String[] getSupportedServiceNames()
+        {
+            return new String[] { getCallbackComponentServiceName() };
+        }
+
+        public void dispose()
+        {
+            final EventObject event = new EventObject( this );
+
+            final ArrayList eventListenersCopy = (ArrayList)m_eventListeners.clone();
+            final Iterator iter = eventListenersCopy.iterator();
+            while ( iter.hasNext() )
+            {
+                ((XEventListener)iter.next()).disposing( event );
+            }
+        }
+
+        public void addEventListener( XEventListener i_listener )
+        {
+            if ( i_listener != null )
+                m_eventListeners.add( i_listener );
+        }
+
+        public void removeEventListener( XEventListener i_listener )
+        {
+            m_eventListeners.remove( i_listener );
+        }
+
+        private final ArrayList m_eventListeners = new ArrayList();
+    };
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private class CallbackComponent implements XJob, XTypeProvider
+    {
+        CallbackComponent()
+        {
+        }
+
+        public Object execute( NamedValue[] i_parameters ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception
+        {
+            // this method is called from within the Basic script which is to check whether the OOo framework
+            // properly cleans up unfinished Undo contexts. It is called immediately after the context has been
+            // entered, so verify the expected Undo manager state.
+            assertEquals( getCallbackUndoContextTitle(), m_undoListener.getCurrentUndoContextTitle() );
+            assertEquals( 1, m_undoListener.getCurrentUndoContextDepth() );
+
+            synchronized( m_callbackCondition )
+            {
+                m_callbackCalled = true;
+                m_callbackCondition.notifyAll();
+            }
+            return m_closeAfterCallback ? "close" : "";
+        }
+
+        public Type[] getTypes()
+        {
+            final Class interfaces[] = getClass().getInterfaces();
+            Type types[] = new Type[ interfaces.length ];
+            for ( int i = 0; i < interfaces.length; ++i )
+                types[i] = new Type(interfaces[i]);
+            return types;
+        }
+
+        public byte[] getImplementationId()
+        {
+            return getClass().toString().getBytes();
+        }
+    }
+
+    private static final OfficeConnection   m_connection = new OfficeConnection();
+    private OfficeDocument                  m_currentDocument;
+    private UndoListener                    m_undoListener;
+    private CallbackComponentFactory        m_callbackFactory = null;
+    private boolean                         m_callbackCalled = false;
+    private boolean                         m_closeAfterCallback = false;
+    private final Object                    m_callbackCondition = new Object();
 }
