@@ -73,7 +73,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #if ( defined NETBSD ) || defined (FREEBSD) || defined (AIX) \
-    || defined (HPUX) || defined (MACOSX)
+    || defined (HPUX) || defined (MACOSX) || defined (OPENBSD)
 #include <sys/wait.h>
 #else
 #include <wait.h>
