@@ -1325,7 +1325,7 @@ AC_ARG_WITH(max-jobs,
          Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
 
-BUILD_TYPE="LibO"
+BUILD_TYPE="OOo"
 
 dnl ===================================================================
 dnl Message.
