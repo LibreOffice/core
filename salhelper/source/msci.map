@@ -19,6 +19,7 @@ GetVersionInfo
 
 UDK_3.1 {
     global:
+        ??_VSimpleReferenceObject@salhelper@@KAXPAX@Z;
         ??_7SimpleReferenceObject@salhelper@@6B@;
 
         ??0Condition@salhelper@@QAE@AAVMutex@osl@@@Z;
