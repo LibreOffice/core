@@ -654,16 +654,6 @@ USHORT ViewShellBase::SetPrinter (
 
 
 
-PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
-{
-    (void)pParent;
-    return NULL;
-    //    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
-}
-
-
-
-
 SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
@@ -677,10 +667,9 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
 
 
 
-USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
+USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI)
 {
     (void)bIsAPI;
-    (void)pDlg;
     return 0;
     //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
 }
@@ -690,11 +679,9 @@ USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
 
 ErrCode ViewShellBase::DoPrint (
     SfxPrinter* pPrinter,
-    PrintDialog* pPrintDialog,
     BOOL bSilent, BOOL bIsAPI )
 {
     (void)pPrinter;
-    (void)pPrintDialog;
     (void)bSilent;
     (void)bIsAPI;
     return 0;
@@ -704,9 +691,9 @@ ErrCode ViewShellBase::DoPrint (
 
 
 
-void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
+void ViewShellBase::PreparePrint ()
 {
-    SfxViewShell::PreparePrint (pPrintDialog);
+    SfxViewShell::PreparePrint ();
     //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
