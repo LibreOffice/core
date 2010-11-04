@@ -1369,12 +1369,16 @@ elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$JAVA_HOME'.$LIB64.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
+   if ($platform =~ m/openbsd/) {
+      $SOLARLIB       .= $L.$USR_LOCAL.$LIB;
+   }
+   $SOLARLIB         .= $L.'$JAVA_HOME'.$LIB64.
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
                         $L.$JRETHREADDIR.
                         $L_STLPORT_LIB;
+
    if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" ) {
       $SOLARLIB       .= $L.$XLIB;
    }
