@@ -1160,7 +1160,7 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
+USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
     DBG_ASSERT( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );

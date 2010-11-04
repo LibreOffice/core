@@ -244,7 +244,7 @@ protected:
                   const String& rText,
                   USHORT        MaxWidth);
 
-    virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0);
+    virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI);
     virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
     virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
                               USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);

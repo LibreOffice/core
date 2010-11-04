@@ -49,7 +49,6 @@
 #include <svl/flagitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/oldprintadaptor.hxx>
-#include <svtools/printdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
 #include <editeng/paperinf.hxx>
@@ -181,42 +180,6 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage( pParent, rSet, FALSE );
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Druckerdialog
- --------------------------------------------------------------------*/
-
-PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
-{
-    PrintDialog *pDlg = new PrintDialog( pParent, false );
-//  pDlg->ChangeFirstPage( 1 );
-
-    if ( !nPg )
-        nPg = 1;
-//  pDlg->ChangeLastPage( nPg );
-//  pDlg->ChangeMaxPage( 9999 );
-    pDlg->EnableRange( PRINTDIALOG_FROMTO );
-
-    if (pSh && (pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected()))
-        pDlg->EnableRange( PRINTDIALOG_SELECTION );
-
-    pDlg->SetRangeText( String::CreateFromInt32(nPg) );
-    pDlg->EnableRange( PRINTDIALOG_RANGE );
-    pDlg->EnableCollate();
-    return pDlg;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
-{
-    // AMA: Hier sollte vielleicht die virtuelle Seitennummer angezeigt werden,
-    //      aber nur, wenn das Drucken virtuelle Seitennummern und nicht wie
-    //      bisher (auch beim SWG 2.0) physikalische beachtet werden.
-    return ::CreatePrintDialog( pParent, GetWrtShell().GetPhyPageNum(), &GetWrtShell() );
 }
 
 /*--------------------------------------------------------------------

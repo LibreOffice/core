@@ -39,7 +39,6 @@
 #include <svl/eitem.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/printdlg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
