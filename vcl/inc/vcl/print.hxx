@@ -318,7 +318,12 @@ public:
     BOOL                        Setup( Window* pWindow = NULL );
     BOOL                        SetPrinterProps( const Printer* pPrinter );
 
-    void                        SetPrinterOptions( const PrinterOptions& rOptions ) { *mpPrinterOptions = rOptions; }
+    // SetPrinterOptions is used internally only now
+    // in earlier times it was used only to set the options loaded directly from the configuration
+    // in SfxPrinter::InitJob, this is now handled internally
+    // should the need arise to set the printer options outside vcl, also a method would have to be devised
+    // to not override these again internally
+    SAL_DLLPRIVATE void         SetPrinterOptions( const PrinterOptions& rOptions );
     const PrinterOptions&       GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
     BOOL                        SetOrientation( Orientation eOrient );
@@ -354,10 +359,6 @@ public:
 
     BOOL                        IsPrinting() const { return mbPrinting; }
 
-    void                        SetPrintFile( const XubString& rFileName ) { maPrintFile = rFileName; }
-    const XubString&            GetPrintFile() const { return maPrintFile; }
-    void                        EnablePrintFile( BOOL bEnable ) { mbPrintFile = bEnable; }
-    BOOL                        IsPrintFileEnabled() const { return mbPrintFile; }
     BOOL                        AbortJob();
     const XubString&            GetCurJobName() const { return maJobName; }
     USHORT                      GetCurPage() const { return mnCurPage; }

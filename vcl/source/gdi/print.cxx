@@ -230,6 +230,11 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
     return bSuccess;
 }
 
+void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
+{
+    *mpPrinterOptions = i_rOptions;
+}
+
 // -------------
 // - QueueInfo -
 // -------------

@@ -533,10 +533,6 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         pSingleValue->Value >>= bSinglePrintJobs;
     }
 
-    // remark: currently it is still possible to use EnablePrintFile and
-    // SetPrintFileName to redirect printout into file
-    // it can be argued that those methods should be removed in favor
-    // of only using the LocalFileName property
     beans::PropertyValue* pFileValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ) );
     if( pFileValue )
     {
