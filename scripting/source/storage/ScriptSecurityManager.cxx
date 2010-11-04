@@ -47,7 +47,7 @@
 #include "ScriptSecurityManager.hxx"
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
-
+#include <tools/diagnose_ex.h>
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -85,28 +85,15 @@ static const int ADD_TO_PATH = 2;
 // ScriptSecurityManager Constructor
 ScriptSecurityManager::ScriptSecurityManager(
     const Reference< XComponentContext > & xContext ) throw ( RuntimeException )
-    : m_xContext( xContext)
+    : m_xContext( xContext, UNO_SET_THROW )
 {
     OSL_TRACE( "< ScriptSecurityManager ctor called >\n" );
-    validateXRef( m_xContext,
-        "ScriptSecurityManager::ScriptSecurityManager: invalid context" );
 
     // get the service manager from the context
-    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
-    validateXRef( xMgr,
-        "ScriptSecurityManager::ScriptSecurityManager: cannot get ServiceManager" );
+    Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
 
     // create an instance of the ConfigurationProvider
-    Reference< XInterface > xInterface = xMgr->createInstanceWithContext(
-        s_configProv, m_xContext );
-    validateXRef( xInterface,
-        "ScriptSecurityManager::ScriptSecurityManager: cannot get ConfigurationProvider" );
-    // create an instance of the ConfigurationAccess for accessing the
-    // scripting security settings
-    m_xConfigProvFactory = Reference < lang::XMultiServiceFactory > ( xInterface, UNO_QUERY );
-    validateXRef( m_xConfigProvFactory,
-        "ScriptSecurityManager::ScriptSecurityManager: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
-
+    m_xConfigProvFactory.set( xMgr->createInstanceWithContext( s_configProv, m_xContext ), UNO_QUERY_THROW );
 }
 
 void ScriptSecurityManager::addScriptStorage( rtl::OUString scriptStorageURL,
@@ -131,35 +118,6 @@ throw ( RuntimeException )
     //need to check if storage has any scripts
     try
     {
-        /* need to replace this with something better, now logical names are
-         * gone
-
-        Reference< XInterface > xInterface;
-        Any a = m_xContext->getValueByName(
-                OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
-        if ( sal_False == ( a >>= xInterface ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager::addScriptStorage: could not obtain ScriptStorageManager singleton" ),
-            Reference< XInterface >() );
-        }
-        validateXRef( xInterface,
-            "ScriptSecurityManager::addScriptStorage: cannot get Storage service" );
-        Reference< storage::XScriptStorageManager > xScriptStorageManager(
-            xInterface, UNO_QUERY_THROW );
-        Reference< XInterface > xScriptStorage =
-            xScriptStorageManager->getScriptStorage( storageID );
-        validateXRef( xScriptStorage,
-          "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
-        Reference< storage::XScriptInfoAccess > xScriptInfoAccess =
-            Reference< storage::XScriptInfoAccess > ( xScriptStorage,
-            UNO_QUERY_THROW );
-        Sequence< ::rtl::OUString > logicalNames = xScriptInfoAccess->getScriptLogicalNames();
-        if( !logicalNames.getLength() ) // we have no logical names
-        {
-            return;
-        } */
-
         // we have some scripts so read config & decide on that basis
         // Setup flags: m_runMacroSetting, m_warning, m_confirmationRequired,
         readConfiguration();
@@ -317,17 +275,12 @@ throw ( RuntimeException )
     short result;
     try
     {
-        Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
-        validateXRef( xMgr,
-            "ScriptSecurityManager::executeDialog: cannot get ServiceManager" );
-        Reference< XInterface > xInterface =
-            xMgr->createInstanceWithArgumentsAndContext( s_securityDialog,
-                aArgs, m_xContext );
-        validateXRef( xInterface, "ScriptSecurityManager::executeDialog: Can't create SecurityDialog" );
-        Reference< awt::XDialog > xDialog( xInterface, UNO_QUERY_THROW );
+        Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
+        Reference< awt::XDialog > xDialog(
+            xMgr->createInstanceWithArgumentsAndContext( s_securityDialog, aArgs, m_xContext ),
+            UNO_QUERY_THROW );
         result = xDialog->execute();
-        Reference< lang::XComponent > xComponent( xInterface, UNO_QUERY_THROW );
-        validateXRef( xInterface, "ScriptSecurityManager::executeDialog: Can't get XComponent to dispose dialog" );
+        Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY_THROW );
         xComponent->dispose();
     }
     catch ( RuntimeException & rte )
@@ -410,31 +363,20 @@ void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptS
 void ScriptSecurityManager::readConfiguration()
     throw ( RuntimeException)
 {
-    Reference< XInterface > xInterface;
     try
     {
-    beans::PropertyValue configPath;
-    configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-    configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
-    Sequence < Any > aargs( 1 );
-    aargs[ 0 ] <<= configPath;
-    validateXRef( m_xConfigProvFactory,
-        "ScriptSecurityManager::readConfiguration: ConfigProviderFactory no longer valid!" );
-    xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configAccess,
-            aargs );
-    validateXRef( xInterface,
-        "ScriptSecurityManager::readConfiguration: cannot get ConfigurationAccess" );
-    // get the XPropertySet interface from the ConfigurationAccess service
-    Reference < beans::XPropertySet > xPropSet( xInterface, UNO_QUERY );
-    Any value;
+        beans::PropertyValue configPath;
+        configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+        configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
+        Sequence < Any > aargs( 1 );
+        aargs[ 0 ] <<= configPath;
+        ENSURE_OR_THROW( m_xConfigProvFactory.is(),
+            "ScriptSecurityManager::readConfiguration: ConfigProviderFactory no longer valid!" );
+        // get the XPropertySet interface from the ConfigurationAccess service
+        Reference < beans::XPropertySet > xPropSet( m_xConfigProvFactory->createInstanceWithArguments( s_configAccess, aargs ), UNO_QUERY_THROW );
 
-        value=xPropSet->getPropertyValue( OUSTR( "Confirmation" ) );
-        if ( sal_False == ( value >>= m_confirmationRequired ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager:readConfiguration: can't get Confirmation setting" ),
-                Reference< XInterface > () );
-        }
+        m_confirmationRequired = sal_True;
+        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "Confirmation" ) ) >>= m_confirmationRequired );
         if ( m_confirmationRequired == sal_True )
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: confirmation is true" );
@@ -443,13 +385,10 @@ void ScriptSecurityManager::readConfiguration()
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: confirmation is false" );
         }
-        value=xPropSet->getPropertyValue( OUSTR( "Warning" ) );
-        if ( sal_False == ( value >>= m_warning ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager:readConfiguration: can't get Warning setting" ),
-                Reference< XInterface > () );
-        }
+
+        m_warning = true;
+        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "Warning" ) ) >>= m_warning );
+
         if ( m_warning == sal_True )
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: warning is true" );
@@ -458,21 +397,13 @@ void ScriptSecurityManager::readConfiguration()
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: warning is false" );
         }
-        value=xPropSet->getPropertyValue( OUSTR( "OfficeBasic" ) );
-        if ( sal_False == ( value >>= m_runMacroSetting ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager:readConfiguration: can't get OfficeBasic setting" ),
-                Reference< XInterface > () );
-        }
+
+        m_runMacroSetting = sal_True;
+        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "OfficeBasic" ) ) >>= m_runMacroSetting );
         OSL_TRACE( "ScriptSecurityManager:readConfiguration: OfficeBasic = %d", m_runMacroSetting );
-        value=xPropSet->getPropertyValue( OUSTR( "SecureURL" ) );
-        if ( sal_False == ( value >>= m_secureURL ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager:readConfiguration: can't get SecureURL setting" ),
-                Reference< XInterface > () );
-        }
+
+        m_secureURL = ::rtl::OUString();
+        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "SecureURL" ) ) >>= m_secureURL );
     }
     catch ( beans::UnknownPropertyException & upe )
     {
@@ -508,18 +439,14 @@ void ScriptSecurityManager::readConfiguration()
     int length = m_secureURL.getLength();
 
     // PathSubstitution needed to interpret variables found in config
-    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
-    validateXRef( xMgr,
-        "ScriptSecurityManager::readConfiguration: cannot get XMultiComponentFactory" );
-    xInterface = xMgr->createInstanceWithContext(
-        ::rtl::OUString::createFromAscii(
-        "com.sun.star.util.PathSubstitution"), m_xContext);
-    validateXRef( xInterface,
-        "ScriptSecurityManager::readConfiguration: cannot get ConfigurationProvider" );
+    Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
+    Reference< XInterface > xInterface = );
     Reference< util::XStringSubstitution > xStringSubstitution(
-        xInterface, UNO_QUERY);
-    validateXRef( xStringSubstitution,
-        "ScriptSecurityManager::readConfiguration: cannot get ConfigurationProvider" );
+        xMgr->createInstanceWithContext(
+            ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSubstitution" ), m_xContext
+        ),
+        UNO_QUERY_THROW
+    );
     for( int i = 0; i < length; i++ )
     {
         OSL_TRACE( "ScriptSecurityManager:readConfiguration path = %s",
@@ -552,16 +479,9 @@ throw ( RuntimeException )
     configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
     Sequence < Any > aargs( 1 );
     aargs[ 0 ] <<= configPath;
-    Reference< XInterface > xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configUpdate,
-            aargs );
-    validateXRef( xInterface,
-        "ScriptSecurityManager::addToSecurePaths: ScriptSecurityManager: cannot get ConfigurationUpdateAccess" );
-    Reference < container::XNameReplace > xNameReplace( xInterface, UNO_QUERY );
-    validateXRef( xNameReplace,
-        "ScriptSecurityManager::addToSecurePaths: ScriptSecurityManager: cannot get XNameReplace" );
-    Reference < util::XChangesBatch > xChangesBatch( xInterface, UNO_QUERY );
-    validateXRef( xChangesBatch,
-        "ScriptSecurityManager::addToSecurePaths: cannot get XChangesBatch" );
+    Reference < container::XNameReplace > xNameReplace(
+        m_xConfigProvFactory->createInstanceWithArguments( s_configUpdate, aargs ), UNO_QUERY_THROW );
+    Reference < util::XChangesBatch > xChangesBatch( xNameReplace, UNO_QUERY_THROW );
 
     OSL_TRACE( "--->ScriptSecurityManager::addToSecurePaths: after if stuff" );
     Reference < beans::XPropertySet > xPropSet( xInterface, UNO_QUERY );

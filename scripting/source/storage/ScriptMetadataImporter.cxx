@@ -38,7 +38,7 @@
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <rtl/string.h>
-
+#include <tools/diagnose_ex.h>
 
 #include <util/util.hxx>
 
@@ -82,31 +82,14 @@ void ScriptMetadataImporter::parseMetaData(
     ms_parcelURI = parcelURI;
 
     //Get the parser service
-    validateXRef( m_xContext,
+    ENSURE_OR_THROW( m_xContext.is(),
         "ScriptMetadataImporter::parseMetaData: No context available" );
 
-    Reference< lang::XMultiComponentFactory > xMgr =
-        m_xContext->getServiceManager();
+    Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
 
-    validateXRef( xMgr,
-        "ScriptMetadataImporter::parseMetaData: No service manager available" );
-
-    Reference< XInterface > xInterface = xMgr->createInstanceWithContext(
-        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), m_xContext );
-
-    validateXRef( xInterface, "ScriptMetadataImporter::parseMetaData: cannot get SAX Parser" );
-    Reference< xml::sax::XParser > xParser;
-    try
-    {
-        xParser.set( xInterface ,UNO_QUERY_THROW );
-    }
-    catch (RuntimeException & re )
-    {
-        OUString msg = OUString::createFromAscii(
-            "ScriptMetadata:Importer::parserMetaData cannot get XParser" );
-        msg.concat( re.Message );
-        throw RuntimeException( msg, Reference< XInterface > () );
-    }
+    Reference< xml::sax::XParser > xParser(
+        xMgr->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), m_xContext ),
+        UNO_QUERY_THROW );
 
     // xxx todo: error handler, entity resolver omitted
     // This class is the document handler for the parser
