@@ -571,6 +571,9 @@ namespace sfx2
         if ( rUndoManager.IsInListAction() )
             throw UndoContextNotClosedException( ::rtl::OUString(), static_cast< XUndoManager* >( this ) );
 
+        if ( (rUndoManager.*i_checkMethod)( IUndoManager::TopLevel ) == 0 )
+            throw EmptyUndoStackException( ::rtl::OUString::createFromAscii( "stack is empty" ), static_cast< XUndoManager* >( this ) );
+
         // let all views enter the standard mode
         // TODO: not sure this is a good idea: This might add another action to the Undo/Redo stack, which
         // will render the call somewhat meaningless - finally, the caller can't be sure that really the action
@@ -588,9 +591,6 @@ namespace sfx2
                 pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDocShell );
             }
         }
-
-        if ( (rUndoManager.*i_checkMethod)( IUndoManager::TopLevel ) == 0 )
-            throw EmptyUndoStackException( ::rtl::OUString::createFromAscii( "stack is empty" ), static_cast< XUndoManager* >( this ) );
 
         const ::rtl::OUString sUndoActionTitle = (rUndoManager.*i_titleRetriever)( 0, IUndoManager::TopLevel );
         {
