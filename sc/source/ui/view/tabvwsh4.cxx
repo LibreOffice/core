@@ -46,7 +46,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/printdlg.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <rtl/logfile.hxx>
@@ -1159,57 +1158,6 @@ USHORT __EXPORT ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDif
     return GetViewData()->GetDocShell()->SetPrinter( pNewPrinter, nDiffFlags );
 }
 
-PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
-{
-    ScDocShell* pDocShell   = GetViewData()->GetDocShell();
-    ScDocument* pDoc        = pDocShell->GetDocument();
-
-    pDoc->SetPrintOptions();                // Optionen aus OFA am Printer setzen
-    SfxPrinter* pPrinter = GetPrinter();
-
-    String          aStrRange;
-    PrintDialog*    pDlg        = new PrintDialog( pParent, true );
-    SCTAB           nTabCount   = pDoc->GetTableCount();
-    long            nDocPageMax = 0;
-
-    pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
-    pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
-    pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_CELLS );
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
-    pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
-
-    // update all pending row heights with a single progress bar,
-    // instead of a separate progress for each sheet from ScPrintFunc
-    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
-
-    for ( SCTAB i=0; i<nTabCount; i++ )
-    {
-        ScPrintFunc aPrintFunc( pDocShell, pPrinter, i );
-        nDocPageMax += aPrintFunc.GetTotalPages();
-    }
-
-    if ( nDocPageMax > 0 )
-    {
-        aStrRange = '1';
-        if ( nDocPageMax > 1 )
-        {
-            aStrRange += '-';
-            aStrRange += String::CreateFromInt32( nDocPageMax );
-        }
-    }
-
-    pDlg->SetRangeText  ( aStrRange );
-    pDlg->EnableRange   ( PRINTDIALOG_ALL );
-    pDlg->EnableRange   ( PRINTDIALOG_RANGE );
-    pDlg->SetFirstPage  ( 1 );
-    pDlg->SetMinPage    ( 1 );
-    pDlg->SetLastPage   ( (USHORT)nDocPageMax );
-    pDlg->SetMaxPage    ( (USHORT)nDocPageMax );
-    pDlg->EnableCollate ();
-
-    return pDlg;
-}
-
 SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -1221,22 +1169,21 @@ SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     return 0;
 }
 
-void __EXPORT ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
+void __EXPORT ScTabViewShell::PreparePrint()
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
 
-    SfxViewShell::PreparePrint( pPrintDialog );
-    pDocShell->PreparePrint( pPrintDialog, &GetViewData()->GetMarkData() );
+    SfxViewShell::PreparePrint();
+    pDocShell->PreparePrint( &GetViewData()->GetMarkData() );
 }
 
-ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
-                                 PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI )
+ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter, BOOL bSilent, BOOL bIsAPI )
 {
     //  #72527# if SID_PRINTDOCDIRECT is executed and there's a selection,
     //  ask if only the selection should be printed
 
     const ScMarkData& rMarkData = GetViewData()->GetMarkData();
-    if ( !pPrintDialog && !bSilent && !bIsAPI && ( rMarkData.IsMarked() || rMarkData.IsMultiMarked() ) )
+    if ( !bSilent && !bIsAPI && ( rMarkData.IsMarked() || rMarkData.IsMultiMarked() ) )
     {
         SvxPrtQryBox aQuery( GetDialogParent() );
         short nBtn = aQuery.Execute();
@@ -1251,10 +1198,10 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
     ErrCode nRet = ERRCODE_IO_ABORT;
 
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
-    if ( pDocShell->CheckPrint( pPrintDialog, &GetViewData()->GetMarkData(), bPrintSelected, bIsAPI ) )
+    if ( pDocShell->CheckPrint( &GetViewData()->GetMarkData(), bPrintSelected, bIsAPI ) )
     {
         // get the list of affected sheets before SfxViewShell::Print
-        bool bAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
+        bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
 
         uno::Sequence<sal_Int32> aSheets;
         SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
@@ -1273,7 +1220,7 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
         SetAdditionalPrintOptions( aProps );
 
         // SfxViewShell::DoPrint calls Print (after StartJob etc.)
-        nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
+        nRet = SfxViewShell::DoPrint( pPrinter, bSilent, bIsAPI );
     }
 
     bPrintSelected = FALSE;
@@ -1281,14 +1228,13 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
     return nRet;
 }
 
-USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI,
-                                       PrintDialog* pPrintDialog )
+USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
-    SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
-    pDocShell->Print( rProgress, pPrintDialog, &GetViewData()->GetMarkData(),
+    SfxViewShell::Print( rProgress, bIsAPI );
+    pDocShell->Print( rProgress, &GetViewData()->GetMarkData(),
                         GetDialogParent(), bPrintSelected, bIsAPI );
     return 0;
 }

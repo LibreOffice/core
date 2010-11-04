@@ -44,7 +44,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/printdlg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -485,40 +484,6 @@ USHORT __EXPORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDif
     return pDocShell->SetPrinter( pNewPrinter, nDiffFlags );
 }
 
-PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
-{
-    pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
-    (void)GetPrinter();
-
-    const long   nCurPage    = pPreview->GetPageNo()+1;
-    const long   nDocPageMax = pPreview->GetTotalPages();
-    PrintDialog* pDlg        = new PrintDialog( pParent, true );
-// wenn zu langsam wieder einbauen
-//  if ( pPreview->AllTested() )
-//      nPageMax = pPreview->GetTotalPages();
-
-    pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
-    pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
-    pDlg->EnableSheetRange( false, PRINTSHEETS_SELECTED_CELLS );
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
-    pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
-
-    if ( nDocPageMax > 0 )
-        pDlg->SetRangeText( String::CreateFromInt32( nCurPage ) );
-
-    pDlg->EnableRange   ( PRINTDIALOG_ALL );
-    pDlg->EnableRange   ( PRINTDIALOG_RANGE );
-    pDlg->SetFirstPage  ( 1 );
-    pDlg->SetMinPage    ( 1 );
-    pDlg->SetLastPage   ( (USHORT)nDocPageMax );
-    pDlg->SetMaxPage    ( (USHORT)nDocPageMax );
-    pDlg->EnableCollate ();
-
-    // Selektion hier nicht
-
-    return pDlg;
-}
-
 SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -530,38 +495,37 @@ SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     return 0;
 }
 
-void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
+void __EXPORT ScPreviewShell::PreparePrint()
 {
-    SfxViewShell::PreparePrint( pPrintDialog );
+    SfxViewShell::PreparePrint();
 
     ScMarkData aMarkData;
     aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
-    pDocShell->PreparePrint( pPrintDialog, &aMarkData );
+    pDocShell->PreparePrint(&aMarkData );
 }
 
-ErrCode ScPreviewShell::DoPrint( SfxPrinter *pPrinter,
-                                 PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI )
+ErrCode ScPreviewShell::DoPrint( SfxPrinter *pPrinter, BOOL bSilent, BOOL bIsAPI )
 {
     ErrCode nRet = ERRCODE_IO_ABORT;
 
     ScMarkData aMarkData;
     aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
 
-    if ( pDocShell->CheckPrint( pPrintDialog, &aMarkData, false, bIsAPI ) )
+    if ( pDocShell->CheckPrint( &aMarkData, false, bIsAPI ) )
     {
         // SfxViewShell::DoPrint calls Print (after StartJob etc.)
-        nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
+        nRet = SfxViewShell::DoPrint( pPrinter, bSilent, bIsAPI );
     }
 
     return nRet;
 }
 
-USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog )
+USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
     // get the list of affected sheets before SfxViewShell::Print
-    bool bAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
 
     ScMarkData aMarkData;
     aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
@@ -584,8 +548,8 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, Prin
     aProps[0].Value <<= aSheets;
     SetAdditionalPrintOptions( aProps );
 
-    SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
-    pDocShell->Print( rProgress, pPrintDialog, &aMarkData, pPreview, FALSE, bIsAPI );
+    SfxViewShell::Print( rProgress, bIsAPI );
+    pDocShell->Print( rProgress, &aMarkData, pPreview, FALSE, bIsAPI );
 
     return 0;
 }

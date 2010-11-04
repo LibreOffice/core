@@ -369,13 +369,11 @@ public:
     virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter,
                                           USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
-    virtual PrintDialog*    CreatePrintDialog( Window* pParent );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
+    virtual void            PreparePrint();
     virtual ErrCode         DoPrint( SfxPrinter *pPrinter,
-                                         PrintDialog *pPrintDialog,
                                          BOOL bSilent, BOOL bIsAPI );
-    virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog = NULL );
+    virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI );
 
     void            ConnectObject( SdrOle2Obj* pObj );
     BOOL            ActivateObject( SdrOle2Obj* pObj, long nVerb );

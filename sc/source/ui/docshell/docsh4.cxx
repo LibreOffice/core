@@ -55,7 +55,6 @@ using namespace ::com::sun::star;
 #include <svtools/sfxecode.hxx>
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
-#include <svtools/printdlg.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
@@ -1830,7 +1829,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
 
 void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
     ScDocument* pDocument /*in*/, SfxPrinter* pPrinter /*in*/,
-    PrintDialog* pPrintDialog /*in*/, bool bForceSelected /*in*/,
+    bool bForceSelected /*in*/,
     ScMarkData* pMarkData /*inout*/, bool& rbHasOptions /*out*/,
     ScPrintOptions& rOptions /*out*/, bool& rbAllTabs /*out*/,
     long& rnTotalPages /*out*/, long aPageArr[] /*out*/,
@@ -1868,13 +1867,13 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
     rPageRanges.SetTotalRange( Range( 0, RANGE_MAX ) );
     rPageRanges.Select( Range( 1, rnTotalPages ) );
 
-    rbAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
+    rbAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
     if ( bForceSelected )
     {
         rbAllTabs = false;
     }
 
-    if ( ( pPrintDialog && pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_SELECTED_CELLS ) || bForceSelected )
+    if ( bForceSelected )
     {
         if ( pMarkData && ( pMarkData->IsMarked() || pMarkData->IsMultiMarked() ) )
         {
@@ -1883,12 +1882,6 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
             pMarkData->GetMultiMarkArea( **ppMarkedRange );
             pMarkData->MarkToSimple();
         }
-    }
-
-    PrintDialogRange eDlgOption = pPrintDialog ? pPrintDialog->GetCheckedRange() : PRINTDIALOG_ALL;
-    if ( eDlgOption == PRINTDIALOG_RANGE )
-    {
-        rPageRanges = MultiSelection( pPrintDialog->GetRangeText() );
     }
 
     // get number of total pages if selection
@@ -1907,14 +1900,14 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
                 rnTotalPages += aPageArr[nTab];
             }
         }
-        if ( eDlgOption == PRINTDIALOG_ALL || bForceSelected )
+        if ( bForceSelected )
         {
             rPageRanges.Select( Range( 1, rnTotalPages ) );
         }
     }
 }
 
-bool ScDocShell::CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData, bool bForceSelected, bool bIsAPI )
+bool ScDocShell::CheckPrint( ScMarkData* pMarkData, bool bForceSelected, bool bIsAPI )
 {
     SfxPrinter* pPrinter = GetPrinter();
     if ( !pPrinter )
@@ -1930,7 +1923,7 @@ bool ScDocShell::CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData, b
     MultiSelection aPageRanges;    // pages to print
     ScRange* pMarkedRange = NULL;
 
-    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, bForceSelected,
+    lcl_GetPrintData( this, &aDocument, pPrinter, bForceSelected,
                       pMarkData, bHasOptions, aOptions, bAllTabs, nTotalPages,
                       aPageArr, aPageRanges, &pMarkedRange );
 
@@ -1950,7 +1943,7 @@ bool ScDocShell::CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData, b
     return true;
 }
 
-void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData )
+void ScDocShell::PreparePrint( ScMarkData* pMarkData )
 {
     SfxPrinter* pPrinter = GetPrinter();
     if ( !pPrinter )
@@ -1973,7 +1966,7 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     MultiSelection aPageRanges;    // pages to print
     ScRange* pMarkedRange = NULL;
 
-    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, false,
+    lcl_GetPrintData( this, &aDocument, pPrinter, false,
                       pMarkData, bHasOptions, aOptions, bAllTabs, nTotalPages,
                       aPageArr, aPageRanges, &pMarkedRange );
 
@@ -2043,7 +2036,7 @@ BOOL lcl_HasTransparent( ScDocument* pDoc, SCTAB nTab, const ScRange* pRange )
     return bFound;
 }
 
-void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
+void ScDocShell::Print( SfxProgress& rProgress,
                         ScMarkData* pMarkData, Window* pDialogParent, BOOL bForceSelected, BOOL bIsAPI )
 {
     SfxPrinter* pPrinter = GetPrinter();
@@ -2060,14 +2053,11 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
     MultiSelection aPageRanges;    // pages to print
     ScRange* pMarkedRange = NULL;
 
-    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, bForceSelected,
+    lcl_GetPrintData( this, &aDocument, pPrinter, bForceSelected,
                       pMarkData, bHasOptions, aOptions, bAllTabs, nTotalPages,
                       aPageArr, aPageRanges, &pMarkedRange );
 
     USHORT nCollateCopies = 1;
-    if ( pPrintDialog && pPrintDialog->IsCollateEnabled() && pPrintDialog->IsCollateChecked() )
-        nCollateCopies = pPrintDialog->GetCopyCount();
-
     //  test if printed range contains transparent objects
 
     BOOL bHasTransp = FALSE;
