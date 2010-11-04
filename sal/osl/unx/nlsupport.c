@@ -31,7 +31,8 @@
 #include <osl/process.h>
 #include <rtl/memory.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
+    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
 #include <pthread.h>
 #ifndef MACOSX
  #include <locale.h>
@@ -232,7 +233,8 @@ static rtl_Locale * _parse_locale( const char * locale )
     return NULL;
 }
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
+    defined(FREEBSD) || defined(OPENBSD)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -543,7 +545,31 @@ const _pair _nl_language_list[] = {
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
 };
 
-#endif /* ifdef SOLARIS LINUX FREEBSD NETBSD */
+#elif defined(OPENBSD)
+
+const _pair _nl_language_list[] = {
+    { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
+    { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
+    { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
+    { "CP866",         RTL_TEXTENCODING_IBM_866        }, /* CP866 866 */
+    { "EUCCN",         RTL_TEXTENCODING_EUC_CN         }, /* China - Simplified Chinese */
+    { "EUCJP",         RTL_TEXTENCODING_EUC_JP         }, /* Japan */
+    { "EUCKR",         RTL_TEXTENCODING_EUC_KR         }, /* Korea */
+    { "ISO8859-1",     RTL_TEXTENCODING_ISO_8859_1     }, /* Western */
+    { "ISO8859-15",    RTL_TEXTENCODING_ISO_8859_15    }, /* Western Updated (w/Euro sign) */
+    { "ISO8859-2",     RTL_TEXTENCODING_ISO_8859_2     }, /* Central European */
+    { "ISO8859-4",     RTL_TEXTENCODING_ISO_8859_4     }, /* LATIN4 L4 */
+    { "ISO8859-5",     RTL_TEXTENCODING_ISO_8859_5     }, /* Cyrillic */
+    { "ISO8859-7",     RTL_TEXTENCODING_ISO_8859_7     }, /* Greek */
+    { "ISO8859-9",     RTL_TEXTENCODING_ISO_8859_9     }, /* Turkish */
+    { "KOI8-R",        RTL_TEXTENCODING_KOI8_R         }, /* KOI8-R */
+    { "KOI8-U",        RTL_TEXTENCODING_KOI8_U         }, /* KOI8-U */
+    { "SJIS",          RTL_TEXTENCODING_SHIFT_JIS      }, /* Japan */
+    { "US-ASCII",      RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
+    { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
+};
+
+#endif /* ifdef SOLARIS LINUX FREEBSD NETBSD OPENBSD */
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -925,7 +951,8 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined ( AIX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
+    defined( AIX ) || defined( OPENBSD )
             setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
@@ -933,7 +960,8 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LC_CTYPE" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined ( AIX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
+    defined( AIX ) || defined( OPENBSD )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -941,7 +969,8 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LANG" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined (AIX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
+    defined( AIX ) || defined( OPENBSD)
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );
