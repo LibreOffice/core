@@ -165,10 +165,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     enum Limits {eMAXCELLS=64000};
 
-    SvBools aMergeBackup;
-    int nCount = aMergeBoxes.Count();
-    for (USHORT i = 0; i < nCount; ++i)
-        aMergeBackup.Insert(aMergeBoxes[i], i);
+    SvBools aMergeBackup(aMergeBoxes);
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
     // waren andere Zeichen (siehe Bug 27445.rtf)
@@ -177,10 +174,10 @@ void SwRTFParser::ReadTable( int nToken )
         if( RTF_TROWD == nToken )
             nToken = GetNextToken();        // RTF_TROWD ueberlesen
 
-        // Flags fuer die gemergten Boxen loeschen
-        aMergeBoxes.Remove( 0, aMergeBoxes.Count() );
-        aMergeBoxes.Insert( (BOOL)FALSE, USHORT(0) );
-        nAktBox = 0;
+        // Flag for delete merged boxes
+        aMergeBoxes.clear();
+        aMergeBoxes.push_back( (BOOL)FALSE );
+        m_nCurrentBox = 0;
 
         // wenn schon in einer Tabellen, dann splitte oder benutze
         // die bisherigen Boxen weiter
@@ -194,11 +191,11 @@ void SwRTFParser::ReadTable( int nToken )
         // very robust to avoid crashes like bug 127425 + crash reports 118743
         if( pLine )
         {
-            USHORT nTmpBox = nAktBox;
+            USHORT nTmpBox = m_nCurrentBox;
             if( nTmpBox > pLine->GetTabBoxes().Count() )
                 nTmpBox = pLine->GetTabBoxes().Count();
 
-            for( USHORT n = nTmpBox; n; )
+            for (USHORT n = nTmpBox; n; )
             {
                 const SwTableBox *pTmp = pLine->GetTabBoxes()[ --n ];
                 if( pTmp )
@@ -223,7 +220,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     sal_Int16 eVerOrient = text::VertOrientation::NONE;
     long nLineHeight = 0;
-    USHORT nBoxCnt = aMergeBoxes.Count()-1;
+    size_t nBoxCnt = aMergeBoxes.size()-1;
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
@@ -292,15 +289,16 @@ void SwRTFParser::ReadTable( int nToken )
             // the first cell cannot be merged with earlier ones.
             if (nBoxCnt != 0)
             {
-                aMergeBoxes[ nBoxCnt ] = TRUE;
+                aMergeBoxes.back() = TRUE;
             }
             break;
 
         case RTF_CELLX:
-            if (!bTrowdRead) {
+            if (!bTrowdRead && (aMergeBoxes.size() < (SAL_MAX_UINT16 - 1)))
+            {
                 SwTableBoxFmt* pFmt = pBoxFmt;
                 SwTwips nSize = nTokenValue - nTblSz;
-                if( aMergeBoxes[ nBoxCnt ] )
+                if( aMergeBoxes.back() )
                 {
                     // neue Zellen lesen und noch keine Formate vorhanden,
                     // dann benutze das der vorhergebende
@@ -308,9 +306,12 @@ void SwRTFParser::ReadTable( int nToken )
                     {
                         SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
                         SwTableLine* pLine = rLns[ rLns.Count()-1 ];
-                        if(nAktBox!=0)
-                            --nAktBox;
-                        pFmt = (SwTableBoxFmt*)pLine->GetTabBoxes()[ nAktBox ]->GetFrmFmt();
+                        if (m_nCurrentBox != 0)
+                        {
+                            --m_nCurrentBox;
+                        }
+                        pFmt = static_cast<SwTableBoxFmt*>(
+                            pLine->GetTabBoxes()[ m_nCurrentBox ]->GetFrmFmt());
                     }
                     else
                         pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
@@ -336,7 +337,8 @@ void SwRTFParser::ReadTable( int nToken )
                     nSize = COL_DFLT_WIDTH;
                 pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
-                aMergeBoxes.Insert( (BOOL)FALSE, ++nBoxCnt );
+                aMergeBoxes.push_back( (BOOL)FALSE );
+                ++nBoxCnt;
 
                 SvxBoxItem aBox(pFmt->GetBox());
 
@@ -483,7 +485,7 @@ void SwRTFParser::ReadTable( int nToken )
         default:
             if( ( nToken & ~(0xff | RTF_TABLEDEF)) == RTF_SHADINGDEF )
             {
-                if( aMergeBoxes[ nBoxCnt ] )
+                if( aMergeBoxes.back() )
                     break;
                 ReadBackgroundAttr( nToken,
                         (SfxItemSet&)pBoxFmt->GetAttrSet(), TRUE );
@@ -491,7 +493,7 @@ void SwRTFParser::ReadTable( int nToken )
             else if( ( nToken & ~(0xff | RTF_TABLEDEF) ) == RTF_BRDRDEF ||
                       IsBorderToken(nToken))
             {
-                if( aMergeBoxes[ nBoxCnt ] )
+                if( aMergeBoxes.back() )
                     break;
 
                 SfxItemSet& rSet = (SfxItemSet&)pBoxFmt->GetAttrSet();
@@ -512,7 +514,7 @@ void SwRTFParser::ReadTable( int nToken )
 
         if( text::VertOrientation::NONE != eVerOrient )
         {
-            if( !aMergeBoxes[ nBoxCnt ] )
+            if( !aMergeBoxes.back() )
                 pBoxFmt->SetFmtAttr( SwFmtVertOrient( 0, eVerOrient ));
             eVerOrient = text::VertOrientation::NONE;
         }
@@ -523,13 +525,11 @@ void SwRTFParser::ReadTable( int nToken )
     // das letzte temp. BoxFmt loeschen
     delete pBoxFmt;
 
-    // es wurde keine einzige Box erkannt
-    if( nAktBox == nBoxCnt || ( bReadNewCell && !pTableNode ))
+    // It has been recognized as not single box
+    if ((m_nCurrentBox == nBoxCnt) || ( bReadNewCell && !pTableNode ))
     {
-        int nC = aMergeBackup.Count();
-        for (USHORT i = 0; i < nC; ++i)
-            aMergeBoxes.Insert(aMergeBackup[i], i);
-        SkipToken( -1 );            // zum Letzen gueltigen zurueck
+        aMergeBoxes = aMergeBackup;
+        SkipToken( -1 );            // go back to the last valid
         return;
     }
 
@@ -636,7 +636,9 @@ void SwRTFParser::ReadTable( int nToken )
         aBoxFmts.Remove( 0, n );
 
         if( aBoxFmts.Count() )      // es muessen noch neue zugefuegt werden
-            nAktBox = n;
+        {
+            m_nCurrentBox = n;
+        }
         else                        // es mussen noch Boxen geloescht werden
         {
             // remove ContentIndex of other Bound
@@ -746,7 +748,7 @@ void SwRTFParser::ReadTable( int nToken )
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
 
-            nAktBox = 0;
+            m_nCurrentBox = 0;
             pOldTblNd = pTableNode;
 
             {
@@ -798,12 +800,14 @@ void SwRTFParser::ReadTable( int nToken )
                     aBoxFmts[ nStt ],
                     // Formate fuer den TextNode der Box
                     pColl, 0,
-                    nAktBox + nStt, 1 );
+                    m_nCurrentBox + nStt, 1 );
         }
     }
 
     if( bChkExistTbl )
-        nAktBox = 0;
+    {
+        m_nCurrentBox = 0;
+    }
 
     maInsertedTables.InsertTable(*pTableNode, *pPam);
 
@@ -815,7 +819,8 @@ void SwRTFParser::ReadTable( int nToken )
     if (pNewLine)
     {
         SwTableBoxes &rBoxes = pNewLine->GetTabBoxes();
-        if (SwTableBox* pBox = (nAktBox < rBoxes.Count() ? rBoxes[nAktBox] : 0))
+        if (SwTableBox* pBox = ((m_nCurrentBox < rBoxes.Count())
+                ? rBoxes[m_nCurrentBox] : 0))
         {
             if (const SwStartNode *pStart = pBox->GetSttNd())
             {
@@ -861,7 +866,7 @@ void SwRTFParser::ReadTable( int nToken )
         //which were intended to be inside the tablerow are now left outside
         //the table after the row was placed before the current insertion point
         SvxRTFItemStack& rAttrStk = GetAttrStack();
-        for (USHORT n = 0; n < rAttrStk.Count(); ++n)
+        for (size_t n = 0; n < rAttrStk.size(); ++n)
         {
             SvxRTFItemStackType* pStk = rAttrStk[n];
             pStk->MoveFullNode(aOldPos, aNewPos);
@@ -885,16 +890,19 @@ void SwRTFParser::GotoNextBox()
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
 
-    if( ++nAktBox >= aMergeBoxes.Count() )
-        nAktBox = aMergeBoxes.Count()-1;
+    if (++m_nCurrentBox >= aMergeBoxes.size())
+    {
+        OSL_ENSURE(aMergeBoxes.size() < SAL_MAX_UINT16, "too many boxes?");
+        m_nCurrentBox = static_cast<USHORT>(aMergeBoxes.size()-1);
+    }
 
-    if( !aMergeBoxes[ nAktBox ] )
+    if (!aMergeBoxes[ m_nCurrentBox ])
     {
         int bMove = TRUE;
         if( pBox->GetSttIdx() > pPam->GetPoint()->nNode.GetIndex() )
         {
             USHORT nRealBox = 0;
-            for( USHORT nTmp = 0; nTmp < nAktBox; ++nTmp )
+            for (USHORT nTmp = 0; nTmp < m_nCurrentBox; ++nTmp)
                 if( !aMergeBoxes[ nTmp ] )
                     ++nRealBox;
 
@@ -906,7 +914,8 @@ void SwRTFParser::GotoNextBox()
             }
         }
 
-        if( bMove && nAktBox + 1 == aMergeBoxes.Count() )
+        if (bMove &&
+                (static_cast<size_t>(m_nCurrentBox + 1) == aMergeBoxes.size()))
             // dann hinter die Tabelle
             pPam->Move( fnMoveForward, fnGoNode );
     }
@@ -972,7 +981,7 @@ void SwRTFParser::NewTblLine()
     ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
     pPam->GetPoint()->nNode = *pBox->GetSttNd();
     pPam->Move( fnMoveForward );
-    nAktBox = 0;
+    m_nCurrentBox = 0;
 
     // alle Nodes in den Boxen auf die "default" Vorlage setzten
     {
@@ -1002,11 +1011,10 @@ void SwRTFParser::NewTblLine()
         pPam->DeleteMark();
     }
 
-    // alle Attribute, die schon auf den nachfolgen zeigen auf die neue
-    // Box umsetzen !!
+    // all attributes which will be displayed in new Box
     SvxRTFItemStack& rAttrStk = GetAttrStack();
     const SvxRTFItemStackType* pStk;
-    for( USHORT n = 0; n < rAttrStk.Count(); ++n )
+    for( size_t n = 0; n < rAttrStk.size(); ++n )
         if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == ULONG(nOldPos) &&
             !pStk->GetSttCnt() )
             ((SvxRTFItemStackType*)pStk)->SetStartPos( SwxPosition( pPam ) );

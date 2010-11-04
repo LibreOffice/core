@@ -558,9 +558,6 @@ public:
     sal_uInt16 GetColOfPage( sal_uInt16 _nPageNum ) const;
 
     // OD 18.12.2002 #103492#
-    Size GetMaxPageSize() const;
-
-    // OD 18.12.2002 #103492#
     Size GetPrevwDocSize() const;
 
     /** get size of a preview page by its physical page number

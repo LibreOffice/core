@@ -93,7 +93,6 @@
 #include <frmui.hrc>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
-#include <swprtopt.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
 //#include <sfx2/app.hxx>
@@ -1911,8 +1910,7 @@ SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
     if (!rxTmpDoc.Is())
     {
         SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();
-        rxTmpDoc = pImpl->BuildTmpSelectionDoc(
-                    GetViewImpl()->GetEmbeddedObjRef() );
+        rxTmpDoc = pImpl->BuildTmpSelectionDoc();
     }
     return rxTmpDoc;
 }
@@ -1926,17 +1924,12 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
 
 /* --------------------------------------------------*/
 
-void SwPrtOptions::MakeOptions( BOOL bWeb )
+namespace sw {
+
+void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb)
 {
-    *this = *SW_MOD()->GetPrtOptions(bWeb);
-
-    nCopyCount = 1;
-    bCollate = FALSE;
-    bPrintSelection = FALSE;
-    bJobStartet = FALSE;
-
-    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    aMulti.SelectAll();
-    aMulti.Select( 0, FALSE );
+    o_rData = *SW_MOD()->GetPrtOptions(bWeb);
 }
+
+} // namespace sw
 

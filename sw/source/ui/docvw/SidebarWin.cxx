@@ -389,7 +389,8 @@ void SwSidebarWin::InitControls()
 
 void SwSidebarWin::CheckMetaText()
 {
-    const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     String sMeta = GetAuthor();
     if (sMeta.Len() == 0)
     {
