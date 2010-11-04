@@ -1741,7 +1741,7 @@ sub cancel_build {
     print "\n";
     print "" . $ENV{'OOO_SHELL'} . "\n";
     print "cd " . $ENV{'SRC_ROOT'} . "\n";
-    print "source ./" . $ENV{'ENV_SCRIPT'} . ".sh\n";
+    print "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
     print "cd $module\n";
     print "build\n";
     print "\n";
@@ -2698,7 +2698,7 @@ sub read_ssolar_vars {
 sub get_solar_vars {
     my ($solar_vars, $file) = @_;
     my ($var, $value);
-    open SOLARTABLE, "<$file" or die "can´t open solarfile $file";
+    open SOLARTABLE, "<$file" or die "can't open solarfile $file";
     while(<SOLARTABLE>) {
         s/\r\n//o;
         next if(!/^\w+\s+(\w+)/o);
