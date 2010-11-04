@@ -397,8 +397,9 @@ sub create_directories
 
         if ($newdirectory eq "install" )
         {
-                # put packages into versioned path (fdo#30837)
-                $path = $path . "$installer::globals::ooodownloadfilename";
+            # put packages into versioned path (fdo#30837)
+            $path = $path . "$installer::globals::ooodownloadfilename";
+            create_directory($path);
         }
         else
         {
@@ -417,8 +418,8 @@ sub create_directories
                 }
 
                 $path = $path . $languagestring  . $installer::globals::separator;
+                create_directory($path);
             }
-            create_directory($path);
         }
     }
 
