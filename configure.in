@@ -1,20 +1,8 @@
-dnl /******************************************************************
-dnl *
-dnl *
-dnl * Name: configure.in
-dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-09-08 07:38:40 $
-dnl *
-dnl * Desc: This file serves as input for the GNU autoconf package
-dnl *       in order to create a configure script.
-dnl *       In this stage configure just checks the pre-requisites
-dnl *       necessary to build LibreOffice
-dnl *
-dnl *
-dnl ******************************************************************/
-AC_REVISION( $Revision: 1.290 $ )
+dnl configure.in serves as input for the GNU autoconf package
+dnl in order to create a configure script.
+
+AC_INIT([LibreOffice], [3.3],,, [http://documentfoundation.org/])
 AC_PREREQ(2.50)
-AC_INIT()
 echo "$@" >config.parms
 
 dnl ===================================================================
@@ -329,44 +317,6 @@ AC_ARG_ENABLE(gstreamer,
         [Disable building the gstreamer avmedia backend.]),
 ,enable_gstreamer=yes)
 
-AC_ARG_ENABLE(mysql-connector,
-    AS_HELP_STRING([--enable-mysql-connector],
-        [Enables the build of the MySQL Connector/LibO extension. This requires
-         access to the MySQL Connector/C (aka libmysql) to be given, too, with
-         either the --with-system-mysql or --with-libmysql-path option.]),
-,)
-
-AC_ARG_ENABLE(presenter-extra-ui,
-    AS_HELP_STRING([--enable-presenter-extra-ui],
-        [Enables extra functionality during slideshow, e.g. selecting pen color,
-         erasing drawings etc.]),
-,enable_presenter_extra_ui=no)
-
-AC_ARG_ENABLE(minimizer,
-    AS_HELP_STRING([--enable-minimizer],
-        [Enables the build of the Presentation Minimizer extension.]),
-,)
-
-AC_ARG_ENABLE(presenter-console,
-    AS_HELP_STRING([--enable-presenter-console],
-        [Enables the build of the Presenter Console extension.]),
-,)
-
-AC_ARG_ENABLE(pdfimport,
-    AS_HELP_STRING([--enable-pdfimport],
-        [Enables the build of the PDF Import extension and xpdf.]),
-,)
-
-AC_ARG_ENABLE(wiki-publisher,
-    AS_HELP_STRING([--enable-wiki-publisher],
-        [Enables the build of the Wiki Publisher extension.]),
-,)
-
-AC_ARG_ENABLE(report-builder,
-    AS_HELP_STRING([--enable-report-builder],
-        [Enables the build of the Report Builder extension.]),
-,)
-
 AC_ARG_ENABLE(neon,
     AS_HELP_STRING([--disable-neon],
         [Disable neon and the compilation of webdav binding.]),
@@ -642,7 +592,7 @@ AC_ARG_WITH(system-icu,
 
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
-        [Use poppler already on system.]),
+        [Use system poppler. (only needed for pdfimport extension)]),
 ,)
 
 AC_ARG_WITH(system-db,
@@ -1256,6 +1206,61 @@ AC_ARG_WITH(sun-templates,
         [Integrate Sun template packages.]),
 ,)
 
+AC_ARG_WITH(num-cpus,
+    AS_HELP_STRING([--with-num-cpus],
+        [Number of build processes/cpus to use (number of projects that will build at the same time).
+         Multi-process/multi-cpu builds can save a lot of time on multi-cpu machines.
+         Defaults to the number of CPUs on the machine.]),
+,)
+
+AC_ARG_WITH(max-jobs,
+    AS_HELP_STRING([--with-max-jobs],
+        [Maximum number of jobs per one CPU that will be issued at the same time my dmake.
+         The real number of the jobs is affected by the --with-num-cpus too, it can get up to CPUS*max_jobs.
+         Defaults to 1, unless you configure --enable-icecream - then to 10.]),
+,)
+
+dnl ===================================================================
+dnl Enable/disable extensions
+dnl ===================================================================
+
+AC_ARG_ENABLE(ext-presenter-ui,
+    AS_HELP_STRING([--enable-ext-presenter-ui],
+        [Enables extra functionality during slideshows, e.g. selecting pen color.]),
+,)
+
+AC_ARG_ENABLE(ext-presenter-minimizer,
+    AS_HELP_STRING([--enable-ext-presenter-minimizer],
+        [Enables the Presentation Minimizer.]),
+,)
+
+AC_ARG_ENABLE(ext-presenter-console,
+    AS_HELP_STRING([--enable-ext-presenter-console],
+        [Enables the Presenter Console extension.]),
+,)
+
+AC_ARG_ENABLE(ext-pdfimport,
+    AS_HELP_STRING([--enable-ext-pdfimport],
+        [Enables the PDF Import extension and xpdf.]),
+,)
+
+AC_ARG_ENABLE(ext-wiki-publisher,
+    AS_HELP_STRING([--enable-ext-wiki-publisher],
+        [Enables the Wiki Publisher extension.]),
+,)
+
+AC_ARG_ENABLE(report-builder,
+    AS_HELP_STRING([--enable-report-builder],
+        [Enables the build of the Report Builder extension.]),
+,)
+
+AC_ARG_ENABLE(mysql-connector,
+    AS_HELP_STRING([--enable-mysql-connector],
+        [Enables the build of the MySQL Connector/LibO extension. This requires
+         access to the MySQL Connector/C (aka libmysql) to be given, too, with
+         either the --with-system-mysql or --with-libmysql-path option.]),
+,)
+
 AC_ARG_WITH(lightproof,
     AS_HELP_STRING([--with-lightproof],
         [Integrate Lightproof extension.]),
@@ -1309,20 +1314,6 @@ AC_ARG_WITH(nlpsolver,
 AC_ARG_WITH(oooblogger,
     AS_HELP_STRING([--with-oooblogger],
         [Download and integrate oooblogger extension.]),
-,)
-
-AC_ARG_WITH(num-cpus,
-    AS_HELP_STRING([--with-num-cpus],
-        [Number of build processes/cpus to use (number of projects that will build at the same time).
-         Multi-process/multi-cpu builds can save a lot of time on multi-cpu machines.
-         Defaults to the number of CPUs on the machine.]),
-,)
-
-AC_ARG_WITH(max-jobs,
-    AS_HELP_STRING([--with-max-jobs],
-        [Maximum number of jobs per one CPU that will be issued at the same time my dmake.
-         The real number of the jobs is affected by the --with-num-cpus too, it can get up to CPUS*max_jobs.
-         Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
 
 BUILD_TYPE="OOo"
@@ -6410,40 +6401,44 @@ fi
 
 AC_SUBST(ENABLE_OPENGL)
 
+# presenter extra ui extension?
 AC_MSG_CHECKING([whether to build extra presenter ui])
-if test -n "$enable_presenter_extra_ui" -a "$enable_presenter_extra_ui" != "no"; then
+AS_IF([test "x$enable_ext_presenter_ui" = "xyes"], [
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_EXTRA_UI=YES
-else
+],[
    AC_MSG_RESULT([no])
    ENABLE_PRESENTER_EXTRA_UI=NO
-fi
+])
 AC_SUBST(ENABLE_PRESENTER_EXTRA_UI)
 
+# presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
-if test -n "$enable_minimizer" -a "$enable_minimizer" != "no"; then
+AS_IF([test "x$enable_ext_presenter_minimizer" = "xyes"], [
    AC_MSG_RESULT([yes])
    ENABLE_MINIMIZER=YES
-else
+],[
    AC_MSG_RESULT([no])
    ENABLE_MINIMIZER=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
-fi
+])
 AC_SUBST(ENABLE_MINIMIZER)
 
-AC_MSG_CHECKING([whether to build the Presenter Screen extension])
-if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; then
+# presenter console extension?
+AC_MSG_CHECKING([whether to build the Presenter Console extension])
+AS_IF([test "x$enable_ext_presenter_console" = "xyes"], [
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
-else
+],[
    AC_MSG_RESULT([no])
    ENABLE_PRESENTER_SCREEN=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PRESENTER_SCREEN"
-fi
+])
 AC_SUBST(ENABLE_PRESENTER_SCREEN)
 
+# pdf import extension?
 AC_MSG_CHECKING([whether to build the PDF Import extension])
-if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
+AS_IF([test "x$enable_ext_pdfimport" = "xyes"], [
   AC_MSG_RESULT([yes])
   ENABLE_PDFIMPORT=YES
 
@@ -6460,22 +6455,23 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
-      AC_MSG_CHECKING([for xpdf module])
+      AC_MSG_CHECKING([for internal xpdf module])
       if test -d ./xpdf; then
-       AC_MSG_RESULT([OK])
+        AC_MSG_RESULT([OK])
       else
-        AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+        AC_MSG_ERROR([not existing! (Did you get the -extensions tarball?)])
       fi
   fi
-else
-   AC_MSG_RESULT([no])
-   ENABLE_PDFIMPORT=NO
-   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
-fi
+],[
+  AC_MSG_RESULT([no])
+  ENABLE_PDFIMPORT=NO
+  SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
+])
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+
 
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
   AC_MSG_CHECKING([for sdext module])
@@ -6488,7 +6484,7 @@ if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$E
 fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
-if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test  "$WITH_JAVA" != "no"; then
+AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
   AC_MSG_RESULT([yes])
   AC_MSG_CHECKING([for swext module])
   if test -d ./swext; then
@@ -6498,11 +6494,14 @@ if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test 
   fi
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
-else
+  if test  "x$WITH_JAVA" = "xno"; then
+    AC_MSG_ERROR([wiki publisher requires Java! Enable java if you want to build it.])
+  fi
+],[
   AC_MSG_RESULT([no])
   ENABLE_MEDIAWIKI=NO
   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
-fi
+])
 AC_SUBST(ENABLE_MEDIAWIKI)
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
