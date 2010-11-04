@@ -142,7 +142,6 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         aStrEmpty               ( ScResId( STR_EMPTY        ))
 {
     FreeResource();
-//  bScAcceptChgDlgIsDead=FALSE;
     bNoSelection=FALSE;
     bNeedsUpdate=FALSE;
     bIgnoreMsg=FALSE;
@@ -202,7 +201,6 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
 }
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
-//  bScAcceptChgDlgIsDead=TRUE;
     ClearView();
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -985,7 +983,6 @@ IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, EMPTYARG )
 
     if(pWnd!=NULL)
     {
-//      bSimpleRefDlgStarted=TRUE;
         USHORT nAcceptId=ScAcceptChgDlgWrapper::GetChildWindowId();
         pViewFrm->ShowChildWindow(nAcceptId,FALSE);
         pWnd->SetCloseHdl(LINK( this, ScAcceptChgDlg,RefInfoHandle));
@@ -1004,7 +1001,6 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, String*, pResult)
 {
     USHORT nId;
 
-//  bSimpleRefDlgStarted=FALSE;
     ScSimpleRefDlgWrapper::SetAutoReOpen(TRUE);
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
@@ -1763,8 +1759,6 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, ULONG nStartAction,U
 
 IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 {
-//  if(bScAcceptChgDlgIsDead) return 0;
-
     ScChangeTrackMsgQueue& aMsgQueue= pChgTrack->GetMsgQueue();
 
     ScChangeTrackMsgInfo* pTrackInfo=aMsgQueue.Get();
