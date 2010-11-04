@@ -1530,8 +1530,8 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
-            mbPwdCheckBoxState = ( pPassItem != NULL );
+            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, FALSE );
+            mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
             SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, FALSE );
@@ -1545,7 +1545,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             mbSelectionEnabled = sal_False;
 
         // the password will be set in case user decide so
+        rpSet->ClearItem( SID_PASSWORDINTERACTION );
         rpSet->ClearItem( SID_PASSWORD );
+        rpSet->ClearItem( SID_ENCRYPTIONDATA );
         rpSet->ClearItem( SID_RECOMMENDREADONLY );
         rpSet->ClearItem( SID_MODIFYPASSWORDINFO );
 
@@ -1660,7 +1662,30 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                         if ( pPasswordRequest->isPassword() )
                         {
                             if ( pPasswordRequest->getPassword().getLength() )
-                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            {
+                                // TODO/LATER: The filters should show the password dialog themself in future
+                                if ( bMSType )
+                                {
+                                    // all the current MS-filters use MSCodec_Std97 implementation
+                                    uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+                                    uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
+
+                                    if ( aEncryptionKey.getLength() )
+                                    {
+                                        ::comphelper::SequenceAsHashMap aHashData;
+                                        aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ) ] <<= aEncryptionKey;
+                                        aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ) ] <<= aUniqueID;
+
+                                        rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
+                                    }
+                                    else
+                                        return ERRCODE_IO_NOTSUPPORTED;
+                                }
+                                else
+                                {
+                                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordRequest->getPassword() ) ) ) );
+                                }
+                            }
 
                             if ( pPasswordRequest->getRecommendReadOnly() )
                                 rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );

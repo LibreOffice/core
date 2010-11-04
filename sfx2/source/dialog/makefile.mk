@@ -42,6 +42,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/itemconnect.obj     \
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/partwnd.obj         \
+        $(SLO)$/passwd.obj			\
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
         $(SLO)$/dinfdlg.obj         \

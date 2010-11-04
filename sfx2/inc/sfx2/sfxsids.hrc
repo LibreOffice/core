@@ -309,7 +309,9 @@
 #define SID_DEFAULTFILENAME                 (SID_SFX_START + 1717)
 #define SID_MODIFYPASSWORDINFO              (SID_SFX_START + 1718)
 #define SID_RECOMMENDREADONLY               (SID_SFX_START + 1719)
-#define SID_SFX_free_START                  (SID_SFX_START + 1720)
+#define SID_ENCRYPTIONDATA                  (SID_SFX_START + 1720)
+#define SID_PASSWORDINTERACTION             (SID_SFX_START + 1721)
+#define SID_SFX_free_START                  (SID_SFX_START + 1722)
 #define SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)

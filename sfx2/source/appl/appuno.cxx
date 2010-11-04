@@ -192,6 +192,7 @@ static char const sUseSystemDialog[] = "UseSystemDialog";
 static char const sStandardDir[] = "StandardDir";
 static char const sBlackList[] = "BlackList";
 static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
+static char const sEncryptionData[] = "EncryptionData";
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -851,6 +852,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
                 }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sEncryptionData)) )
+                {
+                    rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
+                }
 #ifdef DBG_UTIL
                 else
                     --nFoundArgs;
@@ -1065,6 +1070,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1199,6 +1206,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_COPY_STREAM_IF_POSSIBLE )
                         continue;
                     if ( nId == SID_NOAUTOSAVE )
+                        continue;
+                     if ( nId == SID_ENCRYPTIONDATA )
                         continue;
 
                     // used only internally
@@ -1567,6 +1576,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sModifyPasswordInfo));
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_ENCRYPTIONDATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sEncryptionData));
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
         }
