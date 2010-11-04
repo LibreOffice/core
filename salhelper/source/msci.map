@@ -39,6 +39,7 @@ UDK_3.1 {
 
         ??0Timer@salhelper@@QAE@XZ;
         ??0Timer@salhelper@@QAE@ABUTTimeValue@1@@Z;
+        ??0Timer@salhelper@@QAE@ABUTTimeValue@1@0@Z;
         ??1Timer@salhelper@@MAE@XZ;
 
         ?isExpired@Timer@salhelper@@QBAEXZ;
