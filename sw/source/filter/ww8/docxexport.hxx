@@ -33,6 +33,7 @@
 #include "wrtww8.hxx"
 
 #include <sax/fshelper.hxx>
+#include <sax/fastattribs.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cstdio>
@@ -157,8 +158,6 @@ protected:
 
     virtual void OutputLinkedOLE( const rtl::OUString& );
 
-
-
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
     virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
@@ -187,6 +186,9 @@ private:
 
     /// Write docProps/core.xml
     void WriteProperties();
+
+    /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
+    sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
 
 public:
     /// FIXME this is temporary, remotely reminding the method of the same
