@@ -96,6 +96,7 @@
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
+#include <framework/documentundoguard.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
@@ -1771,18 +1772,21 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
 
         if ( pBasMgr )
         {
-            if ( pSh && pDoc )
+            const bool bIsAppBasic = ( pBasMgr == pAppMgr );
+            const bool bIsDocBasic = ( pBasMgr != pAppMgr );
+
+            if ( pDoc )
             {
-                // security check for macros from document basic if an SFX context (pSh) is given
+                // security check for macros from document basic if an SFX doc is given
                 if ( !pDoc->AdjustMacroMode( String() ) )
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;
             }
-            else if ( pSh && pSh->GetMedium() )
+            else if ( pDoc && pDoc->GetMedium() )
             {
-                pSh->AdjustMacroMode( String() );
-                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+                pDoc->AdjustMacroMode( String() );
+                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
                 if ( pUpdateDocItem && pMacroExecModeItem
                   && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
                   && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
@@ -1802,34 +1806,46 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
             if ( pBasMgr->HasMacro( aQualifiedMethod ) )
             {
                 Any aOldThisComponent;
-                if ( pSh )
+                const bool bSetDocMacroMode = ( pDoc != NULL ) && bIsDocBasic;
+                const bool bSetGlobalThisComponent = ( pDoc != NULL ) && bIsAppBasic;
+                if ( bSetDocMacroMode )
                 {
-                    if ( pBasMgr != pAppMgr )
-                        // mark document: it executes an own macro, so it's in a modal mode
-                        pSh->SetMacroMode_Impl( TRUE );
-                    if ( pBasMgr == pAppMgr )
-                    {
-                        // document is executed via AppBASIC, adjust ThisComponent variable
-                        aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pSh->GetModel() ) );
-                    }
+                    // mark document: it executes an own macro, so it's in a modal mode
+                    pDoc->SetMacroMode_Impl( TRUE );
+                }
+
+                if ( bSetGlobalThisComponent )
+                {
+                    // document is executed via AppBASIC, adjust ThisComponent variable
+                    aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pDoc->GetModel() ) );
                 }
 
                 // just to let the shell be alive
-                SfxObjectShellRef rSh = pSh;
+                SfxObjectShellRef xKeepDocAlive = pDoc;
 
-                SbxVariableRef retValRef = new SbxVariable;
-                nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef );
-                if ( nErr == ERRCODE_NONE )
-                    rRetval = sbxToUnoValue( retValRef );
+                {
+                    // attempt to protect the document against the script tampering with its Undo Context
+                    ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+                    if ( bIsDocBasic )
+                        pUndoGuard.reset( new ::framework::DocumentUndoGuard( pDoc->GetModel() ) );
 
-                if ( ( pBasMgr == pAppMgr ) && pSh )
+                    // execute the method
+                    SbxVariableRef retValRef = new SbxVariable;
+                    nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef );
+                    if ( nErr == ERRCODE_NONE )
+                        rRetval = sbxToUnoValue( retValRef );
+                }
+
+                if ( bSetGlobalThisComponent )
                 {
                     pAppMgr->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
                 }
 
-                if ( pSh && pSh->GetModel().is() )
+                if ( bSetDocMacroMode )
+                {
                        // remove flag for modal mode
-                       pSh->SetMacroMode_Impl( FALSE );
+                       pDoc->SetMacroMode_Impl( FALSE );
+                }
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;

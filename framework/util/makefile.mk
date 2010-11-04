@@ -99,7 +99,8 @@ LIB2OBJFILES=   \
                 $(SLO)$/menuextensionsupplier.obj               \
                 $(SLO)$/preventduplicateinteraction.obj         \
                 $(SLO)$/framelistanalyzer.obj                   \
-                $(SLO)$/titlehelper.obj
+                $(SLO)$/titlehelper.obj                         \
+                $(SLO)$/documentundoguard.obj                   \
 
 # --- import classes library ---------------------------------------------------
 

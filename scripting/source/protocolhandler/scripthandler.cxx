@@ -53,6 +53,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/util.hxx>
+#include <framework/documentundoguard.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
@@ -206,6 +207,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    }
                }
             }
+
+            // attempt to protect the document against the script tampering with its Undo Context
+            ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+            if ( bIsDocumentScript )
+                pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
             bSuccess = sal_False;
             while ( !bSuccess )

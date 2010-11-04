@@ -118,6 +118,7 @@ using namespace ::com::sun::star::container;
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
+#include <framework/documentundoguard.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -1721,9 +1722,11 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( _rxScriptContext ) ), UNO_SET_THROW );
         }
 
+        // ry to protect the invocation context's undo manager (if present), just in case the script tampers with it
+        ::framework::DocumentUndoGuard aUndoGuard( _rxScriptContext.get() );
+
         // obtain the script, and execute it
         Reference< provider::XScript > xScript( xScriptProvider->getScript( _rScriptURL ), UNO_QUERY_THROW );
-
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
     }
     catch ( const uno::Exception& )

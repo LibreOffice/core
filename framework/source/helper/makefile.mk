@@ -62,7 +62,8 @@ SLOFILES= 			$(SLO)$/ocomponentaccess.obj					\
                     $(SLO)$/tagwindowasmodified.obj                 \
                     $(SLO)$/titlebarupdate.obj                      \
                     $(SLO)$/titlehelper.obj                         \
-                    $(SLO)$/mischelper.obj
+                    $(SLO)$/mischelper.obj                          \
+                    $(SLO)$/documentundoguard.obj                   \
 
 # --- Targets ------------------------------------------------------
 
