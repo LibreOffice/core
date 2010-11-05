@@ -1333,10 +1333,8 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":withtitlebar") ),
                       OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
-
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
-
+    readImageURLAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
+                           OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
     readEvents();
 }
 

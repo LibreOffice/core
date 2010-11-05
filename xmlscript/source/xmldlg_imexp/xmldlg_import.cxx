@@ -2010,19 +2010,19 @@ void DialogImport::addStyle(
     Reference< xml::input::XElement > const & xStyle )
     SAL_THROW( () )
 {
-    _styleNames.push_back( rStyleId );
-    _styles.push_back( xStyle );
+    (*_pStyleNames).push_back( rStyleId );
+    (*_pStyles).push_back( xStyle );
 }
 //__________________________________________________________________________________________________
 Reference< xml::input::XElement > DialogImport::getStyle(
     OUString const & rStyleId ) const
     SAL_THROW( () )
 {
-    for ( size_t nPos = 0; nPos < _styleNames.size(); ++nPos )
+    for ( size_t nPos = 0; nPos < (*_pStyleNames).size(); ++nPos )
     {
-        if (_styleNames[ nPos ] == rStyleId)
+        if ( (*_pStyleNames)[ nPos ] == rStyleId)
         {
-            return _styles[ nPos ];
+            return (*_pStyles)[ nPos ];
         }
     }
     return 0;

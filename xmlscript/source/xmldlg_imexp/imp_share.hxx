@@ -128,8 +128,6 @@ struct DialogImport
 
     ::boost::shared_ptr< ::std::vector< ::rtl::OUString > > _pStyleNames;
     ::boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > _pStyles;
-    ::std::vector< ::rtl::OUString >& _styleNames;
-    ::std::vector< css::uno::Reference< css::xml::input::XElement > >& _styles;
 
     css::uno::Reference< css::container::XNameContainer > _xDialogModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > _xDialogModelFactory;
@@ -176,8 +174,6 @@ public:
         : _xContext( xContext )
         , _pStyleNames( pStyleNames )
         , _pStyles( pStyles )
-        , _styleNames( *_pStyleNames )
-        , _styles( *_pStyles )
         , _xDialogModel( xDialogModel )
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW ), _xDoc( xDoc )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
@@ -187,8 +183,6 @@ public:
         , _xSupplier( rOther._xSupplier )
         , _pStyleNames( rOther._pStyleNames )
         , _pStyles( rOther._pStyles )
-        , _styleNames( *_pStyleNames )
-        , _styles( *_pStyles )
         , _xDialogModel( rOther._xDialogModel )
         , _xDialogModelFactory( rOther._xDialogModelFactory )
         , _xDoc( rOther._xDoc )
