@@ -166,4 +166,11 @@ diff -u misc/hyphen-2.4/makefile.mk misc/build/hyphen-2.4/makefile.mk
 +ALL: ALLTAR
 +
 +.INCLUDE : target.mk
-Common subdirectories: misc/hyphen-2.4/tests and misc/build/hyphen-2.4/tests
+--- misc/hyphen-2.4/tests/test.sh	Wed Apr 30 14:12:33 2008
++++ misc/build/hyphen-2.4/tests/test.sh	Fri Nov  5 09:05:16 2010
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ function check_valgrind_log () {
+ if [ "$VALGRIND" != "" ]; then
