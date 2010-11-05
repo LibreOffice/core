@@ -31,7 +31,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/zipstorage.hxx>
 #include <oox/vml/vmldrawing.hxx>
-
+#include <oox/export/shapes.hxx>
 #include "epptbase.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -153,6 +153,8 @@ private:
     sal_Bool mbCreateNotes;
 
     static sal_Int32 nStyleLevelToken[5];
+
+    ::oox::drawingml::ShapeExport::ShapeHashMap maShapeMap;
 };
 
 }

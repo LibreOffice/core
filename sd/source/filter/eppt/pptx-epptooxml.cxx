@@ -107,7 +107,7 @@ class PowerPointShapeExport : public ShapeExport
     PageType            mePageType;
     sal_Bool            mbMaster;
 public:
-                        PowerPointShapeExport( FSHelperPtr pFS, PowerPointExport* pFB );
+    PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB );
     void                SetMaster( sal_Bool bMaster );
     void                SetPageType( PageType ePageType );
     ShapeExport&        WriteNonVisualProperties( Reference< XShape > xShape );
@@ -120,8 +120,8 @@ public:
     sal_Bool WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, sal_Bool bMaster );
 };
 
-PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, PowerPointExport* pFB )
-    : ShapeExport( XML_p, pFS, pFB )
+    PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB )
+        : ShapeExport( XML_p, pFS, pShapeMap, pFB )
     , mrExport( *pFB )
 {
 }
@@ -243,6 +243,7 @@ bool PowerPointExport::importDocument() throw()
 bool PowerPointExport::exportDocument() throw()
 {
     DrawingML::ResetCounters();
+    maShapeMap.clear ();
 
     addRelation( US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ), S( "ppt/presentation.xml" ) );
 
@@ -275,6 +276,8 @@ bool PowerPointExport::exportDocument() throw()
 
     commitStorage();
 
+    maShapeMap.clear ();
+
     return true;
 }
 
@@ -297,7 +300,7 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
     pFS->startElementNS( XML_p, XML_bg, FSEND );
     pFS->startElementNS( XML_p, XML_bgPr, FSEND );
 
-    PowerPointShapeExport( pFS, this ).WriteFill( rXPropSet );
+    PowerPointShapeExport( pFS, &maShapeMap, this ).WriteFill( rXPropSet );
 
     pFS->endElementNS( XML_p, XML_bgPr );
     pFS->endElementNS( XML_p, XML_bg );
@@ -651,7 +654,7 @@ void PowerPointExport::WriteAnimationTarget( FSHelperPtr pFS, Any aTarget )
     if( rXShape.is() ) {
     pFS->startElementNS( XML_p, XML_tgtEl, FSEND );
     pFS->singleElementNS( XML_p, XML_spTgt,
-                  XML_spid, I32S( ShapeExport::GetShapeID( rXShape ) ),
+                  XML_spid, I32S( ShapeExport::GetShapeID( rXShape, &maShapeMap ) ),
                   FSEND );
     pFS->endElementNS( XML_p, XML_tgtEl );
     }
@@ -1450,7 +1453,7 @@ void PowerPointExport::ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum
 
 void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_Bool bMaster )
 {
-    PowerPointShapeExport aDML( pFS, this );
+    PowerPointShapeExport aDML( pFS, &maShapeMap, this );
     aDML.SetMaster( bMaster );
     aDML.SetPageType( ePageType );
     sal_uInt32 nShapes;
