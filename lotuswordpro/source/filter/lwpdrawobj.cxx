@@ -90,8 +90,10 @@
  * @descr   Constructor of class LwpDrawObj
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
-LwpDrawObj::LwpDrawObj(SvStream * pStream, DrawingOffsetAndScale* pTransData) :
-m_pStream(pStream), m_pTransData(pTransData), m_eType(OT_UNDEFINED)
+LwpDrawObj::LwpDrawObj(SvStream * pStream, DrawingOffsetAndScale* pTransData)
+    : m_eType(OT_UNDEFINED)
+    , m_pStream(pStream)
+    , m_pTransData(pTransData)
 {
     this->ReadObjHeaderRecord();
 }
