@@ -25,15 +25,20 @@
 #
 #*************************************************************************
 
-# Makefile for OpenBSD.
-
-ASM=
-AFLAGS=
-
+# Makefile for OpenBSD
+ASM*=
+AFLAGS*=
 SOLAR_JAVA*=
+# default optimization level for product code
+CDEFAULTOPT*=-O2
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=
+# position independent code switch
+PICSWITCH*:=-fpic
 JAVAFLAGSDEBUG=-g
 
-# Include arch specific makefile.
+# arch specific defines
 .IF "$(CPUNAME)" == "INTEL"
 CDEFS+=-DX86
 .ENDIF
@@ -43,22 +48,12 @@ ARCH_FLAGS*=
 BUILD64=1
 .ENDIF
 
-# Compiler flags for enabling optimizations
-.IF "$(PRODUCT)"!=""
-CFLAGSOPT=-O2					# optimizing for products
-.IF "$(USE_SYSTEM_STL)"!="YES"
-CFLAGSOPT+=-fno-strict-aliasing			# STLPort headers are full of aliasing warnings
-.ENDIF
-.ELSE   # "$(PRODUCT)"!=""
-CFLAGSOPT=                                      # no optimizing for non products
-.ENDIF  # "$(PRODUCT)"!=""
-
 # filter for supressing verbose messages from linker
 #not needed at the moment
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=450
+CDEFS+=$(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -80,7 +75,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 .IF "$(SYSBASE)"!=""
-CFLAGS_SYSBASE:=-isystem $(SYSBASE)/usr/include
+CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
@@ -99,14 +94,17 @@ CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
-CFLAGS_NO_EXCEPTIONS=-fno-exceptions -DBOOST_NO_EXCEPTIONS
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
+CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
@@ -121,6 +119,15 @@ CFLAGSPROF=
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
+# Compiler flags for enabling optimizations
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
+.IF "$(USE_SYSTEM_STL)"!="YES"
+CFLAGSOPT+=-fno-strict-aliasing #STLPort headers are full of aliasing warnings
+.ENDIF
+.ELSE 	# "$(PRODUCT)"!=""
+CFLAGSOPT=   							# no optimizing for non products
+.ENDIF	# "$(PRODUCT)"!=""
 # Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
@@ -136,8 +143,10 @@ CFLAGSWERRCC=-Werror
 
 # Once all modules on this platform compile without warnings, set
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
-# settings.mk): Currently this is not tested on OpenBSD
-#MODULES_WITH_WARNINGS :=
+# settings.mk):
+MODULES_WITH_WARNINGS := \
+    lotuswordpro \
+    soldep
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
@@ -156,12 +165,19 @@ LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
-LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
+# flag -Wl,-z,noexecstack sets the NX bit on the stack
+LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
+LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
+.ENDIF
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -184,18 +200,26 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
-STDOBJVCL=$(L)/salmain.o
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
+.ENDIF
+
 # libraries for linking applications
-STDLIBGUIMT=-lX11 $(PTHREAD_LIBS) -lm
-STDLIBCUIMT=$(PTHREAD_LIBS) -lm
+STDLIBGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
+STDLIBCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT=-lX11 -lXext $(PTHREAD_LIBS) -lm
-STDSHLCUIMT=$(PTHREAD_LIBS) -lm
+STDSHLGUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
+STDSHLCUIMT+=-Wl,--as-needed $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
+
+X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
@@ -220,7 +244,7 @@ LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
-LIBMGR=ar
+LIBMGR*=ar
 LIBFLAGS=-r
 
 # tool for generating import libraries
@@ -240,3 +264,4 @@ RCSETVERSION=
 DLLPRE=lib
 DLLPOST=.so
 DLLPOSTFIX=
+PCHPOST=.gch
