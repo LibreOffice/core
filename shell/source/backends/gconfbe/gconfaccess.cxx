@@ -322,7 +322,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
         case SETTING_FONT_ANTI_ALIASING_MIN_PIXEL:
         case SETTING_SYMBOL_SET:
         {
-            sal_Int32 nShortValue;
+            sal_Int32 nShortValue(0);
             uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= nShortValue;
             return uno::makeAny( (sal_Int16) nShortValue );
