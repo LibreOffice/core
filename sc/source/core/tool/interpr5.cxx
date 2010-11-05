@@ -3186,7 +3186,6 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         }
     }
     PushMatrix(pResMat);
-    return;
 }
 
 
