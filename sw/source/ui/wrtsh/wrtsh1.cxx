@@ -110,6 +110,7 @@
 #include <editeng/acorrcfg.hxx>
 
 #include "PostItMgr.hxx"
+#include <sfx2/msgpool.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -429,16 +430,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                             pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
                         pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
                     } */
-                case SID_INSERT_APPLET:
-                    /*
-                    if(pReq)
-                    {
-                        SvAppletObjectRef xApplet ( xIPObj );
-                        if(xApplet.Is())
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_1 , xApplet->GetCodeBase()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_2 , aDlg.GetClass()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    }*/
                 case SID_INSERT_FLOATINGFRAME:
                     /*
                     if(pReq && xFloatingFrame.Is())
@@ -453,9 +444,13 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                         pReq->AppendItem(SfxBoolItem(FN_PARAM_5, pDescriptor->HasFrameBorder()));
                     }*/
                 {
+                    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+                    const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
+                    rtl::OString aCmd(".uno:");
+                    aCmd += pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( GetWin(), nSlotId, xStor, &aServerList );
+                            pFact->CreateInsertObjectDialog( GetWin(), rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
                     if ( pDlg )
                     {
                         pDlg->Execute();

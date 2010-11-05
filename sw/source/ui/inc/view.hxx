@@ -83,7 +83,6 @@ class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
 class SvtAccessibilityOptions;
-class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#

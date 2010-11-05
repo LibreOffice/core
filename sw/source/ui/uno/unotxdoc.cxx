@@ -47,7 +47,7 @@
 #include <srcview.hxx>
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
@@ -2716,14 +2716,15 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
 
-            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+            m_pRenderData->SetSwPrtOptions( new SwPrintData );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
             if (pView->IsA(aSwViewTypeId))
             {
                 // PDF export should not make use of the SwPrtOptions
-                const SwPrtOptions *pPrtOptions = bIsPDFExport? NULL : m_pRenderData->GetSwPrtOptions();
+                const SwPrintData *pPrtOptions = (bIsPDFExport)
+                    ? NULL : m_pRenderData->GetSwPrtOptions();
                 m_pRenderData->ViewOptionAdjust( pPrtOptions );
             }
 
@@ -2855,7 +2856,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     {
         // --> TL, OD 2010-09-07 #i114210#
         // determine the correct page number from the renderer index
-        const USHORT nPage = m_pRenderData->GetPagesToPrint()[ nRenderer ];
+        // --> OD 2010-10-01 #i114875
+        // consider brochure print
+        const USHORT nPage = bPrintProspect
+                             ? nRenderer + 1
+                             : m_pRenderData->GetPagesToPrint()[ nRenderer ];
         // <--
 
         // get paper tray to use ...
@@ -3083,7 +3088,8 @@ void SAL_CALL SwXTextDocument::render(
                     }
                     // <--
 
-                    const SwPrtOptions &rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
+                    SwPrintData const& rSwPrtOptions =
+                        *m_pRenderData->GetSwPrtOptions();
                     if (bPrintProspect)
                         pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
                     else    // normal printing and PDF export
@@ -4106,8 +4112,8 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 }
 
 
-void SwViewOptionAdjust_Impl::AdjustViewOptions(
-    const SwPrtOptions *pPrtOptions )
+void
+SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
 {
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present

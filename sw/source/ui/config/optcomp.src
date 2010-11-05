@@ -50,6 +50,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     ListBox LB_FORMATTING
     {
+        HelpID = "sw:ListBox:TP_OPTCOMPATIBILITY_PAGE:LB_FORMATTING";
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 118 , 24 ) ;
         DropDown = TRUE;
@@ -70,12 +71,14 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     PushButton PB_RESET
     {
+        HelpID = "sw:PushButton:TP_OPTCOMPATIBILITY_PAGE:PB_RESET";
         Pos = MAP_APPFONT ( 125 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Reset";
     };
     PushButton PB_DEFAULT
     {
+        HelpID = "sw:PushButton:TP_OPTCOMPATIBILITY_PAGE:PB_DEFAULT";
         Pos = MAP_APPFONT ( 188 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Use as ~Default";

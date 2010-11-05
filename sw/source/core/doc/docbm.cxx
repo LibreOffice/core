@@ -305,7 +305,7 @@ namespace sw { namespace mark
     MarkManager::MarkManager(SwDoc& rDoc)
         : m_pDoc(&rDoc)
     { }
-
+#if OSL_DEBUG_LEVEL > 1
     void MarkManager::dumpFieldmarks( ) const
     {
         const_iterator_t pIt = m_vFieldmarks.begin();
@@ -316,7 +316,7 @@ namespace sw { namespace mark
                 ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
-
+#endif
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const ::rtl::OUString& rName,
         const IDocumentMarkAccess::MarkType eType)

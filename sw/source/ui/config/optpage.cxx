@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -36,21 +37,10 @@
 #include <svl/svstdarr.hxx>
 #endif
 
+#include <optpage.hxx>
 #include <doc.hxx>
 #include <hintids.hxx>
 #include <cmdid.h>
-#include <vcl/svapp.hxx>
-#include <svl/cjkoptions.hxx>
-#include <svtools/ctrltool.hxx>
-#include <svl/eitem.hxx>
-#include <svx/htmlmode.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/bindings.hxx>
-#include <svx/xtable.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/langitem.hxx>
-#include <svx/dlgutil.hxx>
 #include <fmtcol.hxx>
 #include <charatr.hxx>
 #include <swtypes.hxx>
@@ -60,12 +50,12 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#include <cfgitems.hxx> //Items fuer Sw-Seiten
+#include <cfgitems.hxx>
 #include <poolfmt.hxx>
 #include <uiitems.hxx>
 #include <initui.hxx>
-#include <optpage.hxx>
 #include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <modcfg.hxx>
 #include <srcview.hxx>
 #include <crstate.hxx>
@@ -74,13 +64,26 @@
 #include <config.hrc>
 #include <redlopt.hrc>
 #include <optdlg.hrc>
-#include <svx/strarray.hxx>
-#include <svl/slstitm.hxx>
-#include <sfx2/request.hxx>
 #include <swwrtshitem.hxx>
-#include <svl/ctloptions.hxx>
-
 #include <unomid.h>
+
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/bindings.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/ctloptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svtools/ctrltool.hxx>
+#include <svx/htmlmode.hxx>
+#include <svx/xtable.hxx>
+#include <svx/dlgutil.hxx>
+#include <svx/strarray.hxx>
+#include <vcl/svapp.hxx>
+
 
 
 using namespace ::com::sun::star;

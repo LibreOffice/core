@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLYFRM_HXX
-#define _FLYFRM_HXX
+#ifndef SW_FLYFRM_HXX
+#define SW_FLYFRM_HXX
 
 #include "layfrm.hxx"
 #include "frmfmt.hxx"
@@ -158,7 +158,8 @@ public:
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
