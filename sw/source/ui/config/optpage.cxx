@@ -54,7 +54,6 @@
 #include <poolfmt.hxx>
 #include <uiitems.hxx>
 #include <initui.hxx>
-#include <swprtopt.hxx>
 #include <printdata.hxx>
 #include <modcfg.hxx>
 #include <srcview.hxx>
