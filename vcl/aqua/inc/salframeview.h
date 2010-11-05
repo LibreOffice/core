@@ -37,6 +37,7 @@
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(MacOSBOOL)canBecomeKeyWindow;
+-(void)displayIfNeeded;
 -(void)windowDidBecomeKey: (NSNotification*)pNotification;
 -(void)windowDidResignKey: (NSNotification*)pNotification;
 -(void)windowDidChangeScreen: (NSNotification*)pNotification;
@@ -77,6 +78,10 @@
     id              mpMouseEventListener;
     id              mDraggingDestinationHandler;
     NSEvent*        mpLastSuperEvent;
+
+    // #i102807# used by magnify event handler
+    NSTimeInterval  mfLastMagnifyTime;
+    float           mfMagnifyDeltaSum;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;

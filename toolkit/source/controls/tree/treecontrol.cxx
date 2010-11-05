@@ -76,6 +76,7 @@ UnoTreeModel::UnoTreeModel()
     ImplRegisterProperty( BASEPROPERTY_TREE_SHOWSROOTHANDLES );
     ImplRegisterProperty( BASEPROPERTY_TREE_ROWHEIGHT );
     ImplRegisterProperty( BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 UnoTreeModel::UnoTreeModel( const UnoTreeModel& rModel )

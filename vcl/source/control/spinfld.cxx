@@ -88,15 +88,12 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
         // there is just no useful native support for spinfields with dropdown
         !(pWin->GetStyle() & WB_DROPDOWN) )
     {
-        ImplControlValue aControlValue;
-        aControlValue.setOptionalVal( (void*) &rSpinbuttonValue );
-
         if( pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnUpperPart) &&
             pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnLowerPart) )
         {
             // only paint the embedded spin buttons, all buttons are painted at once
-            bNativeOK = pWin->DrawNativeControl( CTRL_SPINBOX, PART_ALL_BUTTONS, Region(), CTRL_STATE_ENABLED,
-                        aControlValue, rtl::OUString() );
+            bNativeOK = pWin->DrawNativeControl( CTRL_SPINBOX, PART_ALL_BUTTONS, Rectangle(), CTRL_STATE_ENABLED,
+                        rSpinbuttonValue, rtl::OUString() );
         }
         else
         {
@@ -115,17 +112,18 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
 
             Point aPt;
             Size aSize( pBorder->GetOutputSizePixel() );    // the size of the border window, i.e., the whole control
-            Region aBound, aContent;
-            Region aNatRgn( Rectangle( aPt, aSize ) );
-            if( pBorder->GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
-                    aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+            Rectangle aBound, aContent;
+            Rectangle aNatRgn( aPt, aSize );
+            if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
+                pBorder->GetNativeControlRegion( CTRL_SPINBOX, PART_ENTIRE_CONTROL,
+                                                 aNatRgn, 0, rSpinbuttonValue, rtl::OUString(), aBound, aContent) )
             {
-                aSize = aContent.GetBoundRect().GetSize();
+                aSize = aContent.GetSize();
             }
 
-            Region aRgn( Rectangle( aPt, aSize ) );
+            Rectangle aRgn( aPt, aSize );
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
-                        aControlValue, rtl::OUString() );
+                        rSpinbuttonValue, rtl::OUString() );
 
             pBorder->SetClipRegion( oldRgn );
         }
@@ -139,12 +137,9 @@ BOOL ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbutton
 
     if( pWin->IsNativeControlSupported(CTRL_SPINBUTTONS, PART_ENTIRE_CONTROL) )
     {
-        ImplControlValue aControlValue;
-        aControlValue.setOptionalVal( (void*) &rSpinbuttonValue );
-
         // only paint the standalone spin buttons, all buttons are painted at once
-        bNativeOK = pWin->DrawNativeControl( CTRL_SPINBUTTONS, PART_ALL_BUTTONS, Region(), CTRL_STATE_ENABLED,
-                    aControlValue, rtl::OUString() );
+        bNativeOK = pWin->DrawNativeControl( CTRL_SPINBUTTONS, PART_ALL_BUTTONS, Rectangle(), CTRL_STATE_ENABLED,
+                    rSpinbuttonValue, rtl::OUString() );
     }
     return bNativeOK;
 }
@@ -705,7 +700,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             nBottom1--;
 
         BOOL bNativeRegionOK = FALSE;
-        Region aContentUp, aContentDown;
+        Rectangle aContentUp, aContentDown;
 
         if ( (pDev->GetOutDevType() == OUTDEV_WINDOW) &&
             // there is just no useful native support for spinfields with dropdown
@@ -717,11 +712,11 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
 
             // get the system's spin button size
             ImplControlValue aControlValue;
-            Region aBound;
+            Rectangle aBound;
             Point aPoint;
 
             // use the full extent of the control
-            Region aArea( Rectangle( aPoint, pBorder->GetOutputSizePixel() ) );
+            Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
             bNativeRegionOK =
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_UP,
@@ -740,8 +735,8 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
 
         if( bNativeRegionOK )
         {
-            rSpinUpArea = aContentUp.GetBoundRect();
-            rSpinDownArea = aContentDown.GetBoundRect();
+            rSpinUpArea = aContentUp;
+            rSpinDownArea = aContentDown;
         }
         else
         {
@@ -774,11 +769,11 @@ void SpinField::Resize()
 
             ImplControlValue aControlValue;
             Point aPoint;
-            Region aContent, aBound;
+            Rectangle aContent, aBound;
 
             // use the full extent of the control
             Window *pBorder = GetWindow( WINDOW_BORDER );
-            Region aArea( Rectangle(aPoint, pBorder->GetOutputSizePixel()) );
+            Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
             // adjust position and size of the edit field
             if ( GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
@@ -789,10 +784,9 @@ void SpinField::Resize()
                 aContent.Move(-aPoint.X(), -aPoint.Y());
 
                 // use the themes drop down size
-                Rectangle aContentRect = aContent.GetBoundRect();
-                mpEdit->SetPosPixel( aContentRect.TopLeft() );
+                mpEdit->SetPosPixel( aContent.TopLeft() );
                 bSubEditPositioned = true;
-                aSize = aContentRect.GetSize();
+                aSize = aContent.GetSize();
             }
             else
             {

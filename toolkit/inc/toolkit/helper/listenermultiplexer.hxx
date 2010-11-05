@@ -171,7 +171,7 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 //  class ActionListenerMultiplexer
 //  ----------------------------------------------------
-DECL_LISTENERMULTIPLEXER_START( ActionListenerMultiplexer, ::com::sun::star::awt::XActionListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( ActionListenerMultiplexer, ::com::sun::star::awt::XActionListener )
     void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 

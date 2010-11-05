@@ -45,7 +45,6 @@ namespace svt { namespace table
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl        ( _rTableControl )
-        ,m_nRowAlreadySelected( -1 )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -110,15 +109,17 @@ namespace svt { namespace table
     {
         Point aPoint = rMEvt.GetPosPixel();
         RowPos nCurRow = m_rTableControl.getCurrentRow(aPoint);
+        std::vector<RowPos> selectedRows(m_rTableControl.getSelectedRows());
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
         else
         {
             if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
             {
-                if( m_nRowAlreadySelected != nCurRow )
+                bool found = std::find(selectedRows.begin(),selectedRows.end(), nCurRow) != selectedRows.end();
+
+                if( !found )
                 {
-                    m_nRowAlreadySelected = nCurRow;
                     m_aSelectHdl.Call( NULL );
                 }
             }

@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <dndevdis.hxx>
-#include <dndlcon.hxx>
+#include <vcl/dndevdis.hxx>
+#include <vcl/dndlcon.hxx>
 #include <vcl/window.h>
 
 #include <vos/mutex.hxx>

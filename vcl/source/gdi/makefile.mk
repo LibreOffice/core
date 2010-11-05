@@ -50,6 +50,7 @@ CDEFS+=-DENABLE_GRAPHITE
 EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/outdev.obj		\
                     $(SLO)$/outdev3.obj 	\
+                    $(SLO)$/outdevnative.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
@@ -62,6 +63,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/metric.obj		\
                     $(SLO)$/pdfwriter_impl.obj	\
+                    $(SLO)$/pdfwriter_impl2.obj	\
                     $(SLO)$/pdffontcache.obj\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
@@ -84,7 +86,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/bitmap4.obj 	\
             $(SLO)$/alpha.obj		\
             $(SLO)$/bitmapex.obj	\
-            $(SLO)$/imgcons.obj 	\
             $(SLO)$/bmpacc.obj		\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\
@@ -106,7 +107,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/outdev4.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
-            $(SLO)$/outdevnative.obj 	\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
             $(SLO)$/wall.obj		\

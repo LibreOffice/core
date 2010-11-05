@@ -12,3 +12,4 @@ mkdir: %_DEST%\inc%_EXT%\comphelper
 mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\comphelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\version.mk  %_DEST%\inc%_EXT%\comphelper\version.mk
+..\%__SRC%\misc\comphelp4.component %_DEST%\xml%_EXT%\comphelp4.component

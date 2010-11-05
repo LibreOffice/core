@@ -1127,6 +1127,8 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     basegfx::B2DTrapezoidVector aB2DTrapVector;
     basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
     const int nTrapCount = aB2DTrapVector.size();
+    if( !nTrapCount )
+        return true;
     const bool bDrawn = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
     return bDrawn;
 }
@@ -1238,12 +1240,17 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
         basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
 
         // draw tesselation result
-        const int nTrapCount = aB2DTrapVector.size();
-        const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
+        if( ! aB2DTrapVector.empty() )
+        {
+            const int nTrapCount = aB2DTrapVector.size();
+            const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
 
-        // restore the original brush GC
-        nBrushColor_ = aKeepBrushColor;
-        return bDrawOk;
+            // restore the original brush GC
+            nBrushColor_ = aKeepBrushColor;
+            return bDrawOk;
+        }
+        else
+            return true;
     }
 
     // get the area polygon for the line polygon

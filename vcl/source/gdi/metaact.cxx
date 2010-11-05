@@ -3793,7 +3793,6 @@ MetaAction* MetaFloatTransparentAction::Clone()
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
-    maMtf.Move(nHorzMove, nVertMove);
 }
 
 // ------------------------------------------------------------------------
@@ -3804,7 +3803,6 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPoint = aRectangle.TopLeft();
     maSize = aRectangle.GetSize();
-    maMtf.Scale(fScaleX, fScaleY);
 }
 
 // ------------------------------------------------------------------------
@@ -4078,7 +4076,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                     aMemStm >> aFill;
                     PolyPolygon aPath;
                     aFill.getPath( aPath );
-                    aPath.Scale( nXMove, nYMove );
+                    aPath.Move( nXMove, nYMove );
                     aFill.setPath( aPath );
                     aDest << aFill;
                 }

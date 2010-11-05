@@ -41,6 +41,9 @@
 
 typedef sal_uInt32      ControlType;
 
+// for use in general purpose ImplControlValue
+#define CTRL_GENERIC            0
+
 // Normal PushButton/Command Button
 #define CTRL_PUSHBUTTON         1
 
@@ -260,13 +263,50 @@ enum ButtonValue {
     BUTTONVALUE_MIXED
 };
 
-#ifdef __cplusplus
+/* ImplControlValue:
+ *
+ *   Generic value container for all control parts.
+ */
+
+class VCL_DLLPUBLIC ImplControlValue
+{
+    friend class SalFrame;
+
+    private:
+        ControlType     mType;
+        ButtonValue     mTristate;    // Tristate value: on, off, mixed
+        long            mNumber;      // numeric value
+    protected:
+        ImplControlValue( ControlType i_eType, ButtonValue i_eTriState, long i_nNumber )
+        : mType( i_eType )
+        , mTristate( i_eTriState )
+        , mNumber( i_nNumber )
+        {}
+
+    public:
+        explicit ImplControlValue( ButtonValue nTristate )
+            : mType( CTRL_GENERIC ), mTristate(nTristate), mNumber(0) {}
+        explicit ImplControlValue( long nNumeric )
+            : mType( CTRL_GENERIC ), mTristate(BUTTONVALUE_DONTKNOW), mNumber( nNumeric) {}
+        inline ImplControlValue()
+            : mType( CTRL_GENERIC ), mTristate(BUTTONVALUE_DONTKNOW), mNumber(0) {}
+
+        virtual ~ImplControlValue();
+
+        ControlType getType() const { return mType; }
+
+        inline ButtonValue      getTristateVal( void ) const { return mTristate; }
+        inline void         setTristateVal( ButtonValue nTristate ) { mTristate = nTristate; }
+
+        inline long         getNumericVal( void ) const { return mNumber; }
+        inline void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
+};
 
 /* ScrollbarValue:
  *
  *   Value container for scrollbars.
  */
-class VCL_DLLPUBLIC ScrollbarValue
+ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -283,15 +323,16 @@ class VCL_DLLPUBLIC ScrollbarValue
         ControlState    mnPage2State;
 
         inline ScrollbarValue()
-                {
-                    mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;
-                    mnButton1State = 0; mnButton2State = 0;
-                    mnThumbState = 0; mnPage1State = 0; mnPage2State = 0;
-                };
-        inline ~ScrollbarValue() {};
+        : ImplControlValue( CTRL_SCROLLBAR, BUTTONVALUE_DONTKNOW, 0 )
+        {
+            mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;
+            mnButton1State = 0; mnButton2State = 0;
+            mnThumbState = 0; mnPage1State = 0; mnPage2State = 0;
+        };
+        virtual ~ScrollbarValue();
 };
 
-class VCL_DLLPUBLIC SliderValue
+class VCL_DLLPUBLIC SliderValue : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -300,9 +341,11 @@ class VCL_DLLPUBLIC SliderValue
         Rectangle       maThumbRect;
         ControlState    mnThumbState;
 
-        SliderValue() : mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( 0 )
+        SliderValue()
+        : ImplControlValue( CTRL_SLIDER, BUTTONVALUE_DONTKNOW, 0 )
+        , mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( 0 )
         {}
-        ~SliderValue() {}
+        virtual ~SliderValue();
 };
 
 /* TabitemValue:
@@ -317,23 +360,24 @@ class VCL_DLLPUBLIC SliderValue
 #define TABITEM_FIRST_IN_GROUP 0x004   // the tabitem is the first in group of tabitems
 #define TABITEM_LAST_IN_GROUP  0x008   // the tabitem is the last in group of tabitems
 
-class VCL_DLLPUBLIC TabitemValue
+class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 {
     public:
         unsigned int    mnAlignment;
 
         inline TabitemValue()
-                {
-                    mnAlignment = 0;
-                };
-        inline ~TabitemValue() {};
+        : ImplControlValue( CTRL_TAB_ITEM, BUTTONVALUE_DONTKNOW, 0 )
+        {
+            mnAlignment = 0;
+        };
+        virtual ~TabitemValue();
 
-        BOOL isLeftAligned()  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
-        BOOL isRightAligned() { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
-        BOOL isBothAligned()  { return isLeftAligned() && isRightAligned(); }
-        BOOL isNotAligned()   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
-        BOOL isFirst()        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
-        BOOL isLast()         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        BOOL isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
+        BOOL isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
+        BOOL isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
+        BOOL isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
+        BOOL isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
+        BOOL isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
 };
 
 /* SpinbuttonValue:
@@ -342,7 +386,7 @@ class VCL_DLLPUBLIC TabitemValue
  *   Note: the other parameters of DrawNativeControl will have no meaning
  *         all parameters for spinbuttons are carried here
  */
-class VCL_DLLPUBLIC SpinbuttonValue
+class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 {
     public:
         Rectangle       maUpperRect;
@@ -353,20 +397,23 @@ class VCL_DLLPUBLIC SpinbuttonValue
         int         mnLowerPart;
 
         inline SpinbuttonValue()
-                {
-                    mnUpperState = mnLowerState = 0;
-                };
-        inline ~SpinbuttonValue() {};
+        : ImplControlValue( CTRL_SPINBUTTONS, BUTTONVALUE_DONTKNOW, 0 )
+        {
+            mnUpperState = mnLowerState = 0;
+        };
+        virtual ~SpinbuttonValue();
 };
 
 /*  Toolbarvalue:
  *
  *  Value container for toolbars detailing the grip position
  */
-class ToolbarValue
+class ToolbarValue : public ImplControlValue
 {
 public:
-    ToolbarValue()  { mbIsTopDockingArea = FALSE; }
+    ToolbarValue() : ImplControlValue( CTRL_TOOLBAR, BUTTONVALUE_DONTKNOW, 0 )
+    { mbIsTopDockingArea = FALSE; }
+    virtual ~ToolbarValue();
     Rectangle           maGripRect;
     BOOL                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar
@@ -376,10 +423,12 @@ public:
  *
  *  Value container for menubars specifying height of adjacent docking area
  */
-class MenubarValue
+class MenubarValue : public ImplControlValue
 {
 public:
-    MenubarValue() { maTopDockingAreaHeight=0; }
+    MenubarValue() : ImplControlValue( CTRL_MENUBAR, BUTTONVALUE_DONTKNOW, 0 )
+    { maTopDockingAreaHeight=0; }
+    virtual ~MenubarValue();
     int             maTopDockingAreaHeight;
 };
 
@@ -387,61 +436,18 @@ public:
  *
  *  Value container for pushbuttons specifying additional drawing hints
  */
-class PushButtonValue
+class PushButtonValue : public ImplControlValue
 {
 public:
-PushButtonValue() : mbBevelButton( false ), mbSingleLine( true ) {}
+    PushButtonValue()
+    : ImplControlValue( CTRL_PUSHBUTTON, BUTTONVALUE_DONTKNOW, 0 )
+    , mbBevelButton( false ), mbSingleLine( true ) {}
+    virtual ~PushButtonValue();
+
     bool            mbBevelButton:1;
     bool            mbSingleLine:1;
 };
 
-/* ImplControlValue:
- *
- *   Generic value container for all control parts.
- */
-
-class ImplControlValue
-{
-    friend class SalFrame;
-
-    private:
-        ButtonValue mTristate;  // Tristate value: on, off, mixed
-        rtl::OUString   mString;        // string value
-        long            mNumber;        // numeric value
-        void *      mOptionalVal;   // optional control-specific value
-
-    public:
-        inline ImplControlValue( ButtonValue nTristate, rtl::OUString sString, long nNumeric, void * aOptVal ) \
-                                { mTristate = nTristate; mString = sString; mNumber = nNumeric; mOptionalVal = aOptVal; };
-        inline ImplControlValue( ButtonValue nTristate, rtl::OUString sString, long nNumeric ) \
-                                { mTristate = nTristate; mString = sString; mNumber = nNumeric; mOptionalVal = NULL; };
-        explicit ImplControlValue( ButtonValue nTristate )
-            : mTristate(nTristate), mNumber(0), mOptionalVal(NULL) {}
-        explicit ImplControlValue( rtl::OUString& rString )
-            : mTristate(BUTTONVALUE_DONTKNOW), mString(rString), mNumber(0), mOptionalVal(NULL) {}
-        explicit ImplControlValue( long nNumeric )
-            : mTristate(BUTTONVALUE_DONTKNOW), mNumber( nNumeric), mOptionalVal(NULL) {}
-        explicit ImplControlValue( void* aOptVal )
-             : mTristate(BUTTONVALUE_DONTKNOW), mNumber(0), mOptionalVal(aOptVal) {}
-        inline ImplControlValue()
-            : mTristate(BUTTONVALUE_DONTKNOW), mNumber(0), mOptionalVal(NULL) {}
-
-        inline ~ImplControlValue() { mOptionalVal = NULL; };
-
-        inline ButtonValue      getTristateVal( void ) const { return mTristate; }
-        inline void         setTristateVal( ButtonValue nTristate ) { mTristate = nTristate; }
-
-        inline const rtl::OUString& getStringVal( void ) const { return mString; }
-        inline void         setStringVal( rtl::OUString sString ) { mString = sString; }
-
-        inline long         getNumericVal( void ) const { return mNumber; }
-        inline void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
-
-        inline void *           getOptionalVal( void ) const { return mOptionalVal; }
-        inline void         setOptionalVal( void * aOptVal ) { mOptionalVal = aOptVal; }
-};
-
-#endif  /* __cplusplus */
 
 #endif
 

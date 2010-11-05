@@ -33,9 +33,6 @@
 #include <vcl/mapmod.hxx>
 #include <tools/stream.hxx>
 
-//#if 0 // _SOLAR__PRIVATE
-#include <tools/urlobj.hxx>
-
 // -------------
 // - ImpBuffer -
 // -------------
@@ -62,7 +59,7 @@ struct ImpBuffer
 
 struct ImpSwap
 {
-    INetURLObject   maURL;
+    rtl::OUString   maURL;
     ULONG           mnDataSize;
     ULONG           mnRefCount;
 
@@ -71,7 +68,7 @@ struct ImpSwap
 
     BYTE*           GetData() const;
 
-    BOOL            IsSwapped() const { return maURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > 0; }
+    BOOL            IsSwapped() const { return maURL.getLength() > 0; }
 
     void            WriteTo( SvStream& rOStm ) const;
 };

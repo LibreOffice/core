@@ -37,7 +37,7 @@ namespace vos
 
 /** Adds seeking capabilities to IStream
 */
-class IPositionableStream : public NAMESPACE_VOS(IStream)
+class IPositionableStream : public vos::IStream
 {
 
 public:
@@ -75,8 +75,8 @@ protected:
 
 /** Implements IPositionableStream
 */
-class OStream : public NAMESPACE_VOS(OObject),
-                public NAMESPACE_VOS(IPositionableStream)
+class OStream : public vos::OObject,
+                public vos::IPositionableStream
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OStream, vos));
 
