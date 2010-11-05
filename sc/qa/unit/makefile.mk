@@ -106,32 +106,31 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
-        -c configmgr.uno$(DLLPOST) \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
 
 #Tweak things to that we use the .res files in the solver
 STAR_RESOURCEPATH:=$(PWD)/$(BIN):$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
-#.IF "$(OS)" == "LINUX"
-#
-#test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
-#    @echo ----------------------------------------------------------
-#    @echo - start unit test \#1 on library $(SHL1TARGETN)
-#    @echo ----------------------------------------------------------
-#    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
-#        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
-#        -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
-#        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
-#        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
-#        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
-#
-#.ELSE
-#
+.IF "$(OS)" == "LINUX"
+
+test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
+    @echo ----------------------------------------------------------
+    @echo - start unit test \#1 on library $(SHL1TARGETN)
+    @echo ----------------------------------------------------------
+    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
+        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+        -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
+        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
+
+.ELSE
+
 test .PHONY: $(SHL1TARGETN)
     @echo ----------------------------------------------------------
-    @echo - WARNING!!, test disabled due to regcomp failure on SUSE
-    @echo - boxes on configmgr.uno.so
+    @echo - WARNING!!, test disabled on your platform
+    @echo - Please test manually, and enable if it works
     @echo ----------------------------------------------------------
 
-#.ENDIF
+.ENDIF

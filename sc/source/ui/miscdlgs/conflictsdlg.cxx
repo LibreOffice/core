@@ -344,25 +344,6 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
                     }
                 }
             }
-            else if ( eConflictAction == SC_CONFLICT_ACTION_KEEP_OTHER )
-            {
-                if ( pAction->GetType() == SC_CAT_CONTENT )
-                {
-                    if ( bHandleContentAction )
-                    {
-                        // do nothing
-                        //mpTrack->SelectContent( pAction );
-                    }
-                }
-                else
-                {
-                    if ( bHandleNonContentAction )
-                    {
-                        // do nothing
-                        //mpTrack->Accept( pAction );
-                    }
-                }
-            }
         }
     }
     else

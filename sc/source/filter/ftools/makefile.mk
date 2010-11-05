@@ -43,12 +43,12 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/fapihelper.obj				\
-        $(SLO)$/fprogressbar.obj			\
-        $(SLO)$/ftools.obj
+        $(EXCEPTIONSFILES)				\
+        $(SLO)$/fprogressbar.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/fapihelper.obj
+        $(SLO)$/fapihelper.obj				\
+        $(SLO)$/ftools.obj
 
 # --- Targets -------------------------------------------------------
 

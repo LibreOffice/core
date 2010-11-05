@@ -117,6 +117,8 @@ using ::oox::drawingml::ChartExport;
 
 #define  HMM2XL(x)        ((x)/26.5)+0.5
 
+#ifdef XLSX_OOXML_FUTURE
+// these function are only used within that context
 // Static Function Helpers
 static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
 {
@@ -167,6 +169,7 @@ static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectan
     rComments->writeEscaped( OUString::valueOf( aRect.Bottom() ) );
     rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
 }
+#endif
 
 static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT32 nTab, Rectangle &aFrom, Rectangle &aTo )
 {

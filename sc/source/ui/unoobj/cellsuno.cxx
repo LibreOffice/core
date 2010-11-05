@@ -4715,7 +4715,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
 
 rtl::OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellRangesObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellRangesObj" ));
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const rtl::OUString& rServiceName )
@@ -4733,10 +4733,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames(
 {
     uno::Sequence<rtl::OUString> aRet(4);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSHEETCELLRANGES_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
-    pArray[2] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
-    pArray[3] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGES_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
     return aRet;
 }
 
@@ -6027,7 +6027,7 @@ const SfxItemPropertyMap* ScCellRangeObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellRangeObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellRangeObj" ));
 }
 
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const rtl::OUString& rServiceName )
@@ -6046,11 +6046,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(5);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
-    pArray[2] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
-    pArray[3] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
-    pArray[4] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
+    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
     return aRet;
 }
 
@@ -6704,7 +6704,7 @@ const SfxItemPropertyMap* ScCellObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellObj" ));
 }
 
 sal_Bool SAL_CALL ScCellObj::supportsService( const rtl::OUString& rServiceName )
@@ -6729,13 +6729,13 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(7);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSHEETCELL_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCCELL_SERVICE );
-    pArray[2] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
-    pArray[3] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
-    pArray[4] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
-    pArray[5] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
-    pArray[6] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELL_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELL_SERVICE ));
+    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    pArray[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
+    pArray[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
     return aRet;
 }
 
@@ -8660,7 +8660,7 @@ const SfxItemPropertyMap* ScTableSheetObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScTableSheetObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScTableSheetObj" ));
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const rtl::OUString& rServiceName )
@@ -8681,13 +8681,13 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames(
 {
     uno::Sequence<rtl::OUString> aRet(7);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSPREADSHEET_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
-    pArray[2] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
-    pArray[3] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
-    pArray[4] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
-    pArray[5] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
-    pArray[6] = rtl::OUString::createFromAscii( SCLINKTARGET_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEET_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
+    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
+    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    pArray[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ));
     return aRet;
 }
 

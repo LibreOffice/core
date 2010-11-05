@@ -44,8 +44,11 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =						\
-        $(SLO)$/eeimpars.obj	\
+SLOFILES =				\
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
+        $(SLO)$/eeimpars.obj		\
         $(SLO)$/expbase.obj		\
         $(SLO)$/rtfexp.obj		\
         $(SLO)$/rtfimp.obj		\

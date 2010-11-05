@@ -263,7 +263,6 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
         if ( !pSourceShell->GetError() )                    // only errors
         {
-            //aCbUrl.SetText( pSourceShell->GetTitle( SFX_TITLE_FULLNAME ) );
             aCbUrl.SetText( pMed->GetName() );
         }
         else

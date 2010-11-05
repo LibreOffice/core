@@ -38,29 +38,23 @@ TARGET=app
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-    $(SLO)$/scmod.obj  \
-    $(SLO)$/scmod2.obj  \
-    $(SLO)$/scdll.obj  \
-    $(SLO)$/typemap.obj  \
-    $(SLO)$/transobj.obj \
-    $(SLO)$/drwtrans.obj \
-    $(SLO)$/lnktrans.obj \
-    $(SLO)$/seltrans.obj \
-    $(SLO)$/inputhdl.obj \
-    $(SLO)$/inputwin.obj \
-    $(SLO)$/rfindlst.obj \
-    $(SLO)$/uiitems.obj  \
+    $(EXCEPTIONSFILES) \
     $(SLO)$/msgpool.obj \
-    $(SLO)$/client.obj
+    $(SLO)$/rfindlst.obj \
+    $(SLO)$/uiitems.obj
 
 EXCEPTIONSFILES= \
-    $(SLO)$/drwtrans.obj \
-    $(SLO)$/scdll.obj  \
-    $(SLO)$/scmod2.obj \
-    $(SLO)$/scmod.obj \
-    $(SLO)$/typemap.obj  \
     $(SLO)$/client.obj \
-    $(SLO)$/inputwin.obj
+    $(SLO)$/drwtrans.obj \
+    $(SLO)$/inputhdl.obj \
+    $(SLO)$/inputwin.obj \
+    $(SLO)$/lnktrans.obj \
+    $(SLO)$/scdll.obj \
+    $(SLO)$/scmod.obj \
+    $(SLO)$/scmod2.obj \
+    $(SLO)$/seltrans.obj \
+    $(SLO)$/typemap.obj \
+    $(SLO)$/transobj.obj
 
 #LIB3TARGET=$(SLB)$/ysclib.lib
 #LIB3OBJFILES=$(SLO)$/sclib.obj

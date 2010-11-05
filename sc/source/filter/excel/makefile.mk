@@ -45,63 +45,8 @@ VISIBILITY_HIDDEN=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/colrowst.obj				\
-        $(SLO)$/excdoc.obj					\
-        $(SLO)$/excel.obj					\
-        $(SLO)$/excform.obj					\
-        $(SLO)$/excform8.obj				\
-        $(SLO)$/excimp8.obj					\
-        $(SLO)$/excrecds.obj				\
-        $(SLO)$/exctools.obj				\
-        $(SLO)$/expop2.obj					\
-        $(SLO)$/fontbuff.obj				\
-        $(SLO)$/frmbase.obj					\
-        $(SLO)$/impop.obj					\
-        $(SLO)$/namebuff.obj				\
-        $(SLO)$/read.obj					\
-        $(SLO)$/tokstack.obj				\
-        $(SLO)$/xechart.obj					\
-        $(SLO)$/xecontent.obj				\
-        $(SLO)$/xeescher.obj				\
-        $(SLO)$/xeformula.obj				\
-        $(SLO)$/xehelper.obj				\
-        $(SLO)$/xelink.obj					\
-        $(SLO)$/xename.obj					\
-        $(SLO)$/xepage.obj					\
-        $(SLO)$/xepivot.obj					\
-        $(SLO)$/xerecord.obj				\
-        $(SLO)$/xeroot.obj					\
-        $(SLO)$/xestream.obj				\
-        $(SLO)$/xestring.obj				\
-        $(SLO)$/xestyle.obj					\
-        $(SLO)$/xetable.obj					\
-        $(SLO)$/xeview.obj					\
-        $(SLO)$/xichart.obj					\
-        $(SLO)$/xicontent.obj				\
-        $(SLO)$/xiescher.obj				\
-        $(SLO)$/xiformula.obj				\
-        $(SLO)$/xihelper.obj				\
-        $(SLO)$/xilink.obj					\
-        $(SLO)$/xiname.obj					\
-        $(SLO)$/xipage.obj					\
-        $(SLO)$/xipivot.obj					\
-        $(SLO)$/xiroot.obj					\
-        $(SLO)$/xistream.obj				\
-        $(SLO)$/xistring.obj				\
-        $(SLO)$/xistyle.obj					\
-        $(SLO)$/xiview.obj					\
-        $(SLO)$/xladdress.obj				\
-        $(SLO)$/xlchart.obj					\
-        $(SLO)$/xlescher.obj				\
-        $(SLO)$/xlformula.obj				\
-        $(SLO)$/xlpage.obj					\
-        $(SLO)$/xlpivot.obj					\
-        $(SLO)$/xlroot.obj					\
-        $(SLO)$/xlstyle.obj					\
-        $(SLO)$/xltools.obj					\
-        $(SLO)$/xltracer.obj				\
-        $(SLO)$/xlview.obj \
-        $(SLO)$/xltoolbar.obj \
+        $(EXCEPTIONSFILES)				\
+        $(SLO)$/xltracer.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES = \
@@ -109,49 +54,61 @@ NOOPTFILES = \
 .ENDIF
 
 EXCEPTIONSFILES = \
-        $(SLO)$/excdoc.obj					\
-        $(SLO)$/excel.obj					\
-        $(SLO)$/excform.obj					\
+        $(SLO)$/colrowst.obj				\
+        $(SLO)$/excdoc.obj				\
+        $(SLO)$/excel.obj				\
+        $(SLO)$/excform.obj				\
         $(SLO)$/excform8.obj				\
-        $(SLO)$/excimp8.obj					\
+        $(SLO)$/excimp8.obj				\
         $(SLO)$/excrecds.obj				\
-        $(SLO)$/expop2.obj					\
-        $(SLO)$/impop.obj					\
+        $(SLO)$/exctools.obj				\
+        $(SLO)$/expop2.obj				\
+        $(SLO)$/fontbuff.obj				\
+        $(SLO)$/frmbase.obj				\
+        $(SLO)$/impop.obj				\
         $(SLO)$/namebuff.obj				\
+        $(SLO)$/read.obj				\
         $(SLO)$/tokstack.obj				\
+        $(SLO)$/xechart.obj				\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xeescher.obj				\
         $(SLO)$/xeformula.obj				\
         $(SLO)$/xehelper.obj				\
-        $(SLO)$/xelink.obj					\
-        $(SLO)$/xename.obj					\
-        $(SLO)$/xepage.obj					\
-        $(SLO)$/xepivot.obj					\
-        $(SLO)$/xechart.obj					\
+        $(SLO)$/xelink.obj				\
+        $(SLO)$/xename.obj				\
+        $(SLO)$/xepage.obj				\
+        $(SLO)$/xepivot.obj				\
+        $(SLO)$/xerecord.obj				\
+        $(SLO)$/xeroot.obj				\
         $(SLO)$/xestream.obj				\
         $(SLO)$/xestring.obj				\
-        $(SLO)$/xestyle.obj					\
-        $(SLO)$/xetable.obj					\
-        $(SLO)$/xeview.obj					\
-        $(SLO)$/xichart.obj					\
+        $(SLO)$/xestyle.obj				\
+        $(SLO)$/xetable.obj				\
+        $(SLO)$/xeview.obj				\
+        $(SLO)$/xichart.obj				\
         $(SLO)$/xicontent.obj				\
         $(SLO)$/xiescher.obj				\
+        $(SLO)$/xiformula.obj				\
         $(SLO)$/xihelper.obj				\
-        $(SLO)$/xilink.obj					\
-        $(SLO)$/xipage.obj					\
-        $(SLO)$/xipivot.obj					\
+        $(SLO)$/xilink.obj				\
+        $(SLO)$/xiname.obj				\
+        $(SLO)$/xipage.obj				\
+        $(SLO)$/xipivot.obj				\
+        $(SLO)$/xiroot.obj				\
         $(SLO)$/xistream.obj				\
         $(SLO)$/xistring.obj				\
-        $(SLO)$/xistyle.obj					\
+        $(SLO)$/xistyle.obj				\
+        $(SLO)$/xiview.obj				\
         $(SLO)$/xladdress.obj				\
-        $(SLO)$/xiescher.obj				\
-        $(SLO)$/xlchart.obj					\
+        $(SLO)$/xlchart.obj				\
+        $(SLO)$/xlescher.obj				\
         $(SLO)$/xlformula.obj				\
-        $(SLO)$/xlpivot.obj					\
-        $(SLO)$/xlroot.obj					\
-        $(SLO)$/xlstyle.obj					\
-        $(SLO)$/xltoolbar.obj \
-        $(SLO)$/xltools.obj					\
+        $(SLO)$/xlpage.obj				\
+        $(SLO)$/xlpivot.obj				\
+        $(SLO)$/xlroot.obj				\
+        $(SLO)$/xlstyle.obj				\
+        $(SLO)$/xltoolbar.obj				\
+        $(SLO)$/xltools.obj				\
         $(SLO)$/xlview.obj
 
 # --- Targets -------------------------------------------------------

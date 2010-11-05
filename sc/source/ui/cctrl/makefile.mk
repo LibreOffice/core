@@ -39,16 +39,15 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
-    $(SLO)$/tbinsert.obj	\
-    $(SLO)$/tbzoomsliderctrl.obj \
-    $(SLO)$/dpcontrol.obj
+        $(SLO)$/cbuttonw.obj		\
+        $(SLO)$/dpcontrol.obj		\
+        $(SLO)$/editfield.obj		\
+        $(SLO)$/tbinsert.obj		\
+        $(SLO)$/tbzoomsliderctrl.obj
 
 SLOFILES =	\
+        $(SLO)$/dpcontrol.obj		\
         $(SLO)$/popmenu.obj		\
-        $(SLO)$/tbinsert.obj	\
-        $(SLO)$/cbuttonw.obj	\
-        $(SLO)$/dpcontrol.obj	\
-        $(SLO)$/editfield.obj	\
         $(EXCEPTIONSFILES)
 
 SRS1NAME=$(TARGET)

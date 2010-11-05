@@ -43,11 +43,14 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =						\
-        $(SLO)$/qpro.obj		\
+SLOFILES =			\
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
+        $(SLO)$/biff.obj	\
+        $(SLO)$/qpro.obj	\
         $(SLO)$/qproform.obj    \
-        $(SLO)$/qprostyle.obj	\
-        $(SLO)$/biff.obj
+        $(SLO)$/qprostyle.obj
 
 # --- Tagets -------------------------------------------------------
 
