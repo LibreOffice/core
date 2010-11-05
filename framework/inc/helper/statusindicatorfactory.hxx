@@ -214,7 +214,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         WakeUpThread* m_pWakeUp;
 
         /** Our WakeUpThread calls us in our interface method "XUpdatable::update().
-            There we set this member m_bAllowReschedule to TRUE. Next time if our impl_reschedule()
+            There we set this member m_bAllowReschedule to sal_True. Next time if our impl_reschedule()
             method is called, we know, that an Application::Reschedule() should be made.
             Because the last made Reschedule can be was taken long time ago ... may be.*/
         sal_Bool m_bAllowReschedule;

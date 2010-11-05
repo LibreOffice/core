@@ -94,7 +94,7 @@ const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" )
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
 
-const ULONG  MENU_SAVE_LABEL            = 0x00000001;
+const sal_uIntPtr  MENU_SAVE_LABEL          = 0x00000001;
 
 namespace framework
 {
@@ -259,7 +259,7 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 // #110897#
 OReadMenuBarHandler::OReadMenuBarHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    MenuBar* pMenuBar, USHORT* pItemId )
+    MenuBar* pMenuBar, sal_uInt16* pItemId )
 :   // #110897#
     mxServiceFactory( xServiceFactory ),
     m_pMenuBar( pMenuBar ),
@@ -306,7 +306,7 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
 
-        ULONG    nHelpId = 0;
+        sal_uIntPtr  nHelpId = 0;
         OUString aCommandId;
         OUString aLabel;
 
@@ -328,9 +328,9 @@ throw( SAXException, RuntimeException )
 
         if ( aCommandId.getLength() > 0 )
         {
-            USHORT nItemId;
+            sal_uInt16 nItemId;
             if ( aCommandId.compareTo( aSlotProtocol, aSlotProtocol.getLength() ) == 0 )
-                nItemId = (USHORT) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
+                nItemId = (sal_uInt16) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
             else
                 nItemId = ++(*m_pItemId);
 
@@ -402,7 +402,7 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 
-OReadMenuHandler::OReadMenuHandler( Menu* pMenu, USHORT* pItemId ) :
+OReadMenuHandler::OReadMenuHandler( Menu* pMenu, sal_uInt16* pItemId ) :
     m_pMenu( pMenu ),
     m_nElementDepth( 0 ),
     m_bMenuPopupMode( sal_False ),
@@ -486,7 +486,7 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 
-OReadMenuPopupHandler::OReadMenuPopupHandler( Menu* pMenu, USHORT* pItemId ) :
+OReadMenuPopupHandler::OReadMenuPopupHandler( Menu* pMenu, sal_uInt16* pItemId ) :
     m_pMenu( pMenu ),
     m_nElementDepth( 0 ),
     m_bMenuMode( sal_False ),
@@ -523,7 +523,7 @@ throw( SAXException, RuntimeException )
         m_xReader->startElement( aName, xAttrList );
     else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
     {
-        ULONG    nHelpId = 0;
+        sal_uIntPtr  nHelpId = 0;
         OUString aCommandId;
         OUString aLabel;
 
@@ -545,9 +545,9 @@ throw( SAXException, RuntimeException )
 
         if ( aCommandId.getLength() > 0 )
         {
-            USHORT nItemId;
+            sal_uInt16 nItemId;
             if ( aCommandId.compareTo( aSlotProtocol, aSlotProtocol.getLength() ) == 0 )
-                nItemId = (USHORT) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
+                nItemId = (sal_uInt16) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
             else
                 nItemId = ++(*m_pItemId);
 
@@ -579,7 +579,7 @@ throw( SAXException, RuntimeException )
     }
     else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUITEM )))
     {
-        ULONG    nHelpId = 0;
+        sal_uIntPtr  nHelpId = 0;
         OUString aCommandId;
         OUString aLabel;
 
@@ -598,9 +598,9 @@ throw( SAXException, RuntimeException )
 
         if ( aCommandId.getLength() > 0 )
         {
-            USHORT nItemId;
+            sal_uInt16 nItemId;
             if ( aCommandId.compareTo( aSlotProtocol, aSlotProtocol.getLength() ) == 0 )
-                nItemId = (USHORT) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
+                nItemId = (sal_uInt16) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
             else
                 nItemId = ++(*m_pItemId);
 
@@ -744,12 +744,12 @@ throw ( SAXException, RuntimeException )
 void OWriteMenuDocumentHandler::WriteMenu( Menu* pMenu )
 throw ( SAXException, RuntimeException )
 {
-    USHORT  nItemCount = pMenu->GetItemCount();
-    BOOL    bSeparator = FALSE;
+    sal_uInt16  nItemCount = pMenu->GetItemCount();
+    sal_Bool    bSeparator = sal_False;
 
-    for ( USHORT nItemPos = 0; nItemPos < nItemCount; nItemPos++ )
+    for ( sal_uInt16 nItemPos = 0; nItemPos < nItemCount; nItemPos++ )
     {
-        USHORT nItemId = pMenu->GetItemId( nItemPos );
+        sal_uInt16 nItemId = pMenu->GetItemId( nItemPos );
 
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
@@ -761,7 +761,7 @@ throw ( SAXException, RuntimeException )
             {
                 // special popup menus (filled during runtime) must be saved as a menuitem!!!
                 WriteMenuItem( pMenu, nItemId );
-                bSeparator = FALSE;
+                bSeparator = sal_False;
             }
             else if ( nItemId == SID_FORMATMENU )
             {
@@ -793,7 +793,7 @@ throw ( SAXException, RuntimeException )
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                bSeparator = FALSE;
+                bSeparator = sal_False;
             }
             else if ( !AddonPopupMenu::IsCommandURLPrefix ( aItemCommand ))
             {
@@ -829,7 +829,7 @@ throw ( SAXException, RuntimeException )
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                bSeparator = FALSE;
+                bSeparator = sal_False;
             }
         }
         else
@@ -841,7 +841,7 @@ throw ( SAXException, RuntimeException )
                      !MenuConfiguration::IsWindowListItemId( nItemId ) &&
                      !AddonMenuManager::IsAddonMenuId( nItemId ))
                 {
-                    bSeparator = FALSE;
+                    bSeparator = sal_False;
                     WriteMenuItem( pMenu, nItemId );
                 }
             }
@@ -849,14 +849,14 @@ throw ( SAXException, RuntimeException )
             {
                 // Don't write two separators together
                 WriteMenuSeparator();
-                bSeparator = TRUE;
+                bSeparator = sal_True;
             }
         }
     }
 }
 
 
-void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
+void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, sal_uInt16 nItemId )
 {
     AttributeListImpl* pList = new AttributeListImpl;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
@@ -872,7 +872,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
                                 m_aAttributeType,
                                 aCommand );
 
-    ULONG nHelpId = pMenu->GetHelpId( nItemId );
+    sal_uIntPtr nHelpId = pMenu->GetHelpId( nItemId );
     if ( nHelpId > 0 )
     {
         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_HELPID )),

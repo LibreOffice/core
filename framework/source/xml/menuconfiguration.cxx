@@ -66,12 +66,12 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 
-BOOL MenuConfiguration::IsPickListItemId( USHORT nId )
+sal_Bool MenuConfiguration::IsPickListItemId( sal_uInt16 nId )
 {
     return (( START_ITEMID_PICKLIST <= nId ) && ( nId <= END_ITEMID_PICKLIST ));
 }
 
-BOOL MenuConfiguration::IsWindowListItemId( USHORT nId )
+sal_Bool MenuConfiguration::IsWindowListItemId( sal_uInt16 nId )
 {
     return (( START_ITEMID_WINDOWLIST <= nId ) && ( nId <= END_ITEMID_WINDOWLIST ));
 }

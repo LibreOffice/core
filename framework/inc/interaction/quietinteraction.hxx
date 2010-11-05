@@ -151,8 +151,8 @@ class QuietInteraction : public  css::lang::XTypeProvider
             @descr      It can be usefully to know the reason for a failed operation.
 
             @return     [boolean]
-                            <TRUE/> for used interaction
-                            <FALSE/> otherwhise
+                            <sal_True/> for used interaction
+                            <sal_False/> otherwhise
 
             @threadsafe yes
         */

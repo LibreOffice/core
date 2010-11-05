@@ -98,7 +98,7 @@ class FlagCheck
         @param  nFlags  the flag field, which should be checked.
         @param  nMask   this mask field is searched inside parameter nFlags.
 
-        @return TRUE if mask match to the given flag field.
+        @return sal_True if mask match to the given flag field.
      */
     static sal_Bool isMaskSet( sal_Int32 nFlags, sal_Int32 nMask )
     {
@@ -114,7 +114,7 @@ class FlagCheck
 
         @param  nFlags  the flag field, which should be checked.
 
-        @return TRUE if only well known flags are set.
+        @return sal_True if only well known flags are set.
      */
     static sal_Bool isValid( sal_Int32 nFlags )
     {
@@ -152,7 +152,7 @@ class FlagCheck
 
         @param  nFlags  the flag field, which should be checked.
 
-        @return TRUE if one deprecated flag item could be found.
+        @return sal_True if one deprecated flag item could be found.
      */
     static sal_Bool useDeprecated( sal_Int32 nFlags )
     {

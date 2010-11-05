@@ -44,7 +44,7 @@ pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pNewGetImageFunc )
 }
 
 
-Image SAL_CALL GetImageFromURL( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
+Image SAL_CALL GetImageFromURL( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast )
 {
     if ( _pGetImageFunc )
         return _pGetImageFunc( rFrame, aURL, bBig, bHiContrast );

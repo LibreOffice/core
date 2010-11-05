@@ -902,7 +902,7 @@ rtl::OUString LayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int32 
     aAddonGenericTitle = String( FwkResId( STR_TOOLBAR_TITLE_ADDON ));
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    String aNumStr = rI18nHelper.GetNum( nNumber, 0, FALSE, FALSE );
+    String aNumStr = rI18nHelper.GetNum( nNumber, 0, sal_False, sal_False );
     aAddonGenericTitle.SearchAndReplaceAscii( "%num%", aNumStr );
 
     return rtl::OUString( aAddonGenericTitle );
@@ -1140,7 +1140,7 @@ void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive 
                             pIter->m_bDeactiveHide = sal_False;
                             // we need VCL here to pass special flags to Show()
                             if( pWindow )
-                                pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                                pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                             //xWindow->setVisible( sal_True );
                         }
                     }
@@ -4013,7 +4013,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
                     // Remove ".HelpId:" protocol from toolbar name
                     aToolbarName = aToolbarName.copy( i+1 );
 
-                    USHORT nId = pToolBox->GetCurItemId();
+                    sal_uInt16 nId = pToolBox->GetCurItemId();
                     if ( nId > 0 )
                         aCommand = pToolBox->GetItemCommand( nId );
                 }
@@ -4160,7 +4160,7 @@ throw (RuntimeException)
                     if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         ToolBox* pToolbar = (ToolBox *)pWindow;
-                        USHORT nMenuType = pToolbar->GetMenuType();
+                        sal_uInt16 nMenuType = pToolbar->GetMenuType();
                         if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, m_aCustomizeCmd ))
                             pToolbar->SetMenuType( nMenuType & ~TOOLBOX_MENUTYPE_CUSTOMIZE );
                         else
@@ -4442,7 +4442,7 @@ throw (::com::sun::star::uno::RuntimeException)
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
                     {
-                        pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                         doLayout();
                         bResult = sal_True;
                         bNotify = sal_True;
@@ -4495,7 +4495,7 @@ throw (::com::sun::star::uno::RuntimeException)
                                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                                 if( pWindow && !pWindow->IsReallyVisible() )
                                 {
-                                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                                    pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                                     implts_writeNewStateData( ResourceURL, xWindow );
 
                                     if ( xDockWindow.is() && !xDockWindow->isFloating() )
@@ -4684,7 +4684,7 @@ throw (RuntimeException)
                         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if( pWindow )
                         {
-                            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                             bNotify = sal_True;
                         }
                         implts_writeNewStateData( aName, xWindow );
@@ -6140,15 +6140,15 @@ void LayoutManager::implts_updateMenuBarClose()
             MenuBar* pMenuBar = pSysWindow->GetMenuBar();
             if ( pMenuBar )
             {
-                // TODO remove link on FALSE ?!
+                // TODO remove link on sal_False ?!
                 if ( bShowCloser )
                 {
-                    pMenuBar->ShowCloser( TRUE );
+                    pMenuBar->ShowCloser( sal_True );
                     pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
                 }
                 else
                 {
-                    pMenuBar->ShowCloser( FALSE );
+                    pMenuBar->ShowCloser( sal_False );
                     pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
                 }
             }

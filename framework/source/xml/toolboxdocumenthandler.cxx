@@ -360,7 +360,7 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_ITEMBITS:
                             {
-                                nItemBits = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
+                                nItemBits = (sal_uInt16)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
@@ -381,13 +381,13 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_WIDTH:
                             {
-                                nWidth = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
+                                nWidth = (sal_uInt16)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
                             case TB_ATTRIBUTE_USER:
                             {
-                                nUserDef = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
+                                nUserDef = (sal_uInt16)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 

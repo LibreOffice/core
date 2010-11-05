@@ -181,7 +181,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 if ( m_xConfigData.is() )
                 {
                     // Fill menubar with container contents
-                    USHORT nId = 1;
+                    sal_uInt16 nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
             }

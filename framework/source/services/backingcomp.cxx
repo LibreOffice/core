@@ -283,8 +283,8 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
     @see impl_getStaticSupportedServiceNames()
     @see SERVICENAME
 
-    @return <TRUE/> if the queried service is supported;
-            <br><FALSE/> otherwise.
+    @return <sal_True/> if the queried service is supported;
+            <br><sal_False/> otherwise.
 */
 
 sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const ::rtl::OUString& sServiceName )
@@ -506,7 +506,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // disable full screen mode of the frame!
     if (pParent->IsFullScreenMode())
     {
-        pParent->ShowFullScreenMode(FALSE);
+        pParent->ShowFullScreenMode(sal_False);
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
@@ -546,7 +546,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     This component does not know any model. It will be represented by a window and
     it's controller only.
 
-    return  <FALSE/> everytime.
+    return  <sal_False/> everytime.
  */
 
 sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
@@ -625,10 +625,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     UI user.
 
     @param  bSuspend
-                If its set to TRUE this controller should be suspended.
-                FALSE will resuspend it.
+                If its set to sal_True this controller should be suspended.
+                sal_False will resuspend it.
 
-    @return TRUE if the request could be finished successfully; FALSE otherwise.
+    @return sal_True if the request could be finished successfully; sal_False otherwise.
  */
 
 sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )

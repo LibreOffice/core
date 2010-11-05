@@ -115,7 +115,7 @@ namespace framework
 {
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[] = "private:separator";
-static const USHORT TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
+static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
 AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactory >& rServiceManager,
                                 const Reference< XFrame >& rFrame,
@@ -159,8 +159,8 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            BOOL bBigImage,
-                            BOOL bHiContrast )
+                            sal_Bool bBigImage,
+                            sal_Bool bHiContrast )
 {
     Image aImage;
 
@@ -192,7 +192,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
         ResetableGuard aGuard( m_aLock );
         for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
         {
-            USHORT nId( m_pToolBar->GetItemId( n ) );
+            sal_uInt16 nId( m_pToolBar->GetItemId( n ) );
 
             if ( nId > 0 )
             {
@@ -220,9 +220,9 @@ bool AddonsToolBarManager::MenuItemAllowed( sal_uInt16 nId ) const
 void AddonsToolBarManager::RefreshImages()
 {
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
-        USHORT nId( m_pToolBar->GetItemId( nPos ) );
+        sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
 
         if ( nId > 0 )
         {
@@ -248,7 +248,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     if ( m_bDisposed )
         return;
 
-    USHORT    nId( 1 );
+    sal_uInt16    nId( 1 );
 
     RemoveControllers();
 
@@ -296,7 +296,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         {
             if ( aURL.equalsAsciiL( TOOLBOXITEM_SEPARATOR_STR, TOOLBOXITEM_SEPARATOR_STR_LEN ))
             {
-                USHORT nCount = m_pToolBar->GetItemCount();
+                sal_uInt16 nCount = m_pToolBar->GetItemCount();
                 if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ) && nElements > 0 )
                 {
                     nElements = 0;
@@ -305,13 +305,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             }
             else
             {
-                USHORT nCount = m_pToolBar->GetItemCount();
+                sal_uInt16 nCount = m_pToolBar->GetItemCount();
                 if ( bAppendSeparator && nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ))
                 {
                     // We have to append a separator first if the last item is not a separator
                     m_pToolBar->InsertSeparator();
                 }
-                bAppendSeparator = FALSE;
+                bAppendSeparator = sal_False;
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
@@ -446,7 +446,7 @@ IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -464,7 +464,7 @@ IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -493,7 +493,7 @@ IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
         return 1;
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
-    USHORT      nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16      nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -541,9 +541,9 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
         CheckAndUpdateImages();
     }
 
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
-        const USHORT nId = m_pToolBar->GetItemId(nPos);
+        const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
         Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {

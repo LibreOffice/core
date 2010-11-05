@@ -36,7 +36,7 @@ namespace framework
 class FwkResId : public ResId
 {
     public:
-        FwkResId( USHORT nId );
+        FwkResId( sal_uInt16 nId );
 
     static ResMgr*  GetResManager();
 };

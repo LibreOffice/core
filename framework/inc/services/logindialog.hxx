@@ -566,7 +566,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @return     1; if closed with OK
             @return     0; if cancelled
 
-            @onerror    We return 0(FALSE).
+            @onerror    We return 0(sal_False).
         *//*-*****************************************************************************************************/
 
         virtual sal_Int16 SAL_CALL execute() throw( RUNTIMEEXCEPTION );

@@ -656,7 +656,7 @@ throw ( SAXException, RuntimeException )
                              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE_OUT )) );
     }
 
-    // autosize (default FALSE)
+    // autosize (default sal_False)
     if ( nStyle & ItemStyle::AUTO_SIZE )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_AUTOSIZE )),
@@ -664,7 +664,7 @@ throw ( SAXException, RuntimeException )
                              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) );
     }
 
-    // ownerdraw (default FALSE)
+    // ownerdraw (default sal_False)
     if ( nStyle & ItemStyle::OWNER_DRAW )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_OWNERDRAW )),

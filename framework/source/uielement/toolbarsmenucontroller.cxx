@@ -180,9 +180,9 @@ ToolbarsMenuController::~ToolbarsMenuController()
 }
 
 void ToolbarsMenuController::addCommand(
-    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId, const rtl::OUString& rLabel )
+    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, sal_uInt16 nHelpId, const rtl::OUString& rLabel )
 {
-    USHORT        nItemId    = m_xPopupMenu->getItemCount()+1;
+    sal_uInt16        nItemId    = m_xPopupMenu->getItemCount()+1;
 
     rtl::OUString aLabel;
     if ( rLabel.getLength() == 0 )
@@ -207,7 +207,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetHighContrastMode() );
+        aImage = GetImageFromURL( m_xFrame, rCommandURL, sal_False, rSettings.GetHighContrastMode() );
 
     VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
     if ( pPopupMenu )
@@ -471,7 +471,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         const sal_uInt32 nCount = aSortedTbs.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            USHORT nItemCount = m_xPopupMenu->getItemCount();
+            sal_uInt16 nItemCount = m_xPopupMenu->getItemCount();
             m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
             if ( aSortedTbs[i].bVisible )
                 m_xPopupMenu->checkItem( nIndex, sal_True );
@@ -481,7 +481,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
                 PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
-                pVCLPopupMenu->SetUserValue( nIndex, ULONG( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
+                pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
             }
 
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
@@ -533,7 +533,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             // Create command for configure
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
-                USHORT        nItemCount = m_xPopupMenu->getItemCount();
+                sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
 
@@ -546,7 +546,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             // Create command for configure
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
-                USHORT        nItemCount = m_xPopupMenu->getItemCount();
+                sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
         }
@@ -593,9 +593,9 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
-        for ( USHORT i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
+        for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
         {
-            USHORT nId = pVCLPopupMenu->GetItemId( i );
+            sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );
             if ( nId == 0 )
                 continue;
 

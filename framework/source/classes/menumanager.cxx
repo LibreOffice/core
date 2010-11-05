@@ -159,15 +159,15 @@ MenuManager::MenuManager(
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 #if 0
-    ::std::vector< USHORT > aQueryLabelItemIdVector;
+    ::std::vector< sal_uInt16 > aQueryLabelItemIdVector;
 #endif
 
-    USHORT nItemCount = pMenu->GetItemCount();
+    sal_uInt16 nItemCount = pMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
     ::rtl::OUString aItemCommand;
-    for ( USHORT i = 0; i < nItemCount; i++ )
+    for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        USHORT nItemId = FillItemCommand(aItemCommand,pMenu, i );
+        sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
         bool bShowMenuImages( m_bShowMenuImages );
         MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
         // overwrite the default?
@@ -194,7 +194,7 @@ MenuManager::MenuManager(
                     aItemCommand == aSlotSpecialToolsMenu ) &&
                     AddonMenuManager::HasAddonMenuElements() )
                 {
-                    USHORT      nCount   = 0;
+                    sal_uInt16      nCount   = 0;
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
@@ -222,7 +222,7 @@ MenuManager::MenuManager(
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
-                            Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                            Image aImage = GetImageFromURL( rFrame, aItemCommand, sal_False, m_bWasHiContrast );
                             if ( !!aImage )
                                    pPopupMenu->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }
@@ -254,7 +254,7 @@ MenuManager::MenuManager(
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, sal_False, m_bWasHiContrast );
                     if ( !!aImage )
                            pMenu->SetItemImage( nItemId, aImage );
                 }
@@ -279,7 +279,7 @@ MenuManager::MenuManager(
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, sal_False, m_bWasHiContrast );
                     if ( !!aImage )
                            pMenu->SetItemImage( nItemId, aImage );
                 }
@@ -300,14 +300,14 @@ MenuManager::MenuManager(
                         if ( pMenuAttributes && pMenuAttributes->aImageId.getLength() > 0 )
                         {
                             // Retrieve image id from menu attributes
-                            aImage = GetImageFromURL( rFrame, aImageId, FALSE, m_bWasHiContrast );
+                            aImage = GetImageFromURL( rFrame, aImageId, sal_False, m_bWasHiContrast );
                         }
 
                         if ( !aImage )
                         {
-                            aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                            aImage = GetImageFromURL( rFrame, aItemCommand, sal_False, m_bWasHiContrast );
                             if ( !aImage )
-                                aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE, m_bWasHiContrast );
+                                aImage = AddonsOptions().GetImageFromURL( aItemCommand, sal_False, m_bWasHiContrast );
                         }
 
                         if ( !!aImage )
@@ -315,7 +315,7 @@ MenuManager::MenuManager(
                     }
                     else if ( !pMenu->GetItemImage( nItemId ))
                     {
-                        Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                        Image aImage = GetImageFromURL( rFrame, aItemCommand, sal_False, m_bWasHiContrast );
                         if ( !!aImage )
                                pMenu->SetItemImage( nItemId, aImage );
                     }
@@ -340,7 +340,7 @@ MenuManager::MenuManager(
         Sequence< ::rtl::OUString > aLabelSequence( aQueryLabelItemIdVector.size() );
 
         sal_uInt32 nPos = 0;
-        ::std::vector< USHORT >::iterator p;
+        ::std::vector< sal_uInt16 >::iterator p;
         for ( p = aQueryLabelItemIdVector.begin(); p != aQueryLabelItemIdVector.end(); p++ )
             aURLSequence[nPos++] = pMenu->GetItemCommand( *p );
 
@@ -379,12 +379,12 @@ MenuManager::MenuManager(
 
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
-    USHORT nItemCount = pAddonMenu->GetItemCount();
+    sal_uInt16 nItemCount = pAddonMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
     ::rtl::OUString aItemCommand;
-    for ( USHORT i = 0; i < nItemCount; i++ )
+    for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        USHORT nItemId = FillItemCommand(aItemCommand,pAddonMenu, i );
+        sal_uInt16 nItemId = FillItemCommand(aItemCommand,pAddonMenu, i );
 
         PopupMenu* pPopupMenu = pAddonMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
@@ -444,7 +444,7 @@ MenuManager::~MenuManager()
 }
 
 
-MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( USHORT nItemId )
+MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -611,7 +611,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     ::std::vector< MenuItemHandler* > aNewPickVector;
     Reference< XStringWidth > xStringLength( new StringLength );
 
-    USHORT  nPickItemId = START_ITEMID_PICKLIST;
+    sal_uInt16  nPickItemId = START_ITEMID_PICKLIST;
     int     nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
     aNewPickVector.reserve(nPickListMenuItems);
@@ -779,8 +779,8 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XMultiSe
     // #110897#
     Reference< XDesktop > xDesktop( xServiceFactory->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
 
-    USHORT  nActiveItemId = 0;
-    USHORT  nItemId = START_ITEMID_WINDOWLIST;
+    sal_uInt16  nActiveItemId = 0;
+    sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
 
     if ( xDesktop.is() )
     {
@@ -905,7 +905,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         if ( m_bActive )
             return 0;
 
-        m_bActive = TRUE;
+        m_bActive = sal_True;
 
         ::rtl::OUString aCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand.matchIgnoreAsciiCase( UNO_COMMAND, 0 ))
@@ -1015,7 +1015,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     {
         ResetableGuard aGuard( m_aLock );
 
-        USHORT nCurItemId = pMenu->GetCurItemId();
+        sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         if ( pMenu == m_pVCLMenu &&
              pMenu->GetItemType( nCurItemId ) != MENUITEM_SEPARATOR )
         {
@@ -1031,7 +1031,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 
                 if ( xDesktop.is() )
                 {
-                    USHORT nTaskId = START_ITEMID_WINDOWLIST;
+                    sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
                     Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
                     sal_Int32 nCount = xList->getCount();
                     for ( sal_Int32 i=0; i<nCount; ++i )
@@ -1098,7 +1098,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFac
     return mxServiceFactory;
 }
 
-void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,USHORT _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
+void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
 {
     MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
 
@@ -1113,9 +1113,9 @@ void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCo
     m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
 }
 
-USHORT MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,USHORT _nIndex) const
+sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const
 {
-    USHORT nItemId = _pMenu->GetItemId( _nIndex );
+    sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
     if ( !_rItemCommand.getLength() )
@@ -1131,9 +1131,9 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
 {
     AddonsOptions       aAddonOptions;
 
-    for ( USHORT nPos = 0; nPos < _pMenu->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < _pMenu->GetItemCount(); nPos++ )
     {
-        USHORT nId = _pMenu->GetItemId( nPos );
+        sal_uInt16 nId = _pMenu->GetItemId( nPos );
         if ( _pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
         {
             bool bTmpShowMenuImages( bShowMenuImages );
@@ -1155,7 +1155,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
 
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( _xFrame, aImageId, FALSE, bIsHiContrast );
+                    Image aImage = GetImageFromURL( _xFrame, aImageId, sal_False, bIsHiContrast );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -1166,9 +1166,9 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
                 if ( !bImageSet )
                 {
                     rtl::OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
-                    Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, FALSE, bIsHiContrast );
+                    Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, sal_False, bIsHiContrast );
                     if ( !aImage )
-                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE, bIsHiContrast );
+                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, sal_False, bIsHiContrast );
 
                     _pMenu->SetItemImage( nId, aImage );
                 }

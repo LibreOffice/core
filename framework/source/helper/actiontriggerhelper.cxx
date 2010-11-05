@@ -42,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 
 
-const USHORT START_ITEMID = 1000;
+const sal_uInt16 START_ITEMID = 1000;
 
 using namespace rtl;
 using namespace vos;
@@ -109,7 +109,7 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
     }
 }
 
-void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexContainer > xActionTriggerContainer )
+void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexContainer > xActionTriggerContainer )
 {
     Reference< XIndexAccess > xIndexAccess( xActionTriggerContainer, UNO_QUERY );
     if ( xIndexAccess.is() )
@@ -143,7 +143,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                         Reference< XIndexContainer > xSubContainer;
                         sal_Bool bSpecialItemId = sal_False;
 
-                        USHORT nNewItemId = nItemId++;
+                        sal_uInt16 nNewItemId = nItemId++;
                         GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
                         OGuard aGuard( Application::GetSolarMutex() );
@@ -157,7 +157,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                 // got a special url during conversion from menu=>actiontriggercontainer.
                                 // Now we have to extract this special url and set the correct item id!!!
                                 bSpecialItemId = sal_True;
-                                nNewItemId = (USHORT)aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32();
+                                nNewItemId = (sal_uInt16)aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32();
                                 pSubMenu->InsertItem( nNewItemId, aLabel );
                             }
                             else
@@ -259,7 +259,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
 // implementation helper ( ActionTrigger => menu )
 // ----------------------------------------------------------------------------
 
-Reference< XPropertySet > CreateActionTrigger( USHORT nItemId, const Menu* pMenu, const Reference< XIndexContainer >& rActionTriggerContainer ) throw ( RuntimeException )
+Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* pMenu, const Reference< XIndexContainer >& rActionTriggerContainer ) throw ( RuntimeException )
 {
     Reference< XPropertySet > xPropSet;
 
@@ -337,9 +337,9 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
-        USHORT          nItemId = pMenu->GetItemId( nPos );
+        sal_uInt16          nItemId = pMenu->GetItemId( nPos );
         MenuItemType    nType   = pMenu->GetItemType( nPos );
 
         try
@@ -383,7 +383,7 @@ void ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
     Menu* pNewMenu,
     const Reference< XIndexContainer >& rActionTriggerContainer )
 {
-    USHORT nItemId = START_ITEMID;
+    sal_uInt16 nItemId = START_ITEMID;
 
     if ( rActionTriggerContainer.is() )
         InsertSubMenuItems( pNewMenu, nItemId, rActionTriggerContainer );

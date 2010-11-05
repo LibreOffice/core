@@ -280,7 +280,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   PropertySetHelper           ( xFactory,
                                           &m_aLock,
                                           &m_aTransactionManager,
-                                          sal_False) // FALSE => dont release shared mutex on calling us!
+                                          sal_False) // sal_False => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )
@@ -1345,9 +1345,9 @@ void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException )
                     reference to new component controller
                     (may <NULL/> for relasing or setting of a simple component)
 
-    @return     <TRUE/> if operation was successful, <FALSE/> otherwise.
+    @return     <sal_True/> if operation was successful, <sal_False/> otherwise.
 
-    @onerror    We return <FALSE/>.
+    @onerror    We return <sal_False/>.
     @threadsafe yes
     @modified   06.05.2002 11:39, as96863
 *//*-*****************************************************************************************************/
@@ -1605,14 +1605,14 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 /*-****************************************************************************************************//**
     @short      support two way mechanism to release a frame
     @descr      This method ask internal component (controller) if he accept this close request.
-                In case of <TRUE/> nothing will be happen (from point of caller of this close method).
-                In case of <FALSE/> a CloseVetoException is thrown. After such exception given parameter
+                In case of <sal_True/> nothing will be happen (from point of caller of this close method).
+                In case of <sal_False/> a CloseVetoException is thrown. After such exception given parameter
                 <var>bDeliverOwnerShip</var> regulate which will be the new owner of this instance.
 
     @attention  It's the replacement for XTask::close() which is marked as obsolete method.
 
     @param      bDeliverOwnerShip
-                    If parameter is set to <FALSE/> the original caller will be the owner after thrown
+                    If parameter is set to <sal_False/> the original caller will be the owner after thrown
                     veto exception and must try to close this frame at later time again. Otherwhise the
                     source of throwed exception is the right one. May it will be the frame himself.
 
@@ -3077,7 +3077,7 @@ void Frame::implts_checkSuicide()
             Its existence regulate visibility of this closer item.
 
     @param  bState
-                <TRUE/> enable; <FALSE/> disable this state
+                <sal_True/> enable; <sal_False/> disable this state
  */
 
 void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame ,

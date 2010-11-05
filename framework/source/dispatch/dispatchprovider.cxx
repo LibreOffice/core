@@ -454,7 +454,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         else
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
-            // Normaly if isTop() returned FALSE ... the parent frame MUST(!) exist ...
+            // Normaly if isTop() returned sal_False ... the parent frame MUST(!) exist ...
             // But it seams to be better to check that here to prevent us against an access violation.
             if (xParent.is())
                 xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_TOP, 0);
@@ -781,7 +781,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     @param      aURL
                     URL which should be "detected"
-    @return     <TRUE/> if somewhere could handle that - <FALSE/> otherwise.
+    @return     <sal_True/> if somewhere could handle that - <sal_False/> otherwise.
 
     @threadsafe yes
     @modified   17.05.2002 09:47, as96863
