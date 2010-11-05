@@ -37,7 +37,7 @@ import java.io.*;
  *  manager can exist at a time.  It is final, so it may not be
  *  subclassed.
  *
- *  @author: Brian Cameron
+ *  @author Brian Cameron
  */
 public final class ConverterInfoMgr {
 
@@ -50,15 +50,13 @@ public final class ConverterInfoMgr {
        converterInfoList = new Vector();
     }
 
-
    /**
     *  Adds a converter plug-in to the registry.  The
     *  <code>ConverterInfo</code> must have a unique DisplayName
     *  and must have non-null values for DisplayName, ClassImpl,
     *  OfficeMime, and DeviceMime.
     *
-    *  @param  ConverterInfo  A <code>ConverterInfo</code> object
-    *                         describing a plug-in.
+    *  @param  ci  A <code>ConverterInfo</code> object describing a plug-in.
     *
     *  @throws  RegistryException  If the <code>ConverterInfo</code>
     *                              is not valid.
@@ -111,14 +109,13 @@ public final class ConverterInfoMgr {
         }
     }
 
-
    /**
-    *  Adds a <code>Vector</code> of converter plug-ins to the registry.
-    *  Each <code>ConverterInfo</code> in the <code>Vector</code> must have
+    *  Adds a list of converter plug-ins to the registry.
+    *  Each <code>ConverterInfo</code> in the list must have
     *  a unique DisplayName and must have non-null values for DisplayName,
     *  ClassImpl, OfficeMime, and DeviceMime.
     *
-    *  @param  ciVectory  A <code>Vector</code> of <code>ConverterInfo</code>
+    *  @param  jarEnum  An <code>Enumeration</code> of <code>ConverterInfo</code>
     *                     objects describing one or more plug-in(s).
     *
     *  @throws  RegistryException  If a <code>ConverterInfo</code> in the
@@ -132,7 +129,6 @@ public final class ConverterInfoMgr {
         }
     }
 
-
    /**
     *  Returns an <code>Enumeration</code> of registered
     *  <code>ConverterInfo</code> objects.
@@ -144,7 +140,6 @@ public final class ConverterInfoMgr {
    public static Enumeration getConverterInfoEnumeration() {
       return (converterInfoList.elements());
    }
-
 
    /**
     *  Removes any <code>ConverterInfo</code> object from the registry
@@ -183,7 +178,6 @@ public final class ConverterInfoMgr {
         return rc;
     }
 
-
    /**
     *  Removes any <code>ConverterInfo</code> object from the registry
     *  that have the specified display name value.
@@ -209,7 +203,6 @@ public final class ConverterInfoMgr {
         }
         return rc;
     }
-
 
    /**
     *  Returns the <code>ConverterInfo</code> object that supports
@@ -254,15 +247,14 @@ public final class ConverterInfoMgr {
         return null;
     }
 
-
    /**
     *  Returns an array of two <code>ConverterInfo</code> objects that
     *  can be chained to perform the specified mime type conversion.
     *  If there are multiple <code>ConverterInfo</code> objects that
     *  support this conversion, only the first is returned.
     *
-    *  @param  deviceMimeFrom  The device from mime.
-    *  @param  deviceMimeTo    The device to mime.
+    *  @param  deviceFromMime  The device from mime.
+    *  @param  deviceToMime    The device to mime.
     *
     *  @return  An array of two <code>ConverterInfo</code> objects
     *           that can be chained to perform the specified
@@ -322,7 +314,6 @@ public final class ConverterInfoMgr {
         }
         return null;
     }
-
 
     /**
      *  main to let the user specify what plug-ins to register from
@@ -533,4 +524,3 @@ public final class ConverterInfoMgr {
         }
     }
 }
-

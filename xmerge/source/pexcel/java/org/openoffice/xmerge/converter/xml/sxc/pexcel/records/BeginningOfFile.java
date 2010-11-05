@@ -49,8 +49,7 @@ public class BeginningOfFile implements BIFFRecord {
    /**
     *  Constructor that initializes the member values.
     *
-    *  @param  ver  Version Number
-    *               Substream type (workbook = 0x05, worksheet = 0x10)
+    *  @param  global   True for a workbook, false for a worksheet
     */
     public BeginningOfFile(boolean global) {
         setVersion((short) 271);
