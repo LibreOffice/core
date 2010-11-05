@@ -365,7 +365,7 @@ void dbg_SaveDisassembly( SbModule* pModule )
         if( xSMgr.is() )
         {
             Reference< XSimpleFileAccess3 > xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
             if( xSFI.is() )
             {
                 String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/zBasic.Asm/Asm_") );
@@ -382,7 +382,7 @@ void dbg_SaveDisassembly( SbModule* pModule )
                 if( xSFI->exists( aFile ) )
                     xSFI->kill( aFile );
                 xOut = xSFI->openFileWrite( aFile );
-                Reference< XInterface > x = xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.io.TextOutputStream" ) );
+                Reference< XInterface > x = xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TextOutputStream" )) );
                 Reference< XActiveDataSource > xADS( x, UNO_QUERY );
                 xADS->setOutputStream( xOut );
                 xTextOut = Reference< XTextOutputStream >( x, UNO_QUERY );

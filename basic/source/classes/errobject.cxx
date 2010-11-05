@@ -175,7 +175,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
     throw (uno::RuntimeException)
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Missing Required Paramater")), uno::Reference< uno::XInterface >() );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;

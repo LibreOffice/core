@@ -223,7 +223,7 @@ static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void 
         if( xSMgr.is() )
         {
             xSFI = com::sun::star::uno::Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
         }
     }
     return xSFI;
@@ -2799,11 +2799,11 @@ RTLFUNC(Dir)
                         {
                             if( pRTLData->nCurDirPos == -2 )
                             {
-                                aPath = ::rtl::OUString::createFromAscii( "." );
+                                aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "." ));
                             }
                             else if( pRTLData->nCurDirPos == -1 )
                             {
-                                aPath = ::rtl::OUString::createFromAscii( ".." );
+                                aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".." ));
                             }
                             pRTLData->nCurDirPos++;
                         }
@@ -2989,11 +2989,11 @@ RTLFUNC(Dir)
                     {
                         if( pRTLData->nCurDirPos == -2 )
                         {
-                            aPath = ::rtl::OUString::createFromAscii( "." );
+                            aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "." ));
                         }
                         else if( pRTLData->nCurDirPos == -1 )
                         {
-                            aPath = ::rtl::OUString::createFromAscii( ".." );
+                            aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".." ));
                         }
                         pRTLData->nCurDirPos++;
                     }
