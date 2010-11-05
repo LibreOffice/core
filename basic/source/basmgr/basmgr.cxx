@@ -1824,7 +1824,7 @@ Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const Any& 
     if ( !pStandardLib )
         return aOldValue;
 
-    ::rtl::OUString sVarName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( _pAsciiName )) );
+    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
 
     // obtain the old value
     SbxVariable* pVariable = pStandardLib->Find( sVarName, SbxCLASS_OBJECT );
