@@ -270,19 +270,41 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
         return true;
 
+    // create a text string using the localized text of important buttons
     String aTestText;
-    aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_CANCEL ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_YES ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_NO ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_RETRY ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_HELP ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_CLOSE ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_MORE ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_LESS ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_ABORT ) );
+    static const StandardButtonType aTestButtons[] =
+    {
+        BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
+        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_LESS,
+        BUTTON_RETRY, BUTTON_HELP
+    };
 
-    return HasGlyphs( rFont, aTestText ) >= aTestText.Len();
+    const int nTestButtonCount = sizeof(aTestButtons)/sizeof(*aTestButtons);
+    for( int n = 0; n < nTestButtonCount; ++n )
+    {
+        String aButtonStr = Button::GetStandardText( aTestButtons[n] );
+        // #i115432# ignore mnemonic+accelerator part of each string
+        // TODO: use a string filtering method when it becomes available
+        const int nLen = aButtonStr.Len();
+        bool bInside = false;
+        for( int i = 0; i < nLen; ++i ) {
+            const sal_Unicode c = aButtonStr.GetChar( i );
+            if( (c == '('))
+                bInside = true;
+            if( (c == ')'))
+                bInside = false;
+            if( (c == '~')
+            ||  (c == '(') || (c == ')')
+            || ((c >= 'A') && (c <= 'Z') && bInside) )
+                aButtonStr.SetChar( i, ' ' );
+        }
+        // append sanitized button text to test string
+        aTestText.Append( aButtonStr );
+    }
+
+    const int nFirstChar = HasGlyphs( rFont, aTestText );
+    const bool bUIFontOk = (nFirstChar >= aTestText.Len());
+    return bUIFontOk;
 }
 
 // -----------------------------------------------------------------------
