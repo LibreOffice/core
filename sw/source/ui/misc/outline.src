@@ -65,6 +65,7 @@ ModalDialog DLG_NUM_NAMES
     };
     ListBox LB_FORM
     {
+        HelpID = "sw:ListBox:DLG_NUM_NAMES:LB_FORM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 84 , 42 ) ;
@@ -85,6 +86,7 @@ ModalDialog DLG_NUM_NAMES
     };
     Edit ED_FORM
     {
+        HelpID = "sw:Edit:DLG_NUM_NAMES:ED_FORM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -211,6 +213,7 @@ TabPage TP_OUTLINE_NUM
         Hide = TRUE;
     ListBox LB_LEVEL
     {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_LEVEL";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 23 , 129 ) ;
         TabStop = TRUE ;
@@ -233,6 +236,7 @@ TabPage TP_OUTLINE_NUM
     };
     ListBox LB_COLL
     {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_COLL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50 , 25 ) ;
         Size = MAP_APPFONT ( 120 , 75 ) ;
@@ -251,6 +255,7 @@ TabPage TP_OUTLINE_NUM
     };
     ListBox LB_NUMBER
     {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_NUMBER";
         Pos = MAP_APPFONT ( 104 , 41 ) ;
         Size = MAP_APPFONT ( 66 , 65 ) ;
         TabStop = TRUE ;
@@ -266,6 +271,7 @@ TabPage TP_OUTLINE_NUM
     };
     ListBox LB_CHARFMT
     {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_CHARFMT";
         TabStop = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 104 , 57 ) ;
@@ -279,6 +285,7 @@ TabPage TP_OUTLINE_NUM
     };
     NumericField NF_ALL_LEVEL
     {
+        HelpID = "sw:NumericField:TP_OUTLINE_NUM:NF_ALL_LEVEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 104 , 73 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
@@ -308,6 +315,7 @@ TabPage TP_OUTLINE_NUM
     };
     Edit ED_PREFIX
     {
+        HelpID = "sw:Edit:TP_OUTLINE_NUM:ED_PREFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 104 , 100 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
@@ -324,6 +332,7 @@ TabPage TP_OUTLINE_NUM
     };
     Edit ED_SUFFIX
     {
+        HelpID = "sw:Edit:TP_OUTLINE_NUM:ED_SUFFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 104 , 115 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
@@ -340,6 +349,7 @@ TabPage TP_OUTLINE_NUM
     };
     NumericField ED_START
     {
+        HelpID = "sw:NumericField:TP_OUTLINE_NUM:ED_START";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 104 , 131 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;

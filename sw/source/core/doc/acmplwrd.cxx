@@ -29,6 +29,7 @@
 #include "precompiled_sw.hxx"
 
 
+#include <tools/urlobj.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <unotools/transliterationwrapper.hxx>

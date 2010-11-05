@@ -65,7 +65,7 @@
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <frmatr.hxx>
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
@@ -895,7 +895,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetLineColor();
     pDev->SetBackground();
     BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    SwPrtOptions aOpts( aEmptyStr );
+    SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
@@ -1399,7 +1399,7 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
     if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
-        && ((SfxBoolItem*)pItem)->GetValue() == aPasswd.getLength() > 0)
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
         return false;
 
     bool bRes = false;

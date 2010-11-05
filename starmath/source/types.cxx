@@ -38,7 +38,7 @@ sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar )
     if (IsInPrivateUseArea( cChar ))
     {
         DBG_ASSERT( 0, "Error: private use area characters should no longer be in use!" );
-        cRes = (sal_Unicode) '&'; // just some character that should easily be notice as odd in the context
+        cRes = (sal_Unicode) '@'; // just some character that should easily be notice as odd in the context
     }
     return cRes;
 }

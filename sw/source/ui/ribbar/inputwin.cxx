@@ -80,6 +80,8 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
 
     FreeResource();
 
+    aEdit.SetSizePixel( aEdit.CalcMinimumSize() );
+
     SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
     pManager->RegisterToolBox(this);
 
@@ -101,16 +103,23 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
     Size    aSizeTbx = CalcWindowSizePixel();
+    Size    aEditSize = aEdit.GetSizePixel();
+    Rectangle aItemRect( GetItemRect(FN_FORMULA_CALC) );
+    long nMaxHeight = (aEditSize.Height() > aItemRect.GetHeight()) ? aEditSize.Height() : aItemRect.GetHeight();
+    if( nMaxHeight+2 > aSizeTbx.Height() )
+        aSizeTbx.Height() = nMaxHeight+2;
     Size aSize = GetSizePixel();
     aSize.Height() = aSizeTbx.Height();
     SetSizePixel( aSize );
-    Size    aPosSize = aPos.GetSizePixel();
-    Size    aEditSize = aEdit.GetSizePixel();
-    aPosSize.Height() = aEditSize.Height() = GetItemRect(FN_FORMULA_CALC).GetHeight() - 2;
 
-    Point aPosPos = aPos.GetPosPixel();
-    Point aEditPos= aEdit.GetPosPixel();
-    aPosPos.Y() = aEditPos.Y() = GetItemRect( FN_FORMULA_CALC ).TopLeft().Y() + 1;
+    // align edit and item vcentered
+    Size    aPosSize = aPos.GetSizePixel();
+    aPosSize.Height()  = nMaxHeight;
+    aEditSize.Height() = nMaxHeight;
+    Point aPosPos  = aPos.GetPosPixel();
+    Point aEditPos = aEdit.GetPosPixel();
+    aPosPos.Y()    = (aSize.Height() - nMaxHeight)/2 + 1;
+    aEditPos.Y()   = (aSize.Height() - nMaxHeight)/2 + 1;
     aPos.SetPosSizePixel( aPosPos, aPosSize );
     aEdit.SetPosSizePixel( aEditPos, aEditSize );
 

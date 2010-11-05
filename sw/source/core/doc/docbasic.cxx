@@ -167,9 +167,9 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
         if( bCheckPtr  )
         {
             const SfxPoolItem* pItem;
-            USHORT n, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+            sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
             for( n = 0; n < nMaxItems; ++n )
-                if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_INETFMT, n ) )
+                if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
                     bCheckPtr = FALSE;      // als Flag missbrauchen

@@ -730,7 +730,8 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
 
 String GetAppLangDateTimeString( const DateTime& rDT )
 {
-    const LocaleDataWrapper& rAppLclData = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rAppLclData = aSysLocale.GetLocaleData();
     String sRet( rAppLclData.getDate( rDT ));
     ( sRet += ' ' ) += rAppLclData.getTime( rDT, FALSE, FALSE );
     return sRet;
