@@ -41,6 +41,10 @@ gb_OSDEFS := \
     -DUNX \
     $(PTHREAD_CFLAGS) \
 
+ifeq ($(GXX_INCLUDE_PATH),)
+GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
+endif
+
 gb_COMPILERDEFS := \
     -DGCC \
     -D$(CVER) \
@@ -57,7 +61,7 @@ gb_CPUDEFS := -DX86
 endif
 
 gb_CFLAGS := \
-    -isystem $(SYSBASE)/usr/include \
+    --sysroot=$(SYSBASE) \
     -Wall \
     -Wendif-labels \
     -Wextra \
@@ -68,7 +72,7 @@ gb_CFLAGS := \
     -pipe \
 
 gb_CXXFLAGS := \
-    -isystem $(SYSBASE)/usr/include \
+    --sysroot=$(SYSBASE) \
     -Wall \
     -Wendif-labels \
     -Wextra \
@@ -95,6 +99,8 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -fno-exceptions \
     
 gb_LinkTarget_LDFLAGS := \
+    -Wl,--sysroot=$(SYSBASE) \
+    -Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
     -Wl,--hash-style=both \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
