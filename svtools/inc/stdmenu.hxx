@@ -189,7 +189,7 @@ private:
     Link            maSelectHdl;
     Link            maHighlightHdl;
 
-    SVT_DLLPRIVATE BOOL         ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount );
+    SVT_DLLPRIVATE sal_Bool         ImplIsAlreadyInserted( const XubString& rStyleName, sal_uInt16 nCount );
 
 public:
                     FontStyleMenu();

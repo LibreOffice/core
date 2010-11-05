@@ -177,7 +177,7 @@ namespace svt { namespace table
         /** sets a new column ID
 
             @return
-                <TRUE/> if setting the new ID was successfull. A possible error
+                <sal_True/> if setting the new ID was successfull. A possible error
                 conditions is if you try to set an ID which is already used
                 by another column within the same table.
 
@@ -327,7 +327,7 @@ namespace svt { namespace table
 
         /** determines whether the table has column headers
 
-            If this method returns <TRUE/>, the renderer returned by
+            If this method returns <sal_True/>, the renderer returned by
             ->getRenderer must be able to render column headers.
 
             @see IColumnRenderer
@@ -345,7 +345,7 @@ namespace svt { namespace table
 
         /** determines whether the table has row headers
 
-            If this method returns <TRUE/>, the renderer returned by
+            If this method returns <sal_True/>, the renderer returned by
             ->getRenderer must be able to render row headers.
 
             @see IColumnRenderer
@@ -414,7 +414,7 @@ namespace svt { namespace table
         /** determines the height of the column header row
 
             This method is not to be called if ->hasColumnHeaders()
-            returned <FALSE/>.
+            returned <sal_False/>.
 
             @return
                 the logical height of the column header row, in 1/100 millimeters.
@@ -425,7 +425,7 @@ namespace svt { namespace table
         /** determines the width of the row header column
 
             This method is not to be called if ->hasRowHeaders()
-            returned <FALSE/>.
+            returned <sal_False/>.
 
             @return
                 the logical width of the row header column, in 1/100 millimeters.

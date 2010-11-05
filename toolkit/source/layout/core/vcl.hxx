@@ -36,7 +36,7 @@
     public:\
         bool mClosing;\
         Closing##cls (Window* parent, WinBits bits);\
-        virtual BOOL Close ();\
+        virtual sal_Bool Close ();\
     }
 
 DECLARE_CLOSING_DIALOG (Dialog);

@@ -40,11 +40,11 @@ class SvResizeHelper
     Rectangle   aOuter;
     short       nGrab; // -1 kein Grab,  0 - 7, 8 = Move, siehe FillHandle...
     Point       aSelPos;
-    BOOL        bResizeable;
+    sal_Bool        bResizeable;
 public:
                 SvResizeHelper();
 
-    void        SetResizeable( BOOL b ) { bResizeable = b; }
+    void        SetResizeable( sal_Bool b ) { bResizeable = b; }
     short       GetGrab() const { return nGrab; }
     void        SetBorderPixel( const Size & rBorderP )
                 { aBorder = rBorderP; }
@@ -67,12 +67,12 @@ public:
     void        FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const;
     void        Draw( OutputDevice * );
     void        InvalidateBorder( Window * );
-    BOOL        SelectBegin( Window *, const Point & rPos );
+    sal_Bool        SelectBegin( Window *, const Point & rPos );
     short       SelectMove( Window * pWin, const Point & rPos );
     Point       GetTrackPosPixel( const Rectangle & rRect ) const;
     Rectangle   GetTrackRectPixel( const Point & rTrackPos ) const;
     void        ValidateRect( Rectangle & rValidate ) const;
-    BOOL        SelectRelease( Window *, const Point & rPos, Rectangle & rOutPosSize );
+    sal_Bool        SelectRelease( Window *, const Point & rPos, Rectangle & rOutPosSize );
     void        Release( Window * pWin );
 };
 

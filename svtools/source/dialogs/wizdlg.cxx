@@ -203,7 +203,7 @@ void WizardDialog::ImplPosCtrls()
         long    nViewWidth = 0;
         long    nViewHeight = 0;
         long    nDlgHeight = nOffY;
-        USHORT  nViewPosFlags = WINDOW_POSSIZE_POS;
+        sal_uInt16  nViewPosFlags = WINDOW_POSSIZE_POS;
         if ( meViewAlign == WINDOWALIGN_TOP )
         {
             nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
@@ -338,9 +338,9 @@ void WizardDialog::ImplShowTabPage( TabPage* pTabPage )
 
 // -----------------------------------------------------------------------
 
-TabPage* WizardDialog::ImplGetPage( USHORT nLevel ) const
+TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
 {
-    USHORT              nTempLevel = 0;
+    sal_uInt16              nTempLevel = 0;
     ImplWizPageData*    pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -447,7 +447,7 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        USHORT          nKeyCode = aKeyCode.GetCode();
+        sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
         if ( aKeyCode.IsMod1() )
         {
@@ -458,11 +458,11 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
                     if ( mpPrevBtn->IsVisible() &&
                          mpPrevBtn->IsEnabled() && mpPrevBtn->IsInputEnabled() )
                     {
-                        mpPrevBtn->SetPressed( TRUE );
-                        mpPrevBtn->SetPressed( FALSE );
+                        mpPrevBtn->SetPressed( sal_True );
+                        mpPrevBtn->SetPressed( sal_False );
                         mpPrevBtn->Click();
                     }
-                    return TRUE;
+                    return sal_True;
                 }
             }
             else
@@ -472,11 +472,11 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
                     if ( mpNextBtn->IsVisible() &&
                          mpNextBtn->IsEnabled() && mpNextBtn->IsInputEnabled() )
                     {
-                        mpNextBtn->SetPressed( TRUE );
-                        mpNextBtn->SetPressed( FALSE );
+                        mpNextBtn->SetPressed( sal_True );
+                        mpNextBtn->SetPressed( sal_False );
                         mpNextBtn->Click();
                     }
-                    return TRUE;
+                    return sal_True;
                 }
             }
         }
@@ -499,43 +499,43 @@ long WizardDialog::DeactivatePage()
     if ( maDeactivateHdl.IsSet() )
         return maDeactivateHdl.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL WizardDialog::ShowNextPage()
+sal_Bool WizardDialog::ShowNextPage()
 {
     return ShowPage( mnCurLevel+1 );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL WizardDialog::ShowPrevPage()
+sal_Bool WizardDialog::ShowPrevPage()
 {
     if ( !mnCurLevel )
-        return FALSE;
+        return sal_False;
     return ShowPage( mnCurLevel-1 );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL WizardDialog::ShowPage( USHORT nLevel )
+sal_Bool WizardDialog::ShowPage( sal_uInt16 nLevel )
 {
     if ( DeactivatePage() )
     {
         mnCurLevel = nLevel;
         ActivatePage();
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL WizardDialog::Finnish( long nResult )
+sal_Bool WizardDialog::Finnish( long nResult )
 {
     if ( DeactivatePage() )
     {
@@ -546,10 +546,10 @@ BOOL WizardDialog::Finnish( long nResult )
             EndDialog( nResult );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -600,9 +600,9 @@ void WizardDialog::RemovePage( TabPage* pPage )
 
 // -----------------------------------------------------------------------
 
-void WizardDialog::SetPage( USHORT nLevel, TabPage* pPage )
+void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
 {
-    USHORT              nTempLevel = 0;
+    sal_uInt16              nTempLevel = 0;
     ImplWizPageData*    pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -623,9 +623,9 @@ void WizardDialog::SetPage( USHORT nLevel, TabPage* pPage )
 
 // -----------------------------------------------------------------------
 
-TabPage* WizardDialog::GetPage( USHORT nLevel ) const
+TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
 {
-    USHORT              nTempLevel = 0;
+    sal_uInt16              nTempLevel = 0;
     ImplWizPageData*    pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -686,7 +686,7 @@ void WizardDialog::RemoveButton( Button* pButton )
 
 // -----------------------------------------------------------------------
 
-void WizardDialog::ShowButtonFixedLine( BOOL bVisible )
+void WizardDialog::ShowButtonFixedLine( sal_Bool bVisible )
 {
     if ( !mpFixedLine )
     {
@@ -701,7 +701,7 @@ void WizardDialog::ShowButtonFixedLine( BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-BOOL WizardDialog::IsButtonFixedLineVisible()
+sal_Bool WizardDialog::IsButtonFixedLineVisible()
 {
     return (mpFixedLine && mpFixedLine->IsVisible());
 }

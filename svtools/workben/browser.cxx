@@ -119,7 +119,7 @@ protected:
     virtual long    GetRowCount() const;
     virtual BOOL    SeekRow( long nRow );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
-                                USHORT nColumnId ) const;
+                                sal_uInt16 nColumnId ) const;
 
     virtual void    Select();
     virtual void    DoubleClick();
@@ -501,7 +501,7 @@ BOOL Browser::SeekRow( long nRow )
 //------------------------------------------------------------------
 
 void Browser::PaintField( OutputDevice& rDev, const Rectangle& rRect,
-                          USHORT nColumnId ) const
+                          sal_uInt16 nColumnId ) const
 {
     rDev.SetClipRegion( rRect );
     String aText( aRows.GetCurObject() );

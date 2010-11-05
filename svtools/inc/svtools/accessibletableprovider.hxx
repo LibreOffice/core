@@ -83,31 +83,31 @@ public:
         @param _nColumn The column which description is in demand. */
     virtual ::rtl::OUString         GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
 
-    /** @return  <TRUE/>, if the object has a row header. */
+    /** @return  <sal_True/>, if the object has a row header. */
     virtual sal_Bool                HasRowHeader() const = 0; //GetColumnId
-    /** @return  <TRUE/>, if the object can focus a cell. */
+    /** @return  <sal_True/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const = 0;
     virtual sal_Bool                GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
 
     virtual void                    SetNoSelection() = 0;
     virtual void                    SelectAll() = 0;
-    virtual void                    SelectRow( long _nRow, BOOL _bSelect = TRUE, BOOL bExpand = TRUE ) = 0;
+    virtual void                    SelectRow( long _nRow, sal_Bool _bSelect = sal_True, sal_Bool bExpand = sal_True ) = 0;
     virtual void                    SelectColumn( sal_uInt16 _nColumnPos, sal_Bool _bSelect = sal_True ) = 0;
     virtual sal_Int32               GetSelectedRowCount() const = 0;
     virtual sal_Int32               GetSelectedColumnCount() const = 0;
-    /** @return  <TRUE/>, if the row is selected. */
+    /** @return  <sal_True/>, if the row is selected. */
     virtual bool                    IsRowSelected( long _nRow ) const = 0;
     virtual sal_Bool                IsColumnSelected( long _nColumnPos ) const = 0;
     virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
     virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
 
-    /** @return  <TRUE/>, if the cell is visible. */
+    /** @return  <sal_True/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
-    virtual String                  GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const = 0;
+    virtual String                  GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
-    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle               calcTableRect( BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, BOOL _bIsHeader, BOOL _bOnScreen = TRUE ) = 0;
+    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True ) = 0;
 
     virtual XACC                    CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
     virtual XACC                    CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
@@ -129,12 +129,12 @@ public:
     virtual void                    GrabTableFocus() = 0;
 
     // OutputDevice
-    virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
+    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void                    GrabFocus() = 0;
-    virtual XACC                    GetAccessible( BOOL bCreate = TRUE ) = 0;
+    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True ) = 0;
     virtual Window*                 GetAccessibleParentWindow() const = 0;
     virtual Window*                 GetWindowInstance() = 0;
 
@@ -189,7 +189,7 @@ public:
     virtual void dispose() = 0;
 
     /** checks whether the accessible implementation, and its context, are still alive
-        @return  <TRUE/>, if the object is not disposed or disposing.
+        @return  <sal_True/>, if the object is not disposed or disposing.
     */
     virtual sal_Bool isAlive() const = 0;
 

@@ -81,7 +81,7 @@ class SimplePropertyEditor_Impl :
     INT32 mnActualHistoryLevel;
 
     // Einfache History via Dummy-Properties
-    BOOL bSimpleHistory;
+    sal_Bool bSimpleHistory;
 
     // Methode zum Anlegen/Aktivieren der Controller
     void showObject( const UsrAny& aToShowObj );
@@ -93,7 +93,7 @@ public:
     ~SimplePropertyEditor_Impl();
 
     // HACK fuer History-Test
-    void enableSimpleHistory( BOOL bHistory_ ) { bSimpleHistory = bHistory_; }
+    void enableSimpleHistory( sal_Bool bHistory_ ) { bSimpleHistory = bHistory_; }
 
     SMART_UNO_DECLARATION(ImplIntrospection,UsrObject);
 

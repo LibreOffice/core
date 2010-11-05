@@ -29,9 +29,9 @@
 #define _MSGRD_HXX
 
 
-BOOL ConvertMSGToGDIMetaFile( SvStream & rMSG, GDIMetaFile & rGDIMetaFile,
-                              BOOL(*pCallback)(void *, USHORT), void * pCallerData,
-                              ULONG nMinPercent, ULONG nMaxPercent);
+sal_Bool ConvertMSGToGDIMetaFile( SvStream & rMSG, GDIMetaFile & rGDIMetaFile,
+                              sal_Bool(*pCallback)(void *, sal_uInt16), void * pCallerData,
+                              sal_uIntPtr nMinPercent, sal_uIntPtr nMaxPercent);
 
 
 #endif // _MSGRD_HXX

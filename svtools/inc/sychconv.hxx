@@ -41,7 +41,7 @@ class SymCharConverter
 {
 public:
 
-    static BOOL Convert( Font& rFont, UniString& rString, OutputDevice* pDev = NULL );
+    static sal_Bool Convert( Font& rFont, UniString& rString, OutputDevice* pDev = NULL );
 };
 
 #endif // _CHARCONV_HXX

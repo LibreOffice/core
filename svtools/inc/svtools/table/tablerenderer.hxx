@@ -67,24 +67,24 @@ namespace svt { namespace table
 
             There are two flags specifying whether the to-be-painted area is part of the column
             and/or row header area.
-            <ul><li>If both are <TRUE/>, the intersection of both areas is to be painted.</li>
-                <li>If ->_bIsColHeaderArea is <TRUE/> and ->_bIsRowHeaderArea is <FALSE/>,
+            <ul><li>If both are <sal_True/>, the intersection of both areas is to be painted.</li>
+                <li>If ->_bIsColHeaderArea is <sal_True/> and ->_bIsRowHeaderArea is <sal_False/>,
                     then ->_rArea denotes the column header area <em>excluding</em> the
                     intersection between row and column header area.</li>
-                <li>Equivalently for ->_bIsColHeaderArea being <FALSE/> and ->_bIsRowHeaderArea
-                    being <TRUE/></li>
+                <li>Equivalently for ->_bIsColHeaderArea being <sal_False/> and ->_bIsRowHeaderArea
+                    being <sal_True/></li>
             </ul>
             Note that it's not possible for both ->_bIsColHeaderArea and ->_bIsRowHeaderArea
-            to be <FALSE/> at the same time.
+            to be <sal_False/> at the same time.
 
             @param _rDevice
                 the device to paint onto
             @param _rArea
                 the area to paint into
             @param _bIsColHeaderArea
-                <TRUE/> if and only if ->_rArea is part of the column header area.
+                <sal_True/> if and only if ->_rArea is part of the column header area.
             @param _bIsRowHeaderArea
-                <TRUE/> if and only if ->_rArea is part of the row header area.
+                <sal_True/> if and only if ->_rArea is part of the row header area.
             @param _rStyle
                 the style to be used for drawing
         */
@@ -98,10 +98,10 @@ namespace svt { namespace table
             @param _nCol
                 the index of the column to paint
             @param _bActive
-                <TRUE/> if and only if the column whose column is to be painted
+                <sal_True/> if and only if the column whose column is to be painted
                 contains the active cell.
             @param _bSelected
-                <TRUE/> if and only if the column whose column is to be painted
+                <sal_True/> if and only if the column whose column is to be painted
                 is selected currently.
             @param _rDevice
                 denotes the device to paint onto
@@ -133,10 +133,10 @@ namespace svt { namespace table
                 cell-independent content of this row.
 
             @param _bActive
-                <TRUE/> if and only if the row to be painted contains the
+                <sal_True/> if and only if the row to be painted contains the
                 currently active cell.
             @param _bSelected
-                <TRUE/> if and only if the row to be prepared is
+                <sal_True/> if and only if the row to be prepared is
                 selected currently.
             @param _rDevice
                 denotes the device to paint onto
@@ -156,14 +156,14 @@ namespace svt { namespace table
             ->PrepareRow.
 
             @param _bActive
-                <TRUE/> if and only if the row to be painted contains the
+                <sal_True/> if and only if the row to be painted contains the
                 currently active cell.
                 <br/>
                 Note that this flag is equal to the respective flag in the
                 previous ->PrepareRow call, it's passed here for convinience
                 only.
             @param _bSelected
-                <TRUE/> if and only if the row whose header cell is to be
+                <sal_True/> if and only if the row whose header cell is to be
                 painted is selected currently.
                 <br/>
                 Note that this flag is equal to the respective flag in the
@@ -188,7 +188,7 @@ namespace svt { namespace table
             ->PrepareRow.
 
             @param _bSelected
-                <TRUE/> if and only if the cell to be painted is
+                <sal_True/> if and only if the cell to be painted is
                 selected currently. This is the case if either
                 the row or the column of the cell is currently selected.
                 <br/>
@@ -196,7 +196,7 @@ namespace svt { namespace table
                 previous ->PrepareRow call, it's passed here for convinience
                 only.
             @param _bActive
-                <TRUE/> if the cell is currently active.
+                <sal_True/> if the cell is currently active.
                 <br/>
                 Note that this flag is equal to the respective flag in the
                 previous ->PrepareRow call, it's passed here for convinience
@@ -221,7 +221,7 @@ namespace svt { namespace table
             ->PrepareRow.
 
             @param _bSelected
-                <TRUE/> if and only if the cell to be painted is
+                <sal_True/> if and only if the cell to be painted is
                 selected currently. This is the case if either
                 the row or the column of the cell is currently selected.
                 <br/>
@@ -229,7 +229,7 @@ namespace svt { namespace table
                 previous ->PrepareRow call, it's passed here for convinience
                 only.
             @param _bActive
-                <TRUE/> if the cell is currently active.
+                <sal_True/> if the cell is currently active.
                 <br/>
                 Note that this flag is equal to the respective flag in the
                 previous ->PrepareRow call, it's passed here for convinience

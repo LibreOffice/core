@@ -126,13 +126,13 @@ PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
     mnMinPage       = 1;
     mnMaxPage       = 65535;
     meCheckRange    = PRINTDIALOG_ALL;
-    mbAll           = TRUE;
-    mbSelection     = FALSE;
-    mbFromTo        = FALSE;
-    mbRange         = FALSE;
-    mbCollate       = TRUE;
-    mbCollateCheck  = TRUE;
-    mbOptions       = FALSE;
+    mbAll           = sal_True;
+    mbSelection     = sal_False;
+    mbFromTo        = sal_False;
+    mbRange         = sal_False;
+    mbCollate       = sal_True;
+    mbCollateCheck  = sal_True;
+    mbOptions       = sal_False;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
     maStatusTimer.SetTimeoutHdl( LINK( this, PrintDialog, ImplStatusHdl ) );
@@ -161,7 +161,7 @@ PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
 
 PrintDialog::~PrintDialog()
 {
-    ImplFreePrnDlgListBox( &maLbName, FALSE );
+    ImplFreePrnDlgListBox( &maLbName, sal_False );
     delete mpPrinterImpl;
 }
 
@@ -205,10 +205,10 @@ void PrintDialog::ImplSetInfo()
 #ifdef UNX
     if( pInfo && pInfo->GetLocation().EqualsAscii( "fax_queue" ) )
     {
-        maFiPrintFile.Show( FALSE );
-        maCbxFilePrint.Show( FALSE );
-        maFiFaxNo.Show( TRUE );
-        maEdtFaxNo.Show( TRUE );
+        maFiPrintFile.Show( sal_False );
+        maCbxFilePrint.Show( sal_False );
+        maFiFaxNo.Show( sal_True );
+        maEdtFaxNo.Show( sal_True );
         Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
         maEdtFaxNo.SetText( pPrinter->GetJobValue( String::CreateFromAscii( "FAX#" ) ) );
 
@@ -229,10 +229,10 @@ void PrintDialog::ImplSetInfo()
     else
 #endif
     {
-        maFiPrintFile.Show( TRUE );
-        maCbxFilePrint.Show( TRUE );
-        maFiFaxNo.Show( FALSE );
-        maEdtFaxNo.Show( FALSE );
+        maFiPrintFile.Show( sal_True );
+        maCbxFilePrint.Show( sal_True );
+        maFiFaxNo.Show( sal_False );
+        maEdtFaxNo.Show( sal_False );
     }
 
 }
@@ -242,7 +242,7 @@ void PrintDialog::ImplSetInfo()
 void PrintDialog::ImplCheckOK()
 {
     // Ueberprueft, ob der OK-Button enabled ist
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
 
     if ( bEnable && maRbtPages.IsChecked() )
         bEnable = maEdtPages.GetText().Len() > 0;
@@ -267,20 +267,20 @@ void PrintDialog::ImplInitControls()
     {
         maRbtAll.Enable();
         if( meCheckRange == PRINTDIALOG_ALL )
-            maRbtAll.Check( TRUE );
+            maRbtAll.Check( sal_True );
     }
     else
-        maRbtAll.Enable( FALSE );
+        maRbtAll.Enable( sal_False );
 
     // Selektion
     if ( mbSelection )
     {
         maRbtSelection.Enable();
         if ( meCheckRange == PRINTDIALOG_SELECTION )
-            maRbtSelection.Check( TRUE );
+            maRbtSelection.Check( sal_True );
     }
     else
-        maRbtSelection.Enable( FALSE );
+        maRbtSelection.Enable( sal_False );
 
     // Seiten
     if ( mbRange )
@@ -292,15 +292,15 @@ void PrintDialog::ImplInitControls()
         if( ( meCheckRange == PRINTDIALOG_FROMTO ) ||
             ( meCheckRange == PRINTDIALOG_RANGE ) )
         {
-            maRbtPages.Check( TRUE );
+            maRbtPages.Check( sal_True );
             maEdtPages.Enable();
         }
         else
-            maEdtPages.Enable( FALSE );
+            maEdtPages.Enable( sal_False );
     }
     else
     {
-        maRbtPages.Enable( FALSE );
+        maRbtPages.Enable( sal_False );
         maEdtPages.Hide();
     }
 
@@ -372,7 +372,7 @@ void PrintDialog::ImplFillDialogData()
         maRangeText = maEdtPages.GetText();
     }
 
-    mnCopyCount = (USHORT) maNumCopies.GetValue();
+    mnCopyCount = (sal_uInt16) maNumCopies.GetValue();
     mbCollateCheck = maCbxCollate.IsChecked();
 
     // In Datei drucken
@@ -512,7 +512,7 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
     // Radiobuttons (Umfang)
     if ( !p || (p == &maRbtAll) || (p == &maRbtPages) || (p == &maRbtSelection) )
     {
-        BOOL bCheck = maRbtPages.IsChecked();
+        sal_Bool bCheck = maRbtPages.IsChecked();
         maEdtPages.Enable( bCheck );
         if ( p == &maRbtPages )
             maEdtPages.GrabFocus();
@@ -530,26 +530,26 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
     }
 
     // Anzahl Kopien
-    BOOL bNumCopies = FALSE;
+    sal_Bool bNumCopies = sal_False;
 
     if ( !p || p == &maNumCopies )
     {
         if ( p )
-            bNumCopies = TRUE;
-        //BOOL bCopies = maNumCopies.GetValue() > 1;
+            bNumCopies = sal_True;
+        //sal_Bool bCopies = maNumCopies.GetValue() > 1;
         maCbxCollate.Enable( mbCollate );
 
         /*if ( !bCopies )
-            maCbxCollate.Check( FALSE );
+            maCbxCollate.Check( sal_False );
         else*/
         if ( mbCollateCheck )
-            maCbxCollate.Check( TRUE );
+            maCbxCollate.Check( sal_True );
     }
 
     // Sortieren
     if ( !p || p == &maCbxCollate || bNumCopies )
     {
-        BOOL bCheck = maCbxCollate.IsChecked();
+        sal_Bool bCheck = maCbxCollate.IsChecked();
 
         if ( !bNumCopies )
             mbCollateCheck = maCbxCollate.IsChecked();
@@ -572,7 +572,7 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
 
     if( p == &maBtnOK )
     {
-        EndDialog( maCbxFilePrint.IsChecked() ? ImplGetFilename() : TRUE );
+        EndDialog( maCbxFilePrint.IsChecked() ? ImplGetFilename() : sal_True );
     }
 
     return 0;
@@ -585,7 +585,7 @@ long PrintDialog::ClickOptionsHdl()
     if ( maOptionsHdlLink.IsSet() )
         return maOptionsHdlLink.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -595,7 +595,7 @@ long PrintDialog::OK()
     if ( maOKHdlLink.IsSet() )
         return maOKHdlLink.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -632,13 +632,13 @@ bool PrintDialog::IsSheetRangeEnabled( PrintSheetRange eRange ) const
     switch ( eRange )
     {
         case PRINTSHEETS_ALL :
-            bRet = maRbtAllSheets.IsEnabled() != FALSE;
+            bRet = maRbtAllSheets.IsEnabled() != sal_False;
             break;
         case PRINTSHEETS_SELECTED_SHEETS :
-            bRet = maRbtSelectedSheets.IsEnabled() != FALSE;
+            bRet = maRbtSelectedSheets.IsEnabled() != sal_False;
             break;
         case PRINTSHEETS_SELECTED_CELLS :
-            bRet = maRbtSelectedCells.IsEnabled() != FALSE;
+            bRet = maRbtSelectedCells.IsEnabled() != sal_False;
             break;
         default:
             DBG_ERRORFILE( "PrintDialog::IsSheetRangeEnabled(): invalid range" );
@@ -695,13 +695,13 @@ bool PrintDialog::IsSheetRangeChecked( PrintSheetRange eRange ) const
     switch ( eRange )
     {
         case PRINTSHEETS_ALL :
-            bRet = maRbtAllSheets.IsChecked() != FALSE;
+            bRet = maRbtAllSheets.IsChecked() != sal_False;
             break;
         case PRINTSHEETS_SELECTED_SHEETS :
-            bRet = maRbtSelectedSheets.IsChecked() != FALSE;
+            bRet = maRbtSelectedSheets.IsChecked() != sal_False;
             break;
         case PRINTSHEETS_SELECTED_CELLS :
-            bRet = maRbtSelectedCells.IsChecked() != FALSE;
+            bRet = maRbtSelectedCells.IsChecked() != sal_False;
             break;
         default:
             DBG_ERRORFILE( "PrintDialog::IsSheetRangeChecked(): invalid range" );
@@ -753,13 +753,13 @@ short PrintDialog::Execute()
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
-        return FALSE;
+        return sal_False;
     }
 
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
     if( mpPrinter->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) )
-        return TRUE;
+        return sal_True;
 
     Printer::updatePrinters();
 
@@ -776,7 +776,7 @@ short PrintDialog::Execute()
     short nRet = ModalDialog::Execute();
 
     // Wenn Dialog mit OK beendet wurde, dann die Daten updaten
-    if( nRet == TRUE )
+    if( nRet == sal_True )
     {
         if ( TEMPPRINTER() )
             mpPrinter->SetPrinterProps( TEMPPRINTER() );

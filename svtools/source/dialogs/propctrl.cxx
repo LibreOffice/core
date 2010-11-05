@@ -60,7 +60,7 @@ public:
     // Objekt zum Editieren setzen, dies loest das Eintragen
     // der Properties in die PropertyBox aus
     void setObject( XPropertyEditorRef xEditor_, const UsrAny& aToEditObj,
-        /* HACK fuer History-Interface*/String aPath, BOOL bBack=FALSE, BOOL bForward=FALSE );
+        /* HACK fuer History-Interface*/String aPath, sal_Bool bBack=sal_False, sal_Bool bForward=sal_False );
 
     /* SPAETER
     SMART_UNO_DECLARATION(ImplIntrospection,UsrObject);
@@ -101,7 +101,7 @@ PropertyEditorControler_Impl::PropertyEditorControler_Impl( SvPropertyBox* pProp
 }
 
 void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const UsrAny& aToEditObj,
-    /* HACK fuer History-Interface*/ String aPath, BOOL bBack, BOOL bForward )
+    /* HACK fuer History-Interface*/ String aPath, sal_Bool bBack, sal_Bool bForward )
 {
     static XIntrospectionRef xIntrospection;
 
@@ -142,7 +142,7 @@ void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const
     const Property* pProps = mPropSeq.getConstArray();
 
     // 1. Seite anlegen
-    USHORT nPropPageId = mpPropBox->AppendPage("Properties");
+    sal_uInt16 nPropPageId = mpPropBox->AppendPage("Properties");
 
     // Beim Eintragen solls nicht flimmern
     mpPropBox->DisableUpdate();
@@ -152,9 +152,9 @@ void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const
     if( aPath.Len() )
     {
         // Interface und Structs werden Hyperlinks
-        aProperty.bIsHyperLink = FALSE;
-        aProperty.bIsLocked = TRUE;
-        aProperty.bHasVisibleXButton = FALSE;
+        aProperty.bIsHyperLink = sal_False;
+        aProperty.bIsLocked = sal_True;
+        aProperty.bHasVisibleXButton = sal_False;
         aProperty.eKind = KOC_EDIT;
         aProperty.pControl = NULL;
         aProperty.pDataPtr = NULL;
@@ -165,8 +165,8 @@ void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const
     if( bBack || bForward )
     {
         // Interface und Structs werden Hyperlinks
-        aProperty.bIsHyperLink = TRUE;
-        aProperty.bIsLocked = TRUE;
+        aProperty.bIsHyperLink = sal_True;
+        aProperty.bIsLocked = sal_True;
         // HACK, solange Hyperlink nicht funktioniert
         aProperty.bHasVisibleXButton = aProperty.bIsHyperLink;
         aProperty.eKind = KOC_EDIT;
@@ -232,7 +232,7 @@ void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const
 
     // 2. Seite fuer Listener
     // TODO: Wo kommen die Eintraege her
-    USHORT nListenerPageId = mpPropBox->AppendPage("Listener");
+    sal_uInt16 nListenerPageId = mpPropBox->AppendPage("Listener");
 
     XIdlClassSequence aSupportedListenerSeq = mxUnoAccess->getSupportedListeners();
     const XIdlClassRef* pListenerArray = aSupportedListenerSeq.getConstArray();
@@ -242,12 +242,12 @@ void PropertyEditorControler_Impl::setObject( XPropertyEditorRef xEditor_, const
     aProperty.eKind = KOC_EDIT;
     //aProperty.eKind = KOC_UNDEFINED;
     aProperty.aValue = "Listener-Value";
-    aProperty.bHasVisibleXButton = TRUE;
+    aProperty.bHasVisibleXButton = sal_True;
     // TEST
-    //aProperty.bIsHyperLink = TRUE;
-    aProperty.bIsHyperLink = FALSE;
-    aProperty.bIsLocked = TRUE;
-    //aProperty.bIsLocked = FALSE;
+    //aProperty.bIsHyperLink = sal_True;
+    aProperty.bIsHyperLink = sal_False;
+    aProperty.bIsLocked = sal_True;
+    //aProperty.bIsLocked = sal_False;
     aProperty.pDataPtr = NULL;
     aProperty.pControl = NULL;
 
@@ -275,8 +275,8 @@ void PropertyEditorControler_Impl::Clicked
     if( iPos >= nPropCount )
     {
         // Spezial-IDs fuer forward/back?
-        BOOL bForward = (iPos == 1000000);
-        BOOL bBack = (iPos == 1000001);
+        sal_Bool bForward = (iPos == 1000000);
+        sal_Bool bBack = (iPos == 1000001);
         if( bForward || bBack )
         {
             // Unterstuetzt der PropertyEditor das?
@@ -383,7 +383,7 @@ XIdlClassRef SimplePropertyEditor_Impl::getIdlClass()
 
 // Methoden von SimplePropertyEditor_Impl
 SimplePropertyEditor_Impl::SimplePropertyEditor_Impl( Window *pParent )
-    : maHistorySeq( 10 ), maHistoryNames( 10 ), bSimpleHistory( FALSE )
+    : maHistorySeq( 10 ), maHistoryNames( 10 ), bSimpleHistory( sal_False )
 {
     //XVCLComponent xC = pParent->getVCLComponent
     //xC->addVCLComponentListener( MyListener )

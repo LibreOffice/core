@@ -160,7 +160,7 @@ const Color& SvColorDialog::GetColor() const
 // -----------------------------------------------------------------------
 IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
 {
-    UINT16 n = 0x00; // 1 == RGB, 2 == CMYK, 4 == HSB
+    sal_uInt16 n = 0x00; // 1 == RGB, 2 == CMYK, 4 == HSB
 
     if( p == &maCtlColor )
     {
@@ -173,19 +173,19 @@ IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
     }
     else if( p == &maNumRed )
     {
-        maColor.SetRed( (UINT8)maNumRed.GetValue() );
+        maColor.SetRed( (sal_uInt8)maNumRed.GetValue() );
         maCtlColor.SetColor( maColor );
         n = 6;
     }
     else if( p == &maNumGreen )
     {
-        maColor.SetGreen( (UINT8)maNumGreen.GetValue() );
+        maColor.SetGreen( (sal_uInt8)maNumGreen.GetValue() );
         maCtlColor.SetColor( maColor );
         n = 6;
     }
     else if( p == &maNumBlue )
     {
-        maColor.SetBlue( (UINT8)maNumBlue.GetValue() );
+        maColor.SetBlue( (sal_uInt8)maNumBlue.GetValue() );
         maCtlColor.SetColor( maColor );
         n = 6;
     }
@@ -194,9 +194,9 @@ IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
              p == &maNumLuminance )
     {
 
-        ColorHSB aColorHSB( (UINT16) maNumHue.GetValue(),
-                            (UINT16) maNumSaturation.GetValue(),
-                            (UINT16) maNumLuminance.GetValue() );
+        ColorHSB aColorHSB( (sal_uInt16) maNumHue.GetValue(),
+                            (sal_uInt16) maNumSaturation.GetValue(),
+                            (sal_uInt16) maNumLuminance.GetValue() );
         maCtlColor.SetColor( aColorHSB );
         maColor = maCtlColor.GetColor();
         n = 3;
@@ -211,10 +211,10 @@ IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
         long aYellow  = (long) ( (double)maNumYellow.GetValue() * 255.0 / 100.0 + 0.5 );
         long aKey     = (long) ( (double)maNumKey.GetValue() * 255.0 / 100.0 + 0.5 );
 
-        ColorCMYK aColorCMYK( (UINT16) aCyan,
-                              (UINT16) aMagenta,
-                              (UINT16) aYellow,
-                              (UINT16) aKey );
+        ColorCMYK aColorCMYK( (sal_uInt16) aCyan,
+                              (sal_uInt16) aMagenta,
+                              (sal_uInt16) aYellow,
+                              (sal_uInt16) aKey );
         maColor = aColorCMYK.GetRGB();
         maCtlColor.SetColor( maColor );
         n = 5;
@@ -274,7 +274,7 @@ IMPL_LINK( SvColorDialog, ClickBtnHdl, void *, p )
     }
     else if( p == &maBtn2 )
     {
-        USHORT nPos = maColMixCtrl.GetSelectItemId();
+        sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
         maColor = maColMixCtrl.GetItemColor( nPos );
         maCtlColor.SetColor( maColor );
         ColorModifyHdl( &maCtlColor );
@@ -286,7 +286,7 @@ IMPL_LINK( SvColorDialog, ClickBtnHdl, void *, p )
 // -----------------------------------------------------------------------
 IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, EMPTYARG )
 {
-    USHORT nPos = maColMixCtrl.GetSelectItemId();
+    sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
     CMCPosition ePos = maColMixCtrl.GetCMCPosition();
 
     if( ePos != CMC_OTHER )
@@ -304,12 +304,12 @@ IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( SvColorDialog, SelectMixCtrlHdl, void *, EMPTYARG )
 {
-    //USHORT nPos = maColMixCtrl.GetSelectItemId();
+    //sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
     //maFtRGB.SetText( maColMixCtrl.GetItemText( nPos ) );
 
     CMCPosition ePos = maColMixCtrl.GetCMCPosition();
     if( ePos == CMC_OTHER )
-        maBtn1.Enable( FALSE );
+        maBtn1.Enable( sal_False );
     else
         maBtn1.Enable();
 

@@ -133,19 +133,19 @@ private:
     SvtPrinterImpl*     mpPrinterImpl;
 
     XubString           maRangeText;
-    USHORT              mnCopyCount;
-    USHORT              mnFirstPage;
-    USHORT              mnLastPage;
-    USHORT              mnMinPage;
-    USHORT              mnMaxPage;
+    sal_uInt16              mnCopyCount;
+    sal_uInt16              mnFirstPage;
+    sal_uInt16              mnLastPage;
+    sal_uInt16              mnMinPage;
+    sal_uInt16              mnMaxPage;
     PrintDialogRange    meCheckRange;
-    BOOL                mbAll;
-    BOOL                mbSelection;
-    BOOL                mbFromTo;
-    BOOL                mbRange;
-    BOOL                mbCollate;
-    BOOL                mbCollateCheck;
-    BOOL                mbOptions;
+    sal_Bool                mbAll;
+    sal_Bool                mbSelection;
+    sal_Bool                mbFromTo;
+    sal_Bool                mbRange;
+    sal_Bool                mbCollate;
+    sal_Bool                mbCollateCheck;
+    sal_Bool                mbOptions;
     bool                mbWithSheetsAndCells;
     Link                maOptionsHdlLink; // Link zum Options-Handler
     Link                maOKHdlLink;      // Link zum OK-Handler
@@ -183,39 +183,39 @@ public:
 
     void                EnableRange( PrintDialogRange eRange );
     void                DisableRange( PrintDialogRange eRange );
-    BOOL                IsRangeEnabled( PrintDialogRange eRange ) const;
+    sal_Bool                IsRangeEnabled( PrintDialogRange eRange ) const;
 
     void                CheckRange( PrintDialogRange eRange = PRINTDIALOG_ALL )
                             { meCheckRange = eRange; }
     PrintDialogRange    GetCheckedRange() const { return meCheckRange; }
-    BOOL                IsRangeChecked( PrintDialogRange eRange ) const;
+    sal_Bool                IsRangeChecked( PrintDialogRange eRange ) const;
 
     void                SetRangeText( const XubString& rRange ) { maRangeText = rRange; }
     const XubString&    GetRangeText() const { return maRangeText; }
 
-    void                SetFirstPage( USHORT nPage = 0 );
-    USHORT              GetFirstPage() const { return mnFirstPage; }
-    void                SetLastPage( USHORT nPage = 0 );
-    USHORT              GetLastPage() const { return mnLastPage; }
+    void                SetFirstPage( sal_uInt16 nPage = 0 );
+    sal_uInt16              GetFirstPage() const { return mnFirstPage; }
+    void                SetLastPage( sal_uInt16 nPage = 0 );
+    sal_uInt16              GetLastPage() const { return mnLastPage; }
 
-    void                SetMinPage( USHORT nPage = 1 ) { mnMinPage = nPage; }
-    USHORT              GetMinPage() const { return mnMinPage; }
-    void                SetMaxPage( USHORT nPage = 65535 ) { mnMaxPage = nPage; }
-    USHORT              GetMaxPage() const { return mnMaxPage; }
+    void                SetMinPage( sal_uInt16 nPage = 1 ) { mnMinPage = nPage; }
+    sal_uInt16              GetMinPage() const { return mnMinPage; }
+    void                SetMaxPage( sal_uInt16 nPage = 65535 ) { mnMaxPage = nPage; }
+    sal_uInt16              GetMaxPage() const { return mnMaxPage; }
 
-    void                SetCopyCount( USHORT nCopies = 1 ) { mnCopyCount = nCopies; }
-    USHORT              GetCopyCount() const { return mnCopyCount; }
+    void                SetCopyCount( sal_uInt16 nCopies = 1 ) { mnCopyCount = nCopies; }
+    sal_uInt16              GetCopyCount() const { return mnCopyCount; }
 
-    void                EnableCollate( BOOL bEnable = TRUE )
+    void                EnableCollate( sal_Bool bEnable = sal_True )
                             { mbCollate = bEnable; }
-    BOOL                IsCollateEnabled() const { return mbCollate; }
-    void                CheckCollate( BOOL bCheck = TRUE )
+    sal_Bool                IsCollateEnabled() const { return mbCollate; }
+    void                CheckCollate( sal_Bool bCheck = sal_True )
                             { mbCollateCheck = bCheck; }
-    BOOL                IsCollateChecked() const { return mbCollateCheck; }
+    sal_Bool                IsCollateChecked() const { return mbCollateCheck; }
 
-    void                ShowOptionsButton( BOOL bShow = TRUE )
+    void                ShowOptionsButton( sal_Bool bShow = sal_True )
                             { mbOptions = bShow; }
-    BOOL                IsOptionsButtonVisible() const { return mbOptions; }
+    sal_Bool                IsOptionsButtonVisible() const { return mbOptions; }
 
     void                SetOptionsHdl( const Link& rLink ) { maOptionsHdlLink = rLink; }
     const Link&         GetOptionsHdl() const { return maOptionsHdlLink; }
@@ -234,30 +234,30 @@ public:
 inline void PrintDialog::EnableRange( PrintDialogRange eRange )
 {
     if ( eRange == PRINTDIALOG_ALL )
-        mbAll = TRUE;
+        mbAll = sal_True;
     else if ( eRange == PRINTDIALOG_SELECTION )
-        mbSelection = TRUE;
+        mbSelection = sal_True;
     else if ( eRange == PRINTDIALOG_FROMTO )
-        mbFromTo = TRUE;
+        mbFromTo = sal_True;
     else
-        mbRange = TRUE;
+        mbRange = sal_True;
 }
 
 inline void PrintDialog::DisableRange( PrintDialogRange eRange )
 {
     if ( eRange == PRINTDIALOG_ALL )
-        mbAll = FALSE;
+        mbAll = sal_False;
     else if ( eRange == PRINTDIALOG_SELECTION )
-        mbSelection = FALSE;
+        mbSelection = sal_False;
     else if ( eRange == PRINTDIALOG_FROMTO )
-        mbFromTo = FALSE;
+        mbFromTo = sal_False;
     else
-        mbRange = FALSE;
+        mbRange = sal_False;
 }
 
-inline BOOL PrintDialog::IsRangeEnabled( PrintDialogRange eRange ) const
+inline sal_Bool PrintDialog::IsRangeEnabled( PrintDialogRange eRange ) const
 {
-    BOOL bRet;
+    sal_Bool bRet;
 
     if ( eRange == PRINTDIALOG_ALL )
         bRet = mbAll;
@@ -271,22 +271,22 @@ inline BOOL PrintDialog::IsRangeEnabled( PrintDialogRange eRange ) const
     return bRet;
 }
 
-inline BOOL PrintDialog::IsRangeChecked( PrintDialogRange eRange ) const
+inline sal_Bool PrintDialog::IsRangeChecked( PrintDialogRange eRange ) const
 {
     if ( eRange == meCheckRange )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline void PrintDialog::SetFirstPage( USHORT nPage )
+inline void PrintDialog::SetFirstPage( sal_uInt16 nPage )
 {
     mnFirstPage = nPage;
     if ( nPage && (nPage < mnMinPage) )
         mnMinPage = nPage;
 }
 
-inline void PrintDialog::SetLastPage( USHORT nPage )
+inline void PrintDialog::SetLastPage( sal_uInt16 nPage )
 {
     mnLastPage = nPage;
     if ( nPage && (nPage > mnMaxPage) )

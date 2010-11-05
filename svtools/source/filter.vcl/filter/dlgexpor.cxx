@@ -139,19 +139,19 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
     {
         case 2 :
         {
-            aRbSize.Check( TRUE );
+            aRbSize.Check( sal_True );
             ClickRbSize( NULL );
         }
         break;
         case 1 :
         {
-            aRbRes.Check( TRUE );
+            aRbRes.Check( sal_True );
             ClickRbRes( NULL );
         }
         break;
         default :
         {
-            aRbOriginal.Check( TRUE );
+            aRbOriginal.Check( sal_True );
             ClickRbOriginal( NULL );
         }
         break;
@@ -264,7 +264,7 @@ IMPL_LINK( DlgExportPix, ClickRbSize, void*, EMPTYARG )
 
 IMPL_LINK( DlgExportPix, SelectLbColors, void*, EMPTYARG )
 {
-    const USHORT nLbPos = aLbColors.GetSelectEntryPos();
+    const sal_uInt16 nLbPos = aLbColors.GetSelectEntryPos();
 
     if ( ( nLbPos >= 3 ) && ( nLbPos <= 6 ) )
         aCbxRLE.Enable();
@@ -358,14 +358,14 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
     {
         case 1 :
         {
-            aRbSize.Check( TRUE );
+            aRbSize.Check( sal_True );
             ClickRbSize( NULL );
         }
         break;
 
         default :
         {
-            aRbOriginal.Check( TRUE );
+            aRbOriginal.Check( sal_True );
             ClickRbOriginal( NULL );
         }
         break;

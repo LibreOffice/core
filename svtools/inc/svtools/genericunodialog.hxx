@@ -164,7 +164,7 @@ namespace svt
                 m_aMutex is locked
 
             @return
-                <TRUE/> if and only if m_pDialog is non-<NULL/> upon returning from the method. Note that the only
+                <sal_True/> if and only if m_pDialog is non-<NULL/> upon returning from the method. Note that the only
                 case where m_pDialog is <NULL/> is when createDialog returned <NULL/>, which is will fire an assertion
                 in non-product builds.
         */

@@ -50,7 +50,7 @@ struct JPEGCreateBitmapParam
 };
 
 typedef struct my_error_mgr*    my_error_ptr;
-typedef unsigned char           BYTE;
+typedef unsigned char           sal_uInt8;
 #ifdef WIN
 typedef unsigned char _huge*    HPBYTE;
 #else

@@ -605,13 +605,13 @@ void OptionsWindow::Resize()
 //-----------------------------------------------------------------------------
 void OptionsWindow::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
 {
-    m_aPanelList.InsertEntry( i_pPanel->GetDisplayName(), i_pPanel->GetImage(), USHORT( i_nPosition ) );
+    m_aPanelList.InsertEntry( i_pPanel->GetDisplayName(), i_pPanel->GetImage(), sal_uInt16( i_nPosition ) );
 }
 
 //-----------------------------------------------------------------------------
 void OptionsWindow::PanelRemoved( const size_t i_nPosition )
 {
-    m_aPanelList.RemoveEntry( USHORT( i_nPosition ) );
+    m_aPanelList.RemoveEntry( sal_uInt16( i_nPosition ) );
     impl_updateRemoveButton();
 }
 
@@ -623,7 +623,7 @@ void OptionsWindow::ActivePanelChanged( const ::boost::optional< size_t >& i_rOl
     if ( !i_rNewActive )
         m_aPanelList.SetNoSelection();
     else
-        m_aPanelList.SelectEntryPos( USHORT( *i_rNewActive ) );
+        m_aPanelList.SelectEntryPos( sal_uInt16( *i_rNewActive ) );
 }
 
 //-----------------------------------------------------------------------------

@@ -63,21 +63,21 @@ public:
 class SvpResId: public ResId
 {
 public:
-    SvpResId( USHORT nId, const ::com::sun::star::lang::Locale aLocale ):
+    SvpResId( sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale ):
         ResId( nId, *ImpSvtData::GetSvtData().GetResMgr( aLocale ) ) {}
 
      // VCL dependant, only available in SVT, not in SVL!
-    SvpResId( USHORT nId );
+    SvpResId( sal_uInt16 nId );
 };
 
 
 class SvtResId: public ResId
 {
 public:
-    SvtResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale):
+    SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale):
         ResId(nId, *ImpSvtData::GetSvtData().GetResMgr(aLocale)) {}
 
-    SvtResId(USHORT nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
+    SvtResId(sal_uInt16 nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
      // VCL dependant, only available in SVT, not in SVL!
 };
 

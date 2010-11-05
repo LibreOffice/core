@@ -85,7 +85,7 @@ namespace svt
             You should make this dependent on the current state of the page only, not on
             states on other pages of the whole dialog.
 
-            The default implementation always returns <TRUE/>.
+            The default implementation always returns <sal_True/>.
         */
         virtual bool    canAdvance() const = 0;
     };
@@ -153,8 +153,8 @@ namespace svt
         // restrict access to some aspects of our base class
         SVT_DLLPRIVATE void             AddPage( TabPage* pPage ) { WizardDialog::AddPage(pPage); }
         SVT_DLLPRIVATE void             RemovePage( TabPage* pPage ) { WizardDialog::RemovePage(pPage); }
-        SVT_DLLPRIVATE void             SetPage( USHORT nLevel, TabPage* pPage ) { WizardDialog::SetPage(nLevel, pPage); }
-        //  TabPage*            GetPage( USHORT nLevel ) const { return WizardDialog::GetPage(nLevel); }
+        SVT_DLLPRIVATE void             SetPage( sal_uInt16 nLevel, TabPage* pPage ) { WizardDialog::SetPage(nLevel, pPage); }
+        //  TabPage*            GetPage( sal_uInt16 nLevel ) const { return WizardDialog::GetPage(nLevel); }
         // TODO: probably the complete page handling (next, previous etc.) should be prohibited ...
 
         // IMPORTANT:
@@ -231,7 +231,7 @@ namespace svt
             @param _eReason
                 The reason why the state is to be left.
             @return
-                <TRUE/> if and only if the page is allowed to be left
+                <sal_True/> if and only if the page is allowed to be left
         */
         virtual sal_Bool    prepareLeaveCurrentState( CommitPageReason _eReason );
 
@@ -245,7 +245,7 @@ namespace svt
             changing this return type is too incompatible at the moment ...
 
             @return
-                <TRUE/> if and only if the page is allowed to be left
+                <sal_True/> if and only if the page is allowed to be left
         */
         virtual sal_Bool    leaveState( WizardState _nState );
 
@@ -270,7 +270,7 @@ namespace svt
 
         /** enables the automatic enabled/disabled state of the "Next" button
 
-            If this is <TRUE/>, then upon entering a new state, the "Next" button will automatically be
+            If this is <sal_True/>, then upon entering a new state, the "Next" button will automatically be
             enabled if and only if determineNextState does not return WZS_INVALID_STATE.
         */
         void                enableAutomaticNextButtonState( bool _bEnable = true );
@@ -292,7 +292,7 @@ namespace svt
             method is able to determine the next state without actually having the page of the current state.
 
             @return
-                <TRUE/> if and only if traveling was successfull
+                <sal_True/> if and only if traveling was successfull
 
             @see skipUntil
             @see skipBackwardUntil
@@ -308,7 +308,7 @@ namespace svt
             The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
 
             @return
-                <TRUE/> if and only if traveling was successfull
+                <sal_True/> if and only if traveling was successfull
 
             @see skip
             @see skipBackwardUntil
@@ -326,7 +326,7 @@ namespace svt
             you from this.
 
             @return
-                <TRUE/> if and only if traveling was successfull
+                <sal_True/> if and only if traveling was successfull
 
             @see skipUntil
             @see skip

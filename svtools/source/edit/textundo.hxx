@@ -47,16 +47,16 @@ public:
                     ~TextUndoManager();
 
     using SfxUndoManager::Undo;
-    virtual BOOL    Undo( USHORT nCount=1 );
+    virtual sal_Bool    Undo( sal_uInt16 nCount=1 );
     using SfxUndoManager::Redo;
-    virtual BOOL    Redo( USHORT nCount=1 );
+    virtual sal_Bool    Redo( sal_uInt16 nCount=1 );
 
 };
 
 class TextUndo : public SfxUndoAction
 {
 private:
-    USHORT              mnId;
+    sal_uInt16              mnId;
     TextEngine*         mpTextEngine;
 
 protected:
@@ -69,7 +69,7 @@ protected:
 
 public:
                         TYPEINFO();
-                        TextUndo( USHORT nId, TextEngine* pTextEngine );
+                        TextUndo( sal_uInt16 nId, TextEngine* pTextEngine );
     virtual             ~TextUndo();
 
     TextEngine*         GetTextEngine() const   { return mpTextEngine; }
@@ -78,7 +78,7 @@ public:
     virtual void        Redo()      = 0;
 
     virtual XubString   GetComment() const;
-    virtual USHORT      GetId() const;
+    virtual sal_uInt16      GetId() const;
 };
 
 #endif // _TEXTUNDO_HXX

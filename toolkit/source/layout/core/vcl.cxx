@@ -49,7 +49,7 @@ static PushButton* get_button (Dialog const* dialog, sal_uInt32 type)
         , mClosing (false)\
     {\
     }\
-    BOOL Closing##cls::Close ()\
+    sal_Bool Closing##cls::Close ()\
     {\
         if (mClosing)\
             EndDialog (false);\

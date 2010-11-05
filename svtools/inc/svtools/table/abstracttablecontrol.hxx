@@ -105,7 +105,7 @@ namespace svt { namespace table
         /** dispatches an action to the table control
 
             @return
-                <TRUE/> if the action could be dispatched successfully, <FALSE/> otherwise. Usual
+                <sal_True/> if the action could be dispatched successfully, <sal_False/> otherwise. Usual
                 failure conditions include some other instance vetoing the action, or impossibility
                 to execute the action at all (for instance moving up one row when already positioned
                 on the very first row).

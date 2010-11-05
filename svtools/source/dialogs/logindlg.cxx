@@ -51,18 +51,18 @@ namespace svt
 {
 //............................................................................
 
-void LoginDialog::HideControls_Impl( USHORT nFlags )
+void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
 {
-    FASTBOOL bPathHide = FALSE;
-    FASTBOOL bErrorHide = FALSE;
-    FASTBOOL bAccountHide = FALSE;
+    int bPathHide = sal_False;
+    int bErrorHide = sal_False;
+    int bAccountHide = sal_False;
 
     if ( ( nFlags & LF_NO_PATH ) == LF_NO_PATH )
     {
         aPathFT.Hide();
         aPathED.Hide();
         aPathBtn.Hide();
-        bPathHide = TRUE;
+        bPathHide = sal_True;
     }
     else if ( ( nFlags & LF_PATH_READONLY ) == LF_PATH_READONLY )
     {
@@ -95,14 +95,14 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
     {
         aErrorInfo.Hide();
         aErrorGB.Hide();
-        bErrorHide = TRUE;
+        bErrorHide = sal_True;
     }
 
     if ( ( nFlags & LF_NO_ACCOUNT ) == LF_NO_ACCOUNT )
     {
         aAccountFT.Hide();
         aAccountED.Hide();
-        bAccountHide = TRUE;
+        bAccountHide = sal_True;
     }
 
     if ( bErrorHide )
@@ -227,7 +227,7 @@ IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
 LoginDialog::LoginDialog
 (
     Window* pParent,
-    USHORT nFlags,
+    sal_uInt16 nFlags,
     const String& rServer,
     const String* pRealm
 ) :

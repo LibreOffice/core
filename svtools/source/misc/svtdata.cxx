@@ -75,7 +75,7 @@ ResMgr * ImpSvtData::GetPatchResMgr()
     return GetPatchResMgr(Application::GetSettings().GetUILocale());
 }
 
-SvpResId::SvpResId( USHORT nId ) :
+SvpResId::SvpResId( sal_uInt16 nId ) :
     ResId( nId, *ImpSvtData::GetSvtData().GetPatchResMgr() )
 {
 }

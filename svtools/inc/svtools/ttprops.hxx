@@ -60,10 +60,10 @@ class Bitmap;
 
 class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
 {
-    USHORT nDonePRs;                    // Verwaltung für die Properties, die nur einmal gerufen werden mussen.
-    SVT_DLLPRIVATE BOOL RequestProperty( USHORT nRequest );
+    sal_uInt16 nDonePRs;                    // Verwaltung für die Properties, die nur einmal gerufen werden mussen.
+    SVT_DLLPRIVATE sal_Bool RequestProperty( sal_uInt16 nRequest );
 
-    BOOL HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
+    sal_Bool HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
 
 public:
     TYPEINFO();
@@ -75,31 +75,31 @@ public:
             , nPropertyVersion( 0 )
                     {}
 
-    BOOL GetSlots();
+    sal_Bool GetSlots();
 
     /// ExecuteFunction
-    USHORT mnSID;
+    sal_uInt16 mnSID;
     SfxPoolItem** mppArgs;
-    USHORT mnMode;
-    USHORT ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs = NULL, USHORT nMode = 0 );
+    sal_uInt16 mnMode;
+    sal_uInt16 ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs = NULL, sal_uInt16 nMode = 0 );
 
     /// Img
     Bitmap *mpBmp;
-    BOOL Img( Bitmap *pBmp );
+    sal_Bool Img( Bitmap *pBmp );
 
-    static SvtResId GetSvtResId( USHORT nId );
+    static SvtResId GetSvtResId( sal_uInt16 nId );
 
-    ULONG nSidOpenUrl;
-    ULONG nSidFileName;
-    ULONG nSidNewDocDirect;
-    ULONG nSidCopy;
-    ULONG nSidPaste;
-    ULONG nSidSourceView;
-    ULONG nSidSelectAll;
-    ULONG nSidReferer;
+    sal_uIntPtr nSidOpenUrl;
+    sal_uIntPtr nSidFileName;
+    sal_uIntPtr nSidNewDocDirect;
+    sal_uIntPtr nSidCopy;
+    sal_uIntPtr nSidPaste;
+    sal_uIntPtr nSidSourceView;
+    sal_uIntPtr nSidSelectAll;
+    sal_uIntPtr nSidReferer;
 
-    USHORT nActualPR;
-    USHORT nPropertyVersion;        // Wird bei jedem call gesetzt.
+    sal_uInt16 nActualPR;
+    sal_uInt16 nPropertyVersion;        // Wird bei jedem call gesetzt.
 };
 
 #endif // _SVTOOLS_TTPROPS_HXX

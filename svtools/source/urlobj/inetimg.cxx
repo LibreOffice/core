@@ -38,7 +38,7 @@
 
 #define TOKEN_SEPARATOR '\001'
 
-sal_Bool INetImage::Write( SvStream& rOStm, ULONG nFormat ) const
+sal_Bool INetImage::Write( SvStream& rOStm, sal_uIntPtr nFormat ) const
 {
     sal_Bool bRet = sal_False;
     switch( nFormat )
@@ -68,7 +68,7 @@ sal_Bool INetImage::Write( SvStream& rOStm, ULONG nFormat ) const
     return bRet;
 }
 
-sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
+sal_Bool INetImage::Read( SvStream& rIStm, sal_uIntPtr nFormat )
 {
     sal_Bool bRet = sal_False;
     switch( nFormat )
@@ -96,11 +96,11 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
     --> structure size  MUST - alignment of 4!
     int     iSize;              // size of all data, including variable length strings
     BOOL    bIsMap;             // For server side maps
-    INT32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
-    INT32   iHeight;            //   and EDT_ImageData
-    INT32   iHSpace;
-    INT32   iVSpace;
-    INT32   iBorder;
+    sal_Int32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
+    sal_Int32   iHeight;            //   and EDT_ImageData
+    sal_Int32   iHSpace;
+    sal_Int32   iVSpace;
+    sal_Int32   iBorder;
     int     iLowResOffset;      // Offsets into string_data. If 0, string is NULL (not used)
     int     iAltOffset;         // (alternate text?)
     int     iAnchorOffset;      // HREF in image
@@ -117,7 +117,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
             rIStm >> nVal;  aSizePixel.Width() = nVal;
             rIStm >> nVal;  aSizePixel.Height() = nVal;
             // skip over iHSpace, iVSpace, iBorder, iLowResOffset
-            rIStm.SeekRel( 3 * sizeof( INT32 ) + sizeof( int ) );
+            rIStm.SeekRel( 3 * sizeof( sal_Int32 ) + sizeof( int ) );
             rIStm >> nAltOffset;
             rIStm >> nAnchorOffset;
             // skip over iExtraHTML_Offset

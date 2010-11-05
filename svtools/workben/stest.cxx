@@ -125,14 +125,14 @@ IMPL_LINK( SearchWindow, ClickHdl, Button *, pButton )
                        String( "\nS: " ) + sSrch ).Execute();
 */
         BOOL bRet = FALSE;
-        USHORT nStt = 0, nEnd = sText.Len();
+        sal_uInt16 nStt = 0, nEnd = sText.Len();
 
         {
             aParam.SetSrchStr( sSrch );
             SearchText aSrchText( aParam, GetpApp()->GetAppInternational() );
             bRet = aSrchText.SearchFrwrd( sText, &nStt, &nEnd );
 
-//          BOOL SearchBkwrd( const String &rStr, USHORT* pStart, USHORT* pEnde );
+//          BOOL SearchBkwrd( const String &rStr, sal_uInt16* pStart, sal_uInt16* pEnde );
         }
 
         String sFound( "gefunden" );

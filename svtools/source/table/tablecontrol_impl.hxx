@@ -170,7 +170,7 @@ namespace svt { namespace table
         /** moves the cursor to the cell with the given coordinates
 
             To ease the caller's code, the coordinates must not necessarily denote a
-            valid position. If they don't, <FALSE/> will be returned.
+            valid position. If they don't, <sal_False/> will be returned.
         */
         bool    goTo( ColPos _nColumn, RowPos _nRow );
 
@@ -182,7 +182,7 @@ namespace svt { namespace table
                 the row position which should be visibleMust be non-negative, and smaller
                 than the row count.
             @param _bAcceptPartialVisibility
-                <TRUE/> if it's okay that the given cooordinate is only partially visible
+                <sal_True/> if it's okay that the given cooordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
     /** returns the row, which contains the input point*/
@@ -190,7 +190,7 @@ namespace svt { namespace table
 
     void setCursorAtCurrentCell(const Point& rPoint);
     /** checks whether the vector with the selected rows contains the current row*/
-    BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
+    sal_Bool    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
     bool    isRowSelected(RowPos current);
     /** returns the position of the current row in the selection vector */
@@ -343,8 +343,8 @@ namespace svt { namespace table
        virtual void BeginDrag();
        virtual void CreateAnchor();
        virtual void DestroyAnchor();
-       virtual BOOL SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor);
-       virtual BOOL IsSelectionAtPoint( const Point& rPoint );
+       virtual sal_Bool SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor);
+       virtual sal_Bool IsSelectionAtPoint( const Point& rPoint );
        virtual void DeselectAtPoint( const Point& rPoint );
        virtual void DeselectAll();
     };

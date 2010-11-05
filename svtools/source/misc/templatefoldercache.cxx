@@ -506,7 +506,7 @@ namespace svt
         static  sal_Int32   getMagicNumber();
         static  void        normalize( TemplateFolderContent& _rState );
 
-        // @return <TRUE/> if the states equal
+        // @return <sal_True/> if the states equal
         static  sal_Bool    equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS );
 
         // late initialize m_xOfficeInstDirs

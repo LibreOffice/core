@@ -47,12 +47,12 @@ private:
     Timer                       maReleaseTimer;
     List                        maGraphicCache;
     List                        maDisplayCache;
-    ULONG                       mnReleaseTimeoutSeconds;
-    ULONG                       mnMaxDisplaySize;
-    ULONG                       mnMaxObjDisplaySize;
-    ULONG                       mnUsedDisplaySize;
+    sal_uIntPtr                       mnReleaseTimeoutSeconds;
+    sal_uIntPtr                     mnMaxDisplaySize;
+    sal_uIntPtr                     mnMaxObjDisplaySize;
+    sal_uIntPtr                     mnUsedDisplaySize;
 
-    BOOL                        ImplFreeDisplayCacheSpace( ULONG nSizeToFree );
+    sal_Bool                        ImplFreeDisplayCacheSpace( sal_uIntPtr nSizeToFree );
     GraphicCacheEntry*          ImplGetCacheEntry( const GraphicObject& rObj );
 
 
@@ -61,8 +61,8 @@ private:
 public:
 
                                 GraphicCache( GraphicManager& rMgr,
-                                              ULONG nDisplayCacheSize = 10000000UL,
-                                              ULONG nMaxObjDisplayCacheSize = 2400000UL );
+                                              sal_uIntPtr nDisplayCacheSize = 10000000UL,
+                                              sal_uIntPtr nMaxObjDisplayCacheSize = 2400000UL );
                                 ~GraphicCache();
 
 public:
@@ -72,37 +72,37 @@ public:
     void                        ReleaseGraphicObject( const GraphicObject& rObj );
 
     void                        GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    BOOL                        FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
+    sal_Bool                        FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                        GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
     ByteString                  GetUniqueID( const GraphicObject& rObj ) const;
 
 public:
 
-    void                        SetMaxDisplayCacheSize( ULONG nNewCacheSize );
-    ULONG                       GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
+    void                        SetMaxDisplayCacheSize( sal_uIntPtr nNewCacheSize );
+    sal_uIntPtr                     GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
 
-    void                        SetMaxObjDisplayCacheSize( ULONG nNewMaxObjSize, BOOL bDestroyGreaterCached = FALSE );
-    ULONG                       GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
+    void                        SetMaxObjDisplayCacheSize( sal_uIntPtr nNewMaxObjSize, sal_Bool bDestroyGreaterCached = sal_False );
+    sal_uIntPtr                     GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
 
-    ULONG                       GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
-    ULONG                       GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
+    sal_uIntPtr                     GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
+    sal_uIntPtr                     GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
 
-    void                        SetCacheTimeout( ULONG nTimeoutSeconds );
-    ULONG                       GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
+    void                        SetCacheTimeout( sal_uIntPtr nTimeoutSeconds );
+    sal_uIntPtr                       GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
 
     void                        ClearDisplayCache();
-    BOOL                        IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool                        IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                     const GraphicObject& rObj, const GraphicAttr& rAttr ) const;
-    BOOL                        IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool                        IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                   const GraphicObject& rObj, const GraphicAttr& rAttr ) const;
-    BOOL                        CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool                        CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                        const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                        const BitmapEx& rBmpEx );
-    BOOL                        CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool                        CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                        const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                        const GDIMetaFile& rMtf );
-    BOOL                        DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool                        DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                      const GraphicObject& rObj, const GraphicAttr& rAttr );
 };
 

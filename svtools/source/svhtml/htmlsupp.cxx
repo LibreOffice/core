@@ -56,7 +56,7 @@ static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
     { 0,                    0                   }
 };
 
-BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
+sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
                                      HTMLScriptLanguage& rLang,
                                      String& rSrc,
                                      String& rLibrary,
@@ -70,7 +70,7 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL
     rLibrary.Erase();
     rModule.Erase();
 
-    for( USHORT i = pScriptOptions->Count(); i; )
+    for( sal_uInt16 i = pScriptOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pScriptOptions)[ --i ];
         switch( pOption->GetToken() )
@@ -78,7 +78,7 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL
         case HTML_O_LANGUAGE:
             {
                 rLangString = pOption->GetString();
-                USHORT nLang;
+                sal_uInt16 nLang;
                 if( pOption->GetEnum( nLang, aScriptLangOptEnums ) )
                     rLang = (HTMLScriptLanguage)nLang;
                 else
@@ -99,10 +99,10 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-void HTMLParser::RemoveSGMLComment( String &rString, BOOL bFull )
+void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
 {
     sal_Unicode c = 0;
     while( rString.Len() &&

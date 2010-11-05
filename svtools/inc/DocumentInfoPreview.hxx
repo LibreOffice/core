@@ -53,7 +53,7 @@ namespace svtools
                   ::com::sun::star::document::XDocumentProperties>& i_xDocProps
                     ,const String& i_rURL);
         void    InsertEntry( const String& rTitle, const String& rValue );
-        void SetAutoScroll(BOOL _bAutoScroll);
+        void SetAutoScroll(sal_Bool _bAutoScroll);
     };
 }
 

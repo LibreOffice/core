@@ -159,10 +159,10 @@ protected:
                 <member>declarePath</member> before it can be activated.
 
             @param _bDecideForIt
-                If <TRUE/>, the path will be completely activated, even if it is a conflicting path
+                If <sal_True/>, the path will be completely activated, even if it is a conflicting path
                 (i.e. there is another path which shares the first <code>k</code> states with
                 the to-be-activated path.)<br/>
-                If <FALSE/>, then the new path is checked for conflicts with other paths. If such
+                If <sal_False/>, then the new path is checked for conflicts with other paths. If such
                 conflicts exists, the path is not completely activated, but only up to the point
                 where it does <em>not</em> conflict.<br/>
                 With the paths in the example above, if you activate the second path (when both are

@@ -75,13 +75,13 @@ class SVT_DLLPUBLIC LoginDialog : public ModalDialog
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
-    SVT_DLLPRIVATE void         HideControls_Impl( USHORT nFlags );
+    SVT_DLLPRIVATE void         HideControls_Impl( sal_uInt16 nFlags );
 
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, OKButton * );
     DECL_DLLPRIVATE_LINK( PathHdl_Impl, PushButton * );
 
 public:
-    LoginDialog( Window* pParent, USHORT nFlags,
+    LoginDialog( Window* pParent, sal_uInt16 nFlags,
                  const String& rServer, const String* pRealm = NULL );
 
     String          GetPath() const { return aPathED.GetText(); }
@@ -96,9 +96,9 @@ public:
     String          GetAccount() const { return aAccountED.GetText(); }
     void            SetAccount( const String& rNew )
                         { aAccountED.SetText( rNew ); }
-    BOOL            IsSavePassword() const
+    sal_Bool            IsSavePassword() const
                         { return aSavePasswdBtn.IsChecked(); }
-    void            SetSavePassword( BOOL bSave )
+    void            SetSavePassword( sal_Bool bSave )
                         { aSavePasswdBtn.Check( bSave ); }
     void            SetSavePasswordText( const String& rTxt )
                         { aSavePasswdBtn.SetText( rTxt ); }

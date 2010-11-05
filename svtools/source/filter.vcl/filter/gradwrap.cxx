@@ -57,7 +57,7 @@ GradientWrapper::~GradientWrapper()
 void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
                                           const Gradient& rGradient)
 {
-    USHORT nStepCount = 100;
+    sal_uInt16 nStepCount = 100;
 
     Rectangle aRect = rRect;
     aRect.Left()--;
@@ -84,18 +84,18 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
     Point       aCenter = rRect.Center();
     Rectangle   aFullRect = aRect;
     long        nBorder = (long)rGradient.GetBorder() * aRect.GetHeight() / 100;
-    BOOL        bLinear;
+    sal_Bool        bLinear;
 
     // Rand berechnen und Rechteck neu setzen fuer linearen Farbverlauf
     if ( rGradient.GetStyle() == GRADIENT_LINEAR )
     {
-        bLinear = TRUE;
+        bLinear = sal_True;
         aRect.Top() += nBorder;
     }
     // Rand berechnen und Rechteck neu setzen fuer axiale Farbverlauf
     else
     {
-        bLinear = FALSE;
+        bLinear = sal_False;
         nBorder >>= 1;
 
         aRect.Top()    += nBorder;
@@ -115,10 +115,10 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
         if ( !nInc )
             nInc = 1;
 
-        nStepCount = (USHORT)(nMinRect / nInc);
+        nStepCount = (sal_uInt16)(nMinRect / nInc);
     }
     // minimal drei Schritte
-    long nSteps = Max( nStepCount, (USHORT)3 );
+    long nSteps = Max( nStepCount, (sal_uInt16)3 );
 
     // Falls axialer Farbverlauf, muss die Schrittanzahl ungerade sein
     if ( !bLinear && !(nSteps & 1) )
@@ -171,7 +171,7 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
         // zeichnen zu koennen
         nSteps2 = nSteps + 2;
     }
-    Color aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    Color aCol( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
 
     // GDI-Objekte sichern und setzen
     aSetFillInBrushRecordHdl.Call(&aCol);
@@ -247,13 +247,13 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
         // fuer lineare FV ganz normale Bestimmung der Farbe
         if ( bLinear || (i <= nSteps) )
         {
-            aCol = Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+            aCol = Color( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
         }
         // fuer axiale FV muss die letzte Farbe der ersten
         // Farbe entsprechen
         else
         {
-            aCol = Color( (BYTE) nEndRed, (BYTE) nEndGreen, (BYTE) nEndBlue );
+            aCol = Color( (sal_uInt8) nEndRed, (sal_uInt8) nEndGreen, (sal_uInt8) nEndBlue );
         }
 
         aSetFillInBrushRecordHdl.Call(&aCol);
@@ -265,7 +265,7 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
 void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
                                           const Gradient& rGradient)
 {
-    USHORT      nStepCount = 100;
+    sal_uInt16      nStepCount = 100;
     Rectangle   aClipRect = rRect;
     Rectangle   aRect   = rRect;
     long        nZWidth = aRect.GetWidth() * (long)rGradient.GetOfsX() / 100;
@@ -305,10 +305,10 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
         if ( !nInc )
             nInc = 1;
 
-        nStepCount = (USHORT)(nMinRect / nInc);
+        nStepCount = (sal_uInt16)(nMinRect / nInc);
     }
     // minimal drei Schritte
-    long nSteps = Max( nStepCount, (USHORT)3 );
+    long nSteps = Max( nStepCount, (sal_uInt16)3 );
 
     // Ausgabebegrenzungen und Schrittweite fuer jede Richtung festlegen
     double fScanLeft   = aRect.Left();
@@ -339,7 +339,7 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
     long            nStepRed    = (nEndRed   - nRed)   / nSteps;
     long            nStepGreen  = (nEndGreen - nGreen) / nSteps;
     long            nStepBlue   = (nEndBlue  - nBlue)  / nSteps;
-    Color           aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    Color           aCol( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
 
     // GDI-Objekte sichern und setzen
     aSetFillInBrushRecordHdl.Call(&aCol);
@@ -360,7 +360,7 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
 
     for ( long i = 0; i < nSteps; i++ )
     {
-        Color aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+        Color aCol( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
         aSetFillInBrushRecordHdl.Call(&aCol);
 
         // neues Polygon berechnen
@@ -395,7 +395,7 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
 
     // Falls PolyPolygon-Ausgabe, muessen wir noch ein letztes
     // inneres Polygon zeichnen
-    aCol = Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    aCol = Color( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
     aSetFillInBrushRecordHdl.Call(&aCol);
 
     aPoly = aPolyPoly.GetObject( 1 );
@@ -411,7 +411,7 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
 void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
                                         const Gradient& rGradient)
 {
-    USHORT      nStepCount = 100;
+    sal_uInt16      nStepCount = 100;
     Rectangle   aClipRect = rRect;
     Rectangle   aRect = rRect;
 
@@ -471,10 +471,10 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
         if ( !nInc )
             nInc = 1;
 
-        nStepCount = (USHORT)(nMinRect / nInc);
+        nStepCount = (sal_uInt16)(nMinRect / nInc);
     }
     // minimal drei Schritte
-    long nSteps = Max( nStepCount, (USHORT)3 );
+    long nSteps = Max( nStepCount, (sal_uInt16)3 );
 
     // Ausgabebegrenzungen und Schrittweite fuer jede Richtung festlegen
     double fScanLeft   = aRect.Left();
@@ -505,7 +505,7 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
     long            nStepRed    = (nEndRed   - nRed)   / nSteps;
     long            nStepGreen  = (nEndGreen - nGreen) / nSteps;
     long            nStepBlue   = (nEndBlue  - nBlue)  / nSteps;
-    Color           aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    Color           aCol( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
 
     // GDI-Objekte sichern und setzen
     aSetFillInBrushRecordHdl.Call(&aCol);
@@ -526,7 +526,7 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
     // Schleife, um nacheinander die Polygone/PolyPolygone auszugeben
     for ( long i = 0; i < nSteps; i++ )
     {
-        Color aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+        Color aCol( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
         aSetFillInBrushRecordHdl.Call(&aCol);
 
         // neues Polygon berechnen
@@ -558,7 +558,7 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
         nBlue   = MinMax( nBlue,  0, 0xFF );
     }
 
-    aCol = Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    aCol = Color( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue );
     aSetFillInBrushRecordHdl.Call(&aCol);
 
     aPoly = aPolyPoly.GetObject( 1 );

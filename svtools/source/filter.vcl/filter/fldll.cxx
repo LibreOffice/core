@@ -54,7 +54,7 @@ extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 
     hDLLInst = hDLL;
 
-    return TRUE;
+    return sal_True;
 }
 
 /***************************************************************************

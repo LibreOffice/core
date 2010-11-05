@@ -601,8 +601,8 @@ MyCalendar::MyCalendar( Window* pParent ) :
     uno::Sequence< i18n::CalendarItem> xItems = rCal.getDays();
     const i18n::CalendarItem* pArr = xItems.getArray();
     for ( sal_Int16 i = 0; i < nDays; i++ )
-        aWeekStartMenu.InsertItem( 10+(USHORT)i, pArr[i].FullName, MIB_AUTOCHECK | MIB_RADIOCHECK );
-    aWeekStartMenu.CheckItem( 10+(USHORT)rCal.getFirstDayOfWeek() );
+        aWeekStartMenu.InsertItem( 10+(sal_uInt16)i, pArr[i].FullName, MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekStartMenu.CheckItem( 10+(sal_uInt16)rCal.getFirstDayOfWeek() );
     aWeekCountMenu.InsertItem( 20, XubString( RTL_CONSTASCII_USTRINGPARAM( "~1. Januar" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 21, XubString( RTL_CONSTASCII_USTRINGPARAM( "~2 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 22, XubString( RTL_CONSTASCII_USTRINGPARAM( "~3 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
@@ -610,8 +610,8 @@ MyCalendar::MyCalendar( Window* pParent ) :
     aWeekCountMenu.InsertItem( 24, XubString( RTL_CONSTASCII_USTRINGPARAM( "~5 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 25, XubString( RTL_CONSTASCII_USTRINGPARAM( "~6 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 26, XubString( RTL_CONSTASCII_USTRINGPARAM( "Erste ~volle Woche" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
-    //was: one of 0, 1, 2;  aWeekCountMenu.CheckItem( 20+(USHORT)rIntn.GetWeekCountStart() );
-    aWeekCountMenu.CheckItem( 20+(USHORT)rCal.getMinimumNumberOfDaysForFirstWeek() );
+    //was: one of 0, 1, 2;  aWeekCountMenu.CheckItem( 20+(sal_uInt16)rIntn.GetWeekCountStart() );
+    aWeekCountMenu.CheckItem( 20+(sal_uInt16)rCal.getMinimumNumberOfDaysForFirstWeek() );
     aMenuBar.SetSelectHdl( LINK( this, MyCalendar, MenuSelectHdl ) );
     SetMenuBar( &aMenuBar );
 
@@ -646,7 +646,7 @@ MyCalendar::~MyCalendar()
 
 IMPL_LINK( MyCalendar, RequestDateInfoHdl, Calendar*, EMPTYARG )
 {
-    USHORT nRequestYear = aCalendar.GetRequestYear();
+    sal_uInt16 nRequestYear = aCalendar.GetRequestYear();
     if ( (nRequestYear >= 1954) && (nRequestYear <= 1989) )
         aCalendar.AddDateInfo( Date(  17, 6, nRequestYear ), XubString( RTL_CONSTASCII_USTRINGPARAM( "Tag der deutschen Einheit" ) ), &aHolidayColor, NULL );
     else if ( nRequestYear >=  1990 )
@@ -669,7 +669,7 @@ IMPL_LINK( MyCalendar, DoubleClickHdl, Calendar*, EMPTYARG )
 
 IMPL_LINK( MyCalendar, MenuSelectHdl, Menu*, pMenu )
 {
-    USHORT          nItemId = pMenu->GetCurItemId();
+    sal_uInt16          nItemId = pMenu->GetCurItemId();
 
     if ( (nItemId >= 10) && (nItemId <= 19) )
         aCalendar.SetWeekStart( nItemId-10 );
@@ -968,7 +968,7 @@ IMPL_LINK( MyWin, SelectHdl, Window*, pCtrl )
     }
     else if ( pCtrl == &aValueSet )
     {
-        USHORT nId = aValueSet.GetSelectItemId();
+        sal_uInt16 nId = aValueSet.GetSelectItemId();
         if ( nId > 8 )
         {
             Color aColor = aValueSet.GetItemColor( nId );
@@ -977,10 +977,10 @@ IMPL_LINK( MyWin, SelectHdl, Window*, pCtrl )
     }
     else if ( pCtrl == &aHeadBar )
     {
-        USHORT nCurItemId = aHeadBar.GetCurItemId();
-        for ( USHORT i = 0; i < aHeadBar.GetItemCount(); i++ )
+        sal_uInt16 nCurItemId = aHeadBar.GetCurItemId();
+        for ( sal_uInt16 i = 0; i < aHeadBar.GetItemCount(); i++ )
         {
-            USHORT nItemId = aHeadBar.GetItemId( i );
+            sal_uInt16 nItemId = aHeadBar.GetItemId( i );
             HeaderBarItemBits nBits = aHeadBar.GetItemBits( nItemId );
             if ( nItemId == nCurItemId )
             {
@@ -1072,9 +1072,9 @@ void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     if ( rKEvt.GetKeyCode().GetCode() == KEY_P )
     {
-        for ( USHORT i = 0; i <= 130; i += 2 )
+        for ( sal_uInt16 i = 0; i <= 130; i += 2 )
         {
-            for ( USHORT j = 0; j < 6000; j++ )
+            for ( sal_uInt16 j = 0; j < 6000; j++ )
             {
                 aPrgsBar.SetValue( i );
                 Application::Reschedule();

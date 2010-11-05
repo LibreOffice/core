@@ -515,14 +515,14 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
         }
         ++sm_nAccessibilityRefCount;
     }
-    //StartListening( *sm_pSingleImplConfig, TRUE );
+    //StartListening( *sm_pSingleImplConfig, sal_True );
 }
 
 // -----------------------------------------------------------------------
 
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
-    //EndListening( *sm_pSingleImplConfig, TRUE );
+    //EndListening( *sm_pSingleImplConfig, sal_True );
     ::osl::MutexGuard aGuard( SingletonMutex::get() );
     if( !--sm_nAccessibilityRefCount )
     {

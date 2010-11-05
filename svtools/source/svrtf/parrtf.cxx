@@ -46,7 +46,7 @@ const int MAX_TOKEN_LEN = 128;
 
 SV_IMPL_VARARR( RtfParserStates_Impl, RtfParserState_Impl )
 
-SvRTFParser::SvRTFParser( SvStream& rIn, BYTE nStackSize )
+SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser( rIn, nStackSize ),
     eUNICodeSet( RTL_TEXTENCODING_MS_1252 ),    // default ist ANSI-CodeSet
     nUCharOverread( 1 )
@@ -172,7 +172,7 @@ int SvRTFParser::_GetNextToken()
                         case RTF_UC:
                             if( 0 <= nTokenValue )
                             {
-                                nUCharOverread = (BYTE)nTokenValue;
+                                nUCharOverread = (sal_uInt8)nTokenValue;
 #if 1
                                 //cmc: other ifdef breaks #i3584
                                 aParserStates[ aParserStates.Count()-1].
@@ -211,7 +211,7 @@ int SvRTFParser::_GetNextToken()
 
                                 // overread the next n "RTF" characters. This
                                 // can be also \{, \}, \'88
-                                for( BYTE m = 0; m < nUCharOverread; ++m )
+                                for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                                 {
                                     sal_Unicode cAnsi = nNextCh;
                                     while( 0xD == cAnsi )
@@ -253,7 +253,7 @@ int SvRTFParser::_GetNextToken()
                 {
                     RtfParserState_Impl aState( nUCharOverread, GetSrcEncoding() );
                     aParserStates.Insert(
-                        aState, sal::static_int_cast< USHORT >(nOpenBrakets) );
+                        aState, sal::static_int_cast< sal_uInt16 >(nOpenBrakets) );
                 }
                 ++nOpenBrakets;
                 DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
@@ -267,7 +267,7 @@ int SvRTFParser::_GetNextToken()
             if( 0 <= nOpenBrakets )
             {
                 aParserStates.Remove(
-                    sal::static_int_cast< USHORT >(nOpenBrakets) );
+                    sal::static_int_cast< sal_uInt16 >(nOpenBrakets) );
                 if( aParserStates.Count() )
                 {
                     const RtfParserState_Impl& rRPS =
@@ -440,7 +440,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                             // overread the next n "RTF" characters. This
                             // can be also \{, \}, \'88
-                            for( BYTE m = 0; m < nUCharOverread; ++m )
+                            for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                             {
                                 sal_Unicode cAnsi = nNextCh;
                                 while( 0xD == cAnsi )

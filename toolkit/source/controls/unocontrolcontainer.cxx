@@ -138,7 +138,7 @@ public:
         @param _out_rxControl
             takes the XControl upon successful return
         @return
-            <TRUE/> if and only if a control with the given id is part of the list
+            <sal_True/> if and only if a control with the given id is part of the list
     */
     bool    getControlForIdentifier( ControlIdentifier _nIdentifier, uno::Reference< awt::XControl >& _out_rxControl ) const;
 

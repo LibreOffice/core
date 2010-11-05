@@ -110,8 +110,8 @@ namespace svt { namespace table
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
         _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
+        sal_uIntPtr nHorFlag = TEXT_DRAW_LEFT;
+        sal_uIntPtr nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
@@ -196,8 +196,8 @@ namespace svt { namespace table
         _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
+        sal_uIntPtr nHorFlag = TEXT_DRAW_LEFT;
+        sal_uIntPtr nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
@@ -335,8 +335,8 @@ namespace svt { namespace table
         }
         else
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
+        sal_uIntPtr nHorFlag = TEXT_DRAW_LEFT;
+        sal_uIntPtr nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)

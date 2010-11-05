@@ -222,7 +222,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                     specify the accelerator for execute.
 
             @return [sal_Bool]
-                    TRUE if this key is configured and match to a command.
+                    sal_True if this key is configured and match to a command.
                     Attention: This state does not mean the success state
                     of the corresponding execute. Because its done asynchronous!
          */

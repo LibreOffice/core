@@ -52,11 +52,11 @@ class PacketSender : public Timer
     CommunicationLinkRef mxCL;
 
 public:
-    PacketSender( ULONG nDelay, SvStream* pData, CommunicationLink* pCL );
+    PacketSender( sal_uIntPtr nDelay, SvStream* pData, CommunicationLink* pCL );
     virtual void    Timeout();
 };
 
-PacketSender::PacketSender( ULONG nDelay, SvStream* pData, CommunicationLink* pCL )
+PacketSender::PacketSender( sal_uIntPtr nDelay, SvStream* pData, CommunicationLink* pCL )
 : mpData( pData )
 , mxCL( pCL )
 {
@@ -78,11 +78,11 @@ class DelayedDeleter : public Timer
     CommunicationManager *mpManager;
 
 public:
-    DelayedDeleter( ULONG nDelay, CommunicationManager *pManager );
+    DelayedDeleter( sal_uIntPtr nDelay, CommunicationManager *pManager );
     virtual void    Timeout();
 };
 
-DelayedDeleter::DelayedDeleter( ULONG nDelay, CommunicationManager *pManager )
+DelayedDeleter::DelayedDeleter( sal_uIntPtr nDelay, CommunicationManager *pManager )
 : mpManager( pManager )
 {
     SetTimeout( nDelay );
@@ -135,8 +135,8 @@ void CommunicationTester::Main()
     ToolBox aTB( &aWW, ResId( TBMenu ) );
     aTB.Show();
     aTB.RecalcItems();
-    aTB.SetFloatingMode( TRUE );
-    aTB.SetFloatingMode( FALSE );
+    aTB.SetFloatingMode( sal_True );
+    aTB.SetFloatingMode( sal_False );
     aTB.SetClickHdl( LINK( this, CommunicationTester, TBClick ) );
 
     Execute();
@@ -168,7 +168,7 @@ IMPL_LINK( CommunicationTester, TBClick, ToolBox*, pTB )
     {
         case SERVER_TCP:
             {
-                SWITCH( pServerTcp, CommunicationManagerServerViaSocket( TCP_PORT, (USHORT) 32000 ) );
+                SWITCH( pServerTcp, CommunicationManagerServerViaSocket( TCP_PORT, (sal_uInt16) 32000 ) );
                 if ( pServerTcp )
                     pServerTcp->StartCommunication();   // Am Port horchen
             }

@@ -75,7 +75,7 @@
 // - statics -
 // -----------
 
-static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
@@ -748,7 +748,7 @@ void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
     rOptions.SetReducedGradientStepCount( GetReducedGradientStepCount() );
     rOptions.SetReduceBitmaps( IsReduceBitmaps() );
     rOptions.SetReducedBitmapMode( (PrinterBitmapMode) GetReducedBitmapMode() );
-    rOptions.SetReducedBitmapResolution( aDPIArray[ Min( (USHORT) GetReducedBitmapResolution(), (USHORT)( DPI_COUNT - 1 ) ) ] );
+    rOptions.SetReducedBitmapResolution( aDPIArray[ Min( (sal_uInt16) GetReducedBitmapResolution(), (sal_uInt16)( DPI_COUNT - 1 ) ) ] );
     rOptions.SetReducedBitmapIncludesTransparency( IsReducedBitmapIncludesTransparency() );
     rOptions.SetConvertToGreyscales( IsConvertToGreyscales() );
 }
@@ -771,7 +771,7 @@ void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
     SetReducedBitmapIncludesTransparency( rOptions.IsReducedBitmapIncludesTransparency() );
     SetConvertToGreyscales( rOptions.IsConvertToGreyscales() );
 
-    const USHORT nDPI = rOptions.GetReducedBitmapResolution();
+    const sal_uInt16 nDPI = rOptions.GetReducedBitmapResolution();
 
     if( nDPI < aDPIArray[ 0 ] )
         SetReducedBitmapResolution( 0 );

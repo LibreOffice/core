@@ -55,19 +55,19 @@ struct FltCallDialogParameter
         eFieldUnit      ( eFiUni ) {};
 };
 
-typedef BOOL (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
+typedef sal_Bool (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
                                 FilterConfigItem* pConfigItem, sal_Bool bPrefDialog);
     // Von diesem Typ sind sowohl Export-Filter-Funktionen als auch Import-Filter-Funktionen.
     // rFileName ist der komplette Pfadname der zu importierenden bzw. zu exportierenden Datei.
     // pCallBack darf auch NULL sein. pCallerData wird der Callback-Funktion uebergeben.
     // pOptionsConfig darf NULL sein. Anderenfalls ist die Gruppe des Config schon gesetzt
     // und darf von dem Filter nicht geaendert werden!
-    // Wenn bPrefDialog==TRUE gilt, wird ggf. ein Preferences-Dialog durchgefuehrt.
+    // Wenn bPrefDialog==sal_True gilt, wird ggf. ein Preferences-Dialog durchgefuehrt.
 
-typedef BOOL ( *PFilterDlgCall )( FltCallDialogParameter& );
+typedef sal_Bool ( *PFilterDlgCall )( FltCallDialogParameter& );
     // Von diesem Typ sind sowohl Export-Filter-Funktionen als auch Import-Filter-Funktionen.
     // Uebergeben wird ein Pointer auf ein Parent-Fenster und auf die Options-Config.
-    // pOptions und pWindow duerfen NULL sein, in diesem Fall wird FALSE zurueckgeliefert.
+    // pOptions und pWindow duerfen NULL sein, in diesem Fall wird sal_False zurueckgeliefert.
     // Anderenfalls ist die Gruppe der Config schon gesetzt
     // und darf von dem Filter nicht geaendert werden!
 
