@@ -90,7 +90,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_aURLParameter( aURLParameter )
 {
     Reference< XTransliteration > xTrans(
-        xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.Transliteration" ) ),
+        xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Transliteration" )) ),
         UNO_QUERY );
     Locale aLocale( aURLParameter.get_language(),
                     rtl::OUString(),
@@ -101,7 +101,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
     // Access Lucene via XInvocation
     Reference< script::XInvocation > xInvocation(
-        xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.help.HelpSearch" ) ),
+        xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.HelpSearch" )) ),
         UNO_QUERY );
 
     vector< vector< rtl::OUString > > queryList;
@@ -182,27 +182,27 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                     int nParamCount = bCaptionsOnly ? 7 : 6;
                     Sequence<uno::Any> aParamsSeq( nParamCount );
 
-                    aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
+                    aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" )) );
                     aParamsSeq[1] = uno::makeAny( m_aURLParameter.get_language() );
 
-                    aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
+                    aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-index" )) );
                     rtl::OUString aSystemPath;
                     osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
                     aParamsSeq[3] = uno::makeAny( aSystemPath );
 
-                    aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-query" ) );
+                    aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-query" )) );
 
                     const std::vector< rtl::OUString >& aListItem = queryList[i];
                     ::rtl::OUString aNewQueryStr = aListItem[0];
                     aParamsSeq[5] = uno::makeAny( aNewQueryStr );
 
                     if( bCaptionsOnly )
-                        aParamsSeq[6] = uno::makeAny( rtl::OUString::createFromAscii( "-caption" ) );
+                        aParamsSeq[6] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-caption" )) );
 
                     Sequence< sal_Int16 > aOutParamIndex;
                     Sequence< uno::Any > aOutParam;
 
-                    uno::Any aRet = xInvocation->invoke( rtl::OUString::createFromAscii( "search" ),
+                    uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "search" )),
                         aParamsSeq, aOutParamIndex, aOutParam );
 
                     Sequence< float > aScoreSeq;
@@ -412,8 +412,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 #endif
     }
 
-    sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();
-    rtl::OUString replWith = rtl::OUString::createFromAscii( "vnd.sun.star.help://" );
+    sal_Int32 replIdx = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#HLP#" )).getLength();
+    rtl::OUString replWith = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ));
 
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
@@ -427,16 +427,16 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ));
     aCommand.Argument <<= m_sProperty;
 
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )
     {
         m_aPath[m_nRow] =
             m_aPath[m_nRow]                                          +
-            rtl::OUString::createFromAscii( "?Language=" )           +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "?Language=" ))           +
             m_aURLParameter.get_language()                           +
-            rtl::OUString::createFromAscii( "&System=" )             +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&System=" ))             +
             m_aURLParameter.get_system();
 
         uno::Reference< XContent > content = queryContent();

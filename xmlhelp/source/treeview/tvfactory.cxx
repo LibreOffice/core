@@ -147,7 +147,7 @@ TVFactory::createInstance(
     aAny <<= rtl::OUString();
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
-        rtl::OUString::createFromAscii( "nodepath" ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" )),
         -1,
         aAny,
         PropertyState_DIRECT_VALUE );
@@ -208,7 +208,7 @@ TVFactory::getAvailableServiceNames( )
     throw( RuntimeException )
 {
     Sequence< rtl::OUString > seq( 1 );
-    seq[0] = rtl::OUString::createFromAscii( "com.sun.star.ucb.HierarchyDataReadAccess" );
+    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.HierarchyDataReadAccess" ));
     return seq;
 }
 
@@ -220,7 +220,7 @@ TVFactory::getAvailableServiceNames( )
 rtl::OUString SAL_CALL
 TVFactory::getImplementationName_static()
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.help.TreeViewImpl" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.TreeViewImpl" ));
 }
 
 
@@ -228,8 +228,8 @@ Sequence< rtl::OUString > SAL_CALL
 TVFactory::getSupportedServiceNames_static()
 {
     Sequence< rtl::OUString > seq( 2 );
-    seq[0] = rtl::OUString::createFromAscii( "com.sun.star.help.TreeView" );
-    seq[1] = rtl::OUString::createFromAscii( "com.sun.star.ucb.HiearchyDataSource" );
+    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.TreeView" ));
+    seq[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.HiearchyDataSource" ));
     return seq;
 }
 
@@ -263,9 +263,9 @@ static sal_Bool writeInfo( void * pRegistryKey,
                            const rtl::OUString & rImplementationName,
                               Sequence< rtl::OUString > const & rServiceNames )
 {
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) );
     aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
 
     Reference< registry::XRegistryKey > xKey;
     try

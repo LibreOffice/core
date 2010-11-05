@@ -185,7 +185,7 @@ rtl::OUString URLParameter::get_title()
             m_aTitle = inf->get_title();
     }
     else   // This must be the root
-        m_aTitle = rtl::OUString::createFromAscii("root");
+        m_aTitle = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("root"));
 
     return m_aTitle;
 }
@@ -280,7 +280,7 @@ rtl::OUString URLParameter::get_the_jar()
         return m_aJar;
     }
     else
-        return get_module() + rtl::OUString::createFromAscii(".jar");
+        return get_module() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".jar"));
 }
 
 
@@ -288,7 +288,7 @@ rtl::OUString URLParameter::get_the_jar()
 
 void URLParameter::readBerkeley()
 {
-    static rtl::OUString aQuestionMark( rtl::OUString::createFromAscii( "?" ) );
+    static rtl::OUString aQuestionMark(RTL_CONSTASCII_USTRINGPARAM("?"));
 
     if( get_id().compareToAscii("") == 0 )
         return;
@@ -450,7 +450,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
+            m_pDatabases->jarFile( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "picture.jar" )),
                                    get_language() );
 
         rtl::OUString path = get_path();
@@ -520,7 +520,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
+            m_pDatabases->jarFile( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "picture.jar" )),
                                    get_language() );
 
         rtl::OUString path = get_path();
@@ -578,7 +578,7 @@ bool URLParameter::scheme()
         if( aLastStr.compareToAscii( "DbPAR=" ) == 0 )
         {
             rtl::OUString aNewExpr = m_aExpr.copy( 0, 20 );
-            rtl::OUString aSharedStr = rtl::OUString::createFromAscii( "shared" );
+            rtl::OUString aSharedStr(RTL_CONSTASCII_USTRINGPARAM("shared"));
             aNewExpr += aSharedStr;
             aNewExpr += m_aExpr.copy( 20 );
             aNewExpr += aSharedStr;
@@ -695,7 +695,7 @@ bool URLParameter::query()
             if( ! m_aQuery.getLength() )
                 m_aQuery = value;
             else
-                m_aQuery += ( rtl::OUString::createFromAscii( " " ) + value );
+                m_aQuery += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " )) + value );
         }
         else if( parameter.compareToAscii( "Scope" ) == 0 )
             m_aScope = value;
@@ -1035,7 +1035,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             if( !xContext.is() )
             {
                 throw RuntimeException(
-                    ::rtl::OUString::createFromAscii( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" )),
                     Reference< XInterface >() );
             }
 

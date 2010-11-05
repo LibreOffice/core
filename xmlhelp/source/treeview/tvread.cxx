@@ -185,11 +185,11 @@ using namespace com::sun::star::deployment;
 
 
 ConfigData::ConfigData()
-    : prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
-      prodVersion( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ) ),
-      vendName( rtl::OUString::createFromAscii( "%VENDORNAME" ) ),
-      vendVersion( rtl::OUString::createFromAscii( "%VENDORVERSION" ) ),
-      vendShort( rtl::OUString::createFromAscii( "%VENDORSHORT" ) )
+    : prodName(RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME")),
+      prodVersion(RTL_CONSTASCII_USTRINGPARAM("%PRODUCTVERSION")),
+      vendName(RTL_CONSTASCII_USTRINGPARAM("%VENDORNAME")),
+      vendVersion(RTL_CONSTASCII_USTRINGPARAM("%VENDORVERSION")),
+      vendShort(RTL_CONSTASCII_USTRINGPARAM("%VENDORSHORT"))
 {
 }
 
@@ -308,7 +308,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
     {
         TargetURL = ( tvDom->getTargetURL() + configData.appendix );
         if( tvDom->anchor.getLength() )
-            TargetURL += ( rtl::OUString::createFromAscii( "#" ) +
+            TargetURL += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#" )) +
                            tvDom->anchor );
     }
     else
@@ -363,9 +363,9 @@ TVRead::getElementNames( )
 {
     Sequence< rtl::OUString > seq( 3 );
 
-    seq[0] = rtl::OUString::createFromAscii( "Title" );
-    seq[1] = rtl::OUString::createFromAscii( "TargetURL" );
-    seq[2] = rtl::OUString::createFromAscii( "Children" );
+    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+    seq[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+    seq[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Children" ));
 
     return seq;
 }
@@ -667,7 +667,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( ! instPath.getLength() )
       // try to determine path from default
-      instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
+      instPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$(instpath)/help" ));
 
     // replace anything like $(instpath);
     subst( xSMgr,instPath );
@@ -686,21 +686,21 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-              xSMgr ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
+              xSMgr ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY_THROW);
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
-        aParam.Value <<= ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Product");
+        aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+        aParam.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Product"));
         lParams[0] = uno::makeAny(aParam);
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                     lParams) );
 
         uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString::createFromAscii("ooSetupExtension"));
+        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupExtension")));
 
         aRet >>= setupextension;
     }
@@ -709,7 +709,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     }
 
     rtl::OUString productVersion( setupversion +
-                                  rtl::OUString::createFromAscii( " " ) +
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " )) +
                                   setupextension );
     rtl::OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
 
@@ -719,7 +719,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
     if( errFile != osl::FileBase::E_None ) return configData;
     if( url.lastIndexOf( sal_Unicode( '/' ) ) != url.getLength() - 1 )
-        url += rtl::OUString::createFromAscii( "/" );
+        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
     rtl::OUString ret;
     sal_Int32 idx;
     osl::DirectoryItem aDirItem;
@@ -732,8 +732,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         ret = locale.copy( 0,idx );
     else
         {
-        locale = rtl::OUString::createFromAscii( "en-US" );
-        ret = rtl::OUString::createFromAscii("en");
+        locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en-US" ));
+        ret = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
         }
     url = url + ret;
 
@@ -800,11 +800,11 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
        configData.system = system;
     configData.locale = locale;
     configData.appendix =
-        rtl::OUString::createFromAscii( "?Language=" ) +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "?Language=" )) +
         configData.locale +
-        rtl::OUString::createFromAscii( "&System=" ) +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&System=" )) +
         configData.system +
-        rtl::OUString::createFromAscii( "&UseDB=no" ) ;
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&UseDB=no" )) ;
 
     return configData;
 }
@@ -826,7 +826,7 @@ TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr
         try
         {
             rtl::OUString sProviderService =
-                rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
             sProvider =
                 Reference< XMultiServiceFactory >(
                     m_xSMgr->createInstance( sProviderService ),
@@ -853,7 +853,7 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
     {
         Sequence< Any > seq(1);
         rtl::OUString sReaderService =
-            rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
 
         seq[0] <<= rtl::OUString::createFromAscii( file );
 
@@ -930,7 +930,7 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
         {
             xCfgMgr =
                 Reference< XConfigManager >(
-                    m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
+                    m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" )) ),
                     UNO_QUERY );
         }
         catch( const com::sun::star::uno::Exception& )
@@ -949,9 +949,9 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
 //===================================================================
 // class ExtensionIteratorBase
 
-static rtl::OUString aSlash( rtl::OUString::createFromAscii( "/" ) );
-static rtl::OUString aHelpFilesBaseName( rtl::OUString::createFromAscii( "help" ) );
-static rtl::OUString aHelpMediaType( rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
+static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
+static rtl::OUString aHelpFilesBaseName(RTL_CONSTASCII_USTRINGPARAM("help"));
+static rtl::OUString aHelpMediaType(RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.help"));
 
 ExtensionIteratorBase::ExtensionIteratorBase( const rtl::OUString& aLanguage )
         : m_eState( USER_EXTENSIONS )
@@ -974,13 +974,13 @@ void ExtensionIteratorBase::init()
     if( !m_xContext.is() )
     {
         throw RuntimeException(
-            ::rtl::OUString::createFromAscii( "ExtensionIteratorBase::init(), no XComponentContext" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExtensionIteratorBase::init(), no XComponentContext" )),
             Reference< XInterface >() );
     }
 
     Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
+        xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )),
         m_xContext ), UNO_QUERY_THROW );
 
     m_bUserPackagesLoaded = false;
@@ -1051,7 +1051,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     if( !m_bUserPackagesLoaded )
     {
         Reference< XPackageManager > xUserManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")) );
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -1081,7 +1081,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     if( !m_bSharedPackagesLoaded )
     {
         Reference< XPackageManager > xSharedManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")) );
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -1111,7 +1111,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     if( !m_bBundledPackagesLoaded )
     {
         Reference< XPackageManager > xBundledManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("bundled") );
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")) );
         m_aBundledPackagesSeq = xBundledManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -1236,18 +1236,18 @@ rtl::OUString TreeFileIterator::expandURL( const rtl::OUString& aURL )
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
 
         xFac = Reference< uri::XUriReferenceFactory >(
-            xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
+            xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
         if( !xFac.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString::createFromAscii( "Databases::expand(), could not instatiate UriReferenceFactory." ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Databases::expand(), could not instatiate UriReferenceFactory." )),
                 Reference< XInterface >() );
         }
 
         xMacroExpander = Reference< util::XMacroExpander >(
             m_xContext->getValueByName(
-            ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ),
             UNO_QUERY_THROW );
      }
 
