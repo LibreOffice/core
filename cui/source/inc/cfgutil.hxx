@@ -157,7 +157,6 @@ struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
     SvxConfigGroupBoxResource_Impl* pImp;
-    //SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;

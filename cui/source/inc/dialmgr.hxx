@@ -34,16 +34,16 @@
 
 // forward ---------------------------------------------------------------
 
+#define CUI_MGR()   (*CuiResMgr::GetResMgr())
+#define CUI_RES(i)      ResId(i,CUI_MGR())
+#define CUI_RESSTR(i)   UniString(ResId(i,CUI_MGR()))
+#define CUI_RESSSTR(i)  String(ResId(i,CUI_MGR()))
+
 class ResMgr;
 struct CuiResMgr
 {
     static ResMgr*      GetResMgr();
 };
-
-#define CUI_MGR()   (*CuiResMgr::GetResMgr())
-#define CUI_RES(i)      ResId(i,CUI_MGR())
-#define CUI_RESSTR(i)   UniString(ResId(i,CUI_MGR()))
-#define CUI_RESSSTR(i)  String(ResId(i,CUI_MGR()))
 
 #endif
 

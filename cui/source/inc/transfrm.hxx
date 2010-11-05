@@ -149,8 +149,6 @@ private:
     DECL_LINK( ChangeSizeProtectHdl, void * );
     DECL_LINK( ChangePosXHdl, void * );
     DECL_LINK( ChangePosYHdl, void * );
-//  DECL_LINK( SetAnchorHdl, ListBox * );
-//  DECL_LINK( SetOrientHdl, ListBox * );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
@@ -183,7 +181,6 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
 
-//  void         ShowAnchorCtrls(USHORT nAnchorCtrls); // Writer-spezifische Controls anzeigen
     virtual void FillUserData();
 
     void        DisableResize();
@@ -263,11 +260,9 @@ private:
     FixedLine           aFlRadius;
     FixedText           aFtRadius;
     MetricField         aMtrRadius;
-    //TriStateBox           aTsbVertical;
     FixedLine           aFlAngle;
     FixedText           aFtAngle;
     MetricField         aMtrAngle;
-    //SvxRectCtl            aCtlAngle;
 
     const SfxItemSet&   rOutAttrs;
 

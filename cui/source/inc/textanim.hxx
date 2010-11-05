@@ -51,7 +51,6 @@ private:
     FixedLine           aFlEffect;
     FixedText           aFtEffects;
     ListBox             aLbEffect;
-    //ValueSet          aCtlEffect;
     FixedText           aFtDirection;
     ImageButton         aBtnUp;
     ImageButton         aBtnLeft;

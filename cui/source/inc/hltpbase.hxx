@@ -83,10 +83,7 @@ class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 private:
     BOOL   mbAccessAddress;
 
-//  String GetAllEmailNamesFromDragItem( USHORT nItem );
-
 protected:
-
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 

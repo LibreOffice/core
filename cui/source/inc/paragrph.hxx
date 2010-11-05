@@ -39,12 +39,6 @@
 #include <vcl/lstbox.hxx>
 #include <svx/flagsdef.hxx>
 
-// define ----------------------------------------------------------------
-
-// 1/2 cm in TWIPS
-// wird auch fuer Minimalgrosse der LayFrms aller Arten benutzt
-//CHINA001 #define MM50   283
-
 // forward ---------------------------------------------------------------
 
 class SvxLineSpacingItem;
@@ -142,7 +136,7 @@ public:
     void                    EnableAutoFirstLine();
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void            PageCreated(SfxAllItemSet aSet);
 };
 
 // class SvxParaAlignTabPage ------------------------------------------------
@@ -197,7 +191,7 @@ public:
     virtual void            Reset( const SfxItemSet& rSet );
 
     void                    EnableJustifyExt();
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void            PageCreated(SfxAllItemSet aSet);
 };
 
 // class SvxExtParagraphTabPage ------------------------------------------
@@ -242,10 +236,8 @@ private:
     TriStateBox         aHyphenBox;
     FixedText           aBeforeText;
     NumericField        aExtHyphenBeforeBox;
-//  FixedText           aHyphenBeforeLabel;
     FixedText           aAfterText;
     NumericField        aExtHyphenAfterBox;
-//  FixedText           aHyphenAfterLabel;
     FixedText           aMaxHyphenLabel;
     NumericField        aMaxHyphenEdit;
     FixedLine           aExtFL;
@@ -291,11 +283,10 @@ private:
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
 #endif
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void            PageCreated(SfxAllItemSet aSet);
 };
-/* -----------------------------29.11.00 11:33--------------------------------
 
- ---------------------------------------------------------------------------*/
+//--------------------------------------------------------------------------
 class SvxAsianTabPage : public SfxTabPage
 {
     FixedLine       aOptionsFL;

@@ -99,11 +99,6 @@ namespace offapp
                                     m_aRB_TxtDirLeft2Right.IsChecked() ),
                     SID_ATTR_PARA_LEFT_TO_RIGHT );
 
-        // handling of SheetView stuff
-//      if( m_bEnable_SheetView_Opt )
-//      {
-//      }
-
         return TRUE;
     }
 
@@ -117,13 +112,6 @@ namespace offapp
         BOOL                bLeft2Right = pLeft2RightItem? pLeft2RightItem->GetValue() : TRUE;
         m_aRB_TxtDirLeft2Right.Check( bLeft2Right );
 
-        // handling of SheetView stuff
-//      if( m_bEnable_SheetView_Opt )
-//      {
-//          m_aCB_ShtVwRight2Left.Check( FALSE );
-//
-//          m_aCB_ShtVwCurrentDocOnly.Check( FALSE );
-//      }
     }
 
     InternationalOptionsPage::InternationalOptionsPage( Window* _pParent, const SfxItemSet& _rAttrSet ) :
@@ -142,7 +130,6 @@ namespace offapp
     SfxTabPage* InternationalOptionsPage::CreateSc( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         InternationalOptionsPage*   p = new InternationalOptionsPage( _pParent, _rAttrSet );
-//      p->m_pImpl->EnableOption_SheetView();
         return p;
     }
 
@@ -161,6 +148,6 @@ namespace offapp
         m_pImpl->Reset( _rSet );
     }
 
-}   // /namespace offapp
+}   // namespace offapp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,6 @@ CreateTabPage   GetSSOCreator( void );
 
 // class OfaOptionsTreeListBox -------------------------------------------
 
-//!#define NUMBER_OF_OPTION_PAGES  12
 class SfxModule;
 class SfxShell;
 class SfxItemSet;

@@ -115,7 +115,6 @@ public:
 class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
-//  const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
     USHORT              nAnchorCtrls;
 

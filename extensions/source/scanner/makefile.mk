@@ -76,12 +76,9 @@ SHL1STDLIBS=\
     $(VCLLIB)			\
     $(SVTOOLLIB)
 
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="FREEBSD"
-.IF "$(OS)"!="NETBSD"
+.IF "$(GUI)"=="UNX" && "$(OS)"!="FREEBSD" && \
+	"$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD"
 SHL1STDLIBS+=$(SVTOOLLIB) -ldl
-.ENDIF
-.ENDIF
 .ENDIF
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
