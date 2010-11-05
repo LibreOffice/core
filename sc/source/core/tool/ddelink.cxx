@@ -105,7 +105,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     BOOL bHasValue;
     rStream >> bHasValue;
     if ( bHasValue )
-        pResult = new ScMatrix( rStream );
+        pResult = new ScMatrix(0, 0);
 
     if (rHdr.BytesLeft())       // neu in 388b und der 364w (RealTime-Client) Version
         rStream >> nMode;
@@ -126,8 +126,6 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 
     BOOL bHasValue = ( pResult != NULL );
     rStream << bHasValue;
-    if (bHasValue)
-        pResult->Store( rStream );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
         rStream << nMode;                                   // seit 388b
