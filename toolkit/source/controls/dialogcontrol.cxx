@@ -1873,13 +1873,13 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
         ( aImageURL.getLength() > 0 ))
     {
-        aImageURL =
-            getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
+        rtl::OUString absoluteUrl( aImageURL );
+        if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+            absoluteUrl =
+                getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                  ImplGetPropertyValue( PROPERTY_IMAGEURL ));
-
+        ImplSetPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( absoluteUrl ), sal_True );
     }
-    if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
-        ImplSetPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( aImageURL ), sal_True );
 }
 
 void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
@@ -2111,16 +2111,19 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         if ( bOwnModel && rEvt.PropertyName.equalsAsciiL( "ImageURL", 8 ))
         {
             ::rtl::OUString aImageURL;
+            ::rtl::OUString absoluteUrl( aImageURL );
+            // Ignore GraphicObject urls
             if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
                 ( aImageURL.getLength() > 0 ))
             {
-                aImageURL =
-                    getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
+                absoluteUrl = aImageURL;
+                if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+                    absoluteUrl =
+                        getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                          ImplGetPropertyValue( PROPERTY_IMAGEURL ));
 
+                ImplSetPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( absoluteUrl ), sal_True );
             }
-
-            ImplSetPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( aImageURL ), sal_True );
             break;
         }
     }
