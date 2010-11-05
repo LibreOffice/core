@@ -88,7 +88,7 @@ CFLAGS+=-GS
 
 CFLAGS+=-c -nologo -Gs $(NOLOGO)
 
-.IF "$(cl_x64)" != ""
+.IF "$(cl_x64)" == ""
 CDEFS+= -D_X86_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
 .ELSE
 CDEFS+= -D_AMD64_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
@@ -228,7 +228,7 @@ _VC_MANIFEST_BASENAME=__VC80
 _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
 
-.IF "$(cl_x64)" != ""
+.IF "$(cl_x64)" == ""
 LINK=link /MACHINE:IX86
 .ELSE
 LINK=link /MACHINE:X64
@@ -242,7 +242,7 @@ LINKFLAGS=/MAP /OPT:NOREF
 .ENDIF
 
 # excetion handling protection
-.IF "$(cl_x64)" != ""
+.IF "$(cl_x64)" == ""
 LINKFLAGS+=-safeseh
 .ENDIF
 
@@ -342,7 +342,7 @@ LIBMGR=lib $(NOLOGO)
 IMPLIB=lib
 LIBFLAGS=
 
-.IF "$(cl_x64)" != ""
+.IF "$(cl_x64)" == ""
 IMPLIBFLAGS=-machine:IX86
 .ELSE
 IMPLIBFLAGS=-machine:X64
