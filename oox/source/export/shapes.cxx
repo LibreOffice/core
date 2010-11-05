@@ -365,7 +365,7 @@ namespace oox { namespace drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, XmlFilterBase* pFB, DocumentType eDocumentType )
+ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( pFS, pFB, eDocumentType )
     , mnShapeIdMax( 1 )
     , mnPictureIdMax( 1 )
@@ -373,6 +373,7 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, XmlFilterBas
     , maFraction( 1, 576 )
     , maMapModeSrc( MAP_100TH_MM )
     , maMapModeDest( MAP_INCH, Point(), maFraction, maFraction )
+    , mpShapeMap( pShapeMap ? pShapeMap : &maShapeMap )
 {
 }
 
@@ -980,25 +981,28 @@ sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilt
 
     sal_Int32 nID = pFB->GetUniqueId();
 
-    saShapeMap[ rXShape ] = nID;
+    (*mpShapeMap)[ rXShape ] = nID;
 
     return nID;
 }
 
 sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape )
 {
+    return GetShapeID( rXShape, mpShapeMap );
+}
+
+sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape, ShapeHashMap* pShapeMap )
+{
     if( !rXShape.is() )
         return -1;
 
-    ShapeHashMap::const_iterator aIter = saShapeMap.find( rXShape );
+    ShapeHashMap::const_iterator aIter = pShapeMap->find( rXShape );
 
-    if( aIter == saShapeMap.end() )
+    if( aIter == pShapeMap->end() )
         return -1;
 
     return aIter->second;
 }
-
-ShapeExport::ShapeHashMap ShapeExport::saShapeMap;
 
 } }
 
