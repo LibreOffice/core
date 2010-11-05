@@ -8,6 +8,103 @@ echo "$@" >config.parms
 dnl ===================================================================
 dnl Optional Features (--enable/disable-)
 dnl ===================================================================
+
+dnl ---------- Extensions ----------
+
+AC_ARG_ENABLE(ext-barcode,
+    AS_HELP_STRING([--enable-ext-barcode],
+        [Enables the Barcode extension.]),
+,)
+
+AC_ARG_ENABLE(ext-diagram,
+    AS_HELP_STRING([--enable-ext-diagram],
+        [Enables the Diagram extension.]),
+,)
+
+AC_ARG_ENABLE(ext-google-docs,
+    AS_HELP_STRING([--enable-ext-google-docs],
+        [Download and enables the Google Documents extension.]),
+,)
+
+AC_ARG_ENABLE(ext-hunart,
+    AS_HELP_STRING([--enable-ext-hunart],
+        [Enables the Hungarian Cross-reference Toolbar extension.]),
+,)
+
+AC_ARG_ENABLE(ext-lightproof,
+    AS_HELP_STRING([--enable-ext-lightproof],
+        [Enables the Lightproof extension.]),
+,)
+
+AC_ARG_ENABLE(ext-mysql-connector,
+    AS_HELP_STRING([--enable-ext-mysql-connector],
+        [Enables the build of the MySQL Connector/LibO extension. This requires
+         access to the MySQL Connector/C (aka libmysql) to be given, too, with
+         either the --with-system-mysql or --with-libmysql-path option.]),
+,)
+
+AC_ARG_ENABLE(ext-nlpsolver,
+    AS_HELP_STRING([--enable-ext-nlpsolver],
+        [Download and enables the NLPSolver extension.]),
+,)
+
+AC_ARG_ENABLE(ext-numbertext,
+    AS_HELP_STRING([--enable-ext-numbertext],
+        [Enables the Numbertext extension.]),
+,)
+
+AC_ARG_ENABLE(ext-oooblogger,
+    AS_HELP_STRING([--enable-ext-oooblogger],
+        [Download and enables the OOo Blogger extension.]),
+,)
+
+AC_ARG_ENABLE(ext-pdfimport,
+    AS_HELP_STRING([--enable-ext-pdfimport],
+        [Enables the PDF Import extension and xpdf.]),
+,)
+
+AC_ARG_ENABLE(ext-presenter-console,
+    AS_HELP_STRING([--enable-ext-presenter-console],
+        [Enables the Presenter Console extension.]),
+,)
+
+AC_ARG_ENABLE(ext-presenter-minimizer,
+    AS_HELP_STRING([--enable-ext-presenter-minimizer],
+        [Enables the Presentation Minimizer extension.]),
+,)
+
+AC_ARG_ENABLE(ext-presenter-ui,
+    AS_HELP_STRING([--enable-ext-presenter-ui],
+        [Enables extra functionality during slideshows, e.g. selecting pen color.]),
+,)
+
+AC_ARG_ENABLE(ext-report-builder,
+    AS_HELP_STRING([--enable-ext-report-builder],
+        [Enables the build of the Report Builder extension.]),
+,)
+
+AC_ARG_ENABLE(ext-typo,
+    AS_HELP_STRING([--enable-ext-typo],
+        [Enables the Typography Toolbar extension.]),
+,)
+
+AC_ARG_ENABLE(ext-validator,
+    AS_HELP_STRING([--enable-ext-validator],
+        [Enables the Validator extension.]),
+,)
+
+AC_ARG_ENABLE(ext-watch-window,
+    AS_HELP_STRING([--enable-ext-watch-window],
+        [Enables the Watch Window extension to Calc.]),
+,)
+
+AC_ARG_ENABLE(ext-wiki-publisher,
+    AS_HELP_STRING([--enable-ext-wiki-publisher],
+        [Enables the Wiki Publisher extension.]),
+,)
+
+dnl ---------- *** ----------
+
 AC_ARG_ENABLE(graphite,
     AS_HELP_STRING([--enable-graphite],
         [Enables the compilation of Graphite smart font rendering.]),
@@ -376,6 +473,64 @@ AC_ARG_ENABLE(cl-x64,
     AS_HELP_STRING([--enable-cl-x64],
         [Use the Microsoft C/C++ x64 compiler instead of the default x86 one.]),
 ,)
+
+dnl ---------- Deprecated since 2010-11-05 ----------
+
+AC_ARG_ENABLE(mysql-connector,
+    AS_HELP_STRING([--enable-mysql-connector],
+        [Deprecated: use --enable-ext-mysql-connector instead.]),
+    if test -z "$enable_ext_mysql_connector"; then
+        enable_ext_mysql_connector=$enable_mysql_connector;
+    fi ,
+)
+
+AC_ARG_ENABLE(presenter-extra-ui,
+    AS_HELP_STRING([--enable-presenter-extra-ui],
+        [Deprecated: use --enable-ext-presenter-ui instead.]),
+    if test -z "$enable_ext_presenter_ui"; then
+        enable_ext_presenter_ui=$enable_presenter_extra_ui;
+    fi ,
+)
+
+AC_ARG_ENABLE(minimizer,
+    AS_HELP_STRING([--enable-minimizer],
+        [Deprecated: use --enable-ext-presenter-minimizer instead.]),
+    if test -z "$enable_ext_presenter_minimizer"; then
+        enable_ext_presenter_minimizer=$enable_minimizer;
+    fi ,
+)
+
+AC_ARG_ENABLE(presenter-console,
+    AS_HELP_STRING([--enable-presenter-console],
+        [Deprecated: use --enable-ext-presenter-console instead.]),
+    if test -z "$enable_ext_presenter_console"; then
+        enable_ext_presenter_console=$enable_presenter_console;
+    fi ,
+)
+
+AC_ARG_ENABLE(pdfimport,
+    AS_HELP_STRING([--enable-pdfimport],
+        [Deprecated: use --enable-ext-pdfimport instead.]),
+    if test -z "$enable_ext_pdfimport"; then
+        enable_ext_pdfimport=$enable_pdfimport;
+    fi ,
+)
+
+AC_ARG_ENABLE(wiki-publisher,
+    AS_HELP_STRING([--enable-wiki-publisher],
+        [Deprecated: use --enable-ext-wiki-publisher instead.]),
+    if test -z "$enable_ext_wiki_publisher"; then
+        enable_ext_wiki_publisher=$enable_wiki_publisher;
+    fi ,
+)
+
+AC_ARG_ENABLE(report-builder,
+    AS_HELP_STRING([--enable-report-builder],
+        [Deprecated: use --enable-ext-report-builder instead.]),
+    if test -z "$enable_ext_report_builder"; then
+        enable_ext_report_builder=$enable_report_builder;
+    fi ,
+)
 
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
@@ -1214,103 +1369,97 @@ AC_ARG_WITH(max-jobs,
          Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
 
-dnl ===================================================================
-dnl Enable/disable extensions
-dnl ===================================================================
-
-AC_ARG_ENABLE(ext-presenter-ui,
-    AS_HELP_STRING([--enable-ext-presenter-ui],
-        [Enables extra functionality during slideshows, e.g. selecting pen color.]),
-,)
-
-AC_ARG_ENABLE(ext-presenter-minimizer,
-    AS_HELP_STRING([--enable-ext-presenter-minimizer],
-        [Enables the Presentation Minimizer.]),
-,)
-
-AC_ARG_ENABLE(ext-presenter-console,
-    AS_HELP_STRING([--enable-ext-presenter-console],
-        [Enables the Presenter Console extension.]),
-,)
-
-AC_ARG_ENABLE(ext-pdfimport,
-    AS_HELP_STRING([--enable-ext-pdfimport],
-        [Enables the PDF Import extension and xpdf.]),
-,)
-
-AC_ARG_ENABLE(ext-wiki-publisher,
-    AS_HELP_STRING([--enable-ext-wiki-publisher],
-        [Enables the Wiki Publisher extension.]),
-,)
-
-AC_ARG_ENABLE(report-builder,
-    AS_HELP_STRING([--enable-report-builder],
-        [Enables the build of the Report Builder extension.]),
-,)
-
-AC_ARG_ENABLE(mysql-connector,
-    AS_HELP_STRING([--enable-mysql-connector],
-        [Enables the build of the MySQL Connector/LibO extension. This requires
-         access to the MySQL Connector/C (aka libmysql) to be given, too, with
-         either the --with-system-mysql or --with-libmysql-path option.]),
-,)
-
-AC_ARG_WITH(lightproof,
-    AS_HELP_STRING([--with-lightproof],
-        [Integrate Lightproof extension.]),
-,)
-
-AC_ARG_WITH(numbertext,
-    AS_HELP_STRING([--with-numbertext],
-        [Integrate Numbertext extension.]),
-,)
-
-AC_ARG_WITH(hunart,
-    AS_HELP_STRING([--with-hunart],
-        [Integrate Hungarian Cross-reference Toolbar extension.]),
-,)
-
-AC_ARG_WITH(typo,
-    AS_HELP_STRING([--with-typo],
-        [Integrate Typography Toolbar extension.]),
-,)
-
-AC_ARG_WITH(watch-window,
-    AS_HELP_STRING([--with-watch-window],
-        [Integrate Watch Window extension to Calc.]),
-,)
-
-AC_ARG_WITH(diagram,
-    AS_HELP_STRING([--with-diagram],
-        [Integrate Diagram extension.]),
-,)
-
-AC_ARG_WITH(validator,
-    AS_HELP_STRING([--with-validator],
-        [Integrate Validator extension.]),
-,)
+dnl ---------- Deprecated since 2010-11-05 ----------
 
 AC_ARG_WITH(barcode,
     AS_HELP_STRING([--with-barcode],
-        [Integrate Barcode extension.]),
-,)
+        [Deprecated: use --enable-ext-barcode instead.]),
+    if test -z "$enable_ext_barcode"; then
+        enable_ext_barcode=$with_barcode;
+    fi ,
+)
+
+AC_ARG_WITH(diagram,
+    AS_HELP_STRING([--with-diagram],
+        [Deprecated: use --enable-ext-diagram instead.]),
+    if test -z "$enable_ext_diagram"; then
+        enable_ext_diagram=$with_diagram;
+    fi ,
+)
 
 AC_ARG_WITH(google-docs,
     AS_HELP_STRING([--with-google-docs],
-        [Download and integrate Google Documents extension.]),
-,)
+        [Deprecated: use --enable-ext-google-docs instead.]),
+    if test -z "$enable_ext_google_docs"; then
+        enable_ext_google_docs=$with_google_docs;
+    fi ,
+)
+
+AC_ARG_WITH(hunart,
+    AS_HELP_STRING([--with-hunart],
+        [Deprecated: use --enable-ext-hunart instead.]),
+    if test -z "$enable_ext_hunart"; then
+        enable_ext_hunart=$with_hunart;
+    fi ,
+)
+
+AC_ARG_WITH(lightproof,
+    AS_HELP_STRING([--with-lightproof],
+        [Deprecated: use --enable-ext-lightproof instead.]),
+    if test -z "$enable_ext_lightproof"; then
+        enable_ext_lightproof=$with_lightproof;
+    fi ,
+)
 
 AC_ARG_WITH(nlpsolver,
     AS_HELP_STRING([--with-nlpsolver],
-        [Download and integrate NLPSolver extension.]),
-,)
+        [Deprecated: use --enable-ext-nlpsolver instead.]),
+    if test -z "$enable_ext_nlpsolver"; then
+        enable_ext_nlpsolver=$with_nlpsolver;
+    fi ,
+)
+
+AC_ARG_WITH(numbertext,
+    AS_HELP_STRING([--with-numbertext],
+        [Deprecated: use --enable-ext-numbertext instead.]),
+    if test -z "$enable_ext_numbertext"; then
+        enable_ext_numbertext=$with_numbertext;
+    fi ,
+)
 
 AC_ARG_WITH(oooblogger,
     AS_HELP_STRING([--with-oooblogger],
-        [Download and integrate oooblogger extension.]),
-,)
+        [Deprecated: use --enable-ext-oooblogger instead.]),
+    if test -z "$enable_ext_oooblogger"; then
+        enable_ext_oooblogger=$with_oooblogger;
+    fi ,
+)
 
-BUILD_TYPE="OOo"
+AC_ARG_WITH(typo,
+    AS_HELP_STRING([--with-typo],
+        [Deprecated: use --enable-ext-typo instead.]),
+    if test -z "$enable_ext_typo"; then
+        enable_ext_typo=$with_typo;
+    fi ,
+)
+
+AC_ARG_WITH(validator,
+    AS_HELP_STRING([--with-validator],
+        [Deprecated: use --enable-ext-validator instead.]),
+    if test -z "$enable_ext_validator"; then
+        enable_ext_validator=$with_validator;
+    fi ,
+)
+
+AC_ARG_WITH(watch-window,
+    AS_HELP_STRING([--with-watch-window],
+        [Deprecated: use --enable-ext-watch-window instead.]),
+    if test -z "$enable_ext_watch_window"; then
+        enable_ext_watch_window=$with_watch_window;
+    fi ,
+)
+
+BUILD_TYPE="LibO"
 
 dnl ===================================================================
 dnl Message.
@@ -4465,7 +4614,7 @@ AC_SUBST(LUCENE_CORE_JAR)
 AC_SUBST(LUCENE_ANALYZERS_JAR)
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
-if test -n "$enable_mysql_connector" -a "$enable_mysql_connector" != "no"; then
+if test -n "$enable_ext_mysql_connector" -a "$enable_ext_mysql_connector" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_MYSQLC=YES
   AC_MSG_CHECKING([for mysqlc module])
@@ -6535,7 +6684,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([for reportbuilder module])
@@ -7172,18 +7321,18 @@ dnl ===================================================================
 dnl Test whether to include Lightproof extensions
 dnl ===================================================================
 AC_MSG_CHECKING([for Lightproof extensions integration (only supported languages displayed)])
-if test "z$with_lightproof" = "z" -o "z$with_lightproof" = "zno" ; then
+if test "z$enable_ext_lightproof" = "z" -o "z$enable_ext_lightproof" = "zno" ; then
     LIGHTPROOF_LANG=""
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
     lightproof_supported_langs="hu"
-    if test "z$with_lightproof" = "zyes" ; then
+    if test "z$enable_ext_lightproof" = "zyes" ; then
         wanted_lightproof="$lightproof_supported_langs"
     else
     # check whether the langs are supported by Lightproof
     wanted_lightproof=
-    for lang in $with_lightproof ; do
+    for lang in $enable_ext_lightproof ; do
         if test -n "`echo $lightproof_supported_langs | grep "$lang"`" ; then
             wanted_lightproof="$wanted_lightproof $lang"
         fi
@@ -7204,7 +7353,7 @@ dnl ===================================================================
 dnl Test whether to include Watch Window extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Watch Window extension integration])
-if test "z$with_watch_window" = "z" -o "z$with_watch_window" = "zno" ; then
+if test "z$enable_ext_watch_window" = "z" -o "z$enable_ext_watch_window" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7216,7 +7365,7 @@ dnl ===================================================================
 dnl Test whether to include Diagram extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Diagram extension integration])
-if test "z$with_diagram" = "z" -o "z$with_diagram" = "zno" ; then
+if test "z$enable_ext_diagram" = "z" -o "z$enable_ext_diagram" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7228,7 +7377,7 @@ dnl ===================================================================
 dnl Test whether to include Validator extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Validator extension integration])
-if test "z$with_validator" = "z" -o "z$with_validator" = "zno" ; then
+if test "z$enable_ext_validator" = "z" -o "z$enable_ext_validator" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7240,7 +7389,7 @@ dnl ===================================================================
 dnl Test whether to include Barcode extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Barcode extension integration])
-if test "z$with_barcode" = "z" -o "z$with_barcode" = "zno" ; then
+if test "z$enable_ext_barcode" = "z" -o "z$enable_ext_barcode" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7264,7 +7413,7 @@ dnl ===================================================================
 dnl Test whether to include Numbertext extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Numbertext extension integration])
-if test "z$with_numbertext" = "z" -o "z$with_numbertext" = "zno" ; then
+if test "z$enable_ext_numbertext" = "z" -o "z$enable_ext_numbertext" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7276,7 +7425,7 @@ dnl ===================================================================
 dnl Test whether to include Hungarian Cross-reference Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
-if test "z$with_hunart" = "z" -o "z$with_hunart" = "zno" ; then
+if test "z$enable_ext_hunart" = "z" -o "z$enable_ext_hunart" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7288,7 +7437,7 @@ dnl ===================================================================
 dnl Test whether to include Typography Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Typography Toolbar extension integration])
-if test "z$with_typo" = "z" -o "z$with_typo" = "zno" ; then
+if test "z$enable_ext_typo" = "z" -o "z$enable_ext_typo" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7300,7 +7449,7 @@ dnl ===================================================================
 dnl Test whether to include Google Docs extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Google Docs extension integration])
-if test "z$with_google_docs" = "z" -o "z$with_google_docs" = "zno" ; then
+if test "z$enable_ext_google_docs" = "z" -o "z$enable_ext_google_docs" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7311,7 +7460,7 @@ dnl ===================================================================
 dnl Test whether to include NLPSolver extension
 dnl ===================================================================
 AC_MSG_CHECKING([for NLPSolver extension integration])
-if test "z$with_nlpsolver" = "z" -o "z$with_nlpsolver" = "zno" ; then
+if test "z$enable_ext_nlpsolver" = "z" -o "z$enable_ext_nlpsolver" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7335,7 +7484,7 @@ dnl ===================================================================
 dnl Test whether to include oooblogger extension
 dnl ===================================================================
 AC_MSG_CHECKING([for oooblogger extension integration])
-if test "z$with_oooblogger" = "z" -o "z$with_oooblogger" = "zno" ; then
+if test "z$enable_ext_oooblogger" = "z" -o "z$enable_ext_oooblogger" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
