@@ -70,7 +70,7 @@ static const sal_Char* MOUNTTAB="/etc/mnttab";
 #include <sys/quota.h>
 static const sal_Char* MOUNTTAB="/etc/mtab";
 
-#elif defined(NETBSD) || defined(FREEBSD)
+#elif defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)
 
 #include <sys/param.h>
 #include <sys/ucred.h>
@@ -180,19 +180,23 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 
 #ifdef HAVE_STATFS_H
 
-#if defined(FREEBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
 #   define __OSL_STATFS_STRUCT                  struct statfs
 #   define __OSL_STATFS(dir, sfs)               statfs((dir), (sfs))
 #   define __OSL_STATFS_BLKSIZ(a)               ((sal_uInt64)((a).f_bsize))
 #   define __OSL_STATFS_TYPENAME(a)             ((a).f_fstypename)
+#if defined(OPENBSD)
+#   define __OSL_STATFS_ISREMOTE(a)             (rtl_str_compare((a).f_fstypename, "nfs") == 0)
+#else
 #   define __OSL_STATFS_ISREMOTE(a)             (((a).f_type & MNT_LOCAL) == 0)
+#endif
 
 /* always return true if queried for the properties of
    the file system. If you think this is wrong under any
    of the target platforms fix it!!!! */
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
-#endif /* FREEBSD || MACOSX */
+#endif /* FREEBSD || MACOSX || OPENBSD */
 
 #if defined(NETBSD)
 
@@ -1118,7 +1122,8 @@ osl_isFloppyMounted (oslVolumeDeviceHandleImpl* pDevice)
  *
  *****************************************************************************/
 
-#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
+#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || \
+    defined(AIX) || defined(OPENBSD))
 static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 {
     (void)pszPath;
@@ -1126,7 +1131,8 @@ static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
+#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || \
+    defined(AIX) || defined(OPENBSD))
 static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 {
     (void)hFloppy;
@@ -1134,7 +1140,8 @@ static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
+#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || \
+    defined(AIX) || defined(OPENBSD))
 static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 {
     (void)hFloppy;
@@ -1142,19 +1149,19 @@ static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 }
 #endif /* MACOSX */
 
-#if ( defined(NETBSD) || defined(FREEBSD) )
+#if ( defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) )
 static sal_Bool osl_getFloppyMountEntry(const sal_Char* pszPath, oslVolumeDeviceHandleImpl* pItem)
 {
     return sal_False;
 }
-#endif /* NETBSD || FREEBSD */
+#endif /* NETBSD || FREEBSD || OPENBSD */
 
-#if ( defined(NETBSD) || defined(FREEBSD) )
+#if ( defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) )
 static sal_Bool osl_isFloppyMounted(oslVolumeDeviceHandleImpl* pDevice)
 {
     return sal_False;
 }
-#endif /* NETBSD || FREEBSD */
+#endif /* NETBSD || FREEBSD || OPENBSD */
 
 
 #ifdef DEBUG_OSL_FILE

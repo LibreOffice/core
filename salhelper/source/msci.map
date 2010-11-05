@@ -19,6 +19,7 @@ GetVersionInfo
 
 UDK_3.1 {
     global:
+        ??_VSimpleReferenceObject@salhelper@@KAXPAX@Z;
         ??_7SimpleReferenceObject@salhelper@@6B@;
 
         ??0Condition@salhelper@@QAE@AAVMutex@osl@@@Z;
@@ -37,8 +38,11 @@ UDK_3.1 {
         ??4timedout@ConditionWaiter@salhelper@@QAEAAU012@ABU012@@Z;
 
         ??0Timer@salhelper@@QAE@XZ;
+        ??0Timer@salhelper@@QAE@ABUTTimeValue@1@@Z;
+        ??0Timer@salhelper@@QAE@ABUTTimeValue@1@0@Z;
         ??1Timer@salhelper@@MAE@XZ;
 
+        ?isExpired@Timer@salhelper@@QBAEXZ;
         ?isTicking@Timer@salhelper@@QBAEXZ;
         ?setRemainingTime@Timer@salhelper@@QAAXABUTTimeValue@2@@Z;
         ?start@Timer@salhelper@@QAAXXZ;

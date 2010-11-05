@@ -53,6 +53,8 @@
 #define THIS_OS "FreeBSD"
 #elif defined AIX
 #define THIS_OS "AIX"
+#elif defined OPENBSD
+#define THIS_OS "OpenBSD"
 #endif
 
 #if ! defined THIS_OS
