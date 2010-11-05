@@ -1398,7 +1398,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>OOo2</string>
+	<string>LibO</string>
 	<key>LSRequiresCarbon</key>
 	<string>1</string>
 	<key>NSPrincipalClass</key>
