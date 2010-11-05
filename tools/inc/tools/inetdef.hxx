@@ -59,6 +59,10 @@
 #define TOOLS_INETDEF_OS "FreeBSD/i386"
 #elif defined FREEBSD && defined X86_64
 #define TOOLS_INETDEF_OS "FreeBSD/amd64"
+#elif defined OPENBSD && defined X86
+#define TOOLS_INETDEF_OS "OpenBSD/i386"
+#elif defined OPENBSD && defined X86_64
+#define TOOLS_INETDEF_OS "OpenBSD/amd64"
 #elif defined SINIX
 #define TOOLS_INETDEF_OS "SINIX"
 #else // AIX, HPUX, SOLARIS, ...

@@ -1207,7 +1207,7 @@ struct SystemCommandParameters
     tokenHandler    pHandler;
 };
 
-#if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD))
+#if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
 static void lpgetSysQueueTokenHandler(
     const std::list< rtl::OString >& i_rLines,
     std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
@@ -1352,7 +1352,7 @@ static void standardSysQueueTokenHandler(
 
 static const struct SystemCommandParameters aParms[] =
 {
-    #if defined(LINUX) || defined(NETBSD) || defined(FREEBSD)
+    #if defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)
     { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
     { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
     { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1, standardSysQueueTokenHandler }
