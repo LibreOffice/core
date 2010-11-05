@@ -72,7 +72,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
-     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
+     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
@@ -138,6 +138,7 @@ $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
+$CL_X64 = '@CL_X64@';
 
 #
 #--------------------------------------------------------------------
@@ -931,6 +932,8 @@ $LIB64               .= "64"
 if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
 $LIB64               .= "64"
 if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
+$LIB64               .= $ds."x64"
+if ($platform =~ m/cygwin/);
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
 $DEV                  = $ds."dev";
@@ -1100,10 +1103,15 @@ if ($platform =~ m/cygwin|os2/)
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $wps.$JAVA_HOME.$LIB.
-                        $wps.$PSDK_HOME.$LIB.
-                        $wps.$FRAME_HOME.$LIB.
-                        $wps.$COMPATH.$LIB;
+                        $wps.$JAVA_HOME.$LIB;
+      if ( $CL_X64 ne "TRUE" ) {
+          $ILIB   .= $wps.$COMPATH.$LIB.
+		             $wps.$PSDK_HOME.$LIB;
+	  } else {
+	      $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
+		             $wps.$PSDK_HOME.$LIB64;
+	  }
+      $ILIB       .= $wps.$FRAME_HOME.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $wps.$DIRECTXSDK_LIB;
           if ( '@COMEX@' eq "10" ) {
