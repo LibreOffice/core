@@ -334,21 +334,21 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 //--------------------------------------------------------------------
 
-void SfxPrinter::EnableRange( USHORT nRange )
+void SfxPrinter::EnableRange( USHORT )
 {
     OSL_ENSURE( 0, "dead code !" );
 }
 
 //--------------------------------------------------------------------
 
-void SfxPrinter::DisableRange( USHORT nRange )
+void SfxPrinter::DisableRange( USHORT )
 {
     OSL_ENSURE( 0, "dead code !" );
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxPrinter::IsRangeEnabled( USHORT nRange ) const
+BOOL SfxPrinter::IsRangeEnabled( USHORT ) const
 {
     OSL_ENSURE( 0, "dead code !" );
     return TRUE;
@@ -452,7 +452,7 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
 
 //--------------------------------------------------------------------
 
-BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects )
+BOOL SfxPrinter::InitJob( Window*, BOOL )
 {
     OSL_ENSURE( 0, "dead code !" );
     return FALSE;
