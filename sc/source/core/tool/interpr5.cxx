@@ -2874,7 +2874,6 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             PushMatrix(pResMat);
         }
     }
-    return;
 }
 
 void ScInterpreter::ScTrend()
