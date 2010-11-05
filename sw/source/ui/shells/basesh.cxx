@@ -1081,7 +1081,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
 
             // if new anchor is 'as char' and it is a Math object and the usual
-            // pre-conditionsd are met then align the formula to the baseline of the text
+            // pre-conditions are met then align the formula to the baseline of the text
             const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
             const bool bDoMathBaselineAlignment = xObj.is() && SotExchange::IsMath( xObj->getClassID() )
                     && FLY_AS_CHAR == eSet && rSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
