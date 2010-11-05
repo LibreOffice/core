@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..$/..
+PRJ = ../../../..
 TARGET  = AcceleratorsConfigurationTest
 PRJNAME = framework
-PACKAGE = complex$/accelerators$/helper
+PACKAGE = complex/accelerators/helper
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk

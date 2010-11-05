@@ -63,6 +63,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     };
     Edit ED_MASTERPASSWORD_CRT
     {
+        HelpID = "uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_CRT";
         Pos = MAP_APPFONT ( COL_0 , ROW_3 ) ;
         Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
@@ -76,6 +77,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     };
     Edit ED_MASTERPASSWORD_REPEAT
     {
+        HelpID = "uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_REPEAT";
         Pos = MAP_APPFONT ( COL_0 , ROW_5 ) ;
         Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
