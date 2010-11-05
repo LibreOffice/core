@@ -5,6 +5,7 @@
 #
 
 use IO::File;
+use File::Basename;
 
 $main::hostname= $ARGV[0];
 $main::sdkpath= $ARGV[1];
@@ -35,7 +36,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
 {
 #   $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 } else {
-    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../../ure && pwd`;
+    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 }
 chomp($main::OO_SDK_URE_HOME);
 
@@ -554,15 +555,26 @@ sub resolveLink
 {
     my $base= shift;
     my $link= shift;
-    my $linktarget =  readlink "$base/$link";
+
+    my $resolvedpath = "$base/$link";
+    my $linktarget =  readlink "$resolvedpath";
     my $resolvedlink = "";
 
     while ( $linktarget ne "") {
-    $link = $linktarget;
-    $linktarget = readlink "$base/$link";
+
+    if ( $linktarget =~ m/^\/.*/ )
+    {
+        $resolvedpath = "$linktarget";
+    } else {
+        $resolvedpath = `cd $base/$linktarget; pwd`;
+        chop $resolvedpath;
+    }
+    $base = dirname("$resolvedpath");
+
+    $linktarget = readlink "$resolvedpath";
     }
 
-    $resolvedlink = `cd $base/$link; pwd`;
+    $resolvedlink = `cd $resolvedpath; pwd`;
     chop $resolvedlink;
     return $resolvedlink;
 }
@@ -578,6 +590,7 @@ sub searchprog
     {
         if ( $main::operatingSystem =~ m/darwin/ ) {
             $progDir = resolveLink("/System/Library/Frameworks/JavaVM.Framework/Versions", "CurrentJDK");
+
             if ( -e "$progDir/$main::OO_SDK_JAVA_BIN_DIR/javac" )
             {
                 return "$progDir/$main::OO_SDK_JAVA_BIN_DIR";
