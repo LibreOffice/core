@@ -138,6 +138,7 @@ public:
         static sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName );
 
     static const sal_Char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTargetElementShape( const ::com::sun::star::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, sal_Bool& rParagraphTarget );
 };
 } // namespace ppt
 

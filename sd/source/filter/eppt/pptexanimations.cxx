@@ -1756,54 +1756,69 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
     }
 }
 
-void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const sal_Bool bCreate2b01Atom )
+Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, sal_Bool& rParagraphTarget )
 {
     Reference< XShape > xShape;
-    aAny >>= xShape;
-    sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
-    sal_Int32 begin = -1;
-    sal_Int32 end = -1;
+    rAny >>= xShape;
+
+    rParagraphTarget = sal_False;
 
     if( !xShape.is() )
     {
-        ParagraphTarget aParaTarget;
-        if( aAny >>= aParaTarget )
-            xShape = aParaTarget.Shape;
-        if ( xShape.is() )
+    ParagraphTarget aParaTarget;
+    if( rAny >>= aParaTarget )
+        xShape = aParaTarget.Shape;
+    if ( xShape.is() )
+    {
+        // now calculating the character range for the paragraph
+        sal_Int16 nParagraph = aParaTarget.Paragraph;
+        Reference< XSimpleText > xText( xShape, UNO_QUERY );
+        if ( xText.is() )
         {
-            // now calculating the character range for the paragraph
-            sal_Int16 nParagraph = aParaTarget.Paragraph;
-            Reference< XSimpleText > xText( xShape, UNO_QUERY );
-            if ( xText.is() )
+        rParagraphTarget = sal_True;
+        Reference< XEnumerationAccess > xTextParagraphEnumerationAccess( xText, UNO_QUERY );
+        if ( xTextParagraphEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xTextParagraphEnumeration( xTextParagraphEnumerationAccess->createEnumeration() );
+            if ( xTextParagraphEnumeration.is() )
             {
-                nRefMode = 2;
-                Reference< XEnumerationAccess > xTextParagraphEnumerationAccess( xText, UNO_QUERY );
-                if ( xTextParagraphEnumerationAccess.is() )
+            sal_Int16 nCurrentParagraph;
+            rBegin = rEnd = nCurrentParagraph = 0;
+            while ( xTextParagraphEnumeration->hasMoreElements() )
+            {
+                Reference< XTextRange > xTextRange( xTextParagraphEnumeration->nextElement(), UNO_QUERY );
+                if ( xTextRange.is() )
                 {
-                    Reference< XEnumeration > xTextParagraphEnumeration( xTextParagraphEnumerationAccess->createEnumeration() );
-                    if ( xTextParagraphEnumeration.is() )
-                    {
-                        sal_Int16 nCurrentParagraph;
-                        begin = end = nCurrentParagraph = 0;
-                        while ( xTextParagraphEnumeration->hasMoreElements() )
-                        {
-                            Reference< XTextRange > xTextRange( xTextParagraphEnumeration->nextElement(), UNO_QUERY );
-                            if ( xTextRange.is() )
-                            {
-                                rtl::OUString aParaText( xTextRange->getString() );
-                                sal_Int32 nLength = aParaText.getLength() + 1;
-                                end += nLength;
-                                if ( nCurrentParagraph == nParagraph )
-                                    break;
-                                nCurrentParagraph++;
-                                begin += nLength;
-                            }
-                        }
-                    }
+                rtl::OUString aParaText( xTextRange->getString() );
+                sal_Int32 nLength = aParaText.getLength() + 1;
+                rEnd += nLength;
+                if ( nCurrentParagraph == nParagraph )
+                    break;
+                nCurrentParagraph++;
+                rBegin += nLength;
                 }
             }
+            }
+        }
         }
     }
+    }
+
+    return xShape;
+}
+
+void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const sal_Bool bCreate2b01Atom )
+{
+    sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
+    sal_Int32 begin = -1;
+    sal_Int32 end = -1;
+    sal_Bool bParagraphTarget;
+
+    Reference< XShape > xShape = getTargetElementShape( aAny, begin, end, bParagraphTarget );
+
+    if( bParagraphTarget )
+        nRefMode = 2;
+
     if ( xShape.is() || bCreate2b01Atom )
     {
         EscherExContainer aAnimateTargetElement( rStrm, DFF_msofbtAnimateTargetElement );
