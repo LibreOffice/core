@@ -162,6 +162,7 @@ Colordepth svtools:ListBox:DLG_EXPORT:LB_COLOR_DEPTH
 Quality svtools:NumericField:DLG_EXPORT:NF_COMPRESSION
 
 *LabelFieldSelection extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL
+CBNoAssignment extensions:CheckBox:RID_DLG_SELECTLABELCONTROL:1
 
 *LicenseAgreementDialog HID_LICENSEDIALOG
 LicenseText framework:MultiLineEdit:DLG_LICENSE:ML_LICENSE
