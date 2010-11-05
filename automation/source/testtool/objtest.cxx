@@ -505,6 +505,10 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "23" );  // Linux ALPHA
 #elif defined NETBSD && defined X86_64
     abGP.Append( "24" );  // NetBSD/amd64
+#elif defined OPENBSD && defined X86
+    abGP.Append( "24" );  // OpenBSD/i386
+#elif defined OPENBSD && defined X86_64
+    abGP.Append( "25" );  // OpenBSD/amd64
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
