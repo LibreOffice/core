@@ -27,8 +27,8 @@
  ************************************************************************/
 
 /******************************************************************************
-Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
-         erlaubt, da es von swicli.c included wird!
+Attention : "In this file C++ style // comments are not allowed as it will be
+included in c-context files, so c++ style stuff will cause problems.
 ******************************************************************************/
 
 #ifndef INCLUDED_SW_CMDID_H
@@ -40,8 +40,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #include <unomid.h>
 #endif
 
-/* Flags die mittels des Disable-Features in den Slot-Definitionen ausgenutzt
- * werden */
+/* Flags that are being used in the slot definitions for the disable-features */
 #define SW_DISABLE_ON_PROTECTED_CURSOR  0x00000001
 #define SW_DISABLE_ON_MAILBOX_EDITOR    0x00000002
 
@@ -89,7 +88,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_CLOSE_FILE           (FN_FILE + 1 )    /* Close */
 #define FN_LAUNCH_REGISTRY      (FN_FILE + 2 )    /* Ablage */
 
-#define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Globaldokument erzeugen */
+#define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Create Global Document */
 #define FN_NEW_FILE             (FN_FILE + 5 )    /* New */
 #define FN_NEW_FILE_DLG         (FN_FILE + 6 )    /* New dialog */
 #define FN_OPEN_FILE            (FN_FILE + 7 )    /* Open */
@@ -108,11 +107,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PRINT_CFG_DLG        (FN_FILE + 18)    /* Print configuration dialog */
 
 #define FN_SAVE_ALL             (FN_FILE + 23)    /* Save all files */
-#define FN_NEW_FILE_DEFAULT     (FN_FILE + 24)    /* Neue Datei mit Standardvorlage */
+#define FN_NEW_FILE_DEFAULT     (FN_FILE + 24)    /* New file with default template */
 #define FN_PRINT_FILE_DEFAULT   (FN_FILE + 25)    /* Print with default settings */
 #define FN_LAUNCH_EQ_EDITOR     (FN_FILE + 26)    /* Equation editor */
 #define FN_CHANGE_PRINTER       (FN_FILE + 27)    /* Select printer */
-#define FN_FAX_END              (FN_FILE + 29)    /* Faxen fertig, Id fuer PostMessage */
+#define FN_FAX_END              (FN_FILE + 29)    /* Ready to fax, Id for PostMessage */
 
 #define FN_SELECT_DATABASE      (FN_FILE + 30)    /* Database selection */
 #define FN_DOC_INFO_DLG         (FN_FILE + 31)    /* Document information dialog */
@@ -125,10 +124,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_OUTLINE_TO_IMPRESS   (FN_FILE + 36)  /* Send outline to impress */
 #define FN_OUTLINE_TO_CLIPBOARD (FN_FILE + 37)  /* Send outline to clipboard */
 
-#define FN_NEW_HTML_DOC         (FN_FILE + 40 ) /* HTML Document "erzeugen" */
+#define FN_NEW_HTML_DOC         (FN_FILE + 40 ) /* Create HTML document */
 
-#define FN_APP_START            (FN_FILE + 98)  /* macro for App.Start */
-#define FN_APP_END              (FN_FILE + 99)  /* macro for App.End */
+#define FN_APP_START            (FN_FILE + 98)  /* Macro for App.Start */
+#define FN_APP_END              (FN_FILE + 99)  /* Macro for App.End */
 
 /*--------------------------------------------------------------------
     Region: Edit
@@ -170,27 +169,27 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_NUM_BULLET_OUTLINE_DOWN      (FN_EDIT + 39)  /* Runterstufen mit Unterpunkten */
 #define FN_NUM_BULLET_OUTLINE_UP        (FN_EDIT + 40)  /* Raufstufen mit Unterpunkten */
-#define FN_NUM_BULLET_OUTLINE_MOVEUP    (FN_EDIT + 41)  /* nach oben schieben mit Unterpunkten */
-#define FN_NUM_BULLET_OUTLINE_MOVEDOWN  (FN_EDIT + 42)  /* nach unten schieben mit Unterpunkten */
-#define FN_UPDATE_INPUTFIELDS           (FN_EDIT + 43)  /* Eingabefelder updaten */
+#define FN_NUM_BULLET_OUTLINE_MOVEUP    (FN_EDIT + 41)  /* Push up with sub-items */
+#define FN_NUM_BULLET_OUTLINE_MOVEDOWN  (FN_EDIT + 42)  /* Push down with sub-items */
+#define FN_UPDATE_INPUTFIELDS           (FN_EDIT + 43)  /* Update input fields */
 
 #define FN_NUM_OR_NONUM         (FN_EDIT + 46)  /* Number on/off */
 
-#define FN_GOTO_NEXT_INPUTFLD   (FN_EDIT + 47)  /* go to nexi inputfield    */
+#define FN_GOTO_NEXT_INPUTFLD   (FN_EDIT + 47)  /* go to next inputfield */
 #define FN_GOTO_PREV_INPUTFLD   (FN_EDIT + 48)  /* go to previous inputfield    */
 
-#define FN_REPEAT_SEARCH        (FN_EDIT + 50)  /* Suche wiederholen */
-#define FN_REPEAT_REPLACE       (FN_EDIT + 51)  /* Ersetzen wiederholen */
-#define FN_UPDATE_GRAFIC        (FN_EDIT + 53)  /* Grafik aendern */
-#define FN_SETTAB_ATCURPOS      (FN_EDIT + 54)  /* Tab an der aktuellen Pos setzen */
-#define FN_SET_LR_IND_ATCURPOS  (FN_EDIT + 55)  /* EZE und LR setzen */
-#define FN_FRMCNT_TO_BODY       (FN_EDIT + 56)  /* Rahmeninhalt zu Text */
-#define FN_UPDATE_TOXBASE       (FN_EDIT + 57)  /* Naechstes Verzeichnis erneuern */
+#define FN_REPEAT_SEARCH        (FN_EDIT + 50)  /* Search again */
+#define FN_REPEAT_REPLACE       (FN_EDIT + 51)  /* Repeat replace */
+#define FN_UPDATE_GRAFIC        (FN_EDIT + 53)  /* Change graphic */
+#define FN_SETTAB_ATCURPOS      (FN_EDIT + 54)  /* Set Tab at the current position */
+#define FN_SET_LR_IND_ATCURPOS  (FN_EDIT + 55)  /* EZE and LR set */
+#define FN_FRMCNT_TO_BODY       (FN_EDIT + 56)  /* Frame content to text */
+#define FN_UPDATE_TOXBASE       (FN_EDIT + 57)  /* Next TOC list refresh */
 
-#define FN_REPAGINATE           (FN_EDIT + 61)  /* Neuformatierung erzwingen */
+#define FN_REPAGINATE           (FN_EDIT + 61)  /* Force repagination */
 #define FN_EDIT_FOOTNOTE        (FN_EDIT + 62)  /* Edit footnote */
 
-#define FN_EDIT_REGION          (FN_EDIT + 65)  /* Bereiche bearbeiten  */
+#define FN_EDIT_REGION          (FN_EDIT + 65)  /* Edit region */
 #define FN_GOTO_REFERENCE       (FN_EDIT + 66)  /* Von der Refmark zur Referenz */
 
 // already defined in SVX
@@ -218,7 +217,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_SELECT_PARA               (FN_EDIT + 97) /* select paragraph*/
 
-#define FN_SELECT_CONTENT            (FN_EDIT + 99) /* Navigator - Inhaltstyp */
+#define FN_SELECT_CONTENT            (FN_EDIT + 99) /* Navigator - Content Type */
 
 #define FN_UPDATE_ALL_LINKS          (FN_EDIT2 + 24) /* update all links */
 
@@ -230,8 +229,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
                                                         FN_UPDATE_TOX,
                                                         CalcLayout */
 
-#define FN_REDLINE_ACCEPT            (FN_EDIT2 + 29) /* Redlining annehmen/ablehnen */
-#define FN_ATTR_COLUMNS              (FN_EDIT2 + 31) /* SlotId fuer SwFmtCol */
+#define FN_REDLINE_ACCEPT            (FN_EDIT2 + 29) /* Redlining Accept/Reject */
+#define FN_ATTR_COLUMNS              (FN_EDIT2 + 31) /* SlotId for SwFmtCol */
 #define FN_EDIT_CURRENT_TOX          (FN_EDIT2 + 32) /* edit current index */
 #define FN_EDIT_AUTH_ENTRY_DLG       (FN_EDIT2 + 33) /* edit authorities entry*/
 #define FN_UPDATE_CHARTS             (FN_EDIT2 + 34) /* update all charts */
@@ -244,7 +243,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_COPY_HYPERLINK_LOCATION   (FN_EDIT2 + 40)    /* copy hyperlink URL to clipboard */
 
 /*--------------------------------------------------------------------
-    Bereich: Bearbeiten
+    Region: Edit
  --------------------------------------------------------------------*/
 
 #define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */
@@ -273,7 +272,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Seitenvorlage am Absatz setzen */
 
-#define FN_TOOLBOX_SWITCH       (FN_VIEW + 30)  /* Auf Textshell umschalten */
+#define FN_TOOLBOX_SWITCH       (FN_VIEW + 30)  /* Shell switch to text */
 
 //noch mehr Navigator
 #define FN_CONTENT_LB           (FN_VIEW + 32)  /**/
@@ -287,13 +286,13 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_DROP_REGION_LINK     (FN_VIEW + 38)  /**/
 #define FN_DROP_REGION_COPY     (FN_VIEW + 39)  /**/
 
-#define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigationscontroller am Scrollbar*/
+#define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller in the scrollbar */
 #define FN_SCROLL_NEXT_PREV     (FN_VIEW + 41)  /* arbeitet den MoveType ab */
 
 #define FN_VIEW_HIDDEN_PARA     (FN_VIEW + 42)  /* View hidden paragraphs */
 #define FN_VIEW_SMOOTH_SCROLL   (FN_VIEW + 43)
 
-#define FN_GLOBAL_SWITCH        (FN_VIEW + 44)  /* umschalten zw. Global und Inhalt*/
+#define FN_GLOBAL_SWITCH        (FN_VIEW + 44)  /* Toggle between Global and Content */
 #define FN_GLOBAL_EDIT          (FN_VIEW + 45)  /* edit */
 #define FN_GLOBAL_UPDATE        (FN_VIEW + 46)  /* update */
 #define FN_GLOBAL_OPEN          (FN_VIEW + 47)  /* open */
@@ -301,57 +300,57 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* Navigations-Controller erzeugen */
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* der Tabellencontroller fuer den Zoom */
 
-#define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Zahlenerkennung in Tabellen */
+#define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Number recognition in tables */
 #define FN_HSCROLL_METRIC        (FN_VIEW + 53) /* Metric horizontal scrollbar */
 #define FN_VSCROLL_METRIC        (FN_VIEW + 54) /* Metric vertical scrollbar */
 #define FN_VIEW_NOTES            (FN_VIEW + 55)
 
 /*--------------------------------------------------------------------
-    Bereich: Einfuegen
+    Region: Insert
  --------------------------------------------------------------------*/
 
-#define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Sprungmarke einfuegen */
+#define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
 
-#define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Umbruch */
-#define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Spaltenumbruch */
-#define FN_INSERT_DATE_TIME     (FN_INSERT + 6 )  /* Datum/Uhrzeit */
+#define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
+#define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Column break */
+#define FN_INSERT_DATE_TIME     (FN_INSERT + 6 )  /* Date / Time */
 #define FN_INSERT_FIELD         (FN_INSERT + 8 )  /* Textbefehl */
-#define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Datenbankfeld aendern */
+#define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Change the database field */
 
-#define FN_INSERT_CAPTION       (FN_INSERT + 10)    /* Beschriftung */
-#define FN_INSERT_DBFIELD       (FN_INSERT + 11)    /* Insert database field - for recording */
-#define FN_INSERT_FOOTNOTE_DLG  (FN_INSERT + 12)    /* Dialog Fussnote */
+#define FN_INSERT_CAPTION       (FN_INSERT + 10)  /* Caption */
+#define FN_INSERT_DBFIELD       (FN_INSERT + 11)  /* Insert database field - for recording */
+#define FN_INSERT_FOOTNOTE_DLG  (FN_INSERT + 12)  /* Footnote Dialog */
 
-#define FN_INSERT_REF_FIELD     (FN_INSERT + 13)  /* Refernzfeld einfuegen */
+#define FN_INSERT_REF_FIELD     (FN_INSERT + 13)  /* Insert Reference Field */
 
-#define FN_INSERT_HYPERLINK     (FN_INSERT + 14)    /* Zeichendialog/HyperlinkPage*/
+#define FN_INSERT_HYPERLINK     (FN_INSERT + 14)  /* Character dialogue / hyperlink page */
 
-#define FN_INSERT_INDEX         (FN_INSERT + 16)    /* Stichworteintrag */
+#define FN_INSERT_INDEX         (FN_INSERT + 16)  /* Stichworteintrag */
 #define FN_INSERT_INDEX_DLG     (FN_INSERT + 17)    /* Stichworteintrag */
-#define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Zeilenumbruch */
+#define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Newline */
 #define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* field dialog for mail merge*/
 #define FN_INSERT_OBJECT        (FN_INSERT + 21)    /* Object */
 #define FN_INSERT_OBJECT_DLG    (FN_INSERT + 22)    /* Object */
 #define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Seitenumbruch */
-#define FN_INSERT_PAGENO        (FN_INSERT + 24)    /* Seitennummer */
-#define FN_INSERT_PARAGRAPH     (FN_INSERT + 25)    /* Absatz */
+#define FN_INSERT_PAGENO        (FN_INSERT + 24)    /* Page Number */
+#define FN_INSERT_PARAGRAPH     (FN_INSERT + 25)    /* Paragraph */
 #define FN_INSERT_RECORD        (FN_INSERT + 26)    /* Datensatz einfuegen */
 #define FN_MERGE_RECORD         (FN_INSERT + 27)    /* Datensatz mischen */
-#define FN_INSERT_SYMBOL        (FN_INSERT + 28)    /* Sonderzeichen */
+#define FN_INSERT_SYMBOL        (FN_INSERT + 28)    /* Special characters */
 #define FN_POSTIT               (FN_INSERT + 29)    /* PostIt einfuegen/bearbeiten */
-#define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Tabelle */
+#define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
 #define FN_INSERT_STRING        (FN_INSERT+31)
-#define FN_INSERT_COLS          (FN_INSERT + 32)    /* Spalten einfuegen */
-#define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Rahmen einfuegen aktiv */
-#define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Rahmen einfuegen */
+#define FN_INSERT_COLS          (FN_INSERT + 32)    /* Insert Columns */
+#define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Insert interactive frame */
+#define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Insert Frame */
 
 #define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* Verzeichniseintrag einfuegen */
 #define FN_INSERT_FRAME_INTERACT_NOCOL (FN_INSERT + 36) /*insert interactive non column frame*/
 
-#define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Objekte gruppieren */
-#define FN_TOOL_UNGROUP         (FN_INSERT + 48)    /* Gruppierng aufheben */
+#define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Group objects */
+#define FN_TOOL_UNGROUP         (FN_INSERT + 48)    /* Remove Grouping */
 
-#define FN_TOOL_ANKER           (FN_INSERT + 49)    /* Draw-Objekt umankern */
+#define FN_TOOL_ANKER           (FN_INSERT + 49)    /* Draw Anchor for object */
 #define FN_TOOL_ANKER_PAGE      (FN_INSERT + 50)    /* Draw-Objekt an Seite verankern */
 #define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* Draw-Objekt am Absatz verankern */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* Hierarchie aendern */
@@ -395,7 +394,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_FOOTNOTE      (FN_INSERT + 99)
 
 /*--------------------------------------------------------------------
-    Bereich: Einfuegen (2.Teil)
+    Region: Paste (Part 2)
  --------------------------------------------------------------------*/
 
 #define FN_QRY_GET_ALL_DBNAME   (FN_INSERT2 + 1)    /* Alle konfigurierten Datenabanknamen ermitteln */
@@ -421,7 +420,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
 
 /*--------------------------------------------------------------------
-    Bereich: Format
+    Region: Format
  --------------------------------------------------------------------*/
 
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* Autoformat-Optionen anwenden */
@@ -539,10 +538,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_CONVERT_TEXT_TO_TABLE    (FN_FORMAT + 131)  /* convert selected text to table */
 #define FN_CONVERT_TABLE_TO_TEXT    (FN_FORMAT + 132)  /* convert a table to text */
 #define FN_TABLE_SORT_DIALOG        (FN_FORMAT + 133)  /* sorting in tables*/
-/*--------------------------------------------------------------------
-    Bereich: Seitenvorlage
- --------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------
+    Region: Page Template
+ --------------------------------------------------------------------*/
 #define FN_NEW_PAGE_STYLE           (FN_FORMAT + 129) /* Anlegen Seitenvorlage */
 #define FN_PAGE_STYLE_SET_LR_MARGIN (FN_FORMAT + 130) /* linker / rechter Rand */
 #define FN_PAGE_STYLE_SET_UL_MARGIN (FN_FORMAT + 131) /* oberer / unterer Rand */
@@ -563,7 +562,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TABLE_HEADLINE_COUNT     (FN_FORMAT + 147) /* number of repeated headlines of tables */
 
 /*--------------------------------------------------------------------
-    Bereich: Ribbon
+    Region: Ribbon
  --------------------------------------------------------------------*/
 
 #define FN_SET_BACKGROUND_COLOR     (FN_FORMAT + 150)  /* Hintergrundfarbe */
@@ -674,7 +673,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SAVE_GRAPHIC                     (FN_FORMAT2 + 160)
 
 /*--------------------------------------------------------------------
-    Bereich: Extras
+    Region: Extras
  --------------------------------------------------------------------*/
 
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* Zeilennumerierung */
@@ -704,9 +703,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_MACRO_POPUP              (FN_EXTRA + 37)   /* Alle Macrofunktionen */
 #define FN_BULLET                   (FN_EXTRA + 38)   /* Bullet-Liste */
 
-//  Bereich: Gloassaries
+//  Region: Glossary
 
-#define FN_AUTO_CORRECT             (FN_EXTRA + 49 )  /* Autocorrect aus Basic */
+#define FN_AUTO_CORRECT             (FN_EXTRA + 49 )  /* Autocorrect from Basic */
 
 #define FN_UPDATE_TOX               (FN_EXTRA + 53)   /* alle Verzeichnisse aktualisieren */
 #define FN_UPDATE_CUR_TOX           (FN_EXTRA + 54)   /* aktuelles Verzeichnisse aktualisieren */
@@ -856,14 +855,12 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
 #define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
-/*--------------------------------------------------------------------
-    Bereich: Hilfe
- --------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------
-    Bereich: Traveling & Selektion
- --------------------------------------------------------------------*/
-
+/*------------------------------------------------ --------------------
+    Area: Help
+ -------------------------------------------------- ------------------*/
+/*------------------------------------------------ --------------------
+    Region: Traveling & Selection
+ -------------------------------------------------- ------------------*/
 #define FN_CHAR_LEFT                (FN_SELECTION + 1 ) /* */
 #define FN_CHAR_RIGHT               (FN_SELECTION + 2 ) /* */
 #define FN_LINE_UP                  (FN_SELECTION + 3 ) /* */
@@ -1132,7 +1129,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PRNOPT_END    FN_PRNOPT_POSTITS
 
 /*--------------------------------------------------------------------
-    Beschreibung: Status : nicht mehr als 19!
+    Description: Status: not more than 19!
  --------------------------------------------------------------------*/
 
 #define FN_STAT_PAGE                (FN_STAT + 1)
@@ -1156,7 +1153,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SHOW_BOOKVIEW            (FN_PGPREVIEW + 5)
 
 /*--------------------------------------------------------------------
-    Bereich: Rahmenattribute
+    Region: Setting Attributes
  --------------------------------------------------------------------*/
 
 #define FN_OPAQUE                       (FN_FRAME + 1)
@@ -1178,7 +1175,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_TITLE                    (FN_FRAME + 19)
 #define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
 
-//Member-Ids fuer Fill/SetVariable an Items
+//Member IDs for Fill / SetVariable of items
 #define         MID_STYLE       0xe0
 #define         MID_PWIDTH      0xe1
 #define         MID_ADJUST      0xe2
