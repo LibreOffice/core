@@ -94,7 +94,7 @@ CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
-CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions -DBOOST_NO_EXCEPTIONS
 
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
