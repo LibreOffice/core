@@ -49,20 +49,3 @@ jclass java_lang_Boolean::getMyClass() const
 {
     return st_getMyClass();
 }
-
-java_lang_Boolean::java_lang_Boolean( sal_Bool _par0 ): java_lang_Object( NULL, (jobject)NULL )
-{
-    SDBThreadAttach t;
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
-    static const char * cSignature = "(Z)V";
-    jobject tempObj;
-    static jmethodID mID(NULL);
-    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
-    tempObj = t.pEnv->NewObject( getMyClass(), mID, _par0 );
-    saveRef( t.pEnv, tempObj );
-    t.pEnv->DeleteLocalRef( tempObj );
-    // und aufraeumen
-}
-
-

@@ -84,7 +84,8 @@ namespace
 // constructor
 //-----------------------------------------------------------------------------------------
 SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    m_xServiceMgr( xServiceMgr )
+    SalGtkPicker(xServiceMgr),
+    m_xServiceMgr(xServiceMgr)
 {
     CResourceProvider aResProvider;
 

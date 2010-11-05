@@ -195,6 +195,13 @@ sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 
 //-------------------------------------------------------------------------
 
+sal_Bool SfxObjectShell::QuerySlotExecutable( USHORT /*nSlotId*/ )
+{
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
+
 sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
 {
     const SfxPoolItem* pItem = NULL;
@@ -1182,7 +1189,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     if ( pMedium
       && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
       && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && SfxMedium::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
+      && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         bStoreToSameLocation = sal_True;
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save" ) ) );
@@ -1910,7 +1917,25 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             bResult = SaveCompleted( xTmpStorage );
 
             if ( bResult )
+            {
                 pImp->pBasicManager->setStorage( xTmpStorage );
+
+                // Get rid of this workaround after issue i113914 is fixed
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
+                    xBasicLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImp->xDialogLibraries, uno::UNO_QUERY_THROW );
+                    xDialogLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
+            }
         }
         catch( uno::Exception& )
         {}
@@ -2056,6 +2081,22 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         // TODO/LATER: may be this code will be replaced, but not sure
         // Set storage in document library containers
         pImp->pBasicManager->setStorage( xStorage );
+
+        // Get rid of this workaround after issue i113914 is fixed
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
+            xBasicLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImp->xDialogLibraries, uno::UNO_QUERY_THROW );
+            xDialogLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
     }
     else
     {

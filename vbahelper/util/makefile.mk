@@ -102,3 +102,11 @@ SHL2LIBS=$(SLB)$/$(TARGET_MSFORMS).lib
 # --- Targets -----------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/msforms.component
+
+$(MISC)/msforms.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        msforms.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt msforms.component

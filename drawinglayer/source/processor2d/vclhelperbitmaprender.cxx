@@ -85,9 +85,13 @@ namespace drawinglayer
         }
 
         // prepare dest coor
+        const sal_uInt32 nDiscreteWidth(basegfx::fround(aOutlineRange.getMaxX()));
+        const sal_uInt32 nDiscreteHeight(basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectPixel(
-            basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-            basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
+            basegfx::fround(aOutlineRange.getMinX()),
+            basegfx::fround(aOutlineRange.getMinY()),
+            nDiscreteWidth > 0 ? nDiscreteWidth - 1 : 0,
+            nDiscreteHeight > 0 ? nDiscreteHeight - 1 : 0);
 
         // paint it using GraphicManager
         Graphic aGraphic(rBitmapEx);
@@ -106,9 +110,13 @@ namespace drawinglayer
         // prepare dest coor. Necessary to expand since vcl's DrawBitmapEx draws one pix less
         basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
         aOutlineRange.transform(rTransform);
+        const sal_uInt32 nDiscreteWidth(basegfx::fround(aOutlineRange.getMaxX()));
+        const sal_uInt32 nDiscreteHeight(basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectPixel(
-            basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-            basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
+            basegfx::fround(aOutlineRange.getMinX()),
+            basegfx::fround(aOutlineRange.getMinY()),
+            nDiscreteWidth > 0 ? nDiscreteWidth - 1 : 0,
+            nDiscreteHeight > 0 ? nDiscreteHeight - 1 : 0);
 
         // decompose matrix to check for shear, rotate and mirroring
         basegfx::B2DVector aScale, aTranslate;
@@ -145,9 +153,13 @@ namespace drawinglayer
         // process self with free transformation (containing shear and rotate). Get dest rect in pixels.
         basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
         aOutlineRange.transform(rTransform);
+        const sal_uInt32 nDiscreteWidth(basegfx::fround(aOutlineRange.getMaxX()));
+        const sal_uInt32 nDiscreteHeight(basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectLogic(
-            basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-            basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
+            basegfx::fround(aOutlineRange.getMinX()),
+            basegfx::fround(aOutlineRange.getMinY()),
+            nDiscreteWidth > 0 ? nDiscreteWidth - 1 : 0,
+            nDiscreteHeight > 0 ? nDiscreteHeight - 1 : 0);
         const Rectangle aDestRectPixel(rOutDev.LogicToPixel(aDestRectLogic));
 
         // #i96708# check if Metafile is recorded
@@ -161,18 +173,19 @@ namespace drawinglayer
 
         if(!aCroppedRectPixel.IsEmpty())
         {
-            // as maximum for destination, orientate at SourceSizePixel, but
+            // as maximum for destination, orientate at aOutputRectPixel, but
             // take a rotation of 45 degrees (sqrt(2)) as maximum expansion into account
             const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
             const double fMaximumArea(
-                (double)aSourceSizePixel.getWidth() *
-                (double)aSourceSizePixel.getHeight() *
+                (double)aOutputRectPixel.getWidth() *
+                (double)aOutputRectPixel.getHeight() *
                 1.4142136); // 1.4142136 taken as sqrt(2.0)
 
             // test if discrete view size (pixel) maybe too big and limit it
             const double fArea(aCroppedRectPixel.getWidth() * aCroppedRectPixel.getHeight());
             const bool bNeedToReduce(fArea > fMaximumArea);
             double fReduceFactor(1.0);
+            const Size aDestSizePixel(aCroppedRectPixel.GetSize());
 
             if(bNeedToReduce)
             {
@@ -219,11 +232,6 @@ namespace drawinglayer
             if(bNeedToReduce)
             {
                 // paint in target size
-                const double fFactor(1.0 / fReduceFactor);
-                const Size aDestSizePixel(
-                    basegfx::fround(aCroppedRectPixel.getWidth() * fFactor),
-                    basegfx::fround(aCroppedRectPixel.getHeight() * fFactor));
-
                 if(bRecordToMetaFile)
                 {
                     rOutDev.DrawBitmapEx(

@@ -42,6 +42,10 @@
 #ifndef __ooo_vba_XAssistant_idl__
 #include <ooo/vba/XAssistant.idl>
 #endif
+#ifndef __ooo_vba_excel_XApplication_idl__
+#include <ooo/vba/excel/XApplication.idl>
+#endif
+
 
 module ooo {  module vba {  module excel {
 interface XRange;
@@ -55,6 +59,9 @@ interface XGlobals: com::sun::star::uno::XInterface
     [attribute, readonly] ooo::vba::XAssistant Assistant;
     [attribute, readonly] any Selection;
     [attribute, readonly] XWorkbook ThisWorkbook;
+    [attribute, readonly] ooo::vba::excel::XApplication Excel;
+    [attribute, readonly] any Debug;
+
 
     void Calculate() raises(com::sun::star::script::BasicErrorException);
     XRange Cells([in] any RowIndex, [in] any ColumnIndex);

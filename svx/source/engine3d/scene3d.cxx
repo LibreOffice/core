@@ -240,7 +240,7 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 #endif
 
     // Fuer WIN95/NT die FP-Exceptions abschalten
-#if defined(WNT) || defined(WIN)
+#if defined(WNT)
 #define SC_FPEXCEPTIONS_ON()    _control87( _MCW_EM, 0 )
 #define SC_FPEXCEPTIONS_OFF()   _control87( _MCW_EM, _MCW_EM )
     SC_FPEXCEPTIONS_OFF();

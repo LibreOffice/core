@@ -216,6 +216,13 @@ namespace sfx2
                         if ( e.Context == xHandler )
                             aIterator.remove();
                     }
+                    catch( const RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch( const Exception& )
+                    {
+                    }
                 }
             }
             break;
@@ -246,6 +253,13 @@ namespace sfx2
                     {
                         if ( e.Context == xHandler )
                             aIterator.remove();
+                    }
+                    catch( const RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch( const Exception& )
+                    {
                     }
                 }
             }

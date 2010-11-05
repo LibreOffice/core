@@ -153,28 +153,41 @@ void SAL_CALL
 ScVbaUserForm::setValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     uno::Any aObject = getValue( aPropertyName );
-    // The Object *must* support XDefaultProperty here because getValue will
-    // only return properties that are Objects ( e.g. controls )
-    // e.g. Userform1.aControl = something
-    // 'aControl' has to support XDefaultProperty to make sense here
-    uno::Reference< script::XDefaultProperty > xDfltProp( aObject, uno::UNO_QUERY_THROW );
-    rtl::OUString aDfltPropName = xDfltProp->getDefaultPropertyName();
-    uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObject ) );
-    uno::Reference< beans::XPropertySet > xPropSet( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY_THROW );
-    xPropSet->setPropertyValue( aDfltPropName, aValue );
+
+    // in case the dialog is already closed the VBA implementation should not throw exceptions
+    if ( aObject.hasValue() )
+    {
+        // The Object *must* support XDefaultProperty here because getValue will
+        // only return properties that are Objects ( e.g. controls )
+        // e.g. Userform1.aControl = something
+        // 'aControl' has to support XDefaultProperty to make sense here
+        uno::Reference< script::XDefaultProperty > xDfltProp( aObject, uno::UNO_QUERY_THROW );
+        rtl::OUString aDfltPropName = xDfltProp->getDefaultPropertyName();
+        uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObject ) );
+        uno::Reference< beans::XPropertySet > xPropSet( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( aDfltPropName, aValue );
+    }
 }
 
 uno::Any SAL_CALL
 ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XControlContainer > xContainer( m_xDialog, uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
-    ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
-        uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
-        ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
-        pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
-    return uno::makeAny( xVBAControl );
+    uno::Any aResult;
+
+    // in case the dialog is already closed the VBA implementation should not throw exceptions
+    if ( m_xDialog.is() )
+    {
+        uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
+        uno::Reference< awt::XControlContainer > xContainer( m_xDialog, uno::UNO_QUERY_THROW );
+        uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
+        ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
+            uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
+            ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
+            pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
+        aResult = uno::makeAny( xVBAControl );
+    }
+
+    return aResult;
 }
 
 ::sal_Bool SAL_CALL
@@ -185,7 +198,9 @@ ScVbaUserForm::hasMethod( const ::rtl::OUString& /*aName*/ ) throw (uno::Runtime
 uno::Any SAL_CALL
 ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
+    // if the dialog already closed we should do nothing, but the VBA will call methods of the Controls objects
+    // thus we have to provide a dummy object in this case
+    uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY );
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl ) );
     if ( index.hasValue() )
         return uno::makeAny( xControls->Item( index, uno::Any() ) );

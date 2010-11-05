@@ -51,6 +51,7 @@ namespace sfx2
         ,m_aContentWindow( this, WB_DIALOGCONTROL )
         ,m_aBorder( 3, 1, 3, 3 )
         ,m_bLayoutPending( false )
+        ,m_nTitleBarHeight(0)
     {
         impl_construct();
     }
@@ -139,23 +140,23 @@ namespace sfx2
         Size aWindowSize( GetOutputSizePixel() );
 
         // position the tool box
-        int nTitleBarHeight( GetSettings().GetStyleSettings().GetTitleHeight() );
-        if ( aToolBoxSize.Height() > nTitleBarHeight )
-            nTitleBarHeight = aToolBoxSize.Height();
+        m_nTitleBarHeight = GetSettings().GetStyleSettings().GetTitleHeight();
+        if ( aToolBoxSize.Height() > m_nTitleBarHeight )
+            m_nTitleBarHeight = aToolBoxSize.Height();
         m_aToolbox.SetPosSizePixel(
             Point(
                 aWindowSize.Width() - aToolBoxSize.Width(),
-                ( nTitleBarHeight - aToolBoxSize.Height() ) / 2
+                ( m_nTitleBarHeight - aToolBoxSize.Height() ) / 2
             ),
             aToolBoxSize
         );
 
         // Place the content window.
-        if ( nTitleBarHeight < aToolBoxSize.Height() )
-            nTitleBarHeight = aToolBoxSize.Height();
-        aWindowSize.Height() -= nTitleBarHeight;
+        if ( m_nTitleBarHeight < aToolBoxSize.Height() )
+            m_nTitleBarHeight = aToolBoxSize.Height();
+        aWindowSize.Height() -= m_nTitleBarHeight;
         m_aContentWindow.SetPosSizePixel(
-            Point( m_aBorder.Left(), nTitleBarHeight + m_aBorder.Top() ),
+            Point( m_aBorder.Left(), m_nTitleBarHeight + m_aBorder.Top() ),
             Size(
                 aWindowSize.Width() - m_aBorder.Left() - m_aBorder.Right(),
                 aWindowSize.Height() - m_aBorder.Top() - m_aBorder.Bottom()
@@ -175,11 +176,6 @@ namespace sfx2
 
         Push( PUSH_FONT | PUSH_FILLCOLOR | PUSH_LINECOLOR );
 
-        int nTitleBarHeight( GetSettings().GetStyleSettings().GetTitleHeight() );
-        const Size aToolBoxSize = m_aToolbox.CalcWindowSizePixel();
-        if ( aToolBoxSize.Height() > nTitleBarHeight )
-            nTitleBarHeight = aToolBoxSize.Height();
-
         SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
         SetLineColor();
 
@@ -194,7 +190,7 @@ namespace sfx2
         int nInnerLeft = nOuterLeft + m_aBorder.Left() - 1;
         int nOuterRight = aWindowSize.Width() - 1;
         int nInnerRight = nOuterRight - m_aBorder.Right() + 1;
-        int nInnerTop = nTitleBarHeight + m_aBorder.Top() - 1;
+        int nInnerTop = m_nTitleBarHeight + m_aBorder.Top() - 1;
         int nOuterBottom = aWindowSize.Height() - 1;
         int nInnerBottom = nOuterBottom - m_aBorder.Bottom() + 1;
 
@@ -260,7 +256,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    USHORT TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback )
+    USHORT TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
         const USHORT nItemCount( m_aToolbox.GetItemCount() );

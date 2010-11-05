@@ -159,7 +159,8 @@ public:
     void       SetOptional()    { bOpt = TRUE;      }
     void       SetParamArray()  { bParamArray = TRUE;       }
     void       SetWithEvents()  { bWithEvents = TRUE;       }
-    void       SetByVal()       { bByVal = TRUE;    }
+    void       SetByVal( BOOL bByVal_ = TRUE )
+                { bByVal = bByVal_; }
     void       SetStatic( BOOL bAsStatic = TRUE )       { bStatic = bAsStatic;  }
     void       SetNew()         { bNew = TRUE;      }
     void       SetDefinedAs()   { bAs = TRUE;       }

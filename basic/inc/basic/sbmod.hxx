@@ -28,20 +28,25 @@
 #ifndef _SB_SBMOD_HXX
 #define _SB_SBMOD_HXX
 
+#include <com/sun/star/script/XInvocation.hpp>
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
+#include <vector>
+
+#include <deque>
 
 class SbMethod;
 class SbProperty;
 class SbiRuntime;
-class SbiBreakpoints;
+typedef std::deque< USHORT > SbiBreakpoints;
 class SbiImage;
 class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
+struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
 
@@ -55,8 +60,10 @@ class SbModule : public SbxObject
     friend class    SbClassModuleObject;
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
+    std::vector< String > mModuleVariableNames;
 
 protected:
+    com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     ::rtl::OUString     aOUSource;
     String              aComment;
     SbiImage*           pImage;        // the Image
@@ -67,6 +74,7 @@ protected:
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
+    static void     implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
     SbProperty*     GetProperty( const String&, SbxDataType );
@@ -109,8 +117,8 @@ public:
     const SbxObject* FindType( String aTypeName ) const;
 
     virtual BOOL    IsBreakable( USHORT nLine ) const;
-    virtual USHORT  GetBPCount() const;
-    virtual USHORT  GetBP( USHORT n ) const;
+    virtual size_t  GetBPCount() const;
+    virtual USHORT  GetBP( size_t n ) const;
     virtual BOOL    IsBP( USHORT nLine ) const;
     virtual BOOL    SetBP( USHORT nLine );
     virtual BOOL    ClearBP( USHORT nLine );
@@ -130,7 +138,10 @@ public:
     void SetVBACompat( BOOL bCompat );
     INT32 GetModuleType() { return mnType; }
     void SetModuleType( INT32 nType ) { mnType = nType; }
-    bool GetIsProxyModule() { return bIsProxyModule; }
+    bool isProxyModule() { return bIsProxyModule; }
+    void AddVarName( const String& aName );
+    void RemoveVars();
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 

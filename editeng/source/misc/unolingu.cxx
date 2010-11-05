@@ -1197,7 +1197,10 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
 
         // add new dictionary to list
         if (xTmp.is())
+        {
             xTmpDicList->addDictionary( xTmp );
+            xTmp->setActive( sal_True );
+        }
         xDic = uno::Reference< XDictionary > ( xTmp, UNO_QUERY );
     }
 #if OSL_DEBUG_LEVEL > 1

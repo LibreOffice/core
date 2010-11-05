@@ -68,25 +68,25 @@ VS_VERSION_INFO versioninfo
 			block "040704E4"
 			{
 				// German StringTable
-				value "CompanyName",		"Sun Microsystems, Inc.\0"
+				value "CompanyName",		"Oracle\0"
 				value "FileDescription", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
 				value "InternalName",		PPS(RES_APP_NAME) "\0"
-				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright",		S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
 			}
 #else
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"Sun Microsystems, Inc.\0"
+				value "CompanyName", 		"Oracle\0"
 				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
 				value "InternalName",		PPS(RES_APP_NAME) "\0"
-				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
 			}
 #endif
 		}

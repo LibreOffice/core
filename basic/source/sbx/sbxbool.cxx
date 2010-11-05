@@ -87,21 +87,20 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
         case SbxSTRING:
         case SbxLPSTR:
             nRes = SbxFALSE;
-            if( p->pString )
+            if ( p->pOUString )
             {
-                if( p->pString->EqualsIgnoreCaseAscii( SbxRes( STRING_TRUE ) ) )
+                if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_TRUE ) ) )
                     nRes = SbxTRUE;
-                else if( !p->pString->EqualsIgnoreCaseAscii( SbxRes( STRING_FALSE ) ) )
+                else if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
                 {
                     // Jetzt kann es noch in eine Zahl konvertierbar sein
                     BOOL bError = TRUE;
                     double n;
                     SbxDataType t;
                     USHORT nLen = 0;
-                    String s( *p->pString );
-                    if( ImpScan( s, n, t, &nLen ) == SbxERR_OK )
+                    if( ImpScan( *p->pOUString, n, t, &nLen ) == SbxERR_OK )
                     {
-                        if( nLen == s.Len() )
+                        if( nLen == p->pOUString->getLength() )
                         {
                             bError = FALSE;
                             if( n != 0.0 )
@@ -202,9 +201,10 @@ void ImpPutBool( SbxValues* p, INT16 n )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                p->pString = new XubString;
-            *p->pString = SbxRes( n ? STRING_TRUE : STRING_FALSE );
+            if ( !p->pOUString )
+                p->pOUString = new ::rtl::OUString( SbxRes( n ? STRING_TRUE : STRING_FALSE ) );
+            else
+                *p->pOUString = SbxRes( n ? STRING_TRUE : STRING_FALSE );
             break;
 
         case SbxOBJECT:

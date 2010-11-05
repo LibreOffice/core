@@ -1044,7 +1044,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     {
         PopupMenu aPopupMenu( EditResId( RID_MENU_SPELL ) );
         PopupMenu *pAutoMenu = aPopupMenu.GetPopupMenu( MN_AUTOCORR );
-        PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );
+        PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );  // add word to user-dictionaries
+        pInsertMenu->SetMenuFlags( MENU_FLAG_NOAUTOMNEMONICS );         //! necessary to retrieve the correct dictionary names later
 
         EditPaM aPaM2( aPaM );
         aPaM2.GetIndex()++;
@@ -1261,7 +1262,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         }
         else if ( nId >= MN_DICTSTART )
         {
-            Reference< XDictionary >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
+            String aDicName ( pInsertMenu->GetItemText(nId) );
+
+            uno::Reference< linguistic2::XDictionary >      xDic;
+            if (xDicList.is())
+                xDic = xDicList->getDictionaryByName( aDicName );
+
             if (xDic.is())
                 xDic->add( aSelected, sal_False, String() );
             // save modified user-dictionary if it is persistent

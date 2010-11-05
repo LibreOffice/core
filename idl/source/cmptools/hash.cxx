@@ -141,10 +141,6 @@ BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
 SvStringHashTable::SvStringHashTable( UINT32 nMaxEntries )
         : SvHashTable( nMaxEntries )
 {
-#ifdef WIN
-    DBG_ASSERT( (UINT32)nMaxEntries * sizeof( SvStringHashEntry ) <= 0xFF00,
-                "Hash table size cannot exeed 64k byte" )
-#endif
     pEntries = new SvStringHashEntry[ nMaxEntries ];
 
     // RefCount auf eins setzen
