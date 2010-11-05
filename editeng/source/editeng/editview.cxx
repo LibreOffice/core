@@ -1069,7 +1069,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         // implementation here by providing an additional parameter.
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
-        rVal.Name = OUString::createFromAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS );
+        rVal.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_MAX_NUMBER_OF_SUGGESTIONS ));
         rVal.Value <<= (INT16) 7;
         //
         // Gibt es Replace-Vorschlaege?

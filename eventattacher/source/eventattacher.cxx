@@ -381,7 +381,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
     // Haben wir den Service schon? Sonst anlegen
     if( !m_xIntrospection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ) );
         m_xIntrospection = Reference< XIntrospection >( xIFace, UNO_QUERY );
     }
     return m_xIntrospection;
@@ -395,7 +395,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     // Haben wir den Service schon? Sonst anlegen
     if( !m_xReflection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ) );
         m_xReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
     }
     return m_xReflection;
@@ -409,7 +409,7 @@ Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterSe
     // Haben wir den Service schon? Sonst anlegen
     if( !m_xInvocationAdapterFactory.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ) );
         m_xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >( xIFace, UNO_QUERY );
     }
     return m_xInvocationAdapterFactory;
@@ -424,7 +424,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     // Haben wir den Service schon? Sonst anlegen
     if( !m_xConverter.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.script.Converter") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ) );
         m_xConverter = Reference< XTypeConverter >( xIFace, UNO_QUERY );
     }
     return m_xConverter;

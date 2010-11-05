@@ -226,8 +226,8 @@ uno::Reference< XContentProviderManager > InitializeUCB( void )
         ::ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
 
     uno::Reference< XContentProvider > xFileProvider
-        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
-    xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
+        ( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.FileContentProvider" )) ), UNO_QUERY );
+    xUcb->registerContentProvider( xFileProvider, OUString(RTL_CONSTASCII_USTRINGPARAM( "file" )), sal_True );
 
 
 /*  uno::Reference< XContentProvider > xPackageProvider

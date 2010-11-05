@@ -809,10 +809,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         bFailure = aReq.IsCancelled();
                         if ( bVBARequest )
                         {
-                            SFX_REQUEST_ARG( aReq, pItem, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
-                            if ( pItem )
+                            SFX_REQUEST_ARG( aReq, pDlgRet, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
+                            if ( pDlgRet )
                             {
-                                bSuccess = pItem->GetValue();
+                                bSuccess = pDlgRet->GetValue();
                             }
                         }
                     }

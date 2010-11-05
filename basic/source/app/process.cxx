@@ -159,7 +159,7 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
             while ( aIter != pEnv->end() )
             {
                 ::rtl::OUString aTemp = ::rtl::OUString( (*aIter).first );
-                aTemp += ::rtl::OUString::createFromAscii( "=" );
+                aTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "=" ));
                 aTemp += ::rtl::OUString( (*aIter).second );
                 m_pEnvList[m_nEnvCount] = NULL;
                 rtl_uString_assign( &(m_pEnvList[m_nEnvCount]), aTemp.pData );

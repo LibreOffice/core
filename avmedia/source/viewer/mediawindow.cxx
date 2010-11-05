@@ -382,8 +382,8 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
     for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
-                                        ::rtl::OUString::createFromAscii( pFilters[ i ] ),
-                                        ::rtl::OUString::createFromAscii( pFilters[ i + 1 ] ) ) );
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( pFilters[ i ] )),
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( pFilters[ i + 1 ] )) ) );
     }
 }
 
@@ -475,7 +475,7 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
                     fprintf(stderr, "-->%s uno reference \n\n",AVMEDIA_MANAGER_SERVICE_NAME);
 
                     uno::Reference< ::com::sun::star::media::XManager > xManager(
-                        xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
+                        xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MANAGER_SERVICE_NAME )) ),
                         uno::UNO_QUERY );
 
                     if( xManager.is() )

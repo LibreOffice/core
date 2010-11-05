@@ -4527,7 +4527,7 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
     if ( !xBI.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        xBI.set( xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY );
+        xBI.set( xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" )) ), UNO_QUERY );
     }
     return xBI;
 }
@@ -4537,7 +4537,7 @@ Reference < i18n::XExtendedInputSequenceChecker > ImpEditEngine::ImplGetInputSeq
     if ( !xISC.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        Reference < XInterface > xI = xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.InputSequenceChecker" )) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XExtendedInputSequenceChecker >*)0) );

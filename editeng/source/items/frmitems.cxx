@@ -2097,7 +2097,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
-                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                     uno::UNO_QUERY );
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
@@ -2958,7 +2958,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter
-                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                         uno::UNO_QUERY );
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;

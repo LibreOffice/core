@@ -651,13 +651,13 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
     CharClass& rCC = GetCharClass( eLang );
     const lang::Locale rLocale = rCC.getLocale( );
 
-    if ( rLocale.Language == OUString::createFromAscii( "fr" ) )
+    if ( rLocale.Language == OUString(RTL_CONSTASCII_USTRINGPARAM( "fr" )) )
     {
-        bool bFrCA = rLocale.Country == OUString::createFromAscii( "CA" );
-        OUString allChars = OUString::createFromAscii( ":;!?" );
+        bool bFrCA = rLocale.Country == OUString(RTL_CONSTASCII_USTRINGPARAM( "CA" ));
+        OUString allChars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":;!?" ));
         OUString chars( allChars );
         if ( bFrCA )
-            chars = OUString::createFromAscii( ":" );
+            chars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":" ));
 
         sal_Unicode cChar = rTxt.GetChar( nEndPos );
         bool bHasSpace = chars.indexOf( cChar ) != -1;
@@ -2110,7 +2110,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
                 // get parser
                 uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
                 DBG_ASSERT( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
                 if( !xXMLParser.is() )
@@ -2251,7 +2251,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
         DBG_ASSERT( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( xXMLParser.is() )
         {

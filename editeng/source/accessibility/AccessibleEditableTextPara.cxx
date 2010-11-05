@@ -1259,7 +1259,7 @@ namespace accessibility
 #ifdef TL_DEBUG
         {
             uno::Sequence< rtl::OUString > aNames(1);
-            aNames.getArray()[0] = rtl::OUString::createFromAscii("CharHeight");
+            aNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
             const rtl::OUString *pNames = aNames.getConstArray();
             const uno::Sequence< beans::PropertyValue > aAttribs( getRunAttributes( nIndex, aNames ) );
             const beans::PropertyValue *pAttribs = aAttribs.getConstArray();

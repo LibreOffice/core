@@ -67,7 +67,7 @@ namespace drawinglayer
 
                 if(xSet.is())
                 {
-                    uno::Any aValue(xSet->getPropertyValue(rtl::OUString::createFromAscii("DefaultControl")));
+                    uno::Any aValue(xSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"))));
                     rtl::OUString aUnoControlTypeName;
 
                     if(aValue >>= aUnoControlTypeName)

@@ -424,7 +424,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString::createFromAscii("wav_Wave_Audio_File");
+        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wav_Wave_Audio_File"));
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

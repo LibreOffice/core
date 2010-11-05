@@ -60,7 +60,7 @@ if [ -e ooenv ] ; then
     . ./ooenv
 fi
 
-sd_binary=`basename "$0"`.bin
+sd_binary=`basename "$0" | sed 's/libreoffice/soffice/g'`.bin
 
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on

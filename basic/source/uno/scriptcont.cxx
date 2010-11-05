@@ -1195,9 +1195,9 @@ Sequence< ::rtl::OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServ
 Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString::createFromAscii( "com.sun.star.script.DocumentScriptLibraryContainer" );
+    aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentScriptLibraryContainer" ));
     // plus, for compatibility:
-    aServiceNames[1] = OUString::createFromAscii( "com.sun.star.script.ScriptLibraryContainer" );
+    aServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ));
     return aServiceNames;
 }
 
@@ -1209,7 +1209,7 @@ OUString SfxScriptLibraryContainer::getImplementationName_static()
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ScriptLibraryContainer" );
+        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sfx2.ScriptLibraryContainer" ));
         bNeedsInit = sal_False;
     }
     return aImplName;

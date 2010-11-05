@@ -374,7 +374,7 @@ void OFileAccess::kill( const rtl::OUString& FileURL )
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     try
     {
-        aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "delete" )), makeAny( sal_Bool( sal_True ) ) );
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
@@ -495,7 +495,7 @@ sal_Int32 OFileAccess::getSize( const rtl::OUString& FileURL )
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-    aCnt.getPropertyValue( rtl::OUString::createFromAscii( "Size" ) ) >>= nTemp;
+    aCnt.getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
 }
@@ -519,7 +519,7 @@ DateTime OFileAccess::getDateTimeModified( const rtl::OUString& FileURL )
 
     Reference< XCommandEnvironment > aCmdEnv;
     ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-    aYoung.getPropertyValue( rtl::OUString::createFromAscii( "DateModified" ) ) >>= aDateTime;
+    aYoung.getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTime;
     return aDateTime;
 }
 
@@ -664,7 +664,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
 
     try
     {
-        aCnt.executeCommand( rtl::OUString::createFromAscii( "open" ), aCmdArg );
+        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "open" )), aCmdArg );
     }
     catch ( InteractiveIOException const & e )
     {
@@ -682,7 +682,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
             aInsertArg.ReplaceExisting = sal_False;
 
             aCmdArg <<= aInsertArg;
-            aCnt.executeCommand( rtl::OUString::createFromAscii( "insert" ), aCmdArg );
+            aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "insert" )), aCmdArg );
 
             // Retry...
             return openFileReadWrite( FileURL );
@@ -889,7 +889,7 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    rtl::OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
 
             const Sequence< rtl::OUString > & rSNL = io_FileAccess::FileAccess_getSupportedServiceNames();
             const rtl::OUString * pArray = rSNL.getConstArray();
