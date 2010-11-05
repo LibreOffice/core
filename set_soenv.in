@@ -1878,6 +1878,7 @@ ToFile( "MOZ_LIB",           "@MOZ_LIB@",          "e" );
 ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
 ToFile( "MOZ_NSPR_CFLAGS",   "@MOZ_NSPR_CFLAGS@",  "e" );
 ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
+ToFile( "MOZ_NSS_LIBS",      "@MOZ_NSS_LIBS@",     "e" );
 ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
