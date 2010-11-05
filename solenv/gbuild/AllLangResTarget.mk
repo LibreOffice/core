@@ -34,7 +34,7 @@ gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/l10n/$(INPATH)/misc/sdf/
 gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
-$(info gb_SrsPartMergeTarget $(2))
+$(call gb_Helper_announce,Processing $(3) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \

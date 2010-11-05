@@ -32,6 +32,7 @@ gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
+gb_ComponentTarget_get_target = $(OUTDIR)/misc/$(1).component
 
 define gb_LinkTarget_get_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_LAYER)))
@@ -120,6 +121,7 @@ gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc
 gb_ResTarget_get_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
+
 
 define gb_Module_register_target
 gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
