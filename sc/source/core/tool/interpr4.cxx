@@ -1623,7 +1623,7 @@ bool ScInterpreter::ConvertMatrixParameters()
     for ( USHORT i=1; i <= nParams && i <= sp; ++i )
     {
         FormulaToken* p = pStack[ sp - i ];
-        if ( p->GetOpCode() != ocPush )
+        if ( p->GetOpCode() != ocPush && p->GetOpCode() != ocMissing)
         {
             DBG_ERRORFILE( "ConvertMatrixParameters: not a push");
         }
