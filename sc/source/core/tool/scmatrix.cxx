@@ -128,12 +128,15 @@ class ScMatrixImpl
 {
     quad_type_matrix<String> maMat;
     ScInterpreter*  pErrorInterpreter;
+    bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
 
 public:
     ScMatrixImpl(SCSIZE nC, SCSIZE nR);
     ~ScMatrixImpl();
 
     void Clear();
+    void SetImmutable(bool bVal);
+    bool IsImmutable() const;
     void Resize(SCSIZE nC, SCSIZE nR);
     void SetErrorInterpreter( ScInterpreter* p);
     ScInterpreter* GetErrorInterpreter() const { return pErrorInterpreter; }
@@ -197,7 +200,8 @@ private:
 };
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nC, nR, ::mdds::matrix_density_filled_zero)
+    maMat(nC, nR, ::mdds::matrix_density_filled_zero),
+    mbCloneIfConst(true)
 {
 }
 
@@ -209,6 +213,16 @@ ScMatrixImpl::~ScMatrixImpl()
 void ScMatrixImpl::Clear()
 {
     maMat.clear();
+}
+
+void ScMatrixImpl::SetImmutable(bool bVal)
+{
+    mbCloneIfConst = bVal;
+}
+
+bool ScMatrixImpl::IsImmutable() const
+{
+    return mbCloneIfConst;
 }
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
@@ -784,7 +798,12 @@ ScMatrix* ScMatrix::Clone() const
 
 ScMatrix* ScMatrix::CloneIfConst()
 {
-    return (mbCloneIfConst || IsEternalRef()) ? Clone() : this;
+    return (pImpl->IsImmutable() || IsEternalRef()) ? Clone() : this;
+}
+
+void ScMatrix::SetImmutable( bool bVal )
+{
+    pImpl->SetImmutable(bVal);
 }
 
 void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)

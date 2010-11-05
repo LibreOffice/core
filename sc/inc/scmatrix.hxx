@@ -112,7 +112,6 @@ class SC_DLLPUBLIC ScMatrix
 {
     ScMatrixImpl*   pImpl;
     mutable ULONG   nRefCnt;    // reference count
-    bool            mbCloneIfConst;     // Whether the matrix is cloned with a CloneIfConst() call.
 
     // only delete via Delete()
     ~ScMatrix();
@@ -186,7 +185,7 @@ public:
 
     /** Set the matrix to (im)mutable for CloneIfConst(), only the interpreter
         should do this and know the consequences. */
-    inline void SetImmutable( bool bVal ) { mbCloneIfConst = bVal; }
+    void SetImmutable( bool bVal );
 
     /**
      * Resize the matrix to specified new dimension.  Note that this operation
