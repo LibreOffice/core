@@ -1008,6 +1008,12 @@ LNT=$(DEVROOT)/lint/lint
 LNTFLAGS=+v -i$(DEVROOT)/lint/ -mL options.lnt -u
 LNTFLAGSOUTOBJ=-os
 
+.IF "$(DISABLE_ENHANCED_COMID)"==""
+.INCLUDE : tg_compv.mk
+.ELSE          # "$(DISABLE_ENHANCED_COMID)"==""
+COMID=$(COM)
+.ENDIF          # "$(DISABLE_ENHANCED_COMID)"==""
+
 .IF "$(GUI)"=="WNT"
 .INCLUDE : wnt.mk
 .ENDIF
@@ -1087,11 +1093,6 @@ SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
 CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpplcc
 
-.IF "$(DISABLE_ENHANCED_COMID)"==""
-.INCLUDE : tg_compv.mk
-.ELSE          # "$(DISABLE_ENHANCED_COMID)"==""
-COMID=$(COM)
-.ENDIF          # "$(DISABLE_ENHANCED_COMID)"==""
 .IF "$(SOLAR_JAVA)"=="TRUE"
 .IF "$(USE_JAVAVER)"!=""
 .INCLUDE : tg_javav.mk
