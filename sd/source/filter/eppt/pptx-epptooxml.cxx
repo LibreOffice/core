@@ -1943,11 +1943,6 @@ sal_Bool PowerPointExport::ImplCreateMainNotes()
     return TRUE;
 }
 
-drawingml::chart::ChartConverter& PowerPointExport::getChartConverter()
-{
-    return *mxChartConv;
-}
-
 #define IMPL_NAME "com.sun.star.comp.Impress.oox.PowerPointExport"
 
 OUString SAL_CALL PowerPointExport_getImplementationName() throw()
