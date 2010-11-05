@@ -275,7 +275,7 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     static const StandardButtonType aTestButtons[] =
     {
         BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
-        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_LESS,
+        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_IGNORE,
         BUTTON_RETRY, BUTTON_HELP
     };
 
