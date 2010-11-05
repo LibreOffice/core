@@ -43,12 +43,13 @@ CXXFILES = \
         parasc.cxx \
         wrtasc.cxx
 
-
-
-SLOFILES =	\
+EXCEPTIONSFILES = \
         $(SLO)$/ascatr.obj \
         $(SLO)$/parasc.obj \
         $(SLO)$/wrtasc.obj
+
+SLOFILES =	\
+        $(EXCEPTIONSFILES)
 
 # --- Tagets -------------------------------------------------------
 

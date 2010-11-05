@@ -41,29 +41,29 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
-        $(SLO)$/eddel.obj \
-        $(SLO)$/edlingu.obj \
-        $(SLO)$/edfldexp.obj \
-        $(SLO)$/edtab.obj
-
-SLOFILES =	\
-        $(EXCEPTIONSFILES)\
         $(SLO)$/acorrect.obj \
         $(SLO)$/autofmt.obj \
         $(SLO)$/edatmisc.obj \
         $(SLO)$/edattr.obj \
+        $(SLO)$/eddel.obj \
         $(SLO)$/edfcol.obj \
         $(SLO)$/edfld.obj \
+        $(SLO)$/edfldexp.obj \
         $(SLO)$/edfmt.obj \
         $(SLO)$/edglbldc.obj \
         $(SLO)$/edglss.obj \
         $(SLO)$/editsh.obj \
+        $(SLO)$/edlingu.obj \
         $(SLO)$/ednumber.obj \
         $(SLO)$/edredln.obj \
+        $(SLO)$/edsect.obj \
+        $(SLO)$/edtab.obj \
         $(SLO)$/edtox.obj \
         $(SLO)$/edundo.obj \
-        $(SLO)$/edws.obj \
-        $(SLO)$/edsect.obj
+        $(SLO)$/edws.obj
+
+SLOFILES =	\
+        $(EXCEPTIONSFILES)
 
 # --- Targets -------------------------------------------------------
 

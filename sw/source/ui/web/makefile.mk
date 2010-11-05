@@ -42,16 +42,19 @@ SRS1NAME=$(TARGET)
 SRC1FILES =  \
         web.src 
 
-SLOFILES =  \
-        $(SLO)$/wformsh.obj	\
-        $(SLO)$/wgrfsh.obj	\
-        $(SLO)$/wlistsh.obj	\
-        $(SLO)$/wolesh.obj	\
-        $(SLO)$/wtabsh.obj	\
-        $(SLO)$/wfrmsh.obj \
-        $(SLO)$/wtextsh.obj \
+EXCEPTIONSFILES = \
         $(SLO)$/wdocsh.obj \
+        $(SLO)$/wformsh.obj \
+        $(SLO)$/wfrmsh.obj \
+        $(SLO)$/wgrfsh.obj \
+        $(SLO)$/wlistsh.obj \
+        $(SLO)$/wolesh.obj \
+        $(SLO)$/wtabsh.obj \
+        $(SLO)$/wtextsh.obj \
         $(SLO)$/wview.obj
+
+SLOFILES =  \
+        $(EXCEPTIONSFILES)
 
 # --- Tagets -------------------------------------------------------
 

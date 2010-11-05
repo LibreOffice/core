@@ -45,16 +45,11 @@ CDEFS+=-Dmydebug
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=    \
-    $(SLO)$/crbm.obj \
-    $(SLO)$/crsrsh.obj \
-    $(SLO)$/bookmrk.obj \
-    $(SLO)$/viscrs.obj
-
-SLOFILES =	\
     $(SLO)$/BlockCursor.obj \
     $(SLO)$/bookmrk.obj \
     $(SLO)$/callnk.obj \
     $(SLO)$/crbm.obj \
+    $(SLO)$/crossrefbookmark.obj \
     $(SLO)$/crsrsh.obj \
     $(SLO)$/crstrvl.obj \
     $(SLO)$/crstrvl1.obj \
@@ -70,8 +65,10 @@ SLOFILES =	\
     $(SLO)$/trvlreg.obj \
     $(SLO)$/trvltbl.obj \
     $(SLO)$/unocrsr.obj \
-    $(SLO)$/viscrs.obj \
-    $(SLO)$/crossrefbookmark.obj
+    $(SLO)$/viscrs.obj
+
+SLOFILES =	\
+    $(EXCEPTIONSFILES)
 
 .IF "$(mydebug)" != ""
 SLOFILES +=  \

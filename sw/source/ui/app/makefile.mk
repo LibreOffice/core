@@ -50,6 +50,9 @@ SRC1FILES =\
 
 
 SLOFILES = \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES= \
         $(SLO)$/appenv.obj   \
         $(SLO)$/apphdl.obj   \
         $(SLO)$/applab.obj   \
@@ -61,19 +64,10 @@ SLOFILES = \
         $(SLO)$/docst.obj    \
         $(SLO)$/docstyle.obj \
         $(SLO)$/mainwn.obj   \
-        $(SLO)$/swmodule.obj \
+        $(SLO)$/swdll.obj    \
         $(SLO)$/swmodul1.obj \
-        $(SLO)$/swdll.obj	 \
+        $(SLO)$/swmodule.obj \
         $(SLO)$/swwait.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/docsh.obj    \
-        $(SLO)$/docst.obj    \
-        $(SLO)$/docshini.obj \
-        $(SLO)$/swmodule.obj \
-        $(SLO)$/swmodul1.obj \
-            $(SLO)$/apphdl.obj   \
-        $(SLO)$/docsh2.obj
 
 LIB1TARGET= $(SLB)$/app.lib
 

@@ -48,23 +48,8 @@ CDEFS+=-DDEBUG
 
 EXCEPTIONSFILES = \
     $(SLO)$/anchoreddrawobject.obj \
-    $(SLO)$/flycnt.obj \
-    $(SLO)$/laycache.obj \
-    $(SLO)$/layouter.obj \
-    $(SLO)$/movedfwdfrmsbyobjpos.obj \
-    $(SLO)$/newfrm.obj \
-    $(SLO)$/objectformatter.obj \
-    $(SLO)$/objstmpconsiderwrapinfl.obj \
-    $(SLO)$/paintfrm.obj \
-    $(SLO)$/softpagebreak.obj \
-    $(SLO)$/sortedobjsimpl.obj \
-    $(SLO)$/pagechg.obj
-
-
-SLOFILES =  \
-    $(SLO)$/atrfrm.obj \
     $(SLO)$/anchoredobject.obj \
-    $(SLO)$/anchoreddrawobject.obj \
+    $(SLO)$/atrfrm.obj \
     $(SLO)$/calcmove.obj \
     $(SLO)$/colfrm.obj \
     $(SLO)$/findfrm.obj \
@@ -83,23 +68,26 @@ SLOFILES =  \
     $(SLO)$/movedfwdfrmsbyobjpos.obj \
     $(SLO)$/newfrm.obj \
     $(SLO)$/objectformatter.obj \
-    $(SLO)$/objectformattertxtfrm.obj \
-    $(SLO)$/objectformatterlayfrm.obj \
     $(SLO)$/objstmpconsiderwrapinfl.obj \
     $(SLO)$/pagechg.obj \
     $(SLO)$/pagedesc.obj \
     $(SLO)$/paintfrm.obj \
     $(SLO)$/sectfrm.obj \
     $(SLO)$/softpagebreak.obj \
-    $(SLO)$/sortedobjs.obj \
     $(SLO)$/sortedobjsimpl.obj \
     $(SLO)$/ssfrm.obj \
-    $(SLO)$/swselectionlist.obj \
     $(SLO)$/tabfrm.obj \
     $(SLO)$/trvlfrm.obj \
-    $(SLO)$/unusedf.obj \
     $(SLO)$/virtoutp.obj \
     $(SLO)$/wsfrm.obj
+
+SLOFILES =  \
+    $(EXCEPTIONSFILES) \
+    $(SLO)$/objectformattertxtfrm.obj \
+    $(SLO)$/objectformatterlayfrm.obj \
+    $(SLO)$/sortedobjs.obj \
+    $(SLO)$/swselectionlist.obj \
+    $(SLO)$/unusedf.obj
 
 .IF "$(dbgutil)"!=""
 SLOFILES +=  \

@@ -46,12 +46,12 @@ CXXFILES = \
         swlbox.cxx
 
 SLOFILES =  \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
         $(SLO)$/actctrl.obj \
         $(SLO)$/popbox.obj \
         $(SLO)$/swlbox.obj
-
-EXCEPTIONSFILES = \
-        $(SLO)$/popbox.obj
 
 # --- Tagets -------------------------------------------------------
 

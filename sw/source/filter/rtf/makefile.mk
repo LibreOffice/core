@@ -44,17 +44,15 @@ CDEFS=$(CDEFS) -Dmydebug
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/rtffly.obj \
-        $(SLO)$/rtfnum.obj \
-        $(SLO)$/swparrtf.obj
-
-
-SLOFILES = \
         $(SLO)$/rtffld.obj \
         $(SLO)$/rtffly.obj \
         $(SLO)$/rtfnum.obj \
         $(SLO)$/rtftbl.obj \
         $(SLO)$/swparrtf.obj
+
+
+SLOFILES = \
+        $(EXCEPTIONSFILES)
 
 # --- Tagets -------------------------------------------------------
 

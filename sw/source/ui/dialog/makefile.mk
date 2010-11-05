@@ -50,23 +50,23 @@ SRC1FILES =  \
         wordcountdialog.src
 
 EXCEPTIONSFILES = \
-        $(SLO)$/SwSpellDialogChildWindow.obj
-
-SLOFILES =  \
+        $(SLO)$/SwSpellDialogChildWindow.obj \
         $(SLO)$/abstract.obj \
         $(SLO)$/addrdlg.obj \
         $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
         $(SLO)$/macassgn.obj \
-        $(SLO)$/SwSpellDialogChildWindow.obj \
-        $(SLO)$/regionsw.obj	\
-        $(SLO)$/uiregionsw.obj	\
-        $(SLO)$/swabstdlg.obj	\
-        $(SLO)$/swuiexp.obj		\
-        $(SLO)$/swwrtshitem.obj \
-        $(SLO)$/swdialmgr.obj  \
-        $(SLO)$/wordcountdialog.obj \
-        $(SLO)$/swdlgfact.obj
+        $(SLO)$/regionsw.obj \
+        $(SLO)$/swabstdlg.obj \
+        $(SLO)$/swdialmgr.obj \
+        $(SLO)$/swdlgfact.obj \
+        $(SLO)$/swuiexp.obj \
+        $(SLO)$/uiregionsw.obj \
+        $(SLO)$/wordcountdialog.obj
+
+SLOFILES =  \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/swwrtshitem.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 

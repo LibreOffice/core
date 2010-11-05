@@ -42,49 +42,49 @@ EXCEPTIONSFILES = \
     $(SLO)$/acmplwrd.obj \
     $(SLO)$/dbgoutsw.obj \
     $(SLO)$/doc.obj \
-    $(SLO)$/docbm.obj \
-    $(SLO)$/doccomp.obj \
-    $(SLO)$/docdraw.obj \
-    $(SLO)$/docedt.obj \
-    $(SLO)$/docfmt.obj \
-    $(SLO)$/docglbl.obj \
-    $(SLO)$/docglos.obj \
-    $(SLO)$/doclay.obj \
-    $(SLO)$/docxforms.obj \
-    $(SLO)$/docnew.obj \
-    $(SLO)$/docnum.obj \
-    $(SLO)$/docsort.obj \
-    $(SLO)$/doctxm.obj \
-    $(SLO)$/number.obj \
-    $(SLO)$/swstylemanager.obj \
-    $(SLO)$/tblcpy.obj \
-    $(SLO)$/tblrwcl.obj \
-    $(SLO)$/list.obj
-
-SLOFILES =	$(EXCEPTIONSFILES) \
     $(SLO)$/docbasic.obj \
+    $(SLO)$/docbm.obj \
     $(SLO)$/docchart.obj \
+    $(SLO)$/doccomp.obj \
     $(SLO)$/doccorr.obj \
     $(SLO)$/docdde.obj \
     $(SLO)$/docdesc.obj \
+    $(SLO)$/docdraw.obj \
+    $(SLO)$/docedt.obj \
     $(SLO)$/docfld.obj \
     $(SLO)$/docfly.obj \
+    $(SLO)$/docfmt.obj \
     $(SLO)$/docftn.obj \
+    $(SLO)$/docglbl.obj \
+    $(SLO)$/docglos.obj \
+    $(SLO)$/doclay.obj \
+    $(SLO)$/docnew.obj \
+    $(SLO)$/docnum.obj \
     $(SLO)$/docredln.obj \
     $(SLO)$/docruby.obj \
-    $(SLO)$/docstat.obj \
+    $(SLO)$/docsort.obj \
+    $(SLO)$/doctxm.obj \
+    $(SLO)$/docxforms.obj \
     $(SLO)$/extinput.obj \
     $(SLO)$/fmtcol.obj \
     $(SLO)$/ftnidx.obj \
     $(SLO)$/gctable.obj \
+    $(SLO)$/htmltbl.obj \
     $(SLO)$/lineinfo.obj \
+    $(SLO)$/list.obj \
     $(SLO)$/notxtfrm.obj \
+    $(SLO)$/number.obj \
     $(SLO)$/poolfmt.obj \
-    $(SLO)$/sortopt.obj \
     $(SLO)$/swserv.obj \
+    $(SLO)$/swstylemanager.obj \
     $(SLO)$/tblafmt.obj \
-    $(SLO)$/visiturl.obj \
-    $(SLO)$/htmltbl.obj
+    $(SLO)$/tblcpy.obj \
+    $(SLO)$/tblrwcl.obj \
+    $(SLO)$/visiturl.obj
+
+SLOFILES =	$(EXCEPTIONSFILES) \
+    $(SLO)$/docstat.obj \
+    $(SLO)$/sortopt.obj
 
 # --- Tagets -------------------------------------------------------
 

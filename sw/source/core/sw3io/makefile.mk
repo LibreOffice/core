@@ -38,9 +38,12 @@ TARGET=sw3io
 
 # --- Files --------------------------------------------------------
 
+EXCEPTIONSFILES = \
+  $(SLO)$/sw3convert.obj \
+  $(SLO)$/swacorr.obj
+
 SLOFILES = \
-  $(SLO)$/swacorr.obj \
-  $(SLO)$/sw3convert.obj
+  $(EXCEPTIONSFILES)
 
 
 # --- Targets -------------------------------------------------------

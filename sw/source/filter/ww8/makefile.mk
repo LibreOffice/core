@@ -44,52 +44,31 @@ CDEFS=$(CDEFS) -Dmydebug
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES = \
-        $(SLO)$/wrtww8gr.obj \
-        $(SLO)$/ww8par2.obj \
-        $(SLO)$/ww8par3.obj \
-        $(SLO)$/ww8par5.obj \
-        $(SLO)$/tracer.obj \
-        $(SLO)$/fields.obj \
-        $(SLO)$/styles.obj \
-        $(SLO)$/ww8graf.obj \
-        $(SLO)$/ww8graf2.obj \
-        $(SLO)$/wrtw8esh.obj \
-        $(SLO)$/wrtw8nds.obj \
-        $(SLO)$/wrtw8num.obj \
-        $(SLO)$/wrtw8sty.obj \
-        $(SLO)$/wrtww8.obj \
-        $(SLO)$/docxattributeoutput.obj \
-        $(SLO)$/docxexportfilter.obj \
-        $(SLO)$/docxexport.obj \
-        $(SLO)$/ww8atr.obj \
-        $(SLO)$/ww8par.obj \
-        $(SLO)$/ww8par6.obj \
-        $(SLO)$/writerhelper.obj \
-        $(SLO)$/writerwordglue.obj \
-        $(SLO)$/ww8scan.obj \
-        $(SLO)$/WW8TableInfo.obj \
         $(SLO)$/WW8FFData.obj \
-        $(SLO)$/WW8Sttbf.obj \
-        $(SLO)$/ww8toolbar.obj \
         $(SLO)$/WW8FibData.obj \
+        $(SLO)$/WW8Sttbf.obj \
+        $(SLO)$/WW8TableInfo.obj \
+        $(SLO)$/docxattributeoutput.obj \
+        $(SLO)$/docxexport.obj \
+        $(SLO)$/docxexportfilter.obj \
+        $(SLO)$/fields.obj \
+        $(SLO)$/rtfattributeoutput.obj \
+        $(SLO)$/rtfexport.obj \
         $(SLO)$/rtfexportfilter.obj \
         $(SLO)$/rtfimportfilter.obj \
-        $(SLO)$/rtfattributeoutput.obj \
         $(SLO)$/rtfsdrexport.obj \
-        $(SLO)$/rtfexport.obj
-
-
-SLOFILES =	\
+        $(SLO)$/styles.obj \
+        $(SLO)$/tracer.obj \
+        $(SLO)$/writerhelper.obj \
+        $(SLO)$/writerwordglue.obj \
         $(SLO)$/wrtw8esh.obj \
         $(SLO)$/wrtw8nds.obj \
         $(SLO)$/wrtw8num.obj \
         $(SLO)$/wrtw8sty.obj \
         $(SLO)$/wrtww8.obj \
         $(SLO)$/wrtww8gr.obj \
-        $(SLO)$/docxattributeoutput.obj \
-        $(SLO)$/docxexportfilter.obj \
-        $(SLO)$/docxexport.obj \
         $(SLO)$/ww8atr.obj \
+        $(SLO)$/ww8glsy.obj \
         $(SLO)$/ww8graf.obj \
         $(SLO)$/ww8graf2.obj \
         $(SLO)$/ww8par.obj \
@@ -98,23 +77,12 @@ SLOFILES =	\
         $(SLO)$/ww8par4.obj \
         $(SLO)$/ww8par5.obj \
         $(SLO)$/ww8par6.obj \
-        $(SLO)$/ww8glsy.obj \
-        $(SLO)$/tracer.obj \
-        $(SLO)$/fields.obj \
-        $(SLO)$/styles.obj \
         $(SLO)$/ww8scan.obj \
-        $(SLO)$/writerhelper.obj \
-        $(SLO)$/writerwordglue.obj \
-        $(SLO)$/WW8TableInfo.obj \
-        $(SLO)$/WW8FFData.obj \
-        $(SLO)$/WW8Sttbf.obj \
-        $(SLO)$/ww8toolbar.obj \
-        $(SLO)$/WW8FibData.obj \
-        $(SLO)$/rtfexportfilter.obj \
-        $(SLO)$/rtfimportfilter.obj \
-        $(SLO)$/rtfattributeoutput.obj \
-        $(SLO)$/rtfsdrexport.obj \
-        $(SLO)$/rtfexport.obj
+        $(SLO)$/ww8toolbar.obj
+
+
+SLOFILES =	\
+        $(EXCEPTIONSFILES)
 
 
 # --- Tagets -------------------------------------------------------

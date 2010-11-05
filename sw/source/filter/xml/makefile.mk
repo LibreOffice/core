@@ -43,51 +43,33 @@ CDEFS=$(CDEFS) -Dmydebug
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(SLO)$/swxml.obj \
-        $(SLO)$/xmlimp.obj \
-        $(SLO)$/wrtxml.obj \
-        $(SLO)$/xmlexp.obj \
-        $(SLO)$/xmltext.obj \
-        $(SLO)$/xmltexte.obj \
-        $(SLO)$/xmltexti.obj \
-        $(SLO)$/xmltbli.obj \
-        $(SLO)$/xmltble.obj \
-        $(SLO)$/xmlfmt.obj \
-        $(SLO)$/xmlfmte.obj \
-        $(SLO)$/xmlmeta.obj \
-        $(SLO)$/xmlscript.obj \
-        $(SLO)$/xmlitemm.obj \
-        $(SLO)$/xmlitemi.obj \
-        $(SLO)$/xmliteme.obj \
-        $(SLO)$/xmlithlp.obj \
-        $(SLO)$/xmlbrsh.obj \
-        $(SLO)$/xmlfonte.obj \
-        $(SLO)$/XMLRedlineImportHelper.obj \
-        $(SLO)$/xmlitem.obj	\
-        $(SLO)$/xmlitmpr.obj	\
+        $(EXCEPTIONSFILES) \
         $(SLO)$/xmlimpit.obj \
-        $(SLO)$/xmlexpit.obj
+        $(SLO)$/xmlitemm.obj \
+        $(SLO)$/xmlitmpr.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/XMLRedlineImportHelper.obj \
         $(SLO)$/swxml.obj \
-        $(SLO)$/xmlimp.obj \
         $(SLO)$/wrtxml.obj \
+        $(SLO)$/xmlbrsh.obj \
         $(SLO)$/xmlexp.obj \
-        $(SLO)$/xmltext.obj \
-        $(SLO)$/xmltexti.obj \
-        $(SLO)$/xmltexte.obj \
-        $(SLO)$/xmltbli.obj \
-        $(SLO)$/xmltble.obj \
+        $(SLO)$/xmlexpit.obj \
         $(SLO)$/xmlfmt.obj \
         $(SLO)$/xmlfmte.obj \
+        $(SLO)$/xmlfonte.obj \
+        $(SLO)$/xmlimp.obj \
+        $(SLO)$/xmlitem.obj \
+        $(SLO)$/xmliteme.obj \
+        $(SLO)$/xmlitemi.obj \
+        $(SLO)$/xmlithlp.obj \
         $(SLO)$/xmlmeta.obj \
         $(SLO)$/xmlscript.obj \
-        $(SLO)$/xmlitemi.obj \
-        $(SLO)$/xmliteme.obj \
-        $(SLO)$/xmlithlp.obj \
-        $(SLO)$/xmlbrsh.obj \
-        $(SLO)$/xmlfonte.obj \
-        $(SLO)$/XMLRedlineImportHelper.obj
+        $(SLO)$/xmltble.obj \
+        $(SLO)$/xmltbli.obj \
+        $(SLO)$/xmltext.obj \
+        $(SLO)$/xmltexte.obj \
+        $(SLO)$/xmltexti.obj
 
 # --- Targets -------------------------------------------------------
 
