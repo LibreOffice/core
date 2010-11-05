@@ -636,9 +636,9 @@ sub searchMacOffice
 
 sub searchoffice
 {
-    my $offset = rindex($main::sdkpath, "/openoffice.org");
+    my $offset = rindex($main::sdkpath, "/libreoffice");
     my $tmpOffice = substr($main::sdkpath, 0, $offset);
-    my $officepath = "$tmpOffice/openoffice.org$main::OO_MAJORVERSION";
+    my $officepath = "$tmpOffice/libreoffice";
 
 #   if ( $main::OO_MINORVERSION > 0) {
 #       $officepath = "$officepath$main::OO_MINORVERSION";
