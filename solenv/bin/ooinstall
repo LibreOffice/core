@@ -8,6 +8,7 @@
 # 3. When packaging (called from package-ooo), to install to DESTDIR
 
 use File::Find;
+use File::Path qw(mkpath);
 use Cwd;
 
 $path = '';
@@ -38,10 +39,11 @@ $ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{
 for $arg (@ARGV) {
     if ($arg eq '-l') {
 	$do_link = 1;
-
     } elsif ($arg eq '-h' || $arg eq '--help') {
 	$help = 1;
     } else {
+	# Cwd::realpath does not work if the path does not exist
+	mkpath($arg) unless -d $arg;
 	$path = Cwd::realpath( $arg );
     }
 }
