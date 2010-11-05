@@ -766,7 +766,6 @@ bool VCartesianAxis::createTextShapes(
             rAxisLabelProperties.fRotationAngleDegree = 90;
             rAxisLabelProperties.bLineBreakAllowed = false;
             m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
-            m_aAxisLabelProperties.bLineBreakAllowed = false;
             removeTextShapesFromTicks();
             return false;
         }
@@ -1416,7 +1415,6 @@ void SAL_CALL VCartesianAxis::createLabels()
                     }
                     else
                     {
-                        aComplexProps.bLineBreakAllowed = false;
                         aComplexProps.bOverlapAllowed = true;
                         aComplexProps.bRhythmIsFix = true;
                         aComplexProps.nRhythm = 1;
