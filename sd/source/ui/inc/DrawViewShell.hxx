@@ -443,7 +443,8 @@ private:
     virtual SdPage* CreateOrDuplicatePage (
         SfxRequest& rRequest,
         PageKind ePageKind,
-        SdPage* pPage);
+        SdPage* pPage,
+        const sal_Int32 nInsertPosition = -1);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  mxScannerManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;

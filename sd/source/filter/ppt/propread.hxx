@@ -166,7 +166,7 @@ class Section : private List
 class PropRead : private List
 {
         sal_Bool                mbStatus;
-        SvStorageStream*        mpSvStream;
+        SvStorageStreamRef      mpSvStream;
 
         sal_uInt16              mnByteOrder;
         sal_uInt16              mnFormat;

@@ -66,7 +66,7 @@
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
-
+#include "app.hrc"
 #include "misc.hxx"
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -2105,7 +2105,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     }
 }
 
-SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect )
+SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, Rectangle aRect )
 {
     SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
     DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
@@ -2218,6 +2218,16 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             if( !bUndo )
                 SdrObject::Free( pSourceObj );
+        }
+    }
+    else if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    {
+        switch( pSourceObj->GetObjIdentifier() )
+        {
+        case OBJ_TABLE: eObjKind = PRESOBJ_TABLE; break;
+        case OBJ_MEDIA: eObjKind = PRESOBJ_MEDIA; break;
+        case OBJ_GRAF: eObjKind = PRESOBJ_GRAPHIC; break;
+        case OBJ_OLE2: eObjKind = PRESOBJ_OBJECT; break;
         }
     }
 
@@ -2345,7 +2355,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         }
     }
 
-    if ( pObj && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
+    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
         pObj->AdjustToMaxRect( aRect );
 
     return pObj;

@@ -512,12 +512,20 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "ToolPanelViewShell" ) ) );
 
+    // Some recent changes to the toolpanel make it necessary to create the
+    // accessibility object now.  Creating it on demand would lead to a
+    // pointer cycle in the tree of accessibility objects and would lead
+    // e.g. the accerciser AT tool into an infinite loop.
+    // It would be nice to get rid of this workaround in the future.
+    if (mpContentWindow.get())
+        mpContentWindow->SetAccessible(mpImpl->CreateAccessible(*mpContentWindow));
+
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
     // view shell.  (One is created earlier while the construtor of the base
     // class is executed.  At that time the correct accessibility object can
     // not be constructed.)
-    if ( mpContentWindow.get() )
+    if (mpContentWindow.get())
     {
         mpContentWindow->Hide();
         mpContentWindow->Show();
@@ -599,18 +607,6 @@ SdPage* ToolPanelViewShell::getCurrentPage() const
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Execute( SfxRequest& )
-{
-    OSL_ENSURE( false, "ToolPanelViewShell::Execute: not to be called! (right?)" );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::GetState( SfxItemSet& )
-{
-    OSL_ENSURE( false, "ToolPanelViewShell::GetState: not to be called! (right?)" );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 TaskPaneShellManager& ToolPanelViewShell::GetSubShellManager() const
 {
     return *mpSubShellManager.get();
@@ -633,7 +629,12 @@ DockingWindow* ToolPanelViewShell::GetDockingWindow()
 Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd::Window* i_pWindow )
 {
     ENSURE_OR_RETURN( i_pWindow, "ToolPanelViewShell::CreateAccessibleDocumentView: illegal window!", NULL );
-    return mpImpl->CreateAccessible( *i_pWindow );
+    // As said above, we have to create the accessibility object
+    // (unconditionally) in the constructor, not here on demand, or
+    // otherwise we would create a cycle in the tree of accessible objects
+    // which could lead to infinite loops in AT tools.
+    // return mpImpl->CreateAccessible( *i_pWindow );
+    return Reference<XAccessible>();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -680,10 +681,10 @@ namespace
     struct PanelFactory
     {
         ControlFactoryFactory   pFactory;
-        ULONG                   nHelpID;
-        PanelFactory( const ControlFactoryFactory i_pFactory, const ULONG i_nHelpID )
+        rtl::OString            sHelpID;
+        PanelFactory( const ControlFactoryFactory i_pFactory, const rtl::OString& i_nHelpID )
             :pFactory( i_pFactory )
-            ,nHelpID( i_nHelpID )
+            ,sHelpID( i_nHelpID )
         {
         }
     };
@@ -721,7 +722,7 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
     ::std::auto_ptr< TreeNode > pNode( pControlFactory->CreateControl( mpImpl->GetToolPanelDeck().GetPanelWindowAnchor() ) );
     ENSURE_OR_THROW( ( pNode.get() != NULL ) && ( pNode->GetWindow() != NULL ),
         "illegal node returned by the control factory" );
-    pNode->GetWindow()->SetHelpId( aPanelFactory.nHelpID );
+    pNode->GetWindow()->SetHelpId( aPanelFactory.sHelpID );
 
     // create an XToolPanel
     Reference< XToolPanel > xPanel( new ToolPanel( pNode ) );

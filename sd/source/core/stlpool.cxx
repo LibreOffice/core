@@ -76,6 +76,7 @@
 #include "sdpage.hxx"
 #include "helpids.h"
 #include <svl/itemset.hxx>
+#include "app.hrc"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;

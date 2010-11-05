@@ -228,7 +228,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
         // When the requested view is not in the cache then create a new view.
         if (pDescriptor.get() == NULL)
         {
-            pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView);
+            pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
         }
 
         if (pDescriptor.get() != NULL)
@@ -352,7 +352,8 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     SfxViewFrame& rFrame,
     ::Window& rWindow,
     const Reference<XPane>& rxPane,
-    FrameView* pFrameView)
+    FrameView* pFrameView,
+    const bool bIsCenterPane)
 {
     ::boost::shared_ptr<ViewDescriptor> pDescriptor (new ViewDescriptor());
 
@@ -360,13 +361,12 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         rxViewId,
         rFrame,
         rWindow,
-        pFrameView);
+        pFrameView,
+        bIsCenterPane);
     pDescriptor->mxViewId = rxViewId;
 
     if (pDescriptor->mpViewShell.get() != NULL)
     {
-        const bool bIsCenterPane (
-            rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT));
         pDescriptor->mpViewShell->Init(bIsCenterPane);
         mpBase->GetViewShellManager()->ActivateViewShell(pDescriptor->mpViewShell.get());
 
@@ -387,7 +387,8 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
     ::Window& rWindow,
-    FrameView* pFrameView)
+    FrameView* pFrameView,
+    const bool bIsCenterPane)
 {
     ::boost::shared_ptr<ViewShell> pViewShell;
     const OUString& rsViewURL (rxViewId->getResourceURL());
@@ -463,7 +464,8 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             &rFrame,
             *mpBase,
             &rWindow,
-            pFrameView);
+            pFrameView,
+            bIsCenterPane);
     }
 
     return pViewShell;

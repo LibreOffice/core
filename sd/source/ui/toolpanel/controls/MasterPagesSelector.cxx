@@ -757,11 +757,11 @@ void MasterPagesSelector::ClearPageSet (void)
 
 
 
-void MasterPagesSelector::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
+void MasterPagesSelector::SetHelpId( const rtl::OString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    mpPageSet->SetSmartHelpId( aId, aMode );
+    mpPageSet->SetHelpId( aId );
 }
 
 

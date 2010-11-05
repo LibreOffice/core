@@ -82,27 +82,6 @@ AccessibleTreeNode::AccessibleTreeNode(
 
 
 
-AccessibleTreeNode::AccessibleTreeNode(
-    const Reference<XAccessible>& rxParent,
-    ::sd::toolpanel::TreeNode& rNode,
-    const OUString& rsName,
-    const OUString& rsDescription,
-    const sal_Int16 eRole)
-    : AccessibleTreeNodeBase(MutexOwner::maMutex),
-      mxParent(rxParent),
-      mrTreeNode(rNode),
-      mrStateSet(new ::utl::AccessibleStateSetHelper()),
-      msName(rsName),
-      msDescription(rsDescription),
-      meRole(eRole),
-      mnClientId(0)
-{
-    CommonConstructor();
-}
-
-
-
-
 void AccessibleTreeNode::CommonConstructor (void)
 {
     UpdateStateSet();
