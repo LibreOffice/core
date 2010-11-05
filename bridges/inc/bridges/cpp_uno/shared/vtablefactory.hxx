@@ -38,7 +38,8 @@
 #include <hash_map>
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
-#ifdef LINUX
+#if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
+    || defined(NETBSD)
 #define USE_DOUBLE_MMAP
 #endif
 
