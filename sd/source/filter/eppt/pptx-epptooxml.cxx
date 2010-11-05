@@ -1538,7 +1538,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
 
     // visual shape properties
     mpFS->startElementNS( XML_p, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape );
+    WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
