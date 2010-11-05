@@ -1845,6 +1845,7 @@ ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
 ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
 ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
 ToFile( "GRAPHITE_CFLAGS",   "@GRAPHITE_CFLAGS@",   "e");
+ToFile( "CL_X64",            "@CL_X64@",            "e");
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
 ToFile( "SYSTEM_DICTS",      "@SYSTEM_DICTS@",     "e");
 ToFile( "DICT_SYSTEM_DIR",   "@DICT_SYSTEM_DIR@",  "e");

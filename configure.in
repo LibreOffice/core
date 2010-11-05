@@ -372,6 +372,11 @@ AC_ARG_ENABLE(zenity,
         [Display a icon in the notification area during build.]),
 ,)
 
+AC_ARG_ENABLE(cl-x64,
+    AS_HELP_STRING([--enable-cl-x64],
+        [Use the Microsoft C/C++ x64 compiler instead of the default x86 one.]),
+,)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -1578,6 +1583,21 @@ if test "$_os" = "WINNT"; then
    BUILD_TYPE="$BUILD_TYPE TWAIN"
 fi
 
+if test "$_os" = "WINNT"; then
+   dnl ===================================================================
+   dnl Set the CL_X64 variable.
+   dnl ===================================================================
+   AC_MSG_CHECKING([whether to use the Microsoft C/C++ x64 compiler])
+   if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
+      CL_X64=""
+      AC_MSG_RESULT([no])
+   else
+      CL_X64="TRUE"
+      AC_MSG_RESULT([yes])
+   fi
+   AC_SUBST(CL_X64)
+fi
+
 dnl ===================================================================
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
@@ -2196,14 +2216,17 @@ dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGWIN" != "yes"; then
-        AC_MSG_CHECKING([for friendly registry keys])
-        # VS.Net 2003, VS.Net 2005
-        # (is that just a misleading comment, or does this really apply
-        # only to .NET 2003 and MSVS 2005? which we don't support any more?)
+        AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
         if test -z "$with_cl_home"; then
             vctest=`./oowintool --msvc-productdir`;
-            if test -x "$vctest/bin/cl.exe"; then
-                with_cl_home=$vctest;
+            if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
+                if test -x "$vctest/bin/cl.exe"; then
+                    with_cl_home=$vctest;
+                fi
+            else
+                if test -x "$vctest/bin/x86_amd64/cl.exe"; then
+                    with_cl_home=$vctest;
+                fi
             fi
         else
             with_cl_home=`cygpath -u "$with_cl_home"`
@@ -2249,18 +2272,32 @@ if test "$_os" = "WINNT"; then
         PATH="$MSPDB_PATH:$PATH"
 
         AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-           if test -x "$with_cl_home/bin/cl.exe"; then
-               CC="$with_cl_home/bin/cl.exe"
-           else
-               AC_PATH_PROG(CC, cl.exe)
-           fi
+        if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
+            if test -x "$with_cl_home/bin/cl.exe"; then
+                CC="$with_cl_home/bin/cl.exe"
+            fi
+		else
+            if test -x "$with_cl_home/bin/x86_amd64/cl.exe"; then
+                CC="$with_cl_home/bin/x86_amd64/cl.exe"
+            fi
+		fi
+        if test -z "$CC"; then
+            AC_PATH_PROG(CC, cl.exe)
+        fi
+
           if test -e "$CC"; then
             # This gives us a posix path with 8.3 filename restrictions
             CC=`cygpath -d "$CC"`
             CC=`cygpath -u "$CC"`
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
-            COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+			if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
+                COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+			else
+			    if test -n "$with_cl_home"; then
+			        COMPATH=`echo $with_cl_home`
+				fi
+			fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
             dnl  Check which Microsoft C/C++ compiler is found
             AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
