@@ -2291,13 +2291,13 @@ if test "$_os" = "WINNT"; then
             CC=`cygpath -u "$CC"`
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
-			if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
+            if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
                 COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
-			else
-			    if test -n "$with_cl_home"; then
-			        COMPATH=`echo $with_cl_home`
-				fi
-			fi
+            else
+                if test -n "$with_cl_home"; then
+                    COMPATH=`echo $with_cl_home`
+                fi
+            fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
             dnl  Check which Microsoft C/C++ compiler is found
             AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
