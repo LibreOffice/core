@@ -975,6 +975,9 @@ sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilterBase* pFB )
 {
+    if( !rXShape.is() )
+        return -1;
+
     sal_Int32 nID = pFB->GetUniqueId();
 
     saShapeMap[ rXShape ] = nID;
@@ -984,6 +987,9 @@ sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilt
 
 sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape )
 {
+    if( !rXShape.is() )
+        return -1;
+
     ShapeHashMap::const_iterator aIter = saShapeMap.find( rXShape );
 
     if( aIter == saShapeMap.end() )
