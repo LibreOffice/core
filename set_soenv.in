@@ -88,7 +88,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
-     $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -121,6 +121,9 @@ $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
 $STLPORT4       = '@STLPORT4@';     # Location of STLport4
 $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
+if ($SYSTEM_PYTHON eq "NO") {
+    $PYTHON              = "python";
+}
 $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
@@ -1903,6 +1906,7 @@ ToFile( "SYSTEM_OPENSSL",    "@SYSTEM_OPENSSL@",   "e" );
 ToFile( "OPENSSL_CFLAGS",    "@OPENSSL_CFLAGS@",   "e" );
 ToFile( "OPENSSL_LIBS",      "@OPENSSL_LIBS@",     "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
+ToFile( "PYTHON",            "@PYTHON@",           "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
 if ($SYSTEM_PYTHON eq "NO") {
