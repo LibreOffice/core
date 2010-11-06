@@ -31,18 +31,15 @@
 
 #include <vector>
 #include "address.hxx"
+#include "dpglobal.hxx"
 #include <vcl/ctrl.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/scrbar.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #define PAGE_SIZE   16      // count of visible fields for scrollbar
 #define LINE_SIZE   8       // count of fields per column for scrollbar
 #define MAX_FIELDS  8       // maximum count of fields for row/col/data area
-#define MAX_PAGEFIELDS 10   // maximum count of fields for page area
-
-#define OWIDTH  PivotGlobal::nObjWidth
-#define OHEIGHT PivotGlobal::nObjHeight
-#define SSPACE  PivotGlobal::nSelSpace
 
 class ScDPLayoutDlg;
 class ScAccessibleDataPilotControl;
@@ -61,53 +58,155 @@ enum ScDPFieldType
 
 //-------------------------------------------------------------------
 
-/** Represents a field area in the DataPilot layout dialog. */
-class ScDPFieldWindow : public Control
+/**
+ * Represents a field area in the DataPilot layout dialog.  This base class
+ * handles storage of field names and the accessibility object.
+ */
+class ScDPFieldControlBase : public Control
 {
-private:
-    typedef ::std::pair< String, bool > FieldString;    // true = text fits into button
+protected:
+    typedef ::std::pair<String, bool> FieldName;    // true = text fits into button
+    typedef ::std::vector<FieldName> FieldNames;
 
-    String                  aName;          /// name of the control, used in Accessibility
-    ScDPLayoutDlg*          pDlg;           /// Parent dialog.
-    Rectangle               aWndRect;       /// Area rectangle in pixels.
-    FixedText*              pFtCaption;     /// FixedText containing the name of the control.
-    Point                   aTextPos;       /// Position of the caption text.
-    std::vector< FieldString > aFieldArr;   /// String array of the field names and flags, if text fits into button.
-    ScDPFieldType           eType;          /// Type of this area.
-    Color                   aFaceColor;     /// Color for dialog background.
-    Color                   aWinColor;      /// Color for window background.
-    Color                   aTextColor;     /// Color for text in buttons.
-    Color                   aWinTextColor;  /// Color for text in field windows.
-    size_t                  nFieldSize;     /// Maximum count of fields.
-    size_t                  nFieldSelected; /// Currently selected field.
+public:
+    ScDPFieldControlBase(
+        ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption );
+    virtual ~ScDPFieldControlBase();
 
-    com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAccessible;
-    ScAccessibleDataPilotControl* pAccessible;
+    virtual void CalcSize() = 0;
 
-    /** Initilize the object. */
-    void                    Init();
+    virtual bool IsValidIndex( size_t nIndex ) const = 0;
+    /** @return  The pixel position of a field (without bound check). */
+    virtual Point GetFieldPosition( size_t nIndex ) = 0;
+    /** Calculates the field index at a specific pixel position.
+        @param rnIndex  The index of the field is returned here.
+        @return  TRUE, if the index value is valid. */
+    virtual bool GetFieldIndex( const Point& rPos, size_t& rnIndex ) = 0;
+    /** @return  The pixel size of a field. */
+    virtual Size GetFieldSize() const = 0;
 
-    /** Reads all needed style settings. */
-    void                    GetStyleSettings();
+    /** @return The description of the control which is used for the accessibility objects. */
+    virtual String GetDescription() const = 0;
+    /** @return The type of the FieldWindow. */
+    virtual ScDPFieldType GetFieldType() const = 0;
+    virtual void ScrollToShowSelection() = 0;
+    virtual void ScrollToEnd() = 0;
+    virtual void ResetScrollBar() = 0;
+
+    /** Reads the FixedText's text with mnemonic and hides the FixedText. */
+    void            UseMnemonic();
+
+    /** @return The name of the control without shortcut. */
+    ::rtl::OUString GetName() const;
+    void SetName(const ::rtl::OUString& rName);
+
+    /** @return  TRUE, if the field with the given index exists. */
+    bool            IsExistingIndex( size_t nIndex ) const;
+
+    /** Inserts a field to the specified index. */
+    void            AddField( const String& rText, size_t nNewIndex );
+
+    /** Inserts a field using the specified pixel position.
+        @param rPos  The coordinates to insert the field.
+        @param rnIndex  The new index of the field is returned here.
+        @return  true, if the field has been created. */
+    bool            AddField( const String& rText, const Point& rPos, size_t& rnIndex );
+
+    bool            AppendField(const String& rText, size_t& rnIndex);
+
+    /** Removes a field from the specified index. */
+    void            DelField( size_t nDelIndex );
+
+    /** @return  The count of existing fields. */
+    size_t          GetFieldCount() const;
+
+    bool            IsEmpty() const;
+
+    /** Removes all fields. */
+    void            ClearFields();
+    /** Changes the text on an existing field. */
+    void            SetFieldText( const String& rText, size_t nIndex );
+    /** Returns the text of an existing field. */
+    const String&   GetFieldText( size_t nIndex ) const;
+
+    /** Calculates a field index at a specific pixel position. Returns in every
+        case the index of an existing field.
+        @param rnIndex  The index of the field is returned here.
+        @return  TRUE, if the index value is valid. */
+    void            GetExistingIndex( const Point& rPos, size_t& rnIndex );
+
+    size_t GetSelectedField() const;
+    void SetSelectedField(size_t nSelected);
+
+    /** Notifies this control that the offset of the first field has been changed.
+        The control has to adjust the selection to keep the same field selected
+        on scrolling with scrollbar. */
+    void            ModifySelectionOffset( long nOffsetDiff );
+    /** Selects the next field. Called i.e. after moving a field from SELECT area. */
+    void            SelectNext();
+    /** Grabs focus and sets new selection. */
+    void            GrabFocusWithSel( size_t nIndex );
+
+    virtual void            Paint( const Rectangle& rRect );
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void            MouseMove( const MouseEvent& rMEvt );
+    virtual void            KeyInput( const KeyEvent& rKEvt );
+    virtual void            GetFocus();
+    virtual void            LoseFocus();
+
+protected:
+    FieldNames& GetFieldNames();
+    const FieldNames& GetFieldNames() const;
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
+    void FieldFocusChanged(size_t nOldSelected, size_t nFieldSelected);
+    void AccessibleSetFocus(bool bOn);
+
+    /** Updates the tab stop style bits. */
+    void UpdateStyle();
 
     /** Draws the background. */
-    void                    DrawBackground( OutputDevice& rDev );
-    /** Draws a field into the specified rectangle. */
-    void                    DrawField(
-                                OutputDevice& rDev,
-                                const Rectangle& rRect,
-                                FieldString& rText,
-                                bool bFocus );
+    void DrawBackground( OutputDevice& rDev );
 
-    /** @return  TRUE, if the field index is inside of the control area. */
-    bool                    IsValidIndex( size_t nIndex ) const;
-    /** @return  TRUE, if the field with the given index exists. */
-    bool                    IsExistingIndex( size_t nIndex ) const;
+    /** Draws a field into the specified rectangle. */
+    void DrawField(
+        OutputDevice& rDev, const Rectangle& rRect, FieldName& rText, bool bFocus );
+
+    ScDPLayoutDlg* GetParentDlg() const;
+
+    void AppendPaintable(Window* p);
+    void DrawPaintables();
+    void DrawInvertSelection();
+
+    /** @return  The new selection index after moving to the given direction. */
+    virtual size_t CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const = 0;
+
+    /**
+     * @param nIndex logical index of a field name, independent of scroll
+     *               offsets.
+     * @return Display position of the button.  The first displayed button is
+     *         always 0 no matter what the current scroll offset is.  In case
+     *         the field specified by the index is outside the visible range,
+     *         <code>INVALID_INDEX</code> is returned.
+     */
+    virtual size_t GetDisplayPosition(size_t nIndex) const = 0;
+
+    /** Draws the complete control. */
+    virtual void Redraw() = 0;
+
+private:
     /** @return  TRUE, if the field with the given index exists and the text is
                     too long for the button control. */
     bool                    IsShortenedText( size_t nIndex ) const;
-    /** @return  The new selection index after moving to the given direction. */
-    size_t                  CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
+
+    /** Moves the selected field to nDestIndex. */
+    void                    MoveField( size_t nDestIndex );
+    /** Moves the selected field to the given direction. */
+    void                    MoveFieldRel( SCsCOL nDX, SCsROW nDY );
 
     /** Sets selection to the field with index nIndex. */
     void                    SetSelection( size_t nIndex );
@@ -118,105 +217,214 @@ private:
     /** Sets selection to new position relative to current. */
     void                    MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY );
 
-    /** Moves the selected field to nDestIndex. */
-    void                    MoveField( size_t nDestIndex );
-    /** Moves the selected field to the given direction. */
-    void                    MoveFieldRel( SCsCOL nDX, SCsROW nDY );
+private:
+    typedef ::std::vector<Window*> Paintables;
+    Paintables maPaintables;
 
-    /** Updates the tab stop style bits. */
-    void                    UpdateStyle();
+    FieldNames maFieldNames;   /// String array of the field names and flags, if text fits into button.
+    ScDPLayoutDlg*  mpDlg;
+    FixedText*      mpCaption;     /// FixedText containing the name of the control.
+    ::rtl::OUString maName;
 
-protected:
-    virtual void            Paint( const Rectangle& rRect );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void            KeyInput( const KeyEvent& rKEvt );
-    virtual void            GetFocus();
-    virtual void            LoseFocus();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    size_t mnFieldSelected; /// Currently selected field.
 
-public:
-                            ScDPFieldWindow(
-                                ScDPLayoutDlg* pDialog,
-                                const ResId& rResId,
-                                ScDPFieldType eFieldType,
-                                FixedText* pFtFieldCaption );
-                            ScDPFieldWindow(
-                                ScDPLayoutDlg* pDialog,
-                                const ResId& rResId,
-                                ScDPFieldType eFieldType,
-                                const String& aName );
-    virtual                 ~ScDPFieldWindow();
-
-    /** Reads the FixedText's text with mnemonic and hides the FixedText. */
-    void                    UseMnemonic();
-
-    /** Draws the complete control. */
-    void                    Redraw();
-
-    /** @return  The pixel position of a field (without bound check). */
-    Point                   GetFieldPosition( size_t nIndex ) const;
-    /** @return  The pixel size of a field. */
-    Size                    GetFieldSize() const;
-
-    /** @return  The index of the selected field. */
-    inline bool             IsEmpty() const { return aFieldArr.empty(); }
-    /** @return  The index of the selected field. */
-    inline size_t           GetSelectedField() const { return nFieldSelected; }
-    /** @return  The pixel position of the last possible field. */
-    Point                   GetLastPosition() const;
-
-    /** @return  The count of existing fields. */
-    inline size_t           GetFieldCount() const { return aFieldArr.size(); }
-    /** Inserts a field to the specified index. */
-    void                    AddField( const String& rText, size_t nNewIndex );
-    /** Removes a field from the specified index. */
-    void                    DelField( size_t nDelIndex );
-    /** Removes all fields. */
-    void                    ClearFields();
-    /** Changes the text on an existing field. */
-    void                    SetFieldText( const String& rText, size_t nIndex );
-    /** Returns the text of an existing field. */
-    const String&           GetFieldText( size_t nIndex ) const;
-
-    /** Inserts a field using the specified pixel position.
-        @param rPos  The coordinates to insert the field.
-        @param rnIndex  The new index of the field is returned here.
-        @return  TRUE, if the field has been created. */
-    bool                    AddField( const String& rText, const Point& rPos, size_t& rnIndex );
-    /** Calculates the field index at a specific pixel position.
-        @param rnIndex  The index of the field is returned here.
-        @return  TRUE, if the index value is valid. */
-    bool                    GetFieldIndex( const Point& rPos, size_t& rnIndex ) const;
-    /** Calculates a field index at a specific pixel position. Returns in every
-        case the index of an existing field.
-        @param rnIndex  The index of the field is returned here.
-        @return  TRUE, if the index value is valid. */
-    void                    GetExistingIndex( const Point& rPos, size_t& rnIndex );
-
-    /** Notifies this control that the offset of the first field has been changed.
-        The control has to adjust the selection to keep the same field selected
-        on scrolling with scrollbar. */
-    void                    ModifySelectionOffset( long nOffsetDiff );
-    /** Selects the next field. Called i.e. after moving a field from SELECT area. */
-    void                    SelectNext();
-
-    /** @return The name of the control without shortcut. */
-    inline String           GetName() const { return aName; }
-
-    /** @return The description of the control which is used for the accessibility objects. */
-    String                  GetDescription() const;
-
-    /** Grabs focus and sets new selection. */
-    void                    GrabFocusWithSel( size_t nIndex );
-
-    /** @return The type of the FieldWindow. */
-    inline ScDPFieldType    GetType() const { return eType; }
+    com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAccessible;
+    ScAccessibleDataPilotControl* pAccessible;
 };
 
-//===================================================================
+// ============================================================================
+
+class ScDPHorFieldControl : public ScDPFieldControlBase
+{
+protected:
+    virtual size_t          CalcNewFieldIndex(SCsCOL nDX, SCsROW nDY) const;
+    virtual size_t          GetDisplayPosition(size_t nIndex) const;
+    virtual void            Redraw();
+
+public:
+    ScDPHorFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption );
+
+    virtual                 ~ScDPHorFieldControl();
+
+    virtual void            CalcSize();
+    virtual bool            IsValidIndex( size_t nIndex ) const;
+    virtual Point           GetFieldPosition(size_t nIndex);
+    virtual Size            GetFieldSize() const;
+    virtual bool            GetFieldIndex( const Point& rPos, size_t& rnIndex );
+    virtual String          GetDescription() const;
+
+    virtual void ScrollToEnd();
+    virtual void ScrollToShowSelection();
+    virtual void ResetScrollBar();
+
+private:
+    bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
+    void HandleScroll();
+
+    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK(EndScrollHdl, ScrollBar*);
+
+private:
+
+    ScrollBar               maScroll;
+
+    size_t                  mnFieldBtnRowCount;
+    size_t                  mnFieldBtnColCount;
+};
+
+// ============================================================================
+
+class ScDPPageFieldControl : public ScDPHorFieldControl
+{
+public:
+    ScDPPageFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption);
+    virtual ~ScDPPageFieldControl();
+
+    virtual ScDPFieldType GetFieldType() const;
+};
+
+// ============================================================================
+
+class ScDPColFieldControl : public ScDPHorFieldControl
+{
+public:
+    ScDPColFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption);
+    virtual ~ScDPColFieldControl();
+
+    virtual ScDPFieldType GetFieldType() const;
+};
+
+// ============================================================================
+
+class ScDPRowFieldControl : public ScDPFieldControlBase
+{
+public:
+    ScDPRowFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption );
+
+    virtual                 ~ScDPRowFieldControl();
+
+    virtual void            CalcSize();
+    virtual bool            IsValidIndex( size_t nIndex ) const;
+    virtual Point           GetFieldPosition( size_t nIndex );
+    virtual Size            GetFieldSize() const;
+    virtual bool            GetFieldIndex( const Point& rPos, size_t& rnIndex );
+    virtual String          GetDescription() const;
+    virtual ScDPFieldType   GetFieldType() const;
+
+    virtual void ScrollToEnd();
+    virtual void ScrollToShowSelection();
+    virtual void ResetScrollBar();
+
+protected:
+    virtual size_t          CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
+    virtual size_t          GetDisplayPosition(size_t nIndex) const;
+    virtual void            Redraw();
+
+private:
+    bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
+    void HandleScroll();
+
+    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK(EndScrollHdl, ScrollBar*);
+
+private:
+
+    ScrollBar               maScroll;
+    size_t                  mnColumnBtnCount;
+};
+
+// ============================================================================
+
+class ScDPSelectFieldControl : public ScDPFieldControlBase
+{
+public:
+    ScDPSelectFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, const String& aName );
+
+    virtual                 ~ScDPSelectFieldControl();
+
+    virtual void            CalcSize() {}
+    virtual bool            IsValidIndex( size_t nIndex ) const;
+    virtual Point           GetFieldPosition( size_t nIndex );
+    virtual Size            GetFieldSize() const;
+    virtual bool            GetFieldIndex( const Point& rPos, size_t& rnIndex );
+    virtual String          GetDescription() const;
+    virtual ScDPFieldType   GetFieldType() const;
+
+    virtual void ScrollToEnd() {}
+    virtual void ScrollToShowSelection() {}
+    virtual void ResetScrollBar() {}
+
+protected:
+    virtual size_t          CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
+    virtual size_t          GetDisplayPosition(size_t nIndex) const { return 0; }
+    virtual void            Redraw();
+};
+
+// ============================================================================
+
+class ScDPDataFieldControl : public ScDPFieldControlBase
+{
+public:
+    ScDPDataFieldControl( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption );
+    virtual ~ScDPDataFieldControl();
+
+    virtual void CalcSize();
+    virtual bool IsValidIndex( size_t nIndex ) const;
+    virtual Point GetFieldPosition( size_t nIndex );
+    virtual bool GetFieldIndex(const Point& rPos, size_t& rnIndex);
+    virtual Size GetFieldSize() const;
+    virtual String GetDescription() const;
+    virtual ScDPFieldType GetFieldType() const;
+    virtual void ScrollToEnd();
+    virtual void ScrollToShowSelection();
+    virtual void ResetScrollBar();
+
+public:
+    virtual void Paint( const Rectangle& rRect );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void MouseMove( const MouseEvent& rMEvt );
+
+protected:
+    virtual void Redraw();
+    virtual size_t CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
+    virtual size_t GetDisplayPosition(size_t nIndex) const;
+
+private:
+    /**
+     * Get the size and position of specified field button.
+     *
+     * @param nPos position index of the field button.  Note that this index
+     *             differs from field name index in that, the top left button
+     *             always has an index of 0 regardless off scroll offset.
+     * @param rPos
+     * @param rSize
+     *
+     * @return false if the position index is out-of-bound, or otherwise
+     *         invalid.
+     */
+    bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
+    void GetFieldBtnColRow(const Point& rPos, size_t& rCol, size_t& rRow);
+    long CalcOffsetToShowSelection();
+    void HandleScroll();
+
+    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK(EndScrollHdl, ScrollBar*);
+
+private:
+    ScrollBar       maScroll;
+    ScDPLayoutDlg*  mpParent;
+
+    long            mnScrollMarginHeight; /// bottom scroll bar margin height.
+    size_t          mnColumnBtnCount; /// number of buttons per single column.
+    size_t          mnTotalBtnCount; /// number of total visible buttons
+};
 
 #endif // SC_FIELDWND_HXX
 

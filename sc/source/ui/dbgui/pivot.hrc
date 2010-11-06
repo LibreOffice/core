@@ -38,8 +38,8 @@
 #define WND_ROW                 12
 #define WND_DATA                13
 #define WND_SELECT              14
-#define WND_FIELD               15
-#define WND_FIELD_SPACE         16
+//#define WND_FIELD               15
+//#define WND_FIELD_SPACE         16
 #define WND_HSCROLL             17
 #define WND_PAGE                18
 #define FT_COL                  31

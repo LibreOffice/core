@@ -53,7 +53,7 @@ public:
     ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow,
+        ScDPFieldControlBase* pDPFieldWindow,
         sal_Int32 nIndex);
 
     virtual void Init();
@@ -146,14 +146,14 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ScDPFieldWindow* mpDPFieldWindow;
+    ScDPFieldControlBase* mpDPFieldWindow;
     sal_Int32        mnIndex;
 };
 
     //=====  internal  ========================================================
 ScAccessibleDataPilotControl::ScAccessibleDataPilotControl(
         const uno::Reference<XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow)
+        ScDPFieldControlBase* pDPFieldWindow)
         :
     ScAccessibleContextBase(rxParent, AccessibleRole::GROUP_BOX),
     mpDPFieldWindow(pDPFieldWindow)
@@ -381,7 +381,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
     sal_Int32 nColor(0);
     if (mpDPFieldWindow)
     {
-        if (mpDPFieldWindow->GetType() == TYPE_SELECT)
+        if (mpDPFieldWindow->GetFieldType() == TYPE_SELECT)
         {
             nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
         }
@@ -527,7 +527,7 @@ Rectangle ScAccessibleDataPilotControl::GetBoundingBox(void) const
 ScAccessibleDataPilotButton::ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow,
+        ScDPFieldControlBase* pDPFieldWindow,
         sal_Int32 nIndex)
     : ScAccessibleContextBase(rxParent, AccessibleRole::PUSH_BUTTON),
     mpDPFieldWindow(pDPFieldWindow),

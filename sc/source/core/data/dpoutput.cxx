@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -79,6 +77,48 @@ using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 // -----------------------------------------------------------------------
 
 //! move to a header file
@@ -98,7 +138,6 @@ using ::rtl::OUString;
 
 //! dynamic!!!
 #define SC_DPOUT_MAXLEVELS  256
-
 
 struct ScDPOutLevelData
 {
@@ -374,6 +413,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     bSizeOverflow( FALSE ),
     mbHeaderLayout( false )
 {
+    StackPrinter __stack_printer__("ScDPOutput::ScDPOutput");
     nTabStartCol = nMemberStartCol = nDataStartCol = nTabEndCol = 0;
     nTabStartRow = nMemberStartRow = nDataStartRow = nTabEndRow = 0;
 
@@ -394,6 +434,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         long nDimCount = xDims->getCount();
         for (long nDim=0; nDim<nDimCount; nDim++)
         {
+            fprintf(stdout, "ScDPOutput::ScDPOutput:   dimension = %ld\n", nDim);
             uno::Reference<uno::XInterface> xDim =
                     ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
             uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
@@ -414,6 +455,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
 
                 if ( eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN )
                 {
+                    fprintf(stdout, "ScDPOutput::ScDPOutput:   not hidden\n");
                     uno::Reference<container::XIndexAccess> xHiers =
                             new ScNameToIndexAccess( xDimSupp->getHierarchies() );
                     long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
@@ -453,6 +495,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 switch ( eDimOrient )
                                 {
                                     case sheet::DataPilotFieldOrientation_COLUMN:
+                                        fprintf(stdout, "ScDPOutput::ScDPOutput:   column\n");
                                         pColFields[nColFieldCount].nDim    = nDim;
                                         pColFields[nColFieldCount].nHier   = nHierarchy;
                                         pColFields[nColFieldCount].nLevel  = nLev;
@@ -465,6 +508,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                             ++nColFieldCount;
                                         break;
                                     case sheet::DataPilotFieldOrientation_ROW:
+                                        fprintf(stdout, "ScDPOutput::ScDPOutput:   row\n");
                                         pRowFields[nRowFieldCount].nDim    = nDim;
                                         pRowFields[nRowFieldCount].nHier   = nHierarchy;
                                         pRowFields[nRowFieldCount].nLevel  = nLev;
@@ -480,6 +524,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         }
                                         break;
                                     case sheet::DataPilotFieldOrientation_PAGE:
+                                        fprintf(stdout, "ScDPOutput::ScDPOutput:   page\n");
                                         pPageFields[nPageFieldCount].nDim    = nDim;
                                         pPageFields[nPageFieldCount].nHier   = nHierarchy;
                                         pPageFields[nPageFieldCount].nLevel  = nLev;
@@ -493,6 +538,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         break;
                                     default:
                                     {
+                                        fprintf(stdout, "ScDPOutput::ScDPOutput:   none of the above\n");
                                         // added to avoid warnings
                                     }
                                 }
@@ -500,6 +546,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 // get number formats from data dimensions
                                 if ( bIsDataLayout )
                                 {
+                                    fprintf(stdout, "ScDPOutput::ScDPOutput:   data layout\n");
                                     if (bRowFieldHasMember)
                                         mbHasDataLayout = true;
 
@@ -515,11 +562,14 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                 }
                 else if ( bIsDataLayout )
                 {
+                    fprintf(stdout, "ScDPOutput::ScDPOutput:   hidden data layout\n");
                     // data layout dimension is hidden (allowed if there is only one data dimension)
                     // -> use the number format from the first data dimension for all results
 
                     nSingleNumFmt = lcl_GetFirstNumberFormat( xDims );
                 }
+                else
+                    fprintf(stdout, "ScDPOutput::ScDPOutput:   just hidden ?\n");
             }
         }
         lcl_SortFields( pColFields, nColFieldCount );
@@ -717,6 +767,11 @@ void ScDPOutput::CalcSizes()
             // Insert an extra header row only when there is no column field.
             nHeaderSize = 2;
 
+        fprintf(stdout, "ScDPOutput::CalcSizes:   header size = %d\n", nHeaderSize);
+
+        fprintf(stdout, "ScDPOutput::CalcSizes:   col fields = %d  row fields = %d\n",
+                nColFieldCount, nRowFieldCount);
+
         //  calculate output positions and sizes
 
         long nPageSize = 0;     //! use page fields!
@@ -751,6 +806,9 @@ void ScDPOutput::CalcSizes()
         else
             nTabEndRow = nDataStartRow;     // single row will remain empty
         bSizesValid = TRUE;
+
+        fprintf(stdout, "ScDPOutput::CalcSizes:   table size (col=%ld,row=%ld) - (col=%ld,row=%ld)\n",
+                nTabStartCol,nTabStartRow,nTabEndCol,nTabEndRow);
     }
 }
 
