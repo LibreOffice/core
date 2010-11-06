@@ -18,6 +18,8 @@ Easy
 4. More documentation
 5. Replace j_assert with DBG_ASSERT (don't do this yet).
 6. Remove the CreateTextFromNode methods and replace calls to it with NodeToTextVisitor
+7. Extend NodeToTextVisitor to update token offsets so SmNode::GetRow and SmNode::GetColumn will work.
+   (These methods can be used to enable synchronization of caret positions between visual and non-visual editor).
 
 Medium
 ------
