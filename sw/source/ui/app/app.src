@@ -62,7 +62,7 @@ String STR_PAGE_COUNT_MACRO
     IdList = {                          \
         FN_FORMULA_CALC                 ;\
         FN_FORMULA_CANCEL               ;\
-         FN_FORMULA_APPLY               ;\
+        FN_FORMULA_APPLY                ;\
         };                              \
     IdCount = {                         \
         3;                              \
@@ -74,22 +74,10 @@ ImageList RID_DEFAULTIMAGELIST_SC
     MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
+
 ImageList RID_DEFAULTIMAGELIST_LC
 {
     Prefix = "lc";
-    MaskColor = IMAGE_MASK_COLOR ;
-    IMAGELIST_AND_COUNT
-};
-
-ImageList RID_DEFAULTIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MaskColor = IMAGE_MASK_COLOR ;
-    IMAGELIST_AND_COUNT
-};
-ImageList RID_DEFAULTIMAGELIST_LCH
-{
-    Prefix = "lch";
     MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
@@ -111,65 +99,65 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             Text [ en-US ] = "Paragraph Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-        FilterList [ en-US ] =
-        {
-         < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
-            < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-            < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Automatic" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Text Styles" ; SWSTYLEBIT_TEXT ; > ;
-            < "Chapter Styles" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "List Styles" ; SWSTYLEBIT_LIST ; > ;
-            < "Index Styles" ; SWSTYLEBIT_IDX ; > ;
-            < "Special Styles" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML Styles" ; SWSTYLEBIT_HTML ; > ;
-            < "Conditional Styles" ; SWSTYLEBIT_CONDCOLL ; > ;
+            FilterList [ en-US ] =
+            {
+                < "All Styles"          ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"      ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"       ; SFXSTYLEBIT_USERDEF   ; > ;
+                < "Automatic"           ; SFXSTYLEBIT_AUTO      ; > ;
+                < "Text Styles"         ; SWSTYLEBIT_TEXT       ; > ;
+                < "Chapter Styles"      ; SWSTYLEBIT_CHAPTER    ; > ;
+                < "List Styles"         ; SWSTYLEBIT_LIST       ; > ;
+                < "Index Styles"        ; SWSTYLEBIT_IDX        ; > ;
+                < "Special Styles"      ; SWSTYLEBIT_EXTRA      ; > ;
+                < "HTML Styles"         ; SWSTYLEBIT_HTML       ; > ;
+                < "Conditional Styles"  ; SWSTYLEBIT_CONDCOLL   ; > ;
+            };
         };
-    };
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Character Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_CHAR ;
             FilterList [ en-US ] =
             {
-                < "All" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
-    };
+        };
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Frame Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_FRAME ;
             FilterList [ en-US ] =
             {
-                < "All" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
-    };
+        };
         SfxStyleFamilyItem
         {
             Text [ en-US ] = "Page Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PAGE ;
             FilterList [ en-US ] =
             {
-                < "All" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
-    };
+        };
         SfxStyleFamilyItem
         {
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList [ en-US ] =
             {
-                < "All" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
             Text [ en-US ] = "List Styles" ;
-    };
+        };
     };
 
     ImageList 1 // == BMP_COLOR_NORMAL + 1
@@ -177,18 +165,21 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Prefix = "sf";
         STYLE_IMAGE_LISTEF
     };
+
     ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
     {
         Prefix = "sfh";
         STYLE_IMAGE_LISTEF
     };
+
 };
 
 
 
- // Default Bitmap fuer Toolbox
+// Default Bitmap fuer Toolbox
 BITMAP BMP_FEHLT { FILE = "x.bmp" ; };
- // Bitmap fuer die NumerierungsVorlagen im Organizer
+
+// Bitmap fuer die NumerierungsVorlagen im Organizer
 Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
 Bitmap BMP_STYLES_FAMILY_NUM_HC { File = "styfamnu_h.bmp" ; };
 
@@ -223,17 +214,16 @@ String STR_CANTCREATE
 {
     Text [ en-US ] = "Can't create document.";
 };
+
 String STR_DLLNOTFOUND
 {
     Text [ en-US ] = "Filter not found." ;
 };
 
-
 String STR_UNBENANNT
 {
     Text [ en-US ] = "Untitled" ;
 };
-
 
 String STR_LOAD_GLOBAL_DOC
 {
@@ -251,6 +241,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     DEFBUTTON = WB_DEF_OK ;
     Message [ en-US ] = "Error sending mail." ;
 };
+
 InfoBox MSG_ERROR_PASSWD
 {
     BUTTONS = WB_OK ;
@@ -424,14 +415,17 @@ String STR_FRAME_DEFNAME
 {
     Text [ en-US ] = "Frame" ;
 };
+
 String STR_REGION_DEFNAME
 {
     Text [ en-US ] = "Section" ;
 };
+
 String STR_NUMRULE_DEFNAME
 {
     Text [ en-US ] = "Numbering" ;
 };
+
 String STR_EMPTYPAGE
 {
     Text [ en-US ] = "blank page" ;
@@ -456,6 +450,7 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
 };
+
 String STR_ABSTRACT_TITLE
 {
     Text [ en-US ] = "Abstract: " ;
@@ -485,18 +480,22 @@ String STR_PAGEOFFSET
 {
     Text [ en-US ] = "Page number: " ;
 };
+
 String STR_PAGEBREAK
 {
     Text [ en-US ] = "Break before new page" ;
 };
+
 String STR_WESTERN_FONT
 {
     Text [ en-US ] = "Western text: ";
 };
+
 String STR_CJK_FONT
 {
     Text [ en-US ] = "Asian text: ";
 };
+
 String STR_REDLINE_UNKNOWN_AUTHOR
 {
     Text [ en-US ] = "Unknown Author";
@@ -508,6 +507,7 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     DEFBUTTON = WB_DEF_YES ;
     Message [ en-US ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
 };
+
 QueryBox MSG_PRINT_AS_MERGE
 {
     HelpId = HID_PRINT_AS_MERGE;
@@ -515,6 +515,7 @@ QueryBox MSG_PRINT_AS_MERGE
     DefButton = WB_DEF_YES ;
     Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
+
 ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
 {
     HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
@@ -547,6 +548,7 @@ ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
+
 WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
     HelpId = HID_DATA_SOURCES_UNAVAILABLE;
@@ -558,14 +560,17 @@ String RID_MODULE_TOOLBOX
 {
     Text [ en-US ] = "Function Bar (viewing mode)" ;
 };
+
 String  STR_DONT_ASK_AGAIN
 {
     Text [ en-US ] = "~Do not show warning again" ;
 };
+
 String STR_OUTLINE_NUMBERING
 {
     Text [ en-US ] = "Outline Numbering";
 };
+
 ToolBox RID_MODULE_TOOLBOX
 {
     HelpID = HID_MODULE_TOOLBOX ;
