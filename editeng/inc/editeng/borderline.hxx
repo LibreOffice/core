@@ -95,7 +95,18 @@ enum SvxBorderStyle
 {
     SOLID,
     DOTTED,
-    DASHED
+    DASHED,
+    DOUBLE,
+    THINTHICK_SMALLGAP,
+    THINTHICK_MEDIUMGAP,
+    THINTHICK_LARGEGAP,
+    THICKTHIN_SMALLGAP,
+    THICKTHIN_MEDIUMGAP,
+    THICKTHIN_LARGEGAP,
+    EMBOSSED,
+    ENGRAVED,
+    OUTSET,
+    INSET
 };
 
 class EDITENG_DLLPUBLIC SvxBorderLine
@@ -107,14 +118,25 @@ protected:
     sal_uInt16 nInWidth;
     sal_uInt16 nDistance;
 
+    bool             m_bUseLeftTop;
+    Color            (*m_pColorOutFn)( Color );
+    Color            (*m_pColorInFn)( Color );
+    Color            (*m_pColorGapFn)( Color );
+
 public:
     SvxBorderLine( const Color *pCol = 0, sal_uInt16 nOut = 0, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0,
-                   SvxBorderStyle nStyle = SOLID );
+            SvxBorderStyle nStyle = SOLID, bool bUseLeftTop = false,
+            Color (*pColorOutFn)( Color ) = &darkColor, Color (*pColorInFn)( Color ) = &darkColor,
+            Color (*pColorGapFn)( Color ) = NULL );
     SvxBorderLine( const SvxBorderLine& r );
 
     SvxBorderLine& operator=( const SvxBorderLine& r );
 
     const Color&    GetColor() const { return aColor; }
+    Color           GetColorOut( bool bLeftOrTop = true ) const;
+    Color           GetColorIn( bool bLeftOrTop = true ) const;
+    bool            HasGapColor() const { return m_pColorGapFn != NULL; }
+    Color           GetColorGap() const;
     sal_uInt16          GetOutWidth() const { return nOutWidth; }
     sal_uInt16          GetInWidth() const { return nInWidth; }
     sal_uInt16          GetDistance() const { return nDistance; }
@@ -122,10 +144,14 @@ public:
     SvxBorderStyle  GetStyle() const { return m_nStyle; }
 
     void            SetColor( const Color &rColor ) { aColor = rColor; }
-    void            SetStyle( SvxBorderStyle nNew ) { m_nStyle = nNew; }
+    void            SetColorOutFn( Color (*pColorOutFn)( Color ) ) { m_pColorOutFn = pColorOutFn; }
+    void            SetColorInFn( Color (*pColorInFn)( Color ) ) { m_pColorInFn = pColorInFn; }
+    void            SetColorGapFn( Color (*pColorGapFn)( Color ) ) { m_pColorGapFn = pColorGapFn; }
+    void            SetUseLeftTop( bool bUseLeftTop ) { m_bUseLeftTop = bUseLeftTop; }
     void            SetOutWidth( sal_uInt16 nNew ) { nOutWidth = nNew; }
     void            SetInWidth( sal_uInt16 nNew ) { nInWidth = nNew;  }
     void            SetDistance( sal_uInt16 nNew ) { nDistance = nNew; }
+    void            SetStyle( SvxBorderStyle nNew );
     void            ScaleMetrics( long nMult, long nDiv );
 
     sal_Bool            operator==( const SvxBorderLine &rCmp ) const;
@@ -139,6 +165,14 @@ public:
     bool isEmpty() const { return (0 == nOutWidth && 0 == nInWidth && 0 == nDistance); }
     bool isDouble() const { return (0 != nOutWidth && 0 != nInWidth); }
     sal_uInt16 getWidth() const { return nOutWidth + nInWidth + nDistance; }
+
+    static Color darkColor( Color aMain );
+    static Color lightColor( Color aMain );
+
+    static Color threeDLightColor( Color aMain );
+    static Color threeDMediumColor( Color aMain );
+    static Color threeDDarkColor( Color aMain );
+
 };
 
 // ============================================================================

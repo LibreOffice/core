@@ -60,7 +60,9 @@ public:
     const SvxBorderLine& GetCoreStyle() const { return maCoreStyle; }
     void                SetCoreStyle( const SvxBorderLine* pStyle );
 
-    inline void         SetUIColor( const Color& rColor ) {maUIStyle.SetColor( rColor ); }
+    inline void         SetUIColorPrim( const Color& rColor ) {maUIStyle.SetColorPrim( rColor ); }
+    inline void         SetUIColorSecn( const Color& rColor ) {maUIStyle.SetColorSecn( rColor ); }
+    inline void         SetUIColorGap( bool bUseIt, const Color& rColor ) {maUIStyle.SetColorGap(bUseIt, rColor);}
     inline const frame::Style& GetUIStyle() const { return maUIStyle; }
 
     inline void         ClearFocusArea() { maFocusArea.Clear(); }

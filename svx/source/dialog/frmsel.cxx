@@ -84,7 +84,7 @@ const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
 // ----------------------------------------------------------------------------
 
-static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0 );
+static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0, SOLID );
 static const FrameBorder    OBJ_FRAMEBORDER_NONE( FRAMEBORDER_NONE );
 
 // ----------------------------------------------------------------------------
@@ -627,8 +627,10 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // Translate core colors to current UI colors (regards current background and HC mode).
     for( FrameBorderIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
     {
-        Color aCoreColor = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColor();
-        (*aIt)->SetUIColor( GetDrawLineColor( aCoreColor ) );
+        Color aCoreColorPrim = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorOut();
+        Color aCoreColorSecn = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorIn();
+        (*aIt)->SetUIColorPrim( GetDrawLineColor( aCoreColorPrim ) );
+        (*aIt)->SetUIColorSecn( GetDrawLineColor( aCoreColorSecn ) );
     }
 
     // Copy all frame border styles to the helper array
@@ -637,9 +639,11 @@ void FrameSelectorImpl::DrawAllFrameBorders()
 
     // Invert the style for the right line
     const frame::Style rRightStyle = maRight.GetUIStyle( );
-    frame::Style rInvertedRight( rRightStyle.GetColor(),
+    frame::Style rInvertedRight( rRightStyle.GetColorPrim(),
+            rRightStyle.GetColorSecn(), rRightStyle.GetColorGap(),
+            rRightStyle.UseGapColor(),
             rRightStyle.Secn(), rRightStyle.Dist(), rRightStyle.Prim( ),
-            rRightStyle.Dashing( ) );
+            rRightStyle.Type( ) );
     maArray.SetColumnStyleRight( mbVer ? 1 : 0, rInvertedRight );
 
     maArray.SetRowStyleTop( 0, maTop.GetUIStyle() );
@@ -647,17 +651,21 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     {
         // Invert the style for the hor line to match the real borders
         const frame::Style rHorStyle = maHor.GetUIStyle();
-        frame::Style rInvertedHor( rHorStyle.GetColor(),
+        frame::Style rInvertedHor( rHorStyle.GetColorPrim(),
+            rHorStyle.GetColorSecn(), rHorStyle.GetColorGap(),
+            rHorStyle.UseGapColor(),
             rHorStyle.Secn(), rHorStyle.Dist(), rHorStyle.Prim( ),
-            rHorStyle.Dashing() );
+            rHorStyle.Type() );
         maArray.SetRowStyleTop( 1, rInvertedHor );
     }
 
     // Invert the style for the bottom line
     const frame::Style rBottomStyle = maBottom.GetUIStyle( );
-    frame::Style rInvertedBottom( rBottomStyle.GetColor(),
+    frame::Style rInvertedBottom( rBottomStyle.GetColorPrim(),
+            rBottomStyle.GetColorSecn(), rBottomStyle.GetColorGap(),
+            rBottomStyle.UseGapColor(),
             rBottomStyle.Secn(), rBottomStyle.Dist(), rBottomStyle.Prim( ),
-            rBottomStyle.Dashing() );
+            rBottomStyle.Type() );
     maArray.SetRowStyleBottom( mbHor ? 1 : 0, rInvertedBottom );
 
     for( size_t nCol = 0; nCol < maArray.GetColCount(); ++nCol )
@@ -962,7 +970,7 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
 }
 
 void FrameSelector::SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSecn,
-        SvxBorderStyle nStyle )
+       SvxBorderStyle nStyle )
 {
     mxImpl->maCurrStyle.SetOutWidth( nPrim );
     mxImpl->maCurrStyle.SetDistance( nDist );

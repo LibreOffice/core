@@ -37,6 +37,8 @@
 #include <vcl/outdev.hxx>
 #include <editeng/borderline.hxx>
 
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+
 class OutputDevice;
 
 namespace svx {
@@ -114,15 +116,16 @@ class SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */
-    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnPrim( 0 ), mnDist( 0 ), mnSecn( 0 ), mnDashing( SOLID ) {}
+    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnPrim( 0 ), mnDist( 0 ), mnSecn( 0 ), mnType( SOLID ) {}
     /** Constructs a frame style with passed line widths. */
-    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS ) :
-                            meRefMode( REFMODE_CENTERED ), mnDashing( SOLID )
+    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, SvxBorderStyle nType ) :
+                            meRefMode( REFMODE_CENTERED ), mnType( nType )
                             { Set( nP, nD, nS ); }
     /** Constructs a frame style with passed color and line widths. */
-    inline explicit     Style( const Color& rColor, sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, SvxBorderStyle nDashing = SOLID ) :
-                            meRefMode( REFMODE_CENTERED ), mnDashing( nDashing )
-                            { Set( rColor, nP, nD, nS ); }
+    inline explicit     Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, SvxBorderStyle nType ) :
+                            meRefMode( REFMODE_CENTERED ), mnType( nType )
+                            { Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS ); }
     /** Constructs a frame style from the passed SvxBorderLine struct. */
     inline explicit     Style( const SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
                             meRefMode( REFMODE_CENTERED ) { Set( rBorder, fScale, nMaxWidth ); }
@@ -131,22 +134,25 @@ public:
                             meRefMode( REFMODE_CENTERED ) { Set( pBorder, fScale, nMaxWidth ); }
 
     inline RefMode      GetRefMode() const { return meRefMode; }
-    inline const Color& GetColor() const { return maColor; }
+    inline const Color& GetColorPrim() const { return maColorPrim; }
+    inline const Color& GetColorSecn() const { return maColorSecn; }
+    inline const Color& GetColorGap() const { return maColorGap; }
+    inline bool         UseGapColor() const { return mbUseGapColor; }
     inline sal_uInt16   Prim() const { return mnPrim; }
     inline sal_uInt16   Dist() const { return mnDist; }
     inline sal_uInt16   Secn() const { return mnSecn; }
-    inline SvxBorderStyle Dashing() const { return mnDashing; }
+    inline SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
     inline sal_uInt16   GetWidth() const { return mnPrim + mnDist + mnSecn; }
-
 
     /** Sets the frame style to invisible state. */
     void                Clear();
     /** Sets the frame style to the passed line widths. */
     void                Set( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
     /** Sets the frame style to the passed line widths. */
-    void                Set( const Color& rColor, sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
+    void                Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
     /** Sets the frame style to the passed SvxBorderLine struct. */
     void                Set( const SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
@@ -155,9 +161,11 @@ public:
     /** Sets a new reference point handling mode, does not modify other settings. */
     inline void         SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
     /** Sets a new color, does not modify other settings. */
-    inline void         SetColor( const Color& rColor ) { maColor = rColor; }
+    inline void         SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
+    inline void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
+    inline void         SetColorGap( bool bUseIt, const Color& rColor ) { maColorGap = rColor; mbUseGapColor = bUseIt; }
     /** Sets whether to use dotted style for single hair lines. */
-    inline void         SetDashing( SvxBorderStyle nDashing ) { mnDashing = nDashing; }
+    inline void         SetType( SvxBorderStyle nType ) { mnType = nType; }
 
     /** Scales the style by the specified scaling factor. Ensures that visible lines keep visible. */
     Style&              ScaleSelf( double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
@@ -170,12 +178,15 @@ public:
     Style               Mirror() const;
 
 private:
-    Color               maColor;    /// The color of the line(s) of this frame border.
+    Color               maColorPrim;
+    Color               maColorSecn;
+    Color               maColorGap;
+    bool                mbUseGapColor;
     RefMode             meRefMode;  /// Reference point handling for this frame border.
     sal_uInt16          mnPrim;     /// Width of primary (single, left, or top) line.
     sal_uInt16          mnDist;     /// Distance between primary and secondary line.
     sal_uInt16          mnSecn;     /// Width of secondary (right or bottom) line.
-    SvxBorderStyle      mnDashing;
+    SvxBorderStyle      mnType;
 };
 
 bool operator==( const Style& rL, const Style& rR );
@@ -449,6 +460,22 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
 // ============================================================================
 // Drawing functions
 // ============================================================================
+
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
+    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
+    const Style&        rBorder,        /// Style of the processed frame border.
+
+    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
+    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
+    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
+
+    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
+    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
+    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
+
+    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
+);
 
 /** Draws a horizontal frame border, regards all connected frame styles.
 

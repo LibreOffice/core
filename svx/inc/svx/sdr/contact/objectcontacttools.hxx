@@ -30,6 +30,7 @@
 #define _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -49,7 +50,7 @@ namespace sdr
         // create a mating VCL-Provessor for given OutputDevice. This includes
         // looking for MetaFile-recording. The returned renderer changes owner,
         // deletion is duty of the caller
-        drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+        SVX_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 

@@ -63,6 +63,7 @@
 #include <svl/memberid.hrc>
 #include <svtools/wallitem.hxx>
 #include <svl/cntwall.hxx>
+#include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/filter.hxx>
@@ -93,6 +94,9 @@
 #include <editeng/memberids.hrc>
 #include <editeng/editerr.hxx>
 
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/color/bcolortools.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -104,7 +108,6 @@ using namespace ::com::sun::star;
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 // STATIC DATA -----------------------------------------------------------
-
 
 inline void SetValueProp( XubString& rStr, const sal_uInt16 nValue,
                           const sal_uInt16 nProp )
@@ -141,7 +144,6 @@ TYPEINIT1_FACTORY(SvxFmtBreakItem, SfxEnumItem, new SvxFmtBreakItem(SVX_BREAK_NO
 TYPEINIT1_FACTORY(SvxFmtKeepItem, SfxBoolItem, new SvxFmtKeepItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxLineItem, SfxPoolItem, new SvxLineItem(0));
 TYPEINIT1_FACTORY(SvxFrameDirectionItem, SfxUInt16Item, new SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0));
-
 
 // class SvxPaperBinItem ------------------------------------------------
 
@@ -379,7 +381,6 @@ bool SvxSizeItem::HasMetrics() const
 }
 
 // -----------------------------------------------------------------------
-
 
 SfxPoolItem* SvxSizeItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
@@ -894,7 +895,6 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
 
-
         default:
             OSL_FAIL("unknown MemberId");
             return false;
@@ -1032,7 +1032,6 @@ bool SvxULSpaceItem::HasMetrics() const
 {
     return true;
 }
-
 
 // class SvxPrintItem ----------------------------------------------------
 
@@ -1547,12 +1546,73 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 
 // class SvxBorderLine  --------------------------------------------------
 
+Color SvxBorderLine::darkColor( Color aMain )
+{
+    return aMain;
+}
+
+Color SvxBorderLine::lightColor( Color aMain )
+{
+
+    // Divide Luminance by 2
+    basegfx::BColor color = aMain.getBColor( );
+    basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
+    hsl.setZ( hsl.getZ() * 0.5 );
+    color = basegfx::tools::hsl2rgb( hsl );
+
+    return Color( color );
+}
+
+Color lcl_compute3DColor( Color aMain, int nLight, int nMedium, int nDark )
+{
+    basegfx::BColor color = aMain.getBColor( );
+    basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
+
+    int nCoef = 0;
+    if ( hsl.getZ( ) >= 0.5 )
+        nCoef = nLight;
+    else if ( 0.5 > hsl.getZ() && hsl.getZ() >= 0.25 )
+        nCoef = nMedium;
+    else
+        nCoef = nDark;
+
+    double L = hsl.getZ() * 255.0 + nCoef;
+    hsl.setZ( L / 255.0 );
+    color = basegfx::tools::hsl2rgb( hsl );
+
+    return Color( color );
+}
+
+Color SvxBorderLine::threeDLightColor( Color aMain )
+{
+    // These values have been defined in an empirical way
+    return lcl_compute3DColor( aMain, 3, 40, 83 );
+}
+
+Color SvxBorderLine::threeDDarkColor( Color aMain )
+{
+    // These values have been defined in an empirical way
+    return lcl_compute3DColor( aMain, -85, -43, -1 );
+}
+
+Color SvxBorderLine::threeDMediumColor( Color aMain )
+{
+    // These values have been defined in an empirical way
+    return lcl_compute3DColor( aMain, -42, -0, 42 );
+}
+
 SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist,
-       SvxBorderStyle nStyle )
+       SvxBorderStyle nStyle, bool bUseLeftTop,
+       Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ),
+       Color (*pColorGapFn)( Color ) )
 : m_nStyle( nStyle )
 , nOutWidth( nOut )
 , nInWidth ( nIn )
 , nDistance( nDist )
+, m_bUseLeftTop( bUseLeftTop )
+, m_pColorOutFn( pColorOutFn )
+, m_pColorInFn( pColorInFn )
+, m_pColorGapFn( pColorGapFn )
 {
     if ( pCol )
         aColor = *pCol;
@@ -1574,6 +1634,10 @@ SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
     nInWidth = r.nInWidth;
     nDistance = r.nDistance;
     m_nStyle = r.m_nStyle;
+    m_bUseLeftTop = r.m_bUseLeftTop;
+    m_pColorOutFn = r.m_pColorOutFn;
+    m_pColorInFn = r.m_pColorInFn;
+    m_pColorGapFn = r.m_pColorGapFn;
     return *this;
 }
 
@@ -1590,11 +1654,95 @@ void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 
 sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
-    return ( ( aColor    == rCmp.GetColor() )    &&
-             ( nInWidth  == rCmp.GetInWidth() )  &&
-             ( nOutWidth == rCmp.GetOutWidth() ) &&
-             ( nDistance == rCmp.GetDistance() ) &&
-             ( m_nStyle == rCmp.GetStyle() ) );
+    return ( ( aColor    == rCmp.aColor )            &&
+             ( nInWidth  == rCmp.GetInWidth() )      &&
+             ( nOutWidth == rCmp.GetOutWidth() )     &&
+             ( nDistance == rCmp.GetDistance() )     &&
+             ( m_nStyle == rCmp.GetStyle() )         &&
+             ( m_bUseLeftTop == rCmp.m_bUseLeftTop ) &&
+             ( m_pColorOutFn == rCmp.m_pColorOutFn ) &&
+             ( m_pColorInFn == rCmp.m_pColorInFn )   &&
+             ( m_pColorGapFn == rCmp.m_pColorGapFn ) );
+}
+
+void SvxBorderLine::SetStyle( SvxBorderStyle nNew )
+{
+    m_nStyle = nNew;
+    switch ( nNew )
+    {
+        case EMBOSSED:
+            m_pColorOutFn = threeDLightColor;
+            m_pColorInFn  = threeDDarkColor;
+            m_pColorGapFn = threeDMediumColor;
+            m_bUseLeftTop = true;
+            break;
+        case ENGRAVED:
+            m_pColorOutFn = threeDDarkColor;
+            m_pColorInFn  = threeDLightColor;
+            m_pColorGapFn = threeDMediumColor;
+            m_bUseLeftTop = true;
+            break;
+        case OUTSET:
+            m_pColorOutFn = lightColor;
+            m_pColorInFn  = darkColor;
+            m_bUseLeftTop = true;
+            m_pColorGapFn = NULL;
+            break;
+        case INSET:
+            m_pColorOutFn = darkColor;
+            m_pColorInFn  = lightColor;
+            m_bUseLeftTop = true;
+            m_pColorGapFn = NULL;
+            break;
+        default:
+            m_pColorOutFn = darkColor;
+            m_pColorInFn = darkColor;
+            m_bUseLeftTop = false;
+            m_pColorGapFn = NULL;
+            break;
+    }
+}
+
+Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
+{
+    Color aResult = aColor;
+
+    if ( nInWidth > 0 && nOutWidth > 0 && m_pColorOutFn != NULL )
+    {
+        if ( !bLeftOrTop && m_bUseLeftTop )
+            aResult = (*m_pColorInFn)( aColor );
+        else
+            aResult = (*m_pColorOutFn)( aColor );
+    }
+
+    return aResult;
+}
+
+Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
+{
+    Color aResult = aColor;
+
+    if ( nInWidth > 0 && nOutWidth > 0 && m_pColorInFn != NULL )
+    {
+        if ( !bLeftOrTop && m_bUseLeftTop )
+            aResult = (*m_pColorOutFn)( aColor );
+        else
+            aResult = (*m_pColorInFn)( aColor );
+    }
+
+    return aResult;
+}
+
+Color SvxBorderLine::GetColorGap( ) const
+{
+    Color aResult = aColor;
+
+    if ( nInWidth > 0 && nOutWidth > 0 && m_pColorGapFn != NULL )
+    {
+        aResult = (*m_pColorGapFn)( aColor );
+    }
+
+    return aResult;
 }
 
 // -----------------------------------------------------------------------
@@ -2640,7 +2788,6 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
     }
 }
 
-
 // -----------------------------------------------------------------------
 
 SfxPoolItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
@@ -3173,7 +3320,6 @@ SvxLineItem::SvxLineItem( const SvxLineItem& rCpy ) :
 {
     pLine = rCpy.GetLine() ? new SvxBorderLine( *rCpy.GetLine() ) : 0;
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -4187,7 +4333,6 @@ WallpaperStyle SvxBrushItem::GraphicPos2WallpaperStyle( SvxGraphicPosition ePos 
     }
     return eResult;
 }
-
 
 SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
