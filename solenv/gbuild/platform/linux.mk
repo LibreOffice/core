@@ -61,7 +61,6 @@ gb_CPUDEFS := -DX86
 endif
 
 gb_CFLAGS := \
-    --sysroot=$(SYSBASE) \
     -Wall \
     -Wendif-labels \
     -Wextra \
@@ -72,7 +71,6 @@ gb_CFLAGS := \
     -pipe \
 
 gb_CXXFLAGS := \
-    --sysroot=$(SYSBASE) \
     -Wall \
     -Wendif-labels \
     -Wextra \
@@ -89,6 +87,10 @@ gb_CXXFLAGS := \
     -fvisibility-inlines-hidden \
     -pipe \
 
+ifneq ($(SYSBASE),)
+gb_CXXFLAGS += --sysroot=$(SYSBASE)
+gb_CFLAGS += --sysroot=$(SYSBASE)
+endif
 gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
     -fexceptions \
