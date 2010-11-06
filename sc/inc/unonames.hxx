@@ -622,6 +622,7 @@
 #define SC_UNONAME_XLA1REPR       "XLA1Representation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
+// Security options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 #define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
 
