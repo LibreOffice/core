@@ -93,7 +93,7 @@ $(MISC)$/oxygen.flag : $(OXYGEN_TARBALL)
 
 # unpack the classic icon set
 $(MISC)$/classic.flag : $(CLASSIC_TARBALL)
-    cd $(MISC) && gunzip -d -c $(CLASSIC_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
+    cd $(MISC) && gzip -d -c $(CLASSIC_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
 .IF "$(GUI)"=="UNX"
     chmod -R g+w $(MISC)$/classic
 .ENDIF
