@@ -144,8 +144,8 @@ BOOL SwEditShell::IsAnySectionInDoc( BOOL bChkReadOnly, BOOL bChkHidden, BOOL bC
         const SwSectionFmt* pFmt = rFmts[ n ];
         if( pFmt->IsInNodesArr() &&
             (bChkTOX  ||
-                (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType ))
+                ((eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                && TOX_HEADER_SECTION != eTmpType )))
         {
             const SwSection& rSect = *rFmts[ n ]->GetSection();
             if( (!bChkReadOnly && !bChkHidden ) ||

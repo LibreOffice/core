@@ -498,7 +498,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
         aDirArr.DeleteAndDestroy(0, aDirArr.Count());
 
         if(!nTokenCount ||
-            m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath) )
+            (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
         {
             m_sOldErrPath = m_sErrPath;
             // Falscher Pfad, d.h. AutoText-Verzeichnis existiert nicht

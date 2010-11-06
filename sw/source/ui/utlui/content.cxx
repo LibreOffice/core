@@ -1545,7 +1545,6 @@ void SwContentTree::Display( sal_Bool bActive )
 
             if(nRootType != CONTENT_TYPE_OUTLINE)
             {
-                SvLBoxEntry* pEntry;
                 for(sal_uInt16 i = 0; i < (*ppRootContentT)->GetMemberCount(); i++ )
                 {
                     const SwContent* pCnt = (*ppRootContentT)->GetMember(i);
@@ -2138,7 +2137,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
             SvLBoxEntry* pFirstEntry = FirstSelected();
             if (pFirstEntry && lcl_IsContent(pFirstEntry))
             {
-                if(bIsRoot && nRootType == CONTENT_TYPE_OUTLINE ||
+                if ( (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE) ||
                     ((SwContent*)pFirstEntry->GetUserData())->GetParent()->GetType()
                                                 ==  CONTENT_TYPE_OUTLINE)
                 {
@@ -2156,8 +2155,8 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 if( nMove )
                 {
                     short nDir = nCmd == FN_ITEM_UP ? -1 : 1;
-                    if( !bModifier && (nDir == -1 && nActPos > 0 ||
-                        nDir == 1 && nActPos < GetEntryCount() - 2 ) )
+                    if( !bModifier && ( (nDir == -1 && nActPos > 0) ||
+                        (nDir == 1 && nActPos < GetEntryCount() - 2) ) )
                     {
                         pShell->MoveOutlinePara( nDir );
                         //Cursor wieder an die aktuelle Position setzen
@@ -2787,8 +2786,8 @@ sal_Bool  SwContentTree::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
         pParentEntry = GetParent(pParentEntry);
     }
     if(!bIsLastReadOnly && (!IsVisible() ||
-        (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE && pParentEntry ||
-            lcl_IsContent(pEntry) && ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE)))
+        ( (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE && pParentEntry) ||
+            (lcl_IsContent(pEntry) && ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE)) ))
         bEnable = sal_True;
     SwNavigationPI* pNavi = GetParentWindow();
     pNavi->aContentToolBox.EnableItem(FN_ITEM_UP ,  bEnable);

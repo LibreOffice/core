@@ -174,7 +174,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
                              ('a' <= cNextCh && cNextCh <= 'z') ||
                              ('0' <= cNextCh && cNextCh <= '9') ||
-                             '-'==cNextCh && !IsEOF() );
+                             ('-'==cNextCh && !IsEOF()) );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -272,7 +272,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
                              ('a' <= cNextCh && cNextCh <= 'z') ||
                              ('0' <= cNextCh && cNextCh <= '9') ||
-                             '-' == cNextCh && !IsEOF() );
+                             ('-' == cNextCh && !IsEOF()) );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 

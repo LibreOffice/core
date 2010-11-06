@@ -549,8 +549,8 @@ void    SwOutlineSettingsTabPage::Update()
                 bSameSuffix &= aNumFmtArr[i]->GetSuffix() == aNumFmtArr[0]->GetSuffix();
                 bSameComplete &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[0]->GetIncludeUpperLevels();
                 const SwCharFmt* pFmt = aNumFmtArr[i]->GetCharFmt();
-                bSameCharFmt &=     !pFirstFmt && !pFmt
-                                    || pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName();
+                bSameCharFmt &=     (!pFirstFmt && !pFmt)
+                                    || (pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName());
             }
         }
         CheckForStartValue_Impl(aNumFmtArr[0]->GetNumberingType());

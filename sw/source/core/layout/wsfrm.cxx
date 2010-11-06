@@ -3126,7 +3126,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     // Finally adjust the columns if width is set to auto
     // Possible optimisation: execute this code earlier in this function and
     // return???
-    if ( ( bVert && bHeightChgd || ! bVert && bWidthChgd ) &&
+    if ( ( (bVert && bHeightChgd) || (!bVert && bWidthChgd) ) &&
            Lower()->IsColumnFrm() )
     {
         // get column attribute

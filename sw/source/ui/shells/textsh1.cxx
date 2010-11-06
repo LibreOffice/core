@@ -1748,8 +1748,8 @@ void SwTextShell::ChangeHeaderOrFooter(
         String sTmp(aDesc.GetName());
         if( !rStyleName.Len() || rStyleName == sTmp )
         {
-            if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
-                (bHeader && aDesc.GetMaster().GetHeader().IsActive()) ||
+            if( (bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
+                (bHeader && aDesc.GetMaster().GetHeader().IsActive())) ||
                 (!bHeader && aDesc.GetMaster().GetFooter().IsActive()))
             {
                 bShowWarning = FALSE;

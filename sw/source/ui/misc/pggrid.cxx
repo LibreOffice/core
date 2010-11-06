@@ -455,7 +455,6 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
     {
         if (&aTextSizeMF == pField)
         {
-            sal_Int32 nTextSize = static_cast< sal_Int32 >(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
             m_bRubyUserValue = sal_False;
         }
         //set maximum line per page

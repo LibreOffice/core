@@ -1748,8 +1748,8 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
             (!pTmp->IsCellFrm() ||
              ( ( ! bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
                            (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ||
-                   bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
-                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) )
+                   (bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
+                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2) ) ) )
         pTmp = pTmp->GetNextLayoutLeaf();
 
     if ( pTmp )

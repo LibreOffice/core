@@ -964,7 +964,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFmt->GetDoc();
-        if ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID) ||
+        if ( ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
             (FN_PARAM_COUNTOUR_PP        == pEntry->nWID) ||
             (FN_UNO_IS_AUTOMATIC_CONTOUR == pEntry->nWID) ||
             (FN_UNO_IS_PIXEL_CONTOUR     == pEntry->nWID) )

@@ -108,8 +108,8 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 eEscape = nWhich == FN_SET_SUPER_SCRIPT ?
                                 SVX_ESCAPEMENT_SUPERSCRIPT:
                                 SVX_ESCAPEMENT_SUBSCRIPT;
-                if( nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0 ||
-                            nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0 )
+                if( (nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0) ||
+                            (nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0) )
                     eEscape = SVX_ESCAPEMENT_OFF;
 
                 SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
