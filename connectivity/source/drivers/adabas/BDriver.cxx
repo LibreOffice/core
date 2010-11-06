@@ -1028,7 +1028,7 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
     oslProcess aApp;
 
 #if OSL_DEBUG_LEVEL > 0
-    oslProcesError eError =
+    oslProcessError eError =
 #endif
         osl_executeProcess(sCommandFile.pData, NULL, 0,
                            osl_Process_HIDDEN | osl_Process_WAIT,
@@ -1071,7 +1071,7 @@ void ODriver::PutParam(const ::rtl::OUString& sDBName,
 
 
 #if OSL_DEBUG_LEVEL > 0
-    oslProcesError eError =
+    oslProcessError eError =
 #endif
         osl_executeProcess(sCommand.pData, pArgs, nArgsCount,
                            OPROCESS_ADABAS,
@@ -1249,7 +1249,7 @@ void ODriver::XUTIL(const ::rtl::OUString& _rParam,
 
 
 #if OSL_DEBUG_LEVEL > 0
-    oslProcesError eError =
+    oslProcessError eError =
 #endif
         osl_executeProcess(sCommandFile.pData, NULL, 0,
                            osl_Process_HIDDEN | osl_Process_WAIT,
@@ -1311,7 +1311,7 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
 
 
 #if OSL_DEBUG_LEVEL > 0
-    oslProcesError eError =
+    oslProcessError eError =
 #endif
         osl_executeProcess(sCommandFile.pData, NULL, 0,
                            osl_Process_HIDDEN | osl_Process_WAIT,
