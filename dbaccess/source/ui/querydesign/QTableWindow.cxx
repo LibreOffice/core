@@ -188,7 +188,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
     DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
-    OSL_ENSURE(rInfo.isValid(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
+    OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     sal_Bool bExists = sal_False;
     if(xConnection.is())
