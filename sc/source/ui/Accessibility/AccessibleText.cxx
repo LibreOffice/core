@@ -1109,6 +1109,7 @@ SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
     {
+        // i#49561 Get right-aligned cell content to be read by screenreader.
         mpViewForwarder = new ScEditObjectViewForwarder( mpWindow, mpEditView );
     }
     return mpViewForwarder;

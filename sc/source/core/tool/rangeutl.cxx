@@ -881,7 +881,7 @@ static void lcl_appendCellRangeAddress(
 void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, ScDocument* pDoc )
 {
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    const OUString aRangeSep = GetScCompilerNativeSymbol(ocSep);
+    const OUString aRangeSep = ScCompiler::GetNativeSymbol(ocSep);
     const sal_Unicode cSep = ' ';
     const sal_Unicode cQuote = '\'';
 

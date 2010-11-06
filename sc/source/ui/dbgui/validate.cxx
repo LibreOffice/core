@@ -339,7 +339,7 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     FreeResource();
 
     // list separator in formulas
-    String aListSep = ::GetScCompilerNativeSymbol( ocSep );
+    String aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
     DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
     m_btnRef.Hide(); // cell range picker

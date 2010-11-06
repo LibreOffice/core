@@ -887,10 +887,6 @@ struct ScConsolidateParam
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
 };
 
-// -----------------------------------------------------------------------
-extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();
-extern const LocaleDataWrapper* GetScGlobalpLocaleData();
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -533,8 +533,6 @@ private:
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
 };
 
-SC_DLLPUBLIC String GetScCompilerNativeSymbol( OpCode eOp );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
