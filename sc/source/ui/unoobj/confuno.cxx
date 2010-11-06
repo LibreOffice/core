@@ -419,7 +419,6 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 aRet <<= pDocShell->IsQueryLoadTemplate();
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
                 aRet <<= pDocShell->IsLoadReadonly();
-            // <--
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
