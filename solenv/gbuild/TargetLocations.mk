@@ -94,6 +94,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
     AllLangResTarget \
+    ComponentTarget \
     Executable \
     Library \
     Module \

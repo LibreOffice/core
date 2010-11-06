@@ -38,7 +38,7 @@ $(call gb_Helper_announce,Processing $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_ComponentTarget_XLSTCOMMAND) --nonet --stringparam uri \
-        '$(gb_ComponentTarget_PREFIXBASISNATIVE)$(COMPONENTNAME)' -o $(1) \
+        '$(gb_ComponentTarget_PREFIXBASISNATIVE)$(LIBFILENAME)' -o $(1) \
         $(gb_ComponentTarget_XLSTCOMMANDFILE) $(2))
 
 endef
@@ -46,6 +46,10 @@ endef
 define gb_ComponentTarget__rules
 $$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%)
     $$(call gb_ComponentTarget__command,$$@,$$<)
+
+$$(call gb_ComponentTarget_get_clean_target,%) :
+    $$(call gb_Helper_announce,Cleaning component file $$*)
+    rm -f $$(call gb_ComponentTarget_get_target,$$*)
 
 endef
 
@@ -55,7 +59,7 @@ $(call gb_ComponentTarget_get_target,%) :
     $(error unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS))
 
 define gb_ComponentTarget_ComponentTarget
-$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTNAME := $(2)
+$(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(2)
 
 endef
 

@@ -78,8 +78,9 @@ $(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Li
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(1))
+$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library_get_filename,$(1)))
 $(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
 endef
 
