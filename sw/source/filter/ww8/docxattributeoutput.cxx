@@ -296,9 +296,7 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
         m_rExport.OutputSectionBreaks( &(pFmt->GetAttrSet()), *pTableNode );
     }
 
-    // postpone the output so that we can later [in EndParagraphProperties()]
-    // prepend the properties before the run
-    m_pSerializer->mark();
+    m_pSerializer->mark( );
 
     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
 
@@ -310,6 +308,53 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     }
 
     InitCollectedParagraphProperties();
+
+    // Write the elements in the spec order
+    static const sal_Int32 aOrder[] =
+    {
+        FSNS( XML_w, XML_pStyle ),
+        FSNS( XML_w, XML_keepNext ),
+        FSNS( XML_w, XML_keepLines ),
+        FSNS( XML_w, XML_pageBreakBefore ),
+        FSNS( XML_w, XML_framePr ),
+        FSNS( XML_w, XML_widowControl ),
+        FSNS( XML_w, XML_numPr ),
+        FSNS( XML_w, XML_suppressLineNumbers ),
+        FSNS( XML_w, XML_pBdr ),
+        FSNS( XML_w, XML_shd ),
+        FSNS( XML_w, XML_tabs ),
+        FSNS( XML_w, XML_suppressAutoHyphens ),
+        FSNS( XML_w, XML_kinsoku ),
+        FSNS( XML_w, XML_wordWrap ),
+        FSNS( XML_w, XML_overflowPunct ),
+        FSNS( XML_w, XML_topLinePunct ),
+        FSNS( XML_w, XML_autoSpaceDE ),
+        FSNS( XML_w, XML_autoSpaceDN ),
+        FSNS( XML_w, XML_bidi ),
+        FSNS( XML_w, XML_adjustRightInd ),
+        FSNS( XML_w, XML_snapToGrid ),
+        FSNS( XML_w, XML_spacing ),
+        FSNS( XML_w, XML_ind ),
+        FSNS( XML_w, XML_contextualSpacing ),
+        FSNS( XML_w, XML_mirrorIndents ),
+        FSNS( XML_w, XML_suppressOverlap ),
+        FSNS( XML_w, XML_jc ),
+        FSNS( XML_w, XML_textDirection ),
+        FSNS( XML_w, XML_textAlignment ),
+        FSNS( XML_w, XML_textboxTightWrap ),
+        FSNS( XML_w, XML_outlineLvl ),
+        FSNS( XML_w, XML_divId ),
+        FSNS( XML_w, XML_cnfStyle )
+    };
+
+    // postpone the output so that we can later [in EndParagraphProperties()]
+    // prepend the properties before the run
+    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
+    uno::Sequence< sal_Int32 > aSeqOrder( len );
+    for ( sal_Int32 i = 0; i < len; i++ )
+        aSeqOrder[i] = aOrder[i];
+
+    m_pSerializer->mark( aSeqOrder );
 }
 
 void DocxAttributeOutput::InitCollectedParagraphProperties()
@@ -334,6 +379,8 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
+
+    m_pSerializer->mergeTopMarks( );
 }
 
 void DocxAttributeOutput::EndParagraphProperties()
@@ -391,7 +438,6 @@ void DocxAttributeOutput::EndRun()
             }
         }
     }
-
 
     // write the run properties + the text, already in the correct order
     m_pSerializer->mergeTopMarks(); // merges with "postponed text", see above
@@ -566,7 +612,6 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 
     m_pSerializer->endElementNS( XML_w, XML_r );
 
-
     // Write the Field separator
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     m_pSerializer->singleElementNS( XML_w, XML_fldChar,
@@ -619,7 +664,6 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
           FSNS( XML_w, XML_fldCharType ), "end",
           FSEND );
     m_pSerializer->endElementNS( XML_w, XML_r );
-
 
     // Write the ref field if a bookmark had to be set and the field
     // should be visible
@@ -803,7 +847,6 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
     m_pSerializer->singleElementNS( XML_w, XML_lid,
             FSNS( XML_w, XML_val ),
             OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
-
 
     OString sAlign ( "center" );
     switch ( rRuby.GetAdjustment( ) )
@@ -1327,7 +1370,6 @@ void DocxAttributeOutput::EndTableRow( )
     m_pSerializer->endElementNS( XML_w, XML_tr );
 }
 
-
 void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     if ( !m_pTableWrt )
@@ -1412,7 +1454,6 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 FSEND );
 
     m_pSerializer->endElementNS( XML_w, XML_tblPr );
-
 
     // Write the table grid infos
     m_pSerializer->startElementNS( XML_w, XML_tblGrid, FSEND );
@@ -1802,8 +1843,6 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rS
             XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
             FSEND );
 
-
-
         OString aRelId;
         static sal_Int32 nChartCount = 0;
         nChartCount++;
@@ -2066,7 +2105,6 @@ void DocxAttributeOutput::SectionTitlePage()
 void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmFmt* /*pFirstPageFmt*/ )
 {
     // Output the margins
-
 
     const SvxBoxItem& rBox = pFmt->GetBox( );
 
@@ -3200,7 +3238,6 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
         if ( m_rExport.pAktPageDesc->GetLandscape( ) )
             attrList->add( FSNS( XML_w, XML_orient ), "landscape" );
 
-
         attrList->add( FSNS( XML_w, XML_w ), OString::valueOf( rSize.GetWidth( ) ) );
         attrList->add( FSNS( XML_w, XML_h ), OString::valueOf( rSize.GetHeight( ) ) );
 
@@ -3233,7 +3270,6 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     {
         if ( !m_pSpacingAttrList )
             m_pSpacingAttrList = m_pSerializer->createAttrList();
-
 
         USHORT nLDist, nRDist;
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
