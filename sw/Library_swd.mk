@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,swd))
 
+$(eval $(call gb_Library_set_componentfile,swd,sw/util/swd))
+
 $(eval $(call gb_Library_set_include,swd,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/sw/sdi \
