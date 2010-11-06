@@ -376,7 +376,7 @@ void ScDrawView::RecalcScale()
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
-    if (nEndRow<1000)
+    if (nEndRow<20)
         nEndRow = 1000;
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
