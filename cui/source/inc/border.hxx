@@ -78,9 +78,11 @@ private:
     FixedLine           aFlSep1;
     FixedLine           aFlLine;
     FixedText           aStyleFT;
-    LineListBox         aLbLineStyle;
+    LineStyleListBox    aLbLineStyle;
     FixedText           aColorFT;
     ColorListBox        aLbLineColor;
+    FixedText           aWidthFT;
+    MetricField         aLineWidthMF;
 
     FixedLine           aFlSep2;
     FixedLine           aDistanceFL;
@@ -133,6 +135,7 @@ private:
     DECL_LINK( SelSdwHdl_Impl, void* );
     DECL_LINK( LinesChanged_Impl, void* );
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
+    DECL_LINK( ModifyWidthHdl_Impl, void*);
     DECL_LINK( SyncHdl_Impl, CheckBox*);
 
     sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;

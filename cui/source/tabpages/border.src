@@ -97,10 +97,32 @@ TabPage RID_SVXPAGE_BORDER
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 25 ) ;
         Size = MAP_APPFONT ( 74 , 66 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_WIDTH
+    {
+        Pos = MAP_APPFONT ( 88, 39 ) ;
+        Size = MAP_APPFONT ( 77, 8 ) ;
+        Text [ en-US ] = "~Width";
+    };
+    MetricField MF_LINEWIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 50 ) ;
+        Size = MAP_APPFONT ( 74 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 25 ;
+        First = 25 ;
+        Last = 900 ;
+        Maximum = 900 ;
+        Minimum = 25 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_POINT ;
     };
     FixedText FT_COLOR
     {
-        Pos = MAP_APPFONT ( 88, 95 ) ;
+        Pos = MAP_APPFONT ( 88, 64 ) ;
         Size = MAP_APPFONT ( 77, 8 ) ;
         Text [ en-US ] = "~Color";
     };
@@ -108,7 +130,7 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_BORDER:LB_LINECOLOR";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 106 ) ;
+        Pos = MAP_APPFONT ( 88 , 75 ) ;
         Size = MAP_APPFONT ( 74 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;

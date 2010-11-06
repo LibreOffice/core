@@ -37,6 +37,7 @@
 #define FL_LINE                 20
 #define LB_LINESTYLE            21
 #define LB_LINECOLOR            22
+#define MF_LINEWIDTH            23
 
 #define FL_SEPARATOR2           29
 #define FL_SHADOW               30
@@ -67,6 +68,7 @@
 #define FL_PROPERTIES           64
 #define CB_MERGEWITHNEXT        65
 #define CB_MERGEADJACENTBORDERS 66
+#define FT_WIDTH                67
 
 // ImageListe fuer ValueSets:
 #define IL_PRE_BITMAPS          1400

@@ -86,7 +86,6 @@ static sal_uInt16 pRanges[] =
 
 sal_Bool SvxBorderTabPage::bSync = sal_True;
 
-
 //------------------------------------------------------------------------
 
 #define LINE_WIDTH0     (DEF_LINE_WIDTH_0 *100)
@@ -179,6 +178,8 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aLbLineStyle    ( this, CUI_RES( LB_LINESTYLE ) ),
         aColorFT        ( this, CUI_RES( FT_COLOR ) ),
         aLbLineColor    ( this, CUI_RES( LB_LINECOLOR ) ),
+        aWidthFT        ( this, CUI_RES( FT_WIDTH ) ),
+        aLineWidthMF    ( this, CUI_RES( MF_LINEWIDTH ) ),
 
         aFlSep2         ( this, CUI_RES( FL_SEPARATOR2 ) ),
         aDistanceFL     ( this, CUI_RES( FL_DISTANCE ) ),
@@ -329,6 +330,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     aFrameSel.SetSelectHdl(LINK(this, SvxBorderTabPage, LinesChanged_Impl));
     aLbLineStyle.SetSelectHdl( LINK( this, SvxBorderTabPage, SelStyleHdl_Impl ) );
     aLbLineColor.SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
+    aLineWidthMF.SetModifyHdl( LINK( this, SvxBorderTabPage, ModifyWidthHdl_Impl ) );
     aLbShadowColor.SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     aWndPresets.SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     aWndShadows.SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
@@ -438,7 +440,6 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     SfxMapUnit              eCoreUnit;
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
-
 
     pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, sal_False );
 
@@ -552,7 +553,15 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         SvxBorderStyle nStyle;
         bool bWidthEq = aFrameSel.GetVisibleWidth( nPrim, nDist, nSecn, nStyle );
         if( bWidthEq )
-            aLbLineStyle.SelectEntry( nPrim * 100, nSecn * 100, nDist * 100, nStyle );
+        {
+            // Determine the width first as some styles can be missing depending on it
+            long nWidth = aLbLineStyle.GetWidthFromStyle( nPrim * 5, nSecn * 5, nDist * 5, nStyle );
+            aLineWidthMF.SetValue( sal_Int64( nWidth ) );
+            aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
+
+            // then set the style
+            aLbLineStyle.SelectEntry( nPrim * 5, nSecn * 5, nDist * 5, nStyle );
+        }
         else
             aLbLineStyle.SelectEntryPos( 1 );
 
@@ -915,33 +924,30 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-SvxBorderStyle lcl_getBorderStyle( sal_uInt16 nStyle )
+IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
 {
-    SvxBorderStyle nResult = SOLID;
-    switch ( nStyle )
-    {
-        case STYLE_DOTTED:
-            nResult = DOTTED;
-            break;
-        case STYLE_DASHED:
-            nResult = DASHED;
-            break;
-        default:
-            nResult = SOLID;
-    }
-    return nResult;
+    sal_Int64 nVal = aLineWidthMF.GetValue( );
+    aLbLineStyle.SetWidth( nVal );
+
+    aFrameSel.SetStyleToSelection(
+        static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine1() / 5 ),
+        static_cast< USHORT >( aLbLineStyle.GetSelectEntryDistance() / 5 ),
+        static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine2() / 5 ),
+        SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
+
+    return 0;
 }
+
+// -----------------------------------------------------------------------
 
 IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
-        aFrameSel.SetStyleToSelection(
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine1() / 100 ),
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryDistance() / 100 ),
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine2() / 100 ),
-            lcl_getBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
+        aFrameSel.SetStyleToSelection (
+            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine1() / 5 ),
+            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryDistance() / 5 ),
+            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine2() / 5 ),
+            SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
 
     return 0;
 }
@@ -1090,38 +1096,52 @@ void SvxBorderTabPage::FillValueSets()
 }
 
 // ============================================================================
+Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
+{
+    return SvxBorderLine::threeDMediumColor( aMain );
+}
 
 void SvxBorderTabPage::FillLineListBox_Impl()
 {
-    aLbLineStyle.SetUnit( FUNIT_POINT );
-    aLbLineStyle.SetSourceUnit( FUNIT_TWIP );
+    aLbLineStyle.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
 
-    // Writer 2.0 Defaults:
-    aLbLineStyle.InsertEntry( SVX_RESSTR( RID_SVXSTR_NONE ) );
+    // Simple lines
+    aLbLineStyle.InsertEntry( 1.0, 0.0, 0.0, CHANGE_LINE1, SOLID );
+    aLbLineStyle.InsertEntry( 1.0, 0.0, 0.0, CHANGE_LINE1, DOTTED );
+    aLbLineStyle.InsertEntry( 1.0, 0.0, 0.0, CHANGE_LINE1, DASHED );
 
-    aLbLineStyle.InsertEntry( LINE_WIDTH0 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH5 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH5, 0, 0, STYLE_DOTTED );
-    aLbLineStyle.InsertEntry( LINE_WIDTH5, 0, 0, STYLE_DASHED );
-    aLbLineStyle.InsertEntry( LINE_WIDTH1 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH2 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH3 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH4 );
+    // Double lines
+    aLbLineStyle.InsertEntry( 1.0, 1.0, 1.0, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, DOUBLE );
+    aLbLineStyle.InsertEntry( 1.0, 75.0, 75.0, CHANGE_LINE1, THINTHICK_SMALLGAP, 100 );
+    aLbLineStyle.InsertEntry( 1.0, 0.5, 0.5, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, THINTHICK_MEDIUMGAP );
+    aLbLineStyle.InsertEntry( 75.0, 150.0, 1.0, CHANGE_DIST, THINTHICK_LARGEGAP );
+    aLbLineStyle.InsertEntry( 75.0, 1.0, 75.0, CHANGE_LINE2, THICKTHIN_SMALLGAP, 100 );
+    aLbLineStyle.InsertEntry( 0.5, 1.0, 0.5, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, THICKTHIN_MEDIUMGAP );
+    aLbLineStyle.InsertEntry( 150.0, 75.0, 1.0, CHANGE_DIST, THICKTHIN_LARGEGAP );
 
-    // OS: wenn hier neue Linienstaerken zugfuegt werden, dann
-    // LINESTYLE_HTML_MAX anpassen
+    // Engraved / Embossed
+    /*
+     *  Word compat: the lines widths are exactly following this rule, shouldbe:
+     *      0.75pt up to 3pt and then 3pt
+     */
+    aLbLineStyle.InsertEntry( 0.5, 0.5, 1, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, EMBOSSED, 75,
+            &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
+            &lcl_mediumColor );
+    aLbLineStyle.InsertEntry( 0.5, 0.5, 1, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, ENGRAVED, 75,
+            &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
+            &lcl_mediumColor );
 
-    aLbLineStyle.InsertEntry( DLINE0_OUT, DLINE0_IN, DLINE0_DIST );
-    aLbLineStyle.InsertEntry( DLINE7_OUT, DLINE7_IN, DLINE7_DIST );
-    aLbLineStyle.InsertEntry( DLINE1_OUT, DLINE1_IN, DLINE1_DIST );
-    aLbLineStyle.InsertEntry( DLINE2_OUT, DLINE2_IN, DLINE2_DIST );
-    aLbLineStyle.InsertEntry( DLINE8_OUT, DLINE8_IN, DLINE8_DIST );
-    aLbLineStyle.InsertEntry( DLINE9_OUT, DLINE9_IN, DLINE9_DIST );
-    aLbLineStyle.InsertEntry( DLINE10_OUT,DLINE10_IN,DLINE10_DIST);
-    aLbLineStyle.InsertEntry( DLINE3_OUT, DLINE3_IN, DLINE3_DIST );
-    aLbLineStyle.InsertEntry( DLINE4_OUT, DLINE4_IN, DLINE4_DIST );
-    aLbLineStyle.InsertEntry( DLINE5_OUT, DLINE5_IN, DLINE5_DIST );
-    aLbLineStyle.InsertEntry( DLINE6_OUT, DLINE6_IN, DLINE6_DIST );
+    // Inset / Outset
+    /*
+     * Word compat: the gap width should be measured relatively to the biggest width for the
+     *      row or column.
+     */
+    aLbLineStyle.InsertEntry( 75.0, 1.0, 1.0, CHANGE_LINE2 | CHANGE_DIST, OUTSET, 0.5,
+           &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
+    aLbLineStyle.InsertEntry( 1.0, 75.0, 1.0, CHANGE_LINE1 | CHANGE_DIST, INSET, 0.5,
+           &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
+
+    aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
 }
 
 // -----------------------------------------------------------------------
