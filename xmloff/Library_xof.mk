@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,xof))
 
+$(eval $(call gb_Library_set_componentfile,xof,xmloff/source/transform/xof))
+
 $(eval $(call gb_Library_set_include,xof,\
     -I$(SRCDIR)/xmloff/inc/pch \
     -I$(SRCDIR)/xmloff/inc \

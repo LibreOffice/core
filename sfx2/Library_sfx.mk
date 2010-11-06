@@ -36,6 +36,8 @@ $(eval $(call gb_Library_add_precompiled_header,sfx,$(SRCDIR)/sfx2/inc/pch/preco
 
 $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
+$(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
+
 $(eval $(call gb_Library_set_include,sfx,\
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/inc/sfx2 \
