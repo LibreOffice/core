@@ -28,6 +28,8 @@
 #ifndef SW_FRAME_HXX
 #define SW_FRAME_HXX
 
+#include <vector>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svl/svarray.hxx>
 #include <editeng/borderline.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
@@ -262,7 +264,6 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
 
-
 //Fuer GetNextLeaf/GetPrevLeaf.
 enum MakePageType
 {
@@ -454,7 +455,6 @@ protected:
         //Adjustierung der Frames einer Seite
     SwTwips AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst = sal_False );
 
-
         //Aendern nur die Framesize, nicht die PrtArea-SSize
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
@@ -564,6 +564,8 @@ public:
                           const sal_Bool bLowerBorder = sal_False ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
                           const Color *pColor, const SvxBorderStyle = SOLID ) const;
+
+    void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;
 
     //Retouche, nicht im Bereich des uebergebenen Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
@@ -750,7 +752,6 @@ public:
     sal_uInt16 GetVirtPageNum() const;  //Seitenummer mit Offset
     sal_Bool OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     sal_Bool WannaRightPage() const;
-
 
     inline const  SwLayoutFrm *GetPrevLayoutLeaf() const;
     inline const  SwLayoutFrm *GetNextLayoutLeaf() const;
