@@ -1358,16 +1358,26 @@ void lcl_VertLine( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
         svx::frame::Style aScaled( rLine );
         aScaled.ScaleSelf( 1.0 / cos( svx::frame::GetVerDiagAngle( rTop, rBottom ) ) );
         if( pForceColor )
-            aScaled.SetColor( *pForceColor );
+        {
+            aScaled.SetColorPrim( *pForceColor );
+            aScaled.SetColorSecn( *pForceColor );
+        }
 
         long nXOffs = (aScaled.GetWidth() - 1) / -2L;
 
-        lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColor(),
+        lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColorPrim(),
             nXOffs, aScaled.Prim(), rTopLine, rBottomLine );
 
         if( aScaled.Secn() )
-            lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColor(),
+        {
+            if ( aScaled.UseGapColor() )
+            {
+                lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColorGap(),
+                    nXOffs + aScaled.Prim(), aScaled.Dist(), rTopLine, rBottomLine );
+            }
+            lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColorSecn(),
                 nXOffs + aScaled.Prim() + aScaled.Dist(), aScaled.Secn(), rTopLine, rBottomLine );
+        }
     }
 }
 
