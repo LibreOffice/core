@@ -584,7 +584,7 @@ public:
     static IntlWrapper*         GetScIntlWrapper();
     static ::com::sun::star::lang::Locale*      GetLocale();
 
-    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();
     static ::utl::TransliterationWrapper* GetCaseTransliteration();
 
     SC_DLLPUBLIC static LanguageType            eLnge;
@@ -888,7 +888,7 @@ struct ScConsolidateParam
 };
 
 // -----------------------------------------------------------------------
-extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
+extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();
 extern const LocaleDataWrapper* GetScGlobalpLocaleData();
 
 #endif
