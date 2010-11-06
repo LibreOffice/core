@@ -321,7 +321,6 @@
 #define RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST    (RID_SVTOOLS_IMAGELIST_START +  5)
 #define RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H         (RID_SVTOOLS_IMAGELIST_START +  6)
 #define RID_FILEPICKER_IMAGES                       (RID_SVTOOLS_IMAGELIST_START +  7)
-#define RID_FILEPICKER_IMAGES_HC                    (RID_SVTOOLS_IMAGELIST_START +  8)
 
 //.............................................................................
 // error boxes
