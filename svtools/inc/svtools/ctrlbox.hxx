@@ -47,9 +47,14 @@ typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< ImplFontNameListData* > ImplFontList;
 
-#define STYLE_SOLID     ( ( sal_uInt16 ) 0 )
-#define STYLE_DOTTED    ( ( sal_uInt16 ) 1 )
-#define STYLE_DASHED    ( ( sal_uInt16 ) 2 )
+#define STYLE_SOLID                ( ( sal_uInt16 ) 0 )
+#define STYLE_DOTTED               ( ( sal_uInt16 ) 1 )
+#define STYLE_DASHED               ( ( sal_uInt16 ) 2 )
+
+#define CHANGE_LINE1               ( ( sal_uInt16 ) 1 )
+#define CHANGE_LINE2               ( ( sal_uInt16 ) 2 )
+#define CHANGE_DIST                ( ( sal_uInt16 ) 4 )
+#define ADAPT_DIST                 ( ( sal_uInt16 ) 8 )
 
 /*************************************************************************
 
@@ -253,12 +258,12 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     FieldUnit       eSourceUnit;
 
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
+                                    Color nColor1, Color nColor2, Color nColorDist,
                                     sal_uInt16 nStyle, Bitmap& rBmp, XubString& rStr );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     void            UpdateLineColors( void );
-    sal_Bool            UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
-    inline const Color& GetPaintColor( void ) const;
+    sal_Bool        UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
@@ -275,14 +280,14 @@ public:
     virtual void    Clear();
 
     using ListBox::GetEntryPos;
-    sal_uInt16          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0,
+    virtual sal_uInt16  GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0,
                                  sal_uInt16 nStyle = STYLE_SOLID ) const;
     long            GetEntryLine1( sal_uInt16 nPos ) const;
     long            GetEntryLine2( sal_uInt16 nPos ) const;
     long            GetEntryDistance( sal_uInt16 nPos ) const;
     sal_uInt16          GetEntryStyle( sal_uInt16 nPos ) const;
 
-    inline void     SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
+    void        SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0,
                                  sal_uInt16 nStyle = STYLE_SOLID, sal_Bool bSelect = sal_True );
     long            GetSelectEntryLine1( sal_uInt16 nSelIndex = 0 ) const;
@@ -301,6 +306,13 @@ public:
     void            SetColor( const Color& rColor );
     inline Color    GetColor( void ) const;
 
+protected:
+
+    inline const Color&    GetPaintColor( void ) const;
+    virtual Color   GetColorLine1( sal_uInt16 nPos = 0 );
+    virtual Color   GetColorLine2( sal_uInt16 nPos = 0 );
+    virtual Color   GetColorDist( sal_uInt16 nPos = 0 );
+
 private:
     // declared as private because some compilers would generate the default methods
                     LineListBox( const LineListBox& );
@@ -308,13 +320,6 @@ private:
     void            SetEntryData( sal_uInt16 nPos, void* pNewData );
     void*           GetEntryData( sal_uInt16 nPos ) const;
 };
-
-inline void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle, sal_Bool bSelect )
-{
-    sal_uInt16 nPos = GetEntryPos( nLine1, nLine2, nDistance, nStyle );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        ListBox::SelectEntryPos( nPos, bSelect );
-}
 
 inline long LineListBox::GetSelectEntryLine1( sal_uInt16 nSelIndex ) const
 {
@@ -374,6 +379,73 @@ inline Color LineListBox::GetColor( void ) const
     return aColor;
 }
 
+const Color& LineListBox::GetPaintColor( void ) const
+{
+    return maPaintCol;
+}
+
+SVT_DLLPUBLIC inline Color sameColor( Color rMain )
+{
+    return rMain;
+}
+
+SVT_DLLPUBLIC inline Color sameDistColor( Color /*rMain*/, Color rDefault )
+{
+    return rDefault;
+}
+
+class SVT_DLLPUBLIC LineStyleListBox : public LineListBox
+{
+private:
+   ImpLineStyleList *     m_pStyleList;
+   long                   m_nWidth;
+   XubString              m_sNone;
+
+public:
+                    LineStyleListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
+                    LineStyleListBox( Window* pParent, const ResId& rResId );
+    virtual         ~LineStyleListBox();
+
+    /** Set the width in pt.
+      */
+    void            SetWidth( long nWidth );
+    void            SetNone( const XubString& sNone );
+
+    using LineListBox::InsertEntry;
+    void            InsertEntry( double nLine1, double nLine2, double nDist,
+                        sal_uInt16 nChangeFlags, sal_uInt16 nStyle, long nMinWidth = 0,
+                        Color (*pColor1Fn)(Color) = &sameColor,
+                        Color (*pColor2Fn)( Color ) = &sameColor,
+                        Color (*pColorDistFn)( Color, Color ) = &sameDistColor );
+
+    sal_uInt16      GetSelectedStyle( );
+    long            GetWidthFromStyle( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle );
+
+    virtual sal_uInt16  GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0,
+                                 sal_uInt16 nStyle = STYLE_SOLID ) const;
+
+protected:
+
+    virtual Color   GetColorLine1( sal_uInt16 nPos = 0);
+    virtual Color   GetColorLine2( sal_uInt16 nPos = 0 );
+    virtual Color   GetColorDist( sal_uInt16 nPos = 0 );
+
+private:
+    void            UpdateEntries( long nOldWidth );
+    sal_uInt16      GetStylePos( sal_uInt16 nListPos, long nWidth );
+};
+
+inline void LineStyleListBox::SetWidth( long nWidth )
+{
+    long nOldWidth = m_nWidth;
+    m_nWidth = nWidth;
+    UpdateEntries( nOldWidth );
+}
+
+inline void LineStyleListBox::SetNone( const XubString& sNone )
+{
+    m_sNone = sNone;
+}
 
 // ---------------
 // - FontNameBox -

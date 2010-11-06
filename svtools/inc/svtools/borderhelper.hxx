@@ -33,12 +33,17 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <vcl/outdev.hxx>
+#include <vector>
 
 namespace svtools
 {
     SVT_DLLPUBLIC basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon,
             sal_uInt16 nDashing, MapUnit eUnit );
+
+    SVT_DLLPUBLIC void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rBeg,
+            const basegfx::B2DPoint& rEnd, sal_uInt32 nWidth, sal_uInt16 nDashing );
 
     SVT_DLLPUBLIC void DrawLine( OutputDevice& rDev, const Point& rBeg,
             const Point& rEnd, sal_uInt32 nWidth, sal_uInt16 nDashing );

@@ -293,21 +293,10 @@ struct ImpLineListData
 
 // -----------------------------------------------------------------------
 
-inline const Color& LineListBox::GetPaintColor( void ) const
-{
-    return maPaintCol;
-}
-
-// -----------------------------------------------------------------------
-
-
-inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
+void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
 {
     sal_uInt16 nOldAA = rDev.GetAntialiasing();
     rDev.SetAntialiasing( nOldAA & !ANTIALIASING_ENABLE_B2DDRAW );
-
-    Color aOldColor = rDev.GetFillColor( );
-    rDev.SetFillColor( rDev.GetLineColor( ) );
 
     basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing( rPolygon, nDashing, rDev.GetMapMode().GetMapUnit() );
     for ( sal_uInt32 i = 0; i < aPolygons.count( ); i++ )
@@ -320,7 +309,12 @@ inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPoly
         aVector.normalize( );
         const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
 
-        const basegfx::B2DVector aWidthOffset( nWidth / 2 * aPerpendicular);
+        // Handle problems of width 1px in Pixel mode: 0.5px gives a 1px line
+        long nPix = rDev.PixelToLogic( Size( 0, 1 ) ).Height();
+        if ( rDev.GetMapMode().GetMapUnit() == MAP_PIXEL && nWidth == nPix )
+            nWidth = 0;
+
+        const basegfx::B2DVector aWidthOffset( double( nWidth ) / 2 * aPerpendicular);
         basegfx::B2DPolygon aDashPolygon;
         aDashPolygon.append( aStart + aWidthOffset );
         aDashPolygon.append( aEnd + aWidthOffset );
@@ -331,13 +325,12 @@ inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPoly
         rDev.DrawPolygon( aDashPolygon );
     }
 
-    rDev.SetFillColor( aOldColor );
     rDev.SetAntialiasing( nOldAA );
 }
 
 namespace svtools
 {
-    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, MapUnit eUnit )
+    std::vector < double > GetDashing( sal_uInt16 nDashing, MapUnit eUnit )
     {
         ::std::vector < double >aPattern;
         switch ( nDashing )
@@ -380,6 +373,12 @@ namespace svtools
                 break;
         }
 
+        return aPattern;
+    }
+
+    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, MapUnit eUnit )
+    {
+        std::vector< double > aPattern = GetDashing( nDashing, eUnit );
         basegfx::B2DPolyPolygon aPolygons;
         if ( ! aPattern.empty() )
             basegfx::tools::applyLineDashing( rPolygon, aPattern, &aPolygons );
@@ -392,14 +391,22 @@ namespace svtools
     void DrawLine( OutputDevice& rDev, const Point& rP1, const Point& rP2,
         sal_uInt32 nWidth, sal_uInt16 nDashing )
     {
+        DrawLine( rDev, basegfx::B2DPoint( rP1.X(), rP1.Y() ),
+                basegfx::B2DPoint( rP2.X(), rP2.Y( ) ), nWidth, nDashing );
+    }
+
+    void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::B2DPoint& rP2,
+        sal_uInt32 nWidth, sal_uInt16 nDashing )
+    {
         basegfx::B2DPolygon aPolygon;
-        aPolygon.append( basegfx::B2DPoint( rP1.X(), rP1.Y() ) );
-        aPolygon.append( basegfx::B2DPoint( rP2.X(), rP2.Y() ) );
+        aPolygon.append( rP1 );
+        aPolygon.append( rP2 );
         lclDrawPolygon( rDev, aPolygon, nWidth, nDashing );
     }
 }
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
+                            Color aColor1, Color aColor2, Color aColorDist,
                             sal_uInt16 nStyle, Bitmap& rBmp, XubString& rStr )
 {
     Size aSize = GetOutputSizePixel();
@@ -448,23 +455,23 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         Size aVirSize = aVirDev.LogicToPixel( aSize );
         if ( aVirDev.GetOutputSizePixel() != aVirSize )
             aVirDev.SetOutputSizePixel( aVirSize );
-        aVirDev.SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
+        aVirDev.SetFillColor( aColorDist );
         aVirDev.DrawRect( Rectangle( Point(), aSize ) );
 
-        Color oldColor = aVirDev.GetLineColor( );
-        aVirDev.SetLineColor( GetPaintColor( ) );
+        aVirDev.SetFillColor( aColor1 );
 
-        double y1 = n1 / 2;
-        svtools::DrawLine( aVirDev, Point( 0, y1 ), Point( aSize.Width( ), y1 ), n1, nStyle );
+        double y1 = double( n1 ) / 2;
+        svtools::DrawLine( aVirDev, basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
 
         if ( n2 )
         {
-            double y2 =  n1 + nDist + n2 / 2;
-            svtools::DrawLine( aVirDev, Point( 0, y2 ), Point( aSize.Width(), y2 ), n2, STYLE_SOLID );
+            double y2 =  n1 + nDist + double( n2 ) / 2;
+            aVirDev.SetFillColor( aColor2 );
+            svtools::DrawLine( aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, STYLE_SOLID );
         }
-        aVirDev.SetLineColor( oldColor );
         rBmp = aVirDev.GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
+
     // Twips nach Unit
     if ( eUnit == FUNIT_POINT )
     {
@@ -537,6 +544,13 @@ LineListBox::~LineListBox()
     delete pLineList;
 }
 
+void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle, sal_Bool bSelect )
+{
+    sal_uInt16 nPos = GetEntryPos( nLine1, nLine2, nDistance, nStyle );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        ListBox::SelectEntryPos( nPos, bSelect );
+}
+
 // -----------------------------------------------------------------------
 
 sal_uInt16 LineListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
@@ -561,7 +575,11 @@ sal_uInt16 LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
 {
     XubString   aStr;
     Bitmap      aBmp;
-    ImpGetLine( nLine1, nLine2, nDistance, nStyle, aBmp, aStr );
+    ImpGetLine( nLine1, nLine2, nDistance,
+            GetColorLine1( GetEntryCount( ) ),
+            GetColorLine2( GetEntryCount( ) ),
+            GetColorDist( GetEntryCount( ) ),
+            nStyle, aBmp, aStr );
     nPos = ListBox::InsertEntry( aStr, aBmp, nPos );
     if ( nPos != LISTBOX_ERROR )
     {
@@ -688,6 +706,7 @@ void LineListBox::UpdateLineColors( void )
                 // exchange listbox data
                 ListBox::RemoveEntry( sal_uInt16( n ) );
                 ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance,
+                        GetColorLine1( n ), GetColorLine2( n ), GetColorDist( n ),
                         pData->nStyle, aBmp, aStr );
             }
         }
@@ -716,6 +735,21 @@ sal_Bool LineListBox::UpdatePaintLineColor( void )
     return bRet;
 }
 
+Color LineListBox::GetColorLine1( sal_uInt16 )
+{
+    return GetPaintColor( );
+}
+
+Color LineListBox::GetColorLine2( sal_uInt16 )
+{
+    return GetPaintColor( );
+}
+
+Color LineListBox::GetColorDist( sal_uInt16 )
+{
+    return GetSettings().GetStyleSettings().GetFieldColor();
+}
+
 // -----------------------------------------------------------------------
 
 void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
@@ -724,6 +758,323 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         UpdateLineColors();
+}
+
+// ===================================================================
+// LineStyleNameBox
+// ===================================================================
+
+class ImpLineStyleListData
+{
+private:
+    double m_nLine1;
+    double m_nLine2;
+    double m_nDist;
+    sal_uInt16 m_nFlags;
+
+    Color  ( *m_pColor1Fn )( Color );
+    Color  ( *m_pColor2Fn )( Color );
+    Color  ( *m_pColorDistFn )( Color, Color );
+
+    long   m_nMinWidth;
+    sal_uInt16 m_nStyle;
+
+public:
+    ImpLineStyleListData( double nLine1, double nLine2, double nDist, sal_uInt16 nFlags, sal_uInt16 nStyle,
+            long nMinWidth=0, Color ( *pColor1Fn ) ( Color ) = &sameColor,
+            Color ( *pColor2Fn ) ( Color ) = &sameColor, Color ( *pColorDistFn ) ( Color, Color ) = &sameDistColor );
+
+    double GetLine1ForWidth( double nWidth );
+    double GetLine2ForWidth( double nWidth );
+    double GetDistForWidth( double nWidth );
+
+    long   GetTotalWidth( double nWidth );
+
+    Color  GetColorLine1( const Color& aMain );
+    Color  GetColorLine2( const Color& aMain );
+    Color  GetColorDist( const Color& aMain, const Color& rDefault );
+
+    long   GetMinWidth( );
+    sal_uInt16 GetStyle( );
+
+    long GuessWidth( long nLine1, long nLine2, long nDist );
+};
+
+ImpLineStyleListData::ImpLineStyleListData( double nLine1, double nLine2, double nDist, sal_uInt16 nFlags,
+       sal_uInt16 nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
+       Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
+    m_nLine1( nLine1 ),
+    m_nLine2( nLine2 ),
+    m_nDist( nDist ),
+    m_nFlags( nFlags ),
+    m_pColor1Fn( pColor1Fn ),
+    m_pColor2Fn( pColor2Fn ),
+    m_pColorDistFn( pColorDistFn ),
+    m_nMinWidth( nMinWidth ),
+    m_nStyle( nStyle )
+{
+}
+
+long ImpLineStyleListData::GetMinWidth( )
+{
+    return m_nMinWidth;
+}
+
+double ImpLineStyleListData::GetLine1ForWidth( double nWidth )
+{
+    double result = m_nLine1;
+    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
+        result = m_nLine1 * nWidth;
+    return result;
+}
+
+double ImpLineStyleListData::GetLine2ForWidth( double nWidth )
+{
+    double result = m_nLine2;
+    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
+        result = m_nLine2 * nWidth;
+    return result;
+}
+
+double ImpLineStyleListData::GetDistForWidth( double nWidth )
+{
+    double result = m_nDist;
+    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
+        result = m_nDist * nWidth;
+
+    // Avoid having too small distances
+    if ( result < 100 && m_nLine1 > 0 && m_nLine2 > 0 )
+        result = 100;
+
+    return result;
+}
+
+Color ImpLineStyleListData::GetColorLine1( const Color& rMain )
+{
+    return ( *m_pColor1Fn )( rMain );
+}
+
+Color ImpLineStyleListData::GetColorLine2( const Color& rMain )
+{
+    return ( *m_pColor2Fn )( rMain );
+}
+
+Color ImpLineStyleListData::GetColorDist( const Color& rMain, const Color& rDefault )
+{
+    return ( *m_pColorDistFn )( rMain, rDefault );
+}
+
+sal_uInt16 ImpLineStyleListData::GetStyle( )
+{
+    return m_nStyle;
+}
+
+long ImpLineStyleListData::GuessWidth( long nLine1, long nLine2, long nDist )
+{
+    double nWidth = 0;
+    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
+        nWidth = double( nLine1 ) / m_nLine1;
+
+    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
+    {
+        double nLine2Width = double( nLine2 ) / m_nLine2;
+        if ( nWidth > 0 && nWidth != nLine2Width )
+            nWidth = 0;
+        else
+            nWidth = nLine2Width;
+    }
+
+    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
+    {
+        double nDistWidth = double( nDist ) / m_nDist;
+        if ( nWidth > 0 && nWidth != nDistWidth )
+            nWidth = 0;
+        else
+            nWidth = nDistWidth;
+    }
+
+    return nWidth;
+}
+
+DECLARE_LIST( ImpLineStyleList, ImpLineStyleListData* )
+
+LineStyleListBox::LineStyleListBox( Window* pParent, WinBits nWinStyle ) :
+    LineListBox( pParent, nWinStyle ),
+    m_nWidth( 5 ),
+    m_sNone( )
+{
+    m_pStyleList = new ImpLineStyleList;
+}
+
+LineStyleListBox::LineStyleListBox( Window* pParent, const ResId& rResId ) :
+    LineListBox( pParent, rResId ),
+    m_nWidth( 0 ),
+    m_sNone( )
+{
+    m_pStyleList = new ImpLineStyleList;
+}
+
+LineStyleListBox::~LineStyleListBox( )
+{
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = m_pStyleList->Count( );
+    while ( n < nCount )
+    {
+        ImpLineStyleListData* pData = m_pStyleList->GetObject( n );
+        if ( pData )
+            delete pData;
+        n++;
+    }
+    delete m_pStyleList;
+}
+
+void LineStyleListBox::InsertEntry( double nLine1, double nLine2, double nDist,
+        sal_uInt16 nChangeFlags, sal_uInt16 nStyle, long nMinWidth,
+        Color ( *pColor1Fn )( Color ), Color ( *pColor2Fn )( Color ),
+        Color ( *pColorDistFn )( Color, Color ) )
+{
+    ImpLineStyleListData* pData = new ImpLineStyleListData( nLine1, nLine2, nDist,
+           nChangeFlags, nStyle, nMinWidth,
+           pColor1Fn, pColor2Fn, pColorDistFn );
+    m_pStyleList->Insert( pData, m_pStyleList->Count( ) );
+}
+
+Color LineStyleListBox::GetColorLine1( sal_uInt16 nPos )
+{
+    Color rResult = LineListBox::GetColorLine1( );
+
+    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
+    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
+    if ( pData )
+        rResult = pData->GetColorLine1( GetColor( ) );
+
+    return rResult;
+}
+
+Color LineStyleListBox::GetColorLine2( sal_uInt16 nPos )
+{
+    Color rResult = LineListBox::GetColorLine2( );
+
+    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
+    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
+    if ( pData )
+        rResult = pData->GetColorLine2( GetColor( ) );
+
+    return rResult;
+}
+
+Color LineStyleListBox::GetColorDist( sal_uInt16 nPos )
+{
+    Color rResult = LineListBox::GetColorDist( );
+
+    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
+    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
+    if ( pData )
+        rResult = pData->GetColorDist( GetColor( ), rResult );
+
+    return rResult;
+}
+
+sal_uInt16 LineStyleListBox::GetSelectedStyle( )
+{
+    sal_uInt16 nSelEntry = GetSelectEntryPos();
+    if ( m_sNone.Len( ) > 0 )
+        nSelEntry--;
+    return GetStylePos( nSelEntry, m_nWidth );
+}
+
+long LineStyleListBox::GetWidthFromStyle( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle )
+{
+    long nResult = 0;
+//    sal_uInt16 nStyle = GetSelectedStyle();
+    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
+    if ( pData )
+    {
+        nResult = pData->GuessWidth( nLine1, nLine2, nDistance );
+    }
+    return nResult;
+}
+
+sal_uInt16 LineStyleListBox::GetEntryPos( long /*nLine1*/, long /*nLine2*/,
+                                long /*nDistance*/, sal_uInt16 nStyle ) const
+{
+    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = this->GetEntryCount( );
+    while ( n < nCount )
+    {
+        if ( GetEntryStyle( n ) == nStyle )
+            nPos = (sal_uInt16)n;
+
+        n++;
+    }
+
+    return nPos;
+}
+
+sal_uInt16 LineStyleListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
+{
+    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
+    if ( m_sNone.Len( ) > 0 )
+        nListPos--;
+
+    sal_uInt16 i = 0;
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = m_pStyleList->Count( );
+    while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
+    {
+        ImpLineStyleListData* pData = m_pStyleList->GetObject( i );
+        if ( pData && pData->GetMinWidth() <= nWidth )
+        {
+            if ( nListPos == n )
+                nPos = i;
+            n++;
+        }
+        i++;
+    }
+
+    return nPos;
+}
+
+void LineStyleListBox::UpdateEntries( long nOldWidth )
+{
+    SetUpdateMode( sal_False );
+
+    sal_uInt16      nSelEntry = GetSelectEntryPos();
+    sal_uInt16       nTypePos = GetStylePos( nSelEntry, nOldWidth );
+
+    // Remove the old entries
+    while ( GetEntryCount( ) > 0 )
+        RemoveEntry( 0 );
+
+    // Add the new entries based on the defined width
+    if ( m_sNone.Len( ) > 0 )
+        InsertEntry( m_sNone );
+
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = m_pStyleList->Count( );
+    while ( n < nCount )
+    {
+        ImpLineStyleListData* pData = m_pStyleList->GetObject( n );
+        if ( pData && pData->GetMinWidth() <= m_nWidth )
+        {
+            InsertEntry(
+                   pData->GetLine1ForWidth( m_nWidth ),
+                   pData->GetLine2ForWidth( m_nWidth ),
+                   pData->GetDistForWidth( m_nWidth ),
+                   pData->GetStyle( ) );
+            if ( n == nTypePos )
+                SelectEntryPos( GetEntryCount() - 1 );
+        }
+        else if ( n == nTypePos )
+            SetNoSelection();
+        n++;
+    }
+
+    SetColor( GetColor( ) );
+
+    SetUpdateMode( sal_True );
+    Invalidate();
 }
 
 // ===================================================================
