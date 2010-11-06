@@ -49,7 +49,7 @@ dummy:
     @echo GTK disabled - nothing to build
 
 .ELSE           # "$(ENABLE_GTK)"==""
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="OPENBSD"
 INC+= -DNP_LINUX
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
