@@ -2311,12 +2311,14 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                         (aTmp.*fnRectX->fnSetTop)( nTmp );
                         if( (aEndRect.*fnRectX->fnGetTop)() !=
                             (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
-                        if( bPorR2L )
-                            (aTmp.*fnRectX->fnSetLeft)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                        else
-                            (aTmp.*fnRectX->fnSetRight)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                        {
+                            if( bPorR2L )
+                                (aTmp.*fnRectX->fnSetLeft)(
+                                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                            else
+                                (aTmp.*fnRectX->fnSetRight)(
+                                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                        }
                         aTmp.Intersection( aEndFrm );
                         Sub( aRegion, aTmp );
                     }

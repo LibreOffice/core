@@ -1478,10 +1478,10 @@ const SdrObject* SwFEShell::GetBestObject( BOOL bNext, USHORT /*GOTOOBJ_...*/ eT
                 break;
             }
 
-            if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
+            if(((bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
                         (aPos.Y() > aCurPos.Y())) &&        // " reverse
                 (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
-                        (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
+                        (aBestPos.Y() < aCurPos.Y()))) ||   // " reverse
                         (aBestPos.Y() == aCurPos.Y() &&
                 (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
                         (aBestPos.X() < aCurPos.X()))))     // " reverse
