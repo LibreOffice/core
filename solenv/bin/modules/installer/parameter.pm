@@ -299,6 +299,11 @@ sub setglobalvariables
         }
     }
 
+    if ( $installer::globals::compiler =~ /unxobsd/ )
+    {
+            $installer::globals::epmoutpath = "openbsd";
+    }
+
     if ( $installer::globals::compiler =~ /unxfbsd/ )
     {
         $installer::globals::isfreebsdbuild = 1;
