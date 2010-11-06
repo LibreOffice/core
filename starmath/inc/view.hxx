@@ -57,11 +57,11 @@ class SmGraphicWindow : public ScrollableWindow
     Rectangle aCursorRect;
     bool      bIsCursorVisible;
 public:
-    BOOL IsCursorVisible() const { return bIsCursorVisible; }
-    void ShowCursor(BOOL bShow);
+    bool IsCursorVisible() const { return bIsCursorVisible; }
+    void ShowCursor(bool bShow);
     const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
 protected:
-    void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
+    void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
     using   Window::SetCursor;
     void        SetCursor(const SmNode *pNode);
     void        SetCursor(const Rectangle &rRect);
@@ -157,7 +157,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 {
     SmEditWindow        aEdit;
     SmEditController    aController;
-    BOOL                bExiting;
+    bool                bExiting;
 
     Timer               aInitialFocusTimer;
 
@@ -233,7 +233,7 @@ class SmViewShell: public SfxViewShell
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
     SmClipboardChangeListener*  pClipEvtLstnr;
     SmViewShell_Impl*   pImpl;
-    BOOL                bPasteState;
+    bool                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -242,7 +242,7 @@ class SmViewShell: public SfxViewShell
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
      * visual editor was last to have focus.
      */
-    BOOL bInsertIntoEditWindow;
+    bool bInsertIntoEditWindow;
 protected:
 
     Size GetTextLineSize(OutputDevice& rDevice,
@@ -263,8 +263,8 @@ protected:
     virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
                               USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
-    BOOL        Insert( SfxMedium& rMedium );
-    BOOL        InsertFrom(SfxMedium &rMedium);
+    bool        Insert( SfxMedium& rMedium );
+    bool        InsertFrom(SfxMedium &rMedium);
 
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
@@ -313,7 +313,7 @@ public:
      * so that when text is inserted from catalog or elsewhere we know whether to
      * insert for the visual editor, or the text editor.
      */
-    void SetInsertIntoEditWindow(BOOL bEditWindowHadFocusLast = TRUE){
+    void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast = true){
         bInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
     bool IsInlineEditEnabled() const;

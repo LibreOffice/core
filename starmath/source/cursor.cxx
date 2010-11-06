@@ -481,7 +481,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Find node that this should be applied to
     SmNode* pSubject;
-    BOOL bPatchLine = pSelectedNodesList->size() > 0; //If the line should be patched later
+    bool bPatchLine = pSelectedNodesList->size() > 0; //If the line should be patched later
     if(it != pLineList->begin()) {
         it--;
         pSubject = *it;
@@ -492,7 +492,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         pSubject->Prepare(pDocShell->GetFormat(), *pDocShell);
         it = pLineList->insert(it, pSubject);
         it++;
-        bPatchLine = TRUE;  //We've modified the line it should be patched later.
+        bPatchLine = true;  //We've modified the line it should be patched later.
     }
 
     //Wrap the subject in a SmSubSupNode
@@ -555,7 +555,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterScript, pScriptLine);
 }
 
-BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
+bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     //Find a subject to set limits on
     SmOperNode *pSubject = NULL;
     //Check if pSelectedNode might be a subject
@@ -570,7 +570,7 @@ BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
 
     //Abort operation if we're not in the appropriate context
     if(!pSubject)
-        return FALSE;
+        return false;
 
     BeginEdit();
 
@@ -624,7 +624,7 @@ BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
 
     EndEdit();
 
-    return TRUE;
+    return true;
 }
 
 void SmCursor::InsertBrackets(SmBracketType eBracketType) {
@@ -697,7 +697,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
 }
 
-SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, BOOL bIsLeft) {
+SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     SmToken aTok;
     if(bIsLeft){
         switch(eBracketType){
@@ -771,7 +771,7 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, BOOL bIsLeft) {
     return pRetVal;
 }
 
-BOOL SmCursor::InsertRow() {
+bool SmCursor::InsertRow() {
     AnnotateSelection();
 
     //Find line
@@ -808,7 +808,7 @@ BOOL SmCursor::InsertRow() {
 
     //If we're not in a context that supports InsertRow, return FALSE
     if(!pTable && !pMatrix)
-        return FALSE;
+        return false;
 
     //Now we start editing
     BeginEdit();
@@ -893,7 +893,7 @@ BOOL SmCursor::InsertRow() {
     //FinishEdit is actually used to handle siturations where parent is an instance of
     //SmSubSupNode. In this case parent should always be a table or matrix, however, for
     //code reuse we just use FinishEdit() here too.
-    return TRUE;
+    return true;
 }
 
 void SmCursor::InsertFraction() {
@@ -1108,14 +1108,14 @@ void SmCursor::InsertCommand(USHORT nCommand) {
             InsertRow();
             break;
         case RID_FROMX:
-            InsertLimit(CSUB, TRUE);
+            InsertLimit(CSUB, true);
             break;
         case RID_TOX:
-            InsertLimit(CSUP, TRUE);
+            InsertLimit(CSUP, true);
             break;
         case RID_FROMXTOY:
-            if(InsertLimit(CSUB, FALSE))
-                InsertLimit(CSUP, TRUE);
+            if(InsertLimit(CSUB, true))
+                InsertLimit(CSUP, true);
             break;
         default:
             InsertCommandText(SmResId(nCommand));
@@ -1578,7 +1578,7 @@ SmNode* SmNodeListParser::Error(){
     return new SmErrorNode(PE_UNEXPECTED_TOKEN, SmToken());
 }
 
-BOOL SmNodeListParser::IsOperator(const SmToken &token) {
+bool SmNodeListParser::IsOperator(const SmToken &token) {
     return  IsRelationOperator(token) ||
             IsSumOperator(token) ||
             IsProductOperator(token) ||
@@ -1586,15 +1586,15 @@ BOOL SmNodeListParser::IsOperator(const SmToken &token) {
             IsPostfixOperator(token);
 }
 
-BOOL SmNodeListParser::IsRelationOperator(const SmToken &token) {
+bool SmNodeListParser::IsRelationOperator(const SmToken &token) {
     return token.nGroup & TGRELATION;
 }
 
-BOOL SmNodeListParser::IsSumOperator(const SmToken &token) {
+bool SmNodeListParser::IsSumOperator(const SmToken &token) {
     return token.nGroup & TGSUM;
 }
 
-BOOL SmNodeListParser::IsProductOperator(const SmToken &token) {
+bool SmNodeListParser::IsProductOperator(const SmToken &token) {
     return token.nGroup & TGPRODUCT &&
            token.eType != TWIDESLASH &&
            token.eType != TWIDEBACKSLASH &&
@@ -1603,7 +1603,7 @@ BOOL SmNodeListParser::IsProductOperator(const SmToken &token) {
            token.eType != TOVER;
 }
 
-BOOL SmNodeListParser::IsUnaryOperator(const SmToken &token) {
+bool SmNodeListParser::IsUnaryOperator(const SmToken &token) {
     return  token.nGroup & TGUNOPER &&
             (token.eType == TPLUS ||
              token.eType == TMINUS ||
@@ -1613,6 +1613,6 @@ BOOL SmNodeListParser::IsUnaryOperator(const SmToken &token) {
              token.eType == TUOPER);
 }
 
-BOOL SmNodeListParser::IsPostfixOperator(const SmToken &token) {
+bool SmNodeListParser::IsPostfixOperator(const SmToken &token) {
     return token.eType == TFACT;
 }

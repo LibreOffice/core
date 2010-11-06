@@ -64,7 +64,7 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
     const SfxPoolItem *pItem     = NULL;
 
     UINT16 nU16;
-    BOOL bVal;
+    bool bVal;
     if (rSet.GetItemState(SID_PRINTSIZE, TRUE, &pItem) == SFX_ITEM_SET)
     {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintSize( (SmPrintSize) nU16 );

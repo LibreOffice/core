@@ -291,7 +291,7 @@ private:
      * or EndPos. This means that anything visited in between will be
      * selected.
      */
-    BOOL IsSelecting;
+    bool IsSelecting;
 };
 
 
@@ -417,7 +417,7 @@ private:
     /** Reference to drawing device */
     OutputDevice& rDev;
     /** True if  aSelectionArea have been initialized */
-    BOOL bHasSelectionArea;
+    bool bHasSelectionArea;
     /** The current area that is selected */
     Rectangle aSelectionArea;
     /** Extend the area that must be selected  */

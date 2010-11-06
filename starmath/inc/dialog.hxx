@@ -120,7 +120,7 @@ class SmFontDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, BOOL bHideCheckboxes, BOOL bFreeRes = TRUE);
+    SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes, bool bFreeRes = true);
 
     const Font& GetFont() const { return Face; }
     void        SetFont(const Font &rFont);
@@ -150,7 +150,7 @@ class SmFontSizeDialog : public ModalDialog
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
-    SmFontSizeDialog(Window *pParent, BOOL bFreeRes = TRUE);
+    SmFontSizeDialog(Window *pParent, bool bFreeRes = true);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -187,7 +187,7 @@ class SmFontTypeDialog : public ModalDialog
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
-    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice, BOOL bFreeRes = TRUE);
+    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice, bool bFreeRes = true);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -206,7 +206,7 @@ class SmCategoryDesc : public Resource
     USHORT          Minimum[4];
     USHORT          Maximum[4];
     USHORT          Value[4];
-    BOOL            bIsHighContrast;
+    bool            bIsHighContrast;
 
 public:
     SmCategoryDesc(const ResId &rResId, USHORT nCategoryIdx);
@@ -219,7 +219,7 @@ public:
     USHORT          GetValue(USHORT Index) const    { return Value[Index]; }
     void            SetValue(USHORT Index, USHORT nVal) { Value[Index] = nVal;}
 
-    void            SetHighContrast( BOOL bVal )    { bIsHighContrast = bVal; }
+    void            SetHighContrast( bool bVal )    { bIsHighContrast = bVal; }
     const Bitmap *  GetGraphic(USHORT Index) const
     {
         return bIsHighContrast ? GraphicsH[Index] : Graphics[Index];
@@ -247,7 +247,7 @@ class SmDistanceDialog : public ModalDialog
 
     SmCategoryDesc *Categories[NOCATEGORIES];
     USHORT          nActiveCategory;
-    BOOL            bScaleAllBrackets;
+    bool            bScaleAllBrackets;
 
     DECL_LINK(GetFocusHdl, Control *);
     DECL_LINK(MenuSelectHdl, Menu *);
@@ -261,7 +261,7 @@ class SmDistanceDialog : public ModalDialog
     void    ApplyImages();
 
 public:
-    SmDistanceDialog(Window *pParent, BOOL bFreeRes = TRUE);
+    SmDistanceDialog(Window *pParent, bool bFreeRes = true);
     ~SmDistanceDialog();
 
     void ReadFrom(const SmFormat &rFormat);
@@ -288,7 +288,7 @@ class SmAlignDialog : public ModalDialog
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
-    SmAlignDialog(Window *pParent, BOOL bFreeRes = TRUE);
+    SmAlignDialog(Window *pParent, bool bFreeRes = true);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -372,7 +372,7 @@ class SmSymbolDialog : public ModalDialog
     DECL_LINK(EditClickHdl, Button *);
     DECL_LINK(GetClickHdl, Button *);
 
-    void            FillSymbolSets(BOOL bDeleteText = TRUE);
+    void            FillSymbolSets(bool bDeleteText = true);
     void            SetSymbolSetManager(SmSymbolManager &rMgr);
     const SmSym    *GetSymbol() const;
     void            InitColor_Impl();
@@ -381,10 +381,10 @@ class SmSymbolDialog : public ModalDialog
 
 public:
     SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
-            SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell, BOOL bFreeRes = TRUE);
+            SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell, bool bFreeRes = true);
     virtual ~SmSymbolDialog();
 
-    BOOL    SelectSymbolSet(const XubString &rSymbolSetName);
+    bool    SelectSymbolSet(const XubString &rSymbolSetName);
     void    SelectSymbol(USHORT nSymbolPos);
     USHORT  GetSelectedSymbol() const   { return aSymbolSetDisplay.GetSelectSymbol(); }
 };
@@ -457,22 +457,22 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(ChangeClickHdl, Button *);
     DECL_LINK(DeleteClickHdl, Button *);
 
-    void    FillSymbols(ComboBox &rComboBox, BOOL bDeleteText = TRUE);
-    void    FillSymbolSets(ComboBox &rComboBox, BOOL bDeleteText = TRUE);
-    void    FillFonts(BOOL bDeleteText = TRUE);
-    void    FillStyles(BOOL bDeleteText = TRUE);
+    void    FillSymbols(ComboBox &rComboBox, bool bDeleteText = true);
+    void    FillSymbolSets(ComboBox &rComboBox, bool bDeleteText = true);
+    void    FillFonts(bool bDeleteText = true);
+    void    FillStyles(bool bDeleteText = true);
 
     void    SetSymbolSetManager(const SmSymbolManager &rMgr);
     void    SetFont(const XubString &rFontName, const XubString &rStyleName);
     void    SetOrigSymbol(const SmSym *pSymbol, const XubString &rSymbolSetName);
     void    UpdateButtons();
 
-    BOOL    SelectSymbolSet(ComboBox &rComboBox, const XubString &rSymbolSetName,
-                            BOOL bDeleteText);
-    BOOL    SelectSymbol(ComboBox &rComboBox, const XubString &rSymbolName,
-                            BOOL bDeleteText);
-    BOOL    SelectFont(const XubString &rFontName, BOOL bApplyFont);
-    BOOL    SelectStyle(const XubString &rStyleName, BOOL bApplyFont);
+    bool    SelectSymbolSet(ComboBox &rComboBox, const XubString &rSymbolSetName,
+                            bool bDeleteText);
+    bool    SelectSymbol(ComboBox &rComboBox, const XubString &rSymbolName,
+                            bool bDeleteText);
+    bool    SelectFont(const XubString &rFontName, bool bApplyFont);
+    bool    SelectStyle(const XubString &rStyleName, bool bApplyFont);
 
     SmSym       * GetSymbol(const ComboBox &rComboBox);
     const SmSym * GetSymbol(const ComboBox &rComboBox) const
@@ -485,7 +485,7 @@ class SmSymDefineDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr, BOOL bFreeRes = TRUE);
+    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr, bool bFreeRes = true);
     ~SmSymDefineDialog();
 
     using OutputDevice::SetFont;
@@ -493,28 +493,28 @@ public:
     // Dialog
     virtual short   Execute();
 
-    BOOL SelectOldSymbolSet(const XubString &rSymbolSetName)
+    bool SelectOldSymbolSet(const XubString &rSymbolSetName)
     {
-        return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, FALSE);
+        return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, false);
     }
 
-    BOOL SelectOldSymbol(const XubString &rSymbolName)
+    bool SelectOldSymbol(const XubString &rSymbolName)
     {
-        return SelectSymbol(aOldSymbols, rSymbolName, FALSE);
+        return SelectSymbol(aOldSymbols, rSymbolName, false);
     }
 
-    BOOL SelectSymbolSet(const XubString &rSymbolSetName)
+    bool SelectSymbolSet(const XubString &rSymbolSetName)
     {
-        return SelectSymbolSet(aSymbolSets, rSymbolSetName, FALSE);
+        return SelectSymbolSet(aSymbolSets, rSymbolSetName, false);
     }
 
-    BOOL SelectSymbol(const XubString &rSymbolName)
+    bool SelectSymbol(const XubString &rSymbolName)
     {
-        return SelectSymbol(aSymbols, rSymbolName, FALSE);
+        return SelectSymbol(aSymbols, rSymbolName, false);
     }
 
-    BOOL        SelectFont(const XubString &rFontName)   { return SelectFont(rFontName, TRUE); }
-    BOOL        SelectStyle(const XubString &rStyleName) { return SelectStyle(rStyleName, TRUE); };
+    bool        SelectFont(const XubString &rFontName)   { return SelectFont(rFontName, true); }
+    bool        SelectStyle(const XubString &rStyleName) { return SelectStyle(rStyleName, true); };
     void        SelectChar(xub_Unicode cChar);
 };
 

@@ -501,7 +501,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -517,7 +517,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -761,7 +761,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = IsItalic( rFace );
+                bool bVal = IsItalic( rFace );
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -774,7 +774,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = IsBold( rFace ); // bold?
+                bool bVal = IsBold( rFace ); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;

@@ -46,7 +46,7 @@
 
 ////////////////////////////////////////////////////////////
 
-static USHORT  GetImageListRID( USHORT nCategoryRID, BOOL bHighContrast )
+static USHORT  GetImageListRID( USHORT nCategoryRID, bool bHighContrast )
 {
     USHORT nRes = 0xFFFF;
     switch (nCategoryRID)
@@ -188,7 +188,7 @@ SmViewShell * SmToolBoxWindow::GetView()
 }
 
 
-const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContrast )
+const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, bool bHighContrast )
 {
     // creates the image list via its resource id and stores that
     // list for later use in the respective array.
@@ -216,7 +216,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
 
 void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 {
-    BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // set image list for toolbox 'catalog'
     const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );
@@ -243,12 +243,12 @@ void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    static BOOL bSetPosition = TRUE;
+    static bool bSetPosition = true;
     if (STATE_CHANGE_INITSHOW == nStateChange)
     {
         // calculate initial position to be used after creation of the window...
         AdjustPosSize( bSetPosition );
-        bSetPosition = FALSE;
+        bSetPosition = false;
 
         SetCategory(RID_UNBINOPS_CAT);
     }
@@ -257,7 +257,7 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 }
 
 
-void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
+void SmToolBoxWindow::AdjustPosSize( bool bSetPos )
 {
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 5 ) );
@@ -310,8 +310,8 @@ BOOL SmToolBoxWindow::Close()
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_TOOLBOX, SFX_CALLMODE_STANDARD,
-                new SfxBoolItem(SID_TOOLBOX, FALSE), 0L);
-    return TRUE;
+                new SfxBoolItem(SID_TOOLBOX, false), 0L);
+    return true;
 }
 
 void SmToolBoxWindow::GetFocus()
@@ -361,9 +361,9 @@ void SmToolBoxWindow::SetCategory(USHORT nCategoryRID)
         SetOutputSizePixel( aWndSize );
 
         if (nActiveCategoryRID)
-            aToolBoxCat.CheckItem(nActiveCategoryRID, FALSE);
+            aToolBoxCat.CheckItem(nActiveCategoryRID, false);
         nActiveCategoryRID = nCategoryRID;
-        aToolBoxCat.CheckItem(nActiveCategoryRID, TRUE);
+        aToolBoxCat.CheckItem(nActiveCategoryRID, true);
 
         pToolBoxCmd->Show();
     }

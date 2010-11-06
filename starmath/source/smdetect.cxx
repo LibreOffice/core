@@ -199,9 +199,9 @@ SmFilterDetect::~SmFilterDetect()
     {
         // ctor of SfxMedium uses owner transition of ItemSet
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE );
+        aMedium.UseInteractionHandler( true );
 
-        BOOL bIsStorage = aMedium.IsStorage();
+        bool bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later

@@ -60,7 +60,7 @@ protected:
     DECL_LINK( CmdSelectHdl, ToolBox* );
 
     SmViewShell * GetView();
-    const ImageList * GetImageList( USHORT nResId, BOOL bHighContrast );
+    const ImageList * GetImageList( USHORT nResId, bool bHighContrast );
 
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
@@ -72,7 +72,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
-    void        AdjustPosSize( BOOL bSetPos );
+    void        AdjustPosSize( bool bSetPos );
     void        SetCategory(USHORT nCategory);
 };
 

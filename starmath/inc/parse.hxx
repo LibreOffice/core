@@ -195,7 +195,7 @@ class SmParser
     USHORT          Row,
                     ColOff;
     SmConvert       eConversion;
-    BOOL            bImportSymNames,
+    bool            bImportSymNames,
                     bExportSymNames;
 
     // declare copy-constructor and assignment-operator private
@@ -204,14 +204,14 @@ class SmParser
 
 protected:
 #if OSL_DEBUG_LEVEL
-    BOOL            IsDelimiter( const String &rTxt, xub_StrLen nPos );
+    bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
 #endif
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
     void            Insert(const String &rText, USHORT nPos);
     void            Replace( USHORT nPos, USHORT nLen, const String &rText );
 
-    inline BOOL     TokenInGroup(ULONG nGroup);
+    inline bool     TokenInGroup(ULONG nGroup);
 
     // grammar
     void    Table();
@@ -236,7 +236,7 @@ protected:
     void    FontSize();
     void    Color();
     void    Brace();
-    void    Bracebody(BOOL bIsLeftRight);
+    void    Bracebody(bool bIsLeftRight);
     void    Function();
     void    Binom();
     void    Stack();
@@ -263,10 +263,10 @@ public:
     SmConvert    GetConversion() const              { return eConversion; }
     void         SetConversion(SmConvert eConv)     { eConversion = eConv; }
 
-    BOOL         IsImportSymbolNames() const        { return bImportSymNames; }
-    void         SetImportSymbolNames(BOOL bVal)    { bImportSymNames = bVal; }
-    BOOL         IsExportSymbolNames() const        { return bExportSymNames; }
-    void         SetExportSymbolNames(BOOL bVal)    { bExportSymNames = bVal; }
+    bool         IsImportSymbolNames() const        { return bImportSymNames; }
+    void         SetImportSymbolNames(bool bVal)    { bImportSymNames = bVal; }
+    bool         IsExportSymbolNames() const        { return bExportSymNames; }
+    void         SetExportSymbolNames(bool bVal)    { bExportSymNames = bVal; }
 
     USHORT       AddError(SmParseError Type, SmNode *pNode);
 
@@ -277,9 +277,9 @@ public:
 };
 
 
-inline BOOL SmParser::TokenInGroup(ULONG nGroup)
+inline bool SmParser::TokenInGroup(ULONG nGroup)
 {
-    return (CurToken.nGroup & nGroup) ? TRUE : FALSE;
+    return (CurToken.nGroup & nGroup) ? true : false;
 }
 
 

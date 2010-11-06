@@ -456,7 +456,7 @@ class SmTmpDevice2
     Color   Impl_GetColor( const Color& rColor );
 
 public:
-    SmTmpDevice2( OutputDevice &rTheDev, BOOL bUseMap100th_mm );
+    SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm );
     ~SmTmpDevice2( )  { rOutDev.Pop( ); }
 
     void SetFont( const Font &rNewFont );
@@ -468,7 +468,7 @@ public:
     operator OutputDevice & ( ) { return rOutDev; }
 };
 
-SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, BOOL bUseMap100th_mm ) :
+SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
     rOutDev( rTheDev )
 {
     rOutDev.Push( PUSH_FONT | PUSH_MAPMODE |
@@ -641,7 +641,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // draw root-sign itself
     DrawSpecialNode( pNode );
 
-    SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, TRUE );
+    SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, true );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -690,7 +690,7 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
           aPos ( Position + aOffset );
     pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, FALSE );
+    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
     rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
@@ -709,7 +709,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, FALSE );
+    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -749,7 +749,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     if ( pNode->IsPhantom( )  ||  pNode->GetText( ).Len( ) == 0  ||  pNode->GetText( ).GetChar( 0 ) == xub_Unicode( '\0' ) )
         return;
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, FALSE );
+    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     Point  aPos ( Position );
@@ -860,8 +860,8 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
         IsSelecting = !IsSelecting;
 
     //Cache current state
-    BOOL WasSelecting = IsSelecting;
-    BOOL ChangedState = FALSE;
+    bool WasSelecting = IsSelecting;
+    bool ChangedState = false;
 
     //Set selected
     pNode->SetSelected( IsSelecting );
@@ -1047,7 +1047,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
 void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
     SmCaretPosGraphEntry *left  = pRightMost,
                          *right = pGraph->Add( SmCaretPos( pNode, 1) );
-    BOOL bIsFirst = TRUE;
+    bool bIsFirst = true;
     SmNodeIterator it( pNode );
     while( it.Next() ){
         pRightMost = pGraph->Add( SmCaretPos( it.Current(), 0 ), left);
@@ -1057,7 +1057,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
         pRightMost->SetRight(right);
         if(bIsFirst)
             right->SetLeft(pRightMost);
-        bIsFirst = FALSE;
+        bIsFirst = false;
     }
     pRightMost = right;
 }
@@ -2071,7 +2071,7 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
 
 SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset )
     : rDev( rDevice ) {
-    bHasSelectionArea = FALSE;
+    bHasSelectionArea = false;
 
     //Visit everything
     j_assert( pTree, "pTree can't be null!" );

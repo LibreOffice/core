@@ -85,13 +85,13 @@ private:
     String              m_aExportName;
     String              m_aSetName;
     sal_Unicode         m_cChar;
-    BOOL                m_bPredefined;
-    BOOL                m_bDocSymbol;
+    bool                m_bPredefined;
+    bool                m_bDocSymbol;
 
 public:
     SmSym();
     SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
-          const String& rSet, BOOL bIsPredefined = FALSE);
+          const String& rSet, bool bIsPredefined = false);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
@@ -107,14 +107,14 @@ public:
 //! because ten the key would not be the same as its supposed copy here
 //    void            SetName( const String &rTxt )       { m_aName = rTxt; }
 
-    BOOL            IsPredefined() const        { return m_bPredefined; }
+    bool            IsPredefined() const        { return m_bPredefined; }
     const String &  GetSymbolSetName() const    { return m_aSetName; }
     void            SetSymbolSetName( const String &rName )     { m_aSetName = rName; }
     const String &  GetExportName() const       { return m_aExportName; }
     void            SetExportName( const String &rName )        { m_aExportName = rName; }
 
-    BOOL            IsDocSymbol() const         { return m_bDocSymbol; }
-    void            SetDocSymbol( BOOL bVal )   { m_bDocSymbol = bVal; }
+    bool            IsDocSymbol() const         { return m_bDocSymbol; }
+    void            SetDocSymbol( bool bVal )   { m_bDocSymbol = bVal; }
 
     // true if rSymbol has the same name, font and character
     bool            IsEqualInUI( const SmSym& rSymbol ) const;

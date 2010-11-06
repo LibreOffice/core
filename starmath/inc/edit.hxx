@@ -114,9 +114,9 @@ public:
     ESelection          GetSelection() const;
     void                SetSelection(const ESelection &rSel);
 
-    BOOL                IsEmpty() const;
-    BOOL                IsSelected() const;
-    BOOL                IsAllSelected() const;
+    bool                IsEmpty() const;
+    bool                IsSelected() const;
+    bool                IsAllSelected() const;
     void                Cut();
     void                Copy();
     void                Paste();
@@ -127,14 +127,14 @@ public:
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    BOOL                HasMark(const String &rText) const;
+    bool                HasMark(const String &rText) const;
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
-    BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                HandleWheelCommands( const CommandEvent &rCEvt );
     bool                IsInlineEditEnabled();
     void                StartCursorMove();
 
