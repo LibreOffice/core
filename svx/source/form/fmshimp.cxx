@@ -1134,12 +1134,10 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 PopupMenu* FmXFormShell::GetConversionMenu()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetConversionMenu" );
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bIsHiContrastMode  = rSettings.GetHighContrastMode();
 
     PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
-    ImageList aImageList( SVX_RES( bIsHiContrastMode ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL) );
+    ImageList aImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL) );
     for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
     {
         // das entsprechende Image dran

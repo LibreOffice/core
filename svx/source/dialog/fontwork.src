@@ -345,12 +345,6 @@ DockingWindow RID_SVXDLG_FONTWORK
         MaskColor = IMAGE_STDBTN_COLOR ;
         FONTWORK_IDLIST
     };
-    ImageList ILH_FONTWORK
-    {
-        Prefix = "fwh";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        FONTWORK_IDLIST
-    };
 };
  // Bitmaps ---------------------------------------------------------------
 Bitmap RID_SVXBMP_FONTWORK_FORM1
@@ -400,55 +394,6 @@ Bitmap RID_SVXBMP_FONTWORK_FORM11
 Bitmap RID_SVXBMP_FONTWORK_FORM12
 {
     File = "fwbuttn4.bmp" ;
-};
-
-Bitmap RID_SVXBMP_FONTWORK_FORM1_H
-{
-    File = "fwthcirc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM2_H
-{
-    File = "fwbhcirc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM3_H
-{
-    File = "fwlhcirc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM4_H
-{
-    File = "fwrhcirc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM5_H
-{
-    File = "fwtoparc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM6_H
-{
-    File = "fwbotarc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM7_H
-{
-    File = "fwlftarc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM8_H
-{
-    File = "fwrgtarc_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM9_H
-{
-    File = "fwbuttn1_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM10_H
-{
-    File = "fwbuttn2_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM11_H
-{
-    File = "fwbuttn3_h.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM12_H
-{
-    File = "fwbuttn4_h.bmp" ;
 };
 
  // Strings ---------------------------------------------------------------

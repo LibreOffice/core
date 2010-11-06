@@ -134,7 +134,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     long            nSaveShadowSize;
 
     ImageList       maImageList;
-    ImageList       maImageListH;
 
     const XColorTable* pColorTable;
 

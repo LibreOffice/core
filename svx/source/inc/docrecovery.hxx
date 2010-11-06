@@ -609,9 +609,6 @@ class RecovDocList : public SvxSimpleTable
         Image  m_aGreenCheckImg;
         Image  m_aYellowCheckImg;
         Image  m_aRedCrossImg;
-        Image  m_aGreenCheckImgHC;
-        Image  m_aYellowCheckImgHC;
-        Image  m_aRedCrossImgHC;
 
         String m_aSuccessRecovStr;
         String m_aOrigDocRecovStr;

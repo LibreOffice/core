@@ -249,7 +249,6 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     nSaveShadowSize (100),
 
     maImageList     (ResId(IL_FONTWORK,*rResId.GetResMgr())),
-    maImageListH    (ResId(ILH_FONTWORK,*rResId.GetResMgr())),
 
     pColorTable     (NULL)
 {
@@ -1226,24 +1225,12 @@ void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SvxFontWorkDialog::ApplyImageList()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
     ResMgr* _pMgr = &DIALOG_MGR();
 
-    USHORT nBitmapResId = bHighContrast ? RID_SVXBMP_FONTWORK_FORM1_H : RID_SVXBMP_FONTWORK_FORM1;
+    USHORT nBitmapResId = RID_SVXBMP_FONTWORK_FORM1;
     USHORT nTextResId = RID_SVXSTR_FONTWORK_FORM1;
 
     bool bInit = aFormSet.GetItemCount() == 0;
-
-    if( bInit )
-    {
-/*
-        Size aSize( aTbxStyle.CalcWindowSizePixel() );
-        Bitmap aBmp(ResId(RID_SVXBMP_FONTWORK_FORM1,_pMgr));
-        aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
-        aFormSet.SetSizePixel(aSize);
-*/
-    }
 
     USHORT i;
     for( i = 1; i < 13; i++, nTextResId++, nBitmapResId++ )
@@ -1259,7 +1246,7 @@ void SvxFontWorkDialog::ApplyImageList()
         }
     }
 
-    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
+    ImageList& rImgLst = maImageList;
 
     aTbxStyle.SetImageList( rImgLst );
     aTbxAdjust.SetImageList( rImgLst );

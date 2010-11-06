@@ -84,10 +84,6 @@ typedef std::hash_map< sal_Int64, sal_Int64 > SfxImageManagerMap;
 static SfxImageManager_Impl* pGlobalImageManager = 0;
 static SfxImageManagerMap    m_ImageManager_ImplMap;
 static SfxImageManagerMap    m_ImageManagerMap;
-static ImageList*            pImageListSmall=0;
-static ImageList*            pImageListBig=0;
-static ImageList*            pImageListHiSmall=0;
-static ImageList*            pImageListHiBig=0;
 
 static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 {
@@ -118,40 +114,32 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 }
 
 // Global image list
-static ImageList* GetImageList( BOOL bBig, BOOL bHiContrast )
+static ImageList* GetImageList( BOOL bBig )
 {
     SolarMutexGuard aGuard;
+    ImageList* rpList = NULL;
 
-    // Has to be changed if we know how the IDs are named!!!
-    ImageList*& rpList = bBig ? ( bHiContrast ? pImageListHiBig : pImageListBig ) :
-                                ( bHiContrast ? pImageListHiSmall : pImageListSmall );
-    if ( !rpList )
-    {
-        ResMgr *pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
+    ResMgr *pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
 
-        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
-                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), *pResMgr);
+    ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr);
 
-        aResId.SetRT( RSC_IMAGELIST );
+    aResId.SetRT( RSC_IMAGELIST );
 
-        DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
+    DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
 
-        if ( pResMgr->IsAvailable(aResId) )
-            rpList = new ImageList( aResId );
-        else
-            rpList = new ImageList();
-    }
+    if ( pResMgr->IsAvailable(aResId) )
+        rpList = new ImageList( aResId );
+    else
+        rpList = new ImageList();
 
     return rpList;
 }
 
-static sal_Int16 impl_convertBools( sal_Bool bLarge, sal_Bool bHiContrast )
+static sal_Int16 impl_convertBools( sal_Bool bLarge )
 {
     sal_Int16 nIndex( 0 );
     if ( bLarge  )
         nIndex += 1;
-    if ( bHiContrast )
-        nIndex += 2;
     return nIndex;
 }
 
@@ -183,11 +171,11 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
 
 ImageList* SfxImageManager_Impl::GetImageList( BOOL bBig, BOOL bHiContrast )
 {
-    sal_Int32 nIndex = impl_convertBools( bBig, bHiContrast );
+    sal_Int32 nIndex = impl_convertBools( bBig );
     if ( !m_pImageList[nIndex] )
     {
         if ( !m_pModule )
-            m_pImageList[nIndex] = ::GetImageList( bBig, bHiContrast );
+            m_pImageList[nIndex] = ::GetImageList( bBig );
         else
             m_pImageList[nIndex] = m_pModule->GetImageList_Impl( bBig, bHiContrast );
     }

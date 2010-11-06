@@ -913,16 +913,12 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
     const String*       pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
-    BOOL      bHC         = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
-
     TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
     switch(pInfo->RecoveryState)
     {
         case E_SUCCESSFULLY_RECOVERED :
         {
             pImg = &pList->m_aGreenCheckImg;
-            if (bHC)
-                pImg = &pList->m_aGreenCheckImgHC;
             pTxt = &pList->m_aSuccessRecovStr;
         }
         break;
@@ -930,8 +926,6 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
         case E_ORIGINAL_DOCUMENT_RECOVERED : // TODO must be renamed into ORIGINAL DOCUMENT recovered! Because its marked as yellow
         {
             pImg = &pList->m_aYellowCheckImg;
-            if (bHC)
-                pImg = &pList->m_aYellowCheckImgHC;
             pTxt = &pList->m_aOrigDocRecovStr;
         }
         break;
@@ -939,8 +933,6 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
         case E_RECOVERY_FAILED :
         {
             pImg = &pList->m_aRedCrossImg;
-            if (bHC)
-                pImg = &pList->m_aRedCrossImgHC;
             pTxt = &pList->m_aRecovFailedStr;
         }
         break;
@@ -980,9 +972,6 @@ RecovDocList::RecovDocList(      Window* pParent,
     , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK,*rResId.GetResMgr()     ) )
     , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK,*rResId.GetResMgr()    ) )
     , m_aRedCrossImg      ( ResId(IMG_REDCROSS,*rResId.GetResMgr()       ) )
-    , m_aGreenCheckImgHC  ( ResId(IMG_GREENCHECK_HC,*rResId.GetResMgr()  ) )
-    , m_aYellowCheckImgHC ( ResId(IMG_YELLOWCHECK_HC,*rResId.GetResMgr() ) )
-    , m_aRedCrossImgHC    ( ResId(IMG_REDCROSS_HC,*rResId.GetResMgr()    ) )
     , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV,*rResId.GetResMgr()   ) )
     , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV,*rResId.GetResMgr()   ) )
     , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED,*rResId.GetResMgr()    ) )

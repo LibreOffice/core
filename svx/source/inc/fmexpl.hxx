@@ -249,7 +249,6 @@ public:
     FmFormData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
         const ImageList& _rNormalImages,
-        const ImageList& _rHCImages,
         FmFormData* _pParent = NULL
     );
 
@@ -284,7 +283,6 @@ public:
     FmControlData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxComponent,
         const ImageList& _rNormalImages,
-        const ImageList& _rHCImages,
         FmFormData* _pParent
     );
     FmControlData( const FmControlData& rControlData );
@@ -296,8 +294,7 @@ public:
 
     void ModelReplaced(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxNew,
-        const ImageList& _rNormalImages,
-        const ImageList& _rHCImages
+        const ImageList& _rNormalImages
     );
 };
 
@@ -362,7 +359,6 @@ namespace svxform
         OFormComponentObserver*     m_pPropChangeList;
 
         ImageList                   m_aNormalImages;
-        ImageList                   m_aHCImages;
 
         void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
         FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
@@ -384,7 +380,7 @@ namespace svxform
             // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
 
     public:
-        NavigatorTreeModel( const ImageList& _rNormalImages, const ImageList& _rHCImages );
+        NavigatorTreeModel( const ImageList& _rNormalImages );
         virtual ~NavigatorTreeModel();
 
         void FillBranch( FmFormData* pParentData );
@@ -432,7 +428,6 @@ namespace svxform
         ListBoxEntrySet         m_aCutEntries;
         // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
         ImageList           m_aNavigatorImages;
-        ImageList           m_aNavigatorImagesHC;
 
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 

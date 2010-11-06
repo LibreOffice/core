@@ -251,12 +251,7 @@ namespace sfx2
 
         // Get the closer bitmap and set it as right most button.
         Image aImage( SfxResId( SFX_IMG_CLOSE_DOC ) );
-        Image aImageHC( SfxResId( SFX_IMG_CLOSE_DOC_HC ) );
-        m_aToolbox.InsertItem( 1,
-                GetSettings().GetStyleSettings().GetHighContrastMode()
-            ?   aImageHC
-            :   aImage
-        );
+        m_aToolbox.InsertItem( 1, aImage );
         m_aToolbox.ShowItem( 1 );
     }
 

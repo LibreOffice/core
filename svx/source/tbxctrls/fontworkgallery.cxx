@@ -364,11 +364,6 @@ private:
     Image maImgAlgin3;
     Image maImgAlgin4;
     Image maImgAlgin5;
-    Image maImgAlgin1h;
-    Image maImgAlgin2h;
-    Image maImgAlgin3h;
-    Image maImgAlgin4h;
-    Image maImgAlgin5h;
 
     const rtl::OUString msFontworkAlignment;
 
@@ -380,16 +375,11 @@ private:
 FontWorkAlignmentWindow::FontWorkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT ))
 , mrController( rController )
-, maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16 ) )
-, maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16 ) )
-, maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16 ) )
-, maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16 ) )
+, maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16    ) )
+, maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16  ) )
+, maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16   ) )
+, maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16    ) )
 , maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) )
-, maImgAlgin1h( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16_H ) )
-, maImgAlgin2h( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16_H ) )
-, maImgAlgin3h( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16_H ) )
-, maImgAlgin4h( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16_H ) )
-, maImgAlgin5h( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16_H ) )
 , msFontworkAlignment( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) )
 {
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -397,11 +387,11 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow( svt::ToolboxController& rContr
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
     SetSelectHdl( LINK( this, FontWorkAlignmentWindow, SelectHdl ) );
 
-    appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
-    appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
-    appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT ) ), bHighContrast ? maImgAlgin3h : maImgAlgin3 );
-    appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD ) ), bHighContrast ? maImgAlgin4h : maImgAlgin4 );
-    appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), bHighContrast ? maImgAlgin5h : maImgAlgin5 );
+    appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT    ) ), maImgAlgin1 );
+    appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER  ) ), maImgAlgin2 );
+    appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT   ) ), maImgAlgin3 );
+    appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD    ) ), maImgAlgin4 );
+    appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), maImgAlgin5 );
 
     SetOutputSizePixel( getMenuSize() );
 
@@ -451,11 +441,11 @@ void FontWorkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT ) ), bHighContrast ? maImgAlgin1h : maImgAlgin1 );
-        appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER ) ), bHighContrast ? maImgAlgin2h : maImgAlgin2 );
-        appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT ) ), bHighContrast ? maImgAlgin3h : maImgAlgin3 );
-        appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD ) ), bHighContrast ? maImgAlgin4h : maImgAlgin4 );
-        appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), bHighContrast ? maImgAlgin5h : maImgAlgin5 );
+        appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT    ) ), maImgAlgin1 );
+        appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER  ) ), maImgAlgin2 );
+        appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT   ) ), maImgAlgin3 );
+        appendEntry( 3, String( SVX_RES( STR_ALIGN_WORD    ) ), maImgAlgin4 );
+        appendEntry( 4, String( SVX_RES( STR_ALIGN_STRETCH ) ), maImgAlgin5 );
     }
 }
 
@@ -587,13 +577,13 @@ FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow( svt::ToolboxCont
     SetSelectHdl( LINK( this, FontWorkCharacterSpacingWindow, SelectHdl ) );
 
     appendEntry( 0, String( SVX_RES( STR_CHARS_SPACING_VERY_TIGHT ) ), MIB_RADIOCHECK );
-    appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT ) ), MIB_RADIOCHECK );
-    appendEntry( 2, String( SVX_RES( STR_CHARS_SPACING_NORMAL ) ), MIB_RADIOCHECK );
-    appendEntry( 3, String( SVX_RES( STR_CHARS_SPACING_LOOSE ) ), MIB_RADIOCHECK );
+    appendEntry( 1, String( SVX_RES( STR_CHARS_SPACING_TIGHT      ) ), MIB_RADIOCHECK );
+    appendEntry( 2, String( SVX_RES( STR_CHARS_SPACING_NORMAL     ) ), MIB_RADIOCHECK );
+    appendEntry( 3, String( SVX_RES( STR_CHARS_SPACING_LOOSE      ) ), MIB_RADIOCHECK );
     appendEntry( 4, String( SVX_RES( STR_CHARS_SPACING_VERY_LOOSE ) ), MIB_RADIOCHECK );
-    appendEntry( 5, String( SVX_RES( STR_CHARS_SPACING_CUSTOM ) ), MIB_RADIOCHECK );
+    appendEntry( 5, String( SVX_RES( STR_CHARS_SPACING_CUSTOM     ) ), MIB_RADIOCHECK );
     appendSeparator();
-    appendEntry( 6, String( SVX_RES( STR_CHARS_SPACING_KERN_PAIRS ) ), MIB_CHECKABLE );
+    appendEntry( 6, String( SVX_RES( STR_CHARS_SPACING_KERN_PAIRS ) ), MIB_CHECKABLE  );
 
     SetOutputSizePixel( getMenuSize() );
 

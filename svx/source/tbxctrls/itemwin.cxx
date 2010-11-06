@@ -116,8 +116,6 @@ void SvxLineBox::Select()
     {
         XLineStyle eXLS;
         USHORT nPos = GetSelectEntryPos();
-//      SfxDispatcher* pDisp = rBindings.GetDispatcher();
-        //DBG_ASSERT( pDisp, "invalid Dispatcher" );
 
         switch ( nPos )
         {
@@ -152,7 +150,6 @@ void SvxLineBox::Select()
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
                                                  aArgs );
-//                    pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
                 }
             }
             break;
@@ -167,7 +164,6 @@ void SvxLineBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
                                      aArgs );
-//      pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -287,10 +283,8 @@ void SvxLineBox::FillControl()
         if ( pItem )
             Fill( pItem->GetDashList() );
     }
-
-
-//  rBindings.Invalidate( SID_ATTR_LINE_DASH );
 }
+
 //========================================================================
 // SvxColorBox
 //========================================================================
@@ -332,7 +326,6 @@ IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
         const SvxColorTableItem* pItem = (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if ( pItem )
             Fill( pItem->GetColorTable() );
-//      rBindings.Invalidate( nId );
     }
     return 0;
 }
@@ -373,7 +366,6 @@ void SvxColorBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      maCommand,
                                      aArgs );
-//        rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -532,7 +524,6 @@ void SvxMetricField::Modify()
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
                                  aArgs );
-//  rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
 }
 
 // -----------------------------------------------------------------------

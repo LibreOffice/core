@@ -63,20 +63,6 @@ ImageList RID_DEFAULTIMAGELIST_LC
     IMAGE_ID_LIST
 };
 
-ImageList RID_DEFAULTIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MASKCOLOR
-    IMAGE_ID_LIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_LCH
-{
-    Prefix = "lch";
-    MASKCOLOR
-    IMAGE_ID_LIST
-};
-
 // Strings ---------------------------------------------------------------
 
 String RID_DESKTOP

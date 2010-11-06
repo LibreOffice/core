@@ -252,7 +252,6 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
     pChildList = new FmEntryDataList();
     aText = rEntryData.GetText();
     m_aNormalImage = rEntryData.GetNormalImage();
-    m_aHCImage = rEntryData.GetHCImage();
     pParent = rEntryData.GetParent();
 
     FmEntryData* pChildData;
@@ -317,16 +316,19 @@ sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 TYPEINIT1( FmFormData, FmEntryData );
 DBG_NAME(FmFormData);
 //------------------------------------------------------------------------
-FmFormData::FmFormData( const Reference< XForm >& _rxForm, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
-    :FmEntryData( _pParent, _rxForm )
-    ,m_xForm( _rxForm )
+FmFormData::FmFormData(
+    const Reference< XForm >& _rxForm,
+    const ImageList& _rNormalImages,
+    FmFormData* _pParent
+)
+:   FmEntryData( _pParent, _rxForm ),
+    m_xForm( _rxForm )
 {
     DBG_CTOR(FmEntryData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
 
     m_aNormalImage = _rNormalImages.GetImage( RID_SVXIMG_FORM );
-    m_aHCImage = _rHCImages.GetImage( RID_SVXIMG_FORM );
 
     //////////////////////////////////////////////////////////////////////
     // Titel setzen
@@ -384,16 +386,19 @@ sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 TYPEINIT1( FmControlData, FmEntryData );
 DBG_NAME(FmControlData);
 //------------------------------------------------------------------------
-FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
-    :FmEntryData( _pParent, _rxComponent )
-    ,m_xFormComponent( _rxComponent )
+FmControlData::FmControlData(
+    const Reference< XFormComponent >& _rxComponent,
+    const ImageList& _rNormalImages,
+    FmFormData* _pParent
+)
+:   FmEntryData( _pParent, _rxComponent ),
+    m_xFormComponent( _rxComponent )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::FmControlData" );
     DBG_CTOR(FmControlData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
     m_aNormalImage = GetImage( _rNormalImages );
-    m_aHCImage = GetImage( _rHCImages );
 
     //////////////////////////////////////////////////////////////////////
     // Titel setzen
@@ -554,7 +559,10 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 }
 
 //------------------------------------------------------------------------
-void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, const ImageList& _rNormalImages, const ImageList& _rHCImages )
+void FmControlData::ModelReplaced(
+    const Reference< XFormComponent >& _rxNew,
+    const ImageList& _rNormalImages
+)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::ModelReplaced" );
     m_xFormComponent = _rxNew;
@@ -562,7 +570,6 @@ void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, co
 
     // Images neu setzen
     m_aNormalImage = GetImage( _rNormalImages );
-    m_aHCImage = GetImage( _rHCImages );
 }
 
 //............................................................................

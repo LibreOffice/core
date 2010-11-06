@@ -144,7 +144,6 @@ friend class SfxOrganizeListBox_Impl;
 
     class SfxOrganizeDlg_Impl *pImp;
 
-//  virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     SfxTemplateOrganizeDlg(Window * pParent, SfxDocumentTemplates* = 0);
     ~SfxTemplateOrganizeDlg();

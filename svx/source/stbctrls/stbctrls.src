@@ -260,30 +260,6 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
     };
     MaskColor = STD_MASKCOLOR;
 };
-Image RID_SVXBMP_SIGNET_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "signet_11x16_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-Image RID_SVXBMP_SIGNET_BROKEN_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "caution_11x16_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "notcertificate_16_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
 
 
 Image RID_SVXBMP_SLIDERBUTTON
@@ -310,31 +286,6 @@ Image RID_SVXBMP_SLIDERINCREASE
     };
     MaskColor = STD_MASKCOLOR;
 };
-Image RID_SVXBMP_SLIDERBUTTON_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "navigationball_10_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-Image RID_SVXBMP_SLIDERDECREASE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "slidezoomout_11_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-Image RID_SVXBMP_SLIDERINCREASE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "slidezoomin_11_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
 Image RID_SVXBMP_DOC_MODIFIED_YES
 {
     ImageBitmap = Bitmap

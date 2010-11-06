@@ -33,6 +33,8 @@
 
 #include <rtl/ustring.hxx>
 
-SFX2_DLLPUBLIC void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+SFX2_DLLPUBLIC void SAL_CALL RefreshToolbars(
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame
+);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

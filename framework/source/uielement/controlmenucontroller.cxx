@@ -69,7 +69,6 @@
 // Function-Id's
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
 #define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
-#define RID_SVXIMGLIST_FMEXPL_HC   (RID_FORMS_START + 2)
 
 // Forms - Ids, used to address images from image list
 #define SID_FMSLOTS_START                   (SID_SVX_START + 592)
@@ -235,7 +234,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
 
     ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
-    ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, *pResMgr );
+    ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 
     if ( pResMgr->IsAvailable( aResId ))

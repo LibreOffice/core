@@ -47,19 +47,9 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         ImageBitmap = Bitmap { File = "directionnorthwest_22.bmp" ; };
         MASKCOLOR
     };
-    Image IMG_DIRECTION_H + DIRECTION_NW
-    {
-        ImageBitmap = Bitmap { File = "directionnorthwest_22_h.bmp" ; };
-        MASKCOLOR
-    };
     Image IMG_DIRECTION + DIRECTION_N
     {
         ImageBitmap = Bitmap { File = "directionnorth_22.bmp" ; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION_H + DIRECTION_N
-    {
-        ImageBitmap = Bitmap { File = "directionnorth_22_h.bmp"; };
         MASKCOLOR
     };
     Image IMG_DIRECTION + DIRECTION_NE
@@ -67,19 +57,9 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         ImageBitmap = Bitmap { File = "directionnortheast_22.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DIRECTION_H + DIRECTION_NE
-    {
-        ImageBitmap = Bitmap { File = "directionnortheast_22_h.bmp"; };
-        MASKCOLOR
-    };
     Image IMG_DIRECTION + DIRECTION_W
     {
         ImageBitmap = Bitmap { File = "directionwest_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION_H + DIRECTION_W
-    {
-        ImageBitmap = Bitmap { File = "directionwest_22_h.bmp"; };
         MASKCOLOR
     };
     Image IMG_DIRECTION + DIRECTION_NONE
@@ -87,19 +67,9 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         ImageBitmap = Bitmap { File = "directionstraight_22.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DIRECTION_H + DIRECTION_NONE
-    {
-        ImageBitmap = Bitmap { File = "directionstraight_22_h.bmp"; };
-        MASKCOLOR
-    };
     Image IMG_DIRECTION + DIRECTION_E
     {
         ImageBitmap = Bitmap { File = "directioneast_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION_H + DIRECTION_E
-    {
-        ImageBitmap = Bitmap { File = "directioneast_22_h.bmp"; };
         MASKCOLOR
     };
     Image IMG_DIRECTION + DIRECTION_SW
@@ -107,19 +77,9 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         ImageBitmap = Bitmap { File = "directionsouthwest_22.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DIRECTION_H + DIRECTION_SW
-    {
-        ImageBitmap = Bitmap { File = "directionsouthwest_22_h.bmp"; };
-        MASKCOLOR
-    };
     Image IMG_DIRECTION + DIRECTION_S
     {
         ImageBitmap = Bitmap { File = "directionsouth_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION_H + DIRECTION_S
-    {
-        ImageBitmap = Bitmap { File = "directionsouth_22_h.bmp"; };
         MASKCOLOR
     };
     Image IMG_DIRECTION + DIRECTION_SE
@@ -127,29 +87,14 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         ImageBitmap = Bitmap { File = "directionsoutheast_22.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DIRECTION_H + DIRECTION_SE
-    {
-        ImageBitmap = Bitmap { File = "directionsoutheast_22_h.bmp"; };
-        MASKCOLOR
-    };
     Image IMG_PERSPECTIVE
     {
         ImageBitmap = Bitmap { File = "perspective_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_PERSPECTIVE_H
-    {
-        ImageBitmap = Bitmap { File = "perspective_16_h.bmp"; };
-        MASKCOLOR
-    };
     Image IMG_PARALLEL
     {
         ImageBitmap = Bitmap { File = "parallel_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_PARALLEL_H
-    {
-        ImageBitmap = Bitmap { File = "parallel_16_h.bmp"; };
         MASKCOLOR
     };
 
@@ -227,20 +172,10 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
         ImageBitmap = Bitmap { File = "extrusion0inch_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DEPTH_0_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion0inch_16_h.bmp"; };
-        MASKCOLOR
-    };
 
     Image IMG_DEPTH_1
     {
         ImageBitmap = Bitmap { File = "extrusion05inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_1_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion05inch_16_h.bmp"; };
         MASKCOLOR
     };
 
@@ -249,20 +184,10 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
         ImageBitmap = Bitmap { File = "extrusion1inch_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DEPTH_2_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion1inch_16_h.bmp"; };
-        MASKCOLOR
-    };
 
     Image IMG_DEPTH_3
     {
         ImageBitmap = Bitmap { File = "extrusion2inch_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_3_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion2inch_16_h.bmp"; };
         MASKCOLOR
     };
 
@@ -271,20 +196,10 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
         ImageBitmap = Bitmap { File = "extrusion4inch_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_DEPTH_4_H
-    {
-        ImageBitmap = Bitmap { File = "extrusion4inch_16_h.bmp"; };
-        MASKCOLOR
-    };
 
     Image IMG_DEPTH_INFINITY
     {
         ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DEPTH_INFINITY_H
-    {
-        ImageBitmap = Bitmap { File = "extrusioninfinity_16_h.bmp"; };
         MASKCOLOR
     };
 };
@@ -343,47 +258,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
         MASKCOLOR
     };
 
-    Image IMG_LIGHT_OFF_H + FROM_TOP_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromtopleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_TOP
-    {
-        ImageBitmap = Bitmap { File = "lightofffromtop_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_TOP_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromtopright_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromright_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_BOTTOM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightofffrombottomleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_BOTTOM
-    {
-        ImageBitmap = Bitmap { File = "lightofffrombottom_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF_H + FROM_BOTTOM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightofffrombottomright_22_h.bmp"; };
-        MASKCOLOR
-    };
-
     Image IMG_LIGHT_ON + FROM_TOP_LEFT
     {
         ImageBitmap = Bitmap { File = "lightonfromtopleft_22.bmp"; };
@@ -422,47 +296,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
     Image IMG_LIGHT_ON + FROM_BOTTOM_RIGHT
     {
         ImageBitmap = Bitmap { File = "lightonfrombottomright_22.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_LIGHT_ON_H + FROM_TOP_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromtopleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_TOP
-    {
-        ImageBitmap = Bitmap { File = "lightonfromtop_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_TOP_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromtopright_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromright_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_BOTTOM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightonfrombottomleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_BOTTOM
-    {
-        ImageBitmap = Bitmap { File = "lightonfrombottom_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON_H + FROM_BOTTOM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightonfrombottomright_22_h.bmp"; };
         MASKCOLOR
     };
 
@@ -512,52 +345,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
         MASKCOLOR
     };
 
-    Image IMG_LIGHT_PREVIEW_H + FROM_TOP_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightfromtopleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_TOP
-    {
-        ImageBitmap = Bitmap { File = "lightfromtop_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_TOP_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightfromtopright_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightfromleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightfromright_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_FRONT
-    {
-        ImageBitmap = Bitmap { File = "lightfromfront_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_BOTTOM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightfrombottomleft_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_BOTTOM
-    {
-        ImageBitmap = Bitmap { File = "lightfrombottom_22_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW_H + FROM_BOTTOM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightfrombottomright_22_h.bmp"; };
-        MASKCOLOR
-    };
-
     Image IMG_LIGHTING_BRIGHT
     {
         ImageBitmap = Bitmap { File = "brightlit_16.bmp"; };
@@ -571,22 +358,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
     Image IMG_LIGHTING_DIM
     {
         ImageBitmap = Bitmap { File = "dimlit_16.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_LIGHTING_BRIGHT_H
-    {
-        ImageBitmap = Bitmap { File = "brightlit_16_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHTING_NORMAL_H
-    {
-        ImageBitmap = Bitmap { File = "normallit_16_h.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHTING_DIM_H
-    {
-        ImageBitmap = Bitmap { File = "dimlit_16_h.bmp"; };
         MASKCOLOR
     };
 
@@ -643,42 +414,24 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
         ImageBitmap = Bitmap { File = "wireframe_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_WIRE_FRAME_H
-    {
-        ImageBitmap = Bitmap { File = "wireframe_16_h.bmp"; };
-        MASKCOLOR
-    };
+
     Image IMG_MATTE
     {
         ImageBitmap = Bitmap { File = "matte_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_MATTE_H
-    {
-        ImageBitmap = Bitmap { File = "matte_16_h.bmp"; };
-        MASKCOLOR
-    };
+
     Image IMG_PLASTIC
     {
         ImageBitmap = Bitmap { File = "plastic_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_PLASTIC_H
-    {
-        ImageBitmap = Bitmap { File = "plastic_16_h.bmp"; };
-        MASKCOLOR
-    };
+
     Image IMG_METAL
     {
         ImageBitmap = Bitmap { File = "metal_16.bmp"; };
         MASKCOLOR
     };
-    Image IMG_METAL_H
-    {
-        ImageBitmap = Bitmap { File = "metal_16_h.bmp"; };
-        MASKCOLOR
-    };
-
 };
 
 #define WIDTH                       140
@@ -703,7 +456,6 @@ ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
     };
     MetricField MTR_DEPTH
     {
-         //HelpId = HID_SD_CTL_FAVORITES ;
         Border = FALSE ;
         Pos = MAP_APPFONT ( 3 , 14 ) ;
         Size = MAP_APPFONT ( WIDTH - 50 - 12, 12 ) ;

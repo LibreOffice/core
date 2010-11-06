@@ -198,7 +198,6 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
         maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         maImageList         ( SVX_RES( IL_IMAPDLG ) ),
-        maImageListH        ( SVX_RES( ILH_IMAPDLG ) ),
         pCheckObj           ( NULL ),
         aIMapItem           ( SID_IMAP_EXEC, *this, *_pBindings )
 {
@@ -1034,9 +1033,7 @@ IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
 
 void SvxIMapDlg::ApplyImageList()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
+    ImageList& rImgLst = maImageList;
 
     aTbxIMapDlg1.SetImageList( rImgLst );
 }

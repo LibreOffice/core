@@ -31,9 +31,3 @@ Image SFX_IMG_CLOSE_DOC
 {
     ImageBitmap = Bitmap { File = "closedoc.png" ; };
 };
-
-Image SFX_IMG_CLOSE_DOC_HC
-{
-    ImageBitmap = Bitmap { File = "closedochc.png" ; };
-};
-

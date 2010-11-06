@@ -157,9 +157,6 @@ void SfxPreviewWin_Impl::ImpPaint(
         pWindow->SetLineColor( aBlackCol );
         pWindow->SetFillColor( aWhiteCol );
         pWindow->DrawRect( Rectangle( aPoint + Point( FRAME, FRAME ), bPoint + Point( FRAME, FRAME ) ) );
-//!     pFile->Move( Point( FRAME, FRAME ) );
-//!     pFile->Scale( Fraction( aTmpSize.Width(), aSize.Width() ),
-//!                   Fraction( aTmpSize.Height(), aSize.Height() ) );
         pFile->WindStart();
         pFile->Play( pWindow, aPoint + Point( FRAME, FRAME ), aSize  );
     }

@@ -126,7 +126,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     ComboBox            maCbbTarget;
     StatusBar           aStbStatus;
     ImageList           maImageList;
-    ImageList           maImageListH;
 
     Size                aLastSize;
     IMapWindow*         pIMapWnd;

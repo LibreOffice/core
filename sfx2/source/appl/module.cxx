@@ -94,12 +94,12 @@ SfxModule_Impl::~SfxModule_Impl()
 
 ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig, BOOL bHiContrast )
 {
-    ImageList*& rpList = bBig ? ( bHiContrast ? pImgListHiBig: pImgListBig ) :
+    ImageList*& rpList = bBig ? ( bHiContrast ? pImgListHiBig   : pImgListBig   ) :
                                 ( bHiContrast ? pImgListHiSmall : pImgListSmall );
     if ( !rpList )
     {
-        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
-                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), *pResMgr );
+        ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr );
+
         aResId.SetRT( RSC_IMAGELIST );
 
         DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );

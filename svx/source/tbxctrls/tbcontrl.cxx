@@ -276,14 +276,7 @@ public:
                                   const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-
-    inline BOOL     IsHighContrast( void ) const;
 };
-
-inline BOOL SvxFrameWindow_Impl::IsHighContrast( void ) const
-{
-    return GetSettings().GetStyleSettings().GetHighContrastMode();
-}
 
 //========================================================================
 // class SvxLineWindow_Impl ---------------------------------------------------
@@ -1066,7 +1059,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
     BindListener();
     String sCommand(String::CreateFromAscii( ".uno:BorderReducedMode" ));
     AddStatusListener( sCommand );
-    aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
+    aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
     /*
      *  1       2        3         4
@@ -1127,7 +1120,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
+        aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
         USHORT  nNumOfItems = aFrameSet.GetItemCount();
 

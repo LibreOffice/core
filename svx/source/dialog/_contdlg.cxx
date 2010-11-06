@@ -397,8 +397,7 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
         nGrfChanged         ( 0UL ),
         bExecState          ( FALSE ),
         bGraphicLinked      ( FALSE ),
-        maImageList         ( SVX_RES( CD_IMAPDLG ) ),
-        maImageListH        ( SVX_RES( CDH_IMAPDLG ) )
+        maImageList         ( SVX_RES( CD_IMAPDLG ) )
 {
     ApplyImageList();
 
@@ -1129,9 +1128,7 @@ IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
 
 void SvxSuperContourDlg::ApplyImageList()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
+    ImageList& rImgLst = maImageList;
 
     aTbx1.SetImageList( rImgLst );
 }
@@ -1152,7 +1149,7 @@ void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, EMPTYARG )
 {
-       SvtMiscOptions aMiscOptions;
+    SvtMiscOptions aMiscOptions;
     aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
 
     return 0L;

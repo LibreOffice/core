@@ -57,7 +57,6 @@
 #define FL_LICENSE                              69
 #define FI_LICENSE_ARROW1                       60
 #define FI_LICENSE_ARROW2                       61
-#define IMG_LICENCE_ARROW_HC                    62
 #define BTN_LICENSE_ACCEPT                      63
 
 // local RIDs for "Download and Install" dialog
@@ -94,28 +93,28 @@
 #define RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES        (RID_DEPLOYMENT_GUI_START + 8)
 #define RID_WARNINGBOX_INSTALL_EXTENSION                          (RID_DEPLOYMENT_GUI_START + 9)
 
-#define RID_DLG_UPDATE (RID_DEPLOYMENT_GUI_START + 10)
+#define RID_DLG_UPDATE                      (RID_DEPLOYMENT_GUI_START + 10)
 
-#define RID_DLG_UPDATE_CHECKING 1
-#define RID_DLG_UPDATE_THROBBER 2
-#define RID_DLG_UPDATE_UPDATE 3
-#define RID_DLG_UPDATE_UPDATES 4
-#define RID_DLG_UPDATE_ALL 5
-#define RID_DLG_UPDATE_DESCRIPTION 6
-#define RID_DLG_UPDATE_DESCRIPTIONS 7
-#define RID_DLG_UPDATE_LINE 8
-#define RID_DLG_UPDATE_HELP 9
-#define RID_DLG_UPDATE_OK 10
-#define RID_DLG_UPDATE_CANCEL 11
-#define RID_DLG_UPDATE_NORMALALERT 12
-#define RID_DLG_UPDATE_HIGHCONTRASTALERT 13
-#define RID_DLG_UPDATE_ERROR 14
-#define RID_DLG_UPDATE_NONE 15
-#define RID_DLG_UPDATE_NOINSTALLABLE 16
-#define RID_DLG_UPDATE_FAILURE 17
-#define RID_DLG_UPDATE_UNKNOWNERROR 18
-#define RID_DLG_UPDATE_NODESCRIPTION 19
-#define RID_DLG_UPDATE_NOINSTALL 20
+#define RID_DLG_UPDATE_CHECKING             1
+#define RID_DLG_UPDATE_THROBBER             2
+#define RID_DLG_UPDATE_UPDATE               3
+#define RID_DLG_UPDATE_UPDATES              4
+#define RID_DLG_UPDATE_ALL                  5
+#define RID_DLG_UPDATE_DESCRIPTION          6
+#define RID_DLG_UPDATE_DESCRIPTIONS         7
+#define RID_DLG_UPDATE_LINE                 8
+#define RID_DLG_UPDATE_HELP                 9
+#define RID_DLG_UPDATE_OK                   10
+#define RID_DLG_UPDATE_CANCEL               11
+#define RID_DLG_UPDATE_NORMALALERT          12
+#define RID_DLG_UPDATE_HIGHCONTRASTALERT    13
+#define RID_DLG_UPDATE_ERROR                14
+#define RID_DLG_UPDATE_NONE                 15
+#define RID_DLG_UPDATE_NOINSTALLABLE        16
+#define RID_DLG_UPDATE_FAILURE              17
+#define RID_DLG_UPDATE_UNKNOWNERROR         18
+#define RID_DLG_UPDATE_NODESCRIPTION        19
+#define RID_DLG_UPDATE_NOINSTALL            20
 #define RID_DLG_UPDATE_NODEPENDENCY         21
 #define RID_DLG_UPDATE_NODEPENDENCY_CUR_VER 22
 #define RID_DLG_UPDATE_NOPERMISSION         23
@@ -133,13 +132,9 @@
 #define RID_INFOBOX_UPDATE_SHARED_EXTENSION    (RID_DEPLOYMENT_GUI_START + 21)
 
 #define RID_IMG_WARNING                        (RID_DEPLOYMENT_GUI_START+56)
-#define RID_IMG_WARNING_HC                     (RID_DEPLOYMENT_GUI_START+57)
 #define RID_IMG_LOCKED                         (RID_DEPLOYMENT_GUI_START+58)
-#define RID_IMG_LOCKED_HC                      (RID_DEPLOYMENT_GUI_START+59)
 #define RID_IMG_EXTENSION                      (RID_DEPLOYMENT_GUI_START+60)
-#define RID_IMG_EXTENSION_HC                   (RID_DEPLOYMENT_GUI_START+61)
 #define RID_IMG_SHARED                         (RID_DEPLOYMENT_GUI_START+62)
-#define RID_IMG_SHARED_HC                      (RID_DEPLOYMENT_GUI_START+63)
 
 #define RID_STR_ADD_PACKAGES                   (RID_DEPLOYMENT_GUI_START+70)
 

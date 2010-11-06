@@ -293,11 +293,6 @@ DockingWindow RID_SVXDLG_BMPMASK
         MASKCOLOR
     };
 
-    Image IMG_PIPETTE_H
-    {
-        ImageBitmap = Bitmap { File = "sc10350_h.bmp" ; };
-        MASKCOLOR
-    };
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP

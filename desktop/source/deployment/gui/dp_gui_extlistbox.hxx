@@ -137,13 +137,9 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nExtraHeight;
     Size            m_aOutputSize;
     Image           m_aSharedImage;
-    Image           m_aSharedImageHC;
     Image           m_aLockedImage;
-    Image           m_aLockedImageHC;
     Image           m_aWarningImage;
-    Image           m_aWarningImageHC;
     Image           m_aDefaultImage;
-    Image           m_aDefaultImageHC;
     Link            m_aClickHdl;
 
     ScrollBar      *m_pScrollBar;

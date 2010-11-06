@@ -179,13 +179,9 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
     m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
-    m_aSharedImageHC( DialogHelper::getResId( RID_IMG_SHARED_HC ) ),
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
-    m_aLockedImageHC( DialogHelper::getResId( RID_IMG_LOCKED_HC ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
-    m_aWarningImageHC( DialogHelper::getResId( RID_IMG_WARNING_HC ) ),
     m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
-    m_aDefaultImageHC( DialogHelper::getResId( RID_IMG_EXTENSION_HC ) ),
     m_pScrollBar( NULL ),
     m_pManager( pManager )
 {
@@ -526,7 +522,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     aPos += Point( TOP_OFFSET, TOP_OFFSET );
     Image aImage;
     if ( ! pEntry->m_aIcon )
-        aImage = isHCMode() ? m_aDefaultImageHC : m_aDefaultImage;
+        aImage = m_aDefaultImage;
     else
         aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
@@ -634,14 +630,14 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
         if ( pEntry->m_bLocked )
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aLockedImage );
         else
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aSharedImage );
     }
     if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
+        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aWarningImage );
     }
 
     SetLineColor( Color( COL_LIGHTGRAY ) );

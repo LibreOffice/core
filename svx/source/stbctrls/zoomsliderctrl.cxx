@@ -182,10 +182,9 @@ SvxZoomSliderControl::SvxZoomSliderControl( USHORT _nSlotId,  USHORT _nId, Statu
     SfxStatusBarControl( _nSlotId, _nId, _rStb ),
     mpImpl( new SvxZoomSliderControl_Impl )
 {
-    const sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maSliderButton   = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
-    mpImpl->maIncreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
-    mpImpl->maDecreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
+    mpImpl->maSliderButton   = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
+    mpImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
+    mpImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
 }
 
 // -----------------------------------------------------------------------

@@ -64,7 +64,6 @@
 #define STR_DIRECTION           30      // needs 10 resource ids
 
 #define IMG_DIRECTION           1       // needs 10 resource ids
-#define IMG_DIRECTION_H         10      // needs 10 resource ids
 
 #define IMG_DEPTH_0             19
 #define IMG_DEPTH_1             20
@@ -73,48 +72,24 @@
 #define IMG_DEPTH_4             23
 #define IMG_DEPTH_INFINITY      24
 
-#define IMG_DEPTH_0_H           25
-#define IMG_DEPTH_1_H           26
-#define IMG_DEPTH_2_H           27
-#define IMG_DEPTH_3_H           28
-#define IMG_DEPTH_4_H           29
-#define IMG_DEPTH_INFINITY_H    30
-
 #define IMG_PERSPECTIVE         31
-#define IMG_PERSPECTIVE_H       32
 #define IMG_PARALLEL            33
-#define IMG_PARALLEL_H          34
 
 #define IMG_WIRE_FRAME          35
 #define IMG_MATTE               36
 #define IMG_PLASTIC             37
 #define IMG_METAL               38
 
-#define IMG_WIRE_FRAME_H        39
-#define IMG_MATTE_H             40
-#define IMG_PLASTIC_H           41
-#define IMG_METAL_H             42
-
 #define IMG_LIGHT_OFF           50  // needs 10 resource ids
 #define IMG_LIGHT_ON            60  // needs 10 resource ids
 #define IMG_LIGHT_PREVIEW       70  // needs 10 resource ids
 
-#define IMG_LIGHT_OFF_H         80  // needs 10 resource ids
-#define IMG_LIGHT_ON_H          90  // needs 10 resource ids
-#define IMG_LIGHT_PREVIEW_H     100  // needs 10 resource ids
-
 #define IMG_LIGHTING_BRIGHT     110
 #define IMG_LIGHTING_NORMAL     111
 #define IMG_LIGHTING_DIM        112
-
-#define IMG_LIGHTING_BRIGHT_H   113
-#define IMG_LIGHTING_NORMAL_H   114
-#define IMG_LIGHTING_DIM_H      115
 
 #define FL_DEPTH                1
 #define MTR_DEPTH               2
 #define BTN_OK                  3
 #define BTN_CANCEL              4
 #define BTN_HELP                5
-
-//

@@ -105,9 +105,6 @@
 #define IMG_GREENCHECK              14
 #define IMG_YELLOWCHECK             15
 #define IMG_REDCROSS                16
-#define IMG_GREENCHECK_HC           17
-#define IMG_YELLOWCHECK_HC          18
-#define IMG_REDCROSS_HC             19
 #define STR_SUCCESSRECOV            20
 #define STR_ORIGDOCRECOV            21
 #define STR_RECOVFAILED             22

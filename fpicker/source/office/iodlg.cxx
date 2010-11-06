@@ -548,8 +548,7 @@ void SvtFileDialog::Init_Impl
     WinBits nStyle
 )
 {
-    sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    m_aImages = ImageList( SvtResId( bIsHighContrast ? RID_FILEPICKER_IMAGES_HC : RID_FILEPICKER_IMAGES ) );
+    m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
 
     _pImp->_nStyle = nStyle;
     _pImp->_a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
@@ -2672,11 +2671,7 @@ BOOL SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
 //-----------------------------------------------------------------------------
 void SvtFileDialog::implUpdateImages( )
 {
-    // determine high contrast mode
-    {
-        sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        m_aImages = ImageList( SvtResId( bIsHighContrast ? RID_FILEPICKER_IMAGES_HC : RID_FILEPICKER_IMAGES ) );
-    }
+    m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
 
     // set the appropriate images on the buttons
     if ( _pImp->_pBtnUp )

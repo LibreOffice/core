@@ -67,17 +67,13 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 
 XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, StatusBar& _rStb )
     :SfxStatusBarControl( _nSlotId, _nId, _rStb )
-
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
     mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
 
-    sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maImage = Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
-    mpImpl->maImageBroken =
-        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
-    mpImpl->maImageNotValidated =
-        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_NOTVALIDATED_H : RID_SVXBMP_SIGNET_NOTVALIDATED ) );
+    mpImpl->maImage             = Image( SVX_RES( RID_SVXBMP_SIGNET              ) );
+    mpImpl->maImageBroken       = Image( SVX_RES( RID_SVXBMP_SIGNET_BROKEN       ) );
+    mpImpl->maImageNotValidated = Image( SVX_RES( RID_SVXBMP_SIGNET_NOTVALIDATED ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -97,7 +93,6 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
-//      mpImpl->mbSigned = ( ( SfxUInt16Item* ) pState )->GetValue() == 1 /* SIGNED*/ ;
         mpImpl->mnState = ( ( SfxUInt16Item* ) pState )->GetValue();
     }
     else

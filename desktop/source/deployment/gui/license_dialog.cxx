@@ -215,13 +215,6 @@ LicenseDialogImpl::LicenseDialogImpl(
 
 {
 
-    if (GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        // high contrast mode needs other images
-        m_fiArrow1.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
-        m_fiArrow2.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
-    }
-
     FreeResource();
 
     m_acceptButton.SetUniqueId(UID_BTN_LICENSE_ACCEPT);

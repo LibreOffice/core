@@ -164,20 +164,16 @@ FmParentData::~FmParentData()
 //========================================================================
 TYPEINIT1(FmFormItem, FmParentData);
 //------------------------------------------------------------------------
-Image FmFormItem::GetImage( BmpColorMode _eMode ) const
+Image FmFormItem::GetImage( BmpColorMode /* _eMode */) const
 {
     static Image aImage;
-    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FORM );
-        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FORM );
     }
-    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
+    return aImage;
 }
 
 //========================================================================
@@ -199,20 +195,16 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
+Image FmFilterItems::GetImage( BmpColorMode /* _eMode */ ) const
 {
     static Image aImage;
-    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
-        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FILTER );
     }
-    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
+    return aImage;
 }
 
 //========================================================================
@@ -230,20 +222,16 @@ FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItem::GetImage( BmpColorMode _eMode ) const
+Image FmFilterItem::GetImage( BmpColorMode /* _eMode */ ) const
 {
     static Image aImage;
-    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FIELD );
-        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FIELD );
     }
-    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
+    return aImage;
 }
 
 //========================================================================
@@ -1172,22 +1160,12 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     SetHelpId( HID_FILTER_NAVIGATOR );
 
     {
-        {
-            ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-            SetNodeBitmaps(
-                aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-                aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-                BMP_COLOR_NORMAL
-            );
-        }
-        {
-            ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-            SetNodeBitmaps(
-                aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-                aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-                BMP_COLOR_HIGHCONTRAST
-            );
-        }
+        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        SetNodeBitmaps(
+            aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+            aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_NORMAL
+        );
     }
 
     m_pModel = new FmFilterModel(comphelper::getProcessServiceFactory());
@@ -1235,7 +1213,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
         if (pEntry)
         {
             if (!IsExpanded(pEntry))
-                Expand(pEntry);
+                    Expand(pEntry);
             Select(pEntry, sal_True);
         }
     }

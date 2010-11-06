@@ -69,7 +69,6 @@
 #define SFX_IMG_PROPERTY_REMOVE             (RID_SFX_SFXLOCAL_START +  0)
 #define SFX_IMG_PROPERTY_REMOVE_HC          (RID_SFX_SFXLOCAL_START +  1)
 #define SFX_IMG_CLOSE_DOC                   (RID_SFX_SFXLOCAL_START +  2)
-#define SFX_IMG_CLOSE_DOC_HC                (RID_SFX_SFXLOCAL_START +  3)
 
 #endif
 

@@ -410,7 +410,7 @@ void BackingWindow::initBackground()
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
-    ImageContainerRes aRes( FwkResId( bDark ? RES_BACKING_IMAGES_HC : RES_BACKING_IMAGES ) );
+    ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
 
     // scale middle segment
     Size aMiddleSize;

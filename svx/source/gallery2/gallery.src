@@ -257,19 +257,6 @@ Image RID_SVXIMG_GALLERY_VIEW_LIST
     MASKCOLOR
 };
 
-Image RID_SVXIMG_GALLERY_VIEW_ICON_HC
-{
-    ImageBitmap = Bitmap { File = "galicon_h.bmp"; };
-    MASKCOLOR
-};
-
-Image RID_SVXIMG_GALLERY_VIEW_LIST_HC
-{
-    ImageBitmap = Bitmap { File = "gallist_h.bmp"; };
-    MASKCOLOR
-};
-
-
 /******************************************************************************/
 
 Menu RID_SVXMN_GALLERY1

@@ -156,7 +156,6 @@ void SvxLanguageBox::Init()
     m_pLangTable = new SvtLanguageTable;
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
-    m_aCheckedImageHC = Image( SVX_RES( RID_SVXIMG_CHECKED_H ) );
     m_aAllString            = String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
     m_nLangList             = LANG_LIST_EMPTY;
     m_bHasLangNone          = FALSE;
@@ -202,8 +201,6 @@ USHORT SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, USHORT nPos, bo
     USHORT nRet = 0;
     if( !bChecked )
         nRet = InsertEntry( rEntry, m_aNotCheckedImage, nPos );
-    else if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        nRet = InsertEntry( rEntry, m_aCheckedImageHC, nPos );
     else
         nRet = InsertEntry( rEntry, m_aCheckedImage, nPos );
     return nRet;

@@ -366,15 +366,15 @@ class AddonsOptions_Impl : public ConfigItem
         ImageEntry* ReadOptionalImageData( const ::rtl::OUString& aMenuNodeName );
 
         sal_Int32                                         m_nRootAddonPopupMenuId;
-        ::rtl::OUString                                          m_aPropNames[PROPERTYCOUNT_INDEX];
-        ::rtl::OUString                                          m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
-        ::rtl::OUString                                          m_aPropMergeMenuNames[PROPERTYCOUNT_MERGE_MENUBAR];
-        ::rtl::OUString                                          m_aPropMergeToolbarNames[PROPERTYCOUNT_MERGE_TOOLBAR];
-        ::rtl::OUString                                          m_aEmpty;
-        ::rtl::OUString                                          m_aPathDelimiter;
-        ::rtl::OUString                                          m_aSeparator;
-        ::rtl::OUString                                          m_aRootAddonPopupMenuURLPrexfix;
-        ::rtl::OUString                                          m_aPrivateImageURL;
+        ::rtl::OUString                                   m_aPropNames[PROPERTYCOUNT_INDEX];
+        ::rtl::OUString                                   m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
+        ::rtl::OUString                                   m_aPropMergeMenuNames[PROPERTYCOUNT_MERGE_MENUBAR];
+        ::rtl::OUString                                   m_aPropMergeToolbarNames[PROPERTYCOUNT_MERGE_TOOLBAR];
+        ::rtl::OUString                                   m_aEmpty;
+        ::rtl::OUString                                   m_aPathDelimiter;
+        ::rtl::OUString                                   m_aSeparator;
+        ::rtl::OUString                                   m_aRootAddonPopupMenuURLPrexfix;
+        ::rtl::OUString                                   m_aPrivateImageURL;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuBarPartProperties;
         AddonToolBars                                     m_aCachedToolBarPartProperties;

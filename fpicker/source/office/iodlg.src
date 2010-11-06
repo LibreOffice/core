@@ -53,13 +53,6 @@ ImageList RID_FILEPICKER_IMAGES
     FILEPICKER_IL_IDLIST
 };
 
-ImageList RID_FILEPICKER_IMAGES_HC
-{
-    Prefix = "fph";
-    MASKCOLOR
-    FILEPICKER_IL_IDLIST
-};
-
  // dialogs *******************************************************************
 
 ModalDialog DLG_SVT_EXPLORERFILE

@@ -130,19 +130,9 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
         ImageBitmap = Bitmap { File = "fontworkalignleft_16.png"; };
         MASKCOLOR
     };
-    Image IMG_FONTWORK_ALIGN_LEFT_16_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignleft_16_h.png"; };
-        MASKCOLOR
-    };
     Image IMG_FONTWORK_ALIGN_LEFT_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignleft_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_LEFT_26_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignleft_26_h.png"; };
         MASKCOLOR
     };
     Image IMG_FONTWORK_ALIGN_CENTER_16
@@ -150,19 +140,9 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
         ImageBitmap = Bitmap { File = "fontworkaligncentered_16.png"; };
         MASKCOLOR
     };
-    Image IMG_FONTWORK_ALIGN_CENTER_16_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkaligncentered_16_h.png"; };
-        MASKCOLOR
-    };
     Image IMG_FONTWORK_ALIGN_CENTER_26
     {
         ImageBitmap = Bitmap { File = "fontworkaligncentered_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_CENTER_26_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkaligncentered_26_h.png"; };
         MASKCOLOR
     };
     Image IMG_FONTWORK_ALIGN_RIGHT_16
@@ -170,19 +150,9 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
         ImageBitmap = Bitmap { File = "fontworkalignright_16.png"; };
         MASKCOLOR
     };
-    Image IMG_FONTWORK_ALIGN_RIGHT_16_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignright_16_h.png"; };
-        MASKCOLOR
-    };
     Image IMG_FONTWORK_ALIGN_RIGHT_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignright_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_RIGHT_26_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignright_26_h.png"; };
         MASKCOLOR
     };
     Image IMG_FONTWORK_ALIGN_WORD_16
@@ -190,19 +160,9 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
         ImageBitmap = Bitmap { File = "fontworkalignjustified_16.png"; };
         MASKCOLOR
     };
-    Image IMG_FONTWORK_ALIGN_WORD_16_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignjustified_16_h.png"; };
-        MASKCOLOR
-    };
     Image IMG_FONTWORK_ALIGN_WORD_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignjustified_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_WORD_26_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignjustified_26_h.png"; };
         MASKCOLOR
     };
     Image IMG_FONTWORK_ALIGN_STRETCH_16
@@ -210,19 +170,9 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
         ImageBitmap = Bitmap { File = "fontworkalignstretch_16.png"; };
         MASKCOLOR
     };
-    Image IMG_FONTWORK_ALIGN_STRETCH_16_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignstretch_16_h.png"; };
-        MASKCOLOR
-    };
     Image IMG_FONTWORK_ALIGN_STRETCH_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignstretch_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_STRETCH_26_H
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignstretch_26_h.png"; };
         MASKCOLOR
     };
 };

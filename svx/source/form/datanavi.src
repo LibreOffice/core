@@ -105,12 +105,6 @@ IdCount = { 5 ; } ;
         MASKCOLOR
         IMG_LST
     };
-    ImageList IL_TBX_BMPS_HC
-    {
-        Prefix = "tbh";
-        MASKCOLOR
-        IMG_LST
-    };
 #undef IMG_LST
 };
 
@@ -243,12 +237,6 @@ IdCount = { 6 ; } ;
     ImageList IL_ITEM_BMPS
     {
         Prefix = "da";
-        MASKCOLOR
-        IMG_LST2
-    };
-    ImageList IL_ITEM_BMPS_HC
-    {
-        Prefix = "dah";
         MASKCOLOR
         IMG_LST2
     };

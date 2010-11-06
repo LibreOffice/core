@@ -38,17 +38,20 @@
 // Controls
 #define TB_ITEMS                10
 #define LB_ITEMS                11
+
 // Menu items
 #define MID_INSERT_CONTROL      100
+
 // ToolBox items
 #define TBI_ITEM_ADD            10
 #define TBI_ITEM_ADD_ELEMENT    11
 #define TBI_ITEM_ADD_ATTRIBUTE  12
 #define TBI_ITEM_EDIT           13
 #define TBI_ITEM_REMOVE         14
+
 // ImageLists
 #define IL_TBX_BMPS             20
-#define IL_TBX_BMPS_HC          21
+
 // ImageIndexes
 #define IID_ITEM_ADD            1
 #define IID_ITEM_ADD_ELEMENT    2
@@ -62,6 +65,7 @@
 #define MB_MODELS               11
 #define TC_ITEMS                12
 #define MB_INSTANCES            13
+
 // MenuItems
 #define MID_MODELS_ADD          10
 #define MID_MODELS_EDIT         11
@@ -70,13 +74,15 @@
 #define MID_INSTANCES_EDIT      21
 #define MID_INSTANCES_REMOVE    22
 #define MID_SHOW_DETAILS        30
+
 // TabPage Ids
 #define TID_SUBMISSION          10
 #define TID_BINDINGS            11
 #define TID_INSTANCE            12
+
 // ImageLists
 #define IL_ITEM_BMPS            30
-#define IL_ITEM_BMPS_HC         31
+
 // ImageIndexes
 #define IID_GROUP_CLOSED        1
 #define IID_GROUP_OPEN          2
