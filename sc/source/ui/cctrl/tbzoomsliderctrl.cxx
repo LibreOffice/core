@@ -256,10 +256,9 @@ ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::
                 m_xDispatchProvider( rDispatchProvider ),
                 m_xFrame( _xFrame )
 {
-    BOOL bIsHC                  = GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maSliderButton      = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
-    mpImpl->maIncreaseButton    = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
-    mpImpl->maDecreaseButton    = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
+    mpImpl->maSliderButton      = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
+    mpImpl->maIncreaseButton    = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
+    mpImpl->maDecreaseButton    = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
     Size  aSliderSize           = LogicToPixel( Size( aLogicalSize), MapMode( MAP_10TH_MM ) );
     SetSizePixel( Size( aSliderSize.Width() * nSliderWidth-1, aSliderSize.Height() + nSliderHeight ) );
 }

@@ -283,17 +283,3 @@ ImageList RID_DEFAULTIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
 };
-
-ImageList RID_DEFAULTIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MaskColor = SC_HC_MASKCOLOR ;
-    DEFAULT_IDLIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_LCH
-{
-    Prefix = "lch";
-    MaskColor = SC_HC_MASKCOLOR ;
-    DEFAULT_IDLIST
-};
