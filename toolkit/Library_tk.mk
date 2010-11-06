@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,tk))
 
+$(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk))
+
 $(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
 
 #$(eval $(call gb_Library_add_precompiled_header,tk,$(SRCDIR)/toolkit/inc/pch/precompiled_toolkit))

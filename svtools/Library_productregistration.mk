@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,productregistration))
 
+$(eval $(call gb_Library_set_componentfile,productregistration,svtools/source/productregistration/productregistration.uno))
+
 $(eval $(call gb_Library_set_include,productregistration,\
     $$(SOLARINC) \
     -I$(WORKDIR)/inc/svtools \

@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,hatchwindowfactory))
 
+$(eval $(call gb_Library_set_componentfile,hatchwindowfactory,svtools/source/hatchwindow/hatchwindowfactory))
+
 $(eval $(call gb_Library_set_include,hatchwindowfactory,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/svtools \
