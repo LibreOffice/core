@@ -533,7 +533,7 @@ private:
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
 };
 
-SC_DLLPUBLIC String GetScCompilerNativeSymbol( OpCode eOp ); //CHINA001
+SC_DLLPUBLIC String GetScCompilerNativeSymbol( OpCode eOp );
 
 #endif
 

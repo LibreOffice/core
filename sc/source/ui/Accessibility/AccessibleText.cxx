@@ -1109,9 +1109,7 @@ SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
     {
-        // --> OD 2005-12-21 #i49561#
         mpViewForwarder = new ScEditObjectViewForwarder( mpWindow, mpEditView );
-        // <--
     }
     return mpViewForwarder;
 }
