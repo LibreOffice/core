@@ -26,7 +26,11 @@
  *
  ************************************************************************/
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include "cppunit/plugin/TestPlugIn.h"
+
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -365,8 +369,9 @@ public:
 }; // class LayerManagerTest
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LayerManagerTest, "LayerManagerTest");
+CPPUNIT_TEST_SUITE_REGISTRATION(LayerManagerTest);
 } // namespace
 
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

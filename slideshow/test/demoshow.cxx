@@ -54,6 +54,7 @@
 #include <ucbhelper/configurationkeys.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -197,6 +198,11 @@ private:
 
     virtual void SAL_CALL setMouseCursor( ::sal_Int16 /*nPointerShape*/ ) throw (uno::RuntimeException)
     {
+    }
+
+    virtual awt::Rectangle SAL_CALL getCanvasArea(  ) throw (uno::RuntimeException)
+    {
+        return awt::Rectangle(0,0,maSize.Width(),maSize.Height());
     }
 
     uno::Reference< rendering::XSpriteCanvas > mxCanvas;
@@ -418,7 +424,7 @@ DemoWindow::DemoWindow() :
     maUpdateTimer(),
     mbSlideDisplayed( false )
 {
-    SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Slideshow Demo" )) );
+    SetText( rtl::OUString::createFromAscii( "Slideshow Demo" ) );
     SetSizePixel( Size( 640, 480 ) );
     EnablePaint( true );
 
@@ -456,11 +462,13 @@ void DemoWindow::init()
         if( mxShow.is() && !mbSlideDisplayed )
         {
             uno::Reference< drawing::XDrawPage > xSlide( new DummySlide );
+            uno::Reference< drawing::XDrawPages > xDrawPages;
             mxShow->displaySlide( xSlide,
+                                  uno::Reference< drawing::XDrawPagesSupplier >(),
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(
-                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RehearseTimings")),
+                                     rtl::OUString::createFromAscii("RehearseTimings"),
                                      0,
                                      uno::makeAny( sal_True ),
                                      beans::PropertyState_DIRECT_VALUE ));

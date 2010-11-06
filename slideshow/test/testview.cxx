@@ -26,7 +26,10 @@
  *
  ************************************************************************/
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
@@ -132,6 +135,11 @@ public:
 
     virtual void SAL_CALL setMouseCursor( ::sal_Int16 ) throw (uno::RuntimeException)
     {
+    }
+
+    virtual awt::Rectangle SAL_CALL getCanvasArea(  ) throw (uno::RuntimeException)
+    {
+        return awt::Rectangle(0,0,100,100);
     }
 
     // TestView
@@ -275,6 +283,15 @@ public:
     virtual void _dispose()
     {
         mbDisposed = true;
+    }
+
+    virtual bool isSoundEnabled (void) const
+    {
+        return true;
+    }
+
+    virtual void setIsSoundEnabled (const bool /*bValue*/)
+    {
     }
 };
 

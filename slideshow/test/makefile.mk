@@ -39,6 +39,15 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # --- Common ----------------------------------------------------------
 
 # BEGIN target1 -------------------------------------------------------
@@ -53,7 +62,6 @@ SHL1STDLIBS= 	$(SALLIB)		 \
                 $(BASEGFXLIB)	 \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB)		 \
-                                $(TESTSHL2LIB)    \
                 $(CPPUNITLIB)	 \
                 $(UNOTOOLSLIB)	 \
                 $(VCLLIB)
@@ -68,6 +76,8 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
+
 # END target1 ----------------------------------------------------------
 
 # BEGIN target2 --------------------------------------------------------
