@@ -223,6 +223,7 @@ include $(foreach class,\
     Package\
     PrecompiledHeaders\
     Module\
+    ComponentTarget \
 ,$(GBUILDDIR)/$(class).mk)
 
 # vim: set noet sw=4 ts=4:
