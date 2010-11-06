@@ -81,12 +81,12 @@ my_components = \
     fpicker \
     fps_office \
     frm \
-    fsstorage \
-    fwk \
-    fwl \
-    fwm \
+    svl/source/fsstor/fsstorage \
+    framework/util/fwk \
+    framework/util/fwl \
+    framework/util/fwm \
     guesslang \
-    hatchwindowfactory \
+    svtools/source/hatchwindow/hatchwindowfactory \
     hwp \
     hyphen \
     i18npool \
@@ -104,12 +104,12 @@ my_components = \
     oooimprovecore \
     oox \
     package2 \
-    passwordcontainer \
+    svl/source/passwordcontainer/passwordcontainer \
     pcr \
     pdffilter \
     placeware \
     preload \
-    productregistration.uno \
+    svtools/source/productregistration/productregistration.uno \
     protocolhandler \
     pythonloader \
     pythonscript \
@@ -127,7 +127,7 @@ my_components = \
     sdbc2 \
     sdbt \
     sdd \
-    sfx \
+    sfx2/util/sfx \
     simplecanvas \
     slideshow \
     sm \
@@ -139,16 +139,16 @@ my_components = \
     srtrs1 \
     stringresource \
     svgfilter \
-    svl \
-    svt \
+    svl/util/svl \
+    svtools/util/svt \
     svx \
     svxcore \
-    sw \
-    swd \
+    sw/util/sw \
+    sw/util/swd \
     syssh \
     t602filter \
     textconversiondlgs \
-    tk \
+    toolkit/util/tk \
     tvhlp1 \
     ucb1 \
     ucpchelp1 \
@@ -167,7 +167,7 @@ my_components = \
     utl \
     uui \
     vbaobj \
-    vbaswobj \
+    sw/util/vbaswobj \
     vcl \
     vclcanvas \
     wpft \
@@ -176,8 +176,8 @@ my_components = \
     xmlfa \
     xmlfd \
     xmx \
-    xo \
-    xof \
+    xmloff/util/xo \
+    xmloff/source/transform/xof \
     xsltdlg \
     xsltfilter \
     xstor
