@@ -1665,7 +1665,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     catch( const SQLException& )
     {
         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-        OSL_ENSURE( aError.is(), "ORowSet::impl_prepareAndExecute_throw: caught an SQLException which we cannot analyze!" );
+        OSL_ENSURE( aError.isValid(), "ORowSet::impl_prepareAndExecute_throw: caught an SQLException which we cannot analyze!" );
 
         // append information about what we were actually going to execute
         try
