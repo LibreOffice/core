@@ -48,11 +48,18 @@
 
 #include "attributeexceptions.hxx"
 
+
 class AstExpression;
 class AstArray;
 class AstMember;
 
 #include <parser.hxx>
+
+/* handle locations */
+int yycolumn = 1;
+
+#define YY_USER_ACTION idlc()->setOffset(yycolumn, yycolumn+yyleng-1); \
+    yycolumn += yyleng;
 
 sal_Int32		beginLine = 0;
 ::rtl::OString	docu;
@@ -227,6 +234,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 	for (; *r != '\0' && *r != ' ' && *r != '\t'; r++) ;
 	*r++ = 0;
 	idlc()->setLineNumber((sal_uInt32)atol(h));
+    yylineno = atol(h);
 
 	/* Find file name, if present */
 	for (; *r != '"'; r++)
@@ -283,8 +291,10 @@ IDENTIFIER      ("_"?({ALPHA}|{DIGIT})+)*
 %%
 
 [ \t\r]+	; /* eat up whitespace */
-[\n] 		{
-	idlc()->incLineNumber();
+[\n]           {
+       idlc()->incLineNumber();
+       yycolumn = 1;
+       yylineno++;
 }
 
 attribute       return IDL_ATTRIBUTE;
@@ -349,21 +359,21 @@ published       return IDL_PUBLISHED;
 "..."           return IDL_ELLIPSIS;
 
 ("-")?{INT_LITERAL}+(l|L|u|U)?    {
-            	return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
+                return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
 ("-")?{OCT_LITERAL}+(l|L|u|U)?    {
-            	return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
+                return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
 ("-")?{HEX_LITERAL}+(l|L|u|U)?    {
-            	return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
+                return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
 ("-")?{DIGIT}+(e|E){1}(("+"|"-")?{DIGIT}+)+(f|F)?	|
 ("-")?"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?	|
 ("-")?{DIGIT}*"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?        {
-            	yylval.dval = asciiToFloat( yytext );
+                yylval.dval = asciiToFloat( yytext );
 				return IDL_FLOATING_PT_LITERAL;
             }
 
