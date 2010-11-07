@@ -183,7 +183,6 @@ public:
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
     void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
-    void PutBoolean( bool bVal, SCSIZE nIndex);
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
     USHORT GetError( SCSIZE nIndex) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
@@ -396,13 +395,6 @@ void ScMatrixImpl::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
     {
         DBG_ERRORFILE("ScMatrixImpl::PutBoolean: dimension error");
     }
-}
-
-void ScMatrixImpl::PutBoolean( bool bVal, SCSIZE nIndex)
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    PutBoolean(bVal, nC, nR);
 }
 
 USHORT ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
@@ -904,11 +896,6 @@ void ScMatrix::PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR )
 void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutBoolean(bVal, nC, nR);
-}
-
-void ScMatrix::PutBoolean( bool bVal, SCSIZE nIndex)
-{
-    pImpl->PutBoolean(bVal, nIndex);
 }
 
 USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const

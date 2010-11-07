@@ -300,7 +300,6 @@ public:
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
     void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR);
-    void PutBoolean( bool bVal, SCSIZE nIndex);
 
     void FillDouble( double fVal,
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
