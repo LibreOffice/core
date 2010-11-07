@@ -505,8 +505,8 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
         throw SQLException(sError,*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
-    // filter anhaengen
-    // select ohne where und order by aufbauen
+    // attach filter
+    // select without where and order by construct
     ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if ( m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
@@ -974,23 +974,23 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OS
                                     ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setORCriteria" );
-    // Runde Klammern um den Ausdruck
+    // Parentheses around the expression
     if (pCondition->count() == 3 &&
         SQL_ISPUNCTUATION(pCondition->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pCondition->getChild(2),")"))
     {
         return setORCriteria(pCondition->getChild(1), _rIterator, rFilters, xFormatter);
     }
-    // oder Verknuepfung
+    // OR link
     // a searchcondition can only look like this: search_condition SQL_TOKEN_OR boolean_term
     else if (SQL_ISRULE(pCondition,search_condition))
     {
         sal_Bool bResult = sal_True;
         for (int i = 0; bResult && i < 3; i+=2)
         {
-            // Ist das erste Element wieder eine OR-Verknuepfung?
-            // Dann rekursiv absteigen ...
-            //if (!i && SQL_ISRULE(pCondition->getChild(i),search_condition))
+            // is the first element another OR link
+            // then descend recursively ...
+            // if (!i && SQL_ISRULE(pCondition->getChild(i),search_condition))
             if (SQL_ISRULE(pCondition->getChild(i),search_condition))
                 bResult = setORCriteria(pCondition->getChild(i), _rIterator, rFilters, xFormatter);
             else
@@ -1012,14 +1012,14 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     OSQLParseTreeIterator& _rIterator, ::std::vector < PropertyValue >& rFilter, const Reference< XNumberFormatter > & xFormatter) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setANDCriteria" );
-    // Runde Klammern
+    // Parentheses
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
         // this should not occur
         DBG_ERROR("boolean_primary in And-Criteria");
         return sal_False;
     }
-    // Das erste Element ist (wieder) eine AND-Verknuepfung
+    // The first element is an AND link again
     else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
     {
         return setANDCriteria(pCondition->getChild(0), _rIterator, rFilter, xFormatter) &&
@@ -1230,7 +1230,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         aItem.Handle = pCondition->getNodeType();
         rFilter.push_back(aItem);
     }
-    else // kann sich nur um einen Expr. Ausdruck handeln
+    else // can itself only around a Expr. Expression act (kann sich nur um einen Expr. Ausdruck handeln)
     {
         PropertyValue aItem;
         ::rtl::OUString aName, aValue;
@@ -1238,12 +1238,12 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         OSQLParseNode *pLhs = pCondition->getChild(0);
         OSQLParseNode *pRhs = pCondition->getChild(2);
 
-        // Feldnamen
+        // Fieldnames
         sal_uInt16 i;
         for (i=0;i< pLhs->count();i++)
              pLhs->getChild(i)->parseNodeToPredicateStr( aName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
-        // Kriterium
+        // Criteria
         aItem.Handle = pCondition->getChild(1)->getNodeType();
         aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
@@ -1322,10 +1322,6 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
                 if(xColumnsSupp.is() && xColumnsSupp->getColumns()->hasByName(aColumnName))
                 {
-//                  Reference<XPropertySet> xTableProp(xColumnsSupp,UNO_QUERY);
-//                  xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-//                  xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-//                  xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
                     aTable = *pBegin;
                     break;
                 }
@@ -1685,8 +1681,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         lcl_addFilterCriteria_throw(nFilterOp,sEmpty,aSQL);
     }
 
-    // filter anhaengen
-    // select ohne where und order by aufbauen
+    // attach filter
+    // select without where and order by construct
     ::rtl::OUString sFilter = getFilter();
 
     if ( sFilter.getLength() && aSQL.getLength() )

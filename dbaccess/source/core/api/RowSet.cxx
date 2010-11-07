@@ -545,7 +545,7 @@ void SAL_CALL ORowSet::disposing()
         xComponent->removeEventListener(xEvt);
     }
 
-    m_aActiveConnection = Any(); // the any conatains a reference too
+    m_aActiveConnection = Any(); // the any contains a reference too
     if(m_bOwnConnection)
         ::comphelper::disposeComponent(m_xActiveConnection);
     m_xActiveConnection = NULL;
@@ -678,7 +678,7 @@ void SAL_CALL ORowSet::close(  ) throw(SQLException, RuntimeException)
         MutexGuard aGuard( m_aMutex );
         ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     }
-    // additionals things to set
+    // additional things to set
     freeResources( true );
 }
 
@@ -873,10 +873,10 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
 void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
-    // insertRow is not allowd when
+    // insertRow is not allowed when
     // standing not on the insert row nor
     // when the row isn't modified
-    // or the concurency is read only
+    // or the concurrency is read only
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     if(!m_pCache || !m_bNew || !m_bModified || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
@@ -2281,7 +2281,7 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
     if ( m_bIgnoreResult )
     {   // append a "0=1" filter
         // don't simply overwrite an existent filter, this would lead to problems if this existent
-        // filter contains paramters (since a keyset may add parameters itself)
+        // filter contains parameters (since a keyset may add parameters itself)
         // 2003-12-12 - #23418# - fs@openoffice.org
         m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
         m_xComposer->setFilter( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0 = 1" ) ) );

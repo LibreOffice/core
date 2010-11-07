@@ -400,7 +400,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     aSql.append(m_aComposedTableName);
     aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
 
-    // list all cloumns that should be set
+    // list all columns that should be set
     const ::rtl::OUString aQuote    = getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     static ::rtl::OUString aOr(RTL_CONSTASCII_USTRINGPARAM(" OR "));
@@ -435,7 +435,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     }
     aSql.setLength(aSql.getLength()-3);
 
-    // now create end execute the prepared statement
+    // now create and execute the prepared statement
 
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
@@ -1064,7 +1064,7 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getKeyColumns" );
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact postioning
     // first the keys
 
     Reference<XIndexAccess> xKeys = m_xTableKeys;
