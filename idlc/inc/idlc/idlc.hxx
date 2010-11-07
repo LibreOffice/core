@@ -103,6 +103,12 @@ public:
         { m_warningCount++; }
     sal_uInt32 getLineNumber()
         { return m_lineNumber; }
+    sal_uInt32 getOffsetStart()
+        { return m_offsetStart; }
+    sal_uInt32 getOffsetEnd()
+        { return m_offsetEnd; }
+    void setOffset( sal_uInt32 start, sal_uInt32 end)
+        { m_offsetStart = start; m_offsetEnd = end; }
     void setLineNumber(sal_uInt32 lineNumber)
         { m_lineNumber = lineNumber; }
     void incLineNumber()
@@ -137,6 +143,8 @@ private:
     sal_uInt32          m_errorCount;
     sal_uInt32          m_warningCount;
     sal_uInt32          m_lineNumber;
+    sal_uInt32          m_offsetStart;
+    sal_uInt32          m_offsetEnd;
     ParseState          m_parseState;
     StringSet           m_includes;
 };

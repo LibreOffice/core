@@ -103,8 +103,8 @@
 
 #include <algorithm>
 #include <vector>
-    
-using namespace ::rtl;
+
+using namespace rtl;
 
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1

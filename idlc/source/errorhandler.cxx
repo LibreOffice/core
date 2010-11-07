@@ -489,7 +489,7 @@ static OString flagToString(sal_uInt32 flag)
     return flagStr;
 }
 
-static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber)
+static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber, sal_uInt32 start, sal_uInt32 end)
 {
     OString file;
     if ( idlc()->getFileName() == idlc()->getRealFileName() )
@@ -497,14 +497,23 @@ static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber)
     else
         file = idlc()->getFileName();
 
-    fprintf(stderr, "%s(%lu) : %s", file.getStr(),
+    fprintf(stderr, "%s:%lu [%lu:%lu] : %s", file.getStr(),
             sal::static_int_cast< unsigned long >(lineNumber),
+            sal::static_int_cast< unsigned long >(start),
+            sal::static_int_cast< unsigned long >(end),
             errorCodeToMessage(eCode));
+}
+
+static void errorHeader(ErrorCode eCode, sal_uInt32 lineNumber)
+{
+    errorHeader(eCode, lineNumber,
+            idlc()->getOffsetStart(), idlc()->getOffsetEnd());
 }
 
 static void errorHeader(ErrorCode eCode)
 {
-    errorHeader(eCode, idlc()->getLineNumber());
+    errorHeader(eCode, idlc()->getLineNumber(),
+            idlc()->getOffsetStart(), idlc()->getOffsetEnd());
 }
 
 static void warningHeader(WarningCode wCode)
