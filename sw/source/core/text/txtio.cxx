@@ -287,9 +287,14 @@ SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 
 sal_Bool IsDbg( const SwTxtFrm *pFrm )
 {
+// Hmm, so IsTest4 etc are defined only if OSL_DEBUG_LEVEL > 1,
+// but this file is compiled if DBG_UTIL is defined. So should the IsTest4 etc
+// then instead be conditional on DBG_UTIL? Such crack.
+#if OSL_DEBUG_LEVEL > 1
     if( pFrm && pFrm->GetShell() )
         return pFrm->GetShell()->GetViewOptions()->IsTest4();
     else
+#else
         return sal_False;
 }
 
