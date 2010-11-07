@@ -296,7 +296,6 @@ public:
     void PutString( const String& rStr, SCSIZE nC, SCSIZE nR);
     void PutString( const String& rStr, SCSIZE nIndex);
     void PutEmpty( SCSIZE nC, SCSIZE nR);
-    void PutEmpty( SCSIZE nIndex);
     /// Jump FALSE without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
     void PutEmptyPath( SCSIZE nIndex);

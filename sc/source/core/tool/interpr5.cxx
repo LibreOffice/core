@@ -466,7 +466,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             {
                 ScBaseCell* pCell = GetCell( aAdr );
                 if (HasCellEmptyData(pCell))
-                    pMat->PutEmpty( 0 );
+                    pMat->PutEmpty(0, 0);
                 else if (HasCellValueData(pCell))
                     pMat->PutDouble(GetCellValue(aAdr, pCell), 0);
                 else

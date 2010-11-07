@@ -128,13 +128,13 @@ void compareMatrix(MatrixImplType& rMat)
 {
     switch (eType)
     {
-        case FILLED_EMPTY:
+        case ScMatrix::FILLED_EMPTY:
             return mdds::matrix_density_filled_empty;
-        case FILLED_ZERO:
+        case ScMatrix::FILLED_ZERO:
             return mdds::matrix_density_filled_zero;
-        case SPARSE_EMPTY:
+        case ScMatrix::SPARSE_EMPTY:
             return mdds::matrix_density_sparse_empty;
-        case SPARSE_ZERO:
+        case ScMatrix::SPARSE_ZERO:
             return mdds::matrix_density_sparse_zero;
         default:
             ;
@@ -180,7 +180,6 @@ public:
     void PutString(const String& rStr, SCSIZE nIndex);
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
-    void PutEmpty(SCSIZE nIndex);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nIndex);
     void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
@@ -367,19 +366,12 @@ void ScMatrixImpl::PutEmpty(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
     {
         maMat.set_empty(nR, nC);
-        maMat.clear_flag(nR, nC);
+        maMat.clear_flag(nR, nC); // zero flag to indicate that this is 'empty', not 'empty path'.
     }
     else
     {
         DBG_ERRORFILE("ScMatrixImpl::PutEmpty: dimension error");
     }
-}
-
-void ScMatrixImpl::PutEmpty(SCSIZE nIndex)
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    PutEmpty(nC, nR);
 }
 
 void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
@@ -928,11 +920,6 @@ void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
 void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutEmpty(nC, nR);
-}
-
-void ScMatrix::PutEmpty(SCSIZE nIndex)
-{
-    pImpl->PutEmpty(nIndex);
 }
 
 void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
