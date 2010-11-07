@@ -205,7 +205,6 @@ public:
     BOOL IsValue( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsValueOrEmpty( SCSIZE nIndex ) const;
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsBoolean( SCSIZE nIndex ) const;
     BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsNumeric() const;
     void MatCopy(ScMatrixImpl& mRes) const;
@@ -665,12 +664,6 @@ BOOL ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
     }
     return false;
 }
-BOOL ScMatrixImpl::IsBoolean( SCSIZE nIndex ) const
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    return IsBoolean(nC, nR);
-}
 
 BOOL ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
@@ -1045,11 +1038,6 @@ BOOL ScMatrix::IsValueOrEmpty( SCSIZE nIndex ) const
 BOOL ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValueOrEmpty(nC, nR);
-}
-
-BOOL ScMatrix::IsBoolean( SCSIZE nIndex ) const
-{
-    return pImpl->IsBoolean(nIndex);
 }
 
 BOOL ScMatrix::IsBoolean( SCSIZE nC, SCSIZE nR ) const

@@ -374,9 +374,6 @@ public:
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if boolean.
-    BOOL IsBoolean( SCSIZE nIndex ) const;
-
-    /// @return <TRUE/> if boolean.
     BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
