@@ -331,7 +331,6 @@ public:
         string is returned; an empty string for empty, a "FALSE" string for
         empty path. */
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
-    String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!

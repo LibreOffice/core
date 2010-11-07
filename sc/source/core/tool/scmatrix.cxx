@@ -188,7 +188,6 @@ public:
     double GetDouble( SCSIZE nIndex) const;
     const String& GetString(SCSIZE nC, SCSIZE nR) const;
     const String& GetString( SCSIZE nIndex) const;
-    String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
     BOOL IsString( SCSIZE nIndex ) const;
@@ -462,14 +461,6 @@ const String& ScMatrixImpl::GetString( SCSIZE nIndex) const
     CalcPosition(nIndex, nC, nR);
     return GetString(nC, nR);
 }
-
-String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    return GetString(rFormatter, nC, nR);
-}
-
 
 String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
 {
@@ -914,11 +905,6 @@ const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
 const String& ScMatrix::GetString( SCSIZE nIndex) const
 {
     return pImpl->GetString(nIndex);
-}
-
-String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
-{
-    return pImpl->GetString(rFormatter, nIndex);
 }
 
 String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
