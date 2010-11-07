@@ -202,7 +202,7 @@ private:
 };
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nC, nR, ::mdds::matrix_density_filled_zero),
+    maMat(nR, nC, ::mdds::matrix_density_filled_zero),
     mbCloneIfConst(true)
 {
 }
@@ -229,7 +229,7 @@ bool ScMatrixImpl::IsImmutable() const
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
-    maMat.resize(nC, nR);
+    maMat.resize(nR, nC);
     Clear();
 }
 
