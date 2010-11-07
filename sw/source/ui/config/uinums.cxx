@@ -29,19 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
-#ifndef _SFX_INIMGR_HXX
-#endif
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brshitem.hxx>
-
 
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>

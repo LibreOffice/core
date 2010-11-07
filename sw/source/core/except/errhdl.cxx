@@ -30,10 +30,7 @@
 #include "precompiled_sw.hxx"
 #define _ERRHDL_CXX
 
-
 #include "stdlib.h"
-#ifdef WIN
-#endif
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
