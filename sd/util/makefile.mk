@@ -252,7 +252,9 @@ DEF5NAME=$(SHL5TARGET)
 SHL5STDLIBS = $(ISDLIB) \
               $(EDITENGLIB)       \
               $(SVXCORELIB)       \
-              $(MSFILTERLIB)   \
+              $(MSFILTERLIB)      \
+              $(OOXLIB)           \
+              $(SAXLIB)           \
               $(SFX2LIB)          \
               $(SVTOOLLIB)        \
               $(SOTLIB)           \
