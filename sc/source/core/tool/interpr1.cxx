@@ -1635,7 +1635,7 @@ void ScInterpreter::ScIsEmpty()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = pMat->IsEmpty( 0 );
+                nRes = pMat->IsEmpty( 0, 0);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
@@ -1697,7 +1697,7 @@ short ScInterpreter::IsString()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = pMat->IsString(0) && !pMat->IsEmpty(0);
+                nRes = pMat->IsString(0, 0) && !pMat->IsEmpty(0, 0);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
@@ -5306,10 +5306,10 @@ void ScInterpreter::ScLookup()
 
         if (pResMat)
         {
-            if (pResMat->IsValue( 0 ))
-                PushDouble(pResMat->GetDouble( 0 ));
+            if (pResMat->IsValue( 0, 0 ))
+                PushDouble(pResMat->GetDouble( 0, 0 ));
             else
-                PushString(pResMat->GetString( 0 ));
+                PushString(pResMat->GetString( 0, 0 ));
         }
         else if (nParamCount == 3)
         {

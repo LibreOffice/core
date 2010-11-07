@@ -192,10 +192,8 @@ public:
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
     BOOL IsString( SCSIZE nIndex ) const;
     BOOL IsString( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsEmpty( SCSIZE nIndex ) const;
     BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsEmptyPath( SCSIZE nIndex ) const;
     BOOL IsValue( SCSIZE nIndex ) const;
     BOOL IsValue( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
@@ -499,7 +497,6 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
     return aStr;
 }
 
-
 ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
 {
     ScMatrixValue aVal;
@@ -552,12 +549,6 @@ BOOL ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
     }
     return false;
 }
-BOOL ScMatrixImpl::IsEmpty( SCSIZE nIndex ) const
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    return IsEmpty(nC, nR);
-}
 
 BOOL ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
@@ -572,13 +563,6 @@ BOOL ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
     // 'Empty path' is empty plus non-zero flag.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) != 0;
-}
-
-BOOL ScMatrixImpl::IsEmptyPath( SCSIZE nIndex ) const
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    return IsEmptyPath(nC, nR);
 }
 
 BOOL ScMatrixImpl::IsValue( SCSIZE nIndex ) const
@@ -927,11 +911,6 @@ BOOL ScMatrix::IsString( SCSIZE nC, SCSIZE nR ) const
     return pImpl->IsString(nC, nR);
 }
 
-BOOL ScMatrix::IsEmpty( SCSIZE nIndex ) const
-{
-    return pImpl->IsEmpty(nIndex);
-}
-
 BOOL ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmpty(nC, nR);
@@ -940,11 +919,6 @@ BOOL ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 BOOL ScMatrix::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmptyPath(nC, nR);
-}
-
-BOOL ScMatrix::IsEmptyPath( SCSIZE nIndex ) const
-{
-    return pImpl->IsEmptyPath(nIndex);
 }
 
 BOOL ScMatrix::IsValue( SCSIZE nIndex ) const
