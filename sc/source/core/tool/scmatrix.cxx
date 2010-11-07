@@ -203,7 +203,6 @@ public:
     BOOL IsEmptyPath( SCSIZE nIndex ) const;
     BOOL IsValue( SCSIZE nIndex ) const;
     BOOL IsValue( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsValueOrEmpty( SCSIZE nIndex ) const;
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsNumeric() const;
@@ -643,13 +642,6 @@ BOOL ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
     return false;
 }
 
-BOOL ScMatrixImpl::IsValueOrEmpty( SCSIZE nIndex ) const
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    return IsValueOrEmpty(nC, nR);
-}
-
 BOOL ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated(nC, nR);
@@ -1028,11 +1020,6 @@ BOOL ScMatrix::IsValue( SCSIZE nIndex ) const
 BOOL ScMatrix::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValue(nC, nR);
-}
-
-BOOL ScMatrix::IsValueOrEmpty( SCSIZE nIndex ) const
-{
-    return pImpl->IsValueOrEmpty(nIndex);
 }
 
 BOOL ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const

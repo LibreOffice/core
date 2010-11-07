@@ -1333,14 +1333,16 @@ void ScInterpreter::ScNeg()
                     PushIllegalArgument();
                 else
                 {
-                    SCSIZE nCount = nC * nR;
-                    for ( SCSIZE j=0; j<nCount; ++j )
+                    for (SCSIZE i = 0; i < nC; ++i)
                     {
-                        if ( pMat->IsValueOrEmpty(j) )
-                            pResMat->PutDouble( -pMat->GetDouble(j), j );
-                        else
-                            pResMat->PutString(
-                                ScGlobal::GetRscString( STR_NO_VALUE ), j );
+                        for (SCSIZE j = 0; j < nR; ++j)
+                        {
+                            if ( pMat->IsValueOrEmpty(i,j) )
+                                pResMat->PutDouble( -pMat->GetDouble(i,j), i, j );
+                            else
+                                pResMat->PutString(
+                                    ScGlobal::GetRscString( STR_NO_VALUE ), i, j );
+                        }
                     }
                     PushMatrix( pResMat );
                 }
@@ -1389,14 +1391,16 @@ void ScInterpreter::ScNot()
                     PushIllegalArgument();
                 else
                 {
-                    SCSIZE nCount = nC * nR;
-                    for ( SCSIZE j=0; j<nCount; ++j )
+                    for (SCSIZE i = 0; i < nC; ++i)
                     {
-                        if ( pMat->IsValueOrEmpty(j) )
-                            pResMat->PutDouble( (pMat->GetDouble(j) == 0.0), j );
-                        else
-                            pResMat->PutString(
-                                ScGlobal::GetRscString( STR_NO_VALUE ), j );
+                        for (SCSIZE j = 0; j < nR; ++j)
+                        {
+                            if ( pMat->IsValueOrEmpty(i,j) )
+                                pResMat->PutDouble( (pMat->GetDouble(i,j) == 0.0), i, j );
+                            else
+                                pResMat->PutString(
+                                    ScGlobal::GetRscString( STR_NO_VALUE ), i, j );
+                        }
                     }
                     PushMatrix( pResMat );
                 }

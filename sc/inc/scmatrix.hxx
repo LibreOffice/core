@@ -368,9 +368,6 @@ public:
     BOOL IsValue( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean or empty or empty path.
-    BOOL IsValueOrEmpty( SCSIZE nIndex ) const;
-
-    /// @return <TRUE/> if value or boolean or empty or empty path.
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if boolean.
