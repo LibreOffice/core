@@ -427,9 +427,6 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
-//      ::rtl::OUString sOldName;
-//      Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-//      xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
     }
     else // not supported
