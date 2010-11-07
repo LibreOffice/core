@@ -298,9 +298,7 @@ public:
     void PutEmpty( SCSIZE nC, SCSIZE nR);
     /// Jump FALSE without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
-    void PutEmptyPath( SCSIZE nIndex);
     void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
-    void PutError( USHORT nErrorCode, SCSIZE nIndex );
     void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR);
     void PutBoolean( bool bVal, SCSIZE nIndex);
 
@@ -319,8 +317,6 @@ public:
         @returns 0 if no error or string element, else one of err... constants */
     USHORT GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
         { return IsValue( nC, nR) ? GetError( nC, nR) : 0; }
-    USHORT GetErrorIfNotString( SCSIZE nIndex) const
-        { return IsValue( nIndex) ? GetError( nIndex) : 0; }
 
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     double GetDouble( SCSIZE nC, SCSIZE nR) const;

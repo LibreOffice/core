@@ -2144,8 +2144,8 @@ void ScInterpreter::ScIsValue()
                 ;   // nothing
             else if ( !pJumpMatrix )
             {
-                if (pMat->GetErrorIfNotString( 0 ) == 0)
-                    nRes = pMat->IsValue( 0 );
+                if (pMat->GetErrorIfNotString( 0, 0) == 0)
+                    nRes = pMat->IsValue( 0, 0);
             }
             else
             {
@@ -2250,7 +2250,7 @@ void ScInterpreter::ScIsNV()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = (pMat->GetErrorIfNotString( 0 ) == NOTAVAILABLE);
+                nRes = (pMat->GetErrorIfNotString( 0, 0) == NOTAVAILABLE);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
@@ -2300,7 +2300,7 @@ void ScInterpreter::ScIsErr()
                 nRes = ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pMat);
             else if ( !pJumpMatrix )
             {
-                USHORT nErr = pMat->GetErrorIfNotString( 0 );
+                USHORT nErr = pMat->GetErrorIfNotString( 0, 0);
                 nRes = (nErr && nErr != NOTAVAILABLE);
             }
             else
@@ -2357,7 +2357,7 @@ void ScInterpreter::ScIsError()
             if ( nGlobalError || !pMat )
                 nRes = 1;
             else if ( !pJumpMatrix )
-                nRes = (pMat->GetErrorIfNotString( 0 ) != 0);
+                nRes = (pMat->GetErrorIfNotString( 0, 0) != 0);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;

@@ -181,9 +181,7 @@ public:
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
-    void PutEmptyPath(SCSIZE nIndex);
     void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
-    void PutError( USHORT nErrorCode, SCSIZE nIndex );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
     void PutBoolean( bool bVal, SCSIZE nIndex);
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
@@ -385,23 +383,9 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     }
 }
 
-void ScMatrixImpl::PutEmptyPath(SCSIZE nIndex)
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    PutEmptyPath(nC, nR);
-}
-
 void ScMatrixImpl::PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR )
 {
     maMat.set_numeric(nR, nC, CreateDoubleError(nErrorCode));
-}
-
-void ScMatrixImpl::PutError( USHORT nErrorCode, SCSIZE nIndex )
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    PutError(nErrorCode, nC, nR);
 }
 
 void ScMatrixImpl::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
@@ -912,19 +896,9 @@ void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     pImpl->PutEmptyPath(nC, nR);
 }
 
-void ScMatrix::PutEmptyPath(SCSIZE nIndex)
-{
-    pImpl->PutEmptyPath(nIndex);
-}
-
 void ScMatrix::PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR )
 {
     pImpl->PutError(nErrorCode, nC, nR);
-}
-
-void ScMatrix::PutError( USHORT nErrorCode, SCSIZE nIndex )
-{
-    pImpl->PutError(nErrorCode, nIndex);
 }
 
 void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)

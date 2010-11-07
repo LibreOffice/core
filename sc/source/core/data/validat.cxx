@@ -660,7 +660,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
              * rStrResult += ScGlobal::GetLongErrorString(nErrCode);
              */
 
-            xMatRef->PutError( nErrCode, 0);
+            xMatRef->PutError( nErrCode, 0, 0);
             bOk = false;
         }
         else if (aValidationSrc.HasValueData())

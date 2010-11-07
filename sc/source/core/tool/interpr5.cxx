@@ -1339,41 +1339,43 @@ void ScInterpreter::ScAmpersand()
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            SCSIZE nCount = nC * nR;
             if (nGlobalError)
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                    pResMat->PutError( nGlobalError, i);
+                for (SCSIZE i = 0; i < nC; ++i)
+                    for (SCSIZE j = 0; j < nR; ++j)
+                        pResMat->PutError( nGlobalError, i, j);
             }
             else if (bFlag)
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                {
-                    USHORT nErr = pMat->GetErrorIfNotString( i);
-                    if (nErr)
-                        pResMat->PutError( nErr, i);
-                    else
+                for (SCSIZE i = 0; i < nC; ++i)
+                    for (SCSIZE j = 0; j < nR; ++j)
                     {
-                        String aTmp( sStr);
-                        aTmp += pMat->GetString( *pFormatter, i);
-                        pResMat->PutString( aTmp, i);
+                        USHORT nErr = pMat->GetErrorIfNotString( i, j);
+                        if (nErr)
+                            pResMat->PutError( nErr, i, j);
+                        else
+                        {
+                            String aTmp( sStr);
+                            aTmp += pMat->GetString( *pFormatter, i, j);
+                            pResMat->PutString( aTmp, i, j);
+                        }
                     }
-                }
             }
             else
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                {
-                    USHORT nErr = pMat->GetErrorIfNotString( i);
-                    if (nErr)
-                        pResMat->PutError( nErr, i);
-                    else
+                for (SCSIZE i = 0; i < nC; ++i)
+                    for (SCSIZE j = 0; j < nR; ++j)
                     {
-                        String aTmp( pMat->GetString( *pFormatter, i));
-                        aTmp += sStr;
-                        pResMat->PutString( aTmp, i);
+                        USHORT nErr = pMat->GetErrorIfNotString( i, j);
+                        if (nErr)
+                            pResMat->PutError( nErr, i, j);
+                        else
+                        {
+                            String aTmp( pMat->GetString( *pFormatter, i, j));
+                            aTmp += sStr;
+                            pResMat->PutString( aTmp, i, j);
+                        }
                     }
-                }
             }
             PushMatrix(pResMat);
         }
