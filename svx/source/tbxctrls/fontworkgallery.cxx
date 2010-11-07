@@ -382,8 +382,6 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow( svt::ToolboxController& rContr
 , maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) )
 , msFontworkAlignment( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) )
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
     SetSelectHdl( LINK( this, FontWorkAlignmentWindow, SelectHdl ) );
 
@@ -439,8 +437,6 @@ void FontWorkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         appendEntry( 0, String( SVX_RES( STR_ALIGN_LEFT    ) ), maImgAlgin1 );
         appendEntry( 1, String( SVX_RES( STR_ALIGN_CENTER  ) ), maImgAlgin2 );
         appendEntry( 2, String( SVX_RES( STR_ALIGN_RIGHT   ) ), maImgAlgin3 );
