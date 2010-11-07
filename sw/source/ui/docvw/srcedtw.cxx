@@ -763,7 +763,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         // optimiert das die TextEngine.
         USHORT nLastEnd = 0;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         USHORT nLine = aPortionList[0].nLine;
 #endif
         for ( USHORT i = 0; i < nCount; i++ )
