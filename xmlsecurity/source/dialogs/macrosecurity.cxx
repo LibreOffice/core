@@ -283,7 +283,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
-        // --> PB 2004-09-21 #i33584#
+        // Trusted Path could not be removed (#i33584#)
         // after remove an entry, select another one if exists
         USHORT nNewCount = maTrustFileLocLB.GetEntryCount();
         if ( nNewCount > 0 )
@@ -292,7 +292,6 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
                 nSel = nNewCount - 1;
             maTrustFileLocLB.SelectEntryPos( nSel );
         }
-        // <--
         ImplCheckButtons();
     }
 
@@ -413,11 +412,10 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
-    // --> PB 2004-09-21 #i33584#
+    // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs
     else
         mpDlg->maSecOptions.SetSecureURLs( cssu::Sequence< rtl::OUString >() );
-    // <--
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }

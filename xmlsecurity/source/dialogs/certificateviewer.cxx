@@ -291,10 +291,9 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     const char*             pHexSep = " ";
     String                  aLBEntry;
     String                  aDetails;
-    // --> PB 2004-10-11 #i35107# - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
+    // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = String::CreateFromAscii( "V" );
     aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
-    // <--
     InsertElement( String( XMLSEC_RES( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );

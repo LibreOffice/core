@@ -654,7 +654,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
                 aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
-                // --> PB 2004-10-12 #i20172# String with date and time information
+                // String with date and time information (#i20172#)
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
             bSigValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );

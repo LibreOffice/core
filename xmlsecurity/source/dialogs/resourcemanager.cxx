@@ -79,7 +79,7 @@ namespace XmlSec
 
     String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        // --> PB 2004-10-12 #i20172# String with date and time information
+        // String with date and time information (#i20172#)
         DateTime aDT( GetDateTime( _rDT ) );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
         String sRet( rLoDa.getDate( aDT ) );
