@@ -79,6 +79,46 @@ struct ScMatrixValue
                 pS = r.pS;
         }
     }
+
+    bool operator== (const ScMatrixValue& r) const
+    {
+        if (nType != r.nType)
+            return false;
+
+        switch (nType)
+        {
+            case SC_MATVAL_VALUE:
+            case SC_MATVAL_BOOLEAN:
+                return fVal == r.fVal;
+            break;
+            default:
+                ;
+        }
+        if (!pS)
+            return r.pS == NULL;
+
+        return GetString().Equals(r.GetString());
+    }
+
+    bool operator!= (const ScMatrixValue& r) const
+    {
+        return !operator==(r);
+    }
+
+    ScMatrixValue& operator= (const ScMatrixValue& r)
+    {
+        nType = r.nType;
+        switch (nType)
+        {
+            case SC_MATVAL_VALUE:
+            case SC_MATVAL_BOOLEAN:
+                fVal = r.fVal;
+            break;
+            default:
+                pS = r.pS;
+        }
+        return *this;
+    }
 };
 
 /** Matrix representation of double values and strings.

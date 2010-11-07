@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportDDELinks.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -47,6 +45,7 @@ class ScMatrix;
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUStringBuffer;
 
 ScXMLExportDDELinks::ScXMLExportDDELinks(ScXMLExport& rTempExport)
     : rExport(rTempExport)
@@ -57,121 +56,81 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 {
 }
 
-bool ScXMLExportDDELinks::CellsEqual(
-    const bool bPrevEmpty, const bool bPrevString, const String& sPrevValue, double fPrevValue,
-    const bool bEmpty, const bool bString, const String& sValue, double fValue)
-{
-    if (bEmpty == bPrevEmpty)
-        if (bEmpty)
-            return sal_True;
-        else if (bString == bPrevString)
-            if (bString)
-                return (sPrevValue == sValue);
-            else
-                return (fPrevValue == fValue);
-        else
-            return sal_False;
-    else
-        return sal_False;
-}
+namespace {
 
-void ScXMLExportDDELinks::WriteCell(
-    const bool bEmpty, const bool bString, const String& sValue, double fValue, const sal_Int32 nRepeat)
+void WriteCell(ScXMLExport& rExport, const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {
-    rtl::OUStringBuffer sBuffer;
+    bool bString = ScMatrix::IsNonValueType(aVal.nType);
+    bool bEmpty = ScMatrix::IsEmptyType(aVal.nType) || (bString && aVal.GetString().Len() == 0);
+
     if (!bEmpty)
     {
         if (bString)
         {
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, rtl::OUString(sValue));
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, aVal.GetString());
         }
         else
         {
+            OUStringBuffer aBuf;
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
-            rExport.GetMM100UnitConverter().convertDouble(sBuffer, fValue);
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sBuffer.makeStringAndClear());
+            rExport.GetMM100UnitConverter().convertDouble(aBuf, aVal.fVal);
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, aBuf.makeStringAndClear());
         }
     }
+
     if (nRepeat > 1)
     {
-        rExport.GetMM100UnitConverter().convertNumber(sBuffer, nRepeat);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, sBuffer.makeStringAndClear());
+        OUStringBuffer aBuf;
+        rExport.GetMM100UnitConverter().convertNumber(aBuf, nRepeat);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
     SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True);
 }
 
+}
+
 void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
 {
-    const ScMatrix* pMatrix(NULL);
-    if (rExport.GetDocument())
-        pMatrix = rExport.GetDocument()->GetDdeLinkResultMatrix( static_cast<USHORT>(nPos) );
-    if (pMatrix)
+    ScDocument* pDoc = rExport.GetDocument();
+    if (!pDoc)
+        return;
+
+    const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix(static_cast<USHORT>(nPos));
+    if (!pMatrix)
+        return;
+
+    SCSIZE nCols, nRows;
+    pMatrix->GetDimensions(nCols, nRows);
+
+    SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
+    if (nCols > 1)
     {
-        SCSIZE nuCol;
-        SCSIZE nuRow;
-        pMatrix->GetDimensions( nuCol, nuRow );
-        sal_Int32 nRowCount = static_cast<sal_Int32>(nuRow);
-        sal_Int32 nColCount = static_cast<sal_Int32>(nuCol);
-        SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
-        rtl::OUStringBuffer sBuffer;
-        if (nColCount > 1)
+        OUStringBuffer aBuf;
+        rExport.GetMM100UnitConverter().convertNumber(aBuf, static_cast<sal_Int32>(nCols));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
+    }
+    {
+        SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
+    }
+
+    for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
+    {
+        sal_Int32 nRepeat = 0;
+        ScMatrixValue aPrevVal;
+        SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
+        for (SCSIZE nCol = 0; nCol < nCols; ++nCol, ++nRepeat)
         {
-            rExport.GetMM100UnitConverter().convertNumber(sBuffer, nColCount);
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, sBuffer.makeStringAndClear());
-        }
-        {
-            SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
-        }
-        bool bPrevString = true;
-        bool bPrevEmpty = true;
-        double fPrevValue;
-        String sPrevValue;
-        sal_Int32 nRepeatColsCount(1);
-        for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
-        {
-            SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
-            for(sal_Int32 nColumn = 0; nColumn < nColCount; ++nColumn)
+            ScMatrixValue aVal = pMatrix->Get(nCol, nRow);
+            if (nCol > 0 && aVal != aPrevVal)
             {
-                ScMatrixValue nMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow) );
-                bool bIsString = ScMatrix::IsNonValueType( nMatVal.nType);
-
-                if (nColumn == 0)
-                {
-                    bPrevEmpty = nMatVal.nType == SC_MATVAL_EMPTY;
-                    bPrevString = bIsString;
-                    if( bIsString )
-                        sPrevValue = nMatVal.GetString();
-                    else
-                        fPrevValue = nMatVal.fVal;
-                }
-                else
-                {
-                    double fValue;
-                    String sValue;
-                    bool bEmpty = nMatVal.nType == SC_MATVAL_EMPTY;
-                    bool bString = bIsString;
-                    if( bIsString )
-                        sValue = nMatVal.GetString();
-                    else
-                        fValue = nMatVal.fVal;
-
-                    if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
-                                bEmpty, bString, sValue, fValue))
-                        ++nRepeatColsCount;
-                    else
-                    {
-                        WriteCell(bPrevEmpty, bPrevString, sPrevValue, fPrevValue, nRepeatColsCount);
-                        nRepeatColsCount = 1;
-                        bPrevEmpty = bEmpty;
-                        fPrevValue = fValue;
-                        sPrevValue = sValue;
-                    }
-                }
+                WriteCell(rExport, aPrevVal, nRepeat);
+                nRepeat = 0;
             }
-            WriteCell(bPrevEmpty, bPrevString, sPrevValue, fPrevValue, nRepeatColsCount);
-            nRepeatColsCount = 1;
+            aPrevVal = aVal;
         }
+
+        WriteCell(rExport, aPrevVal, nRepeat);
     }
 }
 
