@@ -335,7 +335,10 @@ void ScMatrixImpl::PutString(const String& rStr, SCSIZE nIndex)
 void ScMatrixImpl::PutEmpty(SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
+    {
         maMat.set_empty(nR, nC);
+        maMat.clear_flag(nR, nC);
+    }
     else
     {
         DBG_ERRORFILE("ScMatrixImpl::PutEmpty: dimension error");
@@ -352,7 +355,10 @@ void ScMatrixImpl::PutEmpty(SCSIZE nIndex)
 void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
+    {
         maMat.set_empty(nR, nC);
+        maMat.set_flag(nR, nC, 1); // non-zero flag to indicate empty 'path'.
+    }
     else
     {
         DBG_ERRORFILE("ScMatrixImpl::PutEmptyPath: dimension error");
@@ -575,16 +581,17 @@ BOOL ScMatrixImpl::IsEmpty( SCSIZE nIndex ) const
 
 BOOL ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
+    // Flag must be zero for this to be an empty element, instead of being an
+    // empty path element.
     ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == ::mdds::element_empty;
+    return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) == 0;
 }
 
 BOOL ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
+    // 'Empty path' is empty plus non-zero flag.
     ValidColRowReplicated( nC, nR );
-    return maMat.get_type(nR, nC) == ::mdds::element_empty;
-    // TODO: we need to differentiate empty and empty path.  'Empty path' is
-    // empty plus extra bit.
+    return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) != 0;
 }
 
 BOOL ScMatrixImpl::IsEmptyPath( SCSIZE nIndex ) const
