@@ -38,9 +38,9 @@ class ScXMLExportDDELinks
 {
     ScXMLExport&        rExport;
 
-    sal_Bool            CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, double fPrevValue,
-                                    const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, double fValue);
-    void                WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat);
+    bool                CellsEqual(const bool bPrevEmpty, const bool bPrevString, const String& sPrevValue, double fPrevValue,
+                               const bool bEmpty, const bool bString, const String& sValue, double fValue);
+    void                WriteCell(const bool bEmpty, const bool bString, const String& sValue, double fValue, const sal_Int32 nRepeat);
     void                WriteTable(const sal_Int32 nPos);
 public:
     ScXMLExportDDELinks(ScXMLExport& rExport);

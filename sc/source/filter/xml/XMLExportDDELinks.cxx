@@ -57,8 +57,9 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 {
 }
 
-sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, double fPrevValue,
-                    const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, double fValue)
+bool ScXMLExportDDELinks::CellsEqual(
+    const bool bPrevEmpty, const bool bPrevString, const String& sPrevValue, double fPrevValue,
+    const bool bEmpty, const bool bString, const String& sValue, double fValue)
 {
     if (bEmpty == bPrevEmpty)
         if (bEmpty)
@@ -74,7 +75,8 @@ sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bo
         return sal_False;
 }
 
-void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat)
+void ScXMLExportDDELinks::WriteCell(
+    const bool bEmpty, const bool bString, const String& sValue, double fValue, const sal_Int32 nRepeat)
 {
     rtl::OUStringBuffer sBuffer;
     if (!bEmpty)
