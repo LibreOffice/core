@@ -61,7 +61,7 @@ namespace {
 void WriteCell(ScXMLExport& rExport, const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {
     bool bString = ScMatrix::IsNonValueType(aVal.nType);
-    bool bEmpty = ScMatrix::IsEmptyType(aVal.nType) || (bString && aVal.GetString().Len() == 0);
+    bool bEmpty = ScMatrix::IsEmptyType(aVal.nType);
 
     if (!bEmpty)
     {

@@ -200,6 +200,9 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
                 double fVal;
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )
                     pResult->PutDouble( fVal, nC, nR );
+                else if (aEntry.Len() == 0)
+                    // empty cell
+                    pResult->PutEmpty(nC, nR);
                 else
                     pResult->PutString( aEntry, nC, nR );
             }
