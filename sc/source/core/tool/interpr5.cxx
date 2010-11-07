@@ -615,12 +615,12 @@ void ScInterpreter::CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE n
         pMat->GetDimensions(nCl, nRw);
         if (nC < nCl && nR < nRw)
         {
-            ScMatValType nMatValType;
-            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,nMatValType);
+            const ScMatrixValue nMatVal = pMat->Get( nC, nR);
+            ScMatValType nMatValType = nMatVal.nType;
             if (ScMatrix::IsNonValueType( nMatValType))
-                PushString( pMatVal->GetString() );
+                PushString( nMatVal.GetString() );
             else
-                PushDouble(pMatVal->fVal);
+                PushDouble(nMatVal.fVal);
                 // also handles DoubleError
         }
         else
@@ -3210,8 +3210,9 @@ void ScInterpreter::ScMatRef()
                 PushNA();
             else
             {
-                ScMatValType nMatValType;
-                const ScMatrixValue* pMatVal = pMat->Get( nC, nR, nMatValType);
+                const ScMatrixValue nMatVal = pMat->Get( nC, nR);
+                ScMatValType nMatValType = nMatVal.nType;
+
                 if (ScMatrix::IsNonValueType( nMatValType))
                 {
                     if (ScMatrix::IsEmptyPathType( nMatValType))
@@ -3225,11 +3226,11 @@ void ScInterpreter::ScMatRef()
                         PushTempToken( new ScEmptyCellToken( false, true));
                     }
                     else
-                        PushString( pMatVal->GetString() );
+                        PushString( nMatVal.GetString() );
                 }
                 else
                 {
-                    PushDouble(pMatVal->fVal);  // handles DoubleError
+                    PushDouble(nMatVal.fVal);  // handles DoubleError
                     pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );
                     nFuncFmtType = nCurFmtType;
                     nFuncFmtIndex = nCurFmtIndex;

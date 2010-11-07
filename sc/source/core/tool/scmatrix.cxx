@@ -42,15 +42,17 @@
 
 #include <math.h>
 
+#define _MDDS_HASH_CONTAINER_COMPAT 1
 #include <mdds/quad_type_matrix.hpp>
 
 using ::std::pair;
-using ::mdds::quad_type_matrix;
 using ::mdds::matrix_element_t;
 
 // ============================================================================
 
 namespace {
+
+typedef ::mdds::quad_type_matrix<String, sal_uInt8> MatrixImplType;
 
 struct ElemEqual : public ::std::unary_function<double, bool>
 {
@@ -101,7 +103,7 @@ struct ElemLessEqual : public ::std::unary_function<double, bool>
 };
 
 template<typename _Comp>
-void compareMatrix(quad_type_matrix<String>& rMat)
+void compareMatrix(MatrixImplType& rMat)
 {
     pair<size_t,size_t> aDim = rMat.size();
     _Comp aComp;
@@ -113,7 +115,7 @@ void compareMatrix(quad_type_matrix<String>& rMat)
             if (eType != mdds::element_numeric && eType == mdds::element_boolean)
                 continue;
 
-            double fVal = maMat.get_numeric(i, j);
+            double fVal = rMat.get_numeric(i, j);
             if (!::rtl::math::isFinite(fVal))
                 continue;
 
@@ -126,8 +128,8 @@ void compareMatrix(quad_type_matrix<String>& rMat)
 
 class ScMatrixImpl
 {
-    quad_type_matrix<String> maMat;
-    ScInterpreter*  pErrorInterpreter;
+    MatrixImplType maMat;
+    ScInterpreter* pErrorInterpreter;
     bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
 
 public:
@@ -169,7 +171,7 @@ public:
     const String& GetString( SCSIZE nIndex) const;
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
-    const ScMatrixValue* Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) const;
+    ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
     BOOL IsString( SCSIZE nIndex ) const;
     BOOL IsString( SCSIZE nC, SCSIZE nR ) const;
     BOOL IsEmpty( SCSIZE nIndex ) const;
@@ -196,7 +198,7 @@ public:
     double Or();
 
 private:
-    void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR);
+    void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
 };
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
@@ -238,20 +240,20 @@ void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)
 
 void ScMatrixImpl::GetDimensions( SCSIZE& rC, SCSIZE& rR) const
 {
-    quad_type_matrix<String>::size_pair_type aDims = maMat.size();
+    MatrixImplType::size_pair_type aDims = maMat.size();
     rR = aDims.first;
     rC = aDims.second;
 }
 
 SCSIZE ScMatrixImpl::GetElementCount() const
 {
-    quad_type_matrix<String>::size_pair_type aDims = maMat.size();
+    MatrixImplType::size_pair_type aDims = maMat.size();
     return aDims.first * aDims.second;
 }
 
 bool ScMatrixImpl::ValidColRow( SCSIZE nC, SCSIZE nR) const
 {
-    quad_type_matrix<String>::size_pair_type aDims = maMat.size();
+    MatrixImplType::size_pair_type aDims = maMat.size();
     return nR < aDims.first && nC < aDims.second;
 }
 
@@ -559,10 +561,11 @@ BOOL ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
         case mdds::element_empty:
         case mdds::element_string:
             return true;
+        default:
+            ;
     }
     return false;
 }
-
 BOOL ScMatrixImpl::IsEmpty( SCSIZE nIndex ) const
 {
     SCSIZE nC, nR;
@@ -606,6 +609,8 @@ BOOL ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
         case mdds::element_boolean:
         case mdds::element_numeric:
             return true;
+        default:
+            ;
     }
     return false;
 }
@@ -626,10 +631,11 @@ BOOL ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
         case mdds::element_numeric:
         case mdds::element_empty:
             return true;
+        default:
+            ;
     }
     return false;
 }
-
 BOOL ScMatrixImpl::IsBoolean( SCSIZE nIndex ) const
 {
     SCSIZE nC, nR;
@@ -640,18 +646,17 @@ BOOL ScMatrixImpl::IsBoolean( SCSIZE nIndex ) const
 BOOL ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated( nC, nR );
-    maMat.get_type(nR, nC) == ::mdds::matrix_boolean;
-//  return mnValType && ScMatrix::IsBooleanType( mnValType[ nC * nRowCount + nR ]);
+    return maMat.get_type(nR, nC) == ::mdds::element_boolean;
 }
 
 BOOL ScMatrixImpl::IsNumeric() const
 {
-    maMat.numeric();
+    return maMat.numeric();
 }
 
 void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
 {
-    quad_type_matrix<String>::size_pair_type s1 = maMat.size(), s2 = mRes.maMat.size();
+    MatrixImplType::size_pair_type s1 = maMat.size(), s2 = mRes.maMat.size();
     if (s1.first > s2.first || s1.second > s2.second)
     {
         // destination matrix is not large enough.
@@ -766,7 +771,7 @@ double ScMatrixImpl::Or()
     return false;
 }
 
-void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR)
+void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 {
     SCSIZE nRowSize = maMat.size().first;
     rC = nIndex / nRowSize;

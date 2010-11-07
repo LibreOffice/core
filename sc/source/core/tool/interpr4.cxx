@@ -2345,47 +2345,51 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
         String& rString )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDoubleOrStringFromMatrix" );
+
+    rDouble = 0.0;
+    rString.Erase();
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
+
     switch ( GetStackType() )
     {
         case svMatrix:
             {
-                const ScMatrixValue* pMatVal = 0;
+                ScMatrixValue nMatVal;
                 ScMatrixRef pMat = PopMatrix();
                 if (!pMat)
                     ;   // nothing
                 else if (!pJumpMatrix)
-                    pMatVal = pMat->Get( 0, 0, nMatValType);
+                {
+                    nMatVal = pMat->Get(0, 0);
+                    nMatValType = nMatVal.nType;
+                }
                 else
                 {
                     SCSIZE nCols, nRows, nC, nR;
                     pMat->GetDimensions( nCols, nRows);
                     pJumpMatrix->GetPos( nC, nR);
                     if ( nC < nCols && nR < nRows )
-                        pMatVal = pMat->Get( nC, nR, nMatValType);
+                    {
+                        nMatVal = pMat->Get( nC, nR);
+                        nMatValType = nMatVal.nType;
+                    }
                     else
                         SetError( errNoValue);
                 }
-                if (!pMatVal)
-                {
-                    rDouble = 0.0;
-                    rString.Erase();
-                }
-                else if (nMatValType == SC_MATVAL_VALUE)
-                    rDouble = pMatVal->fVal;
+
+                if (nMatValType == SC_MATVAL_VALUE)
+                    rDouble = nMatVal.fVal;
                 else if (nMatValType == SC_MATVAL_BOOLEAN)
                 {
-                    rDouble = pMatVal->fVal;
+                    rDouble = nMatVal.fVal;
                     nMatValType = SC_MATVAL_VALUE;
                 }
                 else
-                    rString = pMatVal->GetString();
+                    rString = nMatVal.GetString();
             }
             break;
         default:
             PopError();
-            rDouble = 0.0;
-            rString.Erase();
             SetError( errIllegalParameter);
     }
     return nMatValType;
