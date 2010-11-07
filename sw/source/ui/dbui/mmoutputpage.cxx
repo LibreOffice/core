@@ -1205,7 +1205,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         xTempDocShell->DoClose();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         sal_Int32 nTarget =
                 rConfigItem.MoveResultSet(rInfo.nDBRow);
         OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
