@@ -114,9 +114,6 @@ namespace bib
         m_xGeneralPage = NULL;
     }
 
-    /* -----------------16.11.99 13:13-------------------
-
-     --------------------------------------------------*/
     void BibView::UpdatePages()
     {
         // TODO:
@@ -183,17 +180,12 @@ namespace bib
         FormControlContainer::_loaded( _rEvent );
     }
 
-    /* -----------------------------02.02.00 16:49--------------------------------
-
-     ---------------------------------------------------------------------------*/
     IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
     {
         pThis->m_pDatMan->CreateMappingDialog( pThis );
         return 0;
     }
-    /* -----------------------------13.04.00 16:12--------------------------------
 
-     ---------------------------------------------------------------------------*/
     void BibView::Resize()
     {
         if ( m_pGeneralPage )

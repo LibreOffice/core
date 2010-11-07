@@ -113,9 +113,7 @@ struct SvxBackgroundPage_Impl
     SvxBackgroundPage_Impl() :
         pLoadTimer(NULL), bIsImportDlgInExecute(FALSE) {}
 };
-/* -----------------------------15.08.2002 12:21------------------------------
 
- ---------------------------------------------------------------------------*/
 inline BYTE lcl_PercentToTransparency(long nPercent)
 {
     //0xff must not be returned!
@@ -318,9 +316,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& )
         }
     }
 }
-/* -----------------------------27.02.2002 11:07------------------------------
 
- ---------------------------------------------------------------------------*/
 void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -1935,9 +1931,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         SetGraphicPosition_Impl( ePos );
     }
 }
-/* -----------------------------09.08.2002 14:04------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
 {
     bColTransparency  = bColor;

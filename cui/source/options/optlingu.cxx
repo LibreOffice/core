@@ -205,9 +205,7 @@ sal_Bool KillFile_Impl( const String& rURL )
 
     return bRet;
 }
-/* -----------------------------27.11.00 14:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 // 0x 0p 0t 0c nn
 // p: 1 -> parent
 // t: 1 -> spell, 2 -> hyph, 3 -> thes, 4 -> grammar
@@ -711,9 +709,7 @@ void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >&
     for(i = 0; i < nFound; i++)
         pAllLocales2[nLength++] = pLocToAdd[i];
 }
-/* -----------------------------27.11.00 16:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 void lcl_MergeDisplayArray(
         SvxLinguData_Impl &rData,
         const ServiceInfo_Impl &rToAdd )
@@ -768,9 +764,7 @@ void lcl_MergeDisplayArray(
     rData.GetDisplayServiceArray().push_back( rToAdd );
     rData.SetDisplayServiceCount( nCnt + 1 );
 }
-/* -----------------------------26.11.00 18:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxLinguData_Impl::SvxLinguData_Impl() :
     nDisplayServices    (0)
 {
@@ -913,9 +907,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         }
     }
 }
-/* -----------------------------22.05.01 10:43--------------------------------
 
----------------------------------------------------------------------------*/
 SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
     aDisplayServiceArr  (rData.aDisplayServiceArr),
     nDisplayServices    (rData.nDisplayServices),
@@ -928,9 +920,7 @@ SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
     xLinguSrvcMgr       (rData.xLinguSrvcMgr)
 {
 }
-/* -----------------------------22.05.01 10:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rData)
 {
     xMSF                = rData.xMSF;
@@ -944,15 +934,11 @@ SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rDat
     nDisplayServices    = rData.nDisplayServices;
     return *this;
 }
-/* -----------------------------26.11.00 18:08--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxLinguData_Impl::~SvxLinguData_Impl()
 {
 }
-/* -----------------------------26.11.00 19:42--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)
 {
     const OUString* pConfiguredServices = rConfiguredServices.getConstArray();
@@ -978,9 +964,6 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
         }
     }
 }
-/* -----------------------------26.11.00 20:43--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 sal_Bool SvxLinguData_Impl::AddRemove(
             Sequence< OUString > &rConfigured,
@@ -2175,9 +2158,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 
     return 0;
 }
-/* -----------------------------28.05.01 11:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 {
 //    if (pBox == (SvTreeListBox *) &aModulesCLB)
@@ -2210,9 +2191,7 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 //    }
     return 0;
 }
-/* -----------------------------27.11.00 14:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString lcl_GetServiceName(BYTE nType)
 {
     switch(nType)
@@ -2485,9 +2464,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     aLastLocale.Country = aCurLocale.Country;
     return 0;
 }
-/* -----------------------------27.11.00 19:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
 {
     sal_Bool bUp = &aPrioUpPB == pBtn;
@@ -2534,9 +2511,7 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
 
     return 0;
 }
-/* -----------------------------27.11.00 20:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, EMPTYARG )
 {
     rLinguData = *pDefaultLinguData;

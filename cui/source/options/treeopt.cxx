@@ -288,9 +288,6 @@ static USHORT getGroupNodeId( const rtl::OUString& rModule )
     return nNodeId;
 }
 
-/*-- 29.10.2004 13:57:25---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class MailMergeCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
@@ -307,9 +304,7 @@ public:
     sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
 
 };
-/*-- 29.10.2004 13:57:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 MailMergeCfg_Impl::MailMergeCfg_Impl() :
     utl::ConfigItem(C2U("Office.Writer/MailMergeWizard")),
     bIsEmailSupported(sal_False)
@@ -321,9 +316,7 @@ MailMergeCfg_Impl::MailMergeCfg_Impl() :
     if(aValues.getLength() && pValues[0].hasValue())
         pValues[0] >>= bIsEmailSupported;
 }
-/*-- 29.10.2004 13:57:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 MailMergeCfg_Impl::~MailMergeCfg_Impl()
 {
 }
@@ -511,9 +504,6 @@ static sal_Bool lcl_isOptionHidden( USHORT _nPageId, const SvtOptionsDialogOptio
     return bIsHidden;
 }
 
-/* -----------------11.02.99 09:56-------------------
- *
- * --------------------------------------------------*/
 struct OptionsPageInfo
 {
     SfxTabPage*         m_pPage;
@@ -543,9 +533,6 @@ struct OptionsGroupInfo
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
-/* -----------------04.05.99 15:51-------------------
- *
- * --------------------------------------------------*/
 sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
 {
     bInCollapse = sal_True;
@@ -621,10 +608,6 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString
     ActivateLastSelection();
 }
 
-/* -----------------11.02.99 07:58-------------------
- *
- * --------------------------------------------------*/
-
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
     SvLBoxEntry* pEntry = aTreeLB.First();
@@ -682,9 +665,6 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
     deleteGroupNames();
 }
 
-/* -----------------11.02.99 08:21-------------------
- *
- * --------------------------------------------------*/
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup )
 {
@@ -696,9 +676,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     return pPageInfo;
 }
 
-/* -----------------11.02.99 10:02-------------------
- *  der ItemSet* geht in den Besitz des Dialogs
- * --------------------------------------------------*/
+// der ItemSet* geht in den Besitz des Dialogs
 sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
                                         SfxShell* pCreateShell,
                                         SfxModule* pCreateModule,
@@ -719,9 +697,6 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
     return nRet - 1;
 }
 
-/* -----------------11.02.99 10:31-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 {
     if ( aSelectTimer.GetTimeout() == SELECT_FIRST_TIMEOUT )
@@ -734,9 +709,7 @@ IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 
     return 0;
 }
-/* -----------------11.02.99 10:49-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
 {
     if ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )
@@ -756,9 +729,7 @@ IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
     }
     return 0;
 }
-/* -----------------11.02.99 16:45-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTYARG )
 {
     aTreeLB.EndSelection();
@@ -809,9 +780,7 @@ IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTYARG )
     return 0;
 }
 
-/* -----------------17.02.99 09:15-------------------
- * Eine aufgeklappte Gruppe soll vollstaendig sichtbar sein
- * --------------------------------------------------*/
+// Eine aufgeklappte Gruppe soll vollstaendig sichtbar sein
 IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 {
     pBox->Update();
@@ -846,9 +815,6 @@ IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
     return 0;
 }
 
-/* -----------------11.02.99 10:49-------------------
- *
- * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ApplyItemSets()
 {
     SvLBoxEntry* pEntry = aTreeLB.First();
@@ -910,9 +876,6 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aSelectTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, SelectHdl_Impl ) );
 }
 
-/* -----------------17.02.99 09:51-------------------
- *
- * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
 {
     bIsForSetDocumentLanguage = false;
@@ -943,9 +906,6 @@ void OfaTreeOptionsDialog::ActivatePage( const String& rPageURL )
     ActivateLastSelection();
 }
 
-/* -----------------16.02.99 13:17-------------------
- *
- * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivateLastSelection()
 {
     SvLBoxEntry* pEntry = NULL;
@@ -1020,9 +980,6 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     aTreeLB.GrabFocus();
 }
 
-/* -----------------22.02.99 08:52-------------------
- *
- * --------------------------------------------------*/
 long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -1441,10 +1398,6 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
 
     return 0;
 }
-
-/* -----------------11.02.99 15:51-------------------
- *
- * --------------------------------------------------*/
 
 OfaPageResource::OfaPageResource() :
     Resource(CUI_RES(RID_OFADLG_OPTIONS_TREE_PAGES)),

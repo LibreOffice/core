@@ -624,10 +624,10 @@ public:
                                             SdrModel* pModel=0 ); //add for SvxTextTabDialog
     virtual SfxAbstractTabDialog*       CreateTabItemDialog( Window* pParent,
                                             const SfxItemSet& rSet,
-                                            sal_uInt32 nResId); //add by CHINA001
+                                            sal_uInt32 nResId);
     virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
-                                            USHORT nAnchorTypes = 0 );      //add for SvxCaptionTabDialog CHINA001
+                                            USHORT nAnchorTypes = 0 ); //add for SvxCaptionTabDialog
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
@@ -640,7 +640,7 @@ public:
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
 
-   virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
+   virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
     virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
                                                 const String &rWord, sal_Int16 nLanguage );

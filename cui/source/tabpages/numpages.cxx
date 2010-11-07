@@ -94,9 +94,6 @@ using rtl::OUString;
 
 SV_IMPL_PTRARR(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr);
 
-/*-----------------07.02.97 15.37-------------------
-
---------------------------------------------------*/
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
@@ -118,9 +115,7 @@ static const sal_Char cPrefix[] = "Prefix";
 static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
-/* -----------------------------31.01.01 10:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
@@ -131,9 +126,7 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 
     return xRet;
 }
-/* -----------------------------31.01.01 11:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
     const PropertyValue* pValues = rLevelProps.getConstArray();
@@ -155,9 +148,7 @@ SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& r
     }
     return pNew;
 }
-/* -----------------28.10.98 08:32-------------------
- *
- * --------------------------------------------------*/
+
 // Die Auswahl an Bullets aus den StarSymbol
 static const sal_Unicode aBulletTypes[] =
 {
@@ -170,9 +161,7 @@ static const sal_Unicode aBulletTypes[] =
     0x2717,
     0x2714
 };
-/* -----------------28.10.98 09:42-------------------
- *
- * --------------------------------------------------*/
+
 static sal_Char __READONLY_DATA aNumChar[] =
 {
     'A', //CHARS_UPPER_LETTER
@@ -183,9 +172,7 @@ static sal_Char __READONLY_DATA aNumChar[] =
     ' '
 };
 
-/*-----------------18.03.98 08:35-------------------
-    Ist eins der maskierten Formate gesetzt?
---------------------------------------------------*/
+// Ist eins der maskierten Formate gesetzt?
 BOOL lcl_IsNumFmtSet(SvxNumRule* pNum, USHORT nLevelMask)
 {
     BOOL bRet = FALSE;
@@ -198,9 +185,6 @@ BOOL lcl_IsNumFmtSet(SvxNumRule* pNum, USHORT nLevelMask)
     }
     return bRet;
 }
-/* -----------------28.10.98 08:50-------------------
- *
- * --------------------------------------------------*/
 
 Font& lcl_GetDefaultBulletFont()
 {
@@ -273,9 +257,6 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
         pExamplesVS->SetNumberingSettings(aNumberings, xFormat, aLocale);
     }
 }
-/*-----------------07.02.97 12.08-------------------
-
---------------------------------------------------*/
 
  SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 {
@@ -285,20 +266,11 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     aNumSettingsArr.DeleteAndDestroy(0, aNumSettingsArr.Count());
 }
 
-/*-----------------07.02.97 12.13-------------------
-
---------------------------------------------------*/
-
 SfxTabPage*  SvxSingleNumPickTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxSingleNumPickTabPage(pParent, rAttrSet);
 }
-
-/*-----------------07.02.97 12.09-------------------
-
---------------------------------------------------*/
-
 
 BOOL  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -311,10 +283,6 @@ BOOL  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 
     return bModified;
 }
-
-/*-----------------08.02.97 16.27-------------------
-
---------------------------------------------------*/
 
 void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -351,21 +319,12 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bModified = FALSE;
 }
 
-/*-----------------08.02.97 11.28-------------------
-
---------------------------------------------------*/
-
 int  SvxSingleNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(*_pSet);
     return TRUE;
 }
-
-/*-----------------07.02.97 12.09-------------------
-
---------------------------------------------------*/
-
 
 void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -393,9 +352,6 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
 }
-/*-----------------08.02.97 11.40-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 {
@@ -439,9 +395,6 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-/*-----------------06.06.97 11.15-------------------
-
---------------------------------------------------*/
 IMPL_LINK(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 {
     NumSelectHdl_Impl(pExamplesVS);
@@ -475,10 +428,6 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
     pExamplesVS->SetHelpId(HID_VALUESET_BULLET    );
 
 }
-/*-----------------07.02.97 12.10-------------------
-
---------------------------------------------------*/
-
 
  SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
@@ -486,21 +435,12 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
     delete pExamplesVS;
     delete pSaveNum;
 }
-/*-----------------07.02.97 12.10-------------------
-
---------------------------------------------------*/
-
 
 SfxTabPage*  SvxBulletPickTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxBulletPickTabPage(pParent, rAttrSet);
 }
-
-/*-----------------07.02.97 12.10-------------------
-
---------------------------------------------------*/
-
 
 BOOL  SvxBulletPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -512,9 +452,6 @@ BOOL  SvxBulletPickTabPage::FillItemSet( SfxItemSet& rSet )
     }
     return bModified;
 }
-/*-----------------08.02.97 16.28-------------------
-
---------------------------------------------------*/
 
 void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -549,9 +486,6 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bPreset |= bIsPreset;
     bModified = FALSE;
 }
-/*-----------------08.02.97 11.28-------------------
-
---------------------------------------------------*/
 
 int  SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
@@ -559,11 +493,6 @@ int  SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
         FillItemSet(*_pSet);
     return TRUE;
 }
-
-/*-----------------07.02.97 12.11-------------------
-
---------------------------------------------------*/
-
 
 void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -593,9 +522,6 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
 }
-/*-----------------08.02.97 11.58-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 {
@@ -709,10 +635,6 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
         pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, aLocale);
     }
 }
-/*-----------------07.02.97 12.12-------------------
-
---------------------------------------------------*/
-
 
  SvxNumPickTabPage::~SvxNumPickTabPage()
 {
@@ -721,21 +643,11 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     delete pSaveNum;
 }
 
-/*-----------------07.02.97 12.12-------------------
-
---------------------------------------------------*/
-
-
 SfxTabPage*  SvxNumPickTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxNumPickTabPage(pParent, rAttrSet);
 }
-
-/*-----------------07.02.97 12.12-------------------
-
---------------------------------------------------*/
-
 
 BOOL  SvxNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -747,9 +659,6 @@ BOOL  SvxNumPickTabPage::FillItemSet( SfxItemSet& rSet )
     }
     return bModified;
 }
-/*-----------------08.02.97 16.28-------------------
-
---------------------------------------------------*/
 
 void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -785,20 +694,12 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bModified = FALSE;
 }
 
-/* -----------------08.02.97 11.29-------------------
-
---------------------------------------------------*/
-
 int  SvxNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
         FillItemSet(*_pSet);
     return TRUE;
 }
-
-/*-----------------07.02.97 12.12-------------------
-
---------------------------------------------------*/
 
 void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -829,10 +730,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
 
 }
 
-/*-----------------08.02.97 11.58-------------------
-    Hier werden alle Ebenen veraendert,
---------------------------------------------------*/
-
+// Hier werden alle Ebenen veraendert
 IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 {
     if(pActNum)
@@ -1004,11 +902,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
 
 }
 
-/*-----------------12.02.97 07.46-------------------
-
---------------------------------------------------*/
-
- SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
+SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
     String* pStr = (String*)aGrfNames.First();
     while( pStr )
@@ -1021,19 +915,11 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     delete pSaveNum;
 }
 
-/*-----------------12.02.97 07.46-------------------
-
---------------------------------------------------*/
-
 SfxTabPage*  SvxBitmapPickTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxBitmapPickTabPage(pParent, rAttrSet);
 }
-
-/*-----------------12.02.97 07.46-------------------
-
---------------------------------------------------*/
 
 void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -1070,9 +956,6 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     bPreset |= bIsPreset;
     bModified = FALSE;
 }
-/*-----------------12.02.97 07.46-------------------
-
---------------------------------------------------*/
 
 int  SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
@@ -1080,9 +963,6 @@ int  SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
         FillItemSet(*_pSet);
     return TRUE;
 }
-/*-----------------12.02.97 07.46-------------------
-
---------------------------------------------------*/
 
 BOOL  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -1101,9 +981,6 @@ BOOL  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 
     return bModified;
 }
-/*-----------------12.02.97 07.46-------------------
-
---------------------------------------------------*/
 
 void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -1141,10 +1018,6 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
         aLinkedCB.Enable(FALSE);
     }
 }
-
-/*-----------------12.02.97 07.53-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 {
@@ -1193,9 +1066,6 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-/*-----------------06.06.97 11.17-------------------
-
---------------------------------------------------*/
 IMPL_LINK(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 {
     NumSelectHdl_Impl(pExamplesVS);
@@ -1203,9 +1073,7 @@ IMPL_LINK(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     rOk.GetClickHdl().Call(&rOk);
     return 0;
 }
-/* -----------------03.11.99 13:46-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, EMPTYARG )
 {
     if(!pExamplesVS->IsNoSelection())
@@ -1215,70 +1083,7 @@ IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
-//CHINA001 SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
-//CHINA001
-//CHINA001 SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-//CHINA001 //    rStrList    ( rStrNames ),
-//CHINA001 bGrfNotFound( FALSE )
-//CHINA001
-//CHINA001 {
-//CHINA001 GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
-//CHINA001 SetStyle( GetStyle() | WB_VSCROLL );
-//CHINA001 SetLineCount( 3 );
-//CHINA001 aFormatTimer.SetTimeout(300);
-//CHINA001 aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
-//CHINA001 }
-//CHINA001
-//CHINA001 SvxBmpNumValueSet::~SvxBmpNumValueSet()
-//CHINA001 {
-//CHINA001 GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
-//CHINA001 aFormatTimer.Stop();
-//CHINA001 }
-//CHINA001
-//CHINA001 void     SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
-//CHINA001 {
-//CHINA001 SvxNumValueSet::UserDraw(rUDEvt);
-//CHINA001
-//CHINA001 Rectangle aRect = rUDEvt.GetRect();
-//CHINA001 OutputDevice*  pDev = rUDEvt.GetDevice();
-//CHINA001 USHORT   nItemId = rUDEvt.GetItemId();
-//CHINA001 Point aBLPos = aRect.TopLeft();
-//CHINA001
-//CHINA001 int nRectHeight = aRect.GetHeight();
-//CHINA001 Size aSize(nRectHeight/8, nRectHeight/8);
-//CHINA001
-//CHINA001 Graphic aGraphic;
-//CHINA001 if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
-//CHINA001 &aGraphic, NULL))
-//CHINA001 {
-//CHINA001 bGrfNotFound = TRUE;
-//CHINA001  }
-//CHINA001  else
-//CHINA001 {
-//CHINA001 Point aPos(aBLPos.X() + 5, 0);
-//CHINA001 for( USHORT i = 0; i < 3; i++ )
-//CHINA001 {
-//CHINA001 USHORT nY = 11 + i * 33;
-//CHINA001 aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-//CHINA001 aGraphic.Draw( pDev, aPos, aSize );
-//CHINA001      }
-//CHINA001  }
-//CHINA001 }
-//CHINA001
-//CHINA001 IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
-//CHINA001 {
-//CHINA001 // nur, wenn eine Grafik nicht da war, muss formatiert werden
-//CHINA001 if(bGrfNotFound)
-//CHINA001 {
-//CHINA001 bGrfNotFound = FALSE;
-//CHINA001 Format();
-//CHINA001  }
-//CHINA001 Invalidate();
-//CHINA001 return 0;
-//CHINA001 }
-/*-----------------01.12.97 16:15-------------------
-    Tabpage Numerierungsoptionen
---------------------------------------------------*/
+// Tabpage Numerierungsoptionen
 #define NUM_NO_GRAPHIC 1000
 SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
@@ -1422,9 +1227,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     }
 }
 
-/*-----------------01.12.97 16:30-------------------
-
---------------------------------------------------*/
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 {
     delete aBitmapMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
@@ -1439,9 +1241,6 @@ SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
     delete pSaveNum;
 }
 
-/*-----------------03.12.97 07:52-------------------
-
---------------------------------------------------*/
 void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
 {
     if(eMetric == FUNIT_MM)
@@ -1453,17 +1252,12 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     aHeightMF .SetUnit( eMetric );
 }
 
-/*-----------------01.12.97 16:30-------------------
-
---------------------------------------------------*/
 SfxTabPage* SvxNumOptionsTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxNumOptionsTabPage(pParent, rAttrSet);
 };
-/*-----------------01.12.97 16:29-------------------
 
---------------------------------------------------*/
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
@@ -1504,18 +1298,14 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     }
 
 }
-/*-----------------01.12.97 16:29-------------------
 
---------------------------------------------------*/
 int     SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if(_pSet)
         FillItemSet(*_pSet);
     return TRUE;
 }
-/*-----------------01.12.97 16:29-------------------
 
---------------------------------------------------*/
 BOOL    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     rSet.Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
@@ -1527,9 +1317,7 @@ BOOL    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     }
     return bModified;
 };
-/*-----------------01.12.97 16:29-------------------
 
---------------------------------------------------*/
 void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
@@ -1702,9 +1490,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     bModified = FALSE;
 
 }
-/*-----------------02.12.97 13:47-------------------
 
---------------------------------------------------*/
 void SvxNumOptionsTabPage::InitControls()
 {
     BOOL bShowBullet    = TRUE;
@@ -1885,10 +1671,7 @@ void SvxNumOptionsTabPage::InitControls()
     pPreviewWIN->Invalidate();
 }
 
-/*-----------------02.12.97 14:01-------------------
-     0 - Nummer; 1 - Bullet; 2 - Bitmap
---------------------------------------------------*/
-
+// 0 - Nummer; 1 - Bullet; 2 - Bitmap
 void SvxNumOptionsTabPage::SwitchNumberType( BYTE nType, BOOL )
 {
     if(nBullet == nType)
@@ -1963,9 +1746,7 @@ void SvxNumOptionsTabPage::SwitchNumberType( BYTE nType, BOOL )
     aOrientLB   .Enable(bEnableBitmap);
 
 }
-/*-----------------02.12.97 13:51-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox *, pBox )
 {
     USHORT nSaveNumLvl = nActNumLvl;
@@ -2007,17 +1788,13 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox *, pBox )
     InitControls();
     return 0;
 }
-/* -----------------------------05.04.2002 15:30------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer*, EMPTYARG )
 {
     pPreviewWIN->Invalidate();
     return 0;
 }
-/*-----------------03.12.97 12:01-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
 {
     for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2038,9 +1815,6 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
     return 0;
 }
 
-/*-----------------02.12.97 08:56-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
 {
     String sSelectStyle;
@@ -2129,9 +1903,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
     }
     return 0;
 }
-/* -----------------06.11.2002 14:27-----------------
- *
- * --------------------------------------------------*/
+
 void SvxNumOptionsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
 {
     BOOL bIsNull = aStartED.GetValue() == 0;
@@ -2142,9 +1914,7 @@ void SvxNumOptionsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
     if(bIsNull && bNoZeroAllowed)
         aStartED.GetModifyHdl().Call(&aStartED);
 }
-/*-----------------03.12.97 16:43-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox *, pBox )
 {
     USHORT nPos = pBox->GetSelectEntryPos();
@@ -2172,9 +1942,6 @@ IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox *, pBox )
 
 }
 
-/*-----------------06.12.97 12:00-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, CheckBox *, pBox )
 {
     BOOL bSet = pBox->IsChecked();
@@ -2193,9 +1960,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, CheckBox *, pBox )
     InitControls();
     return 0;
 }
-/* -----------------16.11.98 14:20-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SvxNumOptionsTabPage, BulColorHdl_Impl, ColorListBox*, pBox )
 {
     Color nSetColor = pBox->GetSelectEntryColor();
@@ -2214,9 +1979,7 @@ IMPL_LINK( SvxNumOptionsTabPage, BulColorHdl_Impl, ColorListBox*, pBox )
     SetModified();
     return 0;
 }
-/* -----------------16.11.98 14:20-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
 {
     USHORT nRelSize = (USHORT)pField->GetValue();
@@ -2236,9 +1999,6 @@ IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
     return 0;
 }
 
-/*-----------------02.12.97 10:50-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 {
     USHORT                  nItemId = pButton->GetCurItemId();
@@ -2314,9 +2074,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     }
     return 0;
 }
-/* -----------------27.07.99 12:20-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, EMPTYARG )
 {
     if(!bMenuButtonInitialized)
@@ -2369,9 +2127,6 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, EMPTYARG )
     return 0;
 }
 
-/*-----------------02.12.97 10:58-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, BulletHdl_Impl, Button *, EMPTYARG )
 {
     SvxCharacterMap* pMap = new SvxCharacterMap( this, TRUE );
@@ -2432,10 +2187,6 @@ IMPL_LINK( SvxNumOptionsTabPage, BulletHdl_Impl, Button *, EMPTYARG )
     delete pMap;
     return 0;
 }
-
-/*-----------------03.03.97 15:21-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
 {
@@ -2521,9 +2272,6 @@ IMPL_LINK( SvxNumOptionsTabPage, RatioHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-/*-----------------02.12.97 16:07-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox *, EMPTYARG )
 {
     bAutomaticCharStyles = FALSE;
@@ -2552,9 +2300,6 @@ IMPL_LINK( SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox *, EMPTYARG )
 
 };
 
-/*-----------------03.12.97 11:01-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
 {
     BOOL bPrefix = pEdit == &aPrefixED;
@@ -2591,9 +2336,6 @@ IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-/*-----------------09.12.97 11:49-------------------
-
---------------------------------------------------*/
 USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, USHORT nXStart,
                         USHORT nYStart, USHORT nDivision)
 {
@@ -2616,9 +2358,6 @@ USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, USHORT
 
 }
 
-/*-----------------09.12.97 11:54-------------------
-
---------------------------------------------------*/
 USHORT lcl_DrawBullet(VirtualDevice* pVDev,
             const SvxNumberFormat& rFmt, USHORT nXStart,
             USHORT nYStart, const Size& rSize)
@@ -2653,9 +2392,8 @@ USHORT lcl_DrawBullet(VirtualDevice* pVDev,
     pVDev->SetFont(aTmpFont);
     return nRet;
 }
-/*-----------------02.12.97 10:34-------------------
-    Vorschau der Numerierung painten
---------------------------------------------------*/
+
+// Vorschau der Numerierung painten
 void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
@@ -2955,9 +2693,6 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_NUM_POSITION ), rSet ),
@@ -3059,9 +2794,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     pDebugFixedText->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Das ist ein Debug-Text" ) ) );
 #endif
 }
-/*-----------------03.12.97 10:02-------------------
 
---------------------------------------------------*/
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
 {
     delete pActNum;
@@ -3101,9 +2834,6 @@ void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
 }
 #endif
 
-/*-----------------03.12.97 10:06-------------------
-
---------------------------------------------------*/
 void SvxNumPositionTabPage::InitControls()
 {
     bInInintControl = TRUE;
@@ -3303,9 +3033,6 @@ void SvxNumPositionTabPage::InitControls()
     bInInintControl = FALSE;
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
@@ -3353,9 +3080,6 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
     pPreviewWIN->Invalidate();
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
@@ -3363,9 +3087,6 @@ int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
     return TRUE;
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 BOOL SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
 {
     rSet.Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
@@ -3379,9 +3100,6 @@ BOOL SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
@@ -3505,18 +3223,12 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     aIndentAtMF.Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-/*-----------------03.12.97 10:02-------------------
-
---------------------------------------------------*/
 SfxTabPage* SvxNumPositionTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxNumPositionTabPage(pParent, rAttrSet);
 }
 
-/*-----------------04.12.97 12:51-------------------
-
---------------------------------------------------*/
 void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)
 {
     if(eMetric == FUNIT_MM)
@@ -3536,9 +3248,6 @@ void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)
     aIndentAtMF.SetUnit( eMetric );
 }
 
-/*-----------------03.12.97 11:06-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumPositionTabPage, EditModifyHdl_Impl, Edit *, EMPTYARG )
 {
     USHORT nMask = 1;
@@ -3564,9 +3273,7 @@ IMPL_LINK( SvxNumPositionTabPage, EditModifyHdl_Impl, Edit *, EMPTYARG )
     SetModified();
     return 0;
 }
-/*-----------------03.12.97 11:11-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox *, pBox )
 {
     USHORT nSaveNumLvl = nActNumLvl;
@@ -3612,9 +3319,7 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox *, pBox )
     InitControls();
     return 0;
 }
-/*-----------------03.12.97 12:24-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
 {
     if(bInInintControl)
@@ -3686,9 +3391,6 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
     return 0;
 }
 
-/*-----------------04.12.97 12:35-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
 {
     BOOL bOn = pBox->IsChecked();

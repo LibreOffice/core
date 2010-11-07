@@ -381,9 +381,6 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
     return nRet;
 }
 
-/* -----------------------------25.03.2002 17:05------------------------------
-
----------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
         aGeneralBackWN(this),

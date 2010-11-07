@@ -306,26 +306,14 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     ArrangeControls_Impl();
 }
 
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
-
 SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
-
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxProxyTabPage(pParent, rAttrSet);
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::ReadConfigData_Impl()
 {
@@ -390,10 +378,6 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
 }
 
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
-
 void SvxProxyTabPage::ReadConfigDefaults_Impl()
 {
     try
@@ -453,10 +437,6 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
     }
 }
 
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
-
 void SvxProxyTabPage::RestoreConfigDefaults_Impl()
 {
     try
@@ -491,10 +471,6 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
     }
 }
 
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
-
 void SvxProxyTabPage::Reset(const SfxItemSet&)
 {
     ReadConfigData_Impl();
@@ -510,10 +486,6 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
 
     EnableControls_Impl( aProxyModeLB.GetSelectEntryPos() == 2 );
 }
-
-/*-----------------12.08.96 16.34-------------------
-
---------------------------------------------------*/
 
 BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
 {
@@ -614,7 +586,7 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
 
 void SvxProxyTabPage::ArrangeControls_Impl()
 {
-    //-->Calculate dynamical width of controls, add buy wuy for i71445 Time: 2007.02.27
+    // calculate dynamic width of controls, to not cut-off translated strings #i71445#
     long nWidth = aProxyModeFT.GetCtrlTextWidth( aProxyModeFT.GetText() );
     long nTemp = aHttpProxyFT.GetCtrlTextWidth( aHttpProxyFT.GetText() );
     if ( nTemp > nWidth )
@@ -660,12 +632,8 @@ void SvxProxyTabPage::ArrangeControls_Impl()
         aNewPos.Y() = aNoProxyForED.GetPosPixel().Y();
         aNoProxyForED.SetPosSizePixel( aNewPos, aNewSize );
     }
-    //<--End buy wuy for i71445 Time: 2007.02.27
 }
 
-/*-----------------12.08.96 13.38-------------------
-
---------------------------------------------------*/
 void SvxProxyTabPage::EnableControls_Impl(BOOL bEnable)
 {
     aHttpProxyFT.Enable(bEnable);
@@ -1143,9 +1111,6 @@ IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, EMPTYARG )
 /********************************************************************/
 /********************************************************************/
 
-/*-----------------15.05.97 09:51-------------------
-
---------------------------------------------------*/
 /*
 SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
 
@@ -1158,10 +1123,6 @@ SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
     FreeResource();
     SelectFixedFont();
 } */
-
-/*-----------------15.05.97 09:51-------------------
-
---------------------------------------------------*/
 
 /*void SvxPatternField::KeyInput( const KeyEvent& rKEvt )
 {

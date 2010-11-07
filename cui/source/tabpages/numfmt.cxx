@@ -1925,12 +1925,11 @@ void SvxNumberFormatTabPage::SetCategory(USHORT nPos)
     }
     aLbCategory.SelectEntryPos(nPos);
 }
-/* -----------------12.11.2002 14:35-----------------
- * to support Writer text field language handling an
- * additional entry needs to be inserted into the ListBox
- * which marks a certain language as automatically detected
- * Additionally the "Default" language is removed
- * --------------------------------------------------*/
+/* to support Writer text field language handling an
+   additional entry needs to be inserted into the ListBox
+   which marks a certain language as automatically detected
+   Additionally the "Default" language is removed
+*/
 void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, BOOL bSelect)
 {
     aLbLanguage.RemoveLanguage(LANGUAGE_SYSTEM);

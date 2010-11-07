@@ -35,9 +35,7 @@
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframeexample.hxx>
 
-/*-- 01.03.2004 15:45:01---------------------------------------------------
-  SvxSwPosSizeTabPage - position and size page for Writer drawing objects
-  -----------------------------------------------------------------------*/
+// SvxSwPosSizeTabPage - position and size page for Writer drawing objects
 struct FrmMap;
 class SdrView;
 class SvxSwPosSizeTabPage : public SfxTabPage

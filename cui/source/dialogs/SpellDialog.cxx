@@ -417,10 +417,9 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
         }
     }
 }
-/* -----------------10.09.2003 14:04-----------------
-    Initialize, asynchronous to prevent virtial calls
-    from a constructor
- --------------------------------------------------*/
+/* Initialize, asynchronous to prevent virtial calls
+   from a constructor
+ */
 IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
 {
     pThis->SetUpdateMode( sal_False );
@@ -857,9 +856,7 @@ void SpellDialog::SetLanguage( sal_uInt16 nLang )
     // den richtigen Eintrag finden, da sortiert
     aLanguageLB.SelectLanguage( nLang );
 }
-/*-- 16.06.2008 11:27:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
 {
     Image aRes;

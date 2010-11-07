@@ -325,9 +325,6 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-/* -----------------------------05.04.01 13:10--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString lcl_ExtractUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
@@ -705,9 +702,7 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
     }
     return 0;
 }
-/* -----------------------------05.04.01 13:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
@@ -734,9 +729,7 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
     }
     return sRet;
 }
-/* -----------------------------05.04.01 13:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
     USHORT nCurPos = aDocTypeLB.GetSelectEntryPos();

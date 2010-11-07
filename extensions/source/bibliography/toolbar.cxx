@@ -551,9 +551,7 @@ void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
         (*pListener)->statusChanged(rEvent);
     }
 }
-/* -----------------------------07.05.2002 15:08------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -561,8 +559,6 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
             ApplyImageList();
     ToolBox::DataChanged( rDCEvt );
 }
-/* -----------------------------07.05.2002 15:09------------------------------
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
 {

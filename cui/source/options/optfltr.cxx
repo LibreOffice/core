@@ -120,10 +120,6 @@ BOOL OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
     return FALSE;
 }
 
-/*-----------------02.09.96 13.47-------------------
-
---------------------------------------------------*/
-
 void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 {
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
@@ -151,9 +147,6 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 
 }
 
-/*-----------------29.06.00 13:22-------------------
- *
- * --------------------------------------------------*/
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                                         const SfxItemSet& rSet )
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
@@ -358,9 +351,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::HBarClick()
 {
     // Sortierung durch diese Ueberladung abgeklemmt
 }
-/* -----------------------------2002/06/20 11:51------------------------------
 
- ---------------------------------------------------------------------------*/
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
                             SvLBoxEntry* pEntry, USHORT nCol, SvButtonState eState)
 {
@@ -386,9 +377,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
         InvalidateEntry( pEntry );
     }
 }
-/* -----------------------------2002/06/20 11:56------------------------------
 
- ---------------------------------------------------------------------------*/
 SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
                                     SvLBoxEntry* pEntry, USHORT nCol ) const
 {
@@ -404,9 +393,7 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
 
     return eState;
 }
-/* -----------------------------2002/06/20 11:57------------------------------
 
- ---------------------------------------------------------------------------*/
 void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked)
 {
     if ( nPos < GetEntryCount() )
@@ -416,9 +403,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(ULONG nPos, USHORT nC
             bChecked ? SvButtonState( SV_BUTTON_CHECKED ) :
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
-/* -----------------------------2002/06/20 11:51------------------------------
 
- ---------------------------------------------------------------------------*/
 void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
 {
     if(!rKEvt.GetKeyCode().GetModifier() &&

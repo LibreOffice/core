@@ -66,34 +66,6 @@ static USHORT pRanges[] =
 
 /*************************************************************************
 |*
-|* Dialog zum Kopieren von Objekten
-|*
-\************************************************************************/
-
-//CHINA001 SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
-//CHINA001                              const SdrView* pSdrView ) :
-//CHINA001      SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
-//CHINA001 {
-//CHINA001 SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
-//CHINA001
-//CHINA001 pPage->SetView( pSdrView );
-//CHINA001 pPage->Construct();
-//CHINA001
-//CHINA001 SetTabPage( pPage );
-//CHINA001 SetText( pPage->GetText() );
-//CHINA001 }
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-//CHINA001 SvxTextAttrDialog::~SvxTextAttrDialog()
-//CHINA001 {
-//CHINA001 }
-
-/*************************************************************************
-|*
 |* Dialog (Seite) zum Kopieren von Objekten
 |*
 \************************************************************************/

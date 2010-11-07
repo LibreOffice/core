@@ -640,9 +640,7 @@ void SvxCaptionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
     }
 }
-/*-- 05.03.2004 13:54:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxCaptionTabDialog::SetValidateFramePosLink( const Link& rLink )
 {
     aValidateLink = rLink;

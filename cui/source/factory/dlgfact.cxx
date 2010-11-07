@@ -1128,7 +1128,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
     return new AbstractTabDialog_Impl( pDlg );
 }
 
-//TabDialog that use functionality of the drawing layer and add AnchorTypes  -- for SvxCaptionTabDialog CHINA001
+// TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
 AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             USHORT nAnchorTypes )

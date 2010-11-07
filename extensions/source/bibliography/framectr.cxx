@@ -379,9 +379,7 @@ sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
     _rxCursorSet->getPropertyValue(C2U("Privileges")) >>= nPriv;
     return ((_rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0));
 }
-/* -----------------------------08.05.2002 08:58------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XFormController>& xController)
 {
     if (!xController.is())
@@ -397,7 +395,7 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
     if (!_xSet.is())
         return sal_False;
 
-    // muß gespeichert werden ?
+    // need to save?
     sal_Bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsNew")));
     sal_Bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsModified")));
     sal_Bool bResult = !bIsModified;

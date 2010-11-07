@@ -93,9 +93,7 @@ OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
         }
     return sRet;
 }
-/* -----------------------------04.01.00 10:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 class BibPosListener    :public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
 {
     BibGeneralPage*     pParentPage;
@@ -111,16 +109,12 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
 
 };
-/* -----------------------------04.01.00 10:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 BibPosListener::BibPosListener(BibGeneralPage* pParent) :
     pParentPage(pParent)
 {
 }
-/* -----------------------------04.01.00 10:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno::RuntimeException )
 {
     try
@@ -193,16 +187,11 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
         DBG_ERROR("BibPosListener::positioned: something went wrong !");
     }
 }
-/* -----------------------------04.01.00 11:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::RuntimeException )
 {
 }
 
-/* -----------------16.11.99 13:06-------------------
-
- --------------------------------------------------*/
 BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent,BibResId(RID_TP_GENERAL)),
     aControlParentWin(this, WB_DIALOGCONTROL),
@@ -432,11 +421,9 @@ BibGeneralPage::~BibGeneralPage()
             xRowSet->removeRowSetListener(xPosListener);
     }
 }
- /* -----------------------------14.04.00 13:11--------------------------------
 
-  ---------------------------------------------------------------------------*/
- void BibGeneralPage::RemoveListeners()
- {
+void BibGeneralPage::RemoveListeners()
+{
     for(USHORT i = 0; i < FIELD_COUNT; i++)
     {
         if(aControls[i].is())
@@ -446,10 +433,8 @@ BibGeneralPage::~BibGeneralPage()
             aControls[i] = 0;
         }
     }
- }
-/* -----------------------------21.01.00 17:05--------------------------------
+}
 
- ---------------------------------------------------------------------------*/
 void BibGeneralPage::CommitActiveControl()
 {
     uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();

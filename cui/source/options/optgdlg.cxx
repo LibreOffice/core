@@ -888,18 +888,10 @@ IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
     return 0;
 }
 
-/*-----------------06.12.96 11.50-------------------
-
---------------------------------------------------*/
-
 SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaViewTabPage(pParent, rAttrSet);
 }
-
-/*-----------------06.12.96 11.50-------------------
-
---------------------------------------------------*/
 
 BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
 {
@@ -1099,9 +1091,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
     return bModified;
 }
 
-/*-----------------06.12.96 11.50-------------------
-
---------------------------------------------------*/
 void OfaViewTabPage::Reset( const SfxItemSet& )
 {
     SvtMiscOptions aMiscOptions;
@@ -1206,9 +1195,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );
 #endif
 }
-/* -----------------------------23.11.00 14:55--------------------------------
 
- ---------------------------------------------------------------------------*/
 class LangConfigItem_Impl : public ConfigItem
 {
     Any         aValue;
@@ -1222,9 +1209,7 @@ public:
     const Any&  GetValue() const {return aValue;}
     void        SetValue(Any& rValue)  {aValue = rValue; SetModified();}
 };
-/* -----------------------------23.11.00 15:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 LangConfigItem_Impl::LangConfigItem_Impl(
     const OUString& rTree, const OUString& rProperty) :
     ConfigItem(rTree),
@@ -1235,14 +1220,10 @@ LangConfigItem_Impl::LangConfigItem_Impl(
     Sequence<Any> aValues = GetProperties(aNames);
     aValue = aValues.getConstArray()[0];
 }
-/* -----------------------------23.11.00 15:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 LangConfigItem_Impl::~LangConfigItem_Impl()
 {}
-/* -----------------------------23.11.00 15:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 void LangConfigItem_Impl::Commit()
 {
     Sequence<OUString> aNames(1);
@@ -1251,18 +1232,14 @@ void LangConfigItem_Impl::Commit()
     aValues.getArray()[0] = aValue;
     PutProperties(aNames, aValues);
 }
-/* -----------------22.07.2003 10:33-----------------
 
- --------------------------------------------------*/
 struct LanguageConfig_Impl
 {
     SvtLanguageOptions aLanguageOptions;
     SvtSysLocaleOptions aSysLocaleOptions;
     SvtLinguConfig aLinguConfig;
 };
-/* -----------------------------23.11.00 13:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 
 // some things we'll need...
@@ -1436,23 +1413,17 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aCTLSupportFI.Show(bReadonly);
     SupportHdl( &aCTLSupportCB );
 }
-/*-- 23.11.00 13:06:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
 {
     delete pLangConfig;
 }
-/*-- 23.11.00 13:06:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaLanguagesTabPage(pParent, rAttrSet);
 }
-/*-- 23.11.00 13:06:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 LanguageType lcl_LangStringToLangType(const OUString& rLang)
 {
     Locale aLocale;
@@ -1469,9 +1440,6 @@ LanguageType lcl_LangStringToLangType(const OUString& rLang)
     return eLangType;
 }
 
-/*-- 23.11.00 13:06:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
 {
     SfxViewFrame* pCurrentFrm = SfxViewFrame::Current();
@@ -1884,9 +1852,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         aCurrentDocCB.Check(TRUE);
     }
 }
-/* -----------------------------20.04.01 15:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
 {
     DBG_ASSERT( pBox, "OfaLanguagesTabPage::SupportHdl(): pBox invalid" );
@@ -1933,9 +1899,7 @@ namespace
         _rCB.Enable( !_bNewValue );
     }
 }
-/* -----------------08.06.01 17:56-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 {
     LanguageType eLang = pBox->GetSelectLanguage();

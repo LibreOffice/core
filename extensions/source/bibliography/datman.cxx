@@ -105,10 +105,6 @@ using namespace ::ucb;
 #define MAP_TOKEN ';'
 #define PAIR_TOKEN ':'
 
-
-/* -----------------17.01.00 14:38-------------------
-
- --------------------------------------------------*/
 Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
 {
     // first get the sdb::DataSource corresponding to the url
@@ -165,9 +161,6 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
     return xConn;
 }
 
-/* -----------------17.01.00 14:46-------------------
-
- --------------------------------------------------*/
 Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSet)
 {
     Reference< XConnection >    xConn;
@@ -191,9 +184,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
 
     return xConn;
 }
-/* -----------------17.01.00 16:07-------------------
 
- --------------------------------------------------*/
 Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
 {
     Reference< XNameAccess >  xReturn;
@@ -242,9 +233,6 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
     return xReturn;
 }
 
-/* -----------------11.11.99 15:54-------------------
-
- --------------------------------------------------*/
 class MappingDialog_Impl : public ModalDialog
 {
     BibDataManager* pDatMan;
@@ -331,9 +319,7 @@ public:
     void    SetModified() {bModified = TRUE;}
 
 };
-/* -----------------11.11.99 16:42-------------------
 
- --------------------------------------------------*/
 sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
                                     const ::rtl::OUString& rLogicalColumnName)
 {
@@ -532,14 +518,10 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
         }
     }
 }
-/* -----------------11.11.99 16:44-------------------
 
- --------------------------------------------------*/
 MappingDialog_Impl::~MappingDialog_Impl()
 {}
-/* -----------------15.11.99 10:38-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
 {
     sal_uInt16 nEntryPos = pListBox->GetSelectEntryPos();
@@ -554,9 +536,7 @@ IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
     SetModified();
     return 0;
 }
-/* -----------------12.11.99 14:50-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
 {
     if(bModified)
@@ -587,9 +567,7 @@ IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
     EndDialog(bModified ? RET_OK : RET_CANCEL);
     return 0;
 }
-/* -----------------18.11.99 10:23-------------------
 
- --------------------------------------------------*/
 class DBChangeDialog_Impl : public ModalDialog
 {
     OKButton        aOKBT;
@@ -613,9 +591,6 @@ public:
     String      GetCurrentURL()const;
 };
 
-/*-- 18.11.99 10:35:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan ) :
     ModalDialog(pParent, BibResId(RID_DLG_DBCHANGE) ),
     aOKBT(this,         BibResId( BT_OK     )),
@@ -669,17 +644,13 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
 
 
 }
-/* -----------------06.12.99 12:09-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
 {
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------18.11.99 11:17-------------------
 
- --------------------------------------------------*/
 /*IMPL_LINK(DBChangeDialog_Impl, EndDragHdl, HeaderBar*, pHB)
 {
     long nTabs[3];
@@ -690,15 +661,10 @@ IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
     return 0;
 };*/
 
-/*-- 18.11.99 10:35:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DBChangeDialog_Impl::~DBChangeDialog_Impl()
 {
 }
-/* -----------------18.11.99 12:36-------------------
 
- --------------------------------------------------*/
 String  DBChangeDialog_Impl::GetCurrentURL()const
 {
     String sRet;
@@ -1163,9 +1129,7 @@ void BibDataManager::startQueryWith(const ::rtl::OUString& rQuery)
     }
     setFilter(aQueryString);
 }
-/* -----------------03.12.99 15:05-------------------
 
- --------------------------------------------------*/
 void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
 {
     ::rtl::OUString uTable;
@@ -1703,9 +1667,7 @@ catch(Exception& e )
 
 
 }
-/* -----------------11.11.99 15:51-------------------
 
- --------------------------------------------------*/
 void BibDataManager::CreateMappingDialog(Window* pParent)
 {
     MappingDialog_Impl* pDlg = new MappingDialog_Impl(pParent, this);
@@ -1736,17 +1698,13 @@ void BibDataManager::CreateMappingDialog(Window* pParent)
     delete pDlg;
     return uRet;
 }
-/*-- 18.05.2004 15:20:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BibDataManager::DispatchDBChangeDialog()
 {
     if(pToolbar)
         pToolbar->SendDispatch(TBC_BT_CHANGESOURCE, Sequence< PropertyValue >());
 }
-/* -----------------06.12.99 15:11-------------------
 
- --------------------------------------------------*/
 const ::rtl::OUString& BibDataManager::GetIdentifierMapping()
 {
     if(!sIdentifierMapping.getLength())
@@ -1772,18 +1730,14 @@ const ::rtl::OUString& BibDataManager::GetIdentifierMapping()
     }
     return sIdentifierMapping;
 }
-/* -----------------------------20.11.00 10:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibDataManager::SetToolbar(BibToolBar* pSet)
 {
     pToolbar = pSet;
     if(pToolbar)
         pToolbar->SetDatMan(*this);
 }
-/* -----------------------------08.05.2002 09:26------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference< form::runtime::XFormController > BibDataManager::GetFormController()
 {
     if(!m_xFormCtrl.is())
@@ -1809,9 +1763,7 @@ void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
         m_pInterceptorHelper->acquire();
 }
 
-/*-- 18.05.2004 17:04:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool BibDataManager::HasActiveConnection()const
 {
     sal_Bool bRet = sal_False;
@@ -1824,9 +1776,7 @@ sal_Bool BibDataManager::HasActiveConnection()const
     }
     return bRet;
 }
-/*-- 04.06.2004 14:37:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool BibDataManager::HasActiveConnection()
 {
     return getConnection( m_xForm ).is();

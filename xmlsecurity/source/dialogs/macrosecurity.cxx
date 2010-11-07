@@ -421,9 +421,7 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
-/*-- 26.02.2004 13:31:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
@@ -431,15 +429,10 @@ ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
     SetImage( Image(XMLSEC_RES( bHighContrast ? RID_XMLSECTP_LOCK_HC : RID_XMLSECTP_LOCK )));
 }
 
-/*-- 26.02.2004 13:31:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 ReadOnlyImage::~ReadOnlyImage()
 {
 }
-/*-- 26.02.2004 13:31:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 {
     if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
@@ -459,9 +452,6 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-/*-- 26.02.2004 14:20:21---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 const String& ReadOnlyImage::GetHelpTip()
 {
      static String  aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
