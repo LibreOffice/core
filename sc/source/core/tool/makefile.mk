@@ -105,7 +105,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/reftokenhelper.obj \
         $(SLO)$/scmatrix.obj \
         $(SLO)$/refupdat.obj \
-        $(SLO)$/scmatrix.obj \
         $(SLO)$/simplerangelist.obj \
         $(SLO)$/stringutil.obj \
         $(SLO)$/subtotal.obj \

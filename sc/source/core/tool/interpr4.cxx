@@ -1780,42 +1780,37 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULON
 {
     if (xMat)
     {
-        ScMatValType nMatValType;
-        const ScMatrixValue* pMatVal = xMat->Get(0, 0, nMatValType);
-        if ( pMatVal )
+        ScMatrixValue nMatVal = xMat->Get(0, 0);
+        ScMatValType nMatValType = nMatVal.nType;
+        if (ScMatrix::IsNonValueType( nMatValType))
         {
-            if (ScMatrix::IsNonValueType( nMatValType))
-            {
-                if ( xMat->IsEmptyPath( 0, 0))
-                {   // result of empty FALSE jump path
-                    FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
-                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                    rRetTypeExpr = NUMBERFORMAT_LOGICAL;
-                }
-                else
-                {
-                    String aStr( pMatVal->GetString());
-                    FormulaTokenRef xRes = new FormulaStringToken( aStr);
-                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                    rRetTypeExpr = NUMBERFORMAT_TEXT;
-                }
+            if ( xMat->IsEmptyPath( 0, 0))
+            {   // result of empty FALSE jump path
+                FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
+                PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                rRetTypeExpr = NUMBERFORMAT_LOGICAL;
             }
             else
             {
-                USHORT nErr = GetDoubleErrorValue( pMatVal->fVal);
-                FormulaTokenRef xRes;
-                if (nErr)
-                    xRes = new FormulaErrorToken( nErr);
-                else
-                    xRes = new FormulaDoubleToken( pMatVal->fVal);
+                String aStr( nMatVal.GetString());
+                FormulaTokenRef xRes = new FormulaStringToken( aStr);
                 PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
-                    rRetTypeExpr = NUMBERFORMAT_NUMBER;
+                rRetTypeExpr = NUMBERFORMAT_TEXT;
             }
-            rRetIndexExpr = 0;
         }
         else
-            SetError( errUnknownStackVariable);
+        {
+            USHORT nErr = GetDoubleErrorValue( nMatVal.fVal);
+            FormulaTokenRef xRes;
+            if (nErr)
+                xRes = new FormulaErrorToken( nErr);
+            else
+                xRes = new FormulaDoubleToken( nMatVal.fVal);
+            PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+            if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
+                rRetTypeExpr = NUMBERFORMAT_NUMBER;
+        }
+        rRetIndexExpr = 0;
         xMat->SetErrorInterpreter( NULL);
     }
     else

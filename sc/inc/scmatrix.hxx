@@ -226,6 +226,7 @@ public:
     ScMatrix( SCSIZE nC, SCSIZE nR, DensityType eType = FILLED_ZERO);
 
     /** Clone the matrix. */
+    ScMatrix* Clone() const;
     ScMatrix* Clone( DensityType eType) const;
 
     /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise

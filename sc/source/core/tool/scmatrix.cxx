@@ -42,7 +42,7 @@
 
 #include <math.h>
 
-#define _MDDS_HASH_CONTAINER_COMPAT 1
+#define MDDS_HASH_CONTAINER_STLPORT 1
 #include <mdds/quad_type_matrix.hpp>
 
 using ::std::pair;
