@@ -118,7 +118,7 @@ namespace numfunc
 static sal_Bool bDbgLow = sal_False;
 #endif
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
 
