@@ -310,7 +310,6 @@ public:
                     Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
-    USHORT GetError( SCSIZE nIndex) const;
 
     /** Use in ScInterpreter to obtain the error code, if any.
         @returns 0 if no error or string element, else one of err... constants */

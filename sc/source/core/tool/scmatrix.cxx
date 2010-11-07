@@ -184,7 +184,6 @@ public:
     void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
-    USHORT GetError( SCSIZE nIndex) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
     double GetDouble( SCSIZE nIndex) const;
     const String& GetString(SCSIZE nC, SCSIZE nR) const;
@@ -411,13 +410,6 @@ USHORT ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
     }
 }
 
-USHORT ScMatrixImpl::GetError( SCSIZE nIndex) const
-{
-    SCSIZE nC, nR;
-    CalcPosition(nIndex, nC, nR);
-    return GetError(nC, nR);
-}
-
 double ScMatrixImpl::GetDouble(SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
@@ -473,9 +465,23 @@ const String& ScMatrixImpl::GetString( SCSIZE nIndex) const
 
 String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
 {
-    if (IsString( nIndex))
+    SCSIZE nC, nR;
+    CalcPosition(nIndex, nC, nR);
+    return GetString(rFormatter, nC, nR);
+}
+
+
+String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+{
+    if (!ValidColRowOrReplicated( nC, nR ))
     {
-        if (IsEmptyPath( nIndex))
+        DBG_ERRORFILE("ScMatrixImpl::GetString: dimension error");
+        return String();
+    }
+
+    if (IsString( nC, nR))
+    {
+        if (IsEmptyPath( nC, nR))
         {   // result of empty FALSE jump path
             ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
                     ScGlobal::eLnge);
@@ -484,17 +490,17 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) co
             rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
             return aStr;
         }
-        return GetString( nIndex );
+        return GetString( nC, nR);
     }
 
-    USHORT nError = GetError( nIndex);
+    USHORT nError = GetError( nC, nR);
     if (nError)
     {
         SetErrorAtInterpreter( nError);
         return ScGlobal::GetErrorString( nError);
     }
 
-    double fVal= GetDouble( nIndex);
+    double fVal= GetDouble( nC, nR);
     ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
             ScGlobal::eLnge);
     String aStr;
@@ -502,19 +508,6 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) co
     return aStr;
 }
 
-String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
-{
-    if (ValidColRowOrReplicated( nC, nR ))
-    {
-        SCSIZE nIndex = CalcOffset( nC, nR);
-        return GetString( rFormatter, nIndex);
-    }
-    else
-    {
-        DBG_ERRORFILE("ScMatrixImpl::GetString: dimension error");
-    }
-    return String();
-}
 
 ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
 {
@@ -901,11 +894,6 @@ void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
 USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetError(nC, nR);
-}
-
-USHORT ScMatrix::GetError( SCSIZE nIndex) const
-{
-    return pImpl->GetError(nIndex);
 }
 
 double ScMatrix::GetDouble(SCSIZE nC, SCSIZE nR) const
