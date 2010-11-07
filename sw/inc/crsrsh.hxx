@@ -111,7 +111,7 @@ struct SwContentAtPos
         SW_CONTENT_CHECK    = 0x0400,
         SW_SMARTTAG         = 0x0800,
         SW_FORMCTRL         = 0x1000
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         ,SW_CURR_ATTRS      = 0x4000        // only for debugging
         ,SW_TABLEBOXVALUE   = 0x8000        // only for debugging
 #endif
