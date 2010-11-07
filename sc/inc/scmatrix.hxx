@@ -163,6 +163,13 @@ class SC_DLLPUBLIC ScMatrix
     ScMatrix& operator=( const ScMatrix&);
 
 public:
+    enum DensityType
+    {
+        FILLED_ZERO,
+        FILLED_EMPTY,
+        SPARSE_ZERO,
+        SPARSE_EMPTY
+    };
 
     /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
@@ -216,10 +223,10 @@ public:
     /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
         created instead and a double error value (errStackOverflow) is set.
         Compare nC and nR with a GetDimensions() call to check. */
-    ScMatrix( SCSIZE nC, SCSIZE nR);
+    ScMatrix( SCSIZE nC, SCSIZE nR, DensityType eType = FILLED_ZERO);
 
     /** Clone the matrix. */
-    ScMatrix* Clone() const;
+    ScMatrix* Clone( DensityType eType) const;
 
     /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise
         return _this_ matrix, to be assigned to a ScMatrixRef. */
@@ -237,7 +244,7 @@ public:
 
     /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
         MUST be at least of the size of the original matrix. */
-    ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const;
+    ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows, DensityType eType) const;
 
     /// Disable refcounting forever, may only be deleted via Delete() afterwards.
     inline  void    SetEternalRef()         { nRefCnt = ULONG_MAX; }
@@ -261,6 +268,7 @@ public:
             --nRefCnt;
     }
 
+    DensityType GetDensityType() const;
     void SetErrorInterpreter( ScInterpreter* p);
     void GetDimensions( SCSIZE& rC, SCSIZE& rR) const;
     SCSIZE GetElementCount() const;

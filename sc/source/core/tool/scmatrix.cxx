@@ -124,22 +124,46 @@ void compareMatrix(MatrixImplType& rMat)
     }
 }
 
+::mdds::matrix_density_t toMddsDensityType(ScMatrix::DensityType eType)
+{
+    switch (eType)
+    {
+        case FILLED_EMPTY:
+            return mdds::matrix_density_filled_empty;
+        case FILLED_ZERO:
+            return mdds::matrix_density_filled_zero;
+        case SPARSE_EMPTY:
+            return mdds::matrix_density_sparse_empty;
+        case SPARSE_ZERO:
+            return mdds::matrix_density_sparse_zero;
+        default:
+            ;
+    }
+
+    // default density type
+    return mdds::matrix_density_filled_zero;
+}
+
 }
 
 class ScMatrixImpl
 {
     MatrixImplType maMat;
+    ScMatrix::DensityType meType;
     ScInterpreter* pErrorInterpreter;
     bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
 
+    ScMatrixImpl();
+    ScMatrixImpl(const ScMatrixImpl&);
 public:
-    ScMatrixImpl(SCSIZE nC, SCSIZE nR);
+    ScMatrixImpl(SCSIZE nC, SCSIZE nR, ScMatrix::DensityType eType);
     ~ScMatrixImpl();
 
     void Clear();
     void SetImmutable(bool bVal);
     bool IsImmutable() const;
     void Resize(SCSIZE nC, SCSIZE nR);
+    ScMatrix::DensityType GetDensityType() const;
     void SetErrorInterpreter( ScInterpreter* p);
     ScInterpreter* GetErrorInterpreter() const { return pErrorInterpreter; }
 
@@ -201,8 +225,9 @@ private:
     void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
 };
 
-ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nR, nC, ::mdds::matrix_density_filled_zero),
+ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, ScMatrix::DensityType eType) :
+    maMat(nR, nC, toMddsDensityType(eType)),
+    meType(eType),
     mbCloneIfConst(true)
 {
 }
@@ -231,6 +256,11 @@ void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
     maMat.resize(nR, nC);
     Clear();
+}
+
+ScMatrix::DensityType ScMatrixImpl::GetDensityType() const
+{
+    return meType;
 }
 
 void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)
@@ -787,12 +817,11 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 
 // ============================================================================
 
-ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR) :
-    pImpl(new ScMatrixImpl(nC, nR)),
+ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR, DensityType eType) :
+    pImpl(new ScMatrixImpl(nC, nR, eType)),
     nRefCnt(0)
 {
 }
-
 ScMatrix::~ScMatrix()
 {
     delete pImpl;
@@ -800,9 +829,14 @@ ScMatrix::~ScMatrix()
 
 ScMatrix* ScMatrix::Clone() const
 {
+    return Clone(GetDensityType());
+}
+
+ScMatrix* ScMatrix::Clone( DensityType eType) const
+{
     SCSIZE nC, nR;
     pImpl->GetDimensions(nC, nR);
-    ScMatrix* pScMat = new ScMatrix(nC, nR);
+    ScMatrix* pScMat = new ScMatrix(nC, nR, eType);
     MatCopy(*pScMat);
     pScMat->SetErrorInterpreter(pImpl->GetErrorInterpreter());    // TODO: really?
     return pScMat;
@@ -823,12 +857,17 @@ void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)
     pImpl->Resize(nC, nR);
 }
 
-ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const
+ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows, DensityType eType ) const
 {
-    ScMatrix* pScMat = new ScMatrix( nNewCols, nNewRows);
+    ScMatrix* pScMat = new ScMatrix( nNewCols, nNewRows, eType);
     MatCopy(*pScMat);
     pScMat->SetErrorInterpreter(pImpl->GetErrorInterpreter());
     return pScMat;
+}
+
+ScMatrix::DensityType ScMatrix::GetDensityType() const
+{
+    return pImpl->GetDensityType();
 }
 
 void ScMatrix::SetErrorInterpreter( ScInterpreter* p)

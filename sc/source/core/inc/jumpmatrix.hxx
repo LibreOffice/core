@@ -195,7 +195,7 @@ public:
                                     {
                                         if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
                                         {
-                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows );
+                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows, pMat->GetDensityType() );
                                             if ( nResMatCols < nNewCols )
                                             {
                                                 pMat->FillDouble( CreateDoubleError(
