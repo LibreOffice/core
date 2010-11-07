@@ -730,15 +730,13 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
         {
             ScTokenArray         aCondTokArr;
             TypedStrData*        pEntry = NULL;
-            ScMatValType         nMatValType;
             String               aValStr;
-            const ScMatrixValue* pMatVal = pValues->Get( nCol, nRow, nMatValType);
+            ScMatrixValue nMatVal = pValues->Get( nCol, nRow);
 
             // strings and empties
-            if( NULL == pMatVal || ScMatrix::IsNonValueType( nMatValType ) )
+            if( ScMatrix::IsNonValueType( nMatVal.nType ) )
             {
-                if( NULL != pMatVal )
-                    aValStr = pMatVal->GetString();
+                aValStr = nMatVal.GetString();
 
                 if( NULL != pStrings )
                     pEntry = new TypedStrData( aValStr, 0.0, SC_STRTYPE_STANDARD);
@@ -748,7 +746,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
             }
             else
             {
-                USHORT nErr = pMatVal->GetError();
+                USHORT nErr = nMatVal.GetError();
 
                 if( 0 != nErr )
                 {
@@ -766,17 +764,17 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                             (SCROW)(nRow+aRange.aStart.Row()), aRange.aStart.Tab() , aValStr);
                     }
                     else
-                        pFormatter->GetInputLineString( pMatVal->fVal, 0, aValStr );
+                        pFormatter->GetInputLineString( nMatVal.fVal, 0, aValStr );
                 }
 
                 if( pCell && rMatch < 0 )
                 {
                     // I am not sure errors will work here, but a user can no
                     // manually enter an error yet so the point is somewhat moot.
-                    aCondTokArr.AddDouble( pMatVal->fVal );
+                    aCondTokArr.AddDouble( nMatVal.fVal );
                 }
                 if( NULL != pStrings )
-                    pEntry = new TypedStrData( aValStr, pMatVal->fVal, SC_STRTYPE_VALUE);
+                    pEntry = new TypedStrData( aValStr, nMatVal.fVal, SC_STRTYPE_VALUE);
             }
 
             if( rMatch < 0 && NULL != pCell && IsEqualToTokenArray( pCell, rPos, aCondTokArr ) )

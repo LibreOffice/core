@@ -1087,29 +1087,28 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
     {
         for( SCSIZE nCol = 0; nCol < nCols; ++nCol )
         {
-            ScMatValType nMatValType = SC_MATVAL_VALUE;
-            const ScMatrixValue* pMatVal = mrMatrix.Get( nCol, nRow, nMatValType );
+            ScMatrixValue nMatVal = mrMatrix.Get( nCol, nRow );
 
-            if( !pMatVal || SC_MATVAL_EMPTY == nMatValType )
+            if( SC_MATVAL_EMPTY == nMatVal.nType )
             {
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_EMPTY;
                 rStrm.WriteZeroBytes( 8 );
             }
-            else if( ScMatrix::IsNonValueType( nMatValType ) )
+            else if( ScMatrix::IsNonValueType( nMatVal.nType ) )
             {
-                XclExpString aStr( pMatVal->GetString(), EXC_STR_DEFAULT );
+                XclExpString aStr( nMatVal.GetString(), EXC_STR_DEFAULT );
                 rStrm.SetSliceSize( 6 );
                 rStrm << EXC_CACHEDVAL_STRING << aStr;
             }
-            else if( SC_MATVAL_BOOLEAN == nMatValType )
+            else if( SC_MATVAL_BOOLEAN == nMatVal.nType )
             {
-                sal_Int8 nBool = pMatVal->GetBoolean();
+                sal_Int8 nBool = nMatVal.GetBoolean();
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_BOOL << nBool;
                 rStrm.WriteZeroBytes( 7 );
             }
-            else if( USHORT nScError = pMatVal->GetError() )
+            else if( USHORT nScError = nMatVal.GetError() )
             {
                 sal_Int8 nError ( XclTools::GetXclErrorCode( nScError ) );
                 rStrm.SetSliceSize( 9 );
@@ -1119,7 +1118,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
             else
             {
                 rStrm.SetSliceSize( 9 );
-                rStrm << EXC_CACHEDVAL_DOUBLE << pMatVal->fVal;
+                rStrm << EXC_CACHEDVAL_DOUBLE << nMatVal.fVal;
             }
         }
     }

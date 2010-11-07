@@ -57,8 +57,8 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 {
 }
 
-sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
-                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue)
+sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, double fPrevValue,
+                    const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, double fValue)
 {
     if (bEmpty == bPrevEmpty)
         if (bEmpty)
@@ -121,8 +121,8 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
         {
             SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
         }
-        sal_Bool bPrevString(sal_True);
-        sal_Bool bPrevEmpty(sal_True);
+        bool bPrevString = true;
+        bool bPrevEmpty = true;
         double fPrevValue;
         String sPrevValue;
         sal_Int32 nRepeatColsCount(1);
@@ -131,29 +131,28 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
             for(sal_Int32 nColumn = 0; nColumn < nColCount; ++nColumn)
             {
-                ScMatValType nType = SC_MATVAL_VALUE;
-                const ScMatrixValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), nType );
-                BOOL bIsString = ScMatrix::IsNonValueType( nType);
+                ScMatrixValue nMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow) );
+                bool bIsString = ScMatrix::IsNonValueType( nMatVal.nType);
 
                 if (nColumn == 0)
                 {
-                    bPrevEmpty = !pMatVal;
+                    bPrevEmpty = nMatVal.nType == SC_MATVAL_EMPTY;
                     bPrevString = bIsString;
                     if( bIsString )
-                        sPrevValue = pMatVal->GetString();
+                        sPrevValue = nMatVal.GetString();
                     else
-                        fPrevValue = pMatVal->fVal;
+                        fPrevValue = nMatVal.fVal;
                 }
                 else
                 {
                     double fValue;
                     String sValue;
-                    sal_Bool bEmpty(!pMatVal);
-                    sal_Bool bString(bIsString);
+                    bool bEmpty = nMatVal.nType == SC_MATVAL_EMPTY;
+                    bool bString = bIsString;
                     if( bIsString )
-                        sValue = pMatVal->GetString();
+                        sValue = nMatVal.GetString();
                     else
-                        fValue = pMatVal->fVal;
+                        fValue = nMatVal.fVal;
 
                     if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
                                 bEmpty, bString, sValue, fValue))

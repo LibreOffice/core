@@ -1997,16 +1997,12 @@ void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
     ScConstMatrixRef xMat( aResult.GetMatrix());
     if (xMat)
     {
-        ScMatValType nMatValType;
         // determine if the matrix result is a string or value.
-        const ScMatrixValue* pMatVal = xMat->Get(0, 1, nMatValType);
-        if (pMatVal)
-        {
-            if (!ScMatrix::IsValueType( nMatValType))
-                rURL = pMatVal->GetString();
-            else
-                pFormatter->GetOutputString( pMatVal->fVal, nURLFormat, rURL, &pColor );
-        }
+        ScMatrixValue nMatVal = xMat->Get(0, 1);
+        if (!ScMatrix::IsValueType( nMatVal.nType))
+            rURL = nMatVal.GetString();
+        else
+            pFormatter->GetOutputString( nMatVal.fVal, nURLFormat, rURL, &pColor );
     }
 
     if(!rURL.Len())
