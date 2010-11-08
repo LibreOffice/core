@@ -118,8 +118,7 @@ sub save_script_file
 
     if ( ! $installer::globals::iswindowsbuild )
     {
-        my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
-        system($localcall);
+        chmod 0775, $newscriptfilename;
     }
 
     return $newscriptfilename;
@@ -339,8 +338,7 @@ sub tar_package
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
-    $returnvalue = system($localcall);
+    chmod 0775, $tarfilename;
 
     return ( -s $tarfilename );
 }

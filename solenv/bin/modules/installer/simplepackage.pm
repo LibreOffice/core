@@ -500,10 +500,8 @@ sub create_package
             replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
-            $systemcall = "chmod 775 " . "\"" . $scriptfilename . "\"";
-            system($systemcall);
-            $systemcall = "chmod 775 " . "\"" . $scripthelperrealfilename . "\"";
-            system($systemcall);
+            chmod 0775, $scriptfilename;
+            chmod 0775, $scripthelperrealfilename;
 
             # Copy also Info.plist and icon file
             # Finding both files in solver
@@ -717,13 +715,9 @@ sub create_simple_package
             if ( ! $installer::globals::iswindowsbuild )
             {
                 # see issue 102274
-                my $unixrights = "";
                 if ( $onefile->{'UnixRights'} )
                 {
-                    $unixrights = $onefile->{'UnixRights'};
-
-                    my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
-                    system($localcall);
+                    chmod oct($onefile->{'UnixRights'}), $destination;
                 }
             }
         }

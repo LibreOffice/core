@@ -2875,23 +2875,7 @@ sub create_new_directory_structure
     }
 
     # Setting unix rights to "775" for $newdir ("RPMS" or "packages")
-
-    my $localcall = "chmod 775 $newdir \>\/dev\/null 2\>\&1";
-    my $callreturnvalue = system($localcall);
-
-    my $callinfoline = "Systemcall: $localcall\n";
-    push( @installer::globals::logfileinfo, $callinfoline);
-
-    if ($callreturnvalue)
-    {
-        $callinfoline = "ERROR: Could not execute \"$localcall\"!\n";
-        push( @installer::globals::logfileinfo, $callinfoline);
-    }
-    else
-    {
-        $callinfoline = "Success: Executed \"$localcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $callinfoline);
-    }
+    chmod 0775, $newdir;
 }
 
 ######################################################
@@ -3453,8 +3437,7 @@ sub finalize_linux_patch
     push( @installer::globals::logfileinfo, $infoline);
 
     # Setting unix rights 755
-    my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0755, $newscriptfilename;
 }
 
 1;

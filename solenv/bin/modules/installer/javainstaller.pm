@@ -1168,8 +1168,7 @@ sub copy_setup_locally
     if ($$loadernameref eq "") { installer::exiter::exit_program("ERROR: Could not find Java loader $loadername!", "copy_setup_locally"); }
 
     installer::systemactions::copy_one_file($$loadernameref, $newname);
-    my $localcall = "chmod 775 $newname \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0775, $newname;
 }
 
 
@@ -1185,8 +1184,7 @@ sub put_loader_into_installset
 
     installer::systemactions::copy_one_file($filename, $installname);
 
-    my $localcall = "chmod 775 $installname \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0775, $installname;
 }
 
 #################################################################

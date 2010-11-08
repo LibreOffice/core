@@ -466,8 +466,7 @@ sub include_package_into_script
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    my $localcall = "chmod 775 $scriptfilename \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0775, $scriptfilename;
 
 }
 

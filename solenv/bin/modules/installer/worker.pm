@@ -107,8 +107,7 @@ sub copy_install_sets_to_ship
     if (( ! $installer::globals::iswindowsbuild ) && ( $installer::globals::addjavainstaller ))
     {
         # Setting Unix rights for Java starter ("setup")
-        my $localcall = "chmod 775 $localshipinstalldir/setup \>\/dev\/null 2\>\&1";
-        system($localcall);
+        chmod 0775, "$localshipinstalldir/setup";
     }
 
     # unpacking the tar.gz file for Solaris
@@ -2207,8 +2206,7 @@ sub put_scpactions_into_installset
 
         if ( $onescpaction->{'UnixRights'} )
         {
-            my $localcall = "chmod $onescpaction->{'UnixRights'} $destfile \>\/dev\/null 2\>\&1";
-            system($localcall);
+            chmod oct($onescpaction->{'UnixRights'}), $destfile;
         }
 
     }
@@ -3202,8 +3200,7 @@ sub tar_package
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
-    $returnvalue = system($localcall);
+    chmod 0775, $tarfilename;
 
     my $fulltarfile = $installdir . $installer::globals::separator . $tarfilename;
     my $filesize = ( -s $fulltarfile );
@@ -3240,8 +3237,7 @@ sub untar_package
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
-    $returnvalue = system($localcall);
+    chmod 0775, $tarfilename;
 }
 
 #########################################################
