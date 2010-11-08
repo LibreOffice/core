@@ -890,9 +890,9 @@ Text [ en-US ] = "Maps - Ancient times";
 
 // ---------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_MAPS_SIMBOLS
+String RID_GALLERYSTR_THEME_MAPS_SYMBOLS
 {
-Text [ en-US ] = "Maps - simbols";
+Text [ en-US ] = "Maps - symbols";
 };
 
 // ---------------------------------------------------------------------------
