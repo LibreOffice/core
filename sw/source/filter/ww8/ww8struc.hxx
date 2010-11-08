@@ -297,7 +297,7 @@ public:
         single0, single1, single2, single3, single4, single5,
         double0, double1, double2, double3, double4, double5, double6,
         double7, double8, double9, double10,
-        dashed, dotted,
+        dashed, dotted, emboss, engrave,
         none
     };
     static const WW8_BordersSO &Get0x01LineMatch(eBorderCode nIdx);

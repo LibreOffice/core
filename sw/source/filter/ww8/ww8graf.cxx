@@ -1491,7 +1491,9 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 /*15*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST, SOLID },
 /*16*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST, SOLID},
 /*17*/  { DEF_LINE_WIDTH_5, 0, 0, DASHED },
-/*18*/  { DEF_LINE_WIDTH_5, 0, 0, DOTTED }
+/*18*/  { DEF_LINE_WIDTH_5, 0, 0, DOTTED },
+/*19*/  { DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, EMBOSSED },
+/*20*/  { DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, ENGRAVED }
     };
     size_t nPos = static_cast<size_t>(eCode);
     OSL_ENSURE(nPos < sizeof(aLineTabVer8), "Impossible");

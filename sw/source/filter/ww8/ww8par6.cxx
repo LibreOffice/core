@@ -1325,25 +1325,9 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
         case 22:
         // or if in necessary by a double line
         case 24:
+            eCodeIdx = WW8_BordersSO::emboss;
         case 25:
-            if( nLineThickness < 10)
-                eCodeIdx = WW8_BordersSO::single0;//   1 Twip for us
-            else if( nLineThickness < 20)
-                eCodeIdx = WW8_BordersSO::single5;//   10 Twips for us
-            else if (nLineThickness < 50)
-                eCodeIdx = WW8_BordersSO::single1;//  20 Twips
-            else if (nLineThickness < 80)
-                eCodeIdx = WW8_BordersSO::single2;//  50
-            else if (nLineThickness < 100)
-                eCodeIdx = WW8_BordersSO::single3;//  80
-            else if (nLineThickness < 150)
-                eCodeIdx = WW8_BordersSO::single4;// 100
-            // Hack: for the quite thick lines we must paint double lines,
-            // because our singles lines don't come thicker than 5 points.
-            else if (nLineThickness < 180)
-                eCodeIdx = WW8_BordersSO::double2;// 150
-            else
-                eCodeIdx = WW8_BordersSO::double5;// 180
+            eCodeIdx = WW8_BordersSO::engrave;
         break;
         // then the shading beams which we represent by a double line
         case 23:
