@@ -360,6 +360,8 @@
 {
     YIELD_GUARD;
     
+    NSApplicationTerminateReply aReply = NSTerminateNow;
+    
     SalData* pSalData = GetSalData();
     #if 1 // currently do some really bad hack
     if( ! pSalData->maFrames.empty() )
@@ -399,7 +401,7 @@
                 #endif
                 [(*it) release];
             }
-            return NSTerminateCancel;
+            aReply = NSTerminateCancel;
         }
         #if OSL_DEBUG_LEVEL > 1
         for( std::list< AquaSalFrame* >::iterator it = pSalData->maFrames.begin();
@@ -416,9 +418,12 @@
         #endif
     }
     #else // the clean version follows
-    return pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
+    aReply = pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
     #endif
-    return NSTerminateNow;
+    
+    if( aReply != NSTerminateNow )
+        [NSApp activateIgnoringOtherApps: YES];
+    return aReply;
 }
 
 -(void)systemColorsChanged: (NSNotification*) pNotification
