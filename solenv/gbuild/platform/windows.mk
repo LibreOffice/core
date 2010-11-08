@@ -586,4 +586,8 @@ gb_SrsPartTarget__command_dep =
 endif
 
 
+# ComponentTarget
+
+gb_ComponentTarget_PREFIXBASISNATIVE := vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
+
 # vim: set noet sw=4 ts=4:
