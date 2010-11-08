@@ -377,7 +377,7 @@ void CompileExcelFormulaToODF( ScDocument* pDoc, const String& rOldFormula, Stri
     }
     ScCompiler aCompiler( pDoc, ScAddress() );
     aCompiler.SetGrammar( excel::GetFormulaGrammar( pDoc, ScAddress(), uno::Any( rtl::OUString( rOldFormula ) ) ) );
-    /* ScTokenArray* pCode = */ aCompiler.CompileString( rOldFormula ); // ignore the return ?
+    aCompiler.CompileString( rOldFormula );
     aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
     aCompiler.CreateStringFromTokenArray( rNewFormula );
 }
