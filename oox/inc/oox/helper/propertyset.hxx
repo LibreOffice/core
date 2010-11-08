@@ -30,6 +30,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include "oox/token/properties.hxx"
 
 namespace oox {
 

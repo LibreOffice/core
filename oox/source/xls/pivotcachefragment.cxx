@@ -39,9 +39,8 @@ namespace xls {
 // ============================================================================
 
 using namespace ::com::sun::star::uno;
+using namespace ::oox::core;
 
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
 using ::rtl::OUString;
 
 // ============================================================================

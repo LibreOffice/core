@@ -28,7 +28,6 @@
 #include "oox/xls/themebuffer.hxx"
 
 #include "oox/xls/stylesbuffer.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace xls {

@@ -37,7 +37,6 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/stylesbuffer.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

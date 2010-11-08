@@ -74,8 +74,6 @@
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 #include "oox/xls/worksheetsettings.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace xls {

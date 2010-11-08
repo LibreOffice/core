@@ -50,8 +50,6 @@
 #include "oox/ole/vbahelper.hxx"
 #include "oox/ole/vbainputstream.hxx"
 #include "oox/ole/vbamodule.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace ole {

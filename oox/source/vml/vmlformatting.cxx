@@ -35,7 +35,6 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace vml {

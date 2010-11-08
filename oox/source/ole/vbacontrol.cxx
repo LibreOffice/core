@@ -43,8 +43,6 @@
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
 #include "oox/ole/vbahelper.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace ole {

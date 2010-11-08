@@ -30,9 +30,10 @@
 
 #include <vector>
 #include <map>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include "oox/token/properties.hxx"
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;
@@ -41,7 +42,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 
 namespace oox {
 
-struct PropertyList;
+struct PropertyNameVector;
 
 // ============================================================================
 
@@ -90,7 +91,7 @@ public:
                         makePropertySet() const;
 
 private:
-    const PropertyList* mpPropNames;
+    const PropertyNameVector* mpPropNames;
 };
 
 // ============================================================================

@@ -37,17 +37,14 @@
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/fasttokenhandler.hxx"
+#include "oox/core/fastparser.hxx"
 #include "oox/core/filterdetect.hxx"
 #include "oox/core/fragmenthandler.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/recordparser.hxx"
 #include "oox/core/relationshandler.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace core {
@@ -89,63 +86,54 @@ struct XmlFilterBaseImpl
 {
     typedef RefMap< OUString, Relations > RelationsMap;
 
-    Reference< XFastParser > mxFastParser;
-    OUString            maBinSuffix;
-    OUString            maVmlSuffix;
+    FastParser          maFastParser;
+    const OUString      maBinSuffix;
+    const OUString      maVmlSuffix;
     RelationsMap        maRelationsMap;
     TextFieldStack      maTextFieldStack;
-    explicit            XmlFilterBaseImpl();
+
+    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 };
 
 // ----------------------------------------------------------------------------
 
-XmlFilterBaseImpl::XmlFilterBaseImpl() :
+XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
+    maFastParser( rxContext ),
     maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
     maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
 {
+    // register XML namespaces
+    maFastParser.registerNamespace( NMSP_xml );
+    maFastParser.registerNamespace( NMSP_packageRel );
+    maFastParser.registerNamespace( NMSP_officeRel );
+
+    maFastParser.registerNamespace( NMSP_dml );
+    maFastParser.registerNamespace( NMSP_dmlDiagram );
+    maFastParser.registerNamespace( NMSP_dmlChart );
+    maFastParser.registerNamespace( NMSP_dmlChartDr );
+    maFastParser.registerNamespace( NMSP_dmlSpreadDr );
+
+    maFastParser.registerNamespace( NMSP_vml );
+    maFastParser.registerNamespace( NMSP_vmlOffice );
+    maFastParser.registerNamespace( NMSP_vmlWord );
+    maFastParser.registerNamespace( NMSP_vmlExcel );
+    maFastParser.registerNamespace( NMSP_vmlPowerpoint );
+
+    maFastParser.registerNamespace( NMSP_xls );
+    maFastParser.registerNamespace( NMSP_ppt );
+
+    maFastParser.registerNamespace( NMSP_ax );
+    maFastParser.registerNamespace( NMSP_xm );
 }
 
 // ============================================================================
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     FilterBase( rxContext ),
-    mxImpl( new XmlFilterBaseImpl ),
+    mxImpl( new XmlFilterBaseImpl( rxContext ) ),
     mnRelId( 1 ),
     mnMaxDocId( 0 )
 {
-    try
-    {
-        // create the fast parser
-        mxImpl->mxFastParser.set( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
-        mxImpl->mxFastParser->setTokenHandler( new FastTokenHandler );
-
-        // register XML namespaces
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_VML_DOC );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_VML_XLS );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_VML_PPT );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/activeX" ), NMSP_AX );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
-    }
-    catch( Exception& )
-    {
-        throw RuntimeException();
-    }
 }
 
 XmlFilterBase::~XmlFilterBase()
@@ -202,25 +190,20 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     if( !xDocHandler.is() )
         return false;
 
-    // check that the fast parser exists
-    if( !mxImpl->mxFastParser.is() )
-        return false;
-
     // try to import XML stream
     try
     {
-        // try to open the fragment stream (this may fail - do not assert)
-        Reference< XInputStream > xInStrm( rxHandler->openFragmentStream(), UNO_SET_THROW );
+        /*  Try to open the fragment stream (may fail, do not throw/assert).
+            Using the virtual function openFragmentStream() allows a document
+            handler to create specialized input streams, e.g. VML streams that
+            have to preprocess the raw input data. */
+        Reference< XInputStream > xInStrm = rxHandler->openFragmentStream();
 
-        // create the input source and parse the stream
-        InputSource aSource;
-        aSource.aInputStream = xInStrm;
-        aSource.sSystemId = aFragmentPath;
         // own try/catch block for showing parser failure assertion with fragment path
-        try
+        if( xInStrm.is() ) try
         {
-            mxImpl->mxFastParser->setFastDocumentHandler( xDocHandler );
-            mxImpl->mxFastParser->parseStream( aSource );
+            mxImpl->maFastParser.setDocumentHandler( xDocHandler );
+            mxImpl->maFastParser.parseStream( xInStrm, aFragmentPath );
             return true;
         }
         catch( Exception& )

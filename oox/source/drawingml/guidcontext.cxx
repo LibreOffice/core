@@ -25,10 +25,7 @@
  *
  ************************************************************************/
 
-#include <rtl/ustring.hxx>
 #include "oox/drawingml/guidcontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;

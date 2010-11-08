@@ -38,7 +38,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

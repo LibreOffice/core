@@ -44,7 +44,6 @@
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

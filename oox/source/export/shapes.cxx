@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "tokens.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"

@@ -34,7 +34,6 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulaparser.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

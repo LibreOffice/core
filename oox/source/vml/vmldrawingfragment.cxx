@@ -38,10 +38,8 @@ namespace vml {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace ::oox::core;
 
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::FragmentHandler2;
-using ::oox::core::XmlFilterBase;
 using ::rtl::OUString;
 
 // ============================================================================

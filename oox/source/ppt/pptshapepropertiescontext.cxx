@@ -35,14 +35,11 @@
 #include "oox/ppt/pptshapepropertiescontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -68,7 +65,7 @@ Reference< XFastContextHandler > PPTShapePropertiesContext::createFastChildConte
 
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML | XML_xfrm:
+        case A_TOKEN( xfrm ):
         {
             mrShape.getShapeProperties()[ PROP_IsPlaceholderDependent ] <<= sal_False;
 

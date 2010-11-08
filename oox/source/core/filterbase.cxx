@@ -42,7 +42,6 @@
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
 #include "oox/ole/vbaproject.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace core {

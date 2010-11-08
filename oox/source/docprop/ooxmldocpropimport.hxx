@@ -28,44 +28,44 @@
 #ifndef OOX_DOCPROP_OOXMLDOCPROPIMPORT_HXX
 #define OOX_DOCPROP_OOXMLDOCPROPIMPORT_HXX
 
-#include <sal/config.h>
-#include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#include <cppuhelper/implbase2.hxx>
 
 namespace oox {
 namespace docprop {
 
-class OOXMLDocPropImportImpl:
+// ============================================================================
+
+class DocumentPropertiesImport :
     public ::cppu::WeakImplHelper2<
         ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::document::XOOXMLDocumentPropertiesImporter>
+        ::com::sun::star::document::XOOXMLDocumentPropertiesImporter >
 {
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-
-    OOXMLDocPropImportImpl(const OOXMLDocPropImportImpl &); // not defined
-    OOXMLDocPropImportImpl& operator=(const OOXMLDocPropImportImpl &); // not defined
-
 public:
-    explicit OOXMLDocPropImportImpl(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
-    virtual ~OOXMLDocPropImportImpl() {}
+    explicit            DocumentPropertiesImport(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::xml::sax::InputSource > GetRelatedStreams( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage, const ::rtl::OUString& aStreamType );
-
-    // ::com::sun::star::lang::XServiceInfo:
+    // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString & ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::document::XOOXMLDocumentPropertiesImporter:
-    virtual void SAL_CALL importProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > & xSource, const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > & xDocumentProperties) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::Exception);
+    // XOOXMLDocumentPropertiesImporter
+    virtual void SAL_CALL importProperties(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxSource,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >& rxDocumentProperties )
+                        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::Exception);
 
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
+
+// ============================================================================
 
 } // namespace docprop
 } // namespace oox
 
 #endif
-

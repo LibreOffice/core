@@ -57,11 +57,8 @@ namespace xls {
 
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace ::oox::core;
 
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
-using ::oox::core::Relations;
-using ::oox::core::RelationsRef;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -237,12 +234,12 @@ WorksheetFragment::WorksheetFragment( const WorkbookHelper& rHelper,
     WorksheetFragmentBase( rHelper, rFragmentPath, rxProgressBar, eSheetType, nSheet )
 {
     // import data tables related to this worksheet
-    RelationsRef xTableRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "table" ) );
+    RelationsRef xTableRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "table" ) );
     for( Relations::const_iterator aIt = xTableRels->begin(), aEnd = xTableRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new TableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 
     // import comments related to this worksheet
-    OUString aCommentsFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "comments" ) );
+    OUString aCommentsFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "comments" ) );
     if( aCommentsFragmentPath.getLength() > 0 )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
 }
@@ -492,12 +489,12 @@ void WorksheetFragment::initializeImport()
     initializeWorksheetImport();
 
     // import query table fragments related to this worksheet
-    RelationsRef xQueryRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "queryTable" ) );
+    RelationsRef xQueryRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "queryTable" ) );
     for( Relations::const_iterator aIt = xQueryRels->begin(), aEnd = xQueryRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new QueryTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 
     // import pivot table fragments related to this worksheet
-    RelationsRef xPivotRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "pivotTable" ) );
+    RelationsRef xPivotRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "pivotTable" ) );
     for( Relations::const_iterator aIt = xPivotRels->begin(), aEnd = xPivotRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new PivotTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 }

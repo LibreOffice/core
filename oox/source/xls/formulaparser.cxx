@@ -41,7 +41,6 @@
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/tablebuffer.hxx"
 #include "oox/xls/worksheethelper.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

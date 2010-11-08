@@ -39,8 +39,8 @@ namespace chart {
 
 // ============================================================================
 
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::XmlFilterBase;
+using namespace ::oox::core;
+
 using ::rtl::OUString;
 
 // ============================================================================

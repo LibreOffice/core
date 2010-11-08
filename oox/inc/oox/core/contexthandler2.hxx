@@ -30,14 +30,16 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include "tokens.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/contexthandler.hxx"
-#include "oox/core/namespaces.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+const sal_Int32 XML_ROOT_CONTEXT    = SAL_MAX_INT32;
 
 // ============================================================================
 

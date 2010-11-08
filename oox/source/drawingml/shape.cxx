@@ -38,12 +38,9 @@
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 #include <tools/solar.h>        // for the F_PI180 define
 #include <com/sun/star/graphic/XGraphic.hpp>

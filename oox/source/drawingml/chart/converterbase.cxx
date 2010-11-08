@@ -40,7 +40,6 @@
 #include <tools/solar.h>    // for F_PI180
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace drawingml {

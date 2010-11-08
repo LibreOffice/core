@@ -28,13 +28,11 @@
 #include "oox/core/filterdetect.hxx"
 
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <openssl/evp.h>
 #include <rtl/digest.h>
-#include "oox/core/fasttokenhandler.hxx"
-#include "oox/core/namespaces.hxx"
+#include "oox/core/fastparser.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
@@ -91,22 +89,22 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
     switch ( nElement )
     {
         // cases for _rels/.rels
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:
+        case PR_TOKEN( Relationships ):
         break;
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationship:
-            if( !maContextStack.empty() && (maContextStack.back() == (NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships)) )
+        case PR_TOKEN( Relationship ):
+            if( !maContextStack.empty() && (maContextStack.back() == PR_TOKEN( Relationships )) )
                 parseRelationship( aAttribs );
         break;
 
         // cases for [Content_Types].xml
-        case NMSP_CONTENT_TYPES|XML_Types:
+        case PC_TOKEN( Types ):
         break;
-        case NMSP_CONTENT_TYPES|XML_Default:
-            if( !maContextStack.empty() && (maContextStack.back() == (NMSP_CONTENT_TYPES|XML_Types)) )
+        case PC_TOKEN( Default ):
+            if( !maContextStack.empty() && (maContextStack.back() == PC_TOKEN( Types )) )
                 parseContentTypesDefault( aAttribs );
         break;
-        case NMSP_CONTENT_TYPES|XML_Override:
-            if( !maContextStack.empty() && (maContextStack.back() == (NMSP_CONTENT_TYPES|XML_Types)) )
+        case PC_TOKEN( Override ):
+            if( !maContextStack.empty() && (maContextStack.back() == PC_TOKEN( Types )) )
                 parseContentTypesOverride( aAttribs );
         break;
     }
@@ -604,30 +602,21 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             descriptor. */
         Reference< XInputStream > xInStrm( extractUnencryptedPackage( aMediaDesc ), UNO_SET_THROW );
 
-        // try to detect the file type, must be a ZIP package
+        // stream must be a ZIP package
         ZipStorage aZipStorage( xFactory, xInStrm );
         if( aZipStorage.isStorage() )
         {
-            Reference< XFastParser > xParser( xFactory->createInstance(
-                CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
+            // create the fast parser, register the XML namespaces, set document handler
+            FastParser aParser( mxContext );
+            aParser.registerNamespace( NMSP_packageRel );
+            aParser.registerNamespace( NMSP_officeRel );
+            aParser.registerNamespace( NMSP_packageContentTypes );
+            aParser.setDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
 
-            xParser->setFastDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
-            xParser->setTokenHandler( new FastTokenHandler );
-
-            xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
-            xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-            xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/content-types" ), NMSP_CONTENT_TYPES );
-
-            // Parse _rels/.rels to get the target path.
-            InputSource aParserInput;
-            aParserInput.sSystemId = CREATE_OUSTRING( "_rels/.rels" );
-            aParserInput.aInputStream = aZipStorage.openInputStream( aParserInput.sSystemId );
-            xParser->parseStream( aParserInput );
-
-            // Parse [Content_Types].xml to determine the content type of the part at the target path.
-            aParserInput.sSystemId = CREATE_OUSTRING( "[Content_Types].xml" );
-            aParserInput.aInputStream = aZipStorage.openInputStream( aParserInput.sSystemId );
-            xParser->parseStream( aParserInput );
+            /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
+                to determine the content type of the part at the target path. */
+            aParser.parseStream( aZipStorage, CREATE_OUSTRING( "_rels/.rels" ) );
+            aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
         }
     }
     catch( Exception& )

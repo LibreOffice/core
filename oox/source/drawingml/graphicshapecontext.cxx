@@ -32,7 +32,6 @@
 #include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
 #include "oox/drawingml/table/tablecontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
@@ -42,8 +41,6 @@
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -69,7 +66,7 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( getToken( aElementToken ) )
+    switch( getBaseToken( aElementToken ) )
     {
     // CT_ShapeProperties
     case XML_xfrm:
@@ -80,13 +77,13 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
         break;
     }
 
-    if (getNamespace( aElementToken ) == NMSP_VML && mpShapePtr)
+    if ((getNamespace( aElementToken ) == NMSP_vml) && mpShapePtr)
     {
         mpShapePtr->setServiceName("com.sun.star.drawing.CustomShape");
         CustomShapePropertiesPtr pCstmShpProps
             (mpShapePtr->getCustomShapeProperties());
 
-        sal_uInt32 nType = aElementToken & (~ NMSP_MASK);
+        sal_uInt32 nType = getBaseToken( aElementToken );
         OUString sType(GetShapeType(nType));
 
         if (sType.getLength() > 0)
@@ -112,7 +109,7 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( aElementToken &(~NMSP_MASK) )
+    switch( getBaseToken( aElementToken ) )
     {
     // CT_ShapeProperties
     case XML_nvGraphicFramePr:      // CT_GraphicalObjectFrameNonVisual
@@ -272,12 +269,12 @@ Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildConte
 
     switch( aElementToken )
     {
-    case NMSP_DIAGRAM|XML_relIds:
+    case DGM_TOKEN( relIds ):
     {
-        msDm = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_dm );
-        msLo = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_lo );
-        msQs = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_qs );
-        msCs = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_cs );
+        msDm = xAttribs->getOptionalValue( R_TOKEN( dm ) );
+        msLo = xAttribs->getOptionalValue( R_TOKEN( lo ) );
+        msQs = xAttribs->getOptionalValue( R_TOKEN( qs ) );
+        msCs = xAttribs->getOptionalValue( R_TOKEN( cs ) );
         DiagramPtr pDiagram = loadDiagram();
         pDiagram->addTo( mpShapePtr );
         OSL_TRACE("diagram added shape %s of type %s", OUSTRING_TO_CSTR( mpShapePtr->getName() ),

@@ -46,7 +46,6 @@
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {
@@ -812,8 +811,8 @@ ExternalNameRef ExternalLink::getNameByIndex( sal_Int32 nIndex ) const
 
 // private --------------------------------------------------------------------
 
-#define OOX_TARGETTYPE_EXTLINK      CREATE_OFFICEDOC_RELATIONSTYPE( "externalLinkPath" )
-#define OOX_TARGETTYPE_LIBRARY      CREATE_MSOFFICE_RELATIONSTYPE( "xlExternalLinkPath/xlLibrary" )
+#define OOX_TARGETTYPE_EXTLINK      CREATE_OFFICEDOC_RELATION_TYPE( "externalLinkPath" )
+#define OOX_TARGETTYPE_LIBRARY      CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlLibrary" )
 
 void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUString& rTargetType )
 {

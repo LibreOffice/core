@@ -38,7 +38,6 @@
 #include "oox/drawingml/chart/axisconverter.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace drawingml {

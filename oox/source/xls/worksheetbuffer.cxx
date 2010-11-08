@@ -40,7 +40,6 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

@@ -34,7 +34,6 @@
 #include <oox/drawingml/theme.hxx>
 #include "oox/ppt/presentationfragmenthandler.hxx"
 #include "oox/ppt/slidepersist.hxx"
-#include "tokens.hxx"
 #include <vector>
 #include <map>
 

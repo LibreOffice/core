@@ -28,7 +28,6 @@
 #ifndef OOX_POWERPOINT_SLIDEPERSIST_HXX
 #define OOX_POWERPOINT_SLIDEPERSIST_HXX
 
-#include "tokens.hxx"
 #include <boost/shared_ptr.hpp>
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"

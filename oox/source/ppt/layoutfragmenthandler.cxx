@@ -34,8 +34,6 @@
 #include "headerfootercontext.hxx"
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -67,10 +65,10 @@ Reference< XFastContextHandler > LayoutFragmentHandler::createFastChildContext( 
     Reference< XFastContextHandler > xRet = getFastContextHandler();
     switch( aElementToken )
     {
-        case NMSP_PPT|XML_sldLayout:        // CT_SlideLayout
+        case PPT_TOKEN( sldLayout ):        // CT_SlideLayout
             mpSlidePersistPtr->setLayoutValueToken( xAttribs->getOptionalValueToken( XML_type, 0 ) );   // CT_SlideLayoutType
         break;
-        case NMSP_PPT|XML_hf:               // CT_HeaderFooter
+        case PPT_TOKEN( hf ):               // CT_HeaderFooter
             xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
         break;
         default:

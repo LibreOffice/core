@@ -27,11 +27,9 @@
 
 #include "oox/xls/connectionsbuffer.hxx"
 
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace xls {

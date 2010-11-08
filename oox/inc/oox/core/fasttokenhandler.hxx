@@ -28,8 +28,9 @@
 #ifndef OOX_CORE_FASTTOKENHANDLER_HXX
 #define OOX_CORE_FASTTOKENHANDLER_HXX
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 namespace oox { class TokenMap; }
 
@@ -38,15 +39,23 @@ namespace core {
 
 // ============================================================================
 
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::xml::sax::XFastTokenHandler > FastTokenHandlerBase;
+
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
     that provides access to the tokens generated from the internal token name list.
  */
-class FastTokenHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastTokenHandler >
+class FastTokenHandler : public FastTokenHandlerBase
 {
 public:
     explicit            FastTokenHandler();
     virtual             ~FastTokenHandler();
 
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
+
+    // XFastTokenHandler
     virtual sal_Int32 SAL_CALL getToken( const ::rtl::OUString& rIdentifier ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getIdentifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);

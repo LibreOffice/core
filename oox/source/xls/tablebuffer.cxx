@@ -32,7 +32,6 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

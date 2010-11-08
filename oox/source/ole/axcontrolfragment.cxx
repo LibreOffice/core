@@ -26,23 +26,27 @@
  ************************************************************************/
 
 #include "oox/ole/axcontrolfragment.hxx"
+
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/ole/axcontrol.hxx"
 #include "oox/ole/olehelper.hxx"
 #include "oox/ole/olestorage.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::uno::Reference;
+namespace oox {
+namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
 using ::oox::core::XmlFilterBase;
-
-namespace oox {
-namespace ole {
+using ::rtl::OUString;
 
 // ============================================================================
 

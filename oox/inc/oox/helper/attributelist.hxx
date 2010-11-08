@@ -31,7 +31,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include "oox/helper/helper.hxx"
-#include "tokens.hxx"
+#include "oox/token/namespaces.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace oox {
 

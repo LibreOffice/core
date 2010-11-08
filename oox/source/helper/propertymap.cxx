@@ -32,8 +32,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
-#include "properties.hxx"
-#include "oox/token/propertylist.hxx"
+#include "oox/token/propertynames.hxx"
 
 namespace oox {
 
@@ -50,19 +49,14 @@ using ::rtl::OUString;
 
 namespace {
 
-/** Thread-save singleton of a vector of all supported property names. */
-struct StaticPropertyList : public ::rtl::Static< PropertyList, StaticPropertyList > {};
-
-// ----------------------------------------------------------------------------
-
-typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetImplBase;
+typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetBase;
 
 /** This class implements a generic XPropertySet.
 
     Properties of all names and types can be set and later retrieved.
     TODO: move this to comphelper or better find an existing implementation
  */
-class GenericPropertySet : public GenericPropertySetImplBase, private ::osl::Mutex
+class GenericPropertySet : public GenericPropertySetBase, private ::osl::Mutex
 {
 public:
     explicit            GenericPropertySet();
@@ -95,7 +89,7 @@ GenericPropertySet::GenericPropertySet()
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
-    const PropertyList& rPropNames = StaticPropertyList::get();
+    const PropertyNameVector& rPropNames = StaticPropertyNameVector::get();
     for( PropertyMap::const_iterator aIt = rPropMap.begin(), aEnd = rPropMap.end(); aIt != aEnd; ++aIt )
         maPropMap[ rPropNames[ aIt->first ] ] = aIt->second;
 }
@@ -163,7 +157,7 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
 // ============================================================================
 
 PropertyMap::PropertyMap() :
-    mpPropNames( &StaticPropertyList::get() )
+    mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
 {
 }
 
@@ -174,7 +168,7 @@ PropertyMap::~PropertyMap()
 /*static*/ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
-    return StaticPropertyList::get()[ nPropId ];
+    return StaticPropertyNameVector::get()[ nPropId ];
 }
 
 const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const

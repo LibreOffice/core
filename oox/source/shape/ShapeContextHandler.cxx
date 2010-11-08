@@ -29,7 +29,6 @@
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
-#include "tokens.hxx"
 
 namespace oox { namespace shape {
 
@@ -124,10 +123,10 @@ ShapeContextHandler::getContextHandler()
 {
     uno::Reference<xml::sax::XFastContextHandler> xResult;
 
-    switch (mnStartToken & NMSP_MASK)
+    switch (getNamespace( mnStartToken ))
     {
-        case NMSP_DOC:
-        case NMSP_VML:
+        case NMSP_doc:
+        case NMSP_vml:
             xResult.set(getDrawingShapeContext());
             break;
         default:

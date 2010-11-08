@@ -144,4 +144,3 @@ private:
 } // namespace oox
 
 #endif
-

@@ -37,7 +37,6 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/connectionsbuffer.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

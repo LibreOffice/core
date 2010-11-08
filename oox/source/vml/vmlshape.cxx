@@ -45,7 +45,6 @@
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/vml/vmltextbox.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace vml {

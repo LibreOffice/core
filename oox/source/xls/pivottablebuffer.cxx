@@ -51,7 +51,6 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

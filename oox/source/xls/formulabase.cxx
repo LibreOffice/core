@@ -45,7 +45,6 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

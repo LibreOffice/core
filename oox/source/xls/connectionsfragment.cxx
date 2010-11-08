@@ -36,9 +36,9 @@ namespace xls {
 
 // ============================================================================
 
+using namespace ::oox::core;
+
 using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
 
 // ============================================================================
 

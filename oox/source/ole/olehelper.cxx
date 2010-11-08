@@ -26,16 +26,19 @@
  ************************************************************************/
 
 #include "oox/ole/olehelper.hxx"
+
 #include <rtl/ustrbuf.hxx>
-#include "tokens.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+#include "oox/token/tokens.hxx"
 
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -308,4 +311,3 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 
 } // namespace ole
 } // namespace oox
-

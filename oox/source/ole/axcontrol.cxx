@@ -59,8 +59,6 @@
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace ole {

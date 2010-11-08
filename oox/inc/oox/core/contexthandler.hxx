@@ -28,10 +28,12 @@
 #ifndef OOX_CORE_CONTEXTHANDLER_HXX
 #define OOX_CORE_CONTEXTHANDLER_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <boost/shared_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
+#include "oox/token/namespaces.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }

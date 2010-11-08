@@ -1,10 +1,11 @@
 mkdir: %_DEST%\inc%_EXT%\oox
-mkdir: %_DEST%\inc%_EXT%\oox\helper
 mkdir: %_DEST%\inc%_EXT%\oox\core
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml\chart
 mkdir: %_DEST%\inc%_EXT%\oox\drawingml\table
+mkdir: %_DEST%\inc%_EXT%\oox\helper
 mkdir: %_DEST%\inc%_EXT%\oox\ole
+mkdir: %_DEST%\inc%_EXT%\oox\token
 mkdir: %_DEST%\inc%_EXT%\oox\vml
 mkdir: %_DEST%\inc%_EXT%\oox\xls
 
@@ -17,10 +18,10 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 ..\%__SRC%\lib\i*.lib %_DEST%\lib%_EXT%\i*.lib
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
-..\%__SRC%\inc\tokens.hxx %_DEST%\inc%_EXT%\oox\core\tokens.hxx
+..\%__SRC%\inc\oox\token\tokens.hxx %_DEST%\inc%_EXT%\oox\token\tokens.hxx
+..\%__SRC%\misc\namespaces.txt %_DEST%\inc%_EXT%\oox\namespaces.txt
 
 ..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token.txt
-..\source\token\namespaces.txt %_DEST%\inc%_EXT%\oox\namespaces.txt
 ..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
 ..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx

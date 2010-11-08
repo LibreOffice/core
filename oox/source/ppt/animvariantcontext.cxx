@@ -35,12 +35,10 @@
 #include <rtl/ustring.hxx>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "pptfilterhelpers.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -80,29 +78,29 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case NMSP_PPT|XML_boolVal:
+        case PPT_TOKEN( boolVal ):
         {
             bool val = attribs.getBool( XML_val, false );
             maValue = makeAny( val );
             break;
         }
-        case NMSP_PPT|XML_clrVal:
+        case PPT_TOKEN( clrVal ):
             xRet.set( new ::oox::drawingml::ColorContext( *this, maColor ) );
             // we'll defer setting the Any until the end.
             break;
-        case NMSP_PPT|XML_fltVal:
+        case PPT_TOKEN( fltVal ):
         {
             double val = attribs.getDouble( XML_val, 0.0 );
             maValue = makeAny( val );
             break;
         }
-        case NMSP_PPT|XML_intVal:
+        case PPT_TOKEN( intVal ):
         {
             sal_Int32 val = attribs.getInteger( XML_val, 0 );
             maValue = makeAny( val );
             break;
         }
-        case NMSP_PPT|XML_strVal:
+        case PPT_TOKEN( strVal ):
         {
             OUString val = attribs.getString( XML_val, OUString() );
             convertMeasure( val ); // ignore success or failure if it fails, use as is

@@ -25,26 +25,12 @@
  *
  ************************************************************************/
 
-#ifndef OOX_TOKEN_PROPERTYLIST_HXX
-#define OOX_TOKEN_PROPERTYLIST_HXX
+#ifndef OOX_TOKEN_NAMESPACES_HXX
+#define OOX_TOKEN_NAMESPACES_HXX
 
-#include <vector>
-#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox {
 
 // ============================================================================
-
-/** A vector that contains all predefined property names used in the filters. */
-struct PropertyList : public ::std::vector< ::rtl::OUString >
-{
-    explicit            PropertyList();
-                        ~PropertyList();
-};
-
-// ============================================================================
-
-} // namespace oox
-
-#endif
 

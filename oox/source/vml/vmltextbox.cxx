@@ -28,7 +28,6 @@
 #include "oox/vml/vmltextbox.hxx"
 
 #include <rtl/ustrbuf.hxx>
-#include "tokens.hxx"
 
 namespace oox {
 namespace vml {

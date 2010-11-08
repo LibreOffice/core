@@ -39,8 +39,6 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace drawingml {

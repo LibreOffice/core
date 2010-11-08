@@ -133,10 +133,10 @@ private:
 /** A filter criterion for a custom filter. */
 struct FilterCriterionModel
 {
-    ::com::sun::star::uno::Any maValue; /// The comparison operator.
+    ::com::sun::star::uno::Any maValue; /// Comparison operand.
     sal_Int32           mnOperator;     /// Comparison operator.
-    sal_uInt8           mnDataType;     /// Operator data type (BIFF only).
-    sal_uInt8           mnStrLen;       /// Length of string operator (BIFF5-BIFF8 only).
+    sal_uInt8           mnDataType;     /// Operand data type (BIFF only).
+    sal_uInt8           mnStrLen;       /// Length of string operand (BIFF5-BIFF8 only).
 
     explicit            FilterCriterionModel();
 

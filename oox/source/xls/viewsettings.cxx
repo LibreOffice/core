@@ -45,7 +45,6 @@
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

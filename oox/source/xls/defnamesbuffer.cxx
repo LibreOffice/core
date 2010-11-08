@@ -42,7 +42,6 @@
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

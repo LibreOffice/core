@@ -34,13 +34,11 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -80,7 +78,7 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( getToken( aElementToken ) )
+    switch( getBaseToken( aElementToken ) )
     {
     // nvSpPr CT_ShapeNonVisual begin
 //  case XML_drElemPr:

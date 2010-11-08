@@ -40,7 +40,6 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace drawingml {

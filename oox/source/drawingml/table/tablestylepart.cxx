@@ -27,8 +27,6 @@
 
 #include "oox/drawingml/table/tablestylepart.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;

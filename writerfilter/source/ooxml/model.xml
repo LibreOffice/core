@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
-  <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="XML"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="RELATIONSHIPS"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="OFFICE"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="THEME"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="DOC_DRAWINGML"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="DRAWINGML"/>
-  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="VML"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="PICTURE"/>
-  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="VML_DOC"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="DOC"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="MATH"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="SML"/>
-  <namespace-alias name="http://sprm" alias="sprm" id="SPRM"/>
+  <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="xml"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="officeRel"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="vmlOffice"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="officeRelTheme"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="dml"/>
+  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
+  <namespace-alias name="http://sprm" alias="sprm" id="sprm"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
   <token tokenid="ooxml:inputstream"/>

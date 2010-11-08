@@ -37,7 +37,6 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

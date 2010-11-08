@@ -36,8 +36,8 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/seqstream.hxx>
-#include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace oox {
 

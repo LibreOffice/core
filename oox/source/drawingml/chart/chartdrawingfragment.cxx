@@ -42,10 +42,8 @@ namespace chart {
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
+using namespace ::oox::core;
 
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::FragmentHandler2;
-using ::oox::core::XmlFilterBase;
 using ::rtl::OUString;
 
 // ============================================================================

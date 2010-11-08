@@ -37,14 +37,11 @@
 #include "oox/ppt/pptshapepropertiescontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "tokens.hxx"
-#include "properties.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -102,9 +99,9 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
     switch( aElementToken )
     {
         // nvSpPr CT_ShapeNonVisual begin
-        //  case NMSP_PPT|XML_drElemPr:
+        //  case PPT_TOKEN( drElemPr ):
         //      break;
-        case NMSP_PPT|XML_cNvPr:
+        case PPT_TOKEN( cNvPr ):
         {
             AttributeList aAttribs( xAttribs );
             mpShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
@@ -112,7 +109,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
             mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
             break;
         }
-        case NMSP_PPT|XML_ph:
+        case PPT_TOKEN( ph ):
         {
             sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
             mpShapePtr->setSubType( nSubType );
@@ -191,15 +188,15 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
         // nvSpPr CT_ShapeNonVisual end
 
-        case NMSP_PPT|XML_spPr:
+        case PPT_TOKEN( spPr ):
             xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
             break;
 
-        case NMSP_PPT|XML_style:
+        case PPT_TOKEN( style ):
             xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
             break;
 
-        case NMSP_PPT|XML_txBody:
+        case PPT_TOKEN( txBody ):
         {
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
             xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );

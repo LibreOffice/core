@@ -26,12 +26,15 @@
  ************************************************************************/
 
 #include "oox/ole/axbinaryreader.hxx"
-#include "oox/ole/olehelper.hxx"
 
-using ::rtl::OUString;
+#include "oox/ole/olehelper.hxx"
 
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -343,4 +346,3 @@ bool AxBinaryPropertyReader::startNextProperty()
 
 } // namespace ole
 } // namespace oox
-

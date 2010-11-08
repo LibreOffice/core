@@ -34,7 +34,6 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

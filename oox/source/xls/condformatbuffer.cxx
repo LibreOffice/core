@@ -48,7 +48,6 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/stylesbuffer.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {

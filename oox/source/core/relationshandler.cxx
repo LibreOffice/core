@@ -28,9 +28,7 @@
 #include "oox/core/relationshandler.hxx"
 
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace core {
@@ -80,7 +78,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
     AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationship:
+        case PR_TOKEN( Relationship ):
         {
             Relation aRelation;
             aRelation.maId     = aAttribs.getString( XML_Id, OUString() );
@@ -99,7 +97,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
             }
         }
         break;
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:
+        case PR_TOKEN( Relationships ):
             xRet = getFastContextHandler();
         break;
     }

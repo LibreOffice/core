@@ -30,7 +30,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/datasourcemodel.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace drawingml {

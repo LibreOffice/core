@@ -102,7 +102,7 @@ Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext(
 void ContextHandler2Helper::implStartElement( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
     AttributeList aAttribs( rxAttribs );
-    pushElementInfo( nElement ).mbTrimSpaces = aAttribs.getToken( NMSP_XML | XML_space, XML_TOKEN_INVALID ) != XML_preserve;
+    pushElementInfo( nElement ).mbTrimSpaces = aAttribs.getToken( XML_TOKEN( space ), XML_TOKEN_INVALID ) != XML_preserve;
     onStartElement( aAttribs );
 }
 

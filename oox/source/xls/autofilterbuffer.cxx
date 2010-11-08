@@ -34,15 +34,12 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace xls {

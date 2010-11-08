@@ -59,11 +59,8 @@ namespace xls {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace ::oox::core;
 
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::FragmentHandlerRef;
-using ::oox::core::RecordInfo;
-using ::oox::core::Relation;
 using ::oox::drawingml::ThemeFragmentHandler;
 using ::rtl::OUString;
 
@@ -200,25 +197,25 @@ void WorkbookFragment::finalizeImport()
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
-    OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
+    OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
     if( aThemeFragmentPath.getLength() > 0 )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
-    OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "styles" ) );
+    OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "styles" ) );
     if( aStylesFragmentPath.getLength() > 0 )
         importOoxFragment( new StylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
-    OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "sharedStrings" ) );
+    OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "sharedStrings" ) );
     if( aSstFragmentPath.getLength() > 0 )
         importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) );
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
-    OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "connections" ) );
+    OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "connections" ) );
     if( aConnFragmentPath.getLength() > 0 )
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
@@ -247,20 +244,20 @@ void WorkbookFragment::finalizeImport()
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
 
                 // create the fragment according to the sheet type
-                if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "worksheet" ) )
+                if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) )
                 {
                     xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_WORKSHEET, nCalcSheet ) );
                 }
-                else if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "chartsheet" ) )
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "chartsheet" ) )
                 {
                     xFragment.set( new ChartsheetFragment( *this, aFragmentPath, xSheetSegment, nCalcSheet ) );
                 }
-                else if( (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlMacrosheet" )) ||
-                         (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlIntlMacrosheet" )) )
+                else if( (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlMacrosheet" )) ||
+                         (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlIntlMacrosheet" )) )
                 {
                     xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nCalcSheet ) );
                 }
-                else if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "dialogsheet" ) )
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) )
                 {
                     xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_DIALOGSHEET, nCalcSheet ) );
                 }
@@ -288,7 +285,7 @@ void WorkbookFragment::finalizeImport()
     }
 
     // open the VBA project storage
-    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATIONSTYPE( "vbaProject" ) );
+    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
     if( aVbaFragmentPath.getLength() > 0 )
     {
         Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
