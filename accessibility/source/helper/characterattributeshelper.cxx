@@ -40,18 +40,18 @@ using namespace ::com::sun::star::beans;
 
 CharacterAttributesHelper::CharacterAttributesHelper( const Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor )
 {
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharBackColor" ), makeAny( (sal_Int32) nBackColor ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharColor" ), makeAny( (sal_Int32) nColor ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharFontCharSet" ), makeAny( (sal_Int16) rFont.GetCharSet() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharFontFamily" ), makeAny( (sal_Int16) rFont.GetFamily() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharFontName" ), makeAny( (::rtl::OUString) rFont.GetName() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharFontPitch" ), makeAny( (sal_Int16) rFont.GetPitch() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharFontStyleName" ), makeAny( (::rtl::OUString) rFont.GetStyleName() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharHeight" ), makeAny( (sal_Int16) rFont.GetSize().Height() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharScaleWidth" ), makeAny( (sal_Int16) rFont.GetSize().Width() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharStrikeout" ), makeAny( (sal_Int16) rFont.GetStrikeout() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharUnderline" ), makeAny( (sal_Int16) rFont.GetUnderline() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharWeight" ), makeAny( (float) rFont.GetWeight() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharBackColor" )),     makeAny( (sal_Int32) nBackColor ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColor" )),         makeAny( (sal_Int32) nColor ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" )),   makeAny( (sal_Int16) rFont.GetCharSet() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamily" )),    makeAny( (sal_Int16) rFont.GetFamily() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" )),      makeAny( (::rtl::OUString) rFont.GetName() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitch" )),     makeAny( (sal_Int16) rFont.GetPitch() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontStyleName" )), makeAny( (::rtl::OUString) rFont.GetStyleName() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" )),        makeAny( (sal_Int16) rFont.GetSize().Height() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharScaleWidth" )),    makeAny( (sal_Int16) rFont.GetSize().Width() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharStrikeout" )),     makeAny( (sal_Int16) rFont.GetStrikeout() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" )),     makeAny( (sal_Int16) rFont.GetUnderline() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" )),        makeAny( (float) rFont.GetWeight() ) ) );
 }
 
 // -----------------------------------------------------------------------------
