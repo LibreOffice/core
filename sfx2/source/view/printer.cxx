@@ -334,28 +334,6 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 //--------------------------------------------------------------------
 
-void SfxPrinter::EnableRange( USHORT )
-{
-    OSL_ENSURE( 0, "dead code !" );
-}
-
-//--------------------------------------------------------------------
-
-void SfxPrinter::DisableRange( USHORT )
-{
-    OSL_ENSURE( 0, "dead code !" );
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxPrinter::IsRangeEnabled( USHORT ) const
-{
-    OSL_ENSURE( 0, "dead code !" );
-    return TRUE;
-}
-
-//--------------------------------------------------------------------
-
 SV_IMPL_PTRARR(SfxFontArr_Impl,SfxFont*)
 
 //--------------------------------------------------------------------
@@ -448,14 +426,6 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
     if ( !FONTS() )
         UpdateFonts_Impl();
     return SfxFindFont_Impl(*FONTS(), rFontName);
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxPrinter::InitJob( Window*, BOOL )
-{
-    OSL_ENSURE( 0, "dead code !" );
-    return FALSE;
 }
 
 //--------------------------------------------------------------------

@@ -125,10 +125,6 @@ public:
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    SetOptions( const SfxItemSet &rNewOptions );
 
-    void                    EnableRange( USHORT nRange );
-    void                    DisableRange( USHORT nRange );
-    BOOL                    IsRangeEnabled( USHORT nRange ) const;
-
     BOOL                    IsKnown() const { return bKnown; }
     BOOL                    IsOriginal() const { return bKnown; }
 
@@ -136,8 +132,6 @@ public:
     USHORT                  GetFontCount();
     const SfxFont*          GetFont( USHORT nNo ) const;
     const SfxFont*          GetFontByName( const String &rFontName );
-
-    BOOL                    InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects );
 };
 
 #endif
