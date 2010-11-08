@@ -80,7 +80,7 @@ service UnoControlGridModel
         <p>You can implement your own instance of <type>XGridDataModel</type> or use
         the <type>DefaultGridDataModel</type>.
     */
-    [property] XGridDataModel DataModel;
+    [property] XGridDataModel GridDataModel;
 
     /** Specifies the vertical scrollbar mode.
         <p>The default value is <FALSE/></p>
