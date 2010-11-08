@@ -252,7 +252,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(USHORT const nFlags)
 ,   m_bGotOwnership(false)
 ,   m_bGotFrameOwnership(false)
 ,   m_eScroll(SCROLLING_DEFAULT)
-,   m_nFamily(-1)   // undefined, default set by TemplateDialog
+,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(0)
 ,   m_pAccExec(0)
 {}
