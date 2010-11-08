@@ -469,7 +469,7 @@ Any ORowSetCache::getBookmark(  )
 
     if ( m_aMatrixIter >= m_pMatrix->end() || m_aMatrixIter < m_pMatrix->begin() || !(*m_aMatrixIter).is())
     {
-        return Any(); // this is allowed here because the rowset knows what it is doing
+        return Any(); // this is allowed here because the rowset knowns what it is doing
     }
 
     return lcl_getBookmark(((*m_aMatrixIter)->get())[0],m_pCacheSet);
@@ -765,7 +765,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
         bCheck = m_pCacheSet->next();
     }
     //  m_nStartPos = _nNewStartPos;
-    // we have to read one row forward to ensure that we know when we are on last row
+    // we have to read one row forward to enshure that we know when we are on last row
     // but only when we don't know it already
     if(!m_bRowCountFinal)
     {
@@ -942,12 +942,12 @@ sal_Bool ORowSetCache::moveWindow()
 
             sal_Int32 nPos = m_nStartPos + m_nFetchSize + 1;
             sal_Bool bCheck = m_pCacheSet->absolute(nPos);
-            bCheck = fill(aIter,aEnd,nPos,bCheck); // refill the region we don't need anymore
+            bCheck = fill(aIter,aEnd,nPos,bCheck); // refill the region wew don't need anymore
 
 //          // we know that this is the current maximal rowcount here
 //          if ( !m_bRowCountFinal && bCheck )
 //              m_nRowCount = std::max(nPos,m_nRowCount);
-            // we have to read one row forward to ensure that we know when we are on last row
+            // we have to read one row forward to enshure that we know when we are on last row
             // but only when we don't know it already
             sal_Bool bOk = sal_True;
             if(bCheck && !m_bRowCountFinal)
@@ -1460,7 +1460,7 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sUpdateTableName)
 {
     sal_Bool bOk = sal_False;
-    if (pNode->count() == 3 &&  // ?Expression is clasped?
+    if (pNode->count() == 3 &&  // Ausdruck is geklammert
         SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pNode->getChild(2),")"))
     {
@@ -1469,7 +1469,7 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
     else if ((SQL_ISRULE(pNode,search_condition) || SQL_ISRULE(pNode,boolean_term)) &&          // AND/OR-Verknuepfung:
                 pNode->count() == 3)
     {
-        // only allow an AND link
+        // nur AND Verknüpfung zulassen
         if ( SQL_ISTOKEN(pNode->getChild(1),AND) )
             bOk = checkInnerJoin(pNode->getChild(0),_xConnection,_sUpdateTableName)
                 && checkInnerJoin(pNode->getChild(2),_xConnection,_sUpdateTableName);
@@ -1514,7 +1514,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
             // we found only one element so it must some kind of join here
             OSQLParseNode* pJoin = pTableRefCommalist->getByRule(::connectivity::OSQLParseNode::qualified_join);
             if(pJoin)
-            { // we are only interested in qualified joins like RIGHT or LEFT
+            { // we are only intereseted in qualified joins like RIGHT or LEFT
                 OSQLParseNode* pJoinType    = pJoin->getChild(1);
                 OSQLParseNode* pOuterType   = NULL;
                 if(SQL_ISRULE(pJoinType,join_type) && pJoinType->count() == 2)
