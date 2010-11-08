@@ -73,6 +73,7 @@ Image BMP_EXCEPTION_INFO_SCH
 
 ModalDialog DLG_SQLEXCEPTIONCHAIN
 {
+    HelpID = "dbaccess:ModalDialog:DLG_SQLEXCEPTIONCHAIN";
     Moveable = TRUE ;
     Closeable = TRUE ;
     OutputSize = TRUE ;

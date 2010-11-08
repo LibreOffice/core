@@ -70,6 +70,8 @@
 #include "FieldControls.hxx"
 #endif
 
+#include "dbaccess_slotid.hrc"
+
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

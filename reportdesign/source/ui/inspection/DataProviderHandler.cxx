@@ -285,7 +285,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
-            aOut.PrimaryButtonId = UID_RPT_PROP_CHARTTYPE_DLG;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_CHARTTYPE_DLG);
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::TextField , sal_True);
             aOut.HasPrimaryButton = sal_True;
             break;
@@ -295,7 +295,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::StringListField , sal_False);
-            aOut.PrimaryButtonId = UID_RPT_PROP_DLG_LINKFIELDS;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_DLG_LINKFIELDS);
             aOut.HasPrimaryButton = sal_True;
             break;
         default:
