@@ -32,6 +32,7 @@
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
+#include <svtools/ctrlbox.hxx>
 
 // Line defaults in twips (former Writer defaults):
 
@@ -113,6 +114,12 @@ class EDITENG_DLLPUBLIC SvxBorderLine
 {
 protected:
     Color  aColor;
+
+    double m_nWidth;
+    BorderWidthImpl m_aWidthImpl;
+    long m_nMult;
+    long m_nDiv;
+
     SvxBorderStyle   m_nStyle;
     sal_uInt16 nOutWidth;
     sal_uInt16 nInWidth;
@@ -124,9 +131,11 @@ protected:
     Color            (*m_pColorGapFn)( Color );
 
 public:
-    SvxBorderLine( const Color *pCol = 0, sal_uInt16 nOut = 0, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0,
-            SvxBorderStyle nStyle = SOLID, bool bUseLeftTop = false,
-            Color (*pColorOutFn)( Color ) = &darkColor, Color (*pColorInFn)( Color ) = &darkColor,
+    SvxBorderLine( const Color *pCol = 0,
+            long nWidth = 0, SvxBorderStyle nStyle = SOLID,
+            bool bUseLeftTop = false,
+            Color (*pColorOutFn)( Color ) = &darkColor,
+            Color (*pColorInFn)( Color ) = &darkColor,
             Color (*pColorGapFn)( Color ) = NULL );
     SvxBorderLine( const SvxBorderLine& r );
 
@@ -137,9 +146,9 @@ public:
     Color           GetColorIn( bool bLeftOrTop = true ) const;
     bool            HasGapColor() const { return m_pColorGapFn != NULL; }
     Color           GetColorGap() const;
-    sal_uInt16          GetOutWidth() const { return nOutWidth; }
-    sal_uInt16          GetInWidth() const { return nInWidth; }
-    sal_uInt16          GetDistance() const { return nDistance; }
+    sal_uInt16          GetOutWidth() const;
+    sal_uInt16          GetInWidth() const;
+    sal_uInt16          GetDistance() const;
 
     SvxBorderStyle  GetStyle() const { return m_nStyle; }
 
@@ -148,9 +157,6 @@ public:
     void            SetColorInFn( Color (*pColorInFn)( Color ) ) { m_pColorInFn = pColorInFn; }
     void            SetColorGapFn( Color (*pColorGapFn)( Color ) ) { m_pColorGapFn = pColorGapFn; }
     void            SetUseLeftTop( bool bUseLeftTop ) { m_bUseLeftTop = bUseLeftTop; }
-    void            SetOutWidth( sal_uInt16 nNew ) { nOutWidth = nNew; }
-    void            SetInWidth( sal_uInt16 nNew ) { nInWidth = nNew;  }
-    void            SetDistance( sal_uInt16 nNew ) { nDistance = nNew; }
     void            SetStyle( SvxBorderStyle nNew );
     void            ScaleMetrics( long nMult, long nDiv );
 
@@ -162,9 +168,9 @@ public:
 
     bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 
-    bool isEmpty() const { return (0 == nOutWidth && 0 == nInWidth && 0 == nDistance); }
-    bool isDouble() const { return (0 != nOutWidth && 0 != nInWidth); }
-    sal_uInt16 getWidth() const { return nOutWidth + nInWidth + nDistance; }
+    bool isEmpty() const { return m_aWidthImpl.IsEmpty( ); }
+    bool isDouble() const { return m_aWidthImpl.IsDouble(); }
+    sal_uInt16 getWidth() const { return GetOutWidth() + GetInWidth() + GetDistance(); }
 
     static Color darkColor( Color aMain );
     static Color lightColor( Color aMain );
@@ -173,6 +179,7 @@ public:
     static Color threeDMediumColor( Color aMain );
     static Color threeDDarkColor( Color aMain );
 
+    static BorderWidthImpl getWidthImpl( SvxBorderStyle nStyle );
 };
 
 // ============================================================================

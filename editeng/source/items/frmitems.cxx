@@ -1601,14 +1601,15 @@ Color SvxBorderLine::threeDMediumColor( Color aMain )
     return lcl_compute3DColor( aMain, -42, -0, 42 );
 }
 
-SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist,
+SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
        SvxBorderStyle nStyle, bool bUseLeftTop,
        Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ),
        Color (*pColorGapFn)( Color ) )
-: m_nStyle( nStyle )
-, nOutWidth( nOut )
-, nInWidth ( nIn )
-, nDistance( nDist )
+: m_nWidth( nWidth )
+, m_aWidthImpl( SvxBorderLine::getWidthImpl( nStyle ) )
+, m_nMult( 1 )
+, m_nDiv( 1 )
+, m_nStyle( nStyle )
 , m_bUseLeftTop( bUseLeftTop )
 , m_pColorOutFn( pColorOutFn )
 , m_pColorInFn( pColorInFn )
@@ -1616,6 +1617,88 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn
 {
     if ( pCol )
         aColor = *pCol;
+}
+
+BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
+{
+    BorderWidthImpl aImpl;
+
+    switch ( nStyle )
+    {
+        case SOLID:
+        case DOTTED:
+        case DASHED:
+            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0 );
+            break;
+
+        // Double lines
+
+        case DOUBLE:
+            aImpl = BorderWidthImpl(
+                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    1.0, 1.0, 1.0 );
+            break;
+
+        case THINTHICK_SMALLGAP:
+            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0, 75.0, 75.0 );
+            break;
+
+        case THINTHICK_MEDIUMGAP:
+            aImpl = BorderWidthImpl(
+                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    1.0, 0.5, 0.5 );
+            break;
+
+        case THINTHICK_LARGEGAP:
+            aImpl = BorderWidthImpl( CHANGE_DIST, 75.0, 150.0, 1.0 );
+            break;
+
+        case THICKTHIN_SMALLGAP:
+            aImpl = BorderWidthImpl( CHANGE_DIST, 75.0, 1.0, 75.0 );
+            break;
+
+        case THICKTHIN_MEDIUMGAP:
+            aImpl = BorderWidthImpl(
+                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    0.5, 1.0, 0.5 );
+            break;
+
+        case THICKTHIN_LARGEGAP:
+            aImpl = BorderWidthImpl( CHANGE_DIST, 150.0, 75.0, 1.0 );
+            break;
+
+        // Engraved / Embossed
+        /*
+         *  Word compat: the lines widths are exactly following this rule, shouldbe:
+         *      0.75pt up to 3pt and then 3pt
+         */
+
+        case EMBOSSED:
+        case ENGRAVED:
+            aImpl = BorderWidthImpl(
+                    CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
+                    0.5, 0.5, 1.0 );
+            break;
+
+        // Inset / Outset
+        /*
+         * Word compat: the gap width should be measured relatively to the biggest width for the
+         *      row or column.
+         */
+        case OUTSET:
+            aImpl = BorderWidthImpl(
+                    CHANGE_LINE2 | CHANGE_DIST,
+                    75.0, 1.0, 1.0 );
+            break;
+
+        case INSET:
+            aImpl = BorderWidthImpl(
+                    CHANGE_LINE1 | CHANGE_DIST,
+                    1.0, 75.0, 1.0 );
+            break;
+    }
+
+    return aImpl;
 }
 
 // -----------------------------------------------------------------------
@@ -1630,9 +1713,7 @@ SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
 SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
 {
     aColor = r.aColor;
-    nOutWidth = r.nOutWidth;
-    nInWidth = r.nInWidth;
-    nDistance = r.nDistance;
+    m_aWidthImpl = r.m_aWidthImpl;
     m_nStyle = r.m_nStyle;
     m_bUseLeftTop = r.m_bUseLeftTop;
     m_pColorOutFn = r.m_pColorOutFn;
@@ -1645,9 +1726,23 @@ SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
 
 void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 {
-    nOutWidth = (sal_uInt16)Scale( nOutWidth, nMult, nDiv );
-    nInWidth = (sal_uInt16)Scale( nInWidth, nMult, nDiv );
-    nDistance = (sal_uInt16)Scale( nDistance, nMult, nDiv );
+    m_nMult = nMult;
+    m_nDiv = nDiv;
+}
+
+USHORT SvxBorderLine::GetOutWidth() const
+{
+    return (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+}
+
+USHORT SvxBorderLine::GetInWidth() const
+{
+    return (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
+}
+
+USHORT SvxBorderLine::GetDistance() const
+{
+    return (sal_uInt16)Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv );
 }
 
 // -----------------------------------------------------------------------
@@ -1655,9 +1750,7 @@ void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
     return ( ( aColor    == rCmp.aColor )            &&
-             ( nInWidth  == rCmp.GetInWidth() )      &&
-             ( nOutWidth == rCmp.GetOutWidth() )     &&
-             ( nDistance == rCmp.GetDistance() )     &&
+             ( m_aWidthImpl  == rCmp.m_aWidthImpl )  &&
              ( m_nStyle == rCmp.GetStyle() )         &&
              ( m_bUseLeftTop == rCmp.m_bUseLeftTop ) &&
              ( m_pColorOutFn == rCmp.m_pColorOutFn ) &&
@@ -1707,7 +1800,7 @@ Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
 {
     Color aResult = aColor;
 
-    if ( nInWidth > 0 && nOutWidth > 0 && m_pColorOutFn != NULL )
+    if ( m_aWidthImpl.IsDouble() && m_pColorOutFn != NULL )
     {
         if ( !bLeftOrTop && m_bUseLeftTop )
             aResult = (*m_pColorInFn)( aColor );
@@ -1722,7 +1815,7 @@ Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
 {
     Color aResult = aColor;
 
-    if ( nInWidth > 0 && nOutWidth > 0 && m_pColorInFn != NULL )
+    if ( m_aWidthImpl.IsDouble() && m_pColorInFn != NULL )
     {
         if ( !bLeftOrTop && m_bUseLeftTop )
             aResult = (*m_pColorOutFn)( aColor );
@@ -1737,7 +1830,7 @@ Color SvxBorderLine::GetColorGap( ) const
 {
     Color aResult = aColor;
 
-    if ( nInWidth > 0 && nOutWidth > 0 && m_pColorGapFn != NULL )
+    if ( m_aWidthImpl.IsDouble() && m_pColorGapFn != NULL )
     {
         aResult = (*m_pColorGapFn)( aColor );
     }
@@ -1752,61 +1845,24 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       const IntlWrapper* pIntl,
                                       sal_Bool bMetricStr) const
 {
-    sal_uInt16 nResId = 0;
-
-    if ( 0 == nDistance )
+    static const sal_uInt16 aStyleIds[] =
     {
-        // einfach Linie
-        if ( DEF_LINE_WIDTH_0 == nOutWidth )
-            nResId = RID_SINGLE_LINE0;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth )
-            nResId = RID_SINGLE_LINE1;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth )
-            nResId = RID_SINGLE_LINE2;
-        else if ( DEF_LINE_WIDTH_3 == nOutWidth )
-            nResId = RID_SINGLE_LINE3;
-        else if ( DEF_LINE_WIDTH_4 == nOutWidth )
-            nResId = RID_SINGLE_LINE4;
-    }
-    else if ( DEF_LINE_WIDTH_1 == nDistance )
-    {
-        // double line, small gap
-        if ( DEF_LINE_WIDTH_0 == nOutWidth && DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE0;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
-                  DEF_LINE_WIDTH_1 == nInWidth )
-            nResId = RID_DOUBLE_LINE2;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
-                  DEF_LINE_WIDTH_2 == nInWidth )
-            nResId = RID_DOUBLE_LINE8;
-    }
-    else if ( DEF_LINE_WIDTH_2 == nDistance )
-    {
-        // double line, large gap
-        if ( DEF_LINE_WIDTH_0 == nOutWidth && DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE1;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_2 == nInWidth )
-            nResId = RID_DOUBLE_LINE3;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
-                  DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE4;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE5;
-        else if ( DEF_LINE_WIDTH_3 == nOutWidth &&
-                  DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE6;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_1 == nInWidth )
-            nResId = RID_DOUBLE_LINE7;
-        else if ( DEF_LINE_WIDTH_3 == nOutWidth &&
-                  DEF_LINE_WIDTH_2 == nInWidth )
-            nResId = RID_DOUBLE_LINE9;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_3 == nInWidth )
-            nResId = RID_DOUBLE_LINE10;
-    }
+        RID_SOLID,
+        RID_DOTTED,
+        RID_DASHED,
+        RID_DOUBLE,
+        RID_THINTHICK_SMALLGAP,
+        RID_THINTHICK_MEDIUMGAP,
+        RID_THINTHICK_LARGEGAP,
+        RID_THICKTHIN_SMALLGAP,
+        RID_THICKTHIN_MEDIUMGAP,
+        RID_THICKTHIN_LARGEGAP,
+        RID_EMBOSSED,
+        RID_ENGRAVED,
+        RID_OUTSET,
+        RID_INSET
+    };
+    sal_uInt16 nResId = aStyleIds[m_nStyle];
     String aStr;
     aStr += sal_Unicode('(');
     aStr += ::GetColorString( aColor );
@@ -1817,15 +1873,15 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     else
     {
         String sMetric = EE_RESSTR(GetMetricId( eDestUnit ));
-        aStr += GetMetricText( (long)nInWidth, eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( (long)GetInWidth(), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
         aStr += cpDelim;
-        aStr += GetMetricText( (long)nOutWidth, eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( (long)GetOutWidth(), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
         aStr += cpDelim;
-        aStr += GetMetricText( (long)nDistance, eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( (long)GetDistance(), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
     }

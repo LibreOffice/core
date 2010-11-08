@@ -541,69 +541,61 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
 {
     Text [ en-US ] = "Default" ;
 };
-String RID_SINGLE_LINE0
+String RID_SOLID
 {
-    Text [ en-US ] = "Single, fine lines" ;
+    Text [ en-US ] = "Single, solid" ;
 };
-String RID_SINGLE_LINE1
+String RID_DOTTED
 {
-    Text [ en-US ] = "Single, thin" ;
+    Text [ en-US ] = "Single, dotted" ;
 };
-String RID_SINGLE_LINE2
+String RID_DASHED
 {
-    Text [ en-US ] = "Single, thick" ;
+    Text [ en-US ] = "Single, dashed" ;
 };
-String RID_SINGLE_LINE3
+String RID_SINGLE_DOUBLE
 {
-    Text [ en-US ] = "Single, very thick" ;
+    Text [ en-US ] = "Double" ;
 };
-String RID_SINGLE_LINE4
+String RID_THINTHICK_SMALLGAP
 {
-    Text [ en-US ] = "Single, bold" ;
+    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: small";
 };
-String RID_DOUBLE_LINE0
+String RID_THINTHICK_MEDIUMGAP
 {
-    Text [ en-US ] = "Double, fine lines, spacing: small" ;
+    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: medium";
 };
-String RID_DOUBLE_LINE1
+String RID_THINTHICK_LARGEGAP
 {
-    Text [ en-US ] = "Double, fine line, spacing: large" ;
+    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: large";
 };
-String RID_DOUBLE_LINE2
+String RID_THICKTHIN_SMALLGAP
 {
-    Text [ en-US ] = "Double, thin, spacing: small" ;
+    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: small";
 };
-String RID_DOUBLE_LINE3
+String RID_THICKTHIN_MEDIUMGAP
 {
-    Text [ en-US ] = "Double, thick, spacing: large" ;
+    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: medium";
 };
-String RID_DOUBLE_LINE4
+String RID_THICKTHIN_LARGEGAP
 {
-    Text [ en-US ] = "Double, inside: fine lines, outside: thin, spacing: large" ;
+    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: large";
 };
-String RID_DOUBLE_LINE5
+String RID_EMBOSSED
 {
-    Text [ en-US ] = "Double, inside: fine lines, outside: thick, spacing: large" ;
+    Text [ en-US ] = "3D embossed" ;
 };
-String RID_DOUBLE_LINE6
+String RID_ENGRAVED
 {
-    Text [ en-US ] = "Double, inside: fine lines, outside: very thick, spacing: large" ;
+    Text [ en-US ] = "3D engraved" ;
 };
-String RID_DOUBLE_LINE7
+String RID_INSET
 {
-    Text [ en-US ] = "Double, inside: thin, outside: thick, spacing: large" ;
+    Text [ en-US ] = "Inset" ;
 };
-String RID_DOUBLE_LINE8
+String RID_OUTSET
 {
-    Text [ en-US ] = "Double, inside: thick, outside: thin, spacing: small" ;
-};
-String RID_DOUBLE_LINE9
-{
-    Text [ en-US ] = "Double, inside: thick, outside: very thick, spacing: large" ;
-};
-String RID_DOUBLE_LINE10
-{
-    Text [ en-US ] = "Double, inside: very thick, outside: thick, Spacing: large" ;
+    Text [ en-US ] = "Outset" ;
 };
 String RID_SVXITEMS_METRIC_MM
 {

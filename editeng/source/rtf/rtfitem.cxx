@@ -1410,7 +1410,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     if( SFX_ITEM_SET == rSet.GetItemState( PARDID->nBox, sal_False, &pItem ) )
         aAttr = *(SvxBoxItem*)pItem;
 
-    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0, 0, 0 );    // simple lines
+    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // simple lines
     int bWeiter = sal_True, nBorderTyp = 0;
 
     do {
@@ -1484,8 +1484,9 @@ SETBORDER:
             }
             break;
 
-case RTF_BRDRBTW:
-case RTF_BRDRBAR:           break;
+        case RTF_BRDRBTW:
+        case RTF_BRDRBAR:
+            break;
 
 
         case RTF_BRDRCF:
@@ -1499,13 +1500,13 @@ case RTF_BRDRBAR:           break;
             aBrd.SetOutWidth( DEF_LINE_WIDTH_1 );
             aBrd.SetInWidth( 0 );
             aBrd.SetDistance( 0 );
-            goto SETBORDERLINE;
+            SetBorderLine( nBorderTyp, aAttr, aBrd );
 
         case RTF_BRDRDB:
             aBrd.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
             aBrd.SetInWidth( DEF_DOUBLE_LINE0_IN );
             aBrd.SetDistance( DEF_DOUBLE_LINE0_DIST );
-            goto SETBORDERLINE;
+            SetBorderLine( nBorderTyp, aAttr, aBrd );
 
         case RTF_BRDRSH:
             // shaded box
@@ -1564,18 +1565,19 @@ case RTF_BRDRBAR:           break;
                         aBrd.SetOutWidth( DEF_LINE_WIDTH_4 );
                 }
             }
-            goto SETBORDERLINE;
+            SetBorderLine( nBorderTyp, aAttr, aBrd );
 
         case RTF_BRDRDOT:
             aBrd.SetStyle( DOTTED );
+            SetBorderLine( nBorderTyp, aAttr, aBrd );
             break;
         case RTF_BRDRDASH:
             aBrd.SetStyle( DASHED );
+            SetBorderLine( nBorderTyp, aAttr, aBrd );
             break;
         case RTF_BRDRS:
         case RTF_BRDRHAIR:
             aBrd.SetStyle( SOLID );
-SETBORDERLINE:
             SetBorderLine( nBorderTyp, aAttr, aBrd );
             break;
 
