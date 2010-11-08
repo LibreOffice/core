@@ -2341,7 +2341,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
         aActiveContentArr[CONTENT_TYPE_OUTLINE]->Invalidate();
         Display(sal_True);
     }
-    //TreeListBox will be reloaed from the document
+    //TreeListBox will be reloaded from the document
     return sal_False;
 }
 
