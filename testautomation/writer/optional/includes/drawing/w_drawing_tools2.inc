@@ -679,6 +679,8 @@ testcase tEncapsulatedGroup_1
     Call wZeichenobjektEinfuegen("RECHTECK", 35, 40, 38, 45, false)
     Call wZeichenobjektEinfuegen("ELLIPSE",  40, 40, 58, 45, false, true)
     Call wObjektSelektieren ( 31, 31, 80, 80 )
+
+    Sleep 1
     
     PrintLog "- generate a new group"
     try
