@@ -60,6 +60,7 @@
 
 TabPage TP_AXIS_POSITIONS
 {
+    HelpID = "chart2:TabPage:TP_AXIS_POSITIONS";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -79,6 +80,7 @@ TabPage TP_AXIS_POSITIONS
     };
     ListBox LB_CROSSES_OTHER_AXIS_AT
     {
+        HelpID = "chart2:ListBox:TP_AXIS_POSITIONS:LB_CROSSES_OTHER_AXIS_AT";
         Border = TRUE ;
         AutoHScroll = TRUE ;
         Pos = MAP_APPFONT ( X4 , Y1-2 ) ;
@@ -98,6 +100,7 @@ TabPage TP_AXIS_POSITIONS
     };
     SpinField EDT_CROSSES_OTHER_AXIS_AT
     {
+        HelpID = "chart2:SpinField:TP_AXIS_POSITIONS:EDT_CROSSES_OTHER_AXIS_AT";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( X5 , Y1-2  ) ;
@@ -106,6 +109,7 @@ TabPage TP_AXIS_POSITIONS
     };
     ComboBox EDT_CROSSES_OTHER_AXIS_AT_CATEGORY
     {
+        HelpID = "chart2:ComboBox:TP_AXIS_POSITIONS:EDT_CROSSES_OTHER_AXIS_AT_CATEGORY";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( X5 , Y1-2  ) ;
@@ -116,6 +120,7 @@ TabPage TP_AXIS_POSITIONS
 
     CheckBox CB_AXIS_BETWEEN_CATEGORIES
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_AXIS_BETWEEN_CATEGORIES";
         Hide = TRUE;
         Pos = MAP_APPFONT ( X2 , Y2  ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
@@ -137,6 +142,7 @@ TabPage TP_AXIS_POSITIONS
     };
     ListBox LB_PLACE_LABELS
     {
+        HelpID = "chart2:ListBox:TP_AXIS_POSITIONS:LB_PLACE_LABELS";
         Border = TRUE ;
         AutoHScroll = TRUE ;
         Pos = MAP_APPFONT ( X4 , Y4-2 ) ;
@@ -164,6 +170,7 @@ TabPage TP_AXIS_POSITIONS
     };
     SpinField EDT_AXIS_LABEL_DISTANCE
     {
+        HelpID = "chart2:SpinField:TP_AXIS_POSITIONS:EDT_AXIS_LABEL_DISTANCE";
         Hide = TRUE;
         Border = TRUE ;
         SVLook = TRUE ;
@@ -186,12 +193,14 @@ TabPage TP_AXIS_POSITIONS
     };
     CheckBox CB_TICKS_INNER
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_TICKS_INNER";
         Pos = MAP_APPFONT ( XTICK_2 , Y7  ) ;
         Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
         Text [ en-US ] = "~Inner";
     };
     CheckBox CB_TICKS_OUTER
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_TICKS_OUTER";
         Pos = MAP_APPFONT ( XTICK_3 , Y7  ) ;
         Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
         Text [ en-US ] = "~Outer";
@@ -205,12 +214,14 @@ TabPage TP_AXIS_POSITIONS
     };
     CheckBox CB_MINOR_INNER
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_MINOR_INNER";
         Pos = MAP_APPFONT ( XTICK_2 , Y8  );
         Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
         Text [ en-US ] = "I~nner";
     };
     CheckBox CB_MINOR_OUTER
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_MINOR_OUTER";
         Pos = MAP_APPFONT ( XTICK_3 , Y8  ) ;
         Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
         Text [ en-US ] = "O~uter";
@@ -232,6 +243,7 @@ TabPage TP_AXIS_POSITIONS
     };
     ListBox LB_PLACE_TICKS
     {
+        HelpID = "chart2:ListBox:TP_AXIS_POSITIONS:LB_PLACE_TICKS";
         Border = TRUE ;
         AutoHScroll = TRUE ;
         Pos = MAP_APPFONT ( X3 , Y9-2  ) ;
@@ -259,6 +271,7 @@ TabPage TP_AXIS_POSITIONS
     };
     CheckBox CB_MAJOR_GRID
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_MAJOR_GRID";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( X2 , Y11  ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
@@ -267,6 +280,7 @@ TabPage TP_AXIS_POSITIONS
     };
     PushButton PB_MAJOR_GRID
     {
+        HelpID = "chart2:PushButton:TP_AXIS_POSITIONS:PB_MAJOR_GRID";
         Hide = TRUE ;
         TabStop = TRUE;
         Pos  = MAP_APPFONT ( X3 , Y11-2  );
@@ -275,6 +289,7 @@ TabPage TP_AXIS_POSITIONS
     };
     CheckBox CB_MINOR_GRID
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_POSITIONS:CB_MINOR_GRID";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( X2 , Y12  ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
@@ -283,6 +298,7 @@ TabPage TP_AXIS_POSITIONS
     };
     PushButton PB_MINOR_GRID
     {
+        HelpID = "chart2:PushButton:TP_AXIS_POSITIONS:PB_MINOR_GRID";
         Hide = TRUE ;
         TabStop = TRUE;
         Pos  = MAP_APPFONT ( X3 , Y12-2  );

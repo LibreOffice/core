@@ -69,7 +69,7 @@
 TabPage TP_CHARTTYPE
 {
     Hide = TRUE ;
-    HelpID = SID_DIAGRAM_TYPE;
+    HelpID = HID_DIAGRAM_TYPE;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( CHART_WIZARD_PAGEWIDTH , CHART_WIZARD_PAGEHEIGHT ) ;
 
@@ -99,18 +99,21 @@ TabPage TP_CHARTTYPE
 
     CheckBox CB_X_AXIS_CATEGORIES
     {
+        HelpID = "chart2:CheckBox:TP_CHARTTYPE:CB_X_AXIS_CATEGORIES";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_VALUE_X_AXIS ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "X axis with Categories" ;
     };
     CheckBox CB_3D_LOOK
     {
+        HelpID = "chart2:CheckBox:TP_CHARTTYPE:CB_3D_LOOK";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_3D_LOOK ) ;
         Size = MAP_APPFONT ( WIDTH_3D , 10 ) ;
         Text [ en-US ] = "~3D Look" ;
     };
     ListBox LB_3D_SCHEME
     {
+        HelpID = "chart2:ListBox:TP_CHARTTYPE:LB_3D_SCHEME";
         Border = TRUE;
         TabStop = TRUE;
         DropDown = TRUE;
@@ -120,12 +123,14 @@ TabPage TP_CHARTTYPE
 
     CheckBox CB_STACKED
     {
+        HelpID = "chart2:CheckBox:TP_CHARTTYPE:CB_STACKED";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_STACKING ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "~Stack series" ;
     };
     RadioButton RB_STACK_Y
     {
+        HelpID = "chart2:RadioButton:TP_CHARTTYPE:RB_STACK_Y";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST+RSC_SP_CHK_TEXTINDENT, POS_Y_STACKING+12  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -135,6 +140,7 @@ TabPage TP_CHARTTYPE
     };
     RadioButton RB_STACK_Y_PERCENT
     {
+        HelpID = "chart2:RadioButton:TP_CHARTTYPE:RB_STACK_Y_PERCENT";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST+RSC_SP_CHK_TEXTINDENT, POS_Y_STACKING+2*12  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -142,6 +148,7 @@ TabPage TP_CHARTTYPE
     };
     RadioButton RB_STACK_Z
     {
+        HelpID = "chart2:RadioButton:TP_CHARTTYPE:RB_STACK_Z";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST+RSC_SP_CHK_TEXTINDENT, POS_Y_STACKING+3*12  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -152,6 +159,7 @@ TabPage TP_CHARTTYPE
 
     CheckBox CB_SPLINES
     {
+        HelpID = "chart2:CheckBox:TP_CHARTTYPE:CB_SPLINES";
         Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_SPLINES ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "S~mooth lines" ;
@@ -159,6 +167,7 @@ TabPage TP_CHARTTYPE
 
     PushButton PB_SPLINE_DIALOG
     {
+        HelpID = "chart2:PushButton:TP_CHARTTYPE:PB_SPLINE_DIALOG";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_SPLINES-6 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
@@ -167,6 +176,7 @@ TabPage TP_CHARTTYPE
 
     CheckBox CB_XVALUE_SORTING
     {
+        HelpID = "chart2:CheckBox:TP_CHARTTYPE:CB_XVALUE_SORTING";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_XVALUE_SORTING ) ;
         Size = MAP_APPFONT ( WIDTH_XVALUE_SORTING , 10 ) ;
@@ -185,6 +195,7 @@ ModalDialog DLG_SPLINE_PROPERTIES
     Closeable = TRUE;
     RadioButton RB_SPLINES_CUBIC
     {
+        HelpID = "chart2:RadioButton:DLG_SPLINE_PROPERTIES:RB_SPLINES_CUBIC";
         Pos = MAP_APPFONT ( POS_X_SPLINES_1, POS_Y_SPLINES_2  ) ;
         Size = MAP_APPFONT ( SPLINES_WIDTH_RADIO , 10 ) ;
         TabStop = TRUE ;
@@ -192,6 +203,7 @@ ModalDialog DLG_SPLINE_PROPERTIES
     };
     RadioButton RB_SPLINES_B
     {
+        HelpID = "chart2:RadioButton:DLG_SPLINE_PROPERTIES:RB_SPLINES_B";
         Pos = MAP_APPFONT ( POS_X_SPLINES_1, POS_Y_SPLINES_3  ) ;
         Size = MAP_APPFONT ( SPLINES_WIDTH_RADIO , 10 ) ;
         TabStop = TRUE ;
@@ -213,6 +225,7 @@ ModalDialog DLG_SPLINE_PROPERTIES
     };
     MetricField MF_SPLINE_RESOLUTION
     {
+        HelpID = "chart2:MetricField:DLG_SPLINE_PROPERTIES:MF_SPLINE_RESOLUTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( POS_X_SPLINE_EXTRAS+SPLINES_WIDTH_METRIC_TEXT+RSC_SP_FLGR_SPACE_X , POS_Y_SPLINES_2-2  ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
@@ -236,6 +249,7 @@ ModalDialog DLG_SPLINE_PROPERTIES
     };
     MetricField MF_SPLINE_ORDER
     {
+        HelpID = "chart2:MetricField:DLG_SPLINE_PROPERTIES:MF_SPLINE_ORDER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( POS_X_SPLINE_EXTRAS+SPLINES_WIDTH_METRIC_TEXT+RSC_SP_FLGR_SPACE_X , POS_Y_SPLINES_3-2  ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
