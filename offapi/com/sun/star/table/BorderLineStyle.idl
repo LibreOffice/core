@@ -27,7 +27,6 @@
 #ifndef __com_sun_star_table_BorderLineStyle_idl__
 #define __com_sun_star_table_BorderLineStyle_idl__
 
-
 //=============================================================================
 
 module com {  module sun {  module star {  module table {
@@ -36,21 +35,67 @@ module com {  module sun {  module star {  module table {
 
 constants BorderLineStyle
 {
-    //-------------------------------------------------------------------------
     /** Solid border line.
      */
     const short SOLID = 0;
 
-    //-------------------------------------------------------------------------
     /** Dotted border line.
      */
     const short DOTTED = 1;
 
-    //-------------------------------------------------------------------------
     /** Dashed border line.
      */
     const short DASHED = 2;
 
+    /** Double border line.
+     */
+    const short DOUBLE = 3;
+
+    /** Double border line with a thin line outside and a thick line
+        inside separated by a small gap.
+     */
+    const short THINTHICK_SMALLGAP = 4;
+
+    /** Double border line with a thin line outside and a thick line
+        inside separated by a medium gap.
+     */
+    const short THINTHICK_MEDIUMGAP = 5;
+
+    /** Double border line with a thin line outside and a thick line
+        inside separated by a large gap.
+     */
+    const short THINTHICK_LARGEGAP = 6;
+
+    /** Double border line with a thick line outside and a thin line
+        inside separated by a small gap.
+     */
+    const short THINTHICK_SMALLGAP = 7;
+
+    /** Double border line with a thick line outside and a thin line
+        inside separated by a medium gap.
+     */
+    const short THINTHICK_MEDIUMGAP = 8;
+
+    /** Double border line with a thick line outside and a thin line
+        inside separated by a large gap.
+     */
+    const short THINTHICK_LARGEGAP = 9;
+
+    /** 3D embossed border line.
+     */
+    const short EMBOSSED = 10;
+
+    /** 3D engraved border line.
+     */
+    const short ENGRAVED = 11;
+
+    /** Outset border line.
+     */
+    const short OUTSET = 12;
+
+    /** Inset border line.
+     */
+    const short INSET = 13;
 };
 
 //=============================================================================
