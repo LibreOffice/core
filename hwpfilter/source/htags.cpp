@@ -138,31 +138,33 @@ bool OlePicture::Read(HWPFile & hwpf)
     if (signature != FILESTG_SIGNATURE_NORMAL)
         return false;
 #ifdef WIN32
-     char *data;
-     data = new char[size];
-     if( data == 0 || hwpf.ReadBlock(data,size) == 0 )
-          return false;
-     FILE *fp;
-     char tname[200];
-     wchar_t wtname[200];
-     tmpnam(tname);
-     if (0 == (fp = fopen(tname, "wb")))
-     {
+    char *data = new char[size];
+    if( data == 0 || hwpf.ReadBlock(data,size) == 0 )
+    {
           delete [] data;
           return false;
-     }
-     fwrite(data, size, 1, fp);
-     fclose(fp);
-     MultiByteToWideChar(CP_ACP, 0, tname, -1, wtname, 200);
-     if( StgOpenStorage(wtname, NULL,
-                     STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,
-                     NULL, 0, &pis) != S_OK ) {
-          pis = 0;
-          unlink(tname);
-          return false;
-     }
-     unlink(tname);
-     delete [] data;
+    }
+    FILE *fp;
+    char tname[200];
+    wchar_t wtname[200];
+    tmpnam(tname);
+    if (0 == (fp = fopen(tname, "wb")))
+    {
+         delete [] data;
+         return false;
+    }
+    fwrite(data, size, 1, fp);
+    delete [] data;
+    fclose(fp);
+    MultiByteToWideChar(CP_ACP, 0, tname, -1, wtname, 200);
+    if( StgOpenStorage(wtname, NULL,
+                    STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,
+                    NULL, 0, &pis) != S_OK ) {
+         pis = 0;
+         unlink(tname);
+         return false;
+    }
+    unlink(tname);
 #else
     if (pis == 0 || hwpf.ReadBlock(pis, size) == 0)
         return false;
