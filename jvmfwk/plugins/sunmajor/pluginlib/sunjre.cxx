@@ -89,6 +89,9 @@ char const* const* SunInfo::getLibraryPaths(int* size)
     static char const * ar[] = {
 
         "/lib/" JFW_PLUGIN_ARCH "/client",
+#if defined(OPENBSD)
+        "/lib/" JFW_PLUGIN_ARCH "/server",
+#endif
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
 
