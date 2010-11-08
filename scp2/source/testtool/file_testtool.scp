@@ -46,13 +46,6 @@ File gid_File_Bin_Testtool
     Name = "testtool.bin";
 End
 
-File gid_File_Hid_Testtool
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "hid.lst";
-End
-
 File gid_File_Config_Testtool
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
