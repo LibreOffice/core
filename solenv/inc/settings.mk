@@ -299,6 +299,12 @@ dbgutil=
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
+.IF "$(GUI)"=="WNT"
+posix_PWD:=/cygdrive/$(PWD:s/://)
+.ELSE			#GUI)"=="WNT"
+posix_PWD:=$(PWD)
+.ENDIF			#GUI)"=="WNT"
+
 
 .IF "$(TMP)"!=""
 tmp*=$(TMP)
@@ -602,18 +608,18 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # As this is not part of the initial startup makefile we define an infered
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
-$(OUT)/inc/%world.mk :
+$(posix_PWD)/$(OUT)/inc/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
-.INCLUDE : $(OUT)/inc/myworld.mk
+.INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk
 
 .IF "$(common_build)"!=""
-$(LOCAL_COMMON_OUT)/inc/%world.mk :
+$(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
-.INCLUDE : $(LOCAL_COMMON_OUT)/inc/myworld.mk
+.INCLUDE : $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/myworld.mk
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : office.mk
