@@ -88,16 +88,17 @@ void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet
 void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& rMatrix,
     const uno::Reference< beans::XPropertySet >& xPropSet)
 {
-    // --> OD 2004-08-09 #i28749# - Get <TransformationInHoriL2R>, if it exist
-    // and if the document is exported into the OpenOffice.org file format.
-    // This property only exists at service com::sun::star::text::Shape - the
-    // Writer UNO service for shapes.
-    // This code is needed, because the positioning attributes in the
-    // OpenOffice.org file format are given in horizontal left-to-right layout
-    // regardless the layout direction the shape is in. In the OASIS Open Office
-    // file format the positioning attributes are correctly given in the layout
-    // direction the shape is in. Thus, this code provides the conversion from
-    // the OASIS Open Office file format to the OpenOffice.org file format.
+    /* Get <TransformationInHoriL2R>, if it exist
+       and if the document is exported into the OpenOffice.org file format.
+       This property only exists at service com::sun::star::text::Shape - the
+       Writer UNO service for shapes.
+       This code is needed, because the positioning attributes in the
+       OpenOffice.org file format are given in horizontal left-to-right layout
+       regardless the layout direction the shape is in. In the OASIS Open Office
+       file format the positioning attributes are correctly given in the layout
+       direction the shape is in. Thus, this code provides the conversion from
+       the OASIS Open Office file format to the OpenOffice.org file format. (#i28749#)
+    */
     uno::Any aAny;
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xPropSet->getPropertySetInfo()->hasPropertyByName(
@@ -109,7 +110,6 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
     {
         aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
     }
-    // <--
     drawing::HomogenMatrix3 aMatrix;
     aAny >>= aMatrix;
 
@@ -1286,17 +1286,18 @@ void XMLShapeExport::ImpExportConnectorShape(
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
-    // --> OD 2004-08-09 #i36248# - Get <StartPositionInHoriL2R> and
-    // <EndPositionInHoriL2R>, if they exist and if the document is exported
-    // into the OpenOffice.org file format.
-    // These properties only exist at service com::sun::star::text::Shape - the
-    // Writer UNO service for shapes.
-    // This code is needed, because the positioning attributes in the
-    // OpenOffice.org file format are given in horizontal left-to-right layout
-    // regardless the layout direction the shape is in. In the OASIS Open Office
-    // file format the positioning attributes are correctly given in the layout
-    // direction the shape is in. Thus, this code provides the conversion from
-    // the OASIS Open Office file format to the OpenOffice.org file format.
+    /* Get <StartPositionInHoriL2R> and
+       <EndPositionInHoriL2R>, if they exist and if the document is exported
+       into the OpenOffice.org file format.
+       These properties only exist at service com::sun::star::text::Shape - the
+       Writer UNO service for shapes.
+       This code is needed, because the positioning attributes in the
+       OpenOffice.org file format are given in horizontal left-to-right layout
+       regardless the layout direction the shape is in. In the OASIS Open Office
+       file format the positioning attributes are correctly given in the layout
+       direction the shape is in. Thus, this code provides the conversion from
+       the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
+    */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xProps->getPropertySetInfo()->hasPropertyByName(
             OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
@@ -1311,7 +1312,6 @@ void XMLShapeExport::ImpExportConnectorShape(
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
     }
-    // <--
 
     if( pRefPoint )
     {
@@ -1458,17 +1458,18 @@ void XMLShapeExport::ImpExportMeasureShape(
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
-    // --> OD 2004-08-09 #i36248# - Get <StartPositionInHoriL2R> and
-    // <EndPositionInHoriL2R>, if they exist and if the document is exported
-    // into the OpenOffice.org file format.
-    // These properties only exist at service com::sun::star::text::Shape - the
-    // Writer UNO service for shapes.
-    // This code is needed, because the positioning attributes in the
-    // OpenOffice.org file format are given in horizontal left-to-right layout
-    // regardless the layout direction the shape is in. In the OASIS Open Office
-    // file format the positioning attributes are correctly given in the layout
-    // direction the shape is in. Thus, this code provides the conversion from
-    // the OASIS Open Office file format to the OpenOffice.org file format.
+    /* Get <StartPositionInHoriL2R> and
+       <EndPositionInHoriL2R>, if they exist and if the document is exported
+       into the OpenOffice.org file format.
+       These properties only exist at service com::sun::star::text::Shape - the
+       Writer UNO service for shapes.
+       This code is needed, because the positioning attributes in the
+       OpenOffice.org file format are given in horizontal left-to-right layout
+       regardless the layout direction the shape is in. In the OASIS Open Office
+       file format the positioning attributes are correctly given in the layout
+       direction the shape is in. Thus, this code provides the conversion from
+       the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
+    */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xProps->getPropertySetInfo()->hasPropertyByName(
             OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
@@ -1483,7 +1484,6 @@ void XMLShapeExport::ImpExportMeasureShape(
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
     }
-    // <--
 
     if( pRefPoint )
     {

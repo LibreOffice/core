@@ -100,9 +100,6 @@ static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
 
-/* -----------------28.10.98 08:32-------------------
- *
- * --------------------------------------------------*/
 // Die Auswahl an Bullets aus den StarSymbol
 static const sal_Unicode aBulletTypes[] =
 {
@@ -446,17 +443,11 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
     }
 }
 
-/*-----------------08.02.97 12.38-------------------
-
---------------------------------------------------*/
-
- SvxNumValueSet::~SvxNumValueSet()
+SvxNumValueSet::~SvxNumValueSet()
 {
     delete pVDev;
 }
-/* -----------------------------30.01.01 16:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxNumValueSet::SetNumberingSettings(
     const Sequence<Sequence<PropertyValue> >& aNum,
     Reference<XNumberingFormatter>& xFormat,
@@ -474,9 +465,7 @@ void SvxNumValueSet::SetNumberingSettings(
                 SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
     }
 }
-/* -----------------------------31.01.01 09:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxNumValueSet::SetOutlineNumberingSettings(
             Sequence<Reference<XIndexAccess> >& rOutline,
             Reference<XNumberingFormatter>& xFormat,
@@ -509,20 +498,13 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, co
     aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
-/*-----------------13.02.97 09.41-------------------
-
---------------------------------------------------*/
-
- SvxBmpNumValueSet::~SvxBmpNumValueSet()
+SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
     aFormatTimer.Stop();
 }
-/*-----------------13.02.97 09.41-------------------
 
---------------------------------------------------*/
-
-void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     SvxNumValueSet::UserDraw(rUDEvt);
 
@@ -551,10 +533,6 @@ void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         }
     }
 }
-
-/*-----------------14.02.97 07.34-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
 {

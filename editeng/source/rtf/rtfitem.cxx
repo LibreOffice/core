@@ -2019,9 +2019,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
             // Verhaeltnis der def. TabWidth / Tabs errechnen und
             // enstsprechend die neue Anzahl errechnen.
-/*-----------------14.12.94 19:32-------------------
- ?? wie kommt man auf die 13 ??
---------------------------------------------------*/
+            // ?? wie kommt man auf die 13 ??
             USHORT nAnzTabs = (SVX_TAB_DEFDIST * 13 ) / USHORT(nValue);
             /*
              cmc, make sure we have at least one, or all hell breaks loose in

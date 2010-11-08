@@ -1624,9 +1624,7 @@ public:
 
     util::Duration  GetDuration() const;
 };
-/*-- 20.11.2009 15:40:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 DurationDialog_Impl::DurationDialog_Impl(
     Window* pParent, const util::Duration& rDuration)
         :   ModalDialog( pParent, SfxResId( RID_EDIT_DURATIONS ) ),
@@ -1660,15 +1658,11 @@ DurationDialog_Impl::DurationDialog_Impl(
     aSecondNF.SetValue(rDuration.Seconds);
     aMSecondNF.SetValue(rDuration.MilliSeconds);
 }
-/*-- 20.11.2009 16:08:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 DurationDialog_Impl::~DurationDialog_Impl()
 {
 }
-/*-- 20.11.2009 15:41:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 util::Duration  DurationDialog_Impl::GetDuration() const
 {
     util::Duration  aRet;
@@ -1683,24 +1677,17 @@ util::Duration  DurationDialog_Impl::GetDuration() const
     return aRet;
 }
 
-/*-- 20.11.2009 15:30:58---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 CustomPropertiesDurationField::CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
         Edit( pParent, rResId ), m_pLine( pLine )
 
 {
     SetDuration( util::Duration(false, 0, 0, 0, 0, 0, 0, 0) );
 }
-/*-- 23.11.2009 08:46:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CustomPropertiesDurationField::~CustomPropertiesDurationField()
 {
 }
-/*-- 23.11.2009 09:23:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
 {
     if( rHEvt.GetMode() & HELPMODE_QUICK )
@@ -1714,9 +1701,7 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
                 QUICKHELP_LEFT|QUICKHELP_VCENTER );
     }
 }
-/*-- 20.11.2009 15:30:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
 {
     m_aDuration = rDuration;
@@ -1730,23 +1715,17 @@ void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration
     sText.SearchAndReplace(String::CreateFromAscii( "%6"), String::CreateFromInt32( rDuration.Seconds) );
     SetText( sText );
 }
-/*-- 23.11.2009 08:51:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CustomPropertiesEditButton::CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
         PushButton( pParent, rResId ), m_pLine( pLine )
 {
     SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
 }
-/*-- 23.11.2009 08:51:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CustomPropertiesEditButton::~CustomPropertiesEditButton()
 {
 }
-/*-- 23.11.2009 08:47:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( CustomPropertiesEditButton, ClickHdl, PushButton*, EMPTYARG )
 {
     DurationDialog_Impl* pDurationDlg = new DurationDialog_Impl( this, m_pLine->m_aDurationField.GetDuration() );

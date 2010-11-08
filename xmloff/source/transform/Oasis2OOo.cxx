@@ -384,14 +384,13 @@ static XMLTransformerActionInit aActionTable[] =
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( DRAW, PAGE, XML_ETACTION_PROC_ATTRS,
                 OASIS_MASTER_PAGE_REF_ACTIONS ), /* generated entry */
-    // --> OD 2005-01-10 #i40011#, #i40015#
-    // - conversion of attribute <table:style-name> for <table:table-row> and
-    //   <table:table-column>
+    /* Conversion of attribute <table:style-name> for <table:table-row> and
+       <table:table-column> (#i40011#, #i40015#)
+    */
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
-    // <--
 
     // rename office:value-* to *:value-*
     ENTRY1( TEXT, VARIABLE_DECL, XML_ETACTION_PROC_ATTRS,
@@ -697,16 +696,13 @@ static XMLTransformerActionInit aMapStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// --> OD 2005-01-10 #i40011#, #i40015#
-// action table for OASIS_TABLE_STYLE_REF_ACTIONS
+// action table for OASIS_TABLE_STYLE_REF_ACTIONS (#i40011#, #i40015#)
 static XMLTransformerActionInit aTableStyleRefActionTable[] =
 {
     ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_END ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
-// <--
-
 
 static XMLTransformerActionInit aFontFaceActionTable[] =
 {
@@ -1232,8 +1228,7 @@ void XMLTableTransformerContext_Impl::StartElement(
                 }
                 // OD 2005-07-05 #i50521# - no break here for savety reason.
             }
-            // --> OD 2005-01-10 #i40011#, #i40015#
-            // - convert attribute table:style-name for <table:table>
+            // Convert attribute table:style-name for <table:table> (#i40011#, #i40015#)
             else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
                 const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1249,7 +1244,6 @@ void XMLTableTransformerContext_Impl::StartElement(
                     pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
             }
-            // <--
             else if( IsXMLToken( aLocalName, XML_PRINT ) )
             {
                 if ( !pMutableAttrList )
@@ -1912,12 +1906,11 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                 m_aActions[OASIS_DATETIME_ACTIONS] =
                     new XMLTransformerActions( aDateTimeActionTable );
                 break;
-            // --> OD 2005-01-10 #i40011#, #i40015#
+            // Bugdoc with table won't load correctly (#i40011#, #i40015#)
             case OASIS_TABLE_STYLE_REF_ACTIONS:
                 m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS] =
                     new XMLTransformerActions( aTableStyleRefActionTable );
                 break;
-            // <--
             case OASIS_ANIMATION_ACTIONS:
                 m_aActions[OASIS_ANIMATION_ACTIONS] =
                     new XMLTransformerActions( aAnimationActionTable );

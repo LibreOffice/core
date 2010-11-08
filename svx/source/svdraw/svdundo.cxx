@@ -823,9 +823,9 @@ void SdrUndoInsertObj::Redo()
     DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj ist bereits Inserted");
     if (!pObj->IsInserted())
     {
-        // --> OD 2005-05-10 #i45952# - restore anchor position of an object,
+        // Restore anchor position of an object,
         // which becomes a member of a group, because its cleared in method
-        // <InsertObject(..)>. Needed for correct ReDo in Writer.
+        // <InsertObject(..)>. Needed for correct ReDo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
         if ( pObjList &&
              pObjList->GetOwnerObj() &&
@@ -833,17 +833,15 @@ void SdrUndoInsertObj::Redo()
         {
             aAnchorPos = pObj->GetAnchorPos();
         }
-        // <--
 
         SdrInsertReason aReason(SDRREASON_UNDO);
         pObjList->InsertObject(pObj,nOrdNum,&aReason);
 
-        // --> OD 2005-05-10 #i45952#
+        // Arcs lose position when grouped (#i45952#)
         if ( aAnchorPos.X() || aAnchorPos.Y() )
         {
             pObj->NbcSetAnchorPos( aAnchorPos );
         }
-        // <--
     }
 
     // #94278# Trigger PageChangeCall
@@ -1217,7 +1215,7 @@ bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
     return bOk;
 }
 
-// --> OD 2009-07-09 #i73249#
+// Undo/Redo for setting object's name (#i73249#)
 SdrUndoObjStrAttr::SdrUndoObjStrAttr( SdrObject& rNewObj,
                                       const ObjStrAttrType eObjStrAttr,
                                       const String& sOldStr,

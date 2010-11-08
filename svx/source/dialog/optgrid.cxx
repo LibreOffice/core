@@ -44,9 +44,7 @@
 #include "optgrid.hrc"
 #include "dlgutil.hxx"
 
-/* -----------------18.08.98 17:41-------------------
- * local functions
- * --------------------------------------------------*/
+// local functions
 void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
     nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
@@ -167,11 +165,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     }
 }
 
-
-/*----------------- OS 23.02.95  -----------------------
- TabPage Rastereinstellungen
--------------------------------------------------------*/
-
+// TabPage Rastereinstellungen
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),

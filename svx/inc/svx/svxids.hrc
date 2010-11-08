@@ -745,11 +745,11 @@
 //#define SID_ZOOM_PREV                                   ( SID_SVX_START + 403 )   -> sfxsids.hrc
 #define SID_BACKGRND_DESTINATION                        ( SID_SVX_START + 404 )
 #define SID_ATTR_FLASH                                  ( SID_SVX_START + 406 )
-#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
+#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* Slots mit --> koennen demnaechst entfallen */
 #define SID_ATTR_3D_START                                   SID_ATTR_3D_LIGHT
-#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
-#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
-#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
+#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* Slots mit --> koennen demnaechst entfallen */
 #define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
 #define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
 

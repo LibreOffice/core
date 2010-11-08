@@ -1124,7 +1124,7 @@ String STR_UndoMovLayer
 {
     Text [ en-US ] = "Change order of layers" ;
 };
-// --> OD 2009-07-09 #i73249#
+// Undo/Redo for setting object's name (#i73249#)
 String STR_UndoObjName
 {
     Text [ en-US ] = "Change object name of %1 to" ;
@@ -1137,7 +1137,6 @@ String STR_UndoObjDescription
 {
     Text [ en-US ] = "Change object description of %1" ;
 };
-// <--
 String STR_StandardLayerName
 {
     Text [ en-US ] = "Standard" ;

@@ -3076,7 +3076,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     nTextLen = pTextPortion->GetLen();
                                     pDXArray = pLine->GetCharPosArray().GetData()+( nIndex-pLine->GetStart() );
 
-                                    // --> FME 2005-10-18 #i55716# Paint control characters
+                                    // Paint control characters (#i55716#)
                                     if ( aStatus.MarkFields() )
                                     {
                                         xub_StrLen nTmpIdx;
@@ -3164,7 +3164,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             }
                                         }
                                     }
-                                    // <--
                                 }
                                 else if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                 {
@@ -3415,14 +3414,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
 
-                                        // --> FME 2005-06-17 #i37132# RTL portions with
+                                        // RTL portions with (#i37132#)
                                         // compressed blank should not paint this blank:
                                         if ( pTextPortion->IsRightToLeft() && nTextLen >= 2 &&
                                              pDXArray[ nTextLen - 1 ] ==
                                              pDXArray[ nTextLen - 2 ] &&
                                              ' ' == aText.GetChar( nTextStart + nTextLen - 1 ) )
                                             --nTextLen;
-                                        // <--
 
                                         // output directly
                                         aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
@@ -3436,7 +3434,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
                                             pOutDev->DrawRect( aRect );
                                         }
-
 
                                         // PDF export:
                                         if ( pPDFExtOutDevData )

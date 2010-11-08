@@ -861,7 +861,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
         }
-        // --> PB 2007-12-09 #i83757#
+        // API to raise options dialog with a specified options ab page (#i83757#)
         else
         {
             // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
@@ -883,7 +883,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
             }
         }
-        // <--
 #ifdef DB_UTIL
         if ( nFoundArgs == nCount )
         {

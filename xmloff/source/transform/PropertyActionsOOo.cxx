@@ -301,14 +301,12 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
 //  { XML_NAMESPACE_STYLE, XML_OVERFLOW_BEHAVIOR, XML_ATACTION_COPY,
 //      NO_PARAMS }, /* new attribute */
-    // --> OD 2005-05-12 #i49139# - rename attribute values of <style:mirror>:
-    // horizontal-on-left-pages --> horizontal-on-even
-    // horizontal-on-right-pages --> horizontal-on-odd
-//    { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* generated entry */
+    /* Rename attribute values of <style:mirror>: (#i49139#)
+         horizontal-on-left-pages --> horizontal-on-even
+         horizontal-on-right-pages --> horizontal-on-odd
+    */
     { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_STYLE_MIRROR_OOO,
         NO_PARAMS }, /* generated entry */
-    // <--
     { XML_NAMESPACE_FO, XML_CLIP, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR, XML_ATACTION_COPY,

@@ -401,16 +401,12 @@ void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
     delete pFtBorder;
     pFtBorder = new SvxBoxItem( rNew );
 }
-/* -----------------------------13.06.2002 16:16------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxPageWindow::EnableFrameDirection(sal_Bool bEnable)
 {
     pImpl->EnableFrameDirection(bEnable);
 }
-/* -----------------------------13.06.2002 16:16------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxPageWindow::SetFrameDirection(sal_Int32 nFrameDirection)
 {
     pImpl->SetFrameDirection(nFrameDirection);

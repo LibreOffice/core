@@ -99,9 +99,8 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
         {
             sListStyleName = rValue;
-            // --> OD 2006-09-21 #i69523#
+            // Inherited paragraph style lost information about unset numbering (#i69523#)
             mbListStyleSet = sal_True;
-            // <--
         }
         else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
@@ -120,8 +119,7 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         {
             sal_Int32 nTmp;
             if( SvXMLUnitConverter::convertNumber( nTmp, rValue ) &&
-            //  nTmp > 0 && nTmp < 256 )    //#outline level, removed by zhaojianwei
-                0 <= nTmp && nTmp <= 10 )   //<-end,add by zhaojianwei
+                0 <= nTmp && nTmp <= 10 )
                 nOutlineLevel = static_cast< sal_Int8 >( nTmp );
         }
         else
@@ -146,17 +144,15 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
 ,   sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) )
 ,   sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) )
-,       sOutlineLevel(RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) )//#outline level,add by zhaojianwei
+,       sOutlineLevel(RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) )
 ,   sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
 ,   sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) )
-//, nOutlineLevel( 0 )  // removed by zhaojianwei
-,   nOutlineLevel( -1 ) //<-end, add by zhaojianwei
+,   nOutlineLevel( -1 )
 ,   bAutoUpdate( sal_False )
 ,   bHasMasterPageName( sal_False )
 ,   bHasCombinedCharactersLetter( sal_False )
-// --> OD 2006-09-21 #i69523#
+// Inherited paragraph style lost information about unset numbering (#i69523#)
 ,   mbListStyleSet( sal_False )
-// <--
 ,   pEventContext( NULL )
 {
 }
@@ -254,13 +250,12 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         pEventContext->ReleaseRef();
     }
 
-    // --> OD 2006-10-12 #i69629#
+    // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
     if ( nOutlineLevel > 0 )
     {
         GetImport().GetTextImport()->AddOutlineStyleCandidate( nOutlineLevel,
                                                       GetDisplayName() );
     }
-    // <--
 }
 
 void XMLTextStyleContext::SetDefaults( )
@@ -286,23 +281,19 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     XMLPropStyleContext::Finish( bOverwrite );
 
     Reference < XStyle > xStyle = GetStyle();
-    // --> OD 2006-09-21 #i69523#
-    // consider set empty list style
-//    if ( !( sListStyleName.getLength() ||
+    // Consider set empty list style (#i69523#)
     if ( !( mbListStyleSet ||
-            nOutlineLevel >= 0 ||   //#outline level,add by zhaojianwei
+            nOutlineLevel >= 0 ||
             sDropCapTextStyleName.getLength() ||
             bHasMasterPageName ) ||
          !xStyle.is() ||
          !( bOverwrite || IsNew() ) )
         return;
-    // <--
 
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
 
-    //#outline level,add by zhaojianwei
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ))
     {
         Any aAny;
@@ -312,24 +303,19 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
             xPropSet->setPropertyValue( sOutlineLevel, aAny );
         }
     }
-    //<-end,zhaojianwei
 
-
-    // --> OD 2006-09-21 #i69523#
-    // consider set empty list style
-//    if( sListStyleName.getLength() )
+    // Consider set empty list style (#i69523#)
     if ( mbListStyleSet &&
          xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
-        // --> OD 2006-10-12 #i70223#
-        // Only for text document from version prior OOo 2.1 resp. SO 8 PU5:
-        // - Do not apply list style, if paragraph style has a default outline
-        //   level > 0 and thus, will be assigned to the corresponding list
-        //   level of the outline style.
+        /* Only for text document from version prior OOo 2.1 resp. SO 8 PU5:
+           - Do not apply list style, if paragraph style has a default outline
+             level > 0 and thus, will be assigned to the corresponding list
+             level of the outline style. (#i70223#)
+        */
         bool bApplyListStyle( true );
         if ( nOutlineLevel > 0 )
         {
-            // --> OD 2007-12-19 #152540#
             if ( GetImport().IsTextDocInOOoFileFormat() )
             {
                 bApplyListStyle = false;
@@ -338,17 +324,14 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
             {
                 sal_Int32 nUPD( 0 );
                 sal_Int32 nBuild( 0 );
-                // --> OD 2008-03-19 #i86058#
-                // check explicitly on certain versions
+                // Check explicitly on certain versions (#i86058#)
                 if ( GetImport().getBuildIds( nUPD, nBuild ) &&
                      ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
                        ( nUPD == 680 && nBuild <= 9073 ) ) ) // OOo 2.0 - OOo 2.0.4
                 {
                     bApplyListStyle = false;
                 }
-                // <--
             }
-            // <--
         }
 
         if ( bApplyListStyle )
@@ -379,9 +362,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
                 }
             }
         }
-        // <--
     }
-    // <--
 
     if( sDropCapTextStyleName.getLength() )
     {

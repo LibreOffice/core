@@ -64,7 +64,7 @@
 #include <svx/dialogs.hrc>
 // static ----------------------------------------------------------------
 
-// --> OD 2004-06-18 #i19922#
+// Word 97 incompatibility (#i19922#)
 //static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
 static const long MINBODY = 56;  // 1mm in twips rounded
 
@@ -953,9 +953,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     aRMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
     return 0;
 }
-/* -----------------------------26.08.2002 12:49------------------------------
 
- ---------------------------------------------------------------------------*/
 void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());

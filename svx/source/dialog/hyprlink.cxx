@@ -68,9 +68,6 @@ public:
     virtual void            Commit();
 };
 
-/*-- 11.11.2003 14:20:59---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SearchDefaultConfigItem_Impl::SearchDefaultConfigItem_Impl() :
         ConfigItem(OUString::createFromAscii("Inet/DefaultSearchEngine"))
 {
@@ -79,9 +76,7 @@ SearchDefaultConfigItem_Impl::SearchDefaultConfigItem_Impl() :
     uno::Sequence< uno::Any > aValues = GetProperties(aNames);
     aValues.getConstArray()[0] >>= sDefaultEngine;
 }
-/*-- 11.11.2003 14:21:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SearchDefaultConfigItem_Impl::~SearchDefaultConfigItem_Impl()
 {
 }

@@ -2186,42 +2186,31 @@ EESpellState EditEngine::HasSpellErrors()
 
     return pImpEditEngine->HasSpellErrors();
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditEngine::EndSpelling()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->EndSpelling();
 }
 
-/*-- 13.10.2003 16:43:27---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking );
 }
-/*-- 08.09.2008 11:38:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->PutSpellingToSentenceStart( rEditView );
 }
-/*-- 13.10.2003 16:43:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     DBG_CHKTHIS( EditEngine, 0 );

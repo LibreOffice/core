@@ -968,10 +968,9 @@ namespace sfx2
         // retrieve the default filter for this application module.
         // It must be set as first of the generated filter list.
         const SfxFilter* pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
-        // --> PB 2004-11-01 #i32434# only use one extension
+        // Only use one extension (#i32434#)
         // (and always the first if there are more than one)
         sExtension = pDefaultFilter->GetWildcard().GetWildCard().GetToken( 0, ';' );
-        // <--
         sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
         try
         {
@@ -993,10 +992,9 @@ namespace sfx2
             if (pFilter->GetName() == pDefaultFilter->GetName())
                 continue;
 
-            // --> PB 2004-09-21 #i32434# only use one extension
+            // Only use one extension (#i32434#)
             // (and always the first if there are more than one)
             sExtension = pFilter->GetWildcard().GetWildCard().GetToken( 0, ';' );
-            // <--
             sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
             try
             {

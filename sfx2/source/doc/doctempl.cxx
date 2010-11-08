@@ -2177,9 +2177,8 @@ const OUString& RegionData_Impl::GetTargetURL()
             OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
 
             getTextProperty_Impl( aRegion, aPropName, maTargetURL );
-            // --> PB 2004-10-27 #i32656# - the targeturl must be substituted: $(baseinsturl)
+            // The targeturl must be substituted: $(baseinsturl) (#i32656#)
             maTargetURL = SvtPathOptions().SubstituteVariable( maTargetURL );
-            // <--
         }
         else
         {

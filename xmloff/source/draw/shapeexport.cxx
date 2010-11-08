@@ -507,7 +507,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
 ///////////////////////////////////////////////////////////////////////
 
-// --> OD 2008-05-08 #refactorlists#
 namespace
 {
     class NewTextListsHelper
@@ -584,9 +583,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         return;
     }
 
-    // --> OD 2008-05-08 #refactorlists#
     NewTextListsHelper aNewTextListsHelper( mrExport );
-    // <--
 
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
@@ -619,16 +616,13 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->collect( xShape, mrExport );
 
-    // -------------------------------
-    // export shapes name if he has one
-    // --> OD 2006-03-13 #i51726#
-    // Export of the shape name for text documents only if the OpenDocument
-    // file format is written - exceptions are group shapes.
-    // Note: Writer documents in OpenOffice.org file format doesn't contain
-    //       any names for shapes, except for group shapes.
-    // -------------------------------
+    /* Export shapes name if he has one (#i51726#)
+       Export of the shape name for text documents only if the OpenDocument
+       file format is written - exceptions are group shapes.
+       Note: Writer documents in OpenOffice.org file format doesn't contain
+             any names for shapes, except for group shapes.
+    */
     {
-        // --> OD 2006-03-10 #i51726#
         if ( ( GetExport().GetModelType() != SvtModuleOptions::E_WRITER &&
                GetExport().GetModelType() != SvtModuleOptions::E_WRITERWEB &&
                GetExport().GetModelType() != SvtModuleOptions::E_WRITERGLOBAL ) ||
@@ -645,7 +639,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
             }
         }
-        // <--
     }
 
     // ------------------

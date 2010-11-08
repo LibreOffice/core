@@ -101,10 +101,9 @@
 #define REPLACELENGTH_LANGID            9
 #define REPLACELENGTH_VLANG             8
 #define REPLACELENGTH_WORKDIRURL        13
-// --> PB 2004-10-27 #i32656# - new variable of hierachy service
+// New variable of hierachy service (#i32656#)
 #define REPLACELENGTH_BASEINSTURL       14
 #define REPLACELENGTH_USERDATAURL       14
-// <--
 
 // Name of the pre defined path variables
 #define VARIABLE_INST                   "$(inst)"
@@ -124,10 +123,9 @@
 #define VARIABLE_PROGURL                "$(progurl)"
 #define VARIABLE_USERURL                "$(userurl)"
 #define VARIABLE_WORKDIRURL             "$(workdirurl)"
-// --> PB 2004-10-27 #i32656# - new variable of hierachy service
+// New variable of hierachy service (#i32656#)
 #define VARIABLE_BASEINSTURL            "$(baseinsturl)"
 #define VARIABLE_USERDATAURL            "$(userdataurl)"
-// <--
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -214,10 +212,9 @@ static FixedVariable aFixedVarTable[] =
     { VARIABLE_PROGURL,     PREDEFVAR_PROGURL,      REPLACELENGTH_PROGURL       },
     { VARIABLE_USERURL,     PREDEFVAR_USERURL,      REPLACELENGTH_USERURL       },
     { VARIABLE_WORKDIRURL,  PREDEFVAR_WORKDIRURL,   REPLACELENGTH_WORKDIRURL    },  // Special variable (transient) and don't use for resubstitution!
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL   },
     { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL   },
-    // <--
     { "$(brandbaseurl)", PREDEFVAR_BRANDBASEURL,
       RTL_CONSTASCII_LENGTH("$(brandbaseurl)") }
 };
@@ -1198,16 +1195,14 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(inst), $(instpath), $(insturl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // <--
 
     // Set $(user), $(userpath), $(userurl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // --> PB 2004-11-11 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERDATAURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // <--
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)

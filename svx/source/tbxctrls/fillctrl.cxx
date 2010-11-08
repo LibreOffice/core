@@ -820,9 +820,6 @@ void FillControl::Resize()
     pLbFillType->SetSizePixel( Size( nW * 2 - nSep, nH ) );
     pLbFillAttr->SetPosSizePixel( Point( nW * 2 + nSep, 0 ), Size( nW * 3 - nSep, nH ) );
 }
-/* -----------------------------08.03.2002 15:04------------------------------
-
- ---------------------------------------------------------------------------*/
 
 void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
 {

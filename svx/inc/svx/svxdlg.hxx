@@ -347,7 +347,7 @@ public:
 
     virtual AbstractSvxCaptionDialog* CreateCaptionDialog( Window* pParent,
                                         const SdrView* pView,
-                                        USHORT nAnchorTypes = 0 ) = 0;      //add for SvxCaptionTabDialog CHINA001
+                                        USHORT nAnchorTypes = 0 ) = 0; //add for SvxCaptionTabDialog
 
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,

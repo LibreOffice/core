@@ -158,9 +158,10 @@
 #define CTF_FRAMEWIDTH_REL                  (XML_TEXT_CTF_START + 126)
 #define CTF_FRAMEWIDTH_TYPE                 (XML_TEXT_CTF_START + 127)
 #define CTF_BORDER_MODEL                    (XML_TEXT_CTF_START + 128)
-// --> OD 2004-08-09 #i28749# - define CTF ids for positioning properties of
-// shapes, because on export to OpenOffice.org file format these have to
-// be handled special, if shape isn't anchored as-character.
+/* Define CTF ids for positioning properties of
+   shapes, because on export to OpenOffice.org file format these have to
+   be handled special, if shape isn't anchored as-character. (#i28749#)
+*/
 #define CTF_SHAPE_HORIZONTALPOS             (XML_TEXT_CTF_START + 129)
 #define CTF_SHAPE_HORIZONTALPOS_MIRRORED    (XML_TEXT_CTF_START + 130)
 #define CTF_SHAPE_HORIZONTALREL             (XML_TEXT_CTF_START + 131)

@@ -1959,16 +1959,12 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     return xSpellAlt;
 #endif
 }
-/*-- 13.10.2003 16:43:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void ImpEditEngine::EndSpelling()
 {
     DELETEZ(pSpellInfo);
 }
-/*-- 13.10.2003 16:43:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");
@@ -1976,9 +1972,7 @@ void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
     pSpellInfo = CreateSpellInfo( aCurSel, bMultipleDoc );
 }
-/*-- 13.10.2003 16:43:27---------------------------------------------------
-    Search for the next wrong word within the given selection
-  -----------------------------------------------------------------------*/
+
 Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& rSelection)
 {
     /* ContentNode* pLastNode = */ aEditDoc.SaveGetObject( (aEditDoc.Count()-1) );
@@ -2024,9 +2018,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
     }
     return xSpellAlt;
 }
-/*-- 13.10.2003 16:43:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool ImpEditEngine::SpellSentence(EditView& rEditView,
     ::svx::SpellPortions& rToFill,
     bool /*bIsGrammarChecking*/ )
@@ -2090,9 +2082,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
     return bRet;
 }
 
-/*-- 15.10.2003 16:09:12---------------------------------------------------
-    adds one portion to the SpellPortions
-  -----------------------------------------------------------------------*/
+// Adds one portion to the SpellPortions
 void ImpEditEngine::AddPortion(
                             const EditSelection rSel,
                             uno::Reference< XSpellAlternatives > xAlt,
@@ -2118,9 +2108,7 @@ void ImpEditEngine::AddPortion(
 #endif
 }
 
-/*-- 15.10.2003 16:07:47---------------------------------------------------
-    adds one or more portions of text to the SpellPortions depending on language changes
-  -----------------------------------------------------------------------*/
+// Adds one or more portions of text to the SpellPortions depending on language changes
 void ImpEditEngine::AddPortionIterated(
                             EditView& rEditView,
                             const EditSelection rSel,
@@ -2193,9 +2181,6 @@ void ImpEditEngine::AddPortionIterated(
 #endif
 }
 
-/*-- 13.10.2003 16:43:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
     const ::svx::SpellPortions& rNewPortions,
     bool bRecheck )
@@ -2326,9 +2311,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
     }
 #endif
 }
-/*-- 08.09.2008 11:33:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 {
 #ifdef SVX_LIGHT

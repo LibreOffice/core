@@ -902,9 +902,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
     return pImp->pBaseModel.get();
 }
-/* -----------------------------10.09.2001 15:56------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
 {
     pImp->nStyleFilter = nSet;

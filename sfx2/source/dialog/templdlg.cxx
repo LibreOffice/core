@@ -3013,24 +3013,17 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
-/*-- 10.12.2003 11:44:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DropToolBox_Impl::DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
     ToolBox(pParent),
     DropTargetHelper(this),
     rParent(*pTemplateDialog)
 {
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 DropToolBox_Impl::~DropToolBox_Impl()
 {
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nReturn = DND_ACTION_NONE;
@@ -3050,9 +3043,7 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     return nReturn;
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int8    DropToolBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
      return rParent.aFmtLb.ExecuteDrop(rEvt);

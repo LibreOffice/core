@@ -51,18 +51,15 @@ class XMLTextListBlockContext : public SvXMLImportContext
     sal_Bool                mbRestartNumbering;
     sal_Bool                mbSetDefaults;
 
-    // --> OD 2008-04-22 #refactorlists#
     // text:id property of <list> element, only valid for root <list> element
     ::rtl::OUString msListId;
     // text:continue-list property of <list> element, only valid for root <list> element
     ::rtl::OUString msContinueListId;
-    // <--
 
 public:
 
     TYPEINFO();
 
-    // --> OD 2008-05-07 #refactorlists#
     // add optional parameter <bRestartNumberingAtSubList>
     XMLTextListBlockContext(
                 SvXMLImport& rImport,
@@ -72,7 +69,6 @@ public:
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 const sal_Bool bRestartNumberingAtSubList = sal_False );
-    // <--
     virtual ~XMLTextListBlockContext();
 
     virtual void EndElement();
@@ -91,11 +87,8 @@ public:
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
         { return mxNumRules; }
 
-    // --> OD 2008-04-22 #refactorlists#
     const ::rtl::OUString& GetListId() const;
     const ::rtl::OUString& GetContinueListId() const;
-    // <--
-
 };
 
 

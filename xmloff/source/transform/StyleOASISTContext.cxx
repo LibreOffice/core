@@ -495,7 +495,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
                     {
                         // keep original for writer graphic objects
-                        // --> OD 2005-05-12 #i49139# - adapts attribute values,
+                        // Adapts attribute values (#i49139#)
                         OUString aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;

@@ -244,9 +244,7 @@ void SvxLineBox::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
-/* -----------------------------08.03.2002 15:39------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -428,9 +426,7 @@ long SvxColorBox::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
-/* -----------------------------08.03.2002 15:35------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxColorBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -629,9 +625,7 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
-/* -----------------------------08.03.2002 15:32------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&

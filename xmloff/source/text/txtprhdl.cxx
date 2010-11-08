@@ -244,12 +244,10 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
 // OD 2004-05-05 #i28701#
 SvXMLEnumMapEntry __READONLY_DATA pXML_WrapInfluenceOnPosition_Enum[] =
 {
-    // --> OD 2004-10-18 #i35017# - tokens have been renamed and
-    // <XML_ITERATIVE> has been added
+    // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
     { XML_ONCE_SUCCESSIVE, WrapInfluenceOnPosition::ONCE_SUCCESSIVE },
     { XML_ONCE_CONCURRENT, WrapInfluenceOnPosition::ONCE_CONCURRENT },
     { XML_ITERATIVE,       WrapInfluenceOnPosition::ITERATIVE },
-    // <--
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -854,12 +852,12 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
                rStrExpValue = sVal;
         }
         else if( bHori &&
-                 // --> OD 2005-05-12 #i49139#
-                 // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
-                 // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+                 /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+                    are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+                    (#i49139#)
+                 */
                  ( IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_EVEN ) ||
                    IsXMLToken( rStrExpValue, XML_HORIZONTAL_ON_ODD ) ))
-                 // <--
         {
             rStrExpValue = GetXMLToken( XML_HORIZONTAL );
         }
@@ -1342,16 +1340,12 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_VERTICAL, sal_False );
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT:
-        // --> OD 2005-05-12 #i49139#
-        // XML_HORIZONTAL_ON_LEFT_PAGES is replaced by XML_HORIZONTAL_ON_EVEN.
+        // XML_HORIZONTAL_ON_LEFT_PAGES is replaced by XML_HORIZONTAL_ON_EVEN. (#i49139#)
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_EVEN, sal_True );
-        // <--
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT:
-        // --> OD 2005-05-12 #i49139#
-        // XML_HORIZONTAL_ON_RIGHT_PAGES is replaced by XML_HORIZONTAL_ON_ODD.
+        // XML_HORIZONTAL_ON_RIGHT_PAGES is replaced by XML_HORIZONTAL_ON_ODD. (#i49139#)
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_ODD, sal_True );
-        // <--
         break;
     case XML_TYPE_TEXT_CLIP:
         pHdl = new XMLClipPropertyHandler( sal_False );

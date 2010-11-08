@@ -511,9 +511,7 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
         nNewCol = 20;
     UpdateSize_Impl( nNewCol );
 }
-/* -----------------------------21.05.2002 16:16------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 {
     Size    aWinSize = GetOutputSizePixel();
@@ -573,9 +571,7 @@ void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
     SfxPopupWindow::MouseButtonDown( rMEvt );
     CaptureMouse();
 }
-/* -----------------------------21.05.2002 16:11------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
 {
     BOOL bHandled = FALSE;
@@ -836,9 +832,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
     }
     return pWin;
 }
-/* -----------------18.11.99 16:38-------------------
 
- --------------------------------------------------*/
 void SvxColumnsToolBoxControl::StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState )

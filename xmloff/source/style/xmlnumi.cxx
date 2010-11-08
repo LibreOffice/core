@@ -35,10 +35,8 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-// --> OD 2008-01-16 #newlistlevelattrs#
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
-// <--
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -110,13 +108,11 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
-// --> OD 2008-01-15 #newlistlevelattrs#
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
-// <--
 
 // ---------------------------------------------------------------------
 
@@ -135,16 +131,13 @@ public:
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
     virtual ~SvxXMLListLevelStyleAttrContext_Impl();
 
-    // --> OD 2008-01-16 #newlistlevelattrs#
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
-    // <--
 };
 
 // ---------------------------------------------------------------------
 
-// --> OD 2008-01-16 #newlistlevelattrs#
 class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportContext
 {
     SvxXMLListLevelStyleContext_Impl&   rListLevel;
@@ -158,7 +151,6 @@ public:
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
     virtual ~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl();
 };
-// <--
 
 // ---------------------------------------------------------------------
 
@@ -242,13 +234,11 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Int16           nRelSize;
     Color               aColor;
 
-    // --> OD 2008-01-16 #newlistlevelattrs#
     sal_Int16           ePosAndSpaceMode;
     sal_Int16           eLabelFollowedBy;
     sal_Int32           nListtabStopPosition;
     sal_Int32           nFirstLineIndent;
     sal_Int32           nIndentAt;
-    // <--
 
     sal_Bool            bBullet : 1;
     sal_Bool            bImage : 1;
@@ -291,7 +281,6 @@ public:
     Sequence<beans::PropertyValue> GetProperties(
             const SvI18NMap *pI18NMap=0 );
 
-    // --> OD 2008-01-16 #newlistlevelattrs#
     inline void SetPosAndSpaceMode( sal_Int16 eValue )
     {
         ePosAndSpaceMode = eValue;
@@ -312,7 +301,6 @@ public:
     {
         nIndentAt = nValue;
     }
-    // <--
 };
 
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
@@ -340,13 +328,11 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   cBullet( 0 )
 ,   nRelSize(0)
 ,   aColor( 0 )
-// --> OD 2008-01-16 #newlistelevelattrs#
 ,   ePosAndSpaceMode( PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
 ,   eLabelFollowedBy( LabelFollow::LISTTAB )
 ,   nListtabStopPosition( 0 )
 ,   nFirstLineIndent( 0 )
 ,   nIndentAt( 0 )
-// <--
 ,   bBullet( sal_False )
 ,   bImage( sal_False )
 ,   bNum( sal_False )
@@ -538,7 +524,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             OUString::createFromAscii(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE);
         pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
 
-        // --> OD 2008-01-16 #newlistlevelattrs#
         pProps[nPos].Name =
             OUString::createFromAscii(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE);
         pProps[nPos++].Value <<= (sal_Int16)ePosAndSpaceMode;
@@ -554,7 +539,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         pProps[nPos].Name =
             OUString::createFromAscii(XML_UNO_NAME_NRULE_INDENT_AT);
         pProps[nPos++].Value <<= (sal_Int32)nIndentAt;
-        // <--
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
@@ -690,10 +674,7 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE,
-    // --> OD 2008-01-16 #newlistlevelattrs#
     XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE,
-    // <--
-
     XML_TOK_STYLE_ATTRIBUTES_ATTR_END=XML_TOK_UNKNOWN
 };
 const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
@@ -734,11 +715,8 @@ const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR },
         { XML_NAMESPACE_FO, XML_FONT_SIZE,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE },
-        // --> OD 2008-01-16 #newlistlevelattrs#
         { XML_NAMESPACE_TEXT, XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE },
-        // <--
-
         XML_TOKEN_MAP_END
     };
     return aStyleAttributesAttrTokenMap;
@@ -843,7 +821,6 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             if(SvXMLUnitConverter::convertPercent( nVal, rValue ) )
                 rListLevel.SetRelSize( (sal_Int16)nVal );
             break;
-        // --> OD 2008-01-16 #newlistlevelattrs#
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE:
             {
                 sal_Int16 ePosAndSpaceMode = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
@@ -852,7 +829,6 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 rListLevel.SetPosAndSpaceMode( ePosAndSpaceMode );
             }
             break;
-        // <--
         }
     }
 
@@ -990,7 +966,6 @@ SvxXMLListLevelStyleAttrContext_Impl::~SvxXMLListLevelStyleAttrContext_Impl()
 {
 }
 
-// --> OD 2008-01-16 #newlistlevelattrs#
 SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -1012,11 +987,9 @@ SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
 
     return pContext;
 }
-// <--
 
 // ---------------------------------------------------------------------
 
-// --> OD 2008-01-16 #newlistlevelattrs#
 enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
 {
     XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY,
@@ -1096,7 +1069,6 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
 SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl()
 {
 }
-// <--
 
 // ---------------------------------------------------------------------
 

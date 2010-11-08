@@ -292,12 +292,11 @@ static sal_Bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame
     css::uno::Reference< css::awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), css::uno::UNO_QUERY); // dont use _THROW here ... its a check only
     if (xWindowCheck.is())
     {
-        // --> PB 2007-06-18 #i76867# top and system window is required.
+        // Top and system window is required (#i76867#)
         SolarMutexGuard aGuard;
         css::uno::Reference< css::awt::XWindow > xWindow( xWindowCheck, UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         return ( pWindow && pWindow->IsSystemWindow() );
-        // <--
     }
 
     return sal_False;

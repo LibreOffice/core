@@ -87,10 +87,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-
-// --> OD 2006-02-22 #b6382898#
 #include <com/sun/star/text/XTextDocument.hpp>
-// <--
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -503,12 +500,12 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
     {
         try
         {
-            // --> OD 2006-02-22 #b6382898#
-            // Since fix for issue i33294 the Writer model doesn't support
-            // com.sun.star.drawing.OLE2Shape anymore.
-            // To handle Draw OLE objects it's decided to import these
-            // objects as com.sun.star.drawing.OLE2Shape and convert these
-            // objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            /* Since fix for issue i33294 the Writer model doesn't support
+               com.sun.star.drawing.OLE2Shape anymore.
+               To handle Draw OLE objects it's decided to import these
+               objects as com.sun.star.drawing.OLE2Shape and convert these
+               objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            */
             uno::Reference< drawing::XShape > xShape;
             if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
@@ -519,7 +516,6 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
             {
                 xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
             }
-            // <--
             if( xShape.is() )
                 AddShape( xShape );
         }

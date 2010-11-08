@@ -936,14 +936,13 @@ namespace xmloff { namespace token {
         TOKEN( "hint",                            XML_HINT),
         TOKEN( "horizontal",                      XML_HORIZONTAL ),
         TOKEN( "horizontal-lines",                XML_HORIZONTAL_LINES ),
-        // --> OD 2005-05-12 #i49139#
-        // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
-        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
-        // Usage is deprecated, but the old token are needed for the
-        // OpenOffice.org file format import/export filter for the renaming
+        /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+           are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+           Usage is deprecated, but the old token are needed for the
+           OpenOffice.org file format import/export filter for the renaming (#i49139#)
+        */
         TOKEN( "horizontal-on-left-pages",        XML_HORIZONTAL_ON_LEFT_PAGES ),
         TOKEN( "horizontal-on-right-pages",       XML_HORIZONTAL_ON_RIGHT_PAGES ),
-        // <--
         TOKEN( "horizontal-pos",                  XML_HORIZONTAL_POS ),
         TOKEN( "horizontal-rel",                  XML_HORIZONTAL_REL ),
         TOKEN( "horizontal-scrollbar-width",      XML_HORIZONTAL_SCROLLBAR_WIDTH ),
@@ -2379,8 +2378,7 @@ namespace xmloff { namespace token {
 
         // OD 2004-05-05 #i28701#
         TOKEN( "wrap-influence-on-position",           XML_WRAP_INFLUENCE_ON_POSITION ),
-        // --> OD 2004-10-18 #i35017# - tokens have been renamed and
-        // <XML_ITERATIVE> has been added
+        // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
         TOKEN( "once-successive",                       XML_ONCE_SUCCESSIVE ),
         TOKEN( "once-concurrent",                       XML_ONCE_CONCURRENT ),
 
@@ -2893,12 +2891,10 @@ namespace xmloff { namespace token {
 
         TOKEN( "http://www.w3.org/",    XML_URI_W3_PREFIX ),
         TOKEN( "/xforms",               XML_URI_XFORMS_SUFFIX ),
-        // --> OD 2005-05-12 #i49139#
-        // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
-        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+        /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+           are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD. (#i49139#)
+        */
         TOKEN( "horizontal-on-even",        XML_HORIZONTAL_ON_EVEN ),
-        // <--
-        // --> OJ 2005-09-01
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:report:1.0",        XML_N_RPT_OASIS ),
         TOKEN( "http://openoffice.org/2005/report",       XML_N_RPT ),
         TOKEN( "group",       XML_GROUP ),
@@ -2974,15 +2970,11 @@ namespace xmloff { namespace token {
         TOKEN( "odd-rows",              XML_ODD_ROWS        ),
         TOKEN( "even-columns",          XML_EVEN_COLUMNS    ),
         TOKEN( "odd-columns",           XML_ODD_COLUMNS     ),
-
-        // <--
         TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
-        // --> OD 2005-10-10 #i45874#
+        // Password error from 1.4 to 2.0 Beta (#i45874#)
         TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),
-        // <--
-        // -> FLR #i52127#
+        // OpenDocument <text:numbered-paragraph> element not supported on OpenDocument import (#i52127#)
         TOKEN( "numbered-paragraph", XML_NUMBERED_PARAGRAPH),
-        // <--
         TOKEN( "master-detail-fields",  XML_MASTER_DETAIL_FIELDS),
         TOKEN( "master-detail-field",   XML_MASTER_DETAIL_FIELD),
         TOKEN( "sub-document",          XML_SUB_DOCUMENT),
@@ -3040,11 +3032,9 @@ namespace xmloff { namespace token {
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
         TOKEN( "default-row-style-name", XML_DEFAULT_ROW_STYLE_NAME),
         TOKEN( "angle-offset",          XML_ANGLE_OFFSET ),
-        // --> OD 2007-09-14 #i81002#
+        // Core implementation for direct cross-references (#i81002#)
         TOKEN( "number-no-superior", XML_NUMBER_NO_SUPERIOR ),
         TOKEN( "number-all-superior", XML_NUMBER_ALL_SUPERIOR ),
-        // <--
-        // --> OD 2008-01-15 #newlistlevelattrs#
         TOKEN( "list-level-position-and-space-mode", XML_LIST_LEVEL_POSITION_AND_SPACE_MODE ),
         TOKEN( "label-width-and-position",           XML_LABEL_WIDTH_AND_POSITION ),
         TOKEN( "label-alignment",                    XML_LABEL_ALIGNMENT ),
@@ -3054,7 +3044,6 @@ namespace xmloff { namespace token {
         TOKEN( "space",                              XML_SPACE ),
         TOKEN( "nothing",                            XML_NOTHING ),
         TOKEN( "list-tab-stop-position",             XML_LIST_TAB_STOP_POSITION ),
-        // <--
 
         // bm: chart error bar extensions (ODF 1.2)
         TOKEN( "standard-error",        XML_STANDARD_ERROR ),
@@ -3062,12 +3051,10 @@ namespace xmloff { namespace token {
         TOKEN( "error-lower-range",     XML_ERROR_LOWER_RANGE ),
         TOKEN( "error-upper-range",     XML_ERROR_UPPER_RANGE ),
 
-        // --> OD 2008-04-22 #refactorlists#
         TOKEN( "continue-list",         XML_CONTINUE_LIST ),
         TOKEN( "style-override",        XML_STYLE_OVERRIDE ),
-        // <--
-        //
-        // fs: #i90243#
+
+        // XForms: Changes to model should optionally set document's modified state. (#i90243#)
         TOKEN( "xforms-settings",       XML_XFORM_MODEL_SETTINGS ),
 
         // ODF 1.2 metadata

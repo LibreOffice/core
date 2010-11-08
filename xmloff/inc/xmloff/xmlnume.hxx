@@ -55,13 +55,11 @@ class SvxXMLNumRuleExport
     const ::rtl::OUString sNumberingRules;
     const ::rtl::OUString sIsPhysical;
     const ::rtl::OUString sIsContinuousNumbering;
-    // --> OD 2008-06-06 #i89178#
     // Boolean indicating, if properties for position-and-space-mode LABEL_ALIGNEMNT
-    // are exported or not.
+    // are exported or not. (#i89178#)
     // These properties have been introduced in ODF 1.2. Thus, its export have
     // to be suppressed on writing ODF 1.0 respectively ODF 1.1
     bool mbExportPositionAndSpaceModeLabelAlignment;
-    // <--
 
     void exportLevelStyles(
             const ::com::sun::star::uno::Reference<
@@ -100,12 +98,6 @@ public:
             const ::rtl::OUString& rName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > & xNumRule );
-
-    // --> OD 2008-06-17 #i90780#
-    // refactoring: removing unused methods
-//    void Export( const ::rtl::OUString& rOutline, sal_Bool bContNumbering );
-//    void ExportOutline();
-    // <--
 
     static sal_Bool GetOutlineStyles( XMLStringVector& rStyleNames,
                const ::com::sun::star::uno::Reference<

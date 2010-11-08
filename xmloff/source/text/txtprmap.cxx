@@ -737,10 +737,10 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     MG_E( "SurroundAnchorOnly",     STYLE,  NUMBER_WRAPPED_PARAGRAPHS,  XML_TYPE_TEXT_PARAGRAPH_ONLY, CTF_WRAP_PARAGRAPH_ONLY ),
     MG_E( "SurroundContour",            STYLE,  WRAP_CONTOUR,   XML_TYPE_BOOL, CTF_WRAP_CONTOUR ),
     MG_E( "ContourOutside",         STYLE,  WRAP_CONTOUR_MODE,  XML_TYPE_TEXT_WRAP_OUTSIDE, CTF_WRAP_CONTOUR_MODE ),
-    // --> OD 2004-08-09 #i28749# - use own CTF ids for positioning attributes
+    // Use own CTF ids for positioning attributes (#i28749#)
     // RES_VERT_ORIENT
     MG_E( "VertOrient",         STYLE,  VERTICAL_POS,   XML_TYPE_TEXT_VERTICAL_POS, CTF_SHAPE_VERTICALPOS ),
-    // OD 2004-04-16 #i26791# - add property for at-character anchored shapes
+    // Add property for at-character anchored shapes (#i26791#)
     MG_E( "VertOrient",         STYLE,  VERTICAL_POS,   XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR, CTF_SHAPE_VERTICALPOS_ATCHAR ),
     MG_E( "VertOrient",         STYLE,  VERTICAL_REL,   XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR|MID_FLAG_MULTI_PROPERTY, CTF_VERTICALREL_ASCHAR ),
     MG_E( "VertOrientRelation", STYLE,  VERTICAL_REL,   XML_TYPE_TEXT_VERTICAL_REL, CTF_SHAPE_VERTICALREL ),
@@ -752,13 +752,12 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     MG_E( "HoriOrient",         STYLE,  HORIZONTAL_POS, XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_HORIZONTALPOS_MIRRORED ),
     MG_E( "HoriOrientRelation", STYLE,  HORIZONTAL_REL, XML_TYPE_TEXT_HORIZONTAL_REL, CTF_SHAPE_HORIZONTALREL ),
     MG_E( "HoriOrientRelation", STYLE,  HORIZONTAL_REL, XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_HORIZONTALREL_FRAME ),
-    // <--
-    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    // RES_WRAP_INFLUENCE_ON_OBJPOS (#i28701#)
     MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
     // UserDefinedAttributes is already contained in the map this one is
     // chained to.
 
-    // RES_FOLLOW_TEXT_FLOW - OD 2004-04-21 #i26791#
+    // RES_FOLLOW_TEXT_FLOW (#i26791#)
     MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
     M_END()
@@ -804,12 +803,8 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     MS_E( "EndnoteNumberingSuffix",     TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
     MS_E( "EndnoteIsCollectAtTextEnd",  TEXT,   NOTES_CONFIGURATION,        MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
     MS_E( "UserDefinedAttributes",      TEXT,   XMLNS,      XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
-
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     // RES_EDIT_IN_READONLY
     MS_E( "EditInReadonly",             STYLE,  EDITABLE,  XML_TYPE_BOOL, 0 ),
-    // <--
-
     M_END()
 };
 

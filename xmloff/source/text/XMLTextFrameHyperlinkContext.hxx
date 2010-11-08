@@ -70,12 +70,13 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
+
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > GetTextContent() const;
-    // --> OD 2004-08-24 #i33242#
+
+    // Frame "to character": anchor moves from first to last char after saving (#i33242#)
     ::com::sun::star::uno::Reference <
         ::com::sun::star::drawing::XShape > GetShape() const;
-    // <--
 };
 
 

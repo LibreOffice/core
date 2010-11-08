@@ -802,23 +802,17 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
         pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
     }
 }
-/* -----------------------------04.12.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SvxFontPrevWindow::IsTwoLines() const
 {
     return pImpl->bTwoLines;
 }
-/* -----------------------------04.12.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxFontPrevWindow::SetTwoLines(BOOL bSet)
 {
     pImpl->bTwoLines = bSet;}
 
-/* -----------------------------04.12.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxFontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
 {
     pImpl->cStartBracket = cStart;

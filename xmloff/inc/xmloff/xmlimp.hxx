@@ -409,13 +409,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     GetComponentContext() const;
 
-    // --> OD 2004-08-10 #i28749#
+    // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)
     sal_Bool IsShapePositionInHoriL2R() const;
-    // <--
 
-    // --> OD 2007-12-19 #152540#
     sal_Bool IsTextDocInOOoFileFormat() const;
-    // <--
 
     String GetBaseURL() const;
     String GetDocumentBase() const;

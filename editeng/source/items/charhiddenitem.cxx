@@ -36,23 +36,16 @@
 
 TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
 
-/*-- 16.12.2003 15:24:25---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const USHORT nId ) :
     SfxBoolItem( nId, bHidden )
 {
 }
-/*-- 16.12.2003 15:24:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
 {
     return new SvxCharHiddenItem( *this );
 }
-/*-- 16.12.2003 15:24:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxItemPresentation SvxCharHiddenItem::GetPresentation
 (
     SfxItemPresentation ePres,

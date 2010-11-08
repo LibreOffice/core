@@ -45,10 +45,10 @@ namespace com { namespace sun { namespace star
     {
         class XPropertySet;
     }
-    namespace container     //#outline level,add by zhaojianwei
+    namespace container
     {
         class XNameAccess;
-    }                       //<-end,zhaojianwei
+    }
 
 } } }
 
@@ -65,7 +65,7 @@ protected:
     const ::rtl::OUString sIsAutoUpdate;
     const ::rtl::OUString sFollowStyle;
     const ::rtl::OUString sNumberingStyleName;
-    const ::rtl::OUString sOutlineLevel;    //#outline level,add by zhaojianwei
+    const ::rtl::OUString sOutlineLevel;
 
     SvXMLExport& GetExport() { return rExport; }
     const SvXMLExport& GetExport() const  { return rExport; }
@@ -78,19 +78,13 @@ private:
 
 protected:
 
-    //virtual sal_Bool exportStyle(             //#outline level,zhaojianwei
-    //  const ::com::sun::star::uno::Reference<
-    //          ::com::sun::star::style::XStyle > & rStyle,
-    //  const ::rtl::OUString& rXMLFamily,
-    //  const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    //  const ::rtl::OUString* pPrefix = 0L );
-    virtual sal_Bool exportStyle(               //add by zhaojianwei
+    virtual sal_Bool exportStyle(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::style::XStyle > & rStyle,
         const ::rtl::OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xStyles,
-        const ::rtl::OUString* pPrefix = 0L );  //<-end,zhaojianwei
+        const ::rtl::OUString* pPrefix = 0L );
 
     virtual void exportStyleAttributes(
         const ::com::sun::star::uno::Reference<

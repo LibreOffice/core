@@ -64,15 +64,10 @@ SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBo
 {
 }
 
-/* -----------------------------27.04.01 15:53--------------------------------
-
- ---------------------------------------------------------------------------*/
 SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
-/* -----------------------------27.04.01 15:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxVertCTLTextTbxCtrl::StateChanged(
     USHORT nSID,
     SfxItemState eState,
@@ -118,8 +113,5 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         }
     }
 }
-/* -----------------------------27.04.01 15:50--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

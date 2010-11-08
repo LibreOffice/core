@@ -34,9 +34,6 @@
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 
-/* -----------------------------01.02.00 13:57--------------------------------
-
- ---------------------------------------------------------------------------*/
 SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     MessBox(pParent, 0,
             String(SVX_RES(RID_SVXSTR_QRY_PRINT_TITLE)),
@@ -51,9 +48,7 @@ SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     AddButton(BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
     SetButtonHelpText( RET_OK, String() );
 }
-/* -----------------------------01.02.00 13:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxPrtQryBox::~SvxPrtQryBox()
 {
 }

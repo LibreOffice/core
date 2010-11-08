@@ -504,9 +504,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
     }
     return nHandled ? nHandled : ComboBox::Notify( rNEvt );
 }
-/* -----------------------------08.03.2002 13:03------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -1090,9 +1088,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
     aFrameSet.Show();
 }
-/*-- 22.09.2004 12:27:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 {
     UnbindListener();

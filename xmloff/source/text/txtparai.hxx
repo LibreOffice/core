@@ -55,9 +55,8 @@ class XMLParaContext : public SvXMLImportContext
     bool                        m_bHaveAbout;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
-    // --> OD 2007-07-25 #i73509#
+    // Lost outline numbering in master document (#i73509#)
     sal_Bool                mbOutlineLevelAttrFound;
-    // <--
     sal_Bool                bIgnoreLeadingSpace;
     sal_Bool                bHeading;
     sal_Bool                bIsListHeader;

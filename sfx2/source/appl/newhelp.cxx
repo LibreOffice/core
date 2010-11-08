@@ -1527,7 +1527,6 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
     if (!xLoader.is())
         return;
 
-    // --> PB 2007-03-12 #134037#
     // If a print job runs do not open a new page
     Reference< XFrame >      xTextFrame      = pTextWin->getFrame();
     Reference< XController > xTextController ;
@@ -1538,7 +1537,6 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
         xTextController->suspend( sal_False );
         return;
     }
-    // <--
 
     // save url to history
     if (bAddToHistory)

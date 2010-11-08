@@ -1220,9 +1220,7 @@ void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
 
     SfxDockingWindow::DataChanged( rDCEvt );
 }
-/* -----------------------------08.05.2002 14:28------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxFontWorkDialog::ApplyImageList()
 {
     ResMgr* _pMgr = &DIALOG_MGR();

@@ -513,7 +513,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 sBuildId.Insert( sProductSource, 0 );
             }
 
-            // --> PB 2008-10-30 #i94693#
+            // Version information (in about box) (#i94693#)
             /* if the build ids of the basis or ure layer are different from the build id
              * of the brand layer then show them */
             rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING(
@@ -531,7 +531,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 sTemp += String( aUREProductBuildId );
                 sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
             }
-            // <--
 
             // the build id format is "milestone(build)[cwsname]". For readability, it would
             // be nice to have some more spaces in there.

@@ -2887,11 +2887,10 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
     { XML_CATEGORY_AND_VALUE, ReferenceFieldPart::CATEGORY_AND_NUMBER },
     { XML_CAPTION,      ReferenceFieldPart::ONLY_CAPTION },
     { XML_VALUE,        ReferenceFieldPart::ONLY_SEQUENCE_NUMBER },
-    // --> OD 2007-09-14 #i81002#
+    // Core implementation for direct cross-references (#i81002#)
     { XML_NUMBER,               ReferenceFieldPart::NUMBER },
     { XML_NUMBER_NO_SUPERIOR,   ReferenceFieldPart::NUMBER_NO_CONTEXT },
     { XML_NUMBER_ALL_SUPERIOR,  ReferenceFieldPart::NUMBER_FULL_CONTEXT },
-    // <--
     { XML_TOKEN_INVALID, 0 }
 };
 

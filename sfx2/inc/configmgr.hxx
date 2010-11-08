@@ -33,9 +33,6 @@ namespace utl{
     class ConfigManager;
 }
 
-/* -----------------------------05.09.00 16:42--------------------------------
-    appdata.cxx
- ---------------------------------------------------------------------------*/
 utl::ConfigManager*         GetUtlConfigManager();
 #endif
 
