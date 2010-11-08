@@ -1730,17 +1730,23 @@ void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
     m_nDiv = nDiv;
 }
 
-USHORT SvxBorderLine::GetOutWidth() const
+void SvxBorderLine::SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_uInt16 nOut, sal_uInt16 nDist )
 {
-    return (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+    SetStyle( nStyle );
+    m_nWidth = m_aWidthImpl.GuessWidth( nIn, nOut, nDist );
 }
 
-USHORT SvxBorderLine::GetInWidth() const
+sal_uInt16 SvxBorderLine::GetOutWidth() const
 {
     return (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
 }
 
-USHORT SvxBorderLine::GetDistance() const
+sal_uInt16 SvxBorderLine::GetInWidth() const
+{
+    return (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+}
+
+sal_uInt16 SvxBorderLine::GetDistance() const
 {
     return (sal_uInt16)Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv );
 }
@@ -2105,9 +2111,10 @@ sal_Bool
 lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
-    rSvxLine.SetOutWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ));
-    rSvxLine.SetDistance( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance   )  : rLine.LineDistance  ));
+    rSvxLine.SetLinesWidth( rSvxLine.GetStyle(),
+            sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
+            sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
+            sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
 
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
@@ -2124,23 +2131,55 @@ sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rL
 sal_Bool
 SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
-    const bool bRet(lcl_lineToSvxLine(rLine, rSvxLine, bConvert));
-
     switch ( rLine.LineStyle )
     {
         default:
         case table::BorderLineStyle::SOLID:
-            rSvxLine.SetStyle( SOLID );
+            nStyle = SOLID;
             break;
         case table::BorderLineStyle::DOTTED:
-            rSvxLine.SetStyle( DOTTED );
+            nStyle = DOTTED;
             break;
         case table::BorderLineStyle::DASHED:
-            rSvxLine.SetStyle( DASHED );
+            nStyle = DASHED;
+            break;
+        case table::BorderLineStyle::DOUBLE:
+            nStyle = DOUBLE;
+            break;
+        case table::BorderLineStyle::THINTHICK_SMALLGAP:
+            nStyle = THINTHICK_SMALLGAP;
+            break;
+        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+            nStyle = THINTHICK_MEDIUMGAP;
+            break;
+        case table::BorderLineStyle::THINTHICK_LARGEGAP:
+            nStyle = THINTHICK_LARGEGAP;
+            break;
+        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+            nStyle = THICKTHIN_SMALLGAP;
+            break;
+        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+            nStyle = THICKTHIN_MEDIUMGAP;
+            break;
+        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+            nStyle = THICKTHIN_LARGEGAP;
+            break;
+        case table::BorderLineStyle::EMBOSSED:
+            nStyle = EMBOSSED;
+            break;
+        case table::BorderLineStyle::ENGRAVED:
+            nStyle = ENGRAVED;
+            break;
+        case table::BorderLineStyle::OUTSET:
+            nStyle = OUTSET;
+            break;
+        case table::BorderLineStyle::INSET:
+            nStyle = INSET;
             break;
     }
+    rSvxLine.SetStyle( nStyle );
 
-    return bRet;
+    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert);
 }
 
 // -----------------------------------------------------------------------

@@ -146,9 +146,12 @@ public:
     Color           GetColorIn( bool bLeftOrTop = true ) const;
     bool            HasGapColor() const { return m_pColorGapFn != NULL; }
     Color           GetColorGap() const;
-    sal_uInt16          GetOutWidth() const;
-    sal_uInt16          GetInWidth() const;
-    sal_uInt16          GetDistance() const;
+
+    void            SetWidth( long nWidth = 0 ) { m_nWidth = nWidth; }
+    void            SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_uInt16 nOut, sal_uInt16 nDist );
+    sal_uInt16      GetOutWidth() const;
+    sal_uInt16      GetInWidth() const;
+    sal_uInt16      GetDistance() const;
 
     SvxBorderStyle  GetStyle() const { return m_nStyle; }
 
