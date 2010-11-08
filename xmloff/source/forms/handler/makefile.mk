@@ -25,58 +25,31 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../../..
 
-PRJNAME=scripting
-TARGET=basprov
+PRJNAME=xmloff
+TARGET=form_handlers
+
+INCEXT=..
+
 ENABLE_EXCEPTIONS=TRUE
-VISIBILITY_HIDDEN=TRUE
-COMP1TYPELIST=$(TARGET)
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-DLLPRE =
+.INCLUDE: $(PRJ)/util/makefile.pmk
 
-# ------------------------------------------------------------------
+# --- Files --------------------------------------------------------
 
-SLOFILES= \
-        $(SLO)$/basprov.obj \
-        $(SLO)$/basscript.obj \
-        $(SLO)$/baslibnode.obj \
-        $(SLO)$/basmodnode.obj \
-        $(SLO)$/basmethnode.obj
+SLOFILES =	\
+    $(SLO)/form_handler_factory.obj \
+    $(SLO)/property_handler_base.obj \
+    $(SLO)/vcl_date_handler.obj \
+    $(SLO)/vcl_time_handler.obj
 
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
-SHL1IMPLIB=	i$(TARGET)
+# --- Tagets -------------------------------------------------------
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
+.INCLUDE :  target.mk
 
-SHL1STDLIBS= \
-        $(SFX2LIB) \
-        $(BASICLIB) \
-        $(VCLLIB) \
-        $(SVLLIB) \
-        $(TOOLSLIB) \
-        $(UCBHELPERLIB) \
-        $(COMPHELPERLIB) \
-        $(CPPUHELPERLIB) \
-        $(CPPULIB) \
-        $(SALLIB)
-
-SHL1DEPN=
-SHL1LIBS=$(SLB)$/$(TARGET).lib
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/basprov.component
-
-$(MISC)/basprov.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        basprov.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt basprov.component
+test:
+    echo $(INCLUDE)

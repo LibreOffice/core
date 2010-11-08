@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,19 +24,24 @@
  *
  ************************************************************************/
 
-#ifndef _MNSFOLDERS_HXX_
-#define _MNSFOLDERS_HXX_
+#ifndef XMLOFF_PROPERTY_GROUP_HXX
+#define XMLOFF_PROPERTY_GROUP_HXX
 
-#include <sal/types.h>
-#include <osl/diagnose.h>
-#include <osl/conditn.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
-#include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
+//......................................................................................................................
+namespace xmloff
+{
+//......................................................................................................................
 
-#include <rtl/ustring.hxx>
+    //==================================================================================================================
+    //= PropertyGroup
+    //==================================================================================================================
+    enum PropertyGroup
+    {
+        NO_GROUP
+    };
 
-::rtl::OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
+//......................................................................................................................
+} // namespace xmloff
+//......................................................................................................................
 
-#endif
-
+#endif // XMLOFF_PROPERTY_GROUP_HXX

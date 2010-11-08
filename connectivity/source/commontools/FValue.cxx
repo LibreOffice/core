@@ -1753,7 +1753,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::util::Date ORowSetValue::getDate()        const
+::com::sun::star::util::Date ORowSetValue::getDate() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDate" );
     ::com::sun::star::util::Date aValue;
@@ -1768,8 +1768,6 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toDate((double)*this);
-                break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
@@ -1787,12 +1785,28 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                     aValue.Year     = pDateTime->Year;
                 }
                 break;
+            case DataType::BIT:
+            case DataType::BOOLEAN:
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::INTEGER:
+            case DataType::BIGINT:
+                aValue = DBTypeConversion::toDate( double( sal_Int64( *this ) ) );
+                break;
+
+            case DataType::BLOB:
+            case DataType::CLOB:
+            case DataType::OBJECT:
             default:
-                {
-                    Any aAnyValue = getAny();
-                    aAnyValue >>= aValue;
-                    break;
-                }
+                OSL_ENSURE( false, "ORowSetValue::getDate: cannot retrieve the data!" );
+                // NO break!
+
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::TIME:
+                aValue = DBTypeConversion::toDate( (double)0 );
+                break;
         }
     }
     return aValue;

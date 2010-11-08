@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -25,19 +24,27 @@
  *
  ************************************************************************/
 
-#ifndef _MNSFOLDERS_HXX_
-#define _MNSFOLDERS_HXX_
+#ifndef XMLOFF_FORM_HANDLER_FACTORY_HXX
+#define XMLOFF_FORM_HANDLER_FACTORY_HXX
 
-#include <sal/types.h>
-#include <osl/diagnose.h>
-#include <osl/conditn.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
-#include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
+#include "property_handler.hxx"
 
-#include <rtl/ustring.hxx>
+//......................................................................................................................
+namespace xmloff
+{
+//......................................................................................................................
 
-::rtl::OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
+    //==================================================================================================================
+    //= FormHandlerFactory
+    //==================================================================================================================
+    class FormHandlerFactory
+    {
+    public:
+        static PPropertyHandler getFormPropertyHandler( const PropertyId i_propertyId );
+    };
 
-#endif
+//......................................................................................................................
+} // namespace xmloff
+//......................................................................................................................
 
+#endif // XMLOFF_FORM_HANDLER_FACTORY_HXX
