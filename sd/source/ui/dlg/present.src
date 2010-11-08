@@ -33,7 +33,7 @@
 
 ModalDialog DLG_START_PRESENTATION
 {
-    HelpID = SID_PRESENTATION ;
+    HelpID = CMD_SID_PRESENTATION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256, 205 ) ;
@@ -69,6 +69,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     RadioButton RBT_ALL
     {
+        HelpID = "sd:RadioButton:DLG_START_PRESENTATION:RBT_ALL";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 12 ) ;
         Text [ en-US ] = "All ~slides" ;
@@ -76,6 +77,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     RadioButton RBT_AT_DIA
     {
+        HelpID = "sd:RadioButton:DLG_START_PRESENTATION:RBT_AT_DIA";
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Text [ en-US ] = "~From:" ;
@@ -83,6 +85,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     ListBox LB_DIAS
     {
+        HelpID = "sd:ListBox:DLG_START_PRESENTATION:LB_DIAS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82, 24 ) ;
         Size = MAP_APPFONT ( 111, 80 ) ;
@@ -92,6 +95,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     RadioButton RBT_CUSTOMSHOW
     {
+        HelpID = "sd:RadioButton:DLG_START_PRESENTATION:RBT_CUSTOMSHOW";
         Pos = MAP_APPFONT ( 12 , 38 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
         TabStop = TRUE ;
@@ -99,6 +103,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     ListBox LB_CUSTOMSHOW
     {
+        HelpID = "sd:ListBox:DLG_START_PRESENTATION:LB_CUSTOMSHOW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 32, 53 ) ;
         Size = MAP_APPFONT ( 161, 80 ) ;
@@ -114,6 +119,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     RadioButton RBT_STANDARD
     {
+        HelpID = "sd:RadioButton:DLG_START_PRESENTATION:RBT_STANDARD";
         Pos = MAP_APPFONT ( 12, 84 ) ;
         Size = MAP_APPFONT ( 81, 12 ) ;
         Text [ en-US ] = "~Default" ;
@@ -121,6 +127,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     RadioButton RBT_WINDOW
     {
+        HelpID = "sd:RadioButton:DLG_START_PRESENTATION:RBT_WINDOW";
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 81 , 12 ) ;
         Text [ en-US ] = "~Window" ;
@@ -128,6 +135,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     RadioButton RBT_AUTO
     {
+        HelpID = "sd:RadioButton:DLG_START_PRESENTATION:RBT_AUTO";
         Pos = MAP_APPFONT ( 12 , 108 ) ;
         Size = MAP_APPFONT ( 81 , 12 ) ;
         Text [ en-US ] = "A~uto" ;
@@ -143,6 +151,7 @@ ModalDialog DLG_START_PRESENTATION
 */
     TimeField TMF_PAUSE
     {
+        HelpID = "sd:TimeField:DLG_START_PRESENTATION:TMF_PAUSE";
         Pos = MAP_APPFONT ( 32, 120 ) ;
         Size = MAP_APPFONT ( 50, 12 ) ;
         Border = TRUE ;
@@ -167,6 +176,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_AUTOLOGO
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_AUTOLOGO";
         Pos = MAP_APPFONT ( 32 , 138 ) ;
         Size = MAP_APPFONT ( 61 , 12 ) ;
         TabStop = TRUE ;
@@ -181,6 +191,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_MANUEL
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_MANUEL";
         Pos = MAP_APPFONT ( 108 , 84 ) ;
         Size = MAP_APPFONT ( 139 , 12 ) ;
         TabStop = TRUE ;
@@ -188,6 +199,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_MOUSEPOINTER
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_MOUSEPOINTER";
         Pos = MAP_APPFONT ( 108, 96 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
         Text [ en-US ] = "Mouse pointer ~visible" ;
@@ -195,6 +207,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_PEN
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_PEN";
         Pos = MAP_APPFONT ( 108, 108 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
         Text [ en-US ] = "Mouse pointer as ~pen" ;
@@ -202,6 +215,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_NAVIGATOR
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_NAVIGATOR";
         Pos = MAP_APPFONT ( 108, 120 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
         TabStop = TRUE ;
@@ -209,6 +223,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_ANIMATION_ALLOWED
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_ANIMATION_ALLOWED";
         Pos = MAP_APPFONT ( 108, 132 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
         TabStop = TRUE ;
@@ -216,6 +231,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_CHANGE_PAGE
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_CHANGE_PAGE";
         Pos = MAP_APPFONT ( 108, 144 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
         TabStop = TRUE ;
@@ -223,6 +239,7 @@ ModalDialog DLG_START_PRESENTATION
     };
     CheckBox CBX_ALWAYS_ON_TOP
     {
+        HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_ALWAYS_ON_TOP";
         Pos = MAP_APPFONT ( 108, 156 ) ;
         Size = MAP_APPFONT ( 145, 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Präsentation immer im ~Vordergrund : Prõsentation immer im ~Vordergrund */

@@ -788,9 +788,6 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         break;
 
         case SID_INSERT_DIAGRAM:
-#ifdef STARIMAGE_AVAILABLE
-        case SID_INSERT_IMAGE:
-#endif
         case SID_ATTR_TABLE:
         case SID_INSERTFILE:
         case SID_INSERT_GRAPHIC:
@@ -802,7 +799,6 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
-        case SID_INSERT_APPLET:
         case SID_INSERT_TABLE:
         {
             nMappedSId = SID_DRAWTBX_INSERT;
