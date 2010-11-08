@@ -1526,9 +1526,9 @@ void SwWW8ImplReader::ImportDop()
             sal_Bool bValue = false;
             if (xInfo.is())
             {
-                if (xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
+                if (xInfo->hasPropertyByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFormDesignMode"))))
                 {
-                    xDocProps->setPropertyValue(C2U("ApplyFormDesignMode"),
+                    xDocProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFormDesignMode")),
                                                 cppu::bool2any(bValue));
                 }
             }
