@@ -380,6 +380,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "mxp.dylib"
 #elif defined MACOSX && defined X86
   #define __DLLEXTENSION "mxi.dylib"
+#elif defined OPENBSD
+  #define __DLLEXTENSION "ob.so"
 #else
   #define __DLLEXTENSION ".so"
 #endif
