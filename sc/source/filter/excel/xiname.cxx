@@ -232,7 +232,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                 // discard deleted ranges ( for the moment at least )
                 if ( pData->IsValidReference( aRange ) )
                 {
-                    /* ScExtTabSettings& rTabSett = */ GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
+                    GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
                     // create a mapping between the unmodified localname to
                     // the name in the global name container for named ranges
                     OSL_TRACE(" mapping local name to global name for tab %d which exists? %s", nXclTab, GetDoc().HasTable( mnScTab ) ? "true" : "false" );
