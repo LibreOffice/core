@@ -152,11 +152,11 @@ PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Frame" ))), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));  // change name!
+            m_xMeAsFrame->setName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "form property browser" )));  // change name!
         }
     }
     catch (Exception&)
@@ -196,7 +196,7 @@ void PropBrw::ImplReCreateController()
 
         // create a property browser controller
         Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
-        static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.awt.PropertyBrowserController");
+        static const ::rtl::OUString s_sControllerServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.PropertyBrowserController" ));
         m_xBrowserController = Reference< XPropertySet >(
             xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY
         );
@@ -365,7 +365,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     if ( m_xBrowserController.is() )
     {
         m_xBrowserController->setPropertyValue(
-            ::rtl::OUString::createFromAscii( "IntrospectedObject" ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IntrospectedObject" )),
             makeAny( _rxObject )
         );
 

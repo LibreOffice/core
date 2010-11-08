@@ -671,8 +671,7 @@ void DialogWindow::UpdateBrowser()
         ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
 }
 
-static ::rtl::OUString aResourceResolverPropName =
-    ::rtl::OUString::createFromAscii( "ResourceResolver" );
+static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
 BOOL DialogWindow::SaveDialog()
 {
@@ -721,7 +720,7 @@ BOOL DialogWindow::SaveDialog()
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
         Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
 
         Reference< XOutputStream > xOutput;
         try
@@ -779,9 +778,9 @@ BOOL DialogWindow::SaveDialog()
                 aURLObj.removeSegment();
                 ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 sal_Bool bReadOnly = sal_False;
-                ::rtl::OUString aComment( ::rtl::OUString::createFromAscii( "# " ) );
+                ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
                 aComment += aDialogName;
-                aComment += ::rtl::OUString::createFromAscii( " strings" );
+                aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files
@@ -790,7 +789,7 @@ BOOL DialogWindow::SaveDialog()
                     Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
                     ::rtl::OUString aDialogName_( aDialogName );
-                    aDialogName_ += ::rtl::OUString::createFromAscii( "_" );
+                    aDialogName_ += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_" ));
                     sal_Int32 nCount = aContentSeq.getLength();
                     const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )
@@ -989,7 +988,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
                 ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+                ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY_THROW );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )

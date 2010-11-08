@@ -45,9 +45,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
 
-static ::rtl::OUString aDot  = ::rtl::OUString::createFromAscii( "." );
-static ::rtl::OUString aEsc  = ::rtl::OUString::createFromAscii( "&" );
-static ::rtl::OUString aSemi = ::rtl::OUString::createFromAscii( ";" );
+static ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
+static ::rtl::OUString aEsc( RTL_CONSTASCII_USTRINGPARAM( "&" ));
+static ::rtl::OUString aSemi( RTL_CONSTASCII_USTRINGPARAM( ";" ));
 
 
 LocalizationMgr::LocalizationMgr( BasicIDEShell* pIDEShell,
@@ -73,9 +73,8 @@ bool LocalizationMgr::isLibraryLocalized( void )
 
 void LocalizationMgr::handleTranslationbar( void )
 {
-    static ::rtl::OUString aLayoutManagerName = ::rtl::OUString::createFromAscii( "LayoutManager" );
-    static ::rtl::OUString aToolBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/translationbar" );
+    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+    static ::rtl::OUString aToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/translationbar" ));
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pIDEShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
@@ -931,7 +930,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
-    static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
+    static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );

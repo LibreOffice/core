@@ -648,7 +648,7 @@ void AccessibleDialogWindow::disposing()
 
 ::rtl::OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.basctl.AccessibleWindow" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleWindow" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -669,7 +669,7 @@ sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServic
 Sequence< ::rtl::OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleWindow" ));
     return aNames;
 }
 

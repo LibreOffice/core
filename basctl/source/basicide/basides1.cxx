@@ -1160,13 +1160,10 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
 
 void BasicIDEShell::ManageToolbars()
 {
-    static ::rtl::OUString aLayoutManagerName = ::rtl::OUString::createFromAscii( "LayoutManager" );
-    static ::rtl::OUString aMacroBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/macrobar" );
-    static ::rtl::OUString aDialogBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/dialogbar" );
-    static ::rtl::OUString aInsertControlsBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/insertcontrolsbar" );
+    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+    static ::rtl::OUString aMacroBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/macrobar" ));
+    static ::rtl::OUString aDialogBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/dialogbar" ));
+    static ::rtl::OUString aInsertControlsBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ));
     (void)aInsertControlsBarResName;
 
     if( !pCurWin )

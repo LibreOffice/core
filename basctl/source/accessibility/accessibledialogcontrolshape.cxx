@@ -329,7 +329,7 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
 
 ::rtl::OUString AccessibleDialogControlShape::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.basctl.AccessibleShape" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleShape" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -350,7 +350,7 @@ sal_Bool AccessibleDialogControlShape::supportsService( const ::rtl::OUString& r
 Sequence< ::rtl::OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.AccessibleShape" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AccessibleShape" ));
     return aNames;
 }
 

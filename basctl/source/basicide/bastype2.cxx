@@ -71,7 +71,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
             uno::Any aObject( aModuleInfo.ModuleObject );
             uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
-            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
+            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Worksheet" )) ) )
             {
                 uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
                 if( xNamed.is() )

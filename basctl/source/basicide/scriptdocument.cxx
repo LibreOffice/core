@@ -979,10 +979,10 @@ namespace basctl
                     aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                     Reference< XComponentContext > xContext;
                     Reference< XPropertySet > xProps( xMSF, UNO_QUERY_THROW );
-                    xContext.set( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ), UNO_QUERY_THROW );
+                    xContext.set( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
                     Reference< XMacroExpander > xMacroExpander(
                         xContext->getValueByName(
-                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ),
                         UNO_QUERY_THROW );
                     aFileURL = xMacroExpander->expandMacros( aDecodedURL );
                 }

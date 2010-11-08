@@ -72,12 +72,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using ::rtl::OUString;
 
-static ::rtl::OUString aResourceResolverPropName =
-    ::rtl::OUString::createFromAscii( "ResourceResolver" );
-static ::rtl::OUString aDecorationPropName =
-    ::rtl::OUString::createFromAscii( "Decoration" );
-static ::rtl::OUString aTitlePropName =
-    ::rtl::OUString::createFromAscii( "Title" );
+static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
+static ::rtl::OUString aDecorationPropName( RTL_CONSTASCII_USTRINGPARAM( "Decoration" ));
+static ::rtl::OUString aTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
 
 
 //============================================================================
@@ -237,14 +234,14 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     pFunc = new DlgEdFuncSelect( this );
 
     // set clipboard data flavors
-    m_ClipboardDataFlavors[0].MimeType =                ::rtl::OUString::createFromAscii("application/vnd.sun.xml.dialog");
-    m_ClipboardDataFlavors[0].HumanPresentableName =    ::rtl::OUString::createFromAscii("Dialog 6.0");
-    m_ClipboardDataFlavors[0].DataType =                ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    m_ClipboardDataFlavors[0].MimeType =             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.dialog" ));
+    m_ClipboardDataFlavors[0].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dialog 6.0" ));
+    m_ClipboardDataFlavors[0].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    m_ClipboardDataFlavorsResource[0] =                         m_ClipboardDataFlavors[0];
-    m_ClipboardDataFlavorsResource[1].MimeType =                ::rtl::OUString::createFromAscii("application/vnd.sun.xml.dialogwithresource");
-    m_ClipboardDataFlavorsResource[1].HumanPresentableName =    ::rtl::OUString::createFromAscii("Dialog 8.0");
-    m_ClipboardDataFlavorsResource[1].DataType =                ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    m_ClipboardDataFlavorsResource[0] =                      m_ClipboardDataFlavors[0];
+    m_ClipboardDataFlavorsResource[1].MimeType =             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.dialogwithresource" ));
+    m_ClipboardDataFlavorsResource[1].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dialog 8.0" ));
+    m_ClipboardDataFlavorsResource[1].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aPaintTimer.SetTimeout( 1 );
     aPaintTimer.SetTimeoutHdl( LINK( this, DlgEditor, PaintTimeout ) );
@@ -997,7 +994,7 @@ void DlgEditor::Paste()
                     {
                         Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
                         xStringResourcePersistence = Reference< resource::XStringResourcePersistence >( xSMgr->createInstance
-                            ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResource" ) ), UNO_QUERY );
+                            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.resource.StringResource" )) ), UNO_QUERY );
                         if( xStringResourcePersistence.is() )
                             xStringResourcePersistence->importBinary( aResData );
                     }
