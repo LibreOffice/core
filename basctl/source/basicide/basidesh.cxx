@@ -162,8 +162,6 @@ SFX_IMPL_NAMED_VIEWFACTORY( BasicIDEShell, "Default" )
 }
 
 
-// MI: Prinzipiel IDL, aber ich lieber doch nicht?
-// SFX_IMPL_ /*IDL_*/ INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
@@ -176,7 +174,6 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 #define IDE_VIEWSHELL_FLAGS     SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
 
 
-// Hack for #101048
 static sal_Int32 GnBasicIDEShellCount;
 sal_Int32 getBasicIDEShellCount( void )
     { return GnBasicIDEShellCount; }
@@ -287,10 +284,6 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
         // Destroy all ContainerListeners for Basic Container.
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
-
-    // MI: Das gab einen GPF im SDT beim Schliessen da dann der ViewFrame die
-    // ObjSh loslaesst. Es wusste auch keiner mehr wozu das gut war.
-    // GetViewFrame()->GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
     SFX_APP()->LeaveBasicCall();
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
@@ -433,14 +426,11 @@ USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     }
     else
     {
-        // Hier unguenstig, wird zweimal gerufen...
-//      StoreAllWindowData();
-
         BOOL bCanClose = TRUE;
         for ( ULONG nWin = 0; bCanClose && ( nWin < aIDEWindowTable.Count() ); nWin++ )
         {
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
-            if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
+            if ( !pWin->CanClose() )
             {
                 if ( m_aCurLibName.Len() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
                     SetCurLib( ScriptDocument::getApplicationScriptDocument(), String(), false );
@@ -1060,6 +1050,5 @@ void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
 {
     StartListening( pBasic->GetBroadcaster(), TRUE /* Nur einmal anmelden */ );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

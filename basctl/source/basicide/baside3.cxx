@@ -273,17 +273,6 @@ IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
     (void)pUndoAction;
 
-    // not working yet for unocontrols
-    /*
-    if (pUndoAction)
-    {
-        pUndoMgr->AddUndoAction( pUndoAction );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
-            pBindings->Invalidate( SID_UNDO );
-    }
-    */
-
     return 0;
 }
 

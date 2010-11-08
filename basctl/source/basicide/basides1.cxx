@@ -1257,10 +1257,7 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
         {
             if ( bAppWindowDisabled )
                 Application::GetDefDialogParent()->Enable( FALSE );
-        /*
-            if ( bDispatcherLocked )
-                SFX_APP()->LockDispatcher( TRUE );
-        */
+
             if ( nWaitCount )
             {
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -1316,7 +1313,6 @@ void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &
         return;
 
     Size aSz( rSize );
-//  long nScrollbarWidthPixel = aVScrollBar.GetSizePixel().Width();
     Size aScrollBarBoxSz( aScrollBarBox.GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
 

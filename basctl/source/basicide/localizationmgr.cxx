@@ -100,7 +100,6 @@ void LocalizationMgr::handleTranslationbar( void )
 }
 
 
-//============================================
 // TODO: -> export from toolkit
 
 struct LanguageDependentProp
@@ -136,7 +135,7 @@ bool isLanguageDependentProperty( ::rtl::OUString aName )
     }
     return bRet;
 }
-//============================================
+
 
 void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode )
 {
@@ -266,7 +265,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
-                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -339,7 +337,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
-                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -377,7 +374,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
-                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -661,50 +657,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     return nChangedCount;
 }
 
-/*
-void TEST_simulateDialogAddRemoveLocale( bool bAdd )
-{
-    Sequence< Locale > aLocaleSeq( 1 );
-    Locale* pLocales = aLocaleSeq.getArray();
-
-    ::com::sun::star::lang::Locale aLocale_en;
-    aLocale_en.Language = ::rtl::OUString::createFromAscii( "en" );
-    aLocale_en.Country = ::rtl::OUString::createFromAscii( "US" );
-
-    ::com::sun::star::lang::Locale aLocale_de;
-    aLocale_de.Language = ::rtl::OUString::createFromAscii( "de" );
-    aLocale_de.Country = ::rtl::OUString::createFromAscii( "DE" );
-
-    ::com::sun::star::lang::Locale aLocale_fr;
-    aLocale_fr.Language = ::rtl::OUString::createFromAscii( "fr" );
-    aLocale_fr.Country = ::rtl::OUString::createFromAscii( "FR" );
-
-    int n = 0;
-    if( n == 0 )
-        pLocales[0] = aLocale_en;
-    else if( n == 1 )
-        pLocales[0] = aLocale_de;
-    else if( n == 2 )
-        pLocales[0] = aLocale_fr;
-
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    LocalizationMgr* pMgr = pIDEShell->GetCurLocalizationMgr();
-    if( bAdd )
-        pMgr->handleAddLocales( aLocaleSeq );
-    else
-        pMgr->handleRemoveLocales( aLocaleSeq );
-}
-
-void TEST_simulateDialogAddLocale( void )
-{
-    TEST_simulateDialogAddRemoveLocale( true );
-}
-
-void TEST_simulateDialogRemoveLocale( void )
-{
-    TEST_simulateDialogAddRemoveLocale( false );
-}
-*/
 
 void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
 {
