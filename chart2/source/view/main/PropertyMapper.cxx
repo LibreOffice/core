@@ -174,26 +174,6 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
         , bLimitedHeight ? C2U("TextMaximumFrameHeight") : C2U("TextMaximumFrameWidth") );
 }
 
-/*
-//set some properties from service style::CharacterProperties:
-//-------- tabpage: Characters -----------
-//FontType eg. Albany               UNO_NAME_EDIT_CHAR_FONTNAME == UNO_NAME_EDIT_CHAR_FONTSTYLENAME    //UNO_NAME_CHAR_FONT
-//FontStyle eg. italic              UNO_NAME_EDIT_CHAR_POSTURE    UNO_NAME_CHAR_POSTURE awt::FontSlant NONE OBLIQUE ITALIC DONTKNOW REVERSE_OBLIQUE REVERSE_ITALIC
-//Fontsize (Pointsize eg. 12)       UNO_NAME_EDIT_CHAR_HEIGHT == UNO_NAME_CHAR_HEIGHT
-        //? UNO_NAME_EDIT_CHAR_WEIGHT == UNO_NAME_CHAR_WEIGHT
-//Language                          UNO_NAME_EDIT_CHAR_LOCALE lang::Locale
-
-//-------- tabpage: Font Effect -----------
-//Underline                         UNO_NAME_CHAR_UNDERLINE sal_Int16 awt::FontUnderline_NONE _SINGLE _DOUBLE _DOTTED _DONTKNOW _DASH ...
-//Underline-color                   ??? 'CharUnderlineColor' + CharUnderlineHasColor
-//Strikeout eg. double              "CharStrikeout" sal_Int16 awt::FontStrikeout_NONE _SINGLE _DOUBLE ...
-//Strikeout by word yes/no          "CharWordMode" bool
-//Fontcolor                         UNO_NAME_EDIT_CHAR_COLOR sal_Int32      UNO_NAME_CHAR_COLOR
-//ReliefType without/graved/emboss  "CharRelief" sal_Int16 text::FontRelief_NONE FontRelief_EMBOSSED FontRelief_ENGRAVED
-//Outline                           "CharContoured" bool
-//Shadows                           UNO_NAME_CHAR_SHADOWED bool
-*/
-
 //static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
@@ -342,18 +322,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProper
         tMakePropertyNameMap
         ( PropertyMapper::getPropertyNameMapForCharacterProperties() )
         ( PropertyMapper::getPropertyNameMapForFillProperties() )
-        ( PropertyMapper::getPropertyNameMapForLineProperties() )
-//         ( PropertyMapper::getPropertyNameMapForParagraphProperties() )
-        // some text properties
-//         ( C2U( "TextHorizontalAdjust" ),   C2U( "TextHorizontalAdjust" ) )
-//         ( C2U( "TextVerticalAdjust" ),     C2U( "TextVerticalAdjust" ) )
-//         ( C2U( "TextAutoGrowHeight" ),     C2U( "TextAutoGrowHeight" ) )
-//         ( C2U( "TextAutoGrowWidth" ),      C2U( "TextAutoGrowWidth" ) )
-//         ( C2U( "TextLeftDistance" ),       C2U( "TextLeftDistance" ) )
-//         ( C2U( "TextRightDistance" ),      C2U( "TextRightDistance" ) )
-//         ( C2U( "TextUpperDistance" ),      C2U( "TextUpperDistance" ) )
-//         ( C2U( "TextLowerDistance" ),      C2U( "TextLowerDistance" ) )
-        ;
+        ( PropertyMapper::getPropertyNameMapForLineProperties() );
 
     return m_aShapePropertyMapForTextShapeProperties;
 }
@@ -366,7 +335,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
         tMakePropertyNameMap
         ( C2U( "LineColor" ),           C2U("Color") )
         ( C2U( "LineDashName" ),        C2U("LineDashName") )
-//      ( C2U( "LineJoint" ),           C2U("LineJoint") )
         ( C2U( "LineStyle" ),           C2U("LineStyle") )
         ( C2U( "LineTransparence" ),    C2U("Transparency") )
         ( C2U( "LineWidth" ),           C2U("LineWidth") )

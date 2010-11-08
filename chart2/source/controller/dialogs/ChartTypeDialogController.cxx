@@ -66,11 +66,6 @@ using namespace ::com::sun::star::chart2;
 #define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
 #define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
-/*
-        ( C2U( "com.sun.star.chart2.template.Surface" ),                        CHSTYLE_3D_SURFACE)
-        ( C2U( "com.sun.star.chart2.template.Addin" ),                          CHSTYLE_ADDIN)
-*/
-
 ChartTypeParameter::ChartTypeParameter()
                     : nSubTypeIndex( 1 )
                     , bXAxisWithValues( false )

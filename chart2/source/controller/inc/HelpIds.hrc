@@ -48,7 +48,6 @@
 #define HID_SCH_CTL_DATA            (HID_SCH_START + 10)
 
 #define HID_SCH_CT_INDICATE         (HID_SCH_START + 11)
-// #define HID_SCH_CT_REGRESS          (HID_SCH_START + 12)
 
 //for chart type dialog:
 #define HID_SCH_CTL_TYPE            (HID_SCH_START + 13)
@@ -56,11 +55,6 @@
 #define HID_SCH_NUM_OF_LINES        (HID_SCH_START + 43)
 #define HID_SCH_SERIES_LIST         (HID_SCH_START + 15)
 #define HID_SCH_DATA_RANGES_LIST    (HID_SCH_START + 16)
-//
-
-//#define HID_SCH_CTL_LIGHT           (HID_SCH_START + 17)
-//#define HID_SCH_CT_INDICATE2        (HID_SCH_START + 18)
-//#define HID_SCH_CT_REGRESS2         (HID_SCH_START + 19)
 
 #define HID_SCH_TBI_DATA_INSERT_ROW (HID_SCH_START + 23)
 #define HID_SCH_TBI_DATA_INSERT_COL (HID_SCH_START + 24)
@@ -74,14 +68,6 @@
 #define HID_SCH_ALIGNMENT_CTR_DIAL  (HID_SCH_START + 35)
 #define HID_SCH_ALIGNMENT_STACKED   (HID_SCH_START + 36)
 #define HID_SCH_ALIGNMENT_DEGREES   (HID_SCH_START + 37)
-/*
-#define HID_SCH_LAYOUT              (HID_SCH_START + 38)
-
-#define HID_SCH_TBX_EDIT_FIELD      (HID_SCH_START + 39)
-#define HID_SCH_DIAGRAM_Y_AXIS      (HID_SCH_START + 40)//war mal 3
-
-#define HID_SCH_DEF_COLOR           (HID_SCH_START + 41)
-*/
 #define HID_SCH_TP_AXIS_LABEL       (HID_SCH_START + 42)
 
 #define HID_SCH_CHART_AUTO_FORMAT   (HID_SCH_START + 44)

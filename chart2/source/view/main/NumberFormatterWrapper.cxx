@@ -58,15 +58,6 @@ FixedNumberFormatter::~FixedNumberFormatter()
 {
 }
 
-/*
-sal_Int32 FixedNumberFormatter::getTextAndColor( double fUnscaledValueForText, rtl::OUString& rLabel ) const
-{
-    sal_Int32 nLabelColor = Color(COL_BLUE).GetColor(); //@todo get this from somewheres
-    rLabel = getFormattedString( fUnscaledValueForText, nLabelColor );
-    return nLabelColor;
-}
-*/
-
 rtl::OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
     return m_aNumberFormatterWrapper.getFormattedString(
@@ -144,26 +135,6 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
 
     return aRet;
 }
-
-// to get the language type use MsLangId::convertLocaleToLanguage( rNumberFormat.aLocale )
-
-/*
-    uno::Reference< i18n::XNumberFormatCode > xNumberFormatCode(
-        m_xCC->getServiceManager()->createInstanceWithContext( C2U(
-        "com.sun.star.i18n.NumberFormatMapper" ), m_xCC ), uno::UNO_QUERY );
-
-    i18n::NumberFormatCode aNumberFormatCode = xNumberFormatCode->getDefault (
-        i18n::KNumberFormatType::MEDIUM,
-        i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER,
-        aLocale );
-
-    uno::Sequence< i18n::NumberFormatCode > aListOfNumberFormatCode = xNumberFormatCode->getAllFormatCode(
-        i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER,
-        aLocale );
-
-    i18n::NumberFormatCode aNumberFormatCode0 = aListOfNumberFormatCode[0];
-    i18n::NumberFormatCode aNumberFormatCode1 = aListOfNumberFormatCode[1];
-*/
 
 //.............................................................................
 } //namespace chart

@@ -642,27 +642,6 @@ double PlottingPositionHelper::getBaseValueY() const
     return m_aScales[1].Origin;
 }
 
-/*
-// ____ XTransformation ____
-uno::Sequence< double > SAL_CALL PolarPlottingPositionHelper::transform(
-                        const uno::Sequence< double >& rSourceValues )
-            throw (uno::RuntimeException, lang::IllegalArgumentException)
-{
-    uno::Sequence< double > aSourceValues(3);
-    return aSourceValues;
-}
-
-sal_Int32 SAL_CALL PolarPlottingPositionHelper::getSourceDimension() throw (uno::RuntimeException)
-{
-    return 3;
-}
-
-sal_Int32 SAL_CALL PolarPlottingPositionHelper::getTargetDimension() throw (uno::RuntimeException)
-{
-    return 3;
-}
-*/
-
 //.............................................................................
 } //namespace chart
 //.............................................................................
