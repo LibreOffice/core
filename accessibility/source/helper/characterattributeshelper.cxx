@@ -34,10 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 
-// -----------------------------------------------------------------------------
-// CharacterAttributesHelper
-// -----------------------------------------------------------------------------
-
 CharacterAttributesHelper::CharacterAttributesHelper( const Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor )
 {
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharBackColor" )),     makeAny( (sal_Int32) nBackColor ) ) );
@@ -54,14 +50,12 @@ CharacterAttributesHelper::CharacterAttributesHelper( const Font& rFont, sal_Int
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" )),        makeAny( (float) rFont.GetWeight() ) ) );
 }
 
-// -----------------------------------------------------------------------------
 
 CharacterAttributesHelper::~CharacterAttributesHelper()
 {
     m_aAttributeMap.clear();
 }
 
-// -----------------------------------------------------------------------------
 
 Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
 {
@@ -79,7 +73,6 @@ Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
     return aValues;
 }
 
-// -----------------------------------------------------------------------------
 
 Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( const Sequence< ::rtl::OUString >& aRequestedAttributes )
 {
@@ -117,6 +110,5 @@ Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( con
     return aValues;
 }
 
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
