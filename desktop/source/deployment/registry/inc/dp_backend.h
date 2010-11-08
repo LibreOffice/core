@@ -56,8 +56,7 @@ namespace css = ::com::sun::star;
 
 class PackageRegistryBackend;
 
-char const* const BACKEND_SERVICE_NAME =
-"com.sun.star.deployment.PackageRegistryBackend";
+#define BACKEND_SERVICE_NAME "com.sun.star.deployment.PackageRegistryBackend"
 
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackage > t_PackageBase;
