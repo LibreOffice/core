@@ -419,7 +419,6 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
 // -------------------------------------------------------------------------
 sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& /*_rEvt*/ )
 {
-    // _rEvt.mnAction;
     return DND_ACTION_NONE;
 }
 // -------------------------------------------------------------------------
@@ -852,8 +851,6 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
                     ++nPos;
                 m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? SID_GROUPFOOTER : SID_GROUPHEADER,nPos);
             }
-            //else
-            //    m_pTree->removeEntry(m_pTree->GetEntry(pEntry,nPos));
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
         {
@@ -937,10 +934,6 @@ ONavigator::ONavigator( Window* _pParent
 
     m_pImpl.reset(new ONavigatorImpl(_rController,this));
 
-    //Size aSpace = LogicToPixel( Size( 7, 120), MAP_APPFONT );
-    //Size aOutSize(nMaxTextWidth + m_aHeader.GetSizePixel().Width() + 3*aSpace.Width(),aSpace.Height());
-    //SetMinOutputSizePixel(aOutSize);
-    //SetOutputSizePixel(aOutSize);
     FreeResource();
     m_pImpl->m_pNavigatorTree->Show();
     m_pImpl->m_pNavigatorTree->GrabFocus();

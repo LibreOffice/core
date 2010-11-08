@@ -349,7 +349,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             {
                 String aName = String(ModuleRes(STR_TBL_TITLE));
                 aDefaultName = aName.GetToken(0,' ');
-                //aDefaultName = getPrivateTitle();
                 aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
             }
 
@@ -582,8 +581,6 @@ sal_Bool OTableController::Construct(Window* pParent)
 {
     setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
-//  m_pView->Construct();
-//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -646,10 +643,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
             }
         }
     }
-/*
-    if ( bCheck )
-        OSingleDocumentController::suspend(_bSuspend);
-*/
+
     return bCheck;
 }
 // -----------------------------------------------------------------------------
@@ -912,7 +906,6 @@ void OTableController::loadData()
             {
                 pActFieldDescr->SetName(sName);
                 pActFieldDescr->SetFormatKey(nFormatKey);
-                //  pActFieldDescr->SetPrimaryKey(pPrimary->GetValue());
                 pActFieldDescr->SetDescription(sDescription);
                 pActFieldDescr->SetHelpText(sHelpText);
                 pActFieldDescr->SetAutoIncrement(bIsAutoIncrement);
@@ -1110,7 +1103,6 @@ void OTableController::alterColumns()
                 // Normally, sdbcx::Column objects are expected to have a TypeName property
             }
 
-            //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
             // check if something changed
             if((nType != pField->GetType()                  ||
                 sTypeName != pField->GetTypeName()         ||
@@ -1458,7 +1450,6 @@ void OTableController::assignTable()
             }
         }
     }
-    //updateTitle();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::isAddAllowed() const

@@ -111,7 +111,6 @@ void OWizNameMatching::Reset()
         m_bFirstTime = sal_False;
     }
 
-    //  m_CTRL_LEFT.Clear();
 }
 // -----------------------------------------------------------------------
 void OWizNameMatching::ActivatePage( )
@@ -228,7 +227,6 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
             m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
-            //  m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
         }
 
         TableListClickHdl(&m_CTRL_LEFT);
@@ -357,18 +355,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    //virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
 };
-
-
-
-//------------------------------------------------------------------------
-/*
-void OColumnString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
-{
-    SvLBoxString::InitViewData(pView,pEntry,pViewData);
-}
-*/
 //------------------------------------------------------------------------
 void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {

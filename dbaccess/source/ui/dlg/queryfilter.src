@@ -30,15 +30,6 @@
 #endif
 #include "dbaccess_helpid.hrc"
 
-/*
-#define STRLST_AND_OR \
-    StringList [ en-US ] = \
-    {\
-        < "AND" ; Default ; > ; \
-        < "OR" ; Default ; > ; \
-    };\
-*/
-
 ModalDialog DLG_FILTERCRIT
 {
     OutputSize = TRUE ;
