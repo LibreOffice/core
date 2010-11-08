@@ -33,16 +33,16 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_SERVICE_NAME_CHARTTYPE_AREA ::rtl::OUString::createFromAscii("com.sun.star.chart2.AreaChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_BAR ::rtl::OUString::createFromAscii("com.sun.star.chart2.BarChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ::rtl::OUString::createFromAscii("com.sun.star.chart2.ColumnChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_LINE ::rtl::OUString::createFromAscii("com.sun.star.chart2.LineChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ::rtl::OUString::createFromAscii("com.sun.star.chart2.ScatterChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_PIE ::rtl::OUString::createFromAscii("com.sun.star.chart2.PieChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_NET ::rtl::OUString::createFromAscii("com.sun.star.chart2.NetChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ::rtl::OUString::createFromAscii("com.sun.star.chart2.FilledNetChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ::rtl::OUString::createFromAscii("com.sun.star.chart2.CandleStickChartType")
-#define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ::rtl::OUString::createFromAscii("com.sun.star.chart2.BubbleChartType")
+#define CHART2_SERVICE_NAME_CHARTTYPE_AREA ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.AreaChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_BAR ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BarChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_LINE ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ScatterChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_PIE ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_NET ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.FilledNetChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" ))
+#define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartType" ))
 
 //.............................................................................
 } //namespace chart
