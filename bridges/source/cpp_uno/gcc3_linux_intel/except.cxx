@@ -158,7 +158,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-#if defined(FREEBSD) && __FreeBSD_version < 702104
+#if defined(FREEBSD) && __FreeBSD_version < 702104 /* #i22253# */
         rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
 #else
         rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
