@@ -44,9 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svl/brdcst.hxx>
-//#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
-//#endif
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <comphelper/processfactory.hxx>
