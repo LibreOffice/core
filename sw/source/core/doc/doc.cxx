@@ -2395,6 +2395,54 @@ BOOL SwDoc::RemoveInvisibleContent()
     EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
+/*-- 25.08.2010 14:18:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL SwDoc::HasInvisibleContent() const
+{
+    BOOL bRet = sal_False;
+
+    SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
+    if( aIter.First( TYPE( SwFmtFld ) ) )
+        bRet = sal_True;
+
+    //
+    // Search for any hidden paragraph (hidden text attribute)
+    //
+    if( ! bRet )
+    {
+        for( ULONG n = GetNodes().Count(); !bRet && (n > 0); )
+        {
+            SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
+            if ( pTxtNd )
+            {
+                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
+                if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
+                {
+                    bRet = sal_True;
+                }
+            }
+        }
+    }
+
+    if( ! bRet )
+    {
+        const SwSectionFmts& rSectFmts = GetSections();
+        USHORT n;
+
+        for( n = rSectFmts.Count(); !bRet && (n > 0); )
+        {
+            SwSectionFmt* pSectFmt = rSectFmts[ --n ];
+            // don't add sections in Undo/Redo
+            if( !pSectFmt->IsInNodesArr())
+                continue;
+            SwSection* pSect = pSectFmt->GetSection();
+            if( pSect->IsHidden() )
+                bRet = sal_True;
+        }
+    }
+    return bRet;
+}
 /*-- 11.06.2004 08:34:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2509,26 +2557,17 @@ bool SwDoc::LinksUpdated() const
 }
 
     // embedded alle lokalen Links (Bereiche/Grafiken)
-bool SwDoc::EmbedAllLinks()
+::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
-    BOOL bRet = FALSE;
-    sfx2::LinkManager& rLnkMgr = GetLinkManager();
-    const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-    if( rLnks.Count() )
+    for( USHORT n = 0; n < rLinks.Count(); ++n )
     {
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo( FALSE );
-
-        for( USHORT n = 0; n < rLnks.Count(); ++n )
+        ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
+        if( pLnk &&
+            ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
+              OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
+            pLnk->ISA( SwBaseLink ) )
         {
-            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ n ]);
-            if( pLnk &&
-                ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
-                  OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
-                pLnk->ISA( SwBaseLink ) )
-            {
                 ::sfx2::SvBaseLinkRef xLink = pLnk;
-                USHORT nCount = rLnks.Count();
 
                 String sFName;
                 rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
@@ -2536,20 +2575,33 @@ bool SwDoc::EmbedAllLinks()
                 INetURLObject aURL( sFName );
                 if( INET_PROT_FILE == aURL.GetProtocol() ||
                     INET_PROT_CID == aURL.GetProtocol() )
-                {
-                    // dem Link sagen, das er aufgeloest wird!
-                    xLink->Closed();
+                    return pLnk;
+        }
+    }
+    return 0;
+}
+bool SwDoc::EmbedAllLinks()
+{
+    BOOL bRet = FALSE;
+    sfx2::LinkManager& rLnkMgr = GetLinkManager();
+    const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
+    if( rLinks.Count() )
+    {
+        BOOL bDoesUndo = DoesUndo();
+        DoUndo( FALSE );
 
-                    // falls einer vergessen hat sich auszutragen
-                    if( xLink.Is() )
-                        rLnkMgr.Remove( xLink );
+        ::sfx2::SvBaseLink* pLnk = 0;
+        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
+        {
+            ::sfx2::SvBaseLinkRef xLink = pLnk;
+            // dem Link sagen, das er aufgeloest wird!
+            xLink->Closed();
 
-                    if( nCount != rLnks.Count() + 1 )
-                        n = 0;      // wieder von vorne anfangen, es wurden
-                                    // mehrere Links entfernt
-                    bRet = TRUE;
-                }
-            }
+            // falls einer vergessen hat sich auszutragen
+            if( xLink.Is() )
+                rLnkMgr.Remove( xLink );
+
+            bRet = TRUE;
         }
 
         DelAllUndoObj();

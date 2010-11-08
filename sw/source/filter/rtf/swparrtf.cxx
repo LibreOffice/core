@@ -1628,14 +1628,29 @@ void SwRTFParser::NextToken( int nToken )
     switch( nToken )
     {
     case RTF_FOOTNOTE:
+    {
         //We can only insert a footnote if we're not inside a footnote. e.g.
         //#i7713#
-        if (!mbIsFootnote)
+
+        // in insert mode it's also possible to be inside of a footnote!
+        bool bInsertIntoFootnote = false;
+        if( !IsNewDoc() )
+        {
+            SwStartNode* pSttNode = pPam->GetNode()->StartOfSectionNode();
+            while(pSttNode && pSttNode->IsSectionNode())
+            {
+                pSttNode = pSttNode->StartOfSectionNode();
+            }
+            if( SwFootnoteStartNode == pSttNode->GetStartNodeType() )
+                bInsertIntoFootnote = true;
+        }
+        if (!mbIsFootnote && !bInsertIntoFootnote)
         {
             ReadHeaderFooter( nToken );
             SkipToken( -1 );        // Klammer wieder zurueck
         }
-        break;
+    }
+    break;
     case RTF_SWG_PRTDATA:
         ReadPrtData();
         break;
