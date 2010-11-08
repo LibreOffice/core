@@ -88,8 +88,9 @@
 #include "retstrm.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-#include "editwin.hxx"
+#  include "editwin.hxx"
 #endif
+
 #include "rcontrol.hxx"
 #include <automation/communi.hxx>
 #include "testtool.hxx"
@@ -479,13 +480,13 @@ void StatementSlot::AddReferer()
     nAnzahl++;
     aArgs.realloc(nAnzahl);
     pArg = aArgs.getArray();
-    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("Referer");
-    pArg[nAnzahl-1].Value <<= ::rtl::OUString::createFromAscii("private:user");
+    pArg[nAnzahl-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+    pArg[nAnzahl-1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ));
 
     nAnzahl++;
     aArgs.realloc(nAnzahl);
     pArg = aArgs.getArray();
-    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("SynchronMode");
+    pArg[nAnzahl-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SynchronMode" ));
     pArg[nAnzahl-1].Value <<= sal_Bool( TRUE );
 }
 
