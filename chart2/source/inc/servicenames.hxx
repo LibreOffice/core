@@ -33,37 +33,37 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART_MODEL_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartModel")
-#define CHART_MODEL_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument")
+#define CHART_MODEL_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartModel" ))
+#define CHART_MODEL_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ChartDocument" ))
 //@todo create your own service containing the service com.sun.star.document.OfficeDocument
 
-#define CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartController")
-#define CHART_CONTROLLER_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartController")
+#define CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartController" ))
+#define CHART_CONTROLLER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ChartController" ))
 //@todo create your own service containing the service com.sun.star.frame.Controller
 
-#define CHART_VIEW_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartView")
-#define CHART_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartView")
+#define CHART_VIEW_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartView" ))
+#define CHART_VIEW_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ChartView" ))
 
-#define CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartFrameLoader")
-#define CHART_FRAMELOADER_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.frame.SynchronousFrameLoader")
+#define CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartFrameLoader" ))
+#define CHART_FRAMELOADER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.SynchronousFrameLoader" ))
 
-#define CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.WizardDialog")
-#define CHART_WIZARD_DIALOG_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.WizardDialog")
+#define CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.WizardDialog" ))
+#define CHART_WIZARD_DIALOG_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.WizardDialog" ))
 
-#define CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartTypeDialog")
-#define CHART_TYPE_DIALOG_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartTypeDialog")
+#define CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartTypeDialog" ))
+#define CHART_TYPE_DIALOG_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ChartTypeDialog" ))
 
 // wrapper for old UNO API (com.sun.star.chart)
-#define CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartDocumentWrapper")
-#define CHART_CHARTAPIWRAPPER_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocumentWrapper")
+#define CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartDocumentWrapper" ))
+#define CHART_CHARTAPIWRAPPER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ChartDocumentWrapper" ))
 
 // accessibility
-#define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.AccessibleTextComponent")
-#define CHART_ACCESSIBLE_TEXT_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.accessibility.AccessibleTextComponent")
+#define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.AccessibleTextComponent" ))
+#define CHART_ACCESSIBLE_TEXT_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleTextComponent" ))
 
-#define CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartRenderer")
+#define CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartRenderer" ))
 
-#define CHART_UNDOMANAGER_SERVICE_NAME ::rtl::OUString::createFromAscii( "com.sun.star.chart2.UndoManager" )
+#define CHART_UNDOMANAGER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.UndoManager" ))
 
 //.............................................................................
 } //namespace chart
