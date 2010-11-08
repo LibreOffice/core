@@ -405,7 +405,7 @@ elsif ( $platform =~ m/openbsd/ )
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
       $OUTPATH        = "unxobsd";
-      $outfile        = "OpenBSDEnv.Set.sh";
+      $outfile        = "OpenBSDEnv.Set";
    if ($platform =~ m/^amd64/)
    {
       print "Setting OpenBSD AMD64 specific values... ";
