@@ -1106,39 +1106,31 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     aLbLineStyle.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
 
     // Simple lines
-    aLbLineStyle.InsertEntry( 1.0, 0.0, 0.0, CHANGE_LINE1, SOLID );
-    aLbLineStyle.InsertEntry( 1.0, 0.0, 0.0, CHANGE_LINE1, DOTTED );
-    aLbLineStyle.InsertEntry( 1.0, 0.0, 0.0, CHANGE_LINE1, DASHED );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
 
     // Double lines
-    aLbLineStyle.InsertEntry( 1.0, 1.0, 1.0, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, DOUBLE );
-    aLbLineStyle.InsertEntry( 1.0, 75.0, 75.0, CHANGE_LINE1, THINTHICK_SMALLGAP, 100 );
-    aLbLineStyle.InsertEntry( 1.0, 0.5, 0.5, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, THINTHICK_MEDIUMGAP );
-    aLbLineStyle.InsertEntry( 75.0, 150.0, 1.0, CHANGE_DIST, THINTHICK_LARGEGAP );
-    aLbLineStyle.InsertEntry( 75.0, 1.0, 75.0, CHANGE_LINE2, THICKTHIN_SMALLGAP, 100 );
-    aLbLineStyle.InsertEntry( 0.5, 1.0, 0.5, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, THICKTHIN_MEDIUMGAP );
-    aLbLineStyle.InsertEntry( 150.0, 75.0, 1.0, CHANGE_DIST, THICKTHIN_LARGEGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 100 );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 100 );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
 
     // Engraved / Embossed
-    /*
-     *  Word compat: the lines widths are exactly following this rule, shouldbe:
-     *      0.75pt up to 3pt and then 3pt
-     */
-    aLbLineStyle.InsertEntry( 0.5, 0.5, 1, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, EMBOSSED, 75,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 75,
             &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
             &lcl_mediumColor );
-    aLbLineStyle.InsertEntry( 0.5, 0.5, 1, CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST, ENGRAVED, 75,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 75,
             &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
             &lcl_mediumColor );
 
     // Inset / Outset
-    /*
-     * Word compat: the gap width should be measured relatively to the biggest width for the
-     *      row or column.
-     */
-    aLbLineStyle.InsertEntry( 75.0, 1.0, 1.0, CHANGE_LINE2 | CHANGE_DIST, OUTSET, 0.5,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 0.5,
            &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
-    aLbLineStyle.InsertEntry( 1.0, 75.0, 1.0, CHANGE_LINE1 | CHANGE_DIST, INSET, 0.5,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 0.5,
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
 
     aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
