@@ -62,32 +62,11 @@
 #define FT_TEXTDIR              6038
 #define LB_TEXTDIR              6039
 
-/*
-//Symbol-Tabpage (zum Teil sehr Aehnlich der SVX_AREA_TABPAGE) (obsolete)
-//#define TP_SYMBOL                 906
-#define RBT_COLOR                   1
-#define RBT_GRADIENT                2
-#define RBT_HATCHING                3
-#define RBT_BITMAP                  4
-#define RBT_INVISIBLE               5
-#define LB_COLOR                    1
-#define LB_GRADIENT                 2
-#define LB_HATCHING                 3
-#define LB_BITMAP                   4
-
-#define GRP_FILL                    1
-#define CTL_BITMAP_PREVIEW          6
-*/
-
 //------------
 //from old chart tplabel.hrc
-
 //#define TP_AXIS_LABEL                 920
 
 #define CB_AXIS_LABEL_SCHOW_DESCR       1
-
-//#define FL_AXIS_LABEL_FORMATTING      2
-
 #define FL_AXIS_LABEL_ORIENTATION       3
 #define CT_AXIS_LABEL_DIAL              4
 #define PB_AXIS_LABEL_TEXTSTACKED       5
@@ -107,12 +86,8 @@
 #define RB_AXIS_LABEL_AUTOORDER         17
 
 #define FL_SEPARATOR                    18
-
 #define FT_AXIS_TEXTDIR                 19
 #define LB_AXIS_TEXTDIR                 20
-
-//#define TP_SCALE        903
-
 #define FL_SCALE            1
 
 #define TXT_MIN             1
@@ -135,9 +110,6 @@
 #define EDT_ORIGIN          4
 
 #define MT_STEPHELP         10
-
-//#define TP_AXIS_POSITIONS   904
-
 #define FL_AXIS_LINE        1
 #define FL_LABELS           2
 #define FL_TICKS            3

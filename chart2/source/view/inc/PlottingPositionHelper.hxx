@@ -151,10 +151,6 @@ enum NormalAxis
 };
 
 class PolarPlottingPositionHelper : public PlottingPositionHelper
-    /*
-                                  , public ::cppu::WeakImplHelper1<
-                                ::com::sun::star::chart2::XTransformation >
-                                */
 {
 public:
     PolarPlottingPositionHelper( NormalAxis eNormalAxis=NormalAxis_Z );
@@ -198,21 +194,6 @@ public:
 
     inline bool isMathematicalOrientationAngle() const;
     inline bool isMathematicalOrientationRadius() const;
-
-    /*
-    // ____ XTransformation ____
-    /// @see ::com::sun::star::chart2::XTransformation
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL transform(
-        const ::com::sun::star::uno::Sequence< double >& rSourceValues )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart2::XTransformation
-    virtual sal_Int32 SAL_CALL getSourceDimension()
-        throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::com::sun::star::chart2::XTransformation
-    virtual sal_Int32 SAL_CALL getTargetDimension()
-        throw (::com::sun::star::uno::RuntimeException);
-        */
 public:
     //Offset for radius axis in absolute logic scaled values (1.0 == 1 category)
     double      m_fRadiusOffset;

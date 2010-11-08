@@ -229,47 +229,6 @@ FontList* ViewElementListProvider::getFontList() const
     }
     return m_pFontList;
 }
-
-/*
-SfxPrinter* ObjectPropertiesDialogParameter::getPrinter()
-{
-    //was old chart:
-    //SfxPrinter* SchChartDocShell::GetPrinter()
-
-    // OLE-Objekt: kein Printer anlegen ??? see old chart: :UpdateTablePointers
-    //@todo get printer from calc or other container
-    //return NULL;
-
-    SfxPrinter* pPrinter = NULL;
-    bool bOwnPrinter = true;
-    if (!pPrinter)
-    {
-        SfxBoolItem aItem(SID_PRINTER_NOTFOUND_WARN, TRUE);
-        // ItemSet mit speziellem Poolbereich anlegen
-        SfxItemSet* pSet = new SfxItemSet(GetPool(),
-                                          SID_PRINTER_NOTFOUND_WARN,
-                                          SID_PRINTER_NOTFOUND_WARN, 0);
-        pSet->Put(aItem);
-        pPrinter = new SfxPrinter(pSet); //@todo ->need to remember and delete
-        bOwnPrinter = TRUE;
-
-        MapMode aMapMode = pPrinter->GetMapMode();
-        aMapMode.SetMapUnit(MAP_100TH_MM);
-        pPrinter->SetMapMode(aMapMode);
-
-        if (pChDoc)
-        {
-            if (pPrinter != pChDoc->GetRefDevice())
-                pChDoc->SetRefDevice(pPrinter);
-
-            if (pPrinter != pChDoc->GetOutliner()->GetRefDevice())
-                pChDoc->GetOutliner()->SetRefDevice(pPrinter);
-        }
-    }
-    return pPrinter;
-}
-*/
-
 //.............................................................................
 } //namespace chart
 //.............................................................................
