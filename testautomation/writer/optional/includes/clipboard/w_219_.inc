@@ -49,8 +49,8 @@ testcase HTMLToIMPRESSText
   printlog "  Jump to beginning of document "
   printlog "  Select first paragraph "
   printlog "  Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Shift Down><Shift End>"
@@ -115,8 +115,8 @@ testcase HTMLToIMPRESSField
   printlog "  Jump to beginning of document "
   printlog "  Select paragraph with 'Date Field' "
   printlog "  Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Down>",2
@@ -149,7 +149,7 @@ testcase HTMLToIMPRESSField
      Call hCloseDocument
      wait 500
      printlog "  Reopen saved document "
-     Call hFileOpen (gOfficepath + "user\work\html_to_impress_field.odp",false)
+     hFileOpen( gOfficepath + "user\work\html_to_impress_field.odp",false)
      Wait 500
      printlog "  Close saved document "
      Call hCloseDocument
@@ -172,8 +172,8 @@ testcase HTMLToIMPRESSTable
   printlog "  Jump to beginning of document "
   printlog "  Select 'Table' "
   printlog "  Copy selected table "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Down>",5
@@ -206,7 +206,7 @@ testcase HTMLToIMPRESSTable
      Call hCloseDocument
      wait 500
      printlog "  Reopen saved document "
-     Call hFileOpen (gOfficepath + "user\work\html_to_impress_table.odp",false)
+     hFileOpen( gOfficepath + "user\work\html_to_impress_table.odp",false)
      Wait 500
      printlog "  Close saved document "
      Call hCloseDocument
@@ -229,8 +229,8 @@ testcase HTMLToIMPRESSGraphicLinked
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
     printlog "  Copy selected Linked Graphic "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -262,7 +262,7 @@ testcase HTMLToIMPRESSGraphicLinked
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_impress_graphic1.odp",false)
+        hFileOpen( gOfficepath + "user\work\html_to_impress_graphic1.odp",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -285,8 +285,8 @@ testcase HTMLToIMPRESSControl
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
     printlog "  Copy selected Control "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -319,7 +319,7 @@ testcase HTMLToIMPRESSControl
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_impress_control.odp",false)
+        hFileOpen( gOfficepath + "user\work\html_to_impress_control.odp",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument
@@ -342,8 +342,8 @@ testcase HTMLToIMPRESSFloatingFrame
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "
     printlog "  Copy selected Floating Frame "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -381,7 +381,7 @@ testcase HTMLToIMPRESSFloatingFrame
         Call hCloseDocument
         wait 500
         printlog "  Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_impress_float.odp",false)
+        hFileOpen( gOfficepath + "user\work\html_to_impress_float.odp",false)
         Wait 500
         printlog "  Close saved document "
         Call hCloseDocument

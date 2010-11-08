@@ -496,7 +496,8 @@ testcase tStrokeSort
 
     Dim i , j                 as Integer
 
-    testFile         = "sortTest.sxw"
+    testFile         = gTesttoolPath & "framework\optional\input\CJK\sortTest.sxw"
+    testFile         = convertpath( testFile )
     aCorrectSequence = Array( "1" , "2" , "3" , "4" ,"5" )
 
     j = UBound(aCorrectSequence)
@@ -527,9 +528,8 @@ testcase tStrokeSort
 
     Call hNewDocument
     '/// Open a test file and check <i>No Grid</i> checkbox
-    Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
-    sMakeReadOnlyDocumentEditable
-    EditSelectAll
+    hFileOpenLocally( testfile )
+    hUseAsyncSlot( "EditSelectAll" )
 
     '/// Open <i>Tools/Sort</i>
     ToolsSort
@@ -572,6 +572,7 @@ testcase tStrokeSort
     next i
 
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -586,7 +587,9 @@ testcase tPinyinSort
 
     Dim i , j                 as Integer
 
-    testFile         = "sortTest.sxw"
+    testFile         = gTesttoolPath & "framework\optional\input\CJK\sortTest.sxw"
+    testFile         = convertpath( testFile )
+
     aCorrectSequence = Array( "2" , "3" , "4" , "1" , "5"  )
 
     j = UBound(aCorrectSequence)
@@ -617,9 +620,8 @@ testcase tPinyinSort
 
     Call hNewDocument
     '/// Open a test file and check <i>No Grid</i> checkbox
-    Call hFileOpen ( gTesttoolPath + "framework\optional\input\CJK\" + testFile )
-    sMakeReadOnlyDocumentEditable
-    EditSelectAll
+    hFileOpenLocally( testfile )
+    hUseAsyncSlot( "EditSelectAll" )
 
     '/// Open <i>Tools/Sort</i>
     ToolsSort
@@ -664,6 +666,7 @@ testcase tPinyinSort
     next i
 
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 

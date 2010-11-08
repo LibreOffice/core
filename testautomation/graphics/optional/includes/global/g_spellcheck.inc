@@ -56,8 +56,7 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     sleep(1)
 
@@ -86,164 +85,6 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
     end if
     sleep 2
 
-    PrintLog "- Spellcheck with correct text"
-    select case iSprache
-    case 01   : hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-    case 33   : hTextrahmenErstellen ("Il nous faut donc un de temps pour examiner avec soin tous les dossiers.<Return>",10,10,70,20)
-    case 34   : hTextrahmenErstellen ("Este es un chico muy importante.",10,10,50,20)
-    case 36   : hTextrahmenErstellen ("akit a b�r�s�g vagy a szab�lys�rt�si hat�s�g a eltiltott",10,10,70,20)
-    case 39   : hTextrahmenErstellen ("La ringraziamo per l'interesse mostrato a collaborare con la firma.<Return>",10,10,70,20)
-    case 46   : hTextrahmenErstellen ("Det varierar vad som behandlas och ur vilket perspektiv.<Return>",10,10,50,20)
-    case 49   : hTextrahmenErstellen ("Dies ist ein Text ohne Fehler.<Return>",10,10,50,20)
-    case 50   : hTextrahmenErstellen ("To je besedilo brez napake.<Return>",10,10,50,20)
-    case 55   : hTextrahmenErstellen ("Esta poderia ser a resposta para suas preces?<Return>",10,10,50,20)
-    case else :
-        if bAsianLan then
-            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) will use english instaed"
-            ' there was smth wrong, try to find out :
-            kontext
-            if active.exists then
-                printlog "ERROR: active: '"+active.gettext+"'"
-                active.ok
-            end if
-            hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-            hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-        end if
-    end select
-    ToolsSpellcheck
-    WaitSlot (2000)
-    Kontext "Active"
-    if active.exists(5) then
-        printlog "Message: spellchecking has finished?: '" + active.gettext + "'"
-        Active.OK
-    else
-        errorLog "Spellcheck started :"
-        Kontext "Spellcheck"
-        if Spellcheck.exists then
-            errorlog " - spellcheck came up and will be closed now"
-            Spellcheck.Close
-        else
-            printlog "spellcheck didn't come up"
-        end if
-    end if
-    WaitSlot (2000)
-    Call hCloseDocument
-endcase 'tiToolsSpellcheckCorrect
-
-'------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-testcase tiToolsSpellcheckError
-    if iSprache = 48 then
-        qaerrorlog "This test is not adapted for polish, 48."
-        got endsub
-    endif
-    Dim Fehler$
-    Dim Sprachenname$
-    Dim Dummy$
-    Dim FehlerText$
-    Dim i as integer
-
-    printlog "New document"
-    Call hNewDocument
-    printlog "Selecting language case: " & iSprache
-    select case iSprache
-    case 01 : FehlerText$ = "Thatt is a failure test."                      : Fehler$ = "Thatt" : Sprachenname$ = "English (US)"
-    case 34 : FehlerText$ = "Ezte es un chico muy importante."              : Fehler$ = "Ezte"  : Sprachenname$ = "Niederlaendisch"
-    case 33 : FehlerText$ = "Ler nous faut donc un de temps pour examiner." : Fehler$ = "Ler"   : Sprachenname$ = "Franzoesisch"
-    case 36 : FehlerText$ = "Boszniai americkai kontingens háromnegyedesek – mintegy négyezer katona – magyarországi telepítése egy éven belül megtörténhet" : Fehler$ = "tellepítésel"   : Sprachenname$ = "Ungarisch"
-    case 39 : FehlerText$ = "Ringrarziamo per l'interessa mostrato a collaborare con la firma." : Fehler$ = "Ringrarziamo" : Sprachenname$ = "Italienisch"
-    case 46 : FehlerText$ = "Detd varierar vad som behandlas och ur vilket perspektiv."         : Fehler$ = "Detd"         : Sprachenname$ = "Schwedisch"
-    case 49 : FehlerText$ = "Diees ist ein Fehler."                         : Fehler$ = "Diees" : Sprachenname$ = "Deutsch"
-    case 50 : FehlerText$ = "Toje napaka, ker manjka presledek."            : Fehler$ = "Toje" : Sprachenname$ = "Slovenš�?ina"
-    case 55 : FehlerText$ = "Eesta poderia ser a resposta para suas preces?": Fehler$ = "Eesta" : Sprachenname$ = "Portugiesisch"
-    case else :
-        if bAsianLan then
-            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) using english"
-            FehlerText$ = "Thatt is a failure test."
-            Fehler$ = "Thatt"
-            Sprachenname$ = "English (US)"
-            call hSetSpellHypLanguage
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-        end if
-    end select
-    printlog "Error Text taken for testing is: " & FehlerText$
-    sleep 2
-
-    printlog "Delete ignore word list"
-    if (not wIgnorierenlisteLoeschen) then
-        qaErrorLog "Can't get into Dictionary lists"
-        goto endsub
-    end if
-    printlog "Setting doc language to english"
-    ToolsOptions
-    Kontext "ExtrasOptionenDlg"
-    hToolsOptions("LANGUAGESETTINGS","Languages")
-    Westlich.Select 34
-    Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-    printlog "Create 1 textbox with 1 spelling error (test replace always)"
-    hTextrahmenErstellen (FehlerText$,30,30,90,40)
-
-    hTypeKeys "<HOME>"
-    printlog "Call 'Tools->Spellcheck->Check'"
-    ToolsSpellcheck
-    printlog "Spellcheck dialog has to come up, wrong word is selected."
-    Kontext "Spellcheck"
-    if Spellcheck.Exists then
-        printlog "There has to be at least ONE suggestion."
-        if (Suggestions.GetItemCount < 1) then
-            printlog "If no suggestion avilable:"
-            warnlog "   - no suggestion for the language: "+DictionaryLanguage.GetSelIndex+" '"+DictionaryLanguage.GetSelText+"' , press check button..."
-            printlog "+ press button 'Check word'"
-            Pruefen.click
-            if (Suggestions.GetItemCount < 1) then
-                warnlog " STILL no suggestions :-( errors will follow "
-            else
-                printlog "   - now suggestion for the language: "+DictionaryLanguage.GetSelIndex+" '"+DictionaryLanguage.GetSelText+"'" + Suggestions.GetItemCount
-            end if
-        end if
-        Dummy$=Suggestions.GetItemText (1)
-        printlog "Select first spellcheck suggestion (click it!)."
-        Suggestions.Select (1)
-        printlog "Check if textfield 'word' has changed to selected word."
-        if (Suggestions.GetSelText <> Dummy$) Then
-            Warnlog "Suggestion not used"
-        else
-            Printlog "Suggestion is used"
-        end if
-        sleep 1
-        kontext "Spellcheck"
-        printlog "click button 'Always replace'"
-        ChangeAll.Click
-        printlog "spellcheck dialog has to disappear and"
-        printlog "There has to come up only one active: 'Spellcheck of entire document has been completed [OK]'"
-        Kontext "Active"
-        if Active.Exists(5) then
-            Printlog "Message: Spellchecking has finished?: '" + active.gettext + "'"
-            Active.OK
-        else
-            Printlog "'Change All' seems to have worked correctly."
-            Kontext "Spellcheck"
-            Spellcheck.Close
-            Kontext "Active"
-            if active.exists(5) then
-                Printlog "Spellcheck dialog closed'" + active.gettext + "'"
-                Active.OK
-            else
-                Printlog "Spellcheck dialog closed'"
-            end if
-        end if
-    else
-        Warnlog "  Error not recognized by the Spellchecker"
-        if active.exists(5) then
-            Kontext "Active"
-            printlog "Message: spellchecking has finished?: '" + active.gettext + "'"
-            Active.OK
-        end if
-    end if
-
     printlog "Close dialog 'Edit Custom Dictionary'."
     BenutzerwoerterbuchBearbeiten.Close
     Kontext "ExtrasOptionenDlg"
@@ -256,7 +97,9 @@ testcase tiToolsSpellcheckError
     ' remove the word again from the dictionary
     delete_word_from_dictionary(sWrongWord,"IgnoreAllList")
 
-endcase 'tiToolsSpellcheckCheck
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
+endcase 'tiToolsSpellcheckCorrect
+
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_Change
 
@@ -281,9 +124,7 @@ testcase tiToolsSpellcheckCheck_Change
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -327,8 +168,9 @@ testcase tiToolsSpellcheckCheck_Change
     
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
-endcase
+endcase 'tiToolsSpellcheckCheck_Change
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_ChangeAll
 
@@ -355,9 +197,7 @@ testcase tiToolsSpellcheckCheck_ChangeAll
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -373,9 +213,12 @@ testcase tiToolsSpellcheckCheck_ChangeAll
 
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
-endcase
+endcase 'tiToolsSpellcheckCheck_ChangeAll
+
 '-------------------------------------------------------------------------------
+
 function delete_all_added_words(aWords)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -384,44 +227,7 @@ function delete_all_added_words(aWords)
     Dim iWordCounter as integer
     Dim iBooks as integer
 
-    Select Case Ucase(gApplication)
-    case "DRAW"         : sExt = ".odg"
-    case "IMPRESS"      : sExt = ".odp"
-    end select
-
-    printlog "Load prepared document containing 4 errors : graphics\\required\\input\\recht_" & iSprache & sExt
-    if (not bAsianLan) then
-        printlog "Check if the document is writable."
-        Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-    else
-        Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_1"+sExt)
-    end if
-    if fIsDocumentWritable = false then
-        printlog "Make the document writable and check if it's succesfull."
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        end if
-    end if
-    select case iSprache  ' sWord(1)=red     : sWord(2)=turquoise
-    case 01 : sWord(1) = "documente"     : sWord(2) = "expriss"
-    case 33 : sWord(1) = "intercu"       : sWord(2) = "Lees"
-    case 34 : sWord(1) = "afekto"        : sWord(2) = "fratternal"
-    case 36 : sWord(1) = "szeerint"       : sWord(2) = "tervvezi"
-    case 39 : sWord(1) = "Millano"       : sWord(2) = "tarrget"
-    case 46 : sWord(1) = "desa"          : sWord(2) = "occh"
-    case 49 : sWord(1) = "Texxt"         : sWord(2) = "reichtt"
-    case 50 : sWord(1) = "Bsedilo"       : sWord(2) = "zados�?a"
-    case 55 : sWord(1) = "esktava"         : sWord(2) = "noitee"
-    case else :
-        if bAsianLan then
-            sWord(1) = "documente"     : sWord(2) = "expriss"
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here and create the file"
-        end if
-    end select
-    sleep 2
-
+    Printlog "Delete the given words from dictionaries."
     printlog "Call Tools->Options."
     ToolsOptions
     printlog "Select in category 'Languagesettings' entry 'Writing Aids.'"
@@ -436,7 +242,7 @@ function delete_all_added_words(aWords)
     Kontext "BenutzerwoerterbuchBearbeiten"
     sleep 1
     printlog "Check every book, if it contains the words."
-    iBooks = Buch.getItemCount    
+    iBooks = Buch.getItemCount
     for iBookCounter = 1 to iBooks
         Buch.select(iBookCounter)
         printlog "Items in Booklist: " & WordList.getItemCount
@@ -457,8 +263,10 @@ function delete_all_added_words(aWords)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
     
-end function
+end function 'delete_all_added_words
+
 '-------------------------------------------------------------------------------
+
 function delete_word_from_dictionary(sWord as String, sDictionary as String)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -498,7 +306,9 @@ function delete_word_from_dictionary(sWord as String, sDictionary as String)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
 
-end function
+end function 'delete_word_from_dictionary
+
+'-------------------------------------------------------------------------------
 
 function fSelectWithString(oControl as Object,sText as String)
 
@@ -513,8 +323,9 @@ function fSelectWithString(oControl as Object,sText as String)
         endif
     next
 
-end function
+end function 'fSelectWithString
 
+'-------------------------------------------------------------------------------
 
 function getWordsForLanguage()
 
@@ -563,4 +374,4 @@ function getWordsForLanguage()
 
     getWordsForLanguage = aWords
 
-end function
+end function 'getWordsForLanguage

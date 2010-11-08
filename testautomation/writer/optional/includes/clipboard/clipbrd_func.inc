@@ -141,8 +141,8 @@ end function
 
 function wSetClipboardtestDefaults(ForWhat as string) as boolean
     printlog " Points cursor to beginning of document "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
+    
     Kontext "DocumentWriter"
     printlog " Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
