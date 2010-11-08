@@ -87,28 +87,6 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
         case VCLEVENT_DROPDOWN_OPEN:
         case VCLEVENT_DROPDOWN_CLOSE:
         {
-            /*          // child count changed
-            Any aOldValue, aNewValue;
-            // get the listbox child
-            Reference< XAccessible > xChild;
-            if ( !xChild.is() )
-            {
-                try
-                {
-                    // the listbox is the second child
-                    xChild = getAccessibleChild(1);
-                }
-                catch ( IndexOutOfBoundsException& ) {}
-                catch ( RuntimeException& ) {}
-            }
-            if ( rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN )
-                aNewValue <<= xChild;
-            else
-                aOldValue <<= xChild;
-            NotifyAccessibleEvent(
-            AccessibleEventId::CHILD, aOldValue, aNewValue
-            );
-            */
             break;
         }
 
