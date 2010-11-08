@@ -32,7 +32,7 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -128,6 +128,7 @@ using rtl::OUString;
 using rtl::OUStringBuffer;
 using rtl::OUStringToOString;
 
+using namespace oox;
 using namespace docx;
 using namespace sax_fastparser;
 using namespace nsSwDocInfoSubType;
