@@ -1827,8 +1827,8 @@ void Desktop::Main()
     catch ( ... )
     {
         FatalError( MakeStartupErrorMessage(
-            OUString::createFromAscii(
-            "Unknown error during startup (Office wrapper service).\nInstallation could be damaged.")));
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "Unknown error during startup (Office wrapper service).\nInstallation could be damaged."))));
         return;
     }
     */
@@ -1879,8 +1879,8 @@ void Desktop::Main()
         catch ( ... )
         {
             FatalError( MakeStartupErrorMessage(
-                OUString::createFromAscii(
-                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged."))));
             return;
         }
         */
@@ -2693,9 +2693,9 @@ void Desktop::OpenClients()
      /*
         ::comphelper::ConfigurationHelper::writeDirectKey(
                 ::comphelper::getProcessServiceFactory(),
-                ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
-                ::rtl::OUString::createFromAscii("AutoSave"),
-                ::rtl::OUString::createFromAscii("Enabled"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
                 ::com::sun::star::uno::makeAny(sal_False),
                 ::comphelper::ConfigurationHelper::E_STANDARD);
 

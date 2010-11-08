@@ -111,9 +111,9 @@ component_writeInfo(
     {
         pServiceName= pServices[i];
         pImplName = pImplementations[i];
-        aImpl = OUString::createFromAscii( "/" )
+        aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ))
               + OUString::createFromAscii( pImplName )
-              + OUString::createFromAscii( "/UNO/SERVICES" );
+              + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
         Reference<XRegistryKey> xNewKey = xKey->createKey( aImpl );
         xNewKey->createKey( OUString::createFromAscii( pServiceName ) );
     }

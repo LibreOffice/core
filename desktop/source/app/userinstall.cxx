@@ -109,8 +109,8 @@ namespace desktop {
 
             Sequence< Any > theArgs(1);
             NamedValue v;
-            v.Name = OUString::createFromAscii("NodePath");
-            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
+            v.Value = makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")));
             theArgs[0] <<= v;
             Reference< XHierarchicalNameAccess> hnacc(
                 theConfigProvider->createInstanceWithArguments(
@@ -202,7 +202,7 @@ namespace desktop {
                     rtl::OUString itemname = aFileStatus.getFileName();
                     // append trailing '/' if needed
                     if (newDstUnqPath.lastIndexOf(sal_Unicode('/')) != newDstUnqPath.getLength()-1)
-                        newDstUnqPath += rtl::OUString::createFromAscii("/");
+                        newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     newDstUnqPath += itemname;
                     // recursion
                     err = copy_recursive(newSrcUnqPath, newDstUnqPath);
@@ -261,21 +261,21 @@ namespace desktop {
         }
         try
         {
-            OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-            OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+            OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
+            OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
 
             // get configuration provider
             Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
             Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
                 theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
             Sequence< Any > theArgs(1);
-            NamedValue v(OUString::createFromAscii("NodePath"), makeAny(OUString::createFromAscii("org.openoffice.Setup")));
-            //v.Name = OUString::createFromAscii("NodePath");
-            //v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"))));
+            //v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
+            //v.Value = makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")));
             theArgs[0] <<= v;
             Reference< XHierarchicalPropertySet> hpset(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
+            hpset->setHierarchicalPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/ooSetupInstCompleted")), makeAny(sal_True));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
         }
         catch ( PropertyVetoException& )

@@ -979,13 +979,13 @@ static void AddConversionsToDispatchList(
 
     if( rParamOut.trim().getLength() )
     {
-        aParam += ::rtl::OUString::createFromAscii(";");
+        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
         aParam += aOutDir;
     }
     else
     {
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
-        aParam += ::rtl::OUString::createFromAscii( ";" ) + aPWD;
+        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";" )) + aPWD;
     }
 
     if ( rRequestList.getLength() > 0 )

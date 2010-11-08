@@ -347,7 +347,7 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return comphelper::makeSequence(
-        OUString::createFromAscii(BACKEND_SERVICE_NAME) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM(BACKEND_SERVICE_NAME)) );
 }
 
 // XPackageRegistry

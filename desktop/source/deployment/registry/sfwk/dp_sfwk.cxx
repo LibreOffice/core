@@ -256,7 +256,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.framework-script"))
             {
-                OUString lang = OUString::createFromAscii("Script");
+                OUString lang = OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
                 OUString sParcelDescURL = makeURL(
                     url, OUSTR("parcel-descriptor.xml") );
 

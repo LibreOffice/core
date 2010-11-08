@@ -81,11 +81,11 @@ OUString Desktop::GetLicensePath()
     aLangString = aLocale.Language;
     if ( aLocale.Country.getLength() != 0 )
     {
-        aLangString += OUString::createFromAscii("-");
+        aLangString += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
         aLangString += aLocale.Country;
         if ( aLocale.Variant.getLength() != 0 )
         {
-            aLangString += OUString::createFromAscii("-");
+            aLangString += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
             aLangString += aLocale.Variant;
         }
     }
@@ -93,14 +93,14 @@ OUString Desktop::GetLicensePath()
     aLicensePath =
         aBaseInstallPath + OUString::createFromAscii(szLicensePath)
         + OUString::createFromAscii(szWNTLicenseName)
-        + OUString::createFromAscii("_")
+        + OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
         + aLangString
         + OUString::createFromAscii(szWNTLicenseExt);
 #else
     aLicensePath =
         aBaseInstallPath + OUString::createFromAscii(szLicensePath)
         + OUString::createFromAscii(szUNXLicenseName)
-        + OUString::createFromAscii("_")
+        + OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
         + aLangString
         + OUString::createFromAscii(szUNXLicenseExt);
 #endif
@@ -153,7 +153,7 @@ static sal_Bool impl_isFirstStart()
     try {
         Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
 
-        Any result = xPSet->getPropertyValue(OUString::createFromAscii("FirstStartWizardCompleted"));
+        Any result = xPSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FirstStartWizardCompleted")));
         sal_Bool bCompleted = sal_False;
         if ((result >>= bCompleted) && bCompleted)
             return sal_False;  // wizard was already completed
@@ -188,10 +188,10 @@ static sal_Bool impl_parseDateTime(const OUString& aString, DateTime& aDateTime)
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    OUString aDateTimeSep = OUString::createFromAscii("T");
-    OUString aDateSep = OUString::createFromAscii("-");
-    OUString aTimeSep = OUString::createFromAscii(":");
-    OUString aUTCString = OUString::createFromAscii("Z");
+    OUString aDateTimeSep(RTL_CONSTASCII_USTRINGPARAM("T"));
+    OUString aDateSep(RTL_CONSTASCII_USTRINGPARAM("-"));
+    OUString aTimeSep(RTL_CONSTASCII_USTRINGPARAM(":"));
+    OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
 
     OUString aDateString = aDateTimeString.copy(0, nDateLength);
     OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
@@ -229,7 +229,7 @@ static sal_Bool impl_isLicenseAccepted()
     {
         Reference< XPropertySet > xPSet = impl_getConfigurationAccess( OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office" ) ) );
 
-        Any result = xPSet->getPropertyValue(OUString::createFromAscii("LicenseAcceptDate"));
+        Any result = xPSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LicenseAcceptDate")));
 
         OUString aAcceptDate;
         if (result >>= aAcceptDate)

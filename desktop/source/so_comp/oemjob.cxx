@@ -151,7 +151,7 @@ throw ( RuntimeException )
     {
         // create OEM preload service dialog
         Reference <XExecutableDialog> xDialog( m_xServiceManager->createInstance(
-            OUString::createFromAscii("org.openoffice.comp.preload.OEMPreloadWizard")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.preload.OEMPreloadWizard"))),
             UNO_QUERY );
         if ( xDialog.is() ){
             // execute OEM preload dialog and check return value
@@ -165,7 +165,7 @@ throw ( RuntimeException )
                 // terminate.
                 /*
                 Reference< XDesktop > xDesktop( m_xServiceManager->createInstance(
-                    OUString::createFromAscii("com.sun.star.frame.Desktop")),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
                     UNO_QUERY );
                 xDesktop->terminate();
                 */
@@ -199,7 +199,7 @@ throw ( RuntimeException )
     }
     /*
     NamedValue nv;
-    nv.Name  = OUString::createFromAscii("Deactivate");
+    nv.Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("Deactivate"));
     nv.Value <<=  bDeactivate;
     Sequence<NamedValue> s(1);
     s[0] = nv;
@@ -208,7 +208,6 @@ throw ( RuntimeException )
     r <<= bCont;
     return r;
 }
-
 
 static sal_Bool existsURL( OUString const& _sURL )
 {
@@ -220,7 +219,6 @@ static sal_Bool existsURL( OUString const& _sURL )
 
     return sal_False;
 }
-
 
 // locate soffice.ini/.rc file
 static OUString locateIniFile()

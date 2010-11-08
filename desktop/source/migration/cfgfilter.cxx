@@ -64,7 +64,7 @@ void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
         }
     }
     if (m_aCurrentComponent.getLength() == 0)
-        m_aCurrentComponent = OUString::createFromAscii("unknown.component");
+        m_aCurrentComponent = OUString(RTL_CONSTASCII_USTRINGPARAM("unknown.component"));
 
     if (!m_xSourceLayer.is()) {
         throw Exception();
@@ -78,7 +78,7 @@ void CConfigFilter::pushElement(rtl::OUString aName, sal_Bool bUse)
     OUString aPath;
     if (!m_elementStack.empty()) {
         aPath = m_elementStack.top().path; // or use base path
-        aPath += OUString::createFromAscii("/");
+        aPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
     aPath += aName;
 
@@ -103,7 +103,7 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
     // get full pathname for element
     OUString aFullPath;
     if (!m_elementStack.empty())
-        aFullPath = m_elementStack.top().path + OUString::createFromAscii("/");
+        aFullPath = m_elementStack.top().path + OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     aFullPath += aName;
 
