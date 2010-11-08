@@ -2093,64 +2093,59 @@ void ScDocShell::Print( SfxProgress& rProgress,
         }
     }
 
-    BOOL bContinue = pPrinter->InitJob( pDialogParent, !bIsAPI && bHasTransp );
-
-    if ( bContinue )
+    for ( USHORT n=0; n<nCollateCopies; n++ )
     {
-        for ( USHORT n=0; n<nCollateCopies; n++ )
+        long nTabStart = 0;
+        long nDisplayStart = 0;
+        long nAttrPage = 1;
+        long nPrinted = 0;
+
+        for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
         {
-            long nTabStart = 0;
-            long nDisplayStart = 0;
-            long nAttrPage = 1;
-            long nPrinted = 0;
-
-            for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
+            if ( bAllTabs || !pMarkData || pMarkData->GetTableSelect( nTab ) )
             {
-                if ( bAllTabs || !pMarkData || pMarkData->GetTableSelect( nTab ) )
+                FmFormView* pDrawView = NULL;
+                Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
+
+                // #114135#
+                ScDrawLayer* pModel = aDocument.GetDrawLayer();     // ist nicht NULL
+
+                if(pModel)
                 {
-                    FmFormView* pDrawView = NULL;
-                    Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
-
-                    // #114135#
-                    ScDrawLayer* pModel = aDocument.GetDrawLayer();     // ist nicht NULL
-
-                    if(pModel)
-                    {
-                        pDrawView = new FmFormView( pModel, pPrinter );
-                        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-                        pDrawView->SetPrintPreview( TRUE );
-                    }
-
-                    ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange, &aOptions );
-                    aPrintFunc.SetDrawView( pDrawView );
-                    nPrinted += aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
-
-                    nTabStart += aPageArr[nTab];
-                    if ( aDocument.NeedPageResetAfterTab(nTab) )
-                        nDisplayStart = 0;
-                    else
-                        nDisplayStart += aPageArr[nTab];
-                    nAttrPage = aPrintFunc.GetFirstPageNo();    // behalten oder aus Vorlage
-
-                    delete pDrawView;
+                    pDrawView = new FmFormView( pModel, pPrinter );
+                    pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+                    pDrawView->SetPrintPreview( TRUE );
                 }
-            }
 
-            if ( n+1 < nCollateCopies &&
-                 (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
-                 ( nPrinted % 2 ) == 1 )
-            {
-                // #105584# when several collated copies are printed in duplex mode, and there is
-                // an odd number of pages, print an empty page between copies, so the first page of
-                // the second copy isn't printed on the back of the last page of the first copy.
-                // (same as in Writer ViewShell::Prt)
+                ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange, &aOptions );
+                aPrintFunc.SetDrawView( pDrawView );
+                nPrinted += aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
 
-                // FIXME: needs to be adapted to XRenderable interface
-                #if 0
-                pPrinter->StartPage();
-                pPrinter->EndPage();
-                #endif
+                nTabStart += aPageArr[nTab];
+                if ( aDocument.NeedPageResetAfterTab(nTab) )
+                    nDisplayStart = 0;
+                else
+                    nDisplayStart += aPageArr[nTab];
+                nAttrPage = aPrintFunc.GetFirstPageNo();    // behalten oder aus Vorlage
+
+                delete pDrawView;
             }
+        }
+
+        if ( n+1 < nCollateCopies &&
+             (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
+             ( nPrinted % 2 ) == 1 )
+        {
+            // #105584# when several collated copies are printed in duplex mode, and there is
+            // an odd number of pages, print an empty page between copies, so the first page of
+            // the second copy isn't printed on the back of the last page of the first copy.
+            // (same as in Writer ViewShell::Prt)
+
+            // FIXME: needs to be adapted to XRenderable interface
+            #if 0
+            pPrinter->StartPage();
+            pPrinter->EndPage();
+            #endif
         }
     }
 
