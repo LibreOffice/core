@@ -551,9 +551,6 @@ class ScGlobal
     static ImageList*       pOutlineBitmaps;
     static ImageList*       pOutlineBitmapsHC;
 
-//  static Bitmap*          pAnchorBitmap;
-//  static Bitmap*          pGrayAnchorBitmap;
-
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
 
@@ -639,9 +636,6 @@ public:
     /** Returns the specified image list with outline symbols.
         @param bHC  false = standard symbols; true = high contrast symbols. */
     static ImageList*       GetOutlineSymbols( bool bHC );
-
-//  static const Bitmap&    GetAnchorBitmap();
-//  static const Bitmap&    GetGrayAnchorBitmap();
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();

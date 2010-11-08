@@ -553,7 +553,6 @@ BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
         case MM_FORMULA :
             rPos = aPos;
             return TRUE;
-//        break;
         case MM_REFERENCE :
         {
             pCode->Reset();
@@ -863,7 +862,6 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 else if ( nCol > MAXCOL )
                     nCol = MAXCOL;
                 aPos.SetCol( nCol );
-//              bPosChanged = TRUE;
             }
         }
         if ( nDy && nCol >= nCol1 && nCol <= nCol2 &&
@@ -877,7 +875,6 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 else if ( nRow > MAXROW )
                     nRow = MAXROW;
                 aPos.SetRow( nRow );
-//              bPosChanged = TRUE;
             }
         }
         if ( nDz && nCol >= nCol1 && nCol <= nCol2 &&
@@ -892,14 +889,12 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 else if ( nTab > nMaxTab )
                     nTab = nMaxTab;
                 aPos.SetTab( nTab );
-//              bPosChanged = TRUE;
             }
         }
     }
     else if ( r.In( aPos ) )
     {
         aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
-//      bPosChanged = TRUE;
     }
 
     BOOL bHasRefs = FALSE;

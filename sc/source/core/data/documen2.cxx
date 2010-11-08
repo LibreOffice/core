@@ -883,10 +883,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         pTab[nNewPos]->SetTabBgColor(pTab[nOldPos]->GetTabBgColor());
 
         SCsTAB nDz;
-/*      if (nNewPos < nOldPos)
-            nDz = ((short)nNewPos) - (short)nOldPos + 1;
-        else
-*/          nDz = ((short)nNewPos) - (short)nOldPos;
+        nDz = ((short)nNewPos) - (short)nOldPos;
         pTab[nNewPos]->UpdateReference(URM_COPY, 0, 0, nNewPos , MAXCOL, MAXROW,
                                         nNewPos, 0, 0, nDz, NULL);
 
