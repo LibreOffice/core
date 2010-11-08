@@ -27,6 +27,7 @@
 package mod._forms;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XIndexAccess;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -251,11 +252,10 @@ public class GenericModelTest extends TestCase {
         if (m_ConnectionColsed) return;
 
         try {
+            XIndexAccess forms = UnoRuntime.queryInterface( XIndexAccess.class,
+                FormTools.getForms( WriterTools.getDrawPage( m_xTextDoc ) ) );
             XForm myForm = (XForm) AnyConverter.toObject(new Type(XForm.class),
-                                                 (FormTools.getForms(
-                                                         WriterTools.getDrawPage(
-                                                                 m_xTextDoc)))
-                                                     .getByName("Standard"));
+                                                 forms.getByIndex(0));
 
             if (debug){
                 if (myForm == null){
@@ -269,18 +269,20 @@ public class GenericModelTest extends TestCase {
 
             }
 
-            XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface(
-                                            XPropertySet.class, myForm);
-            XConnection connection = (XConnection) AnyConverter.toObject(
-                                 new Type(XConnection.class),
-                                 xSetProp.getPropertyValue("ActiveConnection"));
-            if (debug && connection == null){
-                log.println("ERROR: could not get property 'ActiveConnection' from the XForm");
+            XPropertySet xSetProp = UnoRuntime.queryInterface( XPropertySet.class, myForm );
+            XConnection connection = UnoRuntime.queryInterface( XConnection.class, xSetProp.getPropertyValue( "ActiveConnection" ) );
+            if ( connection == null )
+            {
+                if ( debug )
+                    log.println("ERROR: could not get property 'ActiveConnection' from the XForm");
             }
-
-            connection.close();
+            else
+            {
+                connection.close();
+            }
         } catch (Exception e) {
             log.println("ERROR: Can't close the connection: " + e.toString());
+            e.printStackTrace( log );
         }
 
         log.println("closing data source...");
