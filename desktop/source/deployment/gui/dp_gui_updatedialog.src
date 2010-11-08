@@ -228,7 +228,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "No new updates are available.";
     };
     String RID_DLG_UPDATE_NOINSTALLABLE {
-        Text[en-US] = "No installable updates are available. To see all updates, mark the check box 'Show all updates'.";
+        Text[en-US] = "No installable updates are available. To see ignored or disabled updates, mark the check box 'Show all updates'.";
     };
     String RID_DLG_UPDATE_FAILURE {
         Text[en-US] = "An error occurred:";
@@ -237,7 +237,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "Unknown error.";
     };
     String RID_DLG_UPDATE_NODESCRIPTION {
-        Text[en-US] = "No descriptions available for this extension.";
+        Text[en-US] = "No more details are available for this update.";
     };
     String RID_DLG_UPDATE_NOINSTALL {
         Text[en-US] = "The extension cannot be updated because:";

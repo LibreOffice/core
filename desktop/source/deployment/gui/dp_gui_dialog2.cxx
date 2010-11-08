@@ -227,13 +227,10 @@ const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 // -----------------------------------------------------------------------
 void ExtBoxWithBtns_Impl::RecalcAll()
 {
-    ExtensionBox_Impl::RecalcAll();
-
     const sal_Int32 nActive = getSelIndex();
 
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
-        SetButtonPos( GetEntryRect( nActive ) );
         SetButtonStatus( GetEntryData( nActive) );
     }
     else
@@ -242,6 +239,11 @@ void ExtBoxWithBtns_Impl::RecalcAll()
         m_pEnableBtn->Hide();
         m_pRemoveBtn->Hide();
     }
+
+    ExtensionBox_Impl::RecalcAll();
+
+    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+        SetButtonPos( GetEntryRect( nActive ) );
 }
 
 

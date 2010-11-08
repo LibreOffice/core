@@ -884,11 +884,13 @@ void UpdateDialog::checkingDone() {
         clearDescription();
         m_description.Enable();
         m_descriptions.Enable();
-        showDescription(
-            ( m_disabledUpdates.empty() && m_specificErrors.empty() )
-                ? m_none : m_noInstallable, false );
+
+        if ( m_disabledUpdates.empty() && m_specificErrors.empty() && m_ignoredUpdates.empty() )
+            showDescription( m_none, false );
+        else
+            showDescription( m_noInstallable, false );
     }
-    // TODO: show special message, when only ignored updates available
+
     enableOk();
 }
 
@@ -1331,8 +1333,6 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
 
                 if ( p->m_bIgnored )
                     b.append( m_ignoredUpdate );
-                else
-                    b.append( m_noDescription );
 
                 break;
             }
@@ -1342,8 +1342,6 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
 
                 if ( p->m_bIgnored )
                     b.append( m_ignoredUpdate );
-                else
-                    b.append( m_noDescription );
 
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[ pos ];
                 if (data.unsatisfiedDependencies.getLength() != 0)
@@ -1391,6 +1389,9 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                 break;
         }
     }
+
+    if ( b.getLength() == 0 )
+        b.append( m_noDescription );
 
     showDescription( b.makeStringAndClear(), bInserted );
     return 0;
