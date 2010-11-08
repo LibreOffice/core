@@ -147,7 +147,10 @@ bool OlePicture::Read(HWPFile & hwpf)
      wchar_t wtname[200];
      tmpnam(tname);
      if (0 == (fp = fopen(tname, "wb")))
+     {
+          delete [] data;
           return false;
+     }
      fwrite(data, size, 1, fp);
      fclose(fp);
      MultiByteToWideChar(CP_ACP, 0, tname, -1, wtname, 200);
