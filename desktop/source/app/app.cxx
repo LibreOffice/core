@@ -1465,7 +1465,11 @@ USHORT Desktop::Exception(USHORT nError)
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
                     osl_removeSignalHandler( pSignalHandler );
+
                 restartOnMac(false);
+                if ( m_rSplashScreen.is() )
+                    m_rSplashScreen->reset();
+
                 _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }
             else
@@ -1972,6 +1976,9 @@ void Desktop::Main()
     if ( bRestartRequested )
     {
         restartOnMac(true);
+        if ( m_rSplashScreen.is() )
+            m_rSplashScreen->reset();
+
         // wouldn't the solution be more clean if SalMain returns the exit code to the system?
         _exit( ExitHelper::E_NORMAL_RESTART );
     }

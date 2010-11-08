@@ -84,11 +84,10 @@ done
 if [ "$sd_binary" = "soffice.bin" -a -x "$sd_prog/oosplash.bin" ] && [ "$no_oosplash" != "y" ] ; then
     sd_binary="oosplash.bin"
 
-    export QSTART_CHECK_ONLY=1
-    if "$sd_prog/$sd_binary" -qsend-and-report $*; then
+    # try to connect to a running instance early
+    if "$sd_prog/$sd_binary" -qsend-and-report "$@" ; then
         exit 0
     fi
-    unset QSTART_CHECK_ONLY
 fi
 
 # pagein
