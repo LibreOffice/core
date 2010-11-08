@@ -29,17 +29,10 @@
 #include "precompiled_filter.hxx"
 
 #include "units.hxx"
+#include <basegfx/range/b2drange.hxx>
 #include "gfxtypes.hxx"
-#include "spirit_supplements.hxx"
-
-#include <string.h>
 #include <rtl/ustring.hxx>
-
-#include <boost/bind.hpp>
-// workaround. spirit uses INT_MAX.
-#include <limits.h>
-#include <boost/spirit.hpp>
-
+#include <boost/spirit/include/classic.hpp>
 
 namespace svgi
 {
@@ -92,7 +85,8 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
 
 double convLength( const rtl::OUString& sValue, const State& rState, char dir )
 {
-    using namespace ::boost::spirit;
+    //FIXME: convert deprecated spirit::classic to use spirit::qi
+    using namespace ::boost::spirit::classic;
 
     rtl::OString aUTF8 = rtl::OUStringToOString( sValue,
                                                  RTL_TEXTENCODING_UTF8 );
