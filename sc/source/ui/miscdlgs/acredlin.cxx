@@ -179,7 +179,7 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     pTPView->SetRejectAllClickHdl( LINK( this, ScAcceptChgDlg,RejectAllHandle));
     pTPView->SetAcceptAllClickHdl( LINK(this, ScAcceptChgDlg, AcceptAllHandle));
     pTheView->SetCalcView();
-    pTheView->SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    pTheView->SetStyle(pTheView->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     pTheView->SetExpandingHdl( LINK(this, ScAcceptChgDlg, ExpandingHandle));
     pTheView->SetSelectHdl( LINK(this, ScAcceptChgDlg, SelectHandle));
     pTheView->SetDeselectHdl( LINK(this, ScAcceptChgDlg, SelectHandle));
