@@ -283,7 +283,7 @@ testcase tGroup_6
     Sleep 2
     Call gMouseClick(80,80)
 
-    Call wObjektSelektieren ( 28, 28, 70, 80 )
+    Call wObjektSelektieren ( 31, 31, 70, 80 )
     Sleep 2
     FormatGroupGroup
     Sleep 1
@@ -351,7 +351,7 @@ testcase tGroup_7
     Sleep 2
     Call gMouseClick(80,80)
     
-    Call wObjektSelektieren ( 28, 28, 70, 80 )
+    Call wObjektSelektieren ( 31, 31, 70, 80 )
     Sleep 2
     FormatGroupGroup
     Sleep 1
@@ -667,7 +667,7 @@ testcase tEncapsulatedGroup_1
     Sleep 1
     Call wZeichenobjektEinfuegen("ELLIPSE",  40, 45, 60, 70, false)
     Sleep 1
-    Call wObjektSelektieren ( 28, 28, 70, 80 )
+    Call wObjektSelektieren ( 31, 31, 70, 80 )
     Sleep 1
     
     FormatGroupGroup
@@ -677,20 +677,35 @@ testcase tEncapsulatedGroup_1
     
       PrintLog "- insert 2 drawing objects (rectangle and ellipse) in the group"
     Call wZeichenobjektEinfuegen("RECHTECK", 35, 40, 38, 45, false)
-    Call wZeichenobjektEinfuegen("ELLIPSE",  52, 40, 78, 45, false)
-    Call wObjektSelektieren ( 28, 38, 80, 48 )
+    Call wZeichenobjektEinfuegen("ELLIPSE",  40, 40, 58, 45, false, true)
+    Call wObjektSelektieren ( 31, 31, 80, 80 )
     
+    PrintLog "- generate a new group"
     try
-          PrintLog "- generate a new group"
         FormatGroupGroup
-          PrintLog "- edit the new group"
+    catch
+        Warnlog "Unable to execute Format / Group"
+    endcatch
+
+    PrintLog "- edit the new group"
+    try
         FormatGroupEditGroup
-          PrintLog "- leave the new group"
+    catch
+        Warnlog "Unable to execute Group / Enter Group"
+    endcatch
+
+    PrintLog "- leave the new group"
+    try
         FormatGroupExitGroup
-          PrintLog "- Undo the new group"
+    catch
+        Warnlog "Unable to exceute Format / Exit Group"
+    endcatch
+
+    PrintLog "- Undo the new group"
+    try
         FormatGroupUnGroup
     catch
-        Warnlog "Something wrong where operating the Encapsulated group!"
+        Warnlog "Unable to execute Format / Ungroup"
     endcatch
     
     Call hCloseDocument
