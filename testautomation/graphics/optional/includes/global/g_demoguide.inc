@@ -41,12 +41,10 @@ testcase t_Introduction
 
     gApplication   = "IMPRESS"
     
-    '///Open new presentation
     printlog "Open new presentation"
     Call hNewDocument
     Call sSelectEmptyLayout
     
-    '///Open the Gallery
     printlog "Open the Gallery"
     ToolsGallery
     Sleep (1)
@@ -55,7 +53,6 @@ testcase t_Introduction
         ToolsGallery
     end if
     
-    '///Choose computer theme and insert the third image
     printlog "Choose an item from the gallery"
     Gallerys.Select(2)
     View.TypeKeys "<HOME><RIGHT><RIGHT>"
@@ -65,7 +62,7 @@ testcase t_Introduction
     sleep 2
     MenuSelect(MenuGetItemID(1))   'Copy
     sleep 2
-    '///+ - Check that we really got a copy of the object ///'
+    printlog "Check that we really got a copy of the object "
     kontext "DocumentImpress"
     DocumentImpress.OpenContextMenu(true)
     sleep 2
@@ -95,14 +92,14 @@ testcase t_Introduction
     endcatch
     sleep 5
 
-    '///Resize object 
     printlog "Resize object"
     Kontext "DocumentImpress"
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
     sleep 1
-    ContextPositionAndSize                '/// Format-position and size
+    printlog "Format-position and size"
+    ContextPositionAndSize                
     Kontext
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
@@ -112,7 +109,6 @@ testcase t_Introduction
     Width.SetText CStr((CInt(Width.GetText)) * 2)
     TabPositionAndSize.OK
     
-    '///Break object
     printlog "Break object"
     Kontext "DocumentImpress"
     gMouseClick (10, 10)
@@ -121,7 +117,6 @@ testcase t_Introduction
     sleep 1
     hOpenContextMenu  '(when the object is marked)
     hMenuSelectNr(13) 
-    '///    Select part of object and make it black
     printlog "Select part of object and make it black"
     DocumentImpress.TypeKeys "<SHIFT TAB>"
     FormatArea
@@ -132,14 +127,12 @@ testcase t_Introduction
     ColourList.Select 1
     TabArea.OK
     
-    '///Group the objects
     printlog "Group the object"
     kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<MOD1 A>"
     hOpenContextMenu  '(when the object is marked)
     hMenuSelectNr(12)
 
-    '///Add Layout "Title Only"
     Printlog "Add Layout"
     kontext "Tasks"
     if (NOT Tasks.exists) then
@@ -147,19 +140,18 @@ testcase t_Introduction
         ViewTaskPane
     endif
 
-    ' enable all items in the task pane.
-    ' may be one item is not enabled due to a previous testrun
+    printlog "enable all items in the task pane"
+    printlog "may be one item is not enabled due to a previous testrun"
     dim i as integer
     for i = 1 to 5
     	printlog i
         View.OpenMenu
         if ( MenuIsItemChecked(MenuGetItemID(i)) ) then
-            ' do nothing the item is allready displayed
+            printlog "ok"
         else
             MenuSelect(MenuGetItemId(4))
         endif
         hMenuSelectNr(0)
-        'sleep(1)
     next
 
     View.OpenMenu
@@ -171,10 +163,8 @@ testcase t_Introduction
     View.OpenMenu
     MenuSelect(MenuGetItemId(5))
 
-
     LayoutsPreview.TypeKeys "<HOME> <DOWN> <DOWN> <RETURN>"
     sleep (5)
-    '///Add a background
     Printlog "Add background"
 
     Kontext "Tasks"
@@ -194,7 +184,6 @@ testcase t_Introduction
 	Tasks.TypeKeys "<MOD1 HOME>",true
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
     sleep (5)
-    '///Add a transition effect
     Printlog "Add a transition effect"
     Kontext "Tasks"
     sleep(5)
@@ -207,34 +196,35 @@ testcase t_Introduction
     View.OpenMenu
     MenuSelect(MenuGetItemID(4))
 
-    TransitionSound.GetItemCount   'needed for select
+    TransitionSound.GetItemCount  
     Sleep 1
     TransitionSound.Select 4
 
-    '///Close the document
+    printlog "Close the document
     Printlog "Close the document"
     Call hCloseDocument
     
 endcase 't_Introduction
+
 '--------------------------------------------------------------------
+
 testcase t_Interoperability
 
     Dim sTemplatename as string
 
     gApplication   = "IMPRESS"
     
-    '///Open PowerPoint presentation
     printlog "Open PowerPoint presentation"
     hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/dotNetOverview.ppt"))
 
     Call sMakeReadOnlyDocumentEditable
     
-    'Save the name of the origin background (taken from last slide)
-        Kontext "DocumentImpress"
-        DocumentImpress.TypeKeys "<END>"
-        sleep (4)
-        sTemplatename = DocumentImpress.StatusGetText (6)
-        printlog "    Background = " & sTemplatename     'Debugcode
+    printlog "Save the name of the origin background (taken from last slide)"
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<END>"
+    sleep (4)
+    sTemplatename = DocumentImpress.StatusGetText (6)
+    printlog "    Background = " & sTemplatename
     
     printlog "Choose a masterpage from right pane"
     
@@ -253,7 +243,7 @@ testcase t_Interoperability
     Kontext "AvailableForUsePreview"
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
     sleep (10)
-    printlog "    Verify that the background has changed"
+    printlog "Verify that the background has changed"
     Kontext "DocumentImpress"
     printlog "    Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
     if DocumentImpress.StatusGetText (6) = sTemplatename then
@@ -261,7 +251,6 @@ testcase t_Interoperability
         else printlog "    Background has been changed"
     endif
     
-    '///Switch back to original background
     printlog "Switch back to original background"
     Kontext "Tasks"
     Kontext "AvailableForUsePreview"
@@ -273,7 +262,6 @@ testcase t_Interoperability
         else warnlog "The background is " & DocumentImpress.StatusGetText (6) & " but should be: " & sTemplatename
     endif
     
-    '///Resort slides
     printlog "Resort slides"
     Kontext "DocumentImpress"
     Kontext "Slides"
@@ -303,12 +291,11 @@ testcase t_Interoperability
      if NameField.GetText <> ".NET Enterprise Federation" then
         Warnlog "Wrong slide found! Expected no 3, but found " + NameField.GetText + "."
      else
-        Printlog "    The slide was correctly moved"
+        Printlog "The slide was correctly moved"
      endif
      NameDlgPage.OK
      sleep 1
     
-    '///Switch views
     printlog "Switch views"
     ViewWorkspaceOutlineView
     sleep (2)
@@ -319,8 +306,8 @@ testcase t_Interoperability
         DocumentImpressOutlineView.TypeKeys "<Mod1 C>"
         sleep (5)
         if getclipboard() <> ".NET Enterprise" then
-                warnlog "    Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
-            else printlog "    Switching to Outlineview was successfull"
+                warnlog "Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
+            else printlog "Switching to Outlineview was successfull"
         endif
     catch
         warnlog "Switching to Outlineview was not successfull"
@@ -335,7 +322,7 @@ testcase t_Interoperability
         MenuSelect(MenuGetItemID(3))   'Open Contextmenu Line
         Kontext "TabLinie"
         TabLinie.Cancel
-        printlog "    Switching to Notesview was successfull"
+        printlog "Switching to Notesview was successfull"
     catch
         warnlog "Switching to Notesview was not successfull"
     endcatch
@@ -344,7 +331,7 @@ testcase t_Interoperability
     try
         Kontext "DocumentImpressHandoutView"
         DocumentImpressHandoutView.TypeKeys "<TAB>"
-        printlog "    Switching to Handoutview was successfull"
+        printlog "Switching to Handoutview was successfull"
     catch
         warnlog "Switching to Handoutview was not successfull"
     endcatch
@@ -354,7 +341,7 @@ testcase t_Interoperability
     try
         Kontext "Slides"
         SlidesControl.TypeKeys "<TAB>"
-        printlog "    Switching to Slideview was successfull"
+        printlog "Switching to Slideview was successfull"
     catch
         warnlog "Switching to Slideview was not successfull"
     endcatch
@@ -364,12 +351,11 @@ testcase t_Interoperability
     try
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<TAB>"
-        printlog "    Switching back to Drawingview was successfull"
+        printlog "Switching back to Drawingview was successfull"
     catch
         warnlog "Switching to Drawingview was not successfull"
     endcatch
     
-    '///Travel through the presentation by left pane
     printlog "Travel through the presentation by left pane to slide 7"
     Kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<HOME><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN>"
@@ -420,18 +406,16 @@ testcase t_DrawingEngine
     
     gApplication   = "DRAW"
     
-    '///Open a drawing
     printlog "Open a drawing"
     hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/Blueprint.odg"))
 
     Call fMakeDocumentWritable
 
-    '///Select grouped object and enter group
     printlog "Select group"
     Kontext "DocumentDraw"
     DocumentDraw.TypeKeys "<TAB><TAB>"
     sleep (5)
-    printlog "    Save position of group"
+    printlog "Save position of group"
     ContextPositionAndSize                'Format-position and size
     Kontext
     Active.SetPage TabPositionAndSize
@@ -444,7 +428,6 @@ testcase t_DrawingEngine
     FormatEditGroupDraw
     sleep 1
     
-    '///Select and move single object
     printlog "Select and move single object"
     printlog "    Select object"
     Kontext "DocumentDraw"
@@ -456,47 +439,45 @@ testcase t_DrawingEngine
     kontext "NameDlgObject"
     if NameField.GetText <> "Chair" then
             Warnlog "Wrong object selected!"
-        else Printlog "    The correct object is selected"
+        else Printlog "The correct object is selected"
     endif
     NameDlgObject.OK
     sleep 1
-    printlog "    Save position of group"
-    ContextPositionAndSize                'Format-position and size
+    printlog "Save position of group"
+    ContextPositionAndSize            
     Kontext
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
     sObjectPosition = PositionY.GetText
-    printlog "    - ObjectPosition is " & sObjectPosition
+    printlog "ObjectPosition is " & sObjectPosition
     TabPositionAndSize.OK
-    printlog "    Move object"
+    printlog "Move object"
     Kontext "DocumentDraw"
     DocumentDraw.TypeKeys "<UP><UP><UP>"
     sleep (5)
-    printlog "    Verify that the object was moved"
-    ContextPositionAndSize                '/// Format-position and size
+    printlog "Verify that the object was moved"
+    ContextPositionAndSize                
     Kontext
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
     if PositionY.GetText <> sObjectPosition then
-            printlog "    Single object was moved" 
+            printlog "Single object was moved" 
         else warnlog "The object has not been moved"
     endif
     TabPositionAndSize.OK
-    printlog "    Exit group"
+    printlog "Exit group"
     FormatExitGroupDraw
     Printlog "Verify that the group is still on position"
-    printlog "    Verify position"
     ContextPositionAndSize                'Format-position and size
     Kontext
     Active.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
     if PositionY.GetText = sGroupPosition then
-            printlog "    Group is still on position"
+            printlog "Group is still on position"
         else warnlog "Group has moved from " & sGroupPosition & " to " & PositionY.GetText
     endif
     TabPositionAndSize.OK
     
-    '///Close document
     printlog "Close document"
     Call hCloseDocument
 

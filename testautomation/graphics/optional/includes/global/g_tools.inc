@@ -189,7 +189,7 @@ testcase tiToolsThesaurus
     
     Call hCloseDocument
 
-endcase
+endcase 'tiToolsThesaurus
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurusWithoutText
 
@@ -212,7 +212,7 @@ testcase tiToolsThesaurusWithoutText
     Call hCloseDocument
     
 
-endcase
+endcase 'tiToolsThesaurusWithoutText
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurusContextMenu
 
@@ -308,15 +308,17 @@ testcase tiToolsThesaurusContextMenu
 
     call hCloseDocument
 
-endcase
+endcase 'tiToolsThesaurusContextMenu
 '-------------------------------------------------------------------------------
 testcase tiToolsHyphenation1
 
    printlog "   - Hyphenation without any text"
-   Call hNewDocument									'/// New impress document ///'
+   printlog "New impress document "
+   Call hNewDocument									
    sleep 3
-   ToolsLanguageHyphenationDraw								'/// Try  with empty document ///'
+   ToolsLanguageHyphenationDraw								
    Kontext "Hyphenation"
+    printlog "Try with empty document"
     if Hyphenation.Exists(1) = True Then
        Warnlog "  - Dialog ist da"
        Hyphenation.Cancel
@@ -326,10 +328,12 @@ testcase tiToolsHyphenation1
 '   Kontext "DocumentImpress"
    printlog "   - Hyphenation with text, but without any possibility to break words"
    select case iSprache
-       case 01 : hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)	'/// Create text without a pssibility to split words///'
+        printlog "Create text without a pssibility to split words"
+       case 01 : hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)	
        case 03 : hTextrahmenErstellen ("Compare a tradu" + Chr(231) + Chr(227) + "o com o original",10,10,40,40)
        case 07 : qaerrorlog "- No Hypenation for Russian available"
-                 Call hCloseDocument                    '/// Close document ///'
+                printlog "Close document"
+                 Call hCloseDocument                    
                  goto endsub
        case 31 : hTextrahmenErstellen ("Het is mijn bedoeling om voor en hulpmiddel.",10,10,40,40)
        case 33 : hTextrahmenErstellen ("Merci beaucoup pout votre candidature du 13/11/97.",10,10,40,40)
@@ -340,7 +344,7 @@ testcase tiToolsHyphenation1
        case 46 : hTextrahmenErstellen ("Detta Ã¤r en text utan delade ord",10,10,40,40)
        case 48 : hTextrahmenErstellen (" Jeoli jednak zechcesz",10,10,40,40)
        case 49 : hTextrahmenErstellen ("Dies ist ein Text ohne eine Moeglichkeit Woerter zu trennen",10,10,40,40)
-       case 50 : hTextrahmenErstellen ("Zato ves Ä?as iÅ¡Ä?emo nove Ä?lane: sodelujte",10,10,40,40)
+       case 50 : hTextrahmenErstellen ("Zato ves ï¿½?as iÅ¡ï¿½?emo nove ï¿½?lane: sodelujte",10,10,40,40)
        case 55 : hTextrahmenErstellen ("a Sun tentou adquirir a Apple",10,10,40,40)
        case else : if bAsianLan then
                      printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
@@ -351,7 +355,7 @@ testcase tiToolsHyphenation1
                   endif
    end select
    hTypeKeys "<Home>"
-   ToolsLanguageHyphenationDraw								'/// Try  ///'
+   ToolsLanguageHyphenationDraw							
    Kontext "Hyphenation"
    if Hyphenation.Exists =True Then
       Warnlog "Dialog exists"
@@ -360,8 +364,8 @@ testcase tiToolsHyphenation1
       Kontext "Active"
       if Active.Exists then Active.OK
    end if
-
-   Call hCloseDocument 										'/// Close document ///'
+   printlog "Close document "
+   Call hCloseDocument 										
    
 endcase 'tiToolsHyphenation1
 
@@ -385,7 +389,7 @@ testcase tiToolsHyphenation2
        Call hFileOpen (sFile)
    endif
 
-   select case iSprache					'/// Open prepared document ///'
+   select case iSprache					
        case 01 :DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
        case 07 : qaerrorlog "- No Hypenation for Russian available"
                  goto endsub
@@ -402,6 +406,7 @@ testcase tiToolsHyphenation2
        case else : if bAsianLan then
              printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
              printlog " :-) will use English instead"
+             printlog "Open prepared document"
              Call hFileOpen (gTesttoolpath + "graphics\required\input\silben_"+"1"+sExt)
              DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
           else
@@ -412,24 +417,29 @@ testcase tiToolsHyphenation2
 
    Call sMakeReadOnlyDocumentEditable
 
-  printlog "   - Test hyphenation"
-   EditSelectAll '/// Press CTRL + A to select all ///'
-   '/// press return to go into the edit mode ///'
+  printlog "Test hyphenation"
+printlog "Press CTRL + A to select all"
+   EditSelectAll 
+   printlog "press return to go into the edit mode"
    hTypeKeys "<Return>"
 
    sleep 1
    ' WA for draw, or smth else: get text part before hyphenation:
    if iSprache = "1" OR bAsianLan = TRUE then
-      hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT RIGHT>"      '/// Select part of text and compare it with original text at this place ///'
+    printlog "Select part of text and compare it with original text at this place"
+      hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT RIGHT>"      
    else
       hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"
    endif
    EditCopy
    sDraw = GetClipboardText()
-   EditSelectAll						'/// Select whole text ///'
-   ToolsLanguageHyphenationDraw					'/// Run Hyphenation ///'
+   printlog "Select whole text"
+   EditSelectAll
+   printlog "Run Hyphenation"
+   ToolsLanguageHyphenationDraw					
    gMouseClick 50,50
-   hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		'/// Select part of text and compare it with original text at this place ///'
+   printlog "Select part of text and compare it with original text at this place"
+   hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		
    sleep 3
    EditCopy
 printlog GetClipboardText
@@ -447,7 +457,8 @@ printlog GetClipboardText
        Printlog "Expected: '"+DasWort+"'; or something different than: '"+sDraw+"'; But what we got was: '"+GetClipboardText+"'"
     end if
    sleep 1
- Call hCloseDocument						'/// Close document ///'
+   printlog "Close document"
+ Call hCloseDocument						
  
 endcase 'tiToolsHyphenation2
 
@@ -464,9 +475,9 @@ testcase tToolsMacro
     ToolsMacro
     Kontext "Makro"
 
-    '/// to get the count of all macros, the list needs to get elapsed-all ///'
+    printlog "to get the count of all macros, the list needs to get elapsed-all"
     for j = 1 to 2
-        Zaehler=MakroAus.GetItemCount
+        Zaehler=MakroAus.GetItemCoun4t
         MakroAus.typeKeys "<end>"
         for i = 1 to Zaehler
             MakroAus.typeKeys "<+><up>"

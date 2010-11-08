@@ -343,7 +343,7 @@ testcase tPDF
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 10, TRUE, FALSE, 1, 3) ' button in toolbar -> last settings have to be used
 
-    printlog "File->Export as PDF document ///'"
+    printlog "File->Export as PDF document"
     printlog " range = all"
     printlog " compression = Press optimized"
     kontext "Standardbar"

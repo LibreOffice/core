@@ -327,7 +327,7 @@ testcase tSlideShowSlideTransition
     if (OeffnenDlg.exists (5)) then
         printlog "Read all entries in Listbox 'File type' "
         for i = 1 to Dateityp.getItemCount
-            printlog "" + i + ":" + Dateityp.getItemText(i)
+            printlog i + ":" + Dateityp.getItemText(i)
         next i
         printlog "cancel dialog 'Open' "
         OeffnenDlg.cancel

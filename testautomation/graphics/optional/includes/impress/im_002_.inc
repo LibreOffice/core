@@ -32,21 +32,21 @@
 '\*****************************************************************
 
 testcase tiEditDeleteSlide
-'/// open application ///'
-   Call hNewDocument
-'/// Insert->Slide; press 'OK' ///'
-   InsertSlide
-   sleep 2
-   hTypekeys "<Pagedown>"
-   sleep 2
-'/// Edit->Delete Slide ///'
-   try
+    printlog "open application"
+    Call hNewDocument
+    printlog "Insert->Slide; press 'OK'"
+    InsertSlide
+    sleep 2
+    hTypekeys "<Pagedown>"
+    sleep 2
+    printlog "Edit->Delete Slide"
+    try
       EditDeleteSlide
-   catch
+    catch
       warnlog "Error when deleting slide"
-   endcatch
-   Call hCloseDocument
-'/// close application ///'
+    endcatch
+    Call hCloseDocument
+    printlog "close application"
 endcase
 
 
