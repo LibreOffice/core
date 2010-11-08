@@ -158,8 +158,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Ignore();
-// KA 04.07.2002
-//              InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
             }
         }
         break;
