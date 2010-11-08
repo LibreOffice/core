@@ -45,7 +45,6 @@
 #include "rangelst.hxx"
 #include "compiler.hxx"
 
-#include <oox/core/tokens.hxx>
 #include <oox/xls/excelvbaproject.hxx>
 #include <formula/grammar.hxx>
 
@@ -64,7 +63,8 @@ using ::utl::OStreamWrapper;
 using ::std::vector;
 
 using namespace ::com::sun::star::uno;
-using namespace formula;
+using namespace ::formula;
+using namespace ::oox;
 
 // ============================================================================
 

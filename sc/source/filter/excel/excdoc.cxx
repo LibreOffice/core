@@ -84,8 +84,7 @@
 
 #include <math.h>
 
-#include <oox/core/tokens.hxx>
-
+using namespace ::oox;
 using ::rtl::OString;
 
 static String lcl_GetVbaTabName( SCTAB n )

@@ -96,11 +96,9 @@
 
 #include "xcl97rec.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::com::sun::star::uno::Sequence;
-
-
 using ::rtl::OString;
 
 //--------------------------------------------------------- class ExcDummy_00 -

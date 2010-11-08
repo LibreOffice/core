@@ -55,7 +55,7 @@
 #include "globstr.hrc"
 #include "xestring.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 using ::rtl::OUString;
