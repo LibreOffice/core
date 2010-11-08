@@ -60,7 +60,7 @@ DBG_NAME( AccessibleDialogWindow )
 
 
 // -----------------------------------------------------------------------------
-//  class ChildDescriptor
+// class ChildDescriptor
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
@@ -116,7 +116,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 }
 
 // -----------------------------------------------------------------------------
-//  class AccessibleDialogWindow
+// class AccessibleDialogWindow
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
@@ -778,7 +778,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(   ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 

@@ -444,7 +444,7 @@ sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription( ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
