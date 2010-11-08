@@ -354,7 +354,6 @@ TestToolObj::TestToolObj( String aName, String aFilePath )              // Inter
     pImpl = new ImplTestToolObj;
     pImpl->ProgParam = String();
     pImpl->aFileBase = DirEntry(aFilePath);
-//  pImpl->aLogFileBase = DirEntry();
     pImpl->aHIDDir = DirEntry(aFilePath);
     pImpl->bIsStart = FALSE;
     pImpl->pMyBasic = NULL;
@@ -597,10 +596,6 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "Kontext", SbxCLASS_METHOD, SbxNULL, ID_Kontext );
     MAKE_TT_KEYWORD( "GetNextError", SbxCLASS_VARIABLE, SbxVARIANT, ID_GetError );
     MAKE_TT_KEYWORD( "Start", SbxCLASS_METHOD, SbxSTRING, ID_Start );
-//      pMeth = Make( "Kill", SbxCLASS_METHOD, SbxNULL );
-//      pMeth->SetUserData( ID_Kill );
-    /*      pMeth = Make( "TestReset", SbxCLASS_METHOD, SbxNULL );
-        pMeth->SetUserData( ID_Reset );*/
     MAKE_TT_KEYWORD( "Use", SbxCLASS_METHOD, SbxNULL, ID_Use );
     MAKE_TT_KEYWORD( "StartUse", SbxCLASS_METHOD, SbxNULL, ID_StartUse );
     MAKE_TT_KEYWORD( "FinishUse", SbxCLASS_METHOD, SbxNULL, ID_FinishUse );
@@ -722,17 +717,10 @@ void TestToolObj::InitTestToolObj()
 
     for ( i=0;i<VAR_POOL_SIZE;i++)
     {
-/*              pMyVar = new SbxObject( "Dummy" );
-        pMyVar->SetType( SbxVARIANT );*/
-
-//           pMyVar = new SbxMethod( "Dummy", SbxVARIANT );
-
         pImpl->pMyVars[i] = new SbxTransportMethod( SbxVARIANT );
         pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(String::CreateFromInt32(i) ) );
 
         Insert( pImpl->pMyVars[i] );
-//              StartListening( pMyVars[i]->GetBroadcaster(), TRUE );
-
     }
 
     m_pControls = new CNames();
@@ -742,45 +730,8 @@ void TestToolObj::InitTestToolObj()
     nMyVar = 0;
 
     pImpl->pMyBasic->AddFactory( &aComManFac );
-
-
-// Das ist zum testen des IPC
-
-/*      int sent = 0;
-
-    ModelessDialog *pDlg = new ModelessDialog(NULL);
-    pDlg->SetOutputSizePixel(Size(100,30));
-
-    Edit *pMyEd = new Edit(pDlg,WB_CENTER | WB_BORDER);
-    pMyEd->SetSizePixel(Size(100,30));
-    pDlg->Show();
-    pMyEd->Show();
-    Time aTime;
-
-    String VollePackung;
-    VollePackung.Fill(32760,'*');
-
-    BeginBlock();   // zum warm werden
-    EndBlock();
-    ResetError();
-
-    while ( pDlg->IsVisible() && !IsError() )
-    {
-        BeginBlock();
-        In->GenCmdFlow (124,VollePackung);
-        EndBlock();
-        pMyEd->SetText(String("Test Nr. ") + String(++sent));
-        while ( aTime.Get100Sec() / 10 == Time().Get100Sec() / 10 );
-        aTime = Time();
-    }
-
-    delete pMyEd;
-    delete pDlg;
-*/
-// Test ende
-
-
 }
+
 
 TestToolObj::~TestToolObj()
 {
@@ -1182,13 +1133,6 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
     }
 
     Stream.Close();
-#ifdef DBG_UTIL
-//      int i;
-//      for ( i = 0 ; i < pNames->Count() ; i++ )
-//      {
-//              DBG_ERROR( pNames->GetObject(i)->pData->Kurzname );
-//      }
-#endif
 }
 
 void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames )
@@ -1253,7 +1197,6 @@ void TestToolObj::WaitForAnswer ()
 
         while ( !bReturnOK && Ende > Time() )
         {
-//          pTemp = PlugInApplication::GetPlugInApp()->GetReturnFromExecute();
             if ( pTemp )
             {
                 ReturnResults( pTemp );
@@ -1398,7 +1341,6 @@ void TestToolObj::EndBlock()
             SendViaSocket();
         else
         {
-//          PlugInApplication::GetPlugInApp()->ExecuteRemoteStatements( In->GetStream() );
             bReturnOK = FALSE;
             if ( aDialogHandlerName.Len() > 0 )
                 GetpApp()->InsertIdleHdl( LINK( this, TestToolObj, IdleHdl ), 1 );
@@ -1741,13 +1683,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         WaitForAnswer();
                         if ( IS_ERROR() )
                         {
-//                                                      pVar->PutULong( GET_ERROR()->nError );
                             pVar->PutString( GET_ERROR()->aText );
                             POP_ERROR();
                         }
                         else
                         {
-//                                                      pVar->PutULong( 0 );
                             pVar->PutString( String() );
                         }
                     }
@@ -1770,10 +1710,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         while ( pCommunicationManager->IsCommunicationRunning() )
                             Application::Reschedule();
 
-                        SingleCommandBlock = TRUE;      // Bug 57188
+                        SingleCommandBlock = TRUE;
                         IsBlock = FALSE;
-
-//                      pCommunicationManager->StartCommunication();
 
                         for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
@@ -2108,62 +2046,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
                     {
                         SetError( SbxERR_NOTIMP );
-                        break;
-
-//                                              Das ist total rotten und mu� wohl komplett neu!!
-
-
-/*                      BOOL bWasBlock = IsBlock;
-                        if ( !IsBlock )                 // Impliziter call bei Aufruf mit Methode
-                            if ( SingleCommandBlock )
-                                BeginBlock();
-//                                              if ( !IsError() )
-//                                                      In->GenCmdSlot (128,rPar);
-//                                              ((Controls*)pVar)->pMethodVar->nValue = 128;
-
-                        ULONG nOldValue = ((Controls*)pVar)->GetULong();
-                        // Setzen, so da� beim Return der Wert stimmt
-                        ((Controls*)pVar)->PutULong( 128 );
-                        pImpl->pNextReturn = ((Controls*)pVar)->pMethodVar;
-                        if ( SingleCommandBlock )
-                            EndBlock();
-                        WaitForAnswer();
-                        if ( bWasBlock )
-                            if ( SingleCommandBlock )
-                                BeginBlock();
-                        ((Controls*)pVar)->PutULong( nOldValue );
-
-                        // R�cksetzen, so da� beim n�chsten Aufruf alles klappt
-//                                              ((Controls*)pVar)->SetUserData( 128 );
-
-
-//                                              ((Controls*)pVar)->SetName("xxx");
-                        // Setzen und r�cksetzen der ID, so dass der Notify ohne Wirkung bleibt.
-                        ((Controls*)pVar)->pMethodVar->SetUserData(ID_ErrorDummy);
-                        ((Controls*)pVar)->PutULong( ((Controls*)pVar)->pMethodVar->GetULong() );
-                        ((Controls*)pVar)->pMethodVar->SetUserData(ID_Control);
-
-                        pShortNames->Insert( CUniString("xxx"), SmartId( ((Controls*)pVar)->pMethodVar->nValue ), nSequence );
-
-                        nOldValue = ((Controls*)pVar)->GetULong();
-
-                        SbxVariable *pMember;
-                        if ( ! (pMember = ((Controls*)pVar)->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
-                        {
-                            pMember = new SbxProperty(CUniString("ID"),SbxVARIANT);
-                            ((Controls*)pVar)->Insert(pMember);
-                        }
-                        pMember->PutULong(((Controls*)pVar)->pMethodVar->nValue);
-
-                        if ( ! (pMember = ((Controls*)pVar)->Find(CUniString("name"),SbxCLASS_DONTCARE)) )
-                        {
-                            pMember = NULL;
-                        }
-                        else
-                            pMember->PutString(CUniString("xxx"));
-
-                                               */
-
                     }
                     else
                         SetError( SbxERR_WRONG_ARGS );
@@ -2194,7 +2076,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         switch ( ((SbxTransportMethod*)pVar)->nValue )
                         {
                             case RC_WinTree:
-//                              ::svt::OStringTransfer::CopyString(pVar->GetString(), pSomeWindowIDontHave );
                                 break;
                         }
 
@@ -2304,13 +2185,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         try
                         {
                             Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
-// is allways there
-/*                          if ( ! xSMgr.is() )
-                            {
-                                xSMgr = ::cppu::createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")), sal_True );
-                                if ( xSMgr.is() )
-                                    comphelper::setProcessServiceFactory( xSMgr );
-                            }*/
 
                             OUString aURL( aString );
                             Reference< XConnector > xConnector( xSMgr->createInstance(
@@ -2323,12 +2197,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 OUString(), OUString( RTL_CONSTASCII_USTRINGPARAM("urp") ),
                                 xConnection, Reference< XInstanceProvider >() ) );
 
-    //                      Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ) );
                             Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager")) ) );
-
-    //                      Reference< XNamingService > xNamingService(xRet, UNO_QUERY);
-
-    //                      Reference< XInterface > smgr = xNamingService->getRegisteredObject( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager" ) ) );
 
                             smgr_xMultiserviceFactory = Reference< XMultiServiceFactory >(xRet, UNO_QUERY);
     //MBA fragen!!
@@ -2345,7 +2214,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if( smgr_xMultiserviceFactory.is() )
                         {
                             Any aAny;
-//                          aAny <<= xBridge;
                             aAny <<= smgr_xMultiserviceFactory;
 
                             SbxObjectRef xMySbxObj = GetSbUnoObject( CUniString("RemoteUnoAppFuerTesttool"), aAny );
@@ -2359,15 +2227,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // Hier wird der Remote UNO Kram gestartet
 
                         String aString;
-//                      aString += GetHostConfig();
-//                      aString.AppendAscii( ":" );
-//                      aString += String::CreateFromInt32( GetUnoPortConfig() );
 
-                        Reference< XMultiServiceFactory > xSMgr /* = comphelper::getProcessServiceFactory()*/;
-//                      if ( ! xSMgr.is() )
+                        Reference< XMultiServiceFactory > xSMgr;
                         {
                             xSMgr = ::cppu::createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\iserverproxy.rdb")), sal_True);
-//                          comphelper::setProcessServiceFactory( xSMgr );
                         }
 
                         OUString aURL( aString );
@@ -2383,21 +2246,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
                         Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("XIServerProxy")) ) );
 
-
-/*                      Reference< XIServerProxy > xIS( xRet, UNO_QUERY );
-                        if ( xIS.is() )
-                        {
-                            String aHost( xIS->getIServerHost() );
-
-//                          Reference < XInformationClient > xIC = xIS->createIServerClient( "XInformationClient" );
-                            Reference < XInformationClient > xIC = xIS->createInformationClient();
-                            xIC->getTree(OUString::createFromAscii("r:\\b_server\\config\\stand.lst"), OUString() );
-
-
-                            Reference< XTypeProvider > xTP( xRet, UNO_QUERY );
-                            Sequence < com::sun::star::uno::Type > s = xTP->getTypes();
-                        }
-  */
 
                         if( xRet.is() )
                         {
@@ -3316,11 +3164,6 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
                 m_pReverseControls->DeleteAndDestroy( nNr );
 // um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
             }
-/*          if ( m_pReverseControlsSon->Seek_Entry( pZeroItem, &nNr ) )
-            {
-                m_pReverseControlsSon->DeleteAndDestroy( nNr );
-// um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
-            }*/
             delete pZeroItem;
         }
     }
@@ -3401,9 +3244,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                 case RET_Value:
                     if ( pImpl->pNextReturn )
                     {
-//                                              ULONG nHintUserData = pImpl->pNextReturn->GetParent()->GetUserData();
-//                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
-//                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
                         if ( aNextReturnId.Matches( aUId ) )
                         {
                             if( nParams & PARAM_ULONG_1 )
@@ -3427,7 +3267,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             ADD_ERROR(SbxERR_BAD_ACTION, GEN_RES_STR0(S_RETURNED_VALUE_ID_MISSMATCH) )
                         }
-//                                              pImpl->pNextReturn->GetParent()->SetUserData(nHintUserData);
                         pImpl->pNextReturn = NULL;
                     }
                     else
@@ -3493,7 +3332,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( pReverseControlsKontext->Seek_Entry(pNewItem,&nNr) )
                             {
-//                                SmartId aID = pReverseControlsKontext->GetObject(nNr)->pData->aUId;
                                 pWinInfo->aKurzname += pReverseControlsKontext->GetObject(nNr)->pData->Kurzname;
                             }
                             delete pNewItem;
@@ -3671,8 +3509,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         case S_AssertError:
                             {
                                 ADD_ASSERTION_LOG( aString1 );
-//                              ADD_ERROR_LOG( aString1, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
-//                                  aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2() );
                             }
                             break;
                         case S_QAError:
@@ -4188,7 +4024,6 @@ Controls::Controls( String aCName )
     pMethodVar = new SbxTransportMethod( SbxVARIANT );
     pMethodVar->SetName( CUniString("Dummy") );
     Insert( pMethodVar );
-//      pMethodVar = Make( CUniString("Dummy"), SbxCLASS_PROPERTY, SbxULONG );
 }
 
 
