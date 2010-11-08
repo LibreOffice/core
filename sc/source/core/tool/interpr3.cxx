@@ -489,24 +489,10 @@ double ScInterpreter::BinomKoeff(double n, double k)
             k--;
             n--;
         }
-/*
-        double f1 = n;                      // Zaehler
-        double f2 = k;                      // Nenner
-        n--;
-        k--;
-        while (k > 0.0)
-        {
-            f2 *= k;
-            f1 *= n;
-            k--;
-            n--;
-        }
-        nVal = f1 / f2;
-*/
+
     }
     return nVal;
 }
-
 
 // The algorithm is based on lanczos13m53 in lanczos.hpp
 // in math library from http://www.boost.org
@@ -651,7 +637,6 @@ double ScInterpreter::GetGamma(double fZ)
     return exp( fLogPi - fLogDivisor) * ((::rtl::math::sin( F_PI*fZ) < 0.0) ? -1.0 : 1.0);
 }
 
-
 /** You must ensure fZ>0 */
 double ScInterpreter::GetLogGamma(double fZ)
 {
@@ -672,48 +657,12 @@ double ScInterpreter::GetFDist(double x, double fF1, double fF2)
     double alpha = fF2/2.0;
     double beta = fF1/2.0;
     return (GetBetaDist(arg, alpha, beta));
-/*
-    double Z = (pow(fF,1.0/3.0)*(1.0-2.0/(9.0*fF2)) - (1.0-2.0/(9.0*fF1))) /
-               sqrt(2.0/(9.0*fF1) + pow(fF,2.0/3.0)*2.0/(9.0*fF2));
-    return (0.5-gauss(Z));
-*/
 }
 
 double ScInterpreter::GetTDist(double T, double fDF)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetTDist" );
     return 0.5 * GetBetaDist(fDF/(fDF+T*T), fDF/2.0, 0.5);
-/*
-    USHORT DF = (USHORT) fDF;
-    double A = T / sqrt(DF);
-    double B = 1.0 + A*A;
-    double R;
-    if (DF == 1)
-        R = 0.5 + atan(A)/F_PI;
-    else if (DF % 2 == 0)
-    {
-        double S0 = A/(2.0 * sqrt(B));
-        double C0 = S0;
-        for (USHORT i = 2; i <= DF-2; i+=2)
-        {
-            C0 *= (1.0 - 1.0/(double)i)/B;
-            S0 += C0;
-        }
-        R = 0.5 + S0;
-    }
-    else
-    {
-        double S1 = A / (B * F_PI);
-        double C1 = S1;
-        for (USHORT i = 3; i <= DF-2; i+=2)
-        {
-            C1 *= (1.0 - 1.0/(double)i)/B;
-            S1 += C1;
-        }
-        R = 0.5 + atan(A)/F_PI + S1;
-    }
-    return 1.0 - R;
-*/
 }
 
 // for LEGACY.CHIDIST, returns right tail, fDF=degrees of freedom
@@ -820,7 +769,6 @@ void ScInterpreter::ScGamma()
         PushDouble(fResult);
     }
 }
-
 
 void ScInterpreter::ScLogGamma()
 {
@@ -962,7 +910,6 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
         // might overflow as a whole, but seldom, not worth to pre-detect it
         return exp((fA-1.0)*fLogX + (fB-1.0)* fLogY - fLogBeta);
 }
-
 
 /*
                 x^a * (1-x)^b
@@ -2250,7 +2197,6 @@ public:
     double  GetValue( double x ) const  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
 };
 
-
 void ScInterpreter::ScChiSqInv()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -2270,7 +2216,6 @@ void ScInterpreter::ScChiSqInv()
         SetError(errNoConvergence);
     PushDouble(fVal);
 }
-
 
 void ScInterpreter::ScConfidence()
 {
@@ -2629,11 +2574,6 @@ void ScInterpreter::ScFTest()
         fF2 = fCount1-1.0;
     }
     PushDouble(2.0*GetFDist(fF, fF1, fF2));
-/*
-    double Z = (pow(fF,1.0/3.0)*(1.0-2.0/(9.0*fF2)) - (1.0-2.0/(9.0*fF1))) /
-               sqrt(2.0/(9.0*fF1) + pow(fF,2.0/3.0)*2.0/(9.0*fF2));
-    PushDouble(1.0-2.0*gauss(Z));
-*/
 }
 
 void ScInterpreter::ScChiTest()
@@ -2688,25 +2628,6 @@ void ScInterpreter::ScChiTest()
     else
         fDF = (double)(nC1-1)*(double)(nR1-1);
     PushDouble(GetChiDist(fChi, fDF));
-/*
-    double fX, fS, fT, fG;
-    fX = 1.0;
-    for (double fi = fDF; fi >= 2.0; fi -= 2.0)
-        fX *= fChi/fi;
-    fX *= exp(-fChi/2.0);
-    if (fmod(fDF, 2.0) != 0.0)
-        fX *= sqrt(2.0*fChi/F_PI);
-    fS = 1.0;
-    fT = 1.0;
-    fG = fDF;
-    while (fT >= 1.0E-7)
-    {
-        fG += 2.0;
-        fT *= fChi/fG;
-        fS += fT;
-    }
-    PushDouble(1.0 - fX*fS);
-*/
 }
 
 void ScInterpreter::ScKurt()

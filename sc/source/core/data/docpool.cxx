@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include "scitems.hxx"
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
@@ -76,7 +74,6 @@
 #include "patattr.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"           // Slot-IDs
-
 
 #define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
 #define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)
@@ -340,7 +337,6 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, FALSE );
     ppPoolDefaults[ ATTR_PAGE_NULLVALS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NULLVALS, TRUE );
     ppPoolDefaults[ ATTR_PAGE_SCALETO    - ATTR_STARTINDEX ] = new ScPageScaleToItem( 1, 1 );
-//  ppPoolDefaults[ ATTR_ITEM_DOUBLE     - ATTR_STARTINDEX ] = new ScDoubleItem( ATTR_ITEM_DOUBLE, 0 );
 
     SetDefaults( ppPoolDefaults );
 
@@ -1024,24 +1020,6 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
         }
         break;
 
-/*
-        case ATTR_PAGE_HEADERLEFT:
-        rText = "SID_SCATTR_PAGE_HEADERLEFT";
-        break;
-
-        case ATTR_PAGE_FOOTERLEFT:
-        rText = "SID_SCATTR_PAGE_FOOTERLEFT";
-        break;
-
-        case ATTR_PAGE_HEADERRIGHT:
-        rText = "SID_SCATTR_PAGE_HEADERRIGHT";
-        break;
-
-        case ATTR_PAGE_FOOTERRIGHT:
-        rText = "SID_SCATTR_PAGE_FOOTERRIGHT";
-        break;
-*/
-
         default:
             if ( !pIntl )
                 pIntl = ScGlobal::GetScIntlWrapper();
@@ -1061,9 +1039,5 @@ SfxMapUnit __EXPORT ScDocumentPool::GetMetric( USHORT nWhich ) const
     else
         return SFX_MAPUNIT_100TH_MM;
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

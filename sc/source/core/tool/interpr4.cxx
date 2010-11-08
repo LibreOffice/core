@@ -1576,13 +1576,11 @@ BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
             PopDoubleRef( aRange, TRUE );
             return DoubleRefToPosSingleRef( aRange, rAdr );
         }
-        //break;
         case svSingleRef :
         {
             PopSingleRef( rAdr );
             return TRUE;
         }
-        //break;
         default:
             PopError();
             SetError( errNoRef );
@@ -2238,12 +2236,10 @@ const String& ScInterpreter::GetString()
         case svError:
             PopError();
             return EMPTY_STRING;
-        //break;
         case svMissing:
         case svEmptyCell:
             Pop();
             return EMPTY_STRING;
-        //break;
         case svDouble:
         {
             double fVal = PopDouble();
@@ -2253,10 +2249,8 @@ const String& ScInterpreter::GetString()
             pFormatter->GetInputLineString(fVal, nIndex, aTempStr);
             return aTempStr;
         }
-        //break;
         case svString:
             return PopString();
-        //break;
         case svSingleRef:
         {
             ScAddress aAdr;
@@ -2270,7 +2264,6 @@ const String& ScInterpreter::GetString()
             else
                 return EMPTY_STRING;
         }
-        //break;
         case svDoubleRef:
         {   // generate position dependent SingleRef
             ScRange aRange;
@@ -2297,7 +2290,6 @@ const String& ScInterpreter::GetString()
             PopExternalDoubleRef(pMat);
             return GetStringFromMatrix(pMat);
         }
-        //break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
@@ -3450,17 +3442,6 @@ void ScInterpreter::ScTableOp()
     pDok->DecInterpreterTableOpLevel();
 }
 
-
-/*
-
-void ScInterpreter::ScErrCell()
-{
-RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScErrCell" );
-    double fErrNum = GetDouble();
-    PushError((USHORT) fErrNum);
-}
-*/
-
 void ScInterpreter::ScDBArea()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBArea" );
@@ -3596,7 +3577,6 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     meVolaileType(NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
-//  pStack = new ScToken*[ MAXSTACK ];
 
     BYTE cMatFlag = pMyFormulaCell->GetMatrixFlag();
     bMatrixFormula = ( cMatFlag == MM_FORMULA || cMatFlag == MM_FAKE );
@@ -3637,7 +3617,6 @@ void ScInterpreter::GlobalExit()        // static
 
 StackVar ScInterpreter::Interpret()
 {
-//  StackPrinter __stack_printer__("ScInterpreter::Interpret");
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Interpret" );
     short nRetTypeExpr = NUMBERFORMAT_UNDEFINED;
     ULONG nRetIndexExpr = 0;
@@ -3745,7 +3724,6 @@ StackVar ScInterpreter::Interpret()
                 case ocNeg              : ScNeg();                      break;
                 case ocPercentSign      : ScPercentSign();              break;
                 case ocPi               : ScPi();                       break;
-//              case ocDefPar           : ScDefPar();                   break;
                 case ocRandom           : ScRandom();                   break;
                 case ocTrue             : ScTrue();                     break;
                 case ocFalse            : ScFalse();                    break;
@@ -4006,7 +3984,6 @@ StackVar ScInterpreter::Interpret()
                 case ocBetaInv          : ScBetaInv();                  break;
                 case ocExternal         : ScExternal();                 break;
                 case ocTableOp          : ScTableOp();                  break;
-//              case ocErrCell          : ScErrCell();                  break;
                 case ocStop :                                           break;
                 case ocErrorType        : ScErrorType();                break;
                 case ocCurrent          : ScCurrent();                  break;

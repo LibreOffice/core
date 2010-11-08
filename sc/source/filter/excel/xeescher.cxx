@@ -876,17 +876,6 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
 {
     return XclMacroHelper::SetMacroLink( rEvent, meEventType );
-/*
-    String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, meEventType );
-    if( aMacroName.Len() )
-    {
-        sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
-        sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( aMacroName, true, false );
-        mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
-        return true;
-    }
-    return false;
-*/
 }
 
 void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )

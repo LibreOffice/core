@@ -257,21 +257,6 @@ bool TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference<
     if ( tbcd.get() )
     {
         std::vector< css::beans::PropertyValue > props;
-/*
-        if ( bBuiltin )
-        {
-            rtl::OUString sCommand = helper.MSOCommandToOOCommand( cmdId );
-            if ( sCommand.getLength() > 0 )
-            {
-                beans::PropertyValue aProp;
-
-                aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
-                aProp.Value <<= sCommand;
-                props.push_back( aProp );
-            }
-
-        }
-*/
         bool bBeginGroup = false;
         if ( ! tbcd->ImportToolBarControl( helper, props, bBeginGroup, bIsMenuToolbar ) )
             return false;

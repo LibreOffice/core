@@ -176,14 +176,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 #include <svl/zforlist.hxx>
-/*
-#ifdef _ZFORLIST_DECLARE_TABLE
-class SvNumberFormatterIndexTable;
-#else
-class Table;
-typedef Table SvNumberFormatterIndexTable;
-#endif
-*/
 
 #define SC_DOC_NEW          0xFFFF
 
