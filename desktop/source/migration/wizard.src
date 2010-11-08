@@ -195,6 +195,7 @@ TabPage TP_LICENSE
     };
     MultiLineEdit ML_LICENSE
     {
+        HelpID = "desktop:MultiLineEdit:TP_LICENSE:ML_LICENSE";
         PosSize = MAP_APPFONT (MARGINLEFT+INDENT, MARGINTOP + 8*ROWHEIGHT, BODYWIDTH-INDENT , BODYHEIGHT - 8*ROWHEIGHT - 20-2*MARGINBOTTOM) ;
         Border = TRUE;
         VScroll = TRUE;
@@ -202,6 +203,7 @@ TabPage TP_LICENSE
     };
     PushButton PB_LICENSE_DOWN
     {
+        HelpID = "desktop:PushButton:TP_LICENSE:PB_LICENSE_DOWN";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-18 ) ;
         Size = MAP_APPFONT ( 50, 15 ) ;
@@ -247,6 +249,7 @@ TabPage TP_MIGRATION
 
     CheckBox CB_MIGRATION
     {
+        HelpID = "desktop:CheckBox:TP_MIGRATION:CB_MIGRATION";
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*10);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
         Check = TRUE;
@@ -282,6 +285,7 @@ TabPage TP_UPDATE_CHECK
 
     CheckBox CB_UPDATE_CHECK
     {
+        HelpID = "desktop:CheckBox:TP_UPDATE_CHECK:CB_UPDATE_CHECK";
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*10);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
         Check = TRUE;
@@ -328,6 +332,7 @@ TabPage TP_USER
     };
     Edit ED_USER_FIRST
     {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_FIRST";
         Border = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*7);
         Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
@@ -340,6 +345,7 @@ TabPage TP_USER
     };
     Edit ED_USER_LAST
     {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_LAST";
         Border = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*9);
         Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
@@ -352,6 +358,7 @@ TabPage TP_USER
     };
     Edit ED_USER_INITIALS
     {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_INITIALS";
         Border = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*11);
         Size = MAP_APPFONT(INITIALSWIDTH, EDHEIGHT);
@@ -366,6 +373,7 @@ TabPage TP_USER
     };
     Edit ED_USER_FATHER
     {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_FATHER";
         Border = TRUE;
         Hide = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT*2+INITIALSWIDTH+10, MARGINTOP+ROWHEIGHT*11);
@@ -398,6 +406,7 @@ TabPage TP_REGISTRATION
     };
     RadioButton RB_REGISTRATION_NOW
     {
+        HelpID = "desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_NOW";
         Text [ en-US ] = "I want to register ~now";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
@@ -405,12 +414,14 @@ TabPage TP_REGISTRATION
     };
     RadioButton RB_REGISTRATION_LATER
     {
+        HelpID = "desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_LATER";
         Text [ en-US ] = "I want to register ~later";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2+RB_HEIGHT);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
     };
     RadioButton RB_REGISTRATION_NEVER
     {
+        HelpID = "desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_NEVER";
         Text [ en-US ] = "I do not want to ~register";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2+RB_HEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);

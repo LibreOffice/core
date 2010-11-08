@@ -173,7 +173,6 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
 
             // einf"ugen
             pMenu->InsertItem( nId, aVerbs[n].VerbName );
-            pMenu->SetHelpId( nId, (ULONG) nId );
         }
     }
 }
@@ -485,10 +484,10 @@ void SfxPopupMenuManager::InsertSeparator( USHORT nPos )
 
 //-------------------------------------------------------------------------
 
-void SfxPopupMenuManager::InsertItem( USHORT nId, const String& rName, MenuItemBits nBits, USHORT nPos )
+void SfxPopupMenuManager::InsertItem( USHORT nId, const String& rName, MenuItemBits nBits, const rtl::OString& rHelpId, USHORT nPos )
 {
     pSVMenu->InsertItem( nId, rName, nBits,nPos );
-    pSVMenu->SetHelpId( nId, (ULONG) nId );
+    pSVMenu->SetHelpId( nId, rHelpId );
 }
 
 //-------------------------------------------------------------------------
