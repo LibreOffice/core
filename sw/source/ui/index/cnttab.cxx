@@ -828,7 +828,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     rHB.Show();
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
-    rTLB.SetWindowBits(WB_CLIPCHILDREN|WB_SORT);
+    rTLB.SetStyle(rTLB.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
     //aStylesTLB.SetSelectHdl(LINK(this, SwAddStylesDlg_Impl, SelectHdl));
     rTLB.GetModel()->SetSortMode(SortAscending);
     for(i = 0; i < MAXLEVEL; ++i)
@@ -2124,7 +2124,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
-    aLevelLB.SetWindowBits( WB_HSCROLL );
+    aLevelLB.SetStyle( aLevelLB.GetStyle() | WB_HSCROLL );
     aLevelLB.SetSpaceBetweenEntries(0);
     aLevelLB.SetSelectionMode( SINGLE_SELECTION );
     aLevelLB.SetHighlightRange();   // select full width
