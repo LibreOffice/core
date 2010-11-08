@@ -277,6 +277,7 @@ MSCodec_Std97::~MSCodec_Std97 ()
     rtl_cipher_destroy (m_hCipher);
 }
 
+#if 0
 #if DEBUG_MSO_ENCRYPTION_STD97
 static void lcl_PrintKeyData(const sal_uInt8* pKeyData, const char* msg)
 {
@@ -292,6 +293,7 @@ static void lcl_PrintKeyData(const sal_uInt8* pKeyData, const char* msg)
 static void lcl_PrintKeyData(const sal_uInt8* /*pKeyData*/, const char* /*msg*/)
 {
 }
+#endif
 #endif
 
 #if DEBUG_MSO_ENCRYPTION_STD97
