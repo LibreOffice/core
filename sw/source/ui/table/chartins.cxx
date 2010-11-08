@@ -204,7 +204,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         {
             uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                 xMCF->createInstanceWithContext(
-                    C2U("com.sun.star.comp.chart2.WizardDialog")
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.WizardDialog"))
                     , xContext), uno::UNO_QUERY);
             uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
             if( xInit.is() )
@@ -214,10 +214,10 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 uno::Sequence<uno::Any> aSeq(2);
                 uno::Any* pArray = aSeq.getArray();
                 beans::PropertyValue aParam1;
-                aParam1.Name = C2U("ParentWindow");
+                aParam1.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                 aParam1.Value <<= uno::makeAny(xDialogParentWindow);
                 beans::PropertyValue aParam2;
-                aParam2.Name = C2U("ChartModel");
+                aParam2.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChartModel"));
                 aParam2.Value <<= uno::makeAny(xChartModel);
                 pArray[0] <<= uno::makeAny(aParam1);
                 pArray[1] <<= uno::makeAny(aParam2);
