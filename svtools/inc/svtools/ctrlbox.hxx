@@ -394,6 +394,31 @@ SVT_DLLPUBLIC inline Color sameDistColor( Color /*rMain*/, Color rDefault )
     return rDefault;
 }
 
+class SVT_DLLPUBLIC BorderWidthImpl
+{
+    USHORT m_nFlags;
+    double m_nRate1;
+    double m_nRate2;
+    double m_nRateGap;
+
+public:
+
+    BorderWidthImpl( USHORT nFlags = CHANGE_LINE1, double nRate1 = 0.0,
+            double nRate2 = 0.0, double nRateGap = 0.0 );
+
+    BorderWidthImpl& operator= ( const BorderWidthImpl& r );
+    bool operator== ( const BorderWidthImpl& r ) const;
+
+    long GetLine1 ( long nWidth ) const;
+    long GetLine2( long nWidth ) const;
+    long GetGap( long nWidth ) const;
+
+    long GuessWidth( long nLine1, long nLine2, long nGap );
+
+    bool IsEmpty( ) const { return (0 == m_nRate1) && (0 == m_nRate2); }
+    bool IsDouble( ) const { return (0 != m_nRate1) && (0 != m_nRate2);  }
+};
+
 class SVT_DLLPUBLIC LineStyleListBox : public LineListBox
 {
 private:
@@ -412,8 +437,8 @@ public:
     void            SetNone( const XubString& sNone );
 
     using LineListBox::InsertEntry;
-    void            InsertEntry( double nLine1, double nLine2, double nDist,
-                        sal_uInt16 nChangeFlags, sal_uInt16 nStyle, long nMinWidth = 0,
+    void            InsertEntry( BorderWidthImpl aWidthImpl,
+                        sal_uInt16 nStyle, long nMinWidth = 0,
                         Color (*pColor1Fn)(Color) = &sameColor,
                         Color (*pColor2Fn)( Color ) = &sameColor,
                         Color (*pColorDistFn)( Color, Color ) = &sameDistColor );

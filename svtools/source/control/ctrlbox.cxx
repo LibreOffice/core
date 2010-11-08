@@ -764,13 +764,91 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 // LineStyleNameBox
 // ===================================================================
 
+BorderWidthImpl::BorderWidthImpl( sal_uInt16 nFlags, double nRate1, double nRate2, double nRateGap ):
+    m_nFlags( nFlags ),
+    m_nRate1( nRate1 ),
+    m_nRate2( nRate2 ),
+    m_nRateGap( nRateGap )
+{
+}
+
+BorderWidthImpl& BorderWidthImpl::operator= ( const BorderWidthImpl& r )
+{
+    m_nFlags = r.m_nFlags;
+    m_nRate1 = r.m_nRate1;
+    m_nRate2 = r.m_nRate2;
+    m_nRateGap = r.m_nRateGap;
+    return *this;
+}
+
+bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
+{
+    return ( m_nFlags == r.m_nFlags ) &&
+           ( m_nRate1 == r.m_nRate1 ) &&
+           ( m_nRate2 == r.m_nRate2 ) &&
+           ( m_nRateGap == r.m_nRateGap );
+}
+
+long BorderWidthImpl::GetLine1( long nWidth ) const
+{
+    long result = m_nRate1;
+    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
+        result = m_nRate1 * nWidth;
+    return result;
+}
+
+long BorderWidthImpl::GetLine2( long nWidth ) const
+{
+    long result = m_nRate2;
+    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
+        result = m_nRate2 * nWidth;
+    return result;
+}
+
+long BorderWidthImpl::GetGap( long nWidth ) const
+{
+    long result = m_nRateGap;
+    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
+        result = m_nRateGap * nWidth;
+
+    // Avoid having too small distances
+    if ( result < 100 && m_nRate1 > 0 && m_nRate2 > 0 )
+        result = 100;
+
+    return result;
+}
+
+long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
+{
+    long nWidth = 0;
+    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
+        nWidth = double( nLine1 ) / m_nRate1;
+
+    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
+    {
+        double nLine2Width = double( nLine2 ) / m_nRate2;
+        if ( nWidth > 0 && nWidth != nLine2Width )
+            nWidth = 0;
+        else
+            nWidth = nLine2Width;
+    }
+
+    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
+    {
+        double nDistWidth = double( nGap ) / m_nRateGap;
+        if ( nWidth > 0 && nWidth != nDistWidth )
+            nWidth = 0;
+        else
+            nWidth = nDistWidth;
+    }
+
+    return nWidth;
+}
+
 class ImpLineStyleListData
 {
 private:
-    double m_nLine1;
-    double m_nLine2;
-    double m_nDist;
-    sal_uInt16 m_nFlags;
+    BorderWidthImpl m_aWidthImpl;
 
     Color  ( *m_pColor1Fn )( Color );
     Color  ( *m_pColor2Fn )( Color );
@@ -780,15 +858,15 @@ private:
     sal_uInt16 m_nStyle;
 
 public:
-    ImpLineStyleListData( double nLine1, double nLine2, double nDist, sal_uInt16 nFlags, sal_uInt16 nStyle,
+    ImpLineStyleListData( BorderWidthImpl aWidthImpl, sal_uInt16 nStyle,
             long nMinWidth=0, Color ( *pColor1Fn ) ( Color ) = &sameColor,
             Color ( *pColor2Fn ) ( Color ) = &sameColor, Color ( *pColorDistFn ) ( Color, Color ) = &sameDistColor );
 
-    double GetLine1ForWidth( double nWidth );
-    double GetLine2ForWidth( double nWidth );
-    double GetDistForWidth( double nWidth );
+    long GetLine1ForWidth( long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
+    long GetLine2ForWidth( long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
+    long GetDistForWidth( long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
 
-    long   GetTotalWidth( double nWidth );
+    long   GetTotalWidth( long nWidth );
 
     Color  GetColorLine1( const Color& aMain );
     Color  GetColorLine2( const Color& aMain );
@@ -797,16 +875,14 @@ public:
     long   GetMinWidth( );
     sal_uInt16 GetStyle( );
 
-    long GuessWidth( long nLine1, long nLine2, long nDist );
+    long GuessWidth( long nLine1, long nLine2, long nDist )
+        { return m_aWidthImpl.GuessWidth( nLine1, nLine2, nDist ); }
 };
 
-ImpLineStyleListData::ImpLineStyleListData( double nLine1, double nLine2, double nDist, sal_uInt16 nFlags,
+ImpLineStyleListData::ImpLineStyleListData( BorderWidthImpl aWidthImpl,
        sal_uInt16 nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
        Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
-    m_nLine1( nLine1 ),
-    m_nLine2( nLine2 ),
-    m_nDist( nDist ),
-    m_nFlags( nFlags ),
+    m_aWidthImpl( aWidthImpl ),
     m_pColor1Fn( pColor1Fn ),
     m_pColor2Fn( pColor2Fn ),
     m_pColorDistFn( pColorDistFn ),
@@ -818,35 +894,6 @@ ImpLineStyleListData::ImpLineStyleListData( double nLine1, double nLine2, double
 long ImpLineStyleListData::GetMinWidth( )
 {
     return m_nMinWidth;
-}
-
-double ImpLineStyleListData::GetLine1ForWidth( double nWidth )
-{
-    double result = m_nLine1;
-    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
-        result = m_nLine1 * nWidth;
-    return result;
-}
-
-double ImpLineStyleListData::GetLine2ForWidth( double nWidth )
-{
-    double result = m_nLine2;
-    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
-        result = m_nLine2 * nWidth;
-    return result;
-}
-
-double ImpLineStyleListData::GetDistForWidth( double nWidth )
-{
-    double result = m_nDist;
-    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
-        result = m_nDist * nWidth;
-
-    // Avoid having too small distances
-    if ( result < 100 && m_nLine1 > 0 && m_nLine2 > 0 )
-        result = 100;
-
-    return result;
 }
 
 Color ImpLineStyleListData::GetColorLine1( const Color& rMain )
@@ -867,33 +914,6 @@ Color ImpLineStyleListData::GetColorDist( const Color& rMain, const Color& rDefa
 sal_uInt16 ImpLineStyleListData::GetStyle( )
 {
     return m_nStyle;
-}
-
-long ImpLineStyleListData::GuessWidth( long nLine1, long nLine2, long nDist )
-{
-    double nWidth = 0;
-    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
-        nWidth = double( nLine1 ) / m_nLine1;
-
-    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
-    {
-        double nLine2Width = double( nLine2 ) / m_nLine2;
-        if ( nWidth > 0 && nWidth != nLine2Width )
-            nWidth = 0;
-        else
-            nWidth = nLine2Width;
-    }
-
-    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
-    {
-        double nDistWidth = double( nDist ) / m_nDist;
-        if ( nWidth > 0 && nWidth != nDistWidth )
-            nWidth = 0;
-        else
-            nWidth = nDistWidth;
-    }
-
-    return nWidth;
 }
 
 DECLARE_LIST( ImpLineStyleList, ImpLineStyleListData* )
@@ -928,13 +948,14 @@ LineStyleListBox::~LineStyleListBox( )
     delete m_pStyleList;
 }
 
-void LineStyleListBox::InsertEntry( double nLine1, double nLine2, double nDist,
-        sal_uInt16 nChangeFlags, sal_uInt16 nStyle, long nMinWidth,
+void LineStyleListBox::InsertEntry(
+        BorderWidthImpl aWidthImpl,
+        sal_uInt16 nStyle, long nMinWidth,
         Color ( *pColor1Fn )( Color ), Color ( *pColor2Fn )( Color ),
         Color ( *pColorDistFn )( Color, Color ) )
 {
-    ImpLineStyleListData* pData = new ImpLineStyleListData( nLine1, nLine2, nDist,
-           nChangeFlags, nStyle, nMinWidth,
+    ImpLineStyleListData* pData = new ImpLineStyleListData(
+            aWidthImpl, nStyle, nMinWidth,
            pColor1Fn, pColor2Fn, pColorDistFn );
     m_pStyleList->Insert( pData, m_pStyleList->Count( ) );
 }
@@ -986,7 +1007,6 @@ sal_uInt16 LineStyleListBox::GetSelectedStyle( )
 long LineStyleListBox::GetWidthFromStyle( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle )
 {
     long nResult = 0;
-//    sal_uInt16 nStyle = GetSelectedStyle();
     ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
     if ( pData )
     {
