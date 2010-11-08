@@ -137,7 +137,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 ::rtl::OUString VCLXAccessibleTextField::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("com.sun.star.comp.toolkit.AccessibleTextField");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTextField" ));
 }
 
 

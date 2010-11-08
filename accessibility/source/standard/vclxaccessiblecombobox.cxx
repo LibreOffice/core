@@ -79,7 +79,7 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 ::rtl::OUString VCLXAccessibleComboBox::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("com.sun.star.comp.toolkit.AccessibleComboBox");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleComboBox" ));
 }
 
 
