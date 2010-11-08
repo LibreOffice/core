@@ -60,7 +60,7 @@ VCLXAccessibleMenuSeparator::~VCLXAccessibleMenuSeparator()
 
 ::rtl::OUString VCLXAccessibleMenuSeparator::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleMenuSeparator" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleMenuSeparator") );
 }
 
 // -----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ VCLXAccessibleMenuSeparator::~VCLXAccessibleMenuSeparator()
 Sequence< ::rtl::OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleMenuSeparator" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleMenuSeparator") );
     return aNames;
 }
 

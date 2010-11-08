@@ -149,8 +149,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleTextField::getSupportedServiceNames (v
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii(
-        "com.sun.star.accessibility.AccessibleTextField");
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleTextField" ));
     return aNames;
 }
 

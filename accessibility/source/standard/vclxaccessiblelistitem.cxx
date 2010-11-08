@@ -230,7 +230,7 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString VCLXAccessibleListItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleListItem" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleListItem" ));
 }
 // -----------------------------------------------------------------------------
 sal_Bool VCLXAccessibleListItem::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
@@ -247,9 +247,9 @@ sal_Bool VCLXAccessibleListItem::supportsService( const ::rtl::OUString& rServic
 Sequence< ::rtl::OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(3);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleContext" );
-    aNames[1] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleComponent" );
-    aNames[2] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleListItem" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ));
+    aNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComponent" ));
+    aNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleListItem" ));
     return aNames;
 }
 // -----------------------------------------------------------------------------

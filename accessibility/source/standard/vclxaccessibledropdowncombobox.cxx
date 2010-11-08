@@ -125,7 +125,7 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 ::rtl::OUString VCLXAccessibleDropDownComboBox::getImplementationName()
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.toolkit.AccessibleDropDownComboBox");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleDropDownComboBox" ));
 }
 
 
@@ -137,8 +137,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceN
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii(
-        "com.sun.star.accessibility.AccessibleDropDownComboBox" );
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleDropDownComboBox" ));
     return aNames;
 }
 

@@ -686,7 +686,7 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString VCLXAccessibleToolBox::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleToolBox" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleToolBox" ));
 }
 // -----------------------------------------------------------------------------
 Sequence< ::rtl::OUString > VCLXAccessibleToolBox::getSupportedServiceNames() throw (RuntimeException)
@@ -694,7 +694,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleToolBox::getSupportedServiceNames() th
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleToolBox" );
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleToolBox" ));
     return aNames;
 }
 // -----------------------------------------------------------------------------
