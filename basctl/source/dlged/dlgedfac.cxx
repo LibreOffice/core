@@ -40,21 +40,18 @@
 
 using namespace ::com::sun::star;
 
-//----------------------------------------------------------------------------
 
 DlgEdFactory::DlgEdFactory()
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
-//----------------------------------------------------------------------------
 
 DlgEdFactory::~DlgEdFactory()
 {
     SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
-//----------------------------------------------------------------------------
 
 IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 {
@@ -191,80 +188,11 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             case OBJ_DLG_TREECONTROL:
                  DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.tree.TreeControlModel") , xDialogSFact );
                  pObjFactory->pNewObj = pNew;
-                 /*
-                 try
-                 {
-                    uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
-                    if (xPSet.is())
-                    {
-                        // first create a data model for our tree control
-                        Reference< XComponentContext > xComponentContext;
-
-                        Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
-                        xPropSet->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xComponentContext;
-
-                        // gets the service manager from the office
-                        Reference< XMultiComponentFactory > xMultiComponentFactoryServer( xComponentContext->getServiceManager() );
-
-
-                        // gets the TreeDataModel
-                        Reference< XMutableTreeDataModel > xTreeDataModel;
-
-                        xTreeDataModel = Reference< XMutableTreeDataModel >(
-                         xMultiComponentFactoryServer->createInstanceWithContext(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tree.MutableTreeDataModel" ) ), xComponentContext ), UNO_QUERY_THROW );
-
-                        // now fill it with some sample data
-                        const OUString sRoot( RTL_CONSTASCII_USTRINGPARAM( "Root" ) );
-
-                        Reference< XMutableTreeNode > xNode( mxTreeDataModel->createNode( sRoot, false ), UNO_QUERY_THROW );
-                        xNode->setDataValue( sRoot );
-                        xNode->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
-                        xNode->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
-
-                        const OUString sNode_1( RTL_CONSTASCII_USTRINGPARAM( "Node_1" ) );
-
-                        Reference< XMutableTreeNode > xChildNode_1( mxTreeDataModel->createNode( sNode_1, true ), UNO_QUERY_THROW );
-                        xChildNode_1->setDataValue( sNode_1 );
-                        xChildNode_1->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
-                        xChildNode_1->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
-
-                        xNode->appendChild( xChildNode_1 );
-
-                        const OUString sNode_1_1( RTL_CONSTASCII_USTRINGPARAM( "Node_1_1" ) );
-
-                        Reference< XMutableTreeNode > xChildNode_1_1( mxTreeDataModel->createNode( sNode_1_1, false ), UNO_QUERY_THROW );
-                        xChildNode_1_1->setDataValue( sNode_1_1 );
-                        xChildNode_1_1->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
-                        xChildNode_1_1->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
-
-                        xChildNode_1->appendChild( xChildNode_1_1 );
-
-                        const OUString sNode_1_1( RTL_CONSTASCII_USTRINGPARAM( "Node_2" ) );
-
-                        Reference< XMutableTreeNode > xChildNode_2( mxTreeDataModel->createNode( sNode_2, false ), UNO_QUERY_THROW );
-                        xChildNode_2->setDataValue( sNode_2 );
-                        xChildNode_2->setNodeGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM("private:graphicrepository/sw/imglst/nc20010.png") ) );
-                        xNode->appendChild( xChildNode_2 );
-
-                        xTreeDataModel->setRoot( xNode );
-
-
-                        const OUString sDataModel( RTL_CONSTASCII_USTRINGPARAM( "DataModel" ) );
-
-                        xPSet->setPropertyValue( sDataModel, xTreeDataModel );
-                    }
-                 }
-                 catch(...)
-                 {
-                 }*/
                  break;
         }
     }
 
     return 0;
 }
-
-//----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

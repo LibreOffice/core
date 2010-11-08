@@ -75,13 +75,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 
-//============================================================================
-// PropBrwMgr
-//============================================================================
 
 SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
-//----------------------------------------------------------------------------
 
 PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
                         SfxBindings *pBindings, SfxChildWinInfo* pInfo)
@@ -103,7 +99,7 @@ PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
     ((PropBrw*)pWindow)->Update( pShell );
 }
 
-//----------------------------------------------------------------------------
+
 void PropBrw::Update( const SfxViewShell* _pShell )
 {
     const BasicIDEShell* pBasicIDEShell = dynamic_cast< const BasicIDEShell* >( _pShell );
@@ -122,7 +118,6 @@ void PropBrw::Update( const SfxViewShell* _pShell )
     }
 }
 
-//----------------------------------------------------------------------------
 
 const long STD_WIN_SIZE_X = 300;
 const long STD_WIN_SIZE_Y = 350;
@@ -136,15 +131,9 @@ const long WIN_BORDER = 2;
 const long MIN_WIN_SIZE_X = 50;
 const long MIN_WIN_SIZE_Y = 50;
 
-//----------------------------------------------------------------------------
-
-//============================================================================
-// PropBrw
-//============================================================================
 
 DBG_NAME(PropBrw)
 
-//----------------------------------------------------------------------------
 
 PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
             const Reference< XModel >& _rxContextDocument )
@@ -179,7 +168,6 @@ PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _
     ImplReCreateController();
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::ImplReCreateController()
 {
@@ -265,7 +253,6 @@ void PropBrw::ImplReCreateController()
     Resize();
 }
 
-//----------------------------------------------------------------------------
 
 PropBrw::~PropBrw()
 {
@@ -275,7 +262,6 @@ PropBrw::~PropBrw()
     DBG_DTOR(PropBrw,NULL);
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::ImplDestroyController()
 {
@@ -300,7 +286,6 @@ void PropBrw::ImplDestroyController()
     m_xBrowserController.clear();
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool PropBrw::Close()
 {
@@ -314,7 +299,7 @@ sal_Bool PropBrw::Close()
     return bClose;
 }
 
-//----------------------------------------------------------------------------
+
 Sequence< Reference< XInterface > >
     PropBrw::CreateMultiSelectionSequence( const SdrMarkList& _rMarkList )
 {
@@ -359,7 +344,7 @@ Sequence< Reference< XInterface > >
     return aSeq;
 }
 
-//----------------------------------------------------------------------------
+
 void PropBrw::implSetNewObjectSequence
     ( const Sequence< Reference< XInterface > >& _rObjectSeq )
 {
@@ -374,7 +359,6 @@ void PropBrw::implSetNewObjectSequence
     }
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 {
@@ -390,7 +374,6 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     }
 }
 
-//----------------------------------------------------------------------------
 
 ::rtl::OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
 {
@@ -510,14 +493,12 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     return aName;
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::Resize()
 {
@@ -536,7 +517,6 @@ void PropBrw::Resize()
     }
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView* pNewView )
 {
@@ -618,7 +598,5 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-//----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
