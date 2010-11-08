@@ -31,6 +31,7 @@ use Cwd;
 use File::Copy;
 use File::stat;
 use File::Temp qw(tmpnam);
+use File::Path;
 use installer::control;
 use installer::converter;
 use installer::existence;
@@ -793,11 +794,20 @@ sub install_simple ($$$$$$)
 
         push @lines, "$destination\n";
         # printf "cp $sourcepath $destdir$destination\n";
+        if(-d  "$destdir$destination"){
+            #printf "Deleting already present Directory $destdir$destination from previous builds\n";
+            rmtree("$destdir$destination");
+        }
+        if(-e "$destdir$destination") {
+            #printf "Deleting already present file $destdir$destination from previous builds\n";
+            unlink "$destdir$destination";
+        }
+
         copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
         my $sourcestat = stat($sourcepath);
         utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
         chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
-         push @lines, "$destination\n";
+        push @lines, "$destination\n";
     }
 
     for ( my $i = 0; $i <= $#{$linksarray}; $i++ )
@@ -807,6 +817,10 @@ sub install_simple ($$$$$$)
         my $destinationfile = $onelink->{'destinationfile'};
 
         # print "link $destinationfile -> $destdir$destination\n";
+        if(-e "$destdir$destination") {
+            #printf "Deleting already present symlink $destdir$destination from previous builds\n";
+            unlink "$destdir$destination";
+        }
         symlink ("$destinationfile", "$destdir$destination") || die "Can't create symlink: $!";
         push @lines, "$destination\n";
     }
