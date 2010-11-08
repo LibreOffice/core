@@ -313,7 +313,6 @@ namespace dbaui
         SetControlFontWeight(m_pFT_HeaderText);
     }
 
-
     //=========================================================================
     //= LayoutHelper
     //=========================================================================
@@ -329,6 +328,24 @@ namespace dbaui
 
         Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
         _rControl.SetPosPixel( aControlPos );
+    }
+
+    //-------------------------------------------------------------------------
+    void LayoutHelper::fitSizeRightAligned( PushButton& io_button )
+    {
+        const Point aOldPos = io_button.GetPosPixel();
+        const Size aOldSize = io_button.GetSizePixel();
+        const Size aMinSize( io_button.CalcMinimumSize() );
+        if ( aMinSize.Width() > aOldSize.Width() )
+        {
+            io_button.SetPosSizePixel(
+                aOldPos.X() + aOldSize.Width() - aMinSize.Width(),
+                0,
+                aMinSize.Width(),
+                0,
+                WINDOW_POSSIZE_X | WINDOW_POSSIZE_WIDTH
+            );
+        }
     }
 
 //.........................................................................
