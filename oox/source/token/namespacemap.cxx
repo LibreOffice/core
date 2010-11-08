@@ -33,7 +33,7 @@ namespace oox {
 
 NamespaceMap::NamespaceMap()
 {
-    static const struct NamespaceUrl { sal_Int32 mnId; sal_Char* mpcUrl; } spNamespaceUrls[] =
+    static const struct NamespaceUrl { sal_Int32 mnId; const sal_Char* mpcUrl; } spNamespaceUrls[] =
     {
 // include auto-generated C array with namespace URLs as C strings
 #include "namespacenames.inc"

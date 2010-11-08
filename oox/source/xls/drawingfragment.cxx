@@ -776,7 +776,6 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
     if( (aShapeName.getLength() > 0) && pClientData )
     {
         Rectangle aShapeRect = rShapeRect;
-        const GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
         const ::oox::vml::TextBox* pTextBox = rShape.getTextBox();
         EmbeddedControl aControl( aShapeName );
         switch( pClientData->mnObjType )

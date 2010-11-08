@@ -278,8 +278,6 @@ ExcelVbaProjectFilter::ExcelVbaProjectFilter( const Reference< XComponentContext
 
 bool ExcelVbaProjectFilter::importDocument() throw()
 {
-    bool bRet = false;
-
     // detect BIFF version and workbook stream name
     OUString aWorkbookName;
     BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );

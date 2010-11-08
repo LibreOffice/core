@@ -574,7 +574,7 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
             else if( aIt->maValue.has< double >() )
             {
                 // floating-point argument
-                double fValue;
+                double fValue = 0.0;
                 aIt->maValue >>= fValue;
                 aSettings.appendField( mbAnd, nOperator, fValue );
             }

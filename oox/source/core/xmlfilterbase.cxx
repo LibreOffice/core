@@ -97,7 +97,7 @@ struct XmlFilterBaseImpl
 
 // ----------------------------------------------------------------------------
 
-XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
+XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     maFastParser( rxContext ),
     maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
     maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
