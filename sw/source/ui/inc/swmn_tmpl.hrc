@@ -57,7 +57,7 @@
     MenuItem\
     {\
         Identifier = FN_FORMAT_PAGE_DLG ; \
-        HelpID = FN_FORMAT_PAGE_DLG ; \
+        HelpId = CMD_FN_FORMAT_PAGE_DLG ; \
         Text [ en-US ] = "Pa~ge..." ; \
     };
 
@@ -74,7 +74,6 @@
     MenuItem\
     {\
         Identifier = MN_FORMAT_STYLE ; \
-        HelpID = MN_FORMAT_STYLE ; \
         Command = ".uno:StyleMenu" ; \
         Text [ en-US ] = "St~yle" ; \
         SubMenu = Menu\
@@ -113,13 +112,13 @@
                 MenuItem\
                 {\
                     Identifier = FN_SET_SUPER_SCRIPT ; \
-                    HelpID = FN_SET_SUPER_SCRIPT ; \
+                    HelpId = CMD_FN_SET_SUPER_SCRIPT ; \
                     Text [ en-US ] = "Superscript" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_SET_SUB_SCRIPT ; \
-                    HelpID = FN_SET_SUB_SCRIPT ; \
+                    HelpId = CMD_FN_SET_SUB_SCRIPT ; \
                     Text [ en-US ] = "Subscript" ; \
                 };\
             };\
@@ -128,7 +127,6 @@
     MenuItem\
     {\
         Identifier = MN_FORMAT_ALGN ; \
-        HelpID = MN_FORMAT_ALGN ; \
         Command = ".uno:AlignTextMenu" ; \
         Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
@@ -153,7 +151,7 @@
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "Justified" ; \
                 };\
@@ -163,7 +161,6 @@
     MenuItem\
     {\
         Identifier = MN_FORMAT_LINESPACE ; \
-        HelpID = MN_FORMAT_LINESPACE ; \
         Command = ".uno:LineSpacingMenu" ; \
         Text [ en-US ] = "Line Spacing" ; \
         _MenuItemFlags = MIB_RADIOCHECK ; \
@@ -208,21 +205,21 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_FIELD ;                                    \
-            HelpID = FN_EDIT_FIELD ;                                        \
+            HelpId = CMD_FN_EDIT_FIELD ;                                        \
             Text [ en-US ] = "Fields..." ;                             \
     };
 #define _MN_EDIT_FOOTNOTE                                                    \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_FOOTNOTE ;                                 \
-            HelpID = FN_EDIT_FOOTNOTE ;                                     \
+            HelpId = CMD_FN_EDIT_FOOTNOTE ;                                     \
             Text [ en-US ] = "Footnote/Endnote~..." ;                          \
         };
     #define _MN_EDIT_IDX_ENTRY_DLG                                          \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_IDX_ENTRY_DLG ;                            \
-            HelpID = FN_EDIT_IDX_ENTRY_DLG ;                                \
+            HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG ;                                \
             Text [ en-US ] = "Inde~x Entry..." ;                       \
     };
 
@@ -230,13 +227,13 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_REDLINE_ACCEPT_DIRECT;                            \
-            HelpID = FN_REDLINE_ACCEPT_DIRECT ;                                \
+            HelpId = CMD_FN_REDLINE_ACCEPT_DIRECT ;                                \
             Text [ en-US ] = "Accept Change" ;                       \
         };\
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_REDLINE_REJECT_DIRECT ;                            \
-            HelpID = FN_REDLINE_REJECT_DIRECT ;                                \
+            HelpId = CMD_FN_REDLINE_REJECT_DIRECT ;                                \
             Text [ en-US ] = "Reject Change" ;                       \
         };                              \
     SEPARATOR ;
@@ -244,7 +241,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_AUTH_ENTRY_DLG ;                           \
-            HelpID = FN_EDIT_AUTH_ENTRY_DLG ;                               \
+            HelpId = CMD_FN_EDIT_AUTH_ENTRY_DLG ;                               \
             Text [ en-US ] = "~Bibliography Entry...";                  \
     };                                                                  \
         SEPARATOR ;
@@ -257,19 +254,19 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     MenuItem                                                            \
     {                                                                   \
         Identifier = FN_EDIT_HYPERLINK ;                           \
-        HelpID = FN_EDIT_HYPERLINK ;                               \
+        HelpId = CMD_FN_EDIT_HYPERLINK ;                               \
         Text [ en-US ] = "Edit Hyperlink...";                  \
     };                                                                  \
     MenuItem                                                            \
     {                                                                   \
         Identifier =  FN_COPY_HYPERLINK_LOCATION;                           \
-        HelpID =  FN_COPY_HYPERLINK_LOCATION;                               \
+        HelpId = CMD_FN_COPY_HYPERLINK_LOCATION;                               \
         Text [ en-US ] = "Copy Hyperlink ~Location";                  \
     };                                                                  \
     MenuItem                                                            \
     {                                                                   \
         Identifier = FN_REMOVE_HYPERLINK ;                           \
-        HelpID = FN_REMOVE_HYPERLINK ;                               \
+        HelpId = CMD_FN_REMOVE_HYPERLINK ;                               \
         Text [ en-US ] = "Remo~ve Hyperlink";                  \
     };
 
@@ -283,7 +280,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     MenuItem\
     {\
         Identifier = FN_EDIT_HYPERLINK ; \
-        HelpID = FN_EDIT_HYPERLINK ; \
+        HelpId = CMD_FN_EDIT_HYPERLINK ; \
         Text [ en-US ] = "~Edit Hyperlink" ; \
     };
 
@@ -306,7 +303,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     MenuItem\
     {\
         Identifier = FN_FORMAT_RESET ; \
-        HelpID = FN_FORMAT_RESET ; \
+        HelpId = CMD_FN_FORMAT_RESET ; \
         Text [ en-US ] = "~Default Formatting" ; \
     };
 
@@ -315,25 +312,25 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_NUMBER_NEWSTART;                                \
-            HelpId = FN_NUMBER_NEWSTART;                                    \
+            HelpId = CMD_FN_NUMBER_NEWSTART;                                    \
             Text[ en-US ] = "Restart Numbering";                            \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_NUM_CONTINUE;                                   \
-            HelpId = FN_NUM_CONTINUE;                                       \
+            HelpId = CMD_FN_NUM_CONTINUE;                                       \
             Text[ en-US ] = "Continue previous numbering";                  \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_NUM_BULLET_UP;                              \
-            HelpId = FN_NUM_BULLET_UP;                                  \
+            HelpId = CMD_FN_NUM_BULLET_UP;                                  \
             Text[ en-US ] = "Up One Level";                              \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_NUM_BULLET_DOWN;                              \
-            HelpId = FN_NUM_BULLET_DOWN;                                  \
+            HelpId = CMD_FN_NUM_BULLET_DOWN;                                  \
             Text[ en-US ] = "Down One Level";                              \
         };
 
@@ -356,19 +353,19 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_UPDATE_CUR_TOX ;                                \
-            HelpID = FN_UPDATE_CUR_TOX ;                                    \
+            HelpId = CMD_FN_UPDATE_CUR_TOX ;                                    \
             Text [ en-US ] = "~Update Index/Table";                         \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_CURRENT_TOX;                               \
-            HelpID = FN_EDIT_CURRENT_TOX;                                   \
+            HelpId = CMD_FN_EDIT_CURRENT_TOX;                                   \
             Text [ en-US ] = "~Edit Index/Table";                           \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_REMOVE_CUR_TOX;                                 \
-            HelpID = FN_REMOVE_CUR_TOX;                                     \
+            HelpId = CMD_FN_REMOVE_CUR_TOX;                                     \
             Text [ en-US ] = "Delete Index/Table";                          \
         };                                                                  \
         SEPARATOR ;

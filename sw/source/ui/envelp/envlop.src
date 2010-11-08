@@ -86,6 +86,7 @@ TabPage TP_ENV_ENV
     };
     MultiLineEdit EDT_ADDR
     {
+        HelpID = "sw:MultiLineEdit:TP_ENV_ENV:EDT_ADDR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 124 , 66 ) ;
@@ -103,6 +104,7 @@ TabPage TP_ENV_ENV
     };
     ListBox LB_DATABASE
     {
+        HelpID = "sw:ListBox:TP_ENV_ENV:LB_DATABASE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 17 ) ;
         Size = MAP_APPFONT ( 82 , 50 ) ;
@@ -117,6 +119,7 @@ TabPage TP_ENV_ENV
     };
     ListBox LB_TABLE
     {
+        HelpID = "sw:ListBox:TP_ENV_ENV:LB_TABLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 44 ) ;
         Size = MAP_APPFONT ( 82 , 50 ) ;
@@ -125,6 +128,7 @@ TabPage TP_ENV_ENV
     };
     ImageButton BTN_INSERT
     {
+        HelpID = "sw:ImageButton:TP_ENV_ENV:BTN_INSERT";
         Pos = MAP_APPFONT ( 137 , 71 ) ;
         Size = MAP_APPFONT ( 18 , 12 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
@@ -138,6 +142,7 @@ TabPage TP_ENV_ENV
     };
     ListBox LB_DBFIELD
     {
+        HelpID = "sw:ListBox:TP_ENV_ENV:LB_DBFIELD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 71 ) ;
         Size = MAP_APPFONT ( 82 , 50 ) ;
@@ -146,6 +151,7 @@ TabPage TP_ENV_ENV
     };
     CheckBox BOX_SEND
     {
+        HelpID = "sw:CheckBox:TP_ENV_ENV:BOX_SEND";
         Pos = MAP_APPFONT ( 6 , 105 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
         Text [ en-US ] = "~Sender" ;
@@ -153,6 +159,7 @@ TabPage TP_ENV_ENV
     };
     MultiLineEdit EDT_SEND
     {
+        HelpID = "sw:MultiLineEdit:TP_ENV_ENV:EDT_SEND";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 116) ;
         Size = MAP_APPFONT ( 124 , 63 ) ;
