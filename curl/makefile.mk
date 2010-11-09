@@ -65,10 +65,6 @@ curl_CFLAGS+=-I$(SYSBASE)$/usr$/include
 curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)$(COM)$(CPU)"=="LINUXGCCI"
-curl_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 .IF "$(OS)$(CPU)"=="SOLARISU"
 curl_CFLAGS+:=$(ARCH_FLAGS)
 curl_LDFLAGS+:=$(ARCH_FLAGS)
