@@ -103,7 +103,6 @@ IDLFILES= \
     XTransformation.idl \
     XUndoManager.idl \
     XUndoSupplier.idl \
-    XUndoHelper.idl
 
 # --- Targets ------------------------------------------------------
 
