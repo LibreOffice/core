@@ -43,3 +43,4 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 
 ..\xml\components.xml %_DEST%\xml%_EXT%\components.xml
+..\%__SRC%\misc\oox.component %_DEST%\xml%_EXT%\oox.component

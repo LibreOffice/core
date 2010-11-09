@@ -173,6 +173,7 @@ Geometry3D
 GradientName
 Graphic
 GraphicColorMode
+GraphicCrop
 GraphicSize
 GraphicURL
 GridColor

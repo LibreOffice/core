@@ -235,7 +235,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
         ( nStyleId == TBL_STYLE_FIRSTCOL )
     };
 
-    for ( int i = 0 ; i < 7; i++ )
+    for ( unsigned i = 0 ; i != sizeof(pPropsToCheck) / sizeof(PropertyIds); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
         PropertyDefinition aProp( nId, false );

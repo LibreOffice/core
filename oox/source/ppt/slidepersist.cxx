@@ -171,12 +171,17 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
     {
         try
         {
+            sal_Int32 nPhClr = API_RGB_TRANSPARENT;
+            if ( maBackgroundColorRef.isUsed() )
+                nPhClr = maBackgroundColorRef.getColor( rFilterBase.getGraphicHelper() );
+
             PropertyMap aPropMap;
             static const rtl::OUString sBackground( RTL_CONSTASCII_USTRINGPARAM( "Background" ) );
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
             PropertySet aPropSet( xPropertySet );
-            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(), rFilterBase.getGraphicHelper() );
+            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(),
+                rFilterBase.getGraphicHelper(), oox::drawingml::FillProperties::DEFAULT_IDS, 0, nPhClr );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )

@@ -49,9 +49,21 @@ mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\misc\filters\modulepacks\fcfg_*.xcu %_DEST%\xml%_EXT%\registry\spool\fcfg_*.xcu
 ..\%COMMON_OUTDIR%\bin\fcfg_langpack_*.zip %_DEST%\pck%_EXT%\fcfg_langpack_*.zip
+..\%__SRC%\misc\t602filter.component %_DEST%\xml%_EXT%\t602filter.component
 
 mkdir: %_DEST%\inc%_EXT%\filter
 mkdir: %_DEST%\inc%_EXT%\filter\msfilter
 ..\inc\filter\msfilter\*.hxx %_DEST%\inc%_EXT%\filter\msfilter\*.hxx
 ..\inc\filter\msfilter\*.h %_DEST%\inc%_EXT%\filter\msfilter\*.h
 
+..\%__SRC%\misc\XSLTFilter.jar.component %_DEST%\xml%_EXT%\XSLTFilter.jar.component
+..\%__SRC%\misc\XSLTValidate.component %_DEST%\xml%_EXT%\XSLTValidate.component
+..\%__SRC%\misc\filterconfig1.component %_DEST%\xml%_EXT%\filterconfig1.component
+..\%__SRC%\misc\flash.component %_DEST%\xml%_EXT%\flash.component
+..\%__SRC%\misc\pdffilter.component %_DEST%\xml%_EXT%\pdffilter.component
+..\%__SRC%\misc\placeware.component %_DEST%\xml%_EXT%\placeware.component
+..\%__SRC%\misc\svgfilter.component %_DEST%\xml%_EXT%\svgfilter.component
+..\%__SRC%\misc\xmlfa.component %_DEST%\xml%_EXT%\xmlfa.component
+..\%__SRC%\misc\xmlfd.component %_DEST%\xml%_EXT%\xmlfd.component
+..\%__SRC%\misc\xsltdlg.component %_DEST%\xml%_EXT%\xsltdlg.component
+..\%__SRC%\misc\xsltfilter.component %_DEST%\xml%_EXT%\xsltfilter.component

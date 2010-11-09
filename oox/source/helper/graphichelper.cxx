@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -344,6 +345,19 @@ OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName
 {
     Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
     return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
+}
+
+Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
+{
+    Size aSizeHmm;
+    PropertySet aPropSet( xGraphic );
+    if( aPropSet.getProperty( aSizeHmm, PROP_Size100thMM ) && (aSizeHmm.Width == 0) && (aSizeHmm.Height == 0) )     // MAPMODE_PIXEL used?
+    {
+        Size aSizePixel( 0, 0 );
+        if( aPropSet.getProperty( aSizePixel, PROP_SizePixel ) )
+            aSizeHmm = convertScreenPixelToHmm( aSizePixel );
+    }
+    return aSizeHmm;
 }
 
 // ============================================================================
