@@ -28,7 +28,6 @@
 #define com_sun_star_chart2_XUndoManager_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 
 module com
@@ -40,24 +39,23 @@ module star
 module chart2
 {
 
-/** An interface for undo functionality based on passing frame::XModel
-    objects.
+/** An interface for undo functionality based on the model which the undo manager belongs to
  */
 interface XUndoManager : ::com::sun::star::uno::XInterface
 {
-    /** call this before you change the xCurrentModel
+    /** call this before you change the model which the undo manager belongs to
      */
-    void preAction( [in] ::com::sun::star::frame::XModel xModelBeforeChange );
+    void preAction();
 
-    /** call this before you change the xCurrentModel. You can pass
+    /** call this before you change the model which the undo manager belongs to. You can pass
         parameters to refine the undo action.
      */
-    void preActionWithArguments( [in] ::com::sun::star::frame::XModel xModelBeforeChange,
-                                 [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments );
+    void preActionWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments );
 
     /** call this after you successfully did changes to your current model
      */
     void postAction( [in] string aUndoText );
+
     /** call this if you aborted the current action.
      */
     void cancelAction();
@@ -66,15 +64,15 @@ interface XUndoManager : ::com::sun::star::uno::XInterface
         state set in preAction.  This is useful for cancellation in
         live-preview dialogs.
     */
-    void cancelActionWithUndo( [inout] ::com::sun::star::frame::XModel xModelToRestore );
+    void cancelActionWithUndo();
 
     /** give the current model to be put into the redo-stack
      */
-    void undo( [inout] ::com::sun::star::frame::XModel xCurrentModel );
+    void undo();
 
     /** give the current model to be put into the undo-stack
      */
-    void redo( [inout] ::com::sun::star::frame::XModel xCurrentModel );
+    void redo();
 
     /** @return <TRUE/> if the undo stack is not empty, i.e. a call to undo() will succeed
      */
