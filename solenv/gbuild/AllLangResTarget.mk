@@ -201,7 +201,7 @@ gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/default_images/
 $(call gb_ResTarget_get_clean_target,%) :
     $(call gb_Helper_announce,Cleaning up resource $* ...)
     $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(OUTDIR)/bin/$*.res $(call gb_ResTarget_get_target,$*))
+        rm -f $(call gb_ResTarget_get_target,$*) $(call gb_ResTarget_get_imagelist_target,$*) $(call gb_ResTarget_get_outdir_target,$*) $(call gb_ResTarget_get_outdir_imagelist_target,$*))
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCTARGET)
     $(call gb_Helper_announce,Building resource $@ ...)
@@ -211,7 +211,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
         RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
         echo "-r -p \
             -lg$(LANGUAGE) \
-            -fs=$(OUTDIR)/bin/$(LIBRARY)$(LANGUAGE).res \
+            -fs=$@ \
             -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE) \
             -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst \
             -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE) \
@@ -222,19 +222,25 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
             -subMODULE=$(gb_ResTarget_DEFIMAGESLOCATION) \
             -subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
             -oil=$(dir $(call gb_ResTarget_get_imagelist_target,$(1))) \
-            -ft=$@ \
             $(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
         $(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
         rm -f $${RESPONSEFILE})
+
+$(call gb_ResTarget_get_outdir_target,%) :
+    $(call gb_Helper_abbreviate_dirs,\
+        $(call gb_Shadow_deliver,$@,$<) && \
+        $(call gb_Shadow_deliver,$(ILSTTARGET),$(dir $<)/$(notdir $(ILSTTARGET))))
 
 define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
 $(call gb_ResTarget_get_target,$(1)) : LANGUAGE = $(3)
 $(call gb_ResTarget_get_target,$(1)) : RESLOCATION = $(2)
-$(call gb_AllLangResTarget_get_target,$(2)) : $(call gb_ResTarget_get_target,$(1))
+$(call gb_AllLangResTarget_get_target,$(2)) : $(call gb_ResTarget_get_outdir_target,$(1))
 $(call gb_AllLangResTarget_get_clean_target,$(2)) : $(call gb_ResTarget_get_clean_target,$(1))
 $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
 
+$(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1)) 
+$(call gb_ResTarget_get_outdir_target,$(1)) : ILSTTARGET = $(call gb_ResTarget_get_outdir_imagelist_target,$(1))
 endef
 
 define gb_ResTarget_add_file

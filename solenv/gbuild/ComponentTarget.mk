@@ -27,8 +27,8 @@
 
 gb_ComponentTarget_REPOS := $(gb_REPOS)
 
-gb_ComponentTarget_XLSTCOMMAND := xsltproc
-gb_ComponentTarget_XLSTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
+gb_ComponentTarget_XSLTCOMMAND := xsltproc
+gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
 # gb_ComponentTarget_PREFIXBASISNATIVE is set by the platform
@@ -37,9 +37,9 @@ define gb_ComponentTarget__command
 $(call gb_Helper_announce,Processing $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    $(gb_ComponentTarget_XLSTCOMMAND) --nonet --stringparam uri \
+    $(gb_ComponentTarget_XSLTCOMMAND) --nonet --stringparam uri \
         '$(gb_ComponentTarget_PREFIXBASISNATIVE)$(LIBFILENAME)' -o $(1) \
-        $(gb_ComponentTarget_XLSTCOMMANDFILE) $(2))
+        $(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 
 endef
 
@@ -49,7 +49,7 @@ $$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source
 
 $$(call gb_ComponentTarget_get_clean_target,%) :
     $$(call gb_Helper_announce,Cleaning component file $$*)
-    rm -f $$(call gb_ComponentTarget_get_target,$$*)
+    rm -f $$(call gb_ComponentTarget_get_outdir_target,$$*) $$(call gb_ComponentTarget_get_target,$$*)
 
 endef
 
@@ -58,8 +58,12 @@ $(foreach repo,$(gb_ComponentTarget_REPOS),$(eval $(call gb_ComponentTarget__rul
 $(call gb_ComponentTarget_get_target,%) :
     $(error unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS))
 
+$(call gb_ComponentTarget_get_external_target,%) :
+    $(call gb_Shadow_deliver,$@,$<)
+
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(2)
+$(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(1))
 
 endef
 

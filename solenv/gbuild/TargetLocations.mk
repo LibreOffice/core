@@ -25,7 +25,15 @@
 #
 #*************************************************************************
 
+
 # outdir target pattern
+
+gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
+gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
+gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc
+gb_PackagePart_get_target = $(OUTDIR)/$(1)
+gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
+gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 
 define gb_Library_get_target
 $(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_Library_TARGETS)):%,$(gb_Library_FILENAMES)))
@@ -35,28 +43,29 @@ define gb_StaticLibrary_get_target
 $(patsubst $(1):%,$(gb_StaticLibrary_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_StaticLibrary_TARGETS)):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
-gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
-gb_PackagePart_get_target = $(OUTDIR)/$(1)
-gb_Package_get_target = $(OUTDIR)/misc/Package/$(1)
-gb_Module_get_target = $(OUTDIR)/misc/Module/$(1)
-gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc
-
 
 # workdir target patterns
 
+gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
-gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
-gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
-gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
-
-define gb_LinkTarget_get_layer
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_LAYER)))
-endef
-
-define gb_Library_get_filename
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
-endef
+gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
+gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
+gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
+gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
+gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
+gb_Module_get_target = $(WORKDIR)/Module/$(1)
+gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
+gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
+gb_Package_get_target = $(WORKDIR)/Package/$(1)
+gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
+gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
+gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
+gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
+gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
+gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
+gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 
 define gb_Library_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
@@ -66,10 +75,6 @@ define gb_Library_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
 
-define gb_StaticLibrary_get_filename
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
-endef
-
 define gb_StaticLibrary_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/StaticLibrary/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
@@ -77,15 +82,6 @@ endef
 define gb_StaticLibrary_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
-
-gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
-gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
-gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
-gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
-gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
-gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
-gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
-gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 
 $(eval $(call gb_Helper_make_clean_targets,\
     LinkTarget \
@@ -118,19 +114,37 @@ $(eval $(call gb_Helper_make_dep_targets,\
     NoexPrecompiledHeader \
 ))
 
-gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
-gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+
+# other getters
+
 gb_Library_get_linktargetname = Library/$(1)
-gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
-gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
-gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/img/$(1).ilst
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
 
+define gb_LinkTarget_get_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_LAYER)))
+endef
+
+define gb_Library_get_filename
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
+endef
+
+define gb_StaticLibrary_get_filename
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
+endef
+
+
+# defined here so it is available early
 
 define gb_Module_register_target
 gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
 gb_Module_CLEANTARGETSTACK := $(2) $(gb_Module_CLEANTARGETSTACK)
 
 endef
+
+# static members declared here because they are used globally
+
+gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
+gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
+gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 
 # vim: set noet sw=4 ts=4:
