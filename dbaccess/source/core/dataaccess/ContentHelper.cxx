@@ -89,7 +89,7 @@ void SAL_CALL OContentHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // say our listeners goobye
+    // say goodbye to our listeners
     EventObject aEvt(*this);
     m_aContentListeners.disposeAndClear(aEvt);
 

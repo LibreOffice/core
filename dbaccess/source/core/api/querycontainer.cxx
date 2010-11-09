@@ -316,7 +316,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const Contain
 void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
-    {   // our "master container" (with the command definitions) is beeing disposed
+    {   // our "master container" (with the command definitions) is being disposed
         DBG_ERROR("OQueryContainer::disposing : nobody should dispose the CommandDefinition container before disposing my connection !");
         dispose();
     }

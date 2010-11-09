@@ -2678,8 +2678,8 @@ void ORowSet::checkUpdateIterator()
         m_pCache->setUpdateIterator(m_aCurrentRow);
         m_aCurrentRow = m_pCache->m_aInsertRow;
         m_bModified = sal_True;
-    } // if(!m_bModified && !m_bNew)
-    else if ( m_bNew ) // here we are modifing a value
+    }
+    else if ( m_bNew ) // here we are modifying a value
         m_bModified = sal_True;
 }
 
@@ -2756,9 +2756,6 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
     ::std::vector< ::rtl::OUString> aNames;
 
     ::rtl::OUString aDescription;
-    //  ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
-    //  Locale aLocale;
-    //  pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
     Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
 
     if ( rParent.m_pColumns )
@@ -2801,7 +2798,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
 
-        } // for(sal_Int32 i=1;pIter != pEnd ;++pIter,++i)
+        }
     }
     Reference<XDatabaseMetaData> xMeta = rParent.m_xActiveConnection->getMetaData();
     m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),

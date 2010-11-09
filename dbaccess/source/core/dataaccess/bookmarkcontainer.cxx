@@ -70,7 +70,7 @@ void OBookmarkContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
 
-    // say our listeners goobye
+    // say goodbye to our listeners
     EventObject aEvt(*this);
     m_aContainerListeners.disposeAndClear(aEvt);
 

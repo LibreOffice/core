@@ -219,7 +219,6 @@ namespace dbaccess
         if ( !m_bInChangingState && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
             m_bInChangingState = true;
-            //m_pDefinition->save(sal_False);
             m_bInChangingState = false;
         }
     }
@@ -1509,9 +1508,9 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
     bool bAllowDocumentMacros = !m_pImpl->m_pDataSource
                             ||  ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eSubDocumentMacros );
 
-    // if *any* of the objects of the database document already has macros, we continue to allow it
-    // to have them, until the user did a migration.
-    // If there are no macros, yet, we don't allow to create them
+    // if *any* of the objects of the database document already has macros, we
+    // continue to allow it to have them, until the user does a migration.
+    // If there are no macros, we don't allow them to be created.
 
     return bAllowDocumentMacros;
 }

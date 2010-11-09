@@ -203,7 +203,7 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
 }
 
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(sal_True),   // TODO: a meaningfull default
+    :m_bRemberPassword(sal_True),   // TODO: a meaningful default
     m_bCanSetUserName(sal_True)
 {
 }
@@ -220,7 +220,7 @@ void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& /*Re
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
 {
-    // we alwas allow this, even if the database document is read-only. In this case,
+    // we always allow this, even if the database document is read-only. In this case,
     // it's simply that the user cannot store the new user name.
     return m_bCanSetUserName;
 }
@@ -316,7 +316,7 @@ class OSharedConnectionManager : public OConnectionHelper_BASE
     typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
 
     ::osl::Mutex                m_aMutex;
-    TConnectionMap              m_aConnections;         // remeber the master connection in conjunction with the digest
+    TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
     TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
     Reference< XProxyFactory >  m_xProxyFactory;
 
@@ -876,9 +876,9 @@ namespace
         }
     };
 
-    /** sets a new set of property values at a given property bag instance
+    /** sets a new set of property values for a given property bag instance
 
-        The methods takes a property bag, and a sequence of property values to set at this bag.
+        The method takes a property bag, and a sequence of property values to set for this bag.
         Upon return, every property which is not part of the given sequence is
         <ul><li>removed from the bag, if it's a removeable property</li>
             <li><em>or</em>reset to its default value, if it's not a removeable property</li>
@@ -887,7 +887,7 @@ namespace
         @param  _rxPropertyBag
             the property bag to operate on
         @param  _rAllNewPropertyValues
-            the new property values to set at the bag
+            the new property values to set for the bag
     */
     void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyAccess >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
     {
@@ -920,7 +920,7 @@ namespace
                     continue;
 
                 // this property is not to be set, but currently exists in the bag.
-                // -> Remove, respectively default, it
+                // -> Remove it, or reset it to the default.
                 if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVEABLE ) != 0 )
                     xPropertyContainer->removeProperty( pExistentProperty->Name );
                 else
@@ -952,7 +952,7 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
                 break;
             case PROPERTY_ID_USER:
                 rValue >>= m_pImpl->m_sUser;
-                // if the user name changed, reset the password
+                // if the user name has changed, reset the password
                 m_pImpl->m_aPassword = ::rtl::OUString();
                 break;
             case PROPERTY_ID_PASSWORD:
@@ -1031,7 +1031,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
 
                     // transform them so that only property values which fulfill certain
-                    // criterions survive
+                    // criteria survive
                     Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
                     const PropertyValue* pCopyEnd = ::std::remove_copy_if(
                         aValues.getConstArray(),

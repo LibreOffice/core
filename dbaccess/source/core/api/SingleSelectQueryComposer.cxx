@@ -1314,7 +1314,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
 
         if(!aTable.getLength())
-        { // we don't found a table name, now we must search every table for this column
+        { // we haven't found a table name, now we must search every table for this column
             for(;pBegin != pEnd;++pBegin)
             {
                 Reference<XColumnsSupplier> xColumnsSupp;

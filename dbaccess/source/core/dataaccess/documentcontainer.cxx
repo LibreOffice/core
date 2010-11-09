@@ -186,7 +186,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     {
         MutexGuard aGuard(m_aMutex);
 
-        // extrat known arguments
+        // extract known arguments
         ::rtl::OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;

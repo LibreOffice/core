@@ -536,7 +536,7 @@ Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 void ODBTableDecorator::fillPrivileges() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::fillPrivileges" );
-    // somebody is asking for the privileges an we do not know them, yet
+    // somebody is asking for the privileges and we do not know them, yet
     m_nPrivileges = 0;
     try
     {

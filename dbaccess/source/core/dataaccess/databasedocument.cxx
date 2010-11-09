@@ -1711,7 +1711,7 @@ void ODatabaseDocument::disposing()
     // the security warning, again.
     m_pImpl->resetMacroExecutionMode();
 
-    // similar argueing for our ViewMonitor
+    // similar arguing for our ViewMonitor
     m_aViewMonitor.reset();
 
     // tell our Impl to forget us

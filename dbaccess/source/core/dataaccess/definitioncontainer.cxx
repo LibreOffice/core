@@ -530,7 +530,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( _rName );
         if ( aFind == rDefinitions.end() )
         {
-            // ensure that the new object thas the proper name.
+            // ensure that the new object has the proper name.
             // Somebody could create an object with name "foo", and insert it as "bar"
             // into a container. In this case, we need to ensure that the object name
             // is also "bar"

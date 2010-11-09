@@ -608,7 +608,7 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) 
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    // it is possible to save some time her when we remember the names - position relation in a map
+    // it is possible to save some time here when we remember the names - position relation in a map
     return m_pColumns ? m_pColumns->findColumn(columnName) : sal_Int32(0);
 }
 
