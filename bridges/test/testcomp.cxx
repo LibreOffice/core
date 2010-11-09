@@ -685,7 +685,7 @@ void testRemote( const Reference< XInterface > &rRemote )
       //--------------------
       // Test attributes
       //----------------------
-       OUString ow = OUString::createFromAscii( "dum didel dum dideldei" );
+       OUString ow( RTL_CONSTASCII_USTRINGPARAM( "dum didel dum dideldei" ));
        rLCallMe->setsAttribute( ow );
        OSL_ASSERT( rLCallMe->getsAttribute() == ow );
 
