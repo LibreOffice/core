@@ -303,10 +303,6 @@ public:
     void            DoHardRecalc( BOOL bApi );
 
     bool            CheckPrint( ScMarkData* pMarkData, bool bForceSelected, bool bIsAPI );
-    void            PreparePrint( ScMarkData* pMarkData );
-    void            Print( SfxProgress& rProgress,
-                            ScMarkData* pMarkData, Window* pDialogParent,
-                            BOOL bForceSelected, BOOL bIsAPI );
 
     void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
     BOOL            IsOle();

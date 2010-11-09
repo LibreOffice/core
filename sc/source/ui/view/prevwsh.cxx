@@ -495,65 +495,6 @@ SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     return 0;
 }
 
-void __EXPORT ScPreviewShell::PreparePrint()
-{
-    SfxViewShell::PreparePrint();
-
-    ScMarkData aMarkData;
-    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
-    pDocShell->PreparePrint(&aMarkData );
-}
-
-ErrCode ScPreviewShell::DoPrint( SfxPrinter *pPrinter, BOOL bSilent, BOOL bIsAPI )
-{
-    ErrCode nRet = ERRCODE_IO_ABORT;
-
-    ScMarkData aMarkData;
-    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
-
-    if ( pDocShell->CheckPrint( &aMarkData, false, bIsAPI ) )
-    {
-        // SfxViewShell::DoPrint calls Print (after StartJob etc.)
-        nRet = SfxViewShell::DoPrint( pPrinter, bSilent, bIsAPI );
-    }
-
-    return nRet;
-}
-
-USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI )
-{
-    pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
-
-    // get the list of affected sheets before SfxViewShell::Print
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
-
-    ScMarkData aMarkData;
-    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
-
-    uno::Sequence< sal_Int32 > aSheets;
-    SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-    sal_Int32 nPrinted = 0;
-    for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
-    {
-        if ( bAllTabs || aMarkData.GetTableSelect( nTab ) )
-        {
-            aSheets.realloc( nPrinted + 1 );
-            aSheets[nPrinted] = nTab;
-            ++nPrinted;
-        }
-    }
-
-    uno::Sequence < beans::PropertyValue > aProps(1);
-    aProps[0].Name = ::rtl::OUString::createFromAscii( "PrintSheets" );
-    aProps[0].Value <<= aSheets;
-    SetAdditionalPrintOptions( aProps );
-
-    SfxViewShell::Print( rProgress, bIsAPI );
-    pDocShell->Print( rProgress, &aMarkData, pPreview, FALSE, bIsAPI );
-
-    return 0;
-}
-
 //------------------------------------------------------------------------
 
 void __EXPORT ScPreviewShell::Activate(BOOL bMDI)

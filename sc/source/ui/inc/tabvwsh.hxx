@@ -370,10 +370,6 @@ public:
                                           USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    virtual void            PreparePrint();
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter,
-                                         BOOL bSilent, BOOL bIsAPI );
-    virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI );
 
     void            ConnectObject( SdrOle2Obj* pObj );
     BOOL            ActivateObject( SdrOle2Obj* pObj, long nVerb );
