@@ -198,9 +198,9 @@ namespace framework
         }
 
         // SfxUndoListener
-        virtual void actionUndone( SfxUndoAction& i_action );
-        virtual void actionRedone( SfxUndoAction& i_action );
-        virtual void undoActionAdded( SfxUndoAction& i_action );
+        virtual void actionUndone( const String& i_actionComment );
+        virtual void actionRedone( const String& i_actionComment );
+        virtual void undoActionAdded( const String& i_actionComment );
         virtual void cleared();
         virtual void clearedRedo();
         virtual void listActionEntered( const String& i_comment );
@@ -349,30 +349,30 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::actionUndone( SfxUndoAction& i_action )
+    void UndoManagerHelper_Impl::actionUndone( const String& i_actionComment )
     {
         if ( bAPIActionRunning )
             return;
 
-        notify( i_action.GetComment(), &XUndoManagerListener::actionUndone );
+        notify( i_actionComment, &XUndoManagerListener::actionUndone );
     }
 
      //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::actionRedone( SfxUndoAction& i_action )
+    void UndoManagerHelper_Impl::actionRedone( const String& i_actionComment )
     {
         if ( bAPIActionRunning )
             return;
 
-        notify( i_action.GetComment(), &XUndoManagerListener::actionRedone );
+        notify( i_actionComment, &XUndoManagerListener::actionRedone );
     }
 
      //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::undoActionAdded( SfxUndoAction& i_action )
+    void UndoManagerHelper_Impl::undoActionAdded( const String& i_actionComment )
     {
         if ( bAPIActionRunning )
             return;
 
-        notify( i_action.GetComment(), &XUndoManagerListener::undoActionAdded );
+        notify( i_actionComment, &XUndoManagerListener::undoActionAdded );
     }
 
      //------------------------------------------------------------------------------------------------------------------
