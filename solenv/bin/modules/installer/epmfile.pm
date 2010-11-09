@@ -2446,6 +2446,56 @@ sub create_packages_without_epm
             $infoline = "Success: Executed \"$systemcall\" successfully!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
+
+
+        ######################
+        # making pkg files
+        ######################
+
+        # my $streamname = $packagename . ".pkg";
+        # $systemcall = "pkgtrans $destinationdir $streamname $packagename";
+        # print "... $systemcall ...\n";
+
+        # $returnvalue = system($systemcall);
+
+        # $infoline = "Systemcall: $systemcall\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+
+        # if ($returnvalue)
+        # {
+        # $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+        # }
+        # else
+        # {
+        # $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+        # }
+
+        #########################
+        # making tar.gz files
+        #########################
+
+        # my $targzname = $packagename . ".tar.gz";
+        # $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
+        # print "... $systemcall ...\n";
+
+        # $returnvalue = system($systemcall);
+
+        # $infoline = "Systemcall: $systemcall\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+
+        # if ($returnvalue)
+        # {
+        # $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+        # }
+        # else
+        # {
+        # $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+        # }
+
     }
 
     # Linux: rpm -bb so8m35.spec    ( -> dependency check abklemmen? )

@@ -524,6 +524,8 @@ sub insert_into_config_file
 
     if (( $styles =~ /\bCREATE\b/ ) && (!($isbracketnode)))
     {
+        # $typepart is 'oor:type="xs:VALUETYPE"';
+        # VALUETYPE can be "string", "boolean", ...
         my $localtypepart = $typepart;
         $localtypepart =~ s/VALUETYPE/$valuetype/;
 
