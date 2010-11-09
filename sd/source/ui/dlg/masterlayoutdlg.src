@@ -31,6 +31,7 @@
 
 ModalDialog RID_SD_DLG_MASTER_LAYOUT
 {
+    HelpID = "sd:ModalDialog:RID_SD_DLG_MASTER_LAYOUT";
     Size = MAP_APPFONT( 89 , 92 );
     OutputSize = TRUE;
     SVLook   = TRUE;
@@ -46,6 +47,7 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
 
     CheckBox CB_HEADER
     {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_HEADER";
         Pos = MAP_APPFONT( 6, 16 );
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
@@ -55,6 +57,7 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
 
     CheckBox CB_DATE
     {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_DATE";
         Pos = MAP_APPFONT( 6, 29 );
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
@@ -64,6 +67,7 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
 
     CheckBox CB_FOOTER
     {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_FOOTER";
         Pos = MAP_APPFONT( 6, 42 );
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
@@ -73,6 +77,7 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
 
     CheckBox CB_PAGE_NUMBER
     {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_PAGE_NUMBER";
         Pos = MAP_APPFONT( 6, 55 );
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
