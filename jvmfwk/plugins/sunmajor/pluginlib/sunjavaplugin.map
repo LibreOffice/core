@@ -6,3 +6,8 @@ UDK_3_0_0 {
     local:
     *;
 };
+
+UDK_3.1 { # OOo 3.3
+    global:
+    jfw_plugin_existJRE;
+} UDK_3_0_0;

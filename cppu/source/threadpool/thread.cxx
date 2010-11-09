@@ -31,6 +31,8 @@
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
 
+#include <rtl/instance.hxx>
+
 #include "thread.hxx"
 #include "jobqueue.hxx"
 #include "threadpool.hxx"
@@ -98,20 +100,17 @@ namespace cppu_threadpool {
         } while( pCurrent );
     }
 
-    ThreadAdmin* ThreadAdmin::getInstance()
+    struct theThreadAdmin : public rtl::StaticWithInit< ThreadAdminHolder, theThreadAdmin >
     {
-        static ThreadAdmin *pThreadAdmin = 0;
-        if( ! pThreadAdmin )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pThreadAdmin )
-            {
-                static ThreadAdmin admin;
-                pThreadAdmin = &admin;
-            }
+        ThreadAdminHolder operator () () {
+            ThreadAdminHolder aRet(new ThreadAdmin());
+            return aRet;
         }
-        return pThreadAdmin;
+    };
 
+    ThreadAdminHolder& ThreadAdmin::getInstance()
+    {
+        return theThreadAdmin::get();
     }
 
 // ----------------------------------------------------------------------------------
@@ -119,12 +118,13 @@ namespace cppu_threadpool {
                                     const ByteSequence &aThreadId,
                                     sal_Bool bAsynchron )
         : m_thread( 0 )
+        , m_aThreadAdmin( ThreadAdmin::getInstance() )
         , m_pQueue( pQueue )
         , m_aThreadId( aThreadId )
         , m_bAsynchron( bAsynchron )
         , m_bDeleteSelf( sal_True )
     {
-        ThreadAdmin::getInstance()->add( this );
+        m_aThreadAdmin->add( this );
     }
 
 
@@ -166,7 +166,7 @@ namespace cppu_threadpool {
 
     void ORequestThread::onTerminated()
     {
-        ThreadAdmin::getInstance()->remove( this );
+        m_aThreadAdmin->remove( this );
         if( m_bDeleteSelf )
         {
             delete this;
@@ -175,6 +175,8 @@ namespace cppu_threadpool {
 
     void ORequestThread::run()
     {
+        ThreadPoolHolder theThreadPool = cppu_threadpool::ThreadPool::getInstance();
+
         while ( m_pQueue )
         {
             if( ! m_bAsynchron )
@@ -197,7 +199,7 @@ namespace cppu_threadpool {
 
                 if( m_pQueue->isEmpty() )
                 {
-                    ThreadPool::getInstance()->revokeQueue( m_aThreadId , m_bAsynchron );
+                    theThreadPool->revokeQueue( m_aThreadId , m_bAsynchron );
                     // Note : revokeQueue might have failed because m_pQueue.isEmpty()
                     //        may be false (race).
                 }
@@ -211,7 +213,7 @@ namespace cppu_threadpool {
                 uno_releaseIdFromCurrentThread();
             }
 
-            cppu_threadpool::ThreadPool::getInstance()->waitInPool( this );
+            theThreadPool->waitInPool( this );
         }
     }
 }
