@@ -30,9 +30,18 @@ COM := GCC
 
 gb_MKTEMP := mktemp -p
 
+gb_CC := gcc
+gb_CXX := g++
+gb_GCCP := gcc
+
+# use CC/CXX if they are nondefaults
+ifneq ($(origin CC),default)
 gb_CC := $(CC)
-gb_CXX := $(CXX)
 gb_GCCP := $(CC)
+endif
+ifneq ($(origin CXX),default)
+gb_CXX := $(CXX)
+endif
 
 gb_OSDEFS := \
     -DLINUX \
