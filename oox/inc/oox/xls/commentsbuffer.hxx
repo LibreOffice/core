@@ -56,7 +56,7 @@ public:
     /** Imports a cell comment from the passed attributes of the comment element. */
     void                importComment( const AttributeList& rAttribs );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
-    void                importComment( RecordInputStream& rStrm );
+    void                importComment( SequenceInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
     RichStringRef       createText();

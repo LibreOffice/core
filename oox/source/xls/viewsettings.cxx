@@ -39,7 +39,6 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
@@ -289,7 +288,7 @@ void SheetViewSettings::importChartSheetView( const AttributeList& rAttribs )
     rModel.mbZoomToFit      = rAttribs.getBool( XML_zoomToFit, false );
 }
 
-void SheetViewSettings::importSheetView( RecordInputStream& rStrm )
+void SheetViewSettings::importSheetView( SequenceInputStream& rStrm )
 {
     SheetViewModel& rModel = *createSheetView();
     sal_uInt16 nFlags;
@@ -316,7 +315,7 @@ void SheetViewSettings::importSheetView( RecordInputStream& rStrm )
     rModel.mbShowOutline  = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWOUTLINE );
 }
 
-void SheetViewSettings::importPane( RecordInputStream& rStrm )
+void SheetViewSettings::importPane( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importPane - missing sheet view model" );
     if( !maSheetViews.empty() )
@@ -334,7 +333,7 @@ void SheetViewSettings::importPane( RecordInputStream& rStrm )
     }
 }
 
-void SheetViewSettings::importSelection( RecordInputStream& rStrm )
+void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
     if( !maSheetViews.empty() )
@@ -354,7 +353,7 @@ void SheetViewSettings::importSelection( RecordInputStream& rStrm )
     }
 }
 
-void SheetViewSettings::importChartSheetView( RecordInputStream& rStrm )
+void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
 {
     SheetViewModel& rModel = *createSheetView();
     sal_uInt16 nFlags;
@@ -649,7 +648,7 @@ void ViewSettings::importOleSize( const AttributeList& rAttribs )
     mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aRange, 0, true, false );
 }
 
-void ViewSettings::importWorkbookView( RecordInputStream& rStrm )
+void ViewSettings::importWorkbookView( SequenceInputStream& rStrm )
 {
     WorkbookViewModel& rModel = createWorkbookView();
     sal_uInt8 nFlags;
@@ -661,7 +660,7 @@ void ViewSettings::importWorkbookView( RecordInputStream& rStrm )
     rModel.mbMinimized     = getFlag( nFlags, BIFF12_WBVIEW_MINIMIZED );
 }
 
-void ViewSettings::importOleSize( RecordInputStream& rStrm )
+void ViewSettings::importOleSize( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;

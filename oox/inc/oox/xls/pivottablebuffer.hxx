@@ -29,7 +29,6 @@
 #define OOX_XLS_PIVOTTABLEBUFFER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 
@@ -145,13 +144,13 @@ public:
     void                importReferenceItem( const AttributeList& rAttribs );
 
     /** Imports pivot field settings from the PTFIELD record. */
-    void                importPTField( RecordInputStream& rStrm );
+    void                importPTField( SequenceInputStream& rStrm );
     /** Imports settings of an item in this pivot field from the PTFITEM record. */
-    void                importPTFItem( RecordInputStream& rStrm );
+    void                importPTFItem( SequenceInputStream& rStrm );
     /** Imports pivot field reference settings from the PTREFERENCE record. */
-    void                importPTReference( RecordInputStream& rStrm );
+    void                importPTReference( SequenceInputStream& rStrm );
     /** Imports pivot field item reference settings from the PTREFERENCEITEM record. */
-    void                importPTReferenceItem( RecordInputStream& rStrm );
+    void                importPTReferenceItem( SequenceInputStream& rStrm );
 
     /** Imports pivot field settings from the PTFIELD and following records. */
     void                importPTField( BiffInputStream& rStrm );
@@ -235,9 +234,9 @@ public:
     void                importTop10( const AttributeList& rAttribs );
 
     /** Reads the settings of a field filter from the PTFILTER record. */
-    void                importPTFilter( RecordInputStream& rStrm );
+    void                importPTFilter( SequenceInputStream& rStrm );
     /** Reads additional settings of a field filter from the TOP10FILTER record. */
-    void                importTop10Filter( RecordInputStream& rStrm );
+    void                importTop10Filter( SequenceInputStream& rStrm );
 
     /** Applies the filter to the associated pivot table field if possible. */
     void                finalizeImport();
@@ -334,17 +333,17 @@ public:
     void                importDataField( const AttributeList& rAttribs );
 
     /** Reads global pivot table settings from the PTDEFINITION record. */
-    void                importPTDefinition( RecordInputStream& rStrm );
+    void                importPTDefinition( SequenceInputStream& rStrm );
     /** Reads the location of the pivot table from the PTLOCATION record. */
-    void                importPTLocation( RecordInputStream& rStrm, sal_Int16 nSheet );
+    void                importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet );
     /** Reads the indexes of all fields located in the row dimension from a PTROWFIELDS record. */
-    void                importPTRowFields( RecordInputStream& rStrm );
+    void                importPTRowFields( SequenceInputStream& rStrm );
     /** Reads the indexes of all fields located in the column dimension from a PTCOLFIELDS record. */
-    void                importPTColFields( RecordInputStream& rStrm );
+    void                importPTColFields( SequenceInputStream& rStrm );
     /** Reads the settings of a field located in the page dimension from the PTPAGEFIELD record. */
-    void                importPTPageField( RecordInputStream& rStrm );
+    void                importPTPageField( SequenceInputStream& rStrm );
     /** Reads the settings of a field located in the data dimension from the PTDATAFIELD record. */
-    void                importPTDataField( RecordInputStream& rStrm );
+    void                importPTDataField( SequenceInputStream& rStrm );
 
     /** Reads global pivot table settings from the PTDEFINITION record. */
     void                importPTDefinition( BiffInputStream& rStrm, sal_Int16 nSheet );
@@ -404,7 +403,7 @@ private:
     /** Reads a field index for the row or column dimension. */
     static void         importField( IndexVector& orFields, const AttributeList& rAttribs );
     /** Reads an array of field indexes for the row or column dimension. */
-    static void         importFields( IndexVector& orFields, RecordInputStream& rStrm );
+    static void         importFields( IndexVector& orFields, SequenceInputStream& rStrm );
     /** Reads an array of field indexes for the row or column dimension. */
     static void         importFields( IndexVector& orFields, BiffInputStream& rStrm, sal_Int32 nCount );
 

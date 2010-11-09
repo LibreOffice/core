@@ -29,6 +29,7 @@
 #define OOX_XLS_AUTOFILTERBUFFER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -68,7 +69,7 @@ public:
     /** Derived classes import filter settings from the passed attribute list. */
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Derived classes import filter settings from the passed record. */
-    virtual void        importRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     /** Derived classes import filter settings from the FILTERCOLUMN record. */
     virtual void        importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags );
 
@@ -91,7 +92,7 @@ public:
     /** Imports filter settings from the filters and filter elements. */
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports filter settings from the FILTERS and FILTER records. */
-    virtual void        importRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     /** Returns converted UNO API filter settings representing all filter settings. */
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );
@@ -115,7 +116,7 @@ public:
     /** Imports filter settings from the filters and filter elements. */
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports filter settings from the FILTERS and FILTER records. */
-    virtual void        importRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     /** Imports filter settings from the FILTERCOLUMN record. */
     virtual void        importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags );
 
@@ -144,7 +145,7 @@ struct FilterCriterionModel
     void                setBiffOperator( sal_uInt8 nOperator );
 
     /** Imports the criterion model from the passed BIFF12 stream. */
-    void                readBiffData( RecordInputStream& rStrm );
+    void                readBiffData( SequenceInputStream& rStrm );
     /** Imports the initial criterion data from the passed BIFF5/BIFF8 stream. */
     void                readBiffData( BiffInputStream& rStrm );
     /** Imports the trailing string data from the passed BIFF5/BIFF8 stream. */
@@ -164,7 +165,7 @@ public:
     /** Imports filter settings from the filters and filter elements. */
     virtual void        importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports filter settings from the FILTERS and FILTER records. */
-    virtual void        importRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     /** Imports filter settings from the FILTERCOLUMN record. */
     virtual void        importBiffRecord( BiffInputStream& rStrm, sal_uInt16 nFlags );
 
@@ -195,7 +196,7 @@ public:
     /** Imports auto filter column settings from the filterColumn element. */
     void                importFilterColumn( const AttributeList& rAttribs );
     /** Imports auto filter column settings from the FILTERCOLUMN record. */
-    void                importFilterColumn( RecordInputStream& rStrm );
+    void                importFilterColumn( SequenceInputStream& rStrm );
     /** Imports auto filter column settings from the FILTERCOLUMN record. */
     void                importFilterColumn( BiffInputStream& rStrm );
 
@@ -228,10 +229,10 @@ public:
     /** Imports auto filter settings from the autoFilter element. */
     void                importAutoFilter( const AttributeList& rAttribs, sal_Int16 nSheet );
     /** Imports auto filter settings from the AUTOFILTER record. */
-    void                importAutoFilter( RecordInputStream& rStrm, sal_Int16 nSheet );
+    void                importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet );
 
     /** Creates a new auto filter column and stores it internally. */
-    FilterColumn&   createFilterColumn();
+    FilterColumn&       createFilterColumn();
 
     /** Applies the filter to the passed filter descriptor. */
     void                finalizeImport( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetFilterDescriptor2 >& rxFilterDesc );

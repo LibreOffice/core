@@ -35,8 +35,8 @@
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
@@ -197,7 +197,7 @@ void FilterSettingsBase::importAttribs( sal_Int32 /*nElement*/, const AttributeL
 {
 }
 
-void FilterSettingsBase::importRecord( sal_Int32 /*nRecId*/, RecordInputStream& /*rStrm*/ )
+void FilterSettingsBase::importRecord( sal_Int32 /*nRecId*/, SequenceInputStream& /*rStrm*/ )
 {
 }
 
@@ -238,7 +238,7 @@ void DiscreteFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAt
     }
 }
 
-void DiscreteFilter::importRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
+void DiscreteFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( nRecId )
     {
@@ -257,7 +257,7 @@ void DiscreteFilter::importRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
 
         case BIFF12_ID_DISCRETEFILTER:
         {
-            OUString aValue = rStrm.readString();
+            OUString aValue = BiffHelper::readString( rStrm );
             if( aValue.getLength() > 0 )
                 maValues.push_back( aValue );
         }
@@ -308,7 +308,7 @@ void Top10Filter::importAttribs( sal_Int32 nElement, const AttributeList& rAttri
     }
 }
 
-void Top10Filter::importRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
+void Top10Filter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     if( nRecId == BIFF12_ID_TOP10FILTER )
     {
@@ -352,7 +352,7 @@ void FilterCriterionModel::setBiffOperator( sal_uInt8 nOperator )
     mnOperator = STATIC_ARRAY_SELECT( spnOperators, nOperator, XML_TOKEN_INVALID );
 }
 
-void FilterCriterionModel::readBiffData( RecordInputStream& rStrm )
+void FilterCriterionModel::readBiffData( SequenceInputStream& rStrm )
 {
     sal_uInt8 nOperator;
     rStrm >> mnDataType >> nOperator;
@@ -366,7 +366,7 @@ void FilterCriterionModel::readBiffData( RecordInputStream& rStrm )
         case BIFF_FILTER_DATATYPE_STRING:
         {
             rStrm.skip( 8 );
-            OUString aValue = rStrm.readString().trim();
+            OUString aValue = BiffHelper::readString( rStrm ).trim();
             if( aValue.getLength() > 0 )
                 maValue <<= aValue;
         }
@@ -485,7 +485,7 @@ void CustomFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAttr
     }
 }
 
-void CustomFilter::importRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
+void CustomFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( nRecId )
     {
@@ -606,7 +606,7 @@ void FilterColumn::importFilterColumn( const AttributeList& rAttribs )
     mbShowButton = rAttribs.getBool( XML_showButton, true );
 }
 
-void FilterColumn::importFilterColumn( RecordInputStream& rStrm )
+void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> mnColId >> nFlags;
@@ -654,7 +654,7 @@ void AutoFilter::importAutoFilter( const AttributeList& rAttribs, sal_Int16 nShe
     getAddressConverter().convertToCellRangeUnchecked( maRange, aRangeStr, nSheet );
 }
 
-void AutoFilter::importAutoFilter( RecordInputStream& rStrm, sal_Int16 nSheet )
+void AutoFilter::importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;

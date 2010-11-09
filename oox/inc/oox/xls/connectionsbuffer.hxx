@@ -28,6 +28,7 @@
 #ifndef OOX_XLS_CONNECTIONSBUFFER_HXX
 #define OOX_XLS_CONNECTIONSBUFFER_HXX
 
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace oox {
@@ -120,13 +121,13 @@ public:
     void                importTable( const AttributeList& rAttribs, sal_Int32 nElement );
 
     /** Imports connection settings from the CONNECTION record. */
-    void                importConnection( RecordInputStream& rStrm );
+    void                importConnection( SequenceInputStream& rStrm );
     /** Imports web query settings from the WEBPR record. */
-    void                importWebPr( RecordInputStream& rStrm );
+    void                importWebPr( SequenceInputStream& rStrm );
     /** Imports web query table settings from the WEBPRTABLES record. */
-    void                importWebPrTables( RecordInputStream& rStrm );
+    void                importWebPrTables( SequenceInputStream& rStrm );
     /** Imports a web query table identifier from the PCITEM_MISSING, PCITEM_STRING, or PCITEM_INDEX record. */
-    void                importWebPrTable( RecordInputStream& rStrm, sal_Int32 nRecId );
+    void                importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId );
 
     /** Imports connection settings from the DBQUERY record. */
     void                importDbQuery( BiffInputStream& rStrm );

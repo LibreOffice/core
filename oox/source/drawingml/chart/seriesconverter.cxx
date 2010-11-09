@@ -39,6 +39,7 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
+#include "oox/helper/containerhelper.hxx"
 
 namespace oox {
 namespace drawingml {

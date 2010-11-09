@@ -30,7 +30,6 @@
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulaparser.hxx"
@@ -112,7 +111,7 @@ void SharedFormulaBuffer::importSharedFmla( const OUString& rFormula, const OUSt
     }
 }
 
-void SharedFormulaBuffer::importSharedFmla( RecordInputStream& rStrm, const CellAddress& rBaseAddr )
+void SharedFormulaBuffer::importSharedFmla( SequenceInputStream& rStrm, const CellAddress& rBaseAddr )
 {
     BinRange aRange;
     rStrm >> aRange;

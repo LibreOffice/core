@@ -28,7 +28,6 @@
 #include "oox/xls/connectionsbuffer.hxx"
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
 namespace oox {
@@ -285,7 +284,7 @@ void Connection::importTable( const AttributeList& rAttribs, sal_Int32 nElement 
     }
 }
 
-void Connection::importConnection( RecordInputStream& rStrm )
+void Connection::importConnection( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags, nStrFlags;
     sal_uInt8 nSavePassword, nCredentials;
@@ -319,7 +318,7 @@ void Connection::importConnection( RecordInputStream& rStrm )
     maModel.mbSavePassword    = nSavePassword == BIFF12_CONNECTION_SAVEPASSWORD_ON;
 }
 
-void Connection::importWebPr( RecordInputStream& rStrm )
+void Connection::importWebPr( SequenceInputStream& rStrm )
 {
     WebPrModel& rWebPr = maModel.createWebPr();
 
@@ -348,7 +347,7 @@ void Connection::importWebPr( RecordInputStream& rStrm )
     rWebPr.mbHtmlTables      = getFlag( nFlags, BIFF12_WEBPR_HTMLTABLES );
 }
 
-void Connection::importWebPrTables( RecordInputStream& /*rStrm*/ )
+void Connection::importWebPrTables( SequenceInputStream& /*rStrm*/ )
 {
     if( maModel.mxWebPr.get() )
     {
@@ -357,16 +356,16 @@ void Connection::importWebPrTables( RecordInputStream& /*rStrm*/ )
     }
 }
 
-void Connection::importWebPrTable( RecordInputStream& rStrm, sal_Int32 nRecId )
+void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId )
 {
     if( maModel.mxWebPr.get() )
     {
         Any aTableAny;
         switch( nRecId )
         {
-            case BIFF12_ID_PCITEM_MISSING:                                      break;
-            case BIFF12_ID_PCITEM_STRING:   aTableAny <<= rStrm.readString();   break;
-            case BIFF12_ID_PCITEM_INDEX:    aTableAny <<= rStrm.readInt32();    break;
+            case BIFF12_ID_PCITEM_MISSING:                                                  break;
+            case BIFF12_ID_PCITEM_STRING:   aTableAny <<= BiffHelper::readString( rStrm );  break;
+            case BIFF12_ID_PCITEM_INDEX:    aTableAny <<= rStrm.readInt32();                break;
             default:
                 OSL_ENSURE( false, "Connection::importWebPrTable - unexpected record" );
                 return;

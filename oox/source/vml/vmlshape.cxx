@@ -36,6 +36,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"

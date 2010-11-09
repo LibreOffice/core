@@ -30,7 +30,6 @@
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/token/tokens.hxx"
 
 namespace oox {
@@ -89,8 +88,9 @@ TokenMap::~TokenMap()
 
 OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
 {
-    const TokenName* pTokenName = ContainerHelper::getVectorElement( maTokenNames, nToken );
-    return pTokenName ? pTokenName->maUniName : OUString();
+    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
+        return maTokenNames[ static_cast< size_t >( nToken ) ].maUniName;
+    return OUString();
 }
 
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
@@ -102,8 +102,9 @@ sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 
 Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 {
-    const TokenName* pTokenName = ContainerHelper::getVectorElement( maTokenNames, nToken );
-    return pTokenName ? pTokenName->maUtf8Name : Sequence< sal_Int8 >();
+    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
+        return maTokenNames[ static_cast< size_t >( nToken ) ].maUtf8Name;
+    return Sequence< sal_Int8 >();
 }
 
 sal_Int32 TokenMap::getTokenFromUtf8( const Sequence< sal_Int8 >& rUtf8Name ) const

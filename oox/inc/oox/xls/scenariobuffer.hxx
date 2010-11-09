@@ -29,7 +29,8 @@
 #define OOX_XLS_SCENARIOBUFFER_HXX
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/refmap.hxx"
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace oox {
@@ -73,9 +74,9 @@ public:
     void                importInputCells( const AttributeList& rAttribs );
 
     /** Imports a scenario definition from a SCENARIO record. */
-    void                importScenario( RecordInputStream& rStrm );
+    void                importScenario( SequenceInputStream& rStrm );
     /** Imports a new cell for this scenario from a INPUTCELLS record. */
-    void                importInputCells( RecordInputStream& rStrm );
+    void                importInputCells( SequenceInputStream& rStrm );
 
     /** Imports a scenario definition from a SCENARIO record. */
     void                importScenario( BiffInputStream& rStrm );
@@ -111,7 +112,7 @@ public:
     /** Imports sheet scenario settings from a scenarios element. */
     void                importScenarios( const AttributeList& rAttribs );
     /** Imports sheet scenario settings from a SCENARIOS record. */
-    void                importScenarios( RecordInputStream& rStrm );
+    void                importScenarios( SequenceInputStream& rStrm );
     /** Imports sheet scenario settings from a SCENARIOS record. */
     void                importScenarios( BiffInputStream& rStrm );
 

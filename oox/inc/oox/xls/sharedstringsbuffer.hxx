@@ -28,7 +28,6 @@
 #ifndef OOX_XLS_SHAREDSTRINGSBUFFER_HXX
 #define OOX_XLS_SHAREDSTRINGSBUFFER_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/richstring.hxx"
 
 namespace oox {

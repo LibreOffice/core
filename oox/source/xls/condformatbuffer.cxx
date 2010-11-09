@@ -43,8 +43,8 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/stylesbuffer.hxx"
@@ -199,7 +199,7 @@ void CondFormatRule::appendFormula( const OUString& rFormula )
     maModel.maFormulas.push_back( aContext );
 }
 
-void CondFormatRule::importCfRule( RecordInputStream& rStrm )
+void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
 {
     sal_Int32 nType, nSubType, nOperator, nFmla1Size, nFmla2Size, nFmla3Size;
     sal_uInt16 nFlags;
@@ -647,7 +647,7 @@ CondFormatRuleRef CondFormat::importCfRule( const AttributeList& rAttribs )
     return xRule;
 }
 
-void CondFormat::importCondFormatting( RecordInputStream& rStrm )
+void CondFormat::importCondFormatting( SequenceInputStream& rStrm )
 {
     BinRangeList aRanges;
     rStrm.skip( 8 );
@@ -655,7 +655,7 @@ void CondFormat::importCondFormatting( RecordInputStream& rStrm )
     getAddressConverter().convertToCellRangeList( maModel.maRanges, aRanges, getSheetIndex(), true );
 }
 
-void CondFormat::importCfRule( RecordInputStream& rStrm )
+void CondFormat::importCfRule( SequenceInputStream& rStrm )
 {
     CondFormatRuleRef xRule = createRule();
     xRule->importCfRule( rStrm );
@@ -725,7 +725,7 @@ CondFormatRef CondFormatBuffer::importConditionalFormatting( const AttributeList
     return xCondFmt;
 }
 
-CondFormatRef CondFormatBuffer::importCondFormatting( RecordInputStream& rStrm )
+CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )
 {
     CondFormatRef xCondFmt = createCondFormat();
     xCondFmt->importCondFormatting( rStrm );

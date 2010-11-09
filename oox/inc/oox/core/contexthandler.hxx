@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }
 } } }
 
-namespace oox { class RecordInputStream; }
+namespace oox { class SequenceInputStream; }
 
 namespace oox {
 namespace core {
@@ -93,8 +93,8 @@ public:
 
     // record context interface -----------------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        startRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        endRecord( sal_Int32 nRecId );
 
 protected:

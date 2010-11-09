@@ -45,13 +45,13 @@ protected:
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
 private:
     /** Imports the dataValidation element containing data validation settings. */
     void                importDataValidation( const AttributeList& rAttribs );
     /** Imports the DATAVALIDATION record containing data validation settings. */
-    void                importDataValidation( RecordInputStream& rStrm );
+    void                importDataValidation( SequenceInputStream& rStrm );
 
 private:
     ::std::auto_ptr< ValidationModel > mxValModel;
@@ -73,7 +73,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        initializeImport();
@@ -104,25 +104,25 @@ private:
     void                importControl( const AttributeList& rAttribs );
 
     /** Imports the DIMENSION record containing the used area of the sheet. */
-    void                importDimension( RecordInputStream& rStrm );
+    void                importDimension( SequenceInputStream& rStrm );
     /** Imports sheet format properties from a SHEETFORMATPR record. */
-    void                importSheetFormatPr( RecordInputStream& rStrm );
+    void                importSheetFormatPr( SequenceInputStream& rStrm );
     /** Imports column settings from a COL record. */
-    void                importCol( RecordInputStream& rStrm );
+    void                importCol( SequenceInputStream& rStrm );
     /** Imports a merged cell range from a MERGECELL record. */
-    void                importMergeCell( RecordInputStream& rStrm );
+    void                importMergeCell( SequenceInputStream& rStrm );
     /** Imports a hyperlink for a cell range from a HYPERLINK record. */
-    void                importHyperlink( RecordInputStream& rStrm );
+    void                importHyperlink( SequenceInputStream& rStrm );
     /** Imports the BRK record for an individual row or column page break. */
-    void                importBrk( RecordInputStream& rStrm, bool bRowBreak );
+    void                importBrk( SequenceInputStream& rStrm, bool bRowBreak );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
-    void                importDrawing( RecordInputStream& rStrm );
+    void                importDrawing( SequenceInputStream& rStrm );
     /** Imports the LEGACYDRAWING record containing the relation identifier for the VML drawing part. */
-    void                importLegacyDrawing( RecordInputStream& rStrm );
+    void                importLegacyDrawing( SequenceInputStream& rStrm );
     /** Imports additional data for an OLE object. */
-    void                importOleObject( RecordInputStream& rStrm );
+    void                importOleObject( SequenceInputStream& rStrm );
     /** Imports additional data for an OCX form control. */
-    void                importControl( RecordInputStream& rStrm );
+    void                importControl( SequenceInputStream& rStrm );
 
     /** Imports the binary data of an embedded OLE object from the fragment with the passed ID. */
     void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const ::rtl::OUString& rRelId );

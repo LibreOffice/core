@@ -44,7 +44,6 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/stylesbuffer.hxx"
@@ -242,14 +241,14 @@ void PageSettings::importPicture( const Relations& rRelations, const AttributeLi
     importPictureData( rRelations, rAttribs.getString( R_TOKEN( id ), OUString() ) );
 }
 
-void PageSettings::importPageMargins( RecordInputStream& rStrm )
+void PageSettings::importPageMargins( SequenceInputStream& rStrm )
 {
     rStrm   >> maModel.mfLeftMargin   >> maModel.mfRightMargin
             >> maModel.mfTopMargin    >> maModel.mfBottomMargin
             >> maModel.mfHeaderMargin >> maModel.mfFooterMargin;
 }
 
-void PageSettings::importPrintOptions( RecordInputStream& rStrm )
+void PageSettings::importPrintOptions( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
@@ -259,7 +258,7 @@ void PageSettings::importPrintOptions( RecordInputStream& rStrm )
     maModel.mbPrintHeadings = getFlag( nFlags, BIFF12_PRINTOPT_PRINTHEADING );
 }
 
-void PageSettings::importPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
+void PageSettings::importPageSetup( const Relations& rRelations, SequenceInputStream& rStrm )
 {
     OUString aRelId;
     sal_uInt16 nFlags;
@@ -279,7 +278,7 @@ void PageSettings::importPageSetup( const Relations& rRelations, RecordInputStre
     maModel.mbDraftQuality  = getFlag( nFlags, BIFF12_PAGESETUP_DRAFTQUALITY );
 }
 
-void PageSettings::importChartPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
+void PageSettings::importChartPageSetup( const Relations& rRelations, SequenceInputStream& rStrm )
 {
     OUString aRelId;
     sal_uInt16 nFirstPage, nFlags;
@@ -294,7 +293,7 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, RecordInpu
     maModel.mbDraftQuality  = getFlag( nFlags, BIFF12_CHARTPAGESETUP_DRAFTQUALITY );
 }
 
-void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
+void PageSettings::importHeaderFooter( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm   >> nFlags
@@ -305,9 +304,9 @@ void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
     maModel.mbUseFirstHF = getFlag( nFlags, BIFF12_HEADERFOOTER_DIFFFIRST );
 }
 
-void PageSettings::importPicture( const Relations& rRelations, RecordInputStream& rStrm )
+void PageSettings::importPicture( const Relations& rRelations, SequenceInputStream& rStrm )
 {
-    importPictureData( rRelations, rStrm.readString() );
+    importPictureData( rRelations, BiffHelper::readString( rStrm ) );
 }
 
 void PageSettings::importLeftMargin( BiffInputStream& rStrm )

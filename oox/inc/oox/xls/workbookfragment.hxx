@@ -49,7 +49,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
@@ -59,8 +59,8 @@ private:
     void                importDefinedName( const AttributeList& rAttribs );
     void                importPivotCache( const AttributeList& rAttribs );
 
-    void                importExternalRef( RecordInputStream& rStrm );
-    void                importPivotCache( RecordInputStream& rStrm );
+    void                importExternalRef( SequenceInputStream& rStrm );
+    void                importPivotCache( SequenceInputStream& rStrm );
 
     void                importExternalLinkFragment( ExternalLink& rExtLink );
     void                importPivotCacheDefFragment( const ::rtl::OUString& rRelId, sal_Int32 nCacheId );

@@ -46,9 +46,9 @@
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
@@ -366,7 +366,7 @@ void Color::importColor( const AttributeList& rAttribs )
     }
 }
 
-void Color::importColor( RecordInputStream& rStrm )
+void Color::importColor( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags, nIndex;
     sal_Int16 nTint;
@@ -403,12 +403,12 @@ void Color::importColor( RecordInputStream& rStrm )
     }
 }
 
-void Color::importColorId( RecordInputStream& rStrm )
+void Color::importColorId( SequenceInputStream& rStrm )
 {
     setIndexed( rStrm.readInt32() );
 }
 
-void Color::importColorRgb( RecordInputStream& rStrm )
+void Color::importColorRgb( SequenceInputStream& rStrm )
 {
     setRgb( lclReadRgbColor( rStrm ) );
 }
@@ -423,7 +423,7 @@ void Color::importColorRgb( BiffInputStream& rStrm )
     setRgb( lclReadRgbColor( rStrm ) );
 }
 
-RecordInputStream& operator>>( RecordInputStream& rStrm, Color& orColor )
+SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
 {
     orColor.importColor( rStrm );
     return rStrm;
@@ -518,7 +518,7 @@ void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
     appendColor( rAttribs.getIntegerHex( XML_rgb, API_RGB_WHITE ) );
 }
 
-void ColorPalette::importPaletteColor( RecordInputStream& rStrm )
+void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
 {
     sal_Int32 nRgb = lclReadRgbColor( rStrm );
     appendColor( nRgb & 0xFFFFFF );
@@ -791,7 +791,7 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
     }
 }
 
-void Font::importFont( RecordInputStream& rStrm )
+void Font::importFont( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !mbDxf, "Font::importFont - unexpected conditional formatting flag" );
 
@@ -816,56 +816,56 @@ void Font::importFont( RecordInputStream& rStrm )
     maModel.mbShadow    = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
 }
 
-void Font::importDxfName( RecordInputStream& rStrm )
+void Font::importDxfName( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfName - missing conditional formatting flag" );
-    maModel.maName = rStrm.readString( false );
+    maModel.maName = BiffHelper::readString( rStrm, false );
     maUsedFlags.mbColorUsed = true;
 }
 
-void Font::importDxfColor( RecordInputStream& rStrm )
+void Font::importDxfColor( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfColor - missing conditional formatting flag" );
     rStrm >> maModel.maColor;
     maUsedFlags.mbColorUsed = true;
 }
 
-void Font::importDxfScheme( RecordInputStream& rStrm )
+void Font::importDxfScheme( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfScheme - missing conditional formatting flag" );
     maModel.setBiff12Scheme( rStrm.readuInt8() );
     maUsedFlags.mbSchemeUsed = true;
 }
 
-void Font::importDxfHeight( RecordInputStream& rStrm )
+void Font::importDxfHeight( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfHeight - missing conditional formatting flag" );
     maModel.setBiffHeight( rStrm.readuInt16() );
     maUsedFlags.mbHeightUsed = true;
 }
 
-void Font::importDxfWeight( RecordInputStream& rStrm )
+void Font::importDxfWeight( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfWeight - missing conditional formatting flag" );
     maModel.setBiffWeight( rStrm.readuInt16() );
     maUsedFlags.mbWeightUsed = true;
 }
 
-void Font::importDxfUnderline( RecordInputStream& rStrm )
+void Font::importDxfUnderline( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfUnderline - missing conditional formatting flag" );
     maModel.setBiffUnderline( rStrm.readuInt16() );
     maUsedFlags.mbUnderlineUsed = true;
 }
 
-void Font::importDxfEscapement( RecordInputStream& rStrm )
+void Font::importDxfEscapement( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfEscapement - missing conditional formatting flag" );
     maModel.setBiffEscapement( rStrm.readuInt16() );
     maUsedFlags.mbEscapementUsed = true;
 }
 
-void Font::importDxfFlag( sal_Int32 nElement, RecordInputStream& rStrm )
+void Font::importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfFlag - missing conditional formatting flag" );
     bool bFlag = rStrm.readuInt8() != 0;
@@ -1652,7 +1652,7 @@ void Border::importColor( sal_Int32 nElement, const AttributeList& rAttribs )
         pBorderLine->maColor.importColor( rAttribs );
 }
 
-void Border::importBorder( RecordInputStream& rStrm )
+void Border::importBorder( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags = rStrm.readuInt8();
     maModel.mbDiagTLtoBR = getFlag( nFlags, BIFF12_BORDER_DIAG_TLBR );
@@ -1669,7 +1669,7 @@ void Border::importBorder( RecordInputStream& rStrm )
     rStrm >> maModel.maDiagonal.maColor;
 }
 
-void Border::importDxfBorder( sal_Int32 nElement, RecordInputStream& rStrm )
+void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Border::importDxfBorder - missing conditional formatting flag" );
     if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
@@ -1861,7 +1861,7 @@ GradientFillModel::GradientFillModel() :
 {
 }
 
-void GradientFillModel::readGradient( RecordInputStream& rStrm )
+void GradientFillModel::readGradient( SequenceInputStream& rStrm )
 {
     sal_Int32 nType;
     rStrm >> nType >> mfAngle >> mfLeft >> mfRight >> mfTop >> mfBottom;
@@ -1869,7 +1869,7 @@ void GradientFillModel::readGradient( RecordInputStream& rStrm )
     mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
-void GradientFillModel::readGradientStop( RecordInputStream& rStrm, bool bDxf )
+void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf )
 {
     Color aColor;
     double fPosition;
@@ -1976,7 +1976,7 @@ void Fill::importColor( const AttributeList& rAttribs, double fPosition )
         mxGradientModel->maColors[ fPosition ].importColor( rAttribs );
 }
 
-void Fill::importFill( RecordInputStream& rStrm )
+void Fill::importFill( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !mbDxf, "Fill::importFill - unexpected conditional formatting flag" );
     sal_Int32 nPattern = rStrm.readInt32();
@@ -1998,7 +1998,7 @@ void Fill::importFill( RecordInputStream& rStrm )
     }
 }
 
-void Fill::importDxfPattern( RecordInputStream& rStrm )
+void Fill::importDxfPattern( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfPattern - missing conditional formatting flag" );
     if( !mxPatternModel )
@@ -2007,7 +2007,7 @@ void Fill::importDxfPattern( RecordInputStream& rStrm )
     mxPatternModel->mbPatternUsed = true;
 }
 
-void Fill::importDxfFgColor( RecordInputStream& rStrm )
+void Fill::importDxfFgColor( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfFgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
@@ -2016,7 +2016,7 @@ void Fill::importDxfFgColor( RecordInputStream& rStrm )
     mxPatternModel->mbPattColorUsed = true;
 }
 
-void Fill::importDxfBgColor( RecordInputStream& rStrm )
+void Fill::importDxfBgColor( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfBgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
@@ -2025,7 +2025,7 @@ void Fill::importDxfBgColor( RecordInputStream& rStrm )
     mxPatternModel->mbFillColorUsed = true;
 }
 
-void Fill::importDxfGradient( RecordInputStream& rStrm )
+void Fill::importDxfGradient( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfGradient - missing conditional formatting flag" );
     if( !mxGradientModel )
@@ -2033,7 +2033,7 @@ void Fill::importDxfGradient( RecordInputStream& rStrm )
     mxGradientModel->readGradient( rStrm );
 }
 
-void Fill::importDxfStop( RecordInputStream& rStrm )
+void Fill::importDxfStop( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfStop - missing conditional formatting flag" );
     if( !mxGradientModel )
@@ -2255,7 +2255,7 @@ void Xf::importProtection( const AttributeList& rAttribs )
     maProtection.importProtection( rAttribs );
 }
 
-void Xf::importXf( RecordInputStream& rStrm, bool bCellXf )
+void Xf::importXf( SequenceInputStream& rStrm, bool bCellXf )
 {
     maModel.mbCellXf = bCellXf;
     maModel.mnStyleXfId = rStrm.readuInt16();
@@ -2546,7 +2546,7 @@ void Dxf::importProtection( const AttributeList& rAttribs )
     mxProtection->importProtection( rAttribs );
 }
 
-void Dxf::importDxf( RecordInputStream& rStrm )
+void Dxf::importDxf( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = -1;
     OUString aFmtCode;
@@ -2581,7 +2581,7 @@ void Dxf::importDxf( RecordInputStream& rStrm )
             case BIFF12_DXF_FONT_SHADOW:        createFont( false )->importDxfFlag( XML_shadow, rStrm );                break;
             case BIFF12_DXF_FONT_HEIGHT:        createFont( false )->importDxfHeight( rStrm );                          break;
             case BIFF12_DXF_FONT_SCHEME:        createFont( false )->importDxfScheme( rStrm );                          break;
-            case BIFF12_DXF_NUMFMT_CODE:        aFmtCode = rStrm.readString( false );                                   break;
+            case BIFF12_DXF_NUMFMT_CODE:        aFmtCode = BiffHelper::readString( rStrm, false );                      break;
             case BIFF12_DXF_NUMFMT_ID:          nNumFmtId = rStrm.readuInt16();                                         break;
         }
         rStrm.seek( nRecEnd );
@@ -2851,7 +2851,7 @@ void CellStyle::importCellStyle( const AttributeList& rAttribs )
     maModel.mbHidden    = rAttribs.getBool( XML_hidden, false );
 }
 
-void CellStyle::importCellStyle( RecordInputStream& rStrm )
+void CellStyle::importCellStyle( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> maModel.mnXfId >> nFlags;
@@ -2952,7 +2952,7 @@ CellStyleRef CellStyleBuffer::importCellStyle( const AttributeList& rAttribs )
     return xCellStyle;
 }
 
-CellStyleRef CellStyleBuffer::importCellStyle( RecordInputStream& rStrm )
+CellStyleRef CellStyleBuffer::importCellStyle( SequenceInputStream& rStrm )
 {
     CellStyleRef xCellStyle( new CellStyle( *this ) );
     xCellStyle->importCellStyle( rStrm );
@@ -3189,17 +3189,17 @@ CellStyleRef StylesBuffer::importCellStyle( const AttributeList& rAttribs )
     return maCellStyles.importCellStyle( rAttribs );
 }
 
-void StylesBuffer::importPaletteColor( RecordInputStream& rStrm )
+void StylesBuffer::importPaletteColor( SequenceInputStream& rStrm )
 {
     maPalette.importPaletteColor( rStrm );
 }
 
-void StylesBuffer::importNumFmt( RecordInputStream& rStrm )
+void StylesBuffer::importNumFmt( SequenceInputStream& rStrm )
 {
     maNumFmts.importNumFmt( rStrm );
 }
 
-void StylesBuffer::importCellStyle( RecordInputStream& rStrm )
+void StylesBuffer::importCellStyle( SequenceInputStream& rStrm )
 {
     maCellStyles.importCellStyle( rStrm );
 }

@@ -83,7 +83,7 @@ void PivotTableFieldContext::onStartElement( const AttributeList& rAttribs )
         mrTableField.importPivotField( rAttribs );
 }
 
-ContextHandlerRef PivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -113,7 +113,7 @@ ContextHandlerRef PivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecI
     return 0;
 }
 
-void PivotTableFieldContext::onStartRecord( RecordInputStream& rStrm )
+void PivotTableFieldContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrTableField.importPTField( rStrm );
@@ -150,7 +150,7 @@ void PivotTableFilterContext::onStartElement( const AttributeList& rAttribs )
         mrTableFilter.importFilter( rAttribs );
 }
 
-ContextHandlerRef PivotTableFilterContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotTableFilterContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -167,7 +167,7 @@ ContextHandlerRef PivotTableFilterContext::onCreateRecordContext( sal_Int32 nRec
     return 0;
 }
 
-void PivotTableFilterContext::onStartRecord( RecordInputStream& rStrm )
+void PivotTableFilterContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrTableFilter.importPTFilter( rStrm );
@@ -224,7 +224,7 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
     return 0;
 }
 
-ContextHandlerRef PivotTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotTableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

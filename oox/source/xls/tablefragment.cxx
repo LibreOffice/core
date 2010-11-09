@@ -67,7 +67,7 @@ ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

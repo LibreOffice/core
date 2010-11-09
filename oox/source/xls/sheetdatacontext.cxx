@@ -35,7 +35,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulaparser.hxx"
@@ -285,7 +284,7 @@ void SheetDataContext::onEndElement()
     }
 }
 
-ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -375,7 +374,7 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
     maTableData.mbRef2Deleted = rAttribs.getBool( XML_del2, false );
 }
 
-void SheetDataContext::importCellHeader( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellHeader( SequenceInputStream& rStrm, CellType eCellType )
 {
     maCurrCell.reset();
 
@@ -398,7 +397,7 @@ void SheetDataContext::importCellHeader( RecordInputStream& rStrm, CellType eCel
         extendUsedArea( maCurrCell.maAddress );
 }
 
-void SheetDataContext::importCellBool( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellBool( SequenceInputStream& rStrm, CellType eCellType )
 {
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_b;
@@ -419,14 +418,14 @@ void SheetDataContext::importCellBool( RecordInputStream& rStrm, CellType eCellT
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellBlank( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellBlank( SequenceInputStream& rStrm, CellType eCellType )
 {
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellBlank - no formula cells supported" );
     importCellHeader( rStrm, eCellType );
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellDouble( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellDouble( SequenceInputStream& rStrm, CellType eCellType )
 {
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_n;
@@ -441,7 +440,7 @@ void SheetDataContext::importCellDouble( RecordInputStream& rStrm, CellType eCel
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellError( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellError( SequenceInputStream& rStrm, CellType eCellType )
 {
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_e;
@@ -456,7 +455,7 @@ void SheetDataContext::importCellError( RecordInputStream& rStrm, CellType eCell
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellRk( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellRk( SequenceInputStream& rStrm, CellType eCellType )
 {
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellRk - no formula cells supported" );
     importCellHeader( rStrm, eCellType );
@@ -466,7 +465,7 @@ void SheetDataContext::importCellRk( RecordInputStream& rStrm, CellType eCellTyp
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellRString( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellRString( SequenceInputStream& rStrm, CellType eCellType )
 {
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellRString - no formula cells supported" );
     importCellHeader( rStrm, eCellType );
@@ -482,7 +481,7 @@ void SheetDataContext::importCellRString( RecordInputStream& rStrm, CellType eCe
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellSi( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellSi( SequenceInputStream& rStrm, CellType eCellType )
 {
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellSi - no formula cells supported" );
     importCellHeader( rStrm, eCellType );
@@ -492,7 +491,7 @@ void SheetDataContext::importCellSi( RecordInputStream& rStrm, CellType eCellTyp
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellString( RecordInputStream& rStrm, CellType eCellType )
+void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eCellType )
 {
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_inlineStr;
@@ -510,7 +509,7 @@ void SheetDataContext::importCellString( RecordInputStream& rStrm, CellType eCel
     setCellFormat( maCurrCell );
 }
 
-void SheetDataContext::importCellFormula( RecordInputStream& rStrm )
+void SheetDataContext::importCellFormula( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );
     Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY );
@@ -521,7 +520,7 @@ void SheetDataContext::importCellFormula( RecordInputStream& rStrm )
     }
 }
 
-void SheetDataContext::importRow( RecordInputStream& rStrm )
+void SheetDataContext::importRow( SequenceInputStream& rStrm )
 {
     RowModel aModel;
 
@@ -545,7 +544,7 @@ void SheetDataContext::importRow( RecordInputStream& rStrm )
     setRowModel( aModel );
 }
 
-void SheetDataContext::importArray( RecordInputStream& rStrm )
+void SheetDataContext::importArray( SequenceInputStream& rStrm )
 {
     BinRange aRange;
     rStrm >> aRange;
@@ -560,12 +559,12 @@ void SheetDataContext::importArray( RecordInputStream& rStrm )
     }
 }
 
-void SheetDataContext::importSharedFmla( RecordInputStream& rStrm )
+void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
 {
     getSharedFormulas().importSharedFmla( rStrm, maCurrCell.maAddress );
 }
 
-void SheetDataContext::importDataTable( RecordInputStream& rStrm )
+void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
 {
     BinRange aRange;
     rStrm >> aRange;

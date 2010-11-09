@@ -29,8 +29,8 @@
 
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 
 namespace oox {
@@ -74,7 +74,7 @@ void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
     maModel.mnTotalsRows  = rAttribs.getInteger( XML_totalsRowCount, 0 );
 }
 
-void Table::importTable( RecordInputStream& rStrm, sal_Int16 nSheet )
+void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     sal_Int32 nType;

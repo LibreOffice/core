@@ -29,7 +29,8 @@
 #define OOX_VML_VMLSHAPECONTAINER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
-#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/refmap.hxx"
+#include "oox/helper/refvector.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShapes; }

@@ -28,8 +28,10 @@
 #ifndef OOX_HELPER_STORAGEBASE_HXX
 #define OOX_HELPER_STORAGEBASE_HXX
 
+#include <vector>
+#include <com/sun/star/uno/Reference.hxx>
+#include "oox/helper/refmap.hxx"
 #include "oox/dllapi.h"
-#include "oox/helper/containerhelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }

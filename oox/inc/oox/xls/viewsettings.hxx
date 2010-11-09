@@ -30,7 +30,6 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/worksheethelper.hxx"
@@ -119,13 +118,13 @@ public:
     void                importChartSheetView( const AttributeList& rAttribs );
 
     /** Imports the SHEETVIEW record containing sheet view settings. */
-    void                importSheetView( RecordInputStream& rStrm );
+    void                importSheetView( SequenceInputStream& rStrm );
     /** Imports the PANE record containing sheet pane settings. */
-    void                importPane( RecordInputStream& rStrm );
+    void                importPane( SequenceInputStream& rStrm );
     /** Imports the SELECTION record containing selection settings for a pane. */
-    void                importSelection( RecordInputStream& rStrm );
+    void                importSelection( SequenceInputStream& rStrm );
     /** Imports the CHARTSHEETVIEW record containing view settings of a chart sheet. */
-    void                importChartSheetView( RecordInputStream& rStrm );
+    void                importChartSheetView( SequenceInputStream& rStrm );
 
     /** Imports the WINDOW2 record containing sheet view settings. */
     void                importWindow2( BiffInputStream& rStrm );
@@ -185,9 +184,9 @@ public:
     /** Imports the oleSize element containing the visible size of the workbook. */
     void                importOleSize( const AttributeList& rAttribs );
     /** Imports the WORKBOOKVIEW record containing workbook view settings. */
-    void                importWorkbookView( RecordInputStream& rStrm );
+    void                importWorkbookView( SequenceInputStream& rStrm );
     /** Imports the OLESIZE record containing the visible size of the workbook. */
-    void                importOleSize( RecordInputStream& rStrm );
+    void                importOleSize( SequenceInputStream& rStrm );
     /** Imports the WINDOW1 record containing workbook view settings. */
     void                importWindow1( BiffInputStream& rStrm );
     /** Imports the OLESIZE record containing the visible size of the workbook. */

@@ -63,7 +63,7 @@ void FilterSettingsContext::onStartElement( const AttributeList& rAttribs )
     mrFilterSettings.importAttribs( getCurrentElement(), rAttribs );
 }
 
-ContextHandlerRef FilterSettingsContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& /*rStrm*/ )
+ContextHandlerRef FilterSettingsContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& /*rStrm*/ )
 {
     switch( getCurrentElement() )
     {
@@ -77,7 +77,7 @@ ContextHandlerRef FilterSettingsContext::onCreateRecordContext( sal_Int32 nRecId
     return 0;
 }
 
-void FilterSettingsContext::onStartRecord( RecordInputStream& rStrm )
+void FilterSettingsContext::onStartRecord( SequenceInputStream& rStrm )
 {
     mrFilterSettings.importRecord( getCurrentElement(), rStrm );
 }
@@ -109,7 +109,7 @@ void FilterColumnContext::onStartElement( const AttributeList& rAttribs )
     mrFilterColumn.importFilterColumn( rAttribs );
 }
 
-ContextHandlerRef FilterColumnContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& /*rStrm*/ )
+ContextHandlerRef FilterColumnContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& /*rStrm*/ )
 {
     if( getCurrentElement() == BIFF12_ID_FILTERCOLUMN ) switch( nRecId )
     {
@@ -123,7 +123,7 @@ ContextHandlerRef FilterColumnContext::onCreateRecordContext( sal_Int32 nRecId, 
     return 0;
 }
 
-void FilterColumnContext::onStartRecord( RecordInputStream& rStrm )
+void FilterColumnContext::onStartRecord( SequenceInputStream& rStrm )
 {
     mrFilterColumn.importFilterColumn( rStrm );
 }
@@ -148,14 +148,14 @@ void AutoFilterContext::onStartElement( const AttributeList& rAttribs )
     mrAutoFilter.importAutoFilter( rAttribs, getSheetIndex() );
 }
 
-ContextHandlerRef AutoFilterContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& /*rStrm*/ )
+ContextHandlerRef AutoFilterContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& /*rStrm*/ )
 {
     if( (getCurrentElement() == BIFF12_ID_AUTOFILTER) && (nRecId == BIFF12_ID_FILTERCOLUMN) )
         return new FilterColumnContext( *this, mrAutoFilter.createFilterColumn() );
     return 0;
 }
 
-void AutoFilterContext::onStartRecord( RecordInputStream& rStrm )
+void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
 {
     mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
 }

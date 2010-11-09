@@ -133,12 +133,12 @@ void ContextHandler::processingInstruction( const OUString&, const OUString& ) t
 
 // record context interface ---------------------------------------------------
 
-ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, RecordInputStream& )
+ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, SequenceInputStream& )
 {
     return 0;
 }
 
-void ContextHandler::startRecord( sal_Int32, RecordInputStream& )
+void ContextHandler::startRecord( sal_Int32, SequenceInputStream& )
 {
 }
 

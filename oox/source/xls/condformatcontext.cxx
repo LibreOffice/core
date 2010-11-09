@@ -73,7 +73,7 @@ void CondFormatContext::onCharacters( const OUString& rChars )
         mxRule->appendFormula( rChars );
 }
 
-ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
 {
     switch( getCurrentElement() )
     {
@@ -83,7 +83,7 @@ ContextHandlerRef CondFormatContext::onCreateRecordContext( sal_Int32 nRecId, Re
     return 0;
 }
 
-void CondFormatContext::onStartRecord( RecordInputStream& rStrm )
+void CondFormatContext::onStartRecord( SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

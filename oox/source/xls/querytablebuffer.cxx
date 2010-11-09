@@ -32,7 +32,6 @@
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/connectionsbuffer.hxx"
@@ -219,7 +218,7 @@ void QueryTable::importQueryTable( const AttributeList& rAttribs )
     maModel.mbApplyProtection  = rAttribs.getBool( XML_applyWidthHeightFormats, false );
 }
 
-void QueryTable::importQueryTable( RecordInputStream& rStrm )
+void QueryTable::importQueryTable( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
     rStrm >> nFlags;

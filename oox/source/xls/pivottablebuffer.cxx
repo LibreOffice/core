@@ -47,8 +47,8 @@
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
@@ -383,7 +383,7 @@ void PivotTableField::importReferenceItem( const AttributeList& rAttribs )
     maModel.mnSortRefItem = rAttribs.getInteger( XML_v, -1 );
 }
 
-void PivotTableField::importPTField( RecordInputStream& rStrm )
+void PivotTableField::importPTField( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2;
     rStrm >> nFlags1 >> maModel.mnNumFmtId >> nFlags2 >> maModel.mnAutoShowItems >> maModel.mnAutoShowRankBy;
@@ -417,7 +417,7 @@ void PivotTableField::importPTField( RecordInputStream& rStrm )
     maModel.mnSortType = bAutoSort ? (bAscending ? XML_ascending : XML_descending) : XML_manual;
 }
 
-void PivotTableField::importPTFItem( RecordInputStream& rStrm )
+void PivotTableField::importPTFItem( SequenceInputStream& rStrm )
 {
     PTFieldItemModel aModel;
     sal_uInt8 nType;
@@ -431,12 +431,12 @@ void PivotTableField::importPTFItem( RecordInputStream& rStrm )
     maItems.push_back( aModel );
 }
 
-void PivotTableField::importPTReference( RecordInputStream& rStrm )
+void PivotTableField::importPTReference( SequenceInputStream& rStrm )
 {
     rStrm >> maModel.mnSortRefField;
 }
 
-void PivotTableField::importPTReferenceItem( RecordInputStream& rStrm )
+void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
 {
     rStrm >> maModel.mnSortRefItem;
 }
@@ -906,7 +906,7 @@ void PivotTableFilter::importTop10( const AttributeList& rAttribs )
     maModel.mbTopFilter = rAttribs.getBool( XML_top, true );
 }
 
-void PivotTableFilter::importPTFilter( RecordInputStream& rStrm )
+void PivotTableFilter::importPTFilter( SequenceInputStream& rStrm )
 {
     sal_Int32 nType;
     sal_uInt16 nFlags;
@@ -946,7 +946,7 @@ void PivotTableFilter::importPTFilter( RecordInputStream& rStrm )
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
-void PivotTableFilter::importTop10Filter( RecordInputStream& rStrm )
+void PivotTableFilter::importTop10Filter( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags;
     rStrm >> nFlags >> maModel.mfValue;
@@ -1128,7 +1128,7 @@ void PivotTable::importDataField( const AttributeList& rAttribs )
     maDataFields.push_back( aModel );
 }
 
-void PivotTable::importPTDefinition( RecordInputStream& rStrm )
+void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2, nFlags3;
     sal_uInt8 nDataAxis;
@@ -1196,7 +1196,7 @@ void PivotTable::importPTDefinition( RecordInputStream& rStrm )
     maDefModel.mbCustomListSort      = !getFlag( nFlags3, BIFF12_PTDEF_NOCUSTOMLISTSORT );
 }
 
-void PivotTable::importPTLocation( RecordInputStream& rStrm, sal_Int16 nSheet )
+void PivotTable::importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     rStrm   >> aBinRange >> maLocationModel.mnFirstHeaderRow
@@ -1205,17 +1205,17 @@ void PivotTable::importPTLocation( RecordInputStream& rStrm, sal_Int16 nSheet )
     getAddressConverter().convertToCellRangeUnchecked( maLocationModel.maRange, aBinRange, nSheet );
 }
 
-void PivotTable::importPTRowFields( RecordInputStream& rStrm )
+void PivotTable::importPTRowFields( SequenceInputStream& rStrm )
 {
     importFields( maRowFields, rStrm );
 }
 
-void PivotTable::importPTColFields( RecordInputStream& rStrm )
+void PivotTable::importPTColFields( SequenceInputStream& rStrm )
 {
     importFields( maColFields, rStrm );
 }
 
-void PivotTable::importPTPageField( RecordInputStream& rStrm )
+void PivotTable::importPTPageField( SequenceInputStream& rStrm )
 {
     PTPageFieldModel aModel;
     sal_uInt8 nFlags;
@@ -1227,7 +1227,7 @@ void PivotTable::importPTPageField( RecordInputStream& rStrm )
     maPageFields.push_back( aModel );
 }
 
-void PivotTable::importPTDataField( RecordInputStream& rStrm )
+void PivotTable::importPTDataField( SequenceInputStream& rStrm )
 {
     PTDataFieldModel aModel;
     sal_Int32 nSubtotal, nShowDataAs;
@@ -1521,7 +1521,7 @@ void PivotTable::importField( IndexVector& orFields, const AttributeList& rAttri
     orFields.push_back( rAttribs.getInteger( XML_x, -1 ) );
 }
 
-void PivotTable::importFields( IndexVector& orFields, RecordInputStream& rStrm )
+void PivotTable::importFields( IndexVector& orFields, SequenceInputStream& rStrm )
 {
     OSL_ENSURE( orFields.empty(), "PivotTable::importFields - multiple record instances" );
     orFields.clear();

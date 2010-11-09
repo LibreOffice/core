@@ -141,13 +141,13 @@ void ExternalName::importOleItem( const AttributeList& rAttribs )
     maExtNameModel.mbIconified = rAttribs.getBool( XML_icon, false );
 }
 
-void ExternalName::importExternalName( RecordInputStream& rStrm )
+void ExternalName::importExternalName( SequenceInputStream& rStrm )
 {
     rStrm >> maModel.maName;
     OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
 }
 
-void ExternalName::importExternalNameFlags( RecordInputStream& rStrm )
+void ExternalName::importExternalNameFlags( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     sal_Int32 nSheetId;
@@ -164,31 +164,31 @@ void ExternalName::importExternalNameFlags( RecordInputStream& rStrm )
         "ExternalName::importExternalNameFlags - wrong OLE flag in external name" );
 }
 
-void ExternalName::importDdeItemValues( RecordInputStream& rStrm )
+void ExternalName::importDdeItemValues( SequenceInputStream& rStrm )
 {
     sal_Int32 nRows, nCols;
     rStrm >> nRows >> nCols;
     setResultSize( nCols, nRows );
 }
 
-void ExternalName::importDdeItemBool( RecordInputStream& rStrm )
+void ExternalName::importDdeItemBool( SequenceInputStream& rStrm )
 {
     appendResultValue< double >( (rStrm.readuInt8() == 0) ? 0.0 : 1.0 );
 }
 
-void ExternalName::importDdeItemDouble( RecordInputStream& rStrm )
+void ExternalName::importDdeItemDouble( SequenceInputStream& rStrm )
 {
     appendResultValue( rStrm.readDouble() );
 }
 
-void ExternalName::importDdeItemError( RecordInputStream& rStrm )
+void ExternalName::importDdeItemError( SequenceInputStream& rStrm )
 {
     appendResultValue( BiffHelper::calcDoubleFromError( rStrm.readuInt8() ) );
 }
 
-void ExternalName::importDdeItemString( RecordInputStream& rStrm )
+void ExternalName::importDdeItemString( SequenceInputStream& rStrm )
 {
-    appendResultValue( rStrm.readString() );
+    appendResultValue( BiffHelper::readString( rStrm ) );
 }
 
 void ExternalName::importExternalName( BiffInputStream& rStrm )
@@ -543,32 +543,32 @@ ExternalNameRef ExternalLink::importOleItem( const AttributeList& rAttribs )
     return xExtName;
 }
 
-void ExternalLink::importExternalRef( RecordInputStream& rStrm )
+void ExternalLink::importExternalRef( SequenceInputStream& rStrm )
 {
     rStrm >> maRelId;
 }
 
-void ExternalLink::importExternalSelf( RecordInputStream& )
+void ExternalLink::importExternalSelf( SequenceInputStream& )
 {
     meLinkType = LINKTYPE_SELF;
 }
 
-void ExternalLink::importExternalSame( RecordInputStream& )
+void ExternalLink::importExternalSame( SequenceInputStream& )
 {
     meLinkType = LINKTYPE_SAME;
 }
 
-void ExternalLink::importExternalAddin( RecordInputStream& )
+void ExternalLink::importExternalAddin( SequenceInputStream& )
 {
     meLinkType = LINKTYPE_UNKNOWN;
 }
 
-void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputStream& rStrm )
+void ExternalLink::importExternalBook( const Relations& rRelations, SequenceInputStream& rStrm )
 {
     switch( rStrm.readuInt16() )
     {
         case BIFF12_EXTERNALBOOK_BOOK:
-            parseExternalReference( rRelations, rStrm.readString() );
+            parseExternalReference( rRelations, BiffHelper::readString( rStrm ) );
         break;
         case BIFF12_EXTERNALBOOK_DDE:
         {
@@ -579,8 +579,8 @@ void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputS
         break;
         case BIFF12_EXTERNALBOOK_OLE:
         {
-            OUString aTargetUrl = rRelations.getExternalTargetFromRelId( rStrm.readString() );
-            OUString aProgId = rStrm.readString();
+            OUString aTargetUrl = rRelations.getExternalTargetFromRelId( BiffHelper::readString( rStrm ) );
+            OUString aProgId = BiffHelper::readString( rStrm );
             setDdeOleTargetUrl( aProgId, aTargetUrl, LINKTYPE_OLE );
         }
         break;
@@ -589,17 +589,17 @@ void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputS
     }
 }
 
-void ExternalLink::importExtSheetNames( RecordInputStream& rStrm )
+void ExternalLink::importExtSheetNames( SequenceInputStream& rStrm )
 {
     // load external sheet names and create the sheet caches in the Calc document
     OSL_ENSURE( (meLinkType == LINKTYPE_EXTERNAL) || (meLinkType == LINKTYPE_LIBRARY),
         "ExternalLink::importExtSheetNames - invalid link type" );
     if( meLinkType == LINKTYPE_EXTERNAL )   // ignore sheets of external libraries
         for( sal_Int32 nSheet = 0, nCount = rStrm.readInt32(); !rStrm.isEof() && (nSheet < nCount); ++nSheet )
-            insertExternalSheet( rStrm.readString() );
+            insertExternalSheet( BiffHelper::readString( rStrm ) );
 }
 
-ExternalNameRef ExternalLink::importExternalName( RecordInputStream& rStrm )
+ExternalNameRef ExternalLink::importExternalName( SequenceInputStream& rStrm )
 {
     ExternalNameRef xExtName = createExternalName();
     xExtName->importExternalName( rStrm );
@@ -718,7 +718,7 @@ sal_Int16 ExternalLink::getCalcSheetIndex( sal_Int32 nTabId ) const
     OSL_ENSURE( meLinkType == LINKTYPE_INTERNAL, "ExternalLink::getCalcSheetIndex - invalid link type" );
     OSL_ENSURE( (nTabId == 0) || (getFilterType() == FILTER_OOXML) || (getBiff() == BIFF8),
         "ExternalLink::getCalcSheetIndex - invalid sheet index" );
-    return ContainerHelper::getVectorElement< sal_Int16 >( maCalcSheets, nTabId, -1 );
+    return ContainerHelper::getVectorElement( maCalcSheets, nTabId, -1 );
 }
 
 sal_Int32 ExternalLink::getDocumentLinkIndex() const
@@ -732,7 +732,7 @@ sal_Int32 ExternalLink::getSheetCacheIndex( sal_Int32 nTabId ) const
     OSL_ENSURE( meLinkType == LINKTYPE_EXTERNAL, "ExternalLink::getSheetCacheIndex - invalid link type" );
     OSL_ENSURE( (nTabId == 0) || (getFilterType() == FILTER_OOXML) || (getBiff() == BIFF8),
         "ExternalLink::getSheetCacheIndex - invalid sheet index" );
-    return ContainerHelper::getVectorElement< sal_Int32 >( maSheetCaches, nTabId, -1 );
+    return ContainerHelper::getVectorElement( maSheetCaches, nTabId, -1 );
 }
 
 Reference< XExternalSheetCache > ExternalLink::getSheetCache( sal_Int32 nTabId ) const
@@ -926,7 +926,7 @@ RefSheetsModel::RefSheetsModel() :
 {
 }
 
-void RefSheetsModel::readBiff12Data( RecordInputStream& rStrm )
+void RefSheetsModel::readBiff12Data( SequenceInputStream& rStrm )
 {
     rStrm >> mnExtRefId >> mnTabId1 >> mnTabId2;
 }
@@ -956,7 +956,7 @@ ExternalLinkRef ExternalLinkBuffer::importExternalReference( const AttributeList
     return xExtLink;
 }
 
-ExternalLinkRef ExternalLinkBuffer::importExternalRef( RecordInputStream& rStrm )
+ExternalLinkRef ExternalLinkBuffer::importExternalRef( SequenceInputStream& rStrm )
 {
     mbUseRefSheets = true;
     ExternalLinkRef xExtLink = createExternalLink();
@@ -965,25 +965,25 @@ ExternalLinkRef ExternalLinkBuffer::importExternalRef( RecordInputStream& rStrm 
     return xExtLink;
 }
 
-void ExternalLinkBuffer::importExternalSelf( RecordInputStream& rStrm )
+void ExternalLinkBuffer::importExternalSelf( SequenceInputStream& rStrm )
 {
     mbUseRefSheets = true;
     createExternalLink()->importExternalSelf( rStrm );
 }
 
-void ExternalLinkBuffer::importExternalSame( RecordInputStream& rStrm )
+void ExternalLinkBuffer::importExternalSame( SequenceInputStream& rStrm )
 {
     mbUseRefSheets = true;
     createExternalLink()->importExternalSame( rStrm );
 }
 
-void ExternalLinkBuffer::importExternalAddin( RecordInputStream& rStrm )
+void ExternalLinkBuffer::importExternalAddin( SequenceInputStream& rStrm )
 {
     mbUseRefSheets = true;
     createExternalLink()->importExternalAddin( rStrm );
 }
 
-void ExternalLinkBuffer::importExternalSheets( RecordInputStream& rStrm )
+void ExternalLinkBuffer::importExternalSheets( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbUseRefSheets, "ExternalLinkBuffer::importExternalSheets - missing EXTERNALREFS records" );
     mbUseRefSheets = true;

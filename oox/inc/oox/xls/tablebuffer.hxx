@@ -29,7 +29,6 @@
 #define OOX_XLS_TABLEBUFFER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/autofilterbuffer.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
@@ -62,7 +61,7 @@ public:
     /** Imports a table definition from the passed attributes. */
     void                importTable( const AttributeList& rAttribs, sal_Int16 nSheet );
     /** Imports a table definition from a TABLE record. */
-    void                importTable( RecordInputStream& rStrm, sal_Int16 nSheet );
+    void                importTable( SequenceInputStream& rStrm, sal_Int16 nSheet );
     /** Creates a new auto filter and stores it internally. */
     inline AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
 

@@ -34,7 +34,6 @@
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include "oox/core/filterbase.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
@@ -419,7 +418,7 @@ public:
     /** Imports and converts a BIFF12 token array from the passed stream. */
     virtual void        importBiff12Formula(
                             FormulaContext& rContext,
-                            RecordInputStream& rStrm );
+                            SequenceInputStream& rStrm );
 
     /** Imports and converts a BIFF2-BIFF8 token array from the passed stream. */
     virtual void        importBiffFormula(
@@ -583,7 +582,7 @@ void FormulaParserImpl::importOoxFormula( FormulaContext&, const OUString& )
     OSL_ENSURE( false, "FormulaParserImpl::importOoxFormula - not implemented" );
 }
 
-void FormulaParserImpl::importBiff12Formula( FormulaContext&, RecordInputStream& )
+void FormulaParserImpl::importBiff12Formula( FormulaContext&, SequenceInputStream& )
 {
     OSL_ENSURE( false, "FormulaParserImpl::importBiff12Formula - not implemented" );
 }
@@ -1241,31 +1240,31 @@ public:
 
     virtual void        importBiff12Formula(
                             FormulaContext& rContext,
-                            RecordInputStream& rStrm );
+                            SequenceInputStream& rStrm );
 
 private:
     // import token contents and create API formula token ---------------------
 
-    bool                importAttrToken( RecordInputStream& rStrm );
-    bool                importSpaceToken( RecordInputStream& rStrm );
-    bool                importTableToken( RecordInputStream& rStrm );
-    bool                importArrayToken( RecordInputStream& rStrm );
-    bool                importRefToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importAreaToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importRef3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importArea3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importMemAreaToken( RecordInputStream& rStrm, bool bAddData );
-    bool                importMemFuncToken( RecordInputStream& rStrm );
-    bool                importNameToken( RecordInputStream& rStrm );
-    bool                importNameXToken( RecordInputStream& rStrm );
-    bool                importFuncToken( RecordInputStream& rStrm );
-    bool                importFuncVarToken( RecordInputStream& rStrm );
-    bool                importExpToken( RecordInputStream& rStrm );
+    bool                importAttrToken( SequenceInputStream& rStrm );
+    bool                importSpaceToken( SequenceInputStream& rStrm );
+    bool                importTableToken( SequenceInputStream& rStrm );
+    bool                importArrayToken( SequenceInputStream& rStrm );
+    bool                importRefToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importAreaToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importRef3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importArea3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importMemAreaToken( SequenceInputStream& rStrm, bool bAddData );
+    bool                importMemFuncToken( SequenceInputStream& rStrm );
+    bool                importNameToken( SequenceInputStream& rStrm );
+    bool                importNameXToken( SequenceInputStream& rStrm );
+    bool                importFuncToken( SequenceInputStream& rStrm );
+    bool                importFuncVarToken( SequenceInputStream& rStrm );
+    bool                importExpToken( SequenceInputStream& rStrm );
 
-    LinkSheetRange      readSheetRange( RecordInputStream& rStrm );
+    LinkSheetRange      readSheetRange( SequenceInputStream& rStrm );
 
-    void                swapStreamPosition( RecordInputStream& rStrm );
-    void                skipMemAreaAddData( RecordInputStream& rStrm );
+    void                swapStreamPosition( SequenceInputStream& rStrm );
+    void                skipMemAreaAddData( SequenceInputStream& rStrm );
 
     // convert BIN token and push API operand or operator ---------------------
 
@@ -1301,7 +1300,7 @@ void OoxFormulaParserImpl::importOoxFormula( FormulaContext& rContext, const OUS
     finalizeImport( maApiParser.parseFormula( rFormulaString, rContext.getBaseAddress() ) );
 }
 
-void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, RecordInputStream& rStrm )
+void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, SequenceInputStream& rStrm )
 {
     initializeImport( rContext );
 
@@ -1330,34 +1329,34 @@ void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, Record
             // base tokens
             switch( nBaseId )
             {
-                case BIFF_TOKID_EXP:        bOk = importExpToken( rStrm );                          break;
-                case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                 break;
-                case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                 break;
-                case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                break;
-                case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                 break;
-                case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );               break;
-                case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );              break;
-                case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                break;
-                case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );          break;
-                case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );               break;
-                case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );       break;
-                case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );             break;
-                case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );           break;
-                case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );           break;
-                case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                break;
-                case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );               break;
-                case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );         break;
-                case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );        break;
-                case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );          break;
-                case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                        break;
-                case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                    break;
-                case BIFF_TOKID_STR:        bOk = pushValueOperand( rStrm.readString( false ) );    break;
-                case BIFF_TOKID_NLR:        bOk = importTableToken( rStrm );                        break;
-                case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                         break;
-                case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );        break;
-                case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );         break;
-                case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() ); break;
-                case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );           break;
+                case BIFF_TOKID_EXP:        bOk = importExpToken( rStrm );                                      break;
+                case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                             break;
+                case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                             break;
+                case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                            break;
+                case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                             break;
+                case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );                           break;
+                case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );                          break;
+                case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                            break;
+                case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );                      break;
+                case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );                           break;
+                case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );                   break;
+                case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );                         break;
+                case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );                       break;
+                case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );                       break;
+                case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                            break;
+                case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );                           break;
+                case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );                     break;
+                case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );                    break;
+                case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );                      break;
+                case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                                    break;
+                case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                                break;
+                case BIFF_TOKID_STR:        bOk = pushValueOperand( BiffHelper::readString( rStrm, false ) );   break;
+                case BIFF_TOKID_NLR:        bOk = importTableToken( rStrm );                                    break;
+                case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                                     break;
+                case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );                    break;
+                case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );                     break;
+                case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() );             break;
+                case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );                       break;
                 default:                    bOk = false;
             }
         }
@@ -1403,7 +1402,7 @@ void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, Record
 
 // import token contents and create API formula token -------------------------
 
-bool OoxFormulaParserImpl::importAttrToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importAttrToken( SequenceInputStream& rStrm )
 {
     bool bOk = true;
     sal_uInt8 nType;
@@ -1436,7 +1435,7 @@ bool OoxFormulaParserImpl::importAttrToken( RecordInputStream& rStrm )
     return bOk;
 }
 
-bool OoxFormulaParserImpl::importSpaceToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importSpaceToken( SequenceInputStream& rStrm )
 {
     // equal constants in BIFF and OOX
     sal_uInt8 nType, nCount;
@@ -1465,7 +1464,7 @@ bool OoxFormulaParserImpl::importSpaceToken( RecordInputStream& rStrm )
     return true;
 }
 
-bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags, nTableId, nCol1, nCol2;
     rStrm.skip( 3 );
@@ -1590,7 +1589,7 @@ bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
     return pushBiffErrorOperand( BIFF_ERR_REF );
 }
 
-bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importArrayToken( SequenceInputStream& rStrm )
 {
     rStrm.skip( 14 );
 
@@ -1620,7 +1619,7 @@ bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
                     appendRawToken( OPCODE_PUSH ) <<= rStrm.readDouble();
                 break;
                 case BIFF_TOK_ARRAY_STRING:
-                    appendRawToken( OPCODE_PUSH ) <<= rStrm.readString( false );
+                    appendRawToken( OPCODE_PUSH ) <<= BiffHelper::readString( rStrm, false );
                 break;
                 case BIFF_TOK_ARRAY_BOOL:
                     appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
@@ -1643,21 +1642,21 @@ bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
     return true;
 }
 
-bool OoxFormulaParserImpl::importRefToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importRefToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     BinSingleRef2d aRef;
     aRef.readBiff12Data( rStrm, bRelativeAsOffset );
     return pushReferenceOperand( aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importAreaToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importAreaToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     BinComplexRef2d aRef;
     aRef.readBiff12Data( rStrm, bRelativeAsOffset );
     return pushReferenceOperand( aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importRef3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importRef3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     LinkSheetRange aSheetRange = readSheetRange( rStrm );
     BinSingleRef2d aRef;
@@ -1665,7 +1664,7 @@ bool OoxFormulaParserImpl::importRef3dToken( RecordInputStream& rStrm, bool bDel
     return pushReferenceOperand( aSheetRange, aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importArea3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importArea3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     LinkSheetRange aSheetRange = readSheetRange( rStrm );
     BinComplexRef2d aRef;
@@ -1673,7 +1672,7 @@ bool OoxFormulaParserImpl::importArea3dToken( RecordInputStream& rStrm, bool bDe
     return pushReferenceOperand( aSheetRange, aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importMemAreaToken( RecordInputStream& rStrm, bool bAddData )
+bool OoxFormulaParserImpl::importMemAreaToken( SequenceInputStream& rStrm, bool bAddData )
 {
     rStrm.skip( 6 );
     if( bAddData )
@@ -1681,32 +1680,32 @@ bool OoxFormulaParserImpl::importMemAreaToken( RecordInputStream& rStrm, bool bA
     return true;
 }
 
-bool OoxFormulaParserImpl::importMemFuncToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importMemFuncToken( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );
     return true;
 }
 
-bool OoxFormulaParserImpl::importNameToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importNameToken( SequenceInputStream& rStrm )
 {
     return pushBiff12Name( rStrm.readInt32() );
 }
 
-bool OoxFormulaParserImpl::importNameXToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importNameXToken( SequenceInputStream& rStrm )
 {
     sal_Int32 nRefId = rStrm.readInt16();
     sal_Int32 nNameId = rStrm.readInt32();
     return pushBiff12ExtName( nRefId, nNameId );
 }
 
-bool OoxFormulaParserImpl::importFuncToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importFuncToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFuncId;
     rStrm >> nFuncId;
     return pushBiff12Function( nFuncId );
 }
 
-bool OoxFormulaParserImpl::importFuncVarToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importFuncVarToken( SequenceInputStream& rStrm )
 {
     sal_uInt8 nParamCount;
     sal_uInt16 nFuncId;
@@ -1714,7 +1713,7 @@ bool OoxFormulaParserImpl::importFuncVarToken( RecordInputStream& rStrm )
     return pushBiff12Function( nFuncId, nParamCount );
 }
 
-bool OoxFormulaParserImpl::importExpToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importExpToken( SequenceInputStream& rStrm )
 {
     BinAddress aBaseAddr;
     rStrm >> aBaseAddr.mnRow;
@@ -1726,19 +1725,19 @@ bool OoxFormulaParserImpl::importExpToken( RecordInputStream& rStrm )
     return false;
 }
 
-LinkSheetRange OoxFormulaParserImpl::readSheetRange( RecordInputStream& rStrm )
+LinkSheetRange OoxFormulaParserImpl::readSheetRange( SequenceInputStream& rStrm )
 {
     return getExternalLinks().getSheetRange( rStrm.readInt16() );
 }
 
-void OoxFormulaParserImpl::swapStreamPosition( RecordInputStream& rStrm )
+void OoxFormulaParserImpl::swapStreamPosition( SequenceInputStream& rStrm )
 {
     sal_Int64 nRecPos = rStrm.tell();
     rStrm.seek( mnAddDataPos );
     mnAddDataPos = nRecPos;
 }
 
-void OoxFormulaParserImpl::skipMemAreaAddData( RecordInputStream& rStrm )
+void OoxFormulaParserImpl::skipMemAreaAddData( SequenceInputStream& rStrm )
 {
     swapStreamPosition( rStrm );
     rStrm.skip( 16 * rStrm.readInt32() );
@@ -2771,7 +2770,7 @@ void FormulaParser::importFormula( FormulaContext& rContext, const OUString& rFo
     mxImpl->importOoxFormula( rContext, rFormulaString );
 }
 
-void FormulaParser::importFormula( FormulaContext& rContext, RecordInputStream& rStrm ) const
+void FormulaParser::importFormula( FormulaContext& rContext, SequenceInputStream& rStrm ) const
 {
     mxImpl->importBiff12Formula( rContext, rStrm );
 }
@@ -2833,7 +2832,7 @@ OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
     return OUString();
 }
 
-OUString FormulaParser::importOleTargetLink( RecordInputStream& rStrm )
+OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
 {
     OUString aTargetLink;
     sal_Int32 nFmlaSize = rStrm.readInt32();

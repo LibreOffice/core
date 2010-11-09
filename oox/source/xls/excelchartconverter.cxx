@@ -31,6 +31,7 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include "oox/drawingml/chart/datasourcemodel.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
 
 namespace oox {

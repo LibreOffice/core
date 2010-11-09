@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/ole/axcontrol.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"

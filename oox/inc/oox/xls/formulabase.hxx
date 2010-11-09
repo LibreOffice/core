@@ -33,8 +33,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -232,7 +232,7 @@ struct BinSingleRef2d
     void                setBiff2Data( sal_uInt8 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
     void                setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
 
-    void                readBiff12Data( RecordInputStream& rStrm, bool bRelativeAsOffset );
+    void                readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
@@ -245,7 +245,7 @@ struct BinComplexRef2d
     BinSingleRef2d      maRef1;             /// Start (top-left) cell address.
     BinSingleRef2d      maRef2;             /// End (bottom-right) cell address.
 
-    void                readBiff12Data( RecordInputStream& rStrm, bool bRelativeAsOffset );
+    void                readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };

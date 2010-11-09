@@ -29,7 +29,6 @@
 #define OOX_XLS_CONDFORMATBUFFER_HXX
 
 #include <com/sun/star/sheet/ConditionOperator.hpp>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
@@ -87,7 +86,7 @@ public:
     void                appendFormula( const ::rtl::OUString& rFormula );
 
     /** Imports rule settings from a CFRULE record. */
-    void                importCfRule( RecordInputStream& rStrm );
+    void                importCfRule( SequenceInputStream& rStrm );
 
     /** Imports rule settings from a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority );
@@ -131,9 +130,9 @@ public:
     CondFormatRuleRef   importCfRule( const AttributeList& rAttribs );
 
     /** Imports settings from the CONDFORMATTING record. */
-    void                importCondFormatting( RecordInputStream& rStrm );
+    void                importCondFormatting( SequenceInputStream& rStrm );
     /** Imports a conditional formatting rule from the CFRULE record. */
-    void                importCfRule( RecordInputStream& rStrm );
+    void                importCfRule( SequenceInputStream& rStrm );
 
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
@@ -167,7 +166,7 @@ public:
     /** Imports settings from the conditionalFormatting element. */
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
-    CondFormatRef       importCondFormatting( RecordInputStream& rStrm );
+    CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
 

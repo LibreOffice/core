@@ -55,7 +55,7 @@ protected:
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
 private:
     /** Different types of cell records. */
@@ -69,35 +69,35 @@ private:
     void                importFormula( const AttributeList& rAttribs );
 
     /** Imports a cell address and the following XF identifier. */
-    void                importCellHeader( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellHeader( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports an empty cell from a CELL_BLANK or MULTCELL_BLANK record. */
-    void                importCellBlank( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellBlank( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports a boolean cell from a CELL_BOOL, MULTCELL_BOOL, or FORMULA_BOOL record. */
-    void                importCellBool( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellBool( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports a numeric cell from a CELL_DOUBLE, MULTCELL_DOUBLE, or FORMULA_DOUBLE record. */
-    void                importCellDouble( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellDouble( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports an error code cell from a CELL_ERROR, MULTCELL_ERROR, or FORMULA_ERROR record. */
-    void                importCellError( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellError( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports an encoded numeric cell from a CELL_RK or MULTCELL_RK record. */
-    void                importCellRk( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellRk( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports a rich-string cell from a CELL_RSTRING or MULTCELL_RSTRING record. */
-    void                importCellRString( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellRString( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports a string cell from a CELL_SI or MULTCELL_SI record. */
-    void                importCellSi( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellSi( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports a string cell from a CELL_STRING, MULTCELL_STRING, or FORMULA_STRING record. */
-    void                importCellString( RecordInputStream& rStrm, CellType eCellType );
+    void                importCellString( SequenceInputStream& rStrm, CellType eCellType );
 
     /** Imports a cell formula for the current cell. */
-    void                importCellFormula( RecordInputStream& rStrm );
+    void                importCellFormula( SequenceInputStream& rStrm );
 
     /** Imports row settings from a ROW record. */
-    void                importRow( RecordInputStream& rStrm );
+    void                importRow( SequenceInputStream& rStrm );
     /** Imports an array formula from an ARRAY record. */
-    void                importArray( RecordInputStream& rStrm );
+    void                importArray( SequenceInputStream& rStrm );
     /** Imports a shared formula from a SHAREDFORMULA record. */
-    void                importSharedFmla( RecordInputStream& rStrm );
+    void                importSharedFmla( SequenceInputStream& rStrm );
     /** Imports table operation from a DATATABLE record. */
-    void                importDataTable( RecordInputStream& rStrm );
+    void                importDataTable( SequenceInputStream& rStrm );
 
 private:
     CellModel           maCurrCell;         /// Position and formatting of current imported cell.

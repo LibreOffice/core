@@ -34,7 +34,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffoutputstream.hxx"
 
@@ -123,7 +122,7 @@ CellAddress ApiCellRangeList::getBaseAddress() const
 
 // ============================================================================
 
-void BinAddress::read( RecordInputStream& rStrm )
+void BinAddress::read( SequenceInputStream& rStrm )
 {
     rStrm >> mnRow >> mnCol;
 }
@@ -154,7 +153,7 @@ bool BinRange::contains( const BinAddress& rAddr ) const
             (maFirst.mnRow <= rAddr.mnRow) && (rAddr.mnRow <= maLast.mnRow);
 }
 
-void BinRange::read( RecordInputStream& rStrm )
+void BinRange::read( SequenceInputStream& rStrm )
 {
     rStrm >> maFirst.mnRow >> maLast.mnRow >> maFirst.mnCol >> maLast.mnCol;
 }
@@ -199,7 +198,7 @@ BinRange BinRangeList::getEnclosingRange() const
     return aRange;
 }
 
-void BinRangeList::read( RecordInputStream& rStrm )
+void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );

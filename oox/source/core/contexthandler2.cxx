@@ -126,12 +126,12 @@ void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
     }
 }
 
-ContextHandlerRef ContextHandler2Helper::implCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ContextHandler2Helper::implCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     return onCreateRecordContext( nRecId, rStrm );
 }
 
-void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
+void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     pushElementInfo( nRecId );
     onStartRecord( rStrm );
@@ -215,12 +215,12 @@ void SAL_CALL ContextHandler2::endFastElement( sal_Int32 nElement ) throw( SAXEx
 
 // oox.core.RecordContext interface -------------------------------------------
 
-ContextHandlerRef ContextHandler2::createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ContextHandler2::createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     return implCreateRecordContext( nRecId, rStrm );
 }
 
-void ContextHandler2::startRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
+void ContextHandler2::startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     implStartRecord( nRecId, rStrm );
 }
@@ -249,12 +249,12 @@ void ContextHandler2::onEndElement()
 {
 }
 
-ContextHandlerRef ContextHandler2::onCreateRecordContext( sal_Int32, RecordInputStream& )
+ContextHandlerRef ContextHandler2::onCreateRecordContext( sal_Int32, SequenceInputStream& )
 {
     return 0;
 }
 
-void ContextHandler2::onStartRecord( RecordInputStream& )
+void ContextHandler2::onStartRecord( SequenceInputStream& )
 {
 }
 

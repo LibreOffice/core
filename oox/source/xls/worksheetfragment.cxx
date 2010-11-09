@@ -30,7 +30,6 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/autofilterbuffer.hxx"
 #include "oox/xls/autofiltercontext.hxx"
@@ -164,7 +163,7 @@ void DataValidationsContext::onEndElement()
 }
 
 
-ContextHandlerRef DataValidationsContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef DataValidationsContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     if( nRecId == BIFF12_ID_DATAVALIDATION )
         importDataValidation( rStrm );
@@ -191,7 +190,7 @@ void DataValidationsContext::importDataValidation( const AttributeList& rAttribs
     mxValModel->mbAllowBlank   = rAttribs.getBool( XML_allowBlank, false );
 }
 
-void DataValidationsContext::importDataValidation( RecordInputStream& rStrm )
+void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 {
     ValidationModel aModel;
 
@@ -370,7 +369,7 @@ void WorksheetFragment::onCharacters( const OUString& rChars )
     }
 }
 
-ContextHandlerRef WorksheetFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef WorksheetFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -621,7 +620,7 @@ void WorksheetFragment::importControl( const AttributeList& rAttribs )
     getVmlDrawing().registerControl( aInfo );
 }
 
-void WorksheetFragment::importDimension( RecordInputStream& rStrm )
+void WorksheetFragment::importDimension( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     aBinRange.read( rStrm );
@@ -635,7 +634,7 @@ void WorksheetFragment::importDimension( RecordInputStream& rStrm )
         extendUsedArea( aRange );
 }
 
-void WorksheetFragment::importSheetFormatPr( RecordInputStream& rStrm )
+void WorksheetFragment::importSheetFormatPr( SequenceInputStream& rStrm )
 {
     sal_Int32 nDefaultWidth;
     sal_uInt16 nBaseWidth, nDefaultHeight, nFlags;
@@ -654,7 +653,7 @@ void WorksheetFragment::importSheetFormatPr( RecordInputStream& rStrm )
         getFlag( nFlags, BIFF_DEFROW_THICKBOTTOM ) );
 }
 
-void WorksheetFragment::importCol( RecordInputStream& rStrm )
+void WorksheetFragment::importCol( SequenceInputStream& rStrm )
 {
     ColumnModel aModel;
 
@@ -676,7 +675,7 @@ void WorksheetFragment::importCol( RecordInputStream& rStrm )
     setColumnModel( aModel );
 }
 
-void WorksheetFragment::importMergeCell( RecordInputStream& rStrm )
+void WorksheetFragment::importMergeCell( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;
@@ -685,20 +684,20 @@ void WorksheetFragment::importMergeCell( RecordInputStream& rStrm )
         setMergedRange( aRange );
 }
 
-void WorksheetFragment::importHyperlink( RecordInputStream& rStrm )
+void WorksheetFragment::importHyperlink( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;
     HyperlinkModel aModel;
     if( getAddressConverter().convertToCellRange( aModel.maRange, aBinRange, getSheetIndex(), true, true ) )
     {
-        aModel.maTarget = getRelations().getExternalTargetFromRelId( rStrm.readString() );
+        aModel.maTarget = getRelations().getExternalTargetFromRelId( BiffHelper::readString( rStrm ) );
         rStrm >> aModel.maLocation >> aModel.maTooltip >> aModel.maDisplay;
         setHyperlink( aModel );
     }
 }
 
-void WorksheetFragment::importBrk( RecordInputStream& rStrm, bool bRowBreak )
+void WorksheetFragment::importBrk( SequenceInputStream& rStrm, bool bRowBreak )
 {
     PageBreakModel aModel;
     sal_Int32 nManual;
@@ -707,17 +706,17 @@ void WorksheetFragment::importBrk( RecordInputStream& rStrm, bool bRowBreak )
     setPageBreak( aModel, bRowBreak );
 }
 
-void WorksheetFragment::importDrawing( RecordInputStream& rStrm )
+void WorksheetFragment::importDrawing( SequenceInputStream& rStrm )
 {
-    setDrawingPath( getFragmentPathFromRelId( rStrm.readString() ) );
+    setDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
 }
 
-void WorksheetFragment::importLegacyDrawing( RecordInputStream& rStrm )
+void WorksheetFragment::importLegacyDrawing( SequenceInputStream& rStrm )
 {
-    setVmlDrawingPath( getFragmentPathFromRelId( rStrm.readString() ) );
+    setVmlDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
 }
 
-void WorksheetFragment::importOleObject( RecordInputStream& rStrm )
+void WorksheetFragment::importOleObject( SequenceInputStream& rStrm )
 {
     ::oox::vml::OleObjectInfo aInfo;
     sal_Int32 nAspect, nUpdateMode, nShapeId;
@@ -727,7 +726,7 @@ void WorksheetFragment::importOleObject( RecordInputStream& rStrm )
     if( aInfo.mbLinked )
         aInfo.maTargetLink = getFormulaParser().importOleTargetLink( rStrm );
     else
-        importEmbeddedOleData( aInfo.maEmbeddedData, rStrm.readString() );
+        importEmbeddedOleData( aInfo.maEmbeddedData, BiffHelper::readString( rStrm ) );
     aInfo.setShapeId( nShapeId );
     aInfo.mbShowAsIcon = nAspect == BIFF12_OLEOBJECT_ICON;
     aInfo.mbAutoUpdate = nUpdateMode == BIFF12_OLEOBJECT_ALWAYS;
@@ -735,11 +734,11 @@ void WorksheetFragment::importOleObject( RecordInputStream& rStrm )
     getVmlDrawing().registerOleObject( aInfo );
 }
 
-void WorksheetFragment::importControl( RecordInputStream& rStrm )
+void WorksheetFragment::importControl( SequenceInputStream& rStrm )
 {
     ::oox::vml::ControlInfo aInfo;
     aInfo.setShapeId( rStrm.readInt32() );
-    aInfo.maFragmentPath = getFragmentPathFromRelId( rStrm.readString() );
+    aInfo.maFragmentPath = getFragmentPathFromRelId( BiffHelper::readString( rStrm ) );
     rStrm >> aInfo.maName;
     getVmlDrawing().registerControl( aInfo );
 }

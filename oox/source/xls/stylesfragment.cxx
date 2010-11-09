@@ -56,7 +56,7 @@ ContextHandlerRef IndexedColorsContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -242,7 +242,7 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
     return 0;
 }
 
-ContextHandlerRef StylesFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef StylesFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

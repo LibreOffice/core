@@ -66,7 +66,7 @@ public:
                             const ::rtl::OUString& rSharedRange, sal_Int32 nId,
                             const ::com::sun::star::table::CellAddress& rBaseAddr );
     /** Imports a shared formula from a SHAREDFORMULA record in the passed stream */
-    void                importSharedFmla( RecordInputStream& rStrm,
+    void                importSharedFmla( SequenceInputStream& rStrm,
                             const ::com::sun::star::table::CellAddress& rBaseAddr );
     /** Imports a shared formula from a SHAREDFMLA record in the passed stream. */
     void                importSharedFmla( BiffInputStream& rStrm,

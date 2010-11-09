@@ -101,11 +101,11 @@ public:
     void                importCalcPr( const AttributeList& rAttribs );
 
     /** Imports the FILESHARING record containing write protection settings. */
-    void                importFileSharing( RecordInputStream& rStrm );
+    void                importFileSharing( SequenceInputStream& rStrm );
     /** Imports the WORKBOOKPR record containing global workbook settings. */
-    void                importWorkbookPr( RecordInputStream& rStrm );
+    void                importWorkbookPr( SequenceInputStream& rStrm );
     /** Imports the CALCPR record containing workbook calculation settings. */
-    void                importCalcPr( RecordInputStream& rStrm );
+    void                importCalcPr( SequenceInputStream& rStrm );
 
     /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
     void                setSaveExtLinkValues( bool bSaveExtLinks );

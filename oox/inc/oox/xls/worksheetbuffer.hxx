@@ -29,7 +29,8 @@
 #define OOX_XLS_WORKSHEETBUFFER_HXX
 
 #include <utility>
-#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/refmap.hxx"
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -75,7 +76,7 @@ public:
     /** Imports the attributes of a sheet element. */
     void                importSheet( const AttributeList& rAttribs );
     /** Imports the SHEET record from the passed BIFF12 stream. */
-    void                importSheet( RecordInputStream& rStrm );
+    void                importSheet( SequenceInputStream& rStrm );
     /** Imports the SHEET record from the passed BIFF stream. */
     void                importSheet( BiffInputStream& rStrm );
     /** Inserts a new empty sheet into the document. Looks for an unused name.

@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XProtectable.hpp>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
@@ -178,7 +177,7 @@ void WorksheetSettings::importPhoneticPr( const AttributeList& rAttribs )
     maPhoneticSett.importPhoneticPr( rAttribs );
 }
 
-void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
+void WorksheetSettings::importSheetPr( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags1;
     sal_uInt8 nFlags2;
@@ -196,13 +195,13 @@ void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
     getPageSettings().setFitToPagesMode( getFlag( nFlags1, BIFF_SHEETPR_FITTOPAGES ) );
 }
 
-void WorksheetSettings::importChartSheetPr( RecordInputStream& rStrm )
+void WorksheetSettings::importChartSheetPr( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );    // flags, contains only the 'published' flag
     rStrm >> maSheetSettings.maTabColor >> maSheetSettings.maCodeName;
 }
 
-void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
+void WorksheetSettings::importSheetProtection( SequenceInputStream& rStrm )
 {
     rStrm >> maSheetProt.mnPasswordHash;
     // no flags field for all these boolean flags?!?
@@ -224,7 +223,7 @@ void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
     maSheetProt.mbSelectUnlocked   = rStrm.readInt32() != 0;
 }
 
-void WorksheetSettings::importChartProtection( RecordInputStream& rStrm )
+void WorksheetSettings::importChartProtection( SequenceInputStream& rStrm )
 {
     rStrm >> maSheetProt.mnPasswordHash;
     // no flags field for all these boolean flags?!?
@@ -232,7 +231,7 @@ void WorksheetSettings::importChartProtection( RecordInputStream& rStrm )
     maSheetProt.mbObjects          = rStrm.readInt32() != 0;
 }
 
-void WorksheetSettings::importPhoneticPr( RecordInputStream& rStrm )
+void WorksheetSettings::importPhoneticPr( SequenceInputStream& rStrm )
 {
     maPhoneticSett.importPhoneticPr( rStrm );
 }

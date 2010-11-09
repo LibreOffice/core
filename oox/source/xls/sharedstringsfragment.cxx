@@ -64,7 +64,7 @@ ContextHandlerRef SharedStringsFragment::onCreateContext( sal_Int32 nElement, co
     return 0;
 }
 
-ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

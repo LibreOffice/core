@@ -48,7 +48,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        initializeImport();
@@ -58,7 +58,7 @@ private:
     /** Imports the the relation identifier for the DrawingML part. */
     void                importDrawing( const AttributeList& rAttribs );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
-    void                importDrawing( RecordInputStream& rStrm );
+    void                importDrawing( SequenceInputStream& rStrm );
 };
 
 // ============================================================================

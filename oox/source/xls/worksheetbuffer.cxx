@@ -36,8 +36,8 @@
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
@@ -95,7 +95,7 @@ void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
     insertSheet( aModel );
 }
 
-void WorksheetBuffer::importSheet( RecordInputStream& rStrm )
+void WorksheetBuffer::importSheet( SequenceInputStream& rStrm )
 {
     sal_Int32 nState;
     SheetInfoModel aModel;

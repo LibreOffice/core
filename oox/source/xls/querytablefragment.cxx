@@ -59,7 +59,7 @@ ContextHandlerRef QueryTableFragment::onCreateContext( sal_Int32 nElement, const
     return 0;
 }
 
-ContextHandlerRef QueryTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef QueryTableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

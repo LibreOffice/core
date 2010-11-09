@@ -43,7 +43,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
-#include "oox/helper/recordinputstream.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
 namespace oox {
@@ -109,7 +109,7 @@ void BinSingleRef2d::setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelat
         mnRow -= 0x10000;
 }
 
-void BinSingleRef2d::readBiff12Data( RecordInputStream& rStrm, bool bRelativeAsOffset )
+void BinSingleRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
     sal_Int32 nRow;
     sal_uInt16 nCol;
@@ -134,7 +134,7 @@ void BinSingleRef2d::readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffs
 
 // ----------------------------------------------------------------------------
 
-void BinComplexRef2d::readBiff12Data( RecordInputStream& rStrm, bool bRelativeAsOffset )
+void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
     sal_Int32 nRow1, nRow2;
     sal_uInt16 nCol1, nCol2;

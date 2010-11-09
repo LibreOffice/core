@@ -84,8 +84,8 @@ public:
 
     // oox.core.ContextHandler interface --------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        startRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        endRecord( sal_Int32 nRecId );
 
     // oox.core.ContextHandler2Helper interface -------------------------------
@@ -95,8 +95,8 @@ public:
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
-    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
     virtual void        onEndRecord();
 
     // oox.core.FragmentHandler2 interface ------------------------------------

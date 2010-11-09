@@ -32,7 +32,6 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include "oox/core/fragmenthandler.hxx"
-#include "oox/helper/recordinputstream.hxx"
 
 namespace oox {
 namespace core {
@@ -274,7 +273,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
     while( lclReadNextRecord( nRecId, aRecData, *maSource.mxInStream ) )
     {
         // create record stream object from imported record data
-        RecordInputStream aRecStrm( aRecData );
+        SequenceInputStream aRecStrm( aRecData );
         // try to leave a context, there may be other incomplete contexts on the stack
         if( const RecordInfo* pEndRecInfo = getEndRecordInfo( nRecId ) )
         {

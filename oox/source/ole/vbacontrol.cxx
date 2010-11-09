@@ -38,6 +38,7 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/storagebase.hxx"

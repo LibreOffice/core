@@ -40,6 +40,7 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/seriesconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
+#include "oox/helper/containerhelper.hxx"
 
 namespace oox {
 namespace drawingml {

@@ -189,6 +189,8 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 // ============================================================================
 
+// conversion -----------------------------------------------------------------
+
 /*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
     DecodedDouble aDecDbl( 0.0 );
@@ -264,6 +266,35 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     OSL_ENSURE( (0 < nCodePage) && (nCodePage <= SAL_MAX_UINT16), "BiffHelper::calcCodePageFromTextEncoding - unknown text encoding" );
     return static_cast< sal_uInt16 >( (nCodePage == 0) ? 1252 : nCodePage );
 }
+
+// BIFF12 import --------------------------------------------------------------
+
+/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen )
+{
+    OUString aString;
+    if( !rStrm.isEof() )
+    {
+        sal_Int32 nCharCount = b32BitLen ? rStrm.readValue< sal_Int32 >() : rStrm.readValue< sal_Int16 >();
+        // string length -1 is often used to indicate a missing string
+        OSL_ENSURE( !rStrm.isEof() && (nCharCount >= -1), "BiffHelper::readString - invalid string length" );
+        if( !rStrm.isEof() && (nCharCount > 0) )
+        {
+            ::std::vector< sal_Unicode > aBuffer;
+            aBuffer.reserve( getLimitedValue< size_t, sal_Int32 >( nCharCount + 1, 0, 0xFFFF ) );
+            for( sal_Int32 nCharIdx = 0; !rStrm.isEof() && (nCharIdx < nCharCount); ++nCharIdx )
+            {
+                sal_uInt16 nChar;
+                rStrm.readValue( nChar );
+                aBuffer.push_back( static_cast< sal_Unicode >( nChar ) );
+            }
+            aBuffer.push_back( 0 );
+            aString = OUString( &aBuffer.front() );
+        }
+    }
+    return aString;
+}
+
+// BIFF2-BIFF8 import ---------------------------------------------------------
 
 /*static*/ bool BiffHelper::isBofRecord( BiffInputStream& rStrm )
 {

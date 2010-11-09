@@ -36,6 +36,7 @@
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -286,7 +287,7 @@ void DefinedNameBase::importOoxFormula( FormulaContext& rContext, sal_Int16 nBas
         getFormulaParser().convertErrorToFormula( rContext, BIFF_ERR_NAME );
 }
 
-void DefinedNameBase::importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm )
+void DefinedNameBase::importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, SequenceInputStream& rStrm )
 {
     rContext.setBaseAddress( CellAddress( nBaseSheet, 0, 0 ) );
     getFormulaParser().importFormula( rContext, rStrm );
@@ -338,7 +339,7 @@ void DefinedName::setFormula( const OUString& rFormula )
     maModel.maFormula = rFormula;
 }
 
-void DefinedName::importDefinedName( RecordInputStream& rStrm )
+void DefinedName::importDefinedName( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
     rStrm >> nFlags;
@@ -596,7 +597,7 @@ void DefinedName::implImportOoxFormula( FormulaContext& rContext )
 {
     if( mxFormula.get() )
     {
-        RecordInputStream aStrm( *mxFormula );
+        SequenceInputStream aStrm( *mxFormula );
         importBiff12Formula( rContext, mnCalcSheet, aStrm );
     }
     else
@@ -634,7 +635,7 @@ DefinedNameRef DefinedNamesBuffer::importDefinedName( const AttributeList& rAttr
     return xDefName;
 }
 
-void DefinedNamesBuffer::importDefinedName( RecordInputStream& rStrm )
+void DefinedNamesBuffer::importDefinedName( SequenceInputStream& rStrm )
 {
     createDefinedName()->importDefinedName( rStrm );
 }

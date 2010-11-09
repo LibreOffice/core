@@ -29,7 +29,6 @@
 #define OOX_XLS_NUMBERFORMATSBUFFER_HXX
 
 #include <com/sun/star/lang/Locale.hpp>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -109,7 +108,7 @@ public:
     /** Inserts a new number format code. */
     NumberFormatRef     importNumFmt( const AttributeList& rAttribs );
     /** Inserts a new number format code from a NUMFMT record. */
-    void                importNumFmt( RecordInputStream& rStrm );
+    void                importNumFmt( SequenceInputStream& rStrm );
     /** Inserts a new number format code from a FORMAT record. */
     void                importFormat( BiffInputStream& rStrm );
 

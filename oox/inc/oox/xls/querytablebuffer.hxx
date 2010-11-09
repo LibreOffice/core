@@ -67,7 +67,7 @@ public:
     /** Imports query table settings from the queryTable element. */
     void                importQueryTable( const AttributeList& rAttribs );
     /** Imports query table settings from the QUERYTABLE record. */
-    void                importQueryTable( RecordInputStream& rStrm );
+    void                importQueryTable( SequenceInputStream& rStrm );
 
     /** Imports query table settings from the QUERYTABLE record. */
     void                importQueryTable( BiffInputStream& rStrm );

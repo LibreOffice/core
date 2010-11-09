@@ -31,7 +31,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
+#include "oox/helper/binaryinputstream.hxx"
 #include "oox/core/contexthandler.hxx"
 
 namespace oox {
@@ -124,7 +124,7 @@ public:
         Usually 'this' can be returned to improve performance by reusing the
         same instance to process several records. Used by BIFF import only.
      */
-    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm ) = 0;
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) = 0;
 
     /** Will be called when a new record block in a binary stream has been
         started.
@@ -132,7 +132,7 @@ public:
         The current record identifier can be accessed with getCurrentElement()
         or isCurrentElement(). Used by BIFF import only.
      */
-    virtual void        onStartRecord( RecordInputStream& rStrm ) = 0;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) = 0;
 
     /** Will be called when the current record block is about to be left.
 
@@ -189,10 +189,10 @@ protected:
     void                implEndElement( sal_Int32 nElement );
 
     /** Must be called from createRecordContext() in derived classes. */
-    ContextHandlerRef   implCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    ContextHandlerRef   implCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     /** Must be called from startRecord() in derived classes. */
-    void                implStartRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    void                implStartRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     /** Must be called from endRecord() in derived classes. */
     void                implEndRecord( sal_Int32 nRecId );
@@ -250,8 +250,8 @@ public:
 
     // oox.core.ContextHandler interface --------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        startRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        endRecord( sal_Int32 nRecId );
 
     // oox.core.ContextHandler2Helper interface -------------------------------
@@ -261,8 +261,8 @@ public:
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
-    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
     virtual void        onEndRecord();
 };
 

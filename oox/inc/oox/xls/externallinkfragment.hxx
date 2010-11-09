@@ -55,22 +55,22 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onCharacters( const ::rtl::OUString& rChars );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
 private:
     /** Imports cell settings from a c element. */
     void                importCell( const AttributeList& rAttribs );
 
     /** Imports the EXTCELL_BLANK from the passed stream. */
-    void                importExtCellBlank( RecordInputStream& rStrm );
+    void                importExtCellBlank( SequenceInputStream& rStrm );
     /** Imports the EXTCELL_BOOL from the passed stream. */
-    void                importExtCellBool( RecordInputStream& rStrm );
+    void                importExtCellBool( SequenceInputStream& rStrm );
     /** Imports the EXTCELL_DOUBLE from the passed stream. */
-    void                importExtCellDouble( RecordInputStream& rStrm );
+    void                importExtCellDouble( SequenceInputStream& rStrm );
     /** Imports the EXTCELL_ERROR from the passed stream. */
-    void                importExtCellError( RecordInputStream& rStrm );
+    void                importExtCellError( SequenceInputStream& rStrm );
     /** Imports the EXTCELL_STRING from the passed stream. */
-    void                importExtCellString( RecordInputStream& rStrm );
+    void                importExtCellString( SequenceInputStream& rStrm );
 
     /** Sets the passed cell value to the current position in the sheet cache. */
     void                setCellValue( const ::com::sun::star::uno::Any& rValue );
@@ -97,7 +97,7 @@ protected:
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 

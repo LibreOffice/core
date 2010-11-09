@@ -34,7 +34,6 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
 
@@ -156,13 +155,13 @@ void WorkbookSettings::importCalcPr( const AttributeList& rAttribs )
     maCalcSettings.mbConcurrent    = rAttribs.getBool( XML_concurrentCalc, true );
 }
 
-void WorkbookSettings::importFileSharing( RecordInputStream& rStrm )
+void WorkbookSettings::importFileSharing( SequenceInputStream& rStrm )
 {
     maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
     rStrm >> maFileSharing.mnPasswordHash >> maFileSharing.maUserName;
 }
 
-void WorkbookSettings::importWorkbookPr( RecordInputStream& rStrm )
+void WorkbookSettings::importWorkbookPr( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
     rStrm >> nFlags >> maBookSettings.mnDefaultThemeVer >> maBookSettings.maCodeName;
@@ -172,7 +171,7 @@ void WorkbookSettings::importWorkbookPr( RecordInputStream& rStrm )
     setDateMode( getFlag( nFlags, BIFF12_WORKBOOKPR_DATE1904 ) );
 }
 
-void WorkbookSettings::importCalcPr( RecordInputStream& rStrm )
+void WorkbookSettings::importCalcPr( SequenceInputStream& rStrm )
 {
     sal_Int32 nCalcMode, nProcCount;
     sal_uInt16 nFlags;

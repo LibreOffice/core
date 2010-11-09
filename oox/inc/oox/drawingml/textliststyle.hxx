@@ -28,8 +28,8 @@
 #ifndef OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 #define OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
+#include "oox/helper/refvector.hxx"
 
 namespace oox { namespace drawingml {
 

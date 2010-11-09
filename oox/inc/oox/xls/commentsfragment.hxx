@@ -47,7 +47,7 @@ protected:
     virtual void        onCharacters( const ::rtl::OUString& rChars );
     virtual void        onEndElement();
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        onEndRecord();
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
@@ -56,7 +56,7 @@ private:
     /** Imports comment data from the comment element. */
     void                importComment( const AttributeList& rAttribs );
     /** Imports comment data from the COMMENT record. */
-    void                importComment( RecordInputStream& rStrm );
+    void                importComment( SequenceInputStream& rStrm );
 
 private:
     CommentRef          mxComment;

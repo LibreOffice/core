@@ -32,7 +32,6 @@
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/drawingfragment.hxx"
@@ -70,7 +69,7 @@ void Comment::importComment( const AttributeList& rAttribs )
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
 }
 
-void Comment::importComment( RecordInputStream& rStrm )
+void Comment::importComment( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> maModel.mnAuthorId >> aBinRange;

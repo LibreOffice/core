@@ -33,7 +33,6 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/ole/olestorage.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/chartsheetfragment.hxx"
@@ -128,7 +127,7 @@ void WorkbookFragment::onCharacters( const OUString& rChars )
         mxCurrName->setFormula( rChars );
 }
 
-ContextHandlerRef WorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef WorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -317,16 +316,16 @@ void WorkbookFragment::importPivotCache( const AttributeList& rAttribs )
     importPivotCacheDefFragment( aRelId, nCacheId );
 }
 
-void WorkbookFragment::importExternalRef( RecordInputStream& rStrm )
+void WorkbookFragment::importExternalRef( SequenceInputStream& rStrm )
 {
     if( ExternalLink* pExtLink = getExternalLinks().importExternalRef( rStrm ).get() )
         importExternalLinkFragment( *pExtLink );
 }
 
-void WorkbookFragment::importPivotCache( RecordInputStream& rStrm )
+void WorkbookFragment::importPivotCache( SequenceInputStream& rStrm )
 {
     sal_Int32 nCacheId = rStrm.readInt32();
-    OUString aRelId = rStrm.readString();
+    OUString aRelId = BiffHelper::readString( rStrm );
     importPivotCacheDefFragment( aRelId, nCacheId );
 }
 

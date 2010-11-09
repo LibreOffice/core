@@ -30,6 +30,8 @@
 
 #include "oox/helper/binarystreambase.hxx"
 
+namespace oox { class SequenceInputStream; }
+
 namespace oox {
 namespace xls {
 
@@ -615,7 +617,12 @@ public:
     /** Returns a Windows code page from a text encoding. */
     static sal_uInt16   calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc );
 
-    // import -----------------------------------------------------------------
+    // BIFF12 import ----------------------------------------------------------
+
+    /** Reads a BIFF12 string with leading 16-bit or 32-bit length field. */
+    static ::rtl::OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true );
+
+    // BIFF2-BIFF8 import -----------------------------------------------------
 
     /** Returns true, if the current record of the stream is a BOF record. */
     static bool         isBofRecord( BiffInputStream& rStrm );
@@ -643,6 +650,15 @@ private:
                         BiffHelper();   // not implemented
                         ~BiffHelper();  // not implemented
 };
+
+// ----------------------------------------------------------------------------
+
+/** BIFF12 stream operator for an ::rtl::OUString, reads 32-bit string length and Unicode array. */
+inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, ::rtl::OUString& orString )
+{
+    orString = BiffHelper::readString( rStrm );
+    return rStrm;
+}
 
 // ============================================================================
 

@@ -120,7 +120,7 @@ public:
     /** Imports and converts a BIFF12 token array from the passed stream. */
     void                importFormula(
                             FormulaContext& rContext,
-                            RecordInputStream& rStrm ) const;
+                            SequenceInputStream& rStrm ) const;
 
     /** Imports and converts a BIFF2-BIFF8 token array from the passed stream.
         @param pnFmlaSize  Size of the token array. If null is passed, reads
@@ -150,7 +150,7 @@ public:
     ::rtl::OUString     importOleTargetLink( const ::rtl::OUString& rFormulaString );
 
     /** Imports and converts an OLE link target from the passed stream. */
-    ::rtl::OUString     importOleTargetLink( RecordInputStream& rStrm );
+    ::rtl::OUString     importOleTargetLink( SequenceInputStream& rStrm );
 
     /** Imports and converts an OLE link target from the passed stream. */
     ::rtl::OUString     importOleTargetLink(

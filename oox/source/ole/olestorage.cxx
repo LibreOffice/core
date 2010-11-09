@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/helper.hxx"
 
 namespace oox {

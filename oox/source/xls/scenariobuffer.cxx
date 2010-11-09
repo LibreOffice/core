@@ -34,8 +34,8 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
@@ -102,7 +102,7 @@ void Scenario::importInputCells( const AttributeList& rAttribs )
     maCells.push_back( aModel );
 }
 
-void Scenario::importScenario( RecordInputStream& rStrm )
+void Scenario::importScenario( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );    // cell count
     // two longs instead of flag field
@@ -111,7 +111,7 @@ void Scenario::importScenario( RecordInputStream& rStrm )
     rStrm >> maModel.maName >> maModel.maComment >> maModel.maUser;
 }
 
-void Scenario::importInputCells( RecordInputStream& rStrm )
+void Scenario::importInputCells( SequenceInputStream& rStrm )
 {
     // TODO: where is the deleted flag?
     ScenarioCellModel aModel;
@@ -232,7 +232,7 @@ void SheetScenarios::importScenarios( const AttributeList& rAttribs )
     maModel.mnShown   = rAttribs.getInteger( XML_show, 0 );
 }
 
-void SheetScenarios::importScenarios( RecordInputStream& rStrm )
+void SheetScenarios::importScenarios( SequenceInputStream& rStrm )
 {
     maModel.mnCurrent = rStrm.readuInt16();
     maModel.mnShown   = rStrm.readuInt16();

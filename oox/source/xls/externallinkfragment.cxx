@@ -95,7 +95,7 @@ void ExternalSheetDataContext::onCharacters( const OUString& rChars )
     }
 }
 
-ContextHandlerRef ExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -126,35 +126,35 @@ void ExternalSheetDataContext::importCell( const AttributeList& rAttribs )
         mnCurrType = XML_TOKEN_INVALID;
 }
 
-void ExternalSheetDataContext::importExtCellBlank( RecordInputStream& rStrm )
+void ExternalSheetDataContext::importExtCellBlank( SequenceInputStream& rStrm )
 {
     maCurrPos.Column = rStrm.readInt32();
     setCellValue( Any( OUString() ) );
 }
 
-void ExternalSheetDataContext::importExtCellBool( RecordInputStream& rStrm )
+void ExternalSheetDataContext::importExtCellBool( SequenceInputStream& rStrm )
 {
     maCurrPos.Column = rStrm.readInt32();
     double fValue = (rStrm.readuInt8() == 0) ? 0.0 : 1.0;
     setCellValue( Any( fValue ) );
 }
 
-void ExternalSheetDataContext::importExtCellDouble( RecordInputStream& rStrm )
+void ExternalSheetDataContext::importExtCellDouble( SequenceInputStream& rStrm )
 {
     maCurrPos.Column = rStrm.readInt32();
     setCellValue( Any( rStrm.readDouble() ) );
 }
 
-void ExternalSheetDataContext::importExtCellError( RecordInputStream& rStrm )
+void ExternalSheetDataContext::importExtCellError( SequenceInputStream& rStrm )
 {
     maCurrPos.Column = rStrm.readInt32();
     setCellValue( Any( BiffHelper::calcDoubleFromError( rStrm.readuInt8() ) ) );
 }
 
-void ExternalSheetDataContext::importExtCellString( RecordInputStream& rStrm )
+void ExternalSheetDataContext::importExtCellString( SequenceInputStream& rStrm )
 {
     maCurrPos.Column = rStrm.readInt32();
-    setCellValue( Any( rStrm.readString() ) );
+    setCellValue( Any( BiffHelper::readString( rStrm ) ) );
 }
 
 void ExternalSheetDataContext::setCellValue( const Any& rValue )
@@ -280,7 +280,7 @@ void ExternalLinkFragment::onEndElement()
     }
 }
 
-ContextHandlerRef ExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {

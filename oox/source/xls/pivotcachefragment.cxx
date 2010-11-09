@@ -28,7 +28,6 @@
 #include "oox/xls/pivotcachefragment.hxx"
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
@@ -82,7 +81,7 @@ void PivotCacheFieldContext::onStartElement( const AttributeList& rAttribs )
         mrCacheField.importCacheField( rAttribs );
 }
 
-ContextHandlerRef PivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -110,7 +109,7 @@ ContextHandlerRef PivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecI
     return 0;
 }
 
-void PivotCacheFieldContext::onStartRecord( RecordInputStream& rStrm )
+void PivotCacheFieldContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrCacheField.importPCDField( rStrm );
@@ -152,7 +151,7 @@ ContextHandlerRef PivotCacheDefinitionFragment::onCreateContext( sal_Int32 nElem
     return 0;
 }
 
-ContextHandlerRef PivotCacheDefinitionFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotCacheDefinitionFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -261,7 +260,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
     return 0;
 }
 
-ContextHandlerRef PivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -300,14 +299,14 @@ void PivotCacheRecordsFragment::startCacheRecord()
     mbInRecord = true;
 }
 
-void PivotCacheRecordsFragment::importPCRecord( RecordInputStream& rStrm )
+void PivotCacheRecordsFragment::importPCRecord( SequenceInputStream& rStrm )
 {
     startCacheRecord();
     mrPivotCache.importPCRecord( rStrm, *this, mnRow );
     mbInRecord = false;
 }
 
-void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, RecordInputStream& rStrm )
+void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     if( mbInRecord )
     {

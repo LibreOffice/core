@@ -40,7 +40,6 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
 namespace oox {
@@ -1998,10 +1997,10 @@ NumberFormatRef NumberFormatsBuffer::importNumFmt( const AttributeList& rAttribs
     return createNumFmt( nNumFmtId, aFmtCode );
 }
 
-void NumberFormatsBuffer::importNumFmt( RecordInputStream& rStrm )
+void NumberFormatsBuffer::importNumFmt( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = rStrm.readuInt16();
-    OUString aFmtCode = rStrm.readString();
+    OUString aFmtCode = BiffHelper::readString( rStrm );
     createNumFmt( nNumFmtId, aFmtCode );
 }
 

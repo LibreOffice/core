@@ -82,7 +82,7 @@ void CommentsFragment::onEndElement()
         mxComment.reset();
 }
 
-ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -94,7 +94,7 @@ ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, Rec
             if( nRecId == BIFF12_ID_COMMENTLIST ) return this;
         break;
         case BIFF12_ID_COMMENTAUTHORS:
-            if( nRecId == BIFF12_ID_COMMENTAUTHOR ) getComments().appendAuthor( rStrm.readString() );
+            if( nRecId == BIFF12_ID_COMMENTAUTHOR ) getComments().appendAuthor( BiffHelper::readString( rStrm ) );
         break;
         case BIFF12_ID_COMMENTLIST:
             if( nRecId == BIFF12_ID_COMMENT ) { importComment( rStrm ); return this; }
@@ -134,7 +134,7 @@ void CommentsFragment::importComment( const AttributeList& rAttribs )
     mxComment->importComment( rAttribs );
 }
 
-void CommentsFragment::importComment( RecordInputStream& rStrm )
+void CommentsFragment::importComment( SequenceInputStream& rStrm )
 {
     mxComment = getComments().createComment();
     mxComment->importComment( rStrm );

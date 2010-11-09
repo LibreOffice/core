@@ -80,7 +80,7 @@ RecordObjectBase::~RecordObjectBase()
 
 void RecordObjectBase::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    mxBiffStrm.reset( new RecordInputStream( getRecordDataSequence() ) );
+    mxBiffStrm.reset( new SequenceInputStream( getRecordDataSequence() ) );
     SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, mxBiffStrm, "RECORD-NAMES", "SIMPLE-RECORDS" );
     if( SequenceRecordObjectBase::implIsValid() )
         mxErrCodes = cfg().getNameList( "ERRORCODES" );
@@ -198,7 +198,7 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
 {
     sal_uInt8 nFlags = bRich ? dumpHex< sal_uInt8 >( "flags", "STRING-FLAGS" ) : 0;
 
-    OUString aString = mxBiffStrm->readString( b32BitLen );
+    OUString aString = BiffHelper::readString( *mxBiffStrm, b32BitLen );
     writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---

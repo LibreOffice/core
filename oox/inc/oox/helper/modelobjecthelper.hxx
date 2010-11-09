@@ -29,16 +29,52 @@
 #define OOX_HELPER_MODELOBJECTHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include "oox/helper/containerhelper.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
     namespace awt { struct Gradient; }
+    namespace container { class XNameContainer; }
     namespace drawing { struct LineDash; }
     namespace drawing { struct PolyPolygonBezierCoords; }
+    namespace lang { class XMultiServiceFactory; }
 } } }
 
 namespace oox {
+
+// ============================================================================
+
+/** This helper manages named objects in a container, which is created on demand.
+ */
+class ObjectContainer
+{
+public:
+    explicit            ObjectContainer(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::rtl::OUString& rServiceName );
+                        ~ObjectContainer();
+
+    /** Returns true, if the object with the passed name exists in the container. */
+    bool                hasObject( const ::rtl::OUString& rObjName ) const;
+
+    /** Returns the object with the passed name from the container. */
+    ::com::sun::star::uno::Any getObject( const ::rtl::OUString& rObjName ) const;
+
+    /** Inserts the passed object into the container, returns its final name. */
+    ::rtl::OUString     insertObject(
+                            const ::rtl::OUString& rObjName,
+                            const ::com::sun::star::uno::Any& rObj,
+                            bool bInsertByUnusedName );
+
+private:
+    void                createContainer() const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        mxFactory;              /// Factory to create the container.
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                        mxContainer;            /// Container for the objects.
+    ::rtl::OUString     maServiceName;          /// Service name to create the container.
+    sal_Int32           mnIndex;                /// Index to create unique identifiers.
+};
 
 // ============================================================================
 
@@ -77,13 +113,13 @@ public:
     ::rtl::OUString     insertFillBitmap( const ::rtl::OUString& rGraphicUrl );
 
 private:
-    ObjectContainer     maMarkerContainer;
-    ObjectContainer     maDashContainer;
-    ObjectContainer     maGradientContainer;
-    ObjectContainer     maBitmapContainer;
-    const ::rtl::OUString maDashNameBase;
-    const ::rtl::OUString maGradientNameBase;
-    const ::rtl::OUString maBitmapNameBase;
+    ObjectContainer     maMarkerContainer;      /// Contains all named line markers (line end polygons).
+    ObjectContainer     maDashContainer;        /// Contains all named line dsahes.
+    ObjectContainer     maGradientContainer;    /// Contains all named fill gradients.
+    ObjectContainer     maBitmapContainer;      /// Contains all named fill bitmaps.
+    const ::rtl::OUString maDashNameBase;       /// Base name for all named line dashes.
+    const ::rtl::OUString maGradientNameBase;   /// Base name for all named fill gradients.
+    const ::rtl::OUString maBitmapNameBase;     /// Base name for all named fill bitmaps.
 };
 
 // ============================================================================

@@ -28,8 +28,6 @@
 #ifndef OOX_XLS_DEFINEDNAMESBUFFER_HXX
 #define OOX_XLS_DEFINEDNAMESBUFFER_HXX
 
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/formulabase.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -99,7 +97,7 @@ protected:
     /** Imports the OOXML formula string, using the passed formula context. */
     void                importOoxFormula( FormulaContext& rContext, sal_Int16 nBaseSheet );
     /** Imports the BIFF12 formula, using the passed formula context. */
-    void                importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm );
+    void                importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, SequenceInputStream& rStrm );
     /** Imports the BIFF formula, using the passed formula context. */
     void                importBiffFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
 
@@ -125,7 +123,7 @@ public:
     /** Sets the formula string from the body of the definedName element. */
     void                setFormula( const ::rtl::OUString& rFormula );
     /** Imports the defined name from a DEFINEDNAME record in the passed stream. */
-    void                importDefinedName( RecordInputStream& rStrm );
+    void                importDefinedName( SequenceInputStream& rStrm );
     /** Imports the defined name from a DEFINEDNAME record in the passed BIFF stream. */
     void                importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcSheet );
 
@@ -187,7 +185,7 @@ public:
     /** Imports a defined name from the passed attribute set. */
     DefinedNameRef      importDefinedName( const AttributeList& rAttribs );
     /** Imports a defined name from a DEFINEDNAME record in the passed stream. */
-    void                importDefinedName( RecordInputStream& rStrm );
+    void                importDefinedName( SequenceInputStream& rStrm );
     /** Imports a defined name from a DEFINEDNAME record in the passed BIFF stream. */
     void                importDefinedName( BiffInputStream& rStrm );
 

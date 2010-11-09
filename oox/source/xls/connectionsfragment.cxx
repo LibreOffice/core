@@ -81,7 +81,7 @@ void ConnectionContext::onStartElement( const AttributeList& rAttribs )
         mrConnection.importConnection( rAttribs );
 }
 
-ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -108,7 +108,7 @@ ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, Re
     return 0;
 }
 
-void ConnectionContext::onStartRecord( RecordInputStream& rStrm )
+void ConnectionContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( getCurrentElement() == BIFF12_ID_CONNECTION )
         mrConnection.importConnection( rStrm );
@@ -138,7 +138,7 @@ ContextHandlerRef ConnectionsFragment::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& /*rStrm*/ )
+ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& /*rStrm*/ )
 {
     switch( getCurrentElement() )
     {

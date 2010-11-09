@@ -38,6 +38,7 @@
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
+#include "oox/helper/containerhelper.hxx"
 
 namespace oox {
 namespace drawingml {

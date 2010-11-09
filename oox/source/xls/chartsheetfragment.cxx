@@ -28,7 +28,6 @@
 #include "oox/xls/chartsheetfragment.hxx"
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/viewsettings.hxx"
@@ -109,7 +108,7 @@ void ChartsheetFragment::onCharacters( const OUString& rChars )
     }
 }
 
-ContextHandlerRef ChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -173,9 +172,9 @@ void ChartsheetFragment::importDrawing( const AttributeList& rAttribs )
     setDrawingPath( getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) ) );
 }
 
-void ChartsheetFragment::importDrawing( RecordInputStream& rStrm )
+void ChartsheetFragment::importDrawing( SequenceInputStream& rStrm )
 {
-    setDrawingPath( getFragmentPathFromRelId( rStrm.readString() ) );
+    setDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
 }
 
 // ============================================================================

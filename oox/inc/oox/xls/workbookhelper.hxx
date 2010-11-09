@@ -50,8 +50,8 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
     class AttributeList;
-    class RecordInputStream;
     class SegmentProgressBar;
+    class SequenceInputStream;
 }
 
 namespace oox { namespace core {

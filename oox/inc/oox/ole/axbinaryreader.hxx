@@ -30,7 +30,7 @@
 
 #include <utility>
 #include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/refvector.hxx"
 
 namespace oox {
 namespace ole {

@@ -61,7 +61,7 @@ void ScenarioContext::onStartElement( const AttributeList& rAttribs )
         mrScenario.importScenario( rAttribs );
 }
 
-ContextHandlerRef ScenarioContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ScenarioContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
@@ -72,7 +72,7 @@ ContextHandlerRef ScenarioContext::onCreateRecordContext( sal_Int32 nRecId, Reco
     return 0;
 }
 
-void ScenarioContext::onStartRecord( RecordInputStream& rStrm )
+void ScenarioContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrScenario.importScenario( rStrm );
@@ -103,7 +103,7 @@ void ScenariosContext::onStartElement( const AttributeList& rAttribs )
         mrSheetScenarios.importScenarios( rAttribs );
 }
 
-ContextHandlerRef ScenariosContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef ScenariosContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
 {
     switch( getCurrentElement() )
     {
@@ -114,7 +114,7 @@ ContextHandlerRef ScenariosContext::onCreateRecordContext( sal_Int32 nRecId, Rec
     return 0;
 }
 
-void ScenariosContext::onStartRecord( RecordInputStream& rStrm )
+void ScenariosContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrSheetScenarios.importScenarios( rStrm );
