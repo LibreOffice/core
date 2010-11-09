@@ -84,19 +84,18 @@ namespace drawinglayer
             aOutlineRange.transform(aSimpleObjectMatrix);
         }
 
-        // prepare dest coor
-        const sal_uInt32 nDiscreteWidth(basegfx::fround(aOutlineRange.getMaxX()));
-        const sal_uInt32 nDiscreteHeight(basegfx::fround(aOutlineRange.getMaxY()));
-        const Rectangle aDestRectPixel(
-            basegfx::fround(aOutlineRange.getMinX()),
-            basegfx::fround(aOutlineRange.getMinY()),
-            nDiscreteWidth > 0 ? nDiscreteWidth - 1 : 0,
-            nDiscreteHeight > 0 ? nDiscreteHeight - 1 : 0);
+        // prepare dest coordinates
+        const Point aPoint(
+                basegfx::fround(aOutlineRange.getMinX()),
+                basegfx::fround(aOutlineRange.getMinY()));
+        const Size aSize(
+                basegfx::fround(aOutlineRange.getWidth()),
+                basegfx::fround(aOutlineRange.getHeight()));
 
         // paint it using GraphicManager
         Graphic aGraphic(rBitmapEx);
         GraphicObject aGraphicObject(aGraphic);
-        aGraphicObject.Draw(&rOutDev, aDestRectPixel.TopLeft(), aDestRectPixel.GetSize(), &aAttributes);
+        aGraphicObject.Draw(&rOutDev, aPoint, aSize, &aAttributes);
     }
 
     void RenderBitmapPrimitive2D_BitmapEx(
@@ -110,13 +109,13 @@ namespace drawinglayer
         // prepare dest coor. Necessary to expand since vcl's DrawBitmapEx draws one pix less
         basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
         aOutlineRange.transform(rTransform);
-        const sal_uInt32 nDiscreteWidth(basegfx::fround(aOutlineRange.getMaxX()));
-        const sal_uInt32 nDiscreteHeight(basegfx::fround(aOutlineRange.getMaxY()));
-        const Rectangle aDestRectPixel(
-            basegfx::fround(aOutlineRange.getMinX()),
-            basegfx::fround(aOutlineRange.getMinY()),
-            nDiscreteWidth > 0 ? nDiscreteWidth - 1 : 0,
-            nDiscreteHeight > 0 ? nDiscreteHeight - 1 : 0);
+        // prepare dest coordinates
+        const Point aPoint(
+                basegfx::fround(aOutlineRange.getMinX()),
+                basegfx::fround(aOutlineRange.getMinY()));
+        const Size aSize(
+                basegfx::fround(aOutlineRange.getWidth()),
+                basegfx::fround(aOutlineRange.getHeight()));
 
         // decompose matrix to check for shear, rotate and mirroring
         basegfx::B2DVector aScale, aTranslate;
@@ -142,7 +141,7 @@ namespace drawinglayer
         }
 
         // draw bitmap
-        rOutDev.DrawBitmapEx(aDestRectPixel.TopLeft(), aDestRectPixel.GetSize(), aContent);
+        rOutDev.DrawBitmapEx(aPoint, aSize, aContent);
     }
 
     void RenderBitmapPrimitive2D_self(
@@ -153,13 +152,11 @@ namespace drawinglayer
         // process self with free transformation (containing shear and rotate). Get dest rect in pixels.
         basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
         aOutlineRange.transform(rTransform);
-        const sal_uInt32 nDiscreteWidth(basegfx::fround(aOutlineRange.getMaxX()));
-        const sal_uInt32 nDiscreteHeight(basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectLogic(
             basegfx::fround(aOutlineRange.getMinX()),
             basegfx::fround(aOutlineRange.getMinY()),
-            nDiscreteWidth > 0 ? nDiscreteWidth - 1 : 0,
-            nDiscreteHeight > 0 ? nDiscreteHeight - 1 : 0);
+            basegfx::fround(aOutlineRange.getMaxX()),
+            basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectPixel(rOutDev.LogicToPixel(aDestRectLogic));
 
         // #i96708# check if Metafile is recorded
