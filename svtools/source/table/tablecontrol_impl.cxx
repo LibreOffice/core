@@ -952,9 +952,8 @@ namespace svt { namespace table
                 if(m_nColHeaderHeightPixel>1)
                 {
                     m_pDataWindow->SetSizePixel( m_rAntiImpl.GetOutputSizePixel());
-                    //fix for 163360 - tests with other examples!!!
                     if(m_bResizingGrid)
-                    //update column widths to fit in grid - 18.10.10
+                    //update column widths to fit in grid
                         impl_ni_updateColumnWidths();
                     m_bResizingGrid = true;
                 }
@@ -2020,8 +2019,9 @@ namespace svt { namespace table
         PColumnModel pColumn = m_pModel->getColumnModel(m_nCurColumn);
         impl_ni_getAccVisibleColWidths();
         int newColWidth = m_aColumnWidthsPixel[m_nCurColumn];
-        //subtract 1 from m_aAccColumnWidthPixel because right border should be part of the current cell
+        //make resize area for the separator wider
         int nLeft = m_aVisibleColumnWidthsPixel[resizingColumn]-4;
+        //subtract 1 from m_aAccColumnWidthPixel because right border should be part of the current cell
         int nRight = m_aVisibleColumnWidthsPixel[resizingColumn]-1;
         if( rPoint.X()> nLeft && rPoint.X()<nRight && pColumn->isResizable())
             aNewPointer = Pointer( POINTER_HSPLIT );
@@ -2051,6 +2051,7 @@ namespace svt { namespace table
         m_bResizingGrid = false;
         m_nResizingColumn = m_nCurColumn;
         PColumnModel pColumn = m_pModel->getColumnModel(m_nResizingColumn);
+        //make resize area for the separator wider
         int nLeft = m_aVisibleColumnWidthsPixel[m_nResizingColumn-m_nLeftColumn]-4;
         int nRight = m_aVisibleColumnWidthsPixel[m_nResizingColumn-m_nLeftColumn]-1;
         if(rPoint.X()> nLeft && rPoint.X()<nRight && pColumn->isResizable())
